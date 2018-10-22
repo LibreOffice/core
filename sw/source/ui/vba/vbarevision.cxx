@@ -33,9 +33,7 @@ SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >
 {
 }
 
-SwVbaRevision::~SwVbaRevision()
-{
-}
+SwVbaRevision::~SwVbaRevision() = default;
 
 sal_Int32 SwVbaRevision::GetPosition()
 {

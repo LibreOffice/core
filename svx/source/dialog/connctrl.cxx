@@ -50,9 +50,7 @@ void SvxXConnectionPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetOutputSizePixel(aSize);
 }
 
-SvxXConnectionPreview::~SvxXConnectionPreview()
-{
-}
+SvxXConnectionPreview::~SvxXConnectionPreview() = default;
 
 void SvxXConnectionPreview::Resize()
 {

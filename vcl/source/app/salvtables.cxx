@@ -58,9 +58,7 @@ SalFrame::SalFrame()
 // this file contains the virtual destructors of the sal interface
 // compilers usually put their vtables where the destructor is
 
-SalFrame::~SalFrame()
-{
-}
+SalFrame::~SalFrame() = default;
 
 void SalFrame::SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
 {
@@ -85,9 +83,7 @@ SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex)
 {
 }
 
-SalInstance::~SalInstance()
-{
-}
+SalInstance::~SalInstance() = default;
 
 comphelper::SolarMutex* SalInstance::GetYieldMutex()
 {
@@ -130,25 +126,15 @@ std::unique_ptr<SalI18NImeStatus> SalInstance::CreateI18NImeStatus()
     return std::unique_ptr<SalI18NImeStatus>(new SalI18NImeStatus);
 }
 
-SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE
-{
-}
+SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE = default;
 
-SalBitmap::~SalBitmap()
-{
-}
+SalBitmap::~SalBitmap() = default;
 
-SalI18NImeStatus::~SalI18NImeStatus()
-{
-}
+SalI18NImeStatus::~SalI18NImeStatus() = default;
 
-SalSystem::~SalSystem()
-{
-}
+SalSystem::~SalSystem() = default;
 
-SalPrinter::~SalPrinter()
-{
-}
+SalPrinter::~SalPrinter() = default;
 
 bool SalPrinter::StartJob( const OUString*, const OUString&, const OUString&,
                            ImplJobSetup*, vcl::PrinterController& )
@@ -156,21 +142,13 @@ bool SalPrinter::StartJob( const OUString*, const OUString&, const OUString&,
     return false;
 }
 
-SalInfoPrinter::~SalInfoPrinter()
-{
-}
+SalInfoPrinter::~SalInfoPrinter() = default;
 
-SalVirtualDevice::~SalVirtualDevice()
-{
-}
+SalVirtualDevice::~SalVirtualDevice() = default;
 
-SalObject::~SalObject()
-{
-}
+SalObject::~SalObject() = default;
 
-SalMenu::~SalMenu()
-{
-}
+SalMenu::~SalMenu() = default;
 
 bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const tools::Rectangle&, FloatWinPopupFlags )
 {
@@ -195,9 +173,7 @@ tools::Rectangle SalMenu::GetMenuBarButtonRectPixel( sal_uInt16, SalFrame* )
     return tools::Rectangle();
 }
 
-SalMenuItem::~SalMenuItem()
-{
-}
+SalMenuItem::~SalMenuItem() = default;
 
 class SalInstanceWidget : public virtual weld::Widget
 {
@@ -2968,9 +2944,7 @@ namespace weld
         return rController->getDialog()->runAsync(rController, func);
     }
 
-    DialogController::~DialogController() COVERITY_NOEXCEPT_FALSE
-    {
-    }
+    DialogController::~DialogController() COVERITY_NOEXCEPT_FALSE = default;
 
     Dialog* GenericDialogController::getDialog() { return m_xDialog.get(); }
 
@@ -2980,9 +2954,7 @@ namespace weld
     {
     }
 
-    GenericDialogController::~GenericDialogController() COVERITY_NOEXCEPT_FALSE
-    {
-    }
+    GenericDialogController::~GenericDialogController() COVERITY_NOEXCEPT_FALSE = default;
 
     Dialog* MessageDialogController::getDialog() { return m_xDialog.get(); }
 

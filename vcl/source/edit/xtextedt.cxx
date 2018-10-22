@@ -31,9 +31,7 @@ ExtTextEngine::ExtTextEngine() : maGroupChars(OUString("(){}[]"))
 {
 }
 
-ExtTextEngine::~ExtTextEngine()
-{
-}
+ExtTextEngine::~ExtTextEngine() = default;
 
 TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
 {

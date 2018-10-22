@@ -99,9 +99,7 @@ namespace xmloff
     {
     }
 
-    OElementExport::~OElementExport()
-    {
-    }
+    OElementExport::~OElementExport() = default;
 
     void OElementExport::doExport()
     {
@@ -1955,9 +1953,7 @@ namespace xmloff
     {
     }
 
-    OColumnExport::~OColumnExport()
-    {
-    }
+    OColumnExport::~OColumnExport() = default;
 
     void OColumnExport::exportServiceNameAttribute()
     {

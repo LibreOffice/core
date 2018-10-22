@@ -39,8 +39,7 @@ StockDataInterpreter::StockDataInterpreter(
         m_eStockVariant( eVariant )
 {}
 
-StockDataInterpreter::~StockDataInterpreter()
-{}
+StockDataInterpreter::~StockDataInterpreter() = default;
 
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(

@@ -29,10 +29,7 @@
 #include <drawview.hxx>
 #include <svx/svdpagv.hxx>
 
-
-SdPageFormatUndoAction::~SdPageFormatUndoAction()
-{
-}
+SdPageFormatUndoAction::~SdPageFormatUndoAction() = default;
 
 void SdPageFormatUndoAction::Undo()
 {
@@ -70,9 +67,7 @@ void SdPageFormatUndoAction::Redo()
 
 }
 
-SdPageLRUndoAction::~SdPageLRUndoAction()
-{
-}
+SdPageLRUndoAction::~SdPageLRUndoAction() = default;
 
 void SdPageLRUndoAction::Undo()
 {
@@ -86,9 +81,7 @@ void SdPageLRUndoAction::Redo()
     mpPage->SetRightBorder(mnNewRight);
 }
 
-SdPageULUndoAction::~SdPageULUndoAction()
-{
-}
+SdPageULUndoAction::~SdPageULUndoAction() = default;
 
 void SdPageULUndoAction::Undo()
 {

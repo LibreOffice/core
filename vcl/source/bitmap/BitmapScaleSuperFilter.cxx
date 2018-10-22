@@ -927,8 +927,7 @@ BitmapScaleSuperFilter::BitmapScaleSuperFilter(const double& rScaleX, const doub
     mrScaleY(rScaleY)
 {}
 
-BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
-{}
+BitmapScaleSuperFilter::~BitmapScaleSuperFilter() = default;
 
 BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 {

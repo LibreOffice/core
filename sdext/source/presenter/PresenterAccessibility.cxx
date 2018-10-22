@@ -478,9 +478,7 @@ PresenterAccessible::PresenterAccessible (
         mxMainPane->setAccessible(this);
 }
 
-PresenterAccessible::~PresenterAccessible()
-{
-}
+PresenterAccessible::~PresenterAccessible() = default;
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterAccessible::GetPreviewPane() const
 {

@@ -405,9 +405,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
     }
 }
 
-XclImpExtName::~XclImpExtName()
-{
-}
+XclImpExtName::~XclImpExtName() = default;
 
 void XclImpExtName::CreateDdeData( ScDocument& rDoc, const OUString& rApplic, const OUString& rTopic ) const
 {
@@ -891,9 +889,7 @@ XclImpLinkManager::XclImpLinkManager( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpLinkManager::~XclImpLinkManager()
-{
-}
+XclImpLinkManager::~XclImpLinkManager() = default;
 
 void XclImpLinkManager::ReadExternsheet( XclImpStream& rStrm )
 {

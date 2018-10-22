@@ -133,11 +133,7 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
 {
 }
 
-
-SVGAttributeWriter::~SVGAttributeWriter()
-{
-}
-
+SVGAttributeWriter::~SVGAttributeWriter() = default;
 
 double SVGAttributeWriter::ImplRound( double fValue )
 {
@@ -3737,11 +3733,7 @@ SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentCont
         args[0]>>=maFilterData;
 }
 
-
-SVGWriter::~SVGWriter()
-{
-}
-
+SVGWriter::~SVGWriter() = default;
 
 void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
                                 const Sequence<sal_Int8>& rMtfSeq )

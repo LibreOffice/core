@@ -168,9 +168,7 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
     }
 }
 
-PresenterViewFactory::~PresenterViewFactory()
-{
-}
+PresenterViewFactory::~PresenterViewFactory() = default;
 
 void SAL_CALL PresenterViewFactory::disposing()
 {

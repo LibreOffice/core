@@ -61,9 +61,7 @@ CommandEnvironment::CommandEnvironment(
 }
 
 // virtual
-CommandEnvironment::~CommandEnvironment()
-{
-}
+CommandEnvironment::~CommandEnvironment() = default;
 
 // XCommandEnvironemnt methods.
 

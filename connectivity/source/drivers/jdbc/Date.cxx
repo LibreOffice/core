@@ -26,8 +26,7 @@ using namespace connectivity;
 
 jclass java_util_Date::theClass = nullptr;
 
-java_util_Date::~java_util_Date()
-{}
+java_util_Date::~java_util_Date() = default;
 
 jclass java_util_Date::getMyClass() const
 {

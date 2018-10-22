@@ -45,9 +45,7 @@ namespace svgio
         {
         }
 
-        SvgMaskNode::~SvgMaskNode()
-        {
-        }
+        SvgMaskNode::~SvgMaskNode() = default;
 
         const SvgStyleAttributes* SvgMaskNode::getSvgStyleAttributes() const
         {

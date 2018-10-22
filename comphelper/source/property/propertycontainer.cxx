@@ -40,11 +40,7 @@ OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
 {
 }
 
-
-OPropertyContainer::~OPropertyContainer()
-{
-}
-
+OPropertyContainer::~OPropertyContainer() = default;
 
 Sequence< Type > OPropertyContainer::getBaseTypes()
 {

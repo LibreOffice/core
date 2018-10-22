@@ -35,17 +35,10 @@ using namespace ucb_cmdenv;
 
 // UcbCommandEnvironment Implementation.
 
-
-UcbCommandEnvironment::UcbCommandEnvironment()
-{
-}
-
+UcbCommandEnvironment::UcbCommandEnvironment() = default;
 
 // virtual
-UcbCommandEnvironment::~UcbCommandEnvironment()
-{
-}
-
+UcbCommandEnvironment::~UcbCommandEnvironment() = default;
 
 // XInitialization methods.
 

@@ -75,8 +75,7 @@ public:
     virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) override;
 
 private:
-    virtual ~SequenceInputStreamService() override {}
-
+    virtual ~SequenceInputStreamService() override = default;
 
     ::osl::Mutex m_aMutex;
     bool m_bInitialized;

@@ -214,9 +214,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     GetShapeTableExport();
 }
 
-XMLShapeExport::~XMLShapeExport()
-{
-}
+XMLShapeExport::~XMLShapeExport() = default;
 
 // sj: replacing CustomShapes with standard objects that are also supported in OpenOffice.org format
 uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement( const uno::Reference< drawing::XShape >& xShape )

@@ -447,9 +447,7 @@ namespace accessibility
         SetEditSource( std::move(pEditSource) );
     }
 
-    AccessibleStaticTextBase::~AccessibleStaticTextBase()
-    {
-    }
+    AccessibleStaticTextBase::~AccessibleStaticTextBase() = default;
 
     void AccessibleStaticTextBase::SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource )
     {

@@ -51,9 +51,7 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
     mrContainerAdapter.PutMasterPage(pDescriptor);
 }
 
-MasterPageContainerFiller::~MasterPageContainerFiller()
-{
-}
+MasterPageContainerFiller::~MasterPageContainerFiller() = default;
 
 void MasterPageContainerFiller::RunNextStep()
 {

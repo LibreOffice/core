@@ -91,9 +91,7 @@ PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration )
     mpImpl = rEnumeration.mpImpl->Clone();
 }
 
-PageEnumeration::~PageEnumeration()
-{
-}
+PageEnumeration::~PageEnumeration() = default;
 
 PageEnumeration& PageEnumeration::operator= (
     const PageEnumeration& rEnumeration)

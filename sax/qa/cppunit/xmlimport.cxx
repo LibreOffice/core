@@ -84,7 +84,7 @@ private:
     OUString getNamespace(const OUString &sName);
 
 public:
-    TestDocumentHandler() {}
+    TestDocumentHandler() = default;
     const OUString & getString() { return m_aStr; }
 
     // XDocumentHandler
@@ -204,7 +204,7 @@ void SAL_CALL TestDocumentHandler::setDocumentLocator( const Reference< XLocator
 class NSDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
 {
 public:
-    NSDocumentHandler() {}
+    NSDocumentHandler() = default;
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() override {}

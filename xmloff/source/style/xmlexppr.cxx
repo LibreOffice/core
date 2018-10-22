@@ -505,9 +505,7 @@ SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
     mpImpl->mxPropMapper = rMapper;
 }
 
-SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
-{
-}
+SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper() = default;
 
 void SvXMLExportPropertyMapper::ChainExportMapper(
         const rtl::Reference< SvXMLExportPropertyMapper>& rMapper )

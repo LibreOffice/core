@@ -29,15 +29,9 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    OCommonAccessibleComponent::OCommonAccessibleComponent( )
-    {
-    }
+    OCommonAccessibleComponent::OCommonAccessibleComponent() = default;
 
-
-    OCommonAccessibleComponent::~OCommonAccessibleComponent( )
-    {
-    }
-
+    OCommonAccessibleComponent::~OCommonAccessibleComponent() = default;
 
     bool OCommonAccessibleComponent::containsPoint( const Point& _rPoint )
     {
@@ -92,10 +86,7 @@ namespace comphelper
         return implGetBounds();
     }
 
-    OAccessibleComponentHelper::OAccessibleComponentHelper( )
-    {
-    }
-
+    OAccessibleComponentHelper::OAccessibleComponentHelper() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleComponentHelper, OCommonAccessibleComponent, OAccessibleComponentHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleComponentHelper, OCommonAccessibleComponent, OAccessibleComponentHelper_Base )
@@ -131,10 +122,7 @@ namespace comphelper
         return OCommonAccessibleComponent::getBounds( );
     }
 
-    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( )
-    {
-    }
-
+    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleExtendedComponentHelper, OCommonAccessibleComponent, OAccessibleExtendedComponentHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleExtendedComponentHelper, OCommonAccessibleComponent, OAccessibleExtendedComponentHelper_Base )

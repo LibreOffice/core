@@ -36,9 +36,7 @@ namespace sdr
         {
         }
 
-        E3dExtrudeProperties::~E3dExtrudeProperties()
-        {
-        }
+        E3dExtrudeProperties::~E3dExtrudeProperties() = default;
 
         std::unique_ptr<BaseProperties> E3dExtrudeProperties::Clone(SdrObject& rObj) const
         {

@@ -320,9 +320,7 @@ Crypto::Crypto()
 {
 }
 
-Crypto::~Crypto()
-{
-}
+Crypto::~Crypto() = default;
 
 // DECRYPT
 

@@ -48,9 +48,7 @@ private:
     VclPtr<ToolBox>     mpToolBox;
 };
 
-PopupWindowControllerImpl::PopupWindowControllerImpl()
-{
-}
+PopupWindowControllerImpl::PopupWindowControllerImpl() = default;
 
 PopupWindowControllerImpl::~PopupWindowControllerImpl() COVERITY_NOEXCEPT_FALSE
 {
@@ -161,9 +159,7 @@ PopupWindowController::PopupWindowController( const Reference< uno::XComponentCo
 {
 }
 
-PopupWindowController::~PopupWindowController()
-{
-}
+PopupWindowController::~PopupWindowController() = default;
 
 // XServiceInfo
 sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName )

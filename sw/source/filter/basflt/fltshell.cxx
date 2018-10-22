@@ -115,10 +115,7 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, std::unique_ptr<Sf
     bConsumedByField = false;
 }
 
-SwFltStackEntry::~SwFltStackEntry()
-{
-    // Although attribute got passed as pointer, it gets deleted here
-}
+SwFltStackEntry::~SwFltStackEntry() = default;
 
 void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
 {
@@ -954,9 +951,7 @@ SwFltAnchor::SwFltAnchor(const SwFltAnchor& rCpy) :
     pFrameFormat->Add(pClient.get());
 }
 
-SwFltAnchor::~SwFltAnchor()
-{
-}
+SwFltAnchor::~SwFltAnchor() = default;
 
 void SwFltAnchor::SetFrameFormat(SwFrameFormat * _pFrameFormat)
 {

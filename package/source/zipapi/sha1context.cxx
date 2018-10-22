@@ -101,9 +101,7 @@ CorrectSHA1DigestContext::CorrectSHA1DigestContext()
 {
 }
 
-CorrectSHA1DigestContext::~CorrectSHA1DigestContext()
-{
-}
+CorrectSHA1DigestContext::~CorrectSHA1DigestContext() = default;
 
 void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& rData)
 {

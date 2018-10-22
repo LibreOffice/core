@@ -151,9 +151,7 @@ private:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 public:
-    ColorPreviewControl()
-    {
-    }
+    ColorPreviewControl() = default;
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {

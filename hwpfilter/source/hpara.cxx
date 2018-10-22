@@ -81,9 +81,7 @@ HWPPara::HWPPara()
     memset(cshape.get(), 0, sizeof(CharShape));
 }
 
-HWPPara::~HWPPara()
-{
-}
+HWPPara::~HWPPara() = default;
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {

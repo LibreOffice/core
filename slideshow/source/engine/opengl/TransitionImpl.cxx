@@ -43,12 +43,8 @@
 #include <math.h>
 
 TransitionScene::TransitionScene(TransitionScene const& rOther)
-    : maLeavingSlidePrimitives(rOther.maLeavingSlidePrimitives)
-    , maEnteringSlidePrimitives(rOther.maEnteringSlidePrimitives)
-    , maOverallOperations(rOther.maOverallOperations)
-    , maSceneObjects(rOther.maSceneObjects)
-{
-}
+
+    = default;
 
 TransitionScene& TransitionScene::operator=(const TransitionScene& rOther)
 {
@@ -67,9 +63,7 @@ void TransitionScene::swap(TransitionScene& rOther)
     swap(maSceneObjects, rOther.maSceneObjects);
 }
 
-OGLTransitionImpl::~OGLTransitionImpl()
-{
-}
+OGLTransitionImpl::~OGLTransitionImpl() = default;
 
 void OGLTransitionImpl::uploadModelViewProjectionMatrices()
 {
@@ -434,9 +428,7 @@ SceneObject::SceneObject()
 {
 }
 
-SceneObject::~SceneObject()
-{
-}
+SceneObject::~SceneObject() = default;
 
 namespace
 {
@@ -1136,10 +1128,8 @@ Primitive& Primitive::operator=(const Primitive& rvalue)
 }
 
 Primitive::Primitive(const Primitive& rvalue)
-    : Operations(rvalue.Operations)
-    , Vertices(rvalue.Vertices)
-{
-}
+
+    = default;
 
 void Primitive::swap(Primitive& rOther)
 {

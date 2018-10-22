@@ -57,9 +57,7 @@ namespace dbaui
         {
         }
 
-        virtual ~UndoManager_Impl()
-        {
-        }
+        virtual ~UndoManager_Impl() = default;
 
         UndoManager&                    rAntiImpl;
         ::cppu::OWeakObject&            rParent;
@@ -92,7 +90,7 @@ namespace dbaui
         {
         }
 
-        virtual ~OslMutexFacade() {}
+        virtual ~OslMutexFacade() = default;
 
         virtual void acquire() override;
         virtual void release() override;
@@ -125,9 +123,7 @@ namespace dbaui
             if ( i_impl.bDisposed )
                 throw DisposedException( OUString(), i_impl.getThis() );
         }
-        virtual ~UndoManagerMethodGuard()
-        {
-        }
+        virtual ~UndoManagerMethodGuard() = default;
 
         // IMutexGuard
         virtual void clear() override;
@@ -154,9 +150,7 @@ namespace dbaui
     {
     }
 
-    UndoManager::~UndoManager()
-    {
-    }
+    UndoManager::~UndoManager() = default;
 
     SfxUndoManager& UndoManager::GetSfxUndoManager() const
     {

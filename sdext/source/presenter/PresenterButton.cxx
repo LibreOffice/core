@@ -140,9 +140,7 @@ PresenterButton::PresenterButton (
     }
 }
 
-PresenterButton::~PresenterButton()
-{
-}
+PresenterButton::~PresenterButton() = default;
 
 void SAL_CALL PresenterButton::disposing()
 {

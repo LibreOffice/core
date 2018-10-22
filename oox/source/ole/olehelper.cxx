@@ -382,9 +382,7 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
     }
 }
 
-OleFormCtrlExportHelper::~OleFormCtrlExportHelper()
-{
-}
+OleFormCtrlExportHelper::~OleFormCtrlExportHelper() = default;
 
 void OleFormCtrlExportHelper::exportName( const Reference< XOutputStream >& rxOut )
 {
@@ -418,9 +416,7 @@ MSConvertOCXControls::MSConvertOCXControls( const Reference< css::frame::XModel 
 {
 }
 
-MSConvertOCXControls::~MSConvertOCXControls()
-{
-}
+MSConvertOCXControls::~MSConvertOCXControls() = default;
 
 bool
 MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const OUString& rGuidString )

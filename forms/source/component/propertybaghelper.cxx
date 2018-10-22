@@ -76,11 +76,7 @@ namespace frm
     {
     }
 
-
-    PropertyBagHelper::~PropertyBagHelper()
-    {
-    }
-
+    PropertyBagHelper::~PropertyBagHelper() = default;
 
     void PropertyBagHelper::dispose()
     {

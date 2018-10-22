@@ -40,9 +40,7 @@ StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, 
     SetBufferSize( 1024 );
 }
 
-StgInternalStream::~StgInternalStream()
-{
-}
+StgInternalStream::~StgInternalStream() = default;
 
 std::size_t StgInternalStream::GetData(void* pData, std::size_t nSize)
 {

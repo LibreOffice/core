@@ -36,8 +36,7 @@ ScFTestDialog::ScFTestDialog(
     SetText(ScResId(STR_FTEST));
 }
 
-ScFTestDialog::~ScFTestDialog()
-{}
+ScFTestDialog::~ScFTestDialog() = default;
 
 bool ScFTestDialog::Close()
 {

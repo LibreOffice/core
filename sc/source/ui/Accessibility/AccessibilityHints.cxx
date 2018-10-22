@@ -23,15 +23,11 @@ using namespace ::com::sun::star;
 
 //      ScAccWinFocusLostHint - the current window lost its focus (to another application, view or document)
 
-ScAccWinFocusLostHint::~ScAccWinFocusLostHint()
-{
-}
+ScAccWinFocusLostHint::~ScAccWinFocusLostHint() = default;
 
 //      ScAccWinFocusGotHint - the window got the focus (from another application, view or document)
 
-ScAccWinFocusGotHint::~ScAccWinFocusGotHint()
-{
-}
+ScAccWinFocusGotHint::~ScAccWinFocusGotHint() = default;
 
 //      ScAccGridWinFocusLostHint - the current grid window lost its focus (to another application, view or document)
 
@@ -42,9 +38,7 @@ ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld )
 {
 }
 
-ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint()
-{
-}
+ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint() = default;
 
 //      ScAccGridWinFocusGotHint - the grid window got the focus (from another application, view or document)
 
@@ -55,8 +49,6 @@ ScAccGridWinFocusGotHint::ScAccGridWinFocusGotHint(ScSplitPos eNew )
 {
 }
 
-ScAccGridWinFocusGotHint::~ScAccGridWinFocusGotHint()
-{
-}
+ScAccGridWinFocusGotHint::~ScAccGridWinFocusGotHint() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

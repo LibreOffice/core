@@ -37,9 +37,7 @@ TableBackgroundStyleContext::TableBackgroundStyleContext( ContextHandler2Helper 
 {
 }
 
-TableBackgroundStyleContext::~TableBackgroundStyleContext()
-{
-}
+TableBackgroundStyleContext::~TableBackgroundStyleContext() = default;
 
 ContextHandlerRef
 TableBackgroundStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )

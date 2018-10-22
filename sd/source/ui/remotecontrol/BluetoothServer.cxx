@@ -62,7 +62,7 @@ struct DBusObject {
     OString maPath;
     OString maInterface;
 
-    DBusObject() { }
+    DBusObject() = default;
     DBusObject( const char *pBusName, const char *pPath, const char *pInterface )
         : maBusName( pBusName ), maPath( pPath ), maInterface( pInterface ) { }
 
@@ -1078,9 +1078,7 @@ BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
 #endif
 }
 
-BluetoothServer::~BluetoothServer()
-{
-}
+BluetoothServer::~BluetoothServer() = default;
 
 void BluetoothServer::ensureDiscoverable()
 {

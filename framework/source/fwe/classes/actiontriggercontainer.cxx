@@ -37,9 +37,7 @@ ActionTriggerContainer::ActionTriggerContainer() :
 {
 }
 
-ActionTriggerContainer::~ActionTriggerContainer()
-{
-}
+ActionTriggerContainer::~ActionTriggerContainer() = default;
 
 // XInterface
 Any SAL_CALL ActionTriggerContainer::queryInterface( const Type& aType )

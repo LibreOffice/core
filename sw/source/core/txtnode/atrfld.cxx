@@ -534,9 +534,7 @@ SwTextInputField::SwTextInputField(
     SetHasContent( true );
 }
 
-SwTextInputField::~SwTextInputField()
-{
-}
+SwTextInputField::~SwTextInputField() = default;
 
 void SwTextInputField::LockNotifyContentChange()
 {
@@ -614,9 +612,7 @@ SwTextAnnotationField::SwTextAnnotationField(
 {
 }
 
-SwTextAnnotationField::~SwTextAnnotationField()
-{
-}
+SwTextAnnotationField::~SwTextAnnotationField() = default;
 
 ::sw::mark::IMark* SwTextAnnotationField::GetAnnotationMark() const
 {

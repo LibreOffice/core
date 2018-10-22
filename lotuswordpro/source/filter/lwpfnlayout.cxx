@@ -65,8 +65,7 @@ LwpFootnoteLayout::LwpFootnoteLayout(LwpObjectHeader const &objHdr, LwpSvStream 
 {
 }
 
-LwpFootnoteLayout::~LwpFootnoteLayout()
-{}
+LwpFootnoteLayout::~LwpFootnoteLayout() = default;
 
 /**
  * @descr  Read object info
@@ -96,8 +95,7 @@ LwpFnRowLayout::LwpFnRowLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm
 {
 }
 
-LwpFnRowLayout::~LwpFnRowLayout()
-{}
+LwpFnRowLayout::~LwpFnRowLayout() = default;
 
 /**
  * @descr  Read object info
@@ -138,8 +136,7 @@ LwpFnCellLayout::LwpFnCellLayout(LwpObjectHeader const &objHdr, LwpSvStream *pSt
 {
 }
 
-LwpFnCellLayout::~LwpFnCellLayout()
-{}
+LwpFnCellLayout::~LwpFnCellLayout() = default;
 
 /**
  * @descr  Read object info
@@ -176,8 +173,7 @@ LwpEndnoteLayout::LwpEndnoteLayout(LwpObjectHeader const &objHdr, LwpSvStream *p
 {
 }
 
-LwpEndnoteLayout::~LwpEndnoteLayout()
-{}
+LwpEndnoteLayout::~LwpEndnoteLayout() = default;
 
 /**
  * @descr  Read object info
@@ -218,8 +214,7 @@ LwpEnSuperTableLayout::LwpEnSuperTableLayout(LwpObjectHeader const &objHdr, LwpS
 {
 }
 
-LwpEnSuperTableLayout::~LwpEnSuperTableLayout()
-{}
+LwpEnSuperTableLayout::~LwpEnSuperTableLayout() = default;
 
 /**
  * @descr  Read object info
@@ -280,8 +275,7 @@ LwpFnSuperTableLayout::LwpFnSuperTableLayout(LwpObjectHeader const &objHdr, LwpS
 {
 }
 
-LwpFnSuperTableLayout::~LwpFnSuperTableLayout()
-{}
+LwpFnSuperTableLayout::~LwpFnSuperTableLayout() = default;
 
 /**
  * @descr  Read object info
@@ -336,8 +330,7 @@ LwpContFromLayout::LwpContFromLayout(LwpObjectHeader const &objHdr, LwpSvStream 
 {
 }
 
-LwpContFromLayout::~LwpContFromLayout()
-{}
+LwpContFromLayout::~LwpContFromLayout() = default;
 
 /**
  * @descr  Read object info
@@ -367,8 +360,7 @@ LwpContOnLayout::LwpContOnLayout(LwpObjectHeader const &objHdr, LwpSvStream *pSt
 {
 }
 
-LwpContOnLayout::~LwpContOnLayout()
-{}
+LwpContOnLayout::~LwpContOnLayout() = default;
 
 /**
  * @descr  Read object info

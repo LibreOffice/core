@@ -73,8 +73,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 
-SfxStylesInfo_Impl::SfxStylesInfo_Impl()
-{}
+SfxStylesInfo_Impl::SfxStylesInfo_Impl() = default;
 
 void SfxStylesInfo_Impl::init(const OUString& rModuleName, const css::uno::Reference< css::frame::XModel >& xModel)
 {

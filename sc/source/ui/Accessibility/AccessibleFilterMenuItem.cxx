@@ -48,9 +48,7 @@ ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     SetName(rName);
 }
 
-ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem()
-{
-}
+ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem() = default;
 
 sal_Int32 ScAccessibleFilterMenuItem::getAccessibleChildCount()
 {

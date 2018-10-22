@@ -29,8 +29,6 @@ OQueryTableWindowData::OQueryTableWindowData(const OUString& _rComposedName, con
 {
 }
 
-OQueryTableWindowData::~OQueryTableWindowData()
-{
-}
+OQueryTableWindowData::~OQueryTableWindowData() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

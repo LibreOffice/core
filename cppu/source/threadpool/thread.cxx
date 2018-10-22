@@ -101,7 +101,7 @@ namespace cppu_threadpool {
         , m_bAsynchron( bAsynchron )
     {}
 
-    ORequestThread::~ORequestThread() {}
+    ORequestThread::~ORequestThread() = default;
 
     void ORequestThread::setTask( JobQueue *pQueue,
                                   const ByteSequence &aThreadId,

@@ -144,10 +144,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
 
 }
 
-
-sw::DocumentSettingManager::~DocumentSettingManager()
-{
-}
+sw::DocumentSettingManager::~DocumentSettingManager() = default;
 
 /* IDocumentSettingAccess */
 bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const

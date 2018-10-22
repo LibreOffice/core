@@ -75,10 +75,7 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
     }
 }
 
-
-OXMLRowColumn::~OXMLRowColumn()
-{
-}
+OXMLRowColumn::~OXMLRowColumn() = default;
 
 SvXMLImportContextRef OXMLRowColumn::CreateChildContext(
         sal_uInt16 nPrefix,

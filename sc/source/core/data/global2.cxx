@@ -54,39 +54,13 @@ ScImportParam::ScImportParam() :
 {
 }
 
-ScImportParam::ScImportParam( const ScImportParam& r ) :
-    nCol1       (r.nCol1),
-    nRow1       (r.nRow1),
-    nCol2       (r.nCol2),
-    nRow2       (r.nRow2),
-    bImport     (r.bImport),
-    aDBName     (r.aDBName),
-    aStatement  (r.aStatement),
-    bNative     (r.bNative),
-    bSql        (r.bSql),
-    nType       (r.nType)
-{
-}
+ScImportParam::ScImportParam(const ScImportParam& r)
 
-ScImportParam::~ScImportParam()
-{
-}
+    = default;
 
-ScImportParam& ScImportParam::operator=( const ScImportParam& r )
-{
-    nCol1           = r.nCol1;
-    nRow1           = r.nRow1;
-    nCol2           = r.nCol2;
-    nRow2           = r.nRow2;
-    bImport         = r.bImport;
-    aDBName         = r.aDBName;
-    aStatement      = r.aStatement;
-    bNative         = r.bNative;
-    bSql            = r.bSql;
-    nType           = r.nType;
+ScImportParam::~ScImportParam() = default;
 
-    return *this;
-}
+ScImportParam& ScImportParam::operator=(const ScImportParam& r) = default;
 
 bool ScImportParam::operator==( const ScImportParam& rOther ) const
 {
@@ -116,9 +90,7 @@ ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r )
     operator=(r);
 }
 
-ScConsolidateParam::~ScConsolidateParam()
-{
-}
+ScConsolidateParam::~ScConsolidateParam() = default;
 
 void ScConsolidateParam::ClearDataAreas()
 {
@@ -190,16 +162,11 @@ void ScConsolidateParam::SetAreas( std::unique_ptr<ScArea[]> pAreas, sal_uInt16 
 
 // struct ScSolveParam
 
-ScSolveParam::ScSolveParam()
-{
-}
+ScSolveParam::ScSolveParam() = default;
 
-ScSolveParam::ScSolveParam( const ScSolveParam& r )
-    :   aRefFormulaCell ( r.aRefFormulaCell ),
-        aRefVariableCell( r.aRefVariableCell ),
-        pStrTargetVal   ( r.pStrTargetVal )
-{
-}
+ScSolveParam::ScSolveParam(const ScSolveParam& r)
+
+    = default;
 
 ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const ScAddress& rVariableCell,
@@ -210,17 +177,9 @@ ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
 {
 }
 
-ScSolveParam::~ScSolveParam()
-{
-}
+ScSolveParam::~ScSolveParam() = default;
 
-ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
-{
-    aRefFormulaCell  = r.aRefFormulaCell;
-    aRefVariableCell = r.aRefVariableCell;
-    pStrTargetVal = r.pStrTargetVal;
-    return *this;
-}
+ScSolveParam& ScSolveParam::operator=(const ScSolveParam& r) = default;
 
 bool ScSolveParam::operator==( const ScSolveParam& r ) const
 {
@@ -244,14 +203,9 @@ bool ScSolveParam::operator==( const ScSolveParam& r ) const
 
 ScTabOpParam::ScTabOpParam() : meMode(Column) {}
 
-ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
-    :   aRefFormulaCell ( r.aRefFormulaCell ),
-        aRefFormulaEnd  ( r.aRefFormulaEnd ),
-        aRefRowCell     ( r.aRefRowCell ),
-        aRefColCell     ( r.aRefColCell ),
-    meMode(r.meMode)
-{
-}
+ScTabOpParam::ScTabOpParam(const ScTabOpParam& r)
+
+    = default;
 
 ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
@@ -266,15 +220,7 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
 {
 }
 
-ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
-{
-    aRefFormulaCell  = r.aRefFormulaCell;
-    aRefFormulaEnd   = r.aRefFormulaEnd;
-    aRefRowCell      = r.aRefRowCell;
-    aRefColCell      = r.aRefColCell;
-    meMode = r.meMode;
-    return *this;
-}
+ScTabOpParam& ScTabOpParam::operator=(const ScTabOpParam& r) = default;
 
 bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {

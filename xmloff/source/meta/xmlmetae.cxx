@@ -311,9 +311,7 @@ SvXMLMetaExport::SvXMLMetaExport(
     assert(mxDocProps.is());
 }
 
-SvXMLMetaExport::~SvXMLMetaExport()
-{
-}
+SvXMLMetaExport::~SvXMLMetaExport() = default;
 
 void SvXMLMetaExport::Export()
 {

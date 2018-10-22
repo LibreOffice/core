@@ -178,11 +178,7 @@ SpellAlternatives::SpellAlternatives(
 {
 }
 
-
-SpellAlternatives::~SpellAlternatives()
-{
-}
-
+SpellAlternatives::~SpellAlternatives() = default;
 
 OUString SAL_CALL SpellAlternatives::getWord()
 {

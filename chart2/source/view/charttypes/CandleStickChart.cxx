@@ -49,9 +49,7 @@ CandleStickChart::CandleStickChart( const uno::Reference<XChartType>& xChartType
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
 }
 
-CandleStickChart::~CandleStickChart()
-{
-}
+CandleStickChart::~CandleStickChart() = default;
 
 // MinimumAndMaximumSupplier
 

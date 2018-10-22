@@ -38,9 +38,7 @@ ShapeStyleContext::ShapeStyleContext( ContextHandler2Helper const & rParent, Sha
 {
 }
 
-ShapeStyleContext::~ShapeStyleContext()
-{
-}
+ShapeStyleContext::~ShapeStyleContext() = default;
 
 ContextHandlerRef ShapeStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

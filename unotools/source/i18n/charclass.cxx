@@ -46,9 +46,7 @@ CharClass::CharClass(
     xCC = CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-CharClass::~CharClass()
-{
-}
+CharClass::~CharClass() = default;
 
 void CharClass::setLanguageTag( const LanguageTag& rLanguageTag )
 {

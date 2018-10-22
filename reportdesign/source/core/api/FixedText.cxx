@@ -66,9 +66,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
     osl_atomic_decrement( &m_refCount );
 }
 
-OFixedText::~OFixedText()
-{
-}
+OFixedText::~OFixedText() = default;
 
 IMPLEMENT_FORWARD_REFCOUNT( OFixedText, FixedTextBase )
 

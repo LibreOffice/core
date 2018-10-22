@@ -31,9 +31,7 @@ namespace svgio
         {
         }
 
-        SvgANode::~SvgANode()
-        {
-        }
+        SvgANode::~SvgANode() = default;
 
         const SvgStyleAttributes* SvgANode::getSvgStyleAttributes() const
         {

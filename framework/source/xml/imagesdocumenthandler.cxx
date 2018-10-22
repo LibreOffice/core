@@ -134,9 +134,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_bExternalImageStartFound      = false;
 }
 
-OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
-{
-}
+OReadImagesDocumentHandler::~OReadImagesDocumentHandler() = default;
 
 // XDocumentHandler
 void SAL_CALL OReadImagesDocumentHandler::startDocument()
@@ -580,9 +578,7 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_aAttributeValueSimple = ATTRIBUTE_XLINK_TYPE_VALUE;
 }
 
-OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
-{
-}
+OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler() = default;
 
 void OWriteImagesDocumentHandler::WriteImagesDocument()
 {

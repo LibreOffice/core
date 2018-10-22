@@ -29,9 +29,7 @@ AstEnum::AstEnum(const OString& name, AstScope* pScope)
 {
 }
 
-AstEnum::~AstEnum()
-{
-}
+AstEnum::~AstEnum() = default;
 
 AstConstant* AstEnum::checkValue(AstExpression* pExpr)
 {

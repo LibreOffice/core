@@ -167,9 +167,7 @@ void E3dPolygonObj::CreateDefaultTexture()
     SetPolyTexture2D(aPolyTexture);
 }
 
-E3dPolygonObj::~E3dPolygonObj()
-{
-}
+E3dPolygonObj::~E3dPolygonObj() = default;
 
 sal_uInt16 E3dPolygonObj::GetObjIdentifier() const
 {

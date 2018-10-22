@@ -138,9 +138,7 @@ public:
 class TestPreinit : public CppUnit::TestFixture
 {
 public:
-    TestPreinit()
-    {
-    }
+    TestPreinit() = default;
 
     // initialise your test code values here.
     void setUp() override

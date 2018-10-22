@@ -271,10 +271,7 @@ namespace svxform
         }
     }
 
-    OControlExchange::OControlExchange( )
-    {
-    }
-
+    OControlExchange::OControlExchange() = default;
 
     bool OControlExchange::GetData( const DataFlavor& _rFlavor, const OUString& rDestDoc )
     {

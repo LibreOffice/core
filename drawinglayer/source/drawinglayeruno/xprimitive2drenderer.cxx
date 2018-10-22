@@ -102,9 +102,7 @@ namespace drawinglayer
 {
     namespace unorenderer
     {
-        XPrimitive2DRenderer::XPrimitive2DRenderer()
-        {
-        }
+        XPrimitive2DRenderer::XPrimitive2DRenderer() = default;
 
         uno::Reference< rendering::XBitmap > XPrimitive2DRenderer::rasterize(
             const uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& aPrimitive2DSequence,

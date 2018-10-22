@@ -32,9 +32,7 @@ UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
 {
 }
 
-UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
-{
-}
+UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver() = default;
 
 OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()

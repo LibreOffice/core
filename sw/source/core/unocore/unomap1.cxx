@@ -138,9 +138,7 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
     }
 }
 
-SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
-{
-}
+SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider() = default;
 
 const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextCursorPropertyMap()
 {

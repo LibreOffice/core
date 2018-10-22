@@ -36,9 +36,7 @@ namespace svgio
         {
         }
 
-        SvgPolyNode::~SvgPolyNode()
-        {
-        }
+        SvgPolyNode::~SvgPolyNode() = default;
 
         const SvgStyleAttributes* SvgPolyNode::getSvgStyleAttributes() const
         {

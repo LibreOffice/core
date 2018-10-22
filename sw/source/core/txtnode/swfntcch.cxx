@@ -42,9 +42,7 @@ SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
         m_pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );
 }
 
-SwFontObj::~SwFontObj()
-{
-}
+SwFontObj::~SwFontObj() = default;
 
 SwFontAccess::SwFontAccess( const void *pOwn, SwViewShell *pSh ) :
     SwCacheAccess( *pSwFontCache, pOwn,

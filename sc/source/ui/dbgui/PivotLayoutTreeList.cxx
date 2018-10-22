@@ -27,8 +27,7 @@ ScPivotLayoutTreeList::ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits
     SetForceMakeVisible(true);
 }
 
-ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
-{}
+ScPivotLayoutTreeList::~ScPivotLayoutTreeList() = default;
 
 void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListType eType)
 {

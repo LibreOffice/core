@@ -61,10 +61,7 @@ public:
     virtual void DeInit() override;
 };
 
-MyApp::MyApp()
-{
-}
-
+MyApp::MyApp() = default;
 
 int MyApp::Main()
 {

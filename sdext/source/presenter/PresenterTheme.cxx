@@ -256,9 +256,7 @@ PresenterTheme::PresenterTheme (
     mpTheme = ReadTheme();
 }
 
-PresenterTheme::~PresenterTheme()
-{
-}
+PresenterTheme::~PresenterTheme() = default;
 
 std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
 {

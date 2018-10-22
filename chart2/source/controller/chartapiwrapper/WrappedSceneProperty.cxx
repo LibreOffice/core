@@ -45,9 +45,7 @@ WrappedD3DTransformMatrixProperty::WrappedD3DTransformMatrixProperty(
 {
 }
 
-WrappedD3DTransformMatrixProperty::~WrappedD3DTransformMatrixProperty()
-{
-}
+WrappedD3DTransformMatrixProperty::~WrappedD3DTransformMatrixProperty() = default;
 
 void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {

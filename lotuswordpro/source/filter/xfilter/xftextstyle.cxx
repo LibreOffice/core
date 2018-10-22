@@ -64,13 +64,9 @@
 #include <xfilter/xffont.hxx>
 #include <xfilter/xfutil.hxx>
 
-XFTextStyle::XFTextStyle()
-{
-}
+XFTextStyle::XFTextStyle() = default;
 
-XFTextStyle::~XFTextStyle()
-{
-}
+XFTextStyle::~XFTextStyle() = default;
 
 void    XFTextStyle::SetFont(rtl::Reference<XFFont> const & font)
 {

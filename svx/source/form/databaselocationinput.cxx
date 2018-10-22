@@ -255,11 +255,7 @@ namespace svx
     {
     }
 
-
-    DatabaseLocationInputController::~DatabaseLocationInputController()
-    {
-    }
-
+    DatabaseLocationInputController::~DatabaseLocationInputController() = default;
 
     bool DatabaseLocationInputController::prepareCommit()
     {

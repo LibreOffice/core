@@ -24,9 +24,7 @@ using namespace ::com::sun::star;
 
 namespace chart
 {
-
-SeriesEntry::~SeriesEntry()
-{}
+SeriesEntry::~SeriesEntry() = default;
 
 SeriesListBox::SeriesListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)

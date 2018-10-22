@@ -79,11 +79,7 @@ SVTXGridControl::SVTXGridControl()
 {
 }
 
-
-SVTXGridControl::~SVTXGridControl()
-{
-}
-
+SVTXGridControl::~SVTXGridControl() = default;
 
 void SVTXGridControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {

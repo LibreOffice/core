@@ -70,10 +70,7 @@ OPatternModel::OPatternModel( const OPatternModel* _pOriginal, const Reference<X
 {
 }
 
-
-OPatternModel::~OPatternModel()
-{
-}
+OPatternModel::~OPatternModel() = default;
 
 // XCloneable
 

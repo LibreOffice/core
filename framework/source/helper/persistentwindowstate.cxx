@@ -42,9 +42,7 @@ PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno
 {
 }
 
-PersistentWindowState::~PersistentWindowState()
-{
-}
+PersistentWindowState::~PersistentWindowState() = default;
 
 void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
 {

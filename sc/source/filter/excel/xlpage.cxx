@@ -173,10 +173,8 @@ XclPageData::XclPageData()
     SetDefaults();
 }
 
-XclPageData::~XclPageData()
-{
+XclPageData::~XclPageData() = default;
     // SvxBrushItem incomplete in header
-}
 
 void XclPageData::SetDefaults()
 {

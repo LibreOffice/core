@@ -40,7 +40,7 @@ namespace test {
 
 OfficeConnection::OfficeConnection(): process_(nullptr) {}
 
-OfficeConnection::~OfficeConnection() {}
+OfficeConnection::~OfficeConnection() = default;
 
 void OfficeConnection::setUp() {
     css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(

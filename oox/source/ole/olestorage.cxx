@@ -200,9 +200,7 @@ OleStorage::OleStorage( const OleStorage& rParentStorage,
     initStorage( rxOutStream );
 }
 
-OleStorage::~OleStorage()
-{
-}
+OleStorage::~OleStorage() = default;
 
 void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
 {

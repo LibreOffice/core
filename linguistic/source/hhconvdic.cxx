@@ -86,11 +86,7 @@ HHConvDic::HHConvDic( const OUString &rName, const OUString &rMainURL ) :
 {
 }
 
-
-HHConvDic::~HHConvDic()
-{
-}
-
+HHConvDic::~HHConvDic() = default;
 
 void SAL_CALL HHConvDic::addEntry(
         const OUString& aLeftText,

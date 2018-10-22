@@ -59,9 +59,7 @@ PageObjectPainter::PageObjectPainter (
     mpFocusBorderPainter->AdaptColor(aColor);
 }
 
-PageObjectPainter::~PageObjectPainter()
-{
-}
+PageObjectPainter::~PageObjectPainter() = default;
 
 void PageObjectPainter::PaintPageObject (
     OutputDevice& rDevice,

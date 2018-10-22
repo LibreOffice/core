@@ -179,11 +179,7 @@ namespace svt { namespace table
     {
     }
 
-
-    GridTableRenderer::~GridTableRenderer()
-    {
-    }
-
+    GridTableRenderer::~GridTableRenderer() = default;
 
     bool GridTableRenderer::useGridLines() const
     {

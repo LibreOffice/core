@@ -88,9 +88,7 @@ ZipOutputEntry::ZipOutputEntry(
     }
 }
 
-ZipOutputEntry::~ZipOutputEntry()
-{
-}
+ZipOutputEntry::~ZipOutputEntry() = default;
 
 void ZipOutputEntry::createBufferFile()
 {

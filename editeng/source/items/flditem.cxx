@@ -238,16 +238,9 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
     return nullptr;
 }
 
+SvxFieldData::SvxFieldData() = default;
 
-SvxFieldData::SvxFieldData()
-{
-}
-
-
-SvxFieldData::~SvxFieldData()
-{
-}
-
+SvxFieldData::~SvxFieldData() = default;
 
 std::unique_ptr<SvxFieldData> SvxFieldData::Clone() const
 {
@@ -293,11 +286,7 @@ SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
 {
 }
 
-
-SvxFieldItem::~SvxFieldItem()
-{
-}
-
+SvxFieldItem::~SvxFieldItem() = default;
 
 SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
 {
@@ -478,7 +467,7 @@ MetaAction* SvxURLField::createBeginComment() const
 // SvxPageTitleField methods
 //
 
-SvxPageTitleField::SvxPageTitleField() {}
+SvxPageTitleField::SvxPageTitleField() = default;
 
 std::unique_ptr<SvxFieldData> SvxPageTitleField::Clone() const
 {
@@ -500,8 +489,7 @@ MetaAction* SvxPageTitleField::createBeginComment() const
 //
 // The fields that were removed from Calc:
 
-
-SvxPageField::SvxPageField() {}
+SvxPageField::SvxPageField() = default;
 
 std::unique_ptr<SvxFieldData> SvxPageField::Clone() const
 {
@@ -518,8 +506,7 @@ MetaAction* SvxPageField::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageField" );
 }
 
-
-SvxPagesField::SvxPagesField() {}
+SvxPagesField::SvxPagesField() = default;
 
 std::unique_ptr<SvxFieldData> SvxPagesField::Clone() const
 {
@@ -531,7 +518,7 @@ bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxPagesField *>(&rCmp) != nullptr);
 }
 
-SvxTimeField::SvxTimeField() {}
+SvxTimeField::SvxTimeField() = default;
 
 std::unique_ptr<SvxFieldData> SvxTimeField::Clone() const
 {
@@ -548,7 +535,7 @@ MetaAction* SvxTimeField::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-SvxFileField::SvxFileField() {}
+SvxFileField::SvxFileField() = default;
 
 std::unique_ptr<SvxFieldData> SvxFileField::Clone() const
 {
@@ -870,7 +857,7 @@ OUString SvxAuthorField::GetFormatted() const
     return aString;
 }
 
-SvxHeaderField::SvxHeaderField() {}
+SvxHeaderField::SvxHeaderField() = default;
 
 std::unique_ptr<SvxFieldData> SvxHeaderField::Clone() const
 {
@@ -882,7 +869,7 @@ bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxHeaderField *>(&rCmp) != nullptr );
 }
 
-SvxFooterField::SvxFooterField() {}
+SvxFooterField::SvxFooterField() = default;
 
 std::unique_ptr<SvxFieldData> SvxFooterField::Clone() const
 {
@@ -904,7 +891,7 @@ bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxDateTimeField *>(&rCmp) != nullptr );
 }
 
-SvxDateTimeField::SvxDateTimeField() {}
+SvxDateTimeField::SvxDateTimeField() = default;
 
 OUString SvxDateTimeField::GetFormatted(
     Date const & rDate, tools::Time const & rTime,

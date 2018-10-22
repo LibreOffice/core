@@ -424,9 +424,7 @@ namespace
         virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
 
     protected:
-        virtual ~SelectionSupplier() override
-        {
-        }
+        virtual ~SelectionSupplier() override = default;
 
     private:
         Any m_aSelection;

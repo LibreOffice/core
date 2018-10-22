@@ -43,7 +43,7 @@ class OPackageStructureCreator : public ::cppu::WeakImplHelper< embed::XPackageS
                                                                 lang::XServiceInfo >
 {
 public:
-    OPackageStructureCreator() {}
+    OPackageStructureCreator() = default;
 
     // XPackageStructureCreator
     virtual void SAL_CALL convertToPackage( const OUString& aFolderUrl, const uno::Reference< io::XOutputStream >& xTargetStream ) override;

@@ -59,23 +59,19 @@ namespace rptxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
-OPropertyHandlerFactory::OPropertyHandlerFactory()
-{
-}
+    OPropertyHandlerFactory::OPropertyHandlerFactory() = default;
 
-OPropertyHandlerFactory::~OPropertyHandlerFactory()
-{
-}
+    OPropertyHandlerFactory::~OPropertyHandlerFactory() = default;
 
-const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
-{
-    const XMLPropertyHandler* pHandler = nullptr;
-    sal_Int32 nType = _nType;
-    nType &= MID_FLAG_MASK;
-
-    switch(nType)
+    const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
-        case XML_RPT_ALGINMENT:
+        const XMLPropertyHandler* pHandler = nullptr;
+        sal_Int32 nType = _nType;
+        nType &= MID_FLAG_MASK;
+
+        switch (nType)
+        {
+            case XML_RPT_ALGINMENT:
             {
                 static SvXMLEnumMapEntry<style::VerticalAlignment> const pXML_VerticalAlign_Enum[] =
                 {

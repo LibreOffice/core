@@ -35,8 +35,7 @@ using namespace ::com::sun::star::lang;
 
 jclass java_sql_DriverPropertyInfo::theClass = nullptr;
 
-java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
-{}
+java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo() = default;
 
 jclass java_sql_DriverPropertyInfo::getMyClass() const
 {

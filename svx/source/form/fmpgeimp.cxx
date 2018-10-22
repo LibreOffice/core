@@ -97,9 +97,7 @@ namespace
     class FormHierarchyComparator
     {
     public:
-        FormHierarchyComparator()
-        {
-        }
+        FormHierarchyComparator() = default;
 
         static size_t childCount( const FormComponentPair& _components )
         {

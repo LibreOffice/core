@@ -125,9 +125,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
     }
 }
 
-ExplicitCategoriesProvider::~ExplicitCategoriesProvider()
-{
-}
+ExplicitCategoriesProvider::~ExplicitCategoriesProvider() = default;
 
 Reference< chart2::data::XDataSequence > ExplicitCategoriesProvider::getOriginalCategories()
 {
@@ -204,9 +202,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     }
 }
 
-SplitCategoriesProvider::~SplitCategoriesProvider()
-{
-}
+SplitCategoriesProvider::~SplitCategoriesProvider() = default;
 
 class SplitCategoriesProvider_ForLabeledDataSequences : public SplitCategoriesProvider
 {

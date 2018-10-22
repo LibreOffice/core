@@ -59,13 +59,9 @@
 #include <xfilter/xfshadow.hxx>
 #include <xfilter/xfbgimage.hxx>
 
-XFTextBoxStyle::XFTextBoxStyle()
-{
-}
+XFTextBoxStyle::XFTextBoxStyle() = default;
 
-XFTextBoxStyle::~XFTextBoxStyle()
-{
-}
+XFTextBoxStyle::~XFTextBoxStyle() = default;
 
 enumXFStyle XFTextBoxStyle::GetStyleFamily()
 {

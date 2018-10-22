@@ -96,9 +96,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, weld::Toggle
     ModifiedTrgrHdl_Impl(nullptr);
 }
 
-SvxTransparenceTabPage::~SvxTransparenceTabPage()
-{
-}
+SvxTransparenceTabPage::~SvxTransparenceTabPage() = default;
 
 void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 {

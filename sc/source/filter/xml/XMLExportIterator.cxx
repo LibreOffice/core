@@ -30,13 +30,9 @@
 
 using namespace ::com::sun::star;
 
-ScMyIteratorBase::ScMyIteratorBase()
-{
-}
+ScMyIteratorBase::ScMyIteratorBase() = default;
 
-ScMyIteratorBase::~ScMyIteratorBase()
-{
-}
+ScMyIteratorBase::~ScMyIteratorBase() = default;
 
 void ScMyIteratorBase::UpdateAddress( ScAddress& rCellAddress )
 {
@@ -60,9 +56,7 @@ ScMyShapesContainer::ScMyShapesContainer()
 {
 }
 
-ScMyShapesContainer::~ScMyShapesContainer()
-{
-}
+ScMyShapesContainer::~ScMyShapesContainer() = default;
 
 void ScMyShapesContainer::AddNewShape( const ScMyShape& aShape )
 {
@@ -116,9 +110,7 @@ ScMyNoteShapesContainer::ScMyNoteShapesContainer()
 {
 }
 
-ScMyNoteShapesContainer::~ScMyNoteShapesContainer()
-{
-}
+ScMyNoteShapesContainer::~ScMyNoteShapesContainer() = default;
 
 void ScMyNoteShapesContainer::AddNewNote( const ScMyNoteShape& aNote )
 {
@@ -167,9 +159,7 @@ ScMyMergedRangesContainer::ScMyMergedRangesContainer()
 {
 }
 
-ScMyMergedRangesContainer::~ScMyMergedRangesContainer()
-{
-}
+ScMyMergedRangesContainer::~ScMyMergedRangesContainer() = default;
 
 void ScMyMergedRangesContainer::AddRange(const ScRange& rMergedRange)
 {
@@ -261,9 +251,7 @@ ScMyAreaLinksContainer::ScMyAreaLinksContainer() :
 {
 }
 
-ScMyAreaLinksContainer::~ScMyAreaLinksContainer()
-{
-}
+ScMyAreaLinksContainer::~ScMyAreaLinksContainer() = default;
 
 bool ScMyAreaLinksContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
@@ -319,9 +307,7 @@ ScMyEmptyDatabaseRangesContainer::ScMyEmptyDatabaseRangesContainer()
 {
 }
 
-ScMyEmptyDatabaseRangesContainer::~ScMyEmptyDatabaseRangesContainer()
-{
-}
+ScMyEmptyDatabaseRangesContainer::~ScMyEmptyDatabaseRangesContainer() = default;
 
 void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::CellRangeAddress& aCellRange)
 {
@@ -387,9 +373,7 @@ ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
 {
 }
 
-ScMyDetectiveObjContainer::~ScMyDetectiveObjContainer()
-{
-}
+ScMyDetectiveObjContainer::~ScMyDetectiveObjContainer() = default;
 
 void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SCTAB nSheet,
                                             const ScAddress& rPosition, const ScRange& rSourceRange,
@@ -469,9 +453,7 @@ ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :
 {
 }
 
-ScMyDetectiveOpContainer::~ScMyDetectiveOpContainer()
-{
-}
+ScMyDetectiveOpContainer::~ScMyDetectiveOpContainer() = default;
 
 void ScMyDetectiveOpContainer::AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex )
 {

@@ -25,9 +25,7 @@
 #include <sfx2/mieclip.hxx>
 #include <sfx2/sfxuno.hxx>
 
-MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
-{
-}
+MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj() = default;
 
 SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {

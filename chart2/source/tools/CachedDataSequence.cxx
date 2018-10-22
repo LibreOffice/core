@@ -108,8 +108,7 @@ CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
     registerProperties();
 }
 
-CachedDataSequence::~CachedDataSequence()
-{}
+CachedDataSequence::~CachedDataSequence() = default;
 
 void CachedDataSequence::registerProperties()
 {

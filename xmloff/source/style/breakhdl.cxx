@@ -41,10 +41,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_BreakTypes[] =
 // class XMLFmtBreakBeforePropHdl
 
 
-XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
-{
-    // Nothing to do
-}
+XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl() = default;
 
 bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -111,10 +108,7 @@ bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 // class XMLFmtBreakBeforePropHdl
 
 
-XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
-{
-    // Nothing to do
-}
+XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl() = default;
 
 bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

@@ -32,10 +32,7 @@ SfxPoolItem* SvxPatternListItem::CreateDefault() { return new SvxPatternListItem
 SfxPoolItem* SvxDashListItem::CreateDefault() { return new   SvxDashListItem ;}
 SfxPoolItem* SvxLineEndListItem::CreateDefault() { return new   SvxLineEndListItem ;}
 
-SvxColorListItem::SvxColorListItem()
-{
-}
-
+SvxColorListItem::SvxColorListItem() = default;
 
 SvxColorListItem::SvxColorListItem( XColorListRef const & pTable, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -43,12 +40,9 @@ SvxColorListItem::SvxColorListItem( XColorListRef const & pTable, sal_uInt16 nW 
 {
 }
 
+SvxColorListItem::SvxColorListItem(const SvxColorListItem& rItem)
 
-SvxColorListItem::SvxColorListItem( const SvxColorListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pColorList( rItem.pColorList )
-{
-}
+    = default;
 
 bool SvxColorListItem::GetPresentation
 (
@@ -94,9 +88,7 @@ bool svtype::PutValue( const css::uno::Any& rVal, sal_uInt8 ) \
 
 QUERY_PUT_IMPL( SvxColorListItem, ColorList )
 
-SvxGradientListItem::SvxGradientListItem()
-{
-}
+SvxGradientListItem::SvxGradientListItem() = default;
 
 SvxGradientListItem::SvxGradientListItem( XGradientListRef const & pList, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -104,13 +96,9 @@ SvxGradientListItem::SvxGradientListItem( XGradientListRef const & pList, sal_uI
 {
 }
 
+SvxGradientListItem::SvxGradientListItem(const SvxGradientListItem& rItem)
 
-SvxGradientListItem::SvxGradientListItem( const SvxGradientListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pGradientList( rItem.pGradientList )
-{
-}
-
+    = default;
 
 bool SvxGradientListItem::GetPresentation
 (
@@ -140,10 +128,7 @@ SfxPoolItem* SvxGradientListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxGradientListItem, GradientList )
 
-SvxHatchListItem::SvxHatchListItem()
-{
-}
-
+SvxHatchListItem::SvxHatchListItem() = default;
 
 SvxHatchListItem::SvxHatchListItem( XHatchListRef const & pList, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -151,13 +136,9 @@ SvxHatchListItem::SvxHatchListItem( XHatchListRef const & pList, sal_uInt16 nW )
 {
 }
 
+SvxHatchListItem::SvxHatchListItem(const SvxHatchListItem& rItem)
 
-SvxHatchListItem::SvxHatchListItem( const SvxHatchListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pHatchList( rItem.pHatchList )
-{
-}
-
+    = default;
 
 bool SvxHatchListItem::GetPresentation
 (
@@ -186,9 +167,7 @@ SfxPoolItem* SvxHatchListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxHatchListItem, HatchList )
 
-SvxBitmapListItem::SvxBitmapListItem()
-{
-}
+SvxBitmapListItem::SvxBitmapListItem() = default;
 
 SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef const & pList, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -196,11 +175,9 @@ SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef const & pList, sal_uInt16 n
 {
 }
 
-SvxBitmapListItem::SvxBitmapListItem( const SvxBitmapListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pBitmapList( rItem.pBitmapList )
-{
-}
+SvxBitmapListItem::SvxBitmapListItem(const SvxBitmapListItem& rItem)
+
+    = default;
 
 bool SvxBitmapListItem::GetPresentation
 (
@@ -227,9 +204,7 @@ SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
 
-SvxPatternListItem::SvxPatternListItem()
-{
-}
+SvxPatternListItem::SvxPatternListItem() = default;
 
 SvxPatternListItem::SvxPatternListItem( XPatternListRef const & pList, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -237,11 +212,9 @@ SvxPatternListItem::SvxPatternListItem( XPatternListRef const & pList, sal_uInt1
 {
 }
 
-SvxPatternListItem::SvxPatternListItem( const SvxPatternListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pPatternList( rItem.pPatternList )
-{
-}
+SvxPatternListItem::SvxPatternListItem(const SvxPatternListItem& rItem)
+
+    = default;
 
 bool SvxPatternListItem::GetPresentation
 (
@@ -268,9 +241,7 @@ SfxPoolItem* SvxPatternListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxPatternListItem, PatternList )
 
-SvxDashListItem::SvxDashListItem()
-{
-}
+SvxDashListItem::SvxDashListItem() = default;
 
 SvxDashListItem::SvxDashListItem( XDashListRef const & pList, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -278,11 +249,9 @@ SvxDashListItem::SvxDashListItem( XDashListRef const & pList, sal_uInt16 nW ) :
 {
 }
 
-SvxDashListItem::SvxDashListItem( const SvxDashListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pDashList( rItem.pDashList )
-{
-}
+SvxDashListItem::SvxDashListItem(const SvxDashListItem& rItem)
+
+    = default;
 
 bool SvxDashListItem::GetPresentation
 (
@@ -309,9 +278,7 @@ SfxPoolItem* SvxDashListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxDashListItem, DashList )
 
-SvxLineEndListItem::SvxLineEndListItem()
-{
-}
+SvxLineEndListItem::SvxLineEndListItem() = default;
 
 SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef const & pList, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
@@ -319,11 +286,9 @@ SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef const & pList, sal_uInt1
 {
 }
 
-SvxLineEndListItem::SvxLineEndListItem( const SvxLineEndListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pLineEndList( rItem.pLineEndList )
-{
-}
+SvxLineEndListItem::SvxLineEndListItem(const SvxLineEndListItem& rItem)
+
+    = default;
 
 bool SvxLineEndListItem::GetPresentation
 (

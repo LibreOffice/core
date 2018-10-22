@@ -54,11 +54,7 @@ namespace rptui
     {
     }
 
-
-    FixedTextColor::~FixedTextColor()
-    {
-    }
-
+    FixedTextColor::~FixedTextColor() = default;
 
     void FixedTextColor::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {

@@ -20,9 +20,7 @@
 #include <viscrs.hxx>
 #include "BlockCursor.hxx"
 
-SwBlockCursor::~SwBlockCursor()
-{
-}
+SwBlockCursor::~SwBlockCursor() = default;
 
 SwShellCursor& SwBlockCursor::getShellCursor()
 {

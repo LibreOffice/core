@@ -40,8 +40,7 @@ XMLLabelSeparatorContext::XMLLabelSeparatorContext(
 {
 }
 
-XMLLabelSeparatorContext::~XMLLabelSeparatorContext()
-{}
+XMLLabelSeparatorContext::~XMLLabelSeparatorContext() = default;
 
 void XMLLabelSeparatorContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {

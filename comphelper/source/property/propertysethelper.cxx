@@ -62,9 +62,7 @@ PropertySetHelper::PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo
     mpImpl->mxInfo = xInfo;
 }
 
-PropertySetHelper::~PropertySetHelper() throw()
-{
-}
+PropertySetHelper::~PropertySetHelper() throw() = default;
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  )

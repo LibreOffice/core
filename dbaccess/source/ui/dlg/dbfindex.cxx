@@ -72,9 +72,7 @@ ODbaseIndexDialog::ODbaseIndexDialog(weld::Window * pParent, const OUString& aDa
     SetCtrls();
 }
 
-ODbaseIndexDialog::~ODbaseIndexDialog()
-{
-}
+ODbaseIndexDialog::~ODbaseIndexDialog() = default;
 
 void ODbaseIndexDialog::checkButtons()
 {

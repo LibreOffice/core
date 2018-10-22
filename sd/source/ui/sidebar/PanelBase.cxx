@@ -72,14 +72,9 @@ bool PanelBase::ProvideWrappedControl()
     return mpWrappedControl.get() != nullptr;
 }
 
-ISidebarReceiver::~ISidebarReceiver()
-{
-}
+ISidebarReceiver::~ISidebarReceiver() = default;
 
-IDisposable::~IDisposable()
-{
-}
-
+IDisposable::~IDisposable() = default;
 } } // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

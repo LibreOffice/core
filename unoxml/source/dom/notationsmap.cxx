@@ -28,18 +28,15 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CNotationsMap::CNotationsMap()
-    {
-    }
+CNotationsMap::CNotationsMap() = default;
 
-    /**
+/**
     The number of nodes in this map.
     */
-    sal_Int32 SAL_CALL CNotationsMap::getLength()
-    {
-        OSL_ENSURE(false,
-            "CNotationsMap::getLength: not implemented (#i113683#)");
-        return 0;
+sal_Int32 SAL_CALL CNotationsMap::getLength()
+{
+    OSL_ENSURE(false, "CNotationsMap::getLength: not implemented (#i113683#)");
+    return 0;
     }
 
     /**

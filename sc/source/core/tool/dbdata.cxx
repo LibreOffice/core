@@ -1085,9 +1085,7 @@ ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r, ScDBCollection& rParent)
     }
 }
 
-ScDBCollection::NamedDBs::~NamedDBs()
-{
-}
+ScDBCollection::NamedDBs::~NamedDBs() = default;
 
 void ScDBCollection::NamedDBs::initInserted( ScDBData* p )
 {
@@ -1271,9 +1269,7 @@ bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const
     return ::comphelper::ContainerUniquePtrEquals(m_DBs, r.m_DBs);
 }
 
-ScDBCollection::AnonDBs::AnonDBs()
-{
-}
+ScDBCollection::AnonDBs::AnonDBs() = default;
 
 ScDBCollection::AnonDBs::AnonDBs(AnonDBs const& r)
 {

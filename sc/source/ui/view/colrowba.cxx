@@ -58,9 +58,7 @@ ScColBar::ScColBar( vcl::Window* pParent, ScHSplitPos eWhich,
     Show();
 }
 
-ScColBar::~ScColBar()
-{
-}
+ScColBar::~ScColBar() = default;
 
 SCCOLROW ScColBar::GetPos() const
 {
@@ -217,9 +215,7 @@ ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhich,
     Show();
 }
 
-ScRowBar::~ScRowBar()
-{
-}
+ScRowBar::~ScRowBar() = default;
 
 SCCOLROW ScRowBar::GetPos() const
 {

@@ -37,19 +37,13 @@ namespace accessibility
 
     // EventQueue implementation
 
+AccessibleTextEventQueue::AccessibleTextEventQueue() = default;
 
-    AccessibleTextEventQueue::AccessibleTextEventQueue()
-    {
-    }
+AccessibleTextEventQueue::~AccessibleTextEventQueue() { Clear(); }
 
-    AccessibleTextEventQueue::~AccessibleTextEventQueue()
-    {
-        Clear();
-    }
-
-    void AccessibleTextEventQueue::Append( const SdrHint& rHint )
-    {
-        maEventQueue.push_back( new SdrHint( rHint ) );
+void AccessibleTextEventQueue::Append(const SdrHint& rHint)
+{
+    maEventQueue.push_back(new SdrHint(rHint));
     }
 
     void AccessibleTextEventQueue::Append( const TextHint& rHint )

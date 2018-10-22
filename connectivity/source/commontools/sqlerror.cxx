@@ -252,11 +252,7 @@ namespace connectivity
     {
     }
 
-
-    SQLError::~SQLError()
-    {
-    }
-
+    SQLError::~SQLError() = default;
 
     const OUString& SQLError::getMessagePrefix()
     {

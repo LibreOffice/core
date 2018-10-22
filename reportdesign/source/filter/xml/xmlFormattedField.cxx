@@ -79,10 +79,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
     }
 }
 
-OXMLFormattedField::~OXMLFormattedField()
-{
-}
-
+OXMLFormattedField::~OXMLFormattedField() = default;
 
 } // namespace rptxml
 

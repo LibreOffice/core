@@ -278,9 +278,7 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
         m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = true;
 }
 
-SettingsTable::~SettingsTable()
-{
-}
+SettingsTable::~SettingsTable() = default;
 
 void SettingsTable::lcl_attribute(Id nName, Value & val)
 {

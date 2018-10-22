@@ -34,8 +34,7 @@ XMLSignatureTemplateImpl::XMLSignatureTemplateImpl()
 {
 }
 
-XMLSignatureTemplateImpl::~XMLSignatureTemplateImpl() {
-}
+XMLSignatureTemplateImpl::~XMLSignatureTemplateImpl() = default;
 
 /* XXMLSignatureTemplate */
 void SAL_CALL XMLSignatureTemplateImpl::setTemplate( const Reference< XXMLElementWrapper >& aTemplate )

@@ -68,8 +68,7 @@
      , cColumn(0)
 {}
 
-LwpCellList::~LwpCellList()
-{}
+LwpCellList::~LwpCellList() = default;
 
 void LwpCellList::Read()
 {
@@ -115,8 +114,7 @@ LwpNumericValue::LwpNumericValue(LwpObjectHeader const &objHdr, LwpSvStream* pSt
     , cNumber(0)
 {}
 
-LwpNumericValue::~LwpNumericValue()
-{}
+LwpNumericValue::~LwpNumericValue() = default;
 
 void LwpNumericValue::Read()
 {
@@ -134,8 +132,7 @@ LwpRowList::LwpRowList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     , cRowID(0)
 {}
 
-LwpRowList::~LwpRowList()
-{}
+LwpRowList::~LwpRowList() = default;
 
 void LwpRowList::Read()
 {
@@ -160,8 +157,7 @@ LwpTableRange::LwpTableRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpDLVList(objHdr, pStrm)
 {}
 
-LwpTableRange::~LwpTableRange()
-{}
+LwpTableRange::~LwpTableRange() = default;
 
 void LwpTableRange::Read()
 {
@@ -179,8 +175,7 @@ void  LwpTableRange::Parse(IXFStream* /*pOutputStream*/)
  LwpCellRange::LwpCellRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
 
-LwpCellRange::~LwpCellRange()
-{}
+LwpCellRange::~LwpCellRange() = default;
 
 void LwpCellRange::Read()
 {
@@ -195,8 +190,7 @@ void  LwpCellRange::Parse(IXFStream* /*pOutputStream*/)
  LwpFolder::LwpFolder(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
-LwpFolder::~LwpFolder()
-{}
+LwpFolder::~LwpFolder() = default;
 
 void LwpFolder::Read()
 {
@@ -223,8 +217,7 @@ LwpDependent::LwpDependent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     , cFlags(0)
 {}
 
-LwpDependent::~LwpDependent()
-{}
+LwpDependent::~LwpDependent() = default;
 
 void LwpDependent::Read()
 {

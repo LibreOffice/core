@@ -47,9 +47,7 @@ DragMethod_Base::DragMethod_Base( DrawViewWrapper& rDrawViewWrapper
 {
     setMoveOnly(true);
 }
-DragMethod_Base::~DragMethod_Base()
-{
-}
+DragMethod_Base::~DragMethod_Base() = default;
 
 Reference< frame::XModel > DragMethod_Base::getChartModel() const
 {

@@ -931,9 +931,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
     m_pPhoneticED2->Enable(bKey2HasText && bIsPhoneticReadingEnabled);
 }
 
-SwIndexMarkPane::~SwIndexMarkPane()
-{
-}
+SwIndexMarkPane::~SwIndexMarkPane() = default;
 
 void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOXMark)
 {

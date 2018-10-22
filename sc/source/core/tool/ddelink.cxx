@@ -53,12 +53,9 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const OUString& rA, const OUString& rT, co
 {
 }
 
-ScDdeLink::~ScDdeLink()
-{
+ScDdeLink::~ScDdeLink() = default;
     // cancel connection
-
     // pResult is refcounted
-}
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),

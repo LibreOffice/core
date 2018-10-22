@@ -66,8 +66,7 @@ class VbaTimer
     ::rtl::Reference< VbaApplicationBase > m_xBase;
 
 public:
-    VbaTimer()
-    {}
+    VbaTimer() = default;
 
     ~VbaTimer()
     {
@@ -162,9 +161,7 @@ VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentCon
 {
 }
 
-VbaApplicationBase::~VbaApplicationBase()
-{
-}
+VbaApplicationBase::~VbaApplicationBase() = default;
 
 sal_Bool SAL_CALL
 VbaApplicationBase::getScreenUpdating()

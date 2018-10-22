@@ -96,9 +96,7 @@ E3dObject::E3dObject(SdrModel& rSdrModel)
     bClosedObj = true;
 }
 
-E3dObject::~E3dObject()
-{
-}
+E3dObject::~E3dObject() = default;
 
 void E3dObject::SetSelected(bool bNew)
 {
@@ -506,9 +504,7 @@ void E3dCompoundObject::SetDefaultAttributes()
     aMaterialAmbientColor = COL_BLACK;
 }
 
-E3dCompoundObject::~E3dCompoundObject ()
-{
-}
+E3dCompoundObject::~E3dCompoundObject() = default;
 
 basegfx::B2DPolyPolygon E3dCompoundObject::TakeXorPoly() const
 {

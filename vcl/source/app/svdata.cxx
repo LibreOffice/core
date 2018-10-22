@@ -386,11 +386,10 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
     AllSettings::LocaleSettingsChanged( nHint );
 }
 
-
-ImplSVData::~ImplSVData() {}
-ImplSVAppData::~ImplSVAppData() {}
-ImplSVGDIData::~ImplSVGDIData() {}
-ImplSVWinData::~ImplSVWinData() {}
-ImplSVHelpData::~ImplSVHelpData() {}
+ImplSVData::~ImplSVData() = default;
+ImplSVAppData::~ImplSVAppData() = default;
+ImplSVGDIData::~ImplSVGDIData() = default;
+ImplSVWinData::~ImplSVWinData() = default;
+ImplSVHelpData::~ImplSVHelpData() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

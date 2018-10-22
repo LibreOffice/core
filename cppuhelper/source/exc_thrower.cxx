@@ -48,7 +48,7 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 {
     ExceptionThrower();
 
-    virtual ~ExceptionThrower() {}
+    virtual ~ExceptionThrower() = default;
 
     static Type const & getCppuType()
     {

@@ -51,11 +51,7 @@ OSectionView::OSectionView(
     SetQuickTextEditMode(false);
 }
 
-
-OSectionView::~OSectionView()
-{
-}
-
+OSectionView::~OSectionView() = default;
 
 void OSectionView::MarkListHasChanged()
 {

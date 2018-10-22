@@ -49,7 +49,7 @@ ScMyCellInfo::ScMyCellInfo(
 {
 }
 
-ScMyCellInfo::~ScMyCellInfo() {}
+ScMyCellInfo::~ScMyCellInfo() = default;
 
 const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
 {
@@ -90,18 +90,14 @@ ScMyBaseAction::ScMyBaseAction(const ScChangeActionType nTempActionType)
 {
 }
 
-ScMyBaseAction::~ScMyBaseAction()
-{
-}
+ScMyBaseAction::~ScMyBaseAction() = default;
 
 ScMyInsAction::ScMyInsAction(const ScChangeActionType nActionTypeP)
     : ScMyBaseAction(nActionTypeP)
 {
 }
 
-ScMyInsAction::~ScMyInsAction()
-{
-}
+ScMyInsAction::~ScMyInsAction() = default;
 
 ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
     : ScMyBaseAction(nActionTypeP),
@@ -111,9 +107,7 @@ ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
 {
 }
 
-ScMyDelAction::~ScMyDelAction()
-{
-}
+ScMyDelAction::~ScMyDelAction() = default;
 
 ScMyMoveAction::ScMyMoveAction()
     : ScMyBaseAction(SC_CAT_MOVE),
@@ -121,27 +115,21 @@ ScMyMoveAction::ScMyMoveAction()
 {
 }
 
-ScMyMoveAction::~ScMyMoveAction()
-{
-}
+ScMyMoveAction::~ScMyMoveAction() = default;
 
 ScMyContentAction::ScMyContentAction()
     : ScMyBaseAction(SC_CAT_CONTENT)
 {
 }
 
-ScMyContentAction::~ScMyContentAction()
-{
-}
+ScMyContentAction::~ScMyContentAction() = default;
 
 ScMyRejAction::ScMyRejAction()
     : ScMyBaseAction(SC_CAT_REJECT)
 {
 }
 
-ScMyRejAction::~ScMyRejAction()
-{
-}
+ScMyRejAction::~ScMyRejAction() = default;
 
 ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     aActions(),
@@ -152,9 +140,7 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
 {
 }
 
-ScXMLChangeTrackingImportHelper::~ScXMLChangeTrackingImportHelper()
-{
-}
+ScXMLChangeTrackingImportHelper::~ScXMLChangeTrackingImportHelper() = default;
 
 void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType nActionType)
 {

@@ -129,11 +129,7 @@ namespace svt { namespace table
         m_pImpl->pInputHandler.reset( new DefaultInputHandler );
     }
 
-
-    UnoControlTableModel::~UnoControlTableModel()
-    {
-    }
-
+    UnoControlTableModel::~UnoControlTableModel() = default;
 
     TableSize UnoControlTableModel::getColumnCount() const
     {

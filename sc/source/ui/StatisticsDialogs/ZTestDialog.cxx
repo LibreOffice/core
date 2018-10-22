@@ -36,8 +36,7 @@ ScZTestDialog::ScZTestDialog(
     SetText(ScResId(STR_ZTEST));
 }
 
-ScZTestDialog::~ScZTestDialog()
-{}
+ScZTestDialog::~ScZTestDialog() = default;
 
 bool ScZTestDialog::Close()
 {

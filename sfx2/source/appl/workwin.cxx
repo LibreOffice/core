@@ -137,9 +137,7 @@ LayoutManagerListener::LayoutManagerListener(
 {
 }
 
-LayoutManagerListener::~LayoutManagerListener()
-{
-}
+LayoutManagerListener::~LayoutManagerListener() = default;
 
 void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {

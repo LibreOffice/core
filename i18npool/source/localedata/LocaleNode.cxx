@@ -81,9 +81,7 @@ const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
     return nullptr;
 }
 
-LocaleNode::~LocaleNode()
-{
-}
+LocaleNode::~LocaleNode() = default;
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
 {

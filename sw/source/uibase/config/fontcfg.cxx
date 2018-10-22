@@ -151,9 +151,7 @@ void SwStdFontConfig::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-SwStdFontConfig::~SwStdFontConfig()
-{
-}
+SwStdFontConfig::~SwStdFontConfig() = default;
 
 bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
 {

@@ -62,9 +62,7 @@ GenericToolboxController::GenericToolboxController( const Reference< XComponentC
         m_aListenerMap.emplace( aCommand, Reference< XDispatch >() );
 }
 
-GenericToolboxController::~GenericToolboxController()
-{
-}
+GenericToolboxController::~GenericToolboxController() = default;
 
 void SAL_CALL GenericToolboxController::dispose()
 {

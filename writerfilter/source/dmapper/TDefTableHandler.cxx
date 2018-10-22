@@ -41,10 +41,7 @@ m_nLineColor(0)
 {
 }
 
-
-TDefTableHandler::~TDefTableHandler()
-{
-}
+TDefTableHandler::~TDefTableHandler() = default;
 
 OUString TDefTableHandler::getBorderTypeString(sal_Int32 nType)
 {

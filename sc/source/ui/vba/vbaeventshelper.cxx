@@ -565,9 +565,7 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
     registerWorksheetEvent( WORKSHEET_FOLLOWHYPERLINK,    "FollowHyperlink",    -1 );
 }
 
-ScVbaEventsHelper::~ScVbaEventsHelper()
-{
-}
+ScVbaEventsHelper::~ScVbaEventsHelper() = default;
 
 void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent )
 {

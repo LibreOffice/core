@@ -35,9 +35,7 @@ SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2 con
 {
 }
 
-SlideMasterTextStylesContext::~SlideMasterTextStylesContext()
-{
-}
+SlideMasterTextStylesContext::~SlideMasterTextStylesContext() = default;
 
 ::oox::core::ContextHandlerRef SlideMasterTextStylesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ )
 {

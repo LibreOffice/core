@@ -54,9 +54,7 @@ sal_Int64 QueryPropertiesDialog::getLimit() const
     return m_xLB_Limit->get_active_text().toInt64();
 }
 
-QueryPropertiesDialog::~QueryPropertiesDialog()
-{
-}
+QueryPropertiesDialog::~QueryPropertiesDialog() = default;
 
 } ///dbaui namespace
 

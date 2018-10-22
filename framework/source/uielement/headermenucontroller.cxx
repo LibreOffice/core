@@ -66,9 +66,7 @@ HeaderMenuController::HeaderMenuController( const css::uno::Reference< css::uno:
 {
 }
 
-HeaderMenuController::~HeaderMenuController()
-{
-}
+HeaderMenuController::~HeaderMenuController() = default;
 
 // private function
 void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >& rModel, Reference< css::awt::XPopupMenu > const & rPopupMenu )

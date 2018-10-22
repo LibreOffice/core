@@ -27,9 +27,7 @@ using namespace ::com::sun::star::uno;
 
 using ::xmloff::token::XMLTokenEnum;
 
-XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
-{
-}
+XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler() = default;
 
 bool XMLConstantsPropertyHandler::importXML(
     const OUString& rStrImpValue,

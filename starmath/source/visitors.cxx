@@ -754,9 +754,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
         pRootNode->Accept(this);
 }
 
-SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor()
-{
-}
+SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor() = default;
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
     for( auto pChild : *pNode )

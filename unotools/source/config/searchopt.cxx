@@ -258,9 +258,7 @@ SvtSearchOptions::SvtSearchOptions()
 {
 }
 
-SvtSearchOptions::~SvtSearchOptions()
-{
-}
+SvtSearchOptions::~SvtSearchOptions() = default;
 
 void SvtSearchOptions::Commit()
 {

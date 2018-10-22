@@ -43,9 +43,7 @@ DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   css::uno::Refere
 
 //  destructor
 
-DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
-{
-}
+DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor() = default;
 
 //  XDockingAreaAcceptor
 css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow()

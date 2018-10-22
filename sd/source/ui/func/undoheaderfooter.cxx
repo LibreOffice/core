@@ -34,9 +34,7 @@ SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage
 {
 }
 
-SdHeaderFooterUndoAction::~SdHeaderFooterUndoAction()
-{
-}
+SdHeaderFooterUndoAction::~SdHeaderFooterUndoAction() = default;
 
 void SdHeaderFooterUndoAction::Undo()
 {

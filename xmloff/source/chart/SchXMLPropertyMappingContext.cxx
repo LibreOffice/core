@@ -74,9 +74,7 @@ SchXMLPropertyMappingContext::SchXMLPropertyMappingContext( SchXMLImportHelper& 
 
 }
 
-SchXMLPropertyMappingContext::~SchXMLPropertyMappingContext()
-{
-}
+SchXMLPropertyMappingContext::~SchXMLPropertyMappingContext() = default;
 
 void SchXMLPropertyMappingContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {

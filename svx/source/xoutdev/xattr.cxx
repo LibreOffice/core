@@ -93,11 +93,9 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const OUString& rName) :
 {
 }
 
-NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
-    SfxStringItem(rNameOrIndex),
-    nPalIndex(rNameOrIndex.nPalIndex)
-{
-}
+NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex)
+
+    = default;
 
 bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
 {
@@ -270,11 +268,9 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, const Color& rTheColor)
 {
 }
 
-XColorItem::XColorItem(const XColorItem& rItem) :
-    NameOrIndex(rItem),
-    aColor(rItem.aColor)
-{
-}
+XColorItem::XColorItem(const XColorItem& rItem)
+
+    = default;
 
 SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 {
@@ -557,11 +553,9 @@ XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
 {
 }
 
-XLineDashItem::XLineDashItem(const XLineDashItem& rItem) :
-    NameOrIndex(rItem),
-    aDash(rItem.aDash)
-{
-}
+XLineDashItem::XLineDashItem(const XLineDashItem& rItem)
+
+    = default;
 
 XLineDashItem::XLineDashItem(const XDash& rTheDash)
 :   NameOrIndex( XATTR_LINEDASH, -1 ),
@@ -977,10 +971,8 @@ XLineStartItem::XLineStartItem(const OUString& rName, const basegfx::B2DPolyPoly
 }
 
 XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
-:   NameOrIndex(rItem),
-    maPolyPolygon(rItem.maPolyPolygon)
-{
-}
+
+    = default;
 
 XLineStartItem::XLineStartItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINESTART, -1 ),
@@ -1289,10 +1281,8 @@ XLineEndItem::XLineEndItem(const OUString& rName, const basegfx::B2DPolyPolygon&
 }
 
 XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
-:   NameOrIndex(rItem),
-    maPolyPolygon(rItem.maPolyPolygon)
-{
-}
+
+    = default;
 
 XLineEndItem::XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINEEND, -1 ),
@@ -1983,11 +1973,9 @@ XFillGradientItem::XFillGradientItem(const OUString& rName,
 {
 }
 
-XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
-    NameOrIndex(rItem),
-    aGradient(rItem.aGradient)
-{
-}
+XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem)
+
+    = default;
 
 XFillGradientItem::XFillGradientItem( const XGradient& rTheGradient )
 :   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
@@ -2407,11 +2395,9 @@ XFillHatchItem::XFillHatchItem(const OUString& rName,
 {
 }
 
-XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem) :
-    NameOrIndex(rItem),
-    aHatch(rItem.aHatch)
-{
-}
+XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem)
+
+    = default;
 
 XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
 :   NameOrIndex( XATTR_FILLHATCH, -1 ),

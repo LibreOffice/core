@@ -62,9 +62,7 @@ sal_Int32 ScSheetEvents::GetVbaDocumentEventId(ScSheetEventId nEvent)
     return (nSheetEventId != NO_EVENT) ? (nSheetEventId + USERDEFINED_START) : NO_EVENT;
 }
 
-ScSheetEvents::ScSheetEvents()
-{
-}
+ScSheetEvents::ScSheetEvents() = default;
 
 ScSheetEvents::~ScSheetEvents()
 {

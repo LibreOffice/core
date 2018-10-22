@@ -79,10 +79,7 @@ DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent
 
 }
 
-DataSupplier::~DataSupplier()
-{
-
-}
+DataSupplier::~DataSupplier() = default;
 
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {

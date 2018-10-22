@@ -183,9 +183,7 @@ AffineMatrixItem::AffineMatrixItem(const AffineMatrixItem& rRef)
     maMatrix = rRef.maMatrix;
 }
 
-AffineMatrixItem::~AffineMatrixItem()
-{
-}
+AffineMatrixItem::~AffineMatrixItem() = default;
 
 bool AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
 {

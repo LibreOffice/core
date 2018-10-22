@@ -39,9 +39,7 @@ namespace drawinglayer
         {
         }
 
-        LineGeometryExtractor2D::~LineGeometryExtractor2D()
-        {
-        }
+        LineGeometryExtractor2D::~LineGeometryExtractor2D() = default;
 
         void LineGeometryExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {

@@ -46,13 +46,9 @@
 
 #define HELPTEXTMAXLEN        150
 
-Help::Help()
-{
-}
+Help::Help() = default;
 
-Help::~Help()
-{
-}
+Help::~Help() = default;
 
 bool Help::Start( const OUString&, const vcl::Window* )
 {

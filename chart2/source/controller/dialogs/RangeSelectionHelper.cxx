@@ -37,8 +37,7 @@ RangeSelectionHelper::RangeSelectionHelper(
         m_xChartDocument( xChartDocument )
 {}
 
-RangeSelectionHelper::~RangeSelectionHelper()
-{}
+RangeSelectionHelper::~RangeSelectionHelper() = default;
 
 bool RangeSelectionHelper::hasRangeSelection()
 {

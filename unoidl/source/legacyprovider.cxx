@@ -80,7 +80,7 @@ public:
         RegistryKey const & key);
 
 private:
-    virtual ~Cursor() throw () override {}
+    virtual ~Cursor() throw() override = default;
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -135,7 +135,7 @@ public:
     {}
 
 private:
-    virtual ~Module() throw () override {}
+    virtual ~Module() throw() override = default;
 
     virtual std::vector< OUString > getMemberNames() const override;
 
@@ -820,8 +820,7 @@ rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
         : rtl::Reference< Entity >();
 }
 
-LegacyProvider::~LegacyProvider() throw () {}
-
+LegacyProvider::~LegacyProvider() throw() = default;
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

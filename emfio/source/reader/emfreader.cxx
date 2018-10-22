@@ -379,9 +379,7 @@ namespace emfio
     {
     }
 
-    EmfReader::~EmfReader()
-    {
-    }
+    EmfReader::~EmfReader() = default;
 
     void EmfReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
     {

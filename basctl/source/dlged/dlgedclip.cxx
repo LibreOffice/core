@@ -32,14 +32,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
+
 DlgEdTransferableImpl::DlgEdTransferableImpl( const Sequence< DataFlavor >& aSeqFlavors, const Sequence< Any >& aSeqData )
 {
     m_SeqFlavors = aSeqFlavors;
     m_SeqData = aSeqData;
 }
-DlgEdTransferableImpl::~DlgEdTransferableImpl()
-{
-}
+
+DlgEdTransferableImpl::~DlgEdTransferableImpl() = default;
+
 bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
     // compare mime content types

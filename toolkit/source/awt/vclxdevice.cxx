@@ -42,9 +42,7 @@
 
 //  class VCLXDevice
 
-VCLXDevice::VCLXDevice()
-{
-}
+VCLXDevice::VCLXDevice() = default;
 
 VCLXDevice::~VCLXDevice()
 {

@@ -232,9 +232,7 @@ XclExpSst::XclExpSst() :
 {
 }
 
-XclExpSst::~XclExpSst()
-{
-}
+XclExpSst::~XclExpSst() = default;
 
 sal_uInt32 XclExpSst::Insert( const XclExpStringRef& xString )
 {
@@ -453,9 +451,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     SetRecSize( 32 + mxVarData->Tell() );
 }
 
-XclExpHyperlink::~XclExpHyperlink()
-{
-}
+XclExpHyperlink::~XclExpHyperlink() = default;
 
 OUString XclExpHyperlink::BuildFileName(
         sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded )
@@ -1086,9 +1082,7 @@ XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEnt
 {
 }
 
-XclExpCF::~XclExpCF()
-{
-}
+XclExpCF::~XclExpCF() = default;
 
 void XclExpCF::WriteBody( XclExpStream& rStrm )
 {
@@ -1108,9 +1102,7 @@ XclExpDateFormat::XclExpDateFormat( const XclExpRoot& rRoot, const ScCondDateFor
 {
 }
 
-XclExpDateFormat::~XclExpDateFormat()
-{
-}
+XclExpDateFormat::~XclExpDateFormat() = default;
 
 namespace {
 
@@ -1233,9 +1225,7 @@ XclExpColScaleCol::XclExpColScaleCol( const XclExpRoot& rRoot, const Color& rCol
 {
 }
 
-XclExpColScaleCol::~XclExpColScaleCol()
-{
-}
+XclExpColScaleCol::~XclExpColScaleCol() = default;
 
 void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -1361,9 +1351,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     }
 }
 
-XclExpCondfmt::~XclExpCondfmt()
-{
-}
+XclExpCondfmt::~XclExpCondfmt() = default;
 
 bool XclExpCondfmt::IsValidForBinary() const
 {
@@ -1803,9 +1791,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     }
 }
 
-XclExpDV::~XclExpDV()
-{
-}
+XclExpDV::~XclExpDV() = default;
 
 void XclExpDV::InsertCellRange( const ScRange& rRange )
 {
@@ -1872,9 +1858,7 @@ XclExpDval::XclExpDval( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpDval::~XclExpDval()
-{
-}
+XclExpDval::~XclExpDval() = default;
 
 void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uLong nScHandle )
 {
@@ -2007,9 +1991,7 @@ XclExpWebQuery::XclExpWebQuery(
     }
 }
 
-XclExpWebQuery::~XclExpWebQuery()
-{
-}
+XclExpWebQuery::~XclExpWebQuery() = default;
 
 void XclExpWebQuery::Save( XclExpStream& rStrm )
 {

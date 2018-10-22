@@ -223,9 +223,7 @@ SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
     mrTable.aData.clear();
 }
 
-SchXMLTableContext::~SchXMLTableContext()
-{
-}
+SchXMLTableContext::~SchXMLTableContext() = default;
 
 SvXMLImportContextRef SchXMLTableContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -411,9 +409,7 @@ SchXMLTableColumnsContext::SchXMLTableColumnsContext(
 {
 }
 
-SchXMLTableColumnsContext::~SchXMLTableColumnsContext()
-{
-}
+SchXMLTableColumnsContext::~SchXMLTableColumnsContext() = default;
 
 SvXMLImportContextRef SchXMLTableColumnsContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -488,9 +484,7 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
     }
 }
 
-SchXMLTableColumnContext::~SchXMLTableColumnContext()
-{
-}
+SchXMLTableColumnContext::~SchXMLTableColumnContext() = default;
 
 // classes for rows
 // class SchXMLTableRowsContext
@@ -505,9 +499,7 @@ SchXMLTableRowsContext::SchXMLTableRowsContext(
 {
 }
 
-SchXMLTableRowsContext::~SchXMLTableRowsContext()
-{
-}
+SchXMLTableRowsContext::~SchXMLTableRowsContext() = default;
 
 SvXMLImportContextRef SchXMLTableRowsContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -548,9 +540,7 @@ SchXMLTableRowContext::SchXMLTableRowContext(
         mrTable.aData.push_back( aNewRow );
 }
 
-SchXMLTableRowContext::~SchXMLTableRowContext()
-{
-}
+SchXMLTableRowContext::~SchXMLTableRowContext() = default;
 
 SvXMLImportContextRef SchXMLTableRowContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -609,9 +599,7 @@ SchXMLTableCellContext::SchXMLTableCellContext(
 {
 }
 
-SchXMLTableCellContext::~SchXMLTableCellContext()
-{
-}
+SchXMLTableCellContext::~SchXMLTableCellContext() = default;
 
 void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

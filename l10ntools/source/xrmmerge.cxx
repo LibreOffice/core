@@ -151,9 +151,7 @@ XRMResParser::XRMResParser()
 {
 }
 
-XRMResParser::~XRMResParser()
-{
-}
+XRMResParser::~XRMResParser() = default;
 
 void XRMResParser::Execute( int nToken, char * pToken )
 {

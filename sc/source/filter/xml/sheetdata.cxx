@@ -33,9 +33,7 @@ ScSheetSaveData::ScSheetSaveData() :
 {
 }
 
-ScSheetSaveData::~ScSheetSaveData()
-{
-}
+ScSheetSaveData::~ScSheetSaveData() = default;
 
 void ScSheetSaveData::AddCellStyle( const OUString& rName, const ScAddress& rCellPos )
 {

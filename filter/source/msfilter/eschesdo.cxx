@@ -1033,10 +1033,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
     Init( rEx );
 }
 
-
-ImplEESdrObject::~ImplEESdrObject()
-{
-}
+ImplEESdrObject::~ImplEESdrObject() = default;
 
 static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape)
 {

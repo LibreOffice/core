@@ -205,9 +205,7 @@ XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(
 {
 }
 
-XMLPageMasterExportPropMapper::~XMLPageMasterExportPropMapper()
-{
-}
+XMLPageMasterExportPropMapper::~XMLPageMasterExportPropMapper() = default;
 
 void XMLPageMasterExportPropMapper::handleElementItem(
         SvXMLExport&,

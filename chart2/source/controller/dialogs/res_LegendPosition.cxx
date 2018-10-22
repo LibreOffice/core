@@ -69,9 +69,7 @@ void LegendPositionResources::impl_setRadioButtonToggleHdl()
     m_xRbtBottom->connect_toggled( LINK( this, LegendPositionResources, PositionChangeHdl ) );
 }
 
-LegendPositionResources::~LegendPositionResources()
-{
-}
+LegendPositionResources::~LegendPositionResources() = default;
 
 void LegendPositionResources::writeToResources( const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -258,9 +256,7 @@ SchLegendPositionResources::SchLegendPositionResources(weld::Builder& rBuilder,
     m_xCbxShow->connect_toggled(LINK(this, SchLegendPositionResources, PositionEnableHdl));
 }
 
-SchLegendPositionResources::~SchLegendPositionResources()
-{
-}
+SchLegendPositionResources::~SchLegendPositionResources() = default;
 
 void SchLegendPositionResources::writeToResources( const uno::Reference< frame::XModel >& xChartModel )
 {

@@ -27,14 +27,9 @@ using com::sun::star::uno::Any;
 
 namespace sd
 {
+STLPropertySet::STLPropertySet() = default;
 
-STLPropertySet::STLPropertySet()
-{
-}
-
-STLPropertySet::~STLPropertySet()
-{
-}
+STLPropertySet::~STLPropertySet() = default;
 
 void STLPropertySet::setPropertyDefaultValue( sal_Int32 nHandle, const Any& rValue )
 {

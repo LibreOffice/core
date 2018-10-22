@@ -43,9 +43,7 @@ LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper const & rPar
     mrLineProperties.moLineCap = rAttribs.getToken( XML_cap );
 }
 
-LinePropertiesContext::~LinePropertiesContext()
-{
-}
+LinePropertiesContext::~LinePropertiesContext() = default;
 
 ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

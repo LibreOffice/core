@@ -70,9 +70,7 @@ RemoteServer::RemoteServer() :
     SAL_INFO( "sdremote", "Instantiated RemoteServer" );
 }
 
-RemoteServer::~RemoteServer()
-{
-}
+RemoteServer::~RemoteServer() = default;
 
 void RemoteServer::execute()
 {

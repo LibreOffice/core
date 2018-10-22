@@ -229,9 +229,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     }
 }
 
-XMLTextListBlockContext::~XMLTextListBlockContext()
-{
-}
+XMLTextListBlockContext::~XMLTextListBlockContext() = default;
 
 void XMLTextListBlockContext::EndElement()
 {

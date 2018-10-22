@@ -49,9 +49,7 @@ namespace svgio
         {
         }
 
-        SvgPatternNode::~SvgPatternNode()
-        {
-        }
+        SvgPatternNode::~SvgPatternNode() = default;
 
         const SvgStyleAttributes* SvgPatternNode::getSvgStyleAttributes() const
         {

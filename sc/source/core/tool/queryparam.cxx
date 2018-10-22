@@ -106,9 +106,7 @@ ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
     return *this;
 }
 
-ScQueryParamBase::~ScQueryParamBase()
-{
-}
+ScQueryParamBase::~ScQueryParamBase() = default;
 
 bool ScQueryParamBase::IsValidFieldIndex() const
 {
@@ -302,9 +300,7 @@ ScQueryParamTable::ScQueryParamTable() :
 {
 }
 
-ScQueryParamTable::~ScQueryParamTable()
-{
-}
+ScQueryParamTable::~ScQueryParamTable() = default;
 
 ScQueryParam::ScQueryParam() :
     ScQueryParamBase(),
@@ -329,9 +325,7 @@ ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
 {
 }
 
-ScQueryParam::~ScQueryParam()
-{
-}
+ScQueryParam::~ScQueryParam() = default;
 
 void ScQueryParam::Clear()
 {
@@ -431,9 +425,7 @@ ScDBQueryParamBase::ScDBQueryParamBase(DataType eType) :
 {
 }
 
-ScDBQueryParamBase::~ScDBQueryParamBase()
-{
-}
+ScDBQueryParamBase::~ScDBQueryParamBase() = default;
 
 ScDBQueryParamInternal::ScDBQueryParamInternal() :
     ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL),
@@ -441,9 +433,7 @@ ScDBQueryParamInternal::ScDBQueryParamInternal() :
 {
 }
 
-ScDBQueryParamInternal::~ScDBQueryParamInternal()
-{
-}
+ScDBQueryParamInternal::~ScDBQueryParamInternal() = default;
 
 bool ScDBQueryParamInternal::IsValidFieldIndex() const
 {
@@ -462,8 +452,6 @@ bool ScDBQueryParamMatrix::IsValidFieldIndex() const
     return 0 <= mnField && mnField <= static_cast<SCCOL>(nC);
 }
 
-ScDBQueryParamMatrix::~ScDBQueryParamMatrix()
-{
-}
+ScDBQueryParamMatrix::~ScDBQueryParamMatrix() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

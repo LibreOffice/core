@@ -542,9 +542,7 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
 
-SvUnoImageMap::SvUnoImageMap()
-{
-}
+SvUnoImageMap::SvUnoImageMap() = default;
 
 SvUnoImageMap::SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems )
 {

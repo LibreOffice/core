@@ -77,9 +77,7 @@ LwpSilverBullet::LwpSilverBullet(LwpObjectHeader const & objHdr, LwpSvStream* pS
 {
 }
 
-LwpSilverBullet::~LwpSilverBullet()
-{
-}
+LwpSilverBullet::~LwpSilverBullet() = default;
 
 void LwpSilverBullet::Read()
 {

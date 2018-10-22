@@ -46,9 +46,7 @@ m_bBottomMarginValid( false )
 {
 }
 
-CellMarginHandler::~CellMarginHandler()
-{
-}
+CellMarginHandler::~CellMarginHandler() = default;
 
 void CellMarginHandler::lcl_attribute(Id rName, Value & rVal)
 {

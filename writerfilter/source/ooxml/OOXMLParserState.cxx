@@ -47,9 +47,7 @@ OOXMLParserState::OOXMLParserState() :
 {
 }
 
-OOXMLParserState::~OOXMLParserState()
-{
-}
+OOXMLParserState::~OOXMLParserState() = default;
 
 void OOXMLParserState::setLastParagraphInSection(bool bLastParagraphInSection)
 {

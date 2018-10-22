@@ -176,11 +176,7 @@ namespace pcr
     {
     }
 
-
-    CachedInspectorUI::~CachedInspectorUI()
-    {
-    }
-
+    CachedInspectorUI::~CachedInspectorUI() = default;
 
     void CachedInspectorUI::dispose()
     {
@@ -369,11 +365,7 @@ namespace pcr
             throw NullPointerException();
     }
 
-
-    ComposedPropertyUIUpdate::~ComposedPropertyUIUpdate( )
-    {
-    }
-
+    ComposedPropertyUIUpdate::~ComposedPropertyUIUpdate() = default;
 
     Reference< XObjectInspectorUI > ComposedPropertyUIUpdate::getUIForPropertyHandler( const Reference< XPropertyHandler >& _rxHandler )
     {
@@ -470,7 +462,7 @@ namespace pcr
         public:
             virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const = 0;
 
-            virtual ~IStringKeyBooleanUIUpdate() { }
+            virtual ~IStringKeyBooleanUIUpdate() = default;
         };
 
 

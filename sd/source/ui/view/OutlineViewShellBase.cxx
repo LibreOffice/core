@@ -57,9 +57,7 @@ OutlineViewShellBase::OutlineViewShellBase (
 {
 }
 
-OutlineViewShellBase::~OutlineViewShellBase()
-{
-}
+OutlineViewShellBase::~OutlineViewShellBase() = default;
 
 } // end of namespace sd
 

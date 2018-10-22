@@ -160,9 +160,7 @@ PresenterPaneBorderPainter::PresenterPaneBorderPainter (
 {
 }
 
-PresenterPaneBorderPainter::~PresenterPaneBorderPainter()
-{
-}
+PresenterPaneBorderPainter::~PresenterPaneBorderPainter() = default;
 
 //----- XPaneBorderPainter ----------------------------------------------------
 

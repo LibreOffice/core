@@ -59,11 +59,7 @@ namespace connectivity { namespace hsqldb
     {
     }
 
-
-    HView::~HView()
-    {
-    }
-
+    HView::~HView() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( HView, HView_Base, HView_IBASE )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( HView, HView_Base, HView_IBASE )

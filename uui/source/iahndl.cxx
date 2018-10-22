@@ -140,9 +140,7 @@ UUIInteractionHelper::UUIInteractionHelper(
 {
 }
 
-UUIInteractionHelper::~UUIInteractionHelper()
-{
-}
+UUIInteractionHelper::~UUIInteractionHelper() = default;
 
 void UUIInteractionHelper::handlerequest(
     void* pHandleData, void* pInteractionHelper)

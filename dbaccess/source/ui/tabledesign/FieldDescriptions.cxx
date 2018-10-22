@@ -80,9 +80,7 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
 {
 }
 
-OFieldDescription::~OFieldDescription()
-{
-}
+OFieldDescription::~OFieldDescription() = default;
 
 OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol,bool _bUseAsDest)
     :m_pType()

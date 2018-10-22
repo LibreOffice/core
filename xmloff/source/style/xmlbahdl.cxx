@@ -84,10 +84,7 @@ static bool lcl_xmloff_getAny( const Any& rValue, sal_Int32& nValue,
 
 // class XMLNumberPropHdl
 
-XMLNumberPropHdl::~XMLNumberPropHdl()
-{
-    // nothing to do
-}
+XMLNumberPropHdl::~XMLNumberPropHdl() = default;
 
 bool XMLNumberPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -127,10 +124,7 @@ XMLNumberNonePropHdl::XMLNumberNonePropHdl( enum XMLTokenEnum eZeroString, sal_I
 {
 }
 
-XMLNumberNonePropHdl::~XMLNumberNonePropHdl()
-{
-    // nothing to do
-}
+XMLNumberNonePropHdl::~XMLNumberNonePropHdl() = default;
 
 bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -174,10 +168,7 @@ bool XMLNumberNonePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
 // class XMLMeasurePropHdl
 
-XMLMeasurePropHdl::~XMLMeasurePropHdl()
-{
-    // nothing to do
-}
+XMLMeasurePropHdl::~XMLMeasurePropHdl() = default;
 
 bool XMLMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
@@ -206,10 +197,7 @@ bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
 
 // class XMLBoolFalsePropHdl
 
-XMLBoolFalsePropHdl::~XMLBoolFalsePropHdl()
-{
-    // nothing to do
-}
+XMLBoolFalsePropHdl::~XMLBoolFalsePropHdl() = default;
 
 bool XMLBoolFalsePropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
 {
@@ -223,10 +211,7 @@ bool XMLBoolFalsePropHdl::exportXML( OUString& rStrExpValue, const Any& /*rValue
 
 // class XMLBoolPropHdl
 
-XMLBoolPropHdl::~XMLBoolPropHdl()
-{
-    // nothing to do
-}
+XMLBoolPropHdl::~XMLBoolPropHdl() = default;
 
 bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -256,10 +241,7 @@ bool XMLBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const
 
 // class XMLNBoolPropHdl
 
-XMLNBoolPropHdl::~XMLNBoolPropHdl()
-{
-    // nothing to do
-}
+XMLNBoolPropHdl::~XMLNBoolPropHdl() = default;
 
 bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -289,10 +271,7 @@ bool XMLNBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, cons
 
 // class XMLPercentPropHdl
 
-XMLPercentPropHdl::~XMLPercentPropHdl()
-{
-    // nothing to do
-}
+XMLPercentPropHdl::~XMLPercentPropHdl() = default;
 
 bool XMLPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -367,10 +346,7 @@ bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
 
 // class XMLNegPercentPropHdl
 
-XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
-{
-    // nothing to do
-}
+XMLNegPercentPropHdl::~XMLNegPercentPropHdl() = default;
 
 bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -399,10 +375,7 @@ bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 }
 
 // class XMLMeasurePxPropHdl
-XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl()
-{
-    // nothing to do
-}
+XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl() = default;
 
 bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -431,10 +404,7 @@ bool XMLMeasurePxPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 
 // class XMLColorPropHdl
 
-XMLColorPropHdl::~XMLColorPropHdl()
-{
-    // Nothing to do
-}
+XMLColorPropHdl::~XMLColorPropHdl() = default;
 
 bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -502,10 +472,7 @@ bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, cons
 
 // class XMLHexPropHdl
 
-XMLHexPropHdl::~XMLHexPropHdl()
-{
-    // Nothing to do
-}
+XMLHexPropHdl::~XMLHexPropHdl() = default;
 
 bool XMLHexPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -539,10 +506,7 @@ bool XMLHexPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const 
 
 // class XMLStringPropHdl
 
-XMLStringPropHdl::~XMLStringPropHdl()
-{
-    // Nothing to do
-}
+XMLStringPropHdl::~XMLStringPropHdl() = default;
 
 bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -562,10 +526,7 @@ bool XMLStringPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
 
 // class XMLStyleNamePropHdl
 
-XMLStyleNamePropHdl::~XMLStyleNamePropHdl()
-{
-    // Nothing to do
-}
+XMLStyleNamePropHdl::~XMLStyleNamePropHdl() = default;
 
 bool XMLStyleNamePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
@@ -582,10 +543,7 @@ bool XMLStyleNamePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 
 // class XMLDoublePropHdl
 
-XMLDoublePropHdl::~XMLDoublePropHdl()
-{
-    // Nothing to do
-}
+XMLDoublePropHdl::~XMLDoublePropHdl() = default;
 
 bool XMLDoublePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -622,10 +580,7 @@ XMLColorTransparentPropHdl::XMLColorTransparentPropHdl(
     // Nothing to do
 }
 
-XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl()
-{
-    // Nothing to do
-}
+XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl() = default;
 
 bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -670,10 +625,7 @@ XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
 {
 }
 
-XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
-{
-    // Nothing to do
-}
+XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl() = default;
 
 bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -704,15 +656,9 @@ bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
 
 // class XMLColorAutoPropHdl
 
-XMLColorAutoPropHdl::XMLColorAutoPropHdl()
-{
-    // Nothing to do
-}
+XMLColorAutoPropHdl::XMLColorAutoPropHdl() = default;
 
-XMLColorAutoPropHdl::~XMLColorAutoPropHdl()
-{
-    // Nothing to do
-}
+XMLColorAutoPropHdl::~XMLColorAutoPropHdl() = default;
 
 bool XMLColorAutoPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -750,14 +696,9 @@ bool XMLColorAutoPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 
 // class XMLIsAutoColorPropHdl
 
-XMLIsAutoColorPropHdl::XMLIsAutoColorPropHdl()
-{
-}
+XMLIsAutoColorPropHdl::XMLIsAutoColorPropHdl() = default;
 
-XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
-{
-    // Nothing to do
-}
+XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl() = default;
 
 bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -789,10 +730,7 @@ bool XMLIsAutoColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
 // class XMLCompareOnlyPropHdl
 
-XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
-{
-    // Nothing to do
-}
+XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl() = default;
 
 bool XMLCompareOnlyPropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
 {
@@ -813,9 +751,7 @@ XMLNumberWithoutZeroPropHdl::XMLNumberWithoutZeroPropHdl( sal_Int8 nB ) :
 {
 }
 
-XMLNumberWithoutZeroPropHdl::~XMLNumberWithoutZeroPropHdl()
-{
-}
+XMLNumberWithoutZeroPropHdl::~XMLNumberWithoutZeroPropHdl() = default;
 
 bool XMLNumberWithoutZeroPropHdl::importXML(
     const OUString& rStrImpValue,
@@ -846,9 +782,7 @@ bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& 
 
 // class XMLNumberWithAutoInsteadZeroPropHdl
 
-XMLNumberWithAutoInsteadZeroPropHdl::~XMLNumberWithAutoInsteadZeroPropHdl()
-{
-}
+XMLNumberWithAutoInsteadZeroPropHdl::~XMLNumberWithAutoInsteadZeroPropHdl() = default;
 
 bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
     const OUString& rStrImpValue,

@@ -30,17 +30,11 @@ using ::com::sun::star::uno::Sequence;
 
 namespace chart
 {
+FilledNetChartType::FilledNetChartType() = default;
 
-FilledNetChartType::FilledNetChartType()
-{}
+FilledNetChartType::FilledNetChartType(const FilledNetChartType&) = default;
 
-FilledNetChartType::FilledNetChartType( const FilledNetChartType & rOther ) :
-        NetChartType_Base( rOther )
-{
-}
-
-FilledNetChartType::~FilledNetChartType()
-{}
+FilledNetChartType::~FilledNetChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL FilledNetChartType::createClone()

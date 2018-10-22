@@ -102,11 +102,7 @@ StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rx
 {
 }
 
-
-StringResourceImpl::~StringResourceImpl()
-{
-}
-
+StringResourceImpl::~StringResourceImpl() = default;
 
 // XServiceInfo
 
@@ -677,11 +673,7 @@ StringResourcePersistenceImpl::StringResourcePersistenceImpl( const Reference< X
 {
 }
 
-
-StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
-{
-}
-
+StringResourcePersistenceImpl::~StringResourcePersistenceImpl() = default;
 
 // XServiceInfo
 
@@ -2103,11 +2095,7 @@ StringResourceWithStorageImpl::StringResourceWithStorageImpl( const Reference< X
 {
 }
 
-
-StringResourceWithStorageImpl::~StringResourceWithStorageImpl()
-{
-}
-
+StringResourceWithStorageImpl::~StringResourceWithStorageImpl() = default;
 
 // XServiceInfo
 
@@ -2390,11 +2378,7 @@ StringResourceWithLocationImpl::StringResourceWithLocationImpl( const Reference<
 {
 }
 
-
-StringResourceWithLocationImpl::~StringResourceWithLocationImpl()
-{
-}
-
+StringResourceWithLocationImpl::~StringResourceWithLocationImpl() = default;
 
 // XServiceInfo
 

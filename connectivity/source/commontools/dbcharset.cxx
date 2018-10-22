@@ -24,11 +24,7 @@
 
 namespace dbtools
 {
-
-    OCharsetMap::OCharsetMap()
-    {
-    }
-
+    OCharsetMap::OCharsetMap() = default;
 
     void OCharsetMap::lateConstruct()
     {
@@ -72,11 +68,7 @@ namespace dbtools
         return bIsMimeEncoding;
     }
 
-
-    OCharsetMap::~OCharsetMap()
-    {
-    }
-
+    OCharsetMap::~OCharsetMap() = default;
 
     OCharsetMap::CharsetIterator OCharsetMap::begin() const
     {
@@ -121,13 +113,8 @@ namespace dbtools
         return CharsetIterator( this, m_aEncodings.end() );
     }
 
-
-    CharsetIteratorDerefHelper::CharsetIteratorDerefHelper( const CharsetIteratorDerefHelper& _rSource )
-        :m_eEncoding( _rSource.m_eEncoding )
-        ,m_aIanaName( _rSource.m_aIanaName )
-    {
-    }
-
+    CharsetIteratorDerefHelper::CharsetIteratorDerefHelper(
+        const CharsetIteratorDerefHelper&) = default;
 
     CharsetIteratorDerefHelper:: CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const OUString& _rIanaName )
         :m_eEncoding( _eEncoding )

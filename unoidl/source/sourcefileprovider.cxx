@@ -27,7 +27,7 @@ public:
     {}
 
 private:
-    virtual ~Cursor() throw () override {}
+    virtual ~Cursor() throw() override = default;
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -48,12 +48,12 @@ rtl::Reference< Entity > Cursor::getNext(OUString * name) {
 
 class Module: public ModuleEntity {
 public:
-    Module() {}
+    Module() = default;
 
     std::map< OUString, rtl::Reference<Entity> > map;
 
 private:
-    virtual ~Module() throw () override {}
+    virtual ~Module() throw() override = default;
 
     virtual std::vector<rtl::OUString> getMemberNames() const override;
 
@@ -128,8 +128,7 @@ rtl::Reference<Entity> SourceFileProvider::findEntity(OUString const & name)
     }
 }
 
-SourceFileProvider::~SourceFileProvider() throw () {}
-
+SourceFileProvider::~SourceFileProvider() throw() = default;
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

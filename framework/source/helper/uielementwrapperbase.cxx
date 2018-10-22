@@ -53,9 +53,7 @@ UIElementWrapperBase::UIElementWrapperBase( sal_Int16 nType )
 {
 }
 
-UIElementWrapperBase::~UIElementWrapperBase()
-{
-}
+UIElementWrapperBase::~UIElementWrapperBase() = default;
 
 Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType )
 {

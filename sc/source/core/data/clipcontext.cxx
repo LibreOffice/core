@@ -26,7 +26,7 @@ namespace sc {
 ClipContextBase::ClipContextBase(ScDocument& rDoc) :
     mpSet(new ColumnBlockPositionSet(rDoc)) {}
 
-ClipContextBase::~ClipContextBase() {}
+ClipContextBase::~ClipContextBase() = default;
 
 ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
@@ -50,9 +50,7 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
 {
 }
 
-CopyFromClipContext::~CopyFromClipContext()
-{
-}
+CopyFromClipContext::~CopyFromClipContext() = default;
 
 void CopyFromClipContext::setTabRange(SCTAB nStart, SCTAB nEnd)
 {
@@ -345,7 +343,7 @@ CopyToClipContext::CopyToClipContext(
     ScDocument& rDoc, bool bKeepScenarioFlags) :
     ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags) {}
 
-CopyToClipContext::~CopyToClipContext() {}
+CopyToClipContext::~CopyToClipContext() = default;
 
 bool CopyToClipContext::isKeepScenarioFlags() const
 {
@@ -355,7 +353,7 @@ bool CopyToClipContext::isKeepScenarioFlags() const
 CopyToDocContext::CopyToDocContext(ScDocument& rDoc) :
     ClipContextBase(rDoc), mbStartListening(true) {}
 
-CopyToDocContext::~CopyToDocContext() {}
+CopyToDocContext::~CopyToDocContext() = default;
 
 void CopyToDocContext::setStartListening( bool b )
 {
@@ -368,8 +366,7 @@ bool CopyToDocContext::isStartListening() const
 }
 
 MixDocContext::MixDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
-MixDocContext::~MixDocContext() {}
-
+MixDocContext::~MixDocContext() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

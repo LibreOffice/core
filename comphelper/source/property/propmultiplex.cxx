@@ -69,11 +69,7 @@ OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* 
     m_pListener->setAdapter(this);
 }
 
-
-OPropertyChangeMultiplexer::~OPropertyChangeMultiplexer()
-{
-}
-
+OPropertyChangeMultiplexer::~OPropertyChangeMultiplexer() = default;
 
 void OPropertyChangeMultiplexer::lock()
 {

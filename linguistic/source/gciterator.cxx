@@ -238,8 +238,7 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
     return xFlatPara->getLanguageOfText( nStartIndex, 1 );
 }
 
-
-LngXStringKeyMap::LngXStringKeyMap() {}
+LngXStringKeyMap::LngXStringKeyMap() = default;
 
 void SAL_CALL LngXStringKeyMap::insertValue(const OUString& aKey, const css::uno::Any& aValue)
 {

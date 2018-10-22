@@ -187,9 +187,7 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit const *pInit,
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OOOC), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
 }
 
-XMLTransformerBase::~XMLTransformerBase() throw ()
-{
-}
+XMLTransformerBase::~XMLTransformerBase() throw() = default;
 
 void SAL_CALL XMLTransformerBase::startDocument()
 {

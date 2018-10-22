@@ -33,9 +33,7 @@
 
 using namespace com::sun::star;
 
-LoginDialog::~LoginDialog()
-{
-}
+LoginDialog::~LoginDialog() = default;
 
 void LoginDialog::SetPassword( const OUString& rNew )
 {

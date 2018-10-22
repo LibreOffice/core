@@ -102,9 +102,7 @@ void SdFiltersTest::testCVEs()
 #endif
 }
 
-SdFiltersTest::SdFiltersTest()
-{
-}
+SdFiltersTest::SdFiltersTest() = default;
 
 void SdFiltersTest::setUp()
 {

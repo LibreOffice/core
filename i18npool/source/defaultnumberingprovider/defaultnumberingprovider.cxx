@@ -288,9 +288,7 @@ DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponent
 
 }
 
-DefaultNumberingProvider::~DefaultNumberingProvider()
-{
-}
+DefaultNumberingProvider::~DefaultNumberingProvider() = default;
 
 Sequence< Reference<container::XIndexAccess> >
 DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale )

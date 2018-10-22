@@ -47,26 +47,17 @@ cow_wrapper_client2::cow_wrapper_client2( int nVal ) :
 {
 }
 
-cow_wrapper_client2::~cow_wrapper_client2()
-{
-}
+cow_wrapper_client2::~cow_wrapper_client2() = default;
 
-cow_wrapper_client2::cow_wrapper_client2( const cow_wrapper_client2& rSrc ) :
-    maImpl(rSrc.maImpl)
-{
-}
+cow_wrapper_client2::cow_wrapper_client2(const cow_wrapper_client2&)
+    = default;
 
 cow_wrapper_client2::cow_wrapper_client2( cow_wrapper_client2&& rSrc ) :
     maImpl( std::move( rSrc.maImpl ) )
 {
 }
 
-cow_wrapper_client2& cow_wrapper_client2::operator=( const cow_wrapper_client2& rSrc )
-{
-    maImpl = rSrc.maImpl;
-
-    return *this;
-}
+cow_wrapper_client2& cow_wrapper_client2::operator=(const cow_wrapper_client2&) = default;
 
 cow_wrapper_client2& cow_wrapper_client2::operator=( cow_wrapper_client2&& rSrc )
 {
@@ -125,26 +116,16 @@ cow_wrapper_client3::cow_wrapper_client3( int nVal ) :
 {
 }
 
-cow_wrapper_client3::~cow_wrapper_client3()
-{
-}
+cow_wrapper_client3::~cow_wrapper_client3() = default;
 
-cow_wrapper_client3::cow_wrapper_client3( const cow_wrapper_client3& rSrc ) :
-    maImpl(rSrc.maImpl)
-{
-}
+cow_wrapper_client3::cow_wrapper_client3(const cow_wrapper_client3&) = default;
 
 cow_wrapper_client3::cow_wrapper_client3( cow_wrapper_client3&& rSrc ) :
     maImpl( std::move( rSrc.maImpl ) )
 {
 }
 
-cow_wrapper_client3& cow_wrapper_client3::operator=( const cow_wrapper_client3& rSrc )
-{
-    maImpl = rSrc.maImpl;
-
-    return *this;
-}
+cow_wrapper_client3& cow_wrapper_client3::operator=(const cow_wrapper_client3&) = default;
 
 cow_wrapper_client3& cow_wrapper_client3::operator=( cow_wrapper_client3&& rSrc )
 {
@@ -207,21 +188,13 @@ cow_wrapper_client4::cow_wrapper_client4( int nVal ) :
 {
 }
 
-cow_wrapper_client4::~cow_wrapper_client4()
-{
-}
+cow_wrapper_client4::~cow_wrapper_client4() = default;
 
-cow_wrapper_client4::cow_wrapper_client4( const cow_wrapper_client4& rSrc ) :
-    maImpl(rSrc.maImpl)
-{
-}
+cow_wrapper_client4::cow_wrapper_client4(const cow_wrapper_client4& rSrc)
 
-cow_wrapper_client4& cow_wrapper_client4::operator=( const cow_wrapper_client4& rSrc )
-{
-    maImpl = rSrc.maImpl;
+    = default;
 
-    return *this;
-}
+cow_wrapper_client4& cow_wrapper_client4::operator=(const cow_wrapper_client4&) = default;
 
 bool cow_wrapper_client4::is_default() const
 {
@@ -255,26 +228,18 @@ cow_wrapper_client5::cow_wrapper_client5(int nX) :
 {
 }
 
-cow_wrapper_client5::cow_wrapper_client5( const cow_wrapper_client5& rSrc ) :
-    maImpl( rSrc.maImpl )
-{
-}
+cow_wrapper_client5::cow_wrapper_client5(const cow_wrapper_client5& rSrc)
+
+    = default;
 
 cow_wrapper_client5::cow_wrapper_client5( cow_wrapper_client5&& rSrc ) :
     maImpl( std::move( rSrc.maImpl ) )
 {
 }
 
-cow_wrapper_client5::~cow_wrapper_client5()
-{
-}
+cow_wrapper_client5::~cow_wrapper_client5() = default;
 
-cow_wrapper_client5& cow_wrapper_client5::operator=( const cow_wrapper_client5& rSrc )
-{
-    maImpl = rSrc.maImpl;
-
-    return *this;
-}
+cow_wrapper_client5& cow_wrapper_client5::operator=(const cow_wrapper_client5& rSrc) = default;
 
 cow_wrapper_client5& cow_wrapper_client5::operator=( cow_wrapper_client5&& rSrc )
 {

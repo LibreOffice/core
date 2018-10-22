@@ -4295,9 +4295,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     mpCursor = m_rDoc.CreateUnoCursor(rPos);
 }
 
-SwWW8ImplReader::~SwWW8ImplReader()
-{
-}
+SwWW8ImplReader::~SwWW8ImplReader() = default;
 
 void SwWW8ImplReader::DeleteStack(std::unique_ptr<SwFltControlStack> pStck)
 {
@@ -6530,9 +6528,7 @@ SwMacroInfo::SwMacroInfo()
 {
 }
 
-SwMacroInfo::~SwMacroInfo()
-{
-}
+SwMacroInfo::~SwMacroInfo() = default;
 
 std::unique_ptr<SdrObjUserData> SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 {

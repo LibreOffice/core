@@ -37,9 +37,7 @@ namespace sdr
         {
         }
 
-        BaseProperties::~BaseProperties()
-        {
-        }
+        BaseProperties::~BaseProperties() = default;
 
         void BaseProperties::applyDefaultStyleSheetFromSdrModel()
         {

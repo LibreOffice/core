@@ -76,9 +76,7 @@ FastParser::FastParser() :
     mxParser->setTokenHandler( mxTokenHandler );
 }
 
-FastParser::~FastParser()
-{
-}
+FastParser::~FastParser() = default;
 
 void FastParser::registerNamespace( sal_Int32 nNamespaceId )
 {

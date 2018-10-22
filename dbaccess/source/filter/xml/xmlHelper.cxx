@@ -36,14 +36,9 @@ namespace dbaxml
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::awt;
 
-OPropertyHandlerFactory::OPropertyHandlerFactory()
-{
-}
+OPropertyHandlerFactory::OPropertyHandlerFactory() = default;
 
-OPropertyHandlerFactory::~OPropertyHandlerFactory()
-{
-
-}
+OPropertyHandlerFactory::~OPropertyHandlerFactory() = default;
 
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
 {

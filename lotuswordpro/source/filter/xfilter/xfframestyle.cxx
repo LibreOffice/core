@@ -76,9 +76,7 @@ XFFrameStyle::XFFrameStyle()
     , m_eYRel(enumXFFrameYRelPage)
 {}
 
-XFFrameStyle::~XFFrameStyle()
-{
-}
+XFFrameStyle::~XFFrameStyle() = default;
 
 void    XFFrameStyle::SetBorders(XFBorders *pBorders)
 {

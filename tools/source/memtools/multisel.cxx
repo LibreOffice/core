@@ -101,9 +101,7 @@ MultiSelection::MultiSelection( const Range& rRange ):
 {
 }
 
-MultiSelection::~MultiSelection()
-{
-}
+MultiSelection::~MultiSelection() = default;
 
 MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
 {

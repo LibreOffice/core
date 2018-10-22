@@ -80,7 +80,7 @@ public:
     void dispose();
 
 private:
-    virtual ~OWeakConnectionPoint() {}
+    virtual ~OWeakConnectionPoint() = default;
 
     /// The reference counter.
     oslInterlockedCount         m_aRefCount;
@@ -250,9 +250,7 @@ void OWeakObject::disposeWeakConnectionPoint()
     }
 }
 
-OWeakObject::~OWeakObject() COVERITY_NOEXCEPT_FALSE
-{
-}
+OWeakObject::~OWeakObject() COVERITY_NOEXCEPT_FALSE = default;
 
 // XWeak
 Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
@@ -275,9 +273,7 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
 
 //-- OWeakAggObject ----------------------------------------------------
 
-OWeakAggObject::~OWeakAggObject()
-{
-}
+OWeakAggObject::~OWeakAggObject() = default;
 
 // XInterface
 void OWeakAggObject::acquire() throw()

@@ -707,7 +707,7 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
     }
 }
 
-SyntaxHighlighter::~SyntaxHighlighter() {}
+SyntaxHighlighter::~SyntaxHighlighter() = default;
 
 void SyntaxHighlighter::getHighlightPortions(const OUString& rLine,
                                               /*out*/std::vector<HighlightPortion>& portions) const

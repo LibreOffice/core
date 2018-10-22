@@ -870,9 +870,7 @@ SelectionFunction::ModeHandler::ModeHandler (
 {
 }
 
-SelectionFunction::ModeHandler::~ModeHandler() COVERITY_NOEXCEPT_FALSE
-{
-}
+SelectionFunction::ModeHandler::~ModeHandler() COVERITY_NOEXCEPT_FALSE = default;
 
 void SelectionFunction::ModeHandler::ReprocessEvent (EventDescriptor& rDescriptor)
 {

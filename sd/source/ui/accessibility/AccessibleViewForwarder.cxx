@@ -49,10 +49,7 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
     }
 }
 
-AccessibleViewForwarder::~AccessibleViewForwarder()
-{
-    // empty
-}
+AccessibleViewForwarder::~AccessibleViewForwarder() = default;
 
 ::tools::Rectangle AccessibleViewForwarder::GetVisibleArea() const
 {

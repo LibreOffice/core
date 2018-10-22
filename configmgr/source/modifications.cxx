@@ -27,9 +27,9 @@
 
 namespace configmgr {
 
-Modifications::Modifications() {}
+Modifications::Modifications() = default;
 
-Modifications::~Modifications() {}
+Modifications::~Modifications() = default;
 
 void Modifications::add(std::vector<OUString> const & path) {
     Node * p = &root_;

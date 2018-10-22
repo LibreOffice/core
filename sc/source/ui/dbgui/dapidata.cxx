@@ -79,9 +79,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg(weld::Window* pParent)
     m_xLbType->connect_changed( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
 }
 
-ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
-{
-}
+ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg() = default;
 
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {

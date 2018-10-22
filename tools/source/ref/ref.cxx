@@ -20,9 +20,7 @@
 #include <tools/ref.hxx>
 #include <tools/weakbase.hxx>
 
-SvRefBase::~SvRefBase() COVERITY_NOEXCEPT_FALSE
-{
-}
+SvRefBase::~SvRefBase() COVERITY_NOEXCEPT_FALSE = default;
 
 tools::WeakBase::~WeakBase()
 {

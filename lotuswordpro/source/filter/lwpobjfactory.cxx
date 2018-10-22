@@ -104,9 +104,7 @@ LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
     m_IdToObjList.clear();
 }
 
-LwpObjectFactory::~LwpObjectFactory()
-{
-}
+LwpObjectFactory::~LwpObjectFactory() = default;
 
 /**
  * @descr       read the index manager

@@ -82,9 +82,7 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     m_nAllCols++;
 }
 
-SwTableRep::~SwTableRep()
-{
-}
+SwTableRep::~SwTableRep() = default;
 
 bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {

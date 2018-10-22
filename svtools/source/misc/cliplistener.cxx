@@ -34,9 +34,7 @@ TransferableClipboardListener::TransferableClipboardListener( const Link<Transfe
 {
 }
 
-TransferableClipboardListener::~TransferableClipboardListener()
-{
-}
+TransferableClipboardListener::~TransferableClipboardListener() = default;
 
 void SAL_CALL TransferableClipboardListener::disposing( const lang::EventObject& )
 {

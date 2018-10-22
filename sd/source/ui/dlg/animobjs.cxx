@@ -62,9 +62,7 @@ SdDisplay::SdDisplay(vcl::Window* pWin)
     SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
 }
 
-SdDisplay::~SdDisplay()
-{
-}
+SdDisplay::~SdDisplay() = default;
 
 void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
 {

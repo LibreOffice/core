@@ -86,9 +86,7 @@ SvXMLEnumMapEntry<drawing::LineStyle> const aLineStyleMap[] =
 // * XMLChartImportPropertyMapper
 // * SchXMLStyleExport
 
-XMLChartPropHdlFactory::~XMLChartPropHdlFactory()
-{
-}
+XMLChartPropHdlFactory::~XMLChartPropHdlFactory() = default;
 
 const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
@@ -178,9 +176,7 @@ XMLChartPropertySetMapper::XMLChartPropertySetMapper( bool bForExport ) :
 {
 }
 
-XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
-{
-}
+XMLChartPropertySetMapper::~XMLChartPropertySetMapper() = default;
 
 XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                                             SvXMLExport& rExport) :
@@ -194,9 +190,7 @@ XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const rtl::Reference
     ChainExportMapper( XMLTextParagraphExport::CreateParaExtPropMapper( rExport ));
 }
 
-XMLChartExportPropertyMapper::~XMLChartExportPropertyMapper()
-{
-}
+XMLChartExportPropertyMapper::~XMLChartExportPropertyMapper() = default;
 
 void XMLChartExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
@@ -534,9 +528,7 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const rtl::Reference
     // to import old documents
 }
 
-XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
-{
-}
+XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper() = default;
 
 bool XMLChartImportPropertyMapper::handleSpecialItem(
     XMLPropertyState& rProperty,

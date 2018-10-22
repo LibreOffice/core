@@ -38,13 +38,9 @@ static const OUStringLiteral gsMacroName("MacroName");
 static const OUStringLiteral gsStarOffice("StarOffice");
 static const OUStringLiteral gsApplication("application");
 
-XMLStarBasicExportHandler::XMLStarBasicExportHandler()
-{
-}
+XMLStarBasicExportHandler::XMLStarBasicExportHandler() = default;
 
-XMLStarBasicExportHandler::~XMLStarBasicExportHandler()
-{
-}
+XMLStarBasicExportHandler::~XMLStarBasicExportHandler() = default;
 
 void XMLStarBasicExportHandler::Export(
     SvXMLExport& rExport,

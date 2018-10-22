@@ -44,9 +44,7 @@ XDashList::XDashList(const OUString& rPath, const OUString& rReferer)
 {
 }
 
-XDashList::~XDashList()
-{
-}
+XDashList::~XDashList() = default;
 
 void XDashList::Replace(std::unique_ptr<XDashEntry> pEntry, long nIndex)
 {

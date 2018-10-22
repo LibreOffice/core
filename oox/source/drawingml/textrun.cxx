@@ -45,9 +45,7 @@ TextRun::TextRun() :
 {
 }
 
-TextRun::~TextRun()
-{
-}
+TextRun::~TextRun() = default;
 
 sal_Int32 TextRun::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,

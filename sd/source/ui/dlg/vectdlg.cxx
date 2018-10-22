@@ -61,9 +61,7 @@ SdVectorizeDlg::SdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::
     InitPreviewBmp();
 }
 
-SdVectorizeDlg::~SdVectorizeDlg()
-{
-}
+SdVectorizeDlg::~SdVectorizeDlg() = default;
 
 ::tools::Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
 {

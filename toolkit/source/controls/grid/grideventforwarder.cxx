@@ -41,11 +41,7 @@ namespace toolkit
     {
     }
 
-
-    GridEventForwarder::~GridEventForwarder()
-    {
-    }
-
+    GridEventForwarder::~GridEventForwarder() = default;
 
     void SAL_CALL GridEventForwarder::acquire() throw()
     {

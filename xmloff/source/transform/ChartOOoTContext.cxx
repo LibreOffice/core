@@ -37,9 +37,7 @@ XMLChartOOoTransformerContext::XMLChartOOoTransformerContext(
 {
 }
 
-XMLChartOOoTransformerContext::~XMLChartOOoTransformerContext()
-{
-}
+XMLChartOOoTransformerContext::~XMLChartOOoTransformerContext() = default;
 
 void XMLChartOOoTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )

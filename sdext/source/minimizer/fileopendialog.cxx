@@ -152,9 +152,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
         }
     }
 }
-FileOpenDialog::~FileOpenDialog()
-{
-}
+FileOpenDialog::~FileOpenDialog() = default;
 sal_Int16 FileOpenDialog::execute()
 {
     return mxFilePicker->execute();

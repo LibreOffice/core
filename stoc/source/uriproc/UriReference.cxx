@@ -49,7 +49,7 @@ UriReference::UriReference(
     OSL_ASSERT(query.isEmpty() || bHasQuery);
 }
 
-UriReference::~UriReference() {}
+UriReference::~UriReference() = default;
 
 OUString UriReference::getUriReference()
 {

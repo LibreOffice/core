@@ -232,9 +232,7 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     }
 }
 
-SdXMLGenericPageContext::~SdXMLGenericPageContext()
-{
-}
+SdXMLGenericPageContext::~SdXMLGenericPageContext() = default;
 
 void SdXMLGenericPageContext::StartElement( const Reference< css::xml::sax::XAttributeList >& )
 {

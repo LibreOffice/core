@@ -27,9 +27,7 @@ SwVbaTabStop::SwVbaTabStop( const uno::Reference< ooo::vba::XHelperInterface >& 
 {
 }
 
-SwVbaTabStop::~SwVbaTabStop()
-{
-}
+SwVbaTabStop::~SwVbaTabStop() = default;
 
 OUString
 SwVbaTabStop::getServiceImplName()

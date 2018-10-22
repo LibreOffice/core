@@ -151,9 +151,7 @@ ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
 {
 }
 
-ExcTable::~ExcTable()
-{
-}
+ExcTable::~ExcTable() = default;
 
 void ExcTable::Add( XclExpRecordBase* pRec )
 {

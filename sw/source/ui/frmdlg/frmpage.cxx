@@ -2727,9 +2727,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
 }
 
-BmpWindow::~BmpWindow()
-{
-}
+BmpWindow::~BmpWindow() = default;
 
 void BmpWindow::SetGraphic(const Graphic& rGraphic)
 {

@@ -35,7 +35,7 @@ typedef std::map< OUString, uno::Sequence<beans::PropertyValue> > NamedPropertyV
 class NamedPropertyValuesContainer : public cppu::WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 public:
-    NamedPropertyValuesContainer() throw();
+    NamedPropertyValuesContainer();
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
@@ -62,9 +62,7 @@ private:
     NamedPropertyValues maProperties;
 };
 
-NamedPropertyValuesContainer::NamedPropertyValuesContainer() throw()
-{
-}
+NamedPropertyValuesContainer::NamedPropertyValuesContainer() = default;
 
 // XNameContainer
 void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const uno::Any& aElement )

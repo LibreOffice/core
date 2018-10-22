@@ -54,12 +54,7 @@ using namespace ::com::sun::star::ucb;
 
 namespace dp_registry {
 namespace backend {
-
-
-PackageRegistryBackend::~PackageRegistryBackend()
-{
-}
-
+PackageRegistryBackend::~PackageRegistryBackend() = default;
 
 void PackageRegistryBackend::disposing( lang::EventObject const & event )
 {
@@ -293,11 +288,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
 
 }
 
-
-Package::~Package()
-{
-}
-
+Package::~Package() = default;
 
 Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   OUString const & url,
@@ -732,9 +723,7 @@ sal_Bool Package::isRemoved()
     return m_bRemoved;
 }
 
-Package::TypeInfo::~TypeInfo()
-{
-}
+Package::TypeInfo::~TypeInfo() = default;
 
 // XPackageTypeInfo
 

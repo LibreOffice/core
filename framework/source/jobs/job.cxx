@@ -96,9 +96,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
     @descr  Releasing of memory and reference must be done inside die() call.
             Otherwise it's a bug.
 */
-Job::~Job()
-{
-}
+Job::~Job() = default;
 
 /**
     @short  set (or delete) a listener for sending dispatch result events

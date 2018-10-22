@@ -283,9 +283,7 @@ OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Refer
     implConstruct();
 }
 
-OFormattedModel::~OFormattedModel()
-{
-}
+OFormattedModel::~OFormattedModel() = default;
 
 // XCloneable
 IMPLEMENT_DEFAULT_CLONING( OFormattedModel )

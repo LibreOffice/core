@@ -80,11 +80,7 @@ namespace dbaui
     }
 
     // CharsetDisplayDerefHelper
-    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource)
-        :CharsetDisplayDerefHelper_Base(_rSource)
-        ,m_sDisplayName(_rSource.m_sDisplayName)
-    {
-    }
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper&) = default;
 
     CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper_Base& _rBase, const OUString& _rDisplayName)
         :CharsetDisplayDerefHelper_Base(_rBase)

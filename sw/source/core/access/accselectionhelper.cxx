@@ -49,9 +49,7 @@ SwAccessibleSelectionHelper::SwAccessibleSelectionHelper(
 {
 }
 
-SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
-{
-}
+SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper() = default;
 
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {

@@ -35,42 +35,13 @@ DAVOptions::DAVOptions() :
 {
 }
 
-DAVOptions::DAVOptions( const DAVOptions & rOther ) :
-    m_isClass1( rOther.m_isClass1 ),
-    m_isClass2( rOther.m_isClass2 ),
-    m_isClass3( rOther.m_isClass3 ),
-    m_isHeadAllowed( rOther.m_isHeadAllowed ),
-    m_isLocked( rOther.m_isLocked ),
-    m_aAllowedMethods( rOther.m_aAllowedMethods ),
-    m_nStaleTime( rOther.m_nStaleTime ),
-    m_nRequestedTimeLife( rOther.m_nRequestedTimeLife ),
-    m_sURL( rOther.m_sURL ),
-    m_sRedirectedURL( rOther.m_sRedirectedURL),
-    m_nHttpResponseStatusCode( rOther.m_nHttpResponseStatusCode ),
-    m_sHttpResponseStatusText( rOther.m_sHttpResponseStatusText )
-{
-}
+DAVOptions::DAVOptions(const DAVOptions& rOther)
 
-DAVOptions::~DAVOptions()
-{
-}
+    = default;
 
-DAVOptions & DAVOptions::operator=( const DAVOptions& rOpts )
-{
-    m_isClass1 = rOpts.m_isClass1;
-    m_isClass2 = rOpts.m_isClass2;
-    m_isClass3 = rOpts.m_isClass3;
-    m_isLocked = rOpts.m_isLocked;
-    m_isHeadAllowed = rOpts.m_isHeadAllowed;
-    m_aAllowedMethods = rOpts.m_aAllowedMethods;
-    m_nStaleTime = rOpts.m_nStaleTime;
-    m_nRequestedTimeLife = rOpts.m_nRequestedTimeLife;
-    m_sURL = rOpts.m_sURL;
-    m_sRedirectedURL = rOpts.m_sRedirectedURL;
-    m_nHttpResponseStatusCode = rOpts.m_nHttpResponseStatusCode;
-    m_sHttpResponseStatusText = rOpts.m_sHttpResponseStatusText;
-    return *this;
-}
+DAVOptions::~DAVOptions() = default;
+
+DAVOptions& DAVOptions::operator=(const DAVOptions& rOpts) = default;
 
 bool DAVOptions::operator==( const DAVOptions& rOpts ) const
 {
@@ -92,13 +63,9 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
 
 // DAVOptionsCache implementation
 
-DAVOptionsCache::DAVOptionsCache()
-{
-}
+DAVOptionsCache::DAVOptionsCache() = default;
 
-DAVOptionsCache::~DAVOptionsCache()
-{
-}
+DAVOptionsCache::~DAVOptionsCache() = default;
 
 bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions )
 {

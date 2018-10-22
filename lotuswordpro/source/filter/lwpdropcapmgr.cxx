@@ -65,9 +65,7 @@ LwpDropcapMgr::LwpDropcapMgr()
     m_pXFPara = nullptr;
 }
 
-LwpDropcapMgr::~LwpDropcapMgr()
-{
-}
+LwpDropcapMgr::~LwpDropcapMgr() = default;
 
 void LwpDropcapMgr::SetXFPara(XFParagraph* pXFPara)
 {

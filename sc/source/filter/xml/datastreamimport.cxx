@@ -60,7 +60,7 @@ ScXMLDataStreamContext::ScXMLDataStreamContext(
     }
 }
 
-ScXMLDataStreamContext::~ScXMLDataStreamContext() {}
+ScXMLDataStreamContext::~ScXMLDataStreamContext() = default;
 
 void SAL_CALL ScXMLDataStreamContext::endFastElement( sal_Int32 /*nElement*/ )
 {

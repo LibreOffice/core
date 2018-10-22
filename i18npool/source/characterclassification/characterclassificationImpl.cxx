@@ -35,9 +35,7 @@ CharacterClassificationImpl::CharacterClassificationImpl(
         xUCI = cachedItem->xCI;
 }
 
-CharacterClassificationImpl::~CharacterClassificationImpl() {
-}
-
+CharacterClassificationImpl::~CharacterClassificationImpl() = default;
 
 OUString SAL_CALL
 CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,

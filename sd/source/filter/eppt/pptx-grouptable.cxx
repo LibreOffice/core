@@ -28,9 +28,7 @@ GroupTable::GroupTable()
     mvGroupEntry.reserve(32);
 }
 
-GroupTable::~GroupTable()
-{
-}
+GroupTable::~GroupTable() = default;
 
 bool GroupTable::EnterGroup( css::uno::Reference< css::container::XIndexAccess > const & rXIndexAccessRef )
 {

@@ -44,11 +44,7 @@ LZWDecompressor::LZWDecompressor()
     }
 }
 
-
-LZWDecompressor::~LZWDecompressor()
-{
-}
-
+LZWDecompressor::~LZWDecompressor() = default;
 
 void LZWDecompressor::StartDecompression(SvStream & rIStream)
 {

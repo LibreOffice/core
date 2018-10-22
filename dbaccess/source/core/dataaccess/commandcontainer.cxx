@@ -48,9 +48,7 @@ OCommandContainer::OCommandContainer( const Reference< css::uno::XComponentConte
 {
 }
 
-OCommandContainer::~OCommandContainer()
-{
-}
+OCommandContainer::~OCommandContainer() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
 IMPLEMENT_GETTYPES2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);

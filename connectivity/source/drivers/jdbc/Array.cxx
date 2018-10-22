@@ -28,8 +28,7 @@ using namespace connectivity;
 
 jclass java_sql_Array::theClass = nullptr;
 
-java_sql_Array::~java_sql_Array()
-{}
+java_sql_Array::~java_sql_Array() = default;
 
 jclass java_sql_Array::getMyClass() const
 {

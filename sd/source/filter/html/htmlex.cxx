@@ -403,9 +403,7 @@ HtmlExport::HtmlExport(
     mpDoc->SetChanged(bChange);
 }
 
-HtmlExport::~HtmlExport()
-{
-}
+HtmlExport::~HtmlExport() = default;
 
 // get common export parameters from item set
 void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams )

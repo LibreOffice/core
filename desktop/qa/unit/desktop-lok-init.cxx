@@ -31,7 +31,7 @@ using namespace css;
 class LOKInitTest : public ::CppUnit::TestFixture
 {
 public:
-    LOKInitTest() {}
+    LOKInitTest() = default;
 
     void testJsonToPropertyValues();
     void testJsonToPropertyValuesBorder();

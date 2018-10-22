@@ -237,9 +237,7 @@ DataPointItemConverter::DataPointItemConverter(
     m_bForbidPercentValue = ChartTypeHelper::getAxisType( xChartType, 0 ) != AxisType::CATEGORY;
 }
 
-DataPointItemConverter::~DataPointItemConverter()
-{
-}
+DataPointItemConverter::~DataPointItemConverter() = default;
 
 void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

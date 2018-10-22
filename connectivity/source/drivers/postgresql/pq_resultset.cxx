@@ -123,8 +123,7 @@ Any ResultSet::getValue( sal_Int32 columnIndex )
     return ret;
 }
 
-ResultSet::~ResultSet()
-{}
+ResultSet::~ResultSet() = default;
 
 void ResultSet::close(  )
 {

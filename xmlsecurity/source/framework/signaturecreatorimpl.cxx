@@ -38,9 +38,7 @@ SignatureCreatorImpl::SignatureCreatorImpl()
 {
 }
 
-SignatureCreatorImpl::~SignatureCreatorImpl( )
-{
-}
+SignatureCreatorImpl::~SignatureCreatorImpl() = default;
 
 void SignatureCreatorImpl::notifyResultListener() const
 /****** SignatureCreatorImpl/notifyResultListener *****************************

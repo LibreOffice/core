@@ -104,9 +104,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XComponentC
         addStatusListener( getMasterCommand( aCommand ) );
 }
 
-GenericToolbarController::~GenericToolbarController()
-{
-}
+GenericToolbarController::~GenericToolbarController() = default;
 
 void SAL_CALL GenericToolbarController::dispose()
 {

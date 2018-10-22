@@ -57,7 +57,7 @@ struct AxesSetModel
     TypeGroupVector     maTypeGroups;       /// All type groups containing data series.
     AxisMap             maAxes;             /// All axes mapped by API axis type.
 
-    explicit     AxesSetModel() {}
+    explicit AxesSetModel() = default;
 };
 
 /** Axes set converter. This is a helper class for the plot area converter. */
@@ -192,9 +192,7 @@ View3DConverter::View3DConverter( const ConverterRoot& rParent, View3DModel& rMo
 {
 }
 
-View3DConverter::~View3DConverter()
-{
-}
+View3DConverter::~View3DConverter() = default;
 
 void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, TypeGroupConverter const & rTypeGroup )
 {
@@ -265,9 +263,7 @@ WallFloorConverter::WallFloorConverter( const ConverterRoot& rParent, WallFloorM
 {
 }
 
-WallFloorConverter::~WallFloorConverter()
-{
-}
+WallFloorConverter::~WallFloorConverter() = default;
 
 void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, ObjectType eObjType )
 {
@@ -291,9 +287,7 @@ DataTableConverter::DataTableConverter( const ConverterRoot& rParent, DataTableM
 {
 }
 
-DataTableConverter::~DataTableConverter()
-{
-}
+DataTableConverter::~DataTableConverter() = default;
 
 void DataTableConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 {
@@ -314,9 +308,7 @@ PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaMode
 {
 }
 
-PlotAreaConverter::~PlotAreaConverter()
-{
-}
+PlotAreaConverter::~PlotAreaConverter() = default;
 
 void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 {

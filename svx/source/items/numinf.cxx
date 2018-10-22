@@ -74,22 +74,11 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 #undef INIT
 
+SvxNumberInfoItem::SvxNumberInfoItem(const SvxNumberInfoItem& rItem)
 
-SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
-    SfxPoolItem  ( rItem ),
-    pFormatter   ( rItem.pFormatter ),
-    eValueType   ( rItem.eValueType ),
-    aStringVal   ( rItem.aStringVal ),
-    nDoubleVal   ( rItem.nDoubleVal ),
-    mvDelFormats( rItem.mvDelFormats )
-{
-}
+    = default;
 
-
-SvxNumberInfoItem::~SvxNumberInfoItem()
-{
-}
-
+SvxNumberInfoItem::~SvxNumberInfoItem() = default;
 
 bool SvxNumberInfoItem::GetPresentation
 (

@@ -2919,9 +2919,7 @@ ScMatrix::ScMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals )
         pImpl.reset( new ScMatrixImpl( 1,1, CreateDoubleError( FormulaError::MatrixSize)));
 }
 
-ScMatrix::~ScMatrix()
-{
-}
+ScMatrix::~ScMatrix() = default;
 
 ScMatrix* ScMatrix::Clone() const
 {

@@ -92,11 +92,7 @@ void DocumentListItemsManager::getNumItems( tSortedNodeNumList& orNodeNumList ) 
     }
 }
 
-DocumentListItemsManager::~DocumentListItemsManager()
-{
-}
-
-
+DocumentListItemsManager::~DocumentListItemsManager() = default;
 }
 
 

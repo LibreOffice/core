@@ -121,9 +121,7 @@ Fraction::Fraction( double dVal ) : mpImpl(new Impl)
     }
 }
 
-Fraction::~Fraction()
-{
-}
+Fraction::~Fraction() = default;
 
 Fraction::operator double() const
 {

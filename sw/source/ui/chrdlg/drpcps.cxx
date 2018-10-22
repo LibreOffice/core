@@ -502,9 +502,7 @@ SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
     m_xWholeWordCB->connect_toggled(LINK(this, SwDropCapsPage, WholeWordHdl));
 }
 
-SwDropCapsPage::~SwDropCapsPage()
-{
-}
+SwDropCapsPage::~SwDropCapsPage() = default;
 
 DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 {

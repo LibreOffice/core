@@ -140,8 +140,7 @@ BarChartTypeTemplate::BarChartTypeTemplate(
         m_nDim( nDim )
 {}
 
-BarChartTypeTemplate::~BarChartTypeTemplate()
-{}
+BarChartTypeTemplate::~BarChartTypeTemplate() = default;
 
 sal_Int32 BarChartTypeTemplate::getDimension() const
 {

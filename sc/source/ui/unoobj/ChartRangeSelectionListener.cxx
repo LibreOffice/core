@@ -39,8 +39,7 @@ ScChartRangeSelectionListener::ScChartRangeSelectionListener( ScTabViewShell * p
         m_pViewShell( pViewShell )
 {}
 
-ScChartRangeSelectionListener::~ScChartRangeSelectionListener()
-{}
+ScChartRangeSelectionListener::~ScChartRangeSelectionListener() = default;
 
 // ____ XModifyListener ____
 void SAL_CALL ScChartRangeSelectionListener::selectionChanged( const lang::EventObject& aEvent )

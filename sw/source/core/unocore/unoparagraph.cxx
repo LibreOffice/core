@@ -211,9 +211,7 @@ SwXParagraph::SwXParagraph(
 {
 }
 
-SwXParagraph::~SwXParagraph()
-{
-}
+SwXParagraph::~SwXParagraph() = default;
 
 const SwTextNode * SwXParagraph::GetTextNode() const
 {

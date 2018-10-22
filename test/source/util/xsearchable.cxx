@@ -56,10 +56,7 @@ void XSearchable::testFindNext()
     }
 }
 
-XSearchable::~XSearchable()
-{
-}
-
+XSearchable::~XSearchable() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

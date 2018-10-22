@@ -49,9 +49,7 @@ namespace cppcanvas
                                                                                      uno::UNO_QUERY) ) );
         }
 
-        ImplBitmap::~ImplBitmap()
-        {
-        }
+        ImplBitmap::~ImplBitmap() = default;
 
         bool ImplBitmap::draw() const
         {

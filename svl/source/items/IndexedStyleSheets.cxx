@@ -205,9 +205,7 @@ IndexedStyleSheets::Clear(StyleSheetDisposer& disposer)
     mPositionsByName.clear();
 }
 
-IndexedStyleSheets::~IndexedStyleSheets()
-{
-}
+IndexedStyleSheets::~IndexedStyleSheets() = default;
 
 bool
 IndexedStyleSheets::HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style) const

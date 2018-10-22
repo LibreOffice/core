@@ -36,11 +36,7 @@ m_nCheckboxDefault(-1)
 {
 }
 
-
-FFDataHandler::~FFDataHandler()
-{
-}
-
+FFDataHandler::~FFDataHandler() = default;
 
 bool FFDataHandler::getCheckboxChecked() const
 {

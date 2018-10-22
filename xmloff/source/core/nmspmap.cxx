@@ -65,9 +65,7 @@ SvXMLNamespaceMap& SvXMLNamespaceMap::operator=( const SvXMLNamespaceMap& rMap )
     return *this;
 }
 
-SvXMLNamespaceMap::~SvXMLNamespaceMap()
-{
-}
+SvXMLNamespaceMap::~SvXMLNamespaceMap() = default;
 
 bool SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
 {

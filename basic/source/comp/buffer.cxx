@@ -38,9 +38,7 @@ SbiBuffer::SbiBuffer( SbiParser* p, short n )
     nOff  = 0;
 }
 
-SbiBuffer::~SbiBuffer()
-{
-}
+SbiBuffer::~SbiBuffer() = default;
 
 // Reach out the buffer
 // This lead to the deletion of the buffer!

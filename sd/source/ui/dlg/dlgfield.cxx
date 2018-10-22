@@ -53,9 +53,7 @@ SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pI
     FillControls();
 }
 
-SdModifyFieldDlg::~SdModifyFieldDlg()
-{
-}
+SdModifyFieldDlg::~SdModifyFieldDlg() = default;
 
 /**
  * Returns the new field, owned by caller.

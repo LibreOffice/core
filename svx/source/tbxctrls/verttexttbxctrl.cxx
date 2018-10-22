@@ -46,9 +46,7 @@ SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId
 {
 }
 
-SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
-{
-}
+SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl() = default;
 
 void SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {

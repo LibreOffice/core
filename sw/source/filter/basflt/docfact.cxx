@@ -29,11 +29,7 @@ SwDocFac::SwDocFac( SwDoc *pDc )
 {
 }
 
-
-SwDocFac::~SwDocFac() COVERITY_NOEXCEPT_FALSE
-{
-}
-
+SwDocFac::~SwDocFac() COVERITY_NOEXCEPT_FALSE = default;
 
 SwDoc *SwDocFac::GetDoc()
 {

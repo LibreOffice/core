@@ -25,10 +25,7 @@
 using namespace ::com::sun::star;
 using namespace css::uno;
 
-
-XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler()
-{
-}
+XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler() = default;
 
 bool XMLIsPercentagePropertyHandler::importXML(
     const OUString& rStrImpValue,

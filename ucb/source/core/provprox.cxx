@@ -42,9 +42,7 @@ UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
 
 
 // virtual
-UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
-{
-}
+UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory() = default;
 
 // XServiceInfo methods.
 
@@ -98,10 +96,7 @@ UcbContentProviderProxy::UcbContentProviderProxy(
 
 
 // virtual
-UcbContentProviderProxy::~UcbContentProviderProxy()
-{
-}
-
+UcbContentProviderProxy::~UcbContentProviderProxy() = default;
 
 // XInterface methods.
 void SAL_CALL UcbContentProviderProxy::acquire()

@@ -111,16 +111,9 @@ std::vector< beans::StringPair > DocTemplLocaleHelper::ReadLocalizationSequence_
     return pHelper->GetParsingResult();
 }
 
+DocTemplLocaleHelper::DocTemplLocaleHelper() = default;
 
-DocTemplLocaleHelper::DocTemplLocaleHelper()
-{
-}
-
-
-DocTemplLocaleHelper::~DocTemplLocaleHelper()
-{
-}
-
+DocTemplLocaleHelper::~DocTemplLocaleHelper() = default;
 
 std::vector< beans::StringPair > const & DocTemplLocaleHelper::GetParsingResult()
 {

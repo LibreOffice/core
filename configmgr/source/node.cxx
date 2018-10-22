@@ -75,8 +75,7 @@ Node::Node(const Node & other):
     SimpleReferenceObject(), layer_(other.layer_), finalized_(other.finalized_)
 {}
 
-Node::~Node() {}
-
+Node::~Node() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

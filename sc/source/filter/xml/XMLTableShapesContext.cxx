@@ -30,9 +30,7 @@ ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport ) :
     // here are no attributes
 }
 
-ScXMLTableShapesContext::~ScXMLTableShapesContext()
-{
-}
+ScXMLTableShapesContext::~ScXMLTableShapesContext() = default;
 
 SvXMLImportContextRef ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,

@@ -338,9 +338,8 @@ SdrItemPool::SdrItemPool(
 // copy ctor, so that static defaults are cloned
 //            (Parameter 2 = sal_True)
 SdrItemPool::SdrItemPool(const SdrItemPool& rPool)
-:   XOutdevItemPool(rPool)
-{
-}
+
+    = default;
 
 SfxItemPool* SdrItemPool::Clone() const
 {
@@ -1940,86 +1939,62 @@ sal_uInt16 SdrGrafCropItem::GetVersion( sal_uInt16 /*nFileVersion*/) const
     // GRFCROP_VERSION_MOVETOSVX is 1
     return GRFCROP_VERSION_MOVETOSVX;
 }
-SdrTextAniStartInsideItem::~SdrTextAniStartInsideItem()
-{
-}
+SdrTextAniStartInsideItem::~SdrTextAniStartInsideItem() = default;
 SfxPoolItem* SdrTextAniStartInsideItem::Clone(SfxItemPool* ) const
 {
     return new SdrTextAniStartInsideItem(*this);
 }
-SdrTextAniStopInsideItem::~SdrTextAniStopInsideItem()
-{
-}
+SdrTextAniStopInsideItem::~SdrTextAniStopInsideItem() = default;
 SfxPoolItem* SdrTextAniStopInsideItem::Clone(SfxItemPool* ) const
 {
     return new SdrTextAniStopInsideItem(*this);
 }
-SdrCaptionEscIsRelItem::~SdrCaptionEscIsRelItem()
-{
-}
+SdrCaptionEscIsRelItem::~SdrCaptionEscIsRelItem() = default;
 SfxPoolItem* SdrCaptionEscIsRelItem::Clone(SfxItemPool* ) const
 {
     return new SdrCaptionEscIsRelItem(*this);
 }
-SdrCaptionEscRelItem::~SdrCaptionEscRelItem()
-{
-}
+SdrCaptionEscRelItem::~SdrCaptionEscRelItem() = default;
 SfxPoolItem* SdrCaptionEscRelItem::Clone(SfxItemPool*) const
 {
     return new SdrCaptionEscRelItem(*this);
 }
-SdrCaptionFitLineLenItem::~SdrCaptionFitLineLenItem()
-{
-}
+SdrCaptionFitLineLenItem::~SdrCaptionFitLineLenItem() = default;
 SfxPoolItem* SdrCaptionFitLineLenItem::Clone(SfxItemPool* ) const
 {
     return new SdrCaptionFitLineLenItem(*this);
 }
-SdrCaptionLineLenItem::~SdrCaptionLineLenItem()
-{
-}
+SdrCaptionLineLenItem::~SdrCaptionLineLenItem() = default;
 SfxPoolItem* SdrCaptionLineLenItem::Clone(SfxItemPool*) const
 {
     return new SdrCaptionLineLenItem(*this);
 }
-SdrMeasureBelowRefEdgeItem::~SdrMeasureBelowRefEdgeItem()
-{
-}
+SdrMeasureBelowRefEdgeItem::~SdrMeasureBelowRefEdgeItem() = default;
 SfxPoolItem* SdrMeasureBelowRefEdgeItem::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureBelowRefEdgeItem(*this);
 }
-SdrMeasureTextIsFixedAngleItem::~SdrMeasureTextIsFixedAngleItem()
-{
-}
+SdrMeasureTextIsFixedAngleItem::~SdrMeasureTextIsFixedAngleItem() = default;
 SfxPoolItem* SdrMeasureTextIsFixedAngleItem::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureTextIsFixedAngleItem(*this);
 }
-SdrMeasureTextFixedAngleItem::~SdrMeasureTextFixedAngleItem()
-{
-}
+SdrMeasureTextFixedAngleItem::~SdrMeasureTextFixedAngleItem() = default;
 SfxPoolItem* SdrMeasureTextFixedAngleItem::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureTextFixedAngleItem(*this);
 }
-SdrMeasureDecimalPlacesItem::~SdrMeasureDecimalPlacesItem()
-{
-}
+SdrMeasureDecimalPlacesItem::~SdrMeasureDecimalPlacesItem() = default;
 SfxPoolItem* SdrMeasureDecimalPlacesItem::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureDecimalPlacesItem(*this);
 }
-SdrMeasureTextRota90Item::~SdrMeasureTextRota90Item()
-{
-}
+SdrMeasureTextRota90Item::~SdrMeasureTextRota90Item() = default;
 SfxPoolItem* SdrMeasureTextRota90Item::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureTextRota90Item(*this);
 }
-SdrMeasureTextUpsideDownItem::~SdrMeasureTextUpsideDownItem()
-{
-}
+SdrMeasureTextUpsideDownItem::~SdrMeasureTextUpsideDownItem() = default;
 SfxPoolItem* SdrMeasureTextUpsideDownItem::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureTextUpsideDownItem(*this);

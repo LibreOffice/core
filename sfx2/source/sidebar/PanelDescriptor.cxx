@@ -55,10 +55,7 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
 {
 }
 
-PanelDescriptor::~PanelDescriptor()
-{
-}
-
+PanelDescriptor::~PanelDescriptor() = default;
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

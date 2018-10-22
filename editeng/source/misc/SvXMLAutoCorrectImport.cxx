@@ -35,9 +35,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
 {
 }
 
-SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() throw ()
-{
-}
+SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() throw() = default;
 
 SvXMLImportContext *SvXMLAutoCorrectImport::CreateFastContext( sal_Int32 Element,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -65,9 +63,7 @@ css::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFa
         return new SvXMLImportContext( rLocalRef );
 }
 
-SvXMLWordListContext::~SvXMLWordListContext()
-{
-}
+SvXMLWordListContext::~SvXMLWordListContext() = default;
 
 SvXMLWordContext::SvXMLWordContext(
    SvXMLAutoCorrectImport& rImport,
@@ -98,9 +94,7 @@ SvXMLWordContext::SvXMLWordContext(
     rImport.pAutocorr_List->LoadEntry( sWrong, sRight, bOnlyTxt );
 }
 
-SvXMLWordContext::~SvXMLWordContext()
-{
-}
+SvXMLWordContext::~SvXMLWordContext() = default;
 
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< uno::XComponentContext > & xContext,
@@ -110,9 +104,7 @@ SvXMLExceptionListImport::SvXMLExceptionListImport(
 {
 }
 
-SvXMLExceptionListImport::~SvXMLExceptionListImport() throw ()
-{
-}
+SvXMLExceptionListImport::~SvXMLExceptionListImport() throw() = default;
 
 SvXMLImportContext *SvXMLExceptionListImport::CreateFastContext(sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -139,9 +131,7 @@ css::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListCo
         return new SvXMLImportContext( rLocalRef );
 }
 
-SvXMLExceptionListContext::~SvXMLExceptionListContext()
-{
-}
+SvXMLExceptionListContext::~SvXMLExceptionListContext() = default;
 
 SvXMLExceptionContext::SvXMLExceptionContext(
    SvXMLExceptionListImport& rImport,
@@ -158,8 +148,6 @@ SvXMLExceptionContext::SvXMLExceptionContext(
     rImport.rList.insert( sWord );
 }
 
-SvXMLExceptionContext::~SvXMLExceptionContext()
-{
-}
+SvXMLExceptionContext::~SvXMLExceptionContext() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

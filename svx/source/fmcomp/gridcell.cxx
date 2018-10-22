@@ -1230,11 +1230,7 @@ DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     doPropertyListening( FM_PROP_FORMATKEY );
 }
 
-
-DbFormattedField::~DbFormattedField()
-{
-}
-
+DbFormattedField::~DbFormattedField() = default;
 
 void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {

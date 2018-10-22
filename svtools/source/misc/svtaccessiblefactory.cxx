@@ -181,16 +181,9 @@ namespace svt
             }
         };
 
+        AccessibleDummyFactory::AccessibleDummyFactory() = default;
 
-        AccessibleDummyFactory::AccessibleDummyFactory()
-        {
-        }
-
-
-        AccessibleDummyFactory::~AccessibleDummyFactory()
-        {
-        }
-
+        AccessibleDummyFactory::~AccessibleDummyFactory() = default;
     }
 
 

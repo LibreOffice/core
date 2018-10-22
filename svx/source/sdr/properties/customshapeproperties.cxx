@@ -191,9 +191,7 @@ namespace sdr
         {
         }
 
-        CustomShapeProperties::~CustomShapeProperties()
-        {
-        }
+        CustomShapeProperties::~CustomShapeProperties() = default;
 
         std::unique_ptr<BaseProperties> CustomShapeProperties::Clone(SdrObject& rObj) const
         {

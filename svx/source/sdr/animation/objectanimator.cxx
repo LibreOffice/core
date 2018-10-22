@@ -30,9 +30,7 @@ namespace sdr
         {
         }
 
-        primitiveAnimator::~primitiveAnimator()
-        {
-        }
+        primitiveAnimator::~primitiveAnimator() = default;
     } // end of namespace animation
 } // end of namespace sdr
 

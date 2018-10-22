@@ -44,9 +44,7 @@ namespace accessibility
         implSetName( aAccName );
     }
 
-    AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
-    {
-    }
+    AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell() = default;
 
     void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
     {

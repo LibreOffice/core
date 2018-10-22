@@ -567,10 +567,8 @@ namespace drawinglayer
             maCurrentTransformation = rViewInformation.getObjectTransformation();
         }
 
-        VclMetafileProcessor2D::~VclMetafileProcessor2D()
-        {
+        VclMetafileProcessor2D::~VclMetafileProcessor2D() = default;
             // MapMode was not changed, no restore necessary
-        }
 
         /***********************************************************************************************
 

@@ -38,9 +38,7 @@ SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParen
     mxSelSupp.set( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
 }
 
-SwVbaFind::~SwVbaFind()
-{
-}
+SwVbaFind::~SwVbaFind() = default;
 
 bool SwVbaFind::InRange( const uno::Reference< text::XTextRange >& xCurrentRange )
 {

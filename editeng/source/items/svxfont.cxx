@@ -171,7 +171,7 @@ public:
         : pOut(_pOut), rTxt(_rTxt), nIdx(_nIdx), nLen(_nLen)
         { }
 
-    virtual ~SvxDoCapitals() {}
+        virtual ~SvxDoCapitals() = default;
 
     virtual void DoSpace( const bool bDraw );
     virtual void SetSpace();

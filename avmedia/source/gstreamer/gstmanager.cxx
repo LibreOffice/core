@@ -31,13 +31,9 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
-Manager::Manager()
-{
-}
+Manager::Manager() = default;
 
-Manager::~Manager()
-{
-}
+Manager::~Manager() = default;
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
 {

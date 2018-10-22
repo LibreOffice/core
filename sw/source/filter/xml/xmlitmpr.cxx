@@ -44,9 +44,7 @@ SvXMLItemMapEntries::SvXMLItemMapEntries( SvXMLItemMapEntry const * pEntries )
     }
 }
 
-SvXMLItemMapEntries::~SvXMLItemMapEntries()
-{
-}
+SvXMLItemMapEntries::~SvXMLItemMapEntries() = default;
 
 SvXMLItemMapEntry const * SvXMLItemMapEntries::getByName(  sal_uInt16 nNameSpace,
                                                     const OUString& rString  ) const

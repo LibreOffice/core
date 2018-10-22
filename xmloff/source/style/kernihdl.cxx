@@ -32,10 +32,7 @@ using namespace ::xmloff::token;
 // class XMLKerningPropHdl
 
 
-XMLKerningPropHdl::~XMLKerningPropHdl()
-{
-    // nothing to do
-}
+XMLKerningPropHdl::~XMLKerningPropHdl() = default;
 
 bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {

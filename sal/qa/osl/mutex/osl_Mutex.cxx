@@ -211,7 +211,7 @@ class GlobalMutexThread : public Thread
 {
 public:
     //get the Mutex pointer to operate
-    GlobalMutexThread( ){ }
+    GlobalMutexThread() = default;
 
     virtual ~GlobalMutexThread( ) override
     {

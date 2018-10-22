@@ -29,9 +29,7 @@ PageOrientationPopup::PageOrientationPopup(sal_uInt16 nSlotId, sal_uInt16 nId, T
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-PageOrientationPopup::~PageOrientationPopup()
-{
-}
+PageOrientationPopup::~PageOrientationPopup() = default;
 
 VclPtr<SfxPopupWindow> PageOrientationPopup::CreatePopupWindow()
 {

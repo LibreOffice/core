@@ -56,9 +56,7 @@ OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
     pEditView.reset( new EditView( pOut->pEditEngine.get(), pWin ) );
 }
 
-OutlinerView::~OutlinerView()
-{
-}
+OutlinerView::~OutlinerView() = default;
 
 void OutlinerView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {

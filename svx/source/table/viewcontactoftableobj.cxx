@@ -419,9 +419,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfTableObj::~ViewContactOfTableObj()
-        {
-        }
+        ViewContactOfTableObj::~ViewContactOfTableObj() = default;
     } // end of namespace contact
 } // end of namespace sdr
 

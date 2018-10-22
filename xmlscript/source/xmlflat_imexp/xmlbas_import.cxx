@@ -50,9 +50,7 @@ namespace xmlscript
     {
     }
 
-    BasicElementBase::~BasicElementBase()
-    {
-    }
+    BasicElementBase::~BasicElementBase() = default;
 
     bool BasicElementBase::getBoolAttr( bool* pRet, const OUString& rAttrName,
         const css::uno::Reference< css::xml::input::XAttributes >& xAttributes,
@@ -394,9 +392,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    BasicImport::~BasicImport()
-    {
-    }
+    BasicImport::~BasicImport() = default;
 
     // XRoot
 
@@ -475,9 +471,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    XMLBasicImporterBase::~XMLBasicImporterBase()
-    {
-    }
+    XMLBasicImporterBase::~XMLBasicImporterBase() = default;
 
     // XServiceInfo
     sal_Bool XMLBasicImporterBase::supportsService( const OUString& rServiceName )
@@ -585,9 +579,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    XMLBasicImporter::~XMLBasicImporter()
-    {
-    }
+    XMLBasicImporter::~XMLBasicImporter() = default;
 
     // XServiceInfo
 
@@ -609,9 +601,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    XMLOasisBasicImporter::~XMLOasisBasicImporter()
-    {
-    }
+    XMLOasisBasicImporter::~XMLOasisBasicImporter() = default;
 
     // XServiceInfo
 

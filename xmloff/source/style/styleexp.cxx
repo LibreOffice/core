@@ -70,9 +70,7 @@ XMLStyleExport::XMLStyleExport(
 {
 }
 
-XMLStyleExport::~XMLStyleExport()
-{
-}
+XMLStyleExport::~XMLStyleExport() = default;
 
 void XMLStyleExport::exportStyleAttributes( const Reference< XStyle >& )
 {

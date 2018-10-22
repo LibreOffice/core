@@ -144,9 +144,7 @@ XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
 {
 }
 
-XMLTextImportPropertyMapper::~XMLTextImportPropertyMapper()
-{
-}
+XMLTextImportPropertyMapper::~XMLTextImportPropertyMapper() = default;
 
 void XMLTextImportPropertyMapper::FontFinished(
     XMLPropertyState *pFontFamilyNameState,

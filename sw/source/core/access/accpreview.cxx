@@ -34,9 +34,7 @@ SwAccessiblePreview::SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const&
     SetName( GetResource( STR_ACCESS_PREVIEW_DOC_NAME ) );
 }
 
-SwAccessiblePreview::~SwAccessiblePreview()
-{
-}
+SwAccessiblePreview::~SwAccessiblePreview() = default;
 
 OUString SwAccessiblePreview::getImplementationName( )
 {

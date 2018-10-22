@@ -18,17 +18,17 @@
 class PoolItemTest : public CppUnit::TestFixture
 {
   public:
-             PoolItemTest() {}
+      PoolItemTest() = default;
 
-    void testPool();
+      void testPool();
 
-    // Adds code needed to register the test suite
-    CPPUNIT_TEST_SUITE(PoolItemTest);
+      // Adds code needed to register the test suite
+      CPPUNIT_TEST_SUITE(PoolItemTest);
 
-    CPPUNIT_TEST(testPool);
+      CPPUNIT_TEST(testPool);
 
-    // End of test suite definition
-    CPPUNIT_TEST_SUITE_END();
+      // End of test suite definition
+      CPPUNIT_TEST_SUITE_END();
 };
 
 void PoolItemTest::testPool()

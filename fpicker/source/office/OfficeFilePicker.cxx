@@ -418,10 +418,7 @@ SvtFilePicker::SvtFilePicker()
 {
 }
 
-SvtFilePicker::~SvtFilePicker()
-{
-}
-
+SvtFilePicker::~SvtFilePicker() = default;
 
 sal_Int16 SvtFilePicker::implExecutePicker( )
 {
@@ -1103,9 +1100,7 @@ Reference< XInterface > SvtFilePicker::impl_createInstance(
 
 // SvtRemoteFilePicker
 
-SvtRemoteFilePicker::SvtRemoteFilePicker()
-{
-}
+SvtRemoteFilePicker::SvtRemoteFilePicker() = default;
 
 VclPtr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog( vcl::Window* _pParent )
 {

@@ -45,9 +45,7 @@ AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
 {
 }
 
-AccessibleTitleBar::~AccessibleTitleBar()
-{
-}
+AccessibleTitleBar::~AccessibleTitleBar() = default;
 
 void AccessibleTitleBar::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
 {

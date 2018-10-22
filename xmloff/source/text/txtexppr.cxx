@@ -194,9 +194,7 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
 {
 }
 
-XMLTextExportPropertySetMapper::~XMLTextExportPropertySetMapper()
-{
-}
+XMLTextExportPropertySetMapper::~XMLTextExportPropertySetMapper() = default;
 
 void XMLTextExportPropertySetMapper::ContextFontFilter(
     bool bEnableFoFontFamily,

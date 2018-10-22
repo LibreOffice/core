@@ -31,13 +31,9 @@ namespace webdav_ucp
 
     //PropertyNamesCache implementation
 
-    PropertyNamesCache::PropertyNamesCache()
-    {
-    }
+    PropertyNamesCache::PropertyNamesCache() = default;
 
-    PropertyNamesCache::~PropertyNamesCache()
-    {
-    }
+    PropertyNamesCache::~PropertyNamesCache() = default;
 
     bool PropertyNamesCache::getCachedPropertyNames( const OUString& rURL, PropertyNames& rCacheElement )
     {

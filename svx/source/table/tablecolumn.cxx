@@ -56,11 +56,7 @@ TableColumn::TableColumn( const TableModelRef& xTableModel, sal_Int32 nColumn )
 {
 }
 
-
-TableColumn::~TableColumn()
-{
-}
-
+TableColumn::~TableColumn() = default;
 
 void TableColumn::dispose()
 {

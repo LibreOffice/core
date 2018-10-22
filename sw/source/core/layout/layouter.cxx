@@ -200,13 +200,9 @@ void SwLooping::Control( SwPageFrame* pPage )
     }
 }
 
-SwLayouter::SwLayouter()
-{
-}
+SwLayouter::SwLayouter() = default;
 
-SwLayouter::~SwLayouter()
-{
-}
+SwLayouter::~SwLayouter() = default;
 
 void SwLayouter::CollectEndnotes_( SwSectionFrame* pSect )
 {

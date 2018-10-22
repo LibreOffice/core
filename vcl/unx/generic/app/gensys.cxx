@@ -39,13 +39,9 @@
 
 using namespace com::sun::star;
 
-SalGenericSystem::SalGenericSystem()
-{
-}
+SalGenericSystem::SalGenericSystem() = default;
 
-SalGenericSystem::~SalGenericSystem()
-{
-}
+SalGenericSystem::~SalGenericSystem() = default;
 
 int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUString& rMessage )
 {

@@ -99,9 +99,7 @@ XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, const OUString& rLName
 {
 }
 
-XMLScriptContext::~XMLScriptContext()
-{
-}
+XMLScriptContext::~XMLScriptContext() = default;
 
 SvXMLImportContextRef XMLScriptContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,

@@ -158,17 +158,15 @@ SfxStatusBarControl::SfxStatusBarControl
 {
 }
 
-
 SfxStatusBarControl::~SfxStatusBarControl()
 
-/*  [Description]
+    /*  [Description]
 
     Destructor of the SfxStatusBarControl Class. The Class and its Subclasses
     are destroyed by SFx.
 */
 
-{}
-
+    = default;
 
 // XInterface
 void SAL_CALL SfxStatusBarControl::acquire() throw()

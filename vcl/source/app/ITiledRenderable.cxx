@@ -12,11 +12,7 @@
 
 namespace vcl
 {
-
-ITiledRenderable::~ITiledRenderable()
-{
-}
-
+ITiledRenderable::~ITiledRenderable() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,9 +60,7 @@ SwVbaView::SwVbaView( const uno::Reference< ooo::vba::XHelperInterface >& rParen
     mxViewSettings.set( xViewSettingSupp->getViewSettings(), uno::UNO_QUERY_THROW );
 }
 
-SwVbaView::~SwVbaView()
-{
-}
+SwVbaView::~SwVbaView() = default;
 
 ::sal_Int32 SAL_CALL
 SwVbaView::getSeekView()

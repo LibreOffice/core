@@ -136,9 +136,7 @@ SvxRubyData_Impl::SvxRubyData_Impl()
 {
 }
 
-SvxRubyData_Impl::~SvxRubyData_Impl()
-{
-}
+SvxRubyData_Impl::~SvxRubyData_Impl() = default;
 
 void SvxRubyData_Impl::SetController(const Reference<XController>& xCtrl)
 {

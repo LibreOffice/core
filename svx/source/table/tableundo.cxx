@@ -353,11 +353,7 @@ TableColumnUndo::TableColumnUndo( const TableColumnRef& xCol )
     getData( maUndoData );
 }
 
-
-TableColumnUndo::~TableColumnUndo()
-{
-}
-
+TableColumnUndo::~TableColumnUndo() = default;
 
 void TableColumnUndo::Undo()
 {
@@ -419,11 +415,7 @@ TableRowUndo::TableRowUndo( const TableRowRef& xRow )
     getData( maUndoData );
 }
 
-
-TableRowUndo::~TableRowUndo()
-{
-}
-
+TableRowUndo::~TableRowUndo() = default;
 
 void TableRowUndo::Undo()
 {

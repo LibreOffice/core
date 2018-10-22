@@ -35,9 +35,7 @@ namespace xmloff
     {
     }
 
-    OFormLayerXMLImport::~OFormLayerXMLImport()
-    {
-    }
+    OFormLayerXMLImport::~OFormLayerXMLImport() = default;
 
     void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
     {

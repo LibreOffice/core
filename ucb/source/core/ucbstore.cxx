@@ -152,9 +152,7 @@ UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
 
 
 // virtual
-UcbStore::~UcbStore()
-{
-}
+UcbStore::~UcbStore() = default;
 
 XSERVICEINFO_COMMOM_IMPL( UcbStore,
                           OUString( "com.sun.star.comp.ucb.UcbStore" ) )
@@ -248,10 +246,7 @@ PropertySetRegistry::PropertySetRegistry(
 
 
 // virtual
-PropertySetRegistry::~PropertySetRegistry()
-{
-}
-
+PropertySetRegistry::~PropertySetRegistry() = default;
 
 // XServiceInfo methods.
 

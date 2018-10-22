@@ -54,7 +54,7 @@ public:
     virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name) override;
 };
 
-CurrentContext::CurrentContext() {}
+CurrentContext::CurrentContext() = default;
 
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
 {
@@ -63,9 +63,9 @@ css::uno::Any CurrentContext::getValueByName(OUString const & Name)
 
 }
 
-testtools::bridgetest::CurrentContextChecker::CurrentContextChecker() {}
+testtools::bridgetest::CurrentContextChecker::CurrentContextChecker() = default;
 
-testtools::bridgetest::CurrentContextChecker::~CurrentContextChecker() {}
+testtools::bridgetest::CurrentContextChecker::~CurrentContextChecker() = default;
 
 sal_Bool testtools::bridgetest::CurrentContextChecker::perform(
     css::uno::Reference<

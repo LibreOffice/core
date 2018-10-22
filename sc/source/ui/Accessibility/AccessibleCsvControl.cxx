@@ -1369,9 +1369,7 @@ ScAccessibleCsvCell::ScAccessibleCsvCell(
     SetEditSource( implCreateEditSource() );
 }
 
-ScAccessibleCsvCell::~ScAccessibleCsvCell()
-{
-}
+ScAccessibleCsvCell::~ScAccessibleCsvCell() = default;
 
 void SAL_CALL ScAccessibleCsvCell::disposing()
 {

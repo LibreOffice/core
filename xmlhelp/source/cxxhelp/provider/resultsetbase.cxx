@@ -43,10 +43,7 @@ ResultSetBase::ResultSetBase( const uno::Reference< uno::XComponentContext >&  r
 {
 }
 
-ResultSetBase::~ResultSetBase()
-{
-}
-
+ResultSetBase::~ResultSetBase() = default;
 
 // XInterface
 

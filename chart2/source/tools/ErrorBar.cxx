@@ -124,8 +124,7 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     }
 }
 
-ErrorBar::~ErrorBar()
-{}
+ErrorBar::~ErrorBar() = default;
 
 uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
 {

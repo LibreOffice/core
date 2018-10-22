@@ -247,9 +247,7 @@ DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelM
 {
 }
 
-DataLabelConverter::~DataLabelConverter()
-{
-}
+DataLabelConverter::~DataLabelConverter() = default;
 
 void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup,
                                            const PropertySet& rSeriesPropSet )
@@ -350,9 +348,7 @@ DataLabelsConverter::DataLabelsConverter( const ConverterRoot& rParent, DataLabe
 {
 }
 
-DataLabelsConverter::~DataLabelsConverter()
-{
-}
+DataLabelsConverter::~DataLabelsConverter() = default;
 
 void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
 {
@@ -383,9 +379,7 @@ ErrorBarConverter::ErrorBarConverter( const ConverterRoot& rParent, ErrorBarMode
 {
 }
 
-ErrorBarConverter::~ErrorBarConverter()
-{
-}
+ErrorBarConverter::~ErrorBarConverter() = default;
 
 void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries )
 {
@@ -507,9 +501,7 @@ TrendlineLabelConverter::TrendlineLabelConverter( const ConverterRoot& rParent, 
 {
 }
 
-TrendlineLabelConverter::~TrendlineLabelConverter()
-{
-}
+TrendlineLabelConverter::~TrendlineLabelConverter() = default;
 
 void TrendlineLabelConverter::convertFromModel( PropertySet& rPropSet )
 {
@@ -522,9 +514,7 @@ TrendlineConverter::TrendlineConverter( const ConverterRoot& rParent, TrendlineM
 {
 }
 
-TrendlineConverter::~TrendlineConverter()
-{
-}
+TrendlineConverter::~TrendlineConverter() = default;
 
 void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries )
 {
@@ -610,9 +600,7 @@ DataPointConverter::DataPointConverter( const ConverterRoot& rParent, DataPointM
 {
 }
 
-DataPointConverter::~DataPointConverter()
-{
-}
+DataPointConverter::~DataPointConverter() = default;
 
 void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries,
         const TypeGroupConverter& rTypeGroup, const SeriesModel& rSeries )
@@ -650,9 +638,7 @@ SeriesConverter::SeriesConverter( const ConverterRoot& rParent, SeriesModel& rMo
 {
 }
 
-SeriesConverter::~SeriesConverter()
-{
-}
+SeriesConverter::~SeriesConverter() = default;
 
 Reference< XLabeledDataSequence > SeriesConverter::createCategorySequence( const OUString& rRole )
 {

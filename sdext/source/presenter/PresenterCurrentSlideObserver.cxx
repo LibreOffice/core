@@ -45,9 +45,7 @@ PresenterCurrentSlideObserver::PresenterCurrentSlideObserver (
     }
 }
 
-PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver()
-{
-}
+PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver() = default;
 
 void SAL_CALL PresenterCurrentSlideObserver::disposing()
 {

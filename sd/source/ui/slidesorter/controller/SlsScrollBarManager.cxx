@@ -65,9 +65,7 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
         LINK(this, ScrollBarManager, AutoScrollTimeoutHandler));
 }
 
-ScrollBarManager::~ScrollBarManager()
-{
-}
+ScrollBarManager::~ScrollBarManager() = default;
 
 void ScrollBarManager::Connect()
 {

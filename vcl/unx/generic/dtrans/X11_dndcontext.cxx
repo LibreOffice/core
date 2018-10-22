@@ -35,9 +35,7 @@ DropTargetDropContext::DropTargetDropContext(
 {
 }
 
-DropTargetDropContext::~DropTargetDropContext()
-{
-}
+DropTargetDropContext::~DropTargetDropContext() = default;
 
 void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation )
 {
@@ -66,9 +64,7 @@ DropTargetDragContext::DropTargetDragContext(
 {
 }
 
-DropTargetDragContext::~DropTargetDragContext()
-{
-}
+DropTargetDragContext::~DropTargetDragContext() = default;
 
 void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation )
 {
@@ -92,9 +88,7 @@ DragSourceContext::DragSourceContext(
 {
 }
 
-DragSourceContext::~DragSourceContext()
-{
-}
+DragSourceContext::~DragSourceContext() = default;
 
 sal_Int32 DragSourceContext::getCurrentCursor()
 {

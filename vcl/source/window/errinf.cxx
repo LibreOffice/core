@@ -274,9 +274,7 @@ std::unique_ptr<ErrorInfo> ErrorInfo::GetErrorInfo(ErrCode nId)
         return o3tl::make_unique<ErrorInfo>(nId);
 }
 
-ErrorInfo::~ErrorInfo()
-{
-}
+ErrorInfo::~ErrorInfo() = default;
 
 DynamicErrorInfo::DynamicErrorInfo(ErrCode nArgUserId, DialogMask nMask)
 : ErrorInfo(nArgUserId),

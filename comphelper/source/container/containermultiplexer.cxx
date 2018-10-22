@@ -89,11 +89,7 @@ namespace comphelper
         osl_atomic_decrement(&m_refCount);
     }
 
-
-    OContainerListenerAdapter::~OContainerListenerAdapter()
-    {
-    }
-
+    OContainerListenerAdapter::~OContainerListenerAdapter() = default;
 
     void OContainerListenerAdapter::dispose()
     {

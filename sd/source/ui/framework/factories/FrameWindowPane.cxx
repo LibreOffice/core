@@ -32,9 +32,7 @@ FrameWindowPane::FrameWindowPane (
 {
 }
 
-FrameWindowPane::~FrameWindowPane() throw()
-{
-}
+FrameWindowPane::~FrameWindowPane() throw() = default;
 
 sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly()
 {

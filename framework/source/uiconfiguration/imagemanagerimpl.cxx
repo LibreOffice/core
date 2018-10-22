@@ -120,9 +120,7 @@ CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxCo
 {
 }
 
-CmdImageList::~CmdImageList()
-{
-}
+CmdImageList::~CmdImageList() = default;
 
 void CmdImageList::initialize()
 {

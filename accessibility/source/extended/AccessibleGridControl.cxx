@@ -354,11 +354,7 @@ AccessibleGridControlAccess::AccessibleGridControlAccess(
 {
 }
 
-
-AccessibleGridControlAccess::~AccessibleGridControlAccess()
-{
-}
-
+AccessibleGridControlAccess::~AccessibleGridControlAccess() = default;
 
 void AccessibleGridControlAccess::DisposeAccessImpl()
 {

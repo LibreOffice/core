@@ -451,11 +451,7 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
 
 //  SfxBaseController -> destructor
 
-
-SfxBaseController::~SfxBaseController()
-{
-}
-
+SfxBaseController::~SfxBaseController() = default;
 
 //  SfxBaseController -> XController2
 

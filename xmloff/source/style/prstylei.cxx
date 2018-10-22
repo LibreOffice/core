@@ -154,9 +154,7 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
 {
 }
 
-XMLPropStyleContext::~XMLPropStyleContext()
-{
-}
+XMLPropStyleContext::~XMLPropStyleContext() = default;
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getStandardSet()
 {

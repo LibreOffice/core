@@ -34,9 +34,7 @@ AccessibleViewForwarder::AccessibleViewForwarder( AccessibleChartView* pAccChart
 {
 }
 
-AccessibleViewForwarder::~AccessibleViewForwarder()
-{
-}
+AccessibleViewForwarder::~AccessibleViewForwarder() = default;
 
 // ________ IAccessibleViewforwarder ________
 

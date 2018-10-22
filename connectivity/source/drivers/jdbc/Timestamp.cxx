@@ -55,8 +55,7 @@ java_sql_Date::java_sql_Date( const css::util::Date& _rOut ) : java_util_Date( n
     // and clean
 }
 
-java_sql_Date::~java_sql_Date()
-{}
+java_sql_Date::~java_sql_Date() = default;
 
 jclass java_sql_Date::getMyClass() const
 {
@@ -82,8 +81,7 @@ java_sql_Date::operator css::util::Date()
 
 jclass java_sql_Time::theClass = nullptr;
 
-java_sql_Time::~java_sql_Time()
-{}
+java_sql_Time::~java_sql_Time() = default;
 
 jclass java_sql_Time::getMyClass() const
 {
@@ -135,8 +133,7 @@ java_sql_Time::operator css::util::Time()
 
 jclass java_sql_Timestamp::theClass = nullptr;
 
-java_sql_Timestamp::~java_sql_Timestamp()
-{}
+java_sql_Timestamp::~java_sql_Timestamp() = default;
 
 jclass java_sql_Timestamp::getMyClass() const
 {

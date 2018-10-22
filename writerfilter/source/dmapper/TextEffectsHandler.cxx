@@ -486,10 +486,7 @@ TextEffectsHandler::TextEffectsHandler(sal_uInt32 aElementId) :
     mpGrabBagStack.reset(new oox::GrabBagStack(maElementName));
 }
 
-TextEffectsHandler::~TextEffectsHandler()
-{
-}
-
+TextEffectsHandler::~TextEffectsHandler() = default;
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 {

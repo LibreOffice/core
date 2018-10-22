@@ -2156,9 +2156,7 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
 {
     m_xData->copyItems( *i_rSource.m_xData );
 }
-UnoControlListBoxModel::~UnoControlListBoxModel()
-{
-}
+UnoControlListBoxModel::~UnoControlListBoxModel() = default;
 
 OUString UnoControlListBoxModel::getImplementationName()
 {

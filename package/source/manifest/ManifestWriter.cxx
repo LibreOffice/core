@@ -52,9 +52,7 @@ ManifestWriter::ManifestWriter( const Reference < XComponentContext > & xContext
 : m_xContext ( xContext )
 {
 }
-ManifestWriter::~ManifestWriter()
-{
-}
+ManifestWriter::~ManifestWriter() = default;
 
 // XManifestWriter methods
 void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStream >& rStream, const Sequence< Sequence< PropertyValue > >& rSequence )

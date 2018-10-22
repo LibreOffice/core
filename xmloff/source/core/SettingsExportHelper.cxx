@@ -59,9 +59,7 @@ XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportCon
 {
 }
 
-XMLSettingsExportHelper::~XMLSettingsExportHelper()
-{
-}
+XMLSettingsExportHelper::~XMLSettingsExportHelper() = default;
 
 void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                                             const OUString& rName) const

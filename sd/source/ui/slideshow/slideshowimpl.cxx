@@ -3139,9 +3139,7 @@ SlideShowListenerProxy::SlideShowListenerProxy( const rtl::Reference< SlideshowI
 {
 }
 
-SlideShowListenerProxy::~SlideShowListenerProxy()
-{
-}
+SlideShowListenerProxy::~SlideShowListenerProxy() = default;
 
 void SlideShowListenerProxy::addAsSlideShowListener()
 {

@@ -131,7 +131,7 @@ void GetOptimalHeightsInColumn(
 
 struct OptimalHeightsFuncObjBase
 {
-    virtual ~OptimalHeightsFuncObjBase() {}
+    virtual ~OptimalHeightsFuncObjBase() = default;
     virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) = 0;
 };
 
@@ -2151,9 +2151,7 @@ ScTable::VisibleDataCellIterator::VisibleDataCellIterator(ScFlatBoolRowSegments&
 {
 }
 
-ScTable::VisibleDataCellIterator::~VisibleDataCellIterator()
-{
-}
+ScTable::VisibleDataCellIterator::~VisibleDataCellIterator() = default;
 
 ScRefCellValue ScTable::VisibleDataCellIterator::reset(SCROW nRow)
 {

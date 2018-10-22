@@ -46,9 +46,7 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
                         mnStartIdx, mnEndIdx );
 }
 
-SvXMLPropertySetContext::~SvXMLPropertySetContext()
-{
-}
+SvXMLPropertySetContext::~SvXMLPropertySetContext() = default;
 
 SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
     sal_uInt16 nPrefix,

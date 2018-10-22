@@ -134,9 +134,7 @@ void XMLFontStyleContextFontFace::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-XMLFontStyleContextFontFace::~XMLFontStyleContextFontFace()
-{
-}
+XMLFontStyleContextFontFace::~XMLFontStyleContextFontFace() = default;
 
 void XMLFontStyleContextFontFace::FillProperties(
         ::std::vector< XMLPropertyState > &rProps,
@@ -376,7 +374,7 @@ XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
 {
 }
 
-XMLFontStylesContext::~XMLFontStylesContext() {}
+XMLFontStylesContext::~XMLFontStylesContext() = default;
 
 bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          ::std::vector< XMLPropertyState > &rProps,

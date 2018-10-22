@@ -78,9 +78,7 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
     ppNodes.reset( new ONDXNode[nT] );
 }
 
-ONDXPage::~ONDXPage()
-{
-}
+ONDXPage::~ONDXPage() = default;
 
 void ONDXPage::ReleaseRef()
 {

@@ -60,9 +60,7 @@ namespace sdr
         {
         }
 
-        OverlayTriangle::~OverlayTriangle()
-        {
-        }
+        OverlayTriangle::~OverlayTriangle() = default;
 
     } // end of namespace overlay
 } // end of namespace sdr

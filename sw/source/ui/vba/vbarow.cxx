@@ -38,9 +38,7 @@ SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
     mxRowProps.set( mxTableRows->getByIndex( mnIndex ), uno::UNO_QUERY_THROW );
 }
 
-SwVbaRow::~SwVbaRow()
-{
-}
+SwVbaRow::~SwVbaRow() = default;
 
 uno::Any SAL_CALL SwVbaRow::getHeight()
 {

@@ -33,9 +33,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString
 {
 }
 
-OPreparedStatement::~OPreparedStatement()
-{
-}
+OPreparedStatement::~OPreparedStatement() = default;
 
 void OPreparedStatement::lateInit()
 {

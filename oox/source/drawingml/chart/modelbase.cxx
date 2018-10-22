@@ -51,9 +51,7 @@ LayoutModel::LayoutModel() :
 {
 }
 
-LayoutModel::~LayoutModel()
-{
-}
+LayoutModel::~LayoutModel() = default;
 
 } // namespace chart
 } // namespace drawingml

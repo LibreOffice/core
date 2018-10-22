@@ -91,9 +91,7 @@ E3dLatheObj::E3dLatheObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
-E3dLatheObj::~E3dLatheObj()
-{
-}
+E3dLatheObj::~E3dLatheObj() = default;
 
 void E3dLatheObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {

@@ -103,9 +103,7 @@ ImplAccessibleInfos::ImplAccessibleInfos()
     pMemberOfWindow = nullptr;
 }
 
-ImplAccessibleInfos::~ImplAccessibleInfos()
-{
-}
+ImplAccessibleInfos::~ImplAccessibleInfos() = default;
 
 namespace vcl {
 

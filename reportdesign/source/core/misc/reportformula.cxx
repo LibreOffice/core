@@ -74,9 +74,7 @@ namespace rptui
         m_sUndecoratedContent = _rFieldOrExpression;
     }
 
-    ReportFormula::~ReportFormula()
-    {
-    }
+    ReportFormula::~ReportFormula() = default;
 
     void ReportFormula::impl_construct( const OUString& _rFormula )
     {

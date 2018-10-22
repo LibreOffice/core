@@ -60,13 +60,9 @@
 #include <xfilter/xfcontentcontainer.hxx>
 #include <xfilter/xftextcontent.hxx>
 
-XFContentContainer::XFContentContainer()
-{
-}
+XFContentContainer::XFContentContainer() = default;
 
-XFContentContainer::~XFContentContainer()
-{
-}
+XFContentContainer::~XFContentContainer() = default;
 
 void XFContentContainer::Add(XFContent *pContent)
 {

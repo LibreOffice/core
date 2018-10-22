@@ -32,9 +32,7 @@ namespace svgio
         {
         }
 
-        SvgTspanNode::~SvgTspanNode()
-        {
-        }
+        SvgTspanNode::~SvgTspanNode() = default;
 
         const SvgStyleAttributes* SvgTspanNode::getSvgStyleAttributes() const
         {

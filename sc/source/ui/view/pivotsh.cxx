@@ -65,9 +65,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Pivot));
 }
 
-ScPivotShell::~ScPivotShell()
-{
-}
+ScPivotShell::~ScPivotShell() = default;
 
 void ScPivotShell::Execute( const SfxRequest& rReq )
 {

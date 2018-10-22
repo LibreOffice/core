@@ -27,16 +27,11 @@ using namespace ::com::sun::star;
 
 namespace chart
 {
+AreaChartType::AreaChartType() = default;
 
-AreaChartType::AreaChartType()
-{}
+AreaChartType::AreaChartType(const AreaChartType&) = default;
 
-AreaChartType::AreaChartType( const AreaChartType & rOther ) :
-        ChartType( rOther )
-{}
-
-AreaChartType::~AreaChartType()
-{}
+AreaChartType::~AreaChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()

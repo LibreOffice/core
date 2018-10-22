@@ -58,9 +58,7 @@ SdUnoDrawView::SdUnoDrawView(
 {
 }
 
-SdUnoDrawView::~SdUnoDrawView() throw()
-{
-}
+SdUnoDrawView::~SdUnoDrawView() throw() = default;
 
 bool SdUnoDrawView::getMasterPageMode() const throw()
 {

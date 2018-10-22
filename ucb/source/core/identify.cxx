@@ -39,10 +39,7 @@ ContentIdentifier::ContentIdentifier( const OUString& ContentId )
 
 
 // virtual
-ContentIdentifier::~ContentIdentifier()
-{
-}
-
+ContentIdentifier::~ContentIdentifier() = default;
 
 // XContentIdentifier methods.
 // virtual

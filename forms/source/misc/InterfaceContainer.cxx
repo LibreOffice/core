@@ -164,10 +164,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
 }
 
-ElementDescription::ElementDescription( )
-{
-}
-
+ElementDescription::ElementDescription() = default;
 
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XComponentContext>& _rxContext,
@@ -232,11 +229,7 @@ void OInterfaceContainer::impl_createEventAttacher_nothrow()
     }
 }
 
-
-OInterfaceContainer::~OInterfaceContainer()
-{
-}
-
+OInterfaceContainer::~OInterfaceContainer() = default;
 
 void OInterfaceContainer::disposing()
 {

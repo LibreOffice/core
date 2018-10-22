@@ -420,7 +420,7 @@ SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nContent, SwPaM* pRing )
     m_pPoint->nContent.Assign( rNodeIdx.GetNode().GetContentNode(), nContent );
 }
 
-SwPaM::~SwPaM() {}
+SwPaM::~SwPaM() = default;
 
 SwPaM::SwPaM(SwPaM const& rPam, SwPaM *const pRing)
     : Ring(pRing)

@@ -72,9 +72,7 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
 {
 }
 
-UIConfigElementWrapperBase::~UIConfigElementWrapperBase()
-{
-}
+UIConfigElementWrapperBase::~UIConfigElementWrapperBase() = default;
 
 Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType )
 {

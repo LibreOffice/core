@@ -135,18 +135,11 @@ struct StaticScatterChartTypeInfo : public rtl::StaticAggregate< uno::Reference<
 
 namespace chart
 {
+ScatterChartType::ScatterChartType() = default;
 
-ScatterChartType::ScatterChartType()
-{
-}
+ScatterChartType::ScatterChartType(const ScatterChartType&) = default;
 
-ScatterChartType::ScatterChartType( const ScatterChartType & rOther ) :
-        ChartType( rOther )
-{
-}
-
-ScatterChartType::~ScatterChartType()
-{}
+ScatterChartType::~ScatterChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()

@@ -78,9 +78,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     }
 }
 
-SwInputFieldList::~SwInputFieldList()
-{
-}
+SwInputFieldList::~SwInputFieldList() = default;
 
 size_t SwInputFieldList::Count() const
 {

@@ -330,10 +330,7 @@ void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rVal
         rStrm.WriteUInt16( 0 );
 }
 
-
-SfxOleObjectBase::~SfxOleObjectBase()
-{
-}
+SfxOleObjectBase::~SfxOleObjectBase() = default;
 
 ErrCode const & SfxOleObjectBase::Load( SvStream& rStrm )
 {

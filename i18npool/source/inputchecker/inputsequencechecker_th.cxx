@@ -29,9 +29,7 @@ InputSequenceChecker_th::InputSequenceChecker_th()
 {
 }
 
-InputSequenceChecker_th::~InputSequenceChecker_th()
-{
-}
+InputSequenceChecker_th::~InputSequenceChecker_th() = default;
 
 /* Table for Thai Cell Manipulation */
 sal_Char const TAC_celltype_inputcheck[17][17] = {

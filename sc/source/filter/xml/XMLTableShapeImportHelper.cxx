@@ -48,9 +48,7 @@ XMLTableShapeImportHelper::XMLTableShapeImportHelper( ScXMLImport& rImp ) :
 {
 }
 
-XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
-{
-}
+XMLTableShapeImportHelper::~XMLTableShapeImportHelper() = default;
 
 void XMLTableShapeImportHelper::SetLayer(const uno::Reference<drawing::XShape>& rShape, SdrLayerID nLayerID, const OUString& sType)
 {

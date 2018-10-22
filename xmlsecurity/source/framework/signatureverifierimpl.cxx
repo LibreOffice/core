@@ -36,9 +36,7 @@ SignatureVerifierImpl::SignatureVerifierImpl()
 {
 }
 
-SignatureVerifierImpl::~SignatureVerifierImpl()
-{
-}
+SignatureVerifierImpl::~SignatureVerifierImpl() = default;
 
 void SignatureVerifierImpl::notifyResultListener() const
 /****** SignatureVerifierImpl/notifyResultListener ***************************

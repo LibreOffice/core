@@ -41,9 +41,7 @@ ViewCacheContext::ViewCacheContext (SlideSorter& rSlideSorter)
 {
 }
 
-ViewCacheContext::~ViewCacheContext()
-{
-}
+ViewCacheContext::~ViewCacheContext() = default;
 
 void ViewCacheContext::NotifyPreviewCreation(cache::CacheKey aKey)
 {

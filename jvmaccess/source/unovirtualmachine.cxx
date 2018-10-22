@@ -27,19 +27,15 @@
 #include <jni.h>
 
 namespace jvmaccess {
+UnoVirtualMachine::CreationException::CreationException() = default;
 
-UnoVirtualMachine::CreationException::CreationException() {}
+UnoVirtualMachine::CreationException::CreationException(CreationException const&) = default;
 
-UnoVirtualMachine::CreationException::CreationException(
-    CreationException const &)
-{}
+UnoVirtualMachine::CreationException::~CreationException() = default;
 
-UnoVirtualMachine::CreationException::~CreationException() {}
-
-UnoVirtualMachine::CreationException &
-UnoVirtualMachine::CreationException::operator =(CreationException const &) {
-    return *this;
-}
+UnoVirtualMachine::CreationException& UnoVirtualMachine::CreationException::
+operator=(CreationException const&)
+    = default;
 
 UnoVirtualMachine::UnoVirtualMachine(
     rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,

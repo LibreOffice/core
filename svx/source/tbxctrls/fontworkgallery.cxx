@@ -89,9 +89,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView* pSd
     fillFavorites( GALLERY_THEME_FONTWORK );
 }
 
-FontWorkGalleryDialog::~FontWorkGalleryDialog()
-{
-}
+FontWorkGalleryDialog::~FontWorkGalleryDialog() = default;
 
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
@@ -631,9 +629,7 @@ FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog(weld::Window* pPa
     m_xMtrScale->set_value(nScale, FUNIT_PERCENT);
 }
 
-FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
-{
-}
+FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog() = default;
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {

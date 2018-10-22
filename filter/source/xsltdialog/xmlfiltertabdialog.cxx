@@ -58,9 +58,7 @@ XMLFilterTabDialog::XMLFilterTabDialog(weld::Window *pParent,
     mpXSLTPage->SetInfo( mpNewInfo.get() );
 }
 
-XMLFilterTabDialog::~XMLFilterTabDialog()
-{
-}
+XMLFilterTabDialog::~XMLFilterTabDialog() = default;
 
 bool XMLFilterTabDialog::onOk()
 {

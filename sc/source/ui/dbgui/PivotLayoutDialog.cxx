@@ -43,8 +43,7 @@ ScItemValue::ScItemValue(const ScItemValue* pInputItemValue) :
     mpOriginalItemValue(this)
 {}
 
-ScItemValue::~ScItemValue()
-{}
+ScItemValue::~ScItemValue() = default;
 
 namespace
 {

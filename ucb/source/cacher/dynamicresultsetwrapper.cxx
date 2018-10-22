@@ -72,10 +72,8 @@ void DynamicResultSetWrapper::impl_init()
         setSource( xSource );
 }
 
-DynamicResultSetWrapper::~DynamicResultSetWrapper()
-{
+DynamicResultSetWrapper::~DynamicResultSetWrapper() = default;
     //call impl_deinit() at start of destructor of derived class
-};
 
 void DynamicResultSetWrapper::impl_deinit()
 {
@@ -427,11 +425,7 @@ DynamicResultSetWrapperListener::DynamicResultSetWrapperListener(
 
 }
 
-DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener()
-{
-
-}
-
+DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener() = default;
 
 // XInterface methods.
 

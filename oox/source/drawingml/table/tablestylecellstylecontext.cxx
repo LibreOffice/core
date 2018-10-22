@@ -39,9 +39,7 @@ TableStyleCellStyleContext::TableStyleCellStyleContext( ContextHandler2Helper co
 {
 }
 
-TableStyleCellStyleContext::~TableStyleCellStyleContext()
-{
-}
+TableStyleCellStyleContext::~TableStyleCellStyleContext() = default;
 
 // CT_TableStyleCellStyle
 ContextHandlerRef

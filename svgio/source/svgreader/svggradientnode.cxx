@@ -57,10 +57,8 @@ namespace svgio
             OSL_ENSURE(aType == SVGTokenLinearGradient || aType == SVGTokenRadialGradient, "SvgGradientNode should only be used for Linear and Radial gradient (!)");
         }
 
-        SvgGradientNode::~SvgGradientNode()
-        {
+        SvgGradientNode::~SvgGradientNode() = default;
             // do NOT delete mpXLink, it's only referenced, not owned
-        }
 
         const SvgStyleAttributes* SvgGradientNode::getSvgStyleAttributes() const
         {

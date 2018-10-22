@@ -207,9 +207,7 @@ namespace svgio
         {
         }
 
-        SvgCharacterNode::~SvgCharacterNode()
-        {
-        }
+        SvgCharacterNode::~SvgCharacterNode() = default;
 
         const SvgStyleAttributes* SvgCharacterNode::getSvgStyleAttributes() const
         {

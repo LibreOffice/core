@@ -27,9 +27,7 @@ SdInsertPasteDlg::SdInsertPasteDlg(weld::Window* pWindow)
     m_xRbAfter->set_active(true);
 }
 
-SdInsertPasteDlg::~SdInsertPasteDlg()
-{
-}
+SdInsertPasteDlg::~SdInsertPasteDlg() = default;
 
 bool SdInsertPasteDlg::IsInsertBefore() const
 {

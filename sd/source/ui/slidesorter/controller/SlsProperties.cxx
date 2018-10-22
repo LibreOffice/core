@@ -38,9 +38,7 @@ Properties::Properties()
 {
 }
 
-Properties::~Properties()
-{
-}
+Properties::~Properties() = default;
 
 void Properties::HandleDataChangeEvent()
 {

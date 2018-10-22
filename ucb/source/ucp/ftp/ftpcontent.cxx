@@ -113,9 +113,7 @@ FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
 {
 }
 
-FTPContent::~FTPContent()
-{
-}
+FTPContent::~FTPContent() = default;
 
 // XInterface methods.
 
@@ -648,7 +646,7 @@ public:
 
     explicit InsertData(const Reference<XInputStream>& xInputStream)
         : m_xInputStream(xInputStream) { }
-    virtual ~InsertData() {}
+    virtual ~InsertData() = default;
 
     // returns the number of bytes actually read
     virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested) override;

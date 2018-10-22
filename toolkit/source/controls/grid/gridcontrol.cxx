@@ -278,11 +278,7 @@ UnoGridControl::UnoGridControl()
 {
 }
 
-
-UnoGridControl::~UnoGridControl()
-{
-}
-
+UnoGridControl::~UnoGridControl() = default;
 
 OUString UnoGridControl::GetComponentServiceName()
 {

@@ -53,8 +53,6 @@ SwWebTableShell::SwWebTableShell(SwView &_rView) :
     SetName("Table");
 }
 
-SwWebTableShell::~SwWebTableShell()
-{
-}
+SwWebTableShell::~SwWebTableShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

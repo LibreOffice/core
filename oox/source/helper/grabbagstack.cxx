@@ -23,8 +23,7 @@ GrabBagStack::GrabBagStack(const OUString& aElementName)
     mCurrentElement.maElementName = aElementName;
 }
 
-GrabBagStack::~GrabBagStack()
-{}
+GrabBagStack::~GrabBagStack() = default;
 
 bool GrabBagStack::isStackEmpty()
 {

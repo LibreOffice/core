@@ -55,9 +55,7 @@ ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
     m_xBtnDefVal->set_active(nCurrentValue == nDefaultValue);
 }
 
-ScMetricInputDlg::~ScMetricInputDlg()
-{
-}
+ScMetricInputDlg::~ScMetricInputDlg() = default;
 
 int ScMetricInputDlg::GetInputValue() const
 {

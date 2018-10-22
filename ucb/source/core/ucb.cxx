@@ -241,10 +241,7 @@ UniversalContentBroker::UniversalContentBroker(
 
 
 // virtual
-UniversalContentBroker::~UniversalContentBroker()
-{
-}
-
+UniversalContentBroker::~UniversalContentBroker() = default;
 
 // XInterface methods.
 void SAL_CALL UniversalContentBroker::acquire()

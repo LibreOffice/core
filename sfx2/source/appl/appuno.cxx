@@ -1711,9 +1711,7 @@ RequestPackageReparation::RequestPackageReparation( const OUString& aName )
 {
 }
 
-RequestPackageReparation::~RequestPackageReparation()
-{
-}
+RequestPackageReparation::~RequestPackageReparation() = default;
 
 bool RequestPackageReparation::isApproved()
 {
@@ -1761,9 +1759,7 @@ NotifyBrokenPackage::NotifyBrokenPackage( const OUString& aName )
 {
 }
 
-NotifyBrokenPackage::~NotifyBrokenPackage()
-{
-}
+NotifyBrokenPackage::~NotifyBrokenPackage() = default;
 
 css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
 {

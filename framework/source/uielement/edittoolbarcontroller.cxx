@@ -127,9 +127,7 @@ EditToolbarController::EditToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pEditControl );
 }
 
-EditToolbarController::~EditToolbarController()
-{
-}
+EditToolbarController::~EditToolbarController() = default;
 
 void SAL_CALL EditToolbarController::dispose()
 {

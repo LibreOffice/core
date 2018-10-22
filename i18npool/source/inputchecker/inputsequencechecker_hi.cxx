@@ -28,9 +28,7 @@ InputSequenceChecker_hi::InputSequenceChecker_hi()
 {
 }
 
-InputSequenceChecker_hi::~InputSequenceChecker_hi()
-{
-}
+InputSequenceChecker_hi::~InputSequenceChecker_hi() = default;
 /* Non-Defined Class type */
 #define ND_        0
 

@@ -2177,9 +2177,7 @@ SwDrawVirtObj::SwDrawVirtObj(
     NbcMove( Size( -16000, -16000 ) );
 }
 
-SwDrawVirtObj::~SwDrawVirtObj()
-{
-}
+SwDrawVirtObj::~SwDrawVirtObj() = default;
 
 SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
 {

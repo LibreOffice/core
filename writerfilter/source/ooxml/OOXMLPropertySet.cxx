@@ -38,9 +38,7 @@ OOXMLProperty::OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue,
 {
 }
 
-OOXMLProperty::~OOXMLProperty()
-{
-}
+OOXMLProperty::~OOXMLProperty() = default;
 
 sal_uInt32 OOXMLProperty::getId() const
 {
@@ -124,13 +122,9 @@ void OOXMLProperty::resolve(writerfilter::Properties & rProperties)
    class OOXMLValue
 */
 
-OOXMLValue::OOXMLValue()
-{
-}
+OOXMLValue::OOXMLValue() = default;
 
-OOXMLValue::~OOXMLValue()
-{
-}
+OOXMLValue::~OOXMLValue() = default;
 
 int OOXMLValue::getInt() const
 {
@@ -179,9 +173,7 @@ OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const &
 {
 }
 
-OOXMLBinaryValue::~OOXMLBinaryValue()
-{
-}
+OOXMLBinaryValue::~OOXMLBinaryValue() = default;
 
 writerfilter::Reference<BinaryObj>::Pointer_t OOXMLBinaryValue::getBinary()
 {
@@ -231,9 +223,7 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 {
 }
 
-OOXMLBooleanValue::~OOXMLBooleanValue()
-{
-}
+OOXMLBooleanValue::~OOXMLBooleanValue() = default;
 
 int OOXMLBooleanValue::getInt() const
 {
@@ -266,9 +256,7 @@ OOXMLStringValue::OOXMLStringValue(const OUString & rStr)
 {
 }
 
-OOXMLStringValue::~OOXMLStringValue()
-{
-}
+OOXMLStringValue::~OOXMLStringValue() = default;
 
 uno::Any OOXMLStringValue::getAny() const
 {
@@ -300,9 +288,7 @@ OOXMLInputStreamValue::OOXMLInputStreamValue(uno::Reference<io::XInputStream> co
 {
 }
 
-OOXMLInputStreamValue::~OOXMLInputStreamValue()
-{
-}
+OOXMLInputStreamValue::~OOXMLInputStreamValue() = default;
 
 uno::Any OOXMLInputStreamValue::getAny() const
 {
@@ -325,13 +311,9 @@ OOXMLValue * OOXMLInputStreamValue::clone() const
    class OOXMLPropertySet
 */
 
-OOXMLPropertySet::OOXMLPropertySet()
-{
-}
+OOXMLPropertySet::OOXMLPropertySet() = default;
 
-OOXMLPropertySet::~OOXMLPropertySet()
-{
-}
+OOXMLPropertySet::~OOXMLPropertySet() = default;
 
 void OOXMLPropertySet::resolve(Properties & rHandler)
 {
@@ -439,9 +421,7 @@ OOXMLPropertySetValue::OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& 
 {
 }
 
-OOXMLPropertySetValue::~OOXMLPropertySetValue()
-{
-}
+OOXMLPropertySetValue::~OOXMLPropertySetValue() = default;
 
 writerfilter::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getProperties()
 {
@@ -506,9 +486,7 @@ OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
 {
 }
 
-OOXMLIntegerValue::~OOXMLIntegerValue()
-{
-}
+OOXMLIntegerValue::~OOXMLIntegerValue() = default;
 
 int OOXMLIntegerValue::getInt() const
 {
@@ -549,9 +527,7 @@ OOXMLHexValue::OOXMLHexValue(const char * pValue)
 {
 }
 
-OOXMLHexValue::~OOXMLHexValue()
-{
-}
+OOXMLHexValue::~OOXMLHexValue() = default;
 
 int OOXMLHexValue::getInt() const
 {
@@ -642,9 +618,7 @@ OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue, sal_
     }
 }
 
-OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()
-{
-}
+OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue() = default;
 
 int OOXMLUniversalMeasureValue::getInt() const
 {
@@ -698,9 +672,7 @@ OOXMLShapeValue::OOXMLShapeValue(uno::Reference<drawing::XShape> const & rShape)
 {
 }
 
-OOXMLShapeValue::~OOXMLShapeValue()
-{
-}
+OOXMLShapeValue::~OOXMLShapeValue() = default;
 
 uno::Any OOXMLShapeValue::getAny() const
 {
@@ -729,9 +701,7 @@ OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject >
 {
 }
 
-OOXMLStarMathValue::~OOXMLStarMathValue()
-{
-}
+OOXMLStarMathValue::~OOXMLStarMathValue() = default;
 
 uno::Any OOXMLStarMathValue::getAny() const
 {
@@ -754,14 +724,9 @@ OOXMLValue * OOXMLStarMathValue::clone() const
   class OOXMLTableImpl
  */
 
-OOXMLTable::OOXMLTable()
-{
-}
+OOXMLTable::OOXMLTable() = default;
 
-OOXMLTable::~OOXMLTable()
-{
-}
-
+OOXMLTable::~OOXMLTable() = default;
 
 void OOXMLTable::resolve(Table & rTable)
 {
@@ -801,9 +766,7 @@ OOXMLPropertySetEntryToString::OOXMLPropertySetEntryToString(Id nId)
 {
 }
 
-OOXMLPropertySetEntryToString::~OOXMLPropertySetEntryToString()
-{
-}
+OOXMLPropertySetEntryToString::~OOXMLPropertySetEntryToString() = default;
 
 void OOXMLPropertySetEntryToString::sprm(Sprm & /*rSprm*/)
 {
@@ -824,9 +787,7 @@ OOXMLPropertySetEntryToInteger::OOXMLPropertySetEntryToInteger(Id nId)
 {
 }
 
-OOXMLPropertySetEntryToInteger::~OOXMLPropertySetEntryToInteger()
-{
-}
+OOXMLPropertySetEntryToInteger::~OOXMLPropertySetEntryToInteger() = default;
 
 void OOXMLPropertySetEntryToInteger::sprm(Sprm & /*rSprm*/)
 {
@@ -846,7 +807,7 @@ OOXMLPropertySetEntryToBool::OOXMLPropertySetEntryToBool(Id nId)
     : mnId(nId), mValue(false)
 {}
 
-OOXMLPropertySetEntryToBool::~OOXMLPropertySetEntryToBool() {}
+OOXMLPropertySetEntryToBool::~OOXMLPropertySetEntryToBool() = default;
 
 void OOXMLPropertySetEntryToBool::sprm(Sprm & /*rSprm*/) {}
 

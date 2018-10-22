@@ -405,9 +405,7 @@ SwXDocumentIndex::SwXDocumentIndex(const TOXTypes eType, SwDoc& rDoc)
 {
 }
 
-SwXDocumentIndex::~SwXDocumentIndex()
-{
-}
+SwXDocumentIndex::~SwXDocumentIndex() = default;
 
 uno::Reference<text::XDocumentIndex>
 SwXDocumentIndex::CreateXDocumentIndex(
@@ -1636,9 +1634,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(SwDoc & rDoc,
 {
 }
 
-SwXDocumentIndexMark::~SwXDocumentIndexMark()
-{
-}
+SwXDocumentIndexMark::~SwXDocumentIndexMark() = default;
 
 uno::Reference<text::XDocumentIndexMark>
 SwXDocumentIndexMark::CreateXDocumentIndexMark(
@@ -2377,9 +2373,7 @@ SwXDocumentIndexes::SwXDocumentIndexes(SwDoc *const _pDoc)
 {
 }
 
-SwXDocumentIndexes::~SwXDocumentIndexes()
-{
-}
+SwXDocumentIndexes::~SwXDocumentIndexes() = default;
 
 OUString SAL_CALL
 SwXDocumentIndexes::getImplementationName()
@@ -2562,9 +2556,7 @@ SwXDocumentIndex::StyleAccess_Impl::StyleAccess_Impl(
 {
 }
 
-SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl()
-{
-}
+SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl() = default;
 
 OUString SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
@@ -2682,9 +2674,7 @@ SwXDocumentIndex::TokenAccess_Impl::TokenAccess_Impl(
 {
 }
 
-SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl()
-{
-}
+SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl() = default;
 
 OUString SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getImplementationName()

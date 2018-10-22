@@ -59,13 +59,9 @@
  ************************************************************************/
 #include <xfilter/xfstyle.hxx>
 
-XFStyle::XFStyle()
-{
-}
+XFStyle::XFStyle() = default;
 
-XFStyle::~XFStyle()
-{
-}
+XFStyle::~XFStyle() = default;
 
 OUString   XFStyle::GetStyleName()
 {

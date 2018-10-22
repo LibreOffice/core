@@ -46,9 +46,7 @@ namespace drawinglayer
         {
         }
 
-        ContourExtractor2D::~ContourExtractor2D()
-        {
-        }
+        ContourExtractor2D::~ContourExtractor2D() = default;
 
         void ContourExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {

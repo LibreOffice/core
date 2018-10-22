@@ -29,10 +29,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 
-OSelectionChangeListener::~OSelectionChangeListener()
-{
-}
-
+OSelectionChangeListener::~OSelectionChangeListener() = default;
 
 void OSelectionChangeListener::_disposing(const EventObject&)
 {
@@ -60,11 +57,7 @@ OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListene
     osl_atomic_decrement(&m_refCount);
 }
 
-
-OSelectionChangeMultiplexer::~OSelectionChangeMultiplexer()
-{
-}
-
+OSelectionChangeMultiplexer::~OSelectionChangeMultiplexer() = default;
 
 void OSelectionChangeMultiplexer::lock()
 {

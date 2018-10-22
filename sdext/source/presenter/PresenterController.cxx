@@ -69,10 +69,7 @@ namespace {
 }
 
 namespace sdext { namespace presenter {
-
-IPresentationTime::~IPresentationTime()
-{
-}
+IPresentationTime::~IPresentationTime() = default;
 
 PresenterController::InstanceContainer PresenterController::maInstances;
 
@@ -190,9 +187,7 @@ PresenterController::PresenterController (
     }
 }
 
-PresenterController::~PresenterController()
-{
-}
+PresenterController::~PresenterController() = default;
 
 void PresenterController::disposing()
 {

@@ -51,9 +51,7 @@ PresenterHelper::PresenterHelper (
 {
 }
 
-PresenterHelper::~PresenterHelper()
-{
-}
+PresenterHelper::~PresenterHelper() = default;
 
 //----- XInitialize -----------------------------------------------------------
 

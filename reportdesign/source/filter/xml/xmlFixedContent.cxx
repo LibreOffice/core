@@ -117,12 +117,7 @@ OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
 {
 }
 
-
-OXMLFixedContent::~OXMLFixedContent()
-{
-
-}
-
+OXMLFixedContent::~OXMLFixedContent() = default;
 
 SvXMLImportContextRef OXMLFixedContent::CreateChildContext_(
         sal_uInt16 nPrefix,

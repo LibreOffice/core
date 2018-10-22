@@ -275,7 +275,7 @@ class FrameworkHelper::ViewURLMap
           ViewShell::ShellType>
 {
 public:
-    ViewURLMap() {}
+    ViewURLMap() = default;
 };
 
 //----- Framework::DiposeListener ---------------------------------------------
@@ -383,9 +383,7 @@ void FrameworkHelper::Initialize()
     mxDisposeListener = new DisposeListener(shared_from_this());
 }
 
-FrameworkHelper::~FrameworkHelper()
-{
-}
+FrameworkHelper::~FrameworkHelper() = default;
 
 void FrameworkHelper::Dispose()
 {

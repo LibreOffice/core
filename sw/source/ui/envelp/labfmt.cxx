@@ -337,9 +337,7 @@ SwLabFormatPage::SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
     aPreviewIdle.SetInvokeHandler(LINK(this, SwLabFormatPage, PreviewHdl));
 }
 
-SwLabFormatPage::~SwLabFormatPage()
-{
-}
+SwLabFormatPage::~SwLabFormatPage() = default;
 
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_NOARG(SwLabFormatPage, MetricModifyHdl, weld::MetricSpinButton&, void)
@@ -536,9 +534,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabDlg* pParent, SwLabRec& rRec)
     }
 }
 
-SwSaveLabelDlg::~SwSaveLabelDlg()
-{
-}
+SwSaveLabelDlg::~SwSaveLabelDlg() = default;
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, weld::Button&, void)
 {

@@ -45,9 +45,7 @@ SvXMLAttrContainerItem::SvXMLAttrContainerItem(
 {
 }
 
-SvXMLAttrContainerItem::~SvXMLAttrContainerItem()
-{
-}
+SvXMLAttrContainerItem::~SvXMLAttrContainerItem() = default;
 
 bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 {

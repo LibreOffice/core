@@ -24,9 +24,7 @@
 
 using namespace com::sun::star;
 
-ScUnoListenerCalls::ScUnoListenerCalls()
-{
-}
+ScUnoListenerCalls::ScUnoListenerCalls() = default;
 
 ScUnoListenerCalls::~ScUnoListenerCalls()
 {

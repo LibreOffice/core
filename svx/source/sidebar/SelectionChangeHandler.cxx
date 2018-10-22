@@ -42,11 +42,7 @@ SelectionChangeHandler::SelectionChangeHandler (
 {
 }
 
-
-SelectionChangeHandler::~SelectionChangeHandler()
-{
-}
-
+SelectionChangeHandler::~SelectionChangeHandler() = default;
 
 void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&)
 {

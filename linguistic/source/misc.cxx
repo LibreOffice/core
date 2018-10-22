@@ -768,9 +768,7 @@ AppExitListener::AppExitListener()
     }
 }
 
-AppExitListener::~AppExitListener()
-{
-}
+AppExitListener::~AppExitListener() = default;
 
 void AppExitListener::Activate()
 {

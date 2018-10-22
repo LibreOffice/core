@@ -47,9 +47,7 @@ XNamedRanges::XNamedRanges(const OUString& rNameToRemove):
 
 }
 
-XNamedRanges::~XNamedRanges()
-{
-}
+XNamedRanges::~XNamedRanges() = default;
 
 void XNamedRanges::testAddNewByName()
 {

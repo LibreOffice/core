@@ -409,9 +409,7 @@ ScriptProtocolHandler::ScriptProtocolHandler( const Reference< css::uno::XCompon
 {
 }
 
-ScriptProtocolHandler::~ScriptProtocolHandler()
-{
-}
+ScriptProtocolHandler::~ScriptProtocolHandler() = default;
 
 /* XServiceInfo */
 OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )

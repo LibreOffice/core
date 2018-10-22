@@ -68,11 +68,7 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
-XMLEventsImportContext::~XMLEventsImportContext()
-{
-//  // if, for whatever reason, the object gets destroyed prematurely,
-//  // we need to delete the collected events
-}
+XMLEventsImportContext::~XMLEventsImportContext() = default;
 
 
 void XMLEventsImportContext::StartElement(

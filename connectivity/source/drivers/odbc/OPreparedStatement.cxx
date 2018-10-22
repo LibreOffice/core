@@ -69,9 +69,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString
     m_sSqlStatement = sql;
 }
 
-OPreparedStatement::~OPreparedStatement()
-{
-}
+OPreparedStatement::~OPreparedStatement() = default;
 
 void SAL_CALL OPreparedStatement::acquire() throw()
 {

@@ -152,9 +152,7 @@ LanguageType EditView::CheckLanguage(
 }
 
 // class EditViewCallbacks
-EditViewCallbacks::~EditViewCallbacks()
-{
-}
+EditViewCallbacks::~EditViewCallbacks() = default;
 
 // class EditView
 EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
@@ -162,9 +160,7 @@ EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
     pImpEditView.reset( new ImpEditView( this, pEng, pWindow ) );
 }
 
-EditView::~EditView()
-{
-}
+EditView::~EditView() = default;
 
 void EditView::setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
 {

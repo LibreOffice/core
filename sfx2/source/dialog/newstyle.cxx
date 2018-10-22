@@ -82,8 +82,6 @@ SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rIn
     }
 }
 
-SfxNewStyleDlg::~SfxNewStyleDlg()
-{
-}
+SfxNewStyleDlg::~SfxNewStyleDlg() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

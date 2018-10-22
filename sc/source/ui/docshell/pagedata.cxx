@@ -29,9 +29,7 @@ ScPrintRangeData::ScPrintRangeData()
     nFirstPage = 1;
 }
 
-ScPrintRangeData::~ScPrintRangeData()
-{
-}
+ScPrintRangeData::~ScPrintRangeData() = default;
 
 void ScPrintRangeData::SetPagesX( size_t nCount, const SCCOL* pData )
 {
@@ -53,9 +51,7 @@ ScPageBreakData::ScPageBreakData(size_t nMax)
     nAlloc = nMax;
 }
 
-ScPageBreakData::~ScPageBreakData()
-{
-}
+ScPageBreakData::~ScPageBreakData() = default;
 
 ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
 {

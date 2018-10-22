@@ -369,9 +369,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
     return nSubItems;
 }
 
-CustomAnimationEffect::~CustomAnimationEffect()
-{
-}
+CustomAnimationEffect::~CustomAnimationEffect() = default;
 
 CustomAnimationEffectPtr CustomAnimationEffect::clone() const
 {
@@ -2758,7 +2756,7 @@ void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
 
 struct stl_notify_listeners_func
 {
-    stl_notify_listeners_func() {}
+    stl_notify_listeners_func() = default;
     void operator()(ISequenceListener* pListener) { pListener->notify_change(); }
 };
 

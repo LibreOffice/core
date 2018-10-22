@@ -113,9 +113,7 @@ PresenterScreenJob::PresenterScreenJob (const Reference<XComponentContext>& rxCo
 {
 }
 
-PresenterScreenJob::~PresenterScreenJob()
-{
-}
+PresenterScreenJob::~PresenterScreenJob() = default;
 
 void SAL_CALL PresenterScreenJob::disposing()
 {
@@ -264,9 +262,7 @@ PresenterScreen::PresenterScreen (
 {
 }
 
-PresenterScreen::~PresenterScreen()
-{
-}
+PresenterScreen::~PresenterScreen() = default;
 
 bool PresenterScreen::isPresenterScreenEnabled(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
 {

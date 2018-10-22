@@ -117,9 +117,7 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     return *this;
 }
 
-SwPageDesc::~SwPageDesc()
-{
-}
+SwPageDesc::~SwPageDesc() = default;
 
 bool SwPageDesc::SetName( const OUString& rNewName )
 {
@@ -485,9 +483,7 @@ SwPageDescExt::SwPageDescExt(const SwPageDescExt & rSrc)
     SetPageDesc(rSrc.m_PageDesc);
 }
 
-SwPageDescExt::~SwPageDescExt()
-{
-}
+SwPageDescExt::~SwPageDescExt() = default;
 
 OUString const & SwPageDescExt::GetName() const
 {

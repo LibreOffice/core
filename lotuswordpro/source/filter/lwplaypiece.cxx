@@ -67,8 +67,7 @@ LwpRotor::LwpRotor()
     : m_nRotation(0)
 {}
 
-LwpRotor::~LwpRotor()
-{}
+LwpRotor::~LwpRotor() = default;
 
 void LwpRotor:: Read(LwpObjectStream *pStrm)
 {
@@ -82,8 +81,7 @@ LwpLayoutGeometry::LwpLayoutGeometry(LwpObjectHeader const & objHdr, LwpSvStream
     , m_ContentOrientation(0)
 {}
 
-LwpLayoutGeometry::~LwpLayoutGeometry()
-{}
+LwpLayoutGeometry::~LwpLayoutGeometry() = default;
 
 void LwpLayoutGeometry::Read()
 {
@@ -113,8 +111,7 @@ LwpLayoutScale::LwpLayoutScale(LwpObjectHeader const & objHdr, LwpSvStream* pStr
     , m_nPlacement(0)
 {}
 
-LwpLayoutScale::~LwpLayoutScale()
-{}
+LwpLayoutScale::~LwpLayoutScale() = default;
 
 void LwpLayoutScale::Read()
 {
@@ -141,8 +138,7 @@ LwpLayoutMargins::LwpLayoutMargins(LwpObjectHeader const & objHdr, LwpSvStream* 
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutMargins::~LwpLayoutMargins()
-{}
+LwpLayoutMargins::~LwpLayoutMargins() = default;
 
 void LwpLayoutMargins::Read()
 {
@@ -164,8 +160,7 @@ LwpLayoutBorder::LwpLayoutBorder(LwpObjectHeader const & objHdr, LwpSvStream* pS
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutBorder::~LwpLayoutBorder()
-{}
+LwpLayoutBorder::~LwpLayoutBorder() = default;
 
 void LwpLayoutBorder::Read()
 {
@@ -185,8 +180,7 @@ LwpLayoutBackground::LwpLayoutBackground(LwpObjectHeader const & objHdr, LwpSvSt
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutBackground::~LwpLayoutBackground()
-{}
+LwpLayoutBackground::~LwpLayoutBackground() = default;
 
 void LwpLayoutBackground::Read()
 {
@@ -202,11 +196,9 @@ void LwpLayoutBackground::Read()
 void LwpLayoutBackground::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpExternalBorder::LwpExternalBorder()
-{}
+LwpExternalBorder::LwpExternalBorder() = default;
 
-LwpExternalBorder::~LwpExternalBorder()
-{}
+LwpExternalBorder::~LwpExternalBorder() = default;
 
 void LwpExternalBorder:: Read(LwpObjectStream *pStrm)
 {
@@ -230,8 +222,7 @@ LwpLayoutExternalBorder::LwpLayoutExternalBorder(LwpObjectHeader const & objHdr,
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutExternalBorder::~LwpLayoutExternalBorder()
-{}
+LwpLayoutExternalBorder::~LwpLayoutExternalBorder() = default;
 
 void LwpLayoutExternalBorder::Read()
 {
@@ -252,8 +243,7 @@ LwpColumnInfo::LwpColumnInfo()
     , m_nGap(0)
 {}
 
-LwpColumnInfo::~LwpColumnInfo()
-{}
+LwpColumnInfo::~LwpColumnInfo() = default;
 
 void LwpColumnInfo:: Read(LwpObjectStream *pStrm)
 {
@@ -266,9 +256,7 @@ LwpLayoutColumns::LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* 
     , m_nNumCols(0)
 {}
 
-LwpLayoutColumns::~LwpLayoutColumns()
-{
-}
+LwpLayoutColumns::~LwpLayoutColumns() = default;
 
 void LwpLayoutColumns::Read()
 {
@@ -302,8 +290,7 @@ LwpLayoutGutters::LwpLayoutGutters(LwpObjectHeader const & objHdr, LwpSvStream* 
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutGutters::~LwpLayoutGutters()
-{}
+LwpLayoutGutters::~LwpLayoutGutters() = default;
 
 void LwpLayoutGutters::Read()
 {
@@ -328,8 +315,7 @@ LwpJoinStuff::LwpJoinStuff()
     , m_nScaling(0)
 {}
 
-LwpJoinStuff::~LwpJoinStuff()
-{}
+LwpJoinStuff::~LwpJoinStuff() = default;
 
 void LwpJoinStuff:: Read(LwpObjectStream *pStrm)
 {
@@ -355,8 +341,7 @@ LwpLayoutJoins::LwpLayoutJoins(LwpObjectHeader const & objHdr, LwpSvStream* pStr
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutJoins::~LwpLayoutJoins()
-{}
+LwpLayoutJoins::~LwpLayoutJoins() = default;
 
 void LwpLayoutJoins::Read()
 {
@@ -376,8 +361,7 @@ LwpLayoutShadow::LwpLayoutShadow(LwpObjectHeader const & objHdr, LwpSvStream* pS
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
-LwpLayoutShadow::~LwpLayoutShadow()
-{}
+LwpLayoutShadow::~LwpLayoutShadow() = default;
 
 void LwpLayoutShadow::Read()
 {
@@ -428,9 +412,7 @@ LwpLayoutRelativity::LwpLayoutRelativity(LwpObjectHeader const &objHdr, LwpSvStr
 {
 }
 
-LwpLayoutRelativity::~LwpLayoutRelativity()
-{
-}
+LwpLayoutRelativity::~LwpLayoutRelativity() = default;
 
 void LwpLayoutRelativity::Read()
 {

@@ -393,8 +393,7 @@ public:
     virtual bool processParams() = 0;
 };
 
-template <class T> PCodeVisitor< T >::~PCodeVisitor()
-{}
+template <class T> PCodeVisitor<T>::~PCodeVisitor() = default;
 
 template <class T>
 class PCodeBufferWalker

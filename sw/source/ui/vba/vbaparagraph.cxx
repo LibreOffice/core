@@ -31,9 +31,7 @@ SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface
 {
 }
 
-SwVbaParagraph::~SwVbaParagraph()
-{
-}
+SwVbaParagraph::~SwVbaParagraph() = default;
 
 uno::Reference< word::XRange > SAL_CALL
 SwVbaParagraph::getRange( )

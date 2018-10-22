@@ -50,9 +50,7 @@ WW8TableNodeInfoInner::WW8TableNodeInfoInner(WW8TableNodeInfo * pParent)
 {
 }
 
-WW8TableNodeInfoInner::~WW8TableNodeInfoInner()
-{
-}
+WW8TableNodeInfoInner::~WW8TableNodeInfoInner() = default;
 
 void WW8TableNodeInfoInner::setDepth(sal_uInt32 nDepth)
 {
@@ -379,9 +377,7 @@ WW8TableNodeInfo::WW8TableNodeInfo(WW8TableInfo * pParent,
 {
 }
 
-WW8TableNodeInfo::~WW8TableNodeInfo()
-{
-}
+WW8TableNodeInfo::~WW8TableNodeInfo() = default;
 
 #ifdef DBG_UTIL
 std::string WW8TableNodeInfo::toString() const
@@ -561,13 +557,9 @@ const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getInnerForDepth(sal_uI
     return pResult;
 }
 
-WW8TableInfo::WW8TableInfo()
-{
-}
+WW8TableInfo::WW8TableInfo() = default;
 
-WW8TableInfo::~WW8TableInfo()
-{
-}
+WW8TableInfo::~WW8TableInfo() = default;
 
 WW8TableNodeInfo *
 WW8TableInfo::processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLastRowEnds)
@@ -1038,13 +1030,9 @@ WW8TableNodeInfo * WW8TableInfo::reorderByLayout(const SwTable * pTable, RowEndI
     return pCellGrid->connectCells(rLastRowEnds);
 }
 
-WW8TableCellGrid::WW8TableCellGrid()
-{
-}
+WW8TableCellGrid::WW8TableCellGrid() = default;
 
-WW8TableCellGrid::~WW8TableCellGrid()
-{
-}
+WW8TableCellGrid::~WW8TableCellGrid() = default;
 
 WW8TableCellGridRow::Pointer_t WW8TableCellGrid::getRow(long nTop, bool bCreate)
 {
@@ -1416,9 +1404,7 @@ WW8TableCellGridRow::WW8TableCellGridRow()
 {
 }
 
-WW8TableCellGridRow::~WW8TableCellGridRow()
-{
-}
+WW8TableCellGridRow::~WW8TableCellGridRow() = default;
 
 void WW8TableCellGridRow::insert(const CellInfo & rCellInfo)
 {

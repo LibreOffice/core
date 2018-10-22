@@ -41,9 +41,7 @@ SwXRedlines::SwXRedlines(SwDoc* _pDoc) :
 {
 }
 
-SwXRedlines::~SwXRedlines()
-{
-}
+SwXRedlines::~SwXRedlines() = default;
 
 sal_Int32 SwXRedlines::getCount(  )
 {
@@ -128,9 +126,7 @@ SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXRedlineEnumeration::~SwXRedlineEnumeration()
-{
-}
+SwXRedlineEnumeration::~SwXRedlineEnumeration() = default;
 
 sal_Bool SwXRedlineEnumeration::hasMoreElements()
 {

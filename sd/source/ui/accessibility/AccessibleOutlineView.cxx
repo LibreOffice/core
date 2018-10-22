@@ -90,9 +90,7 @@ AccessibleOutlineView::AccessibleOutlineView (
     }
 }
 
-AccessibleOutlineView::~AccessibleOutlineView()
-{
-}
+AccessibleOutlineView::~AccessibleOutlineView() = default;
 
 void AccessibleOutlineView::Init()
 {

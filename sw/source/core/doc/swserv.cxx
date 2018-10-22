@@ -35,9 +35,7 @@
 
 using namespace ::com::sun::star;
 
-SwServerObject::~SwServerObject()
-{
-}
+SwServerObject::~SwServerObject() = default;
 
 bool SwServerObject::GetData( uno::Any & rData,
                                 const OUString & rMimeType, bool )

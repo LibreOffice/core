@@ -136,9 +136,7 @@ SwCondCollItem::SwCondCollItem() :
 {
 }
 
-SwCondCollItem::~SwCondCollItem()
-{
-}
+SwCondCollItem::~SwCondCollItem() = default;
 
 SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 {

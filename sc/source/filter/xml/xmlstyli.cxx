@@ -76,9 +76,7 @@ ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
 {
 }
 
-ScXMLCellImportPropertyMapper::~ScXMLCellImportPropertyMapper()
-{
-}
+ScXMLCellImportPropertyMapper::~ScXMLCellImportPropertyMapper() = default;
 
 void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
@@ -219,9 +217,7 @@ ScXMLRowImportPropertyMapper::ScXMLRowImportPropertyMapper(
 {
 }
 
-ScXMLRowImportPropertyMapper::~ScXMLRowImportPropertyMapper()
-{
-}
+ScXMLRowImportPropertyMapper::~ScXMLRowImportPropertyMapper() = default;
 
 void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
@@ -707,9 +703,7 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
 {
 }
 
-XMLTableStylesContext::~XMLTableStylesContext()
-{
-}
+XMLTableStylesContext::~XMLTableStylesContext() = default;
 
 void XMLTableStylesContext::EndElement()
 {
@@ -925,9 +919,7 @@ ScXMLMasterStylesContext::ScXMLMasterStylesContext(
 {
 }
 
-ScXMLMasterStylesContext::~ScXMLMasterStylesContext()
-{
-}
+ScXMLMasterStylesContext::~ScXMLMasterStylesContext() = default;
 
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
         sal_uInt16 nPrefix,
@@ -973,9 +965,7 @@ ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
 {
 }
 
-ScMasterPageContext::~ScMasterPageContext()
-{
-}
+ScMasterPageContext::~ScMasterPageContext() = default;
 
 SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
@@ -1036,9 +1026,7 @@ ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16
 {
 }
 
-ScCellTextStyleContext::~ScCellTextStyleContext()
-{
-}
+ScCellTextStyleContext::~ScCellTextStyleContext() = default;
 
 void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPropertySet>& xPropSet )
 {

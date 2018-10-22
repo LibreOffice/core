@@ -184,9 +184,7 @@ JPEGReader::JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags
     }
 }
 
-JPEGReader::~JPEGReader()
-{
-}
+JPEGReader::~JPEGReader() = default;
 
 bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
 {

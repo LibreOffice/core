@@ -44,9 +44,7 @@ OFormatCondition::OFormatCondition(uno::Reference< uno::XComponentContext > cons
 {
 }
 
-OFormatCondition::~OFormatCondition()
-{
-}
+OFormatCondition::~OFormatCondition() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2(OFormatCondition,FormatConditionBase,FormatConditionPropertySet)
 

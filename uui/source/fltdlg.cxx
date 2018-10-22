@@ -54,9 +54,7 @@ FilterDialog::FilterDialog(weld::Window* pParentWindow)
                                    m_xLbFilters->get_height_rows(15));
 }
 
-FilterDialog::~FilterDialog()
-{
-}
+FilterDialog::~FilterDialog() = default;
 
 /*-************************************************************************************************************
     @short      set file name on dialog control

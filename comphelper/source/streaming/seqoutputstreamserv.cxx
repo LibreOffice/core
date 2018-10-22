@@ -62,8 +62,7 @@ public:
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) override;
 
 private:
-    virtual ~SequenceOutputStreamService() override {};
-
+    virtual ~SequenceOutputStreamService() override = default;
 
     ::osl::Mutex m_aMutex;
     uno::Reference< io::XOutputStream > m_xOutputStream;

@@ -42,9 +42,7 @@ HtmlImportInfo::HtmlImportInfo( HtmlImportState eSt, SvParser<HtmlTokenId>* pPrs
     nToken      = HtmlTokenId::NONE;
 }
 
-HtmlImportInfo::~HtmlImportInfo()
-{
-}
+HtmlImportInfo::~HtmlImportInfo() = default;
 
 RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser<int>* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
@@ -55,9 +53,7 @@ RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser<int>* pPrsrs, const E
     nTokenValue = 0;
 }
 
-RtfImportInfo::~RtfImportInfo()
-{
-}
+RtfImportInfo::~RtfImportInfo() = default;
 
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
@@ -77,9 +73,7 @@ EditRTFParser::EditRTFParser(
     aEditMapMode = MapMode(mpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit());
 }
 
-EditRTFParser::~EditRTFParser()
-{
-}
+EditRTFParser::~EditRTFParser() = default;
 
 SvParserState EditRTFParser::CallParser()
 {

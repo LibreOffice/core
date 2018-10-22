@@ -156,7 +156,7 @@ public:
     CppuType(
         OUString const & name, rtl::Reference< TypeManager > const & typeMgr);
 
-    virtual ~CppuType() {}
+    virtual ~CppuType() = default;
 
     CppuType(const CppuType&) = delete;
     const CppuType& operator=(const CppuType&) = delete;

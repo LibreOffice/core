@@ -53,8 +53,7 @@ ControllerLockHelper::ControllerLockHelper( const Reference< frame::XModel > & x
         m_xModel( xModel )
 {}
 
-ControllerLockHelper::~ControllerLockHelper()
-{}
+ControllerLockHelper::~ControllerLockHelper() = default;
 
 void ControllerLockHelper::lockControllers()
 {

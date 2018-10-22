@@ -41,9 +41,7 @@ BaseContainerControl::BaseContainerControl( const Reference< XComponentContext >
 {
 }
 
-BaseContainerControl::~BaseContainerControl()
-{
-}
+BaseContainerControl::~BaseContainerControl() = default;
 
 //  XInterface
 

@@ -36,13 +36,9 @@ static const OUStringLiteral gsEventType("EventType");
 static const OUStringLiteral gsScript("Script");
 static const OUStringLiteral gsURL("Script");
 
-XMLScriptContextFactory::XMLScriptContextFactory()
-{
-}
+XMLScriptContextFactory::XMLScriptContextFactory() = default;
 
-XMLScriptContextFactory::~XMLScriptContextFactory()
-{
-}
+XMLScriptContextFactory::~XMLScriptContextFactory() = default;
 
 SvXMLImportContext * XMLScriptContextFactory::CreateContext
 (SvXMLImport & rImport,

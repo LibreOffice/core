@@ -125,9 +125,7 @@ MinMaxLineWrapper::MinMaxLineWrapper(const std::shared_ptr<Chart2ModelContact>& 
 {
 }
 
-MinMaxLineWrapper::~MinMaxLineWrapper()
-{
-}
+MinMaxLineWrapper::~MinMaxLineWrapper() = default;
 
 // ____ XComponent ____
 void SAL_CALL MinMaxLineWrapper::dispose()

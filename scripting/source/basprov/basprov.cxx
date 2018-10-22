@@ -98,11 +98,7 @@ namespace basprov
     {
     }
 
-
-    BasicProviderImpl::~BasicProviderImpl()
-    {
-    }
-
+    BasicProviderImpl::~BasicProviderImpl() = default;
 
     bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const OUString& rLibName )
     {

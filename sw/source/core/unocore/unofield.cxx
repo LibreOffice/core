@@ -549,9 +549,7 @@ SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc)
 {
 }
 
-SwXFieldMaster::~SwXFieldMaster()
-{
-}
+SwXFieldMaster::~SwXFieldMaster() = default;
 
 uno::Reference<beans::XPropertySet>
 SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
@@ -1214,9 +1212,7 @@ SwXTextField::SwXTextField(SwFormatField& rFormat, SwDoc & rDoc)
 {
 }
 
-SwXTextField::~SwXTextField()
-{
-}
+SwXTextField::~SwXTextField() = default;
 
 uno::Reference<text::XTextField>
 SwXTextField::CreateXTextField(SwDoc *const pDoc, SwFormatField const* pFormat,
@@ -2639,10 +2635,7 @@ SwXTextFieldMasters::SwXTextFieldMasters(SwDoc* _pDoc) :
 {
 }
 
-SwXTextFieldMasters::~SwXTextFieldMasters()
-{
-
-}
+SwXTextFieldMasters::~SwXTextFieldMasters() = default;
 
 /*
     Iteration over non-standard field types
@@ -2839,9 +2832,7 @@ SwXTextFieldTypes::SwXTextFieldTypes(SwDoc* _pDoc)
 {
 }
 
-SwXTextFieldTypes::~SwXTextFieldTypes()
-{
-}
+SwXTextFieldTypes::~SwXTextFieldTypes() = default;
 
 void SwXTextFieldTypes::Invalidate()
 {
@@ -2975,9 +2966,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     }
 }
 
-SwXFieldEnumeration::~SwXFieldEnumeration()
-{
-}
+SwXFieldEnumeration::~SwXFieldEnumeration() = default;
 
 sal_Bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
 {

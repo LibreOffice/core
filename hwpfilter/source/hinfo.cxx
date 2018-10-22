@@ -63,10 +63,7 @@ HWPInfo::HWPInfo()
     memset(bordermargin, 0, sizeof(bordermargin));
 }
 
-HWPInfo::~HWPInfo()
-{
-}
-
+HWPInfo::~HWPInfo() = default;
 
 /**
  * Function for reading document information (128 bytes)

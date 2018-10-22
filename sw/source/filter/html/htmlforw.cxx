@@ -1374,7 +1374,6 @@ HTMLControl::HTMLControl(
     xFormComps( rFormComps ), nNdIdx( nIdx ), nCount( 1 )
 {}
 
-HTMLControl::~HTMLControl()
-{}
+HTMLControl::~HTMLControl() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

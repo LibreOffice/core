@@ -42,14 +42,11 @@ PolyPolygon::PolyPolygon( const tools::Polygon& rPoly )
 {
 }
 
-PolyPolygon::PolyPolygon( const tools::PolyPolygon& rPolyPoly )
-    : mpImplPolyPolygon( rPolyPoly.mpImplPolyPolygon )
-{
-}
+PolyPolygon::PolyPolygon(const tools::PolyPolygon& rPolyPoly)
 
-PolyPolygon::~PolyPolygon()
-{
-}
+    = default;
+
+PolyPolygon::~PolyPolygon() = default;
 
 void PolyPolygon::Insert( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
@@ -337,11 +334,7 @@ Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )
     return mpImplPolyPolygon->mvPolyAry[nPos];
 }
 
-PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
-{
-    mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
-    return *this;
-}
+PolyPolygon& PolyPolygon::operator=(const tools::PolyPolygon& rPolyPoly) = default;
 
 PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly )
 {

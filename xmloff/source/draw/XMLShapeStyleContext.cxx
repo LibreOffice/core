@@ -57,9 +57,7 @@ XMLShapeStyleContext::XMLShapeStyleContext(
 {
 }
 
-XMLShapeStyleContext::~XMLShapeStyleContext()
-{
-}
+XMLShapeStyleContext::~XMLShapeStyleContext() = default;
 
 void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue )
 {

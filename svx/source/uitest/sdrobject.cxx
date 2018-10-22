@@ -13,9 +13,7 @@
 
 #include <tools/fract.hxx>
 
-SdrUIObject::~SdrUIObject()
-{
-}
+SdrUIObject::~SdrUIObject() = default;
 
 StringMap SdrUIObject::get_state()
 {

@@ -61,9 +61,7 @@ namespace utl
         bool hasOwnership() const { return m_bHasOwnership; }
 
     protected:
-        virtual ~CloseListener_Impl() override
-        {
-        }
+        virtual ~CloseListener_Impl() override = default;
 
     private:
         bool    m_bHasOwnership;

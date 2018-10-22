@@ -71,9 +71,7 @@ namespace sd
         std::vector< Reference< XAnimationNode > > maCloneNodeVector;
     };
 
-    CustomAnimationClonerImpl::CustomAnimationClonerImpl()
-    {
-    }
+    CustomAnimationClonerImpl::CustomAnimationClonerImpl() = default;
 
     Reference< XAnimationNode > Clone( const Reference< XAnimationNode >& xSourceNode, const SdPage* pSource, const SdPage* pTarget )
     {

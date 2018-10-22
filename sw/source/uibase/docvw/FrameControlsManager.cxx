@@ -24,9 +24,7 @@ SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :
 {
 }
 
-SwFrameControlsManager::~SwFrameControlsManager()
-{
-}
+SwFrameControlsManager::~SwFrameControlsManager() = default;
 
 void SwFrameControlsManager::dispose()
 {
@@ -185,8 +183,6 @@ SwFrameControl::~SwFrameControl()
     mxWindow.disposeAndClear();
 }
 
-ISwFrameControl::~ISwFrameControl()
-{
-}
+ISwFrameControl::~ISwFrameControl() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

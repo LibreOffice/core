@@ -96,9 +96,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
     }
 }
 
-SwFieldDlg::~SwFieldDlg()
-{
-}
+SwFieldDlg::~SwFieldDlg() = default;
 
 bool SwFieldDlg::Close()
 {

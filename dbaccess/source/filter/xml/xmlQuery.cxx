@@ -71,10 +71,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
     }
 }
 
-OXMLQuery::~OXMLQuery()
-{
-
-}
+OXMLQuery::~OXMLQuery() = default;
 
 SvXMLImportContextRef OXMLQuery::CreateChildContext(
         sal_uInt16 nPrefix,

@@ -198,9 +198,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
 }
 
-XMLTableExport::~XMLTableExport ()
-{
-}
+XMLTableExport::~XMLTableExport() = default;
 
 static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 {

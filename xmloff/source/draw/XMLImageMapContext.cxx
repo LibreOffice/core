@@ -568,9 +568,7 @@ XMLImageMapContext::XMLImageMapContext(
     }
 }
 
-XMLImageMapContext::~XMLImageMapContext()
-{
-}
+XMLImageMapContext::~XMLImageMapContext() = default;
 
 SvXMLImportContextRef XMLImageMapContext::CreateChildContext(
     sal_uInt16 nPrefix,

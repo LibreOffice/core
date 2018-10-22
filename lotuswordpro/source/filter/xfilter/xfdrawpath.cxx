@@ -60,9 +60,7 @@
 #include <xfilter/xfdrawpath.hxx>
 #include <rtl/ustrbuf.hxx>
 
-XFSvgPathEntry::XFSvgPathEntry()
-{
-}
+XFSvgPathEntry::XFSvgPathEntry() = default;
 
 OUString XFSvgPathEntry::ToString()
 {
@@ -77,9 +75,7 @@ OUString XFSvgPathEntry::ToString()
     return str.makeStringAndClear();
 }
 
-XFDrawPath::XFDrawPath()
-{
-}
+XFDrawPath::XFDrawPath() = default;
 
 void    XFDrawPath::MoveTo(XFPoint pt)
 {

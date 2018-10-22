@@ -95,8 +95,6 @@ NameClashDialog::NameClashDialog( weld::Window* pParent, const std::locale& rRes
         m_xEDNewName->set_text( rClashingName );
 }
 
-NameClashDialog::~NameClashDialog()
-{
-}
+NameClashDialog::~NameClashDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

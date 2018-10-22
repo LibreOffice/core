@@ -174,9 +174,7 @@ ScCellKeywordTranslator::ScCellKeywordTranslator() :
     init();
 }
 
-ScCellKeywordTranslator::~ScCellKeywordTranslator()
-{
-}
+ScCellKeywordTranslator::~ScCellKeywordTranslator() = default;
 
 struct TransItem
 {

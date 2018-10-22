@@ -190,7 +190,7 @@ OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
     rStream(_rStream)
 {}
 
-OOutputStreamWrapper::~OOutputStreamWrapper() {}
+OOutputStreamWrapper::~OOutputStreamWrapper() = default;
 
 void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
 {
@@ -228,7 +228,7 @@ OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
 {
 }
 
-OSeekableOutputStreamWrapper::~OSeekableOutputStreamWrapper() {}
+OSeekableOutputStreamWrapper::~OSeekableOutputStreamWrapper() = default;
 
 Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType )
 {

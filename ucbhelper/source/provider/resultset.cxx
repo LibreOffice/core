@@ -204,10 +204,7 @@ ResultSet::ResultSet(
 
 
 // virtual
-ResultSet::~ResultSet()
-{
-}
-
+ResultSet::~ResultSet() = default;
 
 // XInterface methods.
 

@@ -81,9 +81,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     */
 }
 
-TextCharacterPropertiesContext::~TextCharacterPropertiesContext()
-{
-}
+TextCharacterPropertiesContext::~TextCharacterPropertiesContext() = default;
 
 ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

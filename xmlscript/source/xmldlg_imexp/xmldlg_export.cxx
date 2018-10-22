@@ -1339,9 +1339,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     return _styles.back()->_id;
 }
 
-StyleBag::~StyleBag()
-{
-}
+StyleBag::~StyleBag() = default;
 
 void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {

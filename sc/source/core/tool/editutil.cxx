@@ -426,9 +426,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     }
 }
 
-ScEditAttrTester::~ScEditAttrTester()
-{
-}
+ScEditAttrTester::~ScEditAttrTester() = default;
 
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
                 bool bDeleteEnginePoolP )
@@ -477,9 +475,7 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg 
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
 
-ScEditEngineDefaulter::~ScEditEngineDefaulter()
-{
-}
+ScEditEngineDefaulter::~ScEditEngineDefaulter() = default;
 
 void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberCopy )
 {

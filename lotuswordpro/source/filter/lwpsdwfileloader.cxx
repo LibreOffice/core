@@ -68,9 +68,7 @@ LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphic
     pStream->Seek(0);
 }
 
-LwpSdwFileLoader::~LwpSdwFileLoader()
-{
-}
+LwpSdwFileLoader::~LwpSdwFileLoader() = default;
 
 /**
  * @descr   entry of lwp-drawing objects.

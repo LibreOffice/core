@@ -1325,7 +1325,7 @@ public:
     vcl::Window* FindTarget();
     vcl::Window* Dispatch(vcl::Window* pTarget);
     virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) = 0;
-    virtual ~HandleGestureEventBase() {}
+    virtual ~HandleGestureEventBase() = default;
 };
 
 bool HandleGestureEventBase::Setup()

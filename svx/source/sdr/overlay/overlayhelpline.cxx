@@ -70,9 +70,7 @@ namespace sdr
         {
         }
 
-        OverlayHelplineStriped::~OverlayHelplineStriped()
-        {
-        }
+        OverlayHelplineStriped::~OverlayHelplineStriped() = default;
     } // end of namespace overlay
 } // end of namespace sdr
 

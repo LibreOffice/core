@@ -60,7 +60,8 @@ class OTableContainerListener:
     std::map< OUString,bool> m_aRefNames;
 
 protected:
-    virtual ~OTableContainerListener() override {}
+    virtual ~OTableContainerListener() override = default;
+
 public:
     explicit OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
     // noncopyable
@@ -166,9 +167,7 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
 {
 }
 
-OTableHelper::~OTableHelper()
-{
-}
+OTableHelper::~OTableHelper() = default;
 
 void SAL_CALL OTableHelper::disposing()
 {

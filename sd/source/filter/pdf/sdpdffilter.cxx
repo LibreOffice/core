@@ -90,7 +90,7 @@ SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell)
 {
 }
 
-SdPdfFilter::~SdPdfFilter() {}
+SdPdfFilter::~SdPdfFilter() = default;
 
 bool SdPdfFilter::Import()
 {

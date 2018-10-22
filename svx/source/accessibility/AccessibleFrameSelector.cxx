@@ -59,9 +59,7 @@ AccFrameSelector::AccFrameSelector(FrameSelector& rFrameSel)
 {
 }
 
-AccFrameSelector::~AccFrameSelector()
-{
-}
+AccFrameSelector::~AccFrameSelector() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2( AccFrameSelector, OAccessibleComponentHelper, OAccessibleHelper_Base )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccFrameSelector, OAccessibleComponentHelper, OAccessibleHelper_Base )
@@ -232,9 +230,7 @@ AccFrameSelectorChild::AccFrameSelectorChild(FrameSelector& rFrameSel, FrameBord
 {
 }
 
-AccFrameSelectorChild::~AccFrameSelectorChild()
-{
-}
+AccFrameSelectorChild::~AccFrameSelectorChild() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2( AccFrameSelectorChild, OAccessibleComponentHelper, OAccessibleHelper_Base )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccFrameSelectorChild, OAccessibleComponentHelper, OAccessibleHelper_Base )

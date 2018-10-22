@@ -128,7 +128,7 @@ class ModuleCollection
     typedef std::map<OUString, std::unique_ptr<ModuleData>> MapType;
     MapType m_Data;
 public:
-    ModuleCollection() {}
+    ModuleCollection() = default;
 
     const ModuleData* findByName(const OUString& rName) const;
     void insert(ModuleData* pNew);
@@ -374,7 +374,7 @@ void LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 
 #endif
 }
 
-LegacyFuncCollection::LegacyFuncCollection() {}
+LegacyFuncCollection::LegacyFuncCollection() = default;
 LegacyFuncCollection::LegacyFuncCollection(const LegacyFuncCollection& r)
 {
     for (auto const& it : r.m_Data)

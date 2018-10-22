@@ -68,11 +68,8 @@ LwpNumberingOverride::LwpNumberingOverride()
 }
 
 LwpNumberingOverride::LwpNumberingOverride(LwpNumberingOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nLevel(rOther.m_nLevel)
-    , m_nPosition(rOther.m_nPosition)
-{
-}
+
+    = default;
 
 LwpNumberingOverride* LwpNumberingOverride::clone() const
 {

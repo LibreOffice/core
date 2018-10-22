@@ -75,9 +75,7 @@ XMLFrameOASISTransformerContext::XMLFrameOASISTransformerContext(
 {
 }
 
-XMLFrameOASISTransformerContext::~XMLFrameOASISTransformerContext()
-{
-}
+XMLFrameOASISTransformerContext::~XMLFrameOASISTransformerContext() = default;
 
 void XMLFrameOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )

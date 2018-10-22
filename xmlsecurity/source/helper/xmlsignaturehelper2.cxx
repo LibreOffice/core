@@ -35,9 +35,7 @@ using namespace com::sun::star;
 
 // XUriBinding
 
-UriBindingHelper::UriBindingHelper()
-{
-}
+UriBindingHelper::UriBindingHelper() = default;
 
 UriBindingHelper::UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage )
 {

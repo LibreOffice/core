@@ -44,13 +44,9 @@ PolarCoordinateSystem::PolarCoordinateSystem( sal_Int32 nDimensionCount /* = 2 *
         BaseCoordinateSystem( nDimensionCount )
 {}
 
-PolarCoordinateSystem::PolarCoordinateSystem(
-    const PolarCoordinateSystem & rSource ) :
-        BaseCoordinateSystem( rSource )
-{}
+PolarCoordinateSystem::PolarCoordinateSystem(const PolarCoordinateSystem&) = default;
 
-PolarCoordinateSystem::~PolarCoordinateSystem()
-{}
+PolarCoordinateSystem::~PolarCoordinateSystem() = default;
 
 // ____ XCoordinateSystem ____
 OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
@@ -91,8 +87,7 @@ PolarCoordinateSystem2d::PolarCoordinateSystem2d() :
         PolarCoordinateSystem( 2 )
 {}
 
-PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
-{}
+PolarCoordinateSystem2d::~PolarCoordinateSystem2d() = default;
 
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
@@ -118,8 +113,7 @@ PolarCoordinateSystem3d::PolarCoordinateSystem3d() :
         PolarCoordinateSystem( 3 )
 {}
 
-PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
-{}
+PolarCoordinateSystem3d::~PolarCoordinateSystem3d() = default;
 
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()

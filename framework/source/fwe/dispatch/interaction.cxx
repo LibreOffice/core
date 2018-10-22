@@ -154,9 +154,7 @@ RequestFilterSelect::RequestFilterSelect( const OUString& sURL )
 {
 }
 
-RequestFilterSelect::~RequestFilterSelect()
-{
-}
+RequestFilterSelect::~RequestFilterSelect() = default;
 
 // return abort state of interaction
 // If it is true, return value of method "getFilter()" will be unspecified then!

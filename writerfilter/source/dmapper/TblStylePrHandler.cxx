@@ -37,9 +37,7 @@ m_pProperties( new PropertyMap )
 {
 }
 
-TblStylePrHandler::~TblStylePrHandler( )
-{
-}
+TblStylePrHandler::~TblStylePrHandler() = default;
 
 OUString TblStylePrHandler::getTypeString()
 {

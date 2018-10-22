@@ -31,9 +31,9 @@
 
 namespace binaryurp {
 
-OutgoingRequests::OutgoingRequests() {}
+OutgoingRequests::OutgoingRequests() = default;
 
-OutgoingRequests::~OutgoingRequests() {}
+OutgoingRequests::~OutgoingRequests() = default;
 
 void OutgoingRequests::push(
     rtl::ByteSequence const & tid, OutgoingRequest const & request)

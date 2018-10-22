@@ -147,11 +147,7 @@ namespace svt
         implResetDate();
     }
 
-
-    TemplateContent::~TemplateContent()
-    {
-    }
-
+    TemplateContent::~TemplateContent() = default;
 
     //= stl helpers
 
@@ -770,11 +766,7 @@ namespace svt
     {
     }
 
-
-    TemplateFolderCache::~TemplateFolderCache( )
-    {
-    }
-
+    TemplateFolderCache::~TemplateFolderCache() = default;
 
     bool TemplateFolderCache::needsUpdate()
     {

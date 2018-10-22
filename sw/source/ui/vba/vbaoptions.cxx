@@ -36,9 +36,7 @@ SwVbaOptions::SwVbaOptions( uno::Reference<uno::XComponentContext > const & xCon
 {
 }
 
-SwVbaOptions::~SwVbaOptions()
-{
-}
+SwVbaOptions::~SwVbaOptions() = default;
 
 uno::Any SAL_CALL
 SwVbaOptions::DefaultFilePath( sal_Int32 _path )

@@ -110,10 +110,7 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
     ImplDrawBrdWinSymbol( pDev, aTempRect, eSymbol );
 }
 
-
-ImplBorderWindowView::~ImplBorderWindowView()
-{
-}
+ImplBorderWindowView::~ImplBorderWindowView() = default;
 
 bool ImplBorderWindowView::MouseMove( const MouseEvent& )
 {
@@ -367,10 +364,7 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
     return nTitleWidth;
 }
 
-
-ImplNoBorderWindowView::ImplNoBorderWindowView()
-{
-}
+ImplNoBorderWindowView::ImplNoBorderWindowView() = default;
 
 void ImplNoBorderWindowView::Init( OutputDevice*, long, long )
 {
@@ -756,9 +750,7 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mbTitleClipped  = false;
 }
 
-ImplStdBorderWindowView::~ImplStdBorderWindowView()
-{
-}
+ImplStdBorderWindowView::~ImplStdBorderWindowView() = default;
 
 bool ImplStdBorderWindowView::MouseMove( const MouseEvent& rMEvt )
 {

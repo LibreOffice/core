@@ -144,9 +144,7 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScTiledRenderingTest::ScTiledRenderingTest()
-{
-}
+ScTiledRenderingTest::ScTiledRenderingTest() = default;
 
 void ScTiledRenderingTest::setUp()
 {

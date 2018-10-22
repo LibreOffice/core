@@ -145,10 +145,7 @@ LwpFootnote::LwpFootnote(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
 {
 }
 
-LwpFootnote::~LwpFootnote()
-{
-
-}
+LwpFootnote::~LwpFootnote() = default;
 
 /**
  * @descr  Read foonote object
@@ -437,10 +434,7 @@ LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader const &objHdr, LwpSvStrea
 {
 }
 
-LwpFootnoteOptions::~LwpFootnoteOptions()
-{
-
-}
+LwpFootnoteOptions::~LwpFootnoteOptions() = default;
 
 /**
  * @descr  Register footnote options object

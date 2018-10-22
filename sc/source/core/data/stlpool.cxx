@@ -67,9 +67,7 @@ ScStyleSheetPool::ScStyleSheetPool( const SfxItemPool& rPoolP,
 {
 }
 
-ScStyleSheetPool::~ScStyleSheetPool()
-{
-}
+ScStyleSheetPool::~ScStyleSheetPool() = default;
 
 void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 {

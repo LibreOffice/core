@@ -54,9 +54,7 @@ OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nD
     // m_aFilenameExtension is not used
 }
 
-OCalcConnection::~OCalcConnection()
-{
-}
+OCalcConnection::~OCalcConnection() = default;
 
 void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
 {

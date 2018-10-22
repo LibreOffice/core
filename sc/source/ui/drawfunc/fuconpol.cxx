@@ -33,9 +33,7 @@ FuConstPolygon::FuConstPolygon(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDra
 {
 }
 
-FuConstPolygon::~FuConstPolygon()
-{
-}
+FuConstPolygon::~FuConstPolygon() = default;
 
 bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {

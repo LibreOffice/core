@@ -41,10 +41,7 @@ SvXMLEnumMapEntry<FontItalic> const aPostureGenericMapping[] =
 // class XMLPosturePropHdl
 
 
-XMLPosturePropHdl::~XMLPosturePropHdl()
-{
-    // nothing to do
-}
+XMLPosturePropHdl::~XMLPosturePropHdl() = default;
 
 bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

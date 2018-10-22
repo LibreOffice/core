@@ -122,9 +122,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
     }
 }
 
-SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper()
-{
-}
+SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper() = default;
 
 SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     SchXMLImportHelper& rImpHelper,
@@ -213,8 +211,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     }
 }
 
-SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
-{}
+SchXMLPlotAreaContext::~SchXMLPlotAreaContext() = default;
 
 void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -609,9 +606,7 @@ SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUS
 {
 }
 
-SchXMLDataPointContext::~SchXMLDataPointContext()
-{
-}
+SchXMLDataPointContext::~SchXMLDataPointContext() = default;
 
 void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -658,9 +653,7 @@ SchXMLPositionAttributesHelper::SchXMLPositionAttributesHelper( SvXMLImport& rIm
 {
 }
 
-SchXMLPositionAttributesHelper::~SchXMLPositionAttributesHelper()
-{
-}
+SchXMLPositionAttributesHelper::~SchXMLPositionAttributesHelper() = default;
 
 bool SchXMLPositionAttributesHelper::hasPosSize() const
 {
@@ -725,9 +718,7 @@ SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
 {
 }
 
-SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext()
-{
-}
+SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext() = default;
 
 void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -758,9 +749,7 @@ SchXMLWallFloorContext::SchXMLWallFloorContext(
 {
 }
 
-SchXMLWallFloorContext::~SchXMLWallFloorContext()
-{
-}
+SchXMLWallFloorContext::~SchXMLWallFloorContext() = default;
 
 void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -807,9 +796,7 @@ SchXMLStockContext::SchXMLStockContext(
 {
 }
 
-SchXMLStockContext::~SchXMLStockContext()
-{
-}
+SchXMLStockContext::~SchXMLStockContext() = default;
 
 void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -932,9 +919,7 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
         mrLSequencesPerIndex(rLSequencesPerIndex)
 {}
 
-SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
-{
-}
+SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext() = default;
 
 namespace {
 

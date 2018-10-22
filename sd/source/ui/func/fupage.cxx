@@ -157,9 +157,7 @@ void FuPage::DoExecute( SfxRequest& )
     }
 }
 
-FuPage::~FuPage()
-{
-}
+FuPage::~FuPage() = default;
 
 void FuPage::Activate()
 {

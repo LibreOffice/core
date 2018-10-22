@@ -1377,22 +1377,13 @@ namespace {
 
     struct DatabaseTypeDescription
     {
-        DatabaseTypeDescription()
-        {}
+        DatabaseTypeDescription() = default;
         DatabaseTypeDescription( const OUString &name, const OUString & type ) :
             typeName( name ),
             typeType( type )
         {}
-        DatabaseTypeDescription( const DatabaseTypeDescription &source ) :
-            typeName( source.typeName ),
-            typeType( source.typeType )
-        {}
-        DatabaseTypeDescription & operator = ( const DatabaseTypeDescription & source )
-        {
-            typeName = source.typeName;
-            typeType = source.typeType;
-            return *this;
-        }
+        DatabaseTypeDescription(const DatabaseTypeDescription&) = default;
+        DatabaseTypeDescription& operator=(const DatabaseTypeDescription&) = default;
         OUString typeName;
         OUString typeType;
     };

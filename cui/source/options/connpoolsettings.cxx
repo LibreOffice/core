@@ -38,10 +38,7 @@ namespace offapp
             &&  (nTimeoutSeconds == _rR.nTimeoutSeconds);
     }
 
-    DriverPoolingSettings::DriverPoolingSettings()
-    {
-    }
-
+    DriverPoolingSettings::DriverPoolingSettings() = default;
 
     DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings )
         :SfxPoolItem(_nId)

@@ -150,9 +150,7 @@ SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCodeArea lStartP, E
     ErrorRegistry::RegisterDisplay(&aWndFunc);
 }
 
-SfxErrorHandler::~SfxErrorHandler()
-{
-}
+SfxErrorHandler::~SfxErrorHandler() = default;
 
 bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
 

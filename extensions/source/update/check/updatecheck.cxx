@@ -342,11 +342,7 @@ UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
     resume();
 }
 
-
-UpdateCheckThread::~UpdateCheckThread()
-{
-}
-
+UpdateCheckThread::~UpdateCheckThread() = default;
 
 void SAL_CALL
 UpdateCheckThread::terminate()
@@ -575,11 +571,7 @@ DownloadThread::DownloadThread(osl::Condition& rCondition,
     createSuspended();
 }
 
-
-DownloadThread::~DownloadThread()
-{
-}
-
+DownloadThread::~DownloadThread() = default;
 
 void SAL_CALL
 DownloadThread::run()
@@ -658,11 +650,7 @@ ShutdownThread::ShutdownThread( const uno::Reference<uno::XComponentContext>& xC
     create();
 }
 
-
-ShutdownThread::~ShutdownThread()
-{
-}
-
+ShutdownThread::~ShutdownThread() = default;
 
 void SAL_CALL
 ShutdownThread::run()
@@ -702,7 +690,7 @@ UpdateCheck::UpdateCheck()
 {
 }
 
-UpdateCheck::~UpdateCheck() {}
+UpdateCheck::~UpdateCheck() = default;
 
 void
 UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,

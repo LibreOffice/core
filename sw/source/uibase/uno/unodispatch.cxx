@@ -57,9 +57,7 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     }
 }
 
-SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor()
-{
-}
+SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor() = default;
 
 uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
@@ -388,12 +386,8 @@ const sal_Char* SwXDispatch::GetDBChangeURL()
     return cInternalDBChangeNotification;
 }
 
-SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl()
-{
-}
+SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl() = default;
 
-SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::~DispatchMutexLock_Impl()
-{
-}
+SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::~DispatchMutexLock_Impl() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

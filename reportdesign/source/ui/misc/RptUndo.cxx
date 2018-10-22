@@ -228,9 +228,7 @@ OReportSectionUndo::OReportSectionUndo(
         collectControls(m_pMemberFunction(&m_aReportHelper));
 }
 
-OReportSectionUndo::~OReportSectionUndo()
-{
-}
+OReportSectionUndo::~OReportSectionUndo() = default;
 
 void OReportSectionUndo::implReInsert( )
 {

@@ -41,9 +41,7 @@ namespace sdr
         {
         }
 
-        ViewObjectContactOfGroup::~ViewObjectContactOfGroup()
-        {
-        }
+        ViewObjectContactOfGroup::~ViewObjectContactOfGroup() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {

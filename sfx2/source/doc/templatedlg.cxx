@@ -1335,9 +1335,7 @@ SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     mxOKButton->set_sensitive(false);
 }
 
-SfxTemplateCategoryDialog::~SfxTemplateCategoryDialog()
-{
-}
+SfxTemplateCategoryDialog::~SfxTemplateCategoryDialog() = default;
 
 IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, weld::Entry&, void)
 {

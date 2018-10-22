@@ -153,9 +153,7 @@ XUnbufferedStream::XUnbufferedStream(
     // m_xCipherContext = ZipFile::StaticGetCipher( xContext, rData, false );
 }
 
-XUnbufferedStream::~XUnbufferedStream()
-{
-}
+XUnbufferedStream::~XUnbufferedStream() = default;
 
 sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {

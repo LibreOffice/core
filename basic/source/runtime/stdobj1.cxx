@@ -40,10 +40,7 @@
 #define METH_SETDATA            24
 #define METH_SETTEXT            25
 
-
-SbStdFactory::SbStdFactory()
-{
-}
+SbStdFactory::SbStdFactory() = default;
 
 SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
 {
@@ -122,10 +119,7 @@ SbStdPicture::SbStdPicture() :
     p->SetUserData( ATTR_IMP_HEIGHT );
 }
 
-SbStdPicture::~SbStdPicture()
-{
-}
-
+SbStdPicture::~SbStdPicture() = default;
 
 void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
@@ -241,9 +235,7 @@ SbStdFont::SbStdFont()
     p->SetUserData( ATTR_IMP_NAME );
 }
 
-SbStdFont::~SbStdFont()
-{
-}
+SbStdFont::~SbStdFont() = default;
 
 void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -389,9 +381,7 @@ SbStdClipboard::SbStdClipboard() :
     p->SetUserData( METH_SETTEXT );
 }
 
-SbStdClipboard::~SbStdClipboard()
-{
-}
+SbStdClipboard::~SbStdClipboard() = default;
 
 void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {

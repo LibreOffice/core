@@ -139,8 +139,7 @@ GridProperties::GridProperties( const GridProperties & rOther ) :
 {
 }
 
-GridProperties::~GridProperties()
-{}
+GridProperties::~GridProperties() = default;
 
 // ____ OPropertySet ____
 uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const

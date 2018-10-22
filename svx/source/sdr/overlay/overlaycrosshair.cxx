@@ -61,9 +61,7 @@ namespace sdr
         {
         }
 
-        OverlayCrosshairStriped::~OverlayCrosshairStriped()
-        {
-        }
+        OverlayCrosshairStriped::~OverlayCrosshairStriped() = default;
     } // end of namespace overlay
 } // end of namespace sdr
 

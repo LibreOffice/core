@@ -29,10 +29,7 @@
 #include "bibcont.hxx"
 #include "bibview.hxx"
 
-
-BibShortCutHandler::~BibShortCutHandler()
-{
-}
+BibShortCutHandler::~BibShortCutHandler() = default;
 
 bool BibShortCutHandler::HandleShortCutKey( const KeyEvent& )
 {
@@ -44,10 +41,7 @@ BibWindow::BibWindow( vcl::Window* pParent, WinBits nStyle ) : Window( pParent, 
 {
 }
 
-BibWindow::~BibWindow()
-{
-}
-
+BibWindow::~BibWindow() = default;
 
 BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWindow( pParent, nStyle ), BibShortCutHandler( this )
 {

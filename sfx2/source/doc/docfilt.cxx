@@ -80,9 +80,7 @@ SfxFilter::SfxFilter( const OUString &rName,
     aWildCard.setGlob(glob.makeStringAndClear());
 }
 
-SfxFilter::~SfxFilter()
-{
-}
+SfxFilter::~SfxFilter() = default;
 
 OUString SfxFilter::GetDefaultExtension() const
 {

@@ -133,9 +133,7 @@ AxisConverter::AxisConverter( const ConverterRoot& rParent, AxisModel& rModel ) 
 {
 }
 
-AxisConverter::~AxisConverter()
-{
-}
+AxisConverter::~AxisConverter() = default;
 
 void AxisConverter::convertFromModel(
     const Reference< XCoordinateSystem >& rxCoordSystem,
@@ -387,9 +385,7 @@ AxisDispUnitsConverter::AxisDispUnitsConverter( const ConverterRoot& rParent, Ax
 {
 }
 
-AxisDispUnitsConverter::~AxisDispUnitsConverter()
-{
-}
+AxisDispUnitsConverter::~AxisDispUnitsConverter() = default;
 
 void AxisDispUnitsConverter::convertFromModel( const Reference< XAxis >& rxAxis )
 {

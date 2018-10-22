@@ -27,14 +27,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+XMLFillBitmapSizePropertyHandler::XMLFillBitmapSizePropertyHandler() = default;
 
-XMLFillBitmapSizePropertyHandler::XMLFillBitmapSizePropertyHandler()
-{
-}
-
-XMLFillBitmapSizePropertyHandler::~XMLFillBitmapSizePropertyHandler()
-{
-}
+XMLFillBitmapSizePropertyHandler::~XMLFillBitmapSizePropertyHandler() = default;
 
 bool XMLFillBitmapSizePropertyHandler::importXML(
     const OUString& rStrImpValue,

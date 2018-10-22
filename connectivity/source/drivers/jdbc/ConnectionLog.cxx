@@ -48,13 +48,7 @@ namespace connectivity { namespace java { namespace sql {
     {
     }
 
-
-    ConnectionLog::ConnectionLog( const ConnectionLog& _rSourceLog )
-        :ConnectionLog_Base( _rSourceLog )
-        ,m_nObjectID( _rSourceLog.m_nObjectID )
-    {
-    }
-
+    ConnectionLog::ConnectionLog(const ConnectionLog&) = default;
 
     ConnectionLog::ConnectionLog( const ConnectionLog& _rSourceLog, ConnectionLog::ObjectType _eType )
         :ConnectionLog_Base( _rSourceLog )

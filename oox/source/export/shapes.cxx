@@ -337,10 +337,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
 } // namespace oox
 
 namespace oox { namespace drawingml {
-
-URLTransformer::~URLTransformer()
-{
-}
+URLTransformer::~URLTransformer() = default;
 
 OUString URLTransformer::getTransformedString(const OUString& rString) const
 {

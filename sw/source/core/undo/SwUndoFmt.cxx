@@ -38,9 +38,7 @@ SwUndoFormatCreate::SwUndoFormatCreate
         sDerivedFrom = _pDerivedFrom->GetName();
 }
 
-SwUndoFormatCreate::~SwUndoFormatCreate()
-{
-}
+SwUndoFormatCreate::~SwUndoFormatCreate() = default;
 
 void SwUndoFormatCreate::UndoImpl(::sw::UndoRedoContext &)
 {
@@ -105,9 +103,7 @@ SwUndoFormatDelete::SwUndoFormatDelete
     bAuto = _pOld->IsAuto();
 }
 
-SwUndoFormatDelete::~SwUndoFormatDelete()
-{
-}
+SwUndoFormatDelete::~SwUndoFormatDelete() = default;
 
 void SwUndoFormatDelete::UndoImpl(::sw::UndoRedoContext &)
 {
@@ -153,9 +149,7 @@ SwUndoRenameFormat::SwUndoRenameFormat(SwUndoId nUndoId,
 {
 }
 
-SwUndoRenameFormat::~SwUndoRenameFormat()
-{
-}
+SwUndoRenameFormat::~SwUndoRenameFormat() = default;
 
 void SwUndoRenameFormat::UndoImpl(::sw::UndoRedoContext &)
 {

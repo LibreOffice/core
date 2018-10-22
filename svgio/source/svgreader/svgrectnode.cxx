@@ -39,9 +39,7 @@ namespace svgio
         {
         }
 
-        SvgRectNode::~SvgRectNode()
-        {
-        }
+        SvgRectNode::~SvgRectNode() = default;
 
         const SvgStyleAttributes* SvgRectNode::getSvgStyleAttributes() const
         {

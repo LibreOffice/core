@@ -39,9 +39,7 @@ Window::Window() :
 {
 }
 
-Window::~Window()
-{
-}
+Window::~Window() = default;
 
 // XPlayerWindow
 

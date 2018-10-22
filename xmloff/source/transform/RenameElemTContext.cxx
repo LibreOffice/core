@@ -54,9 +54,7 @@ XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
 {
 }
 
-XMLRenameElemTransformerContext::~XMLRenameElemTransformerContext()
-{
-}
+XMLRenameElemTransformerContext::~XMLRenameElemTransformerContext() = default;
 
 void XMLRenameElemTransformerContext::StartElement(
         const Reference< XAttributeList >& rAttrList )

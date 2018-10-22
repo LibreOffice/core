@@ -33,9 +33,7 @@ JavaContext::JavaContext( const Reference< XCurrentContext > & ctx)
 {
 }
 
-JavaContext::~JavaContext()
-{
-}
+JavaContext::~JavaContext() = default;
 
 Any SAL_CALL JavaContext::queryInterface(const Type& aType )
 {

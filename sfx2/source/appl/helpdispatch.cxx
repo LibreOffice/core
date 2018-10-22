@@ -39,11 +39,7 @@ HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
 {
 }
 
-
-HelpDispatch_Impl::~HelpDispatch_Impl()
-{
-}
-
+HelpDispatch_Impl::~HelpDispatch_Impl() = default;
 
 // XDispatch
 

@@ -47,9 +47,7 @@ static const char ICON_THEME_PACKAGE_PREFIX[] = "images_";
 
 static const char EXTENSION_FOR_ICON_PACKAGES[] = ".zip";
 
-IconThemeInfo::IconThemeInfo()
-{
-}
+IconThemeInfo::IconThemeInfo() = default;
 
 IconThemeInfo::IconThemeInfo(const OUString& urlToFile)
 : mUrlToFile(urlToFile)

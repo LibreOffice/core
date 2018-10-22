@@ -59,9 +59,7 @@ namespace sdr
         {
         }
 
-        CircleProperties::~CircleProperties()
-        {
-        }
+        CircleProperties::~CircleProperties() = default;
 
         std::unique_ptr<BaseProperties> CircleProperties::Clone(SdrObject& rObj) const
         {

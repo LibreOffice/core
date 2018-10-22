@@ -39,9 +39,7 @@ SvxGalleryItem::SvxGalleryItem( const SvxGalleryItem &rItem )
 {
 }
 
-SvxGalleryItem::~SvxGalleryItem()
-{
-}
+SvxGalleryItem::~SvxGalleryItem() = default;
 
 bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {

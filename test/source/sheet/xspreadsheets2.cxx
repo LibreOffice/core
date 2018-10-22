@@ -44,9 +44,7 @@ static constexpr OUStringLiteral gaSrcSheetName("SheetToCopy");
 static constexpr OUStringLiteral gaSrcFileName("rangenamessrc.ods");
 static constexpr OUStringLiteral gaDestFileBase("ScNamedRangeObj.ods");
 
-XSpreadsheets2::XSpreadsheets2()
-{
-}
+XSpreadsheets2::XSpreadsheets2() = default;
 
 XSpreadsheets2::~XSpreadsheets2()
 {

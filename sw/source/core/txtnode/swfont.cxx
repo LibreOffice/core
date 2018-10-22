@@ -883,9 +883,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     }
 }
 
-SwFont::~SwFont()
-{
-}
+SwFont::~SwFont() = default;
 
 SwFont& SwFont::operator=( const SwFont &rFont )
 {
@@ -1478,9 +1476,7 @@ SwUnderlineFont::SwUnderlineFont(SwFont& rFnt, TextFrameIndex const nEnd, const 
 {
 };
 
-SwUnderlineFont::~SwUnderlineFont()
-{
-}
+SwUnderlineFont::~SwUnderlineFont() = default;
 
 /// Helper for filters to find true lineheight of a font
 long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,

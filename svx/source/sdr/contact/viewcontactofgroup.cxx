@@ -48,9 +48,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfGroup::~ViewContactOfGroup()
-        {
-        }
+        ViewContactOfGroup::~ViewContactOfGroup() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGroup::createViewIndependentPrimitive2DSequence() const
         {

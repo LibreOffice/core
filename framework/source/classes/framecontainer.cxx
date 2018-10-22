@@ -33,13 +33,11 @@ namespace framework{
 
     @threadsafe not necessary - it's not a singleton
  *****************************************************************************************************************/
-FrameContainer::FrameContainer()
+FrameContainer::FrameContainer() = default;
 /*DEPRECATEME
         , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
         , m_aAsyncCall   ( LINK( this, FrameContainer, implts_asyncQuit ) )
 */
-{
-}
 
 /**-***************************************************************************************************************
     @short      deinitialize may a filled container

@@ -391,9 +391,7 @@ ONSSInitializer::ONSSInitializer(
 {
 }
 
-ONSSInitializer::~ONSSInitializer()
-{
-}
+ONSSInitializer::~ONSSInitializer() = default;
 
 bool ONSSInitializer::initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {

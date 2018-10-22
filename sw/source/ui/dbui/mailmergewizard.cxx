@@ -83,9 +83,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
     UpdateRoadmap();
 }
 
-SwMailMergeWizard::~SwMailMergeWizard()
-{
-}
+SwMailMergeWizard::~SwMailMergeWizard() = default;
 
 VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
 {

@@ -45,9 +45,7 @@ ManifestReader::ManifestReader( const Reference < XComponentContext > & xContext
 : m_xContext ( xContext )
 {
 }
-ManifestReader::~ManifestReader()
-{
-}
+ManifestReader::~ManifestReader() = default;
 Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSequence( const Reference< XInputStream >& rStream )
 {
     Sequence < Sequence < PropertyValue > > aManifestSequence;

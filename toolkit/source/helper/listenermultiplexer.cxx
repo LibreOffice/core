@@ -28,9 +28,7 @@ ListenerMultiplexerBase::ListenerMultiplexerBase( ::cppu::OWeakObject& rSource )
 {
 }
 
-ListenerMultiplexerBase::~ListenerMultiplexerBase()
-{
-}
+ListenerMultiplexerBase::~ListenerMultiplexerBase() = default;
 
 // css::uno::XInterface
 css::uno::Any ListenerMultiplexerBase::queryInterface( const css::uno::Type & rType )

@@ -48,10 +48,7 @@ SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
 {
 }
 
-SfxImageItem::~SfxImageItem()
-{
-}
-
+SfxImageItem::~SfxImageItem() = default;
 
 SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
 {

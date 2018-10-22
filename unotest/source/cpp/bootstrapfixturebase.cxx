@@ -20,13 +20,9 @@ using namespace ::com::sun::star;
 // test function in a rather non-intuitive way. This is why all the 'real'
 // heavy lifting is deferred until setUp. setUp and tearDown are interleaved
 // between the tests as you might expect.
-test::BootstrapFixtureBase::BootstrapFixtureBase()
-{
-}
+test::BootstrapFixtureBase::BootstrapFixtureBase() = default;
 
-test::BootstrapFixtureBase::~BootstrapFixtureBase()
-{
-}
+test::BootstrapFixtureBase::~BootstrapFixtureBase() = default;
 
 void test::BootstrapFixtureBase::setUp()
 {

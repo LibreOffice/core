@@ -38,10 +38,7 @@ using namespace cppu;
 using ::rtl::OUString;
 
 namespace cppu {
-
-IPropertyArrayHelper::~IPropertyArrayHelper()
-{
-}
+IPropertyArrayHelper::~IPropertyArrayHelper() = default;
 
 static const css::uno::Type & getPropertyTypeIdentifier( )
 {
@@ -201,9 +198,7 @@ OPropertySetHelper::~OPropertySetHelper()
 {
     delete m_pReserved;
 }
-OPropertySetHelper2::~OPropertySetHelper2()
-{
-}
+OPropertySetHelper2::~OPropertySetHelper2() = default;
 
 // XInterface
 Any OPropertySetHelper::queryInterface( const css::uno::Type & rType )

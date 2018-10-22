@@ -92,9 +92,7 @@ XMLFormPropOASISTransformerContext::XMLFormPropOASISTransformerContext(
 {
 }
 
-XMLFormPropOASISTransformerContext::~XMLFormPropOASISTransformerContext()
-{
-}
+XMLFormPropOASISTransformerContext::~XMLFormPropOASISTransformerContext() = default;
 
 void XMLFormPropOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )

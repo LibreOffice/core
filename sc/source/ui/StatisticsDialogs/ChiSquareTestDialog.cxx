@@ -35,8 +35,7 @@ ScChiSquareTestDialog::ScChiSquareTestDialog(
     SetText(ScResId(STR_CHI_SQUARE_TEST));
 }
 
-ScChiSquareTestDialog::~ScChiSquareTestDialog()
-{}
+ScChiSquareTestDialog::~ScChiSquareTestDialog() = default;
 
 bool ScChiSquareTestDialog::Close()
 {

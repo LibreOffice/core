@@ -23,9 +23,7 @@ ScCondFormatDlgItem::ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList
 {
 }
 
-ScCondFormatDlgItem::~ScCondFormatDlgItem()
-{
-}
+ScCondFormatDlgItem::~ScCondFormatDlgItem() = default;
 
 bool ScCondFormatDlgItem::operator==(const SfxPoolItem& /*rItem*/) const
 {

@@ -60,8 +60,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
 }
 
 SwEditShell::~SwEditShell() // USED
-{
-}
+    = default;
 
 bool SwEditShell::IsModified() const
 {

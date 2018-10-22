@@ -61,9 +61,7 @@ FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentCont
     maContextStack.reserve( 2 );
 }
 
-FilterDetectDocHandler::~FilterDetectDocHandler()
-{
-}
+FilterDetectDocHandler::~FilterDetectDocHandler() = default;
 
 void SAL_CALL FilterDetectDocHandler::startDocument()
 {
@@ -234,9 +232,7 @@ FilterDetect::FilterDetect( const Reference< XComponentContext >& rxContext ) :
 {
 }
 
-FilterDetect::~FilterDetect()
-{
-}
+FilterDetect::~FilterDetect() = default;
 
 namespace
 {

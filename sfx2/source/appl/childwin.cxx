@@ -46,9 +46,7 @@ SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID
     , nPos(n)
 {}
 
-SfxChildWinFactory::~SfxChildWinFactory()
-{
-}
+SfxChildWinFactory::~SfxChildWinFactory() = default;
 
 struct SfxChildWindow_Impl
 {

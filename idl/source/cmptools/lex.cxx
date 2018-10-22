@@ -88,9 +88,7 @@ SvTokenStream::SvTokenStream( const OUString & rFileName )
     InitCtor();
 }
 
-SvTokenStream::~SvTokenStream()
-{
-}
+SvTokenStream::~SvTokenStream() = default;
 
 void SvTokenStream::FillTokenList()
 {

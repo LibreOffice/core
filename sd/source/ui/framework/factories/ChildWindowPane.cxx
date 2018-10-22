@@ -87,9 +87,7 @@ ChildWindowPane::ChildWindowPane (
     }
 }
 
-ChildWindowPane::~ChildWindowPane()
-{
-}
+ChildWindowPane::~ChildWindowPane() = default;
 
 void ChildWindowPane::Hide()
 {

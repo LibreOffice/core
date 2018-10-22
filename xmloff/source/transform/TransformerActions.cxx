@@ -51,9 +51,7 @@ XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit const *pI
     }
 }
 
-XMLTransformerActions::~XMLTransformerActions()
-{
-}
+XMLTransformerActions::~XMLTransformerActions() = default;
 
 void XMLTransformerActions::Add( XMLTransformerActionInit const *pInit )
 {

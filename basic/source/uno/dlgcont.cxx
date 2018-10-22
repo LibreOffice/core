@@ -71,11 +71,9 @@ const sal_Char* SfxDialogLibraryContainer::getLibElementFileExtension() const { 
 const sal_Char* SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
 
 // Ctor for service
-SfxDialogLibraryContainer::SfxDialogLibraryContainer()
-{
+SfxDialogLibraryContainer::SfxDialogLibraryContainer() = default;
     // all initialisation has to be done
     // by calling XInitialization::initialize
-}
 
 SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embed::XStorage >& xStorage )
 {

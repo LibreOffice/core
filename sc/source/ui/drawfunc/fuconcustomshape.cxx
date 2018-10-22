@@ -48,9 +48,7 @@ FuConstCustomShape::FuConstCustomShape(ScTabViewShell& rViewSh, vcl::Window* pWi
     }
 }
 
-FuConstCustomShape::~FuConstCustomShape()
-{
-}
+FuConstCustomShape::~FuConstCustomShape() = default;
 
 bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {

@@ -80,7 +80,7 @@ private:
     Service(const Service&) = delete;
     Service& operator=(const Service&) = delete;
 
-    virtual ~Service() override {}
+    virtual ~Service() override = default;
 
     virtual OUString SAL_CALL getImplementationName() override
     { return configuration_registry::getImplementationName(); }
@@ -144,7 +144,7 @@ private:
     RegistryKey(const RegistryKey&) = delete;
     RegistryKey& operator=(const RegistryKey&) = delete;
 
-    virtual ~RegistryKey() override {}
+    virtual ~RegistryKey() override = default;
 
     virtual OUString SAL_CALL getKeyName() override;
 

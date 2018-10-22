@@ -216,7 +216,9 @@ public:
         m_aSelectionListeners.disposeAndClear( aEvent );
     }
 
-    struct SelectionGuardAccess { friend class SelectionGuard; private: SelectionGuardAccess() { }  };
+    struct SelectionGuardAccess { friend class SelectionGuard; private:
+        SelectionGuardAccess() = default;
+    };
 
     /** enters a block which modifies the selection of our owner.
 

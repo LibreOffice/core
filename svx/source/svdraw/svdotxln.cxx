@@ -103,9 +103,7 @@ ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData():
 {
 }
 
-ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
-{
-}
+ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData() = default;
 
 std::unique_ptr<SdrObjUserData> ImpSdrObjTextLinkUserData::Clone(SdrObject* ) const
 {

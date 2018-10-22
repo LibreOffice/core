@@ -49,10 +49,7 @@ XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
 {
 }
 
-XMLTextMasterPageExport::~XMLTextMasterPageExport()
-{
-}
-
+XMLTextMasterPageExport::~XMLTextMasterPageExport() = default;
 
 void XMLTextMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,

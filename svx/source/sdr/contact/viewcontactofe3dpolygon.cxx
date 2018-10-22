@@ -37,9 +37,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfE3dPolygon::~ViewContactOfE3dPolygon()
-        {
-        }
+        ViewContactOfE3dPolygon::~ViewContactOfE3dPolygon() = default;
 
         drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dPolygon::createViewIndependentPrimitive3DContainer() const
         {

@@ -97,9 +97,7 @@ namespace emfplushelper
         return "";
     }
 
-    EMFPObject::~EMFPObject()
-    {
-    }
+    EMFPObject::~EMFPObject() = default;
 
     typedef enum
     {
@@ -758,9 +756,7 @@ namespace emfplushelper
         mappingChanged();
     }
 
-    EmfPlusHelperData::~EmfPlusHelperData()
-    {
-    }
+    EmfPlusHelperData::~EmfPlusHelperData() = default;
 
     ::basegfx::B2DPolyPolygon const EmfPlusHelperData::combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon)
     {

@@ -123,9 +123,7 @@ public:
     }
 };
 
-ConvDicNameContainer::ConvDicNameContainer()
-{
-}
+ConvDicNameContainer::ConvDicNameContainer() = default;
 
 void ConvDicNameContainer::FlushDics() const
 {

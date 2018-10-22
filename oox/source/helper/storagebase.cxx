@@ -83,9 +83,7 @@ StorageBase::StorageBase( const StorageBase& rParentStorage, const OUString& rSt
 {
 }
 
-StorageBase::~StorageBase()
-{
-}
+StorageBase::~StorageBase() = default;
 
 bool StorageBase::isStorage() const
 {

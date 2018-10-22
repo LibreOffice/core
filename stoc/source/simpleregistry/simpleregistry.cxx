@@ -56,7 +56,7 @@ class SimpleRegistry:
         css::registry::XSimpleRegistry, css::lang::XServiceInfo >
 {
 public:
-    SimpleRegistry() {}
+    SimpleRegistry() = default;
 
     osl::Mutex mutex_;
 

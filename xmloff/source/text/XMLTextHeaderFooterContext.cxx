@@ -97,9 +97,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     }
 }
 
-XMLTextHeaderFooterContext::~XMLTextHeaderFooterContext()
-{
-}
+XMLTextHeaderFooterContext::~XMLTextHeaderFooterContext() = default;
 
 SvXMLImportContextRef XMLTextHeaderFooterContext::CreateChildContext(
     sal_uInt16 nPrefix,

@@ -275,9 +275,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     pUsedList.reset(new SvXMLNumUsedList_Impl);
 }
 
-SvXMLNumFmtExport::~SvXMLNumFmtExport()
-{
-}
+SvXMLNumFmtExport::~SvXMLNumFmtExport() = default;
 
 //  helper methods
 

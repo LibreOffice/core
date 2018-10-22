@@ -2713,11 +2713,7 @@ SfxURLRelocator_Impl::SfxURLRelocator_Impl( const uno::Reference< XComponentCont
 {
 }
 
-
-SfxURLRelocator_Impl::~SfxURLRelocator_Impl()
-{
-}
-
+SfxURLRelocator_Impl::~SfxURLRelocator_Impl() = default;
 
 void SfxURLRelocator_Impl::initOfficeInstDirs()
 {

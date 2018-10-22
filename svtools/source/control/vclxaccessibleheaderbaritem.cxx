@@ -52,9 +52,7 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
 {
 }
 
-VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
-{
-}
+VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem() = default;
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {

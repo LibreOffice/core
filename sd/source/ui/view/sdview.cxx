@@ -180,9 +180,7 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo) override;
 };
 
-ViewRedirector::ViewRedirector()
-{
-}
+ViewRedirector::ViewRedirector() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,

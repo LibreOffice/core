@@ -55,9 +55,7 @@ TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentCo
 {
 }
 
-TitleBarUpdate::~TitleBarUpdate()
-{
-}
+TitleBarUpdate::~TitleBarUpdate() = default;
 
 void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
 {

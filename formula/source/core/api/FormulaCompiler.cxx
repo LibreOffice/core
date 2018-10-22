@@ -746,9 +746,7 @@ FormulaCompiler::FormulaCompiler(bool bComputeII, bool bMatrixFlag)
 {
 }
 
-FormulaCompiler::~FormulaCompiler()
-{
-}
+FormulaCompiler::~FormulaCompiler() = default;
 
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLanguage ) const
 {

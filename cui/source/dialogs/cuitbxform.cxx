@@ -26,8 +26,6 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(weld::Window * pParent)
     m_xRecordNo->set_range(1, 0x7FFFFFFF);
 }
 
-FmInputRecordNoDialog::~FmInputRecordNoDialog()
-{
-}
+FmInputRecordNoDialog::~FmInputRecordNoDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

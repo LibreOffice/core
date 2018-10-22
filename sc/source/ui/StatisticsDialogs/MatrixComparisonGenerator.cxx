@@ -57,8 +57,7 @@ ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
     ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData, rID, rUiXmlDescription)
 {}
 
-ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()
-{}
+ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator() = default;
 
 const char* ScMatrixComparisonGenerator::GetUndoNameId()
 {

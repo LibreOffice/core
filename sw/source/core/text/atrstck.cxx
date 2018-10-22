@@ -350,9 +350,7 @@ SwAttrHandler::SwAttrHandler()
     memset( m_pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
 
-SwAttrHandler::~SwAttrHandler()
-{
-}
+SwAttrHandler::~SwAttrHandler() = default;
 
 void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
                           const IDocumentSettingAccess& rIDocumentSettingAcces )

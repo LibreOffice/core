@@ -29,14 +29,10 @@
 #include <globals.hxx>
 #include <database.hxx>
 
+SvClassElement::SvClassElement() = default;
+;
 
-SvClassElement::SvClassElement()
-{
-};
-
-SvMetaClass::SvMetaClass()
-{
-}
+SvMetaClass::SvMetaClass() = default;
 
 void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )

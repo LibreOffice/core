@@ -45,8 +45,7 @@ SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, con
     maHelpText(aHelpText)
 {}
 
-SmElement::~SmElement()
-{}
+SmElement::~SmElement() = default;
 
 const std::unique_ptr<SmNode>& SmElement::getNode()
 {
@@ -841,8 +840,6 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
     pDialog->Initialize( pInfo );
 }
 
-SmElementsDockingWindowWrapper::~SmElementsDockingWindowWrapper()
-{
-}
+SmElementsDockingWindowWrapper::~SmElementsDockingWindowWrapper() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -93,9 +93,7 @@ LimitBoxController::LimitBoxController(
 {
 }
 
-LimitBoxController::~LimitBoxController()
-{
-}
+LimitBoxController::~LimitBoxController() = default;
 
 /// XInterface
 uno::Any SAL_CALL LimitBoxController::queryInterface( const uno::Type& aType )

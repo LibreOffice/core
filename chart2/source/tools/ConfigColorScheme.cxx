@@ -109,8 +109,7 @@ ConfigColorScheme::ConfigColorScheme(
 {
 }
 
-ConfigColorScheme::~ConfigColorScheme()
-{}
+ConfigColorScheme::~ConfigColorScheme() = default;
 
 void ConfigColorScheme::retrieveConfigColors()
 {

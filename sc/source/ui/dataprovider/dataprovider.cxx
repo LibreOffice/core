@@ -182,9 +182,7 @@ ExternalDataMapper::ExternalDataMapper(ScDocument* /*pDoc*/)
 {
 }
 
-ExternalDataMapper::~ExternalDataMapper()
-{
-}
+ExternalDataMapper::~ExternalDataMapper() = default;
 
 void ExternalDataMapper::insertDataSource(const sc::ExternalDataSource& rSource)
 {
@@ -217,9 +215,7 @@ std::map<OUString, OUString> DataProvider::getDataSourcesForURL(const OUString& 
     return std::map<OUString, OUString>();
 }
 
-DataProvider::~DataProvider()
-{
-}
+DataProvider::~DataProvider() = default;
 
 void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
 {
@@ -256,9 +252,7 @@ ScDBDataManager::ScDBDataManager(const OUString& rDBName, ScDocument* pDoc):
 {
 }
 
-ScDBDataManager::~ScDBDataManager()
-{
-}
+ScDBDataManager::~ScDBDataManager() = default;
 
 void ScDBDataManager::SetDatabase(const OUString& rDBName)
 {

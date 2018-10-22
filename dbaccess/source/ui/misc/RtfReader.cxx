@@ -79,9 +79,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
     m_bAppendFirstLine = false;
 }
 
-ORTFReader::~ORTFReader()
-{
-}
+ORTFReader::~ORTFReader() = default;
 
 SvParserState ORTFReader::CallParser()
 {

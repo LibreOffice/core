@@ -48,7 +48,7 @@
 ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData& rData) :
     mrTextData(rData) {}
 
-ScHeaderFooterEditSource::~ScHeaderFooterEditSource() {}
+ScHeaderFooterEditSource::~ScHeaderFooterEditSource() = default;
 
 ScEditEngineDefaulter* ScHeaderFooterEditSource::GetEditEngine()
 {
@@ -73,9 +73,7 @@ void ScHeaderFooterEditSource::UpdateData()
 ScCellEditSource::ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pCellTextData(new ScCellTextData(pDocSh, rP)) {}
 
-ScCellEditSource::~ScCellEditSource()
-{
-}
+ScCellEditSource::~ScCellEditSource() = default;
 
 std::unique_ptr<SvxEditSource> ScCellEditSource::Clone() const
 {
@@ -221,9 +219,7 @@ ScSimpleEditSource::ScSimpleEditSource( SvxTextForwarder* pForw ) :
     //  always alive and the forwarder is valid as long as there are children.
 }
 
-ScSimpleEditSource::~ScSimpleEditSource()
-{
-}
+ScSimpleEditSource::~ScSimpleEditSource() = default;
 
 std::unique_ptr<SvxEditSource> ScSimpleEditSource::Clone() const
 {
@@ -245,9 +241,7 @@ ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::unique_ptr < ScAcce
 {
 }
 
-ScAccessibilityEditSource::~ScAccessibilityEditSource()
-{
-}
+ScAccessibilityEditSource::~ScAccessibilityEditSource() = default;
 
 std::unique_ptr<SvxEditSource> ScAccessibilityEditSource::Clone() const
 {

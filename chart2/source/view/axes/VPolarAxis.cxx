@@ -48,9 +48,7 @@ VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
 }
 
-VPolarAxis::~VPolarAxis()
-{
-}
+VPolarAxis::~VPolarAxis() = default;
 
 void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
 {

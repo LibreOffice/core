@@ -117,9 +117,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLBodyContext::~ScXMLBodyContext()
-{
-}
+ScXMLBodyContext::~ScXMLBodyContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLBodyContext::createFastChildContext( sal_Int32 nElement,

@@ -37,9 +37,7 @@ namespace sdr
         {
         }
 
-        E3dCompoundProperties::~E3dCompoundProperties()
-        {
-        }
+        E3dCompoundProperties::~E3dCompoundProperties() = default;
 
         std::unique_ptr<BaseProperties> E3dCompoundProperties::Clone(SdrObject& rObj) const
         {

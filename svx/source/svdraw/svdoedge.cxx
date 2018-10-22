@@ -2466,9 +2466,7 @@ SdrEdgeObjGeoData::SdrEdgeObjGeoData()
 {
 }
 
-SdrEdgeObjGeoData::~SdrEdgeObjGeoData()
-{
-}
+SdrEdgeObjGeoData::~SdrEdgeObjGeoData() = default;
 
 SdrObjGeoData* SdrEdgeObj::NewGeoData() const
 {

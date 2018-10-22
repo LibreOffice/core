@@ -143,9 +143,7 @@ XMLCharContext::XMLCharContext(
 {
 }
 
-XMLCharContext::~XMLCharContext()
-{
-}
+XMLCharContext::~XMLCharContext() = default;
 void XMLCharContext::EndElement()
 {
     if ( !m_nCount )

@@ -24,8 +24,7 @@ HtmlWriter::HtmlWriter(SvStream& rStream, const OString& rNamespace) :
     }
 }
 
-HtmlWriter::~HtmlWriter()
-{}
+HtmlWriter::~HtmlWriter() = default;
 
 void HtmlWriter::prettyPrint(bool b)
 {

@@ -437,9 +437,7 @@ void SwContentFrame::DestroyImpl()
     SwFrame::DestroyImpl();
 }
 
-SwContentFrame::~SwContentFrame()
-{
-}
+SwContentFrame::~SwContentFrame() = default;
 
 void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFirst)
 {
@@ -567,9 +565,7 @@ void SwLayoutFrame::DestroyImpl()
     SwFrame::DestroyImpl();
 }
 
-SwLayoutFrame::~SwLayoutFrame()
-{
-}
+SwLayoutFrame::~SwLayoutFrame() = default;
 
 /**
 |*  The paintarea is the area, in which the content of a frame is allowed

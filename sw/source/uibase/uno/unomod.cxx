@@ -202,9 +202,7 @@ SwXModule::SwXModule() :
 {
 }
 
-SwXModule::~SwXModule()
-{
-}
+SwXModule::~SwXModule() = default;
 
 Reference< XPropertySet >  SwXModule::getViewSettings()
 {
@@ -253,10 +251,7 @@ SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 {
 }
 
-SwXPrintSettings::~SwXPrintSettings()
-    throw()
-{
-}
+SwXPrintSettings::~SwXPrintSettings() throw() = default;
 
 void SwXPrintSettings::_preSetValues ()
 {
@@ -535,11 +530,7 @@ SwXViewSettings::SwXViewSettings(SwView* pVw)
 
 }
 
-SwXViewSettings::~SwXViewSettings()
-    throw()
-{
-
-}
+SwXViewSettings::~SwXViewSettings() throw() = default;
 
 void SwXViewSettings::_preSetValues ()
 {

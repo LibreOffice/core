@@ -838,9 +838,7 @@ SwXTextViewCursor::SwXTextViewCursor(SwView* pVw) :
 {
 }
 
-SwXTextViewCursor::~SwXTextViewCursor()
-{
-}
+SwXTextViewCursor::~SwXTextViewCursor() = default;
 
 // used to determine if there is a text selection or not.
 // If there is no text selection the functions that need a working

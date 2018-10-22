@@ -37,9 +37,7 @@ OEndMarker::OEndMarker(vcl::Window* _pParent ,const OUString& _sColorEntry)
     ImplInitSettings();
 }
 
-OEndMarker::~OEndMarker()
-{
-}
+OEndMarker::~OEndMarker() = default;
 
 void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {

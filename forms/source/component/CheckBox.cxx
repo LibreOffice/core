@@ -72,11 +72,7 @@ OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Referenc
 {
 }
 
-
-OCheckBoxModel::~OCheckBoxModel()
-{
-}
-
+OCheckBoxModel::~OCheckBoxModel() = default;
 
 IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 

@@ -123,16 +123,9 @@ namespace toolkit
         }
     };
 
+    AccessibleDummyFactory::AccessibleDummyFactory() = default;
 
-    AccessibleDummyFactory::AccessibleDummyFactory()
-    {
-    }
-
-
-    AccessibleDummyFactory::~AccessibleDummyFactory()
-    {
-    }
-
+    AccessibleDummyFactory::~AccessibleDummyFactory() = default;
 
     //= AccessibilityClient
 

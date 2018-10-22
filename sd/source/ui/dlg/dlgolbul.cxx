@@ -131,9 +131,7 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
     AddTabPage("position", RID_SVXPAGE_NUM_POSITION);
 }
 
-OutlineBulletDlg::~OutlineBulletDlg()
-{
-}
+OutlineBulletDlg::~OutlineBulletDlg() = default;
 
 void OutlineBulletDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {

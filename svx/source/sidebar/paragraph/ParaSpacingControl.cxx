@@ -43,9 +43,7 @@ ParaULSpacingControl::ParaULSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, T
     addStatusListener(".uno:MetricUnit");
 }
 
-ParaULSpacingControl::~ParaULSpacingControl()
-{
-}
+ParaULSpacingControl::~ParaULSpacingControl() = default;
 
 void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState)
@@ -113,9 +111,7 @@ ParaLRSpacingControl::ParaLRSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, T
     addStatusListener(".uno:MetricUnit");
 }
 
-ParaLRSpacingControl::~ParaLRSpacingControl()
-{
-}
+ParaLRSpacingControl::~ParaLRSpacingControl() = default;
 
 void SAL_CALL ParaLRSpacingControl::dispose()
 {

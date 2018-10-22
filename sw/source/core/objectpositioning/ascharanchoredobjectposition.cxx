@@ -56,8 +56,7 @@ SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
 {}
 
 /** destructor */
-SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
-{}
+SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition() = default;
 
 /** method to cast <SwAnchoredObjectPosition::GetAnchorFrame()> to needed type */
 const SwTextFrame& SwAsCharAnchoredObjectPosition::GetAnchorTextFrame() const

@@ -85,10 +85,7 @@ static void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sa
 // class XMLEscapementPropHdl
 
 
-XMLBorderWidthHdl::~XMLBorderWidthHdl()
-{
-    // nothing to do
-}
+XMLBorderWidthHdl::~XMLBorderWidthHdl() = default;
 
 bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
@@ -169,10 +166,7 @@ bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
 // class XMLEscapementHeightPropHdl
 
 
-XMLBorderHdl::~XMLBorderHdl()
-{
-    // nothing to do
-}
+XMLBorderHdl::~XMLBorderHdl() = default;
 
 bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {

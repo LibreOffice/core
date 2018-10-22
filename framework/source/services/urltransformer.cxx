@@ -35,7 +35,7 @@ namespace {
 class URLTransformer : public ::cppu::WeakImplHelper< css::util::XURLTransformer, css::lang::XServiceInfo>
 {
 public:
-    URLTransformer() {}
+    URLTransformer() = default;
 
     virtual OUString SAL_CALL getImplementationName() override
     {

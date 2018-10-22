@@ -447,9 +447,7 @@ ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFor
 {
 }
 
-ScCondFormatObj::~ScCondFormatObj()
-{
-}
+ScCondFormatObj::~ScCondFormatObj() = default;
 
 ScConditionalFormat* ScCondFormatObj::getCoreObject()
 {
@@ -668,9 +666,7 @@ ScConditionEntryObj::ScConditionEntryObj(rtl::Reference<ScCondFormatObj> const &
 {
 }
 
-ScConditionEntryObj::~ScConditionEntryObj()
-{
-}
+ScConditionEntryObj::~ScConditionEntryObj() = default;
 
 ScCondFormatEntry* ScConditionEntryObj::getCoreObject()
 {
@@ -837,9 +833,7 @@ ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> con
 {
 }
 
-ScColorScaleFormatObj::~ScColorScaleFormatObj()
-{
-}
+ScColorScaleFormatObj::~ScColorScaleFormatObj() = default;
 
 ScColorScaleFormat* ScColorScaleFormatObj::getCoreObject()
 {
@@ -996,9 +990,7 @@ ScColorScaleEntryObj::ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj>
 {
 }
 
-ScColorScaleEntryObj::~ScColorScaleEntryObj()
-{
-}
+ScColorScaleEntryObj::~ScColorScaleEntryObj() = default;
 
 ScColorScaleEntry* ScColorScaleEntryObj::getCoreObject()
 {
@@ -1087,9 +1079,7 @@ ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> const & x
 {
 }
 
-ScDataBarFormatObj::~ScDataBarFormatObj()
-{
-}
+ScDataBarFormatObj::~ScDataBarFormatObj() = default;
 
 ScDataBarFormat* ScDataBarFormatObj::getCoreObject()
 {
@@ -1378,9 +1368,7 @@ ScDataBarEntryObj::ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> const & 
 {
 }
 
-ScDataBarEntryObj::~ScDataBarEntryObj()
-{
-}
+ScDataBarEntryObj::~ScDataBarEntryObj() = default;
 
 ScColorScaleEntry* ScDataBarEntryObj::getCoreObject()
 {
@@ -1461,9 +1449,7 @@ ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> const & x
 {
 }
 
-ScIconSetFormatObj::~ScIconSetFormatObj()
-{
-}
+ScIconSetFormatObj::~ScIconSetFormatObj() = default;
 
 ScIconSetFormat* ScIconSetFormatObj::getCoreObject()
 {
@@ -1677,9 +1663,7 @@ ScIconSetEntryObj::ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> const & 
 {
 }
 
-ScIconSetEntryObj::~ScIconSetEntryObj()
-{
-}
+ScIconSetEntryObj::~ScIconSetEntryObj() = default;
 
 ScColorScaleEntry* ScIconSetEntryObj::getCoreObject()
 {
@@ -1764,9 +1748,7 @@ ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> const &
 {
 }
 
-ScCondDateFormatObj::~ScCondDateFormatObj()
-{
-}
+ScCondDateFormatObj::~ScCondDateFormatObj() = default;
 
 ScCondDateFormatEntry* ScCondDateFormatObj::getCoreObject()
 {

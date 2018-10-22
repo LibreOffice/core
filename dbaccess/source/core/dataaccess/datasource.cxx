@@ -147,9 +147,7 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
     OSL_ENSURE( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
 }
 
-FlushNotificationAdapter::~FlushNotificationAdapter()
-{
-}
+FlushNotificationAdapter::~FlushNotificationAdapter() = default;
 
 void FlushNotificationAdapter::impl_dispose()
 {
@@ -318,9 +316,7 @@ OSharedConnectionManager::OSharedConnectionManager(const Reference< XComponentCo
     m_xProxyFactory.set( ProxyFactory::create( _rxContext ) );
 }
 
-OSharedConnectionManager::~OSharedConnectionManager()
-{
-}
+OSharedConnectionManager::~OSharedConnectionManager() = default;
 
 void SAL_CALL OSharedConnectionManager::disposing( const css::lang::EventObject& Source )
 {

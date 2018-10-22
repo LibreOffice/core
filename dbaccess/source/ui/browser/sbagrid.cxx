@@ -148,9 +148,7 @@ SbaXGridControl::SbaXGridControl(const Reference< XComponentContext >& _rM)
 {
 }
 
-SbaXGridControl::~SbaXGridControl()
-{
-}
+SbaXGridControl::~SbaXGridControl() = default;
 
 FmXGridPeer* SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
 {
@@ -294,9 +292,7 @@ SbaXGridPeer::SbaXGridPeer(const Reference< XComponentContext >& _rM)
 {
 }
 
-SbaXGridPeer::~SbaXGridPeer()
-{
-}
+SbaXGridPeer::~SbaXGridPeer() = default;
 
 void SAL_CALL SbaXGridPeer::dispose()
 {

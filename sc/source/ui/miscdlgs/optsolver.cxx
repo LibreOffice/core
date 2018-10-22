@@ -84,9 +84,7 @@ ScSolverNoSolutionDialog::ScSolverNoSolutionDialog(weld::Window* pParent, const 
     m_xFtErrorText->set_label(rErrorText);
 }
 
-ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
-{
-}
+ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog() = default;
 
 ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, const OUString& rSolution)
     : GenericDialogController(pParent, "modules/scalc/ui/solversuccessdialog.ui", "SolverSuccessDialog")
@@ -100,9 +98,7 @@ ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, const OUStri
     m_xFtResult->set_label(aMessage);
 }
 
-ScSolverSuccessDialog::~ScSolverSuccessDialog()
-{
-}
+ScSolverSuccessDialog::~ScSolverSuccessDialog() = default;
 
 IMPL_LINK(ScSolverSuccessDialog, ClickHdl, weld::Button&, rBtn, void)
 {

@@ -442,9 +442,7 @@ Desktop::Desktop()
     m_firstRunTimer.SetDebugName( "desktop::Desktop m_firstRunTimer" );
 }
 
-Desktop::~Desktop()
-{
-}
+Desktop::~Desktop() = default;
 
 void Desktop::Init()
 {

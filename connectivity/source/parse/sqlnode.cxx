@@ -1680,11 +1680,7 @@ bool OSQLParseNode::operator==(OSQLParseNode const & rParseNode) const
     return bResult;
 }
 
-
-OSQLParseNode::~OSQLParseNode()
-{
-}
-
+OSQLParseNode::~OSQLParseNode() = default;
 
 void OSQLParseNode::append(OSQLParseNode* pNewNode)
 {
@@ -2737,13 +2733,9 @@ OUString OSQLParseNode::getTableRange(const OSQLParseNode* _pTableRef)
     return sTableRange;
 }
 
-OSQLParseNodesContainer::OSQLParseNodesContainer()
-{
-}
+OSQLParseNodesContainer::OSQLParseNodesContainer() = default;
 
-OSQLParseNodesContainer::~OSQLParseNodesContainer()
-{
-}
+OSQLParseNodesContainer::~OSQLParseNodesContainer() = default;
 
 void OSQLParseNodesContainer::push_back(OSQLParseNode* _pNode)
 {

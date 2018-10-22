@@ -46,9 +46,7 @@ SwAsyncRetrieveInputStreamThread::SwAsyncRetrieveInputStreamThread(
 {
 }
 
-SwAsyncRetrieveInputStreamThread::~SwAsyncRetrieveInputStreamThread()
-{
-}
+SwAsyncRetrieveInputStreamThread::~SwAsyncRetrieveInputStreamThread() = default;
 
 void SwAsyncRetrieveInputStreamThread::threadFunction()
 {

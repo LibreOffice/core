@@ -615,8 +615,7 @@ ObjectHierarchy::ObjectHierarchy(
         m_apImpl( new impl::ImplObjectHierarchy( xChartDocument, pExplicitValueProvider, bFlattenDiagram, bOrderingForElementSelector ))
 {}
 
-ObjectHierarchy::~ObjectHierarchy()
-{}
+ObjectHierarchy::~ObjectHierarchy() = default;
 
 ObjectIdentifier ObjectHierarchy::getRootNodeOID()
 {

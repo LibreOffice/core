@@ -22,13 +22,9 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-VCLXPointer::VCLXPointer()
-{
-}
+VCLXPointer::VCLXPointer() = default;
 
-VCLXPointer::~VCLXPointer()
-{
-}
+VCLXPointer::~VCLXPointer() = default;
 
 // css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXPointer )

@@ -92,10 +92,7 @@ SdXML3DLightContext::SdXML3DLightContext(
     }
 }
 
-SdXML3DLightContext::~SdXML3DLightContext()
-{
-}
-
+SdXML3DLightContext::~SdXML3DLightContext() = default;
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
@@ -108,9 +105,7 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
 {
 }
 
-SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
-{
-}
+SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext() = default;
 
 void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {

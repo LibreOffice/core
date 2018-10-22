@@ -92,9 +92,7 @@ FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
 {
 }
 
-FileProvider::~FileProvider()
-{
-}
+FileProvider::~FileProvider() = default;
 
 // XInitialization
 void FileProvider::init()

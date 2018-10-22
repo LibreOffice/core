@@ -3139,11 +3139,7 @@ FieldContext::FieldContext(uno::Reference< text::XTextRange > const& xStart)
     m_pProperties = new PropertyMap();
 }
 
-
-FieldContext::~FieldContext()
-{
-}
-
+FieldContext::~FieldContext() = default;
 
 void FieldContext::AppendCommand(const OUString& rPart)
 {

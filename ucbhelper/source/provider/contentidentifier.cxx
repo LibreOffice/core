@@ -78,10 +78,7 @@ ContentIdentifier::ContentIdentifier( const OUString& rURL )
 
 
 // virtual
-ContentIdentifier::~ContentIdentifier()
-{
-}
-
+ContentIdentifier::~ContentIdentifier() = default;
 
 // XInterface methods.
 

@@ -34,9 +34,7 @@ MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::
 
 //  destructor
 
-MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
-{
-}
+MediaTypeDetectionHelper::~MediaTypeDetectionHelper() = default;
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MediaTypeDetectionHelper
                                         , ::cppu::OWeakObject

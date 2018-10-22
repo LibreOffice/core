@@ -44,9 +44,7 @@ SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 n
     }
 }
 
-SdXMLShapeLinkContext::~SdXMLShapeLinkContext()
-{
-}
+SdXMLShapeLinkContext::~SdXMLShapeLinkContext() = default;
 
 SvXMLImportContextRef SdXMLShapeLinkContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,

@@ -83,8 +83,7 @@ LwpCellLayout::LwpCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpCellLayout::~LwpCellLayout()
-{}
+LwpCellLayout::~LwpCellLayout() = default;
 
 /**
  * @short   Get table layout pointer, if default cell layout, return NULL
@@ -682,8 +681,7 @@ LwpConnectedCellLayout::LwpConnectedCellLayout(LwpObjectHeader const &objHdr, Lw
 {
 }
 
-LwpConnectedCellLayout::~LwpConnectedCellLayout()
-{}
+LwpConnectedCellLayout::~LwpConnectedCellLayout() = default;
 /**
  * @short   Set current connected cell layout to cell layout map
  * @param pCellLayoutMap - cell layout map reference
@@ -846,8 +844,7 @@ LwpHiddenCellLayout::LwpHiddenCellLayout(LwpObjectHeader const &objHdr, LwpSvStr
     : LwpCellLayout(objHdr, pStrm)
 {}
 
-LwpHiddenCellLayout::~LwpHiddenCellLayout()
-{}
+LwpHiddenCellLayout::~LwpHiddenCellLayout() = default;
 /**
  * @short   Set current hidden cell layout to cell layout map
  * @param
@@ -918,8 +915,7 @@ rtl::Reference<XFCell> LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sa
 LwpParallelColumnsBlock::LwpParallelColumnsBlock(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpCellLayout(objHdr, pStrm)
 {}
 
-LwpParallelColumnsBlock::~LwpParallelColumnsBlock()
-{}
+LwpParallelColumnsBlock::~LwpParallelColumnsBlock() = default;
 
 void LwpParallelColumnsBlock::Read()
 {

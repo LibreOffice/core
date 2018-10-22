@@ -34,9 +34,7 @@ IndexEntrySupplier_Common::IndexEntrySupplier_Common(const Reference < uno::XCom
     usePhonetic = false;
 }
 
-IndexEntrySupplier_Common::~IndexEntrySupplier_Common()
-{
-}
+IndexEntrySupplier_Common::~IndexEntrySupplier_Common() = default;
 
 Sequence < lang::Locale > SAL_CALL IndexEntrySupplier_Common::getLocaleList()
 {

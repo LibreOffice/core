@@ -76,8 +76,7 @@ namespace accessibility
     class AccessibleEmptyEditSource_Impl : public SvxEditSource, public SvxViewForwarder, public SvxTextForwarder, public SfxBroadcaster
     {
     public:
-
-        AccessibleEmptyEditSource_Impl() {}
+        AccessibleEmptyEditSource_Impl() = default;
 
         // SvxEditSource
         SvxTextForwarder*       GetTextForwarder() override { return this; }

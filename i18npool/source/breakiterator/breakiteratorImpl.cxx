@@ -35,13 +35,9 @@ BreakIteratorImpl::BreakIteratorImpl( const Reference < XComponentContext >& rxC
 {
 }
 
-BreakIteratorImpl::BreakIteratorImpl()
-{
-}
+BreakIteratorImpl::BreakIteratorImpl() = default;
 
-BreakIteratorImpl::~BreakIteratorImpl()
-{
-}
+BreakIteratorImpl::~BreakIteratorImpl() = default;
 
 #define LBI getLocaleSpecificBreakIterator(rLocale)
 

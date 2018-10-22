@@ -97,9 +97,7 @@ XclExpTablesManager::XclExpTablesManager( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpTablesManager::~XclExpTablesManager()
-{
-}
+XclExpTablesManager::~XclExpTablesManager() = default;
 
 void XclExpTablesManager::Initialize()
 {
@@ -165,9 +163,7 @@ XclExpTables::XclExpTables( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpTables::~XclExpTables()
-{
-}
+XclExpTables::~XclExpTables() = default;
 
 void XclExpTables::AppendTable( const ScDBData* pData, sal_Int32 nTableId )
 {

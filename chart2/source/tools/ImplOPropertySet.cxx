@@ -88,9 +88,7 @@ namespace property
 {
 namespace impl
 {
-
-ImplOPropertySet::ImplOPropertySet()
-{}
+ImplOPropertySet::ImplOPropertySet() = default;
 
 ImplOPropertySet::ImplOPropertySet( const ImplOPropertySet & rOther )
 {

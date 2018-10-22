@@ -45,9 +45,7 @@ XMLChangeInfoContext::XMLChangeInfoContext(
 {
 }
 
-XMLChangeInfoContext::~XMLChangeInfoContext()
-{
-}
+XMLChangeInfoContext::~XMLChangeInfoContext() = default;
 
 void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
 {

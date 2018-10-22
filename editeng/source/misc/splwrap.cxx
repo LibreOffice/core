@@ -119,9 +119,7 @@ void SvxSpellWrapper::ShowLanguageErrors()
 
 }
 
-SvxSpellWrapper::~SvxSpellWrapper()
-{
-}
+SvxSpellWrapper::~SvxSpellWrapper() = default;
 
 /*--------------------------------------------------------------------
  *  Description: Constructor, the test sequence is determined

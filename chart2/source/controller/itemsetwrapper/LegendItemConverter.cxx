@@ -58,9 +58,7 @@ LegendItemConverter::LegendItemConverter(
                                  "ReferencePageSize" ));
 }
 
-LegendItemConverter::~LegendItemConverter()
-{
-}
+LegendItemConverter::~LegendItemConverter() = default;
 
 void LegendItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

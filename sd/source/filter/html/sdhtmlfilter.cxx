@@ -43,9 +43,7 @@ SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) 
 {
 }
 
-SdHTMLFilter::~SdHTMLFilter()
-{
-}
+SdHTMLFilter::~SdHTMLFilter() = default;
 
 bool SdHTMLFilter::Export()
 {

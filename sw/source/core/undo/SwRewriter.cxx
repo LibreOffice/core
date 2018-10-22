@@ -22,9 +22,7 @@
 
 using namespace std;
 
-SwRewriter::SwRewriter()
-{
-}
+SwRewriter::SwRewriter() = default;
 
 void SwRewriter::AddRule(SwUndoArg eWhat, const OUString & rWith)
 {

@@ -133,9 +133,7 @@ UpDownBarWrapper::UpDownBarWrapper(
 {
 }
 
-UpDownBarWrapper::~UpDownBarWrapper()
-{
-}
+UpDownBarWrapper::~UpDownBarWrapper() = default;
 
 // ____ XComponent ____
 void SAL_CALL UpDownBarWrapper::dispose()

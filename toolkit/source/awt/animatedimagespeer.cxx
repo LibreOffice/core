@@ -298,11 +298,7 @@ namespace toolkit
     {
     }
 
-
-    AnimatedImagesPeer::~AnimatedImagesPeer()
-    {
-    }
-
+    AnimatedImagesPeer::~AnimatedImagesPeer() = default;
 
     void SAL_CALL AnimatedImagesPeer::startAnimation()
     {

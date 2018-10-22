@@ -39,9 +39,7 @@ SvxDistributeDialog::SvxDistributeDialog(weld::Window* pParent,
     SetTabPage(mpPage);
 }
 
-SvxDistributeDialog::~SvxDistributeDialog()
-{
-}
+SvxDistributeDialog::~SvxDistributeDialog() = default;
 
 /*************************************************************************
 |*
@@ -69,9 +67,7 @@ SvxDistributePage::SvxDistributePage(TabPageParent pWindow,
 {
 }
 
-SvxDistributePage::~SvxDistributePage()
-{
-}
+SvxDistributePage::~SvxDistributePage() = default;
 
 /*************************************************************************
 |*

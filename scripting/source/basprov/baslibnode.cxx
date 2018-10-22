@@ -56,11 +56,7 @@ namespace basprov
         }
     }
 
-
-    BasicLibraryNodeImpl::~BasicLibraryNodeImpl()
-    {
-    }
-
+    BasicLibraryNodeImpl::~BasicLibraryNodeImpl() = default;
 
     // XBrowseNode
 

@@ -330,11 +330,7 @@ Sprite::Sprite( sal_uInt16 nId )
 {
 }
 
-
-Sprite::~Sprite()
-{
-}
-
+Sprite::~Sprite() = default;
 
 void Sprite::write( SvStream& out )
 {
@@ -382,11 +378,7 @@ FlashFont::FlashFont( const vcl::Font& rFont, sal_uInt16 nId )
 {
 }
 
-
-FlashFont::~FlashFont()
-{
-}
-
+FlashFont::~FlashFont() = default;
 
 /** gets the glyph id for the given character. The glyphs are created on demand */
 sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )

@@ -322,9 +322,7 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProt
     Init();
 }
 
-ScRetypePassInputDlg::~ScRetypePassInputDlg()
-{
-}
+ScRetypePassInputDlg::~ScRetypePassInputDlg() = default;
 
 bool ScRetypePassInputDlg::IsRemovePassword() const
 {

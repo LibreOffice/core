@@ -83,9 +83,7 @@ namespace drawinglayer
         {
         }
 
-        SdrAllFillAttributesHelper::~SdrAllFillAttributesHelper()
-        {
-        }
+        SdrAllFillAttributesHelper::~SdrAllFillAttributesHelper() = default;
 
         bool SdrAllFillAttributesHelper::isUsed() const
         {

@@ -385,9 +385,7 @@ NumberingTypeMgr::NumberingTypeMgr()
     ImplLoad("standard.syb");
 }
 
-NumberingTypeMgr::~NumberingTypeMgr()
-{
-}
+NumberingTypeMgr::~NumberingTypeMgr() = default;
 
 static const char* RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
 {

@@ -36,9 +36,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-DAVSessionFactory::~DAVSessionFactory()
-{
-}
+DAVSessionFactory::~DAVSessionFactory() = default;
 
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const OUString & inUri,

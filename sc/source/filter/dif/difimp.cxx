@@ -667,13 +667,9 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
     }
 }
 
-DifAttrCache::DifAttrCache()
-{
-}
+DifAttrCache::DifAttrCache() = default;
 
-DifAttrCache::~DifAttrCache()
-{
-}
+DifAttrCache::~DifAttrCache() = default;
 
 void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {

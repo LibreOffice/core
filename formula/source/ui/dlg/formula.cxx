@@ -1960,26 +1960,14 @@ void FormEditData::Reset()
     aUndoStr.clear();
 }
 
-FormEditData& FormEditData::operator=( const FormEditData& r )
-{
-    nMode           = r.nMode;
-    nFStart         = r.nFStart;
-    nOffset         = r.nOffset;
-    aUndoStr        = r.aUndoStr;
-    bMatrix         = r.bMatrix ;
-    xFocusWin       = r.xFocusWin;
-    aSelection      = r.aSelection;
-    return *this;
-}
+FormEditData& FormEditData::operator=(const FormEditData&) = default;
 
 FormEditData::FormEditData()
 {
     Reset();
 }
 
-FormEditData::~FormEditData()
-{
-}
+FormEditData::~FormEditData() = default;
 
 FormEditData::FormEditData( const FormEditData& r )
 {

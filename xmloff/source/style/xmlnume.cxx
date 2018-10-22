@@ -639,9 +639,7 @@ SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     }
 }
 
-SvxXMLNumRuleExport::~SvxXMLNumRuleExport()
-{
-}
+SvxXMLNumRuleExport::~SvxXMLNumRuleExport() = default;
 
 void SvxXMLNumRuleExport::exportNumberingRule(
         const OUString& rName, bool bIsHidden,

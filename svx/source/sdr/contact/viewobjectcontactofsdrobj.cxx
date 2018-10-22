@@ -46,9 +46,7 @@ ViewObjectContactOfSdrObj::ViewObjectContactOfSdrObj(ObjectContact& rObjectConta
 {
 }
 
-ViewObjectContactOfSdrObj::~ViewObjectContactOfSdrObj()
-{
-}
+ViewObjectContactOfSdrObj::~ViewObjectContactOfSdrObj() = default;
 
 bool ViewObjectContactOfSdrObj::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const
 {

@@ -1318,9 +1318,7 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
 {
 }
 
-GtkSalMenuItem::~GtkSalMenuItem()
-{
-}
+GtkSalMenuItem::~GtkSalMenuItem() = default;
 
 #endif
 

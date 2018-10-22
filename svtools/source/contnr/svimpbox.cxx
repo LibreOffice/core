@@ -2598,9 +2598,7 @@ ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SvTreeListBox* pV )
     pView = pV;
 }
 
-ImpLBSelEng::~ImpLBSelEng()
-{
-}
+ImpLBSelEng::~ImpLBSelEng() = default;
 
 void ImpLBSelEng::BeginDrag()
 {

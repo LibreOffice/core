@@ -120,9 +120,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     aEntry.nExtraLen    = -1;
 }
 
-ZipPackageStream::~ZipPackageStream()
-{
-}
+ZipPackageStream::~ZipPackageStream() = default;
 
 void ZipPackageStream::setZipEntryOnLoading( const ZipEntry &rInEntry )
 {

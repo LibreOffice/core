@@ -1434,9 +1434,7 @@ namespace drawinglayer
             rOutDev.SetDigitLanguage(drawinglayer::detail::getDigitLanguage());
         }
 
-        VclProcessor2D::~VclProcessor2D()
-        {
-        }
+        VclProcessor2D::~VclProcessor2D() = default;
     }
 }
 

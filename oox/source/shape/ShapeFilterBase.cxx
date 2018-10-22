@@ -34,9 +34,7 @@ ShapeFilterBase::ShapeFilterBase( const uno::Reference< uno::XComponentContext >
 {
 }
 
-ShapeFilterBase::~ShapeFilterBase()
-{
-}
+ShapeFilterBase::~ShapeFilterBase() = default;
 
 const ::oox::drawingml::Theme* ShapeFilterBase::getCurrentTheme() const
 {

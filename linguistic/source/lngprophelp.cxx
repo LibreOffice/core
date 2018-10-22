@@ -75,10 +75,7 @@ PropertyChgHelper::PropertyChgHelper(
     SetDefaultValues();
 }
 
-PropertyChgHelper::~PropertyChgHelper()
-{
-}
-
+PropertyChgHelper::~PropertyChgHelper() = default;
 
 void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount )
 {
@@ -311,11 +308,7 @@ PropertyHelper_Thes::PropertyHelper_Thes(
     GetCurrentValues();
 }
 
-
-PropertyHelper_Thes::~PropertyHelper_Thes()
-{
-}
-
+PropertyHelper_Thes::~PropertyHelper_Thes() = default;
 
 void SAL_CALL
     PropertyHelper_Thes::propertyChange( const PropertyChangeEvent& rEvt )
@@ -345,11 +338,7 @@ PropertyHelper_Spell::PropertyHelper_Spell(
     GetCurrentValues();
 }
 
-
-PropertyHelper_Spell::~PropertyHelper_Spell()
-{
-}
-
+PropertyHelper_Spell::~PropertyHelper_Spell() = default;
 
 void PropertyHelper_Spell::SetDefaultValues()
 {
@@ -523,11 +512,7 @@ PropertyHelper_Hyphen::PropertyHelper_Hyphen(
     GetCurrentValues();
 }
 
-
-PropertyHelper_Hyphen::~PropertyHelper_Hyphen()
-{
-}
-
+PropertyHelper_Hyphen::~PropertyHelper_Hyphen() = default;
 
 void PropertyHelper_Hyphen::SetDefaultValues()
 {
@@ -663,9 +648,7 @@ PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
     xPropHelper = pInst;
 }
 
-PropertyHelper_Thesaurus::~PropertyHelper_Thesaurus()
-{
-}
+PropertyHelper_Thesaurus::~PropertyHelper_Thesaurus() = default;
 
 void PropertyHelper_Thesaurus::AddAsPropListener()
 {
@@ -690,9 +673,7 @@ PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
     xPropHelper = pInst;
 }
 
-PropertyHelper_Hyphenation::~PropertyHelper_Hyphenation()
-{
-}
+PropertyHelper_Hyphenation::~PropertyHelper_Hyphenation() = default;
 
 void PropertyHelper_Hyphenation::AddAsPropListener()
 {
@@ -744,9 +725,7 @@ PropertyHelper_Spelling::PropertyHelper_Spelling(
     xPropHelper = pInst;
 }
 
-PropertyHelper_Spelling::~PropertyHelper_Spelling()
-{
-}
+PropertyHelper_Spelling::~PropertyHelper_Spelling() = default;
 
 void PropertyHelper_Spelling::AddAsPropListener()
 {

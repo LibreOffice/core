@@ -77,9 +77,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
         m_pWebColorConfig->Load();
 }
 
-SwMasterUsrPref::~SwMasterUsrPref()
-{
-}
+SwMasterUsrPref::~SwMasterUsrPref() = default;
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 {
@@ -126,9 +124,7 @@ SwContentViewConfig::SwContentViewConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
     EnableNotification( GetPropertyNames() );
 }
 
-SwContentViewConfig::~SwContentViewConfig()
-{
-}
+SwContentViewConfig::~SwContentViewConfig() = default;
 
 void SwContentViewConfig::Notify( const Sequence< OUString > & /*rPropertyNames*/ )
 {
@@ -265,9 +261,7 @@ SwLayoutViewConfig::SwLayoutViewConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
 {
 }
 
-SwLayoutViewConfig::~SwLayoutViewConfig()
-{
-}
+SwLayoutViewConfig::~SwLayoutViewConfig() = default;
 
 void SwLayoutViewConfig::ImplCommit()
 {
@@ -400,9 +394,7 @@ SwGridConfig::SwGridConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
 {
 }
 
-SwGridConfig::~SwGridConfig()
-{
-}
+SwGridConfig::~SwGridConfig() = default;
 
 void SwGridConfig::ImplCommit()
 {
@@ -485,9 +477,7 @@ SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
 {
 }
 
-SwCursorConfig::~SwCursorConfig()
-{
-}
+SwCursorConfig::~SwCursorConfig() = default;
 
 void SwCursorConfig::ImplCommit()
 {
@@ -550,9 +540,7 @@ SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     aPropNames.getArray()[0] = "Color";
 }
 
-SwWebColorConfig::~SwWebColorConfig()
-{
-}
+SwWebColorConfig::~SwWebColorConfig() = default;
 
 void SwWebColorConfig::ImplCommit()
 {

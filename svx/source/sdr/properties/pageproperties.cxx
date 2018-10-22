@@ -48,9 +48,7 @@ namespace sdr
         {
         }
 
-        PageProperties::~PageProperties()
-        {
-        }
+        PageProperties::~PageProperties() = default;
 
         std::unique_ptr<BaseProperties> PageProperties::Clone(SdrObject& rObj) const
         {

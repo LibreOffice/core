@@ -25,14 +25,9 @@ using namespace ::com::sun::star;
 
 namespace framework
 {
+GraphicNameAccess::GraphicNameAccess() = default;
 
-GraphicNameAccess::GraphicNameAccess()
-{
-}
-
-GraphicNameAccess::~GraphicNameAccess()
-{
-}
+GraphicNameAccess::~GraphicNameAccess() = default;
 
 void GraphicNameAccess::addElement( const OUString& rName, const uno::Reference< graphic::XGraphic >& rElement )
 {

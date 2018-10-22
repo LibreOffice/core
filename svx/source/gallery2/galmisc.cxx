@@ -363,9 +363,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter )
     }
 }
 
-GalleryProgress::~GalleryProgress()
-{
-}
+GalleryProgress::~GalleryProgress() = default;
 
 void GalleryProgress::Update( sal_Int32 nVal, sal_Int32 nMaxVal )
 {
@@ -384,9 +382,7 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObje
     InitData( bLazy );
 }
 
-GalleryTransferable::~GalleryTransferable()
-{
-}
+GalleryTransferable::~GalleryTransferable() = default;
 
 void GalleryTransferable::InitData( bool bLazy )
 {

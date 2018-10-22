@@ -46,9 +46,7 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
         ,new PolarPlottingPositionHelper() ) );
 }
 
-VPolarRadiusAxis::~VPolarRadiusAxis()
-{
-}
+VPolarRadiusAxis::~VPolarRadiusAxis() = default;
 
 void VPolarRadiusAxis::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
 {

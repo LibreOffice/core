@@ -47,9 +47,7 @@ ViewContactOfPageSubObject::ViewContactOfPageSubObject(ViewContactOfSdrPage& rPa
 {
 }
 
-ViewContactOfPageSubObject::~ViewContactOfPageSubObject()
-{
-}
+ViewContactOfPageSubObject::~ViewContactOfPageSubObject() = default;
 
 ViewContact* ViewContactOfPageSubObject::GetParentContact() const
 {
@@ -87,9 +85,7 @@ ViewContactOfPageBackground::ViewContactOfPageBackground(ViewContactOfSdrPage& r
 {
 }
 
-ViewContactOfPageBackground::~ViewContactOfPageBackground()
-{
-}
+ViewContactOfPageBackground::~ViewContactOfPageBackground() = default;
 
 ViewObjectContact& ViewContactOfPageShadow::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -158,9 +154,7 @@ ViewContactOfPageShadow::ViewContactOfPageShadow(ViewContactOfSdrPage& rParentVi
 {
 }
 
-ViewContactOfPageShadow::~ViewContactOfPageShadow()
-{
-}
+ViewContactOfPageShadow::~ViewContactOfPageShadow() = default;
 
 ViewObjectContact& ViewContactOfMasterPage::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -229,9 +223,7 @@ ViewContactOfMasterPage::ViewContactOfMasterPage(ViewContactOfSdrPage& rParentVi
 {
 }
 
-ViewContactOfMasterPage::~ViewContactOfMasterPage()
-{
-}
+ViewContactOfMasterPage::~ViewContactOfMasterPage() = default;
 
 ViewObjectContact& ViewContactOfPageFill::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -264,9 +256,7 @@ ViewContactOfPageFill::ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewCo
 {
 }
 
-ViewContactOfPageFill::~ViewContactOfPageFill()
-{
-}
+ViewContactOfPageFill::~ViewContactOfPageFill() = default;
 
 ViewObjectContact& ViewContactOfOuterPageBorder::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -325,9 +315,7 @@ ViewContactOfOuterPageBorder::ViewContactOfOuterPageBorder(ViewContactOfSdrPage&
 {
 }
 
-ViewContactOfOuterPageBorder::~ViewContactOfOuterPageBorder()
-{
-}
+ViewContactOfOuterPageBorder::~ViewContactOfOuterPageBorder() = default;
 
 ViewObjectContact& ViewContactOfInnerPageBorder::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -373,9 +361,7 @@ ViewContactOfInnerPageBorder::ViewContactOfInnerPageBorder(ViewContactOfSdrPage&
 {
 }
 
-ViewContactOfInnerPageBorder::~ViewContactOfInnerPageBorder()
-{
-}
+ViewContactOfInnerPageBorder::~ViewContactOfInnerPageBorder() = default;
 
 ViewObjectContact& ViewContactOfPageHierarchy::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -408,9 +394,7 @@ ViewContactOfPageHierarchy::ViewContactOfPageHierarchy(ViewContactOfSdrPage& rPa
 {
 }
 
-ViewContactOfPageHierarchy::~ViewContactOfPageHierarchy()
-{
-}
+ViewContactOfPageHierarchy::~ViewContactOfPageHierarchy() = default;
 
 sal_uInt32 ViewContactOfPageHierarchy::GetObjectCount() const
 {
@@ -445,9 +429,7 @@ ViewContactOfGrid::ViewContactOfGrid(ViewContactOfSdrPage& rParentViewContactOfS
 {
 }
 
-ViewContactOfGrid::~ViewContactOfGrid()
-{
-}
+ViewContactOfGrid::~ViewContactOfGrid() = default;
 
 ViewObjectContact& ViewContactOfHelplines::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -470,9 +452,7 @@ ViewContactOfHelplines::ViewContactOfHelplines(ViewContactOfSdrPage& rParentView
 {
 }
 
-ViewContactOfHelplines::~ViewContactOfHelplines()
-{
-}
+ViewContactOfHelplines::~ViewContactOfHelplines() = default;
 
 // Create a Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something.
@@ -501,9 +481,7 @@ ViewContactOfSdrPage::ViewContactOfSdrPage(SdrPage& rPage)
 {
 }
 
-ViewContactOfSdrPage::~ViewContactOfSdrPage()
-{
-}
+ViewContactOfSdrPage::~ViewContactOfSdrPage() = default;
 
 // Access to possible sub-hierarchy
 sal_uInt32 ViewContactOfSdrPage::GetObjectCount() const

@@ -37,10 +37,7 @@ using namespace ::xmloff::token;
 // class XMLEscapementPropHdl
 
 
-XMLEscapementPropHdl::~XMLEscapementPropHdl()
-{
-    // nothing to do
-}
+XMLEscapementPropHdl::~XMLEscapementPropHdl() = default;
 
 bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -102,10 +99,7 @@ bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 // class XMLEscapementHeightPropHdl
 
 
-XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
-{
-    // nothing to do
-}
+XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl() = default;
 
 bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

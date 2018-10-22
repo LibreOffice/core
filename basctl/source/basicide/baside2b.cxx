@@ -183,7 +183,7 @@ public:
     explicit ChangesListener(EditorWindow & editor): editor_(editor) {}
 
 private:
-    virtual ~ChangesListener() override {}
+    virtual ~ChangesListener() override = default;
 
     virtual void SAL_CALL disposing(lang::EventObject const &) override
     {

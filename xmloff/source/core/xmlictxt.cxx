@@ -43,9 +43,7 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
 {
 }
 
-SvXMLImportContext::~SvXMLImportContext()
-{
-}
+SvXMLImportContext::~SvXMLImportContext() = default;
 
 SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,

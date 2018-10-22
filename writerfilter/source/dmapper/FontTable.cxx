@@ -37,7 +37,7 @@ struct FontTable_Impl
 {
     std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
-    FontTable_Impl() {}
+    FontTable_Impl() = default;
 };
 
 FontTable::FontTable()
@@ -48,9 +48,7 @@ FontTable::FontTable()
 {
 }
 
-FontTable::~FontTable()
-{
-}
+FontTable::~FontTable() = default;
 
 void FontTable::lcl_attribute(Id Name, Value & val)
 {

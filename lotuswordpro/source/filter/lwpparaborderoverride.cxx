@@ -104,9 +104,7 @@ LwpParaBorderOverride::LwpParaBorderOverride(LwpParaBorderOverride const& rOther
     m_pMargins.reset( ::clone(rOther.m_pMargins.get()) );
 }
 
-LwpParaBorderOverride::~LwpParaBorderOverride()
-{
-}
+LwpParaBorderOverride::~LwpParaBorderOverride() = default;
 
 LwpParaBorderOverride* LwpParaBorderOverride::clone() const
 {

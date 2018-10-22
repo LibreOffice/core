@@ -201,13 +201,9 @@ protected:
     virtual ~AccessibleFactory() override;
 };
 
-AccessibleFactory::AccessibleFactory()
-{
-}
+AccessibleFactory::AccessibleFactory() = default;
 
-AccessibleFactory::~AccessibleFactory()
-{
-}
+AccessibleFactory::~AccessibleFactory() = default;
 
 Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, bool _bIsMenuBar )
 {

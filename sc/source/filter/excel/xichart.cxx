@@ -220,9 +220,7 @@ XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData )
 {
 }
 
-XclImpChRoot::~XclImpChRoot()
-{
-}
+XclImpChRoot::~XclImpChRoot() = default;
 
 XclImpChChart& XclImpChRoot::GetChartData() const
 {
@@ -388,9 +386,7 @@ void XclImpChRoot::ConvertPieRotation( ScfPropertySet& rPropSet, sal_uInt16 nAng
     rPropSet.SetProperty( EXC_CHPROP_STARTINGANGLE, nApiRot );
 }
 
-XclImpChGroupBase::~XclImpChGroupBase()
-{
-}
+XclImpChGroupBase::~XclImpChGroupBase() = default;
 
 void XclImpChGroupBase::ReadRecordGroup( XclImpStream& rStrm )
 {
@@ -735,9 +731,7 @@ XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
 {
 }
 
-XclImpChSourceLink::~XclImpChSourceLink()
-{
-}
+XclImpChSourceLink::~XclImpChSourceLink() = default;
 
 void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
 {
@@ -912,9 +906,7 @@ void XclImpChSourceLink::FillSourceLink( ::std::vector< ScTokenRef >& rTokens ) 
 
 // Text =======================================================================
 
-XclImpChFontBase::~XclImpChFontBase()
-{
-}
+XclImpChFontBase::~XclImpChFontBase() = default;
 
 void XclImpChFontBase::ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
 {
@@ -3834,9 +3826,7 @@ XclImpChChart::XclImpChChart( const XclImpRoot& rRoot ) :
     mxSecnAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_SECONDARY ) );
 }
 
-XclImpChChart::~XclImpChChart()
-{
-}
+XclImpChChart::~XclImpChChart() = default;
 
 void XclImpChChart::ReadHeaderRecord( XclImpStream& rStrm )
 {
@@ -4263,9 +4253,7 @@ XclImpChart::XclImpChart( const XclImpRoot& rRoot, bool bOwnTab ) :
 {
 }
 
-XclImpChart::~XclImpChart()
-{
-}
+XclImpChart::~XclImpChart() = default;
 
 void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 {

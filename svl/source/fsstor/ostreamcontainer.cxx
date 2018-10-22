@@ -53,9 +53,7 @@ OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xS
     }
 }
 
-OFSStreamContainer::~OFSStreamContainer()
-{
-}
+OFSStreamContainer::~OFSStreamContainer() = default;
 
 // XInterface
 uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )

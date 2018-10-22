@@ -166,9 +166,7 @@ SfxPickList::SfxPickList(SfxApplication& rApp)
 {
 }
 
-SfxPickList::~SfxPickList()
-{
-}
+SfxPickList::~SfxPickList() = default;
 
 SfxPickListImpl::SfxPickListImpl(SfxApplication& rApp)
 {

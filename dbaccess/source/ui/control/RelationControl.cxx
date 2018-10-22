@@ -455,9 +455,7 @@ namespace dbaui
         m_pRightTable->SetSelectHdl(aLink);
     }
 
-    OTableListBoxControl::~OTableListBoxControl()
-    {
-    }
+    OTableListBoxControl::~OTableListBoxControl() = default;
 
     void OTableListBoxControl::fillListBoxes()
     {

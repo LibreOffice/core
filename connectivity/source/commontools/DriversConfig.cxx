@@ -86,9 +86,7 @@ namespace
     }
 }
 
-DriversConfigImpl::DriversConfigImpl()
-{
-}
+DriversConfigImpl::DriversConfigImpl() = default;
 
 const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Reference< uno::XComponentContext >& _rxORB) const
 {
@@ -122,11 +120,7 @@ DriversConfig::DriversConfig(const uno::Reference< uno::XComponentContext >& _rx
 {
 }
 
-
-DriversConfig::~DriversConfig()
-{
-}
-
+DriversConfig::~DriversConfig() = default;
 
 DriversConfig::DriversConfig( const DriversConfig& _rhs )
 {

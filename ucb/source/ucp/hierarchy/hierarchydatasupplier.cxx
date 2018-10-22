@@ -103,10 +103,7 @@ HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
 
 
 // virtual
-HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
-{
-}
-
+HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier() = default;
 
 // virtual
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(

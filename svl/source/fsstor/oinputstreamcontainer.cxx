@@ -33,9 +33,7 @@ OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInp
     m_bSeekable = m_xSeekable.is();
 }
 
-OFSInputStreamContainer::~OFSInputStreamContainer()
-{
-}
+OFSInputStreamContainer::~OFSInputStreamContainer() = default;
 
 uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
 {

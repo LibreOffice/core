@@ -549,9 +549,7 @@ SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     SetSynchron( false );
 }
 
-SdrEmbedObjectLink::~SdrEmbedObjectLink()
-{
-}
+SdrEmbedObjectLink::~SdrEmbedObjectLink() = default;
 
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
     const OUString& /*rMimeType*/, const css::uno::Any & /*rValue*/ )

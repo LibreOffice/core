@@ -87,9 +87,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     }
 }
 
-ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext()
-{
-}
+ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSettingsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -160,9 +158,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLNullDateContext::~ScXMLNullDateContext()
-{
-}
+ScXMLNullDateContext::~ScXMLNullDateContext() = default;
 
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -190,8 +186,6 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLIterationContext::~ScXMLIterationContext()
-{
-}
+ScXMLIterationContext::~ScXMLIterationContext() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

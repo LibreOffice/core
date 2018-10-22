@@ -58,11 +58,7 @@ FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentCont
                         FilterCache::E_FILTER                         );
 }
 
-
-FilterFactory::~FilterFactory()
-{
-}
-
+FilterFactory::~FilterFactory() = default;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const OUString& sFilter)
 {

@@ -56,10 +56,7 @@ SbaXFormAdapter::SbaXFormAdapter()
 
 }
 
-SbaXFormAdapter::~SbaXFormAdapter()
-{
-
-}
+SbaXFormAdapter::~SbaXFormAdapter() = default;
 
 Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  )
 {

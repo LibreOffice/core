@@ -70,7 +70,7 @@ struct SvxAsianConfig::Impl {
 
 SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}
 
-SvxAsianConfig::~SvxAsianConfig() {}
+SvxAsianConfig::~SvxAsianConfig() = default;
 
 void SvxAsianConfig::Commit() {
     impl_->batch->commit();

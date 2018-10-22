@@ -95,9 +95,7 @@ namespace xmloff
 
     //= ODefaultEventAttacherManager
 
-    ODefaultEventAttacherManager::~ODefaultEventAttacherManager()
-    {
-    }
+    ODefaultEventAttacherManager::~ODefaultEventAttacherManager() = default;
 
     void ODefaultEventAttacherManager::registerEvents(const Reference< XPropertySet >& _rxElement,
         const Sequence< ScriptEventDescriptor >& _rEvents)

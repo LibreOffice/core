@@ -58,11 +58,7 @@ PageInfo::PageInfo()
 {
 }
 
-
-PageInfo::~PageInfo()
-{
-}
-
+PageInfo::~PageInfo() = default;
 
 FlashExporter::FlashExporter(
     const Reference< XComponentContext > &rxContext,

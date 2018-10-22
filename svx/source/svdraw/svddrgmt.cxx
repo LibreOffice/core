@@ -78,10 +78,7 @@ SdrDragEntry::SdrDragEntry()
 {
 }
 
-SdrDragEntry::~SdrDragEntry()
-{
-}
-
+SdrDragEntry::~SdrDragEntry() = default;
 
 SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon)
 :   SdrDragEntry(),
@@ -89,9 +86,7 @@ SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& 
 {
 }
 
-SdrDragEntryPolyPolygon::~SdrDragEntryPolyPolygon()
-{
-}
+SdrDragEntryPolyPolygon::~SdrDragEntryPolyPolygon() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
@@ -210,9 +205,7 @@ SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
     setAddToTransparent(true);
 }
 
-SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
-{
-}
+SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
@@ -233,9 +226,7 @@ SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx:
     setAddToTransparent(true);
 }
 
-SdrDragEntryPointGlueDrag::~SdrDragEntryPointGlueDrag()
-{
-}
+SdrDragEntryPointGlueDrag::~SdrDragEntryPointGlueDrag() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {

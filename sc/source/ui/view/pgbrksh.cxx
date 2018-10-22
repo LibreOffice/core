@@ -55,8 +55,6 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
     SetName("PageBreak");
 }
 
-ScPageBreakShell::~ScPageBreakShell()
-{
-}
+ScPageBreakShell::~ScPageBreakShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

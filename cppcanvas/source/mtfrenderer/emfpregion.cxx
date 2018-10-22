@@ -52,9 +52,7 @@ namespace cppcanvas
         {
         }
 
-        EMFPRegion::~EMFPRegion()
-        {
-        }
+        EMFPRegion::~EMFPRegion() = default;
 
         void EMFPRegion::Read(SvStream& s)
         {

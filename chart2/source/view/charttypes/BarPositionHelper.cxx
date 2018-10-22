@@ -37,15 +37,9 @@ BarPositionHelper::BarPositionHelper()
     AllowShiftZAxisPos(true);
 }
 
-BarPositionHelper::BarPositionHelper( const BarPositionHelper& rSource )
-        : CategoryPositionHelper( rSource )
-        , PlottingPositionHelper( rSource )
-{
-}
+BarPositionHelper::BarPositionHelper(const BarPositionHelper&) = default;
 
-BarPositionHelper::~BarPositionHelper()
-{
-}
+BarPositionHelper::~BarPositionHelper() = default;
 
 std::unique_ptr<PlottingPositionHelper> BarPositionHelper::clone() const
 {

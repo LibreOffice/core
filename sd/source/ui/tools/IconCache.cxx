@@ -100,10 +100,7 @@ IconCache::IconCache()
 {
 }
 
-IconCache::~IconCache()
-{
-    // empty
-}
+IconCache::~IconCache() = default;
 
 } // end of namespace sd
 

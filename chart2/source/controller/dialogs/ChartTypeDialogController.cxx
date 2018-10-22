@@ -114,9 +114,7 @@ ChartTypeDialogController::ChartTypeDialogController()
 {
 }
 
-ChartTypeDialogController::~ChartTypeDialogController()
-{
-}
+ChartTypeDialogController::~ChartTypeDialogController() = default;
 
 bool ChartTypeDialogController::isSubType( const OUString& rServiceName )
 {
@@ -382,9 +380,7 @@ ColumnOrBarChartDialogController_Base::ColumnOrBarChartDialogController_Base()
                                         : ChartTypeDialogController()
 {
 }
-ColumnOrBarChartDialogController_Base::~ColumnOrBarChartDialogController_Base()
-{
-}
+ColumnOrBarChartDialogController_Base::~ColumnOrBarChartDialogController_Base() = default;
 bool ColumnOrBarChartDialogController_Base::shouldShow_3DLookControl() const
 {
     return true;
@@ -400,12 +396,8 @@ void ColumnOrBarChartDialogController_Base::adjustSubTypeAndEnableControls( Char
         rParameter.nSubTypeIndex=1;
     }
 }
-ColumnChartDialogController::ColumnChartDialogController()
-{
-}
-ColumnChartDialogController::~ColumnChartDialogController()
-{
-}
+ColumnChartDialogController::ColumnChartDialogController() = default;
+ColumnChartDialogController::~ColumnChartDialogController() = default;
 OUString ColumnChartDialogController::getName()
 {
     return SchResId(STR_TYPE_COLUMN);
@@ -475,13 +467,9 @@ void ColumnChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, co
     rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
 }
 
-BarChartDialogController::BarChartDialogController()
-{
-}
+BarChartDialogController::BarChartDialogController() = default;
 
-BarChartDialogController::~BarChartDialogController()
-{
-}
+BarChartDialogController::~BarChartDialogController() = default;
 
 OUString BarChartDialogController::getName()
 {
@@ -551,13 +539,9 @@ void BarChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const
     rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
 }
 
-PieChartDialogController::PieChartDialogController()
-{
-}
+PieChartDialogController::PieChartDialogController() = default;
 
-PieChartDialogController::~PieChartDialogController()
-{
-}
+PieChartDialogController::~PieChartDialogController() = default;
 
 OUString PieChartDialogController::getName()
 {
@@ -617,13 +601,9 @@ void PieChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPa
         rParameter.eStackMode = GlobalStackMode_NONE;
 }
 
-LineChartDialogController::LineChartDialogController()
-{
-}
+LineChartDialogController::LineChartDialogController() = default;
 
-LineChartDialogController::~LineChartDialogController()
-{
-}
+LineChartDialogController::~LineChartDialogController() = default;
 
 OUString LineChartDialogController::getName()
 {
@@ -772,9 +752,7 @@ XYChartDialogController::XYChartDialogController()
     bSupportsXAxisWithValues = true;
 }
 
-XYChartDialogController::~XYChartDialogController()
-{
-}
+XYChartDialogController::~XYChartDialogController() = default;
 
 OUString XYChartDialogController::getName()
 {
@@ -871,13 +849,9 @@ void XYChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPar
     }
 }
 
-AreaChartDialogController::AreaChartDialogController()
-{
-}
+AreaChartDialogController::AreaChartDialogController() = default;
 
-AreaChartDialogController::~AreaChartDialogController()
-{
-}
+AreaChartDialogController::~AreaChartDialogController() = default;
 
 OUString AreaChartDialogController::getName()
 {
@@ -962,9 +936,7 @@ NetChartDialogController::NetChartDialogController()
     bSupports3D = false;
 }
 
-NetChartDialogController::~NetChartDialogController()
-{
-}
+NetChartDialogController::~NetChartDialogController() = default;
 
 OUString NetChartDialogController::getName()
 {
@@ -1057,9 +1029,7 @@ StockChartDialogController::StockChartDialogController()
     bSupports3D = false;
 }
 
-StockChartDialogController::~StockChartDialogController()
-{
-}
+StockChartDialogController::~StockChartDialogController() = default;
 
 OUString StockChartDialogController::getName()
 {
@@ -1228,13 +1198,9 @@ void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypePa
     }
 }
 
-BubbleChartDialogController::BubbleChartDialogController()
-{
-}
+BubbleChartDialogController::BubbleChartDialogController() = default;
 
-BubbleChartDialogController::~BubbleChartDialogController()
-{
-}
+BubbleChartDialogController::~BubbleChartDialogController() = default;
 
 OUString BubbleChartDialogController::getName()
 {

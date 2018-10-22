@@ -20,8 +20,7 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    BitmapCanvasHelper::BitmapCanvasHelper()
-    {}
+    BitmapCanvasHelper::BitmapCanvasHelper() = default;
 
     void BitmapCanvasHelper::disposing()
     {

@@ -988,9 +988,7 @@ ObjectFormatter::ObjectFormatter( const XmlFilterBase& rFilter, const Reference<
 {
 }
 
-ObjectFormatter::~ObjectFormatter()
-{
-}
+ObjectFormatter::~ObjectFormatter() = default;
 
 void ObjectFormatter::setMaxSeriesIndex( sal_Int32 nMaxSeriesIdx )
 {

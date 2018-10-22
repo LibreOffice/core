@@ -31,9 +31,7 @@ SdHtmlAttrPreview::SdHtmlAttrPreview(vcl::Window* pParent, WinBits nStyle)
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SdHtmlAttrPreview, 0)
 
-SdHtmlAttrPreview::~SdHtmlAttrPreview()
-{
-}
+SdHtmlAttrPreview::~SdHtmlAttrPreview() = default;
 
 void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {

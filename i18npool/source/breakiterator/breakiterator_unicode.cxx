@@ -51,9 +51,7 @@ BreakIterator_Unicode::BreakIterator_Unicode()
 {
 }
 
-BreakIterator_Unicode::~BreakIterator_Unicode()
-{
-}
+BreakIterator_Unicode::~BreakIterator_Unicode() = default;
 
 /*
     Wrapper class to provide public access to the icu::RuleBasedBreakIterator's

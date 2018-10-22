@@ -259,7 +259,7 @@ public:
     virtual void SAL_CALL setParameter(OUString const & key, OUString const & value) override;
 
 private:
-    virtual ~UrlReference() override {}
+    virtual ~UrlReference() override = default;
 
     sal_Int32 findParameter(OUString const & key) const;
 
@@ -353,7 +353,7 @@ class Parser:
         css::lang::XServiceInfo, css::uri::XUriSchemeParser>
 {
 public:
-    Parser() {}
+    Parser() = default;
 
     Parser(const Parser&) = delete;
     Parser& operator=(const Parser&) = delete;
@@ -370,7 +370,7 @@ public:
         OUString const & scheme, OUString const & schemeSpecificPart) override;
 
 private:
-    virtual ~Parser() override {}
+    virtual ~Parser() override = default;
 };
 
 OUString Parser::getImplementationName()

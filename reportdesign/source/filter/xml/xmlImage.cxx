@@ -104,12 +104,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     }
 }
 
-
-OXMLImage::~OXMLImage()
-{
-
-}
-
+OXMLImage::~OXMLImage() = default;
 
 } // namespace rptxml
 

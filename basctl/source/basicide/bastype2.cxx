@@ -83,8 +83,7 @@ sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNa
     return nType;
 }
 
-Entry::~Entry()
-{ }
+Entry::~Entry() = default;
 
 DocumentEntry::DocumentEntry (
     ScriptDocument const& rDocument,
@@ -98,8 +97,7 @@ DocumentEntry::DocumentEntry (
     OSL_ENSURE( m_aDocument.isValid(), "DocumentEntry::DocumentEntry: illegal document!" );
 }
 
-DocumentEntry::~DocumentEntry()
-{ }
+DocumentEntry::~DocumentEntry() = default;
 
 LibEntry::LibEntry (
     ScriptDocument const& rDocument,
@@ -110,8 +108,7 @@ LibEntry::LibEntry (
     m_aLibName(rLibName)
 { }
 
-LibEntry::~LibEntry()
-{ }
+LibEntry::~LibEntry() = default;
 
 EntryDescriptor::EntryDescriptor () :
     m_aDocument(ScriptDocument::getApplicationScriptDocument()),

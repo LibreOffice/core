@@ -33,9 +33,7 @@ namespace svgio
         {
         }
 
-        SvgPathNode::~SvgPathNode()
-        {
-        }
+        SvgPathNode::~SvgPathNode() = default;
 
         const SvgStyleAttributes* SvgPathNode::getSvgStyleAttributes() const
         {

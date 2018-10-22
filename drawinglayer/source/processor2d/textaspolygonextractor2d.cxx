@@ -225,9 +225,7 @@ namespace drawinglayer
         {
         }
 
-        TextAsPolygonExtractor2D::~TextAsPolygonExtractor2D()
-        {
-        }
+        TextAsPolygonExtractor2D::~TextAsPolygonExtractor2D() = default;
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 

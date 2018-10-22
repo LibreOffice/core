@@ -65,9 +65,7 @@ XFTableStyle::XFTableStyle()
     , m_eAlign(enumXFAlignStart)
 {}
 
-XFTableStyle::~XFTableStyle()
-{
-}
+XFTableStyle::~XFTableStyle() = default;
 
 void    XFTableStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {

@@ -74,9 +74,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     m_pToolbar->SetItemImage( m_nID, aImage );
 }
 
-ImageButtonToolbarController::~ImageButtonToolbarController()
-{
-}
+ImageButtonToolbarController::~ImageButtonToolbarController() = default;
 
 void SAL_CALL ImageButtonToolbarController::dispose()
 {

@@ -41,11 +41,7 @@ OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
     m_aInterpreter = new OPredicateInterpreter(m_aCompiler);
 }
 
-
-OSQLAnalyzer::~OSQLAnalyzer()
-{
-}
-
+OSQLAnalyzer::~OSQLAnalyzer() = default;
 
 void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 {

@@ -95,9 +95,7 @@ DataLabelContext::DataLabelContext( ContextHandler2Helper& rParent, DataLabelMod
 {
 }
 
-DataLabelContext::~DataLabelContext()
-{
-}
+DataLabelContext::~DataLabelContext() = default;
 
 ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -126,9 +124,7 @@ DataLabelsContext::DataLabelsContext( ContextHandler2Helper& rParent, DataLabels
 {
 }
 
-DataLabelsContext::~DataLabelsContext()
-{
-}
+DataLabelsContext::~DataLabelsContext() = default;
 
 ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -157,9 +153,7 @@ PictureOptionsContext::PictureOptionsContext( ContextHandler2Helper& rParent, Pi
 {
 }
 
-PictureOptionsContext::~PictureOptionsContext()
-{
-}
+PictureOptionsContext::~PictureOptionsContext() = default;
 
 ContextHandlerRef PictureOptionsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -190,9 +184,7 @@ ErrorBarContext::ErrorBarContext( ContextHandler2Helper& rParent, ErrorBarModel&
 {
 }
 
-ErrorBarContext::~ErrorBarContext()
-{
-}
+ErrorBarContext::~ErrorBarContext() = default;
 
 ContextHandlerRef ErrorBarContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -229,9 +221,7 @@ TrendlineLabelContext::TrendlineLabelContext( ContextHandler2Helper& rParent, Tr
 {
 }
 
-TrendlineLabelContext::~TrendlineLabelContext()
-{
-}
+TrendlineLabelContext::~TrendlineLabelContext() = default;
 
 ContextHandlerRef TrendlineLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -257,9 +247,7 @@ TrendlineContext::TrendlineContext( ContextHandler2Helper& rParent, TrendlineMod
 {
 }
 
-TrendlineContext::~TrendlineContext()
-{
-}
+TrendlineContext::~TrendlineContext() = default;
 
 ContextHandlerRef TrendlineContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -311,9 +299,7 @@ DataPointContext::DataPointContext( ContextHandler2Helper& rParent, DataPointMod
 {
 }
 
-DataPointContext::~DataPointContext()
-{
-}
+DataPointContext::~DataPointContext() = default;
 
 ContextHandlerRef DataPointContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -367,9 +353,7 @@ SeriesContextBase::SeriesContextBase( ContextHandler2Helper& rParent, SeriesMode
 {
 }
 
-SeriesContextBase::~SeriesContextBase()
-{
-}
+SeriesContextBase::~SeriesContextBase() = default;
 
 ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -413,9 +397,7 @@ AreaSeriesContext::AreaSeriesContext( ContextHandler2Helper& rParent, SeriesMode
 {
 }
 
-AreaSeriesContext::~AreaSeriesContext()
-{
-}
+AreaSeriesContext::~AreaSeriesContext() = default;
 
 ContextHandlerRef AreaSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -448,9 +430,7 @@ BarSeriesContext::BarSeriesContext( ContextHandler2Helper& rParent, SeriesModel&
 {
 }
 
-BarSeriesContext::~BarSeriesContext()
-{
-}
+BarSeriesContext::~BarSeriesContext() = default;
 
 ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -491,9 +471,7 @@ BubbleSeriesContext::BubbleSeriesContext( ContextHandler2Helper& rParent, Series
 {
 }
 
-BubbleSeriesContext::~BubbleSeriesContext()
-{
-}
+BubbleSeriesContext::~BubbleSeriesContext() = default;
 
 ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -534,9 +512,7 @@ LineSeriesContext::LineSeriesContext( ContextHandler2Helper& rParent, SeriesMode
 {
 }
 
-LineSeriesContext::~LineSeriesContext()
-{
-}
+LineSeriesContext::~LineSeriesContext() = default;
 
 ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -574,9 +550,7 @@ PieSeriesContext::PieSeriesContext( ContextHandler2Helper& rParent, SeriesModel&
 {
 }
 
-PieSeriesContext::~PieSeriesContext()
-{
-}
+PieSeriesContext::~PieSeriesContext() = default;
 
 ContextHandlerRef PieSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -608,9 +582,7 @@ RadarSeriesContext::RadarSeriesContext( ContextHandler2Helper& rParent, SeriesMo
 {
 }
 
-RadarSeriesContext::~RadarSeriesContext()
-{
-}
+RadarSeriesContext::~RadarSeriesContext() = default;
 
 ContextHandlerRef RadarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -644,9 +616,7 @@ ScatterSeriesContext::ScatterSeriesContext( ContextHandler2Helper& rParent, Seri
 {
 }
 
-ScatterSeriesContext::~ScatterSeriesContext()
-{
-}
+ScatterSeriesContext::~ScatterSeriesContext() = default;
 
 ContextHandlerRef ScatterSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -684,9 +654,7 @@ SurfaceSeriesContext::SurfaceSeriesContext( ContextHandler2Helper& rParent, Seri
 {
 }
 
-SurfaceSeriesContext::~SurfaceSeriesContext()
-{
-}
+SurfaceSeriesContext::~SurfaceSeriesContext() = default;
 
 ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

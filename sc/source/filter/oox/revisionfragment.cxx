@@ -176,8 +176,7 @@ struct RevisionMetadata
     DateTime maDateTime;
 
     RevisionMetadata() : maDateTime(DateTime::EMPTY) {}
-    RevisionMetadata( const RevisionMetadata& r ) :
-        maUserName(r.maUserName), maDateTime(r.maDateTime) {}
+    RevisionMetadata(const RevisionMetadata& r) = default;
 };
 
 }
@@ -188,7 +187,7 @@ struct RevisionHeadersFragment::Impl
 {
     RevDataType maRevData;
 
-    Impl() {}
+    Impl() = default;
 };
 
 RevisionHeadersFragment::RevisionHeadersFragment(
@@ -196,9 +195,7 @@ RevisionHeadersFragment::RevisionHeadersFragment(
     WorkbookFragmentBase(rHelper, rFragmentPath),
     mpImpl(new Impl) {}
 
-RevisionHeadersFragment::~RevisionHeadersFragment()
-{
-}
+RevisionHeadersFragment::~RevisionHeadersFragment() = default;
 
 oox::core::ContextHandlerRef RevisionHeadersFragment::onCreateContext(
     sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
@@ -332,9 +329,7 @@ RevisionLogFragment::RevisionLogFragment(
     WorkbookFragmentBase(rHelper, rFragmentPath),
     mpImpl(new Impl(rChangeTrack)) {}
 
-RevisionLogFragment::~RevisionLogFragment()
-{
-}
+RevisionLogFragment::~RevisionLogFragment() = default;
 
 oox::core::ContextHandlerRef RevisionLogFragment::onCreateContext(
     sal_Int32 nElement, const AttributeList& /*rAttribs*/ )

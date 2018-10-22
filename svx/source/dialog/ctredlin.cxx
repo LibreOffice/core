@@ -41,9 +41,7 @@ RedlinData::RedlinData() : aDateTime(DateTime::EMPTY)
     pData=nullptr;
 }
 
-RedlinData::~RedlinData()
-{
-}
+RedlinData::~RedlinData() = default;
 
 SvxRedlinEntry::SvxRedlinEntry()
     : SvTreeListEntry()
@@ -68,9 +66,7 @@ SvLBoxColorString::SvLBoxColorString()
 {
 }
 
-SvLBoxColorString::~SvLBoxColorString()
-{
-}
+SvLBoxColorString::~SvLBoxColorString() = default;
 
 std::unique_ptr<SvLBoxItem> SvLBoxColorString::Clone(SvLBoxItem const *) const
 {

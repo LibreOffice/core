@@ -41,9 +41,7 @@ SwVbaParagraphFormat::SwVbaParagraphFormat( const uno::Reference< ooo::vba::XHel
 {
 }
 
-SwVbaParagraphFormat::~SwVbaParagraphFormat()
-{
-}
+SwVbaParagraphFormat::~SwVbaParagraphFormat() = default;
 
 sal_Int32 SAL_CALL SwVbaParagraphFormat::getAlignment()
 {

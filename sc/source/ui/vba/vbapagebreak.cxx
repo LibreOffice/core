@@ -118,9 +118,7 @@ ScVbaVPageBreak::ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterfac
 {
 }
 
-ScVbaVPageBreak::~ScVbaVPageBreak()
-{
-}
+ScVbaVPageBreak::~ScVbaVPageBreak() = default;
 
 OUString
 ScVbaVPageBreak::getServiceImplName()

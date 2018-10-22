@@ -100,10 +100,7 @@ CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
 
 // class CfgStack
 
-
-CfgStack::~CfgStack()
-{
-}
+CfgStack::~CfgStack() = default;
 
 OString CfgStack::GetAccessPath( size_t nPos )
 {
@@ -136,9 +133,7 @@ CfgParser::CfgParser()
 {
 }
 
-CfgParser::~CfgParser()
-{
-}
+CfgParser::~CfgParser() = default;
 
 bool CfgParser::IsTokenClosed(const OString &rToken)
 {

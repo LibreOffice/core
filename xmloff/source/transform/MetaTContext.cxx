@@ -63,9 +63,7 @@ XMLMetaTransformerContext::XMLMetaTransformerContext( XMLTransformerBase& rImp,
 {
 }
 
-XMLMetaTransformerContext::~XMLMetaTransformerContext()
-{
-}
+XMLMetaTransformerContext::~XMLMetaTransformerContext() = default;
 
 rtl::Reference<XMLTransformerContext> XMLMetaTransformerContext::CreateChildContext(
             sal_uInt16 /*nPrefix*/,

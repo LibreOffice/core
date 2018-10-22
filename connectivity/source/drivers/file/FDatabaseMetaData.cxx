@@ -49,9 +49,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::OData
 {
 }
 
-ODatabaseMetaData::~ODatabaseMetaData()
-{
-}
+ODatabaseMetaData::~ODatabaseMetaData() = default;
 
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {

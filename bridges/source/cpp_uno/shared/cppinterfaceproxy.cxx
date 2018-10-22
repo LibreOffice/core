@@ -158,8 +158,7 @@ CppInterfaceProxy::CppInterfaceProxy(
         pTypeDescr );
 }
 
-CppInterfaceProxy::~CppInterfaceProxy()
-{}
+CppInterfaceProxy::~CppInterfaceProxy() = default;
 
 com::sun::star::uno::XInterface * CppInterfaceProxy::castProxyToInterface(
     CppInterfaceProxy * pProxy)

@@ -39,9 +39,7 @@ ClientView::ClientView(
 {
 }
 
-ClientView::~ClientView()
-{
-}
+ClientView::~ClientView() = default;
 
 /**
  * If View should not Invalidate() the windows, this method has

@@ -77,7 +77,7 @@ public:
     }
 
 protected:
-    virtual ~Base() {}
+    virtual ~Base() = default;
 
 private:
     oslInterlockedCount m_count;

@@ -38,10 +38,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star::reflection;
 
-OConnectionWrapper::OConnectionWrapper()
-{
-
-}
+OConnectionWrapper::OConnectionWrapper() = default;
 
 void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount)
 {
@@ -176,8 +173,7 @@ namespace
     class TPropertyValueLessFunctor
     {
     public:
-        TPropertyValueLessFunctor()
-        {}
+        TPropertyValueLessFunctor() = default;
         bool operator() (const css::beans::PropertyValue& lhs, const css::beans::PropertyValue& rhs) const
         {
             return lhs.Name.compareToIgnoreAsciiCase(rhs.Name) < 0;

@@ -1133,9 +1133,7 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, doub
     m_nPageObject = m_pWriter->createObject();
 }
 
-PDFWriterImpl::PDFPage::~PDFPage()
-{
-}
+PDFWriterImpl::PDFPage::~PDFPage() = default;
 
 void PDFWriterImpl::PDFPage::beginStream()
 {

@@ -42,9 +42,7 @@ SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
 {
 }
 
-SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
-{
-}
+SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject() = default;
 
 // XInterface
 css::uno::Any SAL_CALL

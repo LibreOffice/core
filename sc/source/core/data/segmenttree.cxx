@@ -357,9 +357,7 @@ ScFlatBoolRowSegments::ScFlatBoolRowSegments(const ScFlatBoolRowSegments& r) :
 {
 }
 
-ScFlatBoolRowSegments::~ScFlatBoolRowSegments()
-{
-}
+ScFlatBoolRowSegments::~ScFlatBoolRowSegments() = default;
 
 bool ScFlatBoolRowSegments::setTrue(SCROW nRow1, SCROW nRow2)
 {
@@ -420,9 +418,7 @@ ScFlatBoolColSegments::ScFlatBoolColSegments(const ScFlatBoolColSegments& r) :
 {
 }
 
-ScFlatBoolColSegments::~ScFlatBoolColSegments()
-{
-}
+ScFlatBoolColSegments::~ScFlatBoolColSegments() = default;
 
 bool ScFlatBoolColSegments::setTrue(SCCOL nCol1, SCCOL nCol2)
 {
@@ -492,9 +488,7 @@ ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(const ScFlatUInt16RowSegments& 
 {
 }
 
-ScFlatUInt16RowSegments::~ScFlatUInt16RowSegments()
-{
-}
+ScFlatUInt16RowSegments::~ScFlatUInt16RowSegments() = default;
 
 void ScFlatUInt16RowSegments::setValue(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue)
 {

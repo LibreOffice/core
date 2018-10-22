@@ -2032,7 +2032,7 @@ public:
     SharedTopFormulaCellPicker & operator =(SharedTopFormulaCellPicker const &) = default;
     SharedTopFormulaCellPicker & operator =(SharedTopFormulaCellPicker &&) = default;
 
-    virtual ~SharedTopFormulaCellPicker() {}
+    virtual ~SharedTopFormulaCellPicker() = default;
 
     void operator() ( sc::CellStoreType::value_type& node )
     {
@@ -2719,8 +2719,7 @@ public:
 class CheckVectorizationHandler
 {
 public:
-    CheckVectorizationHandler()
-    {}
+    CheckVectorizationHandler() = default;
 
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {

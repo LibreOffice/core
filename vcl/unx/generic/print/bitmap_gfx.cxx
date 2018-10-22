@@ -35,9 +35,7 @@ const sal_uInt32 nBufferSize = 16384;
  *
  */
 
-PrinterBmp::~PrinterBmp()
-{
-}
+PrinterBmp::~PrinterBmp() = default;
 
 /* virtual base class */
 
@@ -51,9 +49,7 @@ public:
     virtual         ~ByteEncoder () = 0;
 };
 
-ByteEncoder::~ByteEncoder()
-{
-}
+ByteEncoder::~ByteEncoder() = default;
 
 /* HexEncoder */
 

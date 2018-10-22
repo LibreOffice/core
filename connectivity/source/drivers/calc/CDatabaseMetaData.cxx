@@ -50,9 +50,7 @@ OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon)    :OComponentD
 {
 }
 
-OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
-{
-}
+OCalcDatabaseMetaData::~OCalcDatabaseMetaData() = default;
 
 OUString SAL_CALL OCalcDatabaseMetaData::getURL(  )
 {

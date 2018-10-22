@@ -110,9 +110,7 @@ ConfigurationController::ConfigurationController() throw()
 {
 }
 
-ConfigurationController::~ConfigurationController() throw()
-{
-}
+ConfigurationController::~ConfigurationController() throw() = default;
 
 void SAL_CALL ConfigurationController::disposing()
 {

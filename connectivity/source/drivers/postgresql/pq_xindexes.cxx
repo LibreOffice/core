@@ -89,8 +89,7 @@ Indexes::Indexes(
 {
 }
 
-Indexes::~Indexes()
-{}
+Indexes::~Indexes() = default;
 
 void Indexes::refresh()
 {

@@ -69,9 +69,7 @@ E3dSphereObj::E3dSphereObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
-E3dSphereObj::~E3dSphereObj()
-{
-}
+E3dSphereObj::~E3dSphereObj() = default;
 
 void E3dSphereObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {

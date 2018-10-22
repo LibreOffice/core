@@ -138,8 +138,6 @@ PageData::Allocator::createInstance (rtl::Reference< PageData::Allocator > & rxA
 /*
  * ~OStorePageObject.
  */
-OStorePageObject::~OStorePageObject()
-{
-}
+OStorePageObject::~OStorePageObject() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

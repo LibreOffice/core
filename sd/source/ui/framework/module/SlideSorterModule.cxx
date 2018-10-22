@@ -101,9 +101,7 @@ SlideSorterModule::SlideSorterModule (
     }
 }
 
-SlideSorterModule::~SlideSorterModule()
-{
-}
+SlideSorterModule::~SlideSorterModule() = default;
 
 void SlideSorterModule::SaveResourceState()
 {

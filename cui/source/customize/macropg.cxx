@@ -848,9 +848,7 @@ AssignComponentDialog::AssignComponentDialog(weld::Window* pParent, const OUStri
     mxMethodEdit->select_region(0, -1);
 }
 
-AssignComponentDialog::~AssignComponentDialog()
-{
-}
+AssignComponentDialog::~AssignComponentDialog() = default;
 
 IMPL_LINK_NOARG( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
 {

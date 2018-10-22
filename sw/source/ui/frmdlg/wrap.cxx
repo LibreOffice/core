@@ -107,9 +107,7 @@ SwWrapTabPage::SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet)
     m_xWrapOutlineCB->connect_toggled(LINK(this, SwWrapTabPage, ContourHdl));
 }
 
-SwWrapTabPage::~SwWrapTabPage()
-{
-}
+SwWrapTabPage::~SwWrapTabPage() = default;
 
 VclPtr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {

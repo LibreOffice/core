@@ -29,13 +29,9 @@
 
 //  class VCLXRegion
 
-VCLXRegion::VCLXRegion()
-{
-}
+VCLXRegion::VCLXRegion() = default;
 
-VCLXRegion::~VCLXRegion()
-{
-}
+VCLXRegion::~VCLXRegion() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXRegion::queryInterface( const css::uno::Type & rType )

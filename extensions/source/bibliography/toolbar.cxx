@@ -54,9 +54,7 @@ BibToolBarListener::BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sa
 {
 }
 
-BibToolBarListener::~BibToolBarListener()
-{
-}
+BibToolBarListener::~BibToolBarListener() = default;
 
 void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)
 {
@@ -80,9 +78,7 @@ BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr
 {
 }
 
-BibTBListBoxListener::~BibTBListBoxListener()
-{
-}
+BibTBListBoxListener::~BibTBListBoxListener() = default;
 
 void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)
 {
@@ -118,9 +114,7 @@ BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB, const OUString& 
 {
 }
 
-BibTBQueryMenuListener::~BibTBQueryMenuListener()
-{
-}
+BibTBQueryMenuListener::~BibTBQueryMenuListener() = default;
 
 void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
@@ -154,9 +148,7 @@ BibTBEditListener::BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_
 {
 }
 
-BibTBEditListener::~BibTBEditListener()
-{
-}
+BibTBEditListener::~BibTBEditListener() = default;
 
 void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {

@@ -84,13 +84,9 @@ static void ImplTaskPaneListGrabFocus( vcl::Window *pWindow, bool bForward )
     pWindow->ImplGrabFocus( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
 }
 
-TaskPaneList::TaskPaneList()
-{
-}
+TaskPaneList::TaskPaneList() = default;
 
-TaskPaneList::~TaskPaneList()
-{
-}
+TaskPaneList::~TaskPaneList() = default;
 
 void TaskPaneList::AddWindow( vcl::Window *pWindow )
 {

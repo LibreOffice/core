@@ -29,9 +29,7 @@ SwSvxUnoDrawPool::SwSvxUnoDrawPool(SwDoc* pDoc)
 {
 }
 
-SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw()
-{
-}
+SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw() = default;
 
 SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
 {

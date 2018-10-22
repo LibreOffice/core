@@ -210,7 +210,7 @@ Dependencies::Dependencies(
     }
 }
 
-Dependencies::~Dependencies() {}
+Dependencies::~Dependencies() = default;
 
 void Dependencies::insert(OUString const & name, Kind kind) {
     sal_Int32 k;

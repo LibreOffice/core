@@ -64,8 +64,7 @@ ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
             "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" )
 {}
 
-ScDescriptiveStatisticsDialog::~ScDescriptiveStatisticsDialog()
-{}
+ScDescriptiveStatisticsDialog::~ScDescriptiveStatisticsDialog() = default;
 
 bool ScDescriptiveStatisticsDialog::Close()
 {

@@ -163,9 +163,7 @@ PageBreakModel::PageBreakModel()
 {
 }
 
-HyperlinkModel::HyperlinkModel()
-{
-}
+HyperlinkModel::HyperlinkModel() = default;
 
 ValidationModel::ValidationModel() :
     mnType( XML_none ),

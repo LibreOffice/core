@@ -68,9 +68,7 @@ namespace dbaccess
         m_pData->xAttributes = new SvXMLAttributeList;
     }
 
-    StorageXMLOutputStream::~StorageXMLOutputStream()
-    {
-    }
+    StorageXMLOutputStream::~StorageXMLOutputStream() = default;
 
     void StorageXMLOutputStream::close()
     {
@@ -143,9 +141,7 @@ namespace dbaccess
         m_xParser->parseStream( aInputSource );
     }
 
-    StorageXMLInputStream::~StorageXMLInputStream()
-    {
-    }
+    StorageXMLInputStream::~StorageXMLInputStream() = default;
 
 } // namespace dbaccess
 

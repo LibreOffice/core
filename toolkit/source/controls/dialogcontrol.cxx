@@ -307,19 +307,16 @@ UnoDialogControl::UnoDialogControl( const uno::Reference< uno::XComponentContext
     maComponentInfos.nHeight = 450;
  }
 
-UnoDialogControl::~UnoDialogControl()
-{
-}
+ UnoDialogControl::~UnoDialogControl() = default;
 
-OUString UnoDialogControl::GetComponentServiceName()
-{
-
-    bool bDecoration( true );
-    ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
-    if ( bDecoration )
-        return OUString("Dialog");
-    else
-        return OUString("TabPage");
+ OUString UnoDialogControl::GetComponentServiceName()
+ {
+     bool bDecoration(true);
+     ImplGetPropertyValue(GetPropertyName(BASEPROPERTY_DECORATION)) >>= bDecoration;
+     if (bDecoration)
+         return OUString("Dialog");
+     else
+         return OUString("TabPage");
 }
 
 void UnoDialogControl::dispose()
@@ -648,9 +645,7 @@ UnoMultiPageControl::UnoMultiPageControl( const uno::Reference< uno::XComponentC
     maComponentInfos.nHeight = 400;
 }
 
-UnoMultiPageControl::~UnoMultiPageControl()
-{
-}
+UnoMultiPageControl::~UnoMultiPageControl() = default;
 // XTabListener
 
 void SAL_CALL UnoMultiPageControl::inserted( SAL_UNUSED_PARAMETER ::sal_Int32 )
@@ -858,9 +853,7 @@ UnoMultiPageModel::UnoMultiPageModel( const Reference< XComponentContext >& rxCo
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
-UnoMultiPageModel::~UnoMultiPageModel()
-{
-}
+UnoMultiPageModel::~UnoMultiPageModel() = default;
 
 rtl::Reference<UnoControlModel> UnoMultiPageModel::Clone() const
 {
@@ -932,9 +925,7 @@ UnoPageControl::UnoPageControl( const uno::Reference< uno::XComponentContext >& 
     maComponentInfos.nHeight = 400;
 }
 
-UnoPageControl::~UnoPageControl()
-{
-}
+UnoPageControl::~UnoPageControl() = default;
 
 OUString UnoPageControl::GetComponentServiceName()
 {
@@ -970,9 +961,7 @@ UnoPageModel::UnoPageModel( const Reference< XComponentContext >& rxContext ) : 
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
-UnoPageModel::~UnoPageModel()
-{
-}
+UnoPageModel::~UnoPageModel() = default;
 
 rtl::Reference<UnoControlModel> UnoPageModel::Clone() const
 {
@@ -1031,9 +1020,7 @@ UnoFrameControl::UnoFrameControl( const uno::Reference< uno::XComponentContext >
     maComponentInfos.nHeight = 400;
 }
 
-UnoFrameControl::~UnoFrameControl()
-{
-}
+UnoFrameControl::~UnoFrameControl() = default;
 
 OUString UnoFrameControl::GetComponentServiceName()
 {
@@ -1123,9 +1110,7 @@ UnoFrameModel::UnoFrameModel(  const Reference< XComponentContext >& rxContext )
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
-UnoFrameModel::~UnoFrameModel()
-{
-}
+UnoFrameModel::~UnoFrameModel() = default;
 
 rtl::Reference<UnoControlModel> UnoFrameModel::Clone() const
 {

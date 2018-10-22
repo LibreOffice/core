@@ -130,9 +130,7 @@ XMLTextDropCapImportContext::XMLTextDropCapImportContext(
     ProcessAttrs( xAttrList );
 }
 
-XMLTextDropCapImportContext::~XMLTextDropCapImportContext()
-{
-}
+XMLTextDropCapImportContext::~XMLTextDropCapImportContext() = default;
 
 void XMLTextDropCapImportContext::EndElement()
 {

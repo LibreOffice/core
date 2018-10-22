@@ -124,9 +124,7 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
 
 } // namespace
 
-AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
-{
-}
+AxBinaryPropertyReader::ComplexProperty::~ComplexProperty() = default;
 
 bool AxBinaryPropertyReader::PairProperty::readProperty( AxAlignedInputStream& rInStrm )
 {

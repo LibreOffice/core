@@ -60,12 +60,7 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference
     createWindowPeer( mxWindowPeer );
 }
 
-
-UnoDialog::~UnoDialog()
-{
-
-}
-
+UnoDialog::~UnoDialog() = default;
 
 void UnoDialog::execute()
 {

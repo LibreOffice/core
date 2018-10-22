@@ -159,11 +159,7 @@ private:
     OUString impl_getFreeName_throw();
 };
 
-
-UnoControlHolderList::UnoControlHolderList()
-{
-}
-
+UnoControlHolderList::UnoControlHolderList() = default;
 
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName )
 {
@@ -393,9 +389,7 @@ UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XWindowPeer 
     mpControls.reset(new UnoControlHolderList);
 }
 
-UnoControlContainer::~UnoControlContainer()
-{
-}
+UnoControlContainer::~UnoControlContainer() = default;
 
 void UnoControlContainer::ImplActivateTabControllers()
 {

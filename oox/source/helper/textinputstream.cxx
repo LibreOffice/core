@@ -110,9 +110,7 @@ TextInputStream::TextInputStream( const Reference< XComponentContext >& rxContex
     init( rxContext, new UnoBinaryInputStream( rInStrm ), eTextEnc );
 }
 
-TextInputStream::~TextInputStream()
-{
-}
+TextInputStream::~TextInputStream() = default;
 
 bool TextInputStream::isEof() const
 {

@@ -465,9 +465,7 @@ XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpControlHelper::~XclExpControlHelper()
-{
-}
+XclExpControlHelper::~XclExpControlHelper() = default;
 
 void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape )
 {
@@ -1119,9 +1117,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     mxChart.reset( new XclExpChart( GetRoot(), xModel, aChartRect ) );
 }
 
-XclExpChartObj::~XclExpChartObj()
-{
-}
+XclExpChartObj::~XclExpChartObj() = default;
 
 void XclExpChartObj::Save( XclExpStream& rStrm )
 {
@@ -1361,9 +1357,7 @@ XclMacroHelper::XclMacroHelper( const XclExpRoot& rRoot ) :
 {
 }
 
-XclMacroHelper::~XclMacroHelper()
-{
-}
+XclMacroHelper::~XclMacroHelper() = default;
 
 void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
 {
@@ -1409,9 +1403,7 @@ XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference<
     }
 }
 
-XclExpShapeObj::~XclExpShapeObj()
-{
-}
+XclExpShapeObj::~XclExpShapeObj() = default;
 
 void XclExpShapeObj::WriteSubRecs( XclExpStream& rStrm )
 {
@@ -1504,9 +1496,7 @@ XclExpObjectManager::XclExpObjectManager( const XclExpObjectManager& rParent ) :
     mxEscherEx.reset( new XclEscherEx( GetRoot(), *this, *mxDffStrm, rParent.mxEscherEx.get() ) );
 }
 
-XclExpObjectManager::~XclExpObjectManager()
-{
-}
+XclExpObjectManager::~XclExpObjectManager() = default;
 
 XclExpDffAnchorBase* XclExpObjectManager::CreateDffAnchor() const
 {

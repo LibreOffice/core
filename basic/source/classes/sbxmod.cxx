@@ -589,10 +589,7 @@ void SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth 
     pMapperMethod->bInvalid = false;
 }
 
-SbIfaceMapperMethod::~SbIfaceMapperMethod()
-{
-}
-
+SbIfaceMapperMethod::~SbIfaceMapperMethod() = default;
 
 // From the code generator: remove invalid entries
 
@@ -1938,9 +1935,7 @@ SbMethod::SbMethod( const SbMethod& r )
     SetFlag( SbxFlagBits::NoModify );
 }
 
-SbMethod::~SbMethod()
-{
-}
+SbMethod::~SbMethod() = default;
 
 void SbMethod::ClearStatics()
 {
@@ -2106,9 +2101,7 @@ SbJScriptMethod::SbJScriptMethod( SbxDataType t )
 {
 }
 
-SbJScriptMethod::~SbJScriptMethod()
-{}
-
+SbJScriptMethod::~SbJScriptMethod() = default;
 
 SbObjModule::SbObjModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
     : SbModule( rName, bIsVbaCompatible )
@@ -2124,9 +2117,7 @@ SbObjModule::SbObjModule( const OUString& rName, const css::script::ModuleInfo& 
     }
 }
 
-SbObjModule::~SbObjModule()
-{
-}
+SbObjModule::~SbObjModule() = default;
 
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj )
@@ -2383,9 +2374,7 @@ SbUserFormModule::SbUserFormModule( const OUString& rName, const css::script::Mo
     m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
 }
 
-SbUserFormModule::~SbUserFormModule()
-{
-}
+SbUserFormModule::~SbUserFormModule() = default;
 
 void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
 {
@@ -2641,11 +2630,8 @@ SbProperty::SbProperty( const OUString& r, SbxDataType t, SbModule* p )
 {
 }
 
-SbProperty::~SbProperty()
-{}
+SbProperty::~SbProperty() = default;
 
-
-SbProcedureProperty::~SbProcedureProperty()
-{}
+SbProcedureProperty::~SbProcedureProperty() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

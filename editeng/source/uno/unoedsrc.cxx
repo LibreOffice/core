@@ -40,20 +40,11 @@ const SvxUnoTextRangeBaseVec& SvxEditSource::getRanges() const
     return gList;
 }
 
+SvxTextForwarder::~SvxTextForwarder() COVERITY_NOEXCEPT_FALSE = default;
 
-SvxTextForwarder::~SvxTextForwarder() COVERITY_NOEXCEPT_FALSE
-{
-}
+SvxViewForwarder::~SvxViewForwarder() = default;
 
-
-SvxViewForwarder::~SvxViewForwarder()
-{
-}
-
-
-SvxEditSource::~SvxEditSource()
-{
-}
+SvxEditSource::~SvxEditSource() = default;
 
 SvxViewForwarder* SvxEditSource::GetViewForwarder()
 {

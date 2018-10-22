@@ -197,9 +197,7 @@ ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAcc
 {
 }
 
-ScIndexEnumeration::~ScIndexEnumeration()
-{
-}
+ScIndexEnumeration::~ScIndexEnumeration() = default;
 
 // XEnumeration
 
@@ -251,9 +249,7 @@ ScNameToIndexAccess::ScNameToIndexAccess( const css::uno::Reference<
         aNames = xNameAccess->getElementNames();
 }
 
-ScNameToIndexAccess::~ScNameToIndexAccess()
-{
-}
+ScNameToIndexAccess::~ScNameToIndexAccess() = default;
 
 // XIndexAccess
 

@@ -52,11 +52,9 @@ using namespace css::lang;
 using namespace css::xml::wrapper;
 using namespace css::xml::crypto;
 
-XMLSignature_GpgImpl::XMLSignature_GpgImpl() {
-}
+XMLSignature_GpgImpl::XMLSignature_GpgImpl() = default;
 
-XMLSignature_GpgImpl::~XMLSignature_GpgImpl() {
-}
+XMLSignature_GpgImpl::~XMLSignature_GpgImpl() = default;
 
 /* XXMLSignature */
 Reference< XXMLSignatureTemplate >

@@ -235,11 +235,7 @@ OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lIte
 {
 }
 
-
-OAnyEnumeration::~OAnyEnumeration()
-{
-}
-
+OAnyEnumeration::~OAnyEnumeration() = default;
 
 sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
 {

@@ -39,9 +39,7 @@ SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo
 {
 }
 
- SwPageFootnoteInfoItem::~SwPageFootnoteInfoItem()
-{
-}
+SwPageFootnoteInfoItem::~SwPageFootnoteInfoItem() = default;
 
 SfxPoolItem*  SwPageFootnoteInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
@@ -221,9 +219,7 @@ SwUINumRuleItem::SwUINumRuleItem( const SwUINumRuleItem& rItem )
 {
 }
 
-SwUINumRuleItem::~SwUINumRuleItem()
-{
-}
+SwUINumRuleItem::~SwUINumRuleItem() = default;
 
 SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 {

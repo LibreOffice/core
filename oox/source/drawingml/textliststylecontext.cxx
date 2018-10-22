@@ -36,9 +36,7 @@ TextListStyleContext::TextListStyleContext( ContextHandler2Helper const & rParen
 {
 }
 
-TextListStyleContext::~TextListStyleContext()
-{
-}
+TextListStyleContext::~TextListStyleContext() = default;
 
 ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

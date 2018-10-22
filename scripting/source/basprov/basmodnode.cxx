@@ -49,11 +49,7 @@ namespace basprov
     {
     }
 
-
-    BasicModuleNodeImpl::~BasicModuleNodeImpl()
-    {
-    }
-
+    BasicModuleNodeImpl::~BasicModuleNodeImpl() = default;
 
     // XBrowseNode
 

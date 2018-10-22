@@ -88,9 +88,7 @@ ScCellSearchObj::ScCellSearchObj() :
     //  Selection-Flag will be set when this is called
 }
 
-ScCellSearchObj::~ScCellSearchObj()
-{
-}
+ScCellSearchObj::~ScCellSearchObj() = default;
 
 // XSearchDescriptor
 

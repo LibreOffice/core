@@ -41,9 +41,7 @@ XMLChangeImportContext::XMLChangeImportContext(
 {
 }
 
-XMLChangeImportContext::~XMLChangeImportContext()
-{
-}
+XMLChangeImportContext::~XMLChangeImportContext() = default;
 
 void XMLChangeImportContext::StartElement(
     const Reference<XAttributeList>& xAttrList)

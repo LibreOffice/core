@@ -69,10 +69,7 @@ SkipData::SkipData(hchar hch)
 {
 }
 
-SkipData::~SkipData()
-{
-}
-
+SkipData::~SkipData() = default;
 
 // FieldCode [5]
 FieldCode::FieldCode()
@@ -81,9 +78,7 @@ FieldCode::FieldCode()
 {
 }
 
-FieldCode::~FieldCode()
-{
-}
+FieldCode::~FieldCode() = default;
 
 // book mark(6)
 Bookmark::Bookmark()
@@ -93,9 +88,7 @@ Bookmark::Bookmark()
 {
 }
 
-Bookmark::~Bookmark()
-{
-}
+Bookmark::~Bookmark() = default;
 
 // date format(7)
 DateFormat::DateFormat()
@@ -311,9 +304,7 @@ FBox::FBox(hchar hch)
 {
 }
 
-FBox::~FBox()
-{
-}
+FBox::~FBox() = default;
 
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
 TxtBox::TxtBox()
@@ -336,9 +327,7 @@ TxtBox::TxtBox()
     reserved[0] = reserved[1] = 0;
 }
 
-TxtBox::~TxtBox()
-{
-}
+TxtBox::~TxtBox() = default;
 
 // picture(11)
 
@@ -366,22 +355,13 @@ Picture::~Picture()
 
 // line(14)
 // hidden(15)
-Hidden::~Hidden()
-{
-}
-
+Hidden::~Hidden() = default;
 
 // header/footer(16)
-HeaderFooter::~HeaderFooter()
-{
-}
-
+HeaderFooter::~HeaderFooter() = default;
 
 // footnote(17)
-Footnote::~Footnote()
-{
-}
-
+Footnote::~Footnote() = default;
 
 // auto number(18)
 // new number(19)

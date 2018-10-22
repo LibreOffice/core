@@ -122,7 +122,7 @@ bool Proxy::isProxy(
         static_cast< Proxy * >(object.m_pUnoI)->isProxy(bridge, oid);
 }
 
-Proxy::~Proxy() {}
+Proxy::~Proxy() = default;
 
 void Proxy::do_dispatch_throw(
     typelib_TypeDescription const * member, void * returnValue,

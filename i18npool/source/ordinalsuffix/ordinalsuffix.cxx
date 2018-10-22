@@ -34,15 +34,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 namespace i18npool {
+OrdinalSuffixService::OrdinalSuffixService() = default;
 
-
-OrdinalSuffixService::OrdinalSuffixService()
-{
-}
-
-OrdinalSuffixService::~OrdinalSuffixService()
-{
-}
+OrdinalSuffixService::~OrdinalSuffixService() = default;
 
 namespace
 {

@@ -38,11 +38,7 @@ namespace sfx2
     {
     }
 
-
-    DocumentStorageModifyListener::~DocumentStorageModifyListener()
-    {
-    }
-
+    DocumentStorageModifyListener::~DocumentStorageModifyListener() = default;
 
     void DocumentStorageModifyListener::dispose()
     {

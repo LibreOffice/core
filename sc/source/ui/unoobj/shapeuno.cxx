@@ -129,11 +129,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
     osl_atomic_decrement( &m_refCount );
 }
 
-ScShapeObj::~ScShapeObj()
-{
-//  if (mxShapeAgg.is())
-//      mxShapeAgg->setDelegator(uno::Reference<uno::XInterface>());
-}
+ScShapeObj::~ScShapeObj() = default;
 
 // XInterface
 

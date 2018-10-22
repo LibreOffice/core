@@ -42,9 +42,7 @@ SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler > const & rS
 {
 }
 
-SaxNamespaceFilter::~SaxNamespaceFilter()
-{
-}
+SaxNamespaceFilter::~SaxNamespaceFilter() = default;
 
 // XDocumentHandler
 void SAL_CALL SaxNamespaceFilter::startDocument()

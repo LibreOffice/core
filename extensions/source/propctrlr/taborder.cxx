@@ -295,10 +295,7 @@ namespace pcr
 
     VCL_BUILDER_FACTORY_CONSTRUCTOR(TabOrderListBox, WB_TABSTOP)
 
-    TabOrderListBox::~TabOrderListBox()
-    {
-    }
-
+    TabOrderListBox::~TabOrderListBox() = default;
 
     void TabOrderListBox::ModelHasMoved( SvTreeListEntry* _pSource )
     {

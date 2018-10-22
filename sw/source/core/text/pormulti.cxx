@@ -56,9 +56,7 @@ using namespace ::com::sun::star;
 // it's a container, which contains almost a SwLineLayoutPortion.
 // This SwLineLayout could be followed by other textportions via pPortion
 // and by another SwLineLayout via pNext to realize a doubleline portion.
-SwMultiPortion::~SwMultiPortion()
-{
-}
+SwMultiPortion::~SwMultiPortion() = default;
 
 void SwMultiPortion::Paint( const SwTextPaintInfo & ) const
 {
@@ -534,9 +532,7 @@ void SwDoubleLinePortion::ResetSpaceAdd( SwLineLayout* pCurr )
         pCurr->FinishSpaceAdd();
 }
 
-SwDoubleLinePortion::~SwDoubleLinePortion()
-{
-}
+SwDoubleLinePortion::~SwDoubleLinePortion() = default;
 
 // constructs a ruby portion, i.e. an additional text is displayed
 // beside the main text, e.g. phonetic characters.

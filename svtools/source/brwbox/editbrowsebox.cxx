@@ -56,10 +56,7 @@ namespace svt
     using namespace ::com::sun::star::uno;
     using namespace com::sun::star::accessibility::AccessibleEventId;
 
-
-    IEditImplementation::~IEditImplementation()
-    {
-    }
+    IEditImplementation::~IEditImplementation() = default;
 
     //= EditBrowserHeader
 
@@ -1265,12 +1262,7 @@ return;
         DBG_ASSERT(!pWindow->IsVisible(), "CellController::CellController: window should not be visible!");
     }
 
-
-    CellController::~CellController()
-    {
-
-    }
-
+    CellController::~CellController() = default;
 
     void CellController::suspend( )
     {

@@ -33,8 +33,7 @@ DisplayConnectionDispatch::DisplayConnectionDispatch()
     m_ConnectionIdentifier = ImplGetSVData()->mpDefInst->GetConnectionIdentifier();
 }
 
-DisplayConnectionDispatch::~DisplayConnectionDispatch()
-{}
+DisplayConnectionDispatch::~DisplayConnectionDispatch() = default;
 
 void DisplayConnectionDispatch::start()
 {

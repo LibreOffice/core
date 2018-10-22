@@ -303,9 +303,7 @@ FilterConfigCache::FilterConfigCache( bool bConfig )
         ImplInitSmart();
 }
 
-FilterConfigCache::~FilterConfigCache()
-{
-}
+FilterConfigCache::~FilterConfigCache() = default;
 
 OUString FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
 {

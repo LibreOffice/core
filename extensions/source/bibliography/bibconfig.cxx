@@ -294,13 +294,9 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
     SetModified();
 }
 
-DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl()
-{
-}
+DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl() = default;
 
-DBChangeDialogConfig_Impl::~DBChangeDialogConfig_Impl()
-{
-}
+DBChangeDialogConfig_Impl::~DBChangeDialogConfig_Impl() = default;
 
 const Sequence<OUString>& DBChangeDialogConfig_Impl::GetDataSourceNames()
 {

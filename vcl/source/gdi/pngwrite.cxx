@@ -690,9 +690,7 @@ PNGWriter::PNGWriter(const BitmapEx& rBmpEx,
 {
 }
 
-PNGWriter::~PNGWriter()
-{
-}
+PNGWriter::~PNGWriter() = default;
 
 bool PNGWriter::Write(SvStream& rStream)
 {

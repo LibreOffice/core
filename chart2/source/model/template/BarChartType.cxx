@@ -27,17 +27,11 @@ using namespace ::com::sun::star;
 
 namespace chart
 {
+BarChartType::BarChartType() = default;
 
-BarChartType::BarChartType()
-{}
+BarChartType::BarChartType(const BarChartType&) = default;
 
-BarChartType::BarChartType( const BarChartType & rOther ) :
-        ChartType( rOther )
-{
-}
-
-BarChartType::~BarChartType()
-{}
+BarChartType::~BarChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()

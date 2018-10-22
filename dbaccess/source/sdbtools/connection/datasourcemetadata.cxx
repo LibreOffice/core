@@ -36,9 +36,7 @@ namespace sdbtools
         setWeakConnection( _rxConnection );
     }
 
-    DataSourceMetaData::~DataSourceMetaData()
-    {
-    }
+    DataSourceMetaData::~DataSourceMetaData() = default;
 
     sal_Bool SAL_CALL DataSourceMetaData::supportsQueriesInFrom(  )
     {

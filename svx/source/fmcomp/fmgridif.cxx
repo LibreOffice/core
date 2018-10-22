@@ -343,11 +343,7 @@ FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
 {
 }
 
-
-FmXGridControl::~FmXGridControl()
-{
-}
-
+FmXGridControl::~FmXGridControl() = default;
 
 Any SAL_CALL FmXGridControl::queryAggregation(const Type& _rType)
 {
@@ -988,10 +984,7 @@ FmXGridPeer::GridListenerDelegator::GridListenerDelegator(FmXGridPeer* _pPeer)
     DBG_ASSERT(m_pPeer, "GridListenerDelegator::GridListenerDelegator");
 }
 
-FmXGridPeer::GridListenerDelegator::~GridListenerDelegator()
-{
-}
-
+FmXGridPeer::GridListenerDelegator::~GridListenerDelegator() = default;
 
 void FmXGridPeer::GridListenerDelegator::selectionChanged()
 {

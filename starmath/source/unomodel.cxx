@@ -309,9 +309,7 @@ SmModel::SmModel( SfxObjectShell *pObjSh )
 {
 }
 
-SmModel::~SmModel() throw ()
-{
-}
+SmModel::~SmModel() throw() = default;
 
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
 {

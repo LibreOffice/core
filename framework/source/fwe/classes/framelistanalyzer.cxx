@@ -46,9 +46,7 @@ FrameListAnalyzer::FrameListAnalyzer( const css::uno::Reference< css::frame::XFr
     impl_analyze();
 }
 
-FrameListAnalyzer::~FrameListAnalyzer()
-{
-}
+FrameListAnalyzer::~FrameListAnalyzer() = default;
 
 /** returns an analyzed list of all currently opened (top!) frames inside the desktop tree.
 

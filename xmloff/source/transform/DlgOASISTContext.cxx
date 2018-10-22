@@ -37,9 +37,7 @@ XMLDlgOASISTransformerContext::XMLDlgOASISTransformerContext(
 {
 }
 
-XMLDlgOASISTransformerContext::~XMLDlgOASISTransformerContext()
-{
-}
+XMLDlgOASISTransformerContext::~XMLDlgOASISTransformerContext() = default;
 
 void XMLDlgOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )

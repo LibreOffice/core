@@ -971,9 +971,7 @@ SchXMLExportHelper::SchXMLExportHelper( SvXMLExport& rExport, SvXMLAutoStylePool
 {
 }
 
-SchXMLExportHelper::~SchXMLExportHelper()
-{
-}
+SchXMLExportHelper::~SchXMLExportHelper() = default;
 
 const OUString& SchXMLExportHelper::getChartCLSID()
 {
@@ -3507,9 +3505,7 @@ SchXMLExport::SchXMLExport(const Reference<uno::XComponentContext>& xContext,
         GetNamespaceMap_().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 }
 
-SchXMLExport::~SchXMLExport()
-{
-}
+SchXMLExport::~SchXMLExport() = default;
 
 ErrCode SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {

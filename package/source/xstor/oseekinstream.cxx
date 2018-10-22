@@ -47,9 +47,7 @@ OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & 
     OSL_ENSURE( m_xSeekable.is(), "No seeking support!" );
 }
 
-OInputSeekStream::~OInputSeekStream()
-{
-}
+OInputSeekStream::~OInputSeekStream() = default;
 
 uno::Sequence< uno::Type > SAL_CALL OInputSeekStream::getTypes()
 {

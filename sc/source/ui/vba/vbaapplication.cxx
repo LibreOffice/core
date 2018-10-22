@@ -170,9 +170,7 @@ ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext 
 {
 }
 
-ScVbaApplication::~ScVbaApplication()
-{
-}
+ScVbaApplication::~ScVbaApplication() = default;
 
 /*static*/ bool ScVbaApplication::getDocumentEventsEnabled()
 {

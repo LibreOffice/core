@@ -54,9 +54,7 @@ TextConverter::TextConverter( const ConverterRoot& rParent, TextModel& rModel ) 
 {
 }
 
-TextConverter::~TextConverter()
-{
-}
+TextConverter::~TextConverter() = default;
 
 Reference< XDataSequence > TextConverter::createDataSequence( const OUString& rRole )
 {
@@ -137,9 +135,7 @@ TitleConverter::TitleConverter( const ConverterRoot& rParent, TitleModel& rModel
 {
 }
 
-TitleConverter::~TitleConverter()
-{
-}
+TitleConverter::~TitleConverter() = default;
 
 void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const OUString& rAutoTitle, ObjectType eObjType, sal_Int32 nMainIdx, sal_Int32 nSubIdx )
 {
@@ -179,9 +175,7 @@ LegendConverter::LegendConverter( const ConverterRoot& rParent, LegendModel& rMo
 {
 }
 
-LegendConverter::~LegendConverter()
-{
-}
+LegendConverter::~LegendConverter() = default;
 
 void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 {

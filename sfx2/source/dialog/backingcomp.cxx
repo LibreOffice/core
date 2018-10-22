@@ -146,9 +146,7 @@ public:
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
 };
 
-BackingComp::BackingComp()
-{
-}
+BackingComp::BackingComp() = default;
 
 /** return information about supported interfaces.
 

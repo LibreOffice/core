@@ -125,11 +125,7 @@ AttributeListImpl::AttributeListImpl()
 {
 }
 
-
-AttributeListImpl::~AttributeListImpl()
-{
-}
-
+AttributeListImpl::~AttributeListImpl() = default;
 
 void AttributeListImpl::addAttribute(   const OUString &sName ,
 const OUString &sType ,

@@ -750,9 +750,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     return true;
 }
 
-PrinterController::~PrinterController()
-{
-}
+PrinterController::~PrinterController() = default;
 
 css::view::PrintableState PrinterController::getJobState() const
 {

@@ -99,9 +99,7 @@ namespace vcl
         return true;
     }
 
-    MnemonicEngine::~MnemonicEngine()
-    {
-    }
+    MnemonicEngine::~MnemonicEngine() = default;
 
 } // namespace vcl
 

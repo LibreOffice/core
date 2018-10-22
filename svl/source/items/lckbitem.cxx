@@ -27,11 +27,7 @@
 
 SfxPoolItem* SfxLockBytesItem::CreateDefault() { return new SfxLockBytesItem; }
 
-
-SfxLockBytesItem::SfxLockBytesItem()
-{
-}
-
+SfxLockBytesItem::SfxLockBytesItem() = default;
 
 SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
@@ -43,11 +39,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
     rStream.ReadStream( aLockBytesStream );
 }
 
-
-SfxLockBytesItem::~SfxLockBytesItem()
-{
-}
-
+SfxLockBytesItem::~SfxLockBytesItem() = default;
 
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 {

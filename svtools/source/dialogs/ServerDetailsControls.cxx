@@ -46,9 +46,7 @@ IMPL_LINK(DetailsContainer, FormatPortHdl, weld::SpinButton&, rSpinButton, void)
     rSpinButton.set_text(OUString::number(rSpinButton.get_value()));
 }
 
-DetailsContainer::~DetailsContainer( )
-{
-}
+DetailsContainer::~DetailsContainer() = default;
 
 void DetailsContainer::show( bool )
 {

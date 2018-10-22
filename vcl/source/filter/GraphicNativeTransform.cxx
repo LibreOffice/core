@@ -31,8 +31,7 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
     mrGraphic(rGraphic)
 {}
 
-GraphicNativeTransform::~GraphicNativeTransform()
-{}
+GraphicNativeTransform::~GraphicNativeTransform() = default;
 
 void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
 {

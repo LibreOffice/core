@@ -160,8 +160,7 @@ LineChartTypeTemplate::LineChartTypeTemplate(
         m_bHasSymbols = false;
 }
 
-LineChartTypeTemplate::~LineChartTypeTemplate()
-{}
+LineChartTypeTemplate::~LineChartTypeTemplate() = default;
 // ____ OPropertySet ____
 uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 {

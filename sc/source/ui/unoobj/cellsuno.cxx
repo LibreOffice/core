@@ -893,9 +893,7 @@ SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.Tabl
 
 //! move ScLinkListener into another file !!!
 
-ScLinkListener::~ScLinkListener()
-{
-}
+ScLinkListener::~ScLinkListener() = default;
 
 void ScLinkListener::Notify( const SfxHint& rHint )
 {
@@ -4106,9 +4104,7 @@ ScCellRangesObj::ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR)
 {
 }
 
-ScCellRangesObj::~ScCellRangesObj()
-{
-}
+ScCellRangesObj::~ScCellRangesObj() = default;
 
 void ScCellRangesObj::RefChanged()
 {
@@ -4694,9 +4690,7 @@ ScCellRangeObj::ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR) :
     aRange.PutInOrder();       // beginning / end correct
 }
 
-ScCellRangeObj::~ScCellRangeObj()
-{
-}
+ScCellRangeObj::~ScCellRangeObj() = default;
 
 void ScCellRangeObj::RefChanged()
 {
@@ -5946,9 +5940,7 @@ SvxUnoText& ScCellObj::GetUnoText()
     return *mxUnoText;
 }
 
-ScCellObj::~ScCellObj()
-{
-}
+ScCellObj::~ScCellObj() = default;
 
 void ScCellObj::RefChanged()
 {
@@ -6709,9 +6701,7 @@ ScTableSheetObj::ScTableSheetObj( ScDocShell* pDocSh, SCTAB nTab ) :
 {
 }
 
-ScTableSheetObj::~ScTableSheetObj()
-{
-}
+ScTableSheetObj::~ScTableSheetObj() = default;
 
 void ScTableSheetObj::InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab)
 {
@@ -8498,9 +8488,7 @@ ScTableColumnObj::ScTableColumnObj( ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab )
 {
 }
 
-ScTableColumnObj::~ScTableColumnObj()
-{
-}
+ScTableColumnObj::~ScTableColumnObj() = default;
 
 uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType )
 {
@@ -8694,9 +8682,7 @@ ScTableRowObj::ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab) :
 {
 }
 
-ScTableRowObj::~ScTableRowObj()
-{
-}
+ScTableRowObj::~ScTableRowObj() = default;
 
 // XPropertySet extended for Row-Properties
 

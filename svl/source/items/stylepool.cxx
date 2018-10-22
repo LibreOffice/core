@@ -452,7 +452,6 @@ std::unique_ptr<IStylePoolIteratorAccess> StylePool::createIterator( const bool 
     return pImpl->createIterator( bSkipUnusedItemSets, bSkipIgnorableItems );
 }
 
-StylePool::~StylePool()
-{}
+StylePool::~StylePool() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

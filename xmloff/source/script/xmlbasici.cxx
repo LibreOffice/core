@@ -40,9 +40,7 @@ XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 n
     m_xHandler->setTargetDocument( xComp );
 }
 
-XMLBasicImportContext::~XMLBasicImportContext()
-{
-}
+XMLBasicImportContext::~XMLBasicImportContext() = default;
 
 SvXMLImportContextRef XMLBasicImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -111,9 +109,7 @@ XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sa
 {
 }
 
-XMLBasicImportChildContext::~XMLBasicImportChildContext()
-{
-}
+XMLBasicImportChildContext::~XMLBasicImportChildContext() = default;
 
 SvXMLImportContextRef XMLBasicImportChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,

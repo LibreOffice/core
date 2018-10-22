@@ -198,13 +198,9 @@ namespace xmloff
     }
 
     //= OAttribute2Property
-    OAttribute2Property::OAttribute2Property()
-    {
-    }
+    OAttribute2Property::OAttribute2Property() = default;
 
-    OAttribute2Property::~OAttribute2Property()
-    {
-    }
+    OAttribute2Property::~OAttribute2Property() = default;
 
     const OAttribute2Property::AttributeAssignment* OAttribute2Property::getAttributeTranslation(
             const OUString& _rAttribName)

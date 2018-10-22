@@ -5463,9 +5463,7 @@ HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
 {
 }
 
-HTMLAttr::~HTMLAttr()
-{
-}
+HTMLAttr::~HTMLAttr() = default;
 
 HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
 {

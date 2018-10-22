@@ -75,13 +75,9 @@ public:
     Size    maPreviewSize;
 };
 
-GraphicReader::GraphicReader()
-{
-}
+GraphicReader::GraphicReader() = default;
 
-GraphicReader::~GraphicReader()
-{
-}
+GraphicReader::~GraphicReader() = default;
 
 void GraphicReader::DisablePreviewMode()
 {

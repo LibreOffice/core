@@ -31,9 +31,7 @@ namespace dbaccess
     {
     }
 
-    Veto::~Veto()
-    {
-    }
+    Veto::~Veto() = default;
 
     OUString SAL_CALL Veto::getReason()
     {

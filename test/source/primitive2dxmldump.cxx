@@ -54,9 +54,7 @@ Primitive2dXmlDump::Primitive2dXmlDump() :
     maFilter(constMaxActionType, false)
 {}
 
-Primitive2dXmlDump::~Primitive2dXmlDump()
-{}
-
+Primitive2dXmlDump::~Primitive2dXmlDump() = default;
 
 xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,

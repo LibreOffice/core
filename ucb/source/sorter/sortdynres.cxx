@@ -410,11 +410,7 @@ SortedDynamicResultSetFactory::SortedDynamicResultSetFactory(
     m_xContext = rxContext;
 }
 
-
-SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory()
-{
-}
-
+SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory() = default;
 
 // XServiceInfo methods.
 
@@ -504,10 +500,7 @@ SortedDynamicResultSetListener::SortedDynamicResultSetListener(
     mpOwner = mOwner;
 }
 
-
-SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
-{
-}
+SortedDynamicResultSetListener::~SortedDynamicResultSetListener() = default;
 
 // XEventListener ( base of XDynamicResultSetListener )
 

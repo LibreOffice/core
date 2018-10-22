@@ -49,10 +49,7 @@ java_sql_CallableStatement::java_sql_CallableStatement( JNIEnv * pEnv, java_sql_
 {
 }
 
-java_sql_CallableStatement::~java_sql_CallableStatement()
-{
-}
-
+java_sql_CallableStatement::~java_sql_CallableStatement() = default;
 
 Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType )
 {

@@ -39,11 +39,7 @@ ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno
                         FilterCache::E_CONTENTHANDLER                         );
 }
 
-
-ContentHandlerFactory::~ContentHandlerFactory()
-{
-}
-
+ContentHandlerFactory::~ContentHandlerFactory() = default;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const OUString& sHandler)
 {

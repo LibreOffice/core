@@ -40,11 +40,9 @@ struct SvXMLTagAttribute_Impl
     {
     }
 
-    SvXMLTagAttribute_Impl( const SvXMLTagAttribute_Impl& r ) :
-        sName(r.sName),
-        sValue(r.sValue)
-    {
-    }
+    SvXMLTagAttribute_Impl(const SvXMLTagAttribute_Impl& r)
+
+        = default;
 
     OUString sName;
     OUString sValue;
@@ -136,11 +134,7 @@ SvXMLAttributeList::SvXMLAttributeList()
 {
 }
 
-
-SvXMLAttributeList::~SvXMLAttributeList()
-{
-}
-
+SvXMLAttributeList::~SvXMLAttributeList() = default;
 
 void SvXMLAttributeList::AddAttribute(  const OUString &sName ,
                                         const OUString &sValue )

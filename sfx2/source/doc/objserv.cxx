@@ -178,7 +178,7 @@ class SfxInstanceCloseGuard_Impl
     uno::Reference< util::XCloseable > m_xCloseable;
 
 public:
-    SfxInstanceCloseGuard_Impl() {}
+    SfxInstanceCloseGuard_Impl() = default;
 
     ~SfxInstanceCloseGuard_Impl();
 

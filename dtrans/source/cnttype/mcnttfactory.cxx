@@ -38,9 +38,7 @@ namespace
     }
 }
 
-CMimeContentTypeFactory::CMimeContentTypeFactory()
-{
-}
+CMimeContentTypeFactory::CMimeContentTypeFactory() = default;
 
 Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( const OUString& aContentType )
 {

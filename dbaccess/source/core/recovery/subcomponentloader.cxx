@@ -73,9 +73,7 @@ namespace dbaccess
         osl_atomic_decrement( &m_refCount );
     }
 
-    SubComponentLoader::~SubComponentLoader()
-    {
-    }
+    SubComponentLoader::~SubComponentLoader() = default;
 
     void SAL_CALL SubComponentLoader::windowResized( const WindowEvent&  )
     {

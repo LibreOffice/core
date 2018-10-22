@@ -55,9 +55,7 @@ ShapeContainer::ShapeContainer( Drawing& rDrawing ) :
 {
 }
 
-ShapeContainer::~ShapeContainer()
-{
-}
+ShapeContainer::~ShapeContainer() = default;
 
 std::shared_ptr<ShapeType> ShapeContainer::createShapeType()
 {

@@ -445,7 +445,7 @@ public:
     const ContentEnumeration& operator=(const ContentEnumeration&) = delete;
 
 private:
-    virtual ~ContentEnumeration() override {}
+    virtual ~ContentEnumeration() override = default;
 
     virtual sal_Bool SAL_CALL hasMoreElements() override;
 
@@ -496,7 +496,7 @@ public:
     const SingletonFactory& operator=(const SingletonFactory&) = delete;
 
 private:
-    virtual ~SingletonFactory() override {}
+    virtual ~SingletonFactory() override = default;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
@@ -548,7 +548,7 @@ public:
     const ImplementationWrapper& operator=(const ImplementationWrapper&) = delete;
 
 private:
-    virtual ~ImplementationWrapper() override {}
+    virtual ~ImplementationWrapper() override = default;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
@@ -1288,7 +1288,7 @@ sal_Bool cppuhelper::ServiceManager::hasPropertyByName(
     return Name == "DefaultContext";
 }
 
-cppuhelper::ServiceManager::~ServiceManager() {}
+cppuhelper::ServiceManager::~ServiceManager() = default;
 
 void cppuhelper::ServiceManager::disposing(
     css::lang::EventObject const & Source)

@@ -29,10 +29,7 @@ using namespace ::xmloff::token;
 
 // class XMLOpaquePropHdl
 
-XMLOpaquePropHdl::~XMLOpaquePropHdl()
-{
-    // nothing to do
-}
+XMLOpaquePropHdl::~XMLOpaquePropHdl() = default;
 
 bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {

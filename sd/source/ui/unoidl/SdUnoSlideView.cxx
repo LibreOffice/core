@@ -44,9 +44,7 @@ SdUnoSlideView::SdUnoSlideView (
 {
 }
 
-SdUnoSlideView::~SdUnoSlideView() throw()
-{
-}
+SdUnoSlideView::~SdUnoSlideView() throw() = default;
 
 //----- XSelectionSupplier ----------------------------------------------------
 

@@ -190,9 +190,7 @@ Legend::Legend( const Legend & rOther ) :
 {
 }
 
-Legend::~Legend()
-{
-}
+Legend::~Legend() = default;
 
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Legend::createClone()

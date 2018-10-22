@@ -26,8 +26,7 @@ using namespace connectivity;
 
 jclass java_lang_Throwable::theClass = nullptr;
 
-java_lang_Throwable::~java_lang_Throwable()
-{}
+java_lang_Throwable::~java_lang_Throwable() = default;
 
 jclass java_lang_Throwable::getMyClass() const
 {

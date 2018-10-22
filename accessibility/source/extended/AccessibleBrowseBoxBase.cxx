@@ -547,11 +547,7 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Referenc
 {
 }
 
-
-BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
-{
-}
-
+BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement() = default;
 
 } // namespace accessibility
 

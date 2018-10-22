@@ -45,9 +45,7 @@ java_sql_SQLException_BASE::java_sql_SQLException_BASE( JNIEnv * pEnv, jobject m
 
 jclass java_sql_SQLException_BASE::theClass = nullptr;
 
-java_sql_SQLException_BASE::~java_sql_SQLException_BASE()
-{}
-
+java_sql_SQLException_BASE::~java_sql_SQLException_BASE() = default;
 
 jclass java_sql_SQLException_BASE::getMyClass() const
 {

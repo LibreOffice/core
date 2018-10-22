@@ -46,7 +46,7 @@ namespace {
     class Command
     {
     public:
-        virtual ~Command() {}
+        virtual ~Command() = default;
         virtual void Execute() = 0;
         virtual bool IsEnabled() const { return true; }
         virtual Any GetState() const { return Any(false); }
@@ -251,9 +251,7 @@ PresenterProtocolHandler::PresenterProtocolHandler ()
 {
 }
 
-PresenterProtocolHandler::~PresenterProtocolHandler()
-{
-}
+PresenterProtocolHandler::~PresenterProtocolHandler() = default;
 
 void SAL_CALL PresenterProtocolHandler::disposing()
 {
@@ -401,9 +399,7 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
     return nullptr;
 }
 
-PresenterProtocolHandler::Dispatch::~Dispatch()
-{
-}
+PresenterProtocolHandler::Dispatch::~Dispatch() = default;
 
 void PresenterProtocolHandler::Dispatch::disposing()
 {

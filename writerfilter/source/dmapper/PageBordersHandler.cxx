@@ -31,9 +31,7 @@ PgBorder::PgBorder( ) :
 {
 }
 
-PgBorder::~PgBorder( )
-{
-}
+PgBorder::~PgBorder() = default;
 
 PageBordersHandler::PageBordersHandler( ) :
 LoggedProperties("PageBordersHandler"),
@@ -42,9 +40,7 @@ m_eOffsetFrom(SectionPropertyMap::BorderOffsetFrom::Text)
 {
 }
 
-PageBordersHandler::~PageBordersHandler( )
-{
-}
+PageBordersHandler::~PageBordersHandler() = default;
 
 void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
 {

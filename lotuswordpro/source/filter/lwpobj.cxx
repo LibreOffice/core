@@ -70,9 +70,7 @@ LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)
 /**
  * @descr   dtor()
 */
-LwpObject::~LwpObject()
-{
-}
+LwpObject::~LwpObject() = default;
 /**
  * @descr  QuickRead template
  */

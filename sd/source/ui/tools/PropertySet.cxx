@@ -31,9 +31,7 @@ PropertySet::PropertySet()
 {
 }
 
-PropertySet::~PropertySet()
-{
-}
+PropertySet::~PropertySet() = default;
 
 void SAL_CALL PropertySet::disposing()
 {

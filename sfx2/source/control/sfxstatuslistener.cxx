@@ -58,9 +58,7 @@ SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDis
         m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, OUString(), 0 );
 }
 
-SfxStatusListener::~SfxStatusListener()
-{
-}
+SfxStatusListener::~SfxStatusListener() = default;
 
 // old sfx controller item C++ API
 void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* )

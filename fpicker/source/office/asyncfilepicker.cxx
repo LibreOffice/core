@@ -38,11 +38,7 @@ namespace svt
         assert( m_pView && "AsyncPickerAction::AsyncPickerAction: invalid view!" );
     }
 
-
-    AsyncPickerAction::~AsyncPickerAction()
-    {
-    }
-
+    AsyncPickerAction::~AsyncPickerAction() = default;
 
     void AsyncPickerAction::cancel()
     {

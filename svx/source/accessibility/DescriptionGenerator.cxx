@@ -58,11 +58,7 @@ DescriptionGenerator::DescriptionGenerator (
 {
 }
 
-
-DescriptionGenerator::~DescriptionGenerator()
-{
-}
-
+DescriptionGenerator::~DescriptionGenerator() = default;
 
 void DescriptionGenerator::Initialize(const char* pResourceId)
 {

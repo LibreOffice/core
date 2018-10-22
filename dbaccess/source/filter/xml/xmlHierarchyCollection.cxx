@@ -105,10 +105,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
 {
 }
 
-OXMLHierarchyCollection::~OXMLHierarchyCollection()
-{
-
-}
+OXMLHierarchyCollection::~OXMLHierarchyCollection() = default;
 
 SvXMLImportContextRef OXMLHierarchyCollection::CreateChildContext(
         sal_uInt16 nPrefix,

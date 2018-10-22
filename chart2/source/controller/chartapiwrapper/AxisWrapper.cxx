@@ -372,9 +372,7 @@ AxisWrapper::AxisWrapper(
 {
 }
 
-AxisWrapper::~AxisWrapper()
-{
-}
+AxisWrapper::~AxisWrapper() = default;
 
 // ____ chart::XAxis ____
 Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getAxisTitle()

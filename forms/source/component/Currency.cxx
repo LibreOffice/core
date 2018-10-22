@@ -122,10 +122,7 @@ OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Referenc
     implConstruct();
 }
 
-
-OCurrencyModel::~OCurrencyModel()
-{
-}
+OCurrencyModel::~OCurrencyModel() = default;
 
 // XCloneable
 

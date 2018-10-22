@@ -92,8 +92,7 @@ ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
         m_nDefaultColor( 0x0099ccff )  // blue 8
 {}
 
-ColorPropertySet::~ColorPropertySet()
-{}
+ColorPropertySet::~ColorPropertySet() = default;
 
 // ____ XPropertySet ____
 

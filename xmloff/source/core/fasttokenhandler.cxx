@@ -53,9 +53,7 @@ TokenMap::TokenMap() :
     }
 }
 
-TokenMap::~TokenMap()
-{
-}
+TokenMap::~TokenMap() = default;
 
 sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
 {
@@ -68,9 +66,7 @@ FastTokenHandler::FastTokenHandler() :
 {
 }
 
-FastTokenHandler::~FastTokenHandler()
-{
-}
+FastTokenHandler::~FastTokenHandler() = default;
 
 // XFastTokenHandler
 uno::Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken )

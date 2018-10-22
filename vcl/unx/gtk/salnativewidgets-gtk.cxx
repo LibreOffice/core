@@ -72,9 +72,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow,
     Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ), nXScreen );
 }
 
-GtkSalGraphics::~GtkSalGraphics()
-{
-}
+GtkSalGraphics::~GtkSalGraphics() = default;
 
 /*************************************
  * Cached native widget objects

@@ -27,11 +27,7 @@ using namespace connectivity::file;
 
 // OIndexIterator
 
-
-OIndexIterator::~OIndexIterator()
-{
-}
-
+OIndexIterator::~OIndexIterator() = default;
 
 sal_uInt32 OIndexIterator::First()
 {

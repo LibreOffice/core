@@ -34,9 +34,7 @@ TableDesignPanel::TableDesignPanel (
 #endif
 }
 
-TableDesignPanel::~TableDesignPanel()
-{
-}
+TableDesignPanel::~TableDesignPanel() = default;
 
 vcl::Window* TableDesignPanel::CreateWrappedControl (
     vcl::Window* pParentWindow,

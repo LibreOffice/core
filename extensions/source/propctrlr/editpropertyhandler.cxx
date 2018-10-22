@@ -56,11 +56,7 @@ namespace pcr
     {
     }
 
-
-    EditPropertyHandler::~EditPropertyHandler( )
-    {
-    }
-
+    EditPropertyHandler::~EditPropertyHandler() = default;
 
     OUString EditPropertyHandler::getImplementationName_static(  )
     {

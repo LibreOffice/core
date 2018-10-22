@@ -40,9 +40,7 @@ public:
 private:
 };
 
-OrcusFormatDetect::OrcusFormatDetect()
-{
-}
+OrcusFormatDetect::OrcusFormatDetect() = default;
 
 OUString OrcusFormatDetect::getImplementationName()
 {

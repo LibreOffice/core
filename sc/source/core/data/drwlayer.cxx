@@ -101,9 +101,7 @@ ScUndoObjData::ScUndoObjData( SdrObject* pObjP, const ScAddress& rOS, const ScAd
 {
 }
 
-ScUndoObjData::~ScUndoObjData()
-{
-}
+ScUndoObjData::~ScUndoObjData() = default;
 
 void ScUndoObjData::Undo()
 {
@@ -152,9 +150,7 @@ ScUndoAnchorData::ScUndoAnchorData( SdrObject* pObjP, ScDocument* pDoc, SCTAB nT
     mbWasResizeWithCell = ScDrawLayer::IsResizeWithCell( *pObjP );
 }
 
-ScUndoAnchorData::~ScUndoAnchorData()
-{
-}
+ScUndoAnchorData::~ScUndoAnchorData() = default;
 
 void ScUndoAnchorData::Undo()
 {
@@ -191,18 +187,14 @@ ScTabDeletedHint::ScTabDeletedHint( SCTAB nTabNo ) :
 {
 }
 
-ScTabDeletedHint::~ScTabDeletedHint()
-{
-}
+ScTabDeletedHint::~ScTabDeletedHint() = default;
 
 ScTabSizeChangedHint::ScTabSizeChangedHint( SCTAB nTabNo ) :
     nTab( nTabNo )
 {
 }
 
-ScTabSizeChangedHint::~ScTabSizeChangedHint()
-{
-}
+ScTabSizeChangedHint::~ScTabSizeChangedHint() = default;
 
 #define MAXMM   10000000
 

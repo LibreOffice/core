@@ -38,9 +38,7 @@ SlideTransitionPanel::SlideTransitionPanel (
 #endif
 }
 
-SlideTransitionPanel::~SlideTransitionPanel()
-{
-}
+SlideTransitionPanel::~SlideTransitionPanel() = default;
 
 vcl::Window* SlideTransitionPanel::CreateWrappedControl (
     vcl::Window* pParentWindow,

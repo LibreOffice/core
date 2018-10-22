@@ -149,9 +149,7 @@ ScFormatShell::ScFormatShell(ScViewData* pData) :
     SetName("Format");
 }
 
-ScFormatShell::~ScFormatShell()
-{
-}
+ScFormatShell::~ScFormatShell() = default;
 
 void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {

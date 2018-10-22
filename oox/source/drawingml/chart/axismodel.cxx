@@ -28,9 +28,7 @@ AxisDispUnitsModel::AxisDispUnitsModel() :
 {
 }
 
-AxisDispUnitsModel::~AxisDispUnitsModel()
-{
-}
+AxisDispUnitsModel::~AxisDispUnitsModel() = default;
 
 AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnAxisId( -1 ),
@@ -55,9 +53,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
 {
 }
 
-AxisModel::~AxisModel()
-{
-}
+AxisModel::~AxisModel() = default;
 
 } // namespace chart
 } // namespace drawingml

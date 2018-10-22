@@ -86,9 +86,7 @@ ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxP
     SetName(rName);
 }
 
-ScAccessibleFilterMenu::~ScAccessibleFilterMenu()
-{
-}
+ScAccessibleFilterMenu::~ScAccessibleFilterMenu() = default;
 
 // XAccessibleComponent
 

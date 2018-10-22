@@ -37,9 +37,7 @@ TablePartStyleContext::TablePartStyleContext( ContextHandler2Helper const & rPar
 {
 }
 
-TablePartStyleContext::~TablePartStyleContext()
-{
-}
+TablePartStyleContext::~TablePartStyleContext() = default;
 
 // CT_TablePartStyle
 ContextHandlerRef

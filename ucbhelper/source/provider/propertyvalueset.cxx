@@ -243,10 +243,7 @@ PropertyValueSet::PropertyValueSet(
 
 
 // virtual
-PropertyValueSet::~PropertyValueSet()
-{
-}
-
+PropertyValueSet::~PropertyValueSet() = default;
 
 // XInterface methods.
 void SAL_CALL PropertyValueSet::acquire()

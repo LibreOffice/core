@@ -64,10 +64,7 @@ ODatabaseMetaDataBase::ODatabaseMetaDataBase(const Reference< XConnection >& _rx
     osl_atomic_decrement( &m_refCount );
 }
 
-ODatabaseMetaDataBase::~ODatabaseMetaDataBase()
-{
-}
-
+ODatabaseMetaDataBase::~ODatabaseMetaDataBase() = default;
 
 Sequence< PropertyValue > SAL_CALL ODatabaseMetaDataBase::getConnectionInfo(  )
 {

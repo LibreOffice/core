@@ -362,9 +362,7 @@ NumPicBullet::NumPicBullet()
 {
 }
 
-NumPicBullet::~NumPicBullet()
-{
-}
+NumPicBullet::~NumPicBullet() = default;
 
 void NumPicBullet::SetId(sal_Int32 nId)
 {
@@ -384,9 +382,7 @@ AbstractListDef::AbstractListDef( ) :
 {
 }
 
-AbstractListDef::~AbstractListDef( )
-{
-}
+AbstractListDef::~AbstractListDef() = default;
 
 void AbstractListDef::SetValue( sal_uInt32 nSprmId )
 {
@@ -434,9 +430,7 @@ ListDef::ListDef( ) : AbstractListDef( )
 {
 }
 
-ListDef::~ListDef( )
-{
-}
+ListDef::~ListDef() = default;
 
 OUString ListDef::GetStyleName( sal_Int32 nId )
 {

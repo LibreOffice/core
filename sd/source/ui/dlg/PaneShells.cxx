@@ -47,9 +47,7 @@ LeftImpressPaneShell::LeftImpressPaneShell()
     SetName("LeftImpressPane");
 }
 
-LeftImpressPaneShell::~LeftImpressPaneShell()
-{
-}
+LeftImpressPaneShell::~LeftImpressPaneShell() = default;
 
 //===== LeftDrawPaneShell =====================================================
 
@@ -72,9 +70,7 @@ LeftDrawPaneShell::LeftDrawPaneShell()
     SetName("LeftDrawPane");
 }
 
-LeftDrawPaneShell::~LeftDrawPaneShell()
-{
-}
+LeftDrawPaneShell::~LeftDrawPaneShell() = default;
 
 } // end of namespace ::sd
 

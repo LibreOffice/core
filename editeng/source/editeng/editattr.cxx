@@ -56,9 +56,7 @@ EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int3
     assert((rAttr.Which() < EE_FEATURE_START) || (rAttr.Which() > EE_FEATURE_END) || (nE == (nS+1)));
 }
 
-EditCharAttrib::~EditCharAttrib()
-{
-}
+EditCharAttrib::~EditCharAttrib() = default;
 
 void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 {

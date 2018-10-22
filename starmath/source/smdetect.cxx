@@ -39,9 +39,7 @@ SmFilterDetect::SmFilterDetect( const Reference < XMultiServiceFactory >& /*xFac
 {
 }
 
-SmFilterDetect::~SmFilterDetect()
-{
-}
+SmFilterDetect::~SmFilterDetect() = default;
 
 OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {

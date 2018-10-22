@@ -68,9 +68,7 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
 
 // TODO: VirtualFunctionFinder: This is virtual function!
 
-OReportEngineJFree::~OReportEngineJFree()
-{
-}
+OReportEngineJFree::~OReportEngineJFree() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2(OReportEngineJFree,ReportEngineBase,ReportEnginePropertySet)
 

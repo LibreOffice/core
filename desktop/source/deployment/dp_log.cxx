@@ -64,11 +64,7 @@ public:
     virtual void SAL_CALL pop() override;
 };
 
-
-ProgressLogImpl::~ProgressLogImpl()
-{
-}
-
+ProgressLogImpl::~ProgressLogImpl() = default;
 
 void ProgressLogImpl::disposing()
 {

@@ -130,9 +130,7 @@ ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartSha
 {
 }
 
-ScConflictsFinder::~ScConflictsFinder()
-{
-}
+ScConflictsFinder::~ScConflictsFinder() = default;
 
 bool ScConflictsFinder::DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 )
 {
@@ -243,9 +241,7 @@ ScConflictsResolver::ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList
     OSL_ENSURE( mpTrack, "ScConflictsResolver CTOR: mpTrack is null!" );
 }
 
-ScConflictsResolver::~ScConflictsResolver()
-{
-}
+ScConflictsResolver::~ScConflictsResolver() = default;
 
 void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedAction,
     bool bHandleContentAction, bool bHandleNonContentAction )

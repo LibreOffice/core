@@ -70,9 +70,7 @@ NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
 }
 
-NetChart::~NetChart()
-{
-}
+NetChart::~NetChart() = default;
 
 double NetChart::getMaximumX()
 {

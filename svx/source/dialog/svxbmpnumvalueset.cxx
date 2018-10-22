@@ -775,9 +775,7 @@ void NumValueSet::init(NumberingPageType eType)
     }
 }
 
-NumValueSet::~NumValueSet()
-{
-}
+NumValueSet::~NumValueSet() = default;
 
 void NumValueSet::SetNumberingSettings(
     const Sequence<Sequence<PropertyValue> >& aNum,

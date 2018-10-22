@@ -52,8 +52,6 @@ MasterPasswordDialog::MasterPasswordDialog
     m_xOKBtn->connect_clicked( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
 };
 
-MasterPasswordDialog::~MasterPasswordDialog()
-{
-}
+MasterPasswordDialog::~MasterPasswordDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

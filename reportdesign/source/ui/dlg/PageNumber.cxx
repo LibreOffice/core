@@ -52,9 +52,7 @@ OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
     m_xShowNumberOnFirstPage->hide();
 }
 
-OPageNumberDialog::~OPageNumberDialog()
-{
-}
+OPageNumberDialog::~OPageNumberDialog() = default;
 
 void OPageNumberDialog::execute()
 {

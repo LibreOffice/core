@@ -122,8 +122,7 @@ struct rtl_bootstrap_NameValue
     OUString sName;
     OUString sValue;
 
-    rtl_bootstrap_NameValue()
-        {}
+    rtl_bootstrap_NameValue() = default;
     rtl_bootstrap_NameValue(OUString const & name, OUString const & value )
         : sName( name ),
           sValue( value )

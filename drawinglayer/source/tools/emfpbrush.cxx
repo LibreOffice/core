@@ -58,9 +58,7 @@ namespace emfplushelper
     {
     }
 
-    EMFPBrush::~EMFPBrush()
-    {
-    }
+    EMFPBrush::~EMFPBrush() = default;
 
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
     {

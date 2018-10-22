@@ -369,9 +369,7 @@ namespace XSLT
         m_tcontext->state = XSLT_STATE_STOPPED;
     }
 
-    Reader::~Reader()
-    {
-    }
+    Reader::~Reader() = default;
 
     LibXSLTTransformer::LibXSLTTransformer(
             const css::uno::Reference<XComponentContext> & rxContext) :

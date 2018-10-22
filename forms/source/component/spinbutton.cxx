@@ -55,10 +55,7 @@ namespace frm
         m_nDefaultSpinValue = _pOriginal->m_nDefaultSpinValue;
     }
 
-
-    OSpinButtonModel::~OSpinButtonModel( )
-    {
-    }
+    OSpinButtonModel::~OSpinButtonModel() = default;
 
     OUString SAL_CALL OSpinButtonModel::getImplementationName()
     {

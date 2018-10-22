@@ -36,9 +36,7 @@ VPolarTransformation::VPolarTransformation( const PolarPlottingPositionHelper& r
 {
 }
 
-VPolarTransformation::~VPolarTransformation()
-{
-}
+VPolarTransformation::~VPolarTransformation() = default;
 
 // ____ XTransformation ____
 Sequence< double > SAL_CALL VPolarTransformation::transform(

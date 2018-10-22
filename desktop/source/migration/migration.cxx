@@ -211,13 +211,9 @@ void Migration::migrateSettingsIfNecessary()
     OSL_ENSURE(bResult, "Migration has not been successful");
 }
 
-MigrationImpl::MigrationImpl()
-{
-}
+MigrationImpl::MigrationImpl() = default;
 
-MigrationImpl::~MigrationImpl()
-{
-}
+MigrationImpl::~MigrationImpl() = default;
 
 // The main entry point for migrating settings
 bool MigrationImpl::doMigration()

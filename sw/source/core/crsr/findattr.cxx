@@ -1072,7 +1072,7 @@ struct SwFindParaAttr : public SwFindParas
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
           pSearchOpt( pOpt ), m_rCursor( rCursor ) {}
 
-    virtual ~SwFindParaAttr()   {}
+    virtual ~SwFindParaAttr() = default;
 
     virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;

@@ -38,8 +38,7 @@ XMLChartPropertyContext::XMLChartPropertyContext(
 {
 }
 
-XMLChartPropertyContext::~XMLChartPropertyContext()
-{}
+XMLChartPropertyContext::~XMLChartPropertyContext() = default;
 
 SvXMLImportContextRef XMLChartPropertyContext::CreateChildContext(
     sal_uInt16 nPrefix,

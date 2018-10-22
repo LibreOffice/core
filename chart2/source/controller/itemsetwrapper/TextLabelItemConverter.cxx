@@ -208,9 +208,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     mbForbidPercentValue = ChartTypeHelper::getAxisType(xChartType, 0) != AxisType::CATEGORY;
 }
 
-TextLabelItemConverter::~TextLabelItemConverter()
-{
-}
+TextLabelItemConverter::~TextLabelItemConverter() = default;
 
 void TextLabelItemConverter::FillItemSet( SfxItemSet& rOutItemSet ) const
 {

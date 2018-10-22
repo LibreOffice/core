@@ -52,9 +52,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT(weld::Widget* pPage, weld::Dialog* pD
     m_xPBImportTemplate->connect_clicked( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
 }
 
-XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
-{
-}
+XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT() = default;
 
 void XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
 {

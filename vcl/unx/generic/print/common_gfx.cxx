@@ -106,9 +106,7 @@ PrinterGfx::PrinterGfx()
     maGraphicsStack.emplace_back( );
 }
 
-PrinterGfx::~PrinterGfx()
-{
-}
+PrinterGfx::~PrinterGfx() = default;
 
 void
 PrinterGfx::Clear()

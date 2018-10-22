@@ -30,9 +30,7 @@ SwVbaPane::SwVbaPane( const uno::Reference< ooo::vba::XHelperInterface >& rParen
 {
 }
 
-SwVbaPane::~SwVbaPane()
-{
-}
+SwVbaPane::~SwVbaPane() = default;
 
 uno::Any SAL_CALL
 SwVbaPane::View()

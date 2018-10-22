@@ -376,10 +376,7 @@ sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
     return nAngle;
 }
 
-DffPropertyReader::~DffPropertyReader()
-{
-}
-
+DffPropertyReader::~DffPropertyReader() = default;
 
 static SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
@@ -394,13 +391,9 @@ static SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
     return rIn;
 }
 
-SvxMSDffSolverContainer::SvxMSDffSolverContainer()
-{
-}
+SvxMSDffSolverContainer::SvxMSDffSolverContainer() = default;
 
-SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
-{
-}
+SvxMSDffSolverContainer::~SvxMSDffSolverContainer() = default;
 
 SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
 {
@@ -2899,9 +2892,7 @@ DffRecordList::DffRecordList( DffRecordList* pList ) :
         pList->pNext.reset( this );
 }
 
-DffRecordList::~DffRecordList()
-{
-}
+DffRecordList::~DffRecordList() = default;
 
 DffRecordManager::DffRecordManager() :
     DffRecordList   ( nullptr ),
@@ -5734,9 +5725,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
     SetModel( nullptr, 0 );
 }
 
-SvxMSDffManager::~SvxMSDffManager()
-{
-}
+SvxMSDffManager::~SvxMSDffManager() = default;
 
 void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )
 {
@@ -7485,9 +7474,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
         pWrapPolygon.reset( new tools::Polygon(*rCopy.pWrapPolygon) );
 }
 
-SvxMSDffImportRec::~SvxMSDffImportRec()
-{
-}
+SvxMSDffImportRec::~SvxMSDffImportRec() = default;
 
 void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )
 {
@@ -7520,8 +7507,6 @@ SvxMSDffImportData::SvxMSDffImportData(const tools::Rectangle& rParentRect)
 {
 }
 
-SvxMSDffImportData::~SvxMSDffImportData()
-{
-}
+SvxMSDffImportData::~SvxMSDffImportData() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

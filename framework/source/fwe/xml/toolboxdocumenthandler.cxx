@@ -163,9 +163,7 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_bToolBarSeparatorStartFound   = false;
 }
 
-OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
-{
-}
+OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler() = default;
 
 // XDocumentHandler
 void SAL_CALL OReadToolBoxDocumentHandler::startDocument()
@@ -594,9 +592,7 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     m_aXMLToolbarNS     = XMLNS_TOOLBAR_PREFIX;
 }
 
-OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler()
-{
-}
+OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler() = default;
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
 {

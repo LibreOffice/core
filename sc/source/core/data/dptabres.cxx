@@ -685,9 +685,7 @@ ScDPRowTotals::ScDPRowTotals() :
 {
 }
 
-ScDPRowTotals::~ScDPRowTotals()
-{
-}
+ScDPRowTotals::~ScDPRowTotals() = default;
 
 static ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
 {
@@ -757,9 +755,7 @@ ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
 {
 }
 
-ScDPResultData::~ScDPResultData()
-{
-}
+ScDPResultData::~ScDPResultData() = default;
 
 void ScDPResultData::SetMeasureData(
     std::vector<ScSubTotalFunc>& rFunctions, std::vector<sheet::DataPilotFieldReference>& rRefs,
@@ -963,9 +959,7 @@ ScDPResultMember::ScDPResultMember(
     nMemberStep( 1 )
 {
 }
-ScDPResultMember::~ScDPResultMember()
-{
-}
+ScDPResultMember::~ScDPResultMember() = default;
 
 OUString ScDPResultMember::GetName() const
 {
@@ -1834,9 +1828,7 @@ ScDPDataMember::ScDPDataMember( const ScDPResultData* pData, const ScDPResultMem
     // pResultMember is 0 for root members
 }
 
-ScDPDataMember::~ScDPDataMember()
-{
-}
+ScDPDataMember::~ScDPDataMember() = default;
 
 OUString ScDPDataMember::GetName() const
 {
@@ -2758,9 +2750,7 @@ ScDPResultDimension::ScDPResultDimension( const ScDPResultData* pData ) :
 {
 }
 
-ScDPResultDimension::~ScDPResultDimension()
-{
-}
+ScDPResultDimension::~ScDPResultDimension() = default;
 
 ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 {
@@ -3533,9 +3523,7 @@ ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
 {
 }
 
-ScDPDataDimension::~ScDPDataDimension()
-{
-}
+ScDPDataDimension::~ScDPDataDimension() = default;
 
 void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
 {
@@ -3884,9 +3872,7 @@ ScDPResultVisibilityData::ScDPResultVisibilityData(
 {
 }
 
-ScDPResultVisibilityData::~ScDPResultVisibilityData()
-{
-}
+ScDPResultVisibilityData::~ScDPResultVisibilityData() = default;
 
 void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const ScDPItemData& rMemberItem)
 {
@@ -4061,9 +4047,7 @@ ResultMembers::ResultMembers():
     mbHasHideDetailsMember( false )
 {
 }
-ResultMembers::~ResultMembers()
-{
-}
+ResultMembers::~ResultMembers() = default;
 
 LateInitParams::LateInitParams(
     const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, bool bRow ) :
@@ -4075,9 +4059,7 @@ LateInitParams::LateInitParams(
 {
 }
 
-LateInitParams::~LateInitParams()
-{
-}
+LateInitParams::~LateInitParams() = default;
 
 bool LateInitParams::IsEnd( size_t nPos ) const
 {

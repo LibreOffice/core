@@ -26,8 +26,8 @@
 using namespace com::sun::star;
 using utl::MediaDescriptor;
 
-ScExcelBiffDetect::ScExcelBiffDetect() {}
-ScExcelBiffDetect::~ScExcelBiffDetect() {}
+ScExcelBiffDetect::ScExcelBiffDetect() = default;
+ScExcelBiffDetect::~ScExcelBiffDetect() = default;
 
 OUString ScExcelBiffDetect::getImplementationName()
 {

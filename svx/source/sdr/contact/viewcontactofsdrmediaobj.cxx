@@ -31,9 +31,7 @@ ViewContactOfSdrMediaObj::ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj ) :
 {
 }
 
-ViewContactOfSdrMediaObj::~ViewContactOfSdrMediaObj()
-{
-}
+ViewContactOfSdrMediaObj::~ViewContactOfSdrMediaObj() = default;
 
 ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {

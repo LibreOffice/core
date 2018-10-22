@@ -99,9 +99,7 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
 {
 }
 
-ScPatternAttr::~ScPatternAttr()
-{
-}
+ScPatternAttr::~ScPatternAttr() = default;
 
 SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {

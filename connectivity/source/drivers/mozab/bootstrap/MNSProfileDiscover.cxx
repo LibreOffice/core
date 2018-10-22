@@ -26,9 +26,7 @@ namespace connectivity
 {
     namespace mozab
     {
-        ProfileStruct::ProfileStruct()
-        {
-        }
+        ProfileStruct::ProfileStruct() = default;
 
         ProfileStruct::ProfileStruct(const OUString& aProfileName,
                                      const OUString& aProfilePath)
@@ -42,9 +40,7 @@ namespace connectivity
             return profilePath;
         }
 
-        ProfileAccess::~ProfileAccess()
-        {
-        }
+        ProfileAccess::~ProfileAccess() = default;
 
         ProfileAccess::ProfileAccess()
         {

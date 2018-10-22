@@ -97,9 +97,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     xPropSet->getPropertyValue( sCont ) >>= xHeaderFooterContent;
 }
 
-XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
-{
-}
+XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext() = default;
 
 SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -206,9 +204,7 @@ XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport
     GetImport().GetTextImport()->SetCursor( xTextCursor );
 }
 
-XMLHeaderFooterRegionContext::~XMLHeaderFooterRegionContext()
-{
-}
+XMLHeaderFooterRegionContext::~XMLHeaderFooterRegionContext() = default;
 
 SvXMLImportContextRef XMLHeaderFooterRegionContext::CreateChildContext(
     sal_uInt16 nPrefix,

@@ -41,9 +41,7 @@ X11Transferable::X11Transferable(
 {
 }
 
-X11Transferable::~X11Transferable()
-{
-}
+X11Transferable::~X11Transferable() = default;
 
 Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
 {

@@ -37,9 +37,7 @@ FixedNumberFormatter::FixedNumberFormatter(
 {
 }
 
-FixedNumberFormatter::~FixedNumberFormatter()
-{
-}
+FixedNumberFormatter::~FixedNumberFormatter() = default;
 
 OUString FixedNumberFormatter::getFormattedString( double fValue, Color& rLabelColor, bool& rbColorChanged ) const
 {
@@ -62,9 +60,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
     SAL_WARN_IF(!m_pNumberFormatter,"chart2.tools","need a numberformatter");
 }
 
-NumberFormatterWrapper::~NumberFormatterWrapper()
-{
-}
+NumberFormatterWrapper::~NumberFormatterWrapper() = default;
 
 Date NumberFormatterWrapper::getNullDate() const
 {

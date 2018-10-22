@@ -60,9 +60,7 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
         SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
 }
 
-ScGraphicShell::~ScGraphicShell()
-{
-}
+ScGraphicShell::~ScGraphicShell() = default;
 
 void ScGraphicShell::GetAttrState( SfxItemSet& rSet )
 {

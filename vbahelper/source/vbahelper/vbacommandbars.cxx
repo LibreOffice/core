@@ -79,9 +79,7 @@ ScVbaCommandBars::ScVbaCommandBars( const uno::Reference< XHelperInterface >& xP
     m_xNameAccess = m_pCBarHelper->getPersistentWindowState();
 }
 
-ScVbaCommandBars::~ScVbaCommandBars()
-{
-}
+ScVbaCommandBars::~ScVbaCommandBars() = default;
 
 // XEnumerationAccess
 uno::Type SAL_CALL

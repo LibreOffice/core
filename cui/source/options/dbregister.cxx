@@ -67,9 +67,7 @@ RegistrationItemSetHolder::RegistrationItemSetHolder( const SfxItemSet& _rMaster
     DbRegisteredNamesConfig::GetOptions( m_aRegistrationItems );
 }
 
-RegistrationItemSetHolder::~RegistrationItemSetHolder()
-{
-}
+RegistrationItemSetHolder::~RegistrationItemSetHolder() = default;
 
 // class DatabaseRegistrationDialog  ------------------------------------------------
 

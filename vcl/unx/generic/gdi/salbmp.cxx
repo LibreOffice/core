@@ -1055,10 +1055,7 @@ void ImplSalDDB::ImplDraw(
     }
 }
 
-
-ImplSalBitmapCache::ImplSalBitmapCache()
-{
-}
+ImplSalBitmapCache::ImplSalBitmapCache() = default;
 
 ImplSalBitmapCache::~ImplSalBitmapCache()
 {

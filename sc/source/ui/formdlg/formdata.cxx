@@ -27,9 +27,7 @@ ScFormEditData::ScFormEditData()
     Reset();
 }
 
-ScFormEditData::~ScFormEditData()
-{
-}
+ScFormEditData::~ScFormEditData() = default;
 
 void ScFormEditData::SaveValues()
 {

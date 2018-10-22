@@ -123,10 +123,7 @@ EditUndo::EditUndo(sal_uInt16 nI, EditEngine* pEE) :
         mnViewShellId = pViewShell->GetViewShellId();
 }
 
-EditUndo::~EditUndo()
-{
-}
-
+EditUndo::~EditUndo() = default;
 
 sal_uInt16 EditUndo::GetId() const
 {
@@ -233,9 +230,7 @@ EditUndoConnectParas::EditUndoConnectParas(
     }
 }
 
-EditUndoConnectParas::~EditUndoConnectParas()
-{
-}
+EditUndoConnectParas::~EditUndoConnectParas() = default;
 
 void EditUndoConnectParas::Undo()
 {
@@ -283,7 +278,7 @@ EditUndoSplitPara::EditUndoSplitPara(
     EditUndo(EDITUNDO_SPLITPARA, pEE),
     nNode(nN), nSepPos(nSP) {}
 
-EditUndoSplitPara::~EditUndoSplitPara() {}
+EditUndoSplitPara::~EditUndoSplitPara() = default;
 
 void EditUndoSplitPara::Undo()
 {
@@ -376,9 +371,7 @@ EditUndoInsertFeature::EditUndoInsertFeature(
     DBG_ASSERT( pFeature, "Feature could not be duplicated: EditUndoInsertFeature" );
 }
 
-EditUndoInsertFeature::~EditUndoInsertFeature()
-{
-}
+EditUndoInsertFeature::~EditUndoInsertFeature() = default;
 
 void EditUndoInsertFeature::Undo()
 {
@@ -408,7 +401,7 @@ EditUndoMoveParagraphs::EditUndoMoveParagraphs(
     EditEngine* pEE, const Range& rParas, sal_Int32 n) :
     EditUndo(EDITUNDO_MOVEPARAGRAPHS, pEE), nParagraphs(rParas), nDest(n) {}
 
-EditUndoMoveParagraphs::~EditUndoMoveParagraphs() {}
+EditUndoMoveParagraphs::~EditUndoMoveParagraphs() = default;
 
 void EditUndoMoveParagraphs::Undo()
 {
@@ -453,9 +446,7 @@ EditUndoSetStyleSheet::EditUndoSetStyleSheet(
 {
 }
 
-EditUndoSetStyleSheet::~EditUndoSetStyleSheet()
-{
-}
+EditUndoSetStyleSheet::~EditUndoSetStyleSheet() = default;
 
 void EditUndoSetStyleSheet::Undo()
 {
@@ -479,7 +470,7 @@ EditUndoSetParaAttribs::EditUndoSetParaAttribs(
     aPrevItems(rPrevItems),
     aNewItems(rNewItems) {}
 
-EditUndoSetParaAttribs::~EditUndoSetParaAttribs() {}
+EditUndoSetParaAttribs::~EditUndoSetParaAttribs() = default;
 
 void EditUndoSetParaAttribs::Undo()
 {
@@ -592,9 +583,7 @@ EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelecti
     EditUndo(EDITUNDO_TRANSLITERATE, pEE),
     aOldESel(rESel), nMode(nM) {}
 
-EditUndoTransliteration::~EditUndoTransliteration()
-{
-}
+EditUndoTransliteration::~EditUndoTransliteration() = default;
 
 void EditUndoTransliteration::Undo()
 {
@@ -646,7 +635,7 @@ void EditUndoTransliteration::Redo()
 EditUndoMarkSelection::EditUndoMarkSelection(EditEngine* pEE, const ESelection& rSel) :
     EditUndo(EDITUNDO_MARKSELECTION, pEE), aSelection(rSel) {}
 
-EditUndoMarkSelection::~EditUndoMarkSelection() {}
+EditUndoMarkSelection::~EditUndoMarkSelection() = default;
 
 void EditUndoMarkSelection::Undo()
 {

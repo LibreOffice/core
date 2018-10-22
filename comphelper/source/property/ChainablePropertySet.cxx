@@ -37,10 +37,7 @@ ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo
 {
 }
 
-ChainablePropertySet::~ChainablePropertySet()
-    throw()
-{
-}
+ChainablePropertySet::~ChainablePropertySet() throw() = default;
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(  )

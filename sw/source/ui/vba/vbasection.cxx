@@ -30,9 +30,7 @@ SwVbaSection::SwVbaSection( const uno::Reference< ooo::vba::XHelperInterface >& 
 {
 }
 
-SwVbaSection::~SwVbaSection()
-{
-}
+SwVbaSection::~SwVbaSection() = default;
 
 sal_Bool SAL_CALL SwVbaSection::getProtectedForForms()
 {

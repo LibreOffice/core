@@ -1164,8 +1164,6 @@ SwDocUpdateField::SwDocUpdateField(SwDoc* pDoc)
 {
 }
 
-SwDocUpdateField::~SwDocUpdateField()
-{
-}
+SwDocUpdateField::~SwDocUpdateField() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

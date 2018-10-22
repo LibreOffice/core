@@ -1340,9 +1340,7 @@ ScAccessibleCsvTextData::ScAccessibleCsvTextData(
 {
 }
 
-ScAccessibleCsvTextData::~ScAccessibleCsvTextData()
-{
-}
+ScAccessibleCsvTextData::~ScAccessibleCsvTextData() = default;
 
 void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {

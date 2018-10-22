@@ -157,13 +157,9 @@ void    XFDatePart::ToXml(IXFStream *pStrm)
     }
 }
 
-XFDateStyle::XFDateStyle()
-{
-}
+XFDateStyle::XFDateStyle() = default;
 
-XFDateStyle::~XFDateStyle()
-{
-}
+XFDateStyle::~XFDateStyle() = default;
 
 enumXFStyle XFDateStyle::GetStyleFamily()
 {

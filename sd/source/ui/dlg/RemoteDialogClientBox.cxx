@@ -47,15 +47,12 @@ ClientBoxEntry::ClientBoxEntry(const std::shared_ptr<ClientInfo>& pClientInfo)
 {
 }
 
-ClientBoxEntry::~ClientBoxEntry()
-{}
+ClientBoxEntry::~ClientBoxEntry() = default;
 
 void ClientRemovedListener::disposing( lang::EventObject const & )
 {}
 
-ClientRemovedListener::~ClientRemovedListener()
-{
-}
+ClientRemovedListener::~ClientRemovedListener() = default;
 
 // ClientBox
 

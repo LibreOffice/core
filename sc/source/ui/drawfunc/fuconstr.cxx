@@ -42,9 +42,7 @@ FuConstruct::FuConstruct(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
 {
 }
 
-FuConstruct::~FuConstruct()
-{
-}
+FuConstruct::~FuConstruct() = default;
 
 // Calculate and return offset at current zoom. rInOutPos is adjusted by
 // the calculated offset. rInOutPos now points to the position than when

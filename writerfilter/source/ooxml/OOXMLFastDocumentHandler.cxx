@@ -42,7 +42,7 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 {
 }
 
-OOXMLFastDocumentHandler::~OOXMLFastDocumentHandler() {}
+OOXMLFastDocumentHandler::~OOXMLFastDocumentHandler() = default;
 
 // css::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement

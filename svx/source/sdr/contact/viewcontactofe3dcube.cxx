@@ -36,9 +36,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfE3dCube::~ViewContactOfE3dCube()
-        {
-        }
+        ViewContactOfE3dCube::~ViewContactOfE3dCube() = default;
 
         drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dCube::createViewIndependentPrimitive3DContainer() const
         {

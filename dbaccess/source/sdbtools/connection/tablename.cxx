@@ -67,9 +67,7 @@ namespace sdbtools
         setWeakConnection( _rxConnection );
     }
 
-    TableName::~TableName()
-    {
-    }
+    TableName::~TableName() = default;
 
     OUString SAL_CALL TableName::getCatalogName()
     {

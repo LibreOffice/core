@@ -32,9 +32,7 @@ SwVbaListLevel::SwVbaListLevel( const uno::Reference< ooo::vba::XHelperInterface
 {
 }
 
-SwVbaListLevel::~SwVbaListLevel()
-{
-}
+SwVbaListLevel::~SwVbaListLevel() = default;
 
 ::sal_Int32 SAL_CALL SwVbaListLevel::getAlignment()
 {

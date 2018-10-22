@@ -339,9 +339,7 @@ SalPrinterQueueInfo::SalPrinterQueueInfo()
     mnJobs      = QUEUE_JOBS_DONTKNOW;
 }
 
-SalPrinterQueueInfo::~SalPrinterQueueInfo()
-{
-}
+SalPrinterQueueInfo::~SalPrinterQueueInfo() = default;
 
 ImplPrnQueueList::~ImplPrnQueueList()
 {

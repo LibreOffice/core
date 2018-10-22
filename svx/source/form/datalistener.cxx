@@ -42,9 +42,7 @@ namespace svxform
         DBG_ASSERT( m_pNaviWin, "DataListener::Ctor(): no navigator win" );
     }
 
-    DataListener::~DataListener()
-    {
-    }
+    DataListener::~DataListener() = default;
 
     // XContainerListener
     void SAL_CALL DataListener::elementInserted( const ContainerEvent& /*Event*/ )

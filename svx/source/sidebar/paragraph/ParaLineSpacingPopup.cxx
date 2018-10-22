@@ -33,9 +33,7 @@ ParaLineSpacingPopup::ParaLineSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, T
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-ParaLineSpacingPopup::~ParaLineSpacingPopup()
-{
-}
+ParaLineSpacingPopup::~ParaLineSpacingPopup() = default;
 
 VclPtr<SfxPopupWindow> ParaLineSpacingPopup::CreatePopupWindow()
 {

@@ -86,9 +86,7 @@ MenuBarWrapper::MenuBarWrapper(
 {
 }
 
-MenuBarWrapper::~MenuBarWrapper()
-{
-}
+MenuBarWrapper::~MenuBarWrapper() = default;
 
 void SAL_CALL MenuBarWrapper::dispose()
 {

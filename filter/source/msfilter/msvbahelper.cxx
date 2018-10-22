@@ -531,9 +531,7 @@ VBAMacroResolver::VBAMacroResolver() :
 {
 }
 
-VBAMacroResolver::~VBAMacroResolver()
-{
-}
+VBAMacroResolver::~VBAMacroResolver() = default;
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 

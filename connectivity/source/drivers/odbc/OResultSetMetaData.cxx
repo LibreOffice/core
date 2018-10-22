@@ -25,10 +25,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-
-OResultSetMetaData::~OResultSetMetaData()
-{
-}
+OResultSetMetaData::~OResultSetMetaData() = default;
 
 OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
 {

@@ -191,9 +191,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     }
 }
 
-XMLPageExport::~XMLPageExport()
-{
-}
+XMLPageExport::~XMLPageExport() = default;
 
 void XMLPageExport::exportStyles( bool bUsed, bool bAutoStyles )
 {

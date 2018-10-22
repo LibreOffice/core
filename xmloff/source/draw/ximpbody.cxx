@@ -208,9 +208,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     DeleteAllShapes();
 }
 
-SdXMLDrawPageContext::~SdXMLDrawPageContext()
-{
-}
+SdXMLDrawPageContext::~SdXMLDrawPageContext() = default;
 
 SvXMLImportContextRef SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -287,9 +285,7 @@ SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport,
 {
 }
 
-SdXMLBodyContext::~SdXMLBodyContext()
-{
-}
+SdXMLBodyContext::~SdXMLBodyContext() = default;
 
 SvXMLImportContextRef SdXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,

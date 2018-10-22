@@ -404,9 +404,7 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
             m_aBorderInfos[i].reset( new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] ) );
 }
 
-SvxCSS1PropertyInfo::~SvxCSS1PropertyInfo()
-{
-}
+SvxCSS1PropertyInfo::~SvxCSS1PropertyInfo() = default;
 
 void SvxCSS1PropertyInfo::DestroyBorderInfos()
 {

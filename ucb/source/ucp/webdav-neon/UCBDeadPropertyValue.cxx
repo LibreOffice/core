@@ -43,7 +43,7 @@ struct UCBDeadPropertyValueParseContext
     std::unique_ptr<OUString> pType;
     std::unique_ptr<OUString> pValue;
 
-    UCBDeadPropertyValueParseContext() {}
+    UCBDeadPropertyValueParseContext() = default;
 };
 
 static const char aTypeString[] = "string";

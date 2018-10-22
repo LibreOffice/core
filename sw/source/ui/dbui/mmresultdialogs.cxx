@@ -240,9 +240,7 @@ SwMMResultSaveDialog::SwMMResultSaveDialog(weld::Window* pParent)
     m_xOKButton->connect_clicked(LINK(this, SwMMResultSaveDialog, SaveOutputHdl_Impl));
 }
 
-SwMMResultSaveDialog::~SwMMResultSaveDialog()
-{
-}
+SwMMResultSaveDialog::~SwMMResultSaveDialog() = default;
 
 SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/mmresultprintdialog.ui", "MMResultPrintDialog")
@@ -272,9 +270,7 @@ SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
     FillInPrinterSettings();
 }
 
-SwMMResultPrintDialog::~SwMMResultPrintDialog()
-{
-}
+SwMMResultPrintDialog::~SwMMResultPrintDialog() = default;
 
 SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/mmresultemaildialog.ui", "MMResultEmailDialog")
@@ -311,9 +307,7 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
     FillInEmailSettings();
 }
 
-SwMMResultEmailDialog::~SwMMResultEmailDialog()
-{
-}
+SwMMResultEmailDialog::~SwMMResultEmailDialog() = default;
 
 void SwMMResultPrintDialog::FillInPrinterSettings()
 {

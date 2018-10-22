@@ -30,12 +30,9 @@ using namespace com::sun::star;
 
 namespace chart
 {
+PolynomialRegressionCurveCalculator::PolynomialRegressionCurveCalculator() = default;
 
-PolynomialRegressionCurveCalculator::PolynomialRegressionCurveCalculator()
-{}
-
-PolynomialRegressionCurveCalculator::~PolynomialRegressionCurveCalculator()
-{}
+PolynomialRegressionCurveCalculator::~PolynomialRegressionCurveCalculator() = default;
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(

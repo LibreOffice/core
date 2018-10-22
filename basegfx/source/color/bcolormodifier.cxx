@@ -22,16 +22,14 @@
 
 namespace basegfx
 {
-    BColorModifier::~BColorModifier()
-    {
-    }
+
+BColorModifier::~BColorModifier() = default;
+
 } // end of namespace basegfx
 
 namespace basegfx
 {
-    BColorModifier_gray::~BColorModifier_gray()
-    {
-    }
+    BColorModifier_gray::~BColorModifier_gray() = default;
 
     bool BColorModifier_gray::operator==(const BColorModifier& rCompare) const
     {
@@ -48,9 +46,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    BColorModifier_invert::~BColorModifier_invert()
-    {
-    }
+    BColorModifier_invert::~BColorModifier_invert() = default;
 
     bool BColorModifier_invert::operator==(const BColorModifier& rCompare) const
     {
@@ -65,9 +61,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    BColorModifier_luminance_to_alpha::~BColorModifier_luminance_to_alpha()
-    {
-    }
+    BColorModifier_luminance_to_alpha::~BColorModifier_luminance_to_alpha() = default;
 
     bool BColorModifier_luminance_to_alpha::operator==(const BColorModifier& rCompare) const
     {
@@ -84,9 +78,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    BColorModifier_replace::~BColorModifier_replace()
-    {
-    }
+    BColorModifier_replace::~BColorModifier_replace() = default;
 
     bool BColorModifier_replace::operator==(const BColorModifier& rCompare) const
     {
@@ -108,9 +100,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    BColorModifier_interpolate::~BColorModifier_interpolate()
-    {
-    }
+    BColorModifier_interpolate::~BColorModifier_interpolate() = default;
 
     bool BColorModifier_interpolate::operator==(const BColorModifier& rCompare) const
     {
@@ -132,9 +122,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    BColorModifier_black_and_white::~BColorModifier_black_and_white()
-    {
-    }
+    BColorModifier_black_and_white::~BColorModifier_black_and_white() = default;
 
     bool BColorModifier_black_and_white::operator==(const BColorModifier& rCompare) const
     {
@@ -177,9 +165,7 @@ namespace basegfx
         }
     }
 
-    BColorModifier_gamma::~BColorModifier_gamma()
-    {
-    }
+    BColorModifier_gamma::~BColorModifier_gamma() = default;
 
     bool BColorModifier_gamma::operator==(const BColorModifier& rCompare) const
     {
@@ -257,9 +243,7 @@ namespace basegfx
         }
     }
 
-    BColorModifier_RGBLuminanceContrast::~BColorModifier_RGBLuminanceContrast()
-    {
-    }
+    BColorModifier_RGBLuminanceContrast::~BColorModifier_RGBLuminanceContrast() = default;
 
     bool BColorModifier_RGBLuminanceContrast::operator==(const BColorModifier& rCompare) const
     {

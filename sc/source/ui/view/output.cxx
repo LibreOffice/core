@@ -216,9 +216,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     SetCellRotations();
 }
 
-ScOutputData::~ScOutputData()
-{
-}
+ScOutputData::~ScOutputData() = default;
 
 void ScOutputData::SetSpellCheckContext( const sc::SpellCheckContext* pCxt )
 {

@@ -105,9 +105,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SdPageObjsTLB, WB_TABSTOP)
 
-SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
-{
-}
+SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable() = default;
 
 void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
 {

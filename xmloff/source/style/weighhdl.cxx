@@ -58,10 +58,7 @@ FontWeightMapper const aFontWeightMap[] =
 
 // class XMLFmtBreakBeforePropHdl
 
-XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
-{
-    // Nothing to do
-}
+XMLFontWeightPropHdl::~XMLFontWeightPropHdl() = default;
 
 bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {

@@ -113,7 +113,7 @@ private:
     Service(const Service&) = delete;
     Service& operator=(const Service&) = delete;
 
-    virtual ~Service() override {}
+    virtual ~Service() override = default;
 
     virtual void SAL_CALL disposing() override { flushModifications(); }
 
@@ -355,13 +355,13 @@ class Factory:
         css::lang::XSingleComponentFactory, css::lang::XServiceInfo >
 {
 public:
-    Factory() {}
+    Factory() = default;
 
 private:
     Factory(const Factory&) = delete;
     Factory& operator=(const Factory&) = delete;
 
-    virtual ~Factory() override {}
+    virtual ~Factory() override = default;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(

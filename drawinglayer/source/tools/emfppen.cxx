@@ -79,9 +79,7 @@ namespace emfplushelper
     {
     }
 
-    EMFPPen::~EMFPPen()
-    {
-    }
+    EMFPPen::~EMFPPen() = default;
 
     void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData const & rR, const ::basegfx::B2DHomMatrix& mapModeTransform)
     {

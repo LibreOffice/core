@@ -24,9 +24,7 @@ ThemeOverrideFragmentHandler::ThemeOverrideFragmentHandler( XmlFilterBase& rFilt
 {
 }
 
-ThemeOverrideFragmentHandler::~ThemeOverrideFragmentHandler()
-{
-}
+ThemeOverrideFragmentHandler::~ThemeOverrideFragmentHandler() = default;
 
 ContextHandlerRef ThemeOverrideFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {

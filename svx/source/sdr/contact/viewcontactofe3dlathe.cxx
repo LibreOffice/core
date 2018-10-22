@@ -36,9 +36,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfE3dLathe::~ViewContactOfE3dLathe()
-        {
-        }
+        ViewContactOfE3dLathe::~ViewContactOfE3dLathe() = default;
 
         drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dLathe::createViewIndependentPrimitive3DContainer() const
         {

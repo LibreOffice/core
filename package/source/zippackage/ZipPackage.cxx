@@ -154,9 +154,7 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
     m_xRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }
 
-ZipPackage::~ZipPackage()
-{
-}
+ZipPackage::~ZipPackage() = default;
 
 bool ZipPackage::isLocalFile() const
 {

@@ -48,9 +48,7 @@ FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
 {
 }
 
-FuDraw::~FuDraw()
-{
-}
+FuDraw::~FuDraw() = default;
 
 void FuDraw::DoModifiers(const MouseEvent& rMEvt)
 {

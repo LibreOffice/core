@@ -77,12 +77,7 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
 
 }
 
-
-OControlStyleContext::~OControlStyleContext()
-{
-
-}
-
+OControlStyleContext::~OControlStyleContext() = default;
 
 void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPropSet )
 {
@@ -160,12 +155,7 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
 
 }
 
-
-OReportStylesContext::~OReportStylesContext()
-{
-
-}
-
+OReportStylesContext::~OReportStylesContext() = default;
 
 void OReportStylesContext::EndElement()
 {

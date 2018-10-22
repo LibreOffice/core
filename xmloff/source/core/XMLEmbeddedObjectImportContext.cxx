@@ -220,9 +220,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
     sCLSID = aName.GetHexName();
 }
 
-XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
-{
-}
+XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext() = default;
 
 SvXMLImportContextRef XMLEmbeddedObjectImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,

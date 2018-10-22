@@ -111,6 +111,6 @@ void SbiDllMgr::FreeDll(SAL_UNUSED_PARAMETER OUString const &) {}
 
 SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
 
-SbiDllMgr::~SbiDllMgr() {}
+SbiDllMgr::~SbiDllMgr() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

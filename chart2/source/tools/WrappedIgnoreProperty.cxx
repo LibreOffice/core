@@ -37,9 +37,7 @@ WrappedIgnoreProperty::WrappedIgnoreProperty( const OUString& rOuterName, const 
                          , m_aCurrentValue( rDefaultValue )
 {
 }
-WrappedIgnoreProperty::~WrappedIgnoreProperty()
-{
-}
+WrappedIgnoreProperty::~WrappedIgnoreProperty() = default;
 
 void WrappedIgnoreProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
 {

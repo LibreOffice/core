@@ -43,10 +43,7 @@ AstConstant::AstConstant(const ExprType type,
 {
 }
 
-AstConstant::~AstConstant()
-{
-
-}
+AstConstant::~AstConstant() = default;
 
 bool AstConstant::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, bool published)

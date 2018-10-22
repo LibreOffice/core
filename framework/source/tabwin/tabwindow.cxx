@@ -93,9 +93,7 @@ TabWindow::TabWindow( const css::uno::Reference< css::uno::XComponentContext >& 
 {
 }
 
-TabWindow::~TabWindow()
-{
-}
+TabWindow::~TabWindow() = default;
 
 // Helper
 

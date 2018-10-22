@@ -827,9 +827,7 @@ ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterSt
  {
  }
 
-ImplIMEInfos::~ImplIMEInfos()
-{
-}
+ ImplIMEInfos::~ImplIMEInfos() = default;
 
 void ImplIMEInfos::CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL )
 {

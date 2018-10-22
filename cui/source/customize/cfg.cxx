@@ -417,9 +417,7 @@ MenuSaveInData::MenuSaveInData(
     }
 }
 
-MenuSaveInData::~MenuSaveInData()
-{
-}
+MenuSaveInData::~MenuSaveInData() = default;
 
 SvxEntries*
 MenuSaveInData::GetEntries()
@@ -717,9 +715,7 @@ ContextMenuSaveInData::ContextMenuSaveInData(
     xConfig->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }
 
-ContextMenuSaveInData::~ContextMenuSaveInData()
-{
-}
+ContextMenuSaveInData::~ContextMenuSaveInData() = default;
 
 OUString ContextMenuSaveInData::GetUIName( const OUString& rResourceURL )
 {
@@ -1953,9 +1949,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     m_xMoveDownButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));
 }
 
-SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
-{
-}
+SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog() = default;
 
 IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, ModifyHdl, weld::Entry&, void)
 {
@@ -2087,9 +2081,7 @@ ToolbarSaveInData::ToolbarSaveInData(
     xPWSS->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }
 
-ToolbarSaveInData::~ToolbarSaveInData()
-{
-}
+ToolbarSaveInData::~ToolbarSaveInData() = default;
 
 sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
@@ -2828,9 +2820,7 @@ SvxNewToolbarDialog::SvxNewToolbarDialog(weld::Window* pWindow, const OUString& 
     m_xEdtName->select_region(0, -1);
 }
 
-SvxNewToolbarDialog::~SvxNewToolbarDialog()
-{
-}
+SvxNewToolbarDialog::~SvxNewToolbarDialog() = default;
 
 /*******************************************************************************
 *

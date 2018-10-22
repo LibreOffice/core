@@ -413,9 +413,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
 }
 
-SwHTMLFormatInfo::~SwHTMLFormatInfo()
-{
-}
+SwHTMLFormatInfo::~SwHTMLFormatInfo() = default;
 
 static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                     const SfxItemSet *pNodeItemSet,

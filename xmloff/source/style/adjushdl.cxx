@@ -53,10 +53,7 @@ SvXMLEnumMapEntry<style::ParagraphAdjust> const pXML_Para_Align_Last_Enum[] =
 // class XMLParaAdjustPropHdl
 
 
-XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
-{
-    // nothing to do
-}
+XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl() = default;
 
 bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -88,10 +85,7 @@ bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 // class XMLLastLineAdjustPropHdl
 
 
-XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
-{
-    // nothing to do
-}
+XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl() = default;
 
 bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

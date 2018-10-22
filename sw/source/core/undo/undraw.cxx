@@ -431,9 +431,7 @@ SwUndoDrawUnGroupConnectToLayout::SwUndoDrawUnGroupConnectToLayout(const SwDoc* 
 {
 }
 
-SwUndoDrawUnGroupConnectToLayout::~SwUndoDrawUnGroupConnectToLayout()
-{
-}
+SwUndoDrawUnGroupConnectToLayout::~SwUndoDrawUnGroupConnectToLayout() = default;
 
 void
 SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)

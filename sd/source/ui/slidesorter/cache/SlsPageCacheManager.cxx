@@ -115,7 +115,7 @@ class PageCacheManager::PageCacheContainer
                              CacheDescriptor::Equal>
 {
 public:
-    PageCacheContainer() {}
+    PageCacheContainer() = default;
 
     /** Compare entries in the cache container with respect to the cache
         address only.
@@ -142,7 +142,8 @@ public:
 private:
     std::map<key_type,mapped_type> maMap;
 public:
-    RecentlyUsedPageCaches () {};
+    RecentlyUsedPageCaches() = default;
+    ;
 
     iterator end() { return maMap.end(); }
     void clear() { maMap.clear(); }
@@ -185,9 +186,7 @@ PageCacheManager::PageCacheManager()
 {
 }
 
-PageCacheManager::~PageCacheManager()
-{
-}
+PageCacheManager::~PageCacheManager() = default;
 
 std::shared_ptr<BitmapCache> PageCacheManager::GetCache (
     const DocumentKey& pDocument,

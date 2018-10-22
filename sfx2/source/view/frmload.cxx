@@ -187,10 +187,7 @@ SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< css::uno::XComponentC
 {
 }
 
-SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
-{
-}
-
+SfxFrameLoader_Impl::~SfxFrameLoader_Impl() = default;
 
 std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& sURL,
         const ::comphelper::NamedValueCollection& i_rDescriptor, const SfxFilterMatcher& rMatcher ) const

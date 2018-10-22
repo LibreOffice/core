@@ -30,9 +30,7 @@ IntlWrapper::IntlWrapper(
 {
 }
 
-IntlWrapper::~IntlWrapper()
-{
-}
+IntlWrapper::~IntlWrapper() = default;
 
 void IntlWrapper::ImplNewLocaleData() const
 {

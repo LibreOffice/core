@@ -43,7 +43,7 @@ XcdParser::XcdParser(
     state_(STATE_START), dependencyOptional_(), nesting_()
 {}
 
-XcdParser::~XcdParser() {}
+XcdParser::~XcdParser() = default;
 
 xmlreader::XmlReader::Text XcdParser::getTextMode() {
     return nestedParser_.is()

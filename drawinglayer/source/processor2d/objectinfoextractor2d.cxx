@@ -70,9 +70,7 @@ namespace drawinglayer
         {
         }
 
-        ObjectInfoPrimitiveExtractor2D::~ObjectInfoPrimitiveExtractor2D()
-        {
-        }
+        ObjectInfoPrimitiveExtractor2D::~ObjectInfoPrimitiveExtractor2D() = default;
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 

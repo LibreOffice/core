@@ -19,13 +19,9 @@
 
 #include <editdataarray.hxx>
 
-ScEditDataArray::ScEditDataArray()
-{
-}
+ScEditDataArray::ScEditDataArray() = default;
 
-ScEditDataArray::~ScEditDataArray()
-{
-}
+ScEditDataArray::~ScEditDataArray() = default;
 
 void ScEditDataArray::AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
                               std::unique_ptr<EditTextObject> pOldData, std::unique_ptr<EditTextObject> pNewData)
@@ -58,9 +54,7 @@ ScEditDataArray::Item::Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
 {
 }
 
-ScEditDataArray::Item::~Item()
-{
-}
+ScEditDataArray::Item::~Item() = default;
 
 const EditTextObject* ScEditDataArray::Item::GetOldData() const
 {

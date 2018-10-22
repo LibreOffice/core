@@ -269,9 +269,7 @@ SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
     InitDatabaseBox();
 }
 
-SwLabPage::~SwLabPage()
-{
-}
+SwLabPage::~SwLabPage() = default;
 
 void SwLabPage::SetToBusinessCard()
 {
@@ -568,9 +566,7 @@ SwPrivateDataPage::SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rS
     SetExchangeSupport();
 }
 
-SwPrivateDataPage::~SwPrivateDataPage()
-{
-}
+SwPrivateDataPage::~SwPrivateDataPage() = default;
 
 VclPtr<SfxTabPage> SwPrivateDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
@@ -661,9 +657,7 @@ SwBusinessDataPage::SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& 
     SetExchangeSupport();
 }
 
-SwBusinessDataPage::~SwBusinessDataPage()
-{
-}
+SwBusinessDataPage::~SwBusinessDataPage() = default;
 
 VclPtr<SfxTabPage> SwBusinessDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {

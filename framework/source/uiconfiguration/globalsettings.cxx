@@ -239,9 +239,7 @@ GlobalSettings::GlobalSettings( const css::uno::Reference< css::uno::XComponentC
 {
 }
 
-GlobalSettings::~GlobalSettings()
-{
-}
+GlobalSettings::~GlobalSettings() = default;
 
 // settings access
 bool GlobalSettings::HasToolbarStatesInfo()

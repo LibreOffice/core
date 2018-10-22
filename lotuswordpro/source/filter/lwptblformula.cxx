@@ -70,19 +70,15 @@
 #include <o3tl/make_unique.hxx>
 #include <memory>
 
-LwpFormulaArg::~LwpFormulaArg()
-{
-}
+LwpFormulaArg::~LwpFormulaArg() = default;
 
- LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
     , m_bSupported(true)
     , m_nFormulaRow(0)
 {}
 
-LwpFormulaInfo::~LwpFormulaInfo()
-{
-}
+LwpFormulaInfo::~LwpFormulaInfo() = default;
 
 void LwpFormulaInfo::ReadConst()
 {
@@ -405,9 +401,7 @@ LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType)
     m_nTokenType = nTokenType;
 }
 
-LwpFormulaFunc::~LwpFormulaFunc()
-{
-}
+LwpFormulaFunc::~LwpFormulaFunc() = default;
 void LwpFormulaFunc::AddArg(std::unique_ptr<LwpFormulaArg> pArg)
 {
     m_aArgs.push_back(std::move(pArg));

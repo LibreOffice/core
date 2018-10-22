@@ -44,9 +44,7 @@ ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     SetFont( aFont );
 }
 
-ScScenarioListBox::~ScScenarioListBox()
-{
-}
+ScScenarioListBox::~ScScenarioListBox() = default;
 
 void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryList )
 {

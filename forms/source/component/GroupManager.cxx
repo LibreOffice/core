@@ -126,9 +126,7 @@ OGroup::OGroup( const OUString& rGroupName )
 {
 }
 
-OGroup::~OGroup()
-{
-}
+OGroup::~OGroup() = default;
 
 void OGroup::InsertComponent( const Reference<XPropertySet>& xSet )
 {
@@ -195,9 +193,7 @@ OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
     osl_atomic_decrement(&m_refCount);
 }
 
-OGroupManager::~OGroupManager()
-{
-}
+OGroupManager::~OGroupManager() = default;
 
 // XPropertyChangeListener
 void OGroupManager::disposing(const EventObject& evt)

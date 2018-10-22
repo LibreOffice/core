@@ -58,9 +58,7 @@ ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Refer
         aArgs[ 3 ] >>= m_sLibName;
 }
 
-ScVbaUserForm::~ScVbaUserForm()
-{
-}
+ScVbaUserForm::~ScVbaUserForm() = default;
 
 void SAL_CALL
 ScVbaUserForm::Show(  )

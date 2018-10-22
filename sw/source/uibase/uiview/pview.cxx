@@ -190,9 +190,7 @@ SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView 
     mnSttPage = USHRT_MAX;
 }
 
-SwPagePreviewWin::~SwPagePreviewWin()
-{
-}
+SwPagePreviewWin::~SwPagePreviewWin() = default;
 
 void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {

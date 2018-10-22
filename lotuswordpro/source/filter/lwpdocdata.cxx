@@ -65,9 +65,7 @@ LwpDocData::LwpDocData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpObject(objHdr, pStrm)//m_pEditorAttrList(0)
 {}
 
-LwpDocData::~LwpDocData()
-{
-}
+LwpDocData::~LwpDocData() = default;
 
 void LwpDocData::Read()
 {

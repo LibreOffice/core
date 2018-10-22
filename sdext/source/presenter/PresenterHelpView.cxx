@@ -182,9 +182,7 @@ PresenterHelpView::PresenterHelpView (
     }
 }
 
-PresenterHelpView::~PresenterHelpView()
-{
-}
+PresenterHelpView::~PresenterHelpView() = default;
 
 void SAL_CALL PresenterHelpView::disposing()
 {

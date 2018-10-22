@@ -44,9 +44,7 @@ FocusManager::FocusManager (SlideSorter& rSlideSorter)
         mnPageIndex = 0;
 }
 
-FocusManager::~FocusManager()
-{
-}
+FocusManager::~FocusManager() = default;
 
 void FocusManager::MoveFocus (FocusMoveDirection eDirection)
 {

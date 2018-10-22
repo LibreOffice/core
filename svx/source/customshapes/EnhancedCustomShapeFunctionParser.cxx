@@ -82,8 +82,7 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
     rDest.nPara[ nDestPara ] = nValue;
 }
 
-ExpressionNode::~ExpressionNode()
-{}
+ExpressionNode::~ExpressionNode() = default;
 
 namespace
 {

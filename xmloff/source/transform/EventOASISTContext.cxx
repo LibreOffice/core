@@ -78,9 +78,7 @@ XMLEventOASISTransformerContext::XMLEventOASISTransformerContext(
 {
 }
 
-XMLEventOASISTransformerContext::~XMLEventOASISTransformerContext()
-{
-}
+XMLEventOASISTransformerContext::~XMLEventOASISTransformerContext() = default;
 
 XMLTransformerOASISEventMap_Impl
     *XMLEventOASISTransformerContext::CreateEventMap()

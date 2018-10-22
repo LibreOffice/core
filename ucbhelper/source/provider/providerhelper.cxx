@@ -70,9 +70,7 @@ ContentProviderImplHelper::ContentProviderImplHelper(
 }
 
 // virtual
-ContentProviderImplHelper::~ContentProviderImplHelper()
-{
-}
+ContentProviderImplHelper::~ContentProviderImplHelper() = default;
 
 // XInterface
 void SAL_CALL ContentProviderImplHelper::acquire()

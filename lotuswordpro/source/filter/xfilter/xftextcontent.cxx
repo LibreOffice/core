@@ -61,9 +61,7 @@ XFTextContent::XFTextContent(const OUString& text):m_strText(text)
 {
 }
 
-XFTextContent::~XFTextContent()
-{
-}
+XFTextContent::~XFTextContent() = default;
 
 enumXFContent XFTextContent::GetContentType()
 {

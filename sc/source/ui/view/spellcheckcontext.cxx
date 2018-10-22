@@ -44,9 +44,7 @@ bool SpellCheckContext::CellPos::operator== (const CellPos& r) const
     return mnCol == r.mnCol && mnRow == r.mnRow;
 }
 
-SpellCheckContext::SpellCheckContext()
-{
-}
+SpellCheckContext::SpellCheckContext() = default;
 
 bool SpellCheckContext::isMisspelled( SCCOL nCol, SCROW nRow ) const
 {

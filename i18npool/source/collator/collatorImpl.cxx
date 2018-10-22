@@ -37,9 +37,7 @@ CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) :
     cachedItem = nullptr;
 }
 
-CollatorImpl::~CollatorImpl()
-{
-}
+CollatorImpl::~CollatorImpl() = default;
 
 sal_Int32 SAL_CALL
 CollatorImpl::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,

@@ -67,10 +67,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     }
 }
 
-ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper()
-{
-    // currently does nothing
-}
+ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper() = default;
 
 void SAL_CALL
 ScriptingFrameworkURIHelper::initialize(

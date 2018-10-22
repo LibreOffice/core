@@ -307,9 +307,7 @@ namespace svx
         m_pImpl->buildFrom(_rValues);
     }
 
-    ODataAccessDescriptor::~ODataAccessDescriptor()
-    {
-    }
+    ODataAccessDescriptor::~ODataAccessDescriptor() = default;
 
     void ODataAccessDescriptor::clear()
     {

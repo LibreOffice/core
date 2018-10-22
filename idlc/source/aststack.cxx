@@ -21,9 +21,7 @@
 #include <aststack.hxx>
 #include <astscope.hxx>
 
-AstStack::AstStack()
-{
-}
+AstStack::AstStack() = default;
 
 AstStack::~AstStack()
 {

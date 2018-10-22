@@ -1657,9 +1657,7 @@ AnimationsExporter::AnimationsExporter( SvXMLExport& rExport, const Reference< X
 {
 }
 
-AnimationsExporter::~AnimationsExporter()
-{
-}
+AnimationsExporter::~AnimationsExporter() = default;
 
 void AnimationsExporter::prepare( const Reference< XAnimationNode >& xRootNode )
 {

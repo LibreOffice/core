@@ -1367,11 +1367,7 @@ SvxBoxItem::SvxBoxItem( const sal_uInt16 nId ) :
 {
 }
 
-
-SvxBoxItem::~SvxBoxItem()
-{
-}
-
+SvxBoxItem::~SvxBoxItem() = default;
 
 SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
 {
@@ -2262,11 +2258,7 @@ SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCpy ) :
 {
 }
 
-
-SvxBoxInfoItem::~SvxBoxInfoItem()
-{
-}
-
+SvxBoxInfoItem::~SvxBoxInfoItem() = default;
 
 SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )
 {
@@ -2885,11 +2877,7 @@ SvxLineItem::SvxLineItem( const SvxLineItem& rCpy ) :
 {
 }
 
-
-SvxLineItem::~SvxLineItem()
-{
-}
-
+SvxLineItem::~SvxLineItem() = default;
 
 SvxLineItem& SvxLineItem::operator=( const SvxLineItem& rLine )
 {
@@ -3246,9 +3234,7 @@ SvxBrushItem::SvxBrushItem(SvxBrushItem&& rItem)
 {
 }
 
-SvxBrushItem::~SvxBrushItem()
-{
-}
+SvxBrushItem::~SvxBrushItem() = default;
 
 bool SvxBrushItem::isUsed() const
 {
@@ -3797,11 +3783,7 @@ SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
 {
 }
 
-
-SvxFrameDirectionItem::~SvxFrameDirectionItem()
-{
-}
-
+SvxFrameDirectionItem::~SvxFrameDirectionItem() = default;
 
 SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
 {

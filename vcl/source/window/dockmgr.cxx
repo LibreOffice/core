@@ -266,13 +266,9 @@ bool ImplDockFloatWin2::Close()
     return true;
 }
 
-DockingManager::DockingManager()
-{
-}
+DockingManager::DockingManager() = default;
 
-DockingManager::~DockingManager()
-{
-}
+DockingManager::~DockingManager() = default;
 
 ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const vcl::Window *pWindow )
 {

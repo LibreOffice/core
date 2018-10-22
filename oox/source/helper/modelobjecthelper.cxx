@@ -45,9 +45,7 @@ ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxMod
     OSL_ENSURE( mxModelFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
 }
 
-ObjectContainer::~ObjectContainer()
-{
-}
+ObjectContainer::~ObjectContainer() = default;
 
 bool ObjectContainer::hasObject( const OUString& rObjName ) const
 {

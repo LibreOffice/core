@@ -88,9 +88,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     }
 }
 
-SvtFontSubstConfig::~SvtFontSubstConfig()
-{
-}
+SvtFontSubstConfig::~SvtFontSubstConfig() = default;
 
 void SvtFontSubstConfig::Notify( const css::uno::Sequence< OUString >& )
 {

@@ -44,10 +44,7 @@ XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
 {
 }
 
-
-XMLIndexTitleTemplateContext::~XMLIndexTitleTemplateContext()
-{
-}
+XMLIndexTitleTemplateContext::~XMLIndexTitleTemplateContext() = default;
 
 void XMLIndexTitleTemplateContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

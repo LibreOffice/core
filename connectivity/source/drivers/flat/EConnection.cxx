@@ -49,9 +49,7 @@ OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
 {
 }
 
-OFlatConnection::~OFlatConnection()
-{
-}
+OFlatConnection::~OFlatConnection() = default;
 
 // XServiceInfo
 

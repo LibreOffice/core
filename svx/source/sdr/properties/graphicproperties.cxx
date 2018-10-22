@@ -76,9 +76,7 @@ namespace sdr
         {
         }
 
-        GraphicProperties::~GraphicProperties()
-        {
-        }
+        GraphicProperties::~GraphicProperties() = default;
 
         std::unique_ptr<BaseProperties> GraphicProperties::Clone(SdrObject& rObj) const
         {

@@ -89,9 +89,7 @@ namespace dbmm
     {
     }
 
-    MigrationLog::~MigrationLog()
-    {
-    }
+    MigrationLog::~MigrationLog() = default;
 
     void MigrationLog::logFailure( const MigrationError& _rError )
     {

@@ -34,9 +34,7 @@ XMLRectangleMembersHdl::XMLRectangleMembersHdl( sal_Int32 nType )
 {
 }
 
-XMLRectangleMembersHdl::~XMLRectangleMembersHdl()
-{
-}
+XMLRectangleMembersHdl::~XMLRectangleMembersHdl() = default;
 
 bool XMLRectangleMembersHdl::importXML(
     const OUString& rStrImpValue,

@@ -58,8 +58,6 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     }
 }
 
-SwSortOptions::~SwSortOptions()
-{
-}
+SwSortOptions::~SwSortOptions() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

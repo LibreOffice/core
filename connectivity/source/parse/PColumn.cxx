@@ -163,10 +163,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     return pColumn;
 }
 
-
-OParseColumn::~OParseColumn()
-{
-}
+OParseColumn::~OParseColumn() = default;
 
 void OParseColumn::construct()
 {
@@ -238,11 +235,7 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, bool _bCase
     construct();
 }
 
-
-OOrderColumn::~OOrderColumn()
-{
-}
-
+OOrderColumn::~OOrderColumn() = default;
 
 void OOrderColumn::construct()
 {

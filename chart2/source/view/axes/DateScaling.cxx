@@ -47,9 +47,7 @@ DateScaling::DateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShif
 {
 }
 
-DateScaling::~DateScaling()
-{
-}
+DateScaling::~DateScaling() = default;
 
 double SAL_CALL DateScaling::doScaling( double value )
 {
@@ -123,9 +121,7 @@ InverseDateScaling::InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUn
 {
 }
 
-InverseDateScaling::~InverseDateScaling()
-{
-}
+InverseDateScaling::~InverseDateScaling() = default;
 
 double SAL_CALL InverseDateScaling::doScaling( double value )
 {

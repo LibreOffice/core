@@ -191,9 +191,7 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
         maFontHeights[ nIndex ] = rHtmlOptions.GetFontSize( nIndex ) * 20;
 }
 
-ScHTMLParser::~ScHTMLParser()
-{
-}
+ScHTMLParser::~ScHTMLParser() = default;
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
     EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,
@@ -1888,9 +1886,7 @@ ScHTMLTable::ScHTMLTable(
     mxCurrEntry = CreateEntry();
 }
 
-ScHTMLTable::~ScHTMLTable()
-{
-}
+ScHTMLTable::~ScHTMLTable() = default;
 
 const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 {
@@ -2751,9 +2747,7 @@ ScHTMLGlobalTable::ScHTMLGlobalTable(
 {
 }
 
-ScHTMLGlobalTable::~ScHTMLGlobalTable()
-{
-}
+ScHTMLGlobalTable::~ScHTMLGlobalTable() = default;
 
 void ScHTMLGlobalTable::Recalc()
 {
@@ -2775,9 +2769,7 @@ ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc 
     mpCurrTable = mxGlobTable.get();
 }
 
-ScHTMLQueryParser::~ScHTMLQueryParser()
-{
-}
+ScHTMLQueryParser::~ScHTMLQueryParser() = default;
 
 ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 {
@@ -3031,19 +3023,14 @@ class CSSHandler
 
         MemStr() : mp(nullptr), mn(0) {}
         MemStr(const char* p, size_t n) : mp(p), mn(n) {}
-        MemStr& operator=(const MemStr& r)
-        {
-            mp = r.mp;
-            mn = r.mn;
-            return *this;
-        }
+        MemStr& operator=(const MemStr& r) = default;
     };
 
     MemStr maPropName;  /// current property name.
     MemStr maPropValue; /// current property value.
 
 public:
-    explicit CSSHandler() {}
+    explicit CSSHandler() = default;
 
     static void at_rule_name(const char* /*p*/, size_t /*n*/)
     {

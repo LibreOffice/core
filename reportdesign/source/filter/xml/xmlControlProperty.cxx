@@ -113,10 +113,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
 
 }
 
-
-OXMLControlProperty::~OXMLControlProperty()
-{
-}
+OXMLControlProperty::~OXMLControlProperty() = default;
 
 SvXMLImportContextRef OXMLControlProperty::CreateChildContext(
         sal_uInt16 nPrefix,

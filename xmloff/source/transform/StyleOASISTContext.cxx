@@ -734,9 +734,7 @@ XMLStyleOASISTContext::XMLStyleOASISTContext(
 {
 }
 
-XMLStyleOASISTContext::~XMLStyleOASISTContext()
-{
-}
+XMLStyleOASISTContext::~XMLStyleOASISTContext() = default;
 
 rtl::Reference<XMLTransformerContext> XMLStyleOASISTContext::CreateChildContext(
             sal_uInt16 nPrefix,

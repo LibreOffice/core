@@ -104,7 +104,7 @@ Partial::Partial(
     }
 }
 
-Partial::~Partial() {}
+Partial::~Partial() = default;
 
 Partial::Containment Partial::contains(std::vector<OUString> const & path) const {
     //TODO: For set elements, the segment names recorded in the node tree need

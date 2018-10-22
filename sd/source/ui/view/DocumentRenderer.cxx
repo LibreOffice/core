@@ -691,7 +691,7 @@ namespace {
         {
         }
 
-        virtual ~PrinterPage() {}
+        virtual ~PrinterPage() = default;
 
         virtual void Print (
             Printer& rPrinter,
@@ -2209,9 +2209,7 @@ DocumentRenderer::DocumentRenderer (ViewShellBase& rBase)
 {
 }
 
-DocumentRenderer::~DocumentRenderer()
-{
-}
+DocumentRenderer::~DocumentRenderer() = default;
 
 //----- XRenderable -----------------------------------------------------------
 

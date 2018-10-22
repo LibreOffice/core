@@ -1503,9 +1503,7 @@ SvxUnoTextRange::SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion /*
     xParentText =  static_cast<text::XText*>(const_cast<SvxUnoTextBase *>(&rParent));
 }
 
-SvxUnoTextRange::~SvxUnoTextRange() throw()
-{
-}
+SvxUnoTextRange::~SvxUnoTextRange() throw() = default;
 
 uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
 {
@@ -1622,9 +1620,7 @@ SvxUnoTextBase::SvxUnoTextBase(const SvxUnoTextBase& rText)
     xParentText = rText.xParentText;
 }
 
-SvxUnoTextBase::~SvxUnoTextBase() throw()
-{
-}
+SvxUnoTextBase::~SvxUnoTextBase() throw() = default;
 
 // XInterface
 uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
@@ -2218,9 +2214,7 @@ SvxUnoText::SvxUnoText( const SvxUnoText& rText ) throw()
 {
 }
 
-SvxUnoText::~SvxUnoText() throw()
-{
-}
+SvxUnoText::~SvxUnoText() throw() = default;
 
 // uno::XInterface
 uno::Any SAL_CALL SvxUnoText::queryAggregation( const uno::Type & rType )
@@ -2281,10 +2275,8 @@ sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rI
     }
 }
 
-
-SvxDummyTextSource::~SvxDummyTextSource()
-{
-};
+SvxDummyTextSource::~SvxDummyTextSource() = default;
+;
 
 std::unique_ptr<SvxEditSource> SvxDummyTextSource::Clone() const
 {

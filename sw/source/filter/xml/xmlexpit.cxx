@@ -282,9 +282,7 @@ SvXMLExportItemMapper::SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries
     mrMapEntries = std::move(rMapEntries);
 }
 
-SvXMLExportItemMapper::~SvXMLExportItemMapper()
-{
-}
+SvXMLExportItemMapper::~SvXMLExportItemMapper() = default;
 
 void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,

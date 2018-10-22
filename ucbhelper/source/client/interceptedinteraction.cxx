@@ -22,10 +22,7 @@
 #include <osl/diagnose.h>
 
 namespace ucbhelper{
-
-InterceptedInteraction::InterceptedInteraction()
-{
-}
+InterceptedInteraction::InterceptedInteraction() = default;
 
 void InterceptedInteraction::setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler)
 {

@@ -254,9 +254,7 @@ ScLinkTargetsObj::ScLinkTargetsObj( const uno::Reference< container::XNameAccess
     OSL_ENSURE( xCollection.is(), "ScLinkTargetsObj: NULL" );
 }
 
-ScLinkTargetsObj::~ScLinkTargetsObj()
-{
-}
+ScLinkTargetsObj::~ScLinkTargetsObj() = default;
 
 // container::XNameAccess
 

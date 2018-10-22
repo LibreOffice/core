@@ -149,9 +149,7 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
 {
 }
 
-X11SalGraphicsImpl::~X11SalGraphicsImpl()
-{
-}
+X11SalGraphicsImpl::~X11SalGraphicsImpl() = default;
 
 void X11SalGraphicsImpl::Init()
 {

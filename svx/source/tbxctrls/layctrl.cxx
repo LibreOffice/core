@@ -675,11 +675,7 @@ SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 n
     rTbx.Invalidate();
 }
 
-
-SvxTableToolBoxControl::~SvxTableToolBoxControl()
-{
-}
-
+SvxTableToolBoxControl::~SvxTableToolBoxControl() = default;
 
 VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
 {
@@ -720,11 +716,7 @@ SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt
     rTbx.Invalidate();
 }
 
-
-SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
-{
-}
-
+SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl() = default;
 
 VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
 {

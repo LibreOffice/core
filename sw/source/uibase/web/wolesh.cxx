@@ -46,8 +46,6 @@ SwWebOleShell::SwWebOleShell(SwView &_rView) :
     SetName("Object");
 }
 
-SwWebOleShell::~SwWebOleShell()
-{
-}
+SwWebOleShell::~SwWebOleShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

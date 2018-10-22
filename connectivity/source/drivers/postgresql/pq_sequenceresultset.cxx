@@ -77,10 +77,7 @@ SequenceResultSet::SequenceResultSet(
     }
 }
 
-SequenceResultSet::~SequenceResultSet()
-{
-
-}
+SequenceResultSet::~SequenceResultSet() = default;
 
 void SequenceResultSet::close(  )
 {

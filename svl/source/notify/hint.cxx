@@ -23,9 +23,6 @@
 
 // virtual dtor for the typical base-class Hint
 
-SfxHint::~SfxHint() COVERITY_NOEXCEPT_FALSE
-{
-}
-
+SfxHint::~SfxHint() COVERITY_NOEXCEPT_FALSE = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

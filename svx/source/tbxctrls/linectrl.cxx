@@ -64,11 +64,7 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
     addStatusListener( ".uno:DashListState");
 }
 
-
-SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
-{
-}
-
+SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl() = default;
 
 void SvxLineStyleToolBoxControl::StateChanged (
 
@@ -189,11 +185,7 @@ SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
     addStatusListener( ".uno:MetricUnit");
 }
 
-
-SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
-{
-}
-
+SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl() = default;
 
 void SvxLineWidthToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )

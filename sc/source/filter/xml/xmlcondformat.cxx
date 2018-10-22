@@ -362,9 +362,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
     }
 }
 
-ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
-{
-}
+ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext() = default;
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport,
                         ScConditionalFormat* pFormat):

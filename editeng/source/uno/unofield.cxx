@@ -408,9 +408,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
     mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
 }
 
-SvxUnoTextField::~SvxUnoTextField() throw()
-{
-}
+SvxUnoTextField::~SvxUnoTextField() throw() = default;
 
 std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const throw()
 {

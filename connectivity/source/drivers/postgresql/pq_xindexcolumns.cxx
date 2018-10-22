@@ -88,8 +88,7 @@ IndexColumns::IndexColumns(
       m_columns( columns )
 {}
 
-IndexColumns::~IndexColumns()
-{}
+IndexColumns::~IndexColumns() = default;
 
 static sal_Int32 findInSequence( const Sequence< OUString > & seq , const OUString &str)
 {

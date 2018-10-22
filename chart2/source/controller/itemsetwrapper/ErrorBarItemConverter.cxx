@@ -105,8 +105,7 @@ ErrorBarItemConverter::ErrorBarItemConverter(
         m_xModel( xModel )
 {}
 
-ErrorBarItemConverter::~ErrorBarItemConverter()
-{}
+ErrorBarItemConverter::~ErrorBarItemConverter() = default;
 
 void ErrorBarItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

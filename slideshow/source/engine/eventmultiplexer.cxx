@@ -678,10 +678,8 @@ EventMultiplexer::EventMultiplexer( EventQueue&             rEventQueue,
 {
 }
 
-EventMultiplexer::~EventMultiplexer()
-{
+EventMultiplexer::~EventMultiplexer() = default;
     // outline because of EventMultiplexerImpl's incomplete type
-}
 
 void EventMultiplexer::clear()
 {

@@ -173,9 +173,7 @@ SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
 //    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
 }
 
-SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
-{
-}
+SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext() = default;
 
 void SAL_CALL SvXMLMetaDocumentContext::startFastElement( sal_Int32 nElement,
             const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )

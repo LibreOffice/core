@@ -423,9 +423,7 @@ GraphicFilterEmboss::GraphicFilterEmboss(weld::Window* pParent,
     maCtlLight.GrabFocus();
 }
 
-GraphicFilterEmboss::~GraphicFilterEmboss()
-{
-}
+GraphicFilterEmboss::~GraphicFilterEmboss() = default;
 
 Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {

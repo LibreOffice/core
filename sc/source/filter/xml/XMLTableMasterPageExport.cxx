@@ -40,9 +40,7 @@ XMLTableMasterPageExport::XMLTableMasterPageExport( ScXMLExport& rExp ) :
 {
 }
 
-XMLTableMasterPageExport::~XMLTableMasterPageExport()
-{
-}
+XMLTableMasterPageExport::~XMLTableMasterPageExport() = default;
 
 void XMLTableMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,

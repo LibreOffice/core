@@ -163,9 +163,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     }
 }
 
-SwHTMLWriter::~SwHTMLWriter()
-{
-}
+SwHTMLWriter::~SwHTMLWriter() = default;
 
 std::unique_ptr<SwHTMLNumRuleInfo> SwHTMLWriter::ReleaseNextNumInfo()
 {

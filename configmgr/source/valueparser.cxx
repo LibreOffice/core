@@ -251,7 +251,7 @@ css::uno::Any parseValue(
 
 ValueParser::ValueParser(int layer): type_(TYPE_ERROR), layer_(layer), state_() {}
 
-ValueParser::~ValueParser() {}
+ValueParser::~ValueParser() = default;
 
 xmlreader::XmlReader::Text ValueParser::getTextMode() const {
     if (node_.is()) {

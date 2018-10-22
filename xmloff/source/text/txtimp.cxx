@@ -1035,9 +1035,7 @@ XMLTextImportHelper::XMLTextImportHelper(
         new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 
-XMLTextImportHelper::~XMLTextImportHelper()
-{
-}
+XMLTextImportHelper::~XMLTextImportHelper() = default;
 
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLImport& rImport)
 {

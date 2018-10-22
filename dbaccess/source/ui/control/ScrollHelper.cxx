@@ -23,13 +23,10 @@
 namespace dbaui
 {
 
-    OScrollHelper::OScrollHelper()
-    {
-    }
-    OScrollHelper::~OScrollHelper()
-    {
+    OScrollHelper::OScrollHelper() = default;
 
-    }
+    OScrollHelper::~OScrollHelper() = default;
+
     void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
     {
         // Scrolling Areas

@@ -73,9 +73,7 @@ XMLGradientStyleImport::XMLGradientStyleImport(
 {
 }
 
-XMLGradientStyleImport::~XMLGradientStyleImport()
-{
-}
+XMLGradientStyleImport::~XMLGradientStyleImport() = default;
 
 void XMLGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
@@ -191,9 +189,7 @@ XMLGradientStyleExport::XMLGradientStyleExport(
 {
 }
 
-XMLGradientStyleExport::~XMLGradientStyleExport()
-{
-}
+XMLGradientStyleExport::~XMLGradientStyleExport() = default;
 
 void XMLGradientStyleExport::exportXML(
     const OUString& rStrName,

@@ -76,9 +76,7 @@ private:
     ScExtTabSettingsMap maMap;
 };
 
-ScExtTabSettingsCont::ScExtTabSettingsCont()
-{
-}
+ScExtTabSettingsCont::ScExtTabSettingsCont() = default;
 
 ScExtTabSettingsCont::ScExtTabSettingsCont( const ScExtTabSettingsCont& rSrc )
 {
@@ -143,9 +141,7 @@ ScExtDocOptions::ScExtDocOptions( const ScExtDocOptions& rSrc ) :
 {
 }
 
-ScExtDocOptions::~ScExtDocOptions()
-{
-}
+ScExtDocOptions::~ScExtDocOptions() = default;
 
 ScExtDocOptions& ScExtDocOptions::operator=( const ScExtDocOptions& rSrc )
 {

@@ -38,12 +38,7 @@ XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
 {
 }
 
-
-template<class A>
-XMLPropertyBackpatcher<A>::~XMLPropertyBackpatcher()
-{
-}
-
+template <class A> XMLPropertyBackpatcher<A>::~XMLPropertyBackpatcher() = default;
 
 template<class A>
 void XMLPropertyBackpatcher<A>::ResolveId(

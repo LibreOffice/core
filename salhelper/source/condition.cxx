@@ -37,11 +37,7 @@ Condition::Condition(osl::Mutex& aMutex)
 {
 }
 
-
-Condition::~Condition()
-{
-}
-
+Condition::~Condition() = default;
 
 /******************************************************************
  *                                                                *
@@ -71,14 +67,13 @@ ConditionModifier::~ConditionModifier()
  *                                                                *
  ******************************************************************/
 
-ConditionWaiter::timedout::timedout() {}
+ConditionWaiter::timedout::timedout() = default;
 
-ConditionWaiter::timedout::timedout(timedout const &) {}
+ConditionWaiter::timedout::timedout(timedout const&) = default;
 
-ConditionWaiter::timedout::~timedout() {}
+ConditionWaiter::timedout::~timedout() = default;
 
-ConditionWaiter::timedout &
-ConditionWaiter::timedout::operator =(timedout const &) { return *this; }
+ConditionWaiter::timedout& ConditionWaiter::timedout::operator=(timedout const&) = default;
 
 ConditionWaiter::ConditionWaiter(Condition& aCond)
     : m_aCond(aCond)

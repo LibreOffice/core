@@ -27,9 +27,7 @@ ScPaintLockData::ScPaintLockData() :
 {
 }
 
-ScPaintLockData::~ScPaintLockData()
-{
-}
+ScPaintLockData::~ScPaintLockData() = default;
 
 void ScPaintLockData::AddRange( const ScRange& rRange, PaintPartFlags nP )
 {

@@ -33,7 +33,7 @@ static OUString createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
-ScRangeManagerTable::InitListener::~InitListener() {}
+ScRangeManagerTable::InitListener::~InitListener() = default;
 
 ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
         const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap,

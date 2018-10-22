@@ -182,10 +182,7 @@ SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, long nYPo
 {
 }
 
-
-SwTypeNumber::~SwTypeNumber()
-{
-}
+SwTypeNumber::~SwTypeNumber() = default;
 
 bool SwContent::IsProtect() const
 {
@@ -202,13 +199,9 @@ bool SwURLFieldContent::IsProtect() const
     return pINetAttr->IsProtect();
 }
 
-SwGraphicContent::~SwGraphicContent()
-{
-}
+SwGraphicContent::~SwGraphicContent() = default;
 
-SwTOXBaseContent::~SwTOXBaseContent()
-{
-}
+SwTOXBaseContent::~SwTOXBaseContent() = default;
 
 static const char* STR_CONTENT_TYPE_ARY[] =
 {
@@ -493,9 +486,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         bDataValid = false;
 }
 
-SwContentType::~SwContentType()
-{
-}
+SwContentType::~SwContentType() = default;
 
 const SwContent* SwContentType::GetMember(size_t nIndex)
 {

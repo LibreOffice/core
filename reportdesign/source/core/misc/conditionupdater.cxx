@@ -39,16 +39,9 @@ namespace rptui
 
     //= ConditionUpdater
 
+    ConditionUpdater::ConditionUpdater() = default;
 
-    ConditionUpdater::ConditionUpdater()
-    {
-    }
-
-
-    ConditionUpdater::~ConditionUpdater()
-    {
-    }
-
+    ConditionUpdater::~ConditionUpdater() = default;
 
     void ConditionUpdater::notifyPropertyChange( const PropertyChangeEvent& _rEvent )
     {

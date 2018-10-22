@@ -273,9 +273,7 @@ void SwView_Impl::InitRequest( const SfxRequest& rRequest )
     m_pRequest.reset(new SfxRequest( rRequest ));
 }
 
-SwScannerEventListener::~SwScannerEventListener()
-{
-}
+SwScannerEventListener::~SwScannerEventListener() = default;
 
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& /*rEventObject*/)
 {
@@ -286,9 +284,7 @@ void SAL_CALL SwScannerEventListener::disposing( const EventObject& /*rEventObje
 #endif
 }
 
-SwClipboardChangeListener::~SwClipboardChangeListener()
-{
-}
+SwClipboardChangeListener::~SwClipboardChangeListener() = default;
 
 void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventObject*/ )
 {

@@ -1016,9 +1016,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
     SetGetStateSet( nullptr );
 }
 
-SwGrfShell::~SwGrfShell()
-{
-}
+SwGrfShell::~SwGrfShell() = default;
 
 SwGrfShell::SwGrfShell(SwView &_rView) :
     SwBaseShell(_rView)

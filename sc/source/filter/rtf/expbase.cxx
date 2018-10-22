@@ -31,9 +31,7 @@ ScExportBase::ScExportBase( SvStream& rStrmP, ScDocument* pDocP,
 {
 }
 
-ScExportBase::~ScExportBase()
-{
-}
+ScExportBase::~ScExportBase() = default;
 
 bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const

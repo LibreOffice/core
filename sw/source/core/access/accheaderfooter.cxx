@@ -51,9 +51,7 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
     SetName( GetResource( STR_ACCESS_FOOTER_NAME, &sArg ) );
 }
 
-SwAccessibleHeaderFooter::~SwAccessibleHeaderFooter()
-{
-}
+SwAccessibleHeaderFooter::~SwAccessibleHeaderFooter() = default;
 
 OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
 {

@@ -593,11 +593,7 @@ CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     MakeLookUp(CCIUncompTable,CCIUncompTableSave,pUncompLookUp.data(),CCIUncompTableSize,11);
 }
 
-
-CCIDecompressor::~CCIDecompressor()
-{
-}
-
+CCIDecompressor::~CCIDecompressor() = default;
 
 void CCIDecompressor::StartDecompression( SvStream & rIStream )
 {

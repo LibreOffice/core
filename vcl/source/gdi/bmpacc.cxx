@@ -101,9 +101,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
     }
 }
 
-BitmapReadAccess::~BitmapReadAccess()
-{
-}
+BitmapReadAccess::~BitmapReadAccess() = default;
 
 bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
 {
@@ -322,9 +320,7 @@ BitmapWriteAccess::BitmapWriteAccess(Bitmap& rBitmap)
 {
 }
 
-BitmapWriteAccess::~BitmapWriteAccess()
-{
-}
+BitmapWriteAccess::~BitmapWriteAccess() = default;
 
 void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
 {

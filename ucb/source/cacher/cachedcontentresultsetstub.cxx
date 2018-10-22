@@ -491,10 +491,7 @@ CachedContentResultSetStubFactory::CachedContentResultSetStubFactory(
     m_xSMgr = rSMgr;
 }
 
-CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
-{
-}
-
+CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory() = default;
 
 // CachedContentResultSetStubFactory XInterface methods.
 void SAL_CALL CachedContentResultSetStubFactory::acquire()

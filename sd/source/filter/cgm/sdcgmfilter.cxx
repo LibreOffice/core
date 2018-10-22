@@ -52,9 +52,7 @@ SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
 {
 }
 
-SdCGMFilter::~SdCGMFilter()
-{
-}
+SdCGMFilter::~SdCGMFilter() = default;
 
 namespace
 {

@@ -12,13 +12,9 @@
 
 namespace basegfx
 {
-    SystemDependentDataManager::SystemDependentDataManager()
-    {
-    }
+    SystemDependentDataManager::SystemDependentDataManager() = default;
 
-    SystemDependentDataManager::~SystemDependentDataManager()
-    {
-    }
+    SystemDependentDataManager::~SystemDependentDataManager() = default;
 } // namespace basegfx
 
 namespace basegfx
@@ -29,9 +25,7 @@ namespace basegfx
     {
     }
 
-    MinimalSystemDependentDataManager::~MinimalSystemDependentDataManager()
-    {
-    }
+    MinimalSystemDependentDataManager::~MinimalSystemDependentDataManager() = default;
 
     void MinimalSystemDependentDataManager::startUsage(basegfx::SystemDependentData_SharedPtr& rData)
     {
@@ -68,9 +62,7 @@ namespace basegfx
     {
     }
 
-    SystemDependentData::~SystemDependentData()
-    {
-    }
+    SystemDependentData::~SystemDependentData() = default;
 
     sal_uInt32 SystemDependentData::calculateCombinedHoldCyclesInSeconds() const
     {

@@ -48,9 +48,7 @@ MenuBarFactory::MenuBarFactory( const css::uno::Reference< css::uno::XComponentC
 {
 }
 
-MenuBarFactory::~MenuBarFactory()
-{
-}
+MenuBarFactory::~MenuBarFactory() = default;
 
 // XUIElementFactory
 Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(

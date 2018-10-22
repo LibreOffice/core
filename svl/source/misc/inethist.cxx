@@ -293,9 +293,7 @@ INetURLHistory::INetURLHistory() : m_pImpl (new INetURLHistory_Impl())
 {
 }
 
-INetURLHistory::~INetURLHistory()
-{
-}
+INetURLHistory::~INetURLHistory() = default;
 
 /*
  * GetOrCreate.

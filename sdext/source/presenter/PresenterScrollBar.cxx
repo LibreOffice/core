@@ -135,9 +135,7 @@ PresenterScrollBar::PresenterScrollBar (
     }
 }
 
-PresenterScrollBar::~PresenterScrollBar()
-{
-}
+PresenterScrollBar::~PresenterScrollBar() = default;
 
 void SAL_CALL PresenterScrollBar::disposing()
 {
@@ -577,9 +575,7 @@ PresenterVerticalScrollBar::PresenterVerticalScrollBar (
 {
 }
 
-PresenterVerticalScrollBar::~PresenterVerticalScrollBar()
-{
-}
+PresenterVerticalScrollBar::~PresenterVerticalScrollBar() = default;
 
 double PresenterVerticalScrollBar::GetDragDistance (const sal_Int32, const sal_Int32 nY) const
 {

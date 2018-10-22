@@ -62,13 +62,9 @@ OUString lclConvertToCanonicalName(const OUString& rFileName)
 
 } // end anonymous namespace
 
-CommandImageResolver::CommandImageResolver()
-{
-}
+CommandImageResolver::CommandImageResolver() = default;
 
-CommandImageResolver::~CommandImageResolver()
-{
-}
+CommandImageResolver::~CommandImageResolver() = default;
 
 void CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence)
 {

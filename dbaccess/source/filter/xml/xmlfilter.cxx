@@ -220,12 +220,7 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
                         XML_NAMESPACE_DB );
 }
 
-
-ODBFilter::~ODBFilter() throw()
-{
-
-}
-
+ODBFilter::~ODBFilter() throw() = default;
 
 OUString ODBFilter::getImplementationName_Static()
 {

@@ -82,9 +82,7 @@ FixedTextureAtlasManager::FixedTextureAtlasManager(int nWidthFactor, int nHeight
 {
 }
 
-FixedTextureAtlasManager::~FixedTextureAtlasManager()
-{
-}
+FixedTextureAtlasManager::~FixedTextureAtlasManager() = default;
 
 void FixedTextureAtlasManager::CreateNewTexture()
 {

@@ -113,9 +113,7 @@ ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEng
 
 ScXMLTableRowCellContext::Field::Field(std::unique_ptr<SvxFieldData> pData) : mpData(std::move(pData)) {}
 
-ScXMLTableRowCellContext::Field::~Field()
-{
-}
+ScXMLTableRowCellContext::Field::~Field() = default;
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -294,9 +292,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.GetStylesImportHelper()->SetAttributes(std::move(xStyleName), std::move(xCurrencySymbol), nCellType);
 }
 
-ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
-{
-}
+ScXMLTableRowCellContext::~ScXMLTableRowCellContext() = default;
 
 void ScXMLTableRowCellContext::LockSolarMutex()
 {

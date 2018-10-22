@@ -421,9 +421,7 @@ Array::Array()
     Initialize( 0, 0 );
 }
 
-Array::~Array()
-{
-}
+Array::~Array() = default;
 
 // array size and column/row indexes
 void Array::Initialize( size_t nWidth, size_t nHeight )

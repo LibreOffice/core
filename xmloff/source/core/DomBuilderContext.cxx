@@ -84,9 +84,7 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
     SAL_WARN_IF( mxNode->getNodeType() != NodeType_ELEMENT_NODE, "xmloff", "need element" );
 }
 
-DomBuilderContext::~DomBuilderContext()
-{
-}
+DomBuilderContext::~DomBuilderContext() = default;
 
 Reference<XDocument> DomBuilderContext::getTree()
 {

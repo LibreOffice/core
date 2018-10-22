@@ -99,13 +99,9 @@ ScPivotField::ScPivotField(SCCOL nNewCol) :
     mnDupCount(0)
 {}
 
-ScPivotField::ScPivotField( const ScPivotField& rPivotField ) :
-    nCol(rPivotField.nCol),
-    mnOriginalDim(rPivotField.mnOriginalDim),
-    nFuncMask(rPivotField.nFuncMask),
-    mnDupCount(rPivotField.mnDupCount),
-    maFieldRef(rPivotField.maFieldRef)
-{}
+ScPivotField::ScPivotField(const ScPivotField& rPivotField)
+
+    = default;
 
 long ScPivotField::getOriginalDim() const
 {
@@ -134,8 +130,7 @@ ScPivotParam::ScPivotParam( const ScPivotParam& r )
     SetLabelData(r.maLabelArray);
 }
 
-ScPivotParam::~ScPivotParam()
-{}
+ScPivotParam::~ScPivotParam() = default;
 
 void ScPivotParam::SetLabelData(const ScDPLabelDataVector& rVector)
 {

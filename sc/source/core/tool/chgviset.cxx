@@ -24,9 +24,7 @@
 #include <chgtrack.hxx>
 #include <document.hxx>
 
-ScChangeViewSettings::~ScChangeViewSettings()
-{
-}
+ScChangeViewSettings::~ScChangeViewSettings() = default;
 
 ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
     aFirstDateTime( DateTime::EMPTY ),

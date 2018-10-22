@@ -135,17 +135,13 @@ void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen 
     rColArray.mpNumArray = m_NumArrays.back().get();
 }
 
-FormulaGroupContext::FormulaGroupContext()
-{
-}
+FormulaGroupContext::FormulaGroupContext() = default;
 
-FormulaGroupContext::~FormulaGroupContext()
-{
-}
+FormulaGroupContext::~FormulaGroupContext() = default;
 
-CompiledFormula::CompiledFormula() {}
+CompiledFormula::CompiledFormula() = default;
 
-CompiledFormula::~CompiledFormula() {}
+CompiledFormula::~CompiledFormula() = default;
 
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = nullptr;
 

@@ -55,9 +55,7 @@ bool IteratorPosition::operator== (const IteratorPosition& aPosition) const
 
 //===== Iterator ==============================================================
 
-Iterator::Iterator()
-{
-}
+Iterator::Iterator() = default;
 
 Iterator::Iterator (const Iterator& rIterator)
     : mxIterator(rIterator.mxIterator ? rIterator.mxIterator->Clone() : nullptr)
@@ -74,9 +72,7 @@ Iterator::Iterator (std::unique_ptr<IteratorImplBase> pObject)
 {
 }
 
-Iterator::~Iterator()
-{
-}
+Iterator::~Iterator() = default;
 
 Iterator& Iterator::operator= (const Iterator& rIterator)
 {
@@ -375,8 +371,7 @@ IteratorImplBase::IteratorImplBase( SdDrawDocument* pDocument,
     maPosition.meEditMode = eEditMode;
 }
 
-IteratorImplBase::~IteratorImplBase()
-{}
+IteratorImplBase::~IteratorImplBase() = default;
 
 bool IteratorImplBase::operator== (const IteratorImplBase& rIterator) const
 {
@@ -427,8 +422,7 @@ SelectionIteratorImpl::SelectionIteratorImpl (
 {
 }
 
-SelectionIteratorImpl::~SelectionIteratorImpl()
-{}
+SelectionIteratorImpl::~SelectionIteratorImpl() = default;
 
 IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
@@ -535,9 +529,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     SetPage (nPageIndex);
 }
 
-ViewIteratorImpl::~ViewIteratorImpl()
-{
-}
+ViewIteratorImpl::~ViewIteratorImpl() = default;
 
 IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
@@ -706,8 +698,7 @@ DocumentIteratorImpl::DocumentIteratorImpl (
         mnPageCount = pDocument->GetMasterSdPageCount(ePageKind);
 }
 
-DocumentIteratorImpl::~DocumentIteratorImpl()
-{}
+DocumentIteratorImpl::~DocumentIteratorImpl() = default;
 
 IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
 {

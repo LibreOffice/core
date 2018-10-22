@@ -193,9 +193,7 @@ namespace sdr
         {
         }
 
-        OverlayObjectWithBasePosition::~OverlayObjectWithBasePosition()
-        {
-        }
+        OverlayObjectWithBasePosition::~OverlayObjectWithBasePosition() = default;
 
         void OverlayObjectWithBasePosition::setBasePosition(const basegfx::B2DPoint& rNew)
         {

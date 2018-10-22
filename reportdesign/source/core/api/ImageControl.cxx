@@ -138,9 +138,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
     osl_atomic_decrement( &m_refCount );
 }
 
-OImageControl::~OImageControl()
-{
-}
+OImageControl::~OImageControl() = default;
 
 //IMPLEMENT_FORWARD_XINTERFACE2(OImageControl,ImageControlBase,ImageControlPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OImageControl, ImageControlBase )

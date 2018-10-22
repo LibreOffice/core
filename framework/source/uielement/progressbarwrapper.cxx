@@ -41,9 +41,7 @@ UIElementWrapperBase( css::ui::UIElementType::PROGRESSBAR )
 {
 }
 
-ProgressBarWrapper::~ProgressBarWrapper()
-{
-}
+ProgressBarWrapper::~ProgressBarWrapper() = default;
 
 // public interfaces
 void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rStatusBar, bool bOwnsInstance )

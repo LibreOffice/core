@@ -23,14 +23,9 @@
 
 namespace oox {
 namespace drawingml {
+Theme::Theme() = default;
 
-Theme::Theme()
-{
-}
-
-Theme::~Theme()
-{
-}
+Theme::~Theme() = default;
 
 namespace {
 

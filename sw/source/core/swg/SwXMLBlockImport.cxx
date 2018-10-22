@@ -113,13 +113,9 @@ public:
     virtual ~SwXMLTextBlockParContext() override;
 };
 
-SwXMLTextBlockTokenHandler::SwXMLTextBlockTokenHandler()
-{
-}
+SwXMLTextBlockTokenHandler::SwXMLTextBlockTokenHandler() = default;
 
-SwXMLTextBlockTokenHandler::~SwXMLTextBlockTokenHandler()
-{
-}
+SwXMLTextBlockTokenHandler::~SwXMLTextBlockTokenHandler() = default;
 
 sal_Int32 SAL_CALL SwXMLTextBlockTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
 {
@@ -139,13 +135,9 @@ sal_Int32 SwXMLTextBlockTokenHandler::getTokenDirect( const char *pTag, sal_Int3
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-SwXMLBlockListTokenHandler::SwXMLBlockListTokenHandler()
-{
-}
+SwXMLBlockListTokenHandler::SwXMLBlockListTokenHandler() = default;
 
-SwXMLBlockListTokenHandler::~SwXMLBlockListTokenHandler()
-{
-}
+SwXMLBlockListTokenHandler::~SwXMLBlockListTokenHandler() = default;
 
 sal_Int32 SAL_CALL SwXMLBlockListTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
 {
@@ -298,10 +290,7 @@ SwXMLBlockListImport::SwXMLBlockListImport(
 {
 }
 
-SwXMLBlockListImport::~SwXMLBlockListImport()
-    throw ()
-{
-}
+SwXMLBlockListImport::~SwXMLBlockListImport() throw() = default;
 
 SvXMLImportContext* SwXMLBlockListImport::CreateFastContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -322,10 +311,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
 {
 }
 
-SwXMLTextBlockImport::~SwXMLTextBlockImport()
-    throw()
-{
-}
+SwXMLTextBlockImport::~SwXMLTextBlockImport() throw() = default;
 
 SvXMLImportContext* SwXMLTextBlockImport::CreateFastContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )

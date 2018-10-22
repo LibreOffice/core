@@ -36,7 +36,7 @@ SwScrollbar::SwScrollbar( vcl::Window *pWin, bool bHoriz ) :
         EnableRTL( false );
 }
 
- SwScrollbar::~SwScrollbar() {}
+SwScrollbar::~SwScrollbar() = default;
 
 // Will be called after a change of the document size
 // to refresh the range of the scrollbars.

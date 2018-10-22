@@ -18,9 +18,7 @@ SfxTabDialogUIObject::SfxTabDialogUIObject(const VclPtr<SfxTabDialog>& xTabDialo
 {
 }
 
-SfxTabDialogUIObject::~SfxTabDialogUIObject()
-{
-}
+SfxTabDialogUIObject::~SfxTabDialogUIObject() = default;
 
 StringMap SfxTabDialogUIObject::get_state()
 {

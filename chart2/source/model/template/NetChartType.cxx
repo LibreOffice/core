@@ -35,17 +35,11 @@ using ::com::sun::star::uno::Reference;
 
 namespace chart
 {
+NetChartType_Base::NetChartType_Base() = default;
 
-NetChartType_Base::NetChartType_Base()
-{}
+NetChartType_Base::NetChartType_Base(const NetChartType_Base&) = default;
 
-NetChartType_Base::NetChartType_Base( const NetChartType_Base & rOther ) :
-        ChartType( rOther )
-{
-}
-
-NetChartType_Base::~NetChartType_Base()
-{}
+NetChartType_Base::~NetChartType_Base() = default;
 
 Reference< XCoordinateSystem > SAL_CALL
     NetChartType_Base::createCoordinateSystem( ::sal_Int32 DimensionCount )
@@ -130,16 +124,11 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropert
     return *StaticNetChartTypeInfo::get();
 }
 
-NetChartType::NetChartType()
-{}
+NetChartType::NetChartType() = default;
 
-NetChartType::NetChartType( const NetChartType & rOther ) :
-        NetChartType_Base( rOther )
-{
-}
+NetChartType::NetChartType(const NetChartType&) = default;
 
-NetChartType::~NetChartType()
-{}
+NetChartType::~NetChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()

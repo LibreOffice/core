@@ -52,9 +52,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     Reset();
 }
 
-SdPresLayoutDlg::~SdPresLayoutDlg()
-{
-}
+SdPresLayoutDlg::~SdPresLayoutDlg() = default;
 
 /**
  *    Initialize

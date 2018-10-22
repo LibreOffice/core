@@ -53,9 +53,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics const * pGraph
     mpGraphics->Init( this );
 }
 
-X11OpenGLSalVirtualDevice::~X11OpenGLSalVirtualDevice()
-{
-}
+X11OpenGLSalVirtualDevice::~X11OpenGLSalVirtualDevice() = default;
 
 SalGraphics* X11OpenGLSalVirtualDevice::AcquireGraphics()
 {

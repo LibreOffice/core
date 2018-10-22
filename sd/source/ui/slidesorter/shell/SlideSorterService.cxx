@@ -48,9 +48,7 @@ SlideSorterService::SlideSorterService()
 {
 }
 
-SlideSorterService::~SlideSorterService()
-{
-}
+SlideSorterService::~SlideSorterService() = default;
 
 void SAL_CALL SlideSorterService::disposing()
 {

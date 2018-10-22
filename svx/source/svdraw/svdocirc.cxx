@@ -144,9 +144,7 @@ SdrCircObj::SdrCircObj(
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::~SdrCircObj()
-{
-}
+SdrCircObj::~SdrCircObj() = default;
 
 void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

@@ -219,9 +219,7 @@ TreeParser::TreeParser(
     m_bIsInitialized = true;
 }
 
-TreeParser::~TreeParser()
-{
-}
+TreeParser::~TreeParser() = default;
 
 void TreeParser::Extract( const OString& rPOFile )
 {

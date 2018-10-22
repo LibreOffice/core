@@ -144,8 +144,7 @@ MasterPageObserver::MasterPageObserver()
     : mpImpl (new Implementation)
 {}
 
-MasterPageObserver::~MasterPageObserver()
-{}
+MasterPageObserver::~MasterPageObserver() = default;
 
 //===== MasterPageObserver::Implementation ====================================
 

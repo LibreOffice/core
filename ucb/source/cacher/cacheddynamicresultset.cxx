@@ -155,10 +155,7 @@ CachedDynamicResultSetFactory::CachedDynamicResultSetFactory(
     m_xContext = xContext;
 }
 
-CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
-{
-}
-
+CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory() = default;
 
 // CachedDynamicResultSetFactory XInterface methods.
 void SAL_CALL CachedDynamicResultSetFactory::acquire()

@@ -258,9 +258,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     }
 }
 
-DictionaryNeo::~DictionaryNeo()
-{
-}
+DictionaryNeo::~DictionaryNeo() = default;
 
 ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
 {
@@ -1046,9 +1044,7 @@ DicEntry::DicEntry(const OUString &rDicWord, bool bNegativ,
 {
 }
 
-DicEntry::~DicEntry()
-{
-}
+DicEntry::~DicEntry() = default;
 
 void DicEntry::splitDicFileWord(const OUString &rDicFileWord,
                                 OUString &rDicWord,

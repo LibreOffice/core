@@ -1026,11 +1026,7 @@ ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShap
     pAccessibleShape->SetState (AccessibleStateType::VISIBLE);
 }
 
-
-ChildDescriptor::~ChildDescriptor()
-{
-}
-
+ChildDescriptor::~ChildDescriptor() = default;
 
 AccessibleShape* ChildDescriptor::GetAccessibleShape() const
 {

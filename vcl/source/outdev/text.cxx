@@ -46,13 +46,9 @@
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
-ImplMultiTextLineInfo::ImplMultiTextLineInfo()
-{
-}
+ImplMultiTextLineInfo::ImplMultiTextLineInfo() = default;
 
-ImplMultiTextLineInfo::~ImplMultiTextLineInfo()
-{
-}
+ImplMultiTextLineInfo::~ImplMultiTextLineInfo() = default;
 
 void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )
 {

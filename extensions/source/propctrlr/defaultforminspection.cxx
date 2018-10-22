@@ -60,11 +60,7 @@ namespace pcr
     {
     }
 
-
-    DefaultFormComponentInspectorModel::~DefaultFormComponentInspectorModel()
-    {
-    }
-
+    DefaultFormComponentInspectorModel::~DefaultFormComponentInspectorModel() = default;
 
     OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  )
     {

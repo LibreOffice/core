@@ -74,9 +74,7 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
 {
 }
 
-SwAuthorityFieldType::~SwAuthorityFieldType()
-{
-}
+SwAuthorityFieldType::~SwAuthorityFieldType() = default;
 
 SwFieldType*    SwAuthorityFieldType::Copy()  const
 {

@@ -40,9 +40,7 @@ TransliterationWrapper::TransliterationWrapper(
 {
 }
 
-TransliterationWrapper::~TransliterationWrapper()
-{
-}
+TransliterationWrapper::~TransliterationWrapper() = default;
 
 OUString TransliterationWrapper::transliterate(const OUString& rStr, LanguageType nLang,
                                                sal_Int32 nStart, sal_Int32 nLen,

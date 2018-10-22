@@ -348,9 +348,7 @@ SwBoxAutoFormat::SwBoxAutoFormat( const SwBoxAutoFormat& rNew )
 {
 }
 
-SwBoxAutoFormat::~SwBoxAutoFormat()
-{
-}
+SwBoxAutoFormat::~SwBoxAutoFormat() = default;
 
 SwBoxAutoFormat& SwBoxAutoFormat::operator=( const SwBoxAutoFormat& rNew )
 {
@@ -1235,9 +1233,7 @@ SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const OUString& rName)
     return nullptr;
 }
 
-SwTableAutoFormatTable::~SwTableAutoFormatTable()
-{
-}
+SwTableAutoFormatTable::~SwTableAutoFormatTable() = default;
 
 SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
@@ -1400,12 +1396,9 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
     return bRet;
 }
 
-SwCellStyleTable::SwCellStyleTable()
-{ }
+SwCellStyleTable::SwCellStyleTable() = default;
 
-SwCellStyleTable::~SwCellStyleTable()
-{
-}
+SwCellStyleTable::~SwCellStyleTable() = default;
 
 size_t SwCellStyleTable::size() const
 {

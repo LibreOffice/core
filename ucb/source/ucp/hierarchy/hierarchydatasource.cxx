@@ -184,10 +184,7 @@ HierarchyDataSource::HierarchyDataSource(
 
 
 // virtual
-HierarchyDataSource::~HierarchyDataSource()
-{
-}
-
+HierarchyDataSource::~HierarchyDataSource() = default;
 
 // XInterface methods.
 void SAL_CALL HierarchyDataSource::acquire()

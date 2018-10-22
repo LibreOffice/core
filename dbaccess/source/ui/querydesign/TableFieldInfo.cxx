@@ -28,8 +28,6 @@ OTableFieldInfo::OTableFieldInfo()  :
     m_eFieldType = TAB_NORMAL_FIELD;
 }
 
-OTableFieldInfo::~OTableFieldInfo()
-{
-}
+OTableFieldInfo::~OTableFieldInfo() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

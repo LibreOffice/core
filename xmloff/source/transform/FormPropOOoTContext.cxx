@@ -106,9 +106,7 @@ XMLFormPropOOoTransformerContext::XMLFormPropOOoTransformerContext(
 {
 }
 
-XMLFormPropOOoTransformerContext::~XMLFormPropOOoTransformerContext()
-{
-}
+XMLFormPropOOoTransformerContext::~XMLFormPropOOoTransformerContext() = default;
 
 rtl::Reference<XMLTransformerContext> XMLFormPropOOoTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,

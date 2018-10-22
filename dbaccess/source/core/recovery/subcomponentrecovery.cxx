@@ -176,9 +176,7 @@ namespace dbaccess
         {
         }
 
-        virtual ~SettingsExportContext()
-        {
-        }
+        virtual ~SettingsExportContext() = default;
 
     public:
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue ) override;
@@ -242,14 +240,10 @@ namespace dbaccess
     class SettingsDocumentHandler : public SettingsDocumentHandler_Base
     {
     public:
-        SettingsDocumentHandler()
-        {
-        }
+        SettingsDocumentHandler() = default;
 
     protected:
-        virtual ~SettingsDocumentHandler() override
-        {
-        }
+        virtual ~SettingsDocumentHandler() override = default;
 
     public:
         // XDocumentHandler

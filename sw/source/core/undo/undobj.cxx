@@ -184,9 +184,7 @@ bool SwUndo::IsDelBox() const
         GetId() == SwUndoId::TABLE_DELBOX;
 }
 
-SwUndo::~SwUndo()
-{
-}
+SwUndo::~SwUndo() = default;
 
 class UndoRedoRedlineGuard
 {
@@ -689,12 +687,9 @@ SwRewriter SwUndo::GetRewriter() const
     return aResult;
 }
 
-SwUndoSaveContent::SwUndoSaveContent()
-{}
+SwUndoSaveContent::SwUndoSaveContent() = default;
 
-SwUndoSaveContent::~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE
-{
-}
+SwUndoSaveContent::~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE = default;
 
 // This is needed when deleting content. For REDO all contents will be moved
 // into the UndoNodesArray. These methods always create a new node to insert
@@ -1339,9 +1334,7 @@ SwRedlineSaveData::SwRedlineSaveData(
 #endif
 }
 
-SwRedlineSaveData::~SwRedlineSaveData()
-{
-}
+SwRedlineSaveData::~SwRedlineSaveData() = default;
 
 void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
 {

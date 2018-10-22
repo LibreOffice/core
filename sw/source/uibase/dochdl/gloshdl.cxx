@@ -625,9 +625,7 @@ SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrame, SwWrtShell *pSh)
 {
 }
 
-SwGlossaryHdl::~SwGlossaryHdl()
-{
-}
+SwGlossaryHdl::~SwGlossaryHdl() = default;
 
 // rename an autotext
 bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortName,

@@ -52,12 +52,12 @@ class Impl:
     public cppu::WeakImplHelper<css::lang::XInitialization>
 {
 public:
-    Impl() {}
+    Impl() = default;
     Impl(const Impl&) = delete;
     Impl& operator=(const Impl&) = delete;
 
 private:
-    virtual ~Impl() override {}
+    virtual ~Impl() override = default;
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments) override;
@@ -188,7 +188,7 @@ public:
     Impl2(): m_attr1(0.0) {}
 
 private:
-    virtual ~Impl2() override {}
+    virtual ~Impl2() override = default;
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments) override;

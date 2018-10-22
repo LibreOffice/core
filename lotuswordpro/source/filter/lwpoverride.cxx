@@ -70,11 +70,8 @@
 
 /*class LwpOverride*/
 LwpOverride::LwpOverride(LwpOverride const& rOther)
-    : m_nValues(rOther.m_nValues)
-    , m_nOverride(rOther.m_nOverride)
-    , m_nApply(rOther.m_nApply)
-{
-}
+
+    = default;
 
 void LwpOverride::ReadCommon(LwpObjectStream* pStrm)
 {
@@ -115,10 +112,8 @@ void LwpOverride::Override(sal_uInt16 nBits, STATE eState)
 
 /*class LwpTextLanguageOverride*/
 LwpTextLanguageOverride::LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nLanguage(rOther.m_nLanguage)
-{
-}
+
+    = default;
 
 LwpTextLanguageOverride* LwpTextLanguageOverride::clone() const
 {
@@ -139,11 +134,8 @@ void LwpTextLanguageOverride::Read(LwpObjectStream* pStrm)
 
 /*class LwpTextAttributeOverride*/
 LwpTextAttributeOverride::LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nHideLevels(rOther.m_nHideLevels)
-    , m_nBaseLineOffset(rOther.m_nBaseLineOffset)
-{
-}
+
+    = default;
 
 LwpTextAttributeOverride* LwpTextAttributeOverride::clone() const
 {
@@ -171,10 +163,8 @@ bool LwpTextAttributeOverride::IsHighlight()
 
 /*class LwpKinsokuOptsOverride*/
 LwpKinsokuOptsOverride::LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nLevels(rOther.m_nLevels)
-{
-}
+
+    = default;
 
 LwpKinsokuOptsOverride* LwpKinsokuOptsOverride::clone() const
 {
@@ -194,11 +184,8 @@ void LwpKinsokuOptsOverride::Read(LwpObjectStream* pStrm)
 
 /*class LwpBulletOverride*/
 LwpBulletOverride::LwpBulletOverride(LwpBulletOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_SilverBullet(rOther.m_SilverBullet)
-    , m_bIsNull(rOther.m_bIsNull)
-{
-}
+
+    = default;
 
 LwpBulletOverride* LwpBulletOverride::clone() const
 {
@@ -294,12 +281,8 @@ void LwpBulletOverride::Override(LwpBulletOverride* pOther)
 
 /*class LwpAlignmentOverride*/
 LwpAlignmentOverride::LwpAlignmentOverride(LwpAlignmentOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nAlignType(rOther.m_nAlignType)
-    , m_nPosition(rOther.m_nPosition)
-    , m_nAlignChar(rOther.m_nAlignChar)
-{
-}
+
+    = default;
 
 LwpAlignmentOverride* LwpAlignmentOverride::clone() const
 {
@@ -321,12 +304,8 @@ void LwpAlignmentOverride::Read(LwpObjectStream * pStrm)
 
 /*class LwpSpacingCommonOverride*/
 LwpSpacingCommonOverride::LwpSpacingCommonOverride(LwpSpacingCommonOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nSpacingType(rOther.m_nSpacingType)
-    , m_nAmount(rOther.m_nAmount)
-    , m_nMultiple(rOther.m_nMultiple)
-{
-}
+
+    = default;
 
 LwpSpacingCommonOverride* LwpSpacingCommonOverride::clone() const
 {
@@ -357,9 +336,7 @@ m_pParaSpacingBelow(new LwpSpacingCommonOverride)
 {
 }
 
-LwpSpacingOverride::~LwpSpacingOverride()
-{
-}
+LwpSpacingOverride::~LwpSpacingOverride() = default;
 
 LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     : LwpOverride(rOther)
@@ -394,13 +371,8 @@ void LwpSpacingOverride::Read(LwpObjectStream* pStrm)
 
 /*class LwpIndentOverride*/
 LwpIndentOverride::LwpIndentOverride(LwpIndentOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nAll(rOther.m_nAll)
-    , m_nFirst(rOther.m_nFirst)
-    , m_nRest(rOther.m_nRest)
-    , m_nRight(rOther.m_nRight)
-{
-}
+
+    = default;
 
 LwpIndentOverride* LwpIndentOverride::clone() const
 {
@@ -428,9 +400,7 @@ m_pBackgroundStuff(new LwpBackgroundStuff), m_nType(AMIKAKE_NONE)
 {
 }
 
-LwpAmikakeOverride::~LwpAmikakeOverride()
-{
-}
+LwpAmikakeOverride::~LwpAmikakeOverride() = default;
 
 LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
     : LwpOverride(rOther)

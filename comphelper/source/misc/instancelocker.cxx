@@ -203,11 +203,7 @@ OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWra
 {
 }
 
-
-OLockListener::~OLockListener()
-{
-}
-
+OLockListener::~OLockListener() = default;
 
 void OLockListener::Dispose()
 {

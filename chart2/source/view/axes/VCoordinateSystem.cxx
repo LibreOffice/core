@@ -88,9 +88,7 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
         m_aExplicitScales[2].Orientation = AxisOrientation_MATHEMATICAL;
     }
 }
-VCoordinateSystem::~VCoordinateSystem()
-{
-}
+VCoordinateSystem::~VCoordinateSystem() = default;
 
 void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes >& xLogicTarget
        , const Reference< drawing::XShapes >& xFinalTarget

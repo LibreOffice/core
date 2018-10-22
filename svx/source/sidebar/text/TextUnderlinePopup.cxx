@@ -30,9 +30,7 @@ TextUnderlinePopup::TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolB
 {
 }
 
-TextUnderlinePopup::~TextUnderlinePopup()
-{
-}
+TextUnderlinePopup::~TextUnderlinePopup() = default;
 
 void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {

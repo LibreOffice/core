@@ -55,9 +55,7 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
     m_xAggregateAsCancellable.set(m_xAggregateAsSet, UNO_QUERY);
 }
 
-OStatementBase::~OStatementBase()
-{
-}
+OStatementBase::~OStatementBase() = default;
 
 // css::lang::XTypeProvider
 Sequence< Type > OStatementBase::getTypes()

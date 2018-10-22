@@ -50,9 +50,7 @@ SwNoTextNode::SwNoTextNode( const SwNodeIndex & rWhere,
         SetAttr( *pAutoAttr );
 }
 
-SwNoTextNode::~SwNoTextNode()
-{
-}
+SwNoTextNode::~SwNoTextNode() = default;
 
 /// Creates an AttrSet for all derivations with ranges for frame-
 /// and graphics-attributes.

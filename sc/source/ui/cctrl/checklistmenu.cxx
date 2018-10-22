@@ -1524,8 +1524,7 @@ ScTabStops::ScTabStops( ScCheckListMenuWindow* pMenuWin ) :
     maControls.reserve( 8 );
 }
 
-ScTabStops::~ScTabStops()
-{}
+ScTabStops::~ScTabStops() = default;
 
 void ScTabStops::AddTabStop( vcl::Window* pWin )
 {

@@ -36,9 +36,7 @@ XMLIndexBodyContext::XMLIndexBodyContext(
 {
 }
 
-XMLIndexBodyContext::~XMLIndexBodyContext()
-{
-}
+XMLIndexBodyContext::~XMLIndexBodyContext() = default;
 
 SvXMLImportContextRef XMLIndexBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,

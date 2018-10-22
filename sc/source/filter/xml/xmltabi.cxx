@@ -207,9 +207,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLTableContext::~ScXMLTableContext()
-{
-}
+ScXMLTableContext::~ScXMLTableContext() = default;
 
 SvXMLImportContextRef ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
@@ -485,9 +483,7 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
     rProtectData.mbDeleteRows = bDeleteRows;
 }
 
-ScXMLTableProtectionContext::~ScXMLTableProtectionContext()
-{
-}
+ScXMLTableProtectionContext::~ScXMLTableProtectionContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableProtectionContext::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )

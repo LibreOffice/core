@@ -40,8 +40,6 @@ XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
 {
 }
 
-XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper()
-{
-}
+XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

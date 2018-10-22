@@ -29,13 +29,9 @@ namespace drawinglayer
 {
     namespace texture
     {
-        GeoTexSvx::GeoTexSvx()
-        {
-        }
+        GeoTexSvx::GeoTexSvx() = default;
 
-        GeoTexSvx::~GeoTexSvx()
-        {
-        }
+        GeoTexSvx::~GeoTexSvx() = default;
 
         bool GeoTexSvx::operator==(const GeoTexSvx& /*rGeoTexSvx*/) const
         {
@@ -80,9 +76,7 @@ namespace drawinglayer
         {
         }
 
-        GeoTexSvxGradient::~GeoTexSvxGradient()
-        {
-        }
+        GeoTexSvxGradient::~GeoTexSvxGradient() = default;
 
         bool GeoTexSvxGradient::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
@@ -131,9 +125,7 @@ namespace drawinglayer
             }
         }
 
-        GeoTexSvxGradientLinear::~GeoTexSvxGradientLinear()
-        {
-        }
+        GeoTexSvxGradientLinear::~GeoTexSvxGradientLinear() = default;
 
         void GeoTexSvxGradientLinear::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -224,9 +216,7 @@ namespace drawinglayer
             }
         }
 
-        GeoTexSvxGradientAxial::~GeoTexSvxGradientAxial()
-        {
-        }
+        GeoTexSvxGradientAxial::~GeoTexSvxGradientAxial() = default;
 
         void GeoTexSvxGradientAxial::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -297,9 +287,7 @@ namespace drawinglayer
                 fBorder);
         }
 
-        GeoTexSvxGradientRadial::~GeoTexSvxGradientRadial()
-        {
-        }
+        GeoTexSvxGradientRadial::~GeoTexSvxGradientRadial() = default;
 
         void GeoTexSvxGradientRadial::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -355,9 +343,7 @@ namespace drawinglayer
                 fAngle);
         }
 
-        GeoTexSvxGradientElliptical::~GeoTexSvxGradientElliptical()
-        {
-        }
+        GeoTexSvxGradientElliptical::~GeoTexSvxGradientElliptical() = default;
 
         void GeoTexSvxGradientElliptical::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -431,9 +417,7 @@ namespace drawinglayer
                 fAngle);
         }
 
-        GeoTexSvxGradientSquare::~GeoTexSvxGradientSquare()
-        {
-        }
+        GeoTexSvxGradientSquare::~GeoTexSvxGradientSquare() = default;
 
         void GeoTexSvxGradientSquare::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -489,9 +473,7 @@ namespace drawinglayer
                 fAngle);
         }
 
-        GeoTexSvxGradientRect::~GeoTexSvxGradientRect()
-        {
-        }
+        GeoTexSvxGradientRect::~GeoTexSvxGradientRect() = default;
 
         void GeoTexSvxGradientRect::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -601,9 +583,7 @@ namespace drawinglayer
             mfDistance = 1.0 / fSteps;
         }
 
-        GeoTexSvxHatch::~GeoTexSvxHatch()
-        {
-        }
+        GeoTexSvxHatch::~GeoTexSvxHatch() = default;
 
         bool GeoTexSvxHatch::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
@@ -707,9 +687,7 @@ namespace drawinglayer
             }
         }
 
-        GeoTexSvxTiled::~GeoTexSvxTiled()
-        {
-        }
+        GeoTexSvxTiled::~GeoTexSvxTiled() = default;
 
         bool GeoTexSvxTiled::operator==(const GeoTexSvx& rGeoTexSvx) const
         {

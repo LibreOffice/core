@@ -45,13 +45,9 @@ using namespace ::com::sun::star::beans;
 
 //  class StdTabController
 
-StdTabController::StdTabController()
-{
-}
+StdTabController::StdTabController() = default;
 
-StdTabController::~StdTabController()
-{
-}
+StdTabController::~StdTabController() = default;
 
 bool StdTabController::ImplCreateComponentSequence(
         Sequence< Reference< XControl > >&              rControls,

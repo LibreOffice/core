@@ -73,11 +73,9 @@ ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     mpEngine->EnableUndo( false );
 }
 
-ScEEImport::~ScEEImport()
-{
+ScEEImport::~ScEEImport() = default;
     // Sequence important, or else we crash in some dtor!
     // Is guaranteed as ScEEImport is base class
-}
 
 ErrCode ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 {

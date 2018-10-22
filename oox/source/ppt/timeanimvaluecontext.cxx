@@ -39,9 +39,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    TimeAnimValueListContext::~TimeAnimValueListContext( )
-    {
-    }
+    TimeAnimValueListContext::~TimeAnimValueListContext() = default;
 
     void TimeAnimValueListContext::onEndElement()
     {

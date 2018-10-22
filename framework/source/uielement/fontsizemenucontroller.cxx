@@ -63,9 +63,7 @@ FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::
 {
 }
 
-FontSizeMenuController::~FontSizeMenuController()
-{
-}
+FontSizeMenuController::~FontSizeMenuController() = default;
 
 // private function
 OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame )

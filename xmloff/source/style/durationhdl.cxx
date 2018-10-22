@@ -64,8 +64,6 @@ bool XMLDurationMS16PropHdl_Impl::exportXML(
     return false;
 }
 
-XMLDurationMS16PropHdl_Impl::~XMLDurationMS16PropHdl_Impl()
-{
-}
+XMLDurationMS16PropHdl_Impl::~XMLDurationMS16PropHdl_Impl() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

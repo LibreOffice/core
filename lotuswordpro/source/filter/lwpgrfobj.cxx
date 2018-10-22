@@ -97,9 +97,7 @@ LwpGraphicObject::LwpGraphicObject(LwpObjectHeader const &objHdr, LwpSvStream* p
     memset(m_sServerContextFormat, 0, sizeof(m_sServerContextFormat));
 }
 
-LwpGraphicObject::~LwpGraphicObject()
-{
-}
+LwpGraphicObject::~LwpGraphicObject() = default;
 
 void LwpGraphicObject::Read()
 {

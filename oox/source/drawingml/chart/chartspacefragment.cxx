@@ -39,9 +39,7 @@ ChartSpaceFragment::ChartSpaceFragment( XmlFilterBase& rFilter, const OUString& 
 {
 }
 
-ChartSpaceFragment::~ChartSpaceFragment()
-{
-}
+ChartSpaceFragment::~ChartSpaceFragment() = default;
 
 ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

@@ -78,9 +78,7 @@ PresenterPreviewCache::PresenterPreviewCache ()
 {
 }
 
-PresenterPreviewCache::~PresenterPreviewCache()
-{
-}
+PresenterPreviewCache::~PresenterPreviewCache() = default;
 
 //----- XInitialize -----------------------------------------------------------
 

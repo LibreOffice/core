@@ -128,9 +128,7 @@ CachedContentResultSet::CCRS_Cache::CCRS_Cache(
 {
 }
 
-CachedContentResultSet::CCRS_Cache::~CCRS_Cache()
-{
-}
+CachedContentResultSet::CCRS_Cache::~CCRS_Cache() = default;
 
 void CachedContentResultSet::CCRS_Cache
     ::clear()
@@ -2069,10 +2067,7 @@ CachedContentResultSetFactory::CachedContentResultSetFactory(
     m_xContext = rxContext;
 }
 
-CachedContentResultSetFactory::~CachedContentResultSetFactory()
-{
-}
-
+CachedContentResultSetFactory::~CachedContentResultSetFactory() = default;
 
 // CachedContentResultSetFactory XInterface methods.
 void SAL_CALL CachedContentResultSetFactory::acquire()

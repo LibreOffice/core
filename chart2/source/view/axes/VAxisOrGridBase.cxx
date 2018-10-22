@@ -36,9 +36,7 @@ VAxisOrGridBase::VAxisOrGridBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensio
 {
 }
 
-VAxisOrGridBase::~VAxisOrGridBase()
-{
-}
+VAxisOrGridBase::~VAxisOrGridBase() = default;
 
 void VAxisOrGridBase::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale

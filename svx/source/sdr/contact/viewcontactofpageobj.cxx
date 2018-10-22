@@ -42,9 +42,7 @@ ViewContactOfPageObj::ViewContactOfPageObj(SdrPageObj& rPageObj)
 {
 }
 
-ViewContactOfPageObj::~ViewContactOfPageObj()
-{
-}
+ViewContactOfPageObj::~ViewContactOfPageObj() = default;
 
 // #i35972# React on changes of the object of this ViewContact
 void ViewContactOfPageObj::ActionChanged()

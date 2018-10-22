@@ -32,9 +32,7 @@ ScNumberFormatControl::ScNumberFormatControl(sal_uInt16 nSlotId, sal_uInt16 nId,
 {
 }
 
-ScNumberFormatControl::~ScNumberFormatControl()
-{
-}
+ScNumberFormatControl::~ScNumberFormatControl() = default;
 
 void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
                                          const SfxPoolItem* pState)

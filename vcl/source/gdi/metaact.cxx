@@ -162,9 +162,7 @@ MetaAction::MetaAction( MetaAction const & rOther ) :
 {
 }
 
-MetaAction::~MetaAction()
-{
-}
+MetaAction::~MetaAction() = default;
 
 void MetaAction::Execute( OutputDevice* )
 {
@@ -276,8 +274,7 @@ MetaPixelAction::MetaPixelAction() :
     MetaAction(MetaActionType::PIXEL)
 {}
 
-MetaPixelAction::~MetaPixelAction()
-{}
+MetaPixelAction::~MetaPixelAction() = default;
 
 MetaPixelAction::MetaPixelAction( const Point& rPt, const Color& rColor ) :
     MetaAction  ( MetaActionType::PIXEL ),
@@ -324,8 +321,7 @@ MetaPointAction::MetaPointAction() :
     MetaAction(MetaActionType::POINT)
 {}
 
-MetaPointAction::~MetaPointAction()
-{}
+MetaPointAction::~MetaPointAction() = default;
 
 MetaPointAction::MetaPointAction( const Point& rPt ) :
     MetaAction  ( MetaActionType::POINT ),
@@ -369,8 +365,7 @@ MetaLineAction::MetaLineAction() :
     MetaAction(MetaActionType::LINE)
 {}
 
-MetaLineAction::~MetaLineAction()
-{}
+MetaLineAction::~MetaLineAction() = default;
 
 MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd ) :
     MetaAction  ( MetaActionType::LINE ),
@@ -441,8 +436,7 @@ MetaRectAction::MetaRectAction() :
     MetaAction(MetaActionType::RECT)
 {}
 
-MetaRectAction::~MetaRectAction()
-{}
+MetaRectAction::~MetaRectAction() = default;
 
 MetaRectAction::MetaRectAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::RECT ),
@@ -488,8 +482,7 @@ MetaRoundRectAction::MetaRoundRectAction() :
     mnVertRound ( 0 )
 {}
 
-MetaRoundRectAction::~MetaRoundRectAction()
-{}
+MetaRoundRectAction::~MetaRoundRectAction() = default;
 
 MetaRoundRectAction::MetaRoundRectAction( const tools::Rectangle& rRect,
                                           sal_uInt32 nHorzRound, sal_uInt32 nVertRound ) :
@@ -539,8 +532,7 @@ MetaEllipseAction::MetaEllipseAction() :
     MetaAction(MetaActionType::ELLIPSE)
 {}
 
-MetaEllipseAction::~MetaEllipseAction()
-{}
+MetaEllipseAction::~MetaEllipseAction() = default;
 
 MetaEllipseAction::MetaEllipseAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::ELLIPSE ),
@@ -584,8 +576,7 @@ MetaArcAction::MetaArcAction() :
     MetaAction(MetaActionType::ARC)
 {}
 
-MetaArcAction::~MetaArcAction()
-{}
+MetaArcAction::~MetaArcAction() = default;
 
 MetaArcAction::MetaArcAction( const tools::Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
@@ -640,8 +631,7 @@ MetaPieAction::MetaPieAction() :
     MetaAction(MetaActionType::PIE)
 {}
 
-MetaPieAction::~MetaPieAction()
-{}
+MetaPieAction::~MetaPieAction() = default;
 
 MetaPieAction::MetaPieAction( const tools::Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
@@ -696,8 +686,7 @@ MetaChordAction::MetaChordAction() :
     MetaAction(MetaActionType::CHORD)
 {}
 
-MetaChordAction::~MetaChordAction()
-{}
+MetaChordAction::~MetaChordAction() = default;
 
 MetaChordAction::MetaChordAction( const tools::Rectangle& rRect,
                                   const Point& rStart, const Point& rEnd ) :
@@ -752,8 +741,7 @@ MetaPolyLineAction::MetaPolyLineAction() :
     MetaAction(MetaActionType::POLYLINE)
 {}
 
-MetaPolyLineAction::~MetaPolyLineAction()
-{}
+MetaPolyLineAction::~MetaPolyLineAction() = default;
 
 MetaPolyLineAction::MetaPolyLineAction( const tools::Polygon& rPoly ) :
     MetaAction  ( MetaActionType::POLYLINE ),
@@ -830,8 +818,7 @@ MetaPolygonAction::MetaPolygonAction() :
     MetaAction(MetaActionType::POLYGON)
 {}
 
-MetaPolygonAction::~MetaPolygonAction()
-{}
+MetaPolygonAction::~MetaPolygonAction() = default;
 
 MetaPolygonAction::MetaPolygonAction( const tools::Polygon& rPoly ) :
     MetaAction  ( MetaActionType::POLYGON ),
@@ -892,8 +879,7 @@ MetaPolyPolygonAction::MetaPolyPolygonAction() :
     MetaAction(MetaActionType::POLYPOLYGON)
 {}
 
-MetaPolyPolygonAction::~MetaPolyPolygonAction()
-{}
+MetaPolyPolygonAction::~MetaPolyPolygonAction() = default;
 
 MetaPolyPolygonAction::MetaPolyPolygonAction( const tools::PolyPolygon& rPolyPoly ) :
     MetaAction  ( MetaActionType::POLYPOLYGON ),
@@ -994,8 +980,7 @@ MetaTextAction::MetaTextAction() :
     mnLen       ( 0 )
 {}
 
-MetaTextAction::~MetaTextAction()
-{}
+MetaTextAction::~MetaTextAction() = default;
 
 MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
                                 sal_Int32 nIndex, sal_Int32 nLen ) :
@@ -1094,9 +1079,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     }
 }
 
-MetaTextArrayAction::~MetaTextArrayAction()
-{
-}
+MetaTextArrayAction::~MetaTextArrayAction() = default;
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
@@ -1213,8 +1196,7 @@ MetaStretchTextAction::MetaStretchTextAction() :
     mnLen       ( 0 )
 {}
 
-MetaStretchTextAction::~MetaStretchTextAction()
-{}
+MetaStretchTextAction::~MetaStretchTextAction() = default;
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const OUString& rStr,
@@ -1283,8 +1265,7 @@ MetaTextRectAction::MetaTextRectAction() :
     mnStyle     ( DrawTextFlags::NONE )
 {}
 
-MetaTextRectAction::~MetaTextRectAction()
-{}
+MetaTextRectAction::~MetaTextRectAction() = default;
 
 MetaTextRectAction::MetaTextRectAction( const tools::Rectangle& rRect,
                                         const OUString& rStr, DrawTextFlags nStyle ) :
@@ -1346,8 +1327,7 @@ MetaTextLineAction::MetaTextLineAction() :
     meOverline  ( LINESTYLE_NONE )
 {}
 
-MetaTextLineAction::~MetaTextLineAction()
-{}
+MetaTextLineAction::~MetaTextLineAction() = default;
 
 MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
                                         FontStrikeout eStrikeout,
@@ -1424,8 +1404,7 @@ MetaBmpAction::MetaBmpAction() :
     MetaAction(MetaActionType::BMP)
 {}
 
-MetaBmpAction::~MetaBmpAction()
-{}
+MetaBmpAction::~MetaBmpAction() = default;
 
 MetaBmpAction::MetaBmpAction( const Point& rPt, const Bitmap& rBmp ) :
     MetaAction  ( MetaActionType::BMP ),
@@ -1475,8 +1454,7 @@ MetaBmpScaleAction::MetaBmpScaleAction() :
     MetaAction(MetaActionType::BMPSCALE)
 {}
 
-MetaBmpScaleAction::~MetaBmpScaleAction()
-{}
+MetaBmpScaleAction::~MetaBmpScaleAction() = default;
 
 MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                         const Bitmap& rBmp ) :
@@ -1533,8 +1511,7 @@ MetaBmpScalePartAction::MetaBmpScalePartAction() :
     MetaAction(MetaActionType::BMPSCALEPART)
 {}
 
-MetaBmpScalePartAction::~MetaBmpScalePartAction()
-{}
+MetaBmpScalePartAction::~MetaBmpScalePartAction() = default;
 
 MetaBmpScalePartAction::MetaBmpScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
@@ -1598,8 +1575,7 @@ MetaBmpExAction::MetaBmpExAction() :
     MetaAction(MetaActionType::BMPEX)
 {}
 
-MetaBmpExAction::~MetaBmpExAction()
-{}
+MetaBmpExAction::~MetaBmpExAction() = default;
 
 MetaBmpExAction::MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx ) :
     MetaAction  ( MetaActionType::BMPEX ),
@@ -1649,8 +1625,7 @@ MetaBmpExScaleAction::MetaBmpExScaleAction() :
     MetaAction(MetaActionType::BMPEXSCALE)
 {}
 
-MetaBmpExScaleAction::~MetaBmpExScaleAction()
-{}
+MetaBmpExScaleAction::~MetaBmpExScaleAction() = default;
 
 MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                             const BitmapEx& rBmpEx ) :
@@ -1707,8 +1682,7 @@ MetaBmpExScalePartAction::MetaBmpExScalePartAction() :
     MetaAction(MetaActionType::BMPEXSCALEPART)
 {}
 
-MetaBmpExScalePartAction::~MetaBmpExScalePartAction()
-{}
+MetaBmpExScalePartAction::~MetaBmpExScalePartAction() = default;
 
 MetaBmpExScalePartAction::MetaBmpExScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                     const Point& rSrcPt, const Size& rSrcSz,
@@ -1772,8 +1746,7 @@ MetaMaskAction::MetaMaskAction() :
     MetaAction(MetaActionType::MASK)
 {}
 
-MetaMaskAction::~MetaMaskAction()
-{}
+MetaMaskAction::~MetaMaskAction() = default;
 
 MetaMaskAction::MetaMaskAction( const Point& rPt,
                                 const Bitmap& rBmp,
@@ -1826,8 +1799,7 @@ MetaMaskScaleAction::MetaMaskScaleAction() :
     MetaAction(MetaActionType::MASKSCALE)
 {}
 
-MetaMaskScaleAction::~MetaMaskScaleAction()
-{}
+MetaMaskScaleAction::~MetaMaskScaleAction() = default;
 
 MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
                                           const Bitmap& rBmp,
@@ -1886,8 +1858,7 @@ MetaMaskScalePartAction::MetaMaskScalePartAction() :
     MetaAction(MetaActionType::MASKSCALEPART)
 {}
 
-MetaMaskScalePartAction::~MetaMaskScalePartAction()
-{}
+MetaMaskScalePartAction::~MetaMaskScalePartAction() = default;
 
 MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                   const Point& rSrcPt, const Size& rSrcSz,
@@ -1955,8 +1926,7 @@ MetaGradientAction::MetaGradientAction() :
     MetaAction(MetaActionType::GRADIENT)
 {}
 
-MetaGradientAction::~MetaGradientAction()
-{}
+MetaGradientAction::~MetaGradientAction() = default;
 
 MetaGradientAction::MetaGradientAction( const tools::Rectangle& rRect, const Gradient& rGradient ) :
     MetaAction  ( MetaActionType::GRADIENT ),
@@ -2009,8 +1979,7 @@ MetaGradientExAction::MetaGradientExAction( const tools::PolyPolygon& rPolyPoly,
     maGradient  ( rGradient )
 {}
 
-MetaGradientExAction::~MetaGradientExAction()
-{}
+MetaGradientExAction::~MetaGradientExAction() = default;
 
 void MetaGradientExAction::Execute( OutputDevice* pOut )
 {
@@ -2060,8 +2029,7 @@ MetaHatchAction::MetaHatchAction() :
     MetaAction(MetaActionType::HATCH)
 {}
 
-MetaHatchAction::~MetaHatchAction()
-{}
+MetaHatchAction::~MetaHatchAction() = default;
 
 MetaHatchAction::MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ) :
     MetaAction  ( MetaActionType::HATCH ),
@@ -2114,8 +2082,7 @@ MetaWallpaperAction::MetaWallpaperAction() :
     MetaAction(MetaActionType::WALLPAPER)
 {}
 
-MetaWallpaperAction::~MetaWallpaperAction()
-{}
+MetaWallpaperAction::~MetaWallpaperAction() = default;
 
 MetaWallpaperAction::MetaWallpaperAction( const tools::Rectangle& rRect,
                                           const Wallpaper& rPaper ) :
@@ -2163,8 +2130,7 @@ MetaClipRegionAction::MetaClipRegionAction() :
     mbClip      ( false )
 {}
 
-MetaClipRegionAction::~MetaClipRegionAction()
-{}
+MetaClipRegionAction::~MetaClipRegionAction() = default;
 
 MetaClipRegionAction::MetaClipRegionAction( const vcl::Region& rRegion, bool bClip ) :
     MetaAction  ( MetaActionType::CLIPREGION ),
@@ -2215,8 +2181,7 @@ MetaISectRectClipRegionAction::MetaISectRectClipRegionAction() :
     MetaAction(MetaActionType::ISECTRECTCLIPREGION)
 {}
 
-MetaISectRectClipRegionAction::~MetaISectRectClipRegionAction()
-{}
+MetaISectRectClipRegionAction::~MetaISectRectClipRegionAction() = default;
 
 MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::ISECTRECTCLIPREGION ),
@@ -2260,8 +2225,7 @@ MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction() :
     MetaAction(MetaActionType::ISECTREGIONCLIPREGION)
 {}
 
-MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction()
-{}
+MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction() = default;
 
 MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const vcl::Region& rRegion ) :
     MetaAction  ( MetaActionType::ISECTREGIONCLIPREGION ),
@@ -2308,8 +2272,7 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction() :
     mnVertMove  ( 0 )
 {}
 
-MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
-{}
+MetaMoveClipRegionAction::~MetaMoveClipRegionAction() = default;
 
 MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMove ) :
     MetaAction  ( MetaActionType::MOVECLIPREGION ),
@@ -2354,8 +2317,7 @@ MetaLineColorAction::MetaLineColorAction() :
     mbSet       ( false )
 {}
 
-MetaLineColorAction::~MetaLineColorAction()
-{}
+MetaLineColorAction::~MetaLineColorAction() = default;
 
 MetaLineColorAction::MetaLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( MetaActionType::LINECOLOR ),
@@ -2396,8 +2358,7 @@ MetaFillColorAction::MetaFillColorAction() :
     mbSet       ( false )
 {}
 
-MetaFillColorAction::~MetaFillColorAction()
-{}
+MetaFillColorAction::~MetaFillColorAction() = default;
 
 MetaFillColorAction::MetaFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( MetaActionType::FILLCOLOR ),
@@ -2437,8 +2398,7 @@ MetaTextColorAction::MetaTextColorAction() :
     MetaAction(MetaActionType::TEXTCOLOR)
 {}
 
-MetaTextColorAction::~MetaTextColorAction()
-{}
+MetaTextColorAction::~MetaTextColorAction() = default;
 
 MetaTextColorAction::MetaTextColorAction( const Color& rColor ) :
     MetaAction  ( MetaActionType::TEXTCOLOR ),
@@ -2473,8 +2433,7 @@ MetaTextFillColorAction::MetaTextFillColorAction() :
     mbSet       ( false )
 {}
 
-MetaTextFillColorAction::~MetaTextFillColorAction()
-{}
+MetaTextFillColorAction::~MetaTextFillColorAction() = default;
 
 MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( MetaActionType::TEXTFILLCOLOR ),
@@ -2515,8 +2474,7 @@ MetaTextLineColorAction::MetaTextLineColorAction() :
     mbSet       ( false )
 {}
 
-MetaTextLineColorAction::~MetaTextLineColorAction()
-{}
+MetaTextLineColorAction::~MetaTextLineColorAction() = default;
 
 MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( MetaActionType::TEXTLINECOLOR ),
@@ -2557,8 +2515,7 @@ MetaOverlineColorAction::MetaOverlineColorAction() :
     mbSet       ( false )
 {}
 
-MetaOverlineColorAction::~MetaOverlineColorAction()
-{}
+MetaOverlineColorAction::~MetaOverlineColorAction() = default;
 
 MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( MetaActionType::OVERLINECOLOR ),
@@ -2599,8 +2556,7 @@ MetaTextAlignAction::MetaTextAlignAction() :
     maAlign     ( ALIGN_TOP )
 {}
 
-MetaTextAlignAction::~MetaTextAlignAction()
-{}
+MetaTextAlignAction::~MetaTextAlignAction() = default;
 
 MetaTextAlignAction::MetaTextAlignAction( TextAlign aAlign ) :
     MetaAction  ( MetaActionType::TEXTALIGN ),
@@ -2636,8 +2592,7 @@ MetaMapModeAction::MetaMapModeAction() :
     MetaAction(MetaActionType::MAPMODE)
 {}
 
-MetaMapModeAction::~MetaMapModeAction()
-{}
+MetaMapModeAction::~MetaMapModeAction() = default;
 
 MetaMapModeAction::MetaMapModeAction( const MapMode& rMapMode ) :
     MetaAction  ( MetaActionType::MAPMODE ),
@@ -2679,8 +2634,7 @@ MetaFontAction::MetaFontAction() :
     MetaAction(MetaActionType::FONT)
 {}
 
-MetaFontAction::~MetaFontAction()
-{}
+MetaFontAction::~MetaFontAction() = default;
 
 MetaFontAction::MetaFontAction( const vcl::Font& rFont ) :
     MetaAction  ( MetaActionType::FONT ),
@@ -2739,8 +2693,7 @@ MetaPushAction::MetaPushAction() :
     mnFlags     ( PushFlags::NONE )
 {}
 
-MetaPushAction::~MetaPushAction()
-{}
+MetaPushAction::~MetaPushAction() = default;
 
 MetaPushAction::MetaPushAction( PushFlags nFlags ) :
     MetaAction  ( MetaActionType::PUSH ),
@@ -2776,8 +2729,7 @@ MetaPopAction::MetaPopAction() :
     MetaAction(MetaActionType::POP)
 {}
 
-MetaPopAction::~MetaPopAction()
-{}
+MetaPopAction::~MetaPopAction() = default;
 
 void MetaPopAction::Execute( OutputDevice* pOut )
 {
@@ -2805,8 +2757,7 @@ MetaRasterOpAction::MetaRasterOpAction() :
     meRasterOp  ( RasterOp::OverPaint )
 {}
 
-MetaRasterOpAction::~MetaRasterOpAction()
-{}
+MetaRasterOpAction::~MetaRasterOpAction() = default;
 
 MetaRasterOpAction::MetaRasterOpAction( RasterOp eRasterOp ) :
     MetaAction  ( MetaActionType::RASTEROP ),
@@ -2844,8 +2795,7 @@ MetaTransparentAction::MetaTransparentAction() :
     mnTransPercent  ( 0 )
 {}
 
-MetaTransparentAction::~MetaTransparentAction()
-{}
+MetaTransparentAction::~MetaTransparentAction() = default;
 
 MetaTransparentAction::MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( MetaActionType::Transparent ),
@@ -2906,8 +2856,7 @@ MetaFloatTransparentAction::MetaFloatTransparentAction() :
     MetaAction(MetaActionType::FLOATTRANSPARENT)
 {}
 
-MetaFloatTransparentAction::~MetaFloatTransparentAction()
-{}
+MetaFloatTransparentAction::~MetaFloatTransparentAction() = default;
 
 MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                         const Size& rSize, const Gradient& rGradient ) :
@@ -2965,8 +2914,7 @@ MetaEPSAction::MetaEPSAction() :
     MetaAction(MetaActionType::EPS)
 {}
 
-MetaEPSAction::~MetaEPSAction()
-{}
+MetaEPSAction::~MetaEPSAction() = default;
 
 MetaEPSAction::MetaEPSAction( const Point& rPoint, const Size& rSize,
                               const GfxLink& rGfxLink, const GDIMetaFile& rSubst ) :
@@ -3025,8 +2973,7 @@ MetaRefPointAction::MetaRefPointAction() :
     mbSet       ( false )
 {}
 
-MetaRefPointAction::~MetaRefPointAction()
-{}
+MetaRefPointAction::~MetaRefPointAction() = default;
 
 MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, bool bSet ) :
     MetaAction  ( MetaActionType::REFPOINT ),
@@ -3085,9 +3032,7 @@ MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue,
     ImplInitDynamicData( pData, nDataSize );
 }
 
-MetaCommentAction::~MetaCommentAction()
-{
-}
+MetaCommentAction::~MetaCommentAction() = default;
 
 void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize )
 {
@@ -3274,8 +3219,7 @@ MetaLayoutModeAction::MetaLayoutModeAction() :
     mnLayoutMode( ComplexTextLayoutFlags::Default )
 {}
 
-MetaLayoutModeAction::~MetaLayoutModeAction()
-{}
+MetaLayoutModeAction::~MetaLayoutModeAction() = default;
 
 MetaLayoutModeAction::MetaLayoutModeAction( ComplexTextLayoutFlags nLayoutMode ) :
     MetaAction  ( MetaActionType::LAYOUTMODE ),
@@ -3312,8 +3256,7 @@ MetaTextLanguageAction::MetaTextLanguageAction() :
     meTextLanguage( LANGUAGE_DONTKNOW )
 {}
 
-MetaTextLanguageAction::~MetaTextLanguageAction()
-{}
+MetaTextLanguageAction::~MetaTextLanguageAction() = default;
 
 MetaTextLanguageAction::MetaTextLanguageAction( LanguageType eTextLanguage ) :
     MetaAction  ( MetaActionType::TEXTLANGUAGE ),

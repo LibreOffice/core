@@ -47,9 +47,7 @@ namespace xmloff
     using namespace ::xmloff::token;
 
     //= OControlPropertyHandlerFactory
-    OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
-    {
-    }
+    OControlPropertyHandlerFactory::OControlPropertyHandlerFactory() = default;
 
     const XMLPropertyHandler* OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
@@ -115,9 +113,7 @@ namespace xmloff
     }
 
     //= OControlTextEmphasisHandler
-    OControlTextEmphasisHandler::OControlTextEmphasisHandler()
-    {
-    }
+    OControlTextEmphasisHandler::OControlTextEmphasisHandler() = default;
 
     bool OControlTextEmphasisHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
@@ -273,9 +269,7 @@ namespace xmloff
     }
 
     //= OFontWidthHandler
-    OFontWidthHandler::OFontWidthHandler()
-    {
-    }
+    OFontWidthHandler::OFontWidthHandler() = default;
 
     bool OFontWidthHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
@@ -303,9 +297,7 @@ namespace xmloff
     }
 
     //= ORotationAngleHandler
-    ORotationAngleHandler::ORotationAngleHandler()
-    {
-    }
+    ORotationAngleHandler::ORotationAngleHandler() = default;
 
     bool ORotationAngleHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {

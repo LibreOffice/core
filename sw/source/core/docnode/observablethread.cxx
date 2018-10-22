@@ -30,9 +30,7 @@ ObservableThread::ObservableThread()
 {
 }
 
-ObservableThread::~ObservableThread()
-{
-}
+ObservableThread::~ObservableThread() = default;
 
 void ObservableThread::SetListener( std::weak_ptr< IFinishedThreadListener > const & pThreadListener,
                                     const oslInterlockedCount nThreadID )

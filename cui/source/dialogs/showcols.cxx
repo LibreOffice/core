@@ -36,9 +36,7 @@ FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
     m_xOK->connect_clicked(LINK(this, FmShowColsDialog, OnClickedOk));
 }
 
-FmShowColsDialog::~FmShowColsDialog()
-{
-}
+FmShowColsDialog::~FmShowColsDialog() = default;
 
 IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
 {

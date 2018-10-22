@@ -49,9 +49,7 @@ ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection
 {
 }
 
-ODbaseDatabaseMetaData::~ODbaseDatabaseMetaData()
-{
-}
+ODbaseDatabaseMetaData::~ODbaseDatabaseMetaData() = default;
 
 Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 {

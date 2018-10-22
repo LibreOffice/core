@@ -152,9 +152,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     SetGraphicStorageHandler(xGraphicStorageHandler);
 }
 
-SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()
-{
-}
+SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent() = default;
 
 static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &xOut )
 {
@@ -408,11 +406,7 @@ void SvxXMLXTableExportComponent::ExportAutoStyles_() {}
 void SvxXMLXTableExportComponent::ExportMasterStyles_() {}
 void SvxXMLXTableExportComponent::ExportContent_() {}
 
-
-SvxXMLTableEntryExporter::~SvxXMLTableEntryExporter()
-{
-}
-
+SvxXMLTableEntryExporter::~SvxXMLTableEntryExporter() = default;
 
 SvxXMLColorEntryExporter::SvxXMLColorEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport )

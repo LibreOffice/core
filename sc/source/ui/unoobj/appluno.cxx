@@ -178,9 +178,7 @@ ScSpreadsheetSettings::ScSpreadsheetSettings() :
 {
 }
 
-ScSpreadsheetSettings::~ScSpreadsheetSettings()
-{
-}
+ScSpreadsheetSettings::~ScSpreadsheetSettings() = default;
 
 uno::Reference<uno::XInterface> ScSpreadsheetSettings_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
@@ -448,13 +446,9 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSpreadsheetSettings )
 
-ScRecentFunctionsObj::ScRecentFunctionsObj()
-{
-}
+ScRecentFunctionsObj::ScRecentFunctionsObj() = default;
 
-ScRecentFunctionsObj::~ScRecentFunctionsObj()
-{
-}
+ScRecentFunctionsObj::~ScRecentFunctionsObj() = default;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScRecentFunctionsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
@@ -505,13 +499,9 @@ sal_Int32 SAL_CALL ScRecentFunctionsObj::getMaxRecentFunctions()
     return LRU_MAX;
 }
 
-ScFunctionListObj::ScFunctionListObj()
-{
-}
+ScFunctionListObj::ScFunctionListObj() = default;
 
-ScFunctionListObj::~ScFunctionListObj()
-{
-}
+ScFunctionListObj::~ScFunctionListObj() = default;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScFunctionListObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)

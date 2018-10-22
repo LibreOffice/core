@@ -38,9 +38,7 @@ ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParen
     m_nAnimation = msoAnimationIdle;
 }
 
-ScVbaAssistant::~ScVbaAssistant()
-{
-}
+ScVbaAssistant::~ScVbaAssistant() = default;
 
 sal_Bool SAL_CALL ScVbaAssistant::getVisible()
 {

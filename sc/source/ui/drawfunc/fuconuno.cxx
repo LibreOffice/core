@@ -36,9 +36,7 @@ FuConstUnoControl::FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin,
         nIdentifier = pIdentifierItem->GetValue();
 }
 
-FuConstUnoControl::~FuConstUnoControl()
-{
-}
+FuConstUnoControl::~FuConstUnoControl() = default;
 
 bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {

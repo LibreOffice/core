@@ -49,10 +49,7 @@ PathExpression::PathExpression()
 {
 }
 
-PathExpression::~PathExpression()
-{
-}
-
+PathExpression::~PathExpression() = default;
 
 void PathExpression::setExpression( const OUString& rExpression )
 {

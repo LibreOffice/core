@@ -34,11 +34,7 @@ PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
 {
 }
 
-
-PDFFilter::~PDFFilter()
-{
-}
-
+PDFFilter::~PDFFilter() = default;
 
 bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {

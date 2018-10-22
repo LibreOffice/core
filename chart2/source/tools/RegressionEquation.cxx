@@ -203,8 +203,7 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
-RegressionEquation::~RegressionEquation()
-{}
+RegressionEquation::~RegressionEquation() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()

@@ -953,10 +953,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    TimeNodeContext::~TimeNodeContext( ) throw()
-    {
-
-    }
+    TimeNodeContext::~TimeNodeContext() throw() = default;
 
     TimeNodeListContext::TimeNodeListContext( FragmentHandler2 const & rParent, TimeNodePtrList & aList )
         throw()
@@ -965,9 +962,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    TimeNodeListContext::~TimeNodeListContext( ) throw()
-    {
-    }
+    TimeNodeListContext::~TimeNodeListContext() throw() = default;
 
     ::oox::core::ContextHandlerRef TimeNodeListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {

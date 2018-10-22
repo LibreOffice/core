@@ -246,17 +246,16 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
 
 } // namespace
 
-CommandLineArgs::Supplier::Exception::Exception() {}
+CommandLineArgs::Supplier::Exception::Exception() = default;
 
-CommandLineArgs::Supplier::Exception::Exception(Exception const &) {}
+CommandLineArgs::Supplier::Exception::Exception(Exception const&) = default;
 
-CommandLineArgs::Supplier::Exception::~Exception() {}
+CommandLineArgs::Supplier::Exception::~Exception() = default;
 
-CommandLineArgs::Supplier::Exception &
-CommandLineArgs::Supplier::Exception::operator =(Exception const &)
-{ return *this; }
+CommandLineArgs::Supplier::Exception& CommandLineArgs::Supplier::Exception::
+operator=(Exception const&) = default;
 
-CommandLineArgs::Supplier::~Supplier() {}
+CommandLineArgs::Supplier::~Supplier() = default;
 
 // initialize class with command line parameters from process environment
 CommandLineArgs::CommandLineArgs()

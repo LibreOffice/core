@@ -32,9 +32,7 @@
 
 //      modify style (cell or page style)
 
-ScStyleSaveData::ScStyleSaveData()
-{
-}
+ScStyleSaveData::ScStyleSaveData() = default;
 
 ScStyleSaveData::ScStyleSaveData( const ScStyleSaveData& rOther ) :
     aName( rOther.aName ),
@@ -74,9 +72,7 @@ ScUndoModifyStyle::ScUndoModifyStyle( ScDocShell* pDocSh, SfxStyleFamily eFam,
 {
 }
 
-ScUndoModifyStyle::~ScUndoModifyStyle()
-{
-}
+ScUndoModifyStyle::~ScUndoModifyStyle() = default;
 
 OUString ScUndoModifyStyle::GetComment() const
 {
@@ -221,9 +217,7 @@ ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, const OUString& 
 {
 }
 
-ScUndoApplyPageStyle::~ScUndoApplyPageStyle()
-{
-}
+ScUndoApplyPageStyle::~ScUndoApplyPageStyle() = default;
 
 void ScUndoApplyPageStyle::AddSheetAction( SCTAB nTab, const OUString& rOldStyle )
 {

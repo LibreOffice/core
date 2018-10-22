@@ -294,9 +294,7 @@ ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxC
     mxContainer->collectShapes();
 }
 
-ScVbaSheetObjectsBase::~ScVbaSheetObjectsBase()
-{
-}
+ScVbaSheetObjectsBase::~ScVbaSheetObjectsBase() = default;
 
 void ScVbaSheetObjectsBase::collectShapes()
 {

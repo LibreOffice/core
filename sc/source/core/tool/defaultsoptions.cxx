@@ -46,9 +46,7 @@ ScTpDefaultsItem::ScTpDefaultsItem( const ScDefaultsOptions& rOpt ) :
 {
 }
 
-ScTpDefaultsItem::~ScTpDefaultsItem()
-{
-}
+ScTpDefaultsItem::~ScTpDefaultsItem() = default;
 
 bool ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
 {

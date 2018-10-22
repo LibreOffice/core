@@ -29,9 +29,7 @@ EmojiPopup::EmojiPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-EmojiPopup::~EmojiPopup()
-{
-}
+EmojiPopup::~EmojiPopup() = default;
 
 VclPtr<SfxPopupWindow> EmojiPopup::CreatePopupWindow()
 {

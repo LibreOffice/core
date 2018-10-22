@@ -313,7 +313,7 @@ class AsynchReader: public salhelper::Thread
 
     FileHandleGuard m_aGuard;
 
-    virtual ~AsynchReader() override {}
+    virtual ~AsynchReader() override = default;
 
     void execute() override;
 public:

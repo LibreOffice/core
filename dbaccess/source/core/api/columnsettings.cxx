@@ -49,9 +49,7 @@ namespace dbaccess
     {
     }
 
-    OColumnSettings::~OColumnSettings()
-    {
-    }
+    OColumnSettings::~OColumnSettings() = default;
 
     void OColumnSettings::registerProperties( IPropertyContainer& _rPropertyContainer )
     {

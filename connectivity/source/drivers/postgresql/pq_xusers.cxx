@@ -71,8 +71,7 @@ Users::Users(
     : Container( refMutex, origin, pSettings,  getStatics().USER )
 {}
 
-Users::~Users()
-{}
+Users::~Users() = default;
 
 void Users::refresh()
 {

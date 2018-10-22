@@ -30,13 +30,9 @@
 
 namespace emfplushelper
 {
-    EMFPRegion::EMFPRegion()
-    {
-    }
+    EMFPRegion::EMFPRegion() = default;
 
-    EMFPRegion::~EMFPRegion()
-    {
-    }
+    EMFPRegion::~EMFPRegion() = default;
 
     ::basegfx::B2DPolyPolygon EMFPRegion::ReadRegionNode(SvStream& s, EmfPlusHelperData& rR)
     {

@@ -70,7 +70,7 @@ namespace dbp
         friend class OControlWizardPage;
 
     protected:
-        OAccessRegulator() { }
+        OAccessRegulator() = default;
     };
 
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription )
@@ -250,9 +250,7 @@ namespace dbp
         enableButtons(WizardButtonFlags::FINISH, false);
     }
 
-    OControlWizard::~OControlWizard()
-    {
-    }
+    OControlWizard::~OControlWizard() = default;
 
     short OControlWizard::Execute()
     {

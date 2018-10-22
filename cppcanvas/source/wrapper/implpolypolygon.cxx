@@ -58,9 +58,7 @@ namespace cppcanvas
             OSL_ENSURE( mxPolyPoly.is(), "PolyPolygonImpl::PolyPolygonImpl: no valid polygon" );
         }
 
-        ImplPolyPolygon::~ImplPolyPolygon()
-        {
-        }
+        ImplPolyPolygon::~ImplPolyPolygon() = default;
 
         void ImplPolyPolygon::setRGBAFillColor( IntSRGBA aColor )
         {

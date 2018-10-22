@@ -94,9 +94,7 @@ void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString const & rValue, s
 
 } // namespace
 
-AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty()
-{
-}
+AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty() = default;
 
 bool AxBinaryPropertyWriter::PairProperty::writeProperty( AxAlignedOutputStream& rOutStrm )
 {

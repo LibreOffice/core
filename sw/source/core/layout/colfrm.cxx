@@ -57,9 +57,7 @@ void SwColumnFrame::DestroyImpl()
     SwFootnoteBossFrame::DestroyImpl();
 }
 
-SwColumnFrame::~SwColumnFrame()
-{
-}
+SwColumnFrame::~SwColumnFrame() = default;
 
 static void lcl_RemoveColumns( SwLayoutFrame *pCont, sal_uInt16 nCnt )
 {

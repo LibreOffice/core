@@ -402,8 +402,7 @@ MetafileXmlDump::MetafileXmlDump()
     maFilter.fill(false);
 }
 
-MetafileXmlDump::~MetafileXmlDump()
-{}
+MetafileXmlDump::~MetafileXmlDump() = default;
 
 void MetafileXmlDump::filterActionType(const MetaActionType nActionType, bool bShouldFilter)
 {

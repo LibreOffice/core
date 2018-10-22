@@ -34,11 +34,9 @@
 // The local stringpool holds all the symbols that don't move to the image
 // (labels, constant names etc.).
 
-SbiStringPool::SbiStringPool( )
-{}
+SbiStringPool::SbiStringPool() = default;
 
-SbiStringPool::~SbiStringPool()
-{}
+SbiStringPool::~SbiStringPool() = default;
 
 OUString SbiStringPool::Find( sal_uInt32 n ) const
 {
@@ -84,9 +82,7 @@ SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) : rStri
     nProcId  = 0;
 }
 
-SbiSymPool::~SbiSymPool()
-{}
-
+SbiSymPool::~SbiSymPool() = default;
 
 SbiSymDef* SbiSymPool::First()
 {
@@ -269,9 +265,7 @@ SbiSymDef::SbiSymDef( const OUString& rName ) : aName( rName )
     nFixedStringLength = -1;
 }
 
-SbiSymDef::~SbiSymDef()
-{
-}
+SbiSymDef::~SbiSymDef() = default;
 
 SbiProcDef* SbiSymDef::GetProcDef()
 {
@@ -391,8 +385,7 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
     aParams.AddSym( aName );
 }
 
-SbiProcDef::~SbiProcDef()
-{}
+SbiProcDef::~SbiProcDef() = default;
 
 SbiProcDef* SbiProcDef::GetProcDef()
 {
@@ -485,8 +478,7 @@ void SbiConstDef::Set( const OUString& n )
     aVal = n; nVal = 0; eType = SbxSTRING;
 }
 
-SbiConstDef::~SbiConstDef()
-{}
+SbiConstDef::~SbiConstDef() = default;
 
 SbiConstDef* SbiConstDef::GetConstDef()
 {

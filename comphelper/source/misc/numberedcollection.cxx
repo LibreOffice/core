@@ -35,11 +35,7 @@ NumberedCollection::NumberedCollection()
 {
 }
 
-
-NumberedCollection::~NumberedCollection()
-{
-}
-
+NumberedCollection::~NumberedCollection() = default;
 
 void NumberedCollection::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
 {

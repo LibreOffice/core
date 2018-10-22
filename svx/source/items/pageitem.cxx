@@ -55,7 +55,7 @@ SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     eUse        = rItem.eUse;
 }
 
-SvxPageItem::~SvxPageItem() {}
+SvxPageItem::~SvxPageItem() = default;
 
 // Clone
 SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const

@@ -1681,9 +1681,7 @@ SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
     mColor = aColor;
 }
 
-SvxColorItem::~SvxColorItem()
-{
-}
+SvxColorItem::~SvxColorItem() = default;
 
 sal_uInt16 SvxColorItem::GetVersion( sal_uInt16 nFFVer ) const
 {
@@ -2346,9 +2344,7 @@ SvxTwoLinesItem::SvxTwoLinesItem( bool bFlag, sal_Unicode nStartBracket,
 {
 }
 
-SvxTwoLinesItem::~SvxTwoLinesItem()
-{
-}
+SvxTwoLinesItem::~SvxTwoLinesItem() = default;
 
 bool SvxTwoLinesItem::operator==( const SfxPoolItem& rAttr ) const
 {

@@ -175,10 +175,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
     }
 }
 
-OGenericUnoController::~OGenericUnoController()
-{
-
-}
+OGenericUnoController::~OGenericUnoController() = default;
 
 bool OGenericUnoController::Construct(vcl::Window* /*pParent*/)
 {

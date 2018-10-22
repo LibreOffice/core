@@ -41,9 +41,7 @@ namespace oox { namespace drawingml {
         {
         }
 
-        TextTabStopListContext::~TextTabStopListContext()
-        {
-        }
+        TextTabStopListContext::~TextTabStopListContext() = default;
 
         ContextHandlerRef TextTabStopListContext::onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs )
         {

@@ -37,11 +37,7 @@ SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRep
 {
 }
 
-
-SVGFontExport::~SVGFontExport()
-{
-}
-
+SVGFontExport::~SVGFontExport() = default;
 
 SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont )
 {

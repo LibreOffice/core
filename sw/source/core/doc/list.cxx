@@ -216,9 +216,7 @@ SwList::SwList( const OUString& sListId,
 {
 }
 
-SwList::~SwList()
-{
-}
+SwList::~SwList() = default;
 
 const OUString & SwList::GetListId() const
 {

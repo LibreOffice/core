@@ -74,10 +74,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_CrossedoutWidth_Enum[] =
 
 // class XMLCrossedOutTypePropHdl
 
-XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
-{
-    // nothing to do
-}
+XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl() = default;
 
 bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -149,10 +146,7 @@ bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
 // class XMLCrossedOutStylePropHdl
 
-XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
-{
-    // nothing to do
-}
+XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl() = default;
 
 bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -197,10 +191,7 @@ bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::An
 
 // class XMLCrossedOutWidthPropHdl
 
-XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
-{
-    // nothing to do
-}
+XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl() = default;
 
 bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -267,10 +258,7 @@ bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::An
 
 // class XMLCrossedOutTextPropHdl
 
-XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
-{
-    // nothing to do
-}
+XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl() = default;
 
 bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

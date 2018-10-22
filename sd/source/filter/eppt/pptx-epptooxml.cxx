@@ -335,9 +335,7 @@ PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContex
     mbPptm = aArgumentsMap.getUnpackedValueOrDefault("IsPPTM", false);
 }
 
-PowerPointExport::~PowerPointExport()
-{
-}
+PowerPointExport::~PowerPointExport() = default;
 
 void PowerPointExport::writeDocumentProperties()
 {

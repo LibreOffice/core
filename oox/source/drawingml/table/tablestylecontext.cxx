@@ -41,9 +41,7 @@ TableStyleContext::TableStyleContext( ContextHandler2Helper const & rParent,
     mrTableStyle.getStyleName() = rAttribs.getString( XML_styleName ).get();
 }
 
-TableStyleContext::~TableStyleContext()
-{
-}
+TableStyleContext::~TableStyleContext() = default;
 
 ContextHandlerRef
 TableStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& /* rAttribs */ )

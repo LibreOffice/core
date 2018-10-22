@@ -234,11 +234,7 @@ TransferableHelper::TerminateListener::TerminateListener( TransferableHelper& rT
 {
 }
 
-
-TransferableHelper::TerminateListener::~TerminateListener()
-{
-}
-
+TransferableHelper::TerminateListener::~TerminateListener() = default;
 
 void SAL_CALL TransferableHelper::TerminateListener::disposing( const EventObject& )
 {
@@ -1091,9 +1087,7 @@ struct TransferableDataHelper_Impl
     ::osl::Mutex                    maMutex;
     rtl::Reference<TransferableClipboardNotifier>  mxClipboardListener;
 
-    TransferableDataHelper_Impl()
-    {
-    }
+    TransferableDataHelper_Impl() = default;
 };
 
 TransferableDataHelper::TransferableDataHelper()

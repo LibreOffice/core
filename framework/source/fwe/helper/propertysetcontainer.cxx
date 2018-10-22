@@ -40,9 +40,7 @@ PropertySetContainer::PropertySetContainer()
 {
 }
 
-PropertySetContainer::~PropertySetContainer()
-{
-}
+PropertySetContainer::~PropertySetContainer() = default;
 
 // XInterface
 void SAL_CALL PropertySetContainer::acquire() throw ()

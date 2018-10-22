@@ -59,9 +59,7 @@
  ************************************************************************/
 #include <xfilter/xfdrawrect.hxx>
 
-XFDrawRect::XFDrawRect()
-{
-}
+XFDrawRect::XFDrawRect() = default;
 
 void XFDrawRect::ToXml(IXFStream *pStrm)
 {

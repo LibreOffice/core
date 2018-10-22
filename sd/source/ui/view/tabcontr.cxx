@@ -39,11 +39,7 @@
 #include <DrawDocShell.hxx>
 
 namespace sd {
-
-
-TabControl::TabControlTransferable::~TabControlTransferable()
-{
-}
+TabControl::TabControlTransferable::~TabControlTransferable() = default;
 
 void TabControl::TabControlTransferable::AddSupportedFormats()
 {

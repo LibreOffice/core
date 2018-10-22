@@ -39,9 +39,7 @@ WrappedNumberFormatProperty::WrappedNumberFormatProperty(const std::shared_ptr<C
 {
 }
 
-WrappedNumberFormatProperty::~WrappedNumberFormatProperty()
-{
-}
+WrappedNumberFormatProperty::~WrappedNumberFormatProperty() = default;
 
 void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
@@ -87,9 +85,7 @@ WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty() :
 {
 }
 
-WrappedLinkNumberFormatProperty::~WrappedLinkNumberFormatProperty()
-{
-}
+WrappedLinkNumberFormatProperty::~WrappedLinkNumberFormatProperty() = default;
 
 void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {

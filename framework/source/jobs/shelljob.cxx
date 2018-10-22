@@ -59,9 +59,7 @@ ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xCo
 {
 }
 
-ShellJob::~ShellJob()
-{
-}
+ShellJob::~ShellJob() = default;
 
 css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
 {

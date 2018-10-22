@@ -28,9 +28,7 @@ ScPaintHint::ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint ) :
 {
 }
 
-ScPaintHint::~ScPaintHint()
-{
-}
+ScPaintHint::~ScPaintHint() = default;
 
 // ScUpdateRefHint - update references
 
@@ -44,9 +42,7 @@ ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
 {
 }
 
-ScUpdateRefHint::~ScUpdateRefHint()
-{
-}
+ScUpdateRefHint::~ScUpdateRefHint() = default;
 
 //      ScLinkRefreshedHint - a link has been refreshed
 
@@ -55,9 +51,7 @@ ScLinkRefreshedHint::ScLinkRefreshedHint() :
 {
 }
 
-ScLinkRefreshedHint::~ScLinkRefreshedHint()
-{
-}
+ScLinkRefreshedHint::~ScLinkRefreshedHint() = default;
 
 void ScLinkRefreshedHint::SetSheetLink( const OUString& rSourceUrl )
 {
@@ -91,24 +85,18 @@ ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
 {
 }
 
-ScAutoStyleHint::~ScAutoStyleHint()
-{
-}
+ScAutoStyleHint::~ScAutoStyleHint() = default;
 
 ScDBRangeRefreshedHint::ScDBRangeRefreshedHint( const ScImportParam& rP )
     : aParam(rP)
 {
 }
-ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
-{
-}
+ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint() = default;
 
 ScDataPilotModifiedHint::ScDataPilotModifiedHint( const OUString& rName )
     : maName(rName)
 {
 }
-ScDataPilotModifiedHint::~ScDataPilotModifiedHint()
-{
-}
+ScDataPilotModifiedHint::~ScDataPilotModifiedHint() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

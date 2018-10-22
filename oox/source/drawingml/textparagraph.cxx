@@ -36,14 +36,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 namespace oox { namespace drawingml {
+TextParagraph::TextParagraph() = default;
 
-TextParagraph::TextParagraph()
-{
-}
-
-TextParagraph::~TextParagraph()
-{
-}
+TextParagraph::~TextParagraph() = default;
 
 TextCharacterProperties TextParagraph::getCharacterStyle (
     const TextCharacterProperties& rTextStyleProperties,

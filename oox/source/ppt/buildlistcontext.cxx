@@ -32,9 +32,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    BuildListContext::~BuildListContext( )
-    {
-    }
+    BuildListContext::~BuildListContext() = default;
 
     void BuildListContext::onEndElement()
     {

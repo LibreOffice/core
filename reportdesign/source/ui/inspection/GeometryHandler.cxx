@@ -233,9 +233,7 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
     }
 }
 
-GeometryHandler::~GeometryHandler()
-{
-}
+GeometryHandler::~GeometryHandler() = default;
 
 OUString SAL_CALL GeometryHandler::getImplementationName(  )
 {

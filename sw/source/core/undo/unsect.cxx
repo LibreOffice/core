@@ -109,9 +109,7 @@ SwUndoInsSection::SwUndoInsSection(
     }
 }
 
-SwUndoInsSection::~SwUndoInsSection()
-{
-}
+SwUndoInsSection::~SwUndoInsSection() = default;
 
 void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 {

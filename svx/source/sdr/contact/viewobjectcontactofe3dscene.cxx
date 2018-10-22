@@ -61,9 +61,7 @@ namespace sdr
         {
         }
 
-        ViewObjectContactOfE3dScene::~ViewObjectContactOfE3dScene()
-        {
-        }
+        ViewObjectContactOfE3dScene::~ViewObjectContactOfE3dScene() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfE3dScene::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {

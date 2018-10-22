@@ -97,9 +97,7 @@ namespace
         mutable std::shared_ptr< LabelProvider >   m_pInfoLabel;
 
     public:
-        ProviderFactory()
-        {
-        }
+        ProviderFactory() = default;
 
         std::shared_ptr< ImageProvider > const & getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
@@ -577,9 +575,7 @@ OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const OUString& rTitle, co
     Construct(pParent, nStyle, eType);
 }
 
-OSQLMessageBox::~OSQLMessageBox()
-{
-}
+OSQLMessageBox::~OSQLMessageBox() = default;
 
 IMPL_LINK_NOARG(OSQLMessageBox, ButtonClickHdl, weld::Button&, void)
 {

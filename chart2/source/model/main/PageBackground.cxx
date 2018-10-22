@@ -123,8 +123,7 @@ PageBackground::PageBackground( const PageBackground & rOther ) :
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
-PageBackground::~PageBackground()
-{}
+PageBackground::~PageBackground() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()

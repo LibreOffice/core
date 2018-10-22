@@ -80,7 +80,7 @@ class BasicPaneFactory::PaneContainer
     : public ::std::vector<PaneDescriptor>
 {
 public:
-    PaneContainer() {}
+    PaneContainer() = default;
 };
 
 //===== PaneFactory ===========================================================
@@ -95,9 +95,7 @@ BasicPaneFactory::BasicPaneFactory (
 {
 }
 
-BasicPaneFactory::~BasicPaneFactory()
-{
-}
+BasicPaneFactory::~BasicPaneFactory() = default;
 
 void SAL_CALL BasicPaneFactory::disposing()
 {

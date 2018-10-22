@@ -71,10 +71,7 @@ SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent
         maTransition.setOoxAdvanceTime( rAttribs.getInteger( XML_advTm, -1 ) );
 }
 
-SlideTransitionContext::~SlideTransitionContext() throw()
-{
-
-}
+SlideTransitionContext::~SlideTransitionContext() throw() = default;
 
 ::oox::core::ContextHandlerRef SlideTransitionContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

@@ -43,9 +43,7 @@ CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
 {
 }
 
-CacheUpdateListener::~CacheUpdateListener()
-{
-}
+CacheUpdateListener::~CacheUpdateListener() = default;
 
 void CacheUpdateListener::startListening()
 {

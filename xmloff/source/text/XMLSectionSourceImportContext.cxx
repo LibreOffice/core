@@ -49,9 +49,7 @@ XMLSectionSourceImportContext::XMLSectionSourceImportContext(
 {
 }
 
-XMLSectionSourceImportContext::~XMLSectionSourceImportContext()
-{
-}
+XMLSectionSourceImportContext::~XMLSectionSourceImportContext() = default;
 
 enum XMLSectionSourceToken
 {

@@ -76,11 +76,7 @@ namespace offapp
     {
     }
 
-
-    ODriverEnumeration::~ODriverEnumeration() throw()
-    {
-    }
-
+    ODriverEnumeration::~ODriverEnumeration() throw() = default;
 
     ODriverEnumeration::const_iterator ODriverEnumeration::begin() const throw()
     {

@@ -136,9 +136,7 @@ SwGlosDocShell::SwGlosDocShell(bool bNewShow)
 {
 }
 
-SwGlosDocShell::~SwGlosDocShell(  )
-{
-}
+SwGlosDocShell::~SwGlosDocShell() = default;
 
 void SwGlosDocShell::Execute( SfxRequest& rReq )
 {
@@ -171,9 +169,7 @@ SwWebGlosDocShell::SwWebGlosDocShell()
 {
 }
 
-SwWebGlosDocShell::~SwWebGlosDocShell(  )
-{
-}
+SwWebGlosDocShell::~SwWebGlosDocShell() = default;
 
 void SwWebGlosDocShell::Execute( SfxRequest& rReq )
 {

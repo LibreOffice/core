@@ -49,9 +49,7 @@ namespace dbaui
         }
 
     protected:
-        ~DialogExecutor_Impl()
-        {
-        }
+        ~DialogExecutor_Impl() = default;
 
     private:
         DECL_LINK( onExecute, void*, void );

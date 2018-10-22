@@ -101,9 +101,7 @@ namespace sdr
         {
         }
 
-        OverlayRollingRectangleStriped::~OverlayRollingRectangleStriped()
-        {
-        }
+        OverlayRollingRectangleStriped::~OverlayRollingRectangleStriped() = default;
 
         void OverlayRollingRectangleStriped::setSecondPosition(const basegfx::B2DPoint& rNew)
         {

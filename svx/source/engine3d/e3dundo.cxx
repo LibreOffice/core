@@ -24,10 +24,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-
-E3dUndoAction::~E3dUndoAction ()
-{
-}
+E3dUndoAction::~E3dUndoAction() = default;
 
 // Repeat does not exist
 
@@ -38,9 +35,7 @@ bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 
 // Undo destructor for 3D-Rotation
-E3dRotateUndoAction::~E3dRotateUndoAction()
-{
-}
+E3dRotateUndoAction::~E3dRotateUndoAction() = default;
 
 // Undo for 3D-Rotation on the Rotation matrix
 void E3dRotateUndoAction::Undo()
@@ -67,9 +62,7 @@ E3dAttributesUndoAction::E3dAttributesUndoAction(
 {
 }
 
-E3dAttributesUndoAction::~E3dAttributesUndoAction()
-{
-}
+E3dAttributesUndoAction::~E3dAttributesUndoAction() = default;
 
 // Undo() implemented through Set3DAttributes() to only maintain the attributes
 // in one place

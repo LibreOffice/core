@@ -51,9 +51,7 @@ XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
 {
 }
 
-XMLIndexTOCStylesContext::~XMLIndexTOCStylesContext()
-{
-}
+XMLIndexTOCStylesContext::~XMLIndexTOCStylesContext() = default;
 
 void XMLIndexTOCStylesContext::StartElement(
     const Reference<XAttributeList> & xAttrList )

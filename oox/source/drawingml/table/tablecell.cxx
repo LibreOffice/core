@@ -65,9 +65,7 @@ TableCell::TableCell()
 , mnHorzOverflowToken( XML_clip )
 {
 }
-TableCell::~TableCell()
-{
-}
+TableCell::~TableCell() = default;
 
 static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         Reference< XPropertySet > const & rxPropSet, oox::drawingml::LineProperties& rLineProperties,

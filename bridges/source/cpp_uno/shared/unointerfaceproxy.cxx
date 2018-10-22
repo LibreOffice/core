@@ -117,9 +117,7 @@ UnoInterfaceProxy::UnoInterfaceProxy(
     pDispatcher = unoInterfaceProxyDispatch;
 }
 
-UnoInterfaceProxy::~UnoInterfaceProxy()
-{}
-
+UnoInterfaceProxy::~UnoInterfaceProxy() = default;
 } } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

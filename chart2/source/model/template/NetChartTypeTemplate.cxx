@@ -50,8 +50,7 @@ NetChartTypeTemplate::NetChartTypeTemplate(
         m_bHasFilledArea( bHasFilledArea )
 {}
 
-NetChartTypeTemplate::~NetChartTypeTemplate()
-{}
+NetChartTypeTemplate::~NetChartTypeTemplate() = default;
 
 StackMode NetChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {

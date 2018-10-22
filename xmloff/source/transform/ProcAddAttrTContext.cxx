@@ -43,9 +43,7 @@ XMLProcAddAttrTransformerContext::XMLProcAddAttrTransformerContext(
 {
 }
 
-XMLProcAddAttrTransformerContext::~XMLProcAddAttrTransformerContext()
-{
-}
+XMLProcAddAttrTransformerContext::~XMLProcAddAttrTransformerContext() = default;
 
 void XMLProcAddAttrTransformerContext::StartElement(
         const Reference< XAttributeList >& rAttrList )

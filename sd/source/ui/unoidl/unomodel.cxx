@@ -265,9 +265,7 @@ SdXImpressDocument::SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard)
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-SdXImpressDocument::~SdXImpressDocument() throw()
-{
-}
+SdXImpressDocument::~SdXImpressDocument() throw() = default;
 
 // XInterface
 uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType )
@@ -2811,9 +2809,7 @@ SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  throw()
 {
 }
 
-SdDrawPagesAccess::~SdDrawPagesAccess() throw()
-{
-}
+SdDrawPagesAccess::~SdDrawPagesAccess() throw() = default;
 
 // XIndexAccess
 sal_Int32 SAL_CALL SdDrawPagesAccess::getCount()
@@ -3059,9 +3055,7 @@ SdMasterPagesAccess::SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw()
 {
 }
 
-SdMasterPagesAccess::~SdMasterPagesAccess() throw()
-{
-}
+SdMasterPagesAccess::~SdMasterPagesAccess() throw() = default;
 
 // XComponent
 void SAL_CALL SdMasterPagesAccess::dispose(  )
@@ -3300,9 +3294,7 @@ SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) throw()
 {
 }
 
-SdDocLinkTargets::~SdDocLinkTargets() throw()
-{
-}
+SdDocLinkTargets::~SdDocLinkTargets() throw() = default;
 
 // XComponent
 void SAL_CALL SdDocLinkTargets::dispose(  )

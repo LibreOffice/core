@@ -45,9 +45,7 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
         UNO_QUERY_THROW);
 }
 
-PresenterSpritePane::~PresenterSpritePane()
-{
-}
+PresenterSpritePane::~PresenterSpritePane() = default;
 
 void PresenterSpritePane::disposing()
 {

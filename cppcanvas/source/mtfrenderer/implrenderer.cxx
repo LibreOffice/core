@@ -2962,9 +2962,7 @@ namespace cppcanvas
                             );
         }
 
-        ImplRenderer::~ImplRenderer()
-        {
-        }
+        ImplRenderer::~ImplRenderer() = default;
 
         bool ImplRenderer::drawSubset( sal_Int32    nStartIndex,
                                        sal_Int32    nEndIndex ) const

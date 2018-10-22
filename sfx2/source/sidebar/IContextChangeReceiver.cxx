@@ -19,11 +19,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 namespace sfx2 { namespace sidebar {
-
-IContextChangeReceiver::~IContextChangeReceiver()
-{
-}
-
+IContextChangeReceiver::~IContextChangeReceiver() = default;
 } } // end of namespace ::sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

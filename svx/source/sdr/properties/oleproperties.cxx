@@ -54,9 +54,7 @@ namespace sdr
         {
         }
 
-        OleProperties::~OleProperties()
-        {
-        }
+        OleProperties::~OleProperties() = default;
 
         std::unique_ptr<BaseProperties> OleProperties::Clone(SdrObject& rObj) const
         {

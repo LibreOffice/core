@@ -170,9 +170,7 @@ VbaSiteModel::VbaSiteModel() :
 {
 }
 
-VbaSiteModel::~VbaSiteModel()
-{
-}
+VbaSiteModel::~VbaSiteModel() = default;
 
 void VbaSiteModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
 {
@@ -315,13 +313,9 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
     }
 }
 
-VbaFormControl::VbaFormControl()
-{
-}
+VbaFormControl::VbaFormControl() = default;
 
-VbaFormControl::~VbaFormControl()
-{
-}
+VbaFormControl::~VbaFormControl() = default;
 
 void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBase& rStrg, const AxClassTable& rClassTable )
 {

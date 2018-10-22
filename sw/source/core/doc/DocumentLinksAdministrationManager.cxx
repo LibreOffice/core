@@ -438,9 +438,7 @@ bool DocumentLinksAdministrationManager::LinksUpdated() const
     return mbLinksUpdated;
 }
 
-DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()
-{
-}
+DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager() = default;
 
 bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const
 {

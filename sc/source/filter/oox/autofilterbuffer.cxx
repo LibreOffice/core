@@ -146,9 +146,7 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
 
 } // namespace
 
-ApiFilterSettings::ApiFilterSettings()
-{
-}
+ApiFilterSettings::ApiFilterSettings() = default;
 
 void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, double fValue )
 {

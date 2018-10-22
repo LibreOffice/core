@@ -342,9 +342,7 @@ SvtFilterOptions::SvtFilterOptions() :
     Load();
 }
 
-SvtFilterOptions::~SvtFilterOptions()
-{
-}
+SvtFilterOptions::~SvtFilterOptions() = default;
 
 static ConfigFlags lcl_GetFlag(sal_Int32 nProp)
 {

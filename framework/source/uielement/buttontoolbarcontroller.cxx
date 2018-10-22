@@ -65,9 +65,7 @@ ButtonToolbarController::ButtonToolbarController(
 {
 }
 
-ButtonToolbarController::~ButtonToolbarController()
-{
-}
+ButtonToolbarController::~ButtonToolbarController() = default;
 
         // XInterface
 uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rType )

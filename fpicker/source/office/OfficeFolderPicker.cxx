@@ -35,13 +35,9 @@ using namespace     ::com::sun::star::lang;
 using namespace     ::com::sun::star::uno;
 using namespace     ::com::sun::star::beans;
 
-SvtFolderPicker::SvtFolderPicker()
-{
-}
+SvtFolderPicker::SvtFolderPicker() = default;
 
-SvtFolderPicker::~SvtFolderPicker()
-{
-}
+SvtFolderPicker::~SvtFolderPicker() = default;
 
 void SAL_CALL SvtFolderPicker::setTitle( const OUString& _rTitle )
 {

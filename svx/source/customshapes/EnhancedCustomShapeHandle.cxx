@@ -29,11 +29,7 @@ EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::
 {
 }
 
-
-EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle()
-{
-}
-
+EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle() = default;
 
 void SAL_CALL EnhancedCustomShapeHandle::acquire() throw()
 {

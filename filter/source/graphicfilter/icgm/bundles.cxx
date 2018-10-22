@@ -34,9 +34,7 @@ FontEntry::FontEntry() :
 {
 }
 
-FontEntry::~FontEntry()
-{
-}
+FontEntry::~FontEntry() = default;
 
 CGMFList::CGMFList() :
     nFontNameCount      ( 0 ),

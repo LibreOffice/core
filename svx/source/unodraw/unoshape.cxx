@@ -4125,9 +4125,7 @@ SvxShapeRect::SvxShapeRect(SdrObject* pObj)
 {
 }
 
-SvxShapeRect::~SvxShapeRect() throw()
-{
-}
+SvxShapeRect::~SvxShapeRect() throw() = default;
 
 uno::Any SAL_CALL SvxShapeRect::queryInterface( const uno::Type & rType )
 {

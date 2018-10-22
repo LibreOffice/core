@@ -165,9 +165,7 @@ namespace dbaui
     {
     }
 
-    DataSourceMetaData::~DataSourceMetaData()
-    {
-    }
+    DataSourceMetaData::~DataSourceMetaData() = default;
 
     const FeatureSet& DataSourceMetaData::getFeatureSet() const
     {

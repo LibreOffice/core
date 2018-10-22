@@ -52,9 +52,7 @@ ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >
 }
 
 // virtual
-ContentProvider::~ContentProvider()
-{
-}
+ContentProvider::~ContentProvider() = default;
 
 // XInterface methods.
 void SAL_CALL ContentProvider::acquire()

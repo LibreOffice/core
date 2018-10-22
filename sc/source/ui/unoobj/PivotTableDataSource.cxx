@@ -28,9 +28,7 @@ PivotTableDataSource::PivotTableDataSource(const std::vector<css::uno::Reference
 {
 }
 
-PivotTableDataSource::~PivotTableDataSource()
-{
-}
+PivotTableDataSource::~PivotTableDataSource() = default;
 
 void PivotTableDataSource::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHint& /*rHint*/)
 {

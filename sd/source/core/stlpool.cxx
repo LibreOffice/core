@@ -919,8 +919,7 @@ namespace
 {
 struct StyleSheetIsUserDefinedPredicate : svl::StyleSheetPredicate
 {
-    StyleSheetIsUserDefinedPredicate()
-    {}
+    StyleSheetIsUserDefinedPredicate() = default;
 
     bool Check(const SfxStyleSheetBase& sheet) override
     {

@@ -993,9 +993,7 @@ void ExportDialog::updateControls()
     }
 }
 
-ExportDialog::~ExportDialog()
-{
-}
+ExportDialog::~ExportDialog() = default;
 
 /*************************************************************************
 |*

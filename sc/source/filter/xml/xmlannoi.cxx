@@ -36,9 +36,7 @@ ScXMLAnnotationData::ScXMLAnnotationData() :
 {
 }
 
-ScXMLAnnotationData::~ScXMLAnnotationData()
-{
-}
+ScXMLAnnotationData::~ScXMLAnnotationData() = default;
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -103,9 +101,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLAnnotationContext::~ScXMLAnnotationContext()
-{
-}
+ScXMLAnnotationContext::~ScXMLAnnotationContext() = default;
 
 void ScXMLAnnotationContext::StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList)
 {

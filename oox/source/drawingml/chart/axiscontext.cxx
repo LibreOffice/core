@@ -40,9 +40,7 @@ AxisDispUnitsContext::AxisDispUnitsContext( ContextHandler2Helper& rParent, Axis
 {
 }
 
-AxisDispUnitsContext::~AxisDispUnitsContext()
-{
-}
+AxisDispUnitsContext::~AxisDispUnitsContext() = default;
 
 ContextHandlerRef AxisDispUnitsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -84,9 +82,7 @@ AxisContextBase::AxisContextBase( ContextHandler2Helper& rParent, AxisModel& rMo
 {
 }
 
-AxisContextBase::~AxisContextBase()
-{
-}
+AxisContextBase::~AxisContextBase() = default;
 
 ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -174,9 +170,7 @@ CatAxisContext::CatAxisContext( ContextHandler2Helper& rParent, AxisModel& rMode
 {
 }
 
-CatAxisContext::~CatAxisContext()
-{
-}
+CatAxisContext::~CatAxisContext() = default;
 
 ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -210,9 +204,7 @@ DateAxisContext::DateAxisContext( ContextHandler2Helper& rParent, AxisModel& rMo
 {
 }
 
-DateAxisContext::~DateAxisContext()
-{
-}
+DateAxisContext::~DateAxisContext() = default;
 
 ContextHandlerRef DateAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -249,9 +241,7 @@ SerAxisContext::SerAxisContext( ContextHandler2Helper& rParent, AxisModel& rMode
 {
 }
 
-SerAxisContext::~SerAxisContext()
-{
-}
+SerAxisContext::~SerAxisContext() = default;
 
 ContextHandlerRef SerAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -272,9 +262,7 @@ ValAxisContext::ValAxisContext( ContextHandler2Helper& rParent, AxisModel& rMode
 {
 }
 
-ValAxisContext::~ValAxisContext()
-{
-}
+ValAxisContext::~ValAxisContext() = default;
 
 ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

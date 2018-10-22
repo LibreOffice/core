@@ -33,14 +33,9 @@ namespace writerfilter {
 using namespace com::sun::star;
 
 namespace dmapper {
+WrapPolygon::WrapPolygon() = default;
 
-WrapPolygon::WrapPolygon()
-{
-}
-
-WrapPolygon::~WrapPolygon()
-{
-}
+WrapPolygon::~WrapPolygon() = default;
 
 void WrapPolygon::addPoint(const awt::Point & rPoint)
 {
@@ -152,9 +147,7 @@ WrapPolygonHandler::WrapPolygonHandler()
 {
 }
 
-WrapPolygonHandler::~WrapPolygonHandler()
-{
-}
+WrapPolygonHandler::~WrapPolygonHandler() = default;
 
 void WrapPolygonHandler::lcl_attribute(Id Name, Value & val)
 {

@@ -89,9 +89,7 @@ XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
 {
 }
 
-XMLEventOOoTransformerContext::~XMLEventOOoTransformerContext()
-{
-}
+XMLEventOOoTransformerContext::~XMLEventOOoTransformerContext() = default;
 
 XMLTransformerOOoEventMap_Impl
     *XMLEventOOoTransformerContext::CreateEventMap()

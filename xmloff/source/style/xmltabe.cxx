@@ -95,9 +95,7 @@ SvxXMLTabStopExport::SvxXMLTabStopExport(
 {
 }
 
-SvxXMLTabStopExport::~SvxXMLTabStopExport()
-{
-}
+SvxXMLTabStopExport::~SvxXMLTabStopExport() = default;
 
 void SvxXMLTabStopExport::Export( const uno::Any& rAny )
 {

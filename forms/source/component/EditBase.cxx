@@ -79,10 +79,7 @@ OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Referenc
     m_aDefaultText = _pOriginal->m_aDefaultText;
 }
 
-
-OEditBaseModel::~OEditBaseModel( )
-{
-}
+OEditBaseModel::~OEditBaseModel() = default;
 
 // XPersist
 

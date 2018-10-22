@@ -70,9 +70,7 @@ namespace sdr
         {
         }
 
-        TextProperties::~TextProperties()
-        {
-        }
+        TextProperties::~TextProperties() = default;
 
         std::unique_ptr<BaseProperties> TextProperties::Clone(SdrObject& rObj) const
         {

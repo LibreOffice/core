@@ -110,9 +110,7 @@ SolverComponent::SolverComponent() :
     registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, cppu::UnoType<decltype(mbLimitBBDepth)>::get() );
 }
 
-SolverComponent::~SolverComponent()
-{
-}
+SolverComponent::~SolverComponent() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2( SolverComponent, SolverComponent_Base, OPropertyContainer )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SolverComponent, SolverComponent_Base, OPropertyContainer )

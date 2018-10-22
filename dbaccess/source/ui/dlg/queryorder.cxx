@@ -117,9 +117,7 @@ DlgOrderCrit::DlgOrderCrit(weld::Window * pParent,
     m_xLB_ORDERFIELD2->connect_changed(LINK(this,DlgOrderCrit,FieldListSelectHdl));
 }
 
-DlgOrderCrit::~DlgOrderCrit()
-{
-}
+DlgOrderCrit::~DlgOrderCrit() = default;
 
 IMPL_LINK_NOARG( DlgOrderCrit, FieldListSelectHdl, weld::ComboBox&, void )
 {

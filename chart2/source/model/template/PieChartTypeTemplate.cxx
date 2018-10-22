@@ -162,8 +162,7 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::Any( bRings ));
 }
 
-PieChartTypeTemplate::~PieChartTypeTemplate()
-{}
+PieChartTypeTemplate::~PieChartTypeTemplate() = default;
 
 // ____ OPropertySet ____
 uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const

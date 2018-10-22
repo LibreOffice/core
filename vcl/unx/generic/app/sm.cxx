@@ -53,10 +53,10 @@ namespace {
 class IceSalSession : public SalSession
 {
 public:
-    IceSalSession() {}
+    IceSalSession() = default;
 
 private:
-    virtual ~IceSalSession() override {}
+    virtual ~IceSalSession() override = default;
 
     virtual void queryInteraction() override;
     virtual void interactionDone() override;

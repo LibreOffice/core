@@ -617,9 +617,7 @@ SfxDocumentDescPage::SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet
                                    m_xCommentEd->get_height_rows(16));
 }
 
-SfxDocumentDescPage::~SfxDocumentDescPage()
-{
-}
+SfxDocumentDescPage::~SfxDocumentDescPage() = default;
 
 VclPtr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
 {
