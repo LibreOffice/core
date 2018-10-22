@@ -161,6 +161,13 @@ void ShadowControlsWrapper::SetControlValue(const SvxShadowItem& rItem)
     mrLbColor.SelectEntry(rItem.GetColor());
 }
 
+void ShadowControlsWrapper::SetControlDontKnow()
+{
+    mrVsPos.SetNoSelection();
+    mrMfSize.set_text("");
+    mrLbColor.SetNoSelection();
+}
+
 MarginControlsWrapper::MarginControlsWrapper(weld::MetricSpinButton& rMfLeft, weld::MetricSpinButton& rMfRight,
                                              weld::MetricSpinButton& rMfTop, weld::MetricSpinButton& rMfBottom)
     : mrLeftWrp(rMfLeft)
@@ -202,6 +209,15 @@ void MarginControlsWrapper::SetControlValue(const SvxMarginItem& rItem)
     mrRightWrp.save_value();
     mrTopWrp.save_value();
     mrBottomWrp.save_value();
+}
+
+void MarginControlsWrapper::SetControlDontKnow()
+{
+    const OUString sEmpty;
+    mrLeftWrp.set_text(sEmpty);
+    mrRightWrp.set_text(sEmpty);
+    mrTopWrp.set_text(sEmpty);
+    mrBottomWrp.set_text(sEmpty);
 }
 
 SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
@@ -547,13 +563,21 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     if (m_xShadowControls)
     {
         sal_uInt16 nShadowId = pPool->GetWhich(mnShadowSlot);
-        m_xShadowControls->SetControlValue(*static_cast<const SvxShadowItem*>(rSet->GetItem(nShadowId)));
+        const SfxPoolItem* pItem = rSet->GetItem(nShadowId);
+        if (pItem)
+            m_xShadowControls->SetControlValue(*static_cast<const SvxShadowItem*>(pItem));
+        else
+            m_xShadowControls->SetControlDontKnow();
     }
 
     if (m_xMarginControls)
     {
         sal_uInt16 nAlignMarginId = pPool->GetWhich(SID_ATTR_ALIGN_MARGIN);
-        m_xMarginControls->SetControlValue(*static_cast<const SvxMarginItem*>(rSet->GetItem(nAlignMarginId)));
+        const SfxPoolItem* pItem = rSet->GetItem(nAlignMarginId);
+        if (pItem)
+            m_xMarginControls->SetControlValue(*static_cast<const SvxMarginItem*>(pItem));
+        else
+            m_xMarginControls->SetControlDontKnow();
     }
 
     sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
