@@ -93,6 +93,30 @@
       "revId": "48d191885d0a013e0815d9f1c744da6fe360e21f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_a8e01f98",
+        "filename": "sc/uiconfig/scalc/popupmenu/drawtext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-22T14:16:28Z",
+      "side": 1,
+      "message": "It\u0027s a very virtual section when you compare different contexts. In this menu you have separators above and below the single function. But up to you, works for me in either ways.",
+      "parentUuid": "1f1a1f67_48d06bca",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 48
+      },
+      "revId": "48d191885d0a013e0815d9f1c744da6fe360e21f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
