@@ -82,8 +82,6 @@ static ::rtl::OUString getExecutablePath()
     return dirPath;
 }
 
-//rtl::OUString CWD = getExecutablePath();
-
 #if !defined _WIN32
 
 class exclude
