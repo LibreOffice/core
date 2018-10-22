@@ -34,6 +34,24 @@
       "revId": "7aca529b875f5975bd72cc78a8ccae881a2e8cdd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_0d0de53d",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-22T07:42:36Z",
+      "side": 1,
+      "message": "I think option (1) is the right one here, but please add a comment to the commit noting that you fixed some dodgy code in this method.\nWhenever making a commit spanning a lot of smaller changes, with something interesting in the middle, it is good to note that in the commit so that if people are bisecting a problem, it is easier to find.",
+      "parentUuid": "1f1a1f67_4d3abde7",
+      "revId": "7aca529b875f5975bd72cc78a8ccae881a2e8cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
