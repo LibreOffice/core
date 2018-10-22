@@ -24,9 +24,7 @@ struct BulkDataHint::Impl
 BulkDataHint::BulkDataHint( ScDocument& rDoc, SfxHintId nHintId ) :
     SfxHint( nHintId ), mpImpl(new Impl(rDoc)) {}
 
-BulkDataHint::~BulkDataHint()
-{
-}
+BulkDataHint::~BulkDataHint() = default;
 
 void BulkDataHint::setSpans( const ColumnSpanSet* pSpans )
 {

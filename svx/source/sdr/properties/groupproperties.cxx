@@ -53,9 +53,7 @@ namespace sdr
         {
         }
 
-        GroupProperties::~GroupProperties()
-        {
-        }
+        GroupProperties::~GroupProperties() = default;
 
         std::unique_ptr<BaseProperties> GroupProperties::Clone(SdrObject& rObj) const
         {

@@ -211,8 +211,6 @@ bool SfxPoolItem::PutValue( const css::uno::Any&, sal_uInt8 )
     return false;
 }
 
-SfxVoidItem::~SfxVoidItem()
-{
-}
+SfxVoidItem::~SfxVoidItem() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

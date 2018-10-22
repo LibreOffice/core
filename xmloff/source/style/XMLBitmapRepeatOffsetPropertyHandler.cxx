@@ -40,9 +40,7 @@ XMLBitmapRepeatOffsetPropertyHandler::XMLBitmapRepeatOffsetPropertyHandler( bool
 {
 }
 
-XMLBitmapRepeatOffsetPropertyHandler::~XMLBitmapRepeatOffsetPropertyHandler()
-{
-}
+XMLBitmapRepeatOffsetPropertyHandler::~XMLBitmapRepeatOffsetPropertyHandler() = default;
 
 bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
     const OUString& rStrImpValue,

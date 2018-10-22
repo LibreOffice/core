@@ -43,9 +43,7 @@ SwSmartTagMgr::SwSmartTagMgr( const OUString& rModuleName ) :
 {
 }
 
-SwSmartTagMgr::~SwSmartTagMgr()
-{
-}
+SwSmartTagMgr::~SwSmartTagMgr() = default;
 
 void SwSmartTagMgr::modified( const lang::EventObject& rEO )
 {

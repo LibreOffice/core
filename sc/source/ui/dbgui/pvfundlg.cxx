@@ -846,9 +846,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg(weld::Window* pParent, ScDPObject& rDPObj, 
     mxLbDims->connect_row_activated(LINK(this, ScDPShowDetailDlg, DblClickHdl));
 }
 
-ScDPShowDetailDlg::~ScDPShowDetailDlg()
-{
-}
+ScDPShowDetailDlg::~ScDPShowDetailDlg() = default;
 
 short ScDPShowDetailDlg::execute()
 {

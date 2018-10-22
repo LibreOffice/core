@@ -45,9 +45,7 @@ ScMyOLEFixer::ScMyOLEFixer(ScXMLImport& rTempImport)
 {
 }
 
-ScMyOLEFixer::~ScMyOLEFixer()
-{
-}
+ScMyOLEFixer::~ScMyOLEFixer() = default;
 
 bool ScMyOLEFixer::IsOLE(const uno::Reference< drawing::XShape >& rShape)
 {

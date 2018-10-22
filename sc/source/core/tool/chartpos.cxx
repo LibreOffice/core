@@ -82,9 +82,7 @@ ScChartPositioner::ScChartPositioner( const ScChartPositioner& rPositioner ) :
 {
 }
 
-ScChartPositioner::~ScChartPositioner()
-{
-}
+ScChartPositioner::~ScChartPositioner() = default;
 
 void ScChartPositioner::SetRangeList( const ScRange& rRange )
 {
@@ -511,8 +509,6 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
     }
 }
 
-ScChartPositionMap::~ScChartPositionMap()
-{
-}
+ScChartPositionMap::~ScChartPositionMap() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

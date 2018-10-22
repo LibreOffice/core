@@ -32,9 +32,7 @@ OOXMLSecParser::OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecCont
 {
 }
 
-OOXMLSecParser::~OOXMLSecParser()
-{
-}
+OOXMLSecParser::~OOXMLSecParser() = default;
 
 void SAL_CALL OOXMLSecParser::startDocument()
 {

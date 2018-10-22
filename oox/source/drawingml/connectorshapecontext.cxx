@@ -47,9 +47,7 @@ ConnectorShapeContext::ConnectorShapeContext( ContextHandler2Helper const & rPar
 {
 }
 
-ConnectorShapeContext::~ConnectorShapeContext()
-{
-}
+ConnectorShapeContext::~ConnectorShapeContext() = default;
 
 ContextHandlerRef ConnectorShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

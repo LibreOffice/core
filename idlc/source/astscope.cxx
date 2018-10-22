@@ -35,10 +35,7 @@ AstScope::AstScope(NodeType nodeType)
 
 }
 
-AstScope::~AstScope()
-{
-
-}
+AstScope::~AstScope() = default;
 
 AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
 {

@@ -22,13 +22,9 @@
 
 #include <palettes.hxx>
 
-Palette::~Palette()
-{
-}
+Palette::~Palette() = default;
 
-PaletteASE::~PaletteASE()
-{
-}
+PaletteASE::~PaletteASE() = default;
 
 PaletteASE::PaletteASE( const OUString &rFPath, const OUString &rFName ) :
     mbValidPalette( false ),
@@ -194,9 +190,7 @@ PaletteGPL::PaletteGPL( const OUString &rFPath, const OUString &rFName ) :
     LoadPaletteHeader();
 }
 
-PaletteGPL::~PaletteGPL()
-{
-}
+PaletteGPL::~PaletteGPL() = default;
 
 const OUString& PaletteGPL::GetName()
 {
@@ -353,9 +347,7 @@ PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName ) :
 {
 }
 
-PaletteSOC::~PaletteSOC()
-{
-}
+PaletteSOC::~PaletteSOC() = default;
 
 const OUString& PaletteSOC::GetName()
 {

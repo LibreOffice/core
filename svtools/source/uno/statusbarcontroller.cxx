@@ -69,9 +69,7 @@ StatusbarController::StatusbarController() :
 {
 }
 
-StatusbarController::~StatusbarController()
-{
-}
+StatusbarController::~StatusbarController() = default;
 
 Reference< XFrame > StatusbarController::getFrameInterface() const
 {

@@ -1071,7 +1071,7 @@ namespace
         OUString sId;
         explicit FilterByEntryDataId( const OUString& _rId ) : sId( _rId ) { }
 
-        virtual ~FilterByEntryDataId() {}
+        virtual ~FilterByEntryDataId() = default;
 
         virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const override;
     };

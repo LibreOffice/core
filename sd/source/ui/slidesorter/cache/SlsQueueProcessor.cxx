@@ -48,9 +48,7 @@ QueueProcessor::QueueProcessor (
     maTimer.SetDebugName ("sd::QueueProcessor maTimer");
 }
 
-QueueProcessor::~QueueProcessor()
-{
-}
+QueueProcessor::~QueueProcessor() = default;
 
 void QueueProcessor::Start (int nPriorityClass)
 {

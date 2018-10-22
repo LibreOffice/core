@@ -86,11 +86,7 @@ namespace svt
     {
     }
 
-
-    FileViewContentEnumerator::~FileViewContentEnumerator()
-    {
-    }
-
+    FileViewContentEnumerator::~FileViewContentEnumerator() = default;
 
     void FileViewContentEnumerator::cancel()
     {

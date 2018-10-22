@@ -44,9 +44,7 @@ DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, Da
 {
 }
 
-DoubleSequenceContext::~DoubleSequenceContext()
-{
-}
+DoubleSequenceContext::~DoubleSequenceContext() = default;
 
 ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -168,9 +166,7 @@ StringSequenceContext::StringSequenceContext( ContextHandler2Helper& rParent, Da
 {
 }
 
-StringSequenceContext::~StringSequenceContext()
-{
-}
+StringSequenceContext::~StringSequenceContext() = default;
 
 ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -236,9 +232,7 @@ DataSourceContext::DataSourceContext( ContextHandler2Helper& rParent, DataSource
 {
 }
 
-DataSourceContext::~DataSourceContext()
-{
-}
+DataSourceContext::~DataSourceContext() = default;
 
 ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {

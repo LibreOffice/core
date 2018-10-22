@@ -357,9 +357,7 @@ ScColorFormat::ScColorFormat(ScDocument* pDoc)
 {
 }
 
-ScColorFormat::~ScColorFormat()
-{
-}
+ScColorFormat::~ScColorFormat() = default;
 
 void ScColorFormat::SetParent( ScConditionalFormat* pParent )
 {
@@ -385,9 +383,7 @@ ScColorFormat* ScColorScaleFormat::Clone(ScDocument* pDoc) const
     return new ScColorScaleFormat(pDoc, *this);
 }
 
-ScColorScaleFormat::~ScColorScaleFormat()
-{
-}
+ScColorScaleFormat::~ScColorScaleFormat() = default;
 
 void ScColorScaleFormat::SetParent(ScConditionalFormat* pFormat)
 {

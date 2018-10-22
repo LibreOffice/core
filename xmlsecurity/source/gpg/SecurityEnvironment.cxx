@@ -37,9 +37,7 @@ SecurityEnvironmentGpg::SecurityEnvironmentGpg()
     m_ctx->setArmor(false);
 }
 
-SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
-{
-}
+SecurityEnvironmentGpg::~SecurityEnvironmentGpg() = default;
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int8 >& aIdentifier )

@@ -39,8 +39,7 @@ public:
     virtual OUString MSOTCIDToOOCommand( sal_Int16 key ) override;
 };
 
-MSOExcelCommandConvertor::MSOExcelCommandConvertor()
-{
+MSOExcelCommandConvertor::MSOExcelCommandConvertor() = default;
 /*
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
@@ -51,7 +50,6 @@ MSOExcelCommandConvertor::MSOExcelCommandConvertor()
     // #FIXME and *HUNDREDS* of id's to added here
    tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 */
-}
 
 OUString MSOExcelCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
 {
@@ -214,9 +212,7 @@ void CTBS::Print( FILE* fp )
 }
 #endif
 
-ScTBC::ScTBC()
-{
-}
+ScTBC::ScTBC() = default;
 
 bool
 ScTBC::Read(SvStream &rS)
@@ -336,13 +332,9 @@ bool TBCCmd::Read( SvStream &rS )
     return true;
 }
 
-ScCTBWrapper::ScCTBWrapper()
-{
-}
+ScCTBWrapper::ScCTBWrapper() = default;
 
-ScCTBWrapper::~ScCTBWrapper()
-{
-}
+ScCTBWrapper::~ScCTBWrapper() = default;
 
 bool
 ScCTBWrapper::Read( SvStream &rS)

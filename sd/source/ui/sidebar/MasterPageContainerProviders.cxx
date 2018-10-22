@@ -40,9 +40,7 @@ namespace sd { namespace sidebar {
 
 //===== PagePreviewProvider ===================================================
 
-PagePreviewProvider::PagePreviewProvider()
-{
-}
+PagePreviewProvider::PagePreviewProvider() = default;
 
 Image PagePreviewProvider::operator () (
     int nWidth,
@@ -160,9 +158,7 @@ int TemplatePageObjectProvider::GetCostIndex()
 
 //===== DefaultPageObjectProvider ==============================================
 
-DefaultPageObjectProvider::DefaultPageObjectProvider()
-{
-}
+DefaultPageObjectProvider::DefaultPageObjectProvider() = default;
 
 SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocument)
 {

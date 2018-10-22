@@ -43,9 +43,7 @@ WeakComponentImplHelperBase::WeakComponentImplHelperBase( Mutex & rMutex )
 {
 }
 
-WeakComponentImplHelperBase::~WeakComponentImplHelperBase()
-{
-}
+WeakComponentImplHelperBase::~WeakComponentImplHelperBase() = default;
 
 void WeakComponentImplHelperBase::disposing()
 {
@@ -160,9 +158,7 @@ WeakAggComponentImplHelperBase::WeakAggComponentImplHelperBase( Mutex & rMutex )
 {
 }
 
-WeakAggComponentImplHelperBase::~WeakAggComponentImplHelperBase()
-{
-}
+WeakAggComponentImplHelperBase::~WeakAggComponentImplHelperBase() = default;
 
 void WeakAggComponentImplHelperBase::disposing()
 {

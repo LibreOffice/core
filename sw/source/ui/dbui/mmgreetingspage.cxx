@@ -391,9 +391,7 @@ SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
     m_xFemaleFieldCB->save_value();
 }
 
-SwMailBodyDialog::~SwMailBodyDialog()
-{
-}
+SwMailBodyDialog::~SwMailBodyDialog() = default;
 
 IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, weld::ToggleButton&, rBox, void)
 {

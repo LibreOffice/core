@@ -136,9 +136,7 @@ namespace xmloff
             OSL_ENSURE( m_xMasterInfo.is(), "OMergedPropertySetInfo::OMergedPropertySetInfo: hmm?" );
         }
 
-        OMergedPropertySetInfo::~OMergedPropertySetInfo()
-        {
-        }
+        OMergedPropertySetInfo::~OMergedPropertySetInfo() = default;
 
         Sequence< Property > SAL_CALL OMergedPropertySetInfo::getProperties(  )
         {
@@ -185,9 +183,7 @@ namespace xmloff
         OSL_ENSURE( m_xGridColumn.is(), "OGridColumnPropertyTranslator: invalid grid column!" );
     }
 
-    OGridColumnPropertyTranslator::~OGridColumnPropertyTranslator()
-    {
-    }
+    OGridColumnPropertyTranslator::~OGridColumnPropertyTranslator() = default;
 
     Reference< XPropertySetInfo > SAL_CALL OGridColumnPropertyTranslator::getPropertySetInfo(  )
     {

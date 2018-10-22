@@ -584,8 +584,7 @@ DiagramWrapper::DiagramWrapper(const std::shared_ptr<Chart2ModelContact>& spChar
 {
 }
 
-DiagramWrapper::~DiagramWrapper()
-{}
+DiagramWrapper::~DiagramWrapper() = default;
 
 // ____ XDiagram ____
 OUString SAL_CALL DiagramWrapper::getDiagramType()

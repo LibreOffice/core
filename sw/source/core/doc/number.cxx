@@ -221,9 +221,7 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
         EndListeningAll();
 }
 
-SwNumFormat::~SwNumFormat()
-{
-}
+SwNumFormat::~SwNumFormat() = default;
 
 // #i22362#
 bool SwNumFormat::IsEnumeration() const

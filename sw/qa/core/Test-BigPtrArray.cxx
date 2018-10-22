@@ -85,10 +85,7 @@ namespace /* private */
 class BigPtrArrayUnittest : public CppUnit::TestFixture
 {
 public:
-
-    BigPtrArrayUnittest()
-    {
-    }
+    BigPtrArrayUnittest() = default;
 
     /** Test constructor/destructor
         The size of the BigPtrArray

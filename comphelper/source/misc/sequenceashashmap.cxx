@@ -26,10 +26,7 @@
 
 
 namespace comphelper{
-
-SequenceAsHashMap::SequenceAsHashMap()
-{
-}
+SequenceAsHashMap::SequenceAsHashMap() = default;
 
 SequenceAsHashMap::SequenceAsHashMap(const css::uno::Any& aSource)
 {

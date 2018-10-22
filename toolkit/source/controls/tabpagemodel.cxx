@@ -164,9 +164,7 @@ UnoControlTabPage::UnoControlTabPage( const uno::Reference< uno::XComponentConte
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
 }
-UnoControlTabPage::~UnoControlTabPage()
-{
-}
+UnoControlTabPage::~UnoControlTabPage() = default;
 
 OUString UnoControlTabPage::GetComponentServiceName()
 {

@@ -64,9 +64,7 @@ GenericStatusbarController::GenericStatusbarController(
     }
 }
 
-GenericStatusbarController::~GenericStatusbarController()
-{
-}
+GenericStatusbarController::~GenericStatusbarController() = default;
 
 void SAL_CALL GenericStatusbarController::dispose()
 {

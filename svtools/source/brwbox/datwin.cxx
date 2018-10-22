@@ -102,9 +102,7 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
     _nOriginalWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
 }
 
-BrowserColumn::~BrowserColumn()
-{
-}
+BrowserColumn::~BrowserColumn() = default;
 
 void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {

@@ -53,9 +53,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent)
     m_xBtnDelAll->connect_clicked( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
-ScDeleteContentsDlg::~ScDeleteContentsDlg()
-{
-}
+ScDeleteContentsDlg::~ScDeleteContentsDlg() = default;
 
 InsertDeleteFlags ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {

@@ -34,9 +34,7 @@ WrappedProperty::WrappedProperty( const OUString& rOuterName, const OUString& rI
                          , m_aInnerName( rInnerName )
 {
 }
-WrappedProperty::~WrappedProperty()
-{
-}
+WrappedProperty::~WrappedProperty() = default;
 
 OUString WrappedProperty::getInnerName() const
 {

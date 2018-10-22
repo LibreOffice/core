@@ -71,9 +71,7 @@ ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTable
     *this = rConnData;
 }
 
-ORelationTableConnectionData::~ORelationTableConnectionData()
-{
-}
+ORelationTableConnectionData::~ORelationTableConnectionData() = default;
 
 void ORelationTableConnectionData::DropRelation()
 {

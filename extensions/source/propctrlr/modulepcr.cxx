@@ -43,9 +43,7 @@ namespace pcr
         }
     };
 
-    PcrModule::PcrModule()
-    {
-    }
+    PcrModule::PcrModule() = default;
 
     PcrModule& PcrModule::getInstance()
     {

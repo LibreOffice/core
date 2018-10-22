@@ -42,9 +42,7 @@ PresenterCanvasHelper::PresenterCanvasHelper()
 {
 }
 
-PresenterCanvasHelper::~PresenterCanvasHelper()
-{
-}
+PresenterCanvasHelper::~PresenterCanvasHelper() = default;
 
 void PresenterCanvasHelper::Paint (
     const SharedBitmapDescriptor& rpBitmap,

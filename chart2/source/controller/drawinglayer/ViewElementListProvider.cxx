@@ -61,9 +61,7 @@ ViewElementListProvider::ViewElementListProvider( ViewElementListProvider&& rOth
     m_pFontList = std::move(rOther.m_pFontList);
 }
 
-ViewElementListProvider::~ViewElementListProvider()
-{
-}
+ViewElementListProvider::~ViewElementListProvider() = default;
 
 XColorListRef   ViewElementListProvider::GetColorTable() const
 {

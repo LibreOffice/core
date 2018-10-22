@@ -71,9 +71,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aSwConfig.Load(true);
 }
 
-SvxAutoCorrCfg::~SvxAutoCorrCfg()
-{
-}
+SvxAutoCorrCfg::~SvxAutoCorrCfg() = default;
 
 void SvxAutoCorrCfg::SetAutoCorrect(SvxAutoCorrect *const pNew)
 {
@@ -229,9 +227,7 @@ SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :
 {
 }
 
-SvxBaseAutoCorrCfg::~SvxBaseAutoCorrCfg()
-{
-}
+SvxBaseAutoCorrCfg::~SvxBaseAutoCorrCfg() = default;
 
 void SvxBaseAutoCorrCfg::ImplCommit()
 {
@@ -488,9 +484,7 @@ SvxSwAutoCorrCfg::SvxSwAutoCorrCfg(SvxAutoCorrCfg& rPar) :
 {
 }
 
-SvxSwAutoCorrCfg::~SvxSwAutoCorrCfg()
-{
-}
+SvxSwAutoCorrCfg::~SvxSwAutoCorrCfg() = default;
 
 void SvxSwAutoCorrCfg::ImplCommit()
 {

@@ -552,9 +552,7 @@ XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
     }
 }
 
-XclExpPassHash::~XclExpPassHash()
-{
-}
+XclExpPassHash::~XclExpPassHash() = default;
 
 void XclExpPassHash::WriteBody(XclExpStream& rStrm)
 {
@@ -579,9 +577,7 @@ ExcFilterCondition::ExcFilterCondition() :
 {
 }
 
-ExcFilterCondition::~ExcFilterCondition()
-{
-}
+ExcFilterCondition::~ExcFilterCondition() = default;
 
 std::size_t ExcFilterCondition::GetTextBytes() const
 {
@@ -984,9 +980,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
     }
 }
 
-ExcAutoFilterRecs::~ExcAutoFilterRecs()
-{
-}
+ExcAutoFilterRecs::~ExcAutoFilterRecs() = default;
 
 XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
 {

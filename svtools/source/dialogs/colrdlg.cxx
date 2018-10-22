@@ -42,9 +42,7 @@ SvColorDialog::SvColorDialog()
 {
 }
 
-SvColorDialog::~SvColorDialog()
-{
-}
+SvColorDialog::~SvColorDialog() = default;
 void SvColorDialog::SetColor( const Color& rColor )
 {
     maColor = rColor;

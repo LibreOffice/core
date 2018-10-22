@@ -20,9 +20,7 @@
 #include "objstmpconsiderwrapinfl.hxx"
 #include <anchoredobject.hxx>
 
-SwObjsMarkedAsTmpConsiderWrapInfluence::SwObjsMarkedAsTmpConsiderWrapInfluence()
-{
-}
+SwObjsMarkedAsTmpConsiderWrapInfluence::SwObjsMarkedAsTmpConsiderWrapInfluence() = default;
 
 SwObjsMarkedAsTmpConsiderWrapInfluence::~SwObjsMarkedAsTmpConsiderWrapInfluence()
 {

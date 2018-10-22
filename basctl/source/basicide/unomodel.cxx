@@ -40,9 +40,7 @@ SIDEModel::SIDEModel( SfxObjectShell *pObjSh )
 {
 }
 
-SIDEModel::~SIDEModel()
-{
-}
+SIDEModel::~SIDEModel() = default;
 
 uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType )
 {

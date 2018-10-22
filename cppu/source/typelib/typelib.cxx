@@ -200,15 +200,17 @@ struct TypeDescriptor_Init_Impl
 
     TypeDescriptor_Init_Impl()
 #if OSL_DEBUG_LEVEL > 0
-        : nTypeDescriptionCount(0), nCompoundTypeDescriptionCount(0),
-        nIndirectTypeDescriptionCount(0),
-        nEnumTypeDescriptionCount(0),
-        nInterfaceMethodTypeDescriptionCount(0),
-        nInterfaceAttributeTypeDescriptionCount(0),
-        nInterfaceTypeDescriptionCount(0), nTypeDescriptionReferenceCount(0)
+        : nTypeDescriptionCount(0)
+        , nCompoundTypeDescriptionCount(0)
+        , nIndirectTypeDescriptionCount(0)
+        , nEnumTypeDescriptionCount(0)
+        , nInterfaceMethodTypeDescriptionCount(0)
+        , nInterfaceAttributeTypeDescriptionCount(0)
+        , nInterfaceTypeDescriptionCount(0)
+        , nTypeDescriptionReferenceCount(0)
 #endif
-    {}
-
+    {
+    }
     ~TypeDescriptor_Init_Impl();
 };
 

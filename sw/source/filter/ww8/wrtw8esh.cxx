@@ -529,9 +529,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     OutputField(nullptr, ww::eFORMTEXT, OUString(), FieldFlags::Close);
 }
 
-PlcDrawObj::~PlcDrawObj()
-{
-}
+PlcDrawObj::~PlcDrawObj() = default;
 
 //Its irritating to have to change the RTL frames position into LTR ones
 //so that word will have to place them in the right place. Doubly so that
@@ -1486,13 +1484,9 @@ void SwEscherEx::WritePictures()
 
 // Output- Routines for Escher Export
 
-SwEscherExGlobal::SwEscherExGlobal()
-{
-}
+SwEscherExGlobal::SwEscherExGlobal() = default;
 
-SwEscherExGlobal::~SwEscherExGlobal()
-{
-}
+SwEscherExGlobal::~SwEscherExGlobal() = default;
 
 SvStream* SwEscherExGlobal::ImplQueryPictureStream()
 {
@@ -1508,9 +1502,7 @@ SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     Init();
 }
 
-SwBasicEscherEx::~SwBasicEscherEx()
-{
-}
+SwBasicEscherEx::~SwBasicEscherEx() = default;
 
 void SwBasicEscherEx::WriteFrameExtraData(const SwFrameFormat&)
 {
@@ -2342,9 +2334,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     }
 }
 
-SwEscherEx::~SwEscherEx()
-{
-}
+SwEscherEx::~SwEscherEx() = default;
 
 void SwEscherEx::FinishEscher()
 {

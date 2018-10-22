@@ -146,9 +146,7 @@ XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
 {
 }
 
-XMLTextShapeStyleContext::~XMLTextShapeStyleContext()
-{
-}
+XMLTextShapeStyleContext::~XMLTextShapeStyleContext() = default;
 
 SvXMLImportContextRef XMLTextShapeStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,

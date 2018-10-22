@@ -26,8 +26,7 @@ OChildDispListener_Impl::OChildDispListener_Impl( OStorage& aStorage )
 : m_pStorage( &aStorage )
 {}
 
-OChildDispListener_Impl::~OChildDispListener_Impl()
-{}
+OChildDispListener_Impl::~OChildDispListener_Impl() = default;
 
 void OChildDispListener_Impl::OwnerIsDisposed()
 {

@@ -56,10 +56,7 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
     }
 }
 
-
-SvEmbedTransferHelper::~SvEmbedTransferHelper()
-{
-}
+SvEmbedTransferHelper::~SvEmbedTransferHelper() = default;
 
 void SvEmbedTransferHelper::SetParentShellID( const OUString& rShellID )
 {

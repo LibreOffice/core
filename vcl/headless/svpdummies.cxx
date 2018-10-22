@@ -30,9 +30,7 @@ SvpSalObject::SvpSalObject()
     m_aSystemChildData.nSize = sizeof( SystemEnvData );
 }
 
-SvpSalObject::~SvpSalObject()
-{
-}
+SvpSalObject::~SvpSalObject() = default;
 
 void SvpSalObject::ResetClipRegion() {}
 void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
@@ -43,7 +41,7 @@ void SvpSalObject::Show( bool ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
 
 // SalSystem
-SvpSalSystem::~SvpSalSystem() {}
+SvpSalSystem::~SvpSalSystem() = default;
 
 unsigned int SvpSalSystem::GetDisplayScreenCount()
 {

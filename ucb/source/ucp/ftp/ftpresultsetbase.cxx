@@ -43,10 +43,7 @@ ResultSetBase::ResultSetBase(
 {
 }
 
-ResultSetBase::~ResultSetBase()
-{
-}
-
+ResultSetBase::~ResultSetBase() = default;
 
 // XInterface
 

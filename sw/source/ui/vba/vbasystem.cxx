@@ -35,9 +35,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-PrivateProfileStringListener::~PrivateProfileStringListener()
-{
-}
+PrivateProfileStringListener::~PrivateProfileStringListener() = default;
 
 void PrivateProfileStringListener::Initialize( const OUString& rFileName, const OString& rGroupName, const OString& rKey )
 {
@@ -167,9 +165,7 @@ SwVbaSystem::SwVbaSystem( uno::Reference<uno::XComponentContext > const & xConte
 {
 }
 
-SwVbaSystem::~SwVbaSystem()
-{
-}
+SwVbaSystem::~SwVbaSystem() = default;
 
 sal_Int32 SAL_CALL
 SwVbaSystem::getCursor()

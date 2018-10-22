@@ -105,10 +105,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_UnderlineWidth_Enum[] =
 // class XMLUnderlineTypePropHdl
 
 
-XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
-{
-    // nothing to do
-}
+XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl() = default;
 
 bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -187,10 +184,7 @@ bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 // class XMLUnderlineStylePropHdl
 
 
-XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
-{
-    // nothing to do
-}
+XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl() = default;
 
 bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -277,10 +271,7 @@ bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 // class XMLUnderlineWidthPropHdl
 
 
-XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
-{
-    // nothing to do
-}
+XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl() = default;
 
 bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

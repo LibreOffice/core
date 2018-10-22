@@ -317,9 +317,7 @@ ScUndoEnterValue::ScUndoEnterValue(
     SetChangeTrack();
 }
 
-ScUndoEnterValue::~ScUndoEnterValue()
-{
-}
+ScUndoEnterValue::~ScUndoEnterValue() = default;
 
 OUString ScUndoEnterValue::GetComment() const
 {
@@ -388,7 +386,7 @@ ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const S
     SetChangeTrack();
 }
 
-ScUndoSetCell::~ScUndoSetCell() {}
+ScUndoSetCell::~ScUndoSetCell() = default;
 
 void ScUndoSetCell::Undo()
 {
@@ -502,9 +500,7 @@ ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoPageBreak::~ScUndoPageBreak()
-{
-}
+ScUndoPageBreak::~ScUndoPageBreak() = default;
 
 OUString ScUndoPageBreak::GetComment() const
 {
@@ -581,9 +577,7 @@ ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoPrintZoom::~ScUndoPrintZoom()
-{
-}
+ScUndoPrintZoom::~ScUndoPrintZoom() = default;
 
 OUString ScUndoPrintZoom::GetComment() const
 {
@@ -653,7 +647,7 @@ ScUndoThesaurus::ScUndoThesaurus(
     SetChangeTrack(maOldText);
 }
 
-ScUndoThesaurus::~ScUndoThesaurus() {}
+ScUndoThesaurus::~ScUndoThesaurus() = default;
 
 OUString ScUndoThesaurus::GetComment() const
 {
@@ -730,9 +724,7 @@ ScUndoSdrCaptionObj::ScUndoSdrCaptionObj(const std::shared_ptr< SdrCaptionObj >&
 {
 }
 
-ScUndoSdrCaptionObj::~ScUndoSdrCaptionObj()
-{
-}
+ScUndoSdrCaptionObj::~ScUndoSdrCaptionObj() = default;
 
 void ScUndoSdrCaptionObj::BroadcastSwitchToPage()
 {
@@ -771,10 +763,7 @@ ScUndoDelSdrCaptionObj::ScUndoDelSdrCaptionObj(const std::shared_ptr< SdrCaption
 {
 }
 
-ScUndoDelSdrCaptionObj::~ScUndoDelSdrCaptionObj()
-{
-
-}
+ScUndoDelSdrCaptionObj::~ScUndoDelSdrCaptionObj() = default;
 
 void ScUndoDelSdrCaptionObj::Undo()
 {
@@ -839,9 +828,7 @@ ScUndoNewSdrCaptionObj::ScUndoNewSdrCaptionObj(const std::shared_ptr< SdrCaption
 {
 }
 
-ScUndoNewSdrCaptionObj::~ScUndoNewSdrCaptionObj()
-{
-}
+ScUndoNewSdrCaptionObj::~ScUndoNewSdrCaptionObj() = default;
 
 void ScUndoNewSdrCaptionObj::Undo()
 {
@@ -996,9 +983,7 @@ ScUndoShowHideNote::ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& 
 {
 }
 
-ScUndoShowHideNote::~ScUndoShowHideNote()
-{
-}
+ScUndoShowHideNote::~ScUndoShowHideNote() = default;
 
 void ScUndoShowHideNote::Undo()
 {

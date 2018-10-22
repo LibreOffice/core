@@ -249,7 +249,7 @@ ScVbaCommandBarControls::getServiceNames()
 class VbaDummyIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
-    VbaDummyIndexAccess() {}
+    VbaDummyIndexAccess() = default;
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
         { return 0; }

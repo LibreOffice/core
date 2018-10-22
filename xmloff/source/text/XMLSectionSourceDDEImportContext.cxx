@@ -51,9 +51,7 @@ XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
 {
 }
 
-XMLSectionSourceDDEImportContext::~XMLSectionSourceDDEImportContext()
-{
-}
+XMLSectionSourceDDEImportContext::~XMLSectionSourceDDEImportContext() = default;
 
 enum XMLSectionSourceDDEToken
 {

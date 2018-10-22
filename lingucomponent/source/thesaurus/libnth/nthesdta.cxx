@@ -46,9 +46,7 @@ Meaning::Meaning(
 #endif
 }
 
-Meaning::~Meaning()
-{
-}
+Meaning::~Meaning() = default;
 
 OUString SAL_CALL Meaning::getMeaning()
 {

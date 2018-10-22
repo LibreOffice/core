@@ -66,9 +66,7 @@ SwDocStatPage::SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet)
     }
 }
 
-SwDocStatPage::~SwDocStatPage()
-{
-}
+SwDocStatPage::~SwDocStatPage() = default;
 
 // Description: fill ItemSet when changed
 bool  SwDocStatPage::FillItemSet(SfxItemSet * /*rSet*/)

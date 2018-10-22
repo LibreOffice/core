@@ -39,9 +39,7 @@ XMLBackgroundImageExport::XMLBackgroundImageExport( SvXMLExport& rExp ) :
 {
 }
 
-XMLBackgroundImageExport::~XMLBackgroundImageExport()
-{
-}
+XMLBackgroundImageExport::~XMLBackgroundImageExport() = default;
 
 void XMLBackgroundImageExport::exportXML( const Any& rGraphicAny,
             const Any *pPos,

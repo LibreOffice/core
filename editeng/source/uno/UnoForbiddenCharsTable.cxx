@@ -37,9 +37,7 @@ SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbidde
 {
 }
 
-SvxUnoForbiddenCharsTable::~SvxUnoForbiddenCharsTable()
-{
-}
+SvxUnoForbiddenCharsTable::~SvxUnoForbiddenCharsTable() = default;
 
 void SvxUnoForbiddenCharsTable::onChange()
 {

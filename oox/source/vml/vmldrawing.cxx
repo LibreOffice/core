@@ -100,9 +100,7 @@ Drawing::Drawing( XmlFilterBase& rFilter, const Reference< XDrawPage >& rxDrawPa
     OSL_ENSURE( mxDrawPage.is(), "Drawing::Drawing - missing UNO draw page" );
 }
 
-Drawing::~Drawing()
-{
-}
+Drawing::~Drawing() = default;
 
 ::oox::ole::EmbeddedForm& Drawing::getControlForm() const
 {

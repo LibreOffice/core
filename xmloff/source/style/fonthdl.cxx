@@ -55,10 +55,7 @@ static SvXMLEnumMapEntry<FontPitch> const aFontPitchMapping[] =
 
 // class XMLFontFamilyNamePropHdl
 
-XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl()
-{
-    // Nothing to do
-}
+XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl() = default;
 
 bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -186,10 +183,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
 // class XMLFontFamilyPropHdl
 
-XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
-{
-    // Nothing to do
-}
+XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl() = default;
 
 bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -221,10 +215,7 @@ bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 
 // class XMLFontEncodingPropHdl
 
-XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
-{
-    // Nothing to do
-}
+XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl() = default;
 
 bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -255,10 +246,7 @@ bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
 
 // class XMLFontPitchPropHdl
 
-XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
-{
-    // Nothing to do
-}
+XMLFontPitchPropHdl::~XMLFontPitchPropHdl() = default;
 
 bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

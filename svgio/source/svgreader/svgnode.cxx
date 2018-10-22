@@ -286,9 +286,7 @@ namespace svgio
             }
         }
 
-        SvgNode::~SvgNode()
-        {
-        }
+        SvgNode::~SvgNode() = default;
 
         void SvgNode::readLocalCssStyle(const OUString& aContent)
         {

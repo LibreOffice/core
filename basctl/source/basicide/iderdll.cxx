@@ -151,8 +151,7 @@ ExtraData::ExtraData () :
     StarBASIC::SetGlobalBreakHdl(LINK(this, ExtraData, GlobalBasicBreakHdl));
 }
 
-ExtraData::~ExtraData ()
-{
+ExtraData::~ExtraData () = default;
     // Resetting ErrorHdl is cleaner indeed but this instance is destroyed
     // pretty late, after the last Basic, anyway.
     // Due to the call there is AppData created then though and not
@@ -160,7 +159,6 @@ ExtraData::~ExtraData ()
 //  StarBASIC::SetGlobalErrorHdl( Link() );
 //  StarBASIC::SetGlobalBreakHdl( Link() );
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
-}
 
 IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebugFlags)
 {

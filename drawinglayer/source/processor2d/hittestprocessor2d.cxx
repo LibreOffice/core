@@ -69,9 +69,7 @@ namespace drawinglayer
             maDiscreteHitPosition = getViewInformation2D().getObjectToViewTransformation() * rLogicHitPosition;
         }
 
-        HitTestProcessor2D::~HitTestProcessor2D()
-        {
-        }
+        HitTestProcessor2D::~HitTestProcessor2D() = default;
 
         bool HitTestProcessor2D::checkHairlineHitWithTolerance(
             const basegfx::B2DPolygon& rPolygon,

@@ -55,10 +55,7 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
 {
 }
 
-DeckDescriptor::~DeckDescriptor()
-{
-}
-
+DeckDescriptor::~DeckDescriptor() = default;
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

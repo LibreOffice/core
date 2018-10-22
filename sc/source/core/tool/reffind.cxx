@@ -211,9 +211,7 @@ ScRefFinder::ScRefFinder(
 {
 }
 
-ScRefFinder::~ScRefFinder()
-{
-}
+ScRefFinder::~ScRefFinder() = default;
 
 static ScRefFlags lcl_NextFlags( ScRefFlags nOld )
 {

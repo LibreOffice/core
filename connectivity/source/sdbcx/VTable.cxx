@@ -87,9 +87,7 @@ OTable::OTable( OCollection*    _pTables,
     m_Name = Name;
 }
 
-OTable::~OTable()
-{
-}
+OTable::~OTable() = default;
 
 void OTable::construct()
 {

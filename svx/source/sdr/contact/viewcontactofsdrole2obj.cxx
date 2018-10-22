@@ -53,9 +53,7 @@ ViewContactOfSdrOle2Obj::ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj)
 {
 }
 
-ViewContactOfSdrOle2Obj::~ViewContactOfSdrOle2Obj()
-{
-}
+ViewContactOfSdrOle2Obj::~ViewContactOfSdrOle2Obj() = default;
 
 basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
 {

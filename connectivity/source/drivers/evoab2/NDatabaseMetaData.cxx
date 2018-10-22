@@ -252,10 +252,7 @@ OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(OEvoabConnection* _pCon)
 {
     OSL_ENSURE(m_pConnection,"OEvoabDatabaseMetaData::OEvoabDatabaseMetaData: No connection set!");
 }
-OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
-{
-}
-
+OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData() = default;
 
 ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const OUString& columnNamePattern )
 {

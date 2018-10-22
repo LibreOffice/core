@@ -1822,8 +1822,7 @@ public:
     void ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc);
 };
 
-SwTableProperties_Impl::SwTableProperties_Impl()
-    { }
+SwTableProperties_Impl::SwTableProperties_Impl() = default;
 
 void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)
     { aAnyMap.SetValue( nWhichId, nMemberId, rVal ); }
@@ -2045,9 +2044,7 @@ SwXTextTable::SwXTextTable(SwFrameFormat& rFrameFormat)
 {
 }
 
-SwXTextTable::~SwXTextTable()
-{
-}
+SwXTextTable::~SwXTextTable() = default;
 
 uno::Reference<text::XTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* const pFrameFormat)
 {
@@ -3266,9 +3263,7 @@ SwXCellRange::SwXCellRange(sw::UnoCursorPointer const& pCursor,
 {
 }
 
-SwXCellRange::~SwXCellRange()
-{
-}
+SwXCellRange::~SwXCellRange() = default;
 
 rtl::Reference<SwXCellRange> SwXCellRange::CreateXCellRange(
         sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
@@ -3928,8 +3923,7 @@ SwXTableRows::SwXTableRows(SwFrameFormat& rFrameFormat) :
     m_pImpl(new SwXTableRows::Impl(rFrameFormat))
 { }
 
-SwXTableRows::~SwXTableRows()
-{ }
+SwXTableRows::~SwXTableRows() = default;
 
 SwFrameFormat* SwXTableRows::GetFrameFormat()
 {
@@ -4090,8 +4084,7 @@ SwXTableColumns::SwXTableColumns(SwFrameFormat& rFrameFormat) :
     m_pImpl(new SwXTableColumns::Impl(rFrameFormat))
 { }
 
-SwXTableColumns::~SwXTableColumns()
-{ }
+SwXTableColumns::~SwXTableColumns() = default;
 
 SwFrameFormat* SwXTableColumns::GetFrameFormat() const
 {

@@ -32,9 +32,7 @@ SwObjectFormatterLayFrame::SwObjectFormatterLayFrame( SwLayoutFrame& _rAnchorLay
 {
 }
 
-SwObjectFormatterLayFrame::~SwObjectFormatterLayFrame()
-{
-}
+SwObjectFormatterLayFrame::~SwObjectFormatterLayFrame() = default;
 
 std::unique_ptr<SwObjectFormatterLayFrame> SwObjectFormatterLayFrame::CreateObjFormatter(
                                                 SwLayoutFrame& _rAnchorLayFrame,

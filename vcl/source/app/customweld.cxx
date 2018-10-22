@@ -11,7 +11,7 @@
 
 namespace weld
 {
-CustomWidgetController::~CustomWidgetController() {}
+CustomWidgetController::~CustomWidgetController() = default;
 
 CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
                        CustomWidgetController& rWidgetController)

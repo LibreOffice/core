@@ -89,7 +89,7 @@ public:
     {}
 
 private:
-    virtual ~SimpleTypeDescription() override {}
+    virtual ~SimpleTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return typeClass_; }
@@ -112,7 +112,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~SequenceTypeDescription() override {}
+    virtual ~SequenceTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SEQUENCE; }
@@ -135,7 +135,7 @@ class PublishableDescription:
 protected:
     explicit PublishableDescription(bool published): published_(published) {}
 
-    virtual ~PublishableDescription() override {}
+    virtual ~PublishableDescription() override = default;
 
 private:
     virtual sal_Bool SAL_CALL isPublished() override
@@ -156,7 +156,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~ModuleDescription() override {}
+    virtual ~ModuleDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_MODULE; }
@@ -207,7 +207,7 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual ~EnumTypeDescription() override {}
+    virtual ~EnumTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_ENUM; }
@@ -263,7 +263,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~PlainStructTypeDescription() override {}
+    virtual ~PlainStructTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_STRUCT; }
@@ -335,7 +335,7 @@ public:
     {}
 
 private:
-    virtual ~ParameterizedMemberTypeDescription() override {}
+    virtual ~ParameterizedMemberTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_UNKNOWN; }
@@ -364,7 +364,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~PolymorphicStructTypeTemplateDescription() override {}
+    virtual ~PolymorphicStructTypeTemplateDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_STRUCT; }
@@ -456,7 +456,7 @@ public:
     }
 
 private:
-    virtual ~InstantiatedPolymorphicStructTypeDescription() override {}
+    virtual ~InstantiatedPolymorphicStructTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_STRUCT; }
@@ -555,7 +555,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~ExceptionTypeDescription() override {}
+    virtual ~ExceptionTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_EXCEPTION; }
@@ -620,7 +620,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~AttributeDescription() override {}
+    virtual ~AttributeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_INTERFACE_ATTRIBUTE; }
@@ -702,7 +702,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~MethodParameter() override {}
+    virtual ~MethodParameter() override = default;
 
     virtual rtl::OUString SAL_CALL getName() override
     { return parameter_.name; }
@@ -750,7 +750,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~MethodDescription() override {}
+    virtual ~MethodDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_INTERFACE_METHOD; }
@@ -883,7 +883,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~InterfaceTypeDescription() override {}
+    virtual ~InterfaceTypeDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_INTERFACE; }
@@ -985,7 +985,7 @@ public:
         unoidl::ConstantGroupEntity::Member const & member);
 
 private:
-    virtual ~ConstantDescription() override {}
+    virtual ~ConstantDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_CONSTANT; }
@@ -1055,7 +1055,7 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual ~ConstantGroupDescription() override {}
+    virtual ~ConstantGroupDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_CONSTANTS; }
@@ -1100,7 +1100,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~TypedefDescription() override {}
+    virtual ~TypedefDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_TYPEDEF; }
@@ -1130,7 +1130,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~ConstructorParameter() override {}
+    virtual ~ConstructorParameter() override = default;
 
     virtual rtl::OUString SAL_CALL getName() override
     { return parameter_.name; }
@@ -1170,7 +1170,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~ConstructorDescription() override {}
+    virtual ~ConstructorDescription() override = default;
 
     virtual sal_Bool SAL_CALL isDefaultConstructor() override
     { return constructor_.defaultConstructor; }
@@ -1238,7 +1238,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~SingleInterfaceBasedServiceDescription() override {}
+    virtual ~SingleInterfaceBasedServiceDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SERVICE; }
@@ -1338,7 +1338,7 @@ public:
     { assert(manager.is()); }
 
 private:
-    virtual ~PropertyDescription() override {}
+    virtual ~PropertyDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_PROPERTY; }
@@ -1375,7 +1375,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~AccumulationBasedServiceDescription() override {}
+    virtual ~AccumulationBasedServiceDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SERVICE; }
@@ -1538,7 +1538,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~InterfaceBasedSingletonDescription() override {}
+    virtual ~InterfaceBasedSingletonDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SINGLETON; }
@@ -1582,7 +1582,7 @@ public:
     { assert(manager.is()); assert(entity.is()); }
 
 private:
-    virtual ~ServiceBasedSingletonDescription() override {}
+    virtual ~ServiceBasedSingletonDescription() override = default;
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SINGLETON; }
@@ -1626,7 +1626,7 @@ public:
     }
 
 private:
-    virtual ~Enumeration() override {}
+    virtual ~Enumeration() override = default;
 
     virtual sal_Bool SAL_CALL hasMoreElements() override
     { return !positions_.empty(); }
@@ -1889,7 +1889,7 @@ cppuhelper::TypeManager::resolve(rtl::OUString const & name) {
     return desc;
 }
 
-cppuhelper::TypeManager::~TypeManager() throw () {}
+cppuhelper::TypeManager::~TypeManager() throw() = default;
 
 void cppuhelper::TypeManager::disposing() {} //TODO
 

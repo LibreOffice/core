@@ -139,11 +139,7 @@ FTPURL::FTPURL(const OUString& url,
     parse(url);  // can reset m_bShowPassword
 }
 
-
-FTPURL::~FTPURL()
-{
-}
-
+FTPURL::~FTPURL() = default;
 
 void FTPURL::parse(const OUString& url)
 {

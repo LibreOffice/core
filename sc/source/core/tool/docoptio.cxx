@@ -116,9 +116,7 @@ ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
 {
 }
 
-ScTpCalcItem::~ScTpCalcItem()
-{
-}
+ScTpCalcItem::~ScTpCalcItem() = default;
 
 bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {

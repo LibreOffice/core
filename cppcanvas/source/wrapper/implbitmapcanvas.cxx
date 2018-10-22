@@ -45,9 +45,7 @@ namespace cppcanvas
             OSL_ENSURE( mxBitmap.is(), "ImplBitmapCanvas::ImplBitmapCanvas(): Invalid bitmap" );
         }
 
-        ImplBitmapCanvas::~ImplBitmapCanvas()
-        {
-        }
+        ImplBitmapCanvas::~ImplBitmapCanvas() = default;
 
         ::basegfx::B2ISize ImplBitmapCanvas::getSize() const
         {

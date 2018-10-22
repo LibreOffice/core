@@ -95,9 +95,7 @@ SwLineInfo::SwLineInfo()
 {
 }
 
-SwLineInfo::~SwLineInfo()
-{
-}
+SwLineInfo::~SwLineInfo() = default;
 
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTextNode& rTextNode )

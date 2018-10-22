@@ -1117,9 +1117,7 @@ CSS1Parser::CSS1Parser()
 {
 }
 
-CSS1Parser::~CSS1Parser()
-{
-}
+CSS1Parser::~CSS1Parser() = default;
 
 void CSS1Parser::ParseStyleSheet( const OUString& rIn )
 {

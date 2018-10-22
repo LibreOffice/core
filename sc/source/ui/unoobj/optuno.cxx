@@ -192,9 +192,7 @@ ScDocOptionsObj::ScDocOptionsObj( const ScDocOptions& rOpt ) :
 {
 }
 
-ScDocOptionsObj::~ScDocOptionsObj()
-{
-}
+ScDocOptionsObj::~ScDocOptionsObj() = default;
 
 void SAL_CALL ScDocOptionsObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )

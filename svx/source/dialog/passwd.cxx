@@ -84,8 +84,6 @@ SvxPasswordDialog::SvxPasswordDialog(weld::Window* pParent, bool bDisableOldPass
     }
 }
 
-SvxPasswordDialog::~SvxPasswordDialog()
-{
-}
+SvxPasswordDialog::~SvxPasswordDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

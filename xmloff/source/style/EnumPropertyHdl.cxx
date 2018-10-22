@@ -30,10 +30,7 @@ using namespace ::com::sun::star::uno;
 
 // class XMLEnumPropertyHdl
 
-XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
-{
-    // Nothing to do
-}
+XMLEnumPropertyHdl::~XMLEnumPropertyHdl() = default;
 
 bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {

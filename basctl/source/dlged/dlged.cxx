@@ -76,10 +76,7 @@ DlgEdHint::DlgEdHint(Kind eHint, DlgEdObj* pObj)
 {
 }
 
-DlgEdHint::~DlgEdHint()
-{
-}
-
+DlgEdHint::~DlgEdHint() = default;
 
 // DlgEditor
 

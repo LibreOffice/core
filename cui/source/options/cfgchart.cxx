@@ -167,9 +167,7 @@ SvxChartOptions::SvxChartOptions() :
     maPropertyNames[ 0 ] = "DefaultColor/Series";
 }
 
-SvxChartOptions::~SvxChartOptions()
-{
-}
+SvxChartOptions::~SvxChartOptions() = default;
 
 const SvxChartColorTable& SvxChartOptions::GetDefaultColors()
 {

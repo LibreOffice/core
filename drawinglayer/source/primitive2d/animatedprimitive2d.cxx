@@ -48,9 +48,7 @@ namespace drawinglayer
             mpAnimationEntry = rAnimationEntry.clone();
         }
 
-        AnimatedSwitchPrimitive2D::~AnimatedSwitchPrimitive2D()
-        {
-        }
+        AnimatedSwitchPrimitive2D::~AnimatedSwitchPrimitive2D() = default;
 
         bool AnimatedSwitchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {

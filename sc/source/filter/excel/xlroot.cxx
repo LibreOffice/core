@@ -159,9 +159,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
 }
 
-XclRootData::~XclRootData()
-{
-}
+XclRootData::~XclRootData() = default;
 
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )

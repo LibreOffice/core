@@ -60,9 +60,7 @@ PresenterPaneBase::PresenterPaneBase (
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
-PresenterPaneBase::~PresenterPaneBase()
-{
-}
+PresenterPaneBase::~PresenterPaneBase() = default;
 
 void PresenterPaneBase::disposing()
 {

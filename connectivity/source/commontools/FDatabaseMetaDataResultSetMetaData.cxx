@@ -30,9 +30,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-ODatabaseMetaDataResultSetMetaData::~ODatabaseMetaDataResultSetMetaData()
-{
-}
+ODatabaseMetaDataResultSetMetaData::~ODatabaseMetaDataResultSetMetaData() = default;
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {

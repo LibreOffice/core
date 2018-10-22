@@ -172,11 +172,7 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-
-    DataSupplier::~DataSupplier()
-    {
-    }
-
+    DataSupplier::~DataSupplier() = default;
 
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
     {

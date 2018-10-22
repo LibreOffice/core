@@ -57,9 +57,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Auditing));
 }
 
-ScAuditingShell::~ScAuditingShell()
-{
-}
+ScAuditingShell::~ScAuditingShell() = default;
 
 void ScAuditingShell::Execute( const SfxRequest& rReq )
 {

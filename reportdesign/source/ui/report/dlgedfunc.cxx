@@ -771,11 +771,7 @@ DlgEdFuncSelect::DlgEdFuncSelect( OReportSection* _pParent ) :
 {
 }
 
-
-DlgEdFuncSelect::~DlgEdFuncSelect()
-{
-}
-
+DlgEdFuncSelect::~DlgEdFuncSelect() = default;
 
 bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {

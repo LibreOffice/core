@@ -59,9 +59,7 @@ ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const
     addListeners();
 }
 
-ScVbaShape::~ScVbaShape()
-{
-}
+ScVbaShape::~ScVbaShape() = default;
 
 void SAL_CALL
 ScVbaShape::disposing( const lang::EventObject& rEventObject )

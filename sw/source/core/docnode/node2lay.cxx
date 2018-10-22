@@ -452,13 +452,9 @@ SwLayoutFrame* SwNode2Layout::UpperFrame( SwFrame* &rpFrame, const SwNode &rNode
     return pImpl->UpperFrame( rpFrame, rNode );
 }
 
-SwNode2Layout::~SwNode2Layout()
-{
-}
+SwNode2Layout::~SwNode2Layout() = default;
 
-SwNode2LayoutSaveUpperFrames::~SwNode2LayoutSaveUpperFrames()
-{
-}
+SwNode2LayoutSaveUpperFrames::~SwNode2LayoutSaveUpperFrames() = default;
 
 SwFrame* SwNode2Layout::GetFrame( const Point* pDocPos ) const
 {

@@ -4389,9 +4389,7 @@ bool SwShareBoxFormat::RemoveFormat( const SwFrameFormat& rFormat )
     return aNewFormats.empty();
 }
 
-SwShareBoxFormats::~SwShareBoxFormats()
-{
-}
+SwShareBoxFormats::~SwShareBoxFormats() = default;
 
 SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat, long nWidth ) const
 {

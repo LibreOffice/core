@@ -52,8 +52,7 @@ namespace basegfx
         maLineEntries()
     {}
 
-    RasterConverter3D::~RasterConverter3D()
-    {}
+    RasterConverter3D::~RasterConverter3D() = default;
 
     void RasterConverter3D::rasterconvertB3DArea(sal_Int32 nStartLine, sal_Int32 nStopLine)
     {

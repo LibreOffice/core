@@ -314,9 +314,7 @@ private:
 
 };
 
-SearchToolbarControllersManager::SearchToolbarControllersManager()
-{
-}
+SearchToolbarControllersManager::SearchToolbarControllersManager() = default;
 
 class theSearchToolbarControllersManager
     : public rtl::Static<SearchToolbarControllersManager,
@@ -1322,9 +1320,7 @@ private:
 
 };
 
-FindbarDispatcher::FindbarDispatcher()
-{
-}
+FindbarDispatcher::FindbarDispatcher() = default;
 
 FindbarDispatcher::~FindbarDispatcher()
 {

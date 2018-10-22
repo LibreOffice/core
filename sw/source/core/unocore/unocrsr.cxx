@@ -25,7 +25,7 @@
 #include <rootfrm.hxx>
 #include <calbck.hxx>
 
-sw::UnoCursorHint::~UnoCursorHint() {}
+sw::UnoCursorHint::~UnoCursorHint() = default;
 
 SwUnoCursor::SwUnoCursor( const SwPosition &rPos )
     : SwCursor( rPos, nullptr )

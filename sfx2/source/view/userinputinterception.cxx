@@ -118,11 +118,7 @@ namespace sfx2
     {
     }
 
-
-    UserInputInterception::~UserInputInterception()
-    {
-    }
-
+    UserInputInterception::~UserInputInterception() = default;
 
     void UserInputInterception::addKeyHandler( const Reference< XKeyHandler >& _rxHandler )
     {

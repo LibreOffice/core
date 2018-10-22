@@ -259,9 +259,7 @@ SwRevisionConfig::SwRevisionConfig() :
     Load();
 }
 
-SwRevisionConfig::~SwRevisionConfig()
-{
-}
+SwRevisionConfig::~SwRevisionConfig() = default;
 
 static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
 {
@@ -1123,9 +1121,7 @@ SwTableConfig::SwTableConfig(bool bWeb)
     Load();
 }
 
-SwTableConfig::~SwTableConfig()
-{
-}
+SwTableConfig::~SwTableConfig() = default;
 
 void SwTableConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
@@ -1193,9 +1189,7 @@ SwMiscConfig::SwMiscConfig() :
     Load();
 }
 
-SwMiscConfig::~SwMiscConfig()
-{
-}
+SwMiscConfig::~SwMiscConfig() = default;
 
 const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 {
@@ -1325,9 +1319,7 @@ SwCompareConfig::SwCompareConfig() :
     Load();
 }
 
-SwCompareConfig::~SwCompareConfig()
-{
-}
+SwCompareConfig::~SwCompareConfig() = default;
 
 void SwCompareConfig::ImplCommit()
 {

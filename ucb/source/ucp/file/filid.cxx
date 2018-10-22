@@ -42,10 +42,7 @@ FileContentIdentifier::FileContentIdentifier(
     TaskManager::getScheme( m_aProviderScheme );
 }
 
-FileContentIdentifier::~FileContentIdentifier()
-{
-}
-
+FileContentIdentifier::~FileContentIdentifier() = default;
 
 void SAL_CALL
 FileContentIdentifier::acquire()

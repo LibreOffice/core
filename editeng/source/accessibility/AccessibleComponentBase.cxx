@@ -36,14 +36,9 @@ namespace accessibility {
 
 // internal
 
-AccessibleComponentBase::AccessibleComponentBase()
-{
-}
+AccessibleComponentBase::AccessibleComponentBase() = default;
 
-
-AccessibleComponentBase::~AccessibleComponentBase()
-{
-}
+AccessibleComponentBase::~AccessibleComponentBase() = default;
 
 // XAccessibleComponent
 

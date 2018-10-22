@@ -50,8 +50,6 @@ SwBorderDlg::SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes 
     }
 }
 
-SwBorderDlg::~SwBorderDlg()
-{
-}
+SwBorderDlg::~SwBorderDlg() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1022,7 +1022,7 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 {
 }
 
-SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
+SvxXMLListStyleContext::~SvxXMLListStyleContext() = default;
 
 SvXMLImportContextRef SvxXMLListStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,

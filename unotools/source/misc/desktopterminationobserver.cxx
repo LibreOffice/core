@@ -74,13 +74,9 @@ namespace utl
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
         };
 
-        OObserverImpl::OObserverImpl()
-        {
-        }
+        OObserverImpl::OObserverImpl() = default;
 
-        OObserverImpl::~OObserverImpl()
-        {
-        }
+        OObserverImpl::~OObserverImpl() = default;
 
         void OObserverImpl::ensureObservation()
         {

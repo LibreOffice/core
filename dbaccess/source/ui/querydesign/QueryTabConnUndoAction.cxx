@@ -82,9 +82,7 @@ OQueryTabWinShowUndoAct::OQueryTabWinShowUndoAct(OQueryTableView* pOwner)
 {
 }
 
-OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct()
-{
-}
+OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct() = default;
 
 void OQueryTabWinShowUndoAct::Undo()
 {
@@ -103,9 +101,7 @@ OQueryTabWinDelUndoAct::OQueryTabWinDelUndoAct(OQueryTableView* pOwner)
 {
 }
 
-OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct()
-{
-}
+OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct() = default;
 
 void OQueryTabWinDelUndoAct::Undo()
 {

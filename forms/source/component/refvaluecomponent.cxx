@@ -55,11 +55,7 @@ namespace frm
         calculateExternalValueType();
     }
 
-
-    OReferenceValueComponent::~OReferenceValueComponent()
-    {
-    }
-
+    OReferenceValueComponent::~OReferenceValueComponent() = default;
 
     void OReferenceValueComponent::setReferenceValue( const OUString& _rRefValue )
     {

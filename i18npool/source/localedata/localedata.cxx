@@ -376,14 +376,8 @@ Calendar LocaleDataImpl::downcastCalendar( const Calendar2 & rC )
     return aCal;
 }
 
-
-LocaleDataImpl::LocaleDataImpl()
-{
-}
-LocaleDataImpl::~LocaleDataImpl()
-{
-}
-
+LocaleDataImpl::LocaleDataImpl() = default;
+LocaleDataImpl::~LocaleDataImpl() = default;
 
 LocaleDataItem SAL_CALL
 LocaleDataImpl::getLocaleItem( const Locale& rLocale )
@@ -496,9 +490,7 @@ private:
 struct lcl_LookupTableStatic : public ::rtl::Static< lcl_LookupTableHelper, lcl_LookupTableStatic >
 {};
 
-lcl_LookupTableHelper::lcl_LookupTableHelper()
-{
-}
+lcl_LookupTableHelper::lcl_LookupTableHelper() = default;
 
 lcl_LookupTableHelper::~lcl_LookupTableHelper()
 {

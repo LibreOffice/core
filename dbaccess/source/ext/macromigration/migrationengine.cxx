@@ -720,9 +720,7 @@ namespace dbmm
             ,m_sAction( _rAction )
         {
         }
-        virtual ~ProgressDelegator()
-        {
-        }
+        virtual ~ProgressDelegator() = default;
 
         // IProgressConsumer
         virtual void    start( sal_uInt32 _nRange ) override
@@ -1800,9 +1798,7 @@ namespace dbmm
     {
     }
 
-    MigrationEngine::~MigrationEngine()
-    {
-    }
+    MigrationEngine::~MigrationEngine() = default;
 
     sal_Int32 MigrationEngine::getFormCount() const
     {

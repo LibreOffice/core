@@ -25,7 +25,7 @@
 using utl::detail::Options;
 using utl::ConfigurationBroadcaster;
 
-utl::ConfigurationListener::~ConfigurationListener() {}
+utl::ConfigurationListener::~ConfigurationListener() = default;
 
 ConfigurationBroadcaster::ConfigurationBroadcaster()
 : m_nBroadcastBlocked( 0 )
@@ -40,9 +40,7 @@ ConfigurationBroadcaster::ConfigurationBroadcaster(ConfigurationBroadcaster cons
 {
 }
 
-ConfigurationBroadcaster::~ConfigurationBroadcaster()
-{
-}
+ConfigurationBroadcaster::~ConfigurationBroadcaster() = default;
 
 ConfigurationBroadcaster & ConfigurationBroadcaster::operator =(
     ConfigurationBroadcaster const & other)
@@ -98,13 +96,9 @@ void ConfigurationBroadcaster::BlockBroadcasts( bool bBlock )
     }
 }
 
-Options::Options()
-{
-}
+Options::Options() = default;
 
-Options::~Options()
-{
-}
+Options::~Options() = default;
 
 void Options::ConfigurationChanged( ConfigurationBroadcaster*, ConfigurationHints nHint )
 {

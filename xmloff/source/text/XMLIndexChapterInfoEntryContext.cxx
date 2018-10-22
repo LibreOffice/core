@@ -62,9 +62,7 @@ XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
 {
 }
 
-XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext()
-{
-}
+XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext() = default;
 
 static const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
 {

@@ -62,9 +62,7 @@ AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache&
 {
 }
 
-AcceleratorConfigurationReader::~AcceleratorConfigurationReader()
-{
-}
+AcceleratorConfigurationReader::~AcceleratorConfigurationReader() = default;
 
 void SAL_CALL AcceleratorConfigurationReader::startDocument()
 {

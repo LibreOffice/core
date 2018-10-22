@@ -50,9 +50,7 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
 
 }
 
-OXMLSubDocument::~OXMLSubDocument()
-{
-}
+OXMLSubDocument::~OXMLSubDocument() = default;
 
 SvXMLImportContextRef OXMLSubDocument::CreateChildContext_(
         sal_uInt16 _nPrefix,

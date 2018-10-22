@@ -363,9 +363,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     return pNew;
 }
 
-TextPortionList::TextPortionList()
-{
-}
+TextPortionList::TextPortionList() = default;
 
 TextPortionList::~TextPortionList()
 {
@@ -488,9 +486,7 @@ ExtraPortionInfo::ExtraPortionInfo()
 {
 }
 
-ExtraPortionInfo::~ExtraPortionInfo()
-{
-}
+ExtraPortionInfo::~ExtraPortionInfo() = default;
 
 void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen )
 {
@@ -517,9 +513,7 @@ ParaPortion::ParaPortion( ContentNode* pN ) :
 {
 }
 
-ParaPortion::~ParaPortion()
-{
-}
+ParaPortion::~ParaPortion() = default;
 
 void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
@@ -676,9 +670,7 @@ ParaPortionList::ParaPortionList() : nLastCache( 0 )
 {
 }
 
-ParaPortionList::~ParaPortionList()
-{
-}
+ParaPortionList::~ParaPortionList() = default;
 
 sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 {
@@ -942,10 +934,7 @@ EditLine::EditLine( const EditLine& r ) :
 {
 }
 
-EditLine::~EditLine()
-{
-}
-
+EditLine::~EditLine() = default;
 
 EditLine* EditLine::Clone() const
 {
@@ -1040,9 +1029,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
     return aSz;
 }
 
-EditLineList::EditLineList()
-{
-}
+EditLineList::EditLineList() = default;
 
 EditLineList::~EditLineList()
 {
@@ -1125,9 +1112,7 @@ bool EditSelection::DbgIsBuggy( EditDoc const & rDoc )
     return aStartPaM.DbgIsBuggy( rDoc ) || aEndPaM.DbgIsBuggy( rDoc );
 }
 
-EditSelection::EditSelection()
-{
-}
+EditSelection::EditSelection() = default;
 
 EditSelection::EditSelection( const EditPaM& rStartAndAnd ) :
     aStartPaM(rStartAndAnd),
@@ -1194,9 +1179,7 @@ ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAt
 {
 }
 
-ContentNode::~ContentNode()
-{
-}
+ContentNode::~ContentNode() = default;
 
 void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& rItemPool )
 {
@@ -2704,9 +2687,7 @@ CharAttribList::CharAttribList()
 {
 }
 
-CharAttribList::~CharAttribList()
-{
-}
+CharAttribList::~CharAttribList() = default;
 
 void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 {

@@ -629,10 +629,7 @@ void WorkbookGlobals::finalize()
     }
 }
 
-
-WorkbookHelper::~WorkbookHelper()
-{
-}
+WorkbookHelper::~WorkbookHelper() = default;
 
 /*static*/ WorkbookGlobalsRef WorkbookHelper::constructGlobals( ExcelFilter& rFilter )
 {

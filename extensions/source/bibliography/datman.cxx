@@ -526,9 +526,7 @@ BibInterceptorHelper::BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::u
         xFormDispatch = xDispatch;
 }
 
-BibInterceptorHelper::~BibInterceptorHelper( )
-{
-}
+BibInterceptorHelper::~BibInterceptorHelper() = default;
 
 void BibInterceptorHelper::ReleaseInterceptor()
 {

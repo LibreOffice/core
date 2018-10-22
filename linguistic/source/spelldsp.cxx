@@ -65,7 +65,7 @@ class ProposalList
     bool    HasEntry( const OUString &rText ) const;
 
 public:
-    ProposalList()  {}
+    ProposalList() = default;
     ProposalList(const ProposalList&) = delete;
     ProposalList& operator=(const ProposalList&) = delete;
 
@@ -182,11 +182,7 @@ SpellCheckerDispatcher::SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr ) :
 {
 }
 
-
-SpellCheckerDispatcher::~SpellCheckerDispatcher()
-{
-}
-
+SpellCheckerDispatcher::~SpellCheckerDispatcher() = default;
 
 Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
 {

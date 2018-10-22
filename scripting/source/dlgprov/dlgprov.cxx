@@ -191,11 +191,7 @@ namespace dlgprov
     {
     }
 
-
-    DialogProviderImpl::~DialogProviderImpl()
-    {
-    }
-
+    DialogProviderImpl::~DialogProviderImpl() = default;
 
     static Reference< resource::XStringResourceManager > getStringResourceFromDialogLibrary
         ( const Reference< container::XNameContainer >& xDialogLib )

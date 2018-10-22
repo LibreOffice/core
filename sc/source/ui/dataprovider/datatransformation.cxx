@@ -27,9 +27,7 @@ Date getDate(double nDateTime, SvNumberFormatter* pFormatter)
 }
 
 namespace sc {
-DataTransformation::~DataTransformation()
-{
-}
+DataTransformation::~DataTransformation() = default;
 
 SCROW DataTransformation::getLastRow(const ScDocument& rDoc, SCCOL nCol)
 {
@@ -45,9 +43,7 @@ ColumnRemoveTransformation::ColumnRemoveTransformation(const std::set<SCCOL>& rC
 {
 }
 
-ColumnRemoveTransformation::~ColumnRemoveTransformation()
-{
-}
+ColumnRemoveTransformation::~ColumnRemoveTransformation() = default;
 
 void ColumnRemoveTransformation::Transform(ScDocument& rDoc) const
 {

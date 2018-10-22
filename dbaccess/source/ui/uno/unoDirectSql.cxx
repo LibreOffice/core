@@ -56,10 +56,7 @@ namespace dbaui
 
     }
 
-    ODirectSQLDialog::~ODirectSQLDialog()
-    {
-
-    }
+    ODirectSQLDialog::~ODirectSQLDialog() = default;
 
     css::uno::Sequence<sal_Int8> ODirectSQLDialog::getImplementationId()
     {

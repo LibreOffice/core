@@ -48,9 +48,7 @@ XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpColRowSettings::~XclImpColRowSettings()
-{
-}
+XclImpColRowSettings::~XclImpColRowSettings() = default;
 
 void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec )
 {

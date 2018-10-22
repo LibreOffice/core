@@ -69,9 +69,7 @@ SwFrameAreaDefinition::SwFrameAreaDefinition()
 {
 }
 
-SwFrameAreaDefinition::~SwFrameAreaDefinition()
-{
-}
+SwFrameAreaDefinition::~SwFrameAreaDefinition() = default;
 
 void SwFrameAreaDefinition::setFrameAreaPositionValid(bool bNew)
 {

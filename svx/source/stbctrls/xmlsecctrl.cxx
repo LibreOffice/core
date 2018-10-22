@@ -62,9 +62,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
     mpImpl->maImageNotValidated = Image(BitmapEx(RID_SVXBMP_SIGNET_NOTVALIDATED));
 }
 
-XmlSecStatusBarControl::~XmlSecStatusBarControl()
-{
-}
+XmlSecStatusBarControl::~XmlSecStatusBarControl() = default;
 
 void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {

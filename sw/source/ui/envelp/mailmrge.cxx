@@ -622,9 +622,7 @@ SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(weld::Window* pParent)
 {
 }
 
-SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
-{
-}
+SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg() = default;
 
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/mergeconnectdialog.ui", "MergeConnectDialog")
@@ -632,8 +630,6 @@ SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(weld::Window* pPa
 {
 }
 
-SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
-{
-}
+SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

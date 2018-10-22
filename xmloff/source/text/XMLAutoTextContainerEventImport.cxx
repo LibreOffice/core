@@ -47,9 +47,7 @@ XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
 {
 }
 
-XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
-{
-}
+XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport() = default;
 
 SvXMLImportContextRef XMLAutoTextContainerEventImport::CreateChildContext(
     sal_uInt16 nPrefix,

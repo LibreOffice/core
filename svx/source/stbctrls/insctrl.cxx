@@ -38,9 +38,7 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
 {
 }
 
-SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
-{
-}
+SvxInsertStatusBarControl::~SvxInsertStatusBarControl() = default;
 
 void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )

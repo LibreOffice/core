@@ -133,9 +133,7 @@ namespace dbaccess
         }
     }
 
-    DocumentEventExecutor::~DocumentEventExecutor()
-    {
-    }
+    DocumentEventExecutor::~DocumentEventExecutor() = default;
 
     void SAL_CALL DocumentEventExecutor::documentEventOccured( const DocumentEvent& Event )
     {

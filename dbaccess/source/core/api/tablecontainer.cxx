@@ -106,9 +106,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
 {
 }
 
-OTableContainer::~OTableContainer()
-{
-}
+OTableContainer::~OTableContainer() = default;
 
 void OTableContainer::removeMasterContainerListener()
 {

@@ -31,9 +31,7 @@ SwVbaTableOfContents::SwVbaTableOfContents( const uno::Reference< ooo::vba::XHel
     mxTocProps.set( mxDocumentIndex, uno::UNO_QUERY_THROW );
 }
 
-SwVbaTableOfContents::~SwVbaTableOfContents()
-{
-}
+SwVbaTableOfContents::~SwVbaTableOfContents() = default;
 
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getLowerHeadingLevel()
 {

@@ -88,10 +88,7 @@ LwpSection::LwpSection(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     , m_Flags(0)
 {}
 
-LwpSection::~LwpSection()
-{
-
-}
+LwpSection::~LwpSection() = default;
 
 /**
  * @descr: read object information
@@ -122,9 +119,7 @@ LwpIndexSection::LwpIndexSection(LwpObjectHeader const &objHdr, LwpSvStream *pSt
     , m_nFlags(0)
 {}
 
-LwpIndexSection::~LwpIndexSection()
-{
-}
+LwpIndexSection::~LwpIndexSection() = default;
 
 /**
  * @descr: read object information

@@ -81,7 +81,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
     SetAsciiOptions( aNewOpts );
 }
 
-SwASCWriter::~SwASCWriter() {}
+SwASCWriter::~SwASCWriter() = default;
 
 ErrCode SwASCWriter::WriteStream()
 {

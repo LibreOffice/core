@@ -124,9 +124,7 @@ SvxTextAnimationPage::SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet
     m_xBtnDown->connect_clicked( aLink );
 }
 
-SvxTextAnimationPage::~SvxTextAnimationPage()
-{
-}
+SvxTextAnimationPage::~SvxTextAnimationPage() = default;
 
 /*************************************************************************
 |*

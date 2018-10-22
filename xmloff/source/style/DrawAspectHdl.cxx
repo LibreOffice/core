@@ -28,10 +28,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-DrawAspectHdl::~DrawAspectHdl()
-{
-    // nothing to do
-}
+DrawAspectHdl::~DrawAspectHdl() = default;
 
 bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

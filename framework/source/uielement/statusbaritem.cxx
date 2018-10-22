@@ -76,9 +76,7 @@ StatusbarItem::StatusbarItem(
             m_pStatusBar->GetItemBits( m_nId ) );
 }
 
-StatusbarItem::~StatusbarItem()
-{
-}
+StatusbarItem::~StatusbarItem() = default;
 
 void SAL_CALL StatusbarItem::disposing()
 {

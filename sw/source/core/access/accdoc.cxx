@@ -76,9 +76,7 @@ SwAccessibleDocumentBase::SwAccessibleDocumentBase(
 {
 }
 
-SwAccessibleDocumentBase::~SwAccessibleDocumentBase()
-{
-}
+SwAccessibleDocumentBase::~SwAccessibleDocumentBase() = default;
 
 void SwAccessibleDocumentBase::SetVisArea()
 {

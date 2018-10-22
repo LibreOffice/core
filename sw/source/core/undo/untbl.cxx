@@ -1361,9 +1361,7 @@ SwUndoAttrTable::SwUndoAttrTable( const SwTableNode& rTableNd, bool bClearTabCol
     pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
 }
 
-SwUndoAttrTable::~SwUndoAttrTable()
-{
-}
+SwUndoAttrTable::~SwUndoAttrTable() = default;
 
 void SwUndoAttrTable::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -1409,9 +1407,7 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
     }
 }
 
-SwUndoTableAutoFormat::~SwUndoTableAutoFormat()
-{
-}
+SwUndoTableAutoFormat::~SwUndoTableAutoFormat() = default;
 
 void SwUndoTableAutoFormat::SaveBoxContent( const SwTableBox& rBox )
 {
@@ -1513,9 +1509,7 @@ void SwUndoTableNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
     }
 }
 
-SwUndoTableNdsChg::~SwUndoTableNdsChg()
-{
-}
+SwUndoTableNdsChg::~SwUndoTableNdsChg() = default;
 
 void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
                                     const SwTableSortBoxes& rOld )
@@ -2815,9 +2809,7 @@ SwUndoCpyTable::SwUndoCpyTable(const SwDoc* pDoc)
 {
 }
 
-SwUndoCpyTable::~SwUndoCpyTable()
-{
-}
+SwUndoCpyTable::~SwUndoCpyTable() = default;
 
 void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -3151,8 +3143,7 @@ SwUndoTableStyleMake::SwUndoTableStyleMake(const OUString& rName, const SwDoc* p
     m_sName(rName)
 { }
 
-SwUndoTableStyleMake::~SwUndoTableStyleMake()
-{ }
+SwUndoTableStyleMake::~SwUndoTableStyleMake() = default;
 
 void SwUndoTableStyleMake::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -3185,8 +3176,7 @@ SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat
     m_rAffectedTables(rAffectedTables)
 { }
 
-SwUndoTableStyleDelete::~SwUndoTableStyleDelete()
-{ }
+SwUndoTableStyleDelete::~SwUndoTableStyleDelete() = default;
 
 void SwUndoTableStyleDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -3215,8 +3205,7 @@ SwUndoTableStyleUpdate::SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewForm
     , m_pNewFormat(new SwTableAutoFormat(rNewFormat))
 { }
 
-SwUndoTableStyleUpdate::~SwUndoTableStyleUpdate()
-{ }
+SwUndoTableStyleUpdate::~SwUndoTableStyleUpdate() = default;
 
 void SwUndoTableStyleUpdate::UndoImpl(::sw::UndoRedoContext & rContext)
 {

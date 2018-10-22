@@ -490,11 +490,7 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, con
 {
 }
 
-
-ImpOptimizer::~ImpOptimizer()
-{
-}
-
+ImpOptimizer::~ImpOptimizer() = default;
 
 void ImpOptimizer::DispatchStatus()
 {

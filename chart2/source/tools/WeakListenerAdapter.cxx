@@ -31,8 +31,7 @@ WeakModifyListenerAdapter::WeakModifyListenerAdapter(
         WeakListenerAdapter< css::util::XModifyListener >( xListener )
 {}
 
-WeakModifyListenerAdapter::~WeakModifyListenerAdapter()
-{}
+WeakModifyListenerAdapter::~WeakModifyListenerAdapter() = default;
 
 void SAL_CALL WeakModifyListenerAdapter::modified( const lang::EventObject& aEvent )
 {
@@ -46,8 +45,7 @@ WeakSelectionChangeListenerAdapter::WeakSelectionChangeListenerAdapter(
         WeakListenerAdapter< css::view::XSelectionChangeListener >( xListener )
 {}
 
-WeakSelectionChangeListenerAdapter::~WeakSelectionChangeListenerAdapter()
-{}
+WeakSelectionChangeListenerAdapter::~WeakSelectionChangeListenerAdapter() = default;
 
 void SAL_CALL WeakSelectionChangeListenerAdapter::selectionChanged( const lang::EventObject& aEvent )
 {

@@ -250,11 +250,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
-
-CompoundIdlClassImpl::~CompoundIdlClassImpl()
-{
-}
-
+CompoundIdlClassImpl::~CompoundIdlClassImpl() = default;
 
 sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 {

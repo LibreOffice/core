@@ -47,9 +47,7 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
 {
 }
 
-InsertionIndicatorHandler::~InsertionIndicatorHandler() COVERITY_NOEXCEPT_FALSE
-{
-}
+InsertionIndicatorHandler::~InsertionIndicatorHandler() COVERITY_NOEXCEPT_FALSE = default;
 
 void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
 {

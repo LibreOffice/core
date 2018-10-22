@@ -41,9 +41,7 @@ AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
 {
 }
 
-AccessibleBrowseBoxTable::~AccessibleBrowseBoxTable()
-{
-}
+AccessibleBrowseBoxTable::~AccessibleBrowseBoxTable() = default;
 
 // XAccessibleContext ---------------------------------------------------------
 

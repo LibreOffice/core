@@ -40,9 +40,7 @@ using namespace com::sun::star;
 
 static sal_Int64 nBufferSwapCounter = 0;
 
-GLWindow::~GLWindow()
-{
-}
+GLWindow::~GLWindow() = default;
 
 bool GLWindow::Synchronize(bool /*bOnoff*/) const
 {

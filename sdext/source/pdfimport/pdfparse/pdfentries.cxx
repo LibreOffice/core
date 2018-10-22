@@ -102,13 +102,9 @@ EmitContext::EmitContext( const PDFContainer* pTop ) :
         m_pImplData.reset( new EmitImplData( pTop ) );
 }
 
-EmitContext::~EmitContext()
-{
-}
+EmitContext::~EmitContext() = default;
 
-PDFEntry::~PDFEntry()
-{
-}
+PDFEntry::~PDFEntry() = default;
 
 EmitImplData* PDFEntry::getEmitData( EmitContext const & rContext )
 {
@@ -122,13 +118,9 @@ void PDFEntry::setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData )
     rContext.m_pImplData.reset( pNewEmitData );
 }
 
-PDFValue::~PDFValue()
-{
-}
+PDFValue::~PDFValue() = default;
 
-PDFComment::~PDFComment()
-{
-}
+PDFComment::~PDFComment() = default;
 
 bool PDFComment::emit( EmitContext& rWriteContext ) const
 {
@@ -140,9 +132,7 @@ PDFEntry* PDFComment::clone() const
     return new PDFComment( m_aComment );
 }
 
-PDFName::~PDFName()
-{
-}
+PDFName::~PDFName() = default;
 
 bool PDFName::emit( EmitContext& rWriteContext ) const
 {
@@ -188,9 +178,7 @@ OUString PDFName::getFilteredName() const
     return OStringToOUString( aFilter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
-PDFString::~PDFString()
-{
-}
+PDFString::~PDFString() = default;
 
 bool PDFString::emit( EmitContext& rWriteContext ) const
 {
@@ -336,9 +324,7 @@ OString PDFString::getFilteredString() const
     return aBuf.makeStringAndClear();
 }
 
-PDFNumber::~PDFNumber()
-{
-}
+PDFNumber::~PDFNumber() = default;
 
 bool PDFNumber::emit( EmitContext& rWriteContext ) const
 {
@@ -393,10 +379,7 @@ PDFEntry* PDFNumber::clone() const
     return new PDFNumber( m_fValue );
 }
 
-
-PDFBool::~PDFBool()
-{
-}
+PDFBool::~PDFBool() = default;
 
 bool PDFBool::emit( EmitContext& rWriteContext ) const
 {
@@ -408,9 +391,7 @@ PDFEntry* PDFBool::clone() const
     return new PDFBool( m_bValue );
 }
 
-PDFNull::~PDFNull()
-{
-}
+PDFNull::~PDFNull() = default;
 
 bool PDFNull::emit( EmitContext& rWriteContext ) const
 {
@@ -422,10 +403,7 @@ PDFEntry* PDFNull::clone() const
     return new PDFNull();
 }
 
-
-PDFObjectRef::~PDFObjectRef()
-{
-}
+PDFObjectRef::~PDFObjectRef() = default;
 
 bool PDFObjectRef::emit( EmitContext& rWriteContext ) const
 {
@@ -443,9 +421,7 @@ PDFEntry* PDFObjectRef::clone() const
     return new PDFObjectRef( m_nNumber, m_nGeneration );
 }
 
-PDFContainer::~PDFContainer()
-{
-}
+PDFContainer::~PDFContainer() = default;
 
 bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
 {
@@ -490,9 +466,7 @@ PDFObject* PDFContainer::findObject( unsigned int nNumber, unsigned int nGenerat
     return nullptr;
 }
 
-PDFArray::~PDFArray()
-{
-}
+PDFArray::~PDFArray() = default;
 
 bool PDFArray::emit( EmitContext& rWriteContext ) const
 {
@@ -510,9 +484,7 @@ PDFEntry* PDFArray::clone() const
     return pNewAr;
 }
 
-PDFDict::~PDFDict()
-{
-}
+PDFDict::~PDFDict() = default;
 
 bool PDFDict::emit( EmitContext& rWriteContext ) const
 {
@@ -599,9 +571,7 @@ PDFEntry* PDFDict::clone() const
     return pNewDict;
 }
 
-PDFStream::~PDFStream()
-{
-}
+PDFStream::~PDFStream() = default;
 
 bool PDFStream::emit( EmitContext& rWriteContext ) const
 {
@@ -646,9 +616,7 @@ unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
     return pNum ? static_cast<unsigned int>(pNum->m_fValue) : 0;
 }
 
-PDFObject::~PDFObject()
-{
-}
+PDFObject::~PDFObject() = default;
 
 bool PDFObject::getDeflatedStream( std::unique_ptr<char[]>& rpStream, unsigned int* pBytes, const PDFContainer* pObjectContainer, EmitContext& rContext ) const
 {
@@ -914,9 +882,7 @@ PDFEntry* PDFObject::clone() const
     return pNewOb;
 }
 
-PDFTrailer::~PDFTrailer()
-{
-}
+PDFTrailer::~PDFTrailer() = default;
 
 bool PDFTrailer::emit( EmitContext& rWriteContext ) const
 {
@@ -1048,9 +1014,7 @@ PDFFile::PDFFile()
 {
 }
 
-PDFFile::~PDFFile()
-{
-}
+PDFFile::~PDFFile() = default;
 
 bool PDFFile::isEncrypted() const
 {
@@ -1441,9 +1405,7 @@ PDFEntry* PDFFile::clone() const
     return pNewFl;
 }
 
-PDFPart::~PDFPart()
-{
-}
+PDFPart::~PDFPart() = default;
 
 bool PDFPart::emit( EmitContext& rWriteContext ) const
 {

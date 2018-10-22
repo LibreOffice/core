@@ -21,9 +21,7 @@
 
 namespace chart
 {
-
-MutexContainer::~MutexContainer()
-{}
+MutexContainer::~MutexContainer() = default;
 
 ::osl::Mutex & MutexContainer::GetMutex() const
 {

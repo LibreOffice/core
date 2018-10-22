@@ -120,7 +120,8 @@ public:
     {
         mMasterPageSet.insert( xMasterPage );
     }
-    virtual ~TextField() {}
+    virtual ~TextField() = default;
+
 protected:
     void implGrowCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets, const OUString& sText, const OUString& sTextFieldId ) const
     {
@@ -167,7 +168,7 @@ public:
 class FixedDateTimeField : public FixedTextField
 {
 public:
-    FixedDateTimeField() {}
+    FixedDateTimeField() = default;
     virtual OUString getClassName() const override
     {
         return OUString( "FixedDateTimeField" );
@@ -182,7 +183,7 @@ public:
 class FooterField : public FixedTextField
 {
 public:
-    FooterField() {}
+    FooterField() = default;
     virtual OUString getClassName() const override
     {
         return OUString( "FooterField" );
@@ -373,9 +374,7 @@ SVGExport::~SVGExport()
     GetDocHandler()->endDocument();
 }
 
-ObjectRepresentation::ObjectRepresentation()
-{
-}
+ObjectRepresentation::ObjectRepresentation() = default;
 
 ObjectRepresentation::ObjectRepresentation( const Reference< XInterface >& rxObject,
                                             const GDIMetaFile& rMtf ) :

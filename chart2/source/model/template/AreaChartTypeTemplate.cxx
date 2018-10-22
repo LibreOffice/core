@@ -126,8 +126,7 @@ AreaChartTypeTemplate::AreaChartTypeTemplate(
     setFastPropertyValue_NoBroadcast( PROP_AREA_TEMPLATE_DIMENSION, uno::Any( nDim ));
 }
 
-AreaChartTypeTemplate::~AreaChartTypeTemplate()
-{}
+AreaChartTypeTemplate::~AreaChartTypeTemplate() = default;
 
 // ____ OPropertySet ____
 uno::Any AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const

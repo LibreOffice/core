@@ -166,9 +166,7 @@ LayeredDevice::LayeredDevice (const VclPtr<sd::Window>& pTargetWindow)
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
 
-LayeredDevice::~LayeredDevice()
-{
-}
+LayeredDevice::~LayeredDevice() = default;
 
 void LayeredDevice::Invalidate (
     const ::tools::Rectangle& rInvalidationArea,

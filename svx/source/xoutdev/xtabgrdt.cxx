@@ -42,9 +42,7 @@ XGradientList::XGradientList( const OUString& rPath, const OUString& rReferer )
 {
 }
 
-XGradientList::~XGradientList()
-{
-}
+XGradientList::~XGradientList() = default;
 
 void XGradientList::Replace(std::unique_ptr<XGradientEntry> pEntry, long nIndex)
 {

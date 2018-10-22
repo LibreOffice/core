@@ -55,9 +55,7 @@ ContextHandler2Helper::ContextHandler2Helper( const ContextHandler2Helper& rPare
 {
 }
 
-ContextHandler2Helper::~ContextHandler2Helper()
-{
-}
+ContextHandler2Helper::~ContextHandler2Helper() = default;
 
 sal_Int32 ContextHandler2Helper::getCurrentElementWithMce() const
 {
@@ -179,9 +177,7 @@ ContextHandler2::ContextHandler2( ContextHandler2Helper const & rParent ) :
 {
 }
 
-ContextHandler2::~ContextHandler2()
-{
-}
+ContextHandler2::~ContextHandler2() = default;
 
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
 

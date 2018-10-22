@@ -45,9 +45,7 @@ FrameStatusListener::FrameStatusListener(
 {
 }
 
-FrameStatusListener::~FrameStatusListener()
-{
-}
+FrameStatusListener::~FrameStatusListener() = default;
 
 // XInterface
 Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )

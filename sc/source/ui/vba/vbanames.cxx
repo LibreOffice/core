@@ -64,9 +64,7 @@ ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParen
     m_xNameAccess.set( xNames, uno::UNO_QUERY_THROW );
 }
 
-ScVbaNames::~ScVbaNames()
-{
-}
+ScVbaNames::~ScVbaNames() = default;
 
 ScDocument *
 ScVbaNames::getScDocument()

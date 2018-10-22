@@ -73,9 +73,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
     init();
 }
 
-OOXMLStreamImpl::~OOXMLStreamImpl()
-{
-}
+OOXMLStreamImpl::~OOXMLStreamImpl() = default;
 
 const OUString & OOXMLStreamImpl::getTarget() const
 {

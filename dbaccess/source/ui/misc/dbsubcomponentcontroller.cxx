@@ -87,9 +87,7 @@ namespace dbaui
     class DataSourceHolder
     {
     public:
-        DataSourceHolder()
-        {
-        }
+        DataSourceHolder() = default;
 
         explicit DataSourceHolder(const Reference< XDataSource >& _rxDataSource)
         {
@@ -176,9 +174,7 @@ namespace dbaui
     {
     }
 
-    DBSubComponentController::~DBSubComponentController()
-    {
-    }
+    DBSubComponentController::~DBSubComponentController() = default;
 
     void DBSubComponentController::impl_initialize()
     {

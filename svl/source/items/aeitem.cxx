@@ -56,9 +56,7 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
         pValues.reset( new SfxAllEnumValueArr(*rCopy.pValues) );
 }
 
-SfxAllEnumItem::~SfxAllEnumItem()
-{
-}
+SfxAllEnumItem::~SfxAllEnumItem() = default;
 
 sal_uInt16 SfxAllEnumItem::GetValueCount() const
 {

@@ -412,9 +412,7 @@ ScViewPaneObj::ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP) :
 {
 }
 
-ScViewPaneObj::~ScViewPaneObj()
-{
-}
+ScViewPaneObj::~ScViewPaneObj() = default;
 
 uno::Any SAL_CALL ScViewPaneObj::queryInterface( const uno::Type& rType )
 {

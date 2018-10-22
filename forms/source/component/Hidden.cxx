@@ -53,11 +53,7 @@ OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XCom
     m_sHiddenValue = _pOriginal->m_sHiddenValue;
 }
 
-
-OHiddenModel::~OHiddenModel( )
-{
-}
-
+OHiddenModel::~OHiddenModel() = default;
 
 IMPLEMENT_DEFAULT_CLONING( OHiddenModel )
 

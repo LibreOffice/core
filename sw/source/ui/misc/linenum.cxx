@@ -175,9 +175,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
     m_xOKButton->connect_clicked(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
-SwLineNumberingDlg::~SwLineNumberingDlg()
-{
-}
+SwLineNumberingDlg::~SwLineNumberingDlg() = default;
 
 IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, weld::Button&, void)
 {

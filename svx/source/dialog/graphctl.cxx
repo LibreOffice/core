@@ -808,9 +808,7 @@ void SvxGraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     }
 }
 
-SvxGraphCtrl::~SvxGraphCtrl()
-{
-}
+SvxGraphCtrl::~SvxGraphCtrl() = default;
 
 void SvxGraphCtrl::SetGraphic(const Graphic& rGraphic)
 {

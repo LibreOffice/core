@@ -88,9 +88,7 @@ private:
     static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL );
 };
 
-GraphicProvider::GraphicProvider()
-{
-}
+GraphicProvider::GraphicProvider() = default;
 
 OUString SAL_CALL GraphicProvider::getImplementationName()
 {

@@ -113,10 +113,7 @@ SvxHtmlOptions::SvxHtmlOptions() :
     Load( GetPropertyNames() );
 }
 
-
-SvxHtmlOptions::~SvxHtmlOptions()
-{
-}
+SvxHtmlOptions::~SvxHtmlOptions() = default;
 
 void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
 {

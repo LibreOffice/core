@@ -81,9 +81,7 @@ bool DataSupplier::getData()
     return true;
 }
 
-DataSupplier::~DataSupplier()
-{
-}
+DataSupplier::~DataSupplier() = default;
 
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {

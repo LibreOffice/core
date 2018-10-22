@@ -235,9 +235,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
         m_sRuntimeUID = OUString::number( g_nInstanceCounter );
     }
 
-    virtual ~IMPL_SfxBaseModel_DataContainer()
-    {
-    }
+    virtual ~IMPL_SfxBaseModel_DataContainer() = default;
 
     // ::sfx2::IModifiableDocument
     virtual void storageIsModified() override
@@ -497,9 +495,7 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 }
 
 //  destructor
-SfxBaseModel::~SfxBaseModel()
-{
-}
+SfxBaseModel::~SfxBaseModel() = default;
 
 //  XInterface
 Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType )
@@ -4387,10 +4383,7 @@ SfxBaseModel::storeMetadataToMedium(
 
 // = SfxModelSubComponent
 
-
-SfxModelSubComponent::~SfxModelSubComponent()
-{
-}
+SfxModelSubComponent::~SfxModelSubComponent() = default;
 
 void SfxModelSubComponent::disposing()
 {

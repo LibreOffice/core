@@ -67,9 +67,7 @@ SwObjectFormatterTextFrame::SwObjectFormatterTextFrame( SwTextFrame& _rAnchorTex
 {
 }
 
-SwObjectFormatterTextFrame::~SwObjectFormatterTextFrame()
-{
-}
+SwObjectFormatterTextFrame::~SwObjectFormatterTextFrame() = default;
 
 std::unique_ptr<SwObjectFormatterTextFrame> SwObjectFormatterTextFrame::CreateObjFormatter(
                                                 SwTextFrame& _rAnchorTextFrame,

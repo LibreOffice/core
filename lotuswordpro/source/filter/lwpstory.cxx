@@ -81,9 +81,7 @@ LwpStory::LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpStory::~LwpStory()
-{
-}
+LwpStory::~LwpStory() = default;
 
 void LwpStory::Read()
 {

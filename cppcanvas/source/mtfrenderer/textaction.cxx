@@ -479,7 +479,7 @@ namespace cppcanvas
             class TextRenderer
             {
             public:
-                virtual ~TextRenderer() {}
+                virtual ~TextRenderer() = default;
 
                 /// Render text with given RenderState
                 virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const = 0;

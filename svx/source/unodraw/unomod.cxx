@@ -269,9 +269,7 @@ SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) throw()
 {
 }
 
-SvxUnoDrawingModel::~SvxUnoDrawingModel() throw()
-{
-}
+SvxUnoDrawingModel::~SvxUnoDrawingModel() throw() = default;
 
 uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType )
 {

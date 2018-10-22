@@ -105,9 +105,7 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pImpl->pViewSh = pViewSh;
 }
 
-SfxShell::~SfxShell()
-{
-}
+SfxShell::~SfxShell() = default;
 
 void SfxShell::SetName( const OUString &rName )
 {

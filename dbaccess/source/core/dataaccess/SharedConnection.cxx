@@ -34,9 +34,7 @@ OSharedConnection::OSharedConnection(Reference< XAggregation >& _rxProxyConnecti
     setDelegation(_rxProxyConnection,m_refCount);
 }
 
-OSharedConnection::~OSharedConnection()
-{
-}
+OSharedConnection::~OSharedConnection() = default;
 
 void SAL_CALL OSharedConnection::disposing()
 {

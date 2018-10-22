@@ -83,9 +83,7 @@ reserved2(0)
 {
 }
 
-SwCTBWrapper::~SwCTBWrapper()
-{
-}
+SwCTBWrapper::~SwCTBWrapper() = default;
 
 Customization* SwCTBWrapper::GetCustomizaton( sal_Int16 index )
 {
@@ -217,9 +215,7 @@ Customization::Customization( SwCTBWrapper* wrapper )
 {
 }
 
-Customization::~Customization()
-{
-}
+Customization::~Customization() = default;
 
 bool Customization::Read( SvStream &rS)
 {
@@ -386,9 +382,7 @@ SwCTB::SwCTB() : cbTBData( 0 )
 {
 }
 
-SwCTB::~SwCTB()
-{
-}
+SwCTB::~SwCTB() = default;
 
 bool SwCTB::IsMenuToolbar()
 {
@@ -481,13 +475,9 @@ bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const css::uno::Reference< css
     return true;
 }
 
-SwTBC::SwTBC()
-{
-}
+SwTBC::SwTBC() = default;
 
-SwTBC::~SwTBC()
-{
-}
+SwTBC::~SwTBC() = default;
 
 bool SwTBC::Read( SvStream &rS )
 {
@@ -648,13 +638,9 @@ bool Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
     return false;
 }
 
-Tcg255::Tcg255()
-{
-}
+Tcg255::Tcg255() = default;
 
-Tcg255::~Tcg255()
-{
-}
+Tcg255::~Tcg255() = default;
 
 bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 {
@@ -786,9 +772,7 @@ PlfAcd::PlfAcd() :
 {
 }
 
-PlfAcd::~PlfAcd()
-{
-}
+PlfAcd::~PlfAcd() = default;
 
 bool PlfAcd::Read( SvStream &rS)
 {
@@ -821,9 +805,7 @@ PlfKme::PlfKme() :
 {
 }
 
-PlfKme::~PlfKme()
-{
-}
+PlfKme::~PlfKme() = default;
 
 bool PlfKme::Read(SvStream &rS)
 {
@@ -848,9 +830,7 @@ bool PlfKme::Read(SvStream &rS)
     return rS.good();
 }
 
-TcgSttbf::TcgSttbf()
-{
-}
+TcgSttbf::TcgSttbf() = default;
 
 bool TcgSttbf::Read( SvStream &rS)
 {
@@ -866,9 +846,7 @@ TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
 {
 }
 
-TcgSttbfCore::~TcgSttbfCore()
-{
-}
+TcgSttbfCore::~TcgSttbfCore() = default;
 
 bool TcgSttbfCore::Read( SvStream& rS )
 {
@@ -895,9 +873,7 @@ MacroNames::MacroNames() :
 {
 }
 
-MacroNames::~MacroNames()
-{
-}
+MacroNames::~MacroNames() = default;
 
 bool MacroNames::Read( SvStream &rS)
 {
@@ -959,9 +935,7 @@ Kme::Kme() : reserved1(0)
 {
 }
 
-Kme::~Kme()
-{
-}
+Kme::~Kme() = default;
 
 bool
 Kme::Read(SvStream &rS)

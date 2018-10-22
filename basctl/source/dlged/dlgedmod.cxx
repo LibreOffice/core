@@ -28,9 +28,7 @@ DlgEdModel::DlgEdModel()
 {
 }
 
-DlgEdModel::~DlgEdModel()
-{
-}
+DlgEdModel::~DlgEdModel() = default;
 
 SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
 {

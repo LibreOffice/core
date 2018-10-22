@@ -207,9 +207,7 @@ INetMIMEMessage::INetMIMEMessage()
         m_nMIMEIndex[static_cast<InetMessageMime>(i)] = SAL_MAX_UINT32;
 }
 
-INetMIMEMessage::~INetMIMEMessage()
-{
-}
+INetMIMEMessage::~INetMIMEMessage() = default;
 
 void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 {

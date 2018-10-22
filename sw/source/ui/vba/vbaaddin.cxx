@@ -30,9 +30,7 @@ SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rPar
 {
 }
 
-SwVbaAddin::~SwVbaAddin()
-{
-}
+SwVbaAddin::~SwVbaAddin() = default;
 
 OUString SAL_CALL SwVbaAddin::getName()
 {

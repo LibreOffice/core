@@ -555,11 +555,7 @@ PluginProgress::PluginProgress(      vcl::Window*                               
     m_xProgress = m_xProgressFactory->createStatusIndicator();
 }
 
-
-PluginProgress::~PluginProgress()
-{
-}
-
+PluginProgress::~PluginProgress() = default;
 
 void SAL_CALL PluginProgress::dispose()
 {
@@ -1230,9 +1226,7 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(weld::Window* pParent,
     impl_refresh();
 }
 
-BrokenRecoveryDialog::~BrokenRecoveryDialog()
-{
-}
+BrokenRecoveryDialog::~BrokenRecoveryDialog() = default;
 
 void BrokenRecoveryDialog::impl_refresh()
 {

@@ -123,9 +123,7 @@ SwXReferenceMark::SwXReferenceMark(
 {
 }
 
-SwXReferenceMark::~SwXReferenceMark()
-{
-}
+SwXReferenceMark::~SwXReferenceMark() = default;
 
 uno::Reference<text::XTextContent>
 SwXReferenceMark::CreateXReferenceMark(
@@ -688,9 +686,7 @@ SwXMeta::SwXMeta(SwDoc *const pDoc)
 {
 }
 
-SwXMeta::~SwXMeta()
-{
-}
+SwXMeta::~SwXMeta() = default;
 
 uno::Reference<rdf::XMetadatable>
 SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
@@ -1269,9 +1265,7 @@ SwXMetaField::SwXMetaField(SwDoc *const pDoc)
 {
 }
 
-SwXMetaField::~SwXMetaField()
-{
-}
+SwXMetaField::~SwXMetaField() = default;
 
 // XServiceInfo
 OUString SAL_CALL

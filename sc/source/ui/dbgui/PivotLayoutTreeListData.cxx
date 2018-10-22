@@ -71,8 +71,7 @@ ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(vcl::Window* pParent, WinBi
     SetForceMakeVisible(true);
 }
 
-ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
-{}
+ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData() = default;
 
 bool ScPivotLayoutTreeListData::DoubleClickHdl()
 {

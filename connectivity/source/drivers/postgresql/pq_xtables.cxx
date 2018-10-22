@@ -81,8 +81,7 @@ Tables::Tables(
     : Container( refMutex, origin, pSettings,  getStatics().TABLE )
 {}
 
-Tables::~Tables()
-{}
+Tables::~Tables() = default;
 
 void Tables::refresh()
 {

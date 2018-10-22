@@ -199,10 +199,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     }
 }
 
-OXMLDataSource::~OXMLDataSource()
-{
-
-}
+OXMLDataSource::~OXMLDataSource() = default;
 
 SvXMLImportContextRef OXMLDataSource::CreateChildContext(
         sal_uInt16 nPrefix,

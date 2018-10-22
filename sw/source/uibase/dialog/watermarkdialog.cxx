@@ -32,9 +32,7 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
     InitFields();
 }
 
-SwWatermarkDialog::~SwWatermarkDialog()
-{
-}
+SwWatermarkDialog::~SwWatermarkDialog() = default;
 
 void SwWatermarkDialog::InitFields()
 {

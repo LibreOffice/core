@@ -177,9 +177,7 @@ namespace pcr
         Start_Impl();
     }
 
-    ControlCharacterDialog::~ControlCharacterDialog()
-    {
-    }
+    ControlCharacterDialog::~ControlCharacterDialog() = default;
 
     void ControlCharacterDialog::translatePropertiesToItems(const Reference< XPropertySet >& _rxModel, SfxItemSet* _pSet)
     {

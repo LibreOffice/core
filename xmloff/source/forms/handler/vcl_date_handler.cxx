@@ -38,9 +38,7 @@ namespace xmloff
     using ::com::sun::star::util::Date;
 
     //= VCLDateHandler
-    VCLDateHandler::VCLDateHandler()
-    {
-    }
+    VCLDateHandler::VCLDateHandler() = default;
 
     OUString VCLDateHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {

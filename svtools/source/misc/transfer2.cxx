@@ -46,11 +46,7 @@ DragSourceHelper::DragGestureListener::DragGestureListener( DragSourceHelper& rD
 {
 }
 
-
-DragSourceHelper::DragGestureListener::~DragGestureListener()
-{
-}
-
+DragSourceHelper::DragGestureListener::~DragGestureListener() = default;
 
 void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObject& )
 {
@@ -105,11 +101,7 @@ DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDro
 {
 }
 
-
-DropTargetHelper::DropTargetListener::~DropTargetListener()
-{
-}
-
+DropTargetHelper::DropTargetListener::~DropTargetListener() = default;
 
 void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject& )
 {
@@ -319,9 +311,7 @@ struct TransferDataContainer_Impl
     Link<sal_Int8,void> aFinshedLnk;
     std::unique_ptr<INetBookmark> pBookmk;
 
-    TransferDataContainer_Impl()
-    {
-    }
+    TransferDataContainer_Impl() = default;
 };
 
 
@@ -330,11 +320,7 @@ TransferDataContainer::TransferDataContainer()
 {
 }
 
-
-TransferDataContainer::~TransferDataContainer()
-{
-}
-
+TransferDataContainer::~TransferDataContainer() = default;
 
 void TransferDataContainer::AddSupportedFormats()
 {

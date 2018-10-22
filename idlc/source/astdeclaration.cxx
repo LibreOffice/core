@@ -80,11 +80,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
     m_bPublished = idlc()->isPublished();
 }
 
-
-AstDeclaration::~AstDeclaration()
-{
-
-}
+AstDeclaration::~AstDeclaration() = default;
 
 void AstDeclaration::setPredefined(bool bPredefined)
 {

@@ -37,9 +37,7 @@ XMLChartOASISTransformerContext::XMLChartOASISTransformerContext(
 {
 }
 
-XMLChartOASISTransformerContext::~XMLChartOASISTransformerContext()
-{
-}
+XMLChartOASISTransformerContext::~XMLChartOASISTransformerContext() = default;
 
 void XMLChartOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )

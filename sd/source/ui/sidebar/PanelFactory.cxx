@@ -54,9 +54,7 @@ PanelFactory::PanelFactory()
 {
 }
 
-PanelFactory::~PanelFactory()
-{
-}
+PanelFactory::~PanelFactory() = default;
 
 void SAL_CALL PanelFactory::disposing()
 {

@@ -26,7 +26,7 @@ FrameDirectionListBox::FrameDirectionListBox(std::unique_ptr<weld::ComboBox> pCo
 {
 }
 
-FrameDirectionListBox::~FrameDirectionListBox() {}
+FrameDirectionListBox::~FrameDirectionListBox() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

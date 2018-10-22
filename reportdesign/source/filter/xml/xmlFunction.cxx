@@ -93,10 +93,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     }
 }
 
-
-OXMLFunction::~OXMLFunction()
-{
-}
+OXMLFunction::~OXMLFunction() = default;
 
 ORptFilter& OXMLFunction::GetOwnImport()
 {

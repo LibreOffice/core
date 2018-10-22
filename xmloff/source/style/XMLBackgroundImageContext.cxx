@@ -340,9 +340,7 @@ XMLBackgroundImageContext::XMLBackgroundImageContext(
     ProcessAttrs( xAttrList );
 }
 
-XMLBackgroundImageContext::~XMLBackgroundImageContext()
-{
-}
+XMLBackgroundImageContext::~XMLBackgroundImageContext() = default;
 
 SvXMLImportContextRef XMLBackgroundImageContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,

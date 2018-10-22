@@ -135,10 +135,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     }
 }
 
-OXMLServerDatabase::~OXMLServerDatabase()
-{
-
-}
+OXMLServerDatabase::~OXMLServerDatabase() = default;
 
 } // namespace dbaxml
 

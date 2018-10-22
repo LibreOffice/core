@@ -62,7 +62,7 @@ namespace sdbtools
         virtual bool validateName( const OUString& _rName ) = 0;
         virtual void validateName_throw( const OUString& _rName ) = 0;
 
-        virtual ~INameValidation() { }
+        virtual ~INameValidation() = default;
     };
     typedef std::shared_ptr< INameValidation >   PNameValidation;
 
@@ -341,9 +341,7 @@ namespace sdbtools
         setWeakConnection( _rxConnection );
     }
 
-    ObjectNames::~ObjectNames()
-    {
-    }
+    ObjectNames::~ObjectNames() = default;
 
     OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName )
     {

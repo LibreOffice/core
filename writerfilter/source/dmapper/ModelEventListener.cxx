@@ -43,11 +43,7 @@ ModelEventListener::ModelEventListener(bool bIndexes, bool bControls)
 {
 }
 
-
-ModelEventListener::~ModelEventListener()
-{
-}
-
+ModelEventListener::~ModelEventListener() = default;
 
 void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
 {

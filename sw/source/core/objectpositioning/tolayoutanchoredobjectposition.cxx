@@ -44,8 +44,7 @@ SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _
       maOffsetToFrameAnchorPos( Point() )
 {}
 
-SwToLayoutAnchoredObjectPosition::~SwToLayoutAnchoredObjectPosition()
-{}
+SwToLayoutAnchoredObjectPosition::~SwToLayoutAnchoredObjectPosition() = default;
 
 /** calculate position for object position type TO_LAYOUT */
 void SwToLayoutAnchoredObjectPosition::CalcPosition()

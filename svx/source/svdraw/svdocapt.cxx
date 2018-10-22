@@ -213,9 +213,7 @@ SdrCaptionObj::SdrCaptionObj(
     aTailPoly[0]=maFixedTailPos=rTail;
 }
 
-SdrCaptionObj::~SdrCaptionObj()
-{
-}
+SdrCaptionObj::~SdrCaptionObj() = default;
 
 void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

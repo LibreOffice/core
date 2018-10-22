@@ -107,11 +107,7 @@ DXFPalette::DXFPalette()
     }
 }
 
-
-DXFPalette::~DXFPalette()
-{
-}
-
+DXFPalette::~DXFPalette() = default;
 
 void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
 {
@@ -131,9 +127,7 @@ DXFRepresentation::DXFRepresentation()
     setGlobalLineTypeScale(1.0);
 }
 
-DXFRepresentation::~DXFRepresentation()
-{
-}
+DXFRepresentation::~DXFRepresentation() = default;
 
 namespace {
 

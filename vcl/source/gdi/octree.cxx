@@ -279,9 +279,7 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal )
     }
 }
 
-InverseColorMap::~InverseColorMap()
-{
-}
+InverseColorMap::~InverseColorMap() = default;
 
 void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
 {

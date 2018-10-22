@@ -173,9 +173,7 @@ Calendar_gregorian::init(const Era *_eraArray)
     eraArray=_eraArray;
 }
 
-Calendar_gregorian::~Calendar_gregorian()
-{
-}
+Calendar_gregorian::~Calendar_gregorian() = default;
 
 Calendar_hanja::Calendar_hanja()
 {

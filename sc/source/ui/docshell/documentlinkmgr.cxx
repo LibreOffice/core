@@ -65,9 +65,7 @@ struct DocumentLinkManagerImpl
 DocumentLinkManager::DocumentLinkManager( SfxObjectShell* pShell ) :
     mpImpl(new DocumentLinkManagerImpl(pShell)) {}
 
-DocumentLinkManager::~DocumentLinkManager()
-{
-}
+DocumentLinkManager::~DocumentLinkManager() = default;
 
 void DocumentLinkManager::setDataStream( DataStream* p )
 {

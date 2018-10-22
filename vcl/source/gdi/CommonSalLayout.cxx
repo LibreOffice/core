@@ -63,9 +63,7 @@ GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
 {
 }
 
-GenericSalLayout::~GenericSalLayout()
-{
-}
+GenericSalLayout::~GenericSalLayout() = default;
 
 void GenericSalLayout::ParseFeatures(const OUString& aName)
 {

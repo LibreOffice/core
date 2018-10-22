@@ -156,9 +156,7 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     }
 
 }
-XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
-{
-}
+XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext() = default;
 
 enum XMLFtnConfigToken
 {

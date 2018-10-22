@@ -121,10 +121,7 @@ OXUndoEnvironment::OXUndoEnvironment(OReportModel& _rModel)
     StartListening(m_pImpl->m_rModel);
 }
 
-
-OXUndoEnvironment::~OXUndoEnvironment()
-{
-}
+OXUndoEnvironment::~OXUndoEnvironment() = default;
 
 void OXUndoEnvironment::Lock()
 {

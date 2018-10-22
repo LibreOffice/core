@@ -68,9 +68,7 @@ ScDeleteCellDlg::ScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     }
 }
 
-ScDeleteCellDlg::~ScDeleteCellDlg()
-{
-}
+ScDeleteCellDlg::~ScDeleteCellDlg() = default;
 
 DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {

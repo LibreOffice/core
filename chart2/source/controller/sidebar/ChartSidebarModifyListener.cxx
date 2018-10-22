@@ -11,19 +11,14 @@
 
 namespace chart {
 namespace sidebar {
-
-ChartSidebarModifyListenerParent::~ChartSidebarModifyListenerParent()
-{
-}
+ChartSidebarModifyListenerParent::~ChartSidebarModifyListenerParent() = default;
 
 ChartSidebarModifyListener::ChartSidebarModifyListener(ChartSidebarModifyListenerParent* pParent):
     mpParent(pParent)
 {
 }
 
-ChartSidebarModifyListener::~ChartSidebarModifyListener()
-{
-}
+ChartSidebarModifyListener::~ChartSidebarModifyListener() = default;
 
 void ChartSidebarModifyListener::modified(const css::lang::EventObject& /*rEvent*/)
 {

@@ -40,9 +40,7 @@ BubbleDataInterpreter::BubbleDataInterpreter() :
 {
 }
 
-BubbleDataInterpreter::~BubbleDataInterpreter()
-{
-}
+BubbleDataInterpreter::~BubbleDataInterpreter() = default;
 
 // ____ XDataInterpreter ____
 chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(

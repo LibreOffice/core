@@ -63,9 +63,7 @@ namespace pcr
         m_xTypeConverter = Converter::create(_rxContext);
     }
 
-    PropertyHandler::~PropertyHandler()
-    {
-    }
+    PropertyHandler::~PropertyHandler() = default;
 
     void SAL_CALL PropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
     {

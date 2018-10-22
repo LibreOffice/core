@@ -41,9 +41,7 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
 {
 }
 
-InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
-{
-}
+InputSequenceCheckerImpl::~InputSequenceCheckerImpl() = default;
 
 sal_Bool SAL_CALL
 InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,

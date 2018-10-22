@@ -46,10 +46,7 @@ OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
 
 }
 
-OXMLDatabase::~OXMLDatabase()
-{
-
-}
+OXMLDatabase::~OXMLDatabase() = default;
 
 SvXMLImportContextRef OXMLDatabase::CreateChildContext(
         sal_uInt16 nPrefix,

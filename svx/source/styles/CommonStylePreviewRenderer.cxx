@@ -56,8 +56,7 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
 {
 }
 
-CommonStylePreviewRenderer::~CommonStylePreviewRenderer()
-{}
+CommonStylePreviewRenderer::~CommonStylePreviewRenderer() = default;
 
 bool CommonStylePreviewRenderer::recalculate()
 {

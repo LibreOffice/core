@@ -26,11 +26,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 namespace oox { namespace drawingml { namespace table {
-
-TableStylePart::TableStylePart()
-{
-}
-
+TableStylePart::TableStylePart() = default;
 } } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,9 +55,7 @@ namespace dbaccess
         m_pImpl->nCommandType = _eType == TypeQuery ? CommandType::QUERY : CommandType::TABLE;
     }
 
-    ObjectNameApproval::~ObjectNameApproval()
-    {
-    }
+    ObjectNameApproval::~ObjectNameApproval() = default;
 
     void ObjectNameApproval::approveElement( const OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
     {

@@ -36,9 +36,7 @@ SdrGlueEditView::SdrGlueEditView(
 {
 }
 
-SdrGlueEditView::~SdrGlueEditView()
-{
-}
+SdrGlueEditView::~SdrGlueEditView() = default;
 
 void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2, const void* p3, const void* p4)
 {

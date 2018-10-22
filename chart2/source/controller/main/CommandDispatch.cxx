@@ -59,8 +59,7 @@ CommandDispatch::CommandDispatch(
 {
 }
 
-CommandDispatch::~CommandDispatch()
-{}
+CommandDispatch::~CommandDispatch() = default;
 
 void CommandDispatch::initialize()
 {}

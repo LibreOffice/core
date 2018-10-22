@@ -21,9 +21,7 @@
 
 using namespace dbaui;
 //class OConnectionLineData
-OConnectionLineData::OConnectionLineData()
-{
-}
+OConnectionLineData::OConnectionLineData() = default;
 
 OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName )
     :m_aSourceFieldName( rSourceFieldName )
@@ -37,9 +35,7 @@ OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineDa
     *this = rConnLineData;
 }
 
-OConnectionLineData::~OConnectionLineData()
-{
-}
+OConnectionLineData::~OConnectionLineData() = default;
 
 void OConnectionLineData::CopyFrom(const OConnectionLineData& rSource)
 {

@@ -139,14 +139,7 @@ JobResult::JobResult( const JobResult& rCopy )
     m_aDispatchResult = rCopy.m_aDispatchResult;
 }
 
-/**
-    @short      standard dtor
-    @descr      Free all internally used resources at the end of living.
-*/
-JobResult::~JobResult()
-{
-    // Nothing really to do here.
-}
+JobResult::~JobResult() = default;
 
 /**
     @short      =operator

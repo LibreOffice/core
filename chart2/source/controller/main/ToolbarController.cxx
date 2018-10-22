@@ -39,9 +39,7 @@ ChartToolbarController::ChartToolbarController(const css::uno::Sequence<css::uno
     mxFramesSupplier = xFramesSupplier;
 }
 
-ChartToolbarController::~ChartToolbarController()
-{
-}
+ChartToolbarController::~ChartToolbarController() = default;
 
 void ChartToolbarController::execute(sal_Int16 /*nKeyModifier*/)
 {

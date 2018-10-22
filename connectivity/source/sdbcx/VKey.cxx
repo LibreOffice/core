@@ -88,9 +88,7 @@ OKey::OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps, b
 //  m_Name = _Name;
 //}
 
-OKey::~OKey( )
-{
-}
+OKey::~OKey() = default;
 
 Any SAL_CALL OKey::queryInterface( const Type & rType )
 {

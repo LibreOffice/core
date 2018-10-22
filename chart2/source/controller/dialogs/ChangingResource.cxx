@@ -21,18 +21,13 @@
 
 namespace chart
 {
-
-ResourceChangeListener::~ResourceChangeListener()
-{
-}
+ResourceChangeListener::~ResourceChangeListener() = default;
 
 ChangingResource::ChangingResource()
                 : m_pChangeListener(nullptr)
 {
 }
-ChangingResource::~ChangingResource()
-{
-}
+ChangingResource::~ChangingResource() = default;
 void ChangingResource::setChangeListener( ResourceChangeListener* pListener )
 {
     m_pChangeListener = pListener;

@@ -165,10 +165,7 @@ OFlowChainedText::OFlowChainedText(Outliner const *pOutl, bool bIsDeepMerge)
     mbIsDeepMerge = bIsDeepMerge;
 }
 
-OFlowChainedText::~OFlowChainedText()
-{
-}
-
+OFlowChainedText::~OFlowChainedText() = default;
 
 ESelection OFlowChainedText::GetOverflowPointSel() const
 {

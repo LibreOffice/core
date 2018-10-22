@@ -61,9 +61,7 @@ SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uI
     addStatusListener( ".uno:CurrentURL");
 }
 
-SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
-{
-}
+SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl() = default;
 
 SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 {

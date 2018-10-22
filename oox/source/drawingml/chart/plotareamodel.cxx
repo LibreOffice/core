@@ -30,17 +30,11 @@ View3DModel::View3DModel(bool bMSO2007Doc) :
 {
 }
 
-View3DModel::~View3DModel()
-{
-}
+View3DModel::~View3DModel() = default;
 
-WallFloorModel::WallFloorModel()
-{
-}
+WallFloorModel::WallFloorModel() = default;
 
-WallFloorModel::~WallFloorModel()
-{
-}
+WallFloorModel::~WallFloorModel() = default;
 
 DataTableModel::DataTableModel() :
         mbShowHBorder(false),
@@ -49,17 +43,11 @@ DataTableModel::DataTableModel() :
 {
 }
 
-DataTableModel::~DataTableModel()
-{
-}
+DataTableModel::~DataTableModel() = default;
 
-PlotAreaModel::PlotAreaModel()
-{
-}
+PlotAreaModel::PlotAreaModel() = default;
 
-PlotAreaModel::~PlotAreaModel()
-{
-}
+PlotAreaModel::~PlotAreaModel() = default;
 
 } // namespace chart
 } // namespace drawingml

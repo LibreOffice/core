@@ -42,15 +42,11 @@ ScIMapInfo::ScIMapInfo( const ImageMap& rImageMap ) :
 {
 }
 
-ScIMapInfo::ScIMapInfo( const ScIMapInfo& rIMapInfo ) :
-    SdrObjUserData( rIMapInfo ),
-    aImageMap( rIMapInfo.aImageMap )
-{
-}
+ScIMapInfo::ScIMapInfo(const ScIMapInfo& rIMapInfo)
 
-ScIMapInfo::~ScIMapInfo()
-{
-}
+    = default;
+
+ScIMapInfo::~ScIMapInfo() = default;
 
 std::unique_ptr<SdrObjUserData> ScIMapInfo::Clone( SdrObject* ) const
 {
@@ -62,9 +58,7 @@ ScMacroInfo::ScMacroInfo() :
 {
 }
 
-ScMacroInfo::~ScMacroInfo()
-{
-}
+ScMacroInfo::~ScMacroInfo() = default;
 
 std::unique_ptr<SdrObjUserData> ScMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 {

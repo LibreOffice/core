@@ -99,10 +99,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     }
 }
 
-OXMLColumn::~OXMLColumn()
-{
-
-}
+OXMLColumn::~OXMLColumn() = default;
 
 void OXMLColumn::EndElement()
 {

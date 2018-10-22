@@ -73,7 +73,7 @@ class NumberText_Impl : public ::cppu::WeakImplHelper<XNumberText, XServiceInfo>
 #endif
     bool m_bInitialized;
 
-    virtual ~NumberText_Impl() override {}
+    virtual ~NumberText_Impl() override = default;
     void EnsureInitialized();
 
 public:

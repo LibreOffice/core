@@ -29,9 +29,7 @@ UpDownBarsModel::UpDownBarsModel() :
 {
 }
 
-UpDownBarsModel::~UpDownBarsModel()
-{
-}
+UpDownBarsModel::~UpDownBarsModel() = default;
 
 TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mfSplitPos( 0.0 ),
@@ -60,9 +58,7 @@ TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
 {
 }
 
-TypeGroupModel::~TypeGroupModel()
-{
-}
+TypeGroupModel::~TypeGroupModel() = default;
 
 } // namespace chart
 } // namespace drawingml

@@ -84,9 +84,7 @@ ToolBarModule::ToolBarModule (
     }
 }
 
-ToolBarModule::~ToolBarModule()
-{
-}
+ToolBarModule::~ToolBarModule() = default;
 
 void SAL_CALL ToolBarModule::disposing()
 {

@@ -36,9 +36,7 @@ FastTokenHandler::FastTokenHandler() :
 {
 }
 
-FastTokenHandler::~FastTokenHandler()
-{
-}
+FastTokenHandler::~FastTokenHandler() = default;
 
 // XServiceInfo
 OUString SAL_CALL FastTokenHandler::getImplementationName()

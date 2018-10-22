@@ -36,16 +36,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DDecompositionVisitor::~Primitive2DDecompositionVisitor() {}
+    Primitive2DDecompositionVisitor::~Primitive2DDecompositionVisitor() = default;
 
-        BasePrimitive2D::BasePrimitive2D()
-        :   BasePrimitive2DImplBase(m_aMutex)
-        {
+    BasePrimitive2D::BasePrimitive2D()
+        : BasePrimitive2DImplBase(m_aMutex)
+    {
         }
 
-        BasePrimitive2D::~BasePrimitive2D()
-        {
-        }
+        BasePrimitive2D::~BasePrimitive2D() = default;
 
         bool BasePrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
         {
@@ -266,7 +264,7 @@ namespace drawinglayer
             return true;
         }
 
-        Primitive2DContainer::~Primitive2DContainer() {}
+        Primitive2DContainer::~Primitive2DContainer() = default;
 
         void Primitive2DContainer::append(const Primitive2DReference& rSource)
         {

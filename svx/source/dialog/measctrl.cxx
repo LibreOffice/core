@@ -70,9 +70,7 @@ void SvxXMeasurePreview::Resize()
     Invalidate();
 }
 
-SvxXMeasurePreview::~SvxXMeasurePreview()
-{
-}
+SvxXMeasurePreview::~SvxXMeasurePreview() = default;
 
 void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {

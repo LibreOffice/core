@@ -78,9 +78,7 @@ VDiagram::VDiagram(
     }
 }
 
-VDiagram::~VDiagram()
-{
-}
+VDiagram::~VDiagram() = default;
 
 void VDiagram::init(
     const uno::Reference< drawing::XShapes >& xTarget, const uno::Reference< lang::XMultiServiceFactory >& xFactory )

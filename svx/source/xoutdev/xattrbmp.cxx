@@ -51,9 +51,7 @@ XOBitmap::XOBitmap( const BitmapEx& rBmp ) :
 {
 }
 
-XOBitmap::~XOBitmap()
-{
-}
+XOBitmap::~XOBitmap() = default;
 
 BitmapEx XOBitmap::GetBitmap() const
 {
@@ -139,10 +137,8 @@ XFillBitmapItem::XFillBitmapItem(const OUString& rName, const GraphicObject& rGr
 }
 
 XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
-:   NameOrIndex(rItem),
-    maGraphicObject(rItem.maGraphicObject)
-{
-}
+
+    = default;
 
 XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
     : NameOrIndex(XATTR_FILLBITMAP, -1)

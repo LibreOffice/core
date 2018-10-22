@@ -35,11 +35,7 @@ namespace comphelper
 
     // OAccessibleKeyBindingHelper
 
-
-    OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper()
-    {
-    }
-
+    OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper() = default;
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
         : cppu::WeakImplHelper<XAccessibleKeyBinding>( rHelper )
@@ -47,11 +43,7 @@ namespace comphelper
     {
     }
 
-
-    OAccessibleKeyBindingHelper::~OAccessibleKeyBindingHelper()
-    {
-    }
-
+    OAccessibleKeyBindingHelper::~OAccessibleKeyBindingHelper() = default;
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const Sequence< awt::KeyStroke >& rKeyBinding )
     {

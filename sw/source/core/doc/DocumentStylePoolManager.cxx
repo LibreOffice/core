@@ -2517,10 +2517,7 @@ bool DocumentStylePoolManager::IsPoolPageDescUsed( sal_uInt16 nId ) const
     return !pNewPgDsc->GetInfo( aGetHt );
 }
 
-DocumentStylePoolManager::~DocumentStylePoolManager()
-{
-}
-
+DocumentStylePoolManager::~DocumentStylePoolManager() = default;
 }
 
 // Initialise UI names to 0

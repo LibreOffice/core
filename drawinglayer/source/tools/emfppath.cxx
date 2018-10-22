@@ -39,9 +39,7 @@ namespace emfplushelper
             pPointTypes.reset( new sal_uInt8 [_nPoints] );
     }
 
-    EMFPPath::~EMFPPath ()
-    {
-    }
+    EMFPPath::~EMFPPath() = default;
 
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {

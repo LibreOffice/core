@@ -117,9 +117,7 @@ LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpPara::~LwpPara()
-{
-}
+LwpPara::~LwpPara() = default;
 
 void LwpPara::Read()
 {

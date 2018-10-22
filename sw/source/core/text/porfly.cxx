@@ -286,8 +286,10 @@ sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, 
     return pNew;
 }
 
-sw::DrawFlyCntPortion::~DrawFlyCntPortion() {};
-sw::FlyContentPortion::~FlyContentPortion() {};
+sw::DrawFlyCntPortion::~DrawFlyCntPortion() = default;
+;
+sw::FlyContentPortion::~FlyContentPortion() = default;
+;
 
 SdrObject* sw::FlyContentPortion::GetSdrObj(const SwTextFrame&)
 {

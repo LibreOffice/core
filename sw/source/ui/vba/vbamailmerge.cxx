@@ -18,7 +18,7 @@ SwVbaMailMerge::SwVbaMailMerge(const css::uno::Reference<ooo::vba::XHelperInterf
 {
 }
 
-SwVbaMailMerge::~SwVbaMailMerge() {}
+SwVbaMailMerge::~SwVbaMailMerge() = default;
 
 rtl::Reference<SwVbaMailMerge> const&
 SwVbaMailMerge::get(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,

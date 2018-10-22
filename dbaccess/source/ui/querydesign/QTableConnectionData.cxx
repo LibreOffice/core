@@ -32,14 +32,9 @@ OQueryTableConnectionData::OQueryTableConnectionData()
 {
 }
 
-OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectionData& rConnData )
-    : OTableConnectionData( rConnData )
-    , m_nFromEntryIndex(rConnData.m_nFromEntryIndex)
-    , m_nDestEntryIndex(rConnData.m_nDestEntryIndex)
-    , m_eJoinType(rConnData.m_eJoinType)
-    , m_bNatural(rConnData.m_bNatural)
-{
-}
+OQueryTableConnectionData::OQueryTableConnectionData(const OQueryTableConnectionData& rConnData)
+
+    = default;
 
 OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::value_type& _pReferencingTable,
                                                      const TTableWindowData::value_type& _pReferencedTable)
@@ -51,9 +46,7 @@ OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::val
 {
 }
 
-OQueryTableConnectionData::~OQueryTableConnectionData()
-{
-}
+OQueryTableConnectionData::~OQueryTableConnectionData() = default;
 
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {

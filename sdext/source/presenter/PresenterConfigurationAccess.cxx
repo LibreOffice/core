@@ -73,9 +73,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     }
 }
 
-PresenterConfigurationAccess::~PresenterConfigurationAccess()
-{
-}
+PresenterConfigurationAccess::~PresenterConfigurationAccess() = default;
 
 bool PresenterConfigurationAccess::IsValid() const
 {

@@ -101,9 +101,7 @@ ScViewFunc::ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell
 {
 }
 
-ScViewFunc::~ScViewFunc()
-{
-}
+ScViewFunc::~ScViewFunc() = default;
 
 void ScViewFunc::StartFormatArea()
 {

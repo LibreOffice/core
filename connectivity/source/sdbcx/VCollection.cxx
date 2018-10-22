@@ -210,7 +210,7 @@ namespace
     };
 }
 
-IObjectCollection::~IObjectCollection() {}
+IObjectCollection::~IObjectCollection() = default;
 
 IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
 
@@ -237,9 +237,7 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent
     m_pElements->reFill(_rVector);
 }
 
-OCollection::~OCollection()
-{
-}
+OCollection::~OCollection() = default;
 
 Any SAL_CALL OCollection::queryInterface( const Type & rType )
 {

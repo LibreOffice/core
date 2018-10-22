@@ -87,9 +87,7 @@ SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) th
 {
 }
 
-SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
-{
-}
+SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw() = default;
 
 // util::XReplaceable
 uno::Reference< util::XReplaceDescriptor > SAL_CALL SdUnoSearchReplaceShape::createReplaceDescriptor()
@@ -668,9 +666,7 @@ SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor()
     mbWords = false;
 }
 
-SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw()
-{
-}
+SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw() = default;
 
 // XSearchDescriptor
 OUString SAL_CALL SdUnoSearchReplaceDescriptor::getSearchString()
@@ -766,9 +762,7 @@ SdUnoFindAllAccess::SdUnoFindAllAccess( uno::Sequence< uno::Reference< uno::XInt
 {
 }
 
-SdUnoFindAllAccess::~SdUnoFindAllAccess() throw()
-{
-}
+SdUnoFindAllAccess::~SdUnoFindAllAccess() throw() = default;
 
 // XElementAccess
 uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()

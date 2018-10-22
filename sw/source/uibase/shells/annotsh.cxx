@@ -156,9 +156,7 @@ SwAnnotationShell::SwAnnotationShell( SwView& r )
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Annotation));
 }
 
-SwAnnotationShell::~SwAnnotationShell()
-{
-}
+SwAnnotationShell::~SwAnnotationShell() = default;
 
 SfxUndoManager* SwAnnotationShell::GetUndoManager()
 {

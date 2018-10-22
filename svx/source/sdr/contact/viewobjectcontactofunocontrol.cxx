@@ -347,7 +347,7 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const = 0;
 
     protected:
-        ~IPageViewAccess() {}
+        ~IPageViewAccess() = default;
     };
 
     /** is a ->IPageViewAccess implementation based on a real ->SdrPageView instance
@@ -358,7 +358,7 @@ namespace sdr { namespace contact {
     public:
         explicit SdrPageViewAccess( const SdrPageView& _rPageView ) : m_rPageView( _rPageView ) { }
 
-        virtual ~SdrPageViewAccess() {}
+        virtual ~SdrPageViewAccess() = default;
 
         virtual bool    isDesignMode() const override;
         virtual Reference< XControlContainer >
@@ -400,7 +400,7 @@ namespace sdr { namespace contact {
         {
         }
 
-        virtual ~InvisibleControlViewAccess() {}
+        virtual ~InvisibleControlViewAccess() = default;
 
         virtual bool    isDesignMode() const override;
         virtual Reference< XControlContainer >
@@ -446,11 +446,9 @@ namespace sdr { namespace contact {
     class DummyPageViewAccess : public IPageViewAccess
     {
     public:
-        DummyPageViewAccess()
-        {
-        }
+        DummyPageViewAccess() = default;
 
-        virtual ~DummyPageViewAccess() {}
+        virtual ~DummyPageViewAccess() = default;
 
         virtual bool    isDesignMode() const override;
         virtual Reference< XControlContainer >
@@ -1748,11 +1746,7 @@ namespace sdr { namespace contact {
     {
     }
 
-
-    UnoControlPrintOrPreviewContact::~UnoControlPrintOrPreviewContact()
-    {
-    }
-
+    UnoControlPrintOrPreviewContact::~UnoControlPrintOrPreviewContact() = default;
 
     drawinglayer::primitive2d::Primitive2DContainer UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const
     {

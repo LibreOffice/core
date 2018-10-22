@@ -39,9 +39,7 @@ SlideRenderer::SlideRenderer ()
 {
 }
 
-SlideRenderer::~SlideRenderer()
-{
-}
+SlideRenderer::~SlideRenderer() = default;
 
 void SAL_CALL SlideRenderer::disposing()
 {

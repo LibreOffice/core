@@ -69,7 +69,7 @@ public:
     bool isSelected() const { osl::MutexGuard const guard( m_aMutex ); return m_bSelected; }
 
 private:
-    virtual ~PDFPasswordRequest() override {}
+    virtual ~PDFPasswordRequest() override = default;
 };
 
 PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) :
@@ -122,12 +122,12 @@ class UnsupportedEncryptionFormatRequest:
     public cppu::WeakImplHelper< task::XInteractionRequest >
 {
 public:
-    UnsupportedEncryptionFormatRequest() {}
+    UnsupportedEncryptionFormatRequest() = default;
     UnsupportedEncryptionFormatRequest(const UnsupportedEncryptionFormatRequest&) = delete;
     UnsupportedEncryptionFormatRequest& operator=(const UnsupportedEncryptionFormatRequest&) = delete;
 
 private:
-    virtual ~UnsupportedEncryptionFormatRequest() override {}
+    virtual ~UnsupportedEncryptionFormatRequest() override = default;
 
     virtual uno::Any SAL_CALL getRequest() override {
         return uno::makeAny(

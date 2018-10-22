@@ -100,9 +100,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     osl_atomic_decrement(&m_refCount);
 }
 
-OQuery::~OQuery()
-{
-}
+OQuery::~OQuery() = default;
 
 css::uno::Sequence<sal_Int8> OQuery::getImplementationId()
 {

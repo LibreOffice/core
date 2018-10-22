@@ -47,9 +47,7 @@ private:
     std::unique_ptr<SvXMLExport> pExport;
 };
 
-Test::Test()
-{
-}
+Test::Test() = default;
 
 void Test::setUp()
 {

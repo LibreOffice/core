@@ -144,9 +144,7 @@ namespace dbaccess
             m_aContext, getConfigurationRootPath() );
     }
 
-    DatabaseRegistrations::~DatabaseRegistrations()
-    {
-    }
+    DatabaseRegistrations::~DatabaseRegistrations() = default;
 
     ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_nothrow( const OUString& _rName )
     {

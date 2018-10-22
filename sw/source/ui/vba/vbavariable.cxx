@@ -31,9 +31,7 @@ SwVbaVariable::SwVbaVariable( const uno::Reference< ooo::vba::XHelperInterface >
 {
 }
 
-SwVbaVariable::~SwVbaVariable()
-{
-}
+SwVbaVariable::~SwVbaVariable() = default;
 
 OUString SAL_CALL
 SwVbaVariable::getName()

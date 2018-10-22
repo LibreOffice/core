@@ -106,9 +106,7 @@ ScFormulaParserPool::ScFormulaParserPool( const ScDocument& rDoc ) :
 {
 }
 
-ScFormulaParserPool::~ScFormulaParserPool()
-{
-}
+ScFormulaParserPool::~ScFormulaParserPool() = default;
 
 bool ScFormulaParserPool::hasFormulaParser( const OUString& rNamespace )
 {

@@ -35,9 +35,7 @@ Communicator::Communicator( std::unique_ptr<IBluetoothSocket> pSocket ):
 {
 }
 
-Communicator::~Communicator()
-{
-}
+Communicator::~Communicator() = default;
 
 /// Close the underlying socket from another thread to force
 /// an early exit / termination

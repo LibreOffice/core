@@ -118,9 +118,7 @@ void test::BootstrapFixture::setUp()
 #endif
 }
 
-test::BootstrapFixture::~BootstrapFixture()
-{
-}
+test::BootstrapFixture::~BootstrapFixture() = default;
 
 #if HAVE_EXPORT_VALIDATION
 namespace {

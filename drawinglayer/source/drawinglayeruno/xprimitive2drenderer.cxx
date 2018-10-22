@@ -102,81 +102,71 @@ namespace drawinglayer
 {
     namespace unorenderer
     {
-        XPrimitive2DRenderer::XPrimitive2DRenderer()
-        {
-        }
+    XPrimitive2DRenderer::XPrimitive2DRenderer() = default;
 
-        uno::Reference< rendering::XBitmap > XPrimitive2DRenderer::rasterize(
-            const uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& aPrimitive2DSequence,
-            const uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
-            ::sal_uInt32 DPI_X,
-            ::sal_uInt32 DPI_Y,
-            const css::geometry::RealRectangle2D& Range,
-            ::sal_uInt32 MaximumQuadraticPixels)
-        {
-            uno::Reference< rendering::XBitmap > XBitmap;
+    uno::Reference<rendering::XBitmap> XPrimitive2DRenderer::rasterize(
+        const uno::Sequence<uno::Reference<graphic::XPrimitive2D>>& aPrimitive2DSequence,
+        const uno::Sequence<beans::PropertyValue>& aViewInformationSequence, ::sal_uInt32 DPI_X,
+        ::sal_uInt32 DPI_Y, const css::geometry::RealRectangle2D& Range,
+        ::sal_uInt32 MaximumQuadraticPixels)
+    {
+        uno::Reference<rendering::XBitmap> XBitmap;
 
-            if(aPrimitive2DSequence.hasElements())
+        if (aPrimitive2DSequence.hasElements())
+        {
+            const basegfx::B2DRange aRange(Range.X1, Range.Y1, Range.X2, Range.Y2);
+            const double fWidth(aRange.getWidth());
+            const double fHeight(aRange.getHeight());
+
+            if (basegfx::fTools::more(fWidth, 0.0) && basegfx::fTools::more(fHeight, 0.0))
             {
-                const basegfx::B2DRange aRange(Range.X1, Range.Y1, Range.X2, Range.Y2);
-                const double fWidth(aRange.getWidth());
-                const double fHeight(aRange.getHeight());
-
-                if(basegfx::fTools::more(fWidth, 0.0) && basegfx::fTools::more(fHeight, 0.0))
+                if (0 == DPI_X)
                 {
-                    if(0 == DPI_X)
-                    {
-                        DPI_X = 75;
-                    }
+                    DPI_X = 75;
+                }
 
-                    if(0 == DPI_Y)
-                    {
-                        DPI_Y = 75;
-                    }
+                if (0 == DPI_Y)
+                {
+                    DPI_Y = 75;
+                }
 
-                    if(0 == MaximumQuadraticPixels)
-                    {
-                        MaximumQuadraticPixels = 500000;
-                    }
+                if (0 == MaximumQuadraticPixels)
+                {
+                    MaximumQuadraticPixels = 500000;
+                }
 
-                    const geometry::ViewInformation2D aViewInformation2D(aViewInformationSequence);
-                    const double fFactor100th_mmToInch(1.0 / (2.54 * 1000.0));
-                    const sal_uInt32 nDiscreteWidth(basegfx::fround((fWidth * fFactor100th_mmToInch) * DPI_X));
-                    const sal_uInt32 nDiscreteHeight(basegfx::fround((fHeight * fFactor100th_mmToInch) * DPI_Y));
+                const geometry::ViewInformation2D aViewInformation2D(aViewInformationSequence);
+                const double fFactor100th_mmToInch(1.0 / (2.54 * 1000.0));
+                const sal_uInt32 nDiscreteWidth(
+                    basegfx::fround((fWidth * fFactor100th_mmToInch) * DPI_X));
+                const sal_uInt32 nDiscreteHeight(
+                    basegfx::fround((fHeight * fFactor100th_mmToInch) * DPI_Y));
 
-                    basegfx::B2DHomMatrix aEmbedding(
-                        basegfx::utils::createTranslateB2DHomMatrix(
-                            -aRange.getMinX(),
-                            -aRange.getMinY()));
+                basegfx::B2DHomMatrix aEmbedding(basegfx::utils::createTranslateB2DHomMatrix(
+                    -aRange.getMinX(), -aRange.getMinY()));
 
-                    aEmbedding.scale(
-                        nDiscreteWidth / fWidth,
-                        nDiscreteHeight / fHeight);
+                aEmbedding.scale(nDiscreteWidth / fWidth, nDiscreteHeight / fHeight);
 
-                    const primitive2d::Primitive2DReference xEmbedRef(
-                        new primitive2d::TransformPrimitive2D(
-                            aEmbedding,
-                            comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(aPrimitive2DSequence)));
-                    const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+                const primitive2d::Primitive2DReference xEmbedRef(
+                    new primitive2d::TransformPrimitive2D(
+                        aEmbedding,
+                        comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(
+                            aPrimitive2DSequence)));
+                const primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
-                    BitmapEx aBitmapEx(
-                        convertToBitmapEx(
-                            xEmbedSeq,
-                            aViewInformation2D,
-                            nDiscreteWidth,
-                            nDiscreteHeight,
-                            MaximumQuadraticPixels));
+                BitmapEx aBitmapEx(convertToBitmapEx(xEmbedSeq, aViewInformation2D, nDiscreteWidth,
+                                                     nDiscreteHeight, MaximumQuadraticPixels));
 
-                    if(!aBitmapEx.IsEmpty())
-                    {
-                        aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                        aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
-                        XBitmap = vcl::unotools::xBitmapFromBitmapEx(aBitmapEx);
-                    }
+                if (!aBitmapEx.IsEmpty())
+                {
+                    aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                    aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
+                    XBitmap = vcl::unotools::xBitmapFromBitmapEx(aBitmapEx);
                 }
             }
+        }
 
-            return XBitmap;
+        return XBitmap;
         }
 
         OUString SAL_CALL XPrimitive2DRenderer::getImplementationName()

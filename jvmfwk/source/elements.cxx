@@ -939,9 +939,7 @@ MergedSettings::MergedSettings():
     merge(sharedSettings, settings);
 }
 
-MergedSettings::~MergedSettings()
-{
-}
+MergedSettings::~MergedSettings() = default;
 
 void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
 {

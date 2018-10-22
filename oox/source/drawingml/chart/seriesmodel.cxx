@@ -29,9 +29,7 @@ DataLabelModelBase::DataLabelModelBase(bool bMSO2007Doc) :
 {
 }
 
-DataLabelModelBase::~DataLabelModelBase()
-{
-}
+DataLabelModelBase::~DataLabelModelBase() = default;
 
 DataLabelModel::DataLabelModel(bool bMSO2007Doc) :
     DataLabelModelBase(bMSO2007Doc),
@@ -39,9 +37,7 @@ DataLabelModel::DataLabelModel(bool bMSO2007Doc) :
 {
 }
 
-DataLabelModel::~DataLabelModel()
-{
-}
+DataLabelModel::~DataLabelModel() = default;
 
 DataLabelsModel::DataLabelsModel(bool bMSO2007Doc) :
     DataLabelModelBase(bMSO2007Doc),
@@ -49,9 +45,7 @@ DataLabelsModel::DataLabelsModel(bool bMSO2007Doc) :
 {
 }
 
-DataLabelsModel::~DataLabelsModel()
-{
-}
+DataLabelsModel::~DataLabelsModel() = default;
 
 PictureOptionsModel::PictureOptionsModel(bool bMSO2007Doc) :
     mfStackUnit( 1.0 ),
@@ -62,9 +56,7 @@ PictureOptionsModel::PictureOptionsModel(bool bMSO2007Doc) :
 {
 }
 
-PictureOptionsModel::~PictureOptionsModel()
-{
-}
+PictureOptionsModel::~PictureOptionsModel() = default;
 
 ErrorBarModel::ErrorBarModel(bool bMSO2007Doc) :
     mfValue( 0.0 ),
@@ -75,17 +67,11 @@ ErrorBarModel::ErrorBarModel(bool bMSO2007Doc) :
 {
 }
 
-ErrorBarModel::~ErrorBarModel()
-{
-}
+ErrorBarModel::~ErrorBarModel() = default;
 
-TrendlineLabelModel::TrendlineLabelModel()
-{
-}
+TrendlineLabelModel::TrendlineLabelModel() = default;
 
-TrendlineLabelModel::~TrendlineLabelModel()
-{
-}
+TrendlineLabelModel::~TrendlineLabelModel() = default;
 
 TrendlineModel::TrendlineModel(bool bMSO2007Doc) :
     mnOrder( 2 ),
@@ -96,9 +82,7 @@ TrendlineModel::TrendlineModel(bool bMSO2007Doc) :
 {
 }
 
-TrendlineModel::~TrendlineModel()
-{
-}
+TrendlineModel::~TrendlineModel() = default;
 
 DataPointModel::DataPointModel(bool bMSO2007Doc) :
     mnIndex( -1 ),
@@ -106,9 +90,7 @@ DataPointModel::DataPointModel(bool bMSO2007Doc) :
 {
 }
 
-DataPointModel::~DataPointModel()
-{
-}
+DataPointModel::~DataPointModel() = default;
 
 SeriesModel::SeriesModel(bool bMSO2007Doc) :
     mnExplosion( 0 ),
@@ -122,9 +104,7 @@ SeriesModel::SeriesModel(bool bMSO2007Doc) :
 {
 }
 
-SeriesModel::~SeriesModel()
-{
-}
+SeriesModel::~SeriesModel() = default;
 
 } // namespace chart
 } // namespace drawingml

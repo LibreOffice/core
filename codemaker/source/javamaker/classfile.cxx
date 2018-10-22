@@ -108,7 +108,7 @@ void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
 
 }
 
-ClassFile::Code::~Code() {}
+ClassFile::Code::~Code() = default;
 
 void ClassFile::Code::instrAastore() {
     // aastore:
@@ -477,7 +477,7 @@ ClassFile::ClassFile(
     }
 }
 
-ClassFile::~ClassFile() {}
+ClassFile::~ClassFile() = default;
 
 ClassFile::Code * ClassFile::newCode() {
     return new Code(*this);

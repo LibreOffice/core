@@ -53,10 +53,8 @@ namespace accessibility
     {
     }
 
-    AccessibleParaManager::~AccessibleParaManager()
-    {
+    AccessibleParaManager::~AccessibleParaManager() = default;
         // owner is responsible for possible child death
-    }
 
     void AccessibleParaManager::SetAdditionalChildStates( const VectorOfStates& rChildStates )
     {
@@ -270,7 +268,7 @@ namespace accessibility
     class AccessibleParaManager_DisposeChildren
     {
     public:
-        AccessibleParaManager_DisposeChildren() {}
+        AccessibleParaManager_DisposeChildren() = default;
         void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
         {
             rPara.Dispose();

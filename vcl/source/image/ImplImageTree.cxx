@@ -188,13 +188,9 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
 
 } // end anonymous namespace
 
-ImplImageTree::ImplImageTree()
-{
-}
+ImplImageTree::ImplImageTree() = default;
 
-ImplImageTree::~ImplImageTree()
-{
-}
+ImplImageTree::~ImplImageTree() = default;
 
 std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag const & rLanguageTag)
 {

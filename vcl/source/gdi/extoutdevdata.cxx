@@ -21,11 +21,7 @@
 
 namespace vcl
 {
-
-ExtOutDevData::~ExtOutDevData()
-{
-}
-
+ExtOutDevData::~ExtOutDevData() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

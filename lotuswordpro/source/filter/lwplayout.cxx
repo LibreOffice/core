@@ -543,9 +543,7 @@ LwpLayoutStyle::LwpLayoutStyle()
 {
 }
 
-LwpLayoutStyle::~LwpLayoutStyle()
-{
-}
+LwpLayoutStyle::~LwpLayoutStyle() = default;
 
 void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
 {
@@ -563,9 +561,7 @@ m_nGridDistance(0), m_nGridType(0)
 {
 }
 
-LwpLayoutMisc::~LwpLayoutMisc()
-{
-}
+LwpLayoutMisc::~LwpLayoutMisc() = default;
 
 void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
 {
@@ -582,9 +578,7 @@ LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader const &objHdr, LwpSvStream* pS
 {
 }
 
-LwpMiddleLayout::~LwpMiddleLayout()
-{
-}
+LwpMiddleLayout::~LwpMiddleLayout() = default;
 
 void LwpMiddleLayout::Read()
 {
@@ -1481,9 +1475,7 @@ LwpLayout::LwpLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpLayout::~LwpLayout()
-{
-}
+LwpLayout::~LwpLayout() = default;
 
 void LwpLayout::Read()
 {
@@ -1943,8 +1935,7 @@ LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader const &objHdr, LwpSvStream
     , m_nBaseLineOffset(0)
 {}
 
-LwpPlacableLayout::~LwpPlacableLayout()
-{}
+LwpPlacableLayout::~LwpPlacableLayout() = default;
 
 void LwpPlacableLayout::Read()
 {

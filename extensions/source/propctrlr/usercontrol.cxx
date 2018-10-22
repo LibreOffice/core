@@ -176,11 +176,7 @@ namespace pcr
         getTypedControlWindow()->TreatAsNumber(true);
     }
 
-
-    OFormattedNumericControl::~OFormattedNumericControl()
-    {
-    }
-
+    OFormattedNumericControl::~OFormattedNumericControl() = default;
 
     void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue )
     {
@@ -248,11 +244,7 @@ namespace pcr
         getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ;
     }
 
-
-    OFileUrlControl::~OFileUrlControl()
-    {
-    }
-
+    OFileUrlControl::~OFileUrlControl() = default;
 
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue )
     {
@@ -295,11 +287,7 @@ namespace pcr
         getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
     }
 
-
-    OTimeDurationControl::~OTimeDurationControl()
-    {
-    }
-
+    OTimeDurationControl::~OTimeDurationControl() = default;
 
     ::sal_Int16 SAL_CALL OTimeDurationControl::getControlType()
     {

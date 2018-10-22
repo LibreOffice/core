@@ -592,16 +592,10 @@ IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Button&, rBox, void)
     }
 }
 
-ScTpSubTotalGroup1::~ScTpSubTotalGroup1()
-{
-}
+ScTpSubTotalGroup1::~ScTpSubTotalGroup1() = default;
 
-ScTpSubTotalGroup2::~ScTpSubTotalGroup2()
-{
-}
+ScTpSubTotalGroup2::~ScTpSubTotalGroup2() = default;
 
-ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
-{
-}
+ScTpSubTotalGroup3::~ScTpSubTotalGroup3() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

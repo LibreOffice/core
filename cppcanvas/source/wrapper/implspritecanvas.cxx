@@ -64,9 +64,7 @@ namespace cppcanvas
             mpTransformArbiter->setTransformation( getTransformation() );
         }
 
-        ImplSpriteCanvas::~ImplSpriteCanvas()
-        {
-        }
+        ImplSpriteCanvas::~ImplSpriteCanvas() = default;
 
         void ImplSpriteCanvas::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
         {

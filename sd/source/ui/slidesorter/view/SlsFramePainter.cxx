@@ -49,9 +49,7 @@ FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     }
 }
 
-FramePainter::~FramePainter()
-{
-}
+FramePainter::~FramePainter() = default;
 
 void FramePainter::PaintFrame (
     OutputDevice& rDevice,

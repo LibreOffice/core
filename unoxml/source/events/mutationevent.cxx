@@ -31,9 +31,7 @@ namespace DOM { namespace events
     {
     }
 
-    CMutationEvent::~CMutationEvent()
-    {
-    }
+    CMutationEvent::~CMutationEvent() = default;
 
     Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode()
     {

@@ -92,9 +92,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
     mpParserState->incContextCount();
 }
 
-OOXMLFastContextHandler::~OOXMLFastContextHandler()
-{
-}
+OOXMLFastContextHandler::~OOXMLFastContextHandler() = default;
 
 bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Reference<xml::sax::XFastAttributeList>& rAttribs)
 {
@@ -899,9 +897,7 @@ OOXMLFastContextHandlerStream::OOXMLFastContextHandlerStream
 {
 }
 
-OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream()
-{
-}
+OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream() = default;
 
 void OOXMLFastContextHandlerStream::newProperty(Id nId,
                                                 const OOXMLValue::Pointer_t& pVal)
@@ -964,9 +960,7 @@ OOXMLFastContextHandlerProperties::OOXMLFastContextHandlerProperties
         mbResolve = true;
 }
 
-OOXMLFastContextHandlerProperties::~OOXMLFastContextHandlerProperties()
-{
-}
+OOXMLFastContextHandlerProperties::~OOXMLFastContextHandlerProperties() = default;
 
 void OOXMLFastContextHandlerProperties::lcl_endFastElement
 (Token_t /*Element*/)
@@ -1130,9 +1124,7 @@ OOXMLFastContextHandlerPropertyTable::OOXMLFastContextHandlerPropertyTable
 {
 }
 
-OOXMLFastContextHandlerPropertyTable::~OOXMLFastContextHandlerPropertyTable()
-{
-}
+OOXMLFastContextHandlerPropertyTable::~OOXMLFastContextHandlerPropertyTable() = default;
 
 void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
 (Token_t /*Element*/)
@@ -1160,9 +1152,7 @@ OOXMLFastContextHandlerValue::OOXMLFastContextHandlerValue
 {
 }
 
-OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue()
-{
-}
+OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue() = default;
 
 void OOXMLFastContextHandlerValue::setValue(const OOXMLValue::Pointer_t& pValue)
 {
@@ -1241,9 +1231,7 @@ OOXMLFastContextHandlerTable::OOXMLFastContextHandlerTable
 {
 }
 
-OOXMLFastContextHandlerTable::~OOXMLFastContextHandlerTable()
-{
-}
+OOXMLFastContextHandlerTable::~OOXMLFastContextHandlerTable() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandlerTable::createFastChildContext
@@ -1297,9 +1285,7 @@ OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
 {
 }
 
-OOXMLFastContextHandlerXNote::~OOXMLFastContextHandlerXNote()
-{
-}
+OOXMLFastContextHandlerXNote::~OOXMLFastContextHandlerXNote() = default;
 
 void OOXMLFastContextHandlerXNote::lcl_startFastElement
 (Token_t /*Element*/,
@@ -1346,9 +1332,7 @@ OOXMLFastContextHandlerTextTableCell::OOXMLFastContextHandlerTextTableCell
 {
 }
 
-OOXMLFastContextHandlerTextTableCell::~OOXMLFastContextHandlerTextTableCell()
-{
-}
+OOXMLFastContextHandlerTextTableCell::~OOXMLFastContextHandlerTextTableCell() = default;
 
 void OOXMLFastContextHandlerTextTableCell::startCell()
 {
@@ -1400,9 +1384,7 @@ OOXMLFastContextHandlerTextTableRow::OOXMLFastContextHandlerTextTableRow
 {
 }
 
-OOXMLFastContextHandlerTextTableRow::~OOXMLFastContextHandlerTextTableRow()
-{
-}
+OOXMLFastContextHandlerTextTableRow::~OOXMLFastContextHandlerTextTableRow() = default;
 
 void OOXMLFastContextHandlerTextTableRow::startRow()
 {
@@ -1800,9 +1782,7 @@ OOXMLFastContextHandlerWrapper::OOXMLFastContextHandlerWrapper
     setPropertySet(pParent->getPropertySet());
 }
 
-OOXMLFastContextHandlerWrapper::~OOXMLFastContextHandlerWrapper()
-{
-}
+OOXMLFastContextHandlerWrapper::~OOXMLFastContextHandlerWrapper() = default;
 
 void SAL_CALL OOXMLFastContextHandlerWrapper::startUnknownElement
 (const OUString & Namespace,

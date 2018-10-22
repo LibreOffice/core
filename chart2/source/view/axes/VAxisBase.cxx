@@ -51,9 +51,7 @@ VAxisBase::VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
 {
 }
 
-VAxisBase::~VAxisBase()
-{
-}
+VAxisBase::~VAxisBase() = default;
 
 void VAxisBase::initAxisLabelProperties( const css::awt::Size& rFontReferenceSize
                   , const css::awt::Rectangle& rMaximumSpaceForLabels )

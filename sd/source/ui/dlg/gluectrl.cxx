@@ -62,9 +62,7 @@ GlueEscDirLB::GlueEscDirLB( vcl::Window* pParent, const Reference< XFrame >& rFr
     Show();
 }
 
-GlueEscDirLB::~GlueEscDirLB()
-{
-}
+GlueEscDirLB::~GlueEscDirLB() = default;
 
 /**
  * Determines the escape direction and sends the corresponding slot

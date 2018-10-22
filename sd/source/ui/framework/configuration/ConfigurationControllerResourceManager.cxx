@@ -43,9 +43,7 @@ ConfigurationControllerResourceManager::ConfigurationControllerResourceManager (
 {
 }
 
-ConfigurationControllerResourceManager::~ConfigurationControllerResourceManager()
-{
-}
+ConfigurationControllerResourceManager::~ConfigurationControllerResourceManager() = default;
 
 ConfigurationControllerResourceManager::ResourceDescriptor
     ConfigurationControllerResourceManager::GetResource (

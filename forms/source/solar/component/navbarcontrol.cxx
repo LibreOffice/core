@@ -61,11 +61,7 @@ namespace frm
     {
     }
 
-
-    ONavigationBarControl::~ONavigationBarControl()
-    {
-    }
-
+    ONavigationBarControl::~ONavigationBarControl() = default;
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarControl, UnoControl, ONavigationBarControl_Base )
 
@@ -237,11 +233,7 @@ namespace frm
     {
     }
 
-
-    ONavigationBarPeer::~ONavigationBarPeer()
-    {
-    }
-
+    ONavigationBarPeer::~ONavigationBarPeer() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 

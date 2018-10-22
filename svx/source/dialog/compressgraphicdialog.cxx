@@ -65,9 +65,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic c
     Initialize();
 }
 
-CompressGraphicsDialog::~CompressGraphicsDialog()
-{
-}
+CompressGraphicsDialog::~CompressGraphicsDialog() = default;
 
 void CompressGraphicsDialog::Initialize()
 {

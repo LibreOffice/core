@@ -275,29 +275,22 @@ namespace drawinglayer
         }
 
         SdrTextAttribute::SdrTextAttribute(const SdrTextAttribute& rCandidate)
-        :   mpSdrTextAttribute(rCandidate.mpSdrTextAttribute)
-        {
-        }
+
+            = default;
 
         SdrTextAttribute::SdrTextAttribute(SdrTextAttribute&& rCandidate)
         :   mpSdrTextAttribute(std::move(rCandidate.mpSdrTextAttribute))
         {
         }
 
-        SdrTextAttribute::~SdrTextAttribute()
-        {
-        }
+        SdrTextAttribute::~SdrTextAttribute() = default;
 
         bool SdrTextAttribute::isDefault() const
         {
             return mpSdrTextAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrTextAttribute& SdrTextAttribute::operator=(const SdrTextAttribute& rCandidate)
-        {
-            mpSdrTextAttribute = rCandidate.mpSdrTextAttribute;
-            return *this;
-        }
+        SdrTextAttribute& SdrTextAttribute::operator=(const SdrTextAttribute& rCandidate) = default;
 
         SdrTextAttribute& SdrTextAttribute::operator=(SdrTextAttribute&& rCandidate)
         {

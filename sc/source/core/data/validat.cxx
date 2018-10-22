@@ -88,21 +88,8 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
 {
 }
 
-ScValidationData::ScValidationData( const ScValidationData& r )
-    : ScConditionEntry( r )
-    , nKey( r.nKey )
-    , eDataMode( r.eDataMode )
-    , bShowInput( r.bShowInput )
-    , bShowError( r.bShowError )
-    , eErrorStyle( r.eErrorStyle )
-    , mnListType( r.mnListType )
-    , aInputTitle( r.aInputTitle )
-    , aInputMessage( r.aInputMessage )
-    , aErrorTitle( r.aErrorTitle )
-    , aErrorMessage( r.aErrorMessage )
-{
+ScValidationData::ScValidationData( const ScValidationData& r ) = default;
     //  Formulae copied by RefCount
-}
 
 ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationData& r )
     : ScConditionEntry( pDocument, r )
@@ -120,9 +107,7 @@ ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationDat
     //  Formulae really copied
 }
 
-ScValidationData::~ScValidationData()
-{
-}
+ScValidationData::~ScValidationData() = default;
 
 bool ScValidationData::IsEmpty() const
 {

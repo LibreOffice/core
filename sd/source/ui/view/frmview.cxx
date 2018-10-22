@@ -250,9 +250,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
 
 }
 
-FrameView::~FrameView()
-{
-}
+FrameView::~FrameView() = default;
 
 void FrameView::Connect()
 {

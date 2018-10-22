@@ -960,7 +960,7 @@ public:
 
 };
 
-VBAToOOEventDescGen::VBAToOOEventDescGen() {}
+VBAToOOEventDescGen::VBAToOOEventDescGen() = default;
 
 Sequence< ScriptEventDescriptor > SAL_CALL
 VBAToOOEventDescGen::getEventDescriptions( const OUString& sCntrlServiceName, const OUString& sCodeName )

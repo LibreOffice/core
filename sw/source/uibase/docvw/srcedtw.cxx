@@ -215,7 +215,7 @@ public:
     explicit ChangesListener(SwSrcEditWindow & editor): editor_(editor) {}
 
 private:
-    virtual ~ChangesListener() override {}
+    virtual ~ChangesListener() override = default;
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &) override
     {

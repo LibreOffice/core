@@ -60,9 +60,7 @@ BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
 
 }
 
-BasicCodeTagger::~BasicCodeTagger()
-{
-}
+BasicCodeTagger::~BasicCodeTagger() = default;
 //!Gathers all the <bascode> tag nodes from xml tree.
 /*!
  *    Assumes m_pDocument is valid. Handles m_pXmlTreeWalker and m_BasicCodeContainerTags members.

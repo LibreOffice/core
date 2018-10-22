@@ -30,9 +30,7 @@ CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCat
 {
 }
 
-CategoryPositionHelper::~CategoryPositionHelper()
-{
-}
+CategoryPositionHelper::~CategoryPositionHelper() = default;
 
 double CategoryPositionHelper::getScaledSlotWidth() const
 {

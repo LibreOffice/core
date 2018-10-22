@@ -97,9 +97,7 @@ ScUserListData::ScUserListData(const ScUserListData& rData) :
     InitTokens();
 }
 
-ScUserListData::~ScUserListData()
-{
-}
+ScUserListData::~ScUserListData() = default;
 
 void ScUserListData::SetString( const OUString& rStr )
 {

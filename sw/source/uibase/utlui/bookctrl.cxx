@@ -68,9 +68,7 @@ SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
 {
 }
 
-SwBookmarkControl::~SwBookmarkControl()
-{
-}
+SwBookmarkControl::~SwBookmarkControl() = default;
 
 void SwBookmarkControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )

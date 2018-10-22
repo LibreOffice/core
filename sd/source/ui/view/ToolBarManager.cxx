@@ -360,9 +360,7 @@ ToolBarManager::ToolBarManager()
 {
 }
 
-ToolBarManager::~ToolBarManager()
-{
-}
+ToolBarManager::~ToolBarManager() = default;
 
 void ToolBarManager::Shutdown()
 {

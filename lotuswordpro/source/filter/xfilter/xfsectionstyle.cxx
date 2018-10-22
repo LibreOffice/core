@@ -67,9 +67,7 @@ XFSectionStyle::XFSectionStyle()
     m_pColumns = nullptr;
 }
 
-XFSectionStyle::~XFSectionStyle()
-{
-}
+XFSectionStyle::~XFSectionStyle() = default;
 
 enumXFStyle XFSectionStyle::GetStyleFamily()
 {

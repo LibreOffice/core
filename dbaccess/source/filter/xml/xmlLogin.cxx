@@ -115,10 +115,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
     }
 }
 
-OXMLLogin::~OXMLLogin()
-{
-
-}
+OXMLLogin::~OXMLLogin() = default;
 
 } // namespace dbaxml
 

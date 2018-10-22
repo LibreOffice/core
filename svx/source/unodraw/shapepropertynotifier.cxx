@@ -59,9 +59,7 @@ namespace svx
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;
 
-    IPropertyValueProvider::~IPropertyValueProvider()
-    {
-    }
+    IPropertyValueProvider::~IPropertyValueProvider() = default;
 
     struct PropertyChangeNotifier_Data
     {
@@ -96,9 +94,7 @@ namespace svx
     {
     }
 
-    PropertyChangeNotifier::~PropertyChangeNotifier()
-    {
-    }
+    PropertyChangeNotifier::~PropertyChangeNotifier() = default;
 
     void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, const std::shared_ptr<IPropertyValueProvider>& _rProvider)
     {

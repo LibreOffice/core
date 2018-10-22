@@ -58,9 +58,7 @@ Timer::Timer( const Timer& rTimer )
     mnTimeout = rTimer.mnTimeout;
 }
 
-Timer::~Timer()
-{
-}
+Timer::~Timer() = default;
 
 Timer& Timer::operator=( const Timer& rTimer )
 {

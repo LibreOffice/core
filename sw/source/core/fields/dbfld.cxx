@@ -69,9 +69,7 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, const SwDBDat
     }
 }
 
-SwDBFieldType::~SwDBFieldType()
-{
-}
+SwDBFieldType::~SwDBFieldType() = default;
 
 SwFieldType* SwDBFieldType::Copy() const
 {

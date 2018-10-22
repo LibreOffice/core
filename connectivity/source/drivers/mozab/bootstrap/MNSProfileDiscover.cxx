@@ -26,15 +26,12 @@ namespace connectivity
 {
     namespace mozab
     {
-        ProfileStruct::ProfileStruct()
-        {
-        }
+    ProfileStruct::ProfileStruct() = default;
 
-        ProfileStruct::ProfileStruct(const OUString& aProfileName,
-                                     const OUString& aProfilePath)
-            : profileName(aProfileName)
-            , profilePath(aProfilePath)
-        {
+    ProfileStruct::ProfileStruct(const OUString& aProfileName, const OUString& aProfilePath)
+        : profileName(aProfileName)
+        , profilePath(aProfilePath)
+    {
         }
 
         const OUString& ProfileStruct::getProfilePath() const
@@ -42,9 +39,7 @@ namespace connectivity
             return profilePath;
         }
 
-        ProfileAccess::~ProfileAccess()
-        {
-        }
+        ProfileAccess::~ProfileAccess() = default;
 
         ProfileAccess::ProfileAccess()
         {

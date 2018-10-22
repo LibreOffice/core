@@ -42,9 +42,7 @@ ByteGrabber::ByteGrabber(uno::Reference  < io::XInputStream > const & xIstream)
     pSequence = aSequence.getArray();
 }
 
-ByteGrabber::~ByteGrabber()
-{
-}
+ByteGrabber::~ByteGrabber() = default;
 
 void ByteGrabber::setInputStream (const uno::Reference < io::XInputStream >& xNewStream)
 {

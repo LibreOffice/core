@@ -250,9 +250,7 @@ namespace svgio
         {
         }
 
-        SvgTextPathNode::~SvgTextPathNode()
-        {
-        }
+        SvgTextPathNode::~SvgTextPathNode() = default;
 
         const SvgStyleAttributes* SvgTextPathNode::getSvgStyleAttributes() const
         {

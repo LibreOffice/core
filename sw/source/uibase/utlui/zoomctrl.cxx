@@ -36,9 +36,7 @@ SwZoomControl::SwZoomControl( sal_uInt16 _nSlotId,
 {
 }
 
-SwZoomControl::~SwZoomControl()
-{
-}
+SwZoomControl::~SwZoomControl() = default;
 
 void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )

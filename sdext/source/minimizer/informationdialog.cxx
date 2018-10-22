@@ -323,11 +323,7 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxCo
     InitDialog();
 }
 
-
-InformationDialog::~InformationDialog()
-{
-}
-
+InformationDialog::~InformationDialog() = default;
 
 void InformationDialog::execute()
 {

@@ -45,9 +45,7 @@ XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
 {
 }
 
-XMLLineNumberingSeparatorImportContext::~XMLLineNumberingSeparatorImportContext()
-{
-}
+XMLLineNumberingSeparatorImportContext::~XMLLineNumberingSeparatorImportContext() = default;
 
 void XMLLineNumberingSeparatorImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

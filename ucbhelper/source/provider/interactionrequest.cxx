@@ -48,7 +48,7 @@ struct InteractionRequest_Impl
         css::uno::Reference<
             css::task::XInteractionContinuation > > m_aContinuations;
 
-    InteractionRequest_Impl() {}
+    InteractionRequest_Impl() = default;
     explicit InteractionRequest_Impl( const uno::Any & rRequest )
     : m_aRequest( rRequest ) {}
 };
@@ -69,10 +69,7 @@ InteractionRequest::InteractionRequest( const uno::Any & rRequest )
 
 
 // virtual
-InteractionRequest::~InteractionRequest()
-{
-}
-
+InteractionRequest::~InteractionRequest() = default;
 
 void InteractionRequest::setRequest( const uno::Any & rRequest )
 {
@@ -183,10 +180,7 @@ InteractionContinuation::InteractionContinuation(
 
 
 // virtual
-InteractionContinuation::~InteractionContinuation()
-{
-}
-
+InteractionContinuation::~InteractionContinuation() = default;
 
 void InteractionContinuation::recordSelection()
 {

@@ -28,17 +28,11 @@ DataSequenceModel::DataSequenceModel() :
 {
 }
 
-DataSequenceModel::~DataSequenceModel()
-{
-}
+DataSequenceModel::~DataSequenceModel() = default;
 
-DataSourceModel::DataSourceModel()
-{
-}
+DataSourceModel::DataSourceModel() = default;
 
-DataSourceModel::~DataSourceModel()
-{
-}
+DataSourceModel::~DataSourceModel() = default;
 
 } // namespace chart
 } // namespace drawingml

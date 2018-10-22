@@ -45,10 +45,7 @@ DocumentContentFactory::DocumentContentFactory(
 
 
 // virtual
-DocumentContentFactory::~DocumentContentFactory()
-{
-}
-
+DocumentContentFactory::~DocumentContentFactory() = default;
 
 // XServiceInfo methods.
 

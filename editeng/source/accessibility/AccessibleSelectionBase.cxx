@@ -28,21 +28,14 @@ namespace accessibility
 
     // - AccessibleSelectionBase -
 
+AccessibleSelectionBase::AccessibleSelectionBase() = default;
 
-    AccessibleSelectionBase::AccessibleSelectionBase()
-    {
-    }
+AccessibleSelectionBase::~AccessibleSelectionBase() = default;
 
-
-    AccessibleSelectionBase::~AccessibleSelectionBase()
-    {
-    }
-
-
-    void SAL_CALL AccessibleSelectionBase::selectAccessibleChild( sal_Int32 nChildIndex )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
+void SAL_CALL AccessibleSelectionBase::selectAccessibleChild(sal_Int32 nChildIndex)
+{
+    ::osl::MutexGuard aGuard(implGetMutex());
+    OCommonAccessibleSelection::selectAccessibleChild(nChildIndex);
     }
 
 

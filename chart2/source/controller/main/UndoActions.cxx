@@ -51,9 +51,7 @@ UndoElement::UndoElement( const OUString& i_actionString, const Reference< XMode
 {
 }
 
-UndoElement::~UndoElement()
-{
-}
+UndoElement::~UndoElement() = default;
 
 void SAL_CALL UndoElement::disposing()
 {
@@ -97,9 +95,7 @@ ShapeUndoElement::ShapeUndoElement( SdrUndoAction& i_sdrUndoAction )
 {
 }
 
-ShapeUndoElement::~ShapeUndoElement()
-{
-}
+ShapeUndoElement::~ShapeUndoElement() = default;
 
 OUString SAL_CALL ShapeUndoElement::getTitle()
 {

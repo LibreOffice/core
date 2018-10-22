@@ -65,10 +65,7 @@ LwpHyperlinkMgr::LwpHyperlinkMgr()
     m_bIsHyperlink = false;
 }
 
-LwpHyperlinkMgr::~LwpHyperlinkMgr()
-{
-}
-
+LwpHyperlinkMgr::~LwpHyperlinkMgr() = default;
 
 void LwpHyperlinkMgr::SetHyperlink(const OUString& hyperlink)
 {

@@ -22,10 +22,7 @@
 #include <database.hxx>
 #include <osl/file.hxx>
 
-
-SvMetaModule::SvMetaModule()
-{
-}
+SvMetaModule::SvMetaModule() = default;
 
 void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {

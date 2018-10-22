@@ -44,9 +44,7 @@ ExcelChartConverter::ExcelChartConverter( const WorkbookHelper& rHelper ) :
 {
 }
 
-ExcelChartConverter::~ExcelChartConverter()
-{
-}
+ExcelChartConverter::~ExcelChartConverter() = default;
 
 void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >& rxChartDoc )
 {

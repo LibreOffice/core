@@ -410,9 +410,7 @@ SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
     nMask=n;
 }
 
-SfxStyleSheetIterator::~SfxStyleSheetIterator()
-{
-}
+SfxStyleSheetIterator::~SfxStyleSheetIterator() = default;
 
 sal_uInt16 SfxStyleSheetIterator::Count()
 {

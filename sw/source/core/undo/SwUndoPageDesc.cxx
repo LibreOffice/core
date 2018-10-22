@@ -120,9 +120,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     }
 }
 
-SwUndoPageDesc::~SwUndoPageDesc()
-{
-}
+SwUndoPageDesc::~SwUndoPageDesc() = default;
 
 void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest )
 {
@@ -265,9 +263,7 @@ SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
     OSL_ENSURE(nullptr != pDoc, "no document?");
 }
 
-SwUndoPageDescCreate::~SwUndoPageDescCreate()
-{
-}
+SwUndoPageDescCreate::~SwUndoPageDescCreate() = default;
 
 void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 {
@@ -316,9 +312,7 @@ SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
     OSL_ENSURE(nullptr != pDoc, "no document?");
 }
 
-SwUndoPageDescDelete::~SwUndoPageDescDelete()
-{
-}
+SwUndoPageDescDelete::~SwUndoPageDescDelete() = default;
 
 void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {

@@ -102,10 +102,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
     }
 }
 
-OXMLComponent::~OXMLComponent()
-{
-
-}
+OXMLComponent::~OXMLComponent() = default;
 
 } // namespace dbaxml
 

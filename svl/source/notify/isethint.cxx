@@ -30,9 +30,6 @@ SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 {
 }
 
-SfxItemSetHint::~SfxItemSetHint()
-{
-}
-
+SfxItemSetHint::~SfxItemSetHint() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

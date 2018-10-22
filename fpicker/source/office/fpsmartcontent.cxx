@@ -59,8 +59,7 @@ namespace svt
     }
 
 
-    SmartContent::~SmartContent()
-    {
+    SmartContent::~SmartContent() = default;
         /* This destructor originally contained the following blurb: "Do
            not delete the content. Because the content will be used by
            the cache." This is just plain silly, because it relies on
@@ -72,7 +71,6 @@ namespace svt
            TODO: If there is real need for caching the content, it must
            be done here.
         */
-    }
 
 
     void SmartContent::enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::EInterceptedInteractions eInterceptions)

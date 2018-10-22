@@ -49,9 +49,7 @@ XMLMetaExportComponent::XMLMetaExportComponent(
 {
 }
 
-XMLMetaExportComponent::~XMLMetaExportComponent()
-{
-}
+XMLMetaExportComponent::~XMLMetaExportComponent() = default;
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
 {

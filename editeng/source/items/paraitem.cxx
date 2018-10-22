@@ -978,9 +978,7 @@ void SvxTabStopItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // class SvxFormatSplitItem -------------------------------------------------
-SvxFormatSplitItem::~SvxFormatSplitItem()
-{
-}
+SvxFormatSplitItem::~SvxFormatSplitItem() = default;
 
 SfxPoolItem* SvxFormatSplitItem::Clone( SfxItemPool * ) const
 {

@@ -38,9 +38,7 @@ SfxDocumentFontsPage::SfxDocumentFontsPage(TabPageParent parent, const SfxItemSe
 {
 }
 
-SfxDocumentFontsPage::~SfxDocumentFontsPage()
-{
-}
+SfxDocumentFontsPage::~SfxDocumentFontsPage() = default;
 
 void SfxDocumentFontsPage::Reset( const SfxItemSet* )
 {

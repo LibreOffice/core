@@ -56,9 +56,7 @@ namespace sdr
         {
         }
 
-        ConnectorProperties::~ConnectorProperties()
-        {
-        }
+        ConnectorProperties::~ConnectorProperties() = default;
 
         std::unique_ptr<BaseProperties> ConnectorProperties::Clone(SdrObject& rObj) const
         {

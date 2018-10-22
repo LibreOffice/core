@@ -456,9 +456,7 @@ SwCacheObj::SwCacheObj( const void *pOwn ) :
 {
 }
 
-SwCacheObj::~SwCacheObj()
-{
-}
+SwCacheObj::~SwCacheObj() = default;
 
 #ifdef DBG_UTIL
 void SwCacheObj::Lock()

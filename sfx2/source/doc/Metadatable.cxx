@@ -347,9 +347,7 @@ private:
         : static_cast<XmlIdRegistry*>( new XmlIdRegistryDocument );
 }
 
-XmlIdRegistry::XmlIdRegistry()
-{
-}
+XmlIdRegistry::XmlIdRegistry() = default;
 
 css::uno::Reference< css::rdf::XMetadatable >
 XmlIdRegistry::GetElementByMetadataReference(

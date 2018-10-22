@@ -1098,10 +1098,7 @@ ScFunctionMgr::ScFunctionMgr() :
     pCurCatListEnd = aCatLists[0]->end();
 }
 
-ScFunctionMgr::~ScFunctionMgr()
-{
-}
-
+ScFunctionMgr::~ScFunctionMgr() = default;
 
 const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 {

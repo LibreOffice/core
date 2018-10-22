@@ -90,7 +90,7 @@ public:
     virtual void SAL_CALL initialize(const uno::Sequence< uno::Any > & aArguments) override;
 
 private:
-    virtual ~StringRepresentation() override {}
+    virtual ~StringRepresentation() override = default;
 
     /** converts a generic value into a string representation
 

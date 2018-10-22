@@ -230,9 +230,7 @@ TextEncodingBox::TextEncodingBox(std::unique_ptr<weld::ComboBox> pControl)
     m_xControl->make_sorted();
 }
 
-TextEncodingBox::~TextEncodingBox()
-{
-}
+TextEncodingBox::~TextEncodingBox() = default;
 
 void TextEncodingBox::FillFromTextEncodingTable(
         bool bExcludeImportSubsets )

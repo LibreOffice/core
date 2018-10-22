@@ -61,9 +61,7 @@ ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault)
     Init();
 }
 
-ScMoveTableDlg::~ScMoveTableDlg()
-{
-}
+ScMoveTableDlg::~ScMoveTableDlg() = default;
 
 void ScMoveTableDlg::GetTabNameString( OUString& rString ) const
 {

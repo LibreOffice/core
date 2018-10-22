@@ -66,7 +66,7 @@ SdrUndoAction::SdrUndoAction(SdrModel& rNewMod)
         m_nViewShellId = pViewShell->GetViewShellId();
 }
 
-SdrUndoAction::~SdrUndoAction() {}
+SdrUndoAction::~SdrUndoAction() = default;
 
 bool SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
 {
@@ -113,9 +113,7 @@ SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
     eFunction(SdrRepeatFunc::NONE)
 {}
 
-SdrUndoGroup::~SdrUndoGroup()
-{
-}
+SdrUndoGroup::~SdrUndoGroup() = default;
 
 void SdrUndoGroup::AddAction(std::unique_ptr<SdrUndoAction> pAct)
 {
@@ -512,8 +510,7 @@ OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
     return aStr;
 }
 
-
-SdrUndoMoveObj::~SdrUndoMoveObj() {}
+SdrUndoMoveObj::~SdrUndoMoveObj() = default;
 
 void SdrUndoMoveObj::Undo()
 {
@@ -715,10 +712,7 @@ void SdrUndoRemoveObj::Redo()
     ImpShowPageOfThisObject();
 }
 
-SdrUndoRemoveObj::~SdrUndoRemoveObj()
-{
-}
-
+SdrUndoRemoveObj::~SdrUndoRemoveObj() = default;
 
 void SdrUndoInsertObj::Undo()
 {
@@ -1422,9 +1416,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     }
 }
 
-SdrUndoDelPage::~SdrUndoDelPage()
-{
-}
+SdrUndoDelPage::~SdrUndoDelPage() = default;
 
 void SdrUndoDelPage::Undo()
 {
@@ -1606,9 +1598,7 @@ SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
     }
 }
 
-SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
-{
-}
+SdrUndoPageMasterPage::~SdrUndoPageMasterPage() = default;
 
 SdrUndoPageRemoveMasterPage::SdrUndoPageRemoveMasterPage(SdrPage& rChangedPage)
 :   SdrUndoPageMasterPage(rChangedPage)
@@ -1680,8 +1670,7 @@ OUString SdrUndoPageChangeMasterPage::GetComment() const
     return aStr;
 }
 
-
-SdrUndoFactory::~SdrUndoFactory(){}
+SdrUndoFactory::~SdrUndoFactory() = default;
 
 // shapes
 

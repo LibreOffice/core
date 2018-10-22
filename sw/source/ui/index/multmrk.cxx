@@ -56,8 +56,6 @@ void SwMultiTOXMarkDlg::Apply()
     m_rMgr.SetCurTOXMark(m_nPos);
 }
 
-SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg()
-{
-}
+SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

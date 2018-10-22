@@ -28,9 +28,7 @@ namespace oox {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-BinaryStreamBase::~BinaryStreamBase()
-{
-}
+BinaryStreamBase::~BinaryStreamBase() = default;
 
 sal_Int64 BinaryStreamBase::getRemaining() const
 {
@@ -60,9 +58,7 @@ BinaryXSeekableStream::BinaryXSeekableStream( const Reference< XSeekable >& rxSe
 {
 }
 
-BinaryXSeekableStream::~BinaryXSeekableStream()
-{
-}
+BinaryXSeekableStream::~BinaryXSeekableStream() = default;
 
 sal_Int64 BinaryXSeekableStream::size() const
 {

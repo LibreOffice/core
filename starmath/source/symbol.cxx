@@ -98,11 +98,7 @@ SmSymbolManager::SmSymbolManager(const SmSymbolManager& rSymbolSetManager)
     m_bModified     = true;
 }
 
-
-SmSymbolManager::~SmSymbolManager()
-{
-}
-
+SmSymbolManager::~SmSymbolManager() = default;
 
 SmSymbolManager& SmSymbolManager::operator = (const SmSymbolManager& rSymbolSetManager)
 {

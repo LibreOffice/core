@@ -43,9 +43,7 @@ Pane::Pane (
 {
 }
 
-Pane::~Pane()
-{
-}
+Pane::~Pane() = default;
 
 void Pane::disposing()
 {

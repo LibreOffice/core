@@ -47,9 +47,7 @@ AstStruct::AstStruct(const NodeType type,
 {
 }
 
-AstStruct::~AstStruct()
-{
-}
+AstStruct::~AstStruct() = default;
 
 AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
     const

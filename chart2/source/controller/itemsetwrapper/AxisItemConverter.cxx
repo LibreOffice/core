@@ -104,9 +104,7 @@ AxisItemConverter::AxisItemConverter(
     OSL_ASSERT( m_xAxis.is());
 }
 
-AxisItemConverter::~AxisItemConverter()
-{
-}
+AxisItemConverter::~AxisItemConverter() = default;
 
 void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

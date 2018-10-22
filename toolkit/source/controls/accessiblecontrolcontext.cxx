@@ -44,10 +44,7 @@ namespace toolkit
     //= OAccessibleControlContext
 
 
-    OAccessibleControlContext::OAccessibleControlContext()
-    {
-        // nothing to do here, we have a late ctor
-    }
+    OAccessibleControlContext::OAccessibleControlContext() = default;
 
 
     OAccessibleControlContext::~OAccessibleControlContext()

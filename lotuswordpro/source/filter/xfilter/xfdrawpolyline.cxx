@@ -60,9 +60,7 @@
 #include <xfilter/xfdrawpolyline.hxx>
 #include <rtl/ustrbuf.hxx>
 
-XFDrawPolyline::XFDrawPolyline()
-{
-}
+XFDrawPolyline::XFDrawPolyline() = default;
 
 void XFDrawPolyline::ToXml(IXFStream *pStrm)
 {

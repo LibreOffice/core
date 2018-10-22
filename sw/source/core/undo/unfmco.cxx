@@ -41,9 +41,7 @@ SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
         aFormatName = pColl->GetName();
 }
 
-SwUndoFormatColl::~SwUndoFormatColl()
-{
-}
+SwUndoFormatColl::~SwUndoFormatColl() = default;
 
 void SwUndoFormatColl::UndoImpl(::sw::UndoRedoContext & rContext)
 {

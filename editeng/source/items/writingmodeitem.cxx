@@ -32,9 +32,7 @@ SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
 {
 }
 
-SvxWritingModeItem::~SvxWritingModeItem()
-{
-}
+SvxWritingModeItem::~SvxWritingModeItem() = default;
 
 bool SvxWritingModeItem::operator==( const SfxPoolItem& rCmp ) const
 {

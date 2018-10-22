@@ -960,9 +960,7 @@ XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const 
 {
 }
 
-XMLSdPropHdlFactory::~XMLSdPropHdlFactory()
-{
-}
+XMLSdPropHdlFactory::~XMLSdPropHdlFactory() = default;
 
 const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
@@ -1277,9 +1275,7 @@ XMLShapePropertySetMapper::XMLShapePropertySetMapper(const rtl::Reference< XMLPr
 {
 }
 
-XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
-{
-}
+XMLShapePropertySetMapper::~XMLShapePropertySetMapper() = default;
 
 XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport )
 : SvXMLExportPropertyMapper( rMapper )
@@ -1288,9 +1284,7 @@ XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const rtl::Reference
 {
 }
 
-XMLShapeExportPropertyMapper::~XMLShapeExportPropertyMapper()
-{
-}
+XMLShapeExportPropertyMapper::~XMLShapeExportPropertyMapper() = default;
 
 void XMLShapeExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
@@ -1678,9 +1672,7 @@ XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const rtl::Reference< 
 {
 }
 
-XMLPageExportPropertyMapper::~XMLPageExportPropertyMapper()
-{
-}
+XMLPageExportPropertyMapper::~XMLPageExportPropertyMapper() = default;
 
 void XMLPageExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,

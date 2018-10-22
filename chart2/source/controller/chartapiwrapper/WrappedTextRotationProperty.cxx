@@ -31,9 +31,7 @@ WrappedTextRotationProperty::WrappedTextRotationProperty( bool bDirectState )
     , m_bDirectState( bDirectState )
 {
 }
-WrappedTextRotationProperty::~WrappedTextRotationProperty()
-{
-}
+WrappedTextRotationProperty::~WrappedTextRotationProperty() = default;
 
 beans::PropertyState WrappedTextRotationProperty::getPropertyState( const uno::Reference< beans::XPropertyState >& xInnerPropertyState ) const
 {

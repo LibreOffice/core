@@ -767,9 +767,7 @@ XclExpNameManager::XclExpNameManager( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpNameManager::~XclExpNameManager()
-{
-}
+XclExpNameManager::~XclExpNameManager() = default;
 
 void XclExpNameManager::Initialize()
 {

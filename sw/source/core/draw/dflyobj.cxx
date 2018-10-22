@@ -127,9 +127,7 @@ SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
 {
 }
 
-SwFlyDrawObj::~SwFlyDrawObj()
-{
-}
+SwFlyDrawObj::~SwFlyDrawObj() = default;
 
 // SwFlyDrawObj - Factory-Methods
 SdrInventor SwFlyDrawObj::GetObjInventor() const

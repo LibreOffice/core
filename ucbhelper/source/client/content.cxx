@@ -166,7 +166,8 @@ private:
     void disposing(const EventObject& Source);
 
 public:
-    Content_Impl() {};
+    Content_Impl() = default;
+    ;
     Content_Impl( const Reference< XComponentContext >& rCtx,
                   const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv );
@@ -354,17 +355,9 @@ bool Content::create( const OUString& rURL,
     return true;
 }
 
+Content::~Content() = default;
 
-Content::~Content()
-{
-}
-
-
-Content& Content::operator=( const Content& rOther )
-{
-    m_xImpl = rOther.m_xImpl;
-    return *this;
-}
+Content& Content::operator=(const Content& rOther) = default;
 
 Content& Content::operator=( Content&& rOther )
 {

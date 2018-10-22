@@ -143,11 +143,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
 {
 }
 
-
-PDFExport::~PDFExport()
-{
-}
-
+PDFExport::~PDFExport() = default;
 
 bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
     Reference< css::view::XRenderable > const & rRenderable,

@@ -48,9 +48,7 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
     }
 }
 
-OCatalog::~OCatalog()
-{
-}
+OCatalog::~OCatalog() = default;
 
 void SAL_CALL OCatalog::disposing()
 {
@@ -202,9 +200,6 @@ void ODescriptor::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::cppu::UnoType<OUString>::get());
 }
 
-ODescriptor::~ODescriptor()
-{
-}
-
+ODescriptor::~ODescriptor() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

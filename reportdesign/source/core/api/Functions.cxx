@@ -38,9 +38,7 @@ OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xPar
 
 // TODO: VirtualFunctionFinder: This is virtual function!
 
-OFunctions::~OFunctions()
-{
-}
+OFunctions::~OFunctions() = default;
 
 void SAL_CALL OFunctions::dispose()
 {

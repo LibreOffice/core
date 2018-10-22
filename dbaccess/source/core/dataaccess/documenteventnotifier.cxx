@@ -109,9 +109,7 @@ namespace dbaccess
         }
 
     protected:
-        virtual ~DocumentEventNotifier_Impl()
-        {
-        }
+        virtual ~DocumentEventNotifier_Impl() = default;
 
         // IEventProcessor
         virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) override;
@@ -235,9 +233,7 @@ namespace dbaccess
     {
     }
 
-    DocumentEventNotifier::~DocumentEventNotifier()
-    {
-    }
+    DocumentEventNotifier::~DocumentEventNotifier() = default;
 
     void DocumentEventNotifier::disposing()
     {

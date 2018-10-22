@@ -83,9 +83,7 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >
     m_pToolBar->SetDataChangedHdl( LINK( this, AddonsToolBarManager, DataChanged ) );
 }
 
-AddonsToolBarManager::~AddonsToolBarManager()
-{
-}
+AddonsToolBarManager::~AddonsToolBarManager() = default;
 
 static bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
 {

@@ -1712,9 +1712,7 @@ XclXFBase::XclXFBase( bool bCellXF ) :
     SetAllUsedFlags( false );
 }
 
-XclXFBase::~XclXFBase()
-{
-}
+XclXFBase::~XclXFBase() = default;
 
 void XclXFBase::SetAllUsedFlags( bool bUsed )
 {

@@ -35,9 +35,7 @@ SvxAccessibleTextPropertySet::SvxAccessibleTextPropertySet( const SvxEditSource*
 {
 }
 
-SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() throw()
-{
-}
+SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() throw() = default;
 
 uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText()
 {

@@ -108,11 +108,7 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
     return nullptr;
 }
 
-
-SvxViewChangedHint::SvxViewChangedHint()
-{
-}
-
+SvxViewChangedHint::SvxViewChangedHint() = default;
 
 BitmapEx convertMetafileToBitmapEx(
     const GDIMetaFile& rMtf,

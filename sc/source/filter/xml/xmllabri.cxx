@@ -85,9 +85,7 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
     }
 }
 
-ScXMLLabelRangeContext::~ScXMLLabelRangeContext()
-{
-}
+ScXMLLabelRangeContext::~ScXMLLabelRangeContext() = default;
 
 void SAL_CALL ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )
 {

@@ -105,7 +105,7 @@ class DemoRenderer
             sumTime(0),
             countTime(0)
         { }
-        virtual ~RegionRenderer() {}
+        virtual ~RegionRenderer() = default;
         virtual OUString getName() = 0;
         virtual sal_uInt16 getAccelerator() = 0;
         virtual void RenderRegion(OutputDevice &rDev, tools::Rectangle r,
@@ -2180,7 +2180,7 @@ class DemoApp : public Application
     }
 
 public:
-    DemoApp() {}
+    DemoApp() = default;
 
     virtual int Main() override
     {

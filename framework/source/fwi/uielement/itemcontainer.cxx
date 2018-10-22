@@ -85,9 +85,7 @@ ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer,
     }
 }
 
-ItemContainer::~ItemContainer()
-{
-}
+ItemContainer::~ItemContainer() = default;
 
 // private
 void ItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector, const ShareableMutex& rMutex )

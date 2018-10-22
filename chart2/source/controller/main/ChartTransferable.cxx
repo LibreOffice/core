@@ -67,8 +67,7 @@ ChartTransferable::ChartTransferable(
     }
 }
 
-ChartTransferable::~ChartTransferable()
-{}
+ChartTransferable::~ChartTransferable() = default;
 
 void ChartTransferable::AddSupportedFormats()
 {

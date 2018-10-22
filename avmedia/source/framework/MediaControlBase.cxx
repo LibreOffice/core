@@ -34,10 +34,7 @@
 using ::rtl::OUString;
 
 namespace avmedia {
-
-MediaControlBase::MediaControlBase()
-{
-}
+MediaControlBase::MediaControlBase() = default;
 
 void MediaControlBase::UpdateTimeField( MediaItem const & aMediaItem, double fTime )
 {

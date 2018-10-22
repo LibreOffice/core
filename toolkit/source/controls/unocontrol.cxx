@@ -146,9 +146,7 @@ UnoControl::UnoControl() :
     mbDesignMode = false;
 }
 
-UnoControl::~UnoControl()
-{
-}
+UnoControl::~UnoControl() = default;
 
 OUString UnoControl::GetComponentServiceName()
 {

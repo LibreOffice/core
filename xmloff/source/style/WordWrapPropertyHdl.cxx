@@ -37,10 +37,7 @@ XMLWordWrapPropertyHdl::XMLWordWrapPropertyHdl( SvXMLImport* pImport )
 {
 }
 
-XMLWordWrapPropertyHdl::~XMLWordWrapPropertyHdl()
-{
-    // Nothing to do
-}
+XMLWordWrapPropertyHdl::~XMLWordWrapPropertyHdl() = default;
 
 bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {

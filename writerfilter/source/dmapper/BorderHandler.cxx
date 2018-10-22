@@ -48,9 +48,7 @@ m_bOOXML( bOOXML )
     m_aBorderLines.fill(table::BorderLine2());
 }
 
-BorderHandler::~BorderHandler()
-{
-}
+BorderHandler::~BorderHandler() = default;
 
 void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 {

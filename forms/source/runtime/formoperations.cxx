@@ -128,9 +128,7 @@ namespace frm
     {
     }
 
-    FormOperations::~FormOperations()
-    {
-    }
+    FormOperations::~FormOperations() = default;
 
     void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments )
     {

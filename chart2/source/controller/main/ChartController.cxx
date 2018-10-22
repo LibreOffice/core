@@ -141,9 +141,7 @@ ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xMo
         uno::Reference< util::XCloseable >( xModel, uno::UNO_QUERY );
 }
 
-ChartController::TheModel::~TheModel()
-{
-}
+ChartController::TheModel::~TheModel() = default;
 
 void ChartController::TheModel::addListener( ChartController* pController )
 {

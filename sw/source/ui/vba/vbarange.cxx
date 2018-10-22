@@ -61,9 +61,7 @@ SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rPar
     initialize( rStart, rEnd );
 }
 
-SwVbaRange::~SwVbaRange()
-{
-}
+SwVbaRange::~SwVbaRange() = default;
 
 void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd )
 {

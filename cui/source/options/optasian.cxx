@@ -53,7 +53,7 @@ struct SvxForbiddenChars_Impl
 struct SvxAsianLayoutPage_Impl
 {
     SvxAsianConfig  aConfig;
-    SvxAsianLayoutPage_Impl() {}
+    SvxAsianLayoutPage_Impl() = default;
 
     Reference< XForbiddenCharacters >   xForbidden;
     Reference< XPropertySet >           xPrSet;

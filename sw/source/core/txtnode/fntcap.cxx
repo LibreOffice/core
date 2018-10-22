@@ -95,7 +95,8 @@ protected:
     SwCapitalInfo* pCapInf; // referes to additional information
                            // required by the ::Do function
     explicit SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( nullptr ) { }
-    ~SwDoCapitals() {}
+    ~SwDoCapitals() = default;
+
 public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
     virtual void Do() = 0;
@@ -111,7 +112,7 @@ protected:
     Size aTextSize;
 public:
     explicit SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
-    virtual ~SwDoGetCapitalSize() {}
+    virtual ~SwDoGetCapitalSize() = default;
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
     virtual void Do() override;
     const Size &GetSize() const { return aTextSize; }
@@ -164,10 +165,10 @@ public:
         ,   nTextWidth( nWidth )
         ,   m_nBreak( -1 )
         { }
-    virtual ~SwDoGetCapitalBreak() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
-    virtual void Do() override;
-    TextFrameIndex getBreak() const { return m_nBreak; }
+        virtual ~SwDoGetCapitalBreak() = default;
+        virtual void Init(SwFntObj* pUpperFont, SwFntObj* pLowerFont) override;
+        virtual void Do() override;
+        TextFrameIndex getBreak() const { return m_nBreak; }
 };
 
 void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
@@ -240,10 +241,10 @@ public:
     explicit SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
         SwDoCapitals( rInfo ), pUpperFnt(nullptr), pLowerFnt(nullptr)
         { }
-    virtual ~SwDoDrawCapital() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
-    virtual void Do() override;
-    void DrawSpace( Point &rPos );
+        virtual ~SwDoDrawCapital() = default;
+        virtual void Init(SwFntObj* pUpperFont, SwFntObj* pLowerFont) override;
+        virtual void Do() override;
+        void DrawSpace(Point& rPos);
 };
 
 void SwDoDrawCapital::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
@@ -324,11 +325,11 @@ public:
     SwDoCapitalCursorOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
         SwDoCapitals( rInfo ), pUpperFnt(nullptr), pLowerFnt(nullptr), nCursor( 0 ), nOfst( nOfs )
         { }
-    virtual ~SwDoCapitalCursorOfst() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
-    virtual void Do() override;
+        virtual ~SwDoCapitalCursorOfst() = default;
+        virtual void Init(SwFntObj* pUpperFont, SwFntObj* pLowerFont) override;
+        virtual void Do() override;
 
-    TextFrameIndex GetCursor(){ return nCursor; }
+        TextFrameIndex GetCursor() { return nCursor; }
 };
 
 void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )

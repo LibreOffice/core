@@ -194,9 +194,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
         meRangeType = ScDBCollection::GlobalAnonymous;
 }
 
-ScXMLDatabaseRangeContext::~ScXMLDatabaseRangeContext()
-{
-}
+ScXMLDatabaseRangeContext::~ScXMLDatabaseRangeContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDatabaseRangeContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -474,9 +472,7 @@ ScXMLSourceSQLContext::ScXMLSourceSQLContext( ScXMLImport& rImport,
     pDatabaseRangeContext->SetSourceType(sheet::DataImportMode_SQL);
 }
 
-ScXMLSourceSQLContext::~ScXMLSourceSQLContext()
-{
-}
+ScXMLSourceSQLContext::~ScXMLSourceSQLContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceSQLContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -527,9 +523,7 @@ ScXMLSourceTableContext::ScXMLSourceTableContext( ScXMLImport& rImport,
     pDatabaseRangeContext->SetSourceType(sheet::DataImportMode_TABLE);
 }
 
-ScXMLSourceTableContext::~ScXMLSourceTableContext()
-{
-}
+ScXMLSourceTableContext::~ScXMLSourceTableContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceTableContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -579,9 +573,7 @@ ScXMLSourceQueryContext::ScXMLSourceQueryContext( ScXMLImport& rImport,
     pDatabaseRangeContext->SetSourceType(sheet::DataImportMode_QUERY);
 }
 
-ScXMLSourceQueryContext::~ScXMLSourceQueryContext()
-{
-}
+ScXMLSourceQueryContext::~ScXMLSourceQueryContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceQueryContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -623,9 +615,7 @@ ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
         pDatabaseRangeContext->SetConnectionResource(sConRes);
 }
 
-ScXMLConResContext::~ScXMLConResContext()
-{
-}
+ScXMLConResContext::~ScXMLConResContext() = default;
 
 ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -653,9 +643,7 @@ ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLSubTotalRulesContext::~ScXMLSubTotalRulesContext()
-{
-}
+ScXMLSubTotalRulesContext::~ScXMLSubTotalRulesContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSubTotalRulesContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -739,9 +727,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLSortGroupsContext::~ScXMLSortGroupsContext()
-{
-}
+ScXMLSortGroupsContext::~ScXMLSortGroupsContext() = default;
 
 ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -763,9 +749,7 @@ ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLSubTotalRuleContext::~ScXMLSubTotalRuleContext()
-{
-}
+ScXMLSubTotalRuleContext::~ScXMLSubTotalRuleContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSubTotalRuleContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -818,9 +802,7 @@ ScXMLSubTotalFieldContext::ScXMLSubTotalFieldContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLSubTotalFieldContext::~ScXMLSubTotalFieldContext()
-{
-}
+ScXMLSubTotalFieldContext::~ScXMLSubTotalFieldContext() = default;
 
 void SAL_CALL ScXMLSubTotalFieldContext::endFastElement( sal_Int32 /*nElement*/ )
 {

@@ -38,8 +38,7 @@ XMLAxisPositionPropertyHdl::XMLAxisPositionPropertyHdl( bool bCrossingValue )
         : m_bCrossingValue( bCrossingValue )
 {}
 
-XMLAxisPositionPropertyHdl::~XMLAxisPositionPropertyHdl()
-{}
+XMLAxisPositionPropertyHdl::~XMLAxisPositionPropertyHdl() = default;
 
 bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const

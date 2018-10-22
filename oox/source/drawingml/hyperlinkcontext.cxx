@@ -145,9 +145,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
     // XML_endSnd
 }
 
-HyperLinkContext::~HyperLinkContext()
-{
-}
+HyperLinkContext::~HyperLinkContext() = default;
 
 ContextHandlerRef HyperLinkContext::onCreateContext(
         ::sal_Int32 aElement, const AttributeList&  )

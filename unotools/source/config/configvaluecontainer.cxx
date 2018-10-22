@@ -202,9 +202,7 @@ namespace utl
         implConstruct( OUString::createFromAscii( _pConfigLocation ), _nLevels );
     }
 
-    OConfigurationValueContainer::~OConfigurationValueContainer()
-    {
-    }
+    OConfigurationValueContainer::~OConfigurationValueContainer() = default;
 
     void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
         const sal_Int32 _nLevels )

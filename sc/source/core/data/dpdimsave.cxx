@@ -40,7 +40,7 @@ using namespace com::sun::star;
 ScDPSaveGroupItem::ScDPSaveGroupItem( const OUString& rName ) :
     aGroupName(rName) {}
 
-ScDPSaveGroupItem::~ScDPSaveGroupItem() {}
+ScDPSaveGroupItem::~ScDPSaveGroupItem() = default;
 
 void ScDPSaveGroupItem::AddElement( const OUString& rName )
 {
@@ -577,9 +577,7 @@ struct ScDPSaveGroupSourceNameFunc
 
 } // namespace
 
-ScDPDimensionSaveData::ScDPDimensionSaveData()
-{
-}
+ScDPDimensionSaveData::ScDPDimensionSaveData() = default;
 
 bool ScDPDimensionSaveData::operator==( const ScDPDimensionSaveData& ) const
 {

@@ -103,7 +103,7 @@ ScUnitConverter::ScUnitConverter()
     }
 }
 
-ScUnitConverter::~ScUnitConverter() {}
+ScUnitConverter::~ScUnitConverter() = default;
 
 bool ScUnitConverter::GetValue(
     double& fValue, const OUString& rFromUnit, const OUString& rToUnit ) const

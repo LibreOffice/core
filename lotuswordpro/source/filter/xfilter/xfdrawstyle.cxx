@@ -72,10 +72,8 @@ XFDrawStyle::XFDrawStyle()
     , m_bArrowEndCenter(false)
 {}
 
-XFDrawStyle::~XFDrawStyle()
-{
+XFDrawStyle::~XFDrawStyle() = default;
     //don't delete m_pLineStyle, it was managed by XFStyleManager.
-}
 
 void    XFDrawStyle::SetLineStyle(double width, XFColor color)
 {

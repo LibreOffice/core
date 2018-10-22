@@ -65,11 +65,7 @@ namespace comphelper
     {
     }
 
-
-    OPropertyBag::~OPropertyBag()
-    {
-    }
-
+    OPropertyBag::~OPropertyBag() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )

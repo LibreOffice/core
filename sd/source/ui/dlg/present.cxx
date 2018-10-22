@@ -137,9 +137,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     ChangePause();
 }
 
-SdStartPresentationDlg::~SdStartPresentationDlg()
-{
-}
+SdStartPresentationDlg::~SdStartPresentationDlg() = default;
 
 OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
                                                  DisplayType eType )

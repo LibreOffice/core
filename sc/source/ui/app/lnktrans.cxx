@@ -24,13 +24,9 @@
 
 using namespace com::sun::star;
 
-ScLinkTransferObj::ScLinkTransferObj()
-{
-}
+ScLinkTransferObj::ScLinkTransferObj() = default;
 
-ScLinkTransferObj::~ScLinkTransferObj()
-{
-}
+ScLinkTransferObj::~ScLinkTransferObj() = default;
 
 void ScLinkTransferObj::SetLinkURL( const OUString& rURL, const OUString& rText )
 {

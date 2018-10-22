@@ -3954,9 +3954,7 @@ SelectionManagerHolder::SelectionManagerHolder() :
 {
 }
 
-SelectionManagerHolder::~SelectionManagerHolder()
-{
-}
+SelectionManagerHolder::~SelectionManagerHolder() = default;
 
 void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
 {

@@ -162,9 +162,7 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     mxImpl->maDecreaseButton = Image(BitmapEx(RID_SVXBMP_SLIDERDECREASE));
 }
 
-SvxZoomSliderControl::~SvxZoomSliderControl()
-{
-}
+SvxZoomSliderControl::~SvxZoomSliderControl() = default;
 
 void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {

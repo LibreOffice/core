@@ -75,9 +75,7 @@ LngParser::LngParser(const OString &rLngFile)
     }
 }
 
-LngParser::~LngParser()
-{
-}
+LngParser::~LngParser() = default;
 
 void LngParser::CreatePO( const OString &rPOFile )
 {

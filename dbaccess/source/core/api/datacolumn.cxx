@@ -52,9 +52,7 @@ ODataColumn::ODataColumn(
 {
 }
 
-ODataColumn::~ODataColumn()
-{
-}
+ODataColumn::~ODataColumn() = default;
 
 // css::lang::XTypeProvider
 Sequence< Type > ODataColumn::getTypes()

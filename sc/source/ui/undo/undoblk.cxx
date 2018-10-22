@@ -95,9 +95,7 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-ScUndoInsertCells::~ScUndoInsertCells()
-{
-}
+ScUndoInsertCells::~ScUndoInsertCells() = default;
 
 OUString ScUndoInsertCells::GetComment() const
 {
@@ -362,9 +360,7 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-ScUndoDeleteCells::~ScUndoDeleteCells()
-{
-}
+ScUndoDeleteCells::~ScUndoDeleteCells() = default;
 
 OUString ScUndoDeleteCells::GetComment() const
 {
@@ -634,9 +630,7 @@ ScUndoDeleteMulti::ScUndoDeleteMulti(
     SetChangeTrack();
 }
 
-ScUndoDeleteMulti::~ScUndoDeleteMulti()
-{
-}
+ScUndoDeleteMulti::~ScUndoDeleteMulti() = default;
 
 OUString ScUndoDeleteMulti::GetComment() const
 {
@@ -808,9 +802,7 @@ ScUndoCut::ScUndoCut(ScDocShell* pNewDocShell, const ScRange& aRange, const ScAd
     SetChangeTrack();
 }
 
-ScUndoCut::~ScUndoCut()
-{
-}
+ScUndoCut::~ScUndoCut() = default;
 
 OUString ScUndoCut::GetComment() const
 {
@@ -1200,9 +1192,7 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-ScUndoDragDrop::~ScUndoDragDrop()
-{
-}
+ScUndoDragDrop::~ScUndoDragDrop() = default;
 
 OUString ScUndoDragDrop::GetComment() const
 {   // "Move" : "Copy"
@@ -1564,9 +1554,7 @@ ScUndoConditionalFormat::ScUndoConditionalFormat(ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoConditionalFormat::~ScUndoConditionalFormat()
-{
-}
+ScUndoConditionalFormat::~ScUndoConditionalFormat() = default;
 
 OUString ScUndoConditionalFormat::GetComment() const
 {
@@ -1614,9 +1602,7 @@ ScUndoConditionalFormatList::ScUndoConditionalFormatList(ScDocShell* pNewDocShel
 {
 }
 
-ScUndoConditionalFormatList::~ScUndoConditionalFormatList()
-{
-}
+ScUndoConditionalFormatList::~ScUndoConditionalFormatList() = default;
 
 OUString ScUndoConditionalFormatList::GetComment() const
 {
@@ -1683,9 +1669,7 @@ ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
     aRange.aEnd.SetTab(rDestArea.nTab);
 }
 
-ScUndoUseScenario::~ScUndoUseScenario()
-{
-}
+ScUndoUseScenario::~ScUndoUseScenario() = default;
 
 OUString ScUndoUseScenario::GetComment() const
 {
@@ -1798,9 +1782,7 @@ ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
     aMarkData.MarkToMulti();
 }
 
-ScUndoSelectionStyle::~ScUndoSelectionStyle()
-{
-}
+ScUndoSelectionStyle::~ScUndoSelectionStyle() = default;
 
 OUString ScUndoSelectionStyle::GetComment() const
 {
@@ -1897,9 +1879,7 @@ ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& r
     SetChangeTrack();
 }
 
-ScUndoEnterMatrix::~ScUndoEnterMatrix()
-{
-}
+ScUndoEnterMatrix::~ScUndoEnterMatrix() = default;
 
 OUString ScUndoEnterMatrix::GetComment() const
 {
@@ -1990,9 +1970,7 @@ ScUndoIndent::ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,
 {
 }
 
-ScUndoIndent::~ScUndoIndent()
-{
-}
+ScUndoIndent::~ScUndoIndent() = default;
 
 OUString ScUndoIndent::GetComment() const
 {
@@ -2046,9 +2024,7 @@ ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMark
 {
 }
 
-ScUndoTransliterate::~ScUndoTransliterate()
-{
-}
+ScUndoTransliterate::~ScUndoTransliterate() = default;
 
 OUString ScUndoTransliterate::GetComment() const
 {
@@ -2108,9 +2084,7 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
         pWhich[i] = pW[i];
 }
 
-ScUndoClearItems::~ScUndoClearItems()
-{
-}
+ScUndoClearItems::~ScUndoClearItems() = default;
 
 OUString ScUndoClearItems::GetComment() const
 {
@@ -2162,9 +2136,7 @@ ScUndoRemoveBreaks::ScUndoRemoveBreaks( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
-{
-}
+ScUndoRemoveBreaks::~ScUndoRemoveBreaks() = default;
 
 OUString ScUndoRemoveBreaks::GetComment() const
 {
@@ -2231,9 +2203,7 @@ ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoRemoveMerge::~ScUndoRemoveMerge()
-{
-}
+ScUndoRemoveMerge::~ScUndoRemoveMerge() = default;
 
 OUString ScUndoRemoveMerge::GetComment() const
 {

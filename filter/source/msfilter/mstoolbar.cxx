@@ -184,9 +184,7 @@ TBCHeader::TBCHeader()
 {
 }
 
-TBCHeader::~TBCHeader()
-{
-}
+TBCHeader::~TBCHeader() = default;
 
 bool TBCHeader::Read( SvStream &rS )
 {
@@ -669,9 +667,7 @@ TBCCDData::TBCCDData()
 {
 }
 
-TBCCDData::~TBCCDData()
-{
-}
+TBCCDData::~TBCCDData() = default;
 
 bool TBCCDData::Read( SvStream &rS)
 {
@@ -718,9 +714,7 @@ TBCBitMap::TBCBitMap() : cbDIB( 0 )
 {
 }
 
-TBCBitMap::~TBCBitMap()
-{
-}
+TBCBitMap::~TBCBitMap() = default;
 
 bool TBCBitMap::Read( SvStream& rS)
 {

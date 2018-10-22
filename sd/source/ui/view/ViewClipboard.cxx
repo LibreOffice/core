@@ -41,9 +41,7 @@ ViewClipboard::ViewClipboard (::sd::View& rView)
 {
 }
 
-ViewClipboard::~ViewClipboard()
-{
-}
+ViewClipboard::~ViewClipboard() = default;
 
 void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
 {

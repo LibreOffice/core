@@ -93,11 +93,7 @@ void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
     }
 }
 
-
-ODummyEmbeddedObject::~ODummyEmbeddedObject()
-{
-}
-
+ODummyEmbeddedObject::~ODummyEmbeddedObject() = default;
 
 void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
 {

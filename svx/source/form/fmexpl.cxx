@@ -73,11 +73,7 @@ FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt3
 {
 }
 
-
-FmNavInsertedHint::~FmNavInsertedHint()
-{
-}
-
+FmNavInsertedHint::~FmNavInsertedHint() = default;
 
 // class FmNavInsertedHint
 
@@ -86,20 +82,14 @@ FmNavModelReplacedHint::FmNavModelReplacedHint( FmEntryData* pAffectedEntryData 
 {
 }
 
-
-FmNavModelReplacedHint::~FmNavModelReplacedHint()
-{
-}
+FmNavModelReplacedHint::~FmNavModelReplacedHint() = default;
 
 FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
     :pEntryData( pRemovedEntryData )
 {
 }
 
-
-FmNavRemovedHint::~FmNavRemovedHint()
-{
-}
+FmNavRemovedHint::~FmNavRemovedHint() = default;
 
 FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName )
     :pEntryData( pData )
@@ -107,30 +97,15 @@ FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& 
 {
 }
 
+FmNavNameChangedHint::~FmNavNameChangedHint() = default;
 
-FmNavNameChangedHint::~FmNavNameChangedHint()
-{
-}
+FmNavClearedHint::FmNavClearedHint() = default;
 
-FmNavClearedHint::FmNavClearedHint()
-{
-}
+FmNavClearedHint::~FmNavClearedHint() = default;
 
+FmEntryDataList::FmEntryDataList() = default;
 
-FmNavClearedHint::~FmNavClearedHint()
-{
-}
-
-
-FmEntryDataList::FmEntryDataList()
-{
-}
-
-
-FmEntryDataList::~FmEntryDataList()
-{
-}
-
+FmEntryDataList::~FmEntryDataList() = default;
 
 void FmEntryDataList::remove( FmEntryData* pItem )
 {
@@ -258,9 +233,7 @@ FmFormData::FmFormData(const Reference< XForm >& _rxForm, FmFormData* _pParent)
         SetText( OUString() );
 }
 
-FmFormData::~FmFormData()
-{
-}
+FmFormData::~FmFormData() = default;
 
 FmFormData::FmFormData( const FmFormData& rFormData )
     :FmEntryData( rFormData )
@@ -305,11 +278,7 @@ FmControlData::FmControlData(const Reference< XFormComponent >& _rxComponent, Fm
     }
 }
 
-
-FmControlData::~FmControlData()
-{
-}
-
+FmControlData::~FmControlData() = default;
 
 FmControlData::FmControlData( const FmControlData& rControlData )
     :FmEntryData( rControlData )

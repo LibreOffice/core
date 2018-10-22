@@ -36,9 +36,7 @@ namespace svgio
         {
         }
 
-        SvgCircleNode::~SvgCircleNode()
-        {
-        }
+        SvgCircleNode::~SvgCircleNode() = default;
 
         const SvgStyleAttributes* SvgCircleNode::getSvgStyleAttributes() const
         {

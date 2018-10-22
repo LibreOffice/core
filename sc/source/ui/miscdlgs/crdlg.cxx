@@ -34,9 +34,7 @@ ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle, c
     m_xBtnOk->connect_clicked(LINK(this, ScColOrRowDlg, OkHdl));
 }
 
-ScColOrRowDlg::~ScColOrRowDlg()
-{
-}
+ScColOrRowDlg::~ScColOrRowDlg() = default;
 
 IMPL_LINK_NOARG(ScColOrRowDlg, OkHdl, weld::Button&, void)
 {

@@ -1370,9 +1370,7 @@ SwHash::SwHash(const OUString& rStr)
 {
 }
 
-SwHash::~SwHash()
-{
-}
+SwHash::~SwHash() = default;
 
 SwCalcExp::SwCalcExp(const OUString& rStr, const SwSbxValue& rVal,
                       const SwFieldType* pType)

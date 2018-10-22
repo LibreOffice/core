@@ -36,21 +36,11 @@
 
 using ::com::sun::star::uno::Exception;
 
+SfxRepeatTarget::~SfxRepeatTarget() = default;
 
-SfxRepeatTarget::~SfxRepeatTarget()
-{
-}
+SfxUndoContext::~SfxUndoContext() = default;
 
-
-SfxUndoContext::~SfxUndoContext()
-{
-}
-
-
-SfxUndoAction::~SfxUndoAction() COVERITY_NOEXCEPT_FALSE
-{
-}
-
+SfxUndoAction::~SfxUndoAction() COVERITY_NOEXCEPT_FALSE = default;
 
 SfxUndoAction::SfxUndoAction()
     : m_aDateTime(DateTime::SYSTEM)
@@ -1346,9 +1336,7 @@ SfxListUndoAction::SfxListUndoAction(
     nMaxUndoActions = USHRT_MAX;
 }
 
-SfxListUndoAction::~SfxListUndoAction()
-{
-}
+SfxListUndoAction::~SfxListUndoAction() = default;
 
 void SfxListUndoAction::Undo()
 {

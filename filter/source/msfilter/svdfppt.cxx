@@ -209,9 +209,9 @@ SvStream& ReadPptSlidePersistAtom( SvStream& rIn, PptSlidePersistAtom& rAtom )
     return rIn;
 }
 
-PptSlidePersistList::PptSlidePersistList() {}
+PptSlidePersistList::PptSlidePersistList() = default;
 
-PptSlidePersistList::~PptSlidePersistList() {}
+PptSlidePersistList::~PptSlidePersistList() = default;
 
 sal_uInt16 PptSlidePersistList::FindPage(sal_uInt32 nId) const
 {
@@ -514,9 +514,7 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     HeaderFooterOfs[ 0 ] =  HeaderFooterOfs[ 1 ] = HeaderFooterOfs[ 2 ] = HeaderFooterOfs[ 3 ] = 0;
 }
 
-PptSlidePersistEntry::~PptSlidePersistEntry()
-{
-}
+PptSlidePersistEntry::~PptSlidePersistEntry() = default;
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
@@ -525,9 +523,7 @@ SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString&
 {
 }
 
-SdrEscherImport::~SdrEscherImport()
-{
-}
+SdrEscherImport::~SdrEscherImport() = default;
 
 const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
 {
@@ -3374,9 +3370,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
     rSt.Seek( nOldPos );
 }
 
-PPTExtParaProv::~PPTExtParaProv()
-{
-}
+PPTExtParaProv::~PPTExtParaProv() = default;
 
 PPTNumberFormatCreator::PPTNumberFormatCreator( std::unique_ptr<PPTExtParaProv> pParaProv )
     : nIsBullet(0)
@@ -3390,9 +3384,7 @@ PPTNumberFormatCreator::PPTNumberFormatCreator( std::unique_ptr<PPTExtParaProv> 
 {
 }
 
-PPTNumberFormatCreator::~PPTNumberFormatCreator()
-{
-}
+PPTNumberFormatCreator::~PPTNumberFormatCreator() = default;
 
 bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const & rManager,
     SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, TSS_Type nInstance, TSS_Type nDestinationInstance,
@@ -4425,9 +4417,7 @@ PPTParaPropSet::PPTParaPropSet( PPTParaPropSet const & rParaPropSet )
     mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
 }
 
-PPTParaPropSet::~PPTParaPropSet()
-{
-}
+PPTParaPropSet::~PPTParaPropSet() = default;
 
 PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
 {
@@ -4480,9 +4470,7 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 n
     mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = LANGUAGE_SYSTEM;
 }
 
-PPTCharPropSet::~PPTCharPropSet()
-{
-}
+PPTCharPropSet::~PPTCharPropSet() = default;
 
 PPTCharPropSet& PPTCharPropSet::operator=( const PPTCharPropSet& rCharPropSet )
 {
@@ -4527,10 +4515,8 @@ PPTRuler::PPTRuler()
     memset(nBulletOfs, 0, sizeof(nBulletOfs));
 }
 
-PPTRuler::~PPTRuler()
-{
-};
-
+PPTRuler::~PPTRuler() = default;
+;
 
 PPTTextRulerInterpreter::PPTTextRulerInterpreter() :
     mxImplRuler ( new PPTRuler() )
@@ -4654,9 +4640,7 @@ PPTTextRulerInterpreter& PPTTextRulerInterpreter::operator=( PPTTextRulerInterpr
     return *this;
 }
 
-PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
-{
-}
+PPTTextRulerInterpreter::~PPTTextRulerInterpreter() = default;
 
 PPTTextParagraphStyleAtomInterpreter::PPTTextParagraphStyleAtomInterpreter() :
     bValid              ( false ),
@@ -4729,10 +4713,7 @@ bool PPTTextParagraphStyleAtomInterpreter::Read( SvStream& rIn, const DffRecordH
     return bValid;
 }
 
-PPTTextParagraphStyleAtomInterpreter::~PPTTextParagraphStyleAtomInterpreter()
-{
-
-}
+PPTTextParagraphStyleAtomInterpreter::~PPTTextParagraphStyleAtomInterpreter() = default;
 
 PPTTextSpecInfo::PPTTextSpecInfo( sal_uInt32 _nCharIdx ) :
     nCharIdx        ( _nCharIdx ),
@@ -4811,9 +4792,7 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
     return bValid;
 }
 
-PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
-{
-}
+PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter() = default;
 
 void StyleTextProp9::Read( SvStream& rIn )
 {
@@ -5415,9 +5394,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     rIn.Seek( nMerk );
 }
 
-PPTStyleTextPropReader::~PPTStyleTextPropReader()
-{
-}
+PPTStyleTextPropReader::~PPTStyleTextPropReader() = default;
 
 PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt32 nDepth ) :
     PPTCharPropSet  ( 0 ),
@@ -5435,17 +5412,11 @@ PPTPortionObj::PPTPortionObj( const PPTCharPropSet& rCharPropSet, const PPTStyle
 {
 }
 
-PPTPortionObj::PPTPortionObj( const PPTPortionObj& rPortionObj ) :
-    PPTCharPropSet      ( rPortionObj ),
-    mrStyleSheet        ( rPortionObj.mrStyleSheet ),
-    mnInstance          ( rPortionObj.mnInstance ),
-    mnDepth             ( rPortionObj.mnDepth )
-{
-}
+PPTPortionObj::PPTPortionObj(const PPTPortionObj& rPortionObj)
 
-PPTPortionObj::~PPTPortionObj()
-{
-}
+    = default;
+
+PPTPortionObj::~PPTPortionObj() = default;
 
 bool PPTPortionObj::HasTabulator()
 {
@@ -5865,9 +5836,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
     }
 }
 
-PPTParagraphObj::~PPTParagraphObj()
-{
-}
+PPTParagraphObj::~PPTParagraphObj() = default;
 
 void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 {
@@ -6398,9 +6367,7 @@ PPTPortionObj* PPTParagraphObj::Next()
     return m_PortionList[i].get();
 }
 
-PPTFieldEntry::~PPTFieldEntry()
-{
-}
+PPTFieldEntry::~PPTFieldEntry() = default;
 
 void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateFormat, SvxTimeFormat& eTimeFormat )
 {
@@ -7108,9 +7075,7 @@ PPTTextObj::PPTTextObj( PPTTextObj const & rTextObj )
     mxImplTextObj = rTextObj.mxImplTextObj;
 }
 
-PPTTextObj::~PPTTextObj()
-{
-}
+PPTTextObj::~PPTTextObj() = default;
 
 PPTParagraphObj* PPTTextObj::First()
 {

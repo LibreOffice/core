@@ -40,9 +40,7 @@ CustomAnimationPanel::CustomAnimationPanel (
 #endif
 }
 
-CustomAnimationPanel::~CustomAnimationPanel()
-{
-}
+CustomAnimationPanel::~CustomAnimationPanel() = default;
 
 vcl::Window* CustomAnimationPanel::CreateWrappedControl (
     vcl::Window* pParentWindow,

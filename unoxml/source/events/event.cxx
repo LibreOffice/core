@@ -33,9 +33,7 @@ namespace DOM { namespace events
     {
     }
 
-    CEvent::~CEvent()
-    {
-    }
+    CEvent::~CEvent() = default;
 
     OUString SAL_CALL CEvent::getType()
     {

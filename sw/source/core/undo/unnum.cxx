@@ -161,9 +161,7 @@ SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     pHistory.reset( new SwHistory );
 }
 
-SwUndoDelNum::~SwUndoDelNum()
-{
-}
+SwUndoDelNum::~SwUndoDelNum() = default;
 
 void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {

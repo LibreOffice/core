@@ -37,7 +37,7 @@ using namespace com::sun::star;
 class CoinMPSolver : public SolverComponent
 {
 public:
-    CoinMPSolver() {}
+    CoinMPSolver() = default;
 
 private:
     virtual void SAL_CALL solve() override;

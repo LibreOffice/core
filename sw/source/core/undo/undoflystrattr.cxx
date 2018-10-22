@@ -34,9 +34,7 @@ SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
         || eUndoId == SwUndoId::FLYFRMFMT_DESCRIPTION);
 }
 
-SwUndoFlyStrAttr::~SwUndoFlyStrAttr()
-{
-}
+SwUndoFlyStrAttr::~SwUndoFlyStrAttr() = default;
 
 void SwUndoFlyStrAttr::UndoImpl(::sw::UndoRedoContext &)
 {

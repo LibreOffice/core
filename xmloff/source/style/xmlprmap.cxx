@@ -146,9 +146,7 @@ XMLPropertySetMapper::XMLPropertySetMapper(
     }
 }
 
-XMLPropertySetMapper::~XMLPropertySetMapper()
-{
-}
+XMLPropertySetMapper::~XMLPropertySetMapper() = default;
 
 void XMLPropertySetMapper::AddMapperEntry(
     const rtl::Reference < XMLPropertySetMapper >& rMapper )

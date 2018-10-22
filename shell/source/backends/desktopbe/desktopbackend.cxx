@@ -72,12 +72,12 @@ class Default:
         css::lang::XServiceInfo, css::beans::XPropertySet >
 {
 public:
-    Default() {}
+    Default() = default;
     Default(const Default&) = delete;
     Default& operator=(const Default&) = delete;
 
 private:
-    virtual ~Default() override {}
+    virtual ~Default() override = default;
 
     virtual OUString SAL_CALL getImplementationName() override
     { return getDefaultImplementationName(); }

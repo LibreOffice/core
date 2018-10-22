@@ -238,8 +238,7 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
 {
 }
 
-SchXMLChartContext::~SchXMLChartContext()
-{}
+SchXMLChartContext::~SchXMLChartContext() = default;
 
 static bool lcl_hasServiceName(Reference<lang::XMultiServiceFactory> const & xFactory, OUString const & rServiceName)
 {
@@ -1182,8 +1181,7 @@ SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImp
 {
 }
 
-SchXMLTitleContext::~SchXMLTitleContext()
-{}
+SchXMLTitleContext::~SchXMLTitleContext() = default;
 
 void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

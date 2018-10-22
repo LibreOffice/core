@@ -123,9 +123,7 @@ public:
     void HideOverlay();
 };
 
-ImpSdrCreateViewExtraData::ImpSdrCreateViewExtraData()
-{
-}
+ImpSdrCreateViewExtraData::ImpSdrCreateViewExtraData() = default;
 
 ImpSdrCreateViewExtraData::~ImpSdrCreateViewExtraData()
 {

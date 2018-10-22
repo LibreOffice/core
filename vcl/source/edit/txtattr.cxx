@@ -20,9 +20,7 @@
 #include <vcl/txtattr.hxx>
 #include <vcl/font.hxx>
 
-TextAttrib::~TextAttrib()
-{
-}
+TextAttrib::~TextAttrib() = default;
 
 bool TextAttrib::operator==( const TextAttrib& rAttr ) const
 {

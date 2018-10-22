@@ -2358,10 +2358,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     // pass the introspection primal on demand
 }
 
-SbUnoObject::~SbUnoObject()
-{
-}
-
+SbUnoObject::~SbUnoObject() = default;
 
 // pass the introspection on Demand
 void SbUnoObject::doIntrospection()
@@ -2563,9 +2560,7 @@ SbUnoProperty::SbUnoProperty
         PutObject( xDummyArray.get() );
 }
 
-SbUnoProperty::~SbUnoProperty()
-{}
-
+SbUnoProperty::~SbUnoProperty() = default;
 
 SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
 {
@@ -3675,9 +3670,7 @@ SbUnoServiceCtor::SbUnoServiceCtor( const OUString& aName_, Reference< XServiceC
 {
 }
 
-SbUnoServiceCtor::~SbUnoServiceCtor()
-{
-}
+SbUnoServiceCtor::~SbUnoServiceCtor() = default;
 
 SbxInfo* SbUnoServiceCtor::GetInfo()
 {
@@ -4635,9 +4628,7 @@ SbUnoStructRefObject::SbUnoStructRefObject( const OUString& aName_, const Struct
    SetClassName( maMemberInfo.getTypeName() );
 }
 
-SbUnoStructRefObject::~SbUnoStructRefObject()
-{
-}
+SbUnoStructRefObject::~SbUnoStructRefObject() = default;
 
 void SbUnoStructRefObject::initMemberCache()
 {

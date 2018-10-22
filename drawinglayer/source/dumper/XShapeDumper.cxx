@@ -24,10 +24,7 @@
 using namespace com::sun::star;
 //class XShapeDumper
 
-XShapeDumper::XShapeDumper()
-{
-
-}
+XShapeDumper::XShapeDumper() = default;
 
 namespace {
 

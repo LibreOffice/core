@@ -216,9 +216,7 @@ namespace dbaui
     {
     }
 
-    SubComponentManager::~SubComponentManager()
-    {
-    }
+    SubComponentManager::~SubComponentManager() = default;
 
     void SubComponentManager::disposing()
     {

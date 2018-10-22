@@ -66,9 +66,7 @@ SvxPageWindow::SvxPageWindow() :
 {
 }
 
-SvxPageWindow::~SvxPageWindow()
-{
-}
+SvxPageWindow::~SvxPageWindow() = default;
 
 void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {

@@ -36,9 +36,7 @@ VCLXHatchWindow::VCLXHatchWindow()
 {
 }
 
-VCLXHatchWindow::~VCLXHatchWindow()
-{
-}
+VCLXHatchWindow::~VCLXHatchWindow() = default;
 
 void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >& xParent,
                 const awt::Rectangle& aBounds,

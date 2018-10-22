@@ -2399,9 +2399,7 @@ SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, bool bOrg )
     bOrganizer = bOrg;
 }
 
- SwDocStyleSheetPool::~SwDocStyleSheetPool()
-{
-}
+SwDocStyleSheetPool::~SwDocStyleSheetPool() = default;
 
 SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
                                                 SfxStyleFamily  eFam,

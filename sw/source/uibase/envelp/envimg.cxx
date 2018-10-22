@@ -215,9 +215,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
     }
 }
 
-SwEnvCfgItem::~SwEnvCfgItem()
-{
-}
+SwEnvCfgItem::~SwEnvCfgItem() = default;
 
 void SwEnvCfgItem::ImplCommit()
 {

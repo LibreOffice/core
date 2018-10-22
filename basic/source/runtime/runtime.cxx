@@ -265,9 +265,7 @@ SbiRTLData::SbiRTLData()
     nCurDirPos  = 0;
 }
 
-SbiRTLData::~SbiRTLData()
-{
-}
+SbiRTLData::~SbiRTLData() = default;
 
 //                              SbiInstance
 

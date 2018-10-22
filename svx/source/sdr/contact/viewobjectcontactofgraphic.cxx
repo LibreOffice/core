@@ -60,9 +60,7 @@ namespace sdr
         {
         }
 
-        ViewObjectContactOfGraphic::~ViewObjectContactOfGraphic()
-        {
-        }
+        ViewObjectContactOfGraphic::~ViewObjectContactOfGraphic() = default;
     } // end of namespace contact
 } // end of namespace sdr
 

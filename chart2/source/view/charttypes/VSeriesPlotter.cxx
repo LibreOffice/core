@@ -124,9 +124,7 @@ VDataSeriesGroup::VDataSeriesGroup( VDataSeriesGroup&& other )
 {
 }
 
-VDataSeriesGroup::~VDataSeriesGroup()
-{
-}
+VDataSeriesGroup::~VDataSeriesGroup() = default;
 
 void VDataSeriesGroup::deleteSeries()
 {

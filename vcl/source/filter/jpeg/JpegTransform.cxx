@@ -29,8 +29,7 @@ JpegTransform::JpegTransform(SvStream& rInputStream, SvStream& rOutputStream) :
     mrOutputStream ( rOutputStream )
 {}
 
-JpegTransform::~JpegTransform()
-{}
+JpegTransform::~JpegTransform() = default;
 
 void JpegTransform::perform()
 {

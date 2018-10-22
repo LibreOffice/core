@@ -34,9 +34,7 @@ ScNameCreateDlg::ScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)
     m_xRightBox->set_active( bool(nFlags & CreateNameFlags::Right) );
 }
 
-ScNameCreateDlg::~ScNameCreateDlg()
-{
-}
+ScNameCreateDlg::~ScNameCreateDlg() = default;
 
 CreateNameFlags ScNameCreateDlg::GetFlags() const
 {

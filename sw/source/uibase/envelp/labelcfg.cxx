@@ -164,9 +164,7 @@ SwLabelConfig::SwLabelConfig() :
     }
 }
 
-SwLabelConfig::~SwLabelConfig()
-{
-}
+SwLabelConfig::~SwLabelConfig() = default;
 
 // the config item is not writable ?:
 void SwLabelConfig::ImplCommit() {}

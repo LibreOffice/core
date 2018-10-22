@@ -96,9 +96,7 @@ VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContex
     OSL_ENSURE( mxConfigAccess.is(), "VbaFilterConfig::VbaFilterConfig - cannot open configuration" );
 }
 
-VbaFilterConfig::~VbaFilterConfig()
-{
-}
+VbaFilterConfig::~VbaFilterConfig() = default;
 
 bool VbaFilterConfig::isImportVba() const
 {
@@ -121,9 +119,7 @@ VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
     OSL_ENSURE( !maMacroName.isEmpty(), "VbaMacroAttacherBase::VbaMacroAttacherBase - empty macro name" );
 }
 
-VbaMacroAttacherBase::~VbaMacroAttacherBase()
-{
-}
+VbaMacroAttacherBase::~VbaMacroAttacherBase() = default;
 
 void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroResolver >& rxResolver )
 {
@@ -147,9 +143,7 @@ VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
 }
 
-VbaProject::~VbaProject()
-{
-}
+VbaProject::~VbaProject() = default;
 
 bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
 {

@@ -64,12 +64,10 @@ PopupMenuDispatcher::PopupMenuDispatcher(
 {
 }
 
-PopupMenuDispatcher::~PopupMenuDispatcher()
-{
+PopupMenuDispatcher::~PopupMenuDispatcher() = default;
     // Warn programmer if he forgot to dispose this instance.
     // We must release all our references ...
     // and a dtor isn't the best place to do that!
-}
 
 OUString SAL_CALL PopupMenuDispatcher::getImplementationName()
 {

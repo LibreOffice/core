@@ -102,9 +102,7 @@ SidebarWinAccessible::SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSi
     SetWindow( &mrSidebarWin );
 }
 
-SidebarWinAccessible::~SidebarWinAccessible()
-{
-}
+SidebarWinAccessible::~SidebarWinAccessible() = default;
 
 void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem )
 {

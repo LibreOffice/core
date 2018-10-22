@@ -38,9 +38,7 @@ PreviewValueSet::PreviewValueSet (vcl::Window* pParent)
     SetExtraSpacing (2);
 }
 
-PreviewValueSet::~PreviewValueSet()
-{
-}
+PreviewValueSet::~PreviewValueSet() = default;
 
 void PreviewValueSet::SetPreviewSize (const Size& rSize)
 {

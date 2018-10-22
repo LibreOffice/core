@@ -134,9 +134,7 @@ void SwTabFrame::DestroyImpl()
     SwLayoutFrame::DestroyImpl();
 }
 
-SwTabFrame::~SwTabFrame()
-{
-}
+SwTabFrame::~SwTabFrame() = default;
 
 void SwTabFrame::JoinAndDelFollows()
 {
@@ -3691,9 +3689,7 @@ void SwRowFrame::DestroyImpl()
     SwLayoutFrame::DestroyImpl();
 }
 
-SwRowFrame::~SwRowFrame()
-{
-}
+SwRowFrame::~SwRowFrame() = default;
 
 void SwRowFrame::RegistFlys( SwPageFrame *pPage )
 {
@@ -4670,9 +4666,7 @@ void SwCellFrame::DestroyImpl()
     SwLayoutFrame::DestroyImpl();
 }
 
-SwCellFrame::~SwCellFrame()
-{
-}
+SwCellFrame::~SwCellFrame() = default;
 
 static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
 {

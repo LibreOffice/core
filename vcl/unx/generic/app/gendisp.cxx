@@ -26,9 +26,7 @@ SalGenericDisplay::SalGenericDisplay()
     m_pCapture = nullptr;
 }
 
-SalGenericDisplay::~SalGenericDisplay()
-{
-}
+SalGenericDisplay::~SalGenericDisplay() = default;
 
 void SalGenericDisplay::registerFrame( SalFrame* pFrame )
 {

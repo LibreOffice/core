@@ -64,11 +64,7 @@ Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage)
 {
 }
 
-
-Svx3DSceneObject::~Svx3DSceneObject() throw()
-{
-}
-
+Svx3DSceneObject::~Svx3DSceneObject() throw() = default;
 
 void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
@@ -419,9 +415,7 @@ Svx3DCubeObject::Svx3DCubeObject(SdrObject* pObj)
 {
 }
 
-Svx3DCubeObject::~Svx3DCubeObject() throw()
-{
-}
+Svx3DCubeObject::~Svx3DCubeObject() throw() = default;
 
 bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {
@@ -540,9 +534,7 @@ Svx3DSphereObject::Svx3DSphereObject(SdrObject* pObj)
 {
 }
 
-Svx3DSphereObject::~Svx3DSphereObject() throw()
-{
-}
+Svx3DSphereObject::~Svx3DSphereObject() throw() = default;
 
 bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {
@@ -645,9 +637,7 @@ Svx3DLatheObject::Svx3DLatheObject(SdrObject* pObj)
 {
 }
 
-Svx3DLatheObject::~Svx3DLatheObject() throw()
-{
-}
+Svx3DLatheObject::~Svx3DLatheObject() throw() = default;
 
 static bool PolyPolygonShape3D_to_B3dPolyPolygon(
     const Any& rValue,
@@ -825,9 +815,7 @@ Svx3DExtrudeObject::Svx3DExtrudeObject(SdrObject* pObj)
 {
 }
 
-Svx3DExtrudeObject::~Svx3DExtrudeObject() throw()
-{
-}
+Svx3DExtrudeObject::~Svx3DExtrudeObject() throw() = default;
 
 bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {
@@ -908,9 +896,7 @@ Svx3DPolygonObject::Svx3DPolygonObject(SdrObject* pObj)
 {
 }
 
-Svx3DPolygonObject::~Svx3DPolygonObject() throw()
-{
-}
+Svx3DPolygonObject::~Svx3DPolygonObject() throw() = default;
 
 bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {

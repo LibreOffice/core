@@ -37,9 +37,7 @@ namespace drawinglayer
         {
         }
 
-        BaseProcessor3D::~BaseProcessor3D()
-        {
-        }
+        BaseProcessor3D::~BaseProcessor3D() = default;
 
         void BaseProcessor3D::process(const primitive3d::Primitive3DContainer& rSource)
         {

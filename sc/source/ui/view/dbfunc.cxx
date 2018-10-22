@@ -44,9 +44,7 @@ ScDBFunc::ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pV
 {
 }
 
-ScDBFunc::~ScDBFunc()
-{
-}
+ScDBFunc::~ScDBFunc() = default;
 
 //      auxiliary functions
 

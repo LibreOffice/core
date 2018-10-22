@@ -68,7 +68,7 @@ SearchParam::SearchParam( const SearchParam& rParam )
     m_bWildMatchSel = rParam.m_bWildMatchSel;
 }
 
-SearchParam::~SearchParam() {}
+SearchParam::~SearchParam() = default;
 
 static bool lcl_Equals( const i18nutil::SearchOptions2& rSO1, const i18nutil::SearchOptions2& rSO2 )
 {
@@ -223,9 +223,7 @@ void TextSearch::SetLocale( const i18nutil::SearchOptions2& rOptions,
     xTextSearch = getXTextSearch( aSOpt );
 }
 
-TextSearch::~TextSearch()
-{
-}
+TextSearch::~TextSearch() = default;
 
 /*
  * General search methods. These methods will call the respective

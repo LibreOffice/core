@@ -107,13 +107,11 @@ struct ScDocumentImportImpl
 
 ScDocumentImport::Attrs::Attrs() : mbLatinNumFmtOnly(false) {}
 
-ScDocumentImport::Attrs::~Attrs() {}
+ScDocumentImport::Attrs::~Attrs() = default;
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
 
-ScDocumentImport::~ScDocumentImport()
-{
-}
+ScDocumentImport::~ScDocumentImport() = default;
 
 ScDocument& ScDocumentImport::getDoc()
 {
@@ -731,8 +729,7 @@ namespace {
 class CellStoreAfterImportBroadcaster
 {
 public:
-
-    CellStoreAfterImportBroadcaster() {}
+    CellStoreAfterImportBroadcaster() = default;
 
     void operator() (const sc::CellStoreType::value_type& node)
     {

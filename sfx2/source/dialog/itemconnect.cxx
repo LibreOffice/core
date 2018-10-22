@@ -27,11 +27,7 @@ namespace sfx {
 
 // Base control wrapper classes
 
-
-ControlWrapperBase::~ControlWrapperBase()
-{
-}
-
+ControlWrapperBase::~ControlWrapperBase() = default;
 
 } // namespace sfx
 

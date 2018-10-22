@@ -125,9 +125,7 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     *this = rSrcLayerAdmin;
 }
 
-SdrLayerAdmin::~SdrLayerAdmin()
-{
-}
+SdrLayerAdmin::~SdrLayerAdmin() = default;
 
 void SdrLayerAdmin::ClearLayers()
 {

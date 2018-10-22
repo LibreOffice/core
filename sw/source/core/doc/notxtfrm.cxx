@@ -165,9 +165,7 @@ void SwNoTextFrame::DestroyImpl()
     SwContentFrame::DestroyImpl();
 }
 
-SwNoTextFrame::~SwNoTextFrame()
-{
-}
+SwNoTextFrame::~SwNoTextFrame() = default;
 
 void SetOutDev( SwViewShell *pSh, OutputDevice *pOut )
 {

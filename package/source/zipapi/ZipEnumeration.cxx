@@ -26,9 +26,7 @@ ZipEnumeration::ZipEnumeration( EntryHash & rNewEntryHash)
 , aIterator(rEntryHash.begin())
 {
 }
-ZipEnumeration::~ZipEnumeration()
-{
-}
+ZipEnumeration::~ZipEnumeration() = default;
 bool ZipEnumeration::hasMoreElements()
 {
     return (aIterator != rEntryHash.end());

@@ -38,9 +38,7 @@ namespace sdr
         {
         }
 
-        OverlayPrimitive2DSequenceObject::~OverlayPrimitive2DSequenceObject()
-        {
-        }
+        OverlayPrimitive2DSequenceObject::~OverlayPrimitive2DSequenceObject() = default;
     } // end of namespace overlay
 } // end of namespace sdr
 

@@ -651,9 +651,7 @@ struct SwFindParaText : public SwFindParas
     virtual ~SwFindParaText();
 };
 
-SwFindParaText::~SwFindParaText()
-{
-}
+SwFindParaText::~SwFindParaText() = default;
 
 int SwFindParaText::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove,
                           const SwPaM* pRegion, bool bInReadOnly )

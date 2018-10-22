@@ -88,11 +88,7 @@ MediaItem::MediaItem( const MediaItem& rItem )
 {
 }
 
-
-MediaItem::~MediaItem()
-{
-}
-
+MediaItem::~MediaItem() = default;
 
 bool MediaItem::operator==( const SfxPoolItem& rItem ) const
 {

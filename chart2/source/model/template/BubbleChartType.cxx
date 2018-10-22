@@ -90,18 +90,13 @@ struct StaticBubbleChartTypeInfo : public rtl::StaticAggregate< uno::Reference< 
 
 namespace chart
 {
+BubbleChartType::BubbleChartType() = default;
 
-BubbleChartType::BubbleChartType()
-{
-}
+BubbleChartType::BubbleChartType(const BubbleChartType& rOther)
 
-BubbleChartType::BubbleChartType( const BubbleChartType & rOther ) :
-        ChartType( rOther )
-{
-}
+    = default;
 
-BubbleChartType::~BubbleChartType()
-{}
+BubbleChartType::~BubbleChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL BubbleChartType::createClone()

@@ -725,9 +725,7 @@ ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const sv
 {
 }
 
-ScExternalSingleRefToken::~ScExternalSingleRefToken()
-{
-}
+ScExternalSingleRefToken::~ScExternalSingleRefToken() = default;
 
 sal_uInt16 ScExternalSingleRefToken::GetIndex() const
 {
@@ -771,9 +769,7 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const sv
 {
 }
 
-ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
-{
-}
+ScExternalDoubleRefToken::~ScExternalDoubleRefToken() = default;
 
 sal_uInt16 ScExternalDoubleRefToken::GetIndex() const
 {
@@ -836,7 +832,7 @@ ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedS
 {
 }
 
-ScExternalNameToken::~ScExternalNameToken() {}
+ScExternalNameToken::~ScExternalNameToken() = default;
 
 sal_uInt16 ScExternalNameToken::GetIndex() const
 {
@@ -874,7 +870,7 @@ ScTableRefToken::ScTableRefToken( const ScTableRefToken& r ) :
 {
 }
 
-ScTableRefToken::~ScTableRefToken() {}
+ScTableRefToken::~ScTableRefToken() = default;
 
 sal_uInt16 ScTableRefToken::GetIndex() const
 {
@@ -957,9 +953,7 @@ bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && mpJumpMatrix.get() == r.GetJumpMatrix();
 }
 
-ScJumpMatrixToken::~ScJumpMatrixToken()
-{
-}
+ScJumpMatrixToken::~ScJumpMatrixToken() = default;
 
 double          ScEmptyCellToken::GetDouble() const     { return 0.0; }
 
@@ -982,7 +976,7 @@ ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken&
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 
-ScMatrixCellResultToken::~ScMatrixCellResultToken() {}
+ScMatrixCellResultToken::~ScMatrixCellResultToken() = default;
 
 svl::SharedString ScMatrixCellResultToken::GetString() const
 {
@@ -1031,7 +1025,7 @@ ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( const ScMatrixFormulaCellTok
     CloneUpperLeftIfNecessary();
 }
 
-ScMatrixFormulaCellToken::~ScMatrixFormulaCellToken() {}
+ScMatrixFormulaCellToken::~ScMatrixFormulaCellToken() = default;
 
 bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 {
@@ -1862,9 +1856,7 @@ ScTokenArray::ScTokenArray() :
     ResetVectorState();
 }
 
-ScTokenArray::~ScTokenArray()
-{
-}
+ScTokenArray::~ScTokenArray() = default;
 
 ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
 {

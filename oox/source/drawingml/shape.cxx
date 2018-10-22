@@ -177,9 +177,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , maDiagramDoms( pSourceShape->maDiagramDoms )
 {}
 
-Shape::~Shape()
-{
-}
+Shape::~Shape() = default;
 
 table::TablePropertiesPtr const & Shape::getTableProperties()
 {

@@ -30,16 +30,11 @@
 #include <algorithm>
 #include <memory>
 
-Bitmap::Bitmap()
-{
-}
+Bitmap::Bitmap() = default;
 
 Bitmap::Bitmap(const Bitmap& rBitmap)
-    : mxSalBmp(rBitmap.mxSalBmp)
-    , maPrefMapMode(rBitmap.maPrefMapMode)
-    , maPrefSize(rBitmap.maPrefSize)
-{
-}
+
+    = default;
 
 Bitmap::Bitmap(std::shared_ptr<SalBitmap> const & pSalBitmap)
     : mxSalBmp(pSalBitmap)
@@ -109,9 +104,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
     }
 }
 
-Bitmap::~Bitmap()
-{
-}
+Bitmap::~Bitmap() = default;
 
 const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 {

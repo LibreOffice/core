@@ -274,9 +274,7 @@ SdXShape::SdXShape(SvxShape* pShape, SdXImpressDocument* pModel)
     pShape->setMaster( this );
 }
 
-SdXShape::~SdXShape() throw()
-{
-}
+SdXShape::~SdXShape() throw() = default;
 
 void SdXShape::dispose()
 {

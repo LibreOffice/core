@@ -1308,9 +1308,7 @@ ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::un
     maEntries.swap(rEntries);
 }
 
-ExtCfCondFormat::~ExtCfCondFormat()
-{
-}
+ExtCfCondFormat::~ExtCfCondFormat() = default;
 
 const ScRangeList& ExtCfCondFormat::getRange()
 {

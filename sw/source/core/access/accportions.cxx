@@ -91,9 +91,7 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     m_aLineBreaks.push_back( 0 );
 }
 
-SwAccessiblePortionData::~SwAccessiblePortionData()
-{
-}
+SwAccessiblePortionData::~SwAccessiblePortionData() = default;
 
 void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
         sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)

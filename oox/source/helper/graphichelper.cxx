@@ -136,9 +136,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;
 }
 
-GraphicHelper::~GraphicHelper()
-{
-}
+GraphicHelper::~GraphicHelper() = default;
 
 // System colors and predefined colors ----------------------------------------
 

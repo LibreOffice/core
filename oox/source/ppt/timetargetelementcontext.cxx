@@ -99,9 +99,7 @@ namespace oox { namespace ppt {
         OSL_ENSURE( mpTarget, "no valid target passed" );
     }
 
-    TimeTargetElementContext::~TimeTargetElementContext( ) throw( )
-    {
-    }
+    TimeTargetElementContext::~TimeTargetElementContext() throw() = default;
 
     ::oox::core::ContextHandlerRef TimeTargetElementContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {

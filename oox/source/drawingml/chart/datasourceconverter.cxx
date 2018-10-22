@@ -36,9 +36,7 @@ DataSequenceConverter::DataSequenceConverter( const ConverterRoot& rParent, Data
 {
 }
 
-DataSequenceConverter::~DataSequenceConverter()
-{
-}
+DataSequenceConverter::~DataSequenceConverter() = default;
 
 Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUString& rRole )
 {
@@ -84,9 +82,7 @@ DataSourceConverter::DataSourceConverter( const ConverterRoot& rParent, DataSour
 {
 }
 
-DataSourceConverter::~DataSourceConverter()
-{
-}
+DataSourceConverter::~DataSourceConverter() = default;
 
 Reference< XDataSequence > DataSourceConverter::createDataSequence( const OUString& rRole )
 {

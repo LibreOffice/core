@@ -136,9 +136,7 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-LoadEnv::~LoadEnv()
-{
-}
+LoadEnv::~LoadEnv() = default;
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                            const css::uno::Reference< css::uno::XComponentContext >&     xContext  ,

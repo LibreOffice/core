@@ -45,9 +45,7 @@ SdInsertLayerDlg::SdInsertLayerDlg(weld::Window* pWindow, const SfxItemSet& rInA
     m_xNameFrame->set_sensitive(bDeletable);
 }
 
-SdInsertLayerDlg::~SdInsertLayerDlg()
-{
-}
+SdInsertLayerDlg::~SdInsertLayerDlg() = default;
 
 void SdInsertLayerDlg::GetAttr( SfxItemSet& rAttrs )
 {

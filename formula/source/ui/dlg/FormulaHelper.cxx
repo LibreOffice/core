@@ -33,8 +33,8 @@ namespace formula
         class OEmptyFunctionDescription : public IFunctionDescription
         {
         public:
-            OEmptyFunctionDescription(){}
-            virtual ~OEmptyFunctionDescription(){}
+            OEmptyFunctionDescription() = default;
+            virtual ~OEmptyFunctionDescription() = default;
 
             virtual OUString getFunctionName() const override { return OUString(); }
             virtual const IFunctionCategory* getCategory() const override { return nullptr; }

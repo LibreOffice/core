@@ -41,11 +41,7 @@ CellRange::CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 n
 {
 }
 
-
-CellRange::~CellRange()
-{
-}
-
+CellRange::~CellRange() = default;
 
 // ICellRange
 

@@ -55,9 +55,7 @@ SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
 {
 }
 
-SwDPage::~SwDPage()
-{
-}
+SwDPage::~SwDPage() = default;
 
 void SwDPage::lateInit(const SwDPage& rSrcPage)
 {

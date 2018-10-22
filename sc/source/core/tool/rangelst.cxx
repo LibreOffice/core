@@ -130,9 +130,7 @@ private:
 }
 
 //  ScRangeList
-ScRangeList::~ScRangeList()
-{
-}
+ScRangeList::~ScRangeList() = default;
 
 ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
                            formula::FormulaGrammar::AddressConvention eConv,
@@ -1000,12 +998,9 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr )
 
 ScRangeList::ScRangeList() : mnMaxRowUsed(-1) {}
 
-ScRangeList::ScRangeList( const ScRangeList& rList ) :
-    SvRefBase(rList),
-    maRanges(rList.maRanges),
-    mnMaxRowUsed(rList.mnMaxRowUsed)
-{
-}
+ScRangeList::ScRangeList(const ScRangeList& rList)
+
+    = default;
 
 ScRangeList::ScRangeList( const ScRangeList&& rList ) :
     SvRefBase(),
@@ -1149,9 +1144,7 @@ ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
 }
 
 //  ScRangePairList
-ScRangePairList::~ScRangePairList()
-{
-}
+ScRangePairList::~ScRangePairList() = default;
 
 void ScRangePairList::Remove(size_t nPos)
 {

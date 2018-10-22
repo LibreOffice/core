@@ -182,9 +182,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
     }
 }
 
-FormViewPageWindowAdapter::~FormViewPageWindowAdapter()
-{
-}
+FormViewPageWindowAdapter::~FormViewPageWindowAdapter() = default;
 
 void FormViewPageWindowAdapter::dispose()
 {

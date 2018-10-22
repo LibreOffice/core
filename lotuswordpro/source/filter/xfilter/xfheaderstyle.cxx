@@ -68,9 +68,7 @@ XFHeaderStyle::XFHeaderStyle(bool isFooter)
     m_fMinHeight = -1;
 }
 
-XFHeaderStyle::~XFHeaderStyle()
-{
-}
+XFHeaderStyle::~XFHeaderStyle() = default;
 
 void    XFHeaderStyle::SetMargins(double left, double right, double bottom)
 {

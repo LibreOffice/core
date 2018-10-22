@@ -144,10 +144,7 @@ void IdlEnumFieldImpl::set( Any &, const Any & )
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 
-
-EnumIdlClassImpl::~EnumIdlClassImpl()
-{
-}
+EnumIdlClassImpl::~EnumIdlClassImpl() = default;
 
 // IdlClassImpl modifications
 

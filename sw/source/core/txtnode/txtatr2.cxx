@@ -47,9 +47,7 @@ SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
     SetCharFormatAttr( true );
 }
 
-SwTextCharFormat::~SwTextCharFormat( )
-{
-}
+SwTextCharFormat::~SwTextCharFormat() = default;
 
 void SwTextCharFormat::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
@@ -88,9 +86,7 @@ SwTextAttrNesting::SwTextAttrNesting( SfxPoolItem & i_rAttr,
     SetNesting( true );
 }
 
-SwTextAttrNesting::~SwTextAttrNesting()
-{
-}
+SwTextAttrNesting::~SwTextAttrNesting() = default;
 
 SwTextINetFormat::SwTextINetFormat( SwFormatINetFormat& rAttr,
                             sal_Int32 nStart, sal_Int32 nEnd )
@@ -105,9 +101,7 @@ SwTextINetFormat::SwTextINetFormat( SwFormatINetFormat& rAttr,
     SetCharFormatAttr( true );
 }
 
-SwTextINetFormat::~SwTextINetFormat( )
-{
-}
+SwTextINetFormat::~SwTextINetFormat() = default;
 
 SwCharFormat* SwTextINetFormat::GetCharFormat()
 {
@@ -198,9 +192,7 @@ SwTextRuby::SwTextRuby( SwFormatRuby& rAttr,
     rAttr.m_pTextAttr  = this;
 }
 
-SwTextRuby::~SwTextRuby()
-{
-}
+SwTextRuby::~SwTextRuby() = default;
 
 void SwTextRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {

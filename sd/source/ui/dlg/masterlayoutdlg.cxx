@@ -71,9 +71,7 @@ MasterLayoutDialog::MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pD
     mxCBPageNumber->set_active( mbOldPageNumber );
 }
 
-MasterLayoutDialog::~MasterLayoutDialog()
-{
-}
+MasterLayoutDialog::~MasterLayoutDialog() = default;
 
 short MasterLayoutDialog::execute()
 {

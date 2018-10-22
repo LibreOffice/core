@@ -43,9 +43,7 @@ ImageWrapper::ImageWrapper( const Image& aImage ) : m_aImage( aImage )
 {
 }
 
-ImageWrapper::~ImageWrapper()
-{
-}
+ImageWrapper::~ImageWrapper() = default;
 
 Sequence< sal_Int8 > const & ImageWrapper::GetUnoTunnelId()
 {

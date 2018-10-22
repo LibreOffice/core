@@ -26,7 +26,7 @@ namespace {
 class DummyTokenHandler : public cppu::WeakImplHelper< xml::sax::XFastTokenHandler >
 {
 public:
-             DummyTokenHandler() {}
+    DummyTokenHandler() = default;
 
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& ) override
     {

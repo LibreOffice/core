@@ -65,11 +65,7 @@ LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefi
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
-
-LockFileCommon::~LockFileCommon()
-{
-}
-
+LockFileCommon::~LockFileCommon() = default;
 
 INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL ) const
 {

@@ -119,9 +119,7 @@ void PptEscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
 
 }
 
-PptEscherEx::~PptEscherEx()
-{
-}
+PptEscherEx::~PptEscherEx() = default;
 
 void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {

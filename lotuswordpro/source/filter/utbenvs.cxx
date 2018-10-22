@@ -131,9 +131,7 @@ LtcUtBenValueStream::LtcUtBenValueStream(CBenValue * pValue)
     cpValue = pValue;
 }
 
-LtcUtBenValueStream::~LtcUtBenValueStream()
-{
-}
+LtcUtBenValueStream::~LtcUtBenValueStream() = default;
 
 } // end namespace OpenStormBento
 

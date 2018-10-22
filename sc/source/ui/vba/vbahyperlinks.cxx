@@ -134,10 +134,8 @@ private:
     HyperlinkVector     maHlinks;
 };
 
-ScVbaHlinkContainer::ScVbaHlinkContainer()
-{
+ScVbaHlinkContainer::ScVbaHlinkContainer() = default;
     // TODO FIXME: fill with existing hyperlinks
-}
 
 ScVbaHlinkContainer::ScVbaHlinkContainer( const ScVbaHlinkContainerRef& rxSheetContainer,
         const ScRangeList& rScRanges )
@@ -187,9 +185,7 @@ ScVbaHlinkContainerMember::ScVbaHlinkContainerMember( ScVbaHlinkContainer* pCont
 {
 }
 
-ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
-{
-}
+ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember() = default;
 
 } // namespace detail
 
@@ -209,9 +205,7 @@ ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxPa
 {
 }
 
-ScVbaHyperlinks::~ScVbaHyperlinks()
-{
-}
+ScVbaHyperlinks::~ScVbaHyperlinks() = default;
 
 // XHyperlinks ----------------------------------------------------------------
 

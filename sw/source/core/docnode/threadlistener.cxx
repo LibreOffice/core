@@ -29,9 +29,7 @@ ThreadListener::ThreadListener( ThreadManager& rThreadListenerOwner )
 {
 }
 
-ThreadListener::~ThreadListener()
-{
-}
+ThreadListener::~ThreadListener() = default;
 
 void ThreadListener::ListenToThread( const oslInterlockedCount nThreadID,
                                      ObservableThread& rThread )

@@ -59,9 +59,7 @@ VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
 {
 }
 
-VisibleAreaManager::~VisibleAreaManager()
-{
-}
+VisibleAreaManager::~VisibleAreaManager() = default;
 
 void VisibleAreaManager::ActivateCurrentSlideTracking()
 {

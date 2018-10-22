@@ -64,9 +64,7 @@ XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImpo
     }
 }
 
-XMLCalculationSettingsContext::~XMLCalculationSettingsContext()
-{
-}
+XMLCalculationSettingsContext::~XMLCalculationSettingsContext() = default;
 void XMLCalculationSettingsContext::EndElement()
 {
     if (nYear != 1930 )

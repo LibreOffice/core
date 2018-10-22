@@ -103,9 +103,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
     }
 }
 
-RootItemContainer::~RootItemContainer()
-{
-}
+RootItemContainer::~RootItemContainer() = default;
 
 Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType )
 {

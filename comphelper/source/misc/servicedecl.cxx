@@ -63,9 +63,7 @@ private:
     ServiceDecl const& m_rServiceDecl;
 };
 
-ServiceDecl::Factory::~Factory()
-{
-}
+ServiceDecl::Factory::~Factory() = default;
 
 // XServiceInfo:
 OUString ServiceDecl::Factory::getImplementationName()

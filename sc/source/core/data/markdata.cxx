@@ -77,9 +77,7 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     return *this;
 }
 
-ScMarkData::~ScMarkData()
-{
-}
+ScMarkData::~ScMarkData() = default;
 
 void ScMarkData::ResetMark()
 {

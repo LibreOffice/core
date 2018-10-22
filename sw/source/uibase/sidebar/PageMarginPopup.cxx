@@ -29,9 +29,7 @@ PageMarginPopup::PageMarginPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rT
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-PageMarginPopup::~PageMarginPopup()
-{
-}
+PageMarginPopup::~PageMarginPopup() = default;
 
 VclPtr<SfxPopupWindow> PageMarginPopup::CreatePopupWindow()
 {

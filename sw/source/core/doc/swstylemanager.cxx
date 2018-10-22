@@ -34,7 +34,7 @@ class SwStyleCache
 {
     SwStyleNameCache mMap;
 public:
-    SwStyleCache() {}
+    SwStyleCache() = default;
     void addStyleName( const std::shared_ptr<SfxItemSet>& pStyle )
         { mMap[ StylePool::nameOf(pStyle) ] = pStyle; }
     void addCompletePool( StylePool& rPool );

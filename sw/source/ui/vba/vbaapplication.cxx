@@ -93,9 +93,7 @@ SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xCo
 {
 }
 
-SwVbaApplication::~SwVbaApplication()
-{
-}
+SwVbaApplication::~SwVbaApplication() = default;
 
 sal_uInt32
 SwVbaApplication::AddSink( const uno::Reference< XSink >& xSink )

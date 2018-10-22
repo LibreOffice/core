@@ -497,9 +497,7 @@ class SwUndoReplace::Impl
 
 public:
     Impl(SwPaM const& rPam, OUString const& rIns, bool const bRegExp);
-    virtual ~Impl()
-    {
-    }
+    virtual ~Impl() = default;
 
     void UndoImpl( ::sw::UndoRedoContext & );
     void RedoImpl( ::sw::UndoRedoContext & );
@@ -517,9 +515,7 @@ SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
 {
 }
 
-SwUndoReplace::~SwUndoReplace()
-{
-}
+SwUndoReplace::~SwUndoReplace() = default;
 
 void SwUndoReplace::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -793,9 +789,7 @@ SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
     SaveGraphicData( rGrfNd );
 }
 
-SwUndoReRead::~SwUndoReRead()
-{
-}
+SwUndoReRead::~SwUndoReRead() = default;
 
 void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 {

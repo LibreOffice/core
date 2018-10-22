@@ -42,9 +42,7 @@ BitmapFactory::BitmapFactory()
 {
 }
 
-BitmapFactory::~BitmapFactory()
-{
-}
+BitmapFactory::~BitmapFactory() = default;
 
 BitmapEx BitmapFactory::CreateBitmap (
     const SdPage& rPage,

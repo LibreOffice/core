@@ -109,9 +109,7 @@ SwFieldInputDlg::SwFieldInputDlg(weld::Window *pParent, SwWrtShell &rS,
         m_xEditED->select_region(0, -1);
 }
 
-SwFieldInputDlg::~SwFieldInputDlg()
-{
-}
+SwFieldInputDlg::~SwFieldInputDlg() = default;
 
 // Close
 void SwFieldInputDlg::Apply()

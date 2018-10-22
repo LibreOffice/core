@@ -37,9 +37,7 @@ IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
     index.reset( new Index(rxContext) );
 }
 
-IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
-{
-}
+IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode() = default;
 
 sal_Bool SAL_CALL IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
     const OUString& rAlgorithm, sal_Int32 collatorOptions )
@@ -115,9 +113,7 @@ Index::Index(const css::uno::Reference < css::uno::XComponentContext >& rxContex
 {
 }
 
-Index::~Index()
-{
-}
+Index::~Index() = default;
 
 sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)
 {

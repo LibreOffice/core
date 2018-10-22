@@ -73,9 +73,7 @@ SidebarPanelBase::SidebarPanelBase (
     }
 }
 
-SidebarPanelBase::~SidebarPanelBase()
-{
-}
+SidebarPanelBase::~SidebarPanelBase() = default;
 
 void SAL_CALL SidebarPanelBase::disposing()
 {

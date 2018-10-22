@@ -28,8 +28,7 @@ LinearRegressionCurveCalculator::LinearRegressionCurveCalculator() :
     PolynomialRegressionCurveCalculator()
 {}
 
-LinearRegressionCurveCalculator::~LinearRegressionCurveCalculator()
-{}
+LinearRegressionCurveCalculator::~LinearRegressionCurveCalculator() = default;
 
 void LinearRegressionCurveCalculator::setRegressionProperties(
     sal_Int32 /*aDegree*/,

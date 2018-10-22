@@ -53,9 +53,7 @@ MozillaBootstrap::MozillaBootstrap()
 {
 }
 
-MozillaBootstrap::~MozillaBootstrap()
-{
-}
+MozillaBootstrap::~MozillaBootstrap() = default;
 
 void MozillaBootstrap::Init()
 {

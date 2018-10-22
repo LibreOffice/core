@@ -106,10 +106,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     catch (const uno::RuntimeException &) {}
 }
 
-
-Entry_Impl::~Entry_Impl()
-{}
-
+Entry_Impl::~Entry_Impl() = default;
 
 sal_Int32 Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl& rEntry ) const
 {
@@ -165,11 +162,7 @@ void ExtensionRemovedListener::disposing( lang::EventObject const & rEvt )
     }
 }
 
-
-ExtensionRemovedListener::~ExtensionRemovedListener()
-{
-}
-
+ExtensionRemovedListener::~ExtensionRemovedListener() = default;
 
 // ExtensionBox_Impl
 ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :

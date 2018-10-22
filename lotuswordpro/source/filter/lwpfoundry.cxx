@@ -84,9 +84,7 @@ LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
     m_xBulletStyleMgr->SetFoundry(this);
 }
 
-LwpFoundry::~LwpFoundry()
-{
-}
+LwpFoundry::~LwpFoundry() = default;
 
 void LwpFoundry::Read(LwpObjectStream *pStrm)
 {

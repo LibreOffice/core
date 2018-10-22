@@ -797,7 +797,7 @@ namespace accessibility
     class AccessibleTextHelper_UpdateChildBounds
     {
     public:
-        explicit AccessibleTextHelper_UpdateChildBounds() {}
+        explicit AccessibleTextHelper_UpdateChildBounds() = default;
         ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
         {
             // retrieve hard reference from weak one
@@ -1523,9 +1523,7 @@ namespace accessibility
         SetEditSource( std::move(pEditSource) );
     }
 
-    AccessibleTextHelper::~AccessibleTextHelper()
-    {
-    }
+    AccessibleTextHelper::~AccessibleTextHelper() = default;
 
     const SvxEditSource& AccessibleTextHelper::GetEditSource() const
     {

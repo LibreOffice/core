@@ -63,10 +63,7 @@ void FmFormPage::lateInit(const FmFormPage& rPage)
     m_sPageName = rPage.m_sPageName;
 }
 
-
-FmFormPage::~FmFormPage()
-{
-}
+FmFormPage::~FmFormPage() = default;
 
 SdrPage* FmFormPage::CloneSdrPage(SdrModel& rTargetModel) const
 {

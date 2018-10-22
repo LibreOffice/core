@@ -42,10 +42,7 @@ const char PROPNAME_UINAME[]    = "UIName";
 
 namespace framework
 {
-
-ConstItemContainer::ConstItemContainer()
-{
-}
+ConstItemContainer::ConstItemContainer() = default;
 
 ConstItemContainer::ConstItemContainer( const ItemContainer& rItemContainer )
 {
@@ -116,9 +113,7 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
     }
 }
 
-ConstItemContainer::~ConstItemContainer()
-{
-}
+ConstItemContainer::~ConstItemContainer() = default;
 
 // private
 void ConstItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector )

@@ -37,9 +37,7 @@ namespace drawinglayer
         {
         }
 
-        BaseProcessor2D::~BaseProcessor2D()
-        {
-        }
+        BaseProcessor2D::~BaseProcessor2D() = default;
 
         void BaseProcessor2D::process(const primitive2d::BasePrimitive2D& rCandidate)
         {

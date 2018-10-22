@@ -1753,9 +1753,7 @@ FormulaParser::FormulaParser( const WorkbookHelper& rHelper ) :
     mxImpl.reset( new OoxFormulaParserImpl( *this ) );
 }
 
-FormulaParser::~FormulaParser()
-{
-}
+FormulaParser::~FormulaParser() = default;
 
 ApiTokenSequence FormulaParser::importFormula( const ScAddress& rBaseAddress, const OUString& rFormulaString ) const
 {

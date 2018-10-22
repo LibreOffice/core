@@ -49,9 +49,7 @@ OUser::OUser(const OUString& Name, bool _bCase) :    OUser_BASE(m_aMutex)
     m_Name = Name;
 }
 
-OUser::~OUser( )
-{
-}
+OUser::~OUser() = default;
 
 void OUser::disposing()
 {

@@ -487,9 +487,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
 {
 }
 
-ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
-{
-}
+ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage() = default;
 
 void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 {
@@ -828,9 +826,7 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(TabPageParent pParent, const SfxItemSet
     mxRbMagnZoom->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
 }
 
-ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
-{
-}
+ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage() = default;
 
 VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
@@ -978,9 +974,7 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage(TabPageParent pParent, const SfxItemSet
     m_xRbVisibleBookmarkLevels->connect_toggled(LINK(this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl));
 }
 
-ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
-{
-}
+ImpPDFTabViewerPage::~ImpPDFTabViewerPage() = default;
 
 IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, weld::ToggleButton&, void )
 {
@@ -1066,9 +1060,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(TabPageParent i_pParent, const SfxI
     mxPbSetPwd->connect_clicked(LINK(this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl));
 }
 
-ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
-{
-}
+ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage() = default;
 
 VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
@@ -1283,9 +1275,7 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage(TabPageParent pParent, const SfxItemSet& 
 {
 }
 
-ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
-{
-}
+ImpPDFTabLinksPage::~ImpPDFTabLinksPage() = default;
 
 VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
@@ -1465,9 +1455,7 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemS
     mxPbSignCertClear->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertClear));
 }
 
-ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
-{
-}
+ImpPDFTabSigningPage::~ImpPDFTabSigningPage() = default;
 
 IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, void)
 {

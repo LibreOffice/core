@@ -159,9 +159,7 @@ ShapeType::ShapeType( Drawing& rDrawing ) :
 {
 }
 
-ShapeType::~ShapeType()
-{
-}
+ShapeType::~ShapeType() = default;
 
 sal_Int32 ShapeType::getShapeType() const
 {
@@ -270,9 +268,7 @@ ShapeModel::ShapeModel()
 {
 }
 
-ShapeModel::~ShapeModel()
-{
-}
+ShapeModel::~ShapeModel() = default;
 
 TextBox& ShapeModel::createTextBox(ShapeTypeModel& rModel)
 {
@@ -1367,9 +1363,7 @@ GroupShape::GroupShape( Drawing& rDrawing ) :
 {
 }
 
-GroupShape::~GroupShape()
-{
-}
+GroupShape::~GroupShape() = default;
 
 void GroupShape::finalizeFragmentImport()
 {

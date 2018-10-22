@@ -488,10 +488,7 @@ OCustomShape::OCustomShape(
     m_bIsListening = true;
 }
 
-
-OCustomShape::~OCustomShape()
-{
-}
+OCustomShape::~OCustomShape() = default;
 
 sal_uInt16 OCustomShape::GetObjIdentifier() const
 {
@@ -620,9 +617,7 @@ OUnoObject::OUnoObject(
 
 }
 
-OUnoObject::~OUnoObject()
-{
-}
+OUnoObject::~OUnoObject() = default;
 
 void OUnoObject::impl_initializeModel_nothrow()
 {
@@ -947,9 +942,7 @@ OOle2Obj::OOle2Obj(
     m_bIsListening = true;
 }
 
-OOle2Obj::~OOle2Obj()
-{
-}
+OOle2Obj::~OOle2Obj() = default;
 
 sal_uInt16 OOle2Obj::GetObjIdentifier() const
 {

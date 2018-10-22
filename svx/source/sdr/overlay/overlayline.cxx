@@ -72,9 +72,7 @@ namespace sdr
         {
         }
 
-        OverlayLineStriped::~OverlayLineStriped()
-        {
-        }
+        OverlayLineStriped::~OverlayLineStriped() = default;
     } // end of namespace overlay
 } // end of namespace sdr
 

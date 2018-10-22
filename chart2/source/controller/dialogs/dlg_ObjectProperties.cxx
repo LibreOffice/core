@@ -106,9 +106,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
     OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = (aParticleID == "ALLELEMENTS");
 }
-ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
-{
-}
+ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter() = default;
 
 void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -475,9 +473,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
     GetOKButton().connect_clicked(LINK(this, SchAttribTabDlg, OKPressed));
 }
 
-SchAttribTabDlg::~SchAttribTabDlg()
-{
-}
+SchAttribTabDlg::~SchAttribTabDlg() = default;
 
 void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {

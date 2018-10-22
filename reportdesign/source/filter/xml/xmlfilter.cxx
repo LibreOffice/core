@@ -351,10 +351,7 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, S
     m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TextPropMap::TABLE_DEFAULTS, false );
 }
 
-
-ORptFilter::~ORptFilter() throw()
-{
-}
+ORptFilter::~ORptFilter() throw() = default;
 
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
 {

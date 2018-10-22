@@ -83,11 +83,7 @@ namespace pcr
         osl_atomic_decrement( &m_refCount );
     }
 
-
-    FormController::~FormController()
-    {
-    }
-
+    FormController::~FormController() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( FormController, OPropertyBrowserController, FormController_PropertyBase1 )
 

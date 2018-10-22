@@ -100,9 +100,7 @@ SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
 {
 }
 
-SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
-{
-}
+SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor() = default;
 
 OUString SwHyperlinkEventDescriptor::getImplementationName()
 {
@@ -178,9 +176,7 @@ SwFrameEventDescriptor::SwFrameEventDescriptor(
 {
 }
 
-SwFrameEventDescriptor::~SwFrameEventDescriptor()
-{
-}
+SwFrameEventDescriptor::~SwFrameEventDescriptor() = default;
 
 void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
@@ -210,9 +206,7 @@ SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
 {
 }
 
-SwFrameStyleEventDescriptor::~SwFrameStyleEventDescriptor()
-{
-}
+SwFrameStyleEventDescriptor::~SwFrameStyleEventDescriptor() = default;
 
 void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {

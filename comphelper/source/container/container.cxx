@@ -35,8 +35,7 @@ IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterfa
     OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
 }
 
-IndexAccessIterator::~IndexAccessIterator() {}
-
+IndexAccessIterator::~IndexAccessIterator() = default;
 
 css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
 {

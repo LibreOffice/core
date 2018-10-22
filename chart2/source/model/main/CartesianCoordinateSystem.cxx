@@ -45,13 +45,11 @@ CartesianCoordinateSystem::CartesianCoordinateSystem(
         BaseCoordinateSystem( nDimensionCount )
 {}
 
-CartesianCoordinateSystem::CartesianCoordinateSystem(
-    const CartesianCoordinateSystem & rSource ) :
-        BaseCoordinateSystem( rSource )
-{}
+CartesianCoordinateSystem::CartesianCoordinateSystem(const CartesianCoordinateSystem& rSource)
 
-CartesianCoordinateSystem::~CartesianCoordinateSystem()
-{}
+    = default;
+
+CartesianCoordinateSystem::~CartesianCoordinateSystem() = default;
 
 // ____ XCoordinateSystem ____
 OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType()
@@ -92,8 +90,7 @@ CartesianCoordinateSystem2d::CartesianCoordinateSystem2d() :
         CartesianCoordinateSystem( 2 )
 {}
 
-CartesianCoordinateSystem2d::~CartesianCoordinateSystem2d()
-{}
+CartesianCoordinateSystem2d::~CartesianCoordinateSystem2d() = default;
 
 // ____ XServiceInfo ____
 OUString SAL_CALL CartesianCoordinateSystem2d::getImplementationName()
@@ -120,8 +117,7 @@ CartesianCoordinateSystem3d::CartesianCoordinateSystem3d() :
         CartesianCoordinateSystem( 3 )
 {}
 
-CartesianCoordinateSystem3d::~CartesianCoordinateSystem3d()
-{}
+CartesianCoordinateSystem3d::~CartesianCoordinateSystem3d() = default;
 
 // ____ XServiceInfo ____
 OUString SAL_CALL CartesianCoordinateSystem3d::getImplementationName()

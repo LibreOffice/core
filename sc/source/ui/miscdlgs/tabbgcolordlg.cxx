@@ -49,9 +49,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     m_xBtnOk->connect_clicked(HDL(TabBgColorOKHdl_Impl));
 }
 
-ScTabBgColorDlg::~ScTabBgColorDlg()
-{
-}
+ScTabBgColorDlg::~ScTabBgColorDlg() = default;
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {
@@ -119,9 +117,7 @@ ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet()
 {
 }
 
-ScTabBgColorDlg::ScTabBgColorValueSet::~ScTabBgColorValueSet()
-{
-}
+ScTabBgColorDlg::ScTabBgColorValueSet::~ScTabBgColorValueSet() = default;
 
 bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
 {

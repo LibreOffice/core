@@ -43,9 +43,7 @@ ZipPackageBuffer::ZipPackageBuffer()
 , m_bMustInitBuffer ( true )
 {
 }
-ZipPackageBuffer::~ZipPackageBuffer()
-{
-}
+ZipPackageBuffer::~ZipPackageBuffer() = default;
 
 sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {

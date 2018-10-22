@@ -396,9 +396,7 @@ PPTExStyleSheet::PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider* p
     }
 }
 
-PPTExStyleSheet::~PPTExStyleSheet()
-{
-}
+PPTExStyleSheet::~PPTExStyleSheet() = default;
 
 void PPTExStyleSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                         FontCollection& rFontCollection, int nInstance, int nLevel )

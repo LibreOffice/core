@@ -118,8 +118,7 @@ Wall::Wall( const Wall & rOther ) :
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
-Wall::~Wall()
-{}
+Wall::~Wall() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()

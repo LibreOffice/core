@@ -38,8 +38,7 @@ PotentialRegressionCurveCalculator::PotentialRegressionCurveCalculator()
     ::rtl::math::setNan( & m_fIntercept );
 }
 
-PotentialRegressionCurveCalculator::~PotentialRegressionCurveCalculator()
-{}
+PotentialRegressionCurveCalculator::~PotentialRegressionCurveCalculator() = default;
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(

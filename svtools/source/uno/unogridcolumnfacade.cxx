@@ -115,11 +115,7 @@ namespace svt { namespace table
     {
     }
 
-
-    ColumnChangeMultiplexer::~ColumnChangeMultiplexer()
-    {
-    }
-
+    ColumnChangeMultiplexer::~ColumnChangeMultiplexer() = default;
 
     void ColumnChangeMultiplexer::dispose()
     {
@@ -179,11 +175,7 @@ namespace svt { namespace table
         impl_updateDataColumnIndex_nothrow();
     }
 
-
-    UnoGridColumnFacade::~UnoGridColumnFacade()
-    {
-    }
-
+    UnoGridColumnFacade::~UnoGridColumnFacade() = default;
 
     void UnoGridColumnFacade::dispose()
     {

@@ -56,10 +56,10 @@ AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
 {
 }
 
-AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl)
-    : maStates(rImpl.maStates)
-{
-}
+AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl(
+    const AccessibleStateSetHelperImpl& rImpl)
+
+    = default;
 
 inline bool AccessibleStateSetHelperImpl::IsEmpty () const
 {
@@ -134,9 +134,7 @@ AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelp
         mpHelperImpl.reset(new AccessibleStateSetHelperImpl());
 }
 
-AccessibleStateSetHelper::~AccessibleStateSetHelper()
-{
-}
+AccessibleStateSetHelper::~AccessibleStateSetHelper() = default;
 
 //=====  XAccessibleStateSet  ==============================================
 

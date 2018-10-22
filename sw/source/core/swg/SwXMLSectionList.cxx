@@ -97,10 +97,7 @@ SwXMLSectionList::SwXMLSectionList(
                             XML_NAMESPACE_TEXT );
 }
 
-SwXMLSectionList::~SwXMLSectionList()
-    throw()
-{
-}
+SwXMLSectionList::~SwXMLSectionList() throw() = default;
 
 SvXMLImportContext *SwXMLSectionList::CreateDocumentContext(
         sal_uInt16 nPrefix,

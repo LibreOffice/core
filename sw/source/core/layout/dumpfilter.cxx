@@ -65,60 +65,54 @@ namespace
 
 namespace sw
 {
+LayoutDumpFilter::LayoutDumpFilter() = default;
 
-    LayoutDumpFilter::LayoutDumpFilter( )
+LayoutDumpFilter::~LayoutDumpFilter() = default;
+
+// XFilter
+sal_Bool LayoutDumpFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
+{
+    bool bRet = false;
+
+    utl::MediaDescriptor aMediaDesc = aDescriptor;
+
+    // Get the output stream
+    uno::Reference<io::XOutputStream> xOut = aMediaDesc.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_OUTPUTSTREAM(), uno::Reference<io::XOutputStream>());
+
+    // Actually get the SwRootFrame to call dumpAsXml
+    uno::Reference<lang::XUnoTunnel> xDocTunnel(m_xSrcDoc, uno::UNO_QUERY);
+    SwXTextDocument* pXDoc = UnoTunnelGetImplementation<SwXTextDocument>(xDocTunnel);
+    if (pXDoc)
     {
+        SwRootFrame* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();
+
+        // Get sure that the whole layout is processed: set a visible area
+        // even though there isn't any need of it
+        pXDoc->GetDocShell()->GetWrtShell()->StartAction();
+        tools::Rectangle aRect(0, 0, 26000, 21000);
+        pXDoc->GetDocShell()->SetVisArea(aRect);
+        pLayout->InvalidateAllContent(SwInvalidateFlags::Size);
+        pXDoc->GetDocShell()->GetWrtShell()->EndAction();
+
+        // Dump the layout XML into the XOutputStream
+        xmlOutputBufferPtr outBuffer = xmlOutputBufferCreateIO(
+            writeCallback, closeCallback, static_cast<void*>(xOut.get()), nullptr);
+
+        xmlTextWriterPtr writer = xmlNewTextWriter(outBuffer);
+        xmlTextWriterSetIndent(writer, 1);
+        xmlTextWriterStartDocument(writer, nullptr, nullptr, nullptr);
+
+        // TODO This doesn't export the whole XML file, whereas dumpAsXML() does it nicely
+        pLayout->dumpAsXml(writer);
+
+        xmlTextWriterEndDocument(writer);
+        xmlFreeTextWriter(writer);
+
+        bRet = true;
     }
 
-    LayoutDumpFilter::~LayoutDumpFilter( )
-    {
-    }
-
-    // XFilter
-    sal_Bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
-    {
-        bool bRet = false;
-
-        utl::MediaDescriptor aMediaDesc = aDescriptor;
-
-        // Get the output stream
-        uno::Reference< io::XOutputStream > xOut = aMediaDesc.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_OUTPUTSTREAM(),
-                uno::Reference< io::XOutputStream >() );
-
-        // Actually get the SwRootFrame to call dumpAsXml
-        uno::Reference< lang::XUnoTunnel > xDocTunnel( m_xSrcDoc, uno::UNO_QUERY );
-        SwXTextDocument* pXDoc = UnoTunnelGetImplementation< SwXTextDocument >( xDocTunnel );
-        if ( pXDoc )
-        {
-            SwRootFrame* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();
-
-            // Get sure that the whole layout is processed: set a visible area
-            // even though there isn't any need of it
-            pXDoc->GetDocShell()->GetWrtShell()->StartAction();
-            tools::Rectangle aRect( 0, 0, 26000, 21000 );
-            pXDoc->GetDocShell()->SetVisArea( aRect );
-            pLayout->InvalidateAllContent( SwInvalidateFlags::Size );
-            pXDoc->GetDocShell()->GetWrtShell()->EndAction();
-
-            // Dump the layout XML into the XOutputStream
-            xmlOutputBufferPtr outBuffer = xmlOutputBufferCreateIO(
-                    writeCallback, closeCallback, static_cast<void*>(xOut.get()), nullptr );
-
-            xmlTextWriterPtr writer = xmlNewTextWriter( outBuffer );
-            xmlTextWriterSetIndent(writer, 1);
-            xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
-
-            // TODO This doesn't export the whole XML file, whereas dumpAsXML() does it nicely
-            pLayout->dumpAsXml( writer );
-
-            xmlTextWriterEndDocument( writer );
-            xmlFreeTextWriter( writer );
-
-            bRet = true;
-        }
-
-        return bRet;
+    return bRet;
     }
 
     void LayoutDumpFilter::cancel(  )

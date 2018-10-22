@@ -37,9 +37,7 @@ using namespace com::sun::star::uno;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameAccess;
 
-OResultSetMetaData::~OResultSetMetaData()
-{
-}
+OResultSetMetaData::~OResultSetMetaData() = default;
 
 OUString OResultSetMetaData::getCharacterSet( sal_Int32 nIndex )
 {

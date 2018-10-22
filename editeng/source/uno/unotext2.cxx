@@ -83,9 +83,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
     }
 }
 
-SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
-{
-}
+SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw() = default;
 
 // container::XEnumeration
 sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
@@ -138,9 +136,7 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw(
     SetSelection( rContent.GetSelection() );
 }
 
-SvxUnoTextContent::~SvxUnoTextContent() throw()
-{
-}
+SvxUnoTextContent::~SvxUnoTextContent() throw() = default;
 
 // uno::XInterface
 uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType )
@@ -422,9 +418,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rPa
     }
 }
 
-SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() throw()
-{
-}
+SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() throw() = default;
 
 // container::XEnumeration
 
@@ -462,9 +456,7 @@ SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw()
 {
 }
 
-SvxUnoTextCursor::~SvxUnoTextCursor() throw()
-{
-}
+SvxUnoTextCursor::~SvxUnoTextCursor() throw() = default;
 
 // Comment out automatically - [getIdlClass(es) or queryInterface]
 // Please use the XTypeProvider!

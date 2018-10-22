@@ -178,9 +178,7 @@ SwXRedlinePortion::SwXRedlinePortion(SwRangeRedline const& rRedline,
     SetCollapsed(!m_rRedline.HasMark());
 }
 
-SwXRedlinePortion::~SwXRedlinePortion()
-{
-}
+SwXRedlinePortion::~SwXRedlinePortion() = default;
 
 static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRangeRedline& rRedline)
 {
@@ -351,9 +349,7 @@ SwXRedline::SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc) :
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXRedline::~SwXRedline()
-{
-}
+SwXRedline::~SwXRedline() = default;
 
 uno::Reference< beans::XPropertySetInfo > SwXRedline::getPropertySetInfo(  )
 {

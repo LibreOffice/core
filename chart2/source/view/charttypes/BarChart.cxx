@@ -88,9 +88,7 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
     }
 }
 
-BarChart::~BarChart()
-{
-}
+BarChart::~BarChart() = default;
 
 PlottingPositionHelper& BarChart::getPlottingPositionHelper( sal_Int32 nAxisIndex ) const
 {

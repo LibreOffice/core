@@ -59,9 +59,7 @@ ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
     }
 }
 
-ViewContactOfSdrObj::~ViewContactOfSdrObj()
-{
-}
+ViewContactOfSdrObj::~ViewContactOfSdrObj() = default;
 
 // Access to possible sub-hierarchy
 sal_uInt32 ViewContactOfSdrObj::GetObjectCount() const

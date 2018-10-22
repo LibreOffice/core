@@ -124,9 +124,7 @@ ScFilterOptionsObj::ScFilterOptionsObj() :
 {
 }
 
-ScFilterOptionsObj::~ScFilterOptionsObj()
-{
-}
+ScFilterOptionsObj::~ScFilterOptionsObj() = default;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)

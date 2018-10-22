@@ -93,8 +93,6 @@ SwAutoCorrect::SwAutoCorrect( const SvxAutoCorrect& rACorr )
     SwEditShell::SetAutoFormatFlags(&GetSwFlags());
 }
 
-SwAutoCorrect::~SwAutoCorrect()
-{
-}
+SwAutoCorrect::~SwAutoCorrect() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

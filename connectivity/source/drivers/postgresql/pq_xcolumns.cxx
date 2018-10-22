@@ -116,8 +116,7 @@ Columns::Columns(
       m_tableName( tableName )
 {}
 
-Columns::~Columns()
-{}
+Columns::~Columns() = default;
 
 OUString columnMetaData2SDBCX(
     ReflectionBase *pBase, const css::uno::Reference< css::sdbc::XRow > &xRow )

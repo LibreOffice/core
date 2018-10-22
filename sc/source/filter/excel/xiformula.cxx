@@ -87,9 +87,7 @@ XclImpFormulaCompiler::XclImpFormulaCompiler( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpFormulaCompiler::~XclImpFormulaCompiler()
-{
-}
+XclImpFormulaCompiler::~XclImpFormulaCompiler() = default;
 
 void XclImpFormulaCompiler::CreateRangeList(
         ScRangeList& rScRanges, XclFormulaType eType,

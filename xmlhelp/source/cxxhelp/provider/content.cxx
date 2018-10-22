@@ -66,9 +66,7 @@ Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
 }
 
 // virtual
-Content::~Content()
-{
-}
+Content::~Content() = default;
 
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )

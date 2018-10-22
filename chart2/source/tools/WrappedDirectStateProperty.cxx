@@ -31,8 +31,7 @@ WrappedDirectStateProperty::WrappedDirectStateProperty(
         WrappedProperty( rOuterName, rInnerName )
 {}
 
-WrappedDirectStateProperty::~WrappedDirectStateProperty()
-{}
+WrappedDirectStateProperty::~WrappedDirectStateProperty() = default;
 
 beans::PropertyState WrappedDirectStateProperty::getPropertyState(
     const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const

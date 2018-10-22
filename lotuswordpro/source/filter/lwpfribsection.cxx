@@ -75,9 +75,7 @@ LwpFribSection::LwpFribSection(LwpPara *pPara)
 
 }
 
-LwpFribSection::~LwpFribSection()
-{
-}
+LwpFribSection::~LwpFribSection() = default;
 
 /**
  * @descr:  Read section frib information

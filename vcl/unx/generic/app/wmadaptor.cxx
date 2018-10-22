@@ -319,9 +319,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
  *  WMAdaptor destructor
  */
 
-WMAdaptor::~WMAdaptor()
-{
-}
+WMAdaptor::~WMAdaptor() = default;
 
 /*
  *  NetWMAdaptor constructor

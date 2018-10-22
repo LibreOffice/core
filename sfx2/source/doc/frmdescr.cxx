@@ -33,9 +33,7 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
 {
 }
 
-SfxFrameDescriptor::~SfxFrameDescriptor()
-{
-}
+SfxFrameDescriptor::~SfxFrameDescriptor() = default;
 
 SfxItemSet* SfxFrameDescriptor::GetArgs()
 {

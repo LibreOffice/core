@@ -29,9 +29,7 @@ PageColumnPopup::PageColumnPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rT
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-PageColumnPopup::~PageColumnPopup()
-{
-}
+PageColumnPopup::~PageColumnPopup() = default;
 
 VclPtr<SfxPopupWindow> PageColumnPopup::CreatePopupWindow()
 {

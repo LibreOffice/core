@@ -36,14 +36,9 @@
 #include <tools/wintypes.hxx>
 
 namespace framework{
+TagWindowAsModified::TagWindowAsModified() = default;
 
-TagWindowAsModified::TagWindowAsModified()
-{
-}
-
-TagWindowAsModified::~TagWindowAsModified()
-{
-}
+TagWindowAsModified::~TagWindowAsModified() = default;
 
 void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
 {

@@ -33,9 +33,7 @@ XclTracer::XclTracer( const OUString& rDocUrl )
     aConfigData[ 0 ].Value <<= rDocUrl;
 }
 
-XclTracer::~XclTracer()
-{
-}
+XclTracer::~XclTracer() = default;
 
 void XclTracer::ProcessTraceOnce(XclTracerId eProblem)
 {

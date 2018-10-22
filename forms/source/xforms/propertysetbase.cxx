@@ -39,17 +39,11 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;
 
-PropertyAccessorBase::~PropertyAccessorBase()
-{
-}
+PropertyAccessorBase::~PropertyAccessorBase() = default;
 
-PropertySetBase::PropertySetBase( )
-{
-}
+PropertySetBase::PropertySetBase() = default;
 
-PropertySetBase::~PropertySetBase( )
-{
-}
+PropertySetBase::~PropertySetBase() = default;
 
 cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
 {

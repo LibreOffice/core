@@ -162,16 +162,7 @@ TableStyleSettings::TableStyleSettings( const TableStyleSettings& rStyle )
     (*this) = rStyle;
 }
 
-TableStyleSettings& TableStyleSettings::operator=(const TableStyleSettings& rStyle)
-{
-    mbUseFirstRow = rStyle.mbUseFirstRow;
-    mbUseLastRow = rStyle.mbUseLastRow;
-    mbUseFirstColumn = rStyle.mbUseFirstColumn;
-    mbUseLastColumn = rStyle.mbUseLastColumn;
-    mbUseRowBanding = rStyle.mbUseRowBanding;
-    mbUseColumnBanding = rStyle.mbUseColumnBanding;
-    return *this;
-}
+TableStyleSettings& TableStyleSettings::operator=(const TableStyleSettings& rStyle) = default;
 
 bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
 {

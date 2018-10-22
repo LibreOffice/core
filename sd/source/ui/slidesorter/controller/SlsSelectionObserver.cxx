@@ -64,9 +64,7 @@ SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
 {
 }
 
-SelectionObserver::~SelectionObserver()
-{
-}
+SelectionObserver::~SelectionObserver() = default;
 
 void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
 {

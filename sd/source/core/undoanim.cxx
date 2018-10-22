@@ -61,9 +61,7 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
     }
 }
 
-UndoAnimation::~UndoAnimation()
-{
-}
+UndoAnimation::~UndoAnimation() = default;
 
 void UndoAnimation::Undo()
 {
@@ -155,9 +153,7 @@ UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, co
 {
 }
 
-UndoAnimationPath::~UndoAnimationPath()
-{
-}
+UndoAnimationPath::~UndoAnimationPath() = default;
 
 void UndoAnimationPath::Undo()
 {
@@ -225,9 +221,7 @@ UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
     mpImpl->mbOldStopSound = pThePage->mbStopSound;
 }
 
-UndoTransition::~UndoTransition()
-{
-}
+UndoTransition::~UndoTransition() = default;
 
 void UndoTransition::Undo()
 {

@@ -33,9 +33,7 @@ SmartTag::SmartTag( ::sd::View& rView )
     mrView.getSmartTags().add( xThis );
 }
 
-SmartTag::~SmartTag()
-{
-}
+SmartTag::~SmartTag() = default;
 
 bool SmartTag::MouseButtonDown( const MouseEvent&, SmartHdl&  )
 {
@@ -114,9 +112,7 @@ SmartTagSet::SmartTagSet( View& rView )
 {
 }
 
-SmartTagSet::~SmartTagSet()
-{
-}
+SmartTagSet::~SmartTagSet() = default;
 
 void SmartTagSet::add( const SmartTagReference& xTag )
 {

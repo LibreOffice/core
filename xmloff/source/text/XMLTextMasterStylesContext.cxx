@@ -45,9 +45,7 @@ XMLTextMasterStylesContext::XMLTextMasterStylesContext(
 {
 }
 
-XMLTextMasterStylesContext::~XMLTextMasterStylesContext()
-{
-}
+XMLTextMasterStylesContext::~XMLTextMasterStylesContext() = default;
 
 SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
         sal_uInt16 nPrefix,

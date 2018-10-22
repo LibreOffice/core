@@ -30,9 +30,7 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)
     SetSize( Size( LONG_MAX, LONG_MAX ) );
 }
 
-ScDrawPage::~ScDrawPage()
-{
-}
+ScDrawPage::~ScDrawPage() = default;
 
 ScDrawPage* ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
 {

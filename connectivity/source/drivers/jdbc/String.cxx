@@ -26,8 +26,7 @@ using namespace connectivity;
 
 jclass java_lang_String::theClass = nullptr;
 
-java_lang_String::~java_lang_String()
-{}
+java_lang_String::~java_lang_String() = default;
 
 jclass java_lang_String::getMyClass() const
 {

@@ -187,10 +187,7 @@ UcbPropertiesManager::UcbPropertiesManager()
 
 
 // virtual
-UcbPropertiesManager::~UcbPropertiesManager()
-{
-}
-
+UcbPropertiesManager::~UcbPropertiesManager() = default;
 
 // XServiceInfo methods.
 

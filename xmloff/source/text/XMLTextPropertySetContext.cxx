@@ -45,9 +45,7 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
 {
 }
 
-XMLTextPropertySetContext::~XMLTextPropertySetContext()
-{
-}
+XMLTextPropertySetContext::~XMLTextPropertySetContext() = default;
 
 SvXMLImportContextRef XMLTextPropertySetContext::CreateChildContext(
                    sal_uInt16 nPrefix,

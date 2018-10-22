@@ -62,9 +62,7 @@ SmartTagMgr::SmartTagMgr( const OUString& rApplicationName )
 {
 }
 
-SmartTagMgr::~SmartTagMgr()
-{
-}
+SmartTagMgr::~SmartTagMgr() = default;
 
 void SmartTagMgr::Init( const OUString& rConfigurationGroupName )
 {

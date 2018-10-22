@@ -365,8 +365,6 @@ bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, sal_Int32, sal_Int32 ) const
     return false;
 }
 
-SwBaseLink::~SwBaseLink()
-{
-}
+SwBaseLink::~SwBaseLink() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

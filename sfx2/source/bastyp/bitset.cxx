@@ -88,9 +88,7 @@ IndexBitSet::IndexBitSet()
     nBlocks = 0;
 }
 
-IndexBitSet::~IndexBitSet()
-{
-}
+IndexBitSet::~IndexBitSet() = default;
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {

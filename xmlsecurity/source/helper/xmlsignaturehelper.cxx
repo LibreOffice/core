@@ -65,9 +65,7 @@ XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentCon
     mbError = false;
 }
 
-XMLSignatureHelper::~XMLSignatureHelper()
-{
-}
+XMLSignatureHelper::~XMLSignatureHelper() = default;
 
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,

@@ -79,11 +79,7 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
     m_bIsValid = true;
 }
 
-
-MasterScriptProvider::~MasterScriptProvider()
-{
-}
-
+MasterScriptProvider::~MasterScriptProvider() = default;
 
 void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 {

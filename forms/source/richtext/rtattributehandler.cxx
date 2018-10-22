@@ -47,11 +47,7 @@ namespace frm
     {
     }
 
-
-    AttributeHandler::~AttributeHandler()
-    {
-    }
-
+    AttributeHandler::~AttributeHandler() = default;
 
     AttributeId AttributeHandler::getAttributeId( ) const
     {

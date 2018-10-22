@@ -55,9 +55,7 @@ namespace sdr
         {
         }
 
-        CaptionProperties::~CaptionProperties()
-        {
-        }
+        CaptionProperties::~CaptionProperties() = default;
 
         std::unique_ptr<BaseProperties> CaptionProperties::Clone(SdrObject& rObj) const
         {

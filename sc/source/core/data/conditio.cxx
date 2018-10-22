@@ -301,9 +301,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     // Formula cells are created at IsValid
 }
 
-ScConditionEntry::~ScConditionEntry()
-{
-}
+ScConditionEntry::~ScConditionEntry() = default;
 
 void ScConditionEntry::SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& rFormula,
                                                 double& rVal,
@@ -1484,11 +1482,9 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
 {
 }
 
-ScCondFormatEntry::ScCondFormatEntry( const ScCondFormatEntry& r ) :
-    ScConditionEntry( r ),
-    aStyleName( r.aStyleName )
-{
-}
+ScCondFormatEntry::ScCondFormatEntry(const ScCondFormatEntry& r)
+
+    = default;
 
 ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r ) :
     ScConditionEntry( pDocument, r ),
@@ -1503,9 +1499,7 @@ bool ScCondFormatEntry::IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) co
         (aStyleName == static_cast<const ScCondFormatEntry&>(r).aStyleName);
 }
 
-ScCondFormatEntry::~ScCondFormatEntry()
-{
-}
+ScCondFormatEntry::~ScCondFormatEntry() = default;
 
 void ScCondFormatEntry::DataChanged() const
 {
@@ -1781,9 +1775,7 @@ ScDocument* ScConditionalFormat::GetDocument()
     return pDoc;
 }
 
-ScConditionalFormat::~ScConditionalFormat()
-{
-}
+ScConditionalFormat::~ScConditionalFormat() = default;
 
 const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
 {
@@ -2305,11 +2297,10 @@ void ScConditionalFormatList::CalcAll()
 
 }
 
-ScCondFormatData::ScCondFormatData() {}
+ScCondFormatData::ScCondFormatData() = default;
 
 ScCondFormatData::ScCondFormatData(ScCondFormatData&&) = default;
 
-ScCondFormatData::~ScCondFormatData() {}
-
+ScCondFormatData::~ScCondFormatData() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

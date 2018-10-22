@@ -38,9 +38,7 @@ XMLStringBufferImportContext::XMLStringBufferImportContext(
 {
 }
 
-XMLStringBufferImportContext::~XMLStringBufferImportContext()
-{
-}
+XMLStringBufferImportContext::~XMLStringBufferImportContext() = default;
 
 SvXMLImportContextRef XMLStringBufferImportContext::CreateChildContext(
     sal_uInt16 nPrefix,

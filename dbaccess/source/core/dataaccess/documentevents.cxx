@@ -115,9 +115,7 @@ namespace dbaccess
         }
     }
 
-    DocumentEvents::~DocumentEvents()
-    {
-    }
+    DocumentEvents::~DocumentEvents() = default;
 
     void SAL_CALL DocumentEvents::acquire() throw()
     {

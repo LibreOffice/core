@@ -283,9 +283,7 @@ SvtScriptedTextHelper::SvtScriptedTextHelper( const SvtScriptedTextHelper& _rCop
 {
 }
 
-SvtScriptedTextHelper::~SvtScriptedTextHelper()
-{
-}
+SvtScriptedTextHelper::~SvtScriptedTextHelper() = default;
 
 void SvtScriptedTextHelper::SetFonts( vcl::Font const * _pLatinFont, vcl::Font const * _pAsianFont, vcl::Font const * _pCmplxFont )
 {

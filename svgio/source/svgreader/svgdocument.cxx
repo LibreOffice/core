@@ -31,9 +31,7 @@ namespace svgio
         {
         }
 
-        SvgDocument::~SvgDocument()
-        {
-        }
+        SvgDocument::~SvgDocument() = default;
 
         void SvgDocument::appendNode(std::unique_ptr<SvgNode> pNode)
         {

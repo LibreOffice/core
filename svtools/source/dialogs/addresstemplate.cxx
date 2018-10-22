@@ -111,11 +111,7 @@ namespace svt
         virtual void    setCommand(const OUString& _rCommand) = 0;
     };
 
-
-    IAssigmentData::~IAssigmentData()
-    {
-    }
-
+    IAssigmentData::~IAssigmentData() = default;
 
     // = AssigmentTransientData
 

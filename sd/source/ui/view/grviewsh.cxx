@@ -42,9 +42,7 @@ GraphicViewShell::GraphicViewShell (
     ConstructGraphicViewShell();
 }
 
-GraphicViewShell::~GraphicViewShell()
-{
-}
+GraphicViewShell::~GraphicViewShell() = default;
 
 void GraphicViewShell::ConstructGraphicViewShell()
 {

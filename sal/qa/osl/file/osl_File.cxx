@@ -1405,9 +1405,7 @@ namespace osl_FileStatus
         DirectoryItem rItem_file, rItem_link;
 
     public:
-        isValid()
-        {
-        }
+        isValid() = default;
 
         void setUp() override
         {
@@ -5008,8 +5006,7 @@ namespace osl_Directory
     class createPath : public CppUnit::TestFixture
     {
     public:
-        createPath()
-        {}
+        createPath() = default;
 
         void with_relative_path()
         {

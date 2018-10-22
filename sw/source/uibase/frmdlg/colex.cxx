@@ -498,9 +498,7 @@ void SwColumnOnlyExample::Resize()
     Invalidate();
 }
 
-SwPageGridExample::SwPageGridExample()
-{
-}
+SwPageGridExample::SwPageGridExample() = default;
 
 void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
                                  const bool bSecond, const bool bEnabled)

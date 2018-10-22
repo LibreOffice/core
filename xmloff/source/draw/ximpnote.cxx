@@ -87,8 +87,6 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     }
 }
 
-SdXMLNotesContext::~SdXMLNotesContext()
-{
-}
+SdXMLNotesContext::~SdXMLNotesContext() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

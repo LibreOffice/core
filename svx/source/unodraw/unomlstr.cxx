@@ -29,9 +29,7 @@ SvxUnoShapeModifyListener::SvxUnoShapeModifyListener( SdrObject* pObj ) throw()
     mpObj = pObj;
 }
 
-SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
-{
-}
+SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw() = default;
 
 // css::util::XModifyListener
 void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& )

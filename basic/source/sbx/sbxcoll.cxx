@@ -61,8 +61,7 @@ SbxCollection& SbxCollection::operator=( const SbxCollection& r )
     return *this;
 }
 
-SbxCollection::~SbxCollection()
-{}
+SbxCollection::~SbxCollection() = default;
 
 void SbxCollection::Clear()
 {
@@ -250,8 +249,7 @@ SbxStdCollection& SbxStdCollection::operator=( const SbxStdCollection& r )
     return *this;
 }
 
-SbxStdCollection::~SbxStdCollection()
-{}
+SbxStdCollection::~SbxStdCollection() = default;
 
 // Default: Error, if wrong object
 

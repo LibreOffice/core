@@ -96,9 +96,7 @@ OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
 {
 }
 
-OptimisticSet::~OptimisticSet()
-{
-}
+OptimisticSet::~OptimisticSet() = default;
 
 void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
 {

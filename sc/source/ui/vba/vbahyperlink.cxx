@@ -101,9 +101,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     }
 }
 
-ScVbaHyperlink::~ScVbaHyperlink()
-{
-}
+ScVbaHyperlink::~ScVbaHyperlink() = default;
 
 OUString ScVbaHyperlink::getName()
 {

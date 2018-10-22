@@ -34,9 +34,7 @@ SalSystem* X11SalInstance::CreateSalSystem()
     return new X11SalSystem();
 }
 
-X11SalSystem::~X11SalSystem()
-{
-}
+X11SalSystem::~X11SalSystem() = default;
 
 // for the moment only handle xinerama case
 unsigned int X11SalSystem::GetDisplayScreenCount()

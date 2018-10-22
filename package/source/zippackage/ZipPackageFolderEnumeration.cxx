@@ -36,9 +36,7 @@ ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
 {
 }
 
-ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration()
-{
-}
+ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration() = default;
 
 sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements(  )
 {

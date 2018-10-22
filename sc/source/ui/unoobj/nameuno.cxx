@@ -783,10 +783,7 @@ ScGlobalNamedRangesObj::ScGlobalNamedRangesObj(ScDocShell* pDocSh)
 
 }
 
-ScGlobalNamedRangesObj::~ScGlobalNamedRangesObj()
-{
-
-}
+ScGlobalNamedRangesObj::~ScGlobalNamedRangesObj() = default;
 
 ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
@@ -835,10 +832,7 @@ ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference
 
 }
 
-ScLocalNamedRangesObj::~ScLocalNamedRangesObj()
-{
-
-}
+ScLocalNamedRangesObj::~ScLocalNamedRangesObj() = default;
 
 ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {

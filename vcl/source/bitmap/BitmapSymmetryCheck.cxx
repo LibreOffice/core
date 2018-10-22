@@ -10,11 +10,9 @@
 
 #include <BitmapSymmetryCheck.hxx>
 
-BitmapSymmetryCheck::BitmapSymmetryCheck()
-{}
+BitmapSymmetryCheck::BitmapSymmetryCheck() = default;
 
-BitmapSymmetryCheck::~BitmapSymmetryCheck()
-{}
+BitmapSymmetryCheck::~BitmapSymmetryCheck() = default;
 
 bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
 {

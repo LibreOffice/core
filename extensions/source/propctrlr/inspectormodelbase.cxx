@@ -162,11 +162,7 @@ namespace pcr
     {
     }
 
-
-    ImplInspectorModel::~ImplInspectorModel()
-    {
-    }
-
+    ImplInspectorModel::~ImplInspectorModel() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( ImplInspectorModel, ImplInspectorModel_Base, ImplInspectorModel_PBase )
 

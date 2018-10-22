@@ -48,11 +48,7 @@ namespace ucb { namespace ucp { namespace ext
     {
     }
 
-
-    ContentProvider::~ContentProvider()
-    {
-    }
-
+    ContentProvider::~ContentProvider() = default;
 
     OUString ContentProvider::getImplementationName_static()
     {

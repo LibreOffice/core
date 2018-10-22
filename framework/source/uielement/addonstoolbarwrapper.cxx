@@ -57,9 +57,7 @@ AddonsToolBarWrapper::AddonsToolBarWrapper( const Reference< XComponentContext >
 {
 }
 
-AddonsToolBarWrapper::~AddonsToolBarWrapper()
-{
-}
+AddonsToolBarWrapper::~AddonsToolBarWrapper() = default;
 
 // XComponent
 void SAL_CALL AddonsToolBarWrapper::dispose()

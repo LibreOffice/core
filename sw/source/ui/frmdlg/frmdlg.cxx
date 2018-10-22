@@ -132,9 +132,7 @@ SwFrameDlg::SwFrameDlg( SfxViewFrame const * pViewFrame,
         SetCurPageId(sDefPage);
 }
 
-SwFrameDlg::~SwFrameDlg()
-{
-}
+SwFrameDlg::~SwFrameDlg() = default;
 
 void SwFrameDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {

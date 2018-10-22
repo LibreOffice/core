@@ -51,9 +51,7 @@ XMLNotesTransformerContext::XMLNotesTransformerContext(
 {
 }
 
-XMLNotesTransformerContext::~XMLNotesTransformerContext()
-{
-}
+XMLNotesTransformerContext::~XMLNotesTransformerContext() = default;
 
 void XMLNotesTransformerContext::StartElement(
         const Reference< XAttributeList >& rAttrList )

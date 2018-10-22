@@ -60,9 +60,7 @@ ShapeController::ShapeController( const Reference< uno::XComponentContext >& rxC
 {
 }
 
-ShapeController::~ShapeController()
-{
-}
+ShapeController::~ShapeController() = default;
 
 // WeakComponentImplHelperBase
 void ShapeController::disposing()

@@ -48,9 +48,7 @@ ZipOutputStream::ZipOutputStream( const uno::Reference < io::XOutputStream > &xO
 {
 }
 
-ZipOutputStream::~ZipOutputStream()
-{
-}
+ZipOutputStream::~ZipOutputStream() = default;
 
 void ZipOutputStream::setEntry( ZipEntry *pEntry )
 {

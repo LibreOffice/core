@@ -127,9 +127,7 @@ ContentImplHelper::ContentImplHelper(
 }
 
 // virtual
-ContentImplHelper::~ContentImplHelper()
-{
-}
+ContentImplHelper::~ContentImplHelper() = default;
 
 void SAL_CALL ContentImplHelper::acquire()
     throw()

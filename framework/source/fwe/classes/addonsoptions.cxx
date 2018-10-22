@@ -227,7 +227,7 @@ class AddonsOptions_Impl : public ConfigItem
 
             // accessed in this order
             OneImageEntry aSizeEntry[2];
-            ImageEntry() {}
+            ImageEntry() = default;
             void addImage(ImageSize eSize, const Image &rImage, const OUString &rURL);
         };
 

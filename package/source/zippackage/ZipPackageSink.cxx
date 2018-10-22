@@ -23,9 +23,7 @@ ZipPackageSink::ZipPackageSink()
 : xStream ( css::uno::Reference < css::io::XInputStream > (nullptr))
 {
 }
-ZipPackageSink::~ZipPackageSink()
-{
-}
+ZipPackageSink::~ZipPackageSink() = default;
 void SAL_CALL ZipPackageSink::setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream )
 {
     xStream = aStream;

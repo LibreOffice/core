@@ -63,9 +63,7 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XCompon
 /**
     @short      standard dtor
 */
-MailToDispatcher::~MailToDispatcher()
-{
-}
+MailToDispatcher::~MailToDispatcher() = default;
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not

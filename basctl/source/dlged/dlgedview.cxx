@@ -42,9 +42,7 @@ DlgEdView::DlgEdView(
     SetBufferedOverlayAllowed(true);
 }
 
-DlgEdView::~DlgEdView()
-{
-}
+DlgEdView::~DlgEdView() = default;
 
 void DlgEdView::MarkListHasChanged()
 {

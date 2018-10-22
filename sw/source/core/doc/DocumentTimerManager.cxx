@@ -200,8 +200,7 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
 #endif
 }
 
-DocumentTimerManager::~DocumentTimerManager() {}
-
+DocumentTimerManager::~DocumentTimerManager() = default;
 }
 
 

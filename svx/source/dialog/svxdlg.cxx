@@ -25,8 +25,6 @@ SvxAbstractDialogFactory* SvxAbstractDialogFactory::Create()
     return dynamic_cast< SvxAbstractDialogFactory* >( VclAbstractDialogFactory::Create() );
 }
 
-SvxAbstractDialogFactory::~SvxAbstractDialogFactory()
-{
-}
+SvxAbstractDialogFactory::~SvxAbstractDialogFactory() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

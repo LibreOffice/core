@@ -67,9 +67,7 @@ namespace sdr
         {
         }
 
-        OverlayBitmapEx::~OverlayBitmapEx()
-        {
-        }
+        OverlayBitmapEx::~OverlayBitmapEx() = default;
     } // end of namespace overlay
 } // end of namespace sdr
 

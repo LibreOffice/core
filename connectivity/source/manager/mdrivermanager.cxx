@@ -82,11 +82,7 @@ ODriverEnumeration::ODriverEnumeration(const DriverArray& _rDriverSequence)
 {
 }
 
-
-ODriverEnumeration::~ODriverEnumeration()
-{
-}
-
+ODriverEnumeration::~ODriverEnumeration() = default;
 
 sal_Bool SAL_CALL ODriverEnumeration::hasMoreElements(  )
 {
@@ -244,10 +240,7 @@ OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _r
     initializeDriverPrecedence();
 }
 
-
-OSDBCDriverManager::~OSDBCDriverManager()
-{
-}
+OSDBCDriverManager::~OSDBCDriverManager() = default;
 
 void OSDBCDriverManager::bootstrapDrivers()
 {

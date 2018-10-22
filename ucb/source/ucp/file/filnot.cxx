@@ -203,11 +203,7 @@ PropertyChangeNotifier::PropertyChangeNotifier(
 {
 }
 
-
-PropertyChangeNotifier::~PropertyChangeNotifier()
-{
-}
-
+PropertyChangeNotifier::~PropertyChangeNotifier() = default;
 
 void PropertyChangeNotifier::notifyPropertyChanged(
     const uno::Sequence< beans::PropertyChangeEvent >& Changes_ )

@@ -951,9 +951,7 @@ namespace editeng
     {
     }
 
-    HangulHanjaConversion::~HangulHanjaConversion( )
-    {
-    }
+    HangulHanjaConversion::~HangulHanjaConversion() = default;
 
     void HangulHanjaConversion::SetUseSavedConversionDirectionState( bool bVal )
     {

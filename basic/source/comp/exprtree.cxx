@@ -68,7 +68,7 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprListPtr p
     pExpr = o3tl::make_unique<SbiExprNode>( r, SbxVARIANT, std::move(pPar) );
 }
 
-SbiExpression::~SbiExpression() { }
+SbiExpression::~SbiExpression() = default;
 
 // reading in a complete identifier
 // an identifier has the following form:
@@ -898,7 +898,7 @@ SbiExprList::SbiExprList( )
     bBracket = false;
 }
 
-SbiExprList::~SbiExprList() {}
+SbiExprList::~SbiExprList() = default;
 
 SbiExpression* SbiExprList::Get( size_t n )
 {

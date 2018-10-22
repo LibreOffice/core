@@ -33,9 +33,7 @@ ViewContactOfSdrRectObj::ViewContactOfSdrRectObj(SdrRectObj& rRectObj)
 {
 }
 
-ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj()
-{
-}
+ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
 {

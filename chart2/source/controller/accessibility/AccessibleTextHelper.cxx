@@ -49,9 +49,7 @@ AccessibleTextHelper::AccessibleTextHelper(
         m_pDrawViewWrapper( pDrawViewWrapper )
 {}
 
-AccessibleTextHelper::~AccessibleTextHelper()
-{
-}
+AccessibleTextHelper::~AccessibleTextHelper() = default;
 
 // ____ XInitialization ____
 void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArguments )

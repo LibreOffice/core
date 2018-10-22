@@ -351,9 +351,7 @@ private:
     CustomAnimationEffectPtr const mpEffect;
 };
 
-CustomAnimationListEntry::CustomAnimationListEntry()
-{
-}
+CustomAnimationListEntry::CustomAnimationListEntry() = default;
 
 CustomAnimationListEntry::CustomAnimationListEntry(const CustomAnimationEffectPtr& pEffect)
 : mpEffect( pEffect )

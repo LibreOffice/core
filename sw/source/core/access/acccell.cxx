@@ -228,9 +228,7 @@ bool SwAccessibleCell::HasCursor()
     return m_bIsSelected;
 }
 
-SwAccessibleCell::~SwAccessibleCell()
-{
-}
+SwAccessibleCell::~SwAccessibleCell() = default;
 
 OUString SAL_CALL SwAccessibleCell::getAccessibleDescription()
 {

@@ -24,13 +24,9 @@
 #include <svdata.hxx>
 
 // Callback
-GraphicConverter::GraphicConverter()
-{
-}
+GraphicConverter::GraphicConverter() = default;
 
-GraphicConverter::~GraphicConverter()
-{
-}
+GraphicConverter::~GraphicConverter() = default;
 
 ErrCode GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat )
 {

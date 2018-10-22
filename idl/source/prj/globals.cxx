@@ -34,12 +34,9 @@ IdlDll & GetIdlApp()
     return TheIdlDll::get();
 }
 
-IdlDll::IdlDll()
-{}
+IdlDll::IdlDll() = default;
 
-IdlDll::~IdlDll()
-{
-}
+IdlDll::~IdlDll() = default;
 
 static SvStringHashEntry * INS( const OString& rName )
 {

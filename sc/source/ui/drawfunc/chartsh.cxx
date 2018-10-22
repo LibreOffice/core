@@ -63,9 +63,7 @@ ScChartShell::ScChartShell(ScViewData* pData) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Chart));
 }
 
-ScChartShell::~ScChartShell()
-{
-}
+ScChartShell::~ScChartShell() = default;
 
 void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
 {

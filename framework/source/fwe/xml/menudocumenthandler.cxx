@@ -155,9 +155,7 @@ ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
 {
 }
 
-ReadMenuDocumentHandlerBase::~ReadMenuDocumentHandlerBase()
-{
-}
+ReadMenuDocumentHandlerBase::~ReadMenuDocumentHandlerBase() = default;
 
 void SAL_CALL ReadMenuDocumentHandlerBase::ignorableWhitespace(
     const OUString& )
@@ -216,9 +214,7 @@ OReadMenuDocumentHandler::OReadMenuDocumentHandler(
 {
 }
 
-OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
-{
-}
+OReadMenuDocumentHandler::~OReadMenuDocumentHandler() = default;
 
 void SAL_CALL OReadMenuDocumentHandler::startDocument()
 {
@@ -300,9 +296,7 @@ OReadMenuBarHandler::OReadMenuBarHandler(
 {
 }
 
-OReadMenuBarHandler::~OReadMenuBarHandler()
-{
-}
+OReadMenuBarHandler::~OReadMenuBarHandler() = default;
 
 void SAL_CALL OReadMenuBarHandler::startDocument()
 {
@@ -435,9 +429,7 @@ OReadMenuHandler::OReadMenuHandler(
 {
 }
 
-OReadMenuHandler::~OReadMenuHandler()
-{
-}
+OReadMenuHandler::~OReadMenuHandler() = default;
 
 void SAL_CALL OReadMenuHandler::startDocument()
 {
@@ -508,9 +500,7 @@ OReadMenuPopupHandler::OReadMenuPopupHandler(
 {
 }
 
-OReadMenuPopupHandler::~OReadMenuPopupHandler()
-{
-}
+OReadMenuPopupHandler::~OReadMenuPopupHandler() = default;
 
 void SAL_CALL OReadMenuPopupHandler::startDocument()
 {
@@ -722,9 +712,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_aAttributeType = ATTRIBUTE_TYPE_CDATA;
 }
 
-OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler()
-{
-}
+OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler() = default;
 
 void OWriteMenuDocumentHandler::WriteMenuDocument()
 {

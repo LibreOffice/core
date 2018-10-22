@@ -52,10 +52,7 @@ using rtl::OUString;
 
 namespace cppu
 {
-
-BootstrapException::BootstrapException()
-{
-}
+BootstrapException::BootstrapException() = default;
 
 BootstrapException::BootstrapException( const ::rtl::OUString & rMessage )
     :m_aMessage( rMessage )
@@ -67,15 +64,9 @@ BootstrapException::BootstrapException( const BootstrapException & e )
     m_aMessage = e.m_aMessage;
 }
 
-BootstrapException::~BootstrapException()
-{
-}
+BootstrapException::~BootstrapException() = default;
 
-BootstrapException & BootstrapException::operator=( const BootstrapException & e )
-{
-    m_aMessage = e.m_aMessage;
-    return *this;
-}
+BootstrapException& BootstrapException::operator=(const BootstrapException& e) = default;
 
 const ::rtl::OUString & BootstrapException::getMessage() const
 {

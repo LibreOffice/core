@@ -144,9 +144,7 @@ SwXBookmark::SwXBookmark()
 {
 }
 
-SwXBookmark::~SwXBookmark()
-{
-}
+SwXBookmark::~SwXBookmark() = default;
 
 uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
     SwDoc & rDoc,

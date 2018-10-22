@@ -23,13 +23,9 @@
 
 using namespace ::com::sun::star;
 
-SvUnoWeakContainer::SvUnoWeakContainer() throw()
-{
-}
+SvUnoWeakContainer::SvUnoWeakContainer() throw() = default;
 
-SvUnoWeakContainer::~SvUnoWeakContainer() throw()
-{
-}
+SvUnoWeakContainer::~SvUnoWeakContainer() throw() = default;
 
 /** inserts the given ref into this container */
 void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xRef ) throw()

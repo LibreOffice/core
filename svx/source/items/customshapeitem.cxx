@@ -240,9 +240,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
     }
 }
 
-SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
-{
-}
+SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem() = default;
 bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
     bool bRet = SfxPoolItem::operator==( rCmp );

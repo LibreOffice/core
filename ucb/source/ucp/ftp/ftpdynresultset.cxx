@@ -42,10 +42,7 @@ DynamicResultSet::DynamicResultSet(
 {
 }
 
-DynamicResultSet::~DynamicResultSet()
-{
-}
-
+DynamicResultSet::~DynamicResultSet() = default;
 
 // Non-interface methods.
 

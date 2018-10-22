@@ -64,7 +64,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     --m_refCount;
 }
 
-StatusIndicator::~StatusIndicator() {}
+StatusIndicator::~StatusIndicator() = default;
 
 //  XInterface
 

@@ -33,10 +33,7 @@ using namespace ::com::sun::star::container;
 // class XMLAttributeContainerHandler
 
 
-XMLAttributeContainerHandler::~XMLAttributeContainerHandler()
-{
-    // nothing to do
-}
+XMLAttributeContainerHandler::~XMLAttributeContainerHandler() = default;
 
 bool XMLAttributeContainerHandler::equals(
         const Any& r1,

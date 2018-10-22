@@ -47,9 +47,7 @@ StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno
 {
 }
 
-StartModuleDispatcher::~StartModuleDispatcher()
-{
-}
+StartModuleDispatcher::~StartModuleDispatcher() = default;
 
 void SAL_CALL StartModuleDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                               const css::uno::Sequence< css::beans::PropertyValue >& lArguments)

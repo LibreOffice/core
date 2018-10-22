@@ -1332,7 +1332,7 @@ class FilterFunctor
 {
 public:
     virtual bool operator()(const SwFormatField* pField) const = 0;
-    virtual ~FilterFunctor() {}
+    virtual ~FilterFunctor() = default;
 };
 
 class IsPostitField : public FilterFunctor

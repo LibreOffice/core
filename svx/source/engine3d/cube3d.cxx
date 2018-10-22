@@ -60,9 +60,7 @@ E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
-E3dCubeObj::~E3dCubeObj()
-{
-}
+E3dCubeObj::~E3dCubeObj() = default;
 
 void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {

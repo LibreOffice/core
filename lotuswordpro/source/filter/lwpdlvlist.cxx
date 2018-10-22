@@ -150,9 +150,7 @@ void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
 /**
  * @descr       release property list
  **/
-LwpDLNFPVList::~LwpDLNFPVList()
-{
-}
+LwpDLNFPVList::~LwpDLNFPVList() = default;
 
 /**
  * @descr       Read head id and tail id

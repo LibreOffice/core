@@ -415,9 +415,7 @@ ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
     sNewName = rNewName;
 }
 
-ScUndoRenameTab::~ScUndoRenameTab()
-{
-}
+ScUndoRenameTab::~ScUndoRenameTab() = default;
 
 OUString ScUndoRenameTab::GetComment() const
 {
@@ -474,9 +472,7 @@ ScUndoMoveTab::ScUndoMoveTab(
     assert(!mpNewNames || mpNewTabs->size() == mpNewNames->size());
 }
 
-ScUndoMoveTab::~ScUndoMoveTab()
-{
-}
+ScUndoMoveTab::~ScUndoMoveTab() = default;
 
 OUString ScUndoMoveTab::GetComment() const
 {
@@ -717,9 +713,7 @@ ScUndoTabColor::ScUndoTabColor(
 {
 }
 
-ScUndoTabColor::~ScUndoTabColor()
-{
-}
+ScUndoTabColor::~ScUndoTabColor() = default;
 
 OUString ScUndoTabColor::GetComment() const
 {
@@ -1042,9 +1036,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName
     }
 }
 
-ScUndoRemoveLink::~ScUndoRemoveLink()
-{
-}
+ScUndoRemoveLink::~ScUndoRemoveLink() = default;
 
 OUString ScUndoRemoveLink::GetComment() const
 {
@@ -1089,9 +1081,7 @@ ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, const std::vector<SCTA
 {
 }
 
-ScUndoShowHideTab::~ScUndoShowHideTab()
-{
-}
+ScUndoShowHideTab::~ScUndoShowHideTab() = default;
 
 void ScUndoShowHideTab::DoChange( bool bShowP ) const
 {
@@ -1156,9 +1146,7 @@ ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, unique_ptr<ScDocProtectio
 {
 }
 
-ScUndoDocProtect::~ScUndoDocProtect()
-{
-}
+ScUndoDocProtect::~ScUndoDocProtect() = default;
 
 void ScUndoDocProtect::DoProtect(bool bProtect)
 {
@@ -1224,9 +1212,7 @@ ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, unique_ptr<Sc
 {
 }
 
-ScUndoTabProtect::~ScUndoTabProtect()
-{
-}
+ScUndoTabProtect::~ScUndoTabProtect() = default;
 
 void ScUndoTabProtect::DoProtect(bool bProtect)
 {
@@ -1364,9 +1350,7 @@ ScUndoScenarioFlags::ScUndoScenarioFlags(ScDocShell* pNewDocShell, SCTAB nT,
 {
 }
 
-ScUndoScenarioFlags::~ScUndoScenarioFlags()
-{
-}
+ScUndoScenarioFlags::~ScUndoScenarioFlags() = default;
 
 OUString ScUndoScenarioFlags::GetComment() const
 {
@@ -1427,9 +1411,7 @@ ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const OUString
 {
 }
 
-ScUndoRenameObject::~ScUndoRenameObject()
-{
-}
+ScUndoRenameObject::~ScUndoRenameObject() = default;
 
 OUString ScUndoRenameObject::GetComment() const
 {
@@ -1501,9 +1483,7 @@ ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, bool bNewRT
 {
 }
 
-ScUndoLayoutRTL::~ScUndoLayoutRTL()
-{
-}
+ScUndoLayoutRTL::~ScUndoLayoutRTL() = default;
 
 void ScUndoLayoutRTL::DoChange( bool bNew )
 {

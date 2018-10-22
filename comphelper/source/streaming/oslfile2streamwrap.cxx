@@ -36,11 +36,7 @@ OSLInputStreamWrapper::OSLInputStreamWrapper( File& _rFile )
 {
 }
 
-
-OSLInputStreamWrapper::~OSLInputStreamWrapper()
-{
-}
-
+OSLInputStreamWrapper::~OSLInputStreamWrapper() = default;
 
 sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
@@ -143,7 +139,7 @@ OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
     rFile(_rFile)
 {}
 
-OSLOutputStreamWrapper::~OSLOutputStreamWrapper() {}
+OSLOutputStreamWrapper::~OSLOutputStreamWrapper() = default;
 
 void SAL_CALL OSLOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
 {

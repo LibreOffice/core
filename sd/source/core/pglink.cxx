@@ -44,9 +44,7 @@ SdPageLink::SdPageLink(SdPage* pPg, const OUString& rFileName,
 |*
 \************************************************************************/
 
-SdPageLink::~SdPageLink()
-{
-}
+SdPageLink::~SdPageLink() = default;
 
 /*************************************************************************
 |*

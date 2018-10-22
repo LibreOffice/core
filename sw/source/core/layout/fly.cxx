@@ -281,9 +281,7 @@ void SwFlyFrame::DestroyImpl()
     SwLayoutFrame::DestroyImpl();
 }
 
-SwFlyFrame::~SwFlyFrame()
-{
-}
+SwFlyFrame::~SwFlyFrame() = default;
 
 const IDocumentDrawModelAccess& SwFlyFrame::getIDocumentDrawModelAccess()
 {

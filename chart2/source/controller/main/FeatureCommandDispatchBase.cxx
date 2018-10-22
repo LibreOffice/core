@@ -33,9 +33,7 @@ FeatureCommandDispatchBase::FeatureCommandDispatchBase( const Reference< uno::XC
 {
 }
 
-FeatureCommandDispatchBase::~FeatureCommandDispatchBase()
-{
-}
+FeatureCommandDispatchBase::~FeatureCommandDispatchBase() = default;
 
 void FeatureCommandDispatchBase::initialize()
 {

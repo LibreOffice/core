@@ -46,9 +46,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
     mpTempFile->EnableKillingFile();
 }
 
-OTempFileService::~OTempFileService ()
-{
-}
+OTempFileService::~OTempFileService() = default;
 
 // XInterface
 

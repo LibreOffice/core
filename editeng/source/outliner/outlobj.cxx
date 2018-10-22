@@ -51,9 +51,7 @@ OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
 {
 }
 
-OutlinerParaObjData::~OutlinerParaObjData()
-{
-}
+OutlinerParaObjData::~OutlinerParaObjData() = default;
 
 bool OutlinerParaObjData::operator==(const OutlinerParaObjData& rCandidate) const
 {
@@ -83,20 +81,13 @@ OutlinerParaObject::OutlinerParaObject( std::unique_ptr<EditTextObject> pTextObj
 {
 }
 
-OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& r ) :
-    mpImpl(r.mpImpl)
-{
-}
+OutlinerParaObject::OutlinerParaObject(const OutlinerParaObject& r)
 
-OutlinerParaObject::~OutlinerParaObject()
-{
-}
+    = default;
 
-OutlinerParaObject& OutlinerParaObject::operator=( const OutlinerParaObject& r )
-{
-    mpImpl = r.mpImpl;
-    return *this;
-}
+OutlinerParaObject::~OutlinerParaObject() = default;
+
+OutlinerParaObject& OutlinerParaObject::operator=(const OutlinerParaObject& r) = default;
 
 bool OutlinerParaObject::operator==( const OutlinerParaObject& r ) const
 {

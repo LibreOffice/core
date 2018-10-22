@@ -732,9 +732,7 @@ SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
 {
 }
 
-SearchAndParseThread::~SearchAndParseThread()
-{
-}
+SearchAndParseThread::~SearchAndParseThread() = default;
 
 namespace {
 
@@ -1011,10 +1009,8 @@ GetPersonaThread::GetPersonaThread( SelectPersonaDialog* pDialog,
 {
 }
 
-GetPersonaThread::~GetPersonaThread()
-{
+GetPersonaThread::~GetPersonaThread() = default;
     //TODO: Clean-up
-}
 
 void GetPersonaThread::execute()
 {

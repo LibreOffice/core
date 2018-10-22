@@ -43,9 +43,7 @@ SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt
 {
 }
 
-SdXMLDescriptionContext::~SdXMLDescriptionContext()
-{
-}
+SdXMLDescriptionContext::~SdXMLDescriptionContext() = default;
 
 void SdXMLDescriptionContext::EndElement()
 {

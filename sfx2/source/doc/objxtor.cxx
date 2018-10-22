@@ -257,11 +257,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     rArr.push_back( pDoc );
 }
 
-
-SfxObjectShell_Impl::~SfxObjectShell_Impl()
-{
-}
-
+SfxObjectShell_Impl::~SfxObjectShell_Impl() = default;
 
 SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     : pImpl(new SfxObjectShell_Impl(*this))

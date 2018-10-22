@@ -42,9 +42,7 @@ OComponentDatabaseMetaData::OComponentDatabaseMetaData(OConnection* _pCon)    :O
 {
 }
 
-OComponentDatabaseMetaData::~OComponentDatabaseMetaData()
-{
-}
+OComponentDatabaseMetaData::~OComponentDatabaseMetaData() = default;
 
 Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
 {

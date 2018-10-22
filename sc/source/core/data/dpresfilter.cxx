@@ -32,11 +32,9 @@ size_t ScDPResultTree::NamePairHash::operator() (const NamePairType& rPair) cons
     return aHash(rPair.first) + aHash(rPair.second);
 }
 
-ScDPResultTree::DimensionNode::DimensionNode() {}
+ScDPResultTree::DimensionNode::DimensionNode() = default;
 
-ScDPResultTree::DimensionNode::~DimensionNode()
-{
-}
+ScDPResultTree::DimensionNode::~DimensionNode() = default;
 
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::DimensionNode::dump(int nLevel) const
@@ -58,9 +56,9 @@ void ScDPResultTree::DimensionNode::dump(int nLevel) const
 }
 #endif
 
-ScDPResultTree::MemberNode::MemberNode() {}
+ScDPResultTree::MemberNode::MemberNode() = default;
 
-ScDPResultTree::MemberNode::~MemberNode() {}
+ScDPResultTree::MemberNode::~MemberNode() = default;
 
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::MemberNode::dump(int nLevel) const
@@ -80,9 +78,7 @@ void ScDPResultTree::MemberNode::dump(int nLevel) const
 #endif
 
 ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode) {}
-ScDPResultTree::~ScDPResultTree()
-{
-}
+ScDPResultTree::~ScDPResultTree() = default;
 
 void ScDPResultTree::add(
     const std::vector<ScDPResultFilter>& rFilters, double fVal)

@@ -168,9 +168,7 @@ bool SdPPTImport::Import()
     return pFilter->Import();
 }
 
-SdPPTImport::~SdPPTImport()
-{
-}
+SdPPTImport::~SdPPTImport() = default;
 
 ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam )
     : SdrPowerPointImport(rParam, rMedium.GetBaseURL())

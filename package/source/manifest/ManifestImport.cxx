@@ -115,9 +115,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
     aStack.reserve( 10 );
 }
 
-ManifestImport::~ManifestImport()
-{
-}
+ManifestImport::~ManifestImport() = default;
 
 void SAL_CALL ManifestImport::startDocument(  )
 {

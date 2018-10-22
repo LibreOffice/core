@@ -66,9 +66,7 @@ JavaInteractionHandler::JavaInteractionHandler() :
 {
 }
 
-JavaInteractionHandler::~JavaInteractionHandler()
-{
-}
+JavaInteractionHandler::~JavaInteractionHandler() = default;
 
 Any SAL_CALL JavaInteractionHandler::queryInterface(const Type& aType )
 {

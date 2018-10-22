@@ -56,9 +56,7 @@ namespace svgio
         {
         }
 
-        SvgImageNode::~SvgImageNode()
-        {
-        }
+        SvgImageNode::~SvgImageNode() = default;
 
         const SvgStyleAttributes* SvgImageNode::getSvgStyleAttributes() const
         {

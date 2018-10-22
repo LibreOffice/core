@@ -58,11 +58,7 @@ static bool SvcListHasLanguage(
     return bHasLanguage;
 }
 
-
-ThesaurusDispatcher::ThesaurusDispatcher()
-{
-}
-
+ThesaurusDispatcher::ThesaurusDispatcher() = default;
 
 ThesaurusDispatcher::~ThesaurusDispatcher()
 {

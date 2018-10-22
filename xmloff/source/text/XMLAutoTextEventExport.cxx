@@ -63,9 +63,7 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
 {
 }
 
-XMLAutoTextEventExport::~XMLAutoTextEventExport()
-{
-}
+XMLAutoTextEventExport::~XMLAutoTextEventExport() = default;
 
 void XMLAutoTextEventExport::initialize(
     const Sequence<Any> & rArguments )

@@ -88,9 +88,7 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     }
 }
 
-OXMLCell::~OXMLCell()
-{
-}
+OXMLCell::~OXMLCell() = default;
 
 SvXMLImportContextRef OXMLCell::CreateChildContext(
         sal_uInt16 _nPrefix,

@@ -52,9 +52,7 @@ GtkPrintWrapper::GtkPrintWrapper()
 
 #endif
 
-GtkPrintWrapper::~GtkPrintWrapper()
-{
-}
+GtkPrintWrapper::~GtkPrintWrapper() = default;
 
 #if !GTK_CHECK_VERSION(3,0,0)
 

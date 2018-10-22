@@ -49,9 +49,7 @@ void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)
     Invalidate();
 }
 
-SfxPreviewWin_Impl::SfxPreviewWin_Impl()
-{
-}
+SfxPreviewWin_Impl::SfxPreviewWin_Impl() = default;
 
 void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile)
 {

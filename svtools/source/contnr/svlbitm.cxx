@@ -60,9 +60,7 @@ SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bR
     InitData( _bRadioBtn, pControlForSettings );
 }
 
-SvLBoxButtonData::~SvLBoxButtonData()
-{
-}
+SvLBoxButtonData::~SvLBoxButtonData() = default;
 
 void SvLBoxButtonData::CallLink()
 {
@@ -174,9 +172,7 @@ SvLBoxString::SvLBoxString() : SvLBoxItem()
 {
 }
 
-SvLBoxString::~SvLBoxString()
-{
-}
+SvLBoxString::~SvLBoxString() = default;
 
 SvLBoxItemType SvLBoxString::GetType() const
 {
@@ -239,9 +235,7 @@ SvLBoxButton::SvLBoxButton()
     SetStateUnchecked();
 }
 
-SvLBoxButton::~SvLBoxButton()
-{
-}
+SvLBoxButton::~SvLBoxButton() = default;
 
 SvLBoxItemType SvLBoxButton::GetType() const
 {
@@ -389,9 +383,7 @@ SvLBoxContextBmp::SvLBoxContextBmp()
     m_pImpl->m_bExpanded = false;
 }
 
-SvLBoxContextBmp::~SvLBoxContextBmp()
-{
-}
+SvLBoxContextBmp::~SvLBoxContextBmp() = default;
 
 SvLBoxItemType SvLBoxContextBmp::GetType() const
 {

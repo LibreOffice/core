@@ -41,9 +41,7 @@ XYDataInterpreter::XYDataInterpreter() :
 {
 }
 
-XYDataInterpreter::~XYDataInterpreter()
-{
-}
+XYDataInterpreter::~XYDataInterpreter() = default;
 
 // ____ XDataInterpreter ____
 chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(

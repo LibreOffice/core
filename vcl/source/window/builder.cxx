@@ -4158,6 +4158,6 @@ VclBuilder::MenuAndId::MenuAndId(const OString &rId, PopupMenu *pMenu)
             , m_pMenu(pMenu)
 {};
 
-VclBuilder::MenuAndId::~MenuAndId() {}
+VclBuilder::MenuAndId::~MenuAndId() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

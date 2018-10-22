@@ -95,9 +95,7 @@ namespace cairocanvas
     {
     }
 
-    TextLayout::~TextLayout()
-    {
-    }
+    TextLayout::~TextLayout() = default;
 
     void SAL_CALL TextLayout::disposing()
     {

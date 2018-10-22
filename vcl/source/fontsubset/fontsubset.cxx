@@ -42,9 +42,7 @@ FontSubsetInfo::FontSubsetInfo()
 {
 }
 
-FontSubsetInfo::~FontSubsetInfo()
-{
-}
+FontSubsetInfo::~FontSubsetInfo() = default;
 
 // prepare subsetting for fonts where the input font file is mapped
 void FontSubsetInfo::LoadFont(

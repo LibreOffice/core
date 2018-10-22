@@ -22,9 +22,7 @@
 
 SdrDragStatUserData::~SdrDragStatUserData() = default;
 
-SdrDragStat::~SdrDragStat()
-{
-}
+SdrDragStat::~SdrDragStat() = default;
 
 void SdrDragStat::Clear()
 {

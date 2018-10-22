@@ -70,9 +70,7 @@ OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
     m_xComposerHelper.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
 }
 
-OQueryComposer::~OQueryComposer()
-{
-}
+OQueryComposer::~OQueryComposer() = default;
 
 void SAL_CALL OQueryComposer::disposing()
 {

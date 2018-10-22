@@ -2900,10 +2900,7 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
     }
 }
 
-DocumentRedlineManager::~DocumentRedlineManager()
-{
-}
-
+DocumentRedlineManager::~DocumentRedlineManager() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

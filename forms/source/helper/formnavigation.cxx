@@ -46,11 +46,7 @@ namespace frm
         m_pFeatureInterception.reset( new ControlFeatureInterception( m_xORB ) );
     }
 
-
-    OFormNavigationHelper::~OFormNavigationHelper()
-    {
-    }
-
+    OFormNavigationHelper::~OFormNavigationHelper() = default;
 
     void OFormNavigationHelper::dispose( )
     {
@@ -355,11 +351,7 @@ namespace frm
         m_pUrlTransformer.reset( new UrlTransformer( _rxORB ) );
     }
 
-
-    OFormNavigationMapper::~OFormNavigationMapper( )
-    {
-    }
-
+    OFormNavigationMapper::~OFormNavigationMapper() = default;
 
     bool OFormNavigationMapper::getFeatureURL( sal_Int16 _nFeatureId, URL& /* [out] */ _rURL )
     {

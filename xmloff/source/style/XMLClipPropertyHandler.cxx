@@ -39,10 +39,7 @@ XMLClipPropertyHandler::XMLClipPropertyHandler( bool bODF11 ) :
 {
 }
 
-XMLClipPropertyHandler::~XMLClipPropertyHandler()
-{
-    // nothing to do
-}
+XMLClipPropertyHandler::~XMLClipPropertyHandler() = default;
 
 bool XMLClipPropertyHandler::equals(
         const Any& r1,

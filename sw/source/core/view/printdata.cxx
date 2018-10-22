@@ -35,9 +35,7 @@
 
 using namespace ::com::sun::star;
 
-SwRenderData::SwRenderData()
-{
-}
+SwRenderData::SwRenderData() = default;
 
 SwRenderData::~SwRenderData()
 {
@@ -396,9 +394,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     assert(nIdx == nNumProps);
 }
 
-SwPrintUIOptions::~SwPrintUIOptions()
-{
-}
+SwPrintUIOptions::~SwPrintUIOptions() = default;
 
 bool SwPrintUIOptions::IsPrintLeftPages() const
 {

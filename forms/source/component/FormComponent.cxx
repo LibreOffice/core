@@ -324,9 +324,7 @@ OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
 {
 }
 
-OBoundControl::~OBoundControl()
-{
-}
+OBoundControl::~OBoundControl() = default;
 
 Sequence< Type> OBoundControl::_getTypes()
 {

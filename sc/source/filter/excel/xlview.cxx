@@ -43,9 +43,7 @@ XclTabViewData::XclTabViewData() :
     SetDefaults();
 }
 
-XclTabViewData::~XclTabViewData()
-{
-}
+XclTabViewData::~XclTabViewData() = default;
 
 void XclTabViewData::SetDefaults()
 {

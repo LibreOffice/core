@@ -347,8 +347,8 @@ bool ScfTools::GetHTMLNameFromName( const OUString& rSource, OUString& rName )
     return !rName.isEmpty();
 }
 
-ScFormatFilterPluginImpl::ScFormatFilterPluginImpl() {}
-ScFormatFilterPluginImpl::~ScFormatFilterPluginImpl() {}
+ScFormatFilterPluginImpl::ScFormatFilterPluginImpl() = default;
+ScFormatFilterPluginImpl::~ScFormatFilterPluginImpl() = default;
 
 ScOrcusFilters* ScFormatFilterPluginImpl::GetOrcusFilters()
 {

@@ -68,9 +68,7 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
     ODataSettings::registerPropertiesFor(this);
 }
 
-ODBTableDecorator::~ODBTableDecorator()
-{
-}
+ODBTableDecorator::~ODBTableDecorator() = default;
 
 Sequence< sal_Int8 > ODBTableDecorator::getImplementationId()
 {

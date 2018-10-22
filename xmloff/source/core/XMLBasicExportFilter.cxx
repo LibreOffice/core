@@ -29,9 +29,7 @@ XMLBasicExportFilter::XMLBasicExportFilter( const Reference< xml::sax::XDocument
 {
 }
 
-XMLBasicExportFilter::~XMLBasicExportFilter()
-{
-}
+XMLBasicExportFilter::~XMLBasicExportFilter() = default;
 
 // XDocumentHandler
 

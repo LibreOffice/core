@@ -110,11 +110,9 @@ SvxDoubleItem::SvxDoubleItem(double fValue, sal_uInt16 nId) :
 {
 }
 
-SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
-    SfxPoolItem(rItem),
-    fVal(rItem.fVal)
-{
-}
+SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem)
+
+    = default;
 
 bool SvxDoubleItem::GetPresentation
             ( SfxItemPresentation /*ePresentation*/, MapUnit /*eCoreMetric*/,

@@ -29,35 +29,28 @@ namespace svt
 
     //= IWindowOperator
 
+IWindowOperator::~IWindowOperator() = default;
 
-    IWindowOperator::~IWindowOperator()
+//= IWindowEventFilter
+
+IWindowEventFilter::~IWindowEventFilter() = default;
+
+//= DialogController_Data
+
+struct DialogController_Data
+{
+    VclPtr<vcl::Window> xInstigator;
+    ::std::vector<VclPtr<vcl::Window>> aConcernedWindows;
+    PWindowEventFilter pEventFilter;
+    PWindowOperator pOperator;
+
+    DialogController_Data(vcl::Window& _xInstigator, const PWindowEventFilter& _pEventFilter,
+                          const PWindowOperator& _pOperator)
+        : xInstigator(&_xInstigator)
+        , pEventFilter(_pEventFilter)
+        , pOperator(_pOperator)
     {
     }
-
-
-    //= IWindowEventFilter
-
-
-    IWindowEventFilter::~IWindowEventFilter()
-    {
-    }
-
-
-    //= DialogController_Data
-
-    struct DialogController_Data
-    {
-        VclPtr<vcl::Window>                  xInstigator;
-        ::std::vector< VclPtr<vcl::Window> > aConcernedWindows;
-        PWindowEventFilter          pEventFilter;
-        PWindowOperator             pOperator;
-
-        DialogController_Data( vcl::Window& _xInstigator, const PWindowEventFilter& _pEventFilter, const PWindowOperator& _pOperator )
-            :xInstigator( &_xInstigator )
-            ,pEventFilter( _pEventFilter )
-            ,pOperator( _pOperator )
-        {
-        }
     };
 
 
@@ -132,11 +125,7 @@ namespace svt
     {
     }
 
-
-    ControlDependencyManager::~ControlDependencyManager()
-    {
-    }
-
+    ControlDependencyManager::~ControlDependencyManager() = default;
 
     namespace
     {

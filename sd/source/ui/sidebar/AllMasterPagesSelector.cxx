@@ -74,7 +74,7 @@ class AllMasterPagesSelector::SortedMasterPageDescriptorList
     : public ::std::set<SharedMasterPageDescriptor,MasterPageDescriptorOrder>
 {
 public:
-    SortedMasterPageDescriptorList() {}
+    SortedMasterPageDescriptorList() = default;
 };
 
 VclPtr<vcl::Window> AllMasterPagesSelector::Create (
@@ -112,9 +112,7 @@ AllMasterPagesSelector::AllMasterPagesSelector (
     MasterPagesSelector::Fill();
 }
 
-AllMasterPagesSelector::~AllMasterPagesSelector()
-{
-}
+AllMasterPagesSelector::~AllMasterPagesSelector() = default;
 
 void AllMasterPagesSelector::Fill (ItemList& rItemList)
 {

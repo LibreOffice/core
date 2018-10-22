@@ -78,9 +78,7 @@ SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pP
 {
 }
 
-SvxOle2Shape::~SvxOle2Shape() throw()
-{
-}
+SvxOle2Shape::~SvxOle2Shape() throw() = default;
 
 //XPropertySet
 bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
@@ -558,9 +556,7 @@ SvxAppletShape::SvxAppletShape(SdrObject* pObject)
     SetShapeType( "com.sun.star.drawing.AppletShape" );
 }
 
-SvxAppletShape::~SvxAppletShape() throw()
-{
-}
+SvxAppletShape::~SvxAppletShape() throw() = default;
 
 void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
@@ -629,9 +625,7 @@ SvxPluginShape::SvxPluginShape(SdrObject* pObject)
     SetShapeType( "com.sun.star.drawing.PluginShape" );
 }
 
-SvxPluginShape::~SvxPluginShape() throw()
-{
-}
+SvxPluginShape::~SvxPluginShape() throw() = default;
 
 void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
@@ -701,9 +695,7 @@ SvxFrameShape::SvxFrameShape(SdrObject* pObject)
     SetShapeType( "com.sun.star.drawing.FrameShape" );
 }
 
-SvxFrameShape::~SvxFrameShape() throw()
-{
-}
+SvxFrameShape::~SvxFrameShape() throw() = default;
 
 void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
@@ -773,11 +765,7 @@ SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString const & referer)
     SetShapeType( "com.sun.star.drawing.MediaShape" );
 }
 
-
-SvxMediaShape::~SvxMediaShape() throw()
-{
-}
-
+SvxMediaShape::~SvxMediaShape() throw() = default;
 
 bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {

@@ -217,8 +217,7 @@ ChartTypeManager::ChartTypeManager(
     m_xContext( xContext )
 {}
 
-ChartTypeManager::~ChartTypeManager()
-{}
+ChartTypeManager::~ChartTypeManager() = default;
 
 // ____ XMultiServiceFactory ____
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(

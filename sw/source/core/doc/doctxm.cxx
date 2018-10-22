@@ -723,9 +723,7 @@ SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFo
     SetSectionName( GetTOXName() );
 }
 
-SwTOXBaseSection::~SwTOXBaseSection()
-{
-}
+SwTOXBaseSection::~SwTOXBaseSection() = default;
 
 bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos ) const
 {

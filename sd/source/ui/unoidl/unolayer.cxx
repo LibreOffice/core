@@ -85,9 +85,7 @@ SdLayer::SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_)
     // from view.
 }
 
-SdLayer::~SdLayer() throw()
-{
-}
+SdLayer::~SdLayer() throw() = default;
 
 // uno helper
 UNO3_GETIMPLEMENTATION_IMPL( SdLayer );

@@ -92,9 +92,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
     GetScImport().GetTables().SetRowStyle(sCellStyleName);
 }
 
-ScXMLTableRowContext::~ScXMLTableRowContext()
-{
-}
+ScXMLTableRowContext::~ScXMLTableRowContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableRowContext::createFastChildContext( sal_Int32 nElement,
@@ -251,9 +249,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLTableRowsContext::~ScXMLTableRowsContext()
-{
-}
+ScXMLTableRowsContext::~ScXMLTableRowsContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableRowsContext::createFastChildContext( sal_Int32 nElement,

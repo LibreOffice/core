@@ -39,10 +39,7 @@ AccessibleGraphicShape::AccessibleGraphicShape (
 {
 }
 
-
-AccessibleGraphicShape::~AccessibleGraphicShape()
-{
-}
+AccessibleGraphicShape::~AccessibleGraphicShape() = default;
 
 // XAccessibleImage
 OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription()

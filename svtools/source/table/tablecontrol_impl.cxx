@@ -91,9 +91,7 @@ namespace svt { namespace table
     class EmptyTableModel : public ITableModel
     {
     public:
-        EmptyTableModel()
-        {
-        }
+        EmptyTableModel() = default;
 
         // ITableModel overridables
         virtual TableSize           getColumnCount() const override
@@ -2418,9 +2416,7 @@ namespace svt { namespace table
     {
     }
 
-    TableFunctionSet::~TableFunctionSet()
-    {
-    }
+    TableFunctionSet::~TableFunctionSet() = default;
 
     void TableFunctionSet::BeginDrag()
     {

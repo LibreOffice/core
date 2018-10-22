@@ -268,9 +268,7 @@ OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
     return (index <= m_nCount && index > 0) ? m_pFontEntries[index-1].GetFaceName() : OUString();
 }
 
-LwpFontTable::~LwpFontTable()
-{
-}
+LwpFontTable::~LwpFontTable() = default;
 
 void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
 {
@@ -359,9 +357,7 @@ LwpFontNameManager::LwpFontNameManager()
     : m_nCount(0)
 {}
 
-LwpFontNameManager::~LwpFontNameManager()
-{
-}
+LwpFontNameManager::~LwpFontNameManager() = default;
 
 void LwpFontNameManager::Read(LwpObjectStream *pStrm)
 {
@@ -422,9 +418,7 @@ void    LwpFontAttrManager::Override(sal_uInt16 index, rtl::Reference<XFFont> co
     m_pFontAttrs[index-1].Override(pFont);
 }
 
-LwpFontAttrManager::~LwpFontAttrManager()
-{
-}
+LwpFontAttrManager::~LwpFontAttrManager() = default;
 
 void LwpFontManager::Read(LwpObjectStream *pStrm)
 {

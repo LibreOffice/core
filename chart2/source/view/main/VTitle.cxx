@@ -45,9 +45,7 @@ VTitle::VTitle( const uno::Reference< XTitle > & xTitle )
 {
 }
 
-VTitle::~VTitle()
-{
-}
+VTitle::~VTitle() = default;
 
 void VTitle::init(
               const uno::Reference< drawing::XShapes >& xTargetPage

@@ -42,9 +42,7 @@ AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const Accelerator
 {
 }
 
-AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
-{
-}
+AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter() = default;
 
 void AcceleratorConfigurationWriter::flush()
 {

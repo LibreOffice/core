@@ -33,13 +33,9 @@ using ::com::sun::star::beans::PropertyValue;
 
 static const OUStringLiteral gsURL("Script");
 
-XMLScriptExportHandler::XMLScriptExportHandler()
-{
-}
+XMLScriptExportHandler::XMLScriptExportHandler() = default;
 
-XMLScriptExportHandler::~XMLScriptExportHandler()
-{
-}
+XMLScriptExportHandler::~XMLScriptExportHandler() = default;
 
 void XMLScriptExportHandler::Export(
     SvXMLExport& rExport,

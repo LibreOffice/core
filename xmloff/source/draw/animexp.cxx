@@ -262,9 +262,7 @@ XMLAnimationsExporter::XMLAnimationsExporter( XMLShapeExport* pShapeExp )
     mpImpl->mxShapeExp = pShapeExp;
 }
 
-XMLAnimationsExporter::~XMLAnimationsExporter()
-{
-}
+XMLAnimationsExporter::~XMLAnimationsExporter() = default;
 
 void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape )
 {

@@ -143,9 +143,7 @@ ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rIm
     // here are no attributes
 }
 
-ScXMLContentValidationsContext::~ScXMLContentValidationsContext()
-{
-}
+ScXMLContentValidationsContext::~ScXMLContentValidationsContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )

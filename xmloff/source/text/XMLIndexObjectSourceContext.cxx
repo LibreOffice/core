@@ -62,9 +62,7 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
 {
 }
 
-XMLIndexObjectSourceContext::~XMLIndexObjectSourceContext()
-{
-}
+XMLIndexObjectSourceContext::~XMLIndexObjectSourceContext() = default;
 
 void XMLIndexObjectSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,

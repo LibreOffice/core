@@ -253,9 +253,7 @@ SidebarTextControlAccessible::SidebarTextControlAccessible( SidebarTextControl& 
     SetWindow( &mrSidebarTextControl );
 }
 
-SidebarTextControlAccessible::~SidebarTextControlAccessible()
-{
-}
+SidebarTextControlAccessible::~SidebarTextControlAccessible() = default;
 
 css::uno::Reference< css::accessibility::XAccessibleContext > SidebarTextControlAccessible::CreateAccessibleContext()
 {

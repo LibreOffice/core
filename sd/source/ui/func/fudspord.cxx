@@ -38,9 +38,7 @@ FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::Vi
 {
 }
 
-FuDisplayOrder::~FuDisplayOrder()
-{
-}
+FuDisplayOrder::~FuDisplayOrder() = default;
 
 void FuDisplayOrder::implClearOverlay()
 {

@@ -1071,9 +1071,7 @@ FunctionProvider::FunctionProvider(  bool bImportFilter ) :
 {
 }
 
-FunctionProvider::~FunctionProvider()
-{
-}
+FunctionProvider::~FunctionProvider() = default;
 
 const FunctionInfo* FunctionProvider::getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const
 {
@@ -1398,9 +1396,7 @@ OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModel
 {
 }
 
-OpCodeProvider::~OpCodeProvider()
-{
-}
+OpCodeProvider::~OpCodeProvider() = default;
 
 const ApiOpCodes& OpCodeProvider::getOpCodes() const
 {

@@ -52,10 +52,7 @@ PropertySetInfo::PropertySetInfo(
 
 
 // virtual
-PropertySetInfo::~PropertySetInfo()
-{
-}
-
+PropertySetInfo::~PropertySetInfo() = default;
 
 // XInterface methods.
 
@@ -220,10 +217,7 @@ CommandProcessorInfo::CommandProcessorInfo(
 
 
 // virtual
-CommandProcessorInfo::~CommandProcessorInfo()
-{
-}
-
+CommandProcessorInfo::~CommandProcessorInfo() = default;
 
 // XInterface methods.
 

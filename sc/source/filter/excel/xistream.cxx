@@ -48,9 +48,7 @@ XclImpDecrypter::XclImpDecrypter( const XclImpDecrypter& rSrc ) :
 {
 }
 
-XclImpDecrypter::~XclImpDecrypter()
-{
-}
+XclImpDecrypter::~XclImpDecrypter() = default;
 
 XclImpDecrypterRef XclImpDecrypter::Clone() const
 {
@@ -443,9 +441,7 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot ) :
     mrStrm.Seek( STREAM_SEEK_TO_BEGIN );
 }
 
-XclImpStream::~XclImpStream()
-{
-}
+XclImpStream::~XclImpStream() = default;
 
 bool XclImpStream::StartNextRecord()
 {

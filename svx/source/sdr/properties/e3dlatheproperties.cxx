@@ -36,9 +36,7 @@ namespace sdr
         {
         }
 
-        E3dLatheProperties::~E3dLatheProperties()
-        {
-        }
+        E3dLatheProperties::~E3dLatheProperties() = default;
 
         std::unique_ptr<BaseProperties> E3dLatheProperties::Clone(SdrObject& rObj) const
         {

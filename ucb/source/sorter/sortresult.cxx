@@ -1686,13 +1686,9 @@ SortListData::SortListData( sal_IntPtr nPos )
 {
 };
 
-SortedEntryList::SortedEntryList()
-{
-}
+SortedEntryList::SortedEntryList() = default;
 
-SortedEntryList::~SortedEntryList()
-{
-}
+SortedEntryList::~SortedEntryList() = default;
 
 void SortedEntryList::Clear()
 {

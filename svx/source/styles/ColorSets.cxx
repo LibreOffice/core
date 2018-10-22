@@ -18,11 +18,9 @@ ColorSet::ColorSet(OUString const & aColorSetName)
     , maColors(12)
 {}
 
-ColorSets::ColorSets()
-{}
+ColorSets::ColorSets() = default;
 
-ColorSets::~ColorSets()
-{}
+ColorSets::~ColorSets() = default;
 
 void ColorSets::init()
 {

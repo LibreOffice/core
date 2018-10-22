@@ -22,30 +22,24 @@
 #define LISTBOX_SCROLLING_AREA  12
 namespace dbaui
 {
+OScrollHelper::OScrollHelper() = default;
+OScrollHelper::~OScrollHelper() = default;
+void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
+{
+    // Scrolling Areas
+    tools::Rectangle aScrollArea(Point(0, _rOutputSize.Height() - LISTBOX_SCROLLING_AREA),
+                                 Size(_rOutputSize.Width(), LISTBOX_SCROLLING_AREA));
 
-    OScrollHelper::OScrollHelper()
+    // if pointer in bottom area begin scroll
+    if (aScrollArea.IsInside(_rPoint))
+        m_aUpScroll.Call(nullptr);
+    else
     {
+        aScrollArea.SetPos(Point(0, 0));
+        // if pointer in top area begin scroll
+        if (aScrollArea.IsInside(_rPoint))
+            m_aDownScroll.Call(nullptr);
     }
-    OScrollHelper::~OScrollHelper()
-    {
-
-    }
-    void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
-    {
-        // Scrolling Areas
-        tools::Rectangle aScrollArea( Point(0, _rOutputSize.Height() - LISTBOX_SCROLLING_AREA),
-                                     Size(_rOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
-
-        // if pointer in bottom area begin scroll
-        if( aScrollArea.IsInside(_rPoint) )
-            m_aUpScroll.Call(nullptr);
-        else
-        {
-            aScrollArea.SetPos(Point(0,0));
-            // if pointer in top area begin scroll
-            if( aScrollArea.IsInside(_rPoint) )
-                m_aDownScroll.Call(nullptr);
-        }
     }
 }
 

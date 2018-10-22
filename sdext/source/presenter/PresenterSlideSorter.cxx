@@ -359,9 +359,7 @@ PresenterSlideSorter::PresenterSlideSorter (
     }
 }
 
-PresenterSlideSorter::~PresenterSlideSorter()
-{
-}
+PresenterSlideSorter::~PresenterSlideSorter() = default;
 
 void SAL_CALL PresenterSlideSorter::disposing()
 {

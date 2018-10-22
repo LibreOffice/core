@@ -67,9 +67,7 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
 {
 }
 
-XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationContext()
-{
-}
+XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationContext() = default;
 
 void XMLIndexBibliographyConfigurationContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

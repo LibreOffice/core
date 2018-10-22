@@ -77,9 +77,7 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLTableColContext::~ScXMLTableColContext()
-{
-}
+ScXMLTableColContext::~ScXMLTableColContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColContext::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
@@ -169,9 +167,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLTableColsContext::~ScXMLTableColsContext()
-{
-}
+ScXMLTableColsContext::~ScXMLTableColsContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )

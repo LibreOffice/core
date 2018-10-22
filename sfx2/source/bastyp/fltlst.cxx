@@ -85,9 +85,7 @@ SfxFilterListener::SfxFilterListener()
     m_xFilterCache->addRefreshListener( m_xFilterCacheListener );
 }
 
-SfxFilterListener::~SfxFilterListener()
-{
-}
+SfxFilterListener::~SfxFilterListener() = default;
 
 void SfxFilterListener::refreshed( const lang::EventObject& aSource )
 {

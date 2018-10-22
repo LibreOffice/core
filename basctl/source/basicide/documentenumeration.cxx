@@ -69,9 +69,7 @@ namespace basctl { namespace docs {
     {
     }
 
-    DocumentEnumeration::~DocumentEnumeration()
-    {
-    }
+    DocumentEnumeration::~DocumentEnumeration() = default;
 
     namespace
     {

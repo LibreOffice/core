@@ -62,9 +62,7 @@ ScXMLExportDataPilot::ScXMLExportDataPilot(ScXMLExport& rTempExport)
 {
 }
 
-ScXMLExportDataPilot::~ScXMLExportDataPilot()
-{
-}
+ScXMLExportDataPilot::~ScXMLExportDataPilot() = default;
 
 OUString ScXMLExportDataPilot::getDPOperatorXML(
     const ScQueryOp aFilterOperator, const utl::SearchParam::SearchType eSearchType)

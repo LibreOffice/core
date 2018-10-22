@@ -36,9 +36,7 @@ DispatchInformationProvider::DispatchInformationProvider(const css::uno::Referen
 {
 }
 
-DispatchInformationProvider::~DispatchInformationProvider()
-{
-}
+DispatchInformationProvider::~DispatchInformationProvider() = default;
 
 css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
 {

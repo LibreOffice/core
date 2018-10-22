@@ -38,8 +38,7 @@ ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator()
     ::rtl::math::setNan( & m_fLogIntercept );
 }
 
-ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator()
-{}
+ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator() = default;
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(

@@ -34,9 +34,7 @@ SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl,
 {
 }
 
-SvxDrawOutlinerViewForwarder::~SvxDrawOutlinerViewForwarder()
-{
-}
+SvxDrawOutlinerViewForwarder::~SvxDrawOutlinerViewForwarder() = default;
 
 Point SvxDrawOutlinerViewForwarder::GetTextOffset() const
 {

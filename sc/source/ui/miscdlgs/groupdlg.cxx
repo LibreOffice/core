@@ -40,9 +40,7 @@ ScGroupDlg::ScGroupDlg(weld::Window* pParent, bool bUngroup, bool bRows)
     m_xBtnRows->grab_focus();
 }
 
-ScGroupDlg::~ScGroupDlg()
-{
-}
+ScGroupDlg::~ScGroupDlg() = default;
 
 bool ScGroupDlg::GetColsChecked() const
 {

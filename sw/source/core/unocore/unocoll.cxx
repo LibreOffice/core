@@ -178,9 +178,7 @@ class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper< container::XName
 {
     StringHashMap mTemplateToProject;
 public:
-    SwVbaProjectNameProvider()
-    {
-    }
+    SwVbaProjectNameProvider() = default;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
         return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
@@ -844,10 +842,7 @@ SwXTextTables::SwXTextTables(SwDoc* pDc) :
 
 }
 
-SwXTextTables::~SwXTextTables()
-{
-
-}
+SwXTextTables::~SwXTextTables() = default;
 
 sal_Int32 SwXTextTables::getCount()
 {
@@ -1060,7 +1055,9 @@ namespace
             typedef std::list< Any > frmcontainer_t;
             frmcontainer_t m_aFrames;
         protected:
-            virtual ~SwXFrameEnumeration() override {};
+            virtual ~SwXFrameEnumeration() override = default;
+            ;
+
         public:
             SwXFrameEnumeration(const SwDoc* const pDoc);
 
@@ -1160,8 +1157,7 @@ SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
     m_eType(eSet)
 {}
 
-SwXFrames::~SwXFrames()
-{}
+SwXFrames::~SwXFrames() = default;
 
 uno::Reference<container::XEnumeration> SwXFrames::createEnumeration()
 {
@@ -1309,9 +1305,7 @@ SwXTextFrames::SwXTextFrames(SwDoc* _pDoc) :
 {
 }
 
-SwXTextFrames::~SwXTextFrames()
-{
-}
+SwXTextFrames::~SwXTextFrames() = default;
 
 OUString SwXTextGraphicObjects::getImplementationName()
 {
@@ -1334,9 +1328,7 @@ SwXTextGraphicObjects::SwXTextGraphicObjects(SwDoc* _pDoc) :
 {
 }
 
-SwXTextGraphicObjects::~SwXTextGraphicObjects()
-{
-}
+SwXTextGraphicObjects::~SwXTextGraphicObjects() = default;
 
 OUString SwXTextEmbeddedObjects::getImplementationName()
 {
@@ -1359,9 +1351,7 @@ SwXTextEmbeddedObjects::SwXTextEmbeddedObjects(SwDoc* _pDoc) :
 {
 }
 
-SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
-{
-}
+SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects() = default;
 
 OUString SwXTextSections::getImplementationName()
 {
@@ -1384,9 +1374,7 @@ SwXTextSections::SwXTextSections(SwDoc* _pDoc) :
 {
 }
 
-SwXTextSections::~SwXTextSections()
-{
-}
+SwXTextSections::~SwXTextSections() = default;
 
 sal_Int32 SwXTextSections::getCount()
 {
@@ -1559,8 +1547,7 @@ SwXBookmarks::SwXBookmarks(SwDoc* _pDoc) :
     SwUnoCollection(_pDoc)
 { }
 
-SwXBookmarks::~SwXBookmarks()
-{ }
+SwXBookmarks::~SwXBookmarks() = default;
 
 sal_Int32 SwXBookmarks::getCount()
 {
@@ -1693,9 +1680,7 @@ SwXNumberingRulesCollection::SwXNumberingRulesCollection( SwDoc* _pDoc ) :
 {
 }
 
-SwXNumberingRulesCollection::~SwXNumberingRulesCollection()
-{
-}
+SwXNumberingRulesCollection::~SwXNumberingRulesCollection() = default;
 
 sal_Int32 SwXNumberingRulesCollection::getCount()
 {
@@ -1760,9 +1745,7 @@ SwXFootnotes::SwXFootnotes(bool bEnd, SwDoc* _pDoc)
 {
 }
 
-SwXFootnotes::~SwXFootnotes()
-{
-}
+SwXFootnotes::~SwXFootnotes() = default;
 
 sal_Int32 SwXFootnotes::getCount()
 {
@@ -1855,9 +1838,7 @@ SwXReferenceMarks::SwXReferenceMarks(SwDoc* _pDoc) :
 {
 }
 
-SwXReferenceMarks::~SwXReferenceMarks()
-{
-}
+SwXReferenceMarks::~SwXReferenceMarks() = default;
 
 sal_Int32 SwXReferenceMarks::getCount()
 {

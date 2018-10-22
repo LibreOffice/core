@@ -608,9 +608,7 @@ namespace drawinglayer
             maRasterRange.expand(basegfx::B2DTuple(1.0, 1.0));
         }
 
-        DefaultProcessor3D::~DefaultProcessor3D()
-        {
-        }
+        DefaultProcessor3D::~DefaultProcessor3D() = default;
     } // end of namespace processor3d
 } // end of namespace drawinglayer
 

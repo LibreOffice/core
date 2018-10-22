@@ -25,10 +25,7 @@
 #include <vcl/textdata.hxx>
 #include "textdat2.hxx"
 
-
-TextSelection::TextSelection()
-{
-}
+TextSelection::TextSelection() = default;
 
 TextSelection::TextSelection( const TextPaM& rPaM ) :
     maStartPaM( rPaM ), maEndPaM( rPaM )
@@ -50,9 +47,7 @@ void TextSelection::Justify()
     }
 }
 
-TETextPortionList::TETextPortionList()
-{
-}
+TETextPortionList::TETextPortionList() = default;
 
 TETextPortionList::~TETextPortionList()
 {
@@ -152,9 +147,7 @@ TEParaPortion::TEParaPortion( TextNode* pN )
 {
 }
 
-TEParaPortion::~TEParaPortion()
-{
-}
+TEParaPortion::~TEParaPortion() = default;
 
 void TEParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
@@ -262,9 +255,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     }
 }
 
-TEParaPortions::~TEParaPortions()
-{
-}
+TEParaPortions::~TEParaPortions() = default;
 
 IdleFormatter::IdleFormatter()
     : mpView(nullptr)
@@ -322,9 +313,7 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartP
 {
 }
 
-TEIMEInfos::~TEIMEInfos()
-{
-}
+TEIMEInfos::~TEIMEInfos() = default;
 
 void TEIMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
 {

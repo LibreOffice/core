@@ -41,9 +41,7 @@ PageCache::PageCache (
 {
 }
 
-PageCache::~PageCache()
-{
-}
+PageCache::~PageCache() = default;
 
 void PageCache::ChangeSize (
     const Size& rPreviewSize,

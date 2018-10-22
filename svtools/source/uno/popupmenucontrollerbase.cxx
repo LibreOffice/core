@@ -61,9 +61,7 @@ PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XComponentCon
         m_xURLTransformer.set( util::URLTransformer::create( xContext ) );
 }
 
-PopupMenuControllerBase::~PopupMenuControllerBase()
-{
-}
+PopupMenuControllerBase::~PopupMenuControllerBase() = default;
 
 // protected function
 void PopupMenuControllerBase::throwIfDisposed()

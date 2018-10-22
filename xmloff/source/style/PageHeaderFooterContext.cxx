@@ -44,9 +44,7 @@ PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
     bHeader = bTempHeader;
 }
 
-PageHeaderFooterContext::~PageHeaderFooterContext()
-{
-}
+PageHeaderFooterContext::~PageHeaderFooterContext() = default;
 
 SvXMLImportContextRef PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,

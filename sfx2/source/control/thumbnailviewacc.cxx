@@ -42,9 +42,7 @@ ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent, bool bIsTransientChi
 {
 }
 
-ThumbnailViewAcc::~ThumbnailViewAcc()
-{
-}
+ThumbnailViewAcc::~ThumbnailViewAcc() = default;
 
 void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
@@ -559,9 +557,7 @@ ThumbnailViewItemAcc::ThumbnailViewItemAcc( ThumbnailViewItem* pParent, bool bIs
 {
 }
 
-ThumbnailViewItemAcc::~ThumbnailViewItemAcc()
-{
-}
+ThumbnailViewItemAcc::~ThumbnailViewItemAcc() = default;
 
 void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {

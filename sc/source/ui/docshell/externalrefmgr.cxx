@@ -253,9 +253,7 @@ ScExternalRefCache::Table::Table()
 {
 }
 
-ScExternalRefCache::Table::~Table()
-{
-}
+ScExternalRefCache::Table::~Table() = default;
 
 void ScExternalRefCache::Table::clear()
 {
@@ -474,9 +472,9 @@ ScExternalRefCache::CellFormat::CellFormat() :
 {
 }
 
-ScExternalRefCache::ScExternalRefCache() {}
+ScExternalRefCache::ScExternalRefCache() = default;
 
-ScExternalRefCache::~ScExternalRefCache() {}
+ScExternalRefCache::~ScExternalRefCache() = default;
 
 const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const
 {
@@ -1456,9 +1454,7 @@ ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const
 {
 }
 
-ScExternalRefLink::~ScExternalRefLink()
-{
-}
+ScExternalRefLink::~ScExternalRefLink() = default;
 
 void ScExternalRefLink::Closed()
 {
@@ -1693,13 +1689,9 @@ ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(
     return maRefCache.getCacheTable(nFileId, rTabName, bCreateNew, pnIndex, pExtUrl);
 }
 
-ScExternalRefManager::LinkListener::LinkListener()
-{
-}
+ScExternalRefManager::LinkListener::LinkListener() = default;
 
-ScExternalRefManager::LinkListener::~LinkListener()
-{
-}
+ScExternalRefManager::LinkListener::~LinkListener() = default;
 
 ScExternalRefManager::ApiGuard::ApiGuard(const ScDocument* pDoc) :
     mpMgr(pDoc->GetExternalRefManager()),

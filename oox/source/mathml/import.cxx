@@ -21,10 +21,7 @@ using namespace ::com::sun::star;
 
 namespace oox
 {
-
-FormulaImportBase::FormulaImportBase()
-{
-}
+FormulaImportBase::FormulaImportBase() = default;
 
 namespace formulaimport {
 

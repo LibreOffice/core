@@ -50,14 +50,12 @@ private:
     std::vector<AccessibleRelation> maRelations;
 };
 
-AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl()
-{
-}
+AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl() = default;
 
-AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl)
-    : maRelations(rImpl.maRelations)
-{
-}
+AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl(
+    const AccessibleRelationSetHelperImpl& rImpl)
+
+    = default;
 
 sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount() const
 {
@@ -125,9 +123,7 @@ AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelati
         mpHelperImpl.reset(new AccessibleRelationSetHelperImpl());
 }
 
-AccessibleRelationSetHelper::~AccessibleRelationSetHelper()
-{
-}
+AccessibleRelationSetHelper::~AccessibleRelationSetHelper() = default;
 
 //=====  XAccessibleRelationSet  ==============================================
 

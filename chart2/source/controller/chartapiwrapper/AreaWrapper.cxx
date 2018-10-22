@@ -80,8 +80,7 @@ AreaWrapper::AreaWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2Mode
 {
 }
 
-AreaWrapper::~AreaWrapper()
-{}
+AreaWrapper::~AreaWrapper() = default;
 
 // ____ XShape ____
 awt::Point SAL_CALL AreaWrapper::getPosition()

@@ -48,9 +48,7 @@ BreakIterator_th::BreakIterator_th() :
 /**
  * Deconstructor.
  */
-BreakIterator_th::~BreakIterator_th()
-{
-}
+BreakIterator_th::~BreakIterator_th() = default;
 
 sal_Int32 SAL_CALL BreakIterator_th::previousCharacters( const OUString& Text,
     sal_Int32 nStartPos, const lang::Locale& rLocale,

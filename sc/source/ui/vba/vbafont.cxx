@@ -54,9 +54,7 @@ ScVbaFont::GetDataSet()
     return mpRangeObj ? excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj ) : nullptr;
 }
 
-ScVbaFont::~ScVbaFont()
-{
-}
+ScVbaFont::~ScVbaFont() = default;
 
 uno::Any SAL_CALL
 ScVbaFont::getSize()

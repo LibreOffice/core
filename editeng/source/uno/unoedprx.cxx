@@ -296,9 +296,7 @@ SvxEditSourceAdapter::SvxEditSourceAdapter() : mbEditSourceValid( false )
 {
 }
 
-SvxEditSourceAdapter::~SvxEditSourceAdapter()
-{
-}
+SvxEditSourceAdapter::~SvxEditSourceAdapter() = default;
 
 std::unique_ptr<SvxEditSource> SvxEditSourceAdapter::Clone() const
 {
@@ -409,9 +407,7 @@ SvxAccessibleTextAdapter::SvxAccessibleTextAdapter()
 {
 }
 
-SvxAccessibleTextAdapter::~SvxAccessibleTextAdapter()
-{
-}
+SvxAccessibleTextAdapter::~SvxAccessibleTextAdapter() = default;
 
 sal_Int32 SvxAccessibleTextAdapter::GetParagraphCount() const
 {
@@ -1101,9 +1097,7 @@ SvxAccessibleTextEditViewAdapter::SvxAccessibleTextEditViewAdapter()
 {
 }
 
-SvxAccessibleTextEditViewAdapter::~SvxAccessibleTextEditViewAdapter()
-{
-}
+SvxAccessibleTextEditViewAdapter::~SvxAccessibleTextEditViewAdapter() = default;
 
 bool SvxAccessibleTextEditViewAdapter::IsValid() const
 {

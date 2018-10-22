@@ -745,9 +745,7 @@ void SwRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SwRedlineExtraData::~SwRedlineExtraData()
-{
-}
+SwRedlineExtraData::~SwRedlineExtraData() = default;
 
 void SwRedlineExtraData::Reject( SwPaM& ) const
 {
@@ -767,9 +765,7 @@ SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( const OUString& rC
         m_pSet.reset( new SfxItemSet( *pItemSet ) );
 }
 
-SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
-{
-}
+SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl() = default;
 
 SwRedlineExtraData* SwRedlineExtraData_FormatColl::CreateNew() const
 {
@@ -849,9 +845,7 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format(
     m_aWhichIds.insert( m_aWhichIds.begin(), rCpy.m_aWhichIds.begin(), rCpy.m_aWhichIds.end() );
 }
 
-SwRedlineExtraData_Format::~SwRedlineExtraData_Format()
-{
-}
+SwRedlineExtraData_Format::~SwRedlineExtraData_Format() = default;
 
 SwRedlineExtraData* SwRedlineExtraData_Format::CreateNew() const
 {
@@ -912,9 +906,7 @@ SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( cons
     }
 }
 
-SwRedlineExtraData_FormattingChanges::~SwRedlineExtraData_FormattingChanges()
-{
-}
+SwRedlineExtraData_FormattingChanges::~SwRedlineExtraData_FormattingChanges() = default;
 
 SwRedlineExtraData* SwRedlineExtraData_FormattingChanges::CreateNew() const
 {
@@ -1932,9 +1924,7 @@ void SwExtraRedlineTable::DeleteAndDestroyAll()
     }
 }
 
-SwExtraRedline::~SwExtraRedline()
-{
-}
+SwExtraRedline::~SwExtraRedline() = default;
 
 SwTableRowRedline::SwTableRowRedline(const SwRedlineData& rData, const SwTableLine& rTableLine)
     : m_aRedlineData(rData)
@@ -1942,9 +1932,7 @@ SwTableRowRedline::SwTableRowRedline(const SwRedlineData& rData, const SwTableLi
 {
 }
 
-SwTableRowRedline::~SwTableRowRedline()
-{
-}
+SwTableRowRedline::~SwTableRowRedline() = default;
 
 SwTableCellRedline::SwTableCellRedline(const SwRedlineData& rData, const SwTableBox& rTableBox)
     : m_aRedlineData(rData)
@@ -1952,8 +1940,6 @@ SwTableCellRedline::SwTableCellRedline(const SwRedlineData& rData, const SwTable
 {
 }
 
-SwTableCellRedline::~SwTableCellRedline()
-{
-}
+SwTableCellRedline::~SwTableCellRedline() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

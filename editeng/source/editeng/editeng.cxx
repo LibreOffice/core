@@ -100,9 +100,7 @@ EditEngine::EditEngine( SfxItemPool* pItemPool )
     pImpEditEngine.reset( new ImpEditEngine( this, pItemPool ) );
 }
 
-EditEngine::~EditEngine()
-{
-}
+EditEngine::~EditEngine() = default;
 
 void EditEngine::EnableUndo( bool bEnable )
 {
@@ -2820,10 +2818,7 @@ void EditEngine::SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled)
     pImpEditEngine->SetHoriAlignIgnoreTrailingWhitespace(bEnabled);
 }
 
-EFieldInfo::EFieldInfo()
-{
-}
-
+EFieldInfo::EFieldInfo() = default;
 
 EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos ) :
     pFieldItem( new SvxFieldItem( rFieldItem ) ),
@@ -2831,9 +2826,7 @@ EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int
 {
 }
 
-EFieldInfo::~EFieldInfo()
-{
-}
+EFieldInfo::~EFieldInfo() = default;
 
 EFieldInfo::EFieldInfo( const EFieldInfo& rFldInfo )
 {

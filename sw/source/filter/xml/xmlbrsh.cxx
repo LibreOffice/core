@@ -174,18 +174,14 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
     ProcessAttrs( xAttrList, rUnitConv );
 }
 
-SwXMLBrushItemImportContext::~SwXMLBrushItemImportContext()
-{
-}
+SwXMLBrushItemImportContext::~SwXMLBrushItemImportContext() = default;
 
 SwXMLBrushItemExport::SwXMLBrushItemExport( SwXMLExport& rExp ) :
     rExport( rExp )
 {
 }
 
-SwXMLBrushItemExport::~SwXMLBrushItemExport()
-{
-}
+SwXMLBrushItemExport::~SwXMLBrushItemExport() = default;
 
 void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 {

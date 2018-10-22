@@ -34,11 +34,7 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, OutlinerMode nMode )
 {
 }
 
-
-SdrOutliner::~SdrOutliner()
-{
-}
-
+SdrOutliner::~SdrOutliner() = default;
 
 void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {

@@ -32,20 +32,11 @@ ScSortParam::ScSortParam()
     Clear();
 }
 
-ScSortParam::ScSortParam( const ScSortParam& r ) :
-        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
-        bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
-        bNaturalSort(r.bNaturalSort),bIncludeComments(r.bIncludeComments),
-        bIncludeGraphicObjects(r.bIncludeGraphicObjects),bUserDef(r.bUserDef),
-        bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
-        nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
-        maKeyState( r.maKeyState ),
-        aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
-        nCompatHeader( r.nCompatHeader )
-{
-}
+ScSortParam::ScSortParam(const ScSortParam& r)
 
-ScSortParam::~ScSortParam() {}
+    = default;
+
+ScSortParam::~ScSortParam() = default;
 
 void ScSortParam::Clear()
 {
@@ -71,32 +62,7 @@ void ScSortParam::Clear()
     maKeyState.assign( DEFSORT, aKeyState );
 }
 
-ScSortParam& ScSortParam::operator=( const ScSortParam& r )
-{
-    nCol1           = r.nCol1;
-    nRow1           = r.nRow1;
-    nCol2           = r.nCol2;
-    nRow2           = r.nRow2;
-    nUserIndex      = r.nUserIndex;
-    bHasHeader      = r.bHasHeader;
-    bByRow          = r.bByRow;
-    bCaseSens       = r.bCaseSens;
-    bNaturalSort    = r.bNaturalSort;
-    bIncludeComments= r.bIncludeComments;
-    bIncludeGraphicObjects = r.bIncludeGraphicObjects;
-    bUserDef        = r.bUserDef;
-    bIncludePattern = r.bIncludePattern;
-    bInplace        = r.bInplace;
-    nDestTab        = r.nDestTab;
-    nDestCol        = r.nDestCol;
-    nDestRow        = r.nDestRow;
-    maKeyState      = r.maKeyState;
-    aCollatorLocale         = r.aCollatorLocale;
-    aCollatorAlgorithm      = r.aCollatorAlgorithm;
-    nCompatHeader   = r.nCompatHeader;
-
-    return *this;
-}
+ScSortParam& ScSortParam::operator=(const ScSortParam& r) = default;
 
 bool ScSortParam::operator==( const ScSortParam& rOther ) const
 {

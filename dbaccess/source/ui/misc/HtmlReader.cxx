@@ -97,9 +97,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     SetSwitchToUCS2( true );
 }
 
-OHTMLReader::~OHTMLReader()
-{
-}
+OHTMLReader::~OHTMLReader() = default;
 
 SvParserState OHTMLReader::CallParser()
 {

@@ -2706,9 +2706,7 @@ SwTableCellInfo::SwTableCellInfo(const SwTable * pTable)
     m_pImpl->setTable(pTable);
 }
 
-SwTableCellInfo::~SwTableCellInfo()
-{
-}
+SwTableCellInfo::~SwTableCellInfo() = default;
 
 bool SwTableCellInfo::getNext()
 {

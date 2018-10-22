@@ -138,9 +138,7 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHel
     Init( nullptr, rDocPersist, eCreateMode );
 }
 
-SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
-{
-}
+SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper() = default;
 
 void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
 {

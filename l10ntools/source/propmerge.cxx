@@ -119,9 +119,7 @@ PropParser::PropParser(
     m_bIsInitialized = true;
 }
 
-PropParser::~PropParser()
-{
-}
+PropParser::~PropParser() = default;
 
 //Extract strings form source file
 void PropParser::Extract( const OString& rPOFile )

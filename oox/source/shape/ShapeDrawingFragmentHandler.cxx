@@ -22,9 +22,7 @@ ShapeDrawingFragmentHandler::ShapeDrawingFragmentHandler(oox::core::XmlFilterBas
 {
 }
 
-ShapeDrawingFragmentHandler::~ShapeDrawingFragmentHandler() throw()
-{
-}
+ShapeDrawingFragmentHandler::~ShapeDrawingFragmentHandler() throw() = default;
 
 void SAL_CALL ShapeDrawingFragmentHandler::endDocument()
 {

@@ -68,9 +68,7 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     pExcDoc.reset( new ExcDocument( *this ) );
 }
 
-ExportBiff5::~ExportBiff5()
-{
-}
+ExportBiff5::~ExportBiff5() = default;
 
 ErrCode ExportBiff5::Write()
 {
@@ -149,7 +147,5 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
     pExcRoot->eDateiTyp = Biff8;
 }
 
-ExportBiff8::~ExportBiff8()
-{
-}
+ExportBiff8::~ExportBiff8() = default;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

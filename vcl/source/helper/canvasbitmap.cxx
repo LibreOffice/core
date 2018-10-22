@@ -412,9 +412,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     }
 }
 
-VclCanvasBitmap::~VclCanvasBitmap()
-{
-}
+VclCanvasBitmap::~VclCanvasBitmap() = default;
 
 // XBitmap
 geometry::IntegerSize2D SAL_CALL VclCanvasBitmap::getSize()

@@ -36,9 +36,7 @@ StatusIndicatorInterfaceWrapper::StatusIndicatorInterfaceWrapper(
 {
 }
 
-StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper()
-{
-}
+StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper() = default;
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::start(
     const OUString& sText,

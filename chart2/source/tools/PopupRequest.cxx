@@ -20,8 +20,7 @@ PopupRequest::PopupRequest()
 {
 }
 
-PopupRequest::~PopupRequest()
-{}
+PopupRequest::~PopupRequest() = default;
 
 // ____ XRequestCallback ____
 

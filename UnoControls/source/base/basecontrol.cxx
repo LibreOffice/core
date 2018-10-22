@@ -63,9 +63,7 @@ BaseControl::BaseControl( const Reference< XComponentContext >& rxContext )
 {
 }
 
-BaseControl::~BaseControl()
-{
-}
+BaseControl::~BaseControl() = default;
 
 //  XInterface
 

@@ -63,11 +63,7 @@ namespace rptui
         return m_nTextColor;
     }
 
-
-    FormattedFieldBeautifier::~FormattedFieldBeautifier()
-    {
-    }
-
+    FormattedFieldBeautifier::~FormattedFieldBeautifier() = default;
 
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {

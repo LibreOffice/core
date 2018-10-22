@@ -777,9 +777,7 @@ PatternFormatter::PatternFormatter()
     mbInPattKeyInput    = false;
 }
 
-PatternFormatter::~PatternFormatter()
-{
-}
+PatternFormatter::~PatternFormatter() = default;
 
 void PatternFormatter::SetMask( const OString& rEditMask,
                                 const OUString& rLiteralMask )
@@ -1419,9 +1417,7 @@ DateFormatter::DateFormatter() :
     ImplInit();
 }
 
-DateFormatter::~DateFormatter()
-{
-}
+DateFormatter::~DateFormatter() = default;
 
 CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
@@ -2314,9 +2310,7 @@ TimeFormatter::TimeFormatter() :
     ImplInit();
 }
 
-TimeFormatter::~TimeFormatter()
-{
-}
+TimeFormatter::~TimeFormatter() = default;
 
 void TimeFormatter::ReformatAll()
 {

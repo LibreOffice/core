@@ -48,9 +48,7 @@ void LifeTimeManager::impl_init()
     m_aNoLongLastingCallCountCondition.set();
 }
 
-LifeTimeManager::~LifeTimeManager()
-{
-}
+LifeTimeManager::~LifeTimeManager() = default;
 
 bool LifeTimeManager::impl_isDisposed( bool bAssert )
 {
@@ -168,9 +166,7 @@ CloseableLifeTimeManager::CloseableLifeTimeManager( css::util::XCloseable* pClos
     impl_init();
 }
 
-CloseableLifeTimeManager::~CloseableLifeTimeManager()
-{
-}
+CloseableLifeTimeManager::~CloseableLifeTimeManager() = default;
 
 bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
 {

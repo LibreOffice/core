@@ -30,9 +30,7 @@ SdrUndoManager::SdrUndoManager()
 {
 }
 
-SdrUndoManager::~SdrUndoManager()
-{
-}
+SdrUndoManager::~SdrUndoManager() = default;
 
 bool SdrUndoManager::Undo()
 {

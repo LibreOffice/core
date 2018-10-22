@@ -84,9 +84,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController> cons
     }
 }
 
-CenterViewFocusModule::~CenterViewFocusModule()
-{
-}
+CenterViewFocusModule::~CenterViewFocusModule() = default;
 
 void SAL_CALL CenterViewFocusModule::disposing()
 {

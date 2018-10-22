@@ -85,9 +85,7 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
         meEffect =  presentation::AnimationEffect_NONE;
 }
 
-SdAnimationInfo::~SdAnimationInfo()
-{
-}
+SdAnimationInfo::~SdAnimationInfo() = default;
 
 std::unique_ptr<SdrObjUserData> SdAnimationInfo::Clone(SdrObject* pObject) const
 {

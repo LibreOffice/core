@@ -2536,9 +2536,7 @@ XclExpLinkManager::XclExpLinkManager( const XclExpRoot& rRoot ) :
     }
 }
 
-XclExpLinkManager::~XclExpLinkManager()
-{
-}
+XclExpLinkManager::~XclExpLinkManager() = default;
 
 void XclExpLinkManager::FindExtSheet(
         sal_uInt16& rnExtSheet, sal_uInt16& rnXclTab,

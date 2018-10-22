@@ -13,8 +13,7 @@ using namespace css;
 using namespace css::uno;
 
 namespace apitest {
-
-XText::~XText() {}
+XText::~XText() = default;
 
 void XText::testInsertRemoveTextContent()
 {

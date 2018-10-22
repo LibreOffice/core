@@ -92,9 +92,7 @@ PageObjectLayouter::PageObjectLayouter (
         aIconSize);
 }
 
-PageObjectLayouter::~PageObjectLayouter()
-{
-}
+PageObjectLayouter::~PageObjectLayouter() = default;
 
 ::tools::Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     Size& rPageObjectSize,

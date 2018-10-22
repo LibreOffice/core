@@ -104,9 +104,7 @@ public:
     }
 
 protected:
-    virtual ~DocumentStorageAccess() override
-    {
-    }
+    virtual ~DocumentStorageAccess() override = default;
 
 public:
     void dispose();
@@ -413,9 +411,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
     impl_construct_nothrow();
 }
 
-ODatabaseModelImpl::~ODatabaseModelImpl()
-{
-}
+ODatabaseModelImpl::~ODatabaseModelImpl() = default;
 
 void ODatabaseModelImpl::impl_construct_nothrow()
 {
@@ -1298,9 +1294,7 @@ ModelDependentComponent::ModelDependentComponent( const ::rtl::Reference< ODatab
 {
 }
 
-ModelDependentComponent::~ModelDependentComponent()
-{
-}
+ModelDependentComponent::~ModelDependentComponent() = default;
 
 }   // namespace dbaccess
 

@@ -53,9 +53,7 @@ ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet()
 {
 }
 
-ActionTriggerSeparatorPropertySet::~ActionTriggerSeparatorPropertySet()
-{
-}
+ActionTriggerSeparatorPropertySet::~ActionTriggerSeparatorPropertySet() = default;
 
 // XInterface
 Any SAL_CALL ActionTriggerSeparatorPropertySet::queryInterface( const Type& aType )

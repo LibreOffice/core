@@ -36,9 +36,7 @@ SvxGrfCrop::SvxGrfCrop( sal_Int32 nL, sal_Int32 nR,
     nLeft( nL ), nRight( nR ), nTop( nT ), nBottom( nB )
 {}
 
-SvxGrfCrop::~SvxGrfCrop()
-{
-}
+SvxGrfCrop::~SvxGrfCrop() = default;
 
 bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
 {

@@ -38,11 +38,7 @@ m_nRowHeightSizeType( text::SizeType::MIN )
 {
 }
 
-
-MeasureHandler::~MeasureHandler()
-{
-}
-
+MeasureHandler::~MeasureHandler() = default;
 
 void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
 {

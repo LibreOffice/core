@@ -79,7 +79,7 @@ OUString getInternalFromMediaType(const OUString& aMediaType)
 StorageFilterDetect::StorageFilterDetect(const uno::Reference<uno::XComponentContext>& xCxt) :
     mxCxt(xCxt) {}
 
-StorageFilterDetect::~StorageFilterDetect() {}
+StorageFilterDetect::~StorageFilterDetect() = default;
 
 OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue>& rDescriptor)
 {

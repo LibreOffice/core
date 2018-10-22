@@ -240,10 +240,7 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
     for( ; mpSupportedMacroItems[mnMacroItems].mnEvent != SvMacroItemId::NONE; mnMacroItems++) ;
 }
 
-
-SvBaseEventDescriptor::~SvBaseEventDescriptor()
-{
-}
+SvBaseEventDescriptor::~SvBaseEventDescriptor() = default;
 
 void SvBaseEventDescriptor::replaceByName(
     const OUString& rName,
@@ -354,10 +351,7 @@ SvEventDescriptor::SvEventDescriptor(
 }
 
 
-SvEventDescriptor::~SvEventDescriptor()
-{
-    // automatically release xParentRef !
-}
+SvEventDescriptor::~SvEventDescriptor() = default;
 
 void SvEventDescriptor::replaceByName(
     const SvMacroItemId nEvent,
@@ -390,9 +384,7 @@ SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     aMacros.resize(mnMacroItems);
 }
 
-SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
-{
-}
+SvDetachedEventDescriptor::~SvDetachedEventDescriptor() = default;
 
 sal_Int16 SvDetachedEventDescriptor::getIndex(const SvMacroItemId nID) const
 {
@@ -467,9 +459,7 @@ SvMacroTableEventDescriptor::SvMacroTableEventDescriptor(
     }
 }
 
-SvMacroTableEventDescriptor::~SvMacroTableEventDescriptor()
-{
-}
+SvMacroTableEventDescriptor::~SvMacroTableEventDescriptor() = default;
 
 void SvMacroTableEventDescriptor::copyMacrosIntoTable(
     SvxMacroTableDtor& rMacroTable)

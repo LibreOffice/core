@@ -95,9 +95,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
         }
     }
 }
-DragMethod_RotateDiagram::~DragMethod_RotateDiagram()
-{
-}
+DragMethod_RotateDiagram::~DragMethod_RotateDiagram() = default;
 void DragMethod_RotateDiagram::TakeSdrDragComment(OUString& /*rStr*/) const
 {
 }

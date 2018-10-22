@@ -76,10 +76,7 @@ PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rS
 {
 }
 
-PlottingPositionHelper::~PlottingPositionHelper()
-{
-
-}
+PlottingPositionHelper::~PlottingPositionHelper() = default;
 
 std::unique_ptr<PlottingPositionHelper> PlottingPositionHelper::clone() const
 {
@@ -325,17 +322,11 @@ PolarPlottingPositionHelper::PolarPlottingPositionHelper()
     m_bMaySkipPointsInRegressionCalculation = false;
 }
 
-PolarPlottingPositionHelper::PolarPlottingPositionHelper( const PolarPlottingPositionHelper& rSource )
-    : PlottingPositionHelper(rSource)
-    , m_fRadiusOffset( rSource.m_fRadiusOffset )
-    , m_fAngleDegreeOffset( rSource.m_fAngleDegreeOffset )
-    , m_aUnitCartesianToScene( rSource.m_aUnitCartesianToScene )
-{
-}
+PolarPlottingPositionHelper::PolarPlottingPositionHelper(const PolarPlottingPositionHelper& rSource)
 
-PolarPlottingPositionHelper::~PolarPlottingPositionHelper()
-{
-}
+    = default;
+
+PolarPlottingPositionHelper::~PolarPlottingPositionHelper() = default;
 
 std::unique_ptr<PlottingPositionHelper> PolarPlottingPositionHelper::clone() const
 {

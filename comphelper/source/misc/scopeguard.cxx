@@ -45,13 +45,9 @@ void ScopeGuard::dismiss()
     m_func = nullptr;
 }
 
-FlagGuard::~FlagGuard()
-{
-}
+FlagGuard::~FlagGuard() = default;
 
-FlagRestorationGuard::~FlagRestorationGuard()
-{
-}
+FlagRestorationGuard::~FlagRestorationGuard() = default;
 
 } // namespace comphelper
 

@@ -33,8 +33,7 @@ MeanValueRegressionCurveCalculator::MeanValueRegressionCurveCalculator() :
     ::rtl::math::setNan( & m_fMeanValue );
 }
 
-MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator()
-{}
+MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator() = default;
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(

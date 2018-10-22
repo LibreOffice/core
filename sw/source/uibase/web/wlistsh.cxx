@@ -50,8 +50,6 @@ SwWebListShell::SwWebListShell(SwView &_rView) :
     SetName("List");
 }
 
-SwWebListShell::~SwWebListShell()
-{
-}
+SwWebListShell::~SwWebListShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

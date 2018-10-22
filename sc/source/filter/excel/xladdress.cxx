@@ -132,9 +132,7 @@ XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAd
     OSL_ENSURE( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
 }
 
-XclAddressConverterBase::~XclAddressConverterBase()
-{
-}
+XclAddressConverterBase::~XclAddressConverterBase() = default;
 
 void XclAddressConverterBase::CheckScTab( SCTAB nScTab )
 {

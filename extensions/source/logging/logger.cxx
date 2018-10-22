@@ -124,9 +124,7 @@ namespace logging
         osl_atomic_decrement( &m_refCount );
     }
 
-    EventLogger::~EventLogger()
-    {
-    }
+    EventLogger::~EventLogger() = default;
 
     bool EventLogger::impl_nts_isLoggable_nothrow( ::sal_Int32 _nLevel )
     {

@@ -60,10 +60,7 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
 {
 }
 
-OXMLDocuments::~OXMLDocuments()
-{
-
-}
+OXMLDocuments::~OXMLDocuments() = default;
 
 SvXMLImportContextRef OXMLDocuments::CreateChildContext(
         sal_uInt16 nPrefix,

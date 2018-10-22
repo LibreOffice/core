@@ -38,9 +38,7 @@ SdXMLGroupShapeContext::SdXMLGroupShapeContext(
 {
 }
 
-SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
-{
-}
+SdXMLGroupShapeContext::~SdXMLGroupShapeContext() = default;
 
 SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,

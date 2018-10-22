@@ -53,8 +53,8 @@ namespace sw
     }
 }
 
-sw::LegacyModifyHint::~LegacyModifyHint() {}
-sw::ModifyChangedHint::~ModifyChangedHint() {}
+sw::LegacyModifyHint::~LegacyModifyHint() = default;
+sw::ModifyChangedHint::~ModifyChangedHint() = default;
 
 SwClient::SwClient(SwClient&& o) noexcept
     : m_pRegisteredIn(nullptr)
@@ -328,8 +328,7 @@ sw::WriterMultiListener::WriterMultiListener(SwClient& rToTell)
     : m_rToTell(rToTell)
 {}
 
-sw::WriterMultiListener::~WriterMultiListener()
-{}
+sw::WriterMultiListener::~WriterMultiListener() = default;
 
 void sw::WriterMultiListener::StartListening(SwModify* pDepend)
 {

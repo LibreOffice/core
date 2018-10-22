@@ -167,8 +167,7 @@ StockChartTypeTemplate::StockChartTypeTemplate(
         uno::Any( bJapaneseStyle ));
 }
 
-StockChartTypeTemplate::~StockChartTypeTemplate()
-{}
+StockChartTypeTemplate::~StockChartTypeTemplate() = default;
 // ____ OPropertySet ____
 uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 {

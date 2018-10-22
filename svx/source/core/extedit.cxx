@@ -39,13 +39,9 @@
 using namespace css::uno;
 using namespace css::system;
 
-ExternalToolEdit::ExternalToolEdit()
-{
-}
+ExternalToolEdit::ExternalToolEdit() = default;
 
-ExternalToolEdit::~ExternalToolEdit()
-{
-}
+ExternalToolEdit::~ExternalToolEdit() = default;
 
 void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
 {

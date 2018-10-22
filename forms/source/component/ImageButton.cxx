@@ -55,9 +55,7 @@ OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const
 
 IMPLEMENT_DEFAULT_CLONING( OImageButtonModel )
 
-OImageButtonModel::~OImageButtonModel()
-{
-}
+OImageButtonModel::~OImageButtonModel() = default;
 
 // XServiceInfo
 css::uno::Sequence<OUString>  OImageButtonModel::getSupportedServiceNames()

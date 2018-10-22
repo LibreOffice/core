@@ -53,9 +53,7 @@ OContentHelper_Impl::OContentHelper_Impl()
 {
 }
 
-OContentHelper_Impl::~OContentHelper_Impl()
-{
-}
+OContentHelper_Impl::~OContentHelper_Impl() = default;
 
 OContentHelper::OContentHelper(const Reference< XComponentContext >& _xORB
                                ,const Reference< XInterface >&  _xParentContainer

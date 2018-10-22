@@ -34,13 +34,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using utl::MediaDescriptor;
 
-SwFilterDetect::SwFilterDetect()
-{
-}
+SwFilterDetect::SwFilterDetect() = default;
 
-SwFilterDetect::~SwFilterDetect()
-{
-}
+SwFilterDetect::~SwFilterDetect() = default;
 
 OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {

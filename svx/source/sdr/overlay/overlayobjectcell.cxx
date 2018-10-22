@@ -42,9 +42,7 @@ namespace sdr
             allowAntiAliase(false);
         }
 
-        OverlayObjectCell::~OverlayObjectCell()
-        {
-        }
+        OverlayObjectCell::~OverlayObjectCell() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer OverlayObjectCell::createOverlayObjectPrimitive2DSequence()
         {

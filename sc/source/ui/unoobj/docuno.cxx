@@ -1956,7 +1956,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     struct DrawViewKeeper
     {
         std::unique_ptr<FmFormView> mpDrawView;
-        DrawViewKeeper() {}
+        DrawViewKeeper() = default;
         ~DrawViewKeeper()
         {
             if (mpDrawView)
@@ -4288,9 +4288,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
-ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
-{
-}
+ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj() = default;
 
 // XPropertySet
 

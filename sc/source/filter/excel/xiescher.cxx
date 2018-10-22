@@ -167,9 +167,7 @@ XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpDrawObjBase::~XclImpDrawObjBase()
-{
-}
+XclImpDrawObjBase::~XclImpDrawObjBase() = default;
 
 XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
@@ -1846,9 +1844,7 @@ XclImpControlHelper::XclImpControlHelper( const XclImpRoot& rRoot, XclCtrlBindMo
 {
 }
 
-XclImpControlHelper::~XclImpControlHelper()
-{
-}
+XclImpControlHelper::~XclImpControlHelper() = default;
 
 SdrObjectUniquePtr XclImpControlHelper::CreateSdrObjectFromShape(
         const Reference< XShape >& rxShape, const tools::Rectangle& rAnchorRect ) const
@@ -3251,9 +3247,7 @@ XclImpSimpleDffConverter::XclImpSimpleDffConverter( const XclImpRoot& rRoot, SvS
     SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );
 }
 
-XclImpSimpleDffConverter::~XclImpSimpleDffConverter()
-{
-}
+XclImpSimpleDffConverter::~XclImpSimpleDffConverter() = default;
 
 bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const
 {
@@ -3299,9 +3293,7 @@ XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffS
     ScaleEmu( mnDefTextMargin );
 }
 
-XclImpDffConverter::~XclImpDffConverter()
-{
-}
+XclImpDffConverter::~XclImpDffConverter() = default;
 
 OUString XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
 {
@@ -3875,9 +3867,7 @@ XclImpDrawing::XclImpDrawing( const XclImpRoot& rRoot, bool bOleObjects ) :
 {
 }
 
-XclImpDrawing::~XclImpDrawing()
-{
-}
+XclImpDrawing::~XclImpDrawing() = default;
 
 Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
@@ -4279,9 +4269,7 @@ XclImpObjectManager::XclImpObjectManager( const XclImpRoot& rRoot ) :
     maDefObjNames[ EXC_OBJTYPE_DRAWING ]        = ScResId( STR_SHAPE_AUTOSHAPE );
 }
 
-XclImpObjectManager::~XclImpObjectManager()
-{
-}
+XclImpObjectManager::~XclImpObjectManager() = default;
 
 void XclImpObjectManager::ReadMsoDrawingGroup( XclImpStream& rStrm )
 {

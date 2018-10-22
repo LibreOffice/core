@@ -210,11 +210,7 @@ SfxToolBoxControl::SfxToolBoxControl(
     pImpl->mpPopupWindow = nullptr;
 }
 
-
-SfxToolBoxControl::~SfxToolBoxControl()
-{
-}
-
+SfxToolBoxControl::~SfxToolBoxControl() = default;
 
 ToolBox& SfxToolBoxControl::GetToolBox() const
 {

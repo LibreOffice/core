@@ -99,9 +99,7 @@ SvxTextAttrPage::SvxTextAttrPage(TabPageParent pPage, const SfxItemSet& rInAttrs
     m_xTsbFullWidth->connect_clicked(LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
 }
 
-SvxTextAttrPage::~SvxTextAttrPage()
-{
-}
+SvxTextAttrPage::~SvxTextAttrPage() = default;
 
 /*************************************************************************
 |*

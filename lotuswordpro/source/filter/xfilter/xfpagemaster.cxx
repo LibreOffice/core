@@ -75,9 +75,7 @@ m_fSepSpaceBelow(0), m_nSepLengthPercent(0)
 {
 }
 
-XFPageMaster::~XFPageMaster()
-{
-}
+XFPageMaster::~XFPageMaster() = default;
 
 enumXFStyle XFPageMaster::GetStyleFamily()
 {

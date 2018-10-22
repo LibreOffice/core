@@ -30,9 +30,7 @@ SwVbaListTemplate::SwVbaListTemplate( const uno::Reference< ooo::vba::XHelperInt
     pListHelper.reset( new SwVbaListHelper( xTextDoc, nGalleryType, nTemplateType ) );
 }
 
-SwVbaListTemplate::~SwVbaListTemplate()
-{
-}
+SwVbaListTemplate::~SwVbaListTemplate() = default;
 
 uno::Any SAL_CALL
 SwVbaListTemplate::ListLevels( const uno::Any& index )

@@ -39,9 +39,7 @@ OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,con
 
 // TODO: VirtualFunctionFinder: This is virtual function!
 
-OGroups::~OGroups()
-{
-}
+OGroups::~OGroups() = default;
 
 void SAL_CALL OGroups::dispose()
 {

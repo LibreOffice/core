@@ -54,9 +54,7 @@ ScTpPrintItem::ScTpPrintItem( const ScPrintOptions& rOpt ) :
 {
 }
 
-ScTpPrintItem::~ScTpPrintItem()
-{
-}
+ScTpPrintItem::~ScTpPrintItem() = default;
 
 bool ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {

@@ -42,10 +42,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
 namespace oox { namespace drawingml {
-
-TextField::TextField()
-{
-}
+TextField::TextField() = default;
 
 namespace {
 

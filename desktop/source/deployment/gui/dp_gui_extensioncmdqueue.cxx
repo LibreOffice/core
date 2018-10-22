@@ -652,9 +652,7 @@ bool ExtensionCmdQueue::Thread::isBusy()
     return m_bWorking;
 }
 
-
-ExtensionCmdQueue::Thread::~Thread() {}
-
+ExtensionCmdQueue::Thread::~Thread() = default;
 
 void ExtensionCmdQueue::Thread::execute()
 {

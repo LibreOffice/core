@@ -37,9 +37,7 @@ SalUserEventList::SalUserEventList()
 {
 }
 
-SalUserEventList::~SalUserEventList()
-{
-}
+SalUserEventList::~SalUserEventList() = default;
 
 void SalUserEventList::insertFrame( SalFrame* pFrame )
 {

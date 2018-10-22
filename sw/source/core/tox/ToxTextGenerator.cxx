@@ -103,8 +103,7 @@ ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm,
   mTabStopTokenHandler(tabStopHandler)
 {}
 
-ToxTextGenerator::~ToxTextGenerator()
-{}
+ToxTextGenerator::~ToxTextGenerator() = default;
 
 OUString
 ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwFormToken& aToken,

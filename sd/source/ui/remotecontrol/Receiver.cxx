@@ -38,9 +38,7 @@ Receiver::Receiver( Transmitter *aTransmitter )
     SetTimeout( 0 );
 }
 
-Receiver::~Receiver()
-{
-}
+Receiver::~Receiver() = default;
 
 // Bounce the commands to the main thread to avoid threading woes
 void Receiver::pushCommand( const std::vector<OString> &rCommand )

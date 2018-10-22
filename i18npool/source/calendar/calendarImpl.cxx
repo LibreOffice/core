@@ -33,9 +33,7 @@ CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_
 {
 }
 
-CalendarImpl::~CalendarImpl()
-{
-}
+CalendarImpl::~CalendarImpl() = default;
 
 void SAL_CALL
 CalendarImpl::loadDefaultCalendar( const Locale& rLocale )

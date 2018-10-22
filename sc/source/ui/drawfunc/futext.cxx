@@ -107,10 +107,7 @@ FuText::FuText(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
 {
 }
 
-FuText::~FuText()
-{
-//  StopEditMode();                 // in Deactivate !
-}
+FuText::~FuText() = default;
 
 bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {

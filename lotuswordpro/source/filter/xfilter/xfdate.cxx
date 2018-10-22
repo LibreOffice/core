@@ -60,13 +60,9 @@
 #include <string.h>
 #include <xfilter/xfdate.hxx>
 
-XFDate::XFDate()
-{
-}
+XFDate::XFDate() = default;
 
-XFDate::~XFDate()
-{
-}
+XFDate::~XFDate() = default;
 
 void    XFDate::ToXml(IXFStream *pStrm)
 {

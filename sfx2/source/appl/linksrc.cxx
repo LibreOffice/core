@@ -192,10 +192,7 @@ SvLinkSource::SvLinkSource()
 {
 }
 
-SvLinkSource::~SvLinkSource()
-{
-}
-
+SvLinkSource::~SvLinkSource() = default;
 
 SvLinkSource::StreamToLoadFrom SvLinkSource::getStreamToLoadFrom()
 {

@@ -39,13 +39,9 @@ void VCLXContainer::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
-VCLXContainer::VCLXContainer()
-{
-}
+VCLXContainer::VCLXContainer() = default;
 
-VCLXContainer::~VCLXContainer()
-{
-}
+VCLXContainer::~VCLXContainer() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXContainer::queryInterface( const css::uno::Type & rType )

@@ -43,9 +43,7 @@ LabelPositionHelper::LabelPositionHelper(
 {
 }
 
-LabelPositionHelper::~LabelPositionHelper()
-{
-}
+LabelPositionHelper::~LabelPositionHelper() = default;
 
 awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D ) const
 {

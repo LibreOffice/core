@@ -65,9 +65,7 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     }
 }
 
-SwLinguServiceEventListener::~SwLinguServiceEventListener()
-{
-}
+SwLinguServiceEventListener::~SwLinguServiceEventListener() = default;
 
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )

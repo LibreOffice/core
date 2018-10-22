@@ -53,9 +53,7 @@ LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
 {
 }
 
-LOTUS_ROOT::~LOTUS_ROOT()
-{
-}
+LOTUS_ROOT::~LOTUS_ROOT() = default;
 
 static osl::Mutex aLotImpSemaphore;
 

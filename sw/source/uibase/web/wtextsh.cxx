@@ -58,8 +58,6 @@ SwWebTextShell::SwWebTextShell(SwView &_rView) :
 {
 }
 
-SwWebTextShell::~SwWebTextShell()
-{
-}
+SwWebTextShell::~SwWebTextShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

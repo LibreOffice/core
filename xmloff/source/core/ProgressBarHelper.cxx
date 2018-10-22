@@ -42,9 +42,7 @@ ProgressBarHelper::ProgressBarHelper(const css::uno::Reference < css::task::XSta
 {
 }
 
-ProgressBarHelper::~ProgressBarHelper()
-{
-}
+ProgressBarHelper::~ProgressBarHelper() = default;
 
 void ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 {

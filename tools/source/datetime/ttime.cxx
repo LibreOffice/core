@@ -345,11 +345,7 @@ void tools::Time::GetClock( double fTimeInDays,
         fFractionOfSecond = fSeconds;
 }
 
-Time& tools::Time::operator =( const tools::Time& rTime )
-{
-    nTime = rTime.nTime;
-    return *this;
-}
+Time& tools::Time::operator=(const tools::Time& rTime) = default;
 
 Time& tools::Time::operator +=( const tools::Time& rTime )
 {

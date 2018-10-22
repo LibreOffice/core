@@ -31,9 +31,7 @@ ScShowTabDlg::ScShowTabDlg(weld::Window* pParent)
     m_xLb->connect_row_activated(LINK(this, ScShowTabDlg, DblClkHdl));
 }
 
-ScShowTabDlg::~ScShowTabDlg()
-{
-}
+ScShowTabDlg::~ScShowTabDlg() = default;
 
 void ScShowTabDlg::SetDescription(
         const OUString& rTitle, const OUString& rFixedText,

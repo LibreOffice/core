@@ -60,9 +60,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyVa
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
 }
 
-EditHTMLParser::~EditHTMLParser()
-{
-}
+EditHTMLParser::~EditHTMLParser() = default;
 
 SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
 {

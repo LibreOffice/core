@@ -565,9 +565,7 @@ X11OpenGLSalGraphicsImpl::X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent ):
 {
 }
 
-X11OpenGLSalGraphicsImpl::~X11OpenGLSalGraphicsImpl()
-{
-}
+X11OpenGLSalGraphicsImpl::~X11OpenGLSalGraphicsImpl() = default;
 
 void X11OpenGLSalGraphicsImpl::Init()
 {

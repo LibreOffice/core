@@ -839,9 +839,7 @@ SbxMethod::SbxMethod( const SbxMethod& r )
 {
 }
 
-SbxMethod::~SbxMethod()
-{
-}
+SbxMethod::~SbxMethod() = default;
 
 SbxClassType SbxMethod::GetClass() const
 {
@@ -854,9 +852,7 @@ SbxProperty::SbxProperty( const OUString& r, SbxDataType t )
     SetName( r );
 }
 
-SbxProperty::~SbxProperty()
-{
-}
+SbxProperty::~SbxProperty() = default;
 
 SbxClassType SbxProperty::GetClass() const
 {

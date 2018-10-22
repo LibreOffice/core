@@ -47,9 +47,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox(std::unique_ptr<weld::ComboBox> p
     m_xImpl->xInfo.set(xDefNum, uno::UNO_QUERY);
 }
 
-SwNumberingTypeListBox::~SwNumberingTypeListBox()
-{
-}
+SwNumberingTypeListBox::~SwNumberingTypeListBox() = default;
 
 void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 {

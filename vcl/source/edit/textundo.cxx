@@ -62,9 +62,7 @@ TextUndoManager::TextUndoManager( TextEngine* p )
     mpTextEngine = p;
 }
 
-TextUndoManager::~TextUndoManager()
-{
-}
+TextUndoManager::~TextUndoManager() = default;
 
 bool TextUndoManager::Undo()
 {
@@ -120,9 +118,7 @@ TextUndo::TextUndo( TextEngine* p )
     mpTextEngine = p;
 }
 
-TextUndo::~TextUndo()
-{
-}
+TextUndo::~TextUndo() = default;
 
 OUString TextUndo::GetComment() const
 {
@@ -194,9 +190,7 @@ TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 
 {
 }
 
-TextUndoConnectParas::~TextUndoConnectParas()
-{
-}
+TextUndoConnectParas::~TextUndoConnectParas() = default;
 
 void TextUndoConnectParas::Undo()
 {
@@ -222,9 +216,7 @@ TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara,
 {
 }
 
-TextUndoSplitPara::~TextUndoSplitPara()
-{
-}
+TextUndoSplitPara::~TextUndoSplitPara() = default;
 
 void TextUndoSplitPara::Undo()
 {

@@ -63,9 +63,7 @@ namespace dbmm
         m_pData->xHandler = aDocArgs.getOrDefault( "InteractionHandler", m_pData->xHandler );
     }
 
-    InteractionHandler::~InteractionHandler()
-    {
-    }
+    InteractionHandler::~InteractionHandler() = default;
 
     bool InteractionHandler::requestDocumentPassword( const OUString& _rDocumentName, OUString& _io_rPassword )
     {

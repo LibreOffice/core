@@ -103,9 +103,7 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
     m_xRbPoint->set_active(true);
 }
 
-SdSnapLineDlg::~SdSnapLineDlg()
-{
-}
+SdSnapLineDlg::~SdSnapLineDlg() = default;
 
 /**
  * fills provided item sets with dialog box attributes

@@ -129,7 +129,7 @@ namespace svt
             }
         }
 
-        virtual ~StandardFormatNormalizer() {}
+        virtual ~StandardFormatNormalizer() = default;
 
     private:
         ::sal_Int32 m_nFormatKey;
@@ -392,11 +392,7 @@ namespace svt
     {
     }
 
-
-    CellValueConversion::~CellValueConversion()
-    {
-    }
-
+    CellValueConversion::~CellValueConversion() = default;
 
     OUString CellValueConversion::convertToString( const Any& i_value )
     {

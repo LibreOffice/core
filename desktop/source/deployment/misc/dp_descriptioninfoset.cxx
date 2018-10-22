@@ -75,7 +75,7 @@ public:
     item(::sal_Int32 index) override;
 };
 
-EmptyNodeList::EmptyNodeList() {}
+EmptyNodeList::EmptyNodeList() = default;
 
 ::sal_Int32 EmptyNodeList::getLength() {
     return 0;
@@ -327,7 +327,7 @@ DescriptionInfoset::DescriptionInfoset(
     }
 }
 
-DescriptionInfoset::~DescriptionInfoset() {}
+DescriptionInfoset::~DescriptionInfoset() = default;
 
 ::boost::optional< OUString > DescriptionInfoset::getIdentifier() const {
     return getOptionalValue("desc:identifier/@value");

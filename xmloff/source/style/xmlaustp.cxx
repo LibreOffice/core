@@ -260,9 +260,7 @@ SvXMLAutoStylePoolP::SvXMLAutoStylePoolP( SvXMLExport& rExport )
 {
 }
 
-SvXMLAutoStylePoolP::~SvXMLAutoStylePoolP()
-{
-}
+SvXMLAutoStylePoolP::~SvXMLAutoStylePoolP() = default;
 
 SvXMLExport& SvXMLAutoStylePoolP::GetExport() const
 {

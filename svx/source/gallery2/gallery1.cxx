@@ -257,9 +257,7 @@ Gallery::Gallery( const OUString& rMultiPath )
     ImplLoad( rMultiPath );
 }
 
-Gallery::~Gallery()
-{
-}
+Gallery::~Gallery() = default;
 
 Gallery* Gallery::GetGalleryInstance()
 {

@@ -66,11 +66,7 @@ OSeekableInputWrapper::OSeekableInputWrapper(
         throw uno::RuntimeException();
 }
 
-
-OSeekableInputWrapper::~OSeekableInputWrapper()
-{
-}
-
+OSeekableInputWrapper::~OSeekableInputWrapper() = default;
 
 uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
                             const uno::Reference< io::XInputStream >& xInStream,

@@ -278,9 +278,7 @@ ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy
 {
 }
 
-ScAutoFormatDataField::~ScAutoFormatDataField()
-{
-}
+ScAutoFormatDataField::~ScAutoFormatDataField() = default;
 
 void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
 {
@@ -461,9 +459,7 @@ ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
         ppDataField[ nIndex ].reset( new ScAutoFormatDataField( rData.GetField( nIndex ) ) );
 }
 
-ScAutoFormatData::~ScAutoFormatData()
-{
-}
+ScAutoFormatData::~ScAutoFormatData() = default;
 
 ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex )
 {

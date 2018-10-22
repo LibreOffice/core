@@ -46,9 +46,7 @@ ScAppOptions::ScAppOptions( const ScAppOptions& rCpy )
     *this = rCpy;
 }
 
-ScAppOptions::~ScAppOptions()
-{
-}
+ScAppOptions::~ScAppOptions() = default;
 
 void ScAppOptions::SetDefaults()
 {

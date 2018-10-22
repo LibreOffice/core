@@ -126,9 +126,7 @@ SwContourCache::SwContourCache() :
 {
 }
 
-SwContourCache::~SwContourCache()
-{
-}
+SwContourCache::~SwContourCache() = default;
 
 void SwContourCache::ClrObject( sal_uInt16 nPos )
 {
@@ -352,9 +350,7 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
     mbIgnoreObjsInHeaderFooter = rTextFly.mbIgnoreObjsInHeaderFooter;
 }
 
-SwTextFly::~SwTextFly()
-{
-}
+SwTextFly::~SwTextFly() = default;
 
 void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
 {

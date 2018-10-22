@@ -34,9 +34,7 @@ namespace dbaui
         assert(m_xMaster.is());
     }
 
-    OFilePickerInteractionHandler::~OFilePickerInteractionHandler( )
-    {
-    }
+    OFilePickerInteractionHandler::~OFilePickerInteractionHandler() = default;
 
     void SAL_CALL OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest )
     {

@@ -39,9 +39,7 @@ ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
 {
 }
 
-ScXMLContentContext::~ScXMLContentContext()
-{
-}
+ScXMLContentContext::~ScXMLContentContext() = default;
 
 SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,

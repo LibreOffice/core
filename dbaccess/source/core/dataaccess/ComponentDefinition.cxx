@@ -43,7 +43,8 @@ class OColumnPropertyListener:
 {
     OComponentDefinition* m_pComponent;
 protected:
-    virtual ~OColumnPropertyListener() override {}
+    virtual ~OColumnPropertyListener() override = default;
+
 public:
     explicit OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
     OColumnPropertyListener(const OColumnPropertyListener&) = delete;
@@ -61,13 +62,9 @@ public:
     void clear() { m_pComponent = nullptr; }
 };
 
-OComponentDefinition_Impl::OComponentDefinition_Impl()
-{
-}
+OComponentDefinition_Impl::OComponentDefinition_Impl() = default;
 
-OComponentDefinition_Impl::~OComponentDefinition_Impl()
-{
-}
+OComponentDefinition_Impl::~OComponentDefinition_Impl() = default;
 
 // OComponentDefinition
 
@@ -117,9 +114,7 @@ OComponentDefinition::OComponentDefinition(const Reference< XComponentContext >&
     registerProperties();
 }
 
-OComponentDefinition::~OComponentDefinition()
-{
-}
+OComponentDefinition::~OComponentDefinition() = default;
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const OUString& _rElementName

@@ -72,10 +72,7 @@ SwXFlatParagraph::SwXFlatParagraph( SwTextNode& rTextNode, const OUString& aExpa
 {
 }
 
-SwXFlatParagraph::~SwXFlatParagraph()
-{
-}
-
+SwXFlatParagraph::~SwXFlatParagraph() = default;
 
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL

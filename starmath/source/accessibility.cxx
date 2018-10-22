@@ -116,10 +116,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
 }
 
-SmGraphicAccessible::~SmGraphicAccessible()
-{
-}
-
+SmGraphicAccessible::~SmGraphicAccessible() = default;
 
 SmDocShell * SmGraphicAccessible::GetDoc_Impl()
 {
@@ -758,9 +755,7 @@ SmEditSource::SmEditSource( const SmEditSource &rSrc ) :
 {
 }
 
-SmEditSource::~SmEditSource()
-{
-}
+SmEditSource::~SmEditSource() = default;
 
 std::unique_ptr<SvxEditSource> SmEditSource::Clone() const
 {
@@ -798,9 +793,7 @@ SmViewForwarder::SmViewForwarder( SmEditAccessible &rAcc ) :
 {
 }
 
-SmViewForwarder::~SmViewForwarder()
-{
-}
+SmViewForwarder::~SmViewForwarder() = default;
 
 bool SmViewForwarder::IsValid() const
 {
@@ -1377,9 +1370,7 @@ SmEditViewForwarder::SmEditViewForwarder( SmEditAccessible& rAcc ) :
 {
 }
 
-SmEditViewForwarder::~SmEditViewForwarder()
-{
-}
+SmEditViewForwarder::~SmEditViewForwarder() = default;
 
 bool SmEditViewForwarder::IsValid() const
 {
@@ -1491,9 +1482,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
 }
 
-SmEditAccessible::~SmEditAccessible()
-{
-}
+SmEditAccessible::~SmEditAccessible() = default;
 
 ::accessibility::AccessibleTextHelper *SmEditAccessible::GetTextHelper()
 {

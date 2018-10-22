@@ -84,10 +84,7 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     m_aInterceptedURL[DISPATCH_RELOAD]      = ".uno:Reload";
 }
 
-
-OInterceptor::~OInterceptor()
-{
-}
+OInterceptor::~OInterceptor() = default;
 
 struct DispatchHelper
 {

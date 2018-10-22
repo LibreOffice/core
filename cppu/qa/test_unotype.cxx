@@ -57,8 +57,8 @@ struct DerivedException2: css::uno::RuntimeException {};
 
 struct DerivedInterface1: css::uno::XInterface {
 private:
-    ~DerivedInterface1() {}
-        // avoid warnings about virtual members and non-virtual dtor
+    ~DerivedInterface1() = default;
+    // avoid warnings about virtual members and non-virtual dtor
 
 public:
     static void dummy(DerivedInterface1 * p)
@@ -68,8 +68,8 @@ public:
 
 struct DerivedInterface2: css::uno::XComponentContext {
 private:
-    ~DerivedInterface2() {}
-        // avoid warnings about virtual members and non-virtual dtor
+    ~DerivedInterface2() = default;
+    // avoid warnings about virtual members and non-virtual dtor
 
 public:
     static void dummy(DerivedInterface2 * p)

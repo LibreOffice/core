@@ -648,8 +648,7 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
 }
 
-OEvoabResultSet::~OEvoabResultSet()
-{}
+OEvoabResultSet::~OEvoabResultSet() = default;
 
 void OEvoabResultSet::construct( const QueryData& _rData )
 {

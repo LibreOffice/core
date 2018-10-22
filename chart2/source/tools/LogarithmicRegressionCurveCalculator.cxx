@@ -37,8 +37,7 @@ LogarithmicRegressionCurveCalculator::LogarithmicRegressionCurveCalculator() :
     ::rtl::math::setNan( & m_fIntercept );
 }
 
-LogarithmicRegressionCurveCalculator::~LogarithmicRegressionCurveCalculator()
-{}
+LogarithmicRegressionCurveCalculator::~LogarithmicRegressionCurveCalculator() = default;
 
 // ____ XRegressionCurve ____
 void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(

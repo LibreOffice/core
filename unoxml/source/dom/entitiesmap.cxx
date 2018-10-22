@@ -28,18 +28,15 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CEntitiesMap::CEntitiesMap()
-    {
-    }
+CEntitiesMap::CEntitiesMap() = default;
 
-    /**
+/**
     The number of nodes in this map.
     */
-    sal_Int32 SAL_CALL CEntitiesMap::getLength()
-    {
-        OSL_ENSURE(false,
-            "CEntitiesMap::getLength: not implemented (#i113683#)");
-        return 0;
+sal_Int32 SAL_CALL CEntitiesMap::getLength()
+{
+    OSL_ENSURE(false, "CEntitiesMap::getLength: not implemented (#i113683#)");
+    return 0;
     }
 
     /**

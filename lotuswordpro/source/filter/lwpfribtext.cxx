@@ -135,9 +135,7 @@ LwpFribDocVar::LwpFribDocVar(LwpPara* pPara)
 /**
  * @short:   destructor of LwpFribDocVar
  */
-LwpFribDocVar::~LwpFribDocVar()
-{
-}
+LwpFribDocVar::~LwpFribDocVar() = default;
 /**
  * @short:   Reading mothed of document variable frib.
  * @param:   pObjStrm wordpro object stream.

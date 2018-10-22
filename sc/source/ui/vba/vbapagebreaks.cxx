@@ -267,9 +267,7 @@ ScVbaVPageBreaks::ScVbaVPageBreaks( const uno::Reference< XHelperInterface >& xP
 {
 }
 
-ScVbaVPageBreaks::~ScVbaVPageBreaks()
-{
-}
+ScVbaVPageBreaks::~ScVbaVPageBreaks() = default;
 
 uno::Any SAL_CALL
 ScVbaVPageBreaks::Add( const uno::Any& Before )

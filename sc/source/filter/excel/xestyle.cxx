@@ -765,9 +765,7 @@ XclExpPalette::XclExpPalette( const XclExpRoot& rRoot ) :
     SetRecSize( GetColorCount() * 4 + 2 );
 }
 
-XclExpPalette::~XclExpPalette()
-{
-}
+XclExpPalette::~XclExpPalette() = default;
 
 sal_uInt32 XclExpPalette::InsertColor( const Color& rColor, XclExpColorType eType, sal_uInt16 nAutoDefault )
 {
@@ -1377,9 +1375,7 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     mxFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 }
 
-XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
-{
-}
+XclExpNumFmtBuffer::~XclExpNumFmtBuffer() = default;
 
 sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
 {
@@ -3126,9 +3122,7 @@ XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellAlign> 
 {
 }
 
-XclExpDxf::~XclExpDxf()
-{
-}
+XclExpDxf::~XclExpDxf() = default;
 
 void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
 {

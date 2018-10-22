@@ -10,10 +10,8 @@
 #include "lwptaboverride.hxx"
 
 LwpTabOverride::LwpTabOverride(LwpTabOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_aTabRackID(rOther.m_aTabRackID)
-{
-}
+
+    = default;
 
 LwpTabOverride* LwpTabOverride::clone() const
 {

@@ -139,13 +139,9 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 
 }
 
-ScFilterDetect::ScFilterDetect()
-{
-}
+ScFilterDetect::ScFilterDetect() = default;
 
-ScFilterDetect::~ScFilterDetect()
-{
-}
+ScFilterDetect::~ScFilterDetect() = default;
 
 #if 0
 // This method is no longer used, but I do want to keep this for now to see

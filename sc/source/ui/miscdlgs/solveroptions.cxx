@@ -396,9 +396,7 @@ ScSolverIntegerDialog::ScSolverIntegerDialog(weld::Window * pParent)
 {
 }
 
-ScSolverIntegerDialog::~ScSolverIntegerDialog()
-{
-}
+ScSolverIntegerDialog::~ScSolverIntegerDialog() = default;
 
 void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
@@ -422,9 +420,7 @@ ScSolverValueDialog::ScSolverValueDialog(weld::Window* pParent)
 {
 }
 
-ScSolverValueDialog::~ScSolverValueDialog()
-{
-}
+ScSolverValueDialog::~ScSolverValueDialog() = default;
 
 void ScSolverValueDialog::SetOptionName( const OUString& rName )
 {

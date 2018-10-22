@@ -1104,9 +1104,7 @@ void ScEditFieldObj::InitDoc(
     }
 }
 
-ScEditFieldObj::~ScEditFieldObj()
-{
-}
+ScEditFieldObj::~ScEditFieldObj() = default;
 
 SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {

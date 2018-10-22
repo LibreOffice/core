@@ -39,9 +39,7 @@ XMLIndexSpanEntryContext::XMLIndexSpanEntryContext(
     nValues++;  // one more for the text string
 }
 
-XMLIndexSpanEntryContext::~XMLIndexSpanEntryContext()
-{
-}
+XMLIndexSpanEntryContext::~XMLIndexSpanEntryContext() = default;
 
 void XMLIndexSpanEntryContext::Characters(const OUString& sString)
 {

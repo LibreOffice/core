@@ -144,11 +144,7 @@ OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     nCount = 0;
 }
 
-
-OLUndoExpand::~OLUndoExpand()
-{
-}
-
+OLUndoExpand::~OLUndoExpand() = default;
 
 void OLUndoExpand::Restore( bool bUndo )
 {

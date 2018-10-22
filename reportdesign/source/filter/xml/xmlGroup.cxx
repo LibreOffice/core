@@ -183,11 +183,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
     }
 }
 
-
-OXMLGroup::~OXMLGroup()
-{
-
-}
+OXMLGroup::~OXMLGroup() = default;
 
 SvXMLImportContextRef OXMLGroup::CreateChildContext(
         sal_uInt16 nPrefix,

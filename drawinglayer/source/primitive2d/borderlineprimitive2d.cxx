@@ -62,9 +62,7 @@ namespace drawinglayer
         {
         }
 
-        BorderLine::~BorderLine()
-        {
-        }
+        BorderLine::~BorderLine() = default;
 
         bool BorderLine::operator==(const BorderLine& rBorderLine) const
         {

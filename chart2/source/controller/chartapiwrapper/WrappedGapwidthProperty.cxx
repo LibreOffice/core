@@ -54,9 +54,7 @@ void WrappedBarPositionProperty_Base::setDimensionAndAxisIndex( sal_Int32 nDimen
     m_nAxisIndex = nAxisIndex;
 }
 
-WrappedBarPositionProperty_Base::~WrappedBarPositionProperty_Base()
-{
-}
+WrappedBarPositionProperty_Base::~WrappedBarPositionProperty_Base() = default;
 
 void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
@@ -155,18 +153,14 @@ WrappedGapwidthProperty::WrappedGapwidthProperty(
     : WrappedBarPositionProperty_Base( "GapWidth", "GapwidthSequence", DEFAULT_GAPWIDTH, spChart2ModelContact )
 {
 }
-WrappedGapwidthProperty::~WrappedGapwidthProperty()
-{
-}
+WrappedGapwidthProperty::~WrappedGapwidthProperty() = default;
 
 WrappedBarOverlapProperty::WrappedBarOverlapProperty(
         const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
     : WrappedBarPositionProperty_Base( "Overlap", "OverlapSequence", DEFAULT_OVERLAP, spChart2ModelContact )
 {
 }
-WrappedBarOverlapProperty::~WrappedBarOverlapProperty()
-{
-}
+WrappedBarOverlapProperty::~WrappedBarOverlapProperty() = default;
 
 } //  namespace wrapper
 } //  namespace chart

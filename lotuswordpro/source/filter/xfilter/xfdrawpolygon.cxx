@@ -60,9 +60,7 @@
 #include <xfilter/xfdrawpolygon.hxx>
 #include <rtl/ustrbuf.hxx>
 
-XFDrawPolygon::XFDrawPolygon()
-{
-}
+XFDrawPolygon::XFDrawPolygon() = default;
 
 void XFDrawPolygon::ToXml(IXFStream *pStrm)
 {

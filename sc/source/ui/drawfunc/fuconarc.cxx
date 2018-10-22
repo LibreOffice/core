@@ -32,9 +32,7 @@ FuConstArc::FuConstArc(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* p
 {
 }
 
-FuConstArc::~FuConstArc()
-{
-}
+FuConstArc::~FuConstArc() = default;
 
 bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {

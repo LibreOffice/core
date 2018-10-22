@@ -113,9 +113,7 @@ SwFormatTablePage::SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rS
     Init();
 }
 
-SwFormatTablePage::~SwFormatTablePage()
-{
-}
+SwFormatTablePage::~SwFormatTablePage() = default;
 
 void  SwFormatTablePage::Init()
 {
@@ -752,9 +750,7 @@ SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rS
          && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 }
 
-SwTableColumnPage::~SwTableColumnPage()
-{
-}
+SwTableColumnPage::~SwTableColumnPage() = default;
 
 VclPtr<SfxTabPage> SwTableColumnPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
@@ -1258,9 +1254,7 @@ SwTextFlowPage::SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet)
     HeadLineCBClickHdl(*m_xHeadLineCB);
 }
 
-SwTextFlowPage::~SwTextFlowPage()
-{
-}
+SwTextFlowPage::~SwTextFlowPage() = default;
 
 VclPtr<SfxTabPage> SwTextFlowPage::Create( TabPageParent pParent,
                                            const SfxItemSet* rAttrSet)

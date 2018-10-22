@@ -71,9 +71,7 @@ TokenMap::TokenMap() :
     }
 }
 
-TokenMap::~TokenMap()
-{
-}
+TokenMap::~TokenMap() = default;
 
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName )
 {

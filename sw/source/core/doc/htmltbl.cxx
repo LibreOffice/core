@@ -200,9 +200,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
                                              DelayedResize_Impl ) );
 }
 
-SwHTMLTableLayout::~SwHTMLTableLayout()
-{
-}
+SwHTMLTableLayout::~SwHTMLTableLayout() = default;
 
 /// The border widths are calculated like in Netscape:
 /// Outer border: BORDER + CELLSPACING + CELLPADDING

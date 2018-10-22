@@ -39,9 +39,7 @@ XMLBase64ImportContext::XMLBase64ImportContext(
 {
 }
 
-XMLBase64ImportContext::~XMLBase64ImportContext()
-{
-}
+XMLBase64ImportContext::~XMLBase64ImportContext() = default;
 
 void XMLBase64ImportContext::EndElement()
 {

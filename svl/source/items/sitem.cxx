@@ -47,11 +47,7 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
 {
 }
 
-
-SfxSetItem::~SfxSetItem()
-{
-}
-
+SfxSetItem::~SfxSetItem() = default;
 
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {

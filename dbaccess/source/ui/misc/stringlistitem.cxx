@@ -32,10 +32,8 @@ OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< OUString >& 
 }
 
 OStringListItem::OStringListItem(const OStringListItem& _rSource)
-    :SfxPoolItem(_rSource)
-    ,m_aList(_rSource.m_aList)
-{
-}
+
+    = default;
 
 bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {

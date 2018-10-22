@@ -44,9 +44,7 @@ TableCellContext::TableCellContext( ContextHandler2Helper const & rParent, const
     mrTableCell.setvMerge( rAttribs.getBool( XML_vMerge, false ) );
 }
 
-TableCellContext::~TableCellContext()
-{
-}
+TableCellContext::~TableCellContext() = default;
 
 ContextHandlerRef
 TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )

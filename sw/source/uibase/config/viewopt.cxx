@@ -306,9 +306,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     return *this;
 }
 
-SwViewOption::~SwViewOption()
-{
-}
+SwViewOption::~SwViewOption() = default;
 
 void SwViewOption::Init( vcl::Window const *pWin )
 {

@@ -29,9 +29,7 @@
 #include "image.h"
 #include <memory>
 
-ImplImageList::ImplImageList()
-{
-}
+ImplImageList::ImplImageList() = default;
 
 ImplImageList::ImplImageList( const ImplImageList &aSrc )
     : maPrefix(aSrc.maPrefix)
@@ -47,9 +45,7 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
     }
 }
 
-ImplImageList::~ImplImageList()
-{
-}
+ImplImageList::~ImplImageList() = default;
 
 void ImplImageList::AddImage( const OUString &aName,
                               sal_uInt16 nId, const BitmapEx &aBitmapEx )

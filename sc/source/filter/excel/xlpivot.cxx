@@ -50,9 +50,7 @@ XclPCItem::XclPCItem() :
 {
 }
 
-XclPCItem::~XclPCItem()
-{
-}
+XclPCItem::~XclPCItem() = default;
 
 void XclPCItem::SetEmpty()
 {
@@ -288,9 +286,7 @@ XclPCField::XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx ) :
 {
 }
 
-XclPCField::~XclPCField()
-{
-}
+XclPCField::~XclPCField() = default;
 
 bool XclPCField::IsSupportedField() const
 {

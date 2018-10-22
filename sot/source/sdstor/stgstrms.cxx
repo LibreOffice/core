@@ -334,9 +334,7 @@ StgStrm::StgStrm( StgIo& r )
 {
 }
 
-StgStrm::~StgStrm()
-{
-}
+StgStrm::~StgStrm() = default;
 
 // Attach the stream to the given entry.
 

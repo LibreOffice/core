@@ -79,9 +79,7 @@ ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bA
     EnableRTL( false );
 }
 
-ScCornerButton::~ScCornerButton()
-{
-}
+ScCornerButton::~ScCornerButton() = default;
 
 void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {

@@ -223,9 +223,7 @@ AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxC
     m_rConnection = rConnection;
 }
 
-AccInstanceProvider::~AccInstanceProvider()
-{
-}
+AccInstanceProvider::~AccInstanceProvider() = default;
 
 Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 {

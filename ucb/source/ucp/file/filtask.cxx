@@ -76,10 +76,7 @@ TaskManager::UnqPathData::UnqPathData() = default;
 
 TaskManager::UnqPathData::UnqPathData(TaskManager::UnqPathData&&) = default;
 
-
-TaskManager::UnqPathData::~UnqPathData()
-{
-}
+TaskManager::UnqPathData::~UnqPathData() = default;
 
 TaskManager::MyProperty::MyProperty( const OUString&                         thePropertyName )
     : PropertyName( thePropertyName )
@@ -109,10 +106,7 @@ TaskManager::MyProperty::MyProperty( bool                               theisNat
     // empty
 }
 
-TaskManager::MyProperty::~MyProperty()
-{
-    // empty for now
-}
+TaskManager::MyProperty::~MyProperty() = default;
 
 #include "filinl.hxx"
 
@@ -362,11 +356,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     }
 }
 
-
-TaskManager::~TaskManager()
-{
-}
-
+TaskManager::~TaskManager() = default;
 
 void
 TaskManager::startTask(

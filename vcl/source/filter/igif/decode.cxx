@@ -55,9 +55,7 @@ GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
     memset(pTable.get() + nTableSize, 0, sizeof(GIFLZWTableEntry) * (4098 - nTableSize));
 }
 
-GIFLZWDecompressor::~GIFLZWDecompressor()
-{
-}
+GIFLZWDecompressor::~GIFLZWDecompressor() = default;
 
 Scanline GIFLZWDecompressor::DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSize,
                                             sal_uLong& rCount, bool& rEOI )

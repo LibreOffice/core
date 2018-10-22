@@ -74,9 +74,9 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
     }
 }
 
-ScAreaLinkSaveCollection::ScAreaLinkSaveCollection() {}
+ScAreaLinkSaveCollection::ScAreaLinkSaveCollection() = default;
 
-ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() {}
+ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() = default;
 
 bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {

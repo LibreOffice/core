@@ -71,11 +71,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
     }
 }
 
-
-OXMLCondPrtExpr::~OXMLCondPrtExpr()
-{
-}
-
+OXMLCondPrtExpr::~OXMLCondPrtExpr() = default;
 
 void OXMLCondPrtExpr::Characters( const OUString& rChars )
 {

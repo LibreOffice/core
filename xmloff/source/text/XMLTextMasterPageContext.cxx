@@ -170,9 +170,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     }
 }
 
-XMLTextMasterPageContext::~XMLTextMasterPageContext()
-{
-}
+XMLTextMasterPageContext::~XMLTextMasterPageContext() = default;
 
 SvXMLImportContextRef XMLTextMasterPageContext::CreateChildContext(
         sal_uInt16 nPrefix,

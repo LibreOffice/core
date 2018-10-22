@@ -22,14 +22,14 @@
 #include <cassert>
 
 SvtListener::QueryBase::QueryBase( sal_uInt16 nId ) : mnId(nId) {}
-SvtListener::QueryBase::~QueryBase() {}
+SvtListener::QueryBase::~QueryBase() = default;
 
 sal_uInt16 SvtListener::QueryBase::getId() const
 {
     return mnId;
 }
 
-SvtListener::SvtListener() {}
+SvtListener::SvtListener() = default;
 
 SvtListener::SvtListener( const SvtListener & )  {}
 

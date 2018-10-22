@@ -78,9 +78,7 @@ namespace sdr
         {
         }
 
-        OverlayPolyPolygonStripedAndFilled::~OverlayPolyPolygonStripedAndFilled()
-        {
-        }
+        OverlayPolyPolygonStripedAndFilled::~OverlayPolyPolygonStripedAndFilled() = default;
     } // end of namespace overlay
 } // end of namespace sdr
 

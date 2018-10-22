@@ -143,9 +143,7 @@ void InitUpdateCheckJobThread::setTerminating() {
     m_aCondition.set();
 }
 
-UpdateCheckJob::~UpdateCheckJob()
-{
-}
+UpdateCheckJob::~UpdateCheckJob() = default;
 
 uno::Sequence< OUString >
 UpdateCheckJob::getServiceNames()

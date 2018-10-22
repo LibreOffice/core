@@ -72,9 +72,7 @@ CustomShowListContext::CustomShowListContext( FragmentHandler2 const & rParent,
 {
 }
 
-CustomShowListContext::~CustomShowListContext( )
-{
-}
+CustomShowListContext::~CustomShowListContext() = default;
 
 ::oox::core::ContextHandlerRef CustomShowListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

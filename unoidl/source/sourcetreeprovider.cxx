@@ -97,10 +97,10 @@ bool exists(OUString const & uri, bool directory) {
 
 class Cursor: public MapCursor {
 public:
-    Cursor() {}
+    Cursor() = default;
 
 private:
-    virtual ~Cursor() throw () override {}
+    virtual ~Cursor() throw() override = default;
 
     virtual rtl::Reference<Entity> getNext(OUString *) override
     { return rtl::Reference<Entity>(); } //TODO
@@ -108,10 +108,10 @@ private:
 
 class SourceModuleEntity: public ModuleEntity {
 public:
-    SourceModuleEntity() {}
+    SourceModuleEntity() = default;
 
 private:
-    virtual ~SourceModuleEntity() throw () override {}
+    virtual ~SourceModuleEntity() throw() override = default;
 
     virtual std::vector<OUString> getMemberNames() const override
     { return std::vector<OUString>(); } //TODO
@@ -206,8 +206,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
     return ent;
 }
 
-SourceTreeProvider::~SourceTreeProvider() throw () {}
-
+SourceTreeProvider::~SourceTreeProvider() throw() = default;
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

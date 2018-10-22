@@ -38,11 +38,7 @@ namespace comphelper
     {
     }
 
-
-    OWrappedAccessibleChildrenManager::~OWrappedAccessibleChildrenManager( )
-    {
-    }
-
+    OWrappedAccessibleChildrenManager::~OWrappedAccessibleChildrenManager() = default;
 
     void OWrappedAccessibleChildrenManager::setTransientChildren( bool _bSet )
     {
@@ -494,11 +490,7 @@ namespace comphelper
         aggregateProxy( m_refCount, *this );
     }
 
-
-    OAccessibleContextWrapper::~OAccessibleContextWrapper()
-    {
-    }
-
+    OAccessibleContextWrapper::~OAccessibleContextWrapper() = default;
 
     sal_Int32 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  )
     {

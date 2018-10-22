@@ -355,9 +355,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
     SetExportOnlyUsedFieldDeclarations();
 }
 
-XMLTextFieldExport::~XMLTextFieldExport()
-{
-}
+XMLTextFieldExport::~XMLTextFieldExport() = default;
 
 /// get the field ID (as in FieldIDEnum) from XTextField
 enum FieldIdEnum XMLTextFieldExport::GetFieldID(

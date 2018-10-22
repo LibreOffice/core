@@ -127,9 +127,9 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & rContext);
 
 private:
-    SingletonFactory() {}
+    SingletonFactory() = default;
 
-    virtual ~SingletonFactory() override {}
+    virtual ~SingletonFactory() override = default;
 
     SingletonFactory(const SingletonFactory&) = delete;
     SingletonFactory& operator=(const SingletonFactory&) = delete;

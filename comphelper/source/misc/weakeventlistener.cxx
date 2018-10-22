@@ -28,9 +28,7 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    OWeakListenerAdapterBase::~OWeakListenerAdapterBase()
-    {
-    }
+    OWeakListenerAdapterBase::~OWeakListenerAdapterBase() = default;
 
     OWeakEventListenerAdapter::OWeakEventListenerAdapter( Reference< XWeak > const & _rxListener, Reference< XComponent > const & _rxBroadcaster )
         :OWeakEventListenerAdapter_Base( _rxListener, _rxBroadcaster )

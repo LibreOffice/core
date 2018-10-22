@@ -64,10 +64,7 @@ namespace frm
         SetEditSource( new RichTextEditSource( _rEngine, _pTextChangeListener ) );
     }
 
-
-    ORichTextUnoWrapper::~ORichTextUnoWrapper() throw()
-    {
-    }
+    ORichTextUnoWrapper::~ORichTextUnoWrapper() throw() = default;
 
     RichTextEditSource::RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :m_rEngine              ( _rEngine                               )
@@ -76,11 +73,7 @@ namespace frm
     {
     }
 
-
-    RichTextEditSource::~RichTextEditSource()
-    {
-    }
-
+    RichTextEditSource::~RichTextEditSource() = default;
 
     std::unique_ptr<SvxEditSource> RichTextEditSource::Clone() const
     {

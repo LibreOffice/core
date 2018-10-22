@@ -36,9 +36,7 @@ VPolarCoordinateSystem::VPolarCoordinateSystem( const Reference< XCoordinateSyst
 {
 }
 
-VPolarCoordinateSystem::~VPolarCoordinateSystem()
-{
-}
+VPolarCoordinateSystem::~VPolarCoordinateSystem() = default;
 
 //better performance for big data
 uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution(

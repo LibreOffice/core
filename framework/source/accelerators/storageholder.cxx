@@ -47,16 +47,11 @@
 
 namespace framework
 {
+StorageHolder::StorageHolder() = default;
 
-StorageHolder::StorageHolder()
-{
-}
-
-StorageHolder::~StorageHolder()
-{
+StorageHolder::~StorageHolder() = default;
     // TODO implement me
     // dispose/clear etcpp.
-}
 
 void StorageHolder::forgetCachedStorages()
 {

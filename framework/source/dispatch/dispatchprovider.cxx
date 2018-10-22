@@ -72,9 +72,7 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::uno::XCompon
     @short      protected(!) dtor for deinitializing
     @descr      We made it protected to prevent using of us as base class instead as a member.
  */
-DispatchProvider::~DispatchProvider()
-{
-}
+DispatchProvider::~DispatchProvider() = default;
 
 /**
     @interface  XDispatchProvider

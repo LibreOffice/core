@@ -701,9 +701,7 @@ SwScriptInfo::SwScriptInfo()
 {
 };
 
-SwScriptInfo::~SwScriptInfo()
-{
-}
+SwScriptInfo::~SwScriptInfo() = default;
 
 // Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
 // Sw Script Types (SwFontScript::Latin, SwFontScript::CJK, SwFontScript::CTL), used to identify the font
@@ -2154,9 +2152,7 @@ SwParaPortion::SwParaPortion()
     SetWhichPor( POR_PARA );
 }
 
-SwParaPortion::~SwParaPortion()
-{
-}
+SwParaPortion::~SwParaPortion() = default;
 
 TextFrameIndex SwParaPortion::GetParLen() const
 {

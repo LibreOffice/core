@@ -120,18 +120,13 @@ struct StaticPieChartTypeInfo : public rtl::StaticAggregate< uno::Reference< bea
 
 namespace chart
 {
+PieChartType::PieChartType() = default;
 
-PieChartType::PieChartType()
-{
-}
+PieChartType::PieChartType(const PieChartType& rOther)
 
-PieChartType::PieChartType( const PieChartType & rOther ) :
-        ChartType( rOther )
-{
-}
+    = default;
 
-PieChartType::~PieChartType()
-{}
+PieChartType::~PieChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()

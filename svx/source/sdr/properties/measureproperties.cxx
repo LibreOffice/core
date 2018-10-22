@@ -63,9 +63,7 @@ namespace sdr
         {
         }
 
-        MeasureProperties::~MeasureProperties()
-        {
-        }
+        MeasureProperties::~MeasureProperties() = default;
 
         std::unique_ptr<BaseProperties> MeasureProperties::Clone(SdrObject& rObj) const
         {

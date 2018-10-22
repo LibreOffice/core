@@ -653,9 +653,7 @@ ScOrcusSheetProperties::ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDo
 {
 }
 
-ScOrcusSheetProperties::~ScOrcusSheetProperties()
-{
-}
+ScOrcusSheetProperties::~ScOrcusSheetProperties() = default;
 
 namespace {
 
@@ -725,9 +723,7 @@ ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc)
 {
 }
 
-ScOrcusConditionalFormat::~ScOrcusConditionalFormat()
-{
-}
+ScOrcusConditionalFormat::~ScOrcusConditionalFormat() = default;
 
 void ScOrcusConditionalFormat::set_color(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
         os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
@@ -909,7 +905,7 @@ ScOrcusFormula::ScOrcusFormula( ScOrcusSheet& rSheet ) :
     mnResult(0),
     mfResult(0.0) {}
 
-ScOrcusFormula::~ScOrcusFormula() {}
+ScOrcusFormula::~ScOrcusFormula() = default;
 
 void ScOrcusFormula::set_position(os::row_t row, os::col_t col)
 {
@@ -1026,7 +1022,7 @@ ScOrcusArrayFormula::ScOrcusArrayFormula( ScOrcusSheet& rSheet ) :
     mnRowRange(0),
     meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED) {}
 
-ScOrcusArrayFormula::~ScOrcusArrayFormula() {}
+ScOrcusArrayFormula::~ScOrcusArrayFormula() = default;
 
 void ScOrcusArrayFormula::set_range(const os::range_t& range)
 {
@@ -2160,9 +2156,7 @@ ScOrcusAutoFilter::ScOrcusAutoFilter( const ScOrcusGlobalSettings& rGS ) :
 {
 }
 
-ScOrcusAutoFilter::~ScOrcusAutoFilter()
-{
-}
+ScOrcusAutoFilter::~ScOrcusAutoFilter() = default;
 
 void ScOrcusAutoFilter::set_range(const orcus::spreadsheet::range_t& range)
 {

@@ -443,11 +443,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     }
 }
 
-
-PackageManagerImpl::~PackageManagerImpl()
-{
-}
-
+PackageManagerImpl::~PackageManagerImpl() = default;
 
 void PackageManagerImpl::fireModified()
 {
@@ -1533,11 +1529,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     }
 }
 
-
-PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()
-{
-}
-
+PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl() = default;
 
 PackageManagerImpl::CmdEnvWrapperImpl::CmdEnvWrapperImpl(
     Reference<XCommandEnvironment> const & xUserCmdEnv,

@@ -279,9 +279,7 @@ ImpSvNumFor::ImpSvNumFor()
     pColor = nullptr;
 }
 
-ImpSvNumFor::~ImpSvNumFor()
-{
-}
+ImpSvNumFor::~ImpSvNumFor() = default;
 
 void ImpSvNumFor::Enlarge(sal_uInt16 nCnt)
 {
@@ -1343,9 +1341,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
 
 }
 
-SvNumberformat::~SvNumberformat()
-{
-}
+SvNumberformat::~SvNumberformat() = default;
 
 /**
  * Next_Symbol

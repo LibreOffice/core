@@ -482,10 +482,7 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
 //===== ViewRedirector ========================================================
 
 namespace {
-
-ViewRedirector::ViewRedirector()
-{
-}
+ViewRedirector::ViewRedirector() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,

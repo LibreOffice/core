@@ -85,9 +85,7 @@ PresenterWindowManager::PresenterWindowManager (
 
 }
 
-PresenterWindowManager::~PresenterWindowManager()
-{
-}
+PresenterWindowManager::~PresenterWindowManager() = default;
 
 void SAL_CALL PresenterWindowManager::disposing()
 {

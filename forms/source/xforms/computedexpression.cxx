@@ -54,10 +54,7 @@ ComputedExpression::ComputedExpression()
 {
 }
 
-ComputedExpression::~ComputedExpression()
-{
-}
-
+ComputedExpression::~ComputedExpression() = default;
 
 void ComputedExpression::setExpression( const OUString& rExpression )
 {

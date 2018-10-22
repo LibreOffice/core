@@ -259,11 +259,7 @@ namespace toolkit {
     {
     }
 
-
-    AnimatedImagesControlModel::~AnimatedImagesControlModel()
-    {
-    }
-
+    AnimatedImagesControlModel::~AnimatedImagesControlModel() = default;
 
     rtl::Reference<UnoControlModel> AnimatedImagesControlModel::Clone() const
     {

@@ -132,9 +132,7 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     }
 }
 
-SdrPageView::~SdrPageView()
-{
-}
+SdrPageView::~SdrPageView() = default;
 
 void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)
 {

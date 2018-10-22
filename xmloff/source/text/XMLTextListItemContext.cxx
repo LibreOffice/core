@@ -118,9 +118,7 @@ XMLTextListItemContext::XMLTextListItemContext(
 
 }
 
-XMLTextListItemContext::~XMLTextListItemContext()
-{
-}
+XMLTextListItemContext::~XMLTextListItemContext() = default;
 
 void XMLTextListItemContext::EndElement()
 {

@@ -53,9 +53,7 @@ ProgressBar::ProgressBar( const Reference< XComponentContext >& rxContext )
 {
 }
 
-ProgressBar::~ProgressBar()
-{
-}
+ProgressBar::~ProgressBar() = default;
 
 //  XInterface
 

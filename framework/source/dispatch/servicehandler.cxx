@@ -65,9 +65,7 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 /**
     @short      standard dtor
 */
-ServiceHandler::~ServiceHandler()
-{
-}
+ServiceHandler::~ServiceHandler() = default;
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not

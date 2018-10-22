@@ -75,9 +75,7 @@ ZipPackageFolder::ZipPackageFolder( const css::uno::Reference < css::uno::XCompo
     aEntry.nOffset      = -1;
 }
 
-ZipPackageFolder::~ZipPackageFolder()
-{
-}
+ZipPackageFolder::~ZipPackageFolder() = default;
 
 bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
 {

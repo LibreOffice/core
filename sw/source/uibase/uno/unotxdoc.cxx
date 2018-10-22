@@ -3930,9 +3930,7 @@ SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     sBookmarks  = SwResId(STR_CONTENT_TYPE_BOOKMARK);
 }
 
-SwXLinkTargetSupplier::~SwXLinkTargetSupplier()
-{
-}
+SwXLinkTargetSupplier::~SwXLinkTargetSupplier() = default;
 
 Any SwXLinkTargetSupplier::getByName(const OUString& rName)
 {
@@ -4068,9 +4066,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
 {
 }
 
-SwXLinkNameAccessWrapper::~SwXLinkNameAccessWrapper()
-{
-}
+SwXLinkNameAccessWrapper::~SwXLinkNameAccessWrapper() = default;
 
 Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
 {
@@ -4315,9 +4311,7 @@ SwXOutlineTarget::SwXOutlineTarget(const OUString& rOutlineText) :
 {
 }
 
-SwXOutlineTarget::~SwXOutlineTarget()
-{
-}
+SwXOutlineTarget::~SwXOutlineTarget() = default;
 
 Reference< XPropertySetInfo >  SwXOutlineTarget::getPropertySetInfo()
 {
@@ -4382,9 +4376,7 @@ SvxUnoForbiddenCharsTable ( rDoc.getIDocumentSettingAccess().getForbiddenCharact
 {
 }
 
-SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper()
-{
-}
+SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper() = default;
 
 Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable nWhich)
 {

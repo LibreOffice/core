@@ -56,9 +56,7 @@ namespace rptui
     {
     }
 
-    DefaultComponentInspectorModel::~DefaultComponentInspectorModel()
-    {
-    }
+    DefaultComponentInspectorModel::~DefaultComponentInspectorModel() = default;
 
     OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  )
     {

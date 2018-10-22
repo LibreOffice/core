@@ -165,9 +165,7 @@ void SwHistorySetFormat::SetInDoc( SwDoc* pDoc, bool bTmpSet )
     }
 }
 
-SwHistorySetFormat::~SwHistorySetFormat()
-{
-}
+SwHistorySetFormat::~SwHistorySetFormat() = default;
 
 SwHistoryResetFormat::SwHistoryResetFormat(const SfxPoolItem* pFormatHt, sal_uLong nNodeIdx)
     : SwHistoryHint( HSTRY_RESETFMTHNT )
@@ -214,9 +212,7 @@ SwHistorySetText::SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNodePos )
     }
 }
 
-SwHistorySetText::~SwHistorySetText()
-{
-}
+SwHistorySetText::~SwHistorySetText() = default;
 
 void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -277,9 +273,7 @@ OUString SwHistorySetTextField::GetDescription() const
     return m_pField->GetField()->GetDescription();
 }
 
-SwHistorySetTextField::~SwHistorySetTextField()
-{
-}
+SwHistorySetTextField::~SwHistorySetTextField() = default;
 
 void SwHistorySetTextField::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -450,9 +444,7 @@ OUString SwHistorySetFootnote::GetDescription() const
     return SwResId(STR_FOOTNOTE);
 }
 
-SwHistorySetFootnote::~SwHistorySetFootnote()
-{
-}
+SwHistorySetFootnote::~SwHistorySetFootnote() = default;
 
 void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -541,9 +533,7 @@ SwHistoryTextFlyCnt::SwHistoryTextFlyCnt( SwFrameFormat* const pFlyFormat )
     m_pUndo->ChgShowSel( false );
 }
 
-SwHistoryTextFlyCnt::~SwHistoryTextFlyCnt()
-{
-}
+SwHistoryTextFlyCnt::~SwHistoryTextFlyCnt() = default;
 
 void SwHistoryTextFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -877,9 +867,7 @@ SwHistory::SwHistory()
 {
 }
 
-SwHistory::~SwHistory()
-{
-}
+SwHistory::~SwHistory() = default;
 
 void SwHistory::Add(
     const SfxPoolItem* pOldValue,

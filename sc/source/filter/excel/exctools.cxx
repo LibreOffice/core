@@ -83,9 +83,7 @@ XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :
 {
 }
 
-XclImpOutlineBuffer::~XclImpOutlineBuffer()
-{
-}
+XclImpOutlineBuffer::~XclImpOutlineBuffer() = default;
 
 void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, sal_uInt8 nVal, bool bCollapsed )
 {

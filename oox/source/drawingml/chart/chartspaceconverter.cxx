@@ -63,9 +63,7 @@ ChartSpaceConverter::ChartSpaceConverter( const ConverterRoot& rParent, ChartSpa
 {
 }
 
-ChartSpaceConverter::~ChartSpaceConverter()
-{
-}
+ChartSpaceConverter::~ChartSpaceConverter() = default;
 
 void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const awt::Point& rChartPos )
 {

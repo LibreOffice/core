@@ -258,9 +258,7 @@ SwTableCalcPara::SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable )
 {
 }
 
-SwTableCalcPara::~SwTableCalcPara()
-{
-}
+SwTableCalcPara::~SwTableCalcPara() = default;
 
 bool SwTableCalcPara::CalcWithStackOverflow()
 {
@@ -306,9 +304,7 @@ SwTableFormula::SwTableFormula( const OUString& rFormula )
 {
 }
 
-SwTableFormula::~SwTableFormula()
-{
-}
+SwTableFormula::~SwTableFormula() = default;
 
 void SwTableFormula::MakeFormula_( const SwTable& rTable, OUStringBuffer& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const

@@ -115,10 +115,7 @@ DataSupplier::DataSupplier(
 
 
 // virtual
-DataSupplier::~DataSupplier()
-{
-}
-
+DataSupplier::~DataSupplier() = default;
 
 // virtual
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )

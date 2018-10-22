@@ -54,9 +54,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    ISaveValueWrapper::~ISaveValueWrapper()
-    {
-    }
+    ISaveValueWrapper::~ISaveValueWrapper() = default;
 
     OGenericAdministrationPage::OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, &_rAttrSet)

@@ -53,8 +53,7 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
     }
 
 public:
-    ScHTMLExportTest()
-    {}
+    ScHTMLExportTest() = default;
 
     virtual void setUp() override
     {

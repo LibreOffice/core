@@ -27,20 +27,16 @@ namespace core {
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-ContextHandler::ContextHandler( const ContextHandler& rParent ) :
-    ContextHandler_BASE(rParent),
-    mxBaseData( rParent.mxBaseData )
-{
-}
+ContextHandler::ContextHandler(const ContextHandler& rParent)
+
+    = default;
 
 ContextHandler::ContextHandler( const FragmentBaseDataRef& rxBaseData ) :
     mxBaseData( rxBaseData )
 {
 }
 
-ContextHandler::~ContextHandler()
-{
-}
+ContextHandler::~ContextHandler() = default;
 
 XmlFilterBase& ContextHandler::getFilter() const
 {

@@ -198,9 +198,7 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
     }
 }
 
-PieChart::~PieChart()
-{
-}
+PieChart::~PieChart() = default;
 
 void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
 {

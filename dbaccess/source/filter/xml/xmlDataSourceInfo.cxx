@@ -127,10 +127,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     }
 }
 
-OXMLDataSourceInfo::~OXMLDataSourceInfo()
-{
-
-}
+OXMLDataSourceInfo::~OXMLDataSourceInfo() = default;
 
 } // namespace dbaxml
 

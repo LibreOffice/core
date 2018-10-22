@@ -31,7 +31,7 @@ GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstan
     SetSalData(this);
 }
 
-GenericUnixSalData::~GenericUnixSalData() {}
+GenericUnixSalData::~GenericUnixSalData() = default;
 
 void GenericUnixSalData::InitGlyphCache() { m_pGlyphCache.reset(new GlyphCache); }
 

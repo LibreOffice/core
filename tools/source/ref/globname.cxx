@@ -32,10 +32,9 @@ ImpSvGlobalName::ImpSvGlobalName()
     memset( &szData, 0, sizeof( szData ) );
 }
 
-ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
-    : szData(rObj.szData)
-{
-}
+ImpSvGlobalName::ImpSvGlobalName(const ImpSvGlobalName& rObj)
+
+    = default;
 
 ImpSvGlobalName::ImpSvGlobalName(sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                           sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
@@ -94,16 +93,9 @@ SvGlobalName::SvGlobalName( const css::uno::Sequence < sal_Int8 >& aSeq )
     pImp = ::o3tl::cow_wrapper< ImpSvGlobalName >(aResult);
 }
 
-SvGlobalName::~SvGlobalName()
-{
-}
+SvGlobalName::~SvGlobalName() = default;
 
-SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
-{
-    pImp = rObj.pImp;
-
-    return *this;
-}
+SvGlobalName& SvGlobalName::operator=(const SvGlobalName& rObj) = default;
 
 SvGlobalName & SvGlobalName::operator = ( SvGlobalName && rObj )
 {

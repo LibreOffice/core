@@ -41,11 +41,7 @@ FTPContentIdentifier::FTPContentIdentifier(
 {
 }
 
-
-FTPContentIdentifier::~FTPContentIdentifier()
-{
-}
-
+FTPContentIdentifier::~FTPContentIdentifier() = default;
 
 Any SAL_CALL
 FTPContentIdentifier::queryInterface(

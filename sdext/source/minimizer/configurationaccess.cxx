@@ -153,9 +153,7 @@ ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContex
     LoadConfiguration();
 };
 
-ConfigurationAccess::~ConfigurationAccess()
-{
-}
+ConfigurationAccess::~ConfigurationAccess() = default;
 
 OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
 {

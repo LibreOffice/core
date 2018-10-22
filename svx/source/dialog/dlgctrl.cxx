@@ -651,9 +651,7 @@ void SvxPixelCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
                                    pDrawingArea->get_text_height() * 10);
 }
 
-SvxPixelCtl::~SvxPixelCtl()
-{
-}
+SvxPixelCtl::~SvxPixelCtl() = default;
 
 // Changes the foreground or Background color
 

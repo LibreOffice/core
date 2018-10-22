@@ -30,11 +30,7 @@
 
 SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }
 
-
-SfxRectangleItem::SfxRectangleItem()
-{
-}
-
+SfxRectangleItem::SfxRectangleItem() = default;
 
 SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const tools::Rectangle& rVal ) :
     SfxPoolItem( nW ),

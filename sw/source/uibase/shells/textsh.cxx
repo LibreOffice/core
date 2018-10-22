@@ -829,9 +829,7 @@ SwTextShell::SwTextShell(SwView &_rView) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Text));
 }
 
-SwTextShell::~SwTextShell()
-{
-}
+SwTextShell::~SwTextShell() = default;
 
 SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
 {

@@ -38,9 +38,7 @@ OTableDesignUndoAct::OTableDesignUndoAct(OTableRowView* pOwner, const char* pCom
     m_pTabDgnCtrl->m_nCurUndoActId++;
 }
 
-OTableDesignUndoAct::~OTableDesignUndoAct()
-{
-}
+OTableDesignUndoAct::~OTableDesignUndoAct() = default;
 
 void OTableDesignUndoAct::Undo()
 {
@@ -76,9 +74,7 @@ OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, long nR
     m_sOldText = m_pTabDgnCtrl->GetCellData( m_nRow, m_nCol );
 }
 
-OTableDesignCellUndoAct::~OTableDesignCellUndoAct()
-{
-}
+OTableDesignCellUndoAct::~OTableDesignCellUndoAct() = default;
 
 void OTableDesignCellUndoAct::Undo()
 {
@@ -115,9 +111,7 @@ OTableEditorUndoAct::OTableEditorUndoAct(OTableEditorCtrl* pOwner, const char* p
 {
 }
 
-OTableEditorUndoAct::~OTableEditorUndoAct()
-{
-}
+OTableEditorUndoAct::~OTableEditorUndoAct() = default;
 
 // class OTableEditorTypeSelUndoAct
 OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
@@ -128,9 +122,7 @@ OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner
 {
 }
 
-OTableEditorTypeSelUndoAct::~OTableEditorTypeSelUndoAct()
-{
-}
+OTableEditorTypeSelUndoAct::~OTableEditorTypeSelUndoAct() = default;
 
 void OTableEditorTypeSelUndoAct::Undo()
 {
@@ -273,9 +265,7 @@ OTableEditorInsNewUndoAct::OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, 
 {
 }
 
-OTableEditorInsNewUndoAct::~OTableEditorInsNewUndoAct()
-{
-}
+OTableEditorInsNewUndoAct::~OTableEditorInsNewUndoAct() = default;
 
 void OTableEditorInsNewUndoAct::Undo()
 {
@@ -316,9 +306,7 @@ OPrimKeyUndoAct::OPrimKeyUndoAct( OTableEditorCtrl* pOwner, const MultiSelection
 {
 }
 
-OPrimKeyUndoAct::~OPrimKeyUndoAct()
-{
-}
+OPrimKeyUndoAct::~OPrimKeyUndoAct() = default;
 
 void OPrimKeyUndoAct::Undo()
 {

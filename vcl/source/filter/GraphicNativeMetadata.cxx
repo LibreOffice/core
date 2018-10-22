@@ -28,9 +28,7 @@ GraphicNativeMetadata::GraphicNativeMetadata() :
     mRotation(0)
 {}
 
-GraphicNativeMetadata::~GraphicNativeMetadata()
-{}
-
+GraphicNativeMetadata::~GraphicNativeMetadata() = default;
 
 bool GraphicNativeMetadata::read(Graphic const & rGraphic)
 {

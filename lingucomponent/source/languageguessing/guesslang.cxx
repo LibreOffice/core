@@ -80,7 +80,7 @@ class LangGuess_Impl :
     SimpleGuesser   m_aGuesser;
     bool            m_bInitialized;
 
-    virtual ~LangGuess_Impl() override {}
+    virtual ~LangGuess_Impl() override = default;
     void    EnsureInitialized();
 
 public:

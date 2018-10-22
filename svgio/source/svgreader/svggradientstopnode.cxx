@@ -32,9 +32,7 @@ namespace svgio
         {
         }
 
-        SvgGradientStopNode::~SvgGradientStopNode()
-        {
-        }
+        SvgGradientStopNode::~SvgGradientStopNode() = default;
 
         const SvgStyleAttributes* SvgGradientStopNode::getSvgStyleAttributes() const
         {

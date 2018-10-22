@@ -65,9 +65,8 @@ namespace sfx2
         {
         }
 
-        virtual ~DocumentUndoManager_Impl()
-        {
-        };
+        virtual ~DocumentUndoManager_Impl() = default;
+        ;
 
         // IUndoManagerImplementation
         virtual SfxUndoManager&        getImplUndoManager() override;
@@ -141,11 +140,9 @@ namespace sfx2
     class SolarMutexFacade : public ::framework::IMutex
     {
     public:
-        SolarMutexFacade()
-        {
-        }
+        SolarMutexFacade() = default;
 
-        virtual ~SolarMutexFacade() {}
+        virtual ~SolarMutexFacade() = default;
 
         virtual void acquire() override
         {
@@ -170,9 +167,7 @@ namespace sfx2
         {
         }
 
-        virtual ~UndoManagerGuard()
-        {
-        }
+        virtual ~UndoManagerGuard() = default;
 
         UndoManagerGuard(const UndoManagerGuard&) = delete;
         UndoManagerGuard& operator=(const UndoManagerGuard&) = delete;
@@ -204,9 +199,7 @@ namespace sfx2
     {
     }
 
-    DocumentUndoManager::~DocumentUndoManager()
-    {
-    }
+    DocumentUndoManager::~DocumentUndoManager() = default;
 
     void DocumentUndoManager::disposing()
     {

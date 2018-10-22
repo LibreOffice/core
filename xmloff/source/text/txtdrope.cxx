@@ -38,9 +38,7 @@ XMLTextDropCapExport::XMLTextDropCapExport( SvXMLExport& rExp ) :
 {
 }
 
-XMLTextDropCapExport::~XMLTextDropCapExport()
-{
-}
+XMLTextDropCapExport::~XMLTextDropCapExport() = default;
 
 void XMLTextDropCapExport::exportXML( const Any& rAny,
                                       bool bWholeWord,

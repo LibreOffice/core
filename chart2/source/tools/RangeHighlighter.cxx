@@ -74,8 +74,7 @@ RangeHighlighter::RangeHighlighter(
 {
 }
 
-RangeHighlighter::~RangeHighlighter()
-{}
+RangeHighlighter::~RangeHighlighter() = default;
 
 // ____ XRangeHighlighter ____
 Sequence< chart2::data::HighlightedRange > SAL_CALL RangeHighlighter::getSelectedRanges()

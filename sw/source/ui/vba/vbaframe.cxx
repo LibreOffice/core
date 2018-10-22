@@ -33,9 +33,7 @@ SwVbaFrame::SwVbaFrame( const uno::Reference< ooo::vba::XHelperInterface >& rPar
 {
 }
 
-SwVbaFrame::~SwVbaFrame()
-{
-}
+SwVbaFrame::~SwVbaFrame() = default;
 
 void SAL_CALL SwVbaFrame::Select()
 {

@@ -1249,13 +1249,9 @@ void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Invalidate();
 }
 
-FontPrevWindow::FontPrevWindow()
-{
-}
+FontPrevWindow::FontPrevWindow() = default;
 
-FontPrevWindow::~FontPrevWindow()
-{
-}
+FontPrevWindow::~FontPrevWindow() = default;
 
 SvxFont& FontPrevWindow::GetCTLFont()
 {

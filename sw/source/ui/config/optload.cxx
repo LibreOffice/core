@@ -952,9 +952,7 @@ CaptionComboBox::CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
     }
 }
 
-CaptionComboBox::~CaptionComboBox()
-{
-}
+CaptionComboBox::~CaptionComboBox() = default;
 
 sal_Int32 CaptionComboBox::InsertEntry(const OUString& rStr, sal_Int32)
 {

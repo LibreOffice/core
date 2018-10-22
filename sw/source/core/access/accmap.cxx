@@ -105,9 +105,9 @@ public:
 
     SwAccessibleContextMap_Impl()
 #if OSL_DEBUG_LEVEL > 0
-        : mbLocked( false )
+        : mbLocked(false)
 #endif
-    {}
+        = default;
 
     iterator begin() { return maMap.begin(); }
     iterator end() { return maMap.end(); }

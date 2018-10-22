@@ -60,9 +60,7 @@ VCartesianCoordinateSystem::VCartesianCoordinateSystem( const Reference< XCoordi
 {
 }
 
-VCartesianCoordinateSystem::~VCartesianCoordinateSystem()
-{
-}
+VCartesianCoordinateSystem::~VCartesianCoordinateSystem() = default;
 
 void VCartesianCoordinateSystem::createGridShapes()
 {

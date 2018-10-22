@@ -77,10 +77,7 @@ ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const
 {
 }
 
-
-ORadioButtonModel::~ORadioButtonModel()
-{
-}
+ORadioButtonModel::~ORadioButtonModel() = default;
 
 // XCloneable
 

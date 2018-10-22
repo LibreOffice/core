@@ -65,9 +65,7 @@ Paragraph::Paragraph( const ParagraphData& rData )
     mbParaIsNumberingRestart = rData.mbParaIsNumberingRestart;
 }
 
-Paragraph::~Paragraph()
-{
-}
+Paragraph::~Paragraph() = default;
 
 void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
 {

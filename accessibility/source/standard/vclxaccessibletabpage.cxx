@@ -56,11 +56,7 @@ VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt1
     m_sPageText = GetPageText();
 }
 
-
-VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
-{
-}
-
+VCLXAccessibleTabPage::~VCLXAccessibleTabPage() = default;
 
 bool VCLXAccessibleTabPage::IsFocused()
 {

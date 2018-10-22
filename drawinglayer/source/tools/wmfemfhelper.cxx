@@ -314,9 +314,7 @@ namespace wmfemfhelper
     {
     }
 
-    TargetHolder::~TargetHolder()
-    {
-    }
+    TargetHolder::~TargetHolder() = default;
 
     sal_uInt32 TargetHolder::size() const
     {

@@ -29,18 +29,14 @@
 /** All allowed flags for import. */
 const XclStrFlags nAllowedFlags = XclStrFlags::EightBitLength | XclStrFlags::SmartFlags | XclStrFlags::SeparateFormats;
 
-XclImpString::XclImpString()
-{
-}
+XclImpString::XclImpString() = default;
 
 XclImpString::XclImpString( const OUString& rString ) :
     maString( rString )
 {
 }
 
-XclImpString::~XclImpString()
-{
-}
+XclImpString::~XclImpString() = default;
 
 void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
 {

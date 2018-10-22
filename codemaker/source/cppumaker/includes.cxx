@@ -65,8 +65,7 @@ Includes::Includes(
     m_includeTypelibTypedescriptionH(false)
 {}
 
-Includes::~Includes()
-{}
+Includes::~Includes() = default;
 
 void Includes::add(OString const & entityName) {
     sal_Int32 k;

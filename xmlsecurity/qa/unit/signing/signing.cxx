@@ -158,9 +158,7 @@ private:
     uno::Reference<security::XCertificate> getCertificate(DocumentSignatureManager& rSignatureManager, svl::crypto::SignatureMethodAlgorithm eAlgo);
 };
 
-SigningTest::SigningTest()
-{
-}
+SigningTest::SigningTest() = default;
 
 void SigningTest::setUp()
 {

@@ -39,9 +39,7 @@ MasterScriptProviderFactory::MasterScriptProviderFactory(
 {
 }
 
-MasterScriptProviderFactory::~MasterScriptProviderFactory()
-{
-}
+MasterScriptProviderFactory::~MasterScriptProviderFactory() = default;
 
 Reference< provider::XScriptProvider > SAL_CALL
 MasterScriptProviderFactory::createScriptProvider( const Any& context )

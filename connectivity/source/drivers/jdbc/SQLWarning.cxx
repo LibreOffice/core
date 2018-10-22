@@ -25,8 +25,7 @@ using namespace connectivity;
 
 jclass java_sql_SQLWarning_BASE::theClass = nullptr;
 
-java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE()
-{}
+java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE() = default;
 
 jclass java_sql_SQLWarning_BASE::getMyClass() const
 {

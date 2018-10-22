@@ -118,8 +118,7 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
 {
 }
 
-SchXMLAxisContext::~SchXMLAxisContext()
-{}
+SchXMLAxisContext::~SchXMLAxisContext() = default;
 
 static Reference< chart::XAxis > lcl_getChartAxis(const SchXMLAxis& rCurrentAxis, const Reference< chart::XDiagram >& rDiagram )
 {
@@ -248,7 +247,7 @@ class AxisAttributeTokenMap : public SvXMLTokenMap
 {
 public:
     AxisAttributeTokenMap(): SvXMLTokenMap( aAxisAttributeTokenMap ) {}
-    virtual ~AxisAttributeTokenMap() {}
+    virtual ~AxisAttributeTokenMap() = default;
 };
 
 //a AxisAttributeTokenMap Singleton
@@ -607,7 +606,7 @@ class AxisChildTokenMap : public SvXMLTokenMap
 {
 public:
     AxisChildTokenMap(): SvXMLTokenMap( aAxisChildTokenMap ) {}
-    virtual ~AxisChildTokenMap() {}
+    virtual ~AxisChildTokenMap() = default;
 };
 
 //a AxisChildTokenMap Singleton
@@ -902,7 +901,7 @@ class DateScaleAttributeTokenMap : public SvXMLTokenMap
 {
 public:
     DateScaleAttributeTokenMap(): SvXMLTokenMap( aDateScaleAttributeTokenMap ) {}
-    virtual ~DateScaleAttributeTokenMap() {}
+    virtual ~DateScaleAttributeTokenMap() = default;
 };
 
 struct theDateScaleAttributeTokenMap : public rtl::Static< DateScaleAttributeTokenMap, theDateScaleAttributeTokenMap > {};

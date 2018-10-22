@@ -426,7 +426,7 @@ class OParameterContinuation : public OInteraction< XInteractionSupplyParameters
     Sequence< PropertyValue >       m_aValues;
 
 public:
-    OParameterContinuation() { }
+    OParameterContinuation() = default;
 
     const Sequence< PropertyValue >&   getValues() const { return m_aValues; }
 

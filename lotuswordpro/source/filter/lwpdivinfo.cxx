@@ -72,7 +72,7 @@ LwpDivInfo::LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpDivInfo::~LwpDivInfo(){}
+LwpDivInfo::~LwpDivInfo() = default;
 
 void LwpDivInfo::Read()
 {

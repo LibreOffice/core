@@ -147,9 +147,7 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
     }
 }
 
-XclExpUserBViewList::~XclExpUserBViewList()
-{
-}
+XclExpUserBViewList::~XclExpUserBViewList() = default;
 
 void XclExpUserBViewList::Save( XclExpStream& rStrm )
 {
@@ -268,9 +266,7 @@ std::size_t XclExpChTr0x0197::GetLen() const
     return 2;
 }
 
-XclExpChTrEmpty::~XclExpChTrEmpty()
-{
-}
+XclExpChTrEmpty::~XclExpChTrEmpty() = default;
 
 sal_uInt16 XclExpChTrEmpty::GetNum() const
 {
@@ -282,9 +278,7 @@ std::size_t XclExpChTrEmpty::GetLen() const
     return 0;
 }
 
-XclExpChTr0x0195::~XclExpChTr0x0195()
-{
-}
+XclExpChTr0x0195::~XclExpChTr0x0195() = default;
 
 void XclExpChTr0x0195::SaveCont( XclExpStream& rStrm )
 {
@@ -301,9 +295,7 @@ std::size_t XclExpChTr0x0195::GetLen() const
     return 162;
 }
 
-XclExpChTr0x0194::~XclExpChTr0x0194()
-{
-}
+XclExpChTr0x0194::~XclExpChTr0x0194() = default;
 
 void XclExpChTr0x0194::SaveCont( XclExpStream& rStrm )
 {
@@ -323,9 +315,7 @@ std::size_t XclExpChTr0x0194::GetLen() const
     return 162;
 }
 
-XclExpChTrHeader::~XclExpChTrHeader()
-{
-}
+XclExpChTrHeader::~XclExpChTrHeader() = default;
 
 void XclExpChTrHeader::SaveCont( XclExpStream& rStrm )
 {
@@ -513,9 +503,7 @@ XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime& rDate
     memcpy( aGUID, pGUID, 16 );
 }
 
-XclExpChTrInfo::~XclExpChTrInfo()
-{
-}
+XclExpChTrInfo::~XclExpChTrInfo() = default;
 
 void XclExpChTrInfo::SaveCont( XclExpStream& rStrm )
 {
@@ -559,9 +547,7 @@ XclExpChTrTabIdBuffer::XclExpChTrTabIdBuffer( const XclExpChTrTabIdBuffer& rCopy
     pLast = pBuffer.get() + nBufSize - 1;
 }
 
-XclExpChTrTabIdBuffer::~XclExpChTrTabIdBuffer()
-{
-}
+XclExpChTrTabIdBuffer::~XclExpChTrTabIdBuffer() = default;
 
 void XclExpChTrTabIdBuffer::InitFill( sal_uInt16 nIndex )
 {
@@ -684,9 +670,7 @@ XclExpChTrAction::XclExpChTrAction(
     aDateTime.SetNanoSec( 0 );
 }
 
-XclExpChTrAction::~XclExpChTrAction()
-{
-}
+XclExpChTrAction::~XclExpChTrAction() = default;
 
 void XclExpChTrAction::SetAddAction( XclExpChTrAction* pAction )
 {
@@ -1083,10 +1067,7 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rcc );
 }
 
-XclExpChTrInsert::XclExpChTrInsert( const XclExpChTrInsert& rCopy ) :
-    XclExpChTrAction(rCopy),
-    mbEndOfList(rCopy.mbEndOfList),
-    aRange(rCopy.aRange) {}
+XclExpChTrInsert::XclExpChTrInsert(const XclExpChTrInsert& rCopy) = default;
 
 XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeAction& rAction,
@@ -1132,9 +1113,7 @@ XclExpChTrInsert::XclExpChTrInsert(
     }
 }
 
-XclExpChTrInsert::~XclExpChTrInsert()
-{
-}
+XclExpChTrInsert::~XclExpChTrInsert() = default;
 
 void XclExpChTrInsert::SaveActionData( XclExpStream& rStrm ) const
 {
@@ -1215,9 +1194,7 @@ XclExpChTrInsertTab::XclExpChTrInsertTab(
     bForceInfo = true;
 }
 
-XclExpChTrInsertTab::~XclExpChTrInsertTab()
-{
-}
+XclExpChTrInsertTab::~XclExpChTrInsertTab() = default;
 
 void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
 {
@@ -1272,9 +1249,7 @@ XclExpChTrMoveRange::XclExpChTrMoveRange(
     AddDependentContents( rAction, rRoot, rChangeTrack );
 }
 
-XclExpChTrMoveRange::~XclExpChTrMoveRange()
-{
-}
+XclExpChTrMoveRange::~XclExpChTrMoveRange() = default;
 
 void XclExpChTrMoveRange::SaveActionData( XclExpStream& rStrm ) const
 {
@@ -1335,9 +1310,7 @@ XclExpChTr0x014A::XclExpChTr0x014A( const XclExpChTrInsert& rAction ) :
     nOpCode = EXC_CHTR_OP_FORMAT;
 }
 
-XclExpChTr0x014A::~XclExpChTr0x014A()
-{
-}
+XclExpChTr0x014A::~XclExpChTr0x014A() = default;
 
 void XclExpChTr0x014A::SaveActionData( XclExpStream& rStrm ) const
 {

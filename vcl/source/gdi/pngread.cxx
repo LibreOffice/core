@@ -1722,9 +1722,7 @@ PNGReader::PNGReader(SvStream& rIStream) :
 {
 }
 
-PNGReader::~PNGReader()
-{
-}
+PNGReader::~PNGReader() = default;
 
 BitmapEx PNGReader::Read( const Size& i_rPreviewSizeHint )
 {

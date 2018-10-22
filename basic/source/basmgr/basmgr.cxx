@@ -106,8 +106,7 @@ struct BasicManagerImpl
     std::vector<std::unique_ptr<BasicLibInfo>> aLibs;
     OUString         aBasicLibPath;
 
-    BasicManagerImpl()
-    {}
+    BasicManagerImpl() = default;
 };
 
 // BasMgrContainerListenerImpl

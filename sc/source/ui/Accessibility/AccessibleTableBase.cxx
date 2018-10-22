@@ -48,9 +48,7 @@ ScAccessibleTableBase::ScAccessibleTableBase(
 {
 }
 
-ScAccessibleTableBase::~ScAccessibleTableBase()
-{
-}
+ScAccessibleTableBase::~ScAccessibleTableBase() = default;
 
 void SAL_CALL ScAccessibleTableBase::disposing()
 {

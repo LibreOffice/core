@@ -61,9 +61,7 @@ namespace chart
                     officecfg::Office::Common::Undo::Steps::get());
             }
 
-            virtual ~UndoManager_Impl()
-            {
-            }
+            virtual ~UndoManager_Impl() = default;
 
             ::osl::Mutex&                       getMutex();
             // IUndoManagerImplementation
@@ -138,9 +136,7 @@ namespace chart
                 // throw if the instance is already disposed
                 i_impl.checkDisposed_lck();
             }
-            virtual ~UndoManagerMethodGuard()
-            {
-            }
+            virtual ~UndoManagerMethodGuard() = default;
 
             // IMutexGuard
             virtual void clear() override;
@@ -150,7 +146,7 @@ namespace chart
         class DummyMutex : public ::framework::IMutex
         {
         public:
-            virtual ~DummyMutex() {}
+            virtual ~DummyMutex() = default;
             virtual void acquire() override { }
             virtual void release() override { }
         };
@@ -174,9 +170,7 @@ namespace chart
     {
     }
 
-    UndoManager::~UndoManager()
-    {
-    }
+    UndoManager::~UndoManager() = default;
 
     void SAL_CALL UndoManager::acquire() throw ()
     {

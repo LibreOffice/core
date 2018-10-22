@@ -48,9 +48,7 @@ MenuConfiguration::MenuConfiguration(
 {
 }
 
-MenuConfiguration::~MenuConfiguration()
-{
-}
+MenuConfiguration::~MenuConfiguration() = default;
 
 Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     Reference< XInputStream > const & rInputStream )

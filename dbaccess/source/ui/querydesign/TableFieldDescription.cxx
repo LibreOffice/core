@@ -66,9 +66,7 @@ OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     SetField( rF ); SetTable( rT );
 }
 
-OTableFieldDesc::~OTableFieldDesc()
-{
-}
+OTableFieldDesc::~OTableFieldDesc() = default;
 
 OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
 {

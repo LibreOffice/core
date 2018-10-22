@@ -37,9 +37,7 @@ ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilte
 {
 }
 
-ScDPOutputGeometry::~ScDPOutputGeometry()
-{
-}
+ScDPOutputGeometry::~ScDPOutputGeometry() = default;
 
 void ScDPOutputGeometry::setRowFieldCount(sal_uInt32 nCount)
 {

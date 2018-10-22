@@ -66,9 +66,7 @@ SwXTextMarkup::SwXTextMarkup(
 {
 }
 
-SwXTextMarkup::~SwXTextMarkup()
-{
-}
+SwXTextMarkup::~SwXTextMarkup() = default;
 
 SwTextNode* SwXTextMarkup::GetTextNode()
 {
@@ -485,9 +483,7 @@ void SwXTextMarkup::Impl::Notify(const SfxHint& rHint)
     }
 }
 
-SwXStringKeyMap::SwXStringKeyMap()
-{
-}
+SwXStringKeyMap::SwXStringKeyMap() = default;
 
 uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString & aKey)
 {

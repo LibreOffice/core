@@ -46,9 +46,7 @@ OConnectionPointHelper::OConnectionPointHelper(
 {
 }
 
-OConnectionPointHelper::~OConnectionPointHelper()
-{
-}
+OConnectionPointHelper::~OConnectionPointHelper() = default;
 
 //  XInterface
 

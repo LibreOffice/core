@@ -54,9 +54,7 @@ TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext 
 {
 }
 
-TitleHelper::~TitleHelper()
-{
-}
+TitleHelper::~TitleHelper() = default;
 
 void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
 {

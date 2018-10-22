@@ -29,9 +29,7 @@ DlgEdPropListenerImpl::DlgEdPropListenerImpl (DlgEdObj& rObj) :
 {
 }
 
-DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
-{
-}
+DlgEdPropListenerImpl::~DlgEdPropListenerImpl() = default;
 
 // XEventListener
 void SAL_CALL DlgEdPropListenerImpl::disposing( const css::lang::EventObject& )
@@ -50,9 +48,7 @@ DlgEdEvtContListenerImpl::DlgEdEvtContListenerImpl (DlgEdObj& rObj) :
 {
 }
 
-DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
-{
-}
+DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl() = default;
 
 // XEventListener
 void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  css::lang::EventObject& )

@@ -149,7 +149,8 @@ private:
 class iso_lang_identifier
 {
 public:
-    iso_lang_identifier() {};
+    iso_lang_identifier() = default;
+    ;
 
     explicit iso_lang_identifier(const OString& str) :
         maBcp47(str)
@@ -212,8 +213,8 @@ public:
     { return iso_lang_replacement_table_.end(); }
 
 public:
-
-    Substitutor() {};
+    Substitutor() = default;
+    ;
 
     void set_language(const iso_lang_identifier& iso_lang)
     {

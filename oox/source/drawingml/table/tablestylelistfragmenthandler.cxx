@@ -39,9 +39,7 @@ mrTableStyleList( rTableStyleList )
 {
 }
 
-TableStyleListFragmentHandler::~TableStyleListFragmentHandler()
-{
-}
+TableStyleListFragmentHandler::~TableStyleListFragmentHandler() = default;
 
 // CT_TableStyleList
 ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(

@@ -45,9 +45,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    AnimVariantContext::~AnimVariantContext( ) throw( )
-    {
-    }
+    AnimVariantContext::~AnimVariantContext() throw() = default;
 
     void AnimVariantContext::onEndElement()
     {

@@ -39,9 +39,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfSdrMeasureObj::~ViewContactOfSdrMeasureObj()
-        {
-        }
+        ViewContactOfSdrMeasureObj::~ViewContactOfSdrMeasureObj() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMeasureObj::createViewIndependentPrimitive2DSequence() const
         {

@@ -38,13 +38,9 @@ static const OUStringLiteral gsLibrary("Library");
 static const OUStringLiteral gsMacroName("MacroName");
 static const OUStringLiteral gsStarBasic("StarBasic");
 
-XMLStarBasicContextFactory::XMLStarBasicContextFactory()
-{
-}
+XMLStarBasicContextFactory::XMLStarBasicContextFactory() = default;
 
-XMLStarBasicContextFactory::~XMLStarBasicContextFactory()
-{
-}
+XMLStarBasicContextFactory::~XMLStarBasicContextFactory() = default;
 
 SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     SvXMLImport& rImport,

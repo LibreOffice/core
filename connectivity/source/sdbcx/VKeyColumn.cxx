@@ -87,9 +87,7 @@ OKeyColumn::OKeyColumn( const OUString&  ReferencedColumn,
     construct();
 }
 
-OKeyColumn::~OKeyColumn()
-{
-}
+OKeyColumn::~OKeyColumn() = default;
 
 ::cppu::IPropertyArrayHelper* OKeyColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {

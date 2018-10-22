@@ -193,8 +193,7 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
 }
 
-RegressionCurveModel::~RegressionCurveModel()
-{}
+RegressionCurveModel::~RegressionCurveModel() = default;
 
 // ____ XRegressionCurve ____
 uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
@@ -327,12 +326,10 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( RegressionCurveModel, RegressionCurveModel_Bas
 MeanValueRegressionCurve::MeanValueRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_MEAN_VALUE )
 {}
-MeanValueRegressionCurve::MeanValueRegressionCurve(
-    const MeanValueRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-MeanValueRegressionCurve::~MeanValueRegressionCurve()
-{}
+MeanValueRegressionCurve::MeanValueRegressionCurve(const MeanValueRegressionCurve& rOther)
+
+    = default;
+MeanValueRegressionCurve::~MeanValueRegressionCurve() = default;
 
 OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
 {
@@ -357,12 +354,10 @@ uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClon
 LinearRegressionCurve::LinearRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_LINEAR )
 {}
-LinearRegressionCurve::LinearRegressionCurve(
-    const LinearRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-LinearRegressionCurve::~LinearRegressionCurve()
-{}
+LinearRegressionCurve::LinearRegressionCurve(const LinearRegressionCurve& rOther)
+
+    = default;
+LinearRegressionCurve::~LinearRegressionCurve() = default;
 
 OUString SAL_CALL LinearRegressionCurve::getImplementationName()
 {
@@ -387,12 +382,10 @@ uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
 LogarithmicRegressionCurve::LogarithmicRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_LOGARITHM )
 {}
-LogarithmicRegressionCurve::LogarithmicRegressionCurve(
-    const LogarithmicRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
-{}
+LogarithmicRegressionCurve::LogarithmicRegressionCurve(const LogarithmicRegressionCurve& rOther)
+
+    = default;
+LogarithmicRegressionCurve::~LogarithmicRegressionCurve() = default;
 
 OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
 {
@@ -417,12 +410,10 @@ uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createCl
 ExponentialRegressionCurve::ExponentialRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_EXPONENTIAL )
 {}
-ExponentialRegressionCurve::ExponentialRegressionCurve(
-    const ExponentialRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-ExponentialRegressionCurve::~ExponentialRegressionCurve()
-{}
+ExponentialRegressionCurve::ExponentialRegressionCurve(const ExponentialRegressionCurve& rOther)
+
+    = default;
+ExponentialRegressionCurve::~ExponentialRegressionCurve() = default;
 
 OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
 {
@@ -447,12 +438,10 @@ uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createCl
 PotentialRegressionCurve::PotentialRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_POWER )
 {}
-PotentialRegressionCurve::PotentialRegressionCurve(
-    const PotentialRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-PotentialRegressionCurve::~PotentialRegressionCurve()
-{}
+PotentialRegressionCurve::PotentialRegressionCurve(const PotentialRegressionCurve& rOther)
+
+    = default;
+PotentialRegressionCurve::~PotentialRegressionCurve() = default;
 
 OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
 {
@@ -477,12 +466,10 @@ uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClon
 PolynomialRegressionCurve::PolynomialRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_POLYNOMIAL )
 {}
-PolynomialRegressionCurve::PolynomialRegressionCurve(
-    const PolynomialRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-PolynomialRegressionCurve::~PolynomialRegressionCurve()
-{}
+PolynomialRegressionCurve::PolynomialRegressionCurve(const PolynomialRegressionCurve& rOther)
+
+    = default;
+PolynomialRegressionCurve::~PolynomialRegressionCurve() = default;
 
 OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
 {
@@ -508,11 +495,10 @@ MovingAverageRegressionCurve::MovingAverageRegressionCurve()
         : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_MOVING_AVERAGE )
 {}
 MovingAverageRegressionCurve::MovingAverageRegressionCurve(
-    const MovingAverageRegressionCurve & rOther ) :
-        RegressionCurveModel( rOther )
-{}
-MovingAverageRegressionCurve::~MovingAverageRegressionCurve()
-{}
+    const MovingAverageRegressionCurve& rOther)
+
+    = default;
+MovingAverageRegressionCurve::~MovingAverageRegressionCurve() = default;
 
 OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
 {

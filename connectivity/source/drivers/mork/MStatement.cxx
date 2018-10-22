@@ -64,11 +64,7 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     m_pParseTree = nullptr;
 }
 
-
-OCommonStatement::~OCommonStatement()
-{
-}
-
+OCommonStatement::~OCommonStatement() = default;
 
 void OCommonStatement::disposing()
 {

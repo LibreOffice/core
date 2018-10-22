@@ -400,9 +400,7 @@ GotoLineDialog::GotoLineDialog(weld::Window* pParent )
     m_xOKButton->connect_clicked(LINK(this, GotoLineDialog, OkButtonHandler));
 }
 
-GotoLineDialog::~GotoLineDialog()
-{
-}
+GotoLineDialog::~GotoLineDialog() = default;
 
 sal_Int32 GotoLineDialog::GetLineNumber() const
 {
@@ -434,9 +432,7 @@ ExportDialog::ExportDialog(weld::Window * pParent)
     m_xOKButton->connect_clicked(LINK(this, ExportDialog, OkButtonHandler));
 }
 
-ExportDialog::~ExportDialog()
-{
-}
+ExportDialog::~ExportDialog() = default;
 
 // LibPage
 LibPage::LibPage(vcl::Window * pParent)

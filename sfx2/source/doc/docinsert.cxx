@@ -82,9 +82,7 @@ DocumentInserter::DocumentInserter(weld::Window* pParent, const OUString& rFacto
 {
 }
 
-DocumentInserter::~DocumentInserter()
-{
-}
+DocumentInserter::~DocumentInserter() = default;
 
 void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink )
 {

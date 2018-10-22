@@ -51,9 +51,7 @@ RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const
 {
 }
 
-RootActionTriggerContainer::~RootActionTriggerContainer()
-{
-}
+RootActionTriggerContainer::~RootActionTriggerContainer() = default;
 
 // XInterface
 Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )

@@ -1082,9 +1082,7 @@ SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool 
     aMarkerColor = aCol;
 }
 
-SdrHdlColor::~SdrHdlColor()
-{
-}
+SdrHdlColor::~SdrHdlColor() = default;
 
 void SdrHdlColor::CreateB2dIAObject()
 {
@@ -1220,9 +1218,7 @@ SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGra
 {
 }
 
-SdrHdlGradient::~SdrHdlGradient()
-{
-}
+SdrHdlGradient::~SdrHdlGradient() = default;
 
 void SdrHdlGradient::Set2ndPos(const Point& rPnt)
 {
@@ -1389,8 +1385,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     }
 }
 
-
-SdrHdlLine::~SdrHdlLine() {}
+SdrHdlLine::~SdrHdlLine() = default;
 
 void SdrHdlLine::CreateB2dIAObject()
 {
@@ -1444,8 +1439,7 @@ Pointer SdrHdlLine::GetPointer() const
     return Pointer(PointerStyle::RefHand);
 }
 
-
-SdrHdlBezWgt::~SdrHdlBezWgt() {}
+SdrHdlBezWgt::~SdrHdlBezWgt() = default;
 
 void SdrHdlBezWgt::CreateB2dIAObject()
 {
@@ -1545,10 +1539,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
     }
 }
 
-
-ImpEdgeHdl::~ImpEdgeHdl()
-{
-}
+ImpEdgeHdl::~ImpEdgeHdl() = default;
 
 void ImpEdgeHdl::CreateB2dIAObject()
 {
@@ -1664,10 +1655,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     return false;
 }
 
-
-ImpMeasureHdl::~ImpMeasureHdl()
-{
-}
+ImpMeasureHdl::~ImpMeasureHdl() = default;
 
 void ImpMeasureHdl::CreateB2dIAObject()
 {

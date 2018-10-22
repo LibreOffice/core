@@ -158,11 +158,7 @@ namespace toolkit
         lcl_registerDefaultFormatsClient();
     }
 
-
-    UnoControlFormattedFieldModel::~UnoControlFormattedFieldModel()
-    {
-    }
-
+    UnoControlFormattedFieldModel::~UnoControlFormattedFieldModel() = default;
 
     OUString UnoControlFormattedFieldModel::getServiceName()
     {

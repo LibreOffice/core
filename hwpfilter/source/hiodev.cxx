@@ -42,11 +42,7 @@ HIODev::HIODev()
     init();
 }
 
-
-HIODev::~HIODev()
-{
-}
-
+HIODev::~HIODev() = default;
 
 void HIODev::init()
 {
@@ -244,11 +240,7 @@ HMemIODev::HMemIODev(char *s, size_t len)
     length = len;
 }
 
-
-HMemIODev::~HMemIODev()
-{
-}
-
+HMemIODev::~HMemIODev() = default;
 
 void HMemIODev::init()
 {

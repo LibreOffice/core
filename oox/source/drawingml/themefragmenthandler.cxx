@@ -35,9 +35,7 @@ ThemeFragmentHandler::ThemeFragmentHandler( XmlFilterBase& rFilter, const OUStri
 {
 }
 
-ThemeFragmentHandler::~ThemeFragmentHandler()
-{
-}
+ThemeFragmentHandler::~ThemeFragmentHandler() = default;
 
 ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {

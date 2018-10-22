@@ -104,9 +104,7 @@ SbiStream::SbiStream()
 {
 }
 
-SbiStream::~SbiStream()
-{
-}
+SbiStream::~SbiStream() = default;
 
 // map an SvStream-error to StarBASIC-code
 

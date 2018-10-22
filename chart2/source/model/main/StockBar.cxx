@@ -130,8 +130,7 @@ StockBar::StockBar( const StockBar & rOther ) :
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
-StockBar::~StockBar()
-{}
+StockBar::~StockBar() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()

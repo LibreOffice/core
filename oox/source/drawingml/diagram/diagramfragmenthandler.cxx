@@ -39,10 +39,7 @@ DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
 {
 }
 
-DiagramDataFragmentHandler::~DiagramDataFragmentHandler( ) throw ()
-{
-
-}
+DiagramDataFragmentHandler::~DiagramDataFragmentHandler() throw() = default;
 
 void SAL_CALL DiagramDataFragmentHandler::endDocument()
 {
@@ -72,10 +69,7 @@ DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilt
 {
 }
 
-DiagramLayoutFragmentHandler::~DiagramLayoutFragmentHandler( ) throw ()
-{
-
-}
+DiagramLayoutFragmentHandler::~DiagramLayoutFragmentHandler() throw() = default;
 
 void SAL_CALL DiagramLayoutFragmentHandler::endDocument()
 {

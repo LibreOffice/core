@@ -296,11 +296,7 @@ DispatchWatcher::DispatchWatcher()
 {
 }
 
-
-DispatchWatcher::~DispatchWatcher()
-{
-}
-
+DispatchWatcher::~DispatchWatcher() = default;
 
 bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest>& aDispatchRequestsList, bool bNoTerminate )
 {

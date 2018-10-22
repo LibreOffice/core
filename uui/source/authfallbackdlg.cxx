@@ -49,9 +49,7 @@ AuthFallbackDlg::AuthFallbackDlg(weld::Window* pParent, const OUString& instruct
     }
 }
 
-AuthFallbackDlg::~AuthFallbackDlg()
-{
-}
+AuthFallbackDlg::~AuthFallbackDlg() = default;
 
 OUString AuthFallbackDlg::GetCode() const
 {

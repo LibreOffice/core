@@ -63,9 +63,7 @@ void Transmitter::notifyFinished()
     mQueuesNotEmpty.set();
 }
 
-Transmitter::~Transmitter()
-{
-}
+Transmitter::~Transmitter() = default;
 
 void Transmitter::addMessage( const OString& aMessage, const Priority aPriority )
 {

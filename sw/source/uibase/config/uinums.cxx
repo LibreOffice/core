@@ -71,9 +71,7 @@ void SwChapterNumRules::Save()
     }
 }
 
-SwChapterNumRules::~SwChapterNumRules()
-{
-}
+SwChapterNumRules::~SwChapterNumRules() = default;
 
 void  SwChapterNumRules::Init()
 {
@@ -132,9 +130,7 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRulesWithName& rCopy )
     *this = rCopy;
 }
 
-SwNumRulesWithName::~SwNumRulesWithName()
-{
-}
+SwNumRulesWithName::~SwNumRulesWithName() = default;
 
 SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCopy)
 {
@@ -223,9 +219,7 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormatGloba
     }
 }
 
-SwNumRulesWithName::SwNumFormatGlobal::~SwNumFormatGlobal()
-{
-}
+SwNumRulesWithName::SwNumFormatGlobal::~SwNumFormatGlobal() = default;
 
 SwNumFormat SwNumRulesWithName::SwNumFormatGlobal::MakeNumFormat(SwWrtShell& rSh) const
 {

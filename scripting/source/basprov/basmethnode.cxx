@@ -92,11 +92,7 @@ namespace basprov
         registerProperty( BASPROV_PROPERTY_EDITABLE, BASPROV_PROPERTY_ID_EDITABLE, BASPROV_DEFAULT_ATTRIBS(), &m_bEditable, cppu::UnoType<decltype(m_bEditable)>::get() );
     }
 
-
-    BasicMethodNodeImpl::~BasicMethodNodeImpl()
-    {
-    }
-
+    BasicMethodNodeImpl::~BasicMethodNodeImpl() = default;
 
     // XInterface
 

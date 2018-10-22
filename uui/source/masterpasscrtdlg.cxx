@@ -62,8 +62,6 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(weld::Window* pParent, co
     m_xEDMasterPasswordCrt->connect_changed( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
 }
 
-MasterPasswordCreateDialog::~MasterPasswordCreateDialog()
-{
-}
+MasterPasswordCreateDialog::~MasterPasswordCreateDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

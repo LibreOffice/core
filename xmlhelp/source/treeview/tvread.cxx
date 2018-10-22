@@ -240,9 +240,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
         Children = new TVChildTarget( configData,tvDom );
 }
 
-TVRead::~TVRead()
-{
-}
+TVRead::~TVRead() = default;
 
 // XNameAccess
 
@@ -429,9 +427,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
         Elements[i] = new TVRead( configData,tvDom.children[i].get() );
 }
 
-TVChildTarget::~TVChildTarget()
-{
-}
+TVChildTarget::~TVChildTarget() = default;
 
 void TVChildTarget::Check(TVDom* tvDom)
 {

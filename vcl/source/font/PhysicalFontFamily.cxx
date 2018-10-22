@@ -96,9 +96,7 @@ PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
     meMatchWidth( WIDTH_DONTKNOW )
 {}
 
-PhysicalFontFamily::~PhysicalFontFamily()
-{
-}
+PhysicalFontFamily::~PhysicalFontFamily() = default;
 
 void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 {

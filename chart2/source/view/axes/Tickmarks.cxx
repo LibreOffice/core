@@ -65,9 +65,7 @@ PureTickIter::PureTickIter( TickInfoArrayType& rTickInfoVector )
             , m_aTickIter(m_rTickVector.begin())
 {
 }
-PureTickIter::~PureTickIter()
-{
-}
+PureTickIter::~PureTickIter() = default;
 TickInfo* PureTickIter::firstInfo()
 {
     m_aTickIter = m_rTickVector.begin();
@@ -108,9 +106,7 @@ TickFactory::TickFactory(
         m_fScaledVisibleMax = m_rScale.Scaling->doScaling(m_fScaledVisibleMax);
 }
 
-TickFactory::~TickFactory()
-{
-}
+TickFactory::~TickFactory() = default;
 
 bool TickFactory::isDateAxis() const
 {
@@ -163,9 +159,7 @@ TickFactory2D::TickFactory2D(
     }
 }
 
-TickFactory2D::~TickFactory2D()
-{
-}
+TickFactory2D::~TickFactory2D() = default;
 
 bool TickFactory2D::isHorizontalAxis() const
 {

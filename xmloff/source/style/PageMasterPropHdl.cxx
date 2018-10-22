@@ -41,9 +41,7 @@ using namespace ::xmloff::token;
 
 // property handler for style:page-usage (style::PageStyleLayout)
 
-XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
-{
-}
+XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout() = default;
 
 bool XMLPMPropHdl_PageStyleLayout::equals( const Any& rAny1, const Any& rAny2 ) const
 {
@@ -107,9 +105,7 @@ bool XMLPMPropHdl_PageStyleLayout::exportXML(
 
 // property handler for style:num-format (style::NumberingType)
 
-XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat()
-{
-}
+XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat() = default;
 
 bool XMLPMPropHdl_NumFormat::importXML(
         const OUString& rStrImpValue,
@@ -163,9 +159,7 @@ bool XMLPMPropHdl_NumFormat::exportXML(
 
 // property handler for style:num-letter-sync (style::NumberingType)
 
-XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync()
-{
-}
+XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync() = default;
 
 bool XMLPMPropHdl_NumLetterSync::importXML(
         const OUString& rStrImpValue,
@@ -217,9 +211,7 @@ bool XMLPMPropHdl_NumLetterSync::exportXML(
 
 // property handler for style:paper-tray-number
 
-XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber()
-{
-}
+XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber() = default;
 
 bool XMLPMPropHdl_PaperTrayNumber::importXML(
         const OUString& rStrImpValue,
@@ -274,9 +266,7 @@ XMLPMPropHdl_Print::XMLPMPropHdl_Print( enum XMLTokenEnum eValue ) :
 {
 }
 
-XMLPMPropHdl_Print::~XMLPMPropHdl_Print()
-{
-}
+XMLPMPropHdl_Print::~XMLPMPropHdl_Print() = default;
 
 bool XMLPMPropHdl_Print::importXML(
         const OUString& rStrImpValue,
@@ -313,9 +303,7 @@ bool XMLPMPropHdl_Print::exportXML(
 
 // property handler for style:table-centering
 
-XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal()
-{
-}
+XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal() = default;
 
 bool XMLPMPropHdl_CenterHorizontal::importXML(
         const OUString& rStrImpValue,
@@ -354,9 +342,7 @@ bool XMLPMPropHdl_CenterHorizontal::exportXML(
     return bRet;
 }
 
-XMLPMPropHdl_CenterVertical::~XMLPMPropHdl_CenterVertical()
-{
-}
+XMLPMPropHdl_CenterVertical::~XMLPMPropHdl_CenterVertical() = default;
 
 bool XMLPMPropHdl_CenterVertical::importXML(
         const OUString& rStrImpValue,

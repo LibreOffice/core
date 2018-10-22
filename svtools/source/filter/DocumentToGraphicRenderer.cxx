@@ -89,9 +89,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     }
 }
 
-DocumentToGraphicRenderer::~DocumentToGraphicRenderer()
-{
-}
+DocumentToGraphicRenderer::~DocumentToGraphicRenderer() = default;
 
 Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 nCurrentPage)
 {

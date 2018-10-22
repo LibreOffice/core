@@ -42,9 +42,7 @@ View3DContext::View3DContext( ContextHandler2Helper& rParent, View3DModel& rMode
 {
 }
 
-View3DContext::~View3DContext()
-{
-}
+View3DContext::~View3DContext() = default;
 
 ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -85,9 +83,7 @@ WallFloorContext::WallFloorContext( ContextHandler2Helper& rParent, WallFloorMod
 {
 }
 
-WallFloorContext::~WallFloorContext()
-{
-}
+WallFloorContext::~WallFloorContext() = default;
 
 ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
@@ -114,9 +110,7 @@ DataTableContext::DataTableContext( ContextHandler2Helper& rParent, DataTableMod
 {
 }
 
-DataTableContext::~DataTableContext()
-{
-}
+DataTableContext::~DataTableContext() = default;
 
 ContextHandlerRef DataTableContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs)
 {
@@ -145,9 +139,7 @@ PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel&
 {
 }
 
-PlotAreaContext::~PlotAreaContext()
-{
-}
+PlotAreaContext::~PlotAreaContext() = default;
 
 ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {

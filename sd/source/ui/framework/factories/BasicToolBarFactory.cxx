@@ -44,9 +44,7 @@ BasicToolBarFactory::BasicToolBarFactory ()
 {
 }
 
-BasicToolBarFactory::~BasicToolBarFactory()
-{
-}
+BasicToolBarFactory::~BasicToolBarFactory() = default;
 
 void SAL_CALL BasicToolBarFactory::disposing()
 {

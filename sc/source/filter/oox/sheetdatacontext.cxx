@@ -65,9 +65,7 @@ SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
     mxFormulaParser.reset(rHelper.createFormulaParser());
 }
 
-SheetDataContextBase::~SheetDataContextBase()
-{
-}
+SheetDataContextBase::~SheetDataContextBase() = default;
 
 SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment ),

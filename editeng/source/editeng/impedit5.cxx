@@ -827,15 +827,13 @@ ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterSt
  {
  }
 
-ImplIMEInfos::~ImplIMEInfos()
-{
-}
+ ImplIMEInfos::~ImplIMEInfos() = default;
 
-void ImplIMEInfos::CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL )
-{
-    nLen = nL;
-    pAttribs.reset( new ExtTextInputAttr[ nL ] );
-    memcpy( pAttribs.get(), pA, nL*sizeof(ExtTextInputAttr) );
+ void ImplIMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_uInt16 nL)
+ {
+     nLen = nL;
+     pAttribs.reset(new ExtTextInputAttr[nL]);
+     memcpy(pAttribs.get(), pA, nL * sizeof(ExtTextInputAttr));
 }
 
 void ImplIMEInfos::DestroyAttribs()

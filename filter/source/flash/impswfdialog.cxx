@@ -50,9 +50,7 @@ ImpSWFDialog::ImpSWFDialog(weld::Window* pParent, Sequence< PropertyValue >& rFi
     mxCheckExportSlideContents->set_sensitive(false);
 }
 
-ImpSWFDialog::~ImpSWFDialog()
-{
-}
+ImpSWFDialog::~ImpSWFDialog() = default;
 
 Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {

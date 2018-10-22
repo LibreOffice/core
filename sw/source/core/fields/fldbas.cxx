@@ -192,9 +192,7 @@ SwField::SwField(
     assert(m_pType);
 }
 
-SwField::~SwField()
-{
-}
+SwField::~SwField() = default;
 
 // instead of indirectly via the type
 
@@ -561,9 +559,7 @@ SwValueField::SwValueField( const SwValueField& rField )
 {
 }
 
-SwValueField::~SwValueField()
-{
-}
+SwValueField::~SwValueField() = default;
 
 /** Set a new type
  *

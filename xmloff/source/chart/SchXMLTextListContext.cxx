@@ -87,9 +87,7 @@ SchXMLTextListContext::SchXMLTextListContext(
 {
 }
 
-SchXMLTextListContext::~SchXMLTextListContext()
-{
-}
+SchXMLTextListContext::~SchXMLTextListContext() = default;
 
 void SchXMLTextListContext::StartElement( const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {

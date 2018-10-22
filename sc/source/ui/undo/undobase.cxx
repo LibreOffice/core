@@ -560,9 +560,7 @@ ScUndoWrapper::ScUndoWrapper( std::unique_ptr<SfxUndoAction> pUndo ) :
         mnViewShellId = pWrappedUndo->GetViewShellId();
 }
 
-ScUndoWrapper::~ScUndoWrapper()
-{
-}
+ScUndoWrapper::~ScUndoWrapper() = default;
 
 void ScUndoWrapper::ForgetWrappedUndo()
 {

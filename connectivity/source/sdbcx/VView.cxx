@@ -58,9 +58,7 @@ OView::OView(bool _bCase, const css::uno::Reference< css::sdbc::XDatabaseMetaDat
     construct();
 }
 
-OView::~OView()
-{
-}
+OView::~OView() = default;
 
 void OView::construct()
 {

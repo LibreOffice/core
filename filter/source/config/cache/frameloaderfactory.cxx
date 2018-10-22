@@ -38,11 +38,7 @@ FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::uno::XCom
                         FilterCache::E_FRAMELOADER                         );
 }
 
-
-FrameLoaderFactory::~FrameLoaderFactory()
-{
-}
-
+FrameLoaderFactory::~FrameLoaderFactory() = default;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
 {

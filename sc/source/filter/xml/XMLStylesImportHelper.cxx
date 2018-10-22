@@ -40,13 +40,9 @@ sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const OUString& rStyleNam
         return aItr->nNumberFormat;
 }
 
-ScMyStyleRanges::ScMyStyleRanges()
-{
-}
+ScMyStyleRanges::ScMyStyleRanges() = default;
 
-ScMyStyleRanges::~ScMyStyleRanges()
-{
-}
+ScMyStyleRanges::~ScMyStyleRanges() = default;
 
 void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
 {
@@ -243,9 +239,7 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
 {
 }
 
-ScMyStylesImportHelper::~ScMyStylesImportHelper()
-{
-}
+ScMyStylesImportHelper::~ScMyStylesImportHelper() = default;
 
 void ScMyStylesImportHelper::ResetAttributes()
 {

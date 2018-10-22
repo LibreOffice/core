@@ -31,13 +31,9 @@
 
 using namespace ::com::sun::star;
 
-SwSortedObjs::SwSortedObjs()
-{
-}
+SwSortedObjs::SwSortedObjs() = default;
 
-SwSortedObjs::~SwSortedObjs()
-{
-}
+SwSortedObjs::~SwSortedObjs() = default;
 
 size_t SwSortedObjs::size() const
 {

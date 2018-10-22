@@ -73,9 +73,7 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
 {
 }
 
-XMLLineNumberingImportContext::~XMLLineNumberingImportContext()
-{
-}
+XMLLineNumberingImportContext::~XMLLineNumberingImportContext() = default;
 
 void XMLLineNumberingImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

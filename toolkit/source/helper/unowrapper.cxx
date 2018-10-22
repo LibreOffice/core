@@ -139,9 +139,7 @@ void UnoWrapper::Destroy()
     delete this;
 }
 
-UnoWrapper::~UnoWrapper()
-{
-}
+UnoWrapper::~UnoWrapper() = default;
 
 css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
 {

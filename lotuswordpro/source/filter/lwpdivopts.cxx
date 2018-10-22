@@ -69,8 +69,7 @@ LwpHyphenOptions::LwpHyphenOptions()
 {
 }
 
-LwpHyphenOptions::~LwpHyphenOptions()
-{}
+LwpHyphenOptions::~LwpHyphenOptions() = default;
 
 void LwpHyphenOptions::Read(LwpObjectStream *pStrm)
 {
@@ -86,7 +85,7 @@ LwpTextLanguage::LwpTextLanguage()
 {
 }
 
-LwpTextLanguage::~LwpTextLanguage(){}
+LwpTextLanguage::~LwpTextLanguage() = default;
 
 void LwpTextLanguage::Read(LwpObjectStream *pStrm)
 {
@@ -127,8 +126,7 @@ LwpDivisionOptions::LwpDivisionOptions(LwpObjectHeader const & objHdr, LwpSvStre
 {
 }
 
-LwpDivisionOptions::~LwpDivisionOptions()
-{}
+LwpDivisionOptions::~LwpDivisionOptions() = default;
 
 void LwpDivisionOptions::Read()
 {

@@ -205,9 +205,7 @@ namespace canvas
         return { "com.sun.star.rendering.ParametricPolyPolygon" };
     }
 
-    ParametricPolyPolygon::~ParametricPolyPolygon()
-    {
-    }
+    ParametricPolyPolygon::~ParametricPolyPolygon() = default;
 
     ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
                                                   const ::basegfx::B2DPolygon&                          rGradientPoly,

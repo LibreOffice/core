@@ -44,10 +44,8 @@ XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, con
 }
 
 XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
-:   XPropertyEntry(rOther),
-    aB2DPolyPolygon(rOther.aB2DPolyPolygon)
-{
-}
+
+    = default;
 
 XDashEntry::XDashEntry(const XDash& rDash, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -56,10 +54,8 @@ XDashEntry::XDashEntry(const XDash& rDash, const OUString& rName)
 }
 
 XDashEntry::XDashEntry(const XDashEntry& rOther)
-:   XPropertyEntry(rOther),
-aDash(rOther.aDash)
-{
-}
+
+    = default;
 
 XHatchEntry::XHatchEntry(const XHatch& rHatch, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -68,10 +64,8 @@ XHatchEntry::XHatchEntry(const XHatch& rHatch, const OUString& rName)
 }
 
 XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
-:   XPropertyEntry(rOther),
-    aHatch(rOther.aHatch)
-{
-}
+
+    = default;
 
 XGradientEntry::XGradientEntry(const XGradient& rGradient, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -80,10 +74,8 @@ XGradientEntry::XGradientEntry(const XGradient& rGradient, const OUString& rName
 }
 
 XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
-:   XPropertyEntry(rOther),
-    aGradient(rOther.aGradient)
-{
-}
+
+    = default;
 
 XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -92,10 +84,8 @@ XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& 
 }
 
 XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
-:   XPropertyEntry(rOther),
-    maGraphicObject(rOther.maGraphicObject)
-{
-}
+
+    = default;
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
@@ -115,10 +105,7 @@ bool XPropertyList::isValidIdx(long nIndex) const
     return (static_cast<size_t>(nIndex) < maList.size() && nIndex >= 0);
 }
 
-
-XPropertyList::~XPropertyList()
-{
-}
+XPropertyList::~XPropertyList() = default;
 
 long XPropertyList::Count() const
 {

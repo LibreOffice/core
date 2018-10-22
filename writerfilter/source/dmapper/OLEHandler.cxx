@@ -62,11 +62,7 @@ LoggedProperties("OLEHandler"),
 {
 }
 
-
-OLEHandler::~OLEHandler()
-{
-}
-
+OLEHandler::~OLEHandler() = default;
 
 void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 {

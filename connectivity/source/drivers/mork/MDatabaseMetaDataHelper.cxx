@@ -35,10 +35,7 @@ MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 }
 
-
-MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
-{
-}
+MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper() = default;
 
 void MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
                                                    std::vector< OUString >& _rStrings)

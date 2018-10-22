@@ -45,9 +45,7 @@ namespace sw { namespace mark
         }
     }
 
-    AnnotationMark::~AnnotationMark()
-    {
-    }
+    AnnotationMark::~AnnotationMark() = default;
 
     void AnnotationMark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const)
     {

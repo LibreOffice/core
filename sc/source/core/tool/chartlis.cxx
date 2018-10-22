@@ -336,14 +336,9 @@ bool ScChartListener::operator!=( const ScChartListener& r ) const
     return !operator==(r);
 }
 
-ScChartHiddenRangeListener::ScChartHiddenRangeListener()
-{
-}
+ScChartHiddenRangeListener::ScChartHiddenRangeListener() = default;
 
-ScChartHiddenRangeListener::~ScChartHiddenRangeListener()
-{
-    // empty d'tor
-}
+ScChartHiddenRangeListener::~ScChartHiddenRangeListener() = default;
 
 void ScChartListenerCollection::Init()
 {

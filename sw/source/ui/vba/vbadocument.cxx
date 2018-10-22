@@ -83,9 +83,7 @@ SwVbaDocument::SwVbaDocument( uno::Sequence< uno::Any > const& aArgs, uno::Refer
     Initialize();
 }
 
-SwVbaDocument::~SwVbaDocument()
-{
-}
+SwVbaDocument::~SwVbaDocument() = default;
 
 void SwVbaDocument::Initialize()
 {

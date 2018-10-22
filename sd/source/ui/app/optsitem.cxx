@@ -51,9 +51,7 @@ SdOptionsItem::SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& r
 {
 }
 
-SdOptionsItem::~SdOptionsItem()
-{
-}
+SdOptionsItem::~SdOptionsItem() = default;
 
 void SdOptionsItem::ImplCommit()
 {
@@ -122,9 +120,7 @@ void SdOptionsGeneric::Init() const
     }
 }
 
-SdOptionsGeneric::~SdOptionsGeneric()
-{
-}
+SdOptionsGeneric::~SdOptionsGeneric() = default;
 
 void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
 {
@@ -961,9 +957,7 @@ SdOptionsGrid::SdOptionsGrid(bool bImpress) :
     EnableModify( true );
 }
 
-SdOptionsGrid::~SdOptionsGrid()
-{
-}
+SdOptionsGrid::~SdOptionsGrid() = default;
 
 void SdOptionsGrid::SetDefaults()
 {
@@ -1369,9 +1363,7 @@ SdOptions::SdOptions(bool bImpress) :
 {
 }
 
-SdOptions::~SdOptions()
-{
-}
+SdOptions::~SdOptions() = default;
 
 void SdOptions::StoreConfig()
 {

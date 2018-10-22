@@ -103,9 +103,7 @@ ImportTyp::ImportTyp( ScDocument* pDoc, rtl_TextEncoding eQ )
     pD = pDoc;
 }
 
-ImportTyp::~ImportTyp()
-{
-}
+ImportTyp::~ImportTyp() = default;
 
 ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     ImportTyp( &rImpData.mrDoc, rImpData.meTextEnc ),
@@ -1386,9 +1384,7 @@ XclImpOutlineDataBuffer::XclImpOutlineDataBuffer( const XclImpRoot& rRoot, SCTAB
 {
 }
 
-XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer()
-{
-}
+XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer() = default;
 
 void XclImpOutlineDataBuffer::Convert()
 {

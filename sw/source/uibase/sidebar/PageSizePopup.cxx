@@ -29,9 +29,7 @@ PageSizePopup::PageSizePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-PageSizePopup::~PageSizePopup()
-{
-}
+PageSizePopup::~PageSizePopup() = default;
 
 VclPtr<SfxPopupWindow> PageSizePopup::CreatePopupWindow()
 {

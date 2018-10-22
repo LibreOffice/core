@@ -452,10 +452,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL GridContr
     return this;
 }
 
-GridControlAccessibleElement::~GridControlAccessibleElement( )
-{
-}
-
+GridControlAccessibleElement::~GridControlAccessibleElement() = default;
 
 } // namespace accessibility
 

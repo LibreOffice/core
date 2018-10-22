@@ -41,10 +41,7 @@ namespace pcr
     {
     }
 
-
-    CommonBehaviourControlHelper::~CommonBehaviourControlHelper()
-    {
-    }
+    CommonBehaviourControlHelper::~CommonBehaviourControlHelper() = default;
 
     void CommonBehaviourControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext )
     {

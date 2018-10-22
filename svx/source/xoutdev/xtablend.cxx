@@ -41,9 +41,7 @@ XLineEndList::XLineEndList( const OUString& rPath, const OUString& rReferer )
 {
 }
 
-XLineEndList::~XLineEndList()
-{
-}
+XLineEndList::~XLineEndList() = default;
 
 XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 {

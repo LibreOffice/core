@@ -91,9 +91,7 @@ SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
           nElement != XML_ELEMENT( OFFICE, XML_DOCUMENT_CONTENT ) ), "xmloff.chart", "SchXMLDocContext instantiated with no <office:document> element" );
 }
 
-SchXMLDocContext::~SchXMLDocContext()
-{}
-
+SchXMLDocContext::~SchXMLDocContext() = default;
 
 SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -177,8 +175,7 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
                 !IsXMLToken( rLName, XML_CHART ), "xmloff.chart", "SchXMLBodyContext instantiated with no <office:chart> element" );
 }
 
-SchXMLBodyContext::~SchXMLBodyContext()
-{}
+SchXMLBodyContext::~SchXMLBodyContext() = default;
 
 void SchXMLBodyContext::EndElement()
 {

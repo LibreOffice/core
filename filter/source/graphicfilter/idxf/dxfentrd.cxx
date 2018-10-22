@@ -57,9 +57,7 @@ void DXFBasicEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-DXFBasicEntity::~DXFBasicEntity()
-{
-}
+DXFBasicEntity::~DXFBasicEntity() = default;
 
 //--------------------------DXFLineEntity---------------------------------------
 
@@ -563,9 +561,7 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
 {
 }
 
-DXFBoundaryPathData::~DXFBoundaryPathData()
-{
-}
+DXFBoundaryPathData::~DXFBoundaryPathData() = default;
 
 bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
 {

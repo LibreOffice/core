@@ -53,9 +53,7 @@ TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler2Helper co
     }
 }
 
-TableStyleTextStyleContext::~TableStyleTextStyleContext()
-{
-}
+TableStyleTextStyleContext::~TableStyleTextStyleContext() = default;
 
 // CT_TableStyleTextStyle
 ContextHandlerRef

@@ -66,11 +66,7 @@ namespace pcr
     {
     }
 
-
-    EFormsPropertyHandler::~EFormsPropertyHandler( )
-    {
-    }
-
+    EFormsPropertyHandler::~EFormsPropertyHandler() = default;
 
     OUString EFormsPropertyHandler::getImplementationName_static(  )
     {

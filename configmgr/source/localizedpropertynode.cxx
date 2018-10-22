@@ -51,7 +51,7 @@ LocalizedPropertyNode::LocalizedPropertyNode(
     other.members_.cloneInto(&members_);
 }
 
-LocalizedPropertyNode::~LocalizedPropertyNode() {}
+LocalizedPropertyNode::~LocalizedPropertyNode() = default;
 
 Node::Kind LocalizedPropertyNode::kind() const {
     return KIND_LOCALIZED_PROPERTY;

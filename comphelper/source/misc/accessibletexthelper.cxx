@@ -44,16 +44,9 @@ namespace comphelper
 
     // OCommonAccessibleText
 
+    OCommonAccessibleText::OCommonAccessibleText() = default;
 
-    OCommonAccessibleText::OCommonAccessibleText()
-    {
-    }
-
-
-    OCommonAccessibleText::~OCommonAccessibleText()
-    {
-    }
-
+    OCommonAccessibleText::~OCommonAccessibleText() = default;
 
     Reference < i18n::XBreakIterator > const & OCommonAccessibleText::implGetBreakIterator()
     {
@@ -726,11 +719,7 @@ namespace comphelper
 
     // OAccessibleTextHelper
 
-
-    OAccessibleTextHelper::OAccessibleTextHelper( )
-    {
-    }
-
+    OAccessibleTextHelper::OAccessibleTextHelper() = default;
 
     // XInterface
 

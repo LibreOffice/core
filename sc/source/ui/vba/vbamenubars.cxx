@@ -44,9 +44,7 @@ ScVbaMenuBars::ScVbaMenuBars( const uno::Reference< XHelperInterface >& xParent,
 {
 }
 
-ScVbaMenuBars::~ScVbaMenuBars()
-{
-}
+ScVbaMenuBars::~ScVbaMenuBars() = default;
 
 // XEnumerationAccess
 uno::Type SAL_CALL

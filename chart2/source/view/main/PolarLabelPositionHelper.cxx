@@ -42,9 +42,7 @@ PolarLabelPositionHelper::PolarLabelPositionHelper(
 {
 }
 
-PolarLabelPositionHelper::~PolarLabelPositionHelper()
-{
-}
+PolarLabelPositionHelper::~PolarLabelPositionHelper() = default;
 
 awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForLogicValues(
         LabelAlignment& rAlignment

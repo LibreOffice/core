@@ -67,9 +67,7 @@ XFCellStyle::XFCellStyle()
     , m_eVertAlign(enumXFAlignNone)
 {}
 
-XFCellStyle::~XFCellStyle()
-{
-}
+XFCellStyle::~XFCellStyle() = default;
 
 void XFCellStyle::SetPadding(double left, double right,double top, double bottom)
 {

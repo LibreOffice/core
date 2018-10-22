@@ -111,9 +111,7 @@ namespace drawinglayer
             }
         }
 
-        GeoTexSvxBitmapEx::~GeoTexSvxBitmapEx()
-        {
-        }
+        GeoTexSvxBitmapEx::~GeoTexSvxBitmapEx() = default;
 
         sal_uInt8 GeoTexSvxBitmapEx::impGetTransparence(sal_Int32 rX, sal_Int32 rY) const
         {
@@ -354,9 +352,7 @@ namespace drawinglayer
             }
         }
 
-        GeoTexSvxMultiHatch::~GeoTexSvxMultiHatch()
-        {
-        }
+        GeoTexSvxMultiHatch::~GeoTexSvxMultiHatch() = default;
 
         bool GeoTexSvxMultiHatch::impIsOnHatch(const basegfx::B2DPoint& rUV) const
         {

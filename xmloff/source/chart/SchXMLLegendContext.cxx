@@ -71,7 +71,7 @@ class LegendAttributeTokenMap : public SvXMLTokenMap
 {
 public:
     LegendAttributeTokenMap(): SvXMLTokenMap( aLegendAttributeTokenMap ) {}
-    virtual ~LegendAttributeTokenMap() {}
+    virtual ~LegendAttributeTokenMap() = default;
 };
 
 //a LegendAttributeTokenMap Singleton
@@ -203,8 +203,6 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     mrImportHelper.FillAutoStyle(sAutoStyleName, xLegendProps);
 }
 
-SchXMLLegendContext::~SchXMLLegendContext()
-{
-}
+SchXMLLegendContext::~SchXMLLegendContext() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

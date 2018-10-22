@@ -38,9 +38,7 @@ OReportPage::OReportPage(
 {
 }
 
-OReportPage::~OReportPage()
-{
-}
+OReportPage::~OReportPage() = default;
 
 SdrPage* OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
 {

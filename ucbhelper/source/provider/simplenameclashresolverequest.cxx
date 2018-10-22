@@ -123,7 +123,7 @@ InteractionSupplyName::setName( const OUString& Name )
     m_aName = Name;
 }
 
-SimpleNameClashResolveRequest::~SimpleNameClashResolveRequest() {}
+SimpleNameClashResolveRequest::~SimpleNameClashResolveRequest() = default;
 
 SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
                                     const OUString & rTargetFolderURL,

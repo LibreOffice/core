@@ -77,7 +77,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon, MYSQL* pMySql)
 {
 }
 
-ODatabaseMetaData::~ODatabaseMetaData() {}
+ODatabaseMetaData::~ODatabaseMetaData() = default;
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator() { return rtl::OUString(); }
 

@@ -25,9 +25,7 @@ ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport ) :
 {
 }
 
-ScXMLEmptyContext::~ScXMLEmptyContext()
-{
-}
+ScXMLEmptyContext::~ScXMLEmptyContext() = default;
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     ScXMLEmptyContext::createFastChildContext( sal_Int32 /*nElement*/,

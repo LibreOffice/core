@@ -64,7 +64,7 @@ XcuParser::XcuParser(
         recordModifications_)
 {}
 
-XcuParser::~XcuParser() {}
+XcuParser::~XcuParser() = default;
 
 xmlreader::XmlReader::Text XcuParser::getTextMode() {
     return valueParser_.getTextMode();

@@ -289,9 +289,7 @@ FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, con
         m_xObject->addEventListener(this);
 }
 
-FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
-{
-}
+FmXDisposeMultiplexer::~FmXDisposeMultiplexer() = default;
 
 // css::lang::XEventListener
 

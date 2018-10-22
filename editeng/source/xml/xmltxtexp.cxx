@@ -81,9 +81,7 @@ SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 {
 }
 
-SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
-{
-}
+SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl() = default;
 
 SvxTextForwarder* SvxEditEngineSourceImpl::GetTextForwarder()
 {
@@ -104,9 +102,7 @@ SvxEditEngineSource::SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl )
 {
 }
 
-SvxEditEngineSource::~SvxEditEngineSource()
-{
-}
+SvxEditEngineSource::~SvxEditEngineSource() = default;
 
 std::unique_ptr<SvxEditSource> SvxEditEngineSource::Clone() const
 {
@@ -125,9 +121,7 @@ void SvxEditEngineSource::UpdateData()
 
 // class SvxSimpleUnoModel
 
-SvxSimpleUnoModel::SvxSimpleUnoModel()
-{
-}
+SvxSimpleUnoModel::SvxSimpleUnoModel() = default;
 
 // XMultiServiceFactory ( SvxFmMSFactory )
 uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )

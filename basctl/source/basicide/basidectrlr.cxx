@@ -52,8 +52,7 @@ Controller::Controller (Shell* pViewShell)
     );
 }
 
-Controller::~Controller()
-{ }
+Controller::~Controller() = default;
 
 // XInterface
 Any SAL_CALL Controller::queryInterface( const Type & rType )

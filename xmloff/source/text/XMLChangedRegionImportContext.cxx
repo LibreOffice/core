@@ -48,9 +48,7 @@ XMLChangedRegionImportContext::XMLChangedRegionImportContext(
 {
 }
 
-XMLChangedRegionImportContext::~XMLChangedRegionImportContext()
-{
-}
+XMLChangedRegionImportContext::~XMLChangedRegionImportContext() = default;
 
 void XMLChangedRegionImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

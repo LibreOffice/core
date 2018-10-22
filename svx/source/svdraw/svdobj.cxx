@@ -139,10 +139,7 @@
 
 using namespace ::com::sun::star;
 
-
-SdrObjUserCall::~SdrObjUserCall()
-{
-}
+SdrObjUserCall::~SdrObjUserCall() = default;
 
 void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*/, const tools::Rectangle& /*rOldBoundRect*/)
 {
@@ -159,11 +156,9 @@ SdrObjUserData::SdrObjUserData(SdrInventor nInv, sal_uInt16 nId) :
     nInventor(nInv),
     nIdentifier(nId) {}
 
-SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
-    nInventor(rData.nInventor),
-    nIdentifier(rData.nIdentifier) {}
+SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) = default;
 
-SdrObjUserData::~SdrObjUserData() {}
+SdrObjUserData::~SdrObjUserData() = default;
 
 SdrObjGeoData::SdrObjGeoData():
     bMovProt(false),
@@ -175,9 +170,7 @@ SdrObjGeoData::SdrObjGeoData():
 {
 }
 
-SdrObjGeoData::~SdrObjGeoData()
-{
-}
+SdrObjGeoData::~SdrObjGeoData() = default;
 
 SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
     bMoveAllowed(true),
@@ -3135,9 +3128,7 @@ void SdrObjFactory::RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> co
 
 namespace svx
 {
-    ISdrObjectFilter::~ISdrObjectFilter()
-    {
-    }
+ISdrObjectFilter::~ISdrObjectFilter() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

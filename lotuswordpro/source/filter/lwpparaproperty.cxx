@@ -145,9 +145,7 @@ LwpParaAlignProperty::LwpParaAlignProperty(LwpObjectStream* pFile)
 
 }
 
-LwpParaAlignProperty::~LwpParaAlignProperty()
-{
-}
+LwpParaAlignProperty::~LwpParaAlignProperty() = default;
 
 sal_uInt32  LwpParaAlignProperty::GetType()
 {
@@ -162,9 +160,7 @@ LwpParaIndentProperty::LwpParaIndentProperty(LwpObjectStream* pFile)
     m_pIndent = pIndentPiece ? dynamic_cast<LwpIndentOverride*>(pIndentPiece->GetOverride()) : nullptr;
 }
 
-LwpParaIndentProperty::~LwpParaIndentProperty()
-{
-}
+LwpParaIndentProperty::~LwpParaIndentProperty() = default;
 
 sal_uInt32 LwpParaIndentProperty::GetType()
 {
@@ -180,9 +176,7 @@ LwpParaSpacingProperty::LwpParaSpacingProperty(LwpObjectStream* pFile)
     m_pSpacing = pSpacingPiece ? dynamic_cast<LwpSpacingOverride*>(pSpacingPiece->GetOverride()) : nullptr;
 }
 
-LwpParaSpacingProperty::~LwpParaSpacingProperty()
-{
-}
+LwpParaSpacingProperty::~LwpParaSpacingProperty() = default;
 
 sal_uInt32 LwpParaSpacingProperty::GetType()
 {
@@ -222,9 +216,7 @@ m_pBullet(new LwpBulletOverride)
     m_pBullet->Read(pStrm);
 }
 
-LwpParaBulletProperty::~LwpParaBulletProperty()
-{
-}
+LwpParaBulletProperty::~LwpParaBulletProperty() = default;
 
 LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)
     : m_pNumberingOverride(nullptr)
@@ -249,9 +241,7 @@ LwpParaTabRackProperty::LwpParaTabRackProperty(LwpObjectStream* pFile)
     m_pTabOverride = pTabPiece ? dynamic_cast<LwpTabOverride*>(pTabPiece->GetOverride()) : nullptr;
 }
 
-LwpParaTabRackProperty::~LwpParaTabRackProperty()
-{
-}
+LwpParaTabRackProperty::~LwpParaTabRackProperty() = default;
 
 LwpParaBackGroundProperty::LwpParaBackGroundProperty(LwpObjectStream* pFile)
 {
@@ -262,8 +252,6 @@ LwpParaBackGroundProperty::LwpParaBackGroundProperty(LwpObjectStream* pFile)
     m_pBackground = pBackgroundPiece ? dynamic_cast<LwpBackgroundOverride*>(pBackgroundPiece->GetOverride()) : nullptr;
 }
 
-LwpParaBackGroundProperty::~LwpParaBackGroundProperty()
-{
-}
+LwpParaBackGroundProperty::~LwpParaBackGroundProperty() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

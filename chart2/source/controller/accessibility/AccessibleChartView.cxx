@@ -61,9 +61,7 @@ AccessibleChartView::AccessibleChartView(SdrView* pView ) :
     AddState( AccessibleStateType::OPAQUE );
 }
 
-AccessibleChartView::~AccessibleChartView()
-{
-}
+AccessibleChartView::~AccessibleChartView() = default;
 
 awt::Rectangle AccessibleChartView::GetWindowPosSize() const
 {

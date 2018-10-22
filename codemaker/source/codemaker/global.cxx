@@ -360,6 +360,6 @@ FileStream & operator <<(FileStream & out, rtl::OUString const & s) {
     return out << OUStringToOString(s, RTL_TEXTENCODING_UTF8);
 }
 
-CannotDumpException::~CannotDumpException() throw () {}
+CannotDumpException::~CannotDumpException() throw() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

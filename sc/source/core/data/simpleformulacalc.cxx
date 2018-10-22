@@ -35,9 +35,7 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
         aComp.CompileTokenArray();
 }
 
-ScSimpleFormulaCalculator::~ScSimpleFormulaCalculator()
-{
-}
+ScSimpleFormulaCalculator::~ScSimpleFormulaCalculator() = default;
 
 void ScSimpleFormulaCalculator::Calculate()
 {

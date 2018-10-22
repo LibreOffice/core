@@ -64,9 +64,7 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
 {
 }
 
-XMLIndexAlphabeticalSourceContext::~XMLIndexAlphabeticalSourceContext()
-{
-}
+XMLIndexAlphabeticalSourceContext::~XMLIndexAlphabeticalSourceContext() = default;
 
 void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,

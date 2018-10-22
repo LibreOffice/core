@@ -145,11 +145,7 @@ TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTabl
     }
 }
 
-
-TableModel::~TableModel()
-{
-}
-
+TableModel::~TableModel() = default;
 
 void TableModel::init( sal_Int32 nColumns, sal_Int32 nRows )
 {

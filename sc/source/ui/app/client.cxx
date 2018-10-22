@@ -46,9 +46,7 @@ ScClient::ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pS
     SetObject( pObj->GetObjRef() );
 }
 
-ScClient::~ScClient()
-{
-}
+ScClient::~ScClient() = default;
 
 SdrOle2Obj* ScClient::GetDrawObj()
 {

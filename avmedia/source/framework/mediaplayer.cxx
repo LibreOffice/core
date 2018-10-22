@@ -40,11 +40,7 @@ MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _p
     static_cast< MediaFloater* >( GetWindow() )->Initialize( pInfo );
 };
 
-
-MediaPlayer::~MediaPlayer()
-{
-}
-
+MediaPlayer::~MediaPlayer() = default;
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( MediaPlayer, SID_AVMEDIA_PLAYER )
 

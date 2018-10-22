@@ -51,12 +51,9 @@ XMLChildNode::XMLChildNode( XMLParentNode *pPar )
         m_pParent->AddChild( this );
 }
 
+XMLChildNode::XMLChildNode(const XMLChildNode& rObj)
 
-XMLChildNode::XMLChildNode( const XMLChildNode& rObj)
-    : XMLNode(rObj),
-      m_pParent(rObj.m_pParent)
-{
-}
+    = default;
 
 XMLChildNode& XMLChildNode::operator=(const XMLChildNode& rObj)
 {

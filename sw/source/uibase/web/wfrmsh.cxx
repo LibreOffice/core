@@ -49,8 +49,6 @@ SwWebFrameShell::SwWebFrameShell(SwView &_rView) :
 {
 }
 
-SwWebFrameShell::~SwWebFrameShell()
-{
-}
+SwWebFrameShell::~SwWebFrameShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

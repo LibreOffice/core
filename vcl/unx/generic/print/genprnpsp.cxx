@@ -458,13 +458,9 @@ OUString SalGenericInstance::GetDefaultPrinter()
     return rManager.getDefaultPrinter();
 }
 
-PspSalInfoPrinter::PspSalInfoPrinter()
-{
-}
+PspSalInfoPrinter::PspSalInfoPrinter() = default;
 
-PspSalInfoPrinter::~PspSalInfoPrinter()
-{
-}
+PspSalInfoPrinter::~PspSalInfoPrinter() = default;
 
 void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 {
@@ -828,9 +824,7 @@ PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
 {
 }
 
-PspSalPrinter::~PspSalPrinter()
-{
-}
+PspSalPrinter::~PspSalPrinter() = default;
 
 static OUString getTmpName()
 {

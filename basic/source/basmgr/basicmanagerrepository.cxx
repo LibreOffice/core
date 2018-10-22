@@ -205,11 +205,7 @@ namespace basic
         }
     };
 
-
-    ImplRepository::ImplRepository()
-    {
-    }
-
+    ImplRepository::ImplRepository() = default;
 
     ImplRepository& ImplRepository::Instance()
     {

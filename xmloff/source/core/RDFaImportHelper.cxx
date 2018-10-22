@@ -361,9 +361,7 @@ RDFaImportHelper::RDFaImportHelper(const SvXMLImport & i_rImport)
 {
 }
 
-RDFaImportHelper::~RDFaImportHelper()
-{
-}
+RDFaImportHelper::~RDFaImportHelper() = default;
 
 std::shared_ptr<ParsedRDFaAttributes>
 RDFaImportHelper::ParseRDFa(

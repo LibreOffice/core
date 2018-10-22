@@ -48,9 +48,7 @@ SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< css::un
     m_xContext = rxContext;
 }
 
-SEInitializer_NssImpl::~SEInitializer_NssImpl()
-{
-}
+SEInitializer_NssImpl::~SEInitializer_NssImpl() = default;
 
 /* XSEInitializer */
 uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL

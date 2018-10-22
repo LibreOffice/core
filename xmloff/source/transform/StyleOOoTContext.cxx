@@ -1037,9 +1037,7 @@ XMLStyleOOoTContext::XMLStyleOOoTContext(
 {
 }
 
-XMLStyleOOoTContext::~XMLStyleOOoTContext()
-{
-}
+XMLStyleOOoTContext::~XMLStyleOOoTContext() = default;
 
 rtl::Reference<XMLTransformerContext> XMLStyleOOoTContext::CreateChildContext(
             sal_uInt16 nPrefix,

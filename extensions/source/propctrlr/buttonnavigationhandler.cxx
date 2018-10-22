@@ -49,11 +49,7 @@ namespace pcr
         m_xSlaveHandler = css::form::inspection::FormComponentPropertyHandler::create( m_xContext );
     }
 
-
-    ButtonNavigationHandler::~ButtonNavigationHandler( )
-    {
-    }
-
+    ButtonNavigationHandler::~ButtonNavigationHandler() = default;
 
     OUString ButtonNavigationHandler::getImplementationName_static(  )
     {

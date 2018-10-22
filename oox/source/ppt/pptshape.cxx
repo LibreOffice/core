@@ -52,9 +52,7 @@ PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const sal_Char
 {
 }
 
-PPTShape::~PPTShape()
-{
-}
+PPTShape::~PPTShape() = default;
 
 static const char* lclDebugSubType( sal_Int32 nType )
 {

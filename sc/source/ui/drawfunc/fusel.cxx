@@ -62,9 +62,7 @@ FuSelection::FuSelection(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
 {
 }
 
-FuSelection::~FuSelection()
-{
-}
+FuSelection::~FuSelection() = default;
 
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {

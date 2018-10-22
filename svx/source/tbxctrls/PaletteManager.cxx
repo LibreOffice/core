@@ -60,9 +60,7 @@ PaletteManager::PaletteManager() :
 
 }
 
-PaletteManager::~PaletteManager()
-{
-}
+PaletteManager::~PaletteManager() = default;
 
 void PaletteManager::LoadPalettes()
 {

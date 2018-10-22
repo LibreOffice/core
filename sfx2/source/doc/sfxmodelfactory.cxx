@@ -106,11 +106,7 @@ namespace sfx2
     {
     }
 
-
-    SfxModelFactory::~SfxModelFactory()
-    {
-    }
-
+    SfxModelFactory::~SfxModelFactory() = default;
 
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstance(  )
     {

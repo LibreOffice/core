@@ -29,9 +29,7 @@ CharmapPopup::CharmapPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-CharmapPopup::~CharmapPopup()
-{
-}
+CharmapPopup::~CharmapPopup() = default;
 
 VclPtr<SfxPopupWindow> CharmapPopup::CreatePopupWindow()
 {

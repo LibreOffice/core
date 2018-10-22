@@ -38,7 +38,7 @@ public:
     BitmapEx const maPreview;
 
     explicit DummyReplacement (const BitmapEx& rPreview) : maPreview(rPreview)  { }
-    virtual ~DummyReplacement() {}
+    virtual ~DummyReplacement() = default;
     virtual sal_Int32 GetMemorySize() const override { return maPreview.GetSizeBytes(); }
 };
 
@@ -90,9 +90,7 @@ public:
     virtual sal_Int32 GetMemorySize() const override;
 };
 
-ResolutionReduction::ResolutionReducedReplacement::~ResolutionReducedReplacement()
-{
-}
+ResolutionReduction::ResolutionReducedReplacement::~ResolutionReducedReplacement() = default;
 
 sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() const
 {

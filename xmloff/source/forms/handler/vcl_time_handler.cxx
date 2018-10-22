@@ -38,9 +38,7 @@ namespace xmloff
     using ::com::sun::star::util::Time;
 
     //= VCLTimeHandler
-    VCLTimeHandler::VCLTimeHandler()
-    {
-    }
+    VCLTimeHandler::VCLTimeHandler() = default;
 
     OUString VCLTimeHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {

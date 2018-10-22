@@ -70,10 +70,7 @@ ONumericModel::ONumericModel( const ONumericModel* _pOriginal, const Reference<X
 {
 }
 
-
-ONumericModel::~ONumericModel()
-{
-}
+ONumericModel::~ONumericModel() = default;
 
 // XCloneable
 

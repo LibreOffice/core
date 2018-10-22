@@ -40,9 +40,7 @@ AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape (
 {
 }
 
-AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape()
-{
-}
+AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape() = default;
 
 // XServiceInfo
 

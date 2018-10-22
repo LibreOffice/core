@@ -54,9 +54,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
     return nullptr;
 }
 
-VclAbstractDialog::~VclAbstractDialog()
-{
-}
+VclAbstractDialog::~VclAbstractDialog() = default;
 
 bool VclAbstractDialog::StartExecuteAsync(AsyncContext &)
 {
@@ -83,12 +81,8 @@ BitmapEx VclAbstractDialog::createScreenshot() const
 }
 
 // virtual
-VclAbstractDialog2::~VclAbstractDialog2()
-{
-}
+VclAbstractDialog2::~VclAbstractDialog2() = default;
 
-VclAbstractDialogFactory::~VclAbstractDialogFactory()
-{
-}
+VclAbstractDialogFactory::~VclAbstractDialogFactory() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

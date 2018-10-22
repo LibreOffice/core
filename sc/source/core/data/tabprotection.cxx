@@ -103,9 +103,7 @@ bool ScOoxPasswordHash::verifyPassword( const OUString& aPassText ) const
     return aHash == maHashValue;
 }
 
-ScPassHashProtectable::~ScPassHashProtectable()
-{
-}
+ScPassHashProtectable::~ScPassHashProtectable() = default;
 
 class ScTableProtectionImpl
 {
@@ -209,18 +207,9 @@ ScTableProtectionImpl::ScTableProtectionImpl(SCSIZE nOptSize) :
 {
 }
 
-ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r) :
-    maPassText(r.maPassText),
-    maPassHash(r.maPassHash),
-    maOptions(r.maOptions),
-    mbEmptyPass(r.mbEmptyPass),
-    mbProtected(r.mbProtected),
-    meHash1(r.meHash1),
-    meHash2(r.meHash2),
-    maPasswordHash(r.maPasswordHash),
-    maEnhancedProtection(r.maEnhancedProtection)
-{
-}
+ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r)
+
+    = default;
 
 bool ScTableProtectionImpl::isProtectedWithPass() const
 {
@@ -546,9 +535,7 @@ ScDocProtection::ScDocProtection(const ScDocProtection& r) :
 {
 }
 
-ScDocProtection::~ScDocProtection()
-{
-}
+ScDocProtection::~ScDocProtection() = default;
 
 bool ScDocProtection::isProtected() const
 {
@@ -636,9 +623,7 @@ ScTableProtection::ScTableProtection(const ScTableProtection& r) :
 {
 }
 
-ScTableProtection::~ScTableProtection()
-{
-}
+ScTableProtection::~ScTableProtection() = default;
 
 bool ScTableProtection::isProtected() const
 {

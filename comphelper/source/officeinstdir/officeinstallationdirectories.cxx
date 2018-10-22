@@ -86,10 +86,7 @@ OfficeInstallationDirectories::OfficeInstallationDirectories(
 
 
 // virtual
-OfficeInstallationDirectories::~OfficeInstallationDirectories()
-{
-}
-
+OfficeInstallationDirectories::~OfficeInstallationDirectories() = default;
 
 // util::XOfficeInstallationDirectories
 

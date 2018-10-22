@@ -26,13 +26,9 @@
 using namespace css::uno;
 using namespace ::xmloff::token;
 
-SvXMLAutoCorrectTokenHandler::SvXMLAutoCorrectTokenHandler()
-{
-}
+SvXMLAutoCorrectTokenHandler::SvXMLAutoCorrectTokenHandler() = default;
 
-SvXMLAutoCorrectTokenHandler::~SvXMLAutoCorrectTokenHandler()
-{
-}
+SvXMLAutoCorrectTokenHandler::~SvXMLAutoCorrectTokenHandler() = default;
 
 sal_Int32 SAL_CALL SvXMLAutoCorrectTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
 {

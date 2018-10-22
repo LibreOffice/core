@@ -24,9 +24,7 @@
 
 #include <algorithm>
 
-ImplAccelManager::~ImplAccelManager()
-{
-}
+ImplAccelManager::~ImplAccelManager() = default;
 
 bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {

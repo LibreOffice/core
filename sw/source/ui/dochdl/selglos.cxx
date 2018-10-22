@@ -30,9 +30,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(weld::Window * pParent, const OUString &rShor
     m_xGlosBox->connect_row_activated(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
 
-SwSelGlossaryDlg::~SwSelGlossaryDlg()
-{
-}
+SwSelGlossaryDlg::~SwSelGlossaryDlg() = default;
 
 IMPL_LINK_NOARG(SwSelGlossaryDlg, DoubleClickHdl, weld::TreeView&, void)
 {

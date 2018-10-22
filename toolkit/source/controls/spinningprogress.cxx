@@ -82,11 +82,7 @@ protected:
         osl_atomic_decrement( &m_refCount );
     }
 
-
-    SpinningProgressControlModel::~SpinningProgressControlModel()
-    {
-    }
-
+    SpinningProgressControlModel::~SpinningProgressControlModel() = default;
 
     rtl::Reference<UnoControlModel> SpinningProgressControlModel::Clone() const
     {

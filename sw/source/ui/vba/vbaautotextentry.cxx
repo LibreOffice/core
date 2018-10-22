@@ -31,9 +31,7 @@ SwVbaAutoTextEntry::SwVbaAutoTextEntry( const uno::Reference< ooo::vba::XHelperI
 {
 }
 
-SwVbaAutoTextEntry::~SwVbaAutoTextEntry()
-{
-}
+SwVbaAutoTextEntry::~SwVbaAutoTextEntry() = default;
 
 uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::Reference< word::XRange >& _where, const uno::Any& _richtext )
 {

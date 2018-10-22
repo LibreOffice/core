@@ -115,9 +115,7 @@ SwCSS1Parser::SwCSS1Parser( SwDoc *pD, const sal_uInt32 aFHeights[7], const OUSt
     m_aFontHeights[6] = aFHeights[6];
 }
 
-SwCSS1Parser::~SwCSS1Parser()
-{
-}
+SwCSS1Parser::~SwCSS1Parser() = default;
 
 // Feature: PrintExt
 bool SwCSS1Parser::SetFormatBreak( SfxItemSet& rItemSet,

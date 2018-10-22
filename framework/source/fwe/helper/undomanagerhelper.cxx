@@ -175,9 +175,7 @@ namespace framework
         }
 
     protected:
-        virtual ~UndoManagerRequest() override
-        {
-        }
+        virtual ~UndoManagerRequest() override = default;
 
     private:
         ::std::function<void ()>    m_request;
@@ -222,9 +220,7 @@ namespace framework
             getUndoManager().AddUndoListener( *this );
         }
 
-        virtual ~UndoManagerHelper_Impl()
-        {
-        }
+        virtual ~UndoManagerHelper_Impl() = default;
 
         SfxUndoManager& getUndoManager() const
         {
@@ -836,9 +832,7 @@ namespace framework
     {
     }
 
-    UndoManagerHelper::~UndoManagerHelper()
-    {
-    }
+    UndoManagerHelper::~UndoManagerHelper() = default;
 
     void UndoManagerHelper::disposing()
     {

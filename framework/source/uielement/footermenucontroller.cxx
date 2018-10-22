@@ -57,9 +57,7 @@ FooterMenuController::FooterMenuController( const css::uno::Reference< css::uno:
 {
 }
 
-FooterMenuController::~FooterMenuController()
-{
-}
+FooterMenuController::~FooterMenuController() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

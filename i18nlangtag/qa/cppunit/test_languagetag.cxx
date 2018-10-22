@@ -32,7 +32,7 @@ namespace {
 class TestLanguageTag : public CppUnit::TestFixture
 {
 public:
-    TestLanguageTag() {}
+    TestLanguageTag() = default;
 
     void testAllTags();
     void testAllIsoLangEntries();

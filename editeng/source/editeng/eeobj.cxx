@@ -29,14 +29,9 @@
 
 using namespace ::com::sun::star;
 
+EditDataObject::EditDataObject() = default;
 
-EditDataObject::EditDataObject()
-{
-}
-
-EditDataObject::~EditDataObject()
-{
-}
+EditDataObject::~EditDataObject() = default;
 
 // datatransfer::XTransferable
 uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )

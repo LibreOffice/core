@@ -155,9 +155,7 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
 {
 }
 
-XMLIndexSourceBaseContext::~XMLIndexSourceBaseContext()
-{
-}
+XMLIndexSourceBaseContext::~XMLIndexSourceBaseContext() = default;
 
 void XMLIndexSourceBaseContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

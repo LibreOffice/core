@@ -35,9 +35,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfE3dSphere::~ViewContactOfE3dSphere()
-        {
-        }
+        ViewContactOfE3dSphere::~ViewContactOfE3dSphere() = default;
 
         drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dSphere::createViewIndependentPrimitive3DContainer() const
         {

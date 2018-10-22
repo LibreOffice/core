@@ -294,10 +294,7 @@ SwXFootnoteProperties::SwXFootnoteProperties(SwDoc* pDc) :
 {
 }
 
-SwXFootnoteProperties::~SwXFootnoteProperties()
-{
-
-}
+SwXFootnoteProperties::~SwXFootnoteProperties() = default;
 
 uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySetInfo()
 {
@@ -574,9 +571,7 @@ SwXEndnoteProperties::SwXEndnoteProperties(SwDoc* pDc) :
 {
 }
 
-SwXEndnoteProperties::~SwXEndnoteProperties()
-{
-}
+SwXEndnoteProperties::~SwXEndnoteProperties() = default;
 
 uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetInfo()
 {
@@ -777,9 +772,7 @@ SwXLineNumberingProperties::SwXLineNumberingProperties(SwDoc* pDc) :
 {
 }
 
-SwXLineNumberingProperties::~SwXLineNumberingProperties()
-{
-}
+SwXLineNumberingProperties::~SwXLineNumberingProperties() = default;
 
 uno::Reference< beans::XPropertySetInfo >  SwXLineNumberingProperties::getPropertySetInfo()
 {
@@ -2274,9 +2267,7 @@ SwXChapterNumbering::SwXChapterNumbering(SwDocShell& rDocSh) :
 {
 }
 
-SwXChapterNumbering::~SwXChapterNumbering()
-{
-}
+SwXChapterNumbering::~SwXChapterNumbering() = default;
 
 OUString SwXTextColumns::getImplementationName()
 {
@@ -2356,9 +2347,7 @@ SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
     }
 }
 
-SwXTextColumns::~SwXTextColumns()
-{
-}
+SwXTextColumns::~SwXTextColumns() = default;
 
 sal_Int32 SwXTextColumns::getReferenceValue()
 {

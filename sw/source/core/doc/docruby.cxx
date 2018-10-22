@@ -318,8 +318,6 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
     return rPam.HasMark();
 }
 
-SwRubyListEntry::~SwRubyListEntry()
-{
-}
+SwRubyListEntry::~SwRubyListEntry() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

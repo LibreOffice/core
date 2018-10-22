@@ -37,9 +37,7 @@ namespace svgio
         {
         }
 
-        SvgLineNode::~SvgLineNode()
-        {
-        }
+        SvgLineNode::~SvgLineNode() = default;
 
         const SvgStyleAttributes* SvgLineNode::getSvgStyleAttributes() const
         {

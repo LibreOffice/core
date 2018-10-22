@@ -329,11 +329,7 @@ AccessibleTableShape::AccessibleTableShape( const AccessibleShapeInfo& rShapeInf
 {
 }
 
-
-AccessibleTableShape::~AccessibleTableShape()
-{
-}
-
+AccessibleTableShape::~AccessibleTableShape() = default;
 
 void AccessibleTableShape::Init()
 {

@@ -126,9 +126,7 @@ SwXText::SwXText(SwDoc *const pDoc, const CursorType eType)
 {
 }
 
-SwXText::~SwXText()
-{
-}
+SwXText::~SwXText() = default;
 
 const SwDoc * SwXText::GetDoc() const
 {
@@ -2227,9 +2225,7 @@ SwXBodyText::SwXBodyText(SwDoc *const pDoc)
 {
 }
 
-SwXBodyText::~SwXBodyText()
-{
-}
+SwXBodyText::~SwXBodyText() = default;
 
 OUString SAL_CALL
 SwXBodyText::getImplementationName()
@@ -2492,8 +2488,7 @@ SwXHeadFootText::SwXHeadFootText(SwFrameFormat& rHeadFootFormat, const bool bIsH
 {
 }
 
-SwXHeadFootText::~SwXHeadFootText()
-{ }
+SwXHeadFootText::~SwXHeadFootText() = default;
 
 OUString SAL_CALL
 SwXHeadFootText::getImplementationName()

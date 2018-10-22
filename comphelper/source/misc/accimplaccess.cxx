@@ -35,14 +35,9 @@ namespace comphelper
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::accessibility::XAccessible;
 
-    OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
-    {
-    }
+    OAccessibleImplementationAccess::OAccessibleImplementationAccess() = default;
 
-
-    OAccessibleImplementationAccess::~OAccessibleImplementationAccess( )
-    {
-    }
+    OAccessibleImplementationAccess::~OAccessibleImplementationAccess() = default;
 
     const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {

@@ -94,8 +94,7 @@ UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource
     registerProperties();
 }
 
-UncachedDataSequence::~UncachedDataSequence()
-{}
+UncachedDataSequence::~UncachedDataSequence() = default;
 
 void UncachedDataSequence::registerProperties()
 {

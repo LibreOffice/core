@@ -1374,9 +1374,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
     pClass = m_pOfficeClass.get();
 }
 
-LibLibreOffice_Impl::~LibLibreOffice_Impl()
-{
-}
+LibLibreOffice_Impl::~LibLibreOffice_Impl() = default;
 
 namespace
 {

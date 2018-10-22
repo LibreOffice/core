@@ -54,16 +54,9 @@ namespace migration
 
     // BasicMigration
 
+    BasicMigration::BasicMigration() = default;
 
-    BasicMigration::BasicMigration()
-    {
-    }
-
-
-    BasicMigration::~BasicMigration()
-    {
-    }
-
+    BasicMigration::~BasicMigration() = default;
 
     TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
     {

@@ -250,9 +250,7 @@ XclExpPCField::XclExpPCField(
     Finalize();
 }
 
-XclExpPCField::~XclExpPCField()
-{
-}
+XclExpPCField::~XclExpPCField() = default;
 
 void XclExpPCField::SetGroupChildField( const XclExpPCField& rChildField )
 {

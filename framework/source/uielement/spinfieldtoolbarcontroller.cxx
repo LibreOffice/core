@@ -172,9 +172,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pSpinfieldControl );
 }
 
-SpinfieldToolbarController::~SpinfieldToolbarController()
-{
-}
+SpinfieldToolbarController::~SpinfieldToolbarController() = default;
 
 void SAL_CALL SpinfieldToolbarController::dispose()
 {

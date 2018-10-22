@@ -103,9 +103,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    TimeNode::~TimeNode()
-    {
-    }
+    TimeNode::~TimeNode() = default;
 
     void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     {

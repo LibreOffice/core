@@ -38,9 +38,7 @@ TemplateViewItem::TemplateViewItem (ThumbnailView &rView, sal_uInt16 nId)
 {
 }
 
-TemplateViewItem::~TemplateViewItem ()
-{
-}
+TemplateViewItem::~TemplateViewItem() = default;
 
 ::tools::Rectangle TemplateViewItem::getDefaultIconArea() const
 {

@@ -34,7 +34,7 @@ ScWebServiceLink::ScWebServiceLink(ScDocument* pD, const OUString& rURL)
 {
 }
 
-ScWebServiceLink::~ScWebServiceLink() {}
+ScWebServiceLink::~ScWebServiceLink() = default;
 
 sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, const css::uno::Any&)
 {

@@ -61,9 +61,7 @@ DomainMapperTableHandler::DomainMapperTableHandler(
 {
 }
 
-DomainMapperTableHandler::~DomainMapperTableHandler()
-{
-}
+DomainMapperTableHandler::~DomainMapperTableHandler() = default;
 
 void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 {

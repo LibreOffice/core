@@ -66,8 +66,7 @@ ChartDropTargetHelper::ChartDropTargetHelper(
         m_xChartDocument( xChartDocument )
 {}
 
-ChartDropTargetHelper::~ChartDropTargetHelper()
-{}
+ChartDropTargetHelper::~ChartDropTargetHelper() = default;
 
 bool ChartDropTargetHelper::satisfiesPrerequisites() const
 {

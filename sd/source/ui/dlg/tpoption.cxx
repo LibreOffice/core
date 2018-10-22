@@ -52,9 +52,7 @@ SdTpOptionsSnap::SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAtt
     m_xSnapFrames->show();
 }
 
-SdTpOptionsSnap::~SdTpOptionsSnap()
-{
-}
+SdTpOptionsSnap::~SdTpOptionsSnap() = default;
 
 bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 {

@@ -26,9 +26,7 @@ Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
     pTransmitter = aTransmitter;
 }
 
-Listener::~Listener()
-{
-}
+Listener::~Listener() = default;
 
 void Listener::init( const css::uno::Reference< css::presentation::XSlideShowController >& aController)
 {

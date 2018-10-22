@@ -58,9 +58,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( bool bWeb ) :
     }
 }
 
-SwToolbarConfigItem::~SwToolbarConfigItem()
-{
-}
+SwToolbarConfigItem::~SwToolbarConfigItem() = default;
 
 static sal_Int32 lcl_getArrayIndex(SelectionType nSelType)
 {

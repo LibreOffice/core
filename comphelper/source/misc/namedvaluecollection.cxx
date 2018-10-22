@@ -109,11 +109,7 @@ namespace comphelper
         impl_assign( _rArguments );
     }
 
-
-    NamedValueCollection::~NamedValueCollection()
-    {
-    }
-
+    NamedValueCollection::~NamedValueCollection() = default;
 
     bool NamedValueCollection::canExtractFrom( css::uno::Any const & i_value )
     {

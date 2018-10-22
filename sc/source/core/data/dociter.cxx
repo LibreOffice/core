@@ -303,13 +303,9 @@ bool ScValueIterator::GetNext(double& rValue, FormulaError& rErr)
     return GetThis(rValue, rErr);
 }
 
-ScDBQueryDataIterator::DataAccess::DataAccess()
-{
-}
+ScDBQueryDataIterator::DataAccess::DataAccess() = default;
 
-ScDBQueryDataIterator::DataAccess::~DataAccess()
-{
-}
+ScDBQueryDataIterator::DataAccess::~DataAccess() = default;
 
 const sc::CellStoreType* ScDBQueryDataIterator::GetColumnCellStore(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
@@ -367,9 +363,7 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInte
     }
 }
 
-ScDBQueryDataIterator::DataAccessInternal::~DataAccessInternal()
-{
-}
+ScDBQueryDataIterator::DataAccessInternal::~DataAccessInternal() = default;
 
 bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
 {
@@ -527,9 +521,7 @@ ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(ScDBQueryParamMatrix* 
     mnRows = static_cast<SCROW>(nR);
 }
 
-ScDBQueryDataIterator::DataAccessMatrix::~DataAccessMatrix()
-{
-}
+ScDBQueryDataIterator::DataAccessMatrix::~DataAccessMatrix() = default;
 
 bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
 {
@@ -1940,9 +1932,7 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     SetTab( mnTab );
 }
 
-ScHorizontalCellIterator::~ScHorizontalCellIterator()
-{
-}
+ScHorizontalCellIterator::~ScHorizontalCellIterator() = default;
 
 void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
 {
@@ -2181,9 +2171,7 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
             nStartRow, nEndCol, nEndRow ) );
 }
 
-ScHorizontalValueIterator::~ScHorizontalValueIterator()
-{
-}
+ScHorizontalValueIterator::~ScHorizontalValueIterator() = default;
 
 bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
 {
@@ -2261,9 +2249,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     InitForNextRow(true);
 }
 
-ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
-{
-}
+ScHorizontalAttrIterator::~ScHorizontalAttrIterator() = default;
 
 void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
 {
@@ -2407,9 +2393,7 @@ ScUsedAreaIterator::ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
     pPattern = aAttrIter.GetNext( nAttrCol1, nAttrCol2, nAttrRow );
 }
 
-ScUsedAreaIterator::~ScUsedAreaIterator()
-{
-}
+ScUsedAreaIterator::~ScUsedAreaIterator() = default;
 
 bool ScUsedAreaIterator::GetNext()
 {
@@ -2502,9 +2486,7 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
         pColIter.reset( pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow ) );
 }
 
-ScDocAttrIterator::~ScDocAttrIterator()
-{
-}
+ScDocAttrIterator::~ScDocAttrIterator() = default;
 
 const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 )
 {
@@ -2636,9 +2618,7 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
         pColIter = nullptr;
 }
 
-ScAttrRectIterator::~ScAttrRectIterator()
-{
-}
+ScAttrRectIterator::~ScAttrRectIterator() = default;
 
 void ScAttrRectIterator::DataChanged()
 {

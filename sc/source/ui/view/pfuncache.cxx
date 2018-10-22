@@ -74,9 +74,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     }
 }
 
-ScPrintFuncCache::~ScPrintFuncCache()
-{
-}
+ScPrintFuncCache::~ScPrintFuncCache() = default;
 
 void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDev )
 {

@@ -174,9 +174,7 @@ SvxCharBasePage::SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDe
 {
 }
 
-SvxCharBasePage::~SvxCharBasePage()
-{
-}
+SvxCharBasePage::~SvxCharBasePage() = default;
 
 void SvxCharBasePage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -2476,10 +2474,7 @@ SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet
     Initialize();
 }
 
-SvxCharPositionPage::~SvxCharPositionPage()
-{
-}
-
+SvxCharPositionPage::~SvxCharPositionPage() = default;
 
 void SvxCharPositionPage::Initialize()
 {
@@ -3064,9 +3059,7 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet
     Initialize();
 }
 
-SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
-{
-}
+SvxCharTwoLinesPage::~SvxCharTwoLinesPage() = default;
 
 void SvxCharTwoLinesPage::Initialize()
 {

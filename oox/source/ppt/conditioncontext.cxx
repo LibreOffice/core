@@ -160,10 +160,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    CondListContext::~CondListContext( )
-        throw( )
-    {
-    }
+    CondListContext::~CondListContext() throw() = default;
 
     ::oox::core::ContextHandlerRef CondListContext::onCreateContext( sal_Int32 aElement, const AttributeList& rAttribs )
     {

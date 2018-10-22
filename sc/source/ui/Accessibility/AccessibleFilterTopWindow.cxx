@@ -37,9 +37,7 @@ ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow(
     SetName(rName);
 }
 
-ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow()
-{
-}
+ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow() = default;
 
 // XAccessibleContext
 

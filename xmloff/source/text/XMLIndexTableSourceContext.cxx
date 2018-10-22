@@ -59,9 +59,7 @@ XMLIndexTableSourceContext::XMLIndexTableSourceContext(
 {
 }
 
-XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
-{
-}
+XMLIndexTableSourceContext::~XMLIndexTableSourceContext() = default;
 
 static SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
 {

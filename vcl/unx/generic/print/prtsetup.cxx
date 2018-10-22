@@ -91,9 +91,7 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, weld::Window* pParent)
     ActivatePage(m_xTabControl->get_current_page_ident());
 }
 
-RTSDialog::~RTSDialog()
-{
-}
+RTSDialog::~RTSDialog() = default;
 
 IMPL_LINK(RTSDialog, ActivatePage, const OString&, rPage, void)
 {
@@ -165,9 +163,7 @@ RTSPaperPage::RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog)
     update();
 }
 
-RTSPaperPage::~RTSPaperPage()
-{
-}
+RTSPaperPage::~RTSPaperPage() = default;
 
 void RTSPaperPage::update()
 {
@@ -374,9 +370,7 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     }
 }
 
-RTSDevicePage::~RTSDevicePage()
-{
-}
+RTSDevicePage::~RTSDevicePage() = default;
 
 sal_uLong RTSDevicePage::getDepth()
 {

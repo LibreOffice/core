@@ -70,9 +70,7 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 {
 }
 
-XFStyleContainer::~XFStyleContainer()
-{
-}
+XFStyleContainer::~XFStyleContainer() = default;
 
 void XFStyleContainer::Reset()
 {

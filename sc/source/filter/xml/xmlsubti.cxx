@@ -71,9 +71,7 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
 {
 }
 
-ScMyTables::~ScMyTables()
-{
-}
+ScMyTables::~ScMyTables() = default;
 
 namespace {
 

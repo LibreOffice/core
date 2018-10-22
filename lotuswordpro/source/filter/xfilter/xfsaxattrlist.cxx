@@ -65,9 +65,7 @@ XFSaxAttrList::XFSaxAttrList()
     m_xSvAttrList = new SvXMLAttributeList();
 }
 
-XFSaxAttrList::~XFSaxAttrList()
-{
-}
+XFSaxAttrList::~XFSaxAttrList() = default;
 
 void XFSaxAttrList::AddAttribute(const OUString& name, const OUString& value)
 {

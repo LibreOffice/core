@@ -50,9 +50,7 @@ TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext
     @short      deinitialize instance
     @descr      We should release all used resource which are not needed any longer.
 *//*-*****************************************************************************************************/
-TaskCreator::~TaskCreator()
-{
-}
+TaskCreator::~TaskCreator() = default;
 
 /*-****************************************************************************************************
     TODO document me

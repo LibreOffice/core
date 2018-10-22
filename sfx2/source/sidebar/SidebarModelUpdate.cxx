@@ -10,11 +10,7 @@
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 
 namespace sfx2 { namespace sidebar {
-
-SidebarModelUpdate::~SidebarModelUpdate()
-{
-}
-
+SidebarModelUpdate::~SidebarModelUpdate() = default;
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

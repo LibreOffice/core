@@ -67,9 +67,7 @@ OColumn::OColumn( const bool _bNameIsReadOnly )
         &m_sName, cppu::UnoType<decltype(m_sName)>::get() );
 }
 
-OColumn::~OColumn()
-{
-}
+OColumn::~OColumn() = default;
 
 // css::lang::XTypeProvider
 Sequence< Type > OColumn::getTypes()
@@ -171,9 +169,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
 {
 }
 
-OColumns::~OColumns()
-{
-}
+OColumns::~OColumns() = default;
 
 // XServiceInfo
 OUString OColumns::getImplementationName(  )

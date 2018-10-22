@@ -46,9 +46,7 @@ OComponentHelper::OComponentHelper( Mutex & rMutex )
     : rBHelper( rMutex )
 {
 }
-OComponentHelper::~OComponentHelper()
-{
-}
+OComponentHelper::~OComponentHelper() = default;
 
 Any OComponentHelper::queryInterface( Type const & rType )
 {

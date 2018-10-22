@@ -51,16 +51,14 @@ ColRowSpan::ColRowSpan(SCCOLROW nStart, SCCOLROW nEnd) : mnStart(nStart), mnEnd(
 ColumnSpanSet::ColumnType::ColumnType(SCROW nStart, SCROW nEnd, bool bInit) :
     maSpans(nStart, nEnd+1, bInit), miPos(maSpans.begin()) {}
 
-ColumnSpanSet::Action::~Action() {}
+ColumnSpanSet::Action::~Action() = default;
 void ColumnSpanSet::Action::startColumn(SCTAB /*nTab*/, SCCOL /*nCol*/) {}
 
-ColumnSpanSet::ColumnAction::~ColumnAction() {}
+ColumnSpanSet::ColumnAction::~ColumnAction() = default;
 
 ColumnSpanSet::ColumnSpanSet(bool bInit) : mbInit(bInit) {}
 
-ColumnSpanSet::~ColumnSpanSet()
-{
-}
+ColumnSpanSet::~ColumnSpanSet() = default;
 
 ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(SCTAB nTab, SCCOL nCol)
 {

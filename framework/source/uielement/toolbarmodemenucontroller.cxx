@@ -71,9 +71,7 @@ ToolbarModeMenuController::ToolbarModeMenuController( const css::uno::Reference<
 {
 }
 
-ToolbarModeMenuController::~ToolbarModeMenuController()
-{
-}
+ToolbarModeMenuController::~ToolbarModeMenuController() = default;
 
 void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {

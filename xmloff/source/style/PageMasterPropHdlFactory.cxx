@@ -54,9 +54,7 @@ XMLPageMasterPropHdlFactory::XMLPageMasterPropHdlFactory() :
 {
 }
 
-XMLPageMasterPropHdlFactory::~XMLPageMasterPropHdlFactory()
-{
-}
+XMLPageMasterPropHdlFactory::~XMLPageMasterPropHdlFactory() = default;
 
 const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_Int32 nType ) const
 {

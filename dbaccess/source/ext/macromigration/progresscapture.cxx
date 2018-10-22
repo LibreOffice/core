@@ -49,9 +49,7 @@ namespace dbmm
     {
     }
 
-    ProgressCapture::~ProgressCapture()
-    {
-    }
+    ProgressCapture::~ProgressCapture() = default;
 
     void ProgressCapture::dispose()
     {

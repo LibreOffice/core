@@ -175,9 +175,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemS
     Reset(&rOptions);
 }
 
-SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
-{
-}
+SmPrintOptionsTabPage::~SmPrintOptionsTabPage() = default;
 
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 {
@@ -332,9 +330,7 @@ SmFontDialog::SmFontDialog(weld::Window * pParent, OutputDevice *pFntListDevice,
     }
 }
 
-SmFontDialog::~SmFontDialog()
-{
-}
+SmFontDialog::~SmFontDialog() = default;
 
 class SaveDefaultsQuery : public weld::MessageDialogController
 {
@@ -371,9 +367,7 @@ SmFontSizeDialog::SmFontSizeDialog(weld::Window* pParent)
     m_xDefaultButton->connect_clicked(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
 }
 
-SmFontSizeDialog::~SmFontSizeDialog()
-{
-}
+SmFontSizeDialog::~SmFontSizeDialog() = default;
 
 void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 {
@@ -475,9 +469,7 @@ SmFontTypeDialog::SmFontTypeDialog(weld::Window* pParent, OutputDevice *pFntList
     m_xMenuButton->connect_selected(LINK(this, SmFontTypeDialog, MenuSelectHdl));
 }
 
-SmFontTypeDialog::~SmFontTypeDialog()
-{
-}
+SmFontTypeDialog::~SmFontTypeDialog() = default;
 
 void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 {
@@ -586,9 +578,7 @@ SmCategoryDesc::SmCategoryDesc(weld::Builder& rBuilder, sal_uInt16 nCategoryIdx)
     }
 }
 
-SmCategoryDesc::~SmCategoryDesc()
-{
-}
+SmCategoryDesc::~SmCategoryDesc() = default;
 
 /**************************************************************************/
 
@@ -889,9 +879,7 @@ SmAlignDialog::SmAlignDialog(weld::Window* pParent)
     m_xDefaultButton->connect_clicked(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
 }
 
-SmAlignDialog::~SmAlignDialog()
-{
-}
+SmAlignDialog::~SmAlignDialog() = default;
 
 void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
 {
@@ -1128,9 +1116,7 @@ IMPL_LINK_NOARG(SmShowSymbolSet, ScrollHdl, weld::ScrolledWindow&, void)
     Invalidate();
 }
 
-SmShowSymbol::SmShowSymbol()
-{
-}
+SmShowSymbol::SmShowSymbol() = default;
 
 void SmShowSymbol::setFontSize(vcl::Font &rFont) const
 {
@@ -1302,9 +1288,7 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
     m_xGetBtn->connect_clicked(LINK(this, SmSymbolDialog, GetClickHdl));
 }
 
-SmSymbolDialog::~SmSymbolDialog()
-{
-}
+SmSymbolDialog::~SmSymbolDialog() = default;
 
 bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
 {
@@ -1755,9 +1739,7 @@ SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntLi
     m_xCharsetDisplay->SetHighlightHdl( LINK( this, SmSymDefineDialog, CharHighlightHdl ) );
 }
 
-SmSymDefineDialog::~SmSymDefineDialog()
-{
-}
+SmSymDefineDialog::~SmSymDefineDialog() = default;
 
 short SmSymDefineDialog::execute()
 {

@@ -718,9 +718,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg(weld::Window* pParent)
     EnableRemoveButton();
 }
 
-SvxJavaParameterDlg::~SvxJavaParameterDlg()
-{
-}
+SvxJavaParameterDlg::~SvxJavaParameterDlg() = default;
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl, weld::Entry&, void)
 {
@@ -866,9 +864,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(weld::Window* pParent)
     m_xPathList->grab_focus();
 }
 
-SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
-{
-}
+SvxJavaClassPathDlg::~SvxJavaClassPathDlg() = default;
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
 {

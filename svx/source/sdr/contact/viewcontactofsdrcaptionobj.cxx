@@ -47,9 +47,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfSdrCaptionObj::~ViewContactOfSdrCaptionObj()
-        {
-        }
+        ViewContactOfSdrCaptionObj::~ViewContactOfSdrCaptionObj() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence() const
         {

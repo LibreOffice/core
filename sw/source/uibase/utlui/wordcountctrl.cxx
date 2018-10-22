@@ -22,9 +22,7 @@ SwWordCountStatusBarControl::SwWordCountStatusBarControl(
 {
 }
 
-SwWordCountStatusBarControl::~SwWordCountStatusBarControl()
-{
-}
+SwWordCountStatusBarControl::~SwWordCountStatusBarControl() = default;
 
 void SwWordCountStatusBarControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )

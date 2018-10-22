@@ -646,7 +646,7 @@ public:
     virtual void Input( const Point& rPoint ) = 0;
 
 protected:
-    ~ImplPointFilter() {}
+    ~ImplPointFilter() = default;
 };
 
 class ImplPolygonPointFilter : public ImplPointFilter
@@ -660,9 +660,7 @@ public:
     {
     }
 
-    virtual ~ImplPolygonPointFilter()
-    {
-    }
+    virtual ~ImplPolygonPointFilter() = default;
 
     virtual void    LastPoint() override;
     virtual void    Input( const Point& rPoint ) override;
@@ -710,15 +708,14 @@ public:
                         {
                         }
 
-    virtual             ~ImplEdgePointFilter() {}
+                        virtual ~ImplEdgePointFilter() = default;
 
-    Point               EdgeSection( const Point& rPoint, int nEdge ) const;
-    int                 VisibleSide( const Point& rPoint ) const;
-    bool                IsPolygon() const
-                            { return maFirstPoint == maLastPoint; }
+                        Point EdgeSection(const Point& rPoint, int nEdge) const;
+                        int VisibleSide(const Point& rPoint) const;
+                        bool IsPolygon() const { return maFirstPoint == maLastPoint; }
 
-    virtual void        Input( const Point& rPoint ) override;
-    virtual void        LastPoint() override;
+                        virtual void Input(const Point& rPoint) override;
+                        virtual void LastPoint() override;
 };
 
 inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const
@@ -868,9 +865,7 @@ Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pFla
 {
 }
 
-Polygon::Polygon( const tools::Polygon& rPoly ) : mpImplPolygon(rPoly.mpImplPolygon)
-{
-}
+Polygon::Polygon(const tools::Polygon& rPoly) = default;
 
 Polygon::Polygon( tools::Polygon&& rPoly)
     : mpImplPolygon(std::move(rPoly.mpImplPolygon))
@@ -902,9 +897,7 @@ Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
 {
 }
 
-Polygon::~Polygon()
-{
-}
+Polygon::~Polygon() = default;
 
 Point * Polygon::GetPointAry()
 {
@@ -1559,11 +1552,7 @@ Point& Polygon::operator[]( sal_uInt16 nPos )
     return mpImplPolygon->mxPointAry[nPos];
 }
 
-tools::Polygon& Polygon::operator=( const tools::Polygon& rPoly )
-{
-    mpImplPolygon = rPoly.mpImplPolygon;
-    return *this;
-}
+tools::Polygon& Polygon::operator=(const tools::Polygon& rPoly) = default;
 
 tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly )
 {

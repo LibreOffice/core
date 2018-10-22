@@ -163,10 +163,7 @@ ImageProducer::ImageProducer()
     mpGraphic.reset( new Graphic );
 }
 
-ImageProducer::~ImageProducer()
-{
-}
-
+ImageProducer::~ImageProducer() = default;
 
 // XInterface
 css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )

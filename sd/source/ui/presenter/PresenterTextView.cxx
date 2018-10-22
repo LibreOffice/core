@@ -102,9 +102,7 @@ PresenterTextView::PresenterTextView ()
 {
 }
 
-PresenterTextView::~PresenterTextView()
-{
-}
+PresenterTextView::~PresenterTextView() = default;
 
 void SAL_CALL PresenterTextView::disposing()
 {

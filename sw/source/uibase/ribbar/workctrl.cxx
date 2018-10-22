@@ -73,9 +73,7 @@ SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
-SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
-{
-}
+SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl() = default;
 
 VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 {
@@ -569,9 +567,7 @@ SwPreviewZoomControl::SwPreviewZoomControl(
 {
 }
 
-SwPreviewZoomControl::~SwPreviewZoomControl()
-{
-}
+SwPreviewZoomControl::~SwPreviewZoomControl() = default;
 
 void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
                                          SfxItemState eState,
@@ -640,8 +636,7 @@ SwJumpToSpecificPageControl::SwJumpToSpecificPageControl(
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {}
 
-SwJumpToSpecificPageControl::~SwJumpToSpecificPageControl()
-{}
+SwJumpToSpecificPageControl::~SwJumpToSpecificPageControl() = default;
 
 VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *pParent )
 {

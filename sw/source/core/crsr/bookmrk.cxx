@@ -206,8 +206,7 @@ namespace sw { namespace mark
         xmlTextWriterEndElement(pWriter);
     }
 
-    MarkBase::~MarkBase()
-    { }
+    MarkBase::~MarkBase() = default;
 
     OUString MarkBase::GenerateNewName(const OUString& rPrefix)
     {

@@ -210,7 +210,7 @@ SearchResultsDlgWrapper::SearchResultsDlgWrapper(
     SetWindow( VclPtr<SearchResultsDlg>::Create(pBindings, _pParent) );
 }
 
-SearchResultsDlgWrapper::~SearchResultsDlgWrapper() {}
+SearchResultsDlgWrapper::~SearchResultsDlgWrapper() = default;
 
 SfxChildWinInfo SearchResultsDlgWrapper::GetInfo() const
 {

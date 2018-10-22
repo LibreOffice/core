@@ -32,9 +32,7 @@ NativeNumberWrapper::NativeNumberWrapper(
     xNNS = i18n::NativeNumberSupplier2::create(rxContext);
 }
 
-NativeNumberWrapper::~NativeNumberWrapper()
-{
-}
+NativeNumberWrapper::~NativeNumberWrapper() = default;
 
 OUString
 NativeNumberWrapper::getNativeNumberString(

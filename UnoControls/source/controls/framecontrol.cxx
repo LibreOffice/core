@@ -60,9 +60,7 @@ FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
 {
 }
 
-FrameControl::~FrameControl()
-{
-}
+FrameControl::~FrameControl() = default;
 
 //  XInterface
 

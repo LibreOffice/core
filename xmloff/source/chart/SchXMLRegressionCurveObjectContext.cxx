@@ -53,9 +53,7 @@ SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
 {
 }
 
-SchXMLRegressionCurveObjectContext::~SchXMLRegressionCurveObjectContext()
-{
-}
+SchXMLRegressionCurveObjectContext::~SchXMLRegressionCurveObjectContext() = default;
 
 void SchXMLRegressionCurveObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttributeList )
 {
@@ -116,8 +114,7 @@ SchXMLEquationContext::SchXMLEquationContext(
         maChartSize( rChartSize )
 {}
 
-SchXMLEquationContext::~SchXMLEquationContext()
-{}
+SchXMLEquationContext::~SchXMLEquationContext() = default;
 
 void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

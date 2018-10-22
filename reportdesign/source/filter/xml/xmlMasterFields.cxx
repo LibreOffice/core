@@ -70,10 +70,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
         m_pReport->addMasterDetailPair(::std::pair< OUString,OUString >(sMasterField,sDetailField));
 }
 
-
-OXMLMasterFields::~OXMLMasterFields()
-{
-}
+OXMLMasterFields::~OXMLMasterFields() = default;
 
 SvXMLImportContextRef OXMLMasterFields::CreateChildContext(
         sal_uInt16 _nPrefix,

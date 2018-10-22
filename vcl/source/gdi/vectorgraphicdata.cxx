@@ -262,9 +262,7 @@ VectorGraphicData::VectorGraphicData(
     }
 }
 
-VectorGraphicData::~VectorGraphicData()
-{
-}
+VectorGraphicData::~VectorGraphicData() = default;
 
 const basegfx::B2DRange& VectorGraphicData::getRange() const
 {

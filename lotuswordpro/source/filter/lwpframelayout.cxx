@@ -75,9 +75,7 @@ LwpFrame::LwpFrame(LwpPlacableLayout* pLayout):m_pLayout(pLayout)
 {
 }
 
-LwpFrame::~LwpFrame()
-{
-}
+LwpFrame::~LwpFrame() = default;
 /**
 * @descr:  parse frame
 * @param:  register frame style
@@ -742,11 +740,9 @@ bool LwpFrame::IsLeftWider()
     return false;
 }
 
-LwpFrameLink::LwpFrameLink()
-{}
+LwpFrameLink::LwpFrameLink() = default;
 
-LwpFrameLink::~LwpFrameLink()
-{}
+LwpFrameLink::~LwpFrameLink() = default;
 
 /**
  * @descr frame link information
@@ -764,9 +760,7 @@ LwpFrameLayout::LwpFrameLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm
 {
 }
 
-LwpFrameLayout::~LwpFrameLayout()
-{
-}
+LwpFrameLayout::~LwpFrameLayout() = default;
 
 /**
  * @descr read frame layout object
@@ -1025,9 +1019,7 @@ LwpGroupLayout::LwpGroupLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm
 
 }
 
-LwpGroupLayout::~LwpGroupLayout()
-{
-}
+LwpGroupLayout::~LwpGroupLayout() = default;
 /**
  * @descr read group layout object
  *
@@ -1114,8 +1106,7 @@ LwpGroupFrame::LwpGroupFrame(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpContent(objHdr, pStrm)
 {}
 
-LwpGroupFrame::~LwpGroupFrame()
-{}
+LwpGroupFrame::~LwpGroupFrame() = default;
 
 void LwpGroupFrame::Read()
 {

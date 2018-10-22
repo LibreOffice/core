@@ -160,7 +160,7 @@ public:
     { m_base.clearFragment(); }
 
 private:
-    virtual ~UriReference() override {}
+    virtual ~UriReference() override = default;
 
     stoc::uriproc::UriReference m_base;
 };
@@ -277,7 +277,7 @@ public:
         sal_Bool encodeRetainedSpecialSegments) override;
 
 private:
-    virtual ~Factory() override {}
+    virtual ~Factory() override = default;
 
     css::uno::Reference< css::uri::XUriReference > clone(
         css::uno::Reference< css::uri::XUriReference > const & uriReference)

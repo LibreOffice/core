@@ -61,9 +61,7 @@ SalLayoutGlyphs* MenuItemData::GetTextGlyphs(OutputDevice* pOutputDevice)
     return &aTextGlyphs;
 }
 
-MenuItemList::~MenuItemList()
-{
-}
+MenuItemList::~MenuItemList() = default;
 
 MenuItemData* MenuItemList::Insert(
     sal_uInt16 nId,

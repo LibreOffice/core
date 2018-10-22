@@ -52,11 +52,7 @@ namespace sdr { namespace contact {
     {
     }
 
-
-    ViewContactOfUnoControl::~ViewContactOfUnoControl()
-    {
-    }
-
+    ViewContactOfUnoControl::~ViewContactOfUnoControl() = default;
 
     Reference< XControl > ViewContactOfUnoControl::getTemporaryControlForWindow(
         const vcl::Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer ) const

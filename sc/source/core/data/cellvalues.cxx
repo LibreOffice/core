@@ -46,9 +46,7 @@ struct CellValuesImpl
 CellValues::CellValues() :
     mpImpl(new CellValuesImpl) {}
 
-CellValues::~CellValues()
-{
-}
+CellValues::~CellValues() = default;
 
 void CellValues::transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen )
 {
@@ -299,9 +297,7 @@ TableValues::TableValues() :
 TableValues::TableValues( const ScRange& rRange ) :
     mpImpl(new Impl(rRange)) {}
 
-TableValues::~TableValues()
-{
-}
+TableValues::~TableValues() = default;
 
 const ScRange& TableValues::getRange() const
 {

@@ -111,10 +111,7 @@ HwpReader::HwpReader()
     d.reset( new HwpReaderPrivate );
 }
 
-
-HwpReader::~HwpReader()
-{
-}
+HwpReader::~HwpReader() = default;
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
 {

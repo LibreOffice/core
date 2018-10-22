@@ -31,9 +31,7 @@ ConfigFlush::ConfigFlush()
 {
 }
 
-ConfigFlush::~ConfigFlush()
-{
-}
+ConfigFlush::~ConfigFlush() = default;
 
 OUString SAL_CALL ConfigFlush::getImplementationName()
 {

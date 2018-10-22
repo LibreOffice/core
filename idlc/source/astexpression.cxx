@@ -96,9 +96,7 @@ AstExpression::AstExpression(OString* scopedName)
     fillDefinitionDetails();
 }
 
-AstExpression::~AstExpression()
-{
-}
+AstExpression::~AstExpression() = default;
 
 /*
  * Perform the coercion from the given AstExprValue to the requested

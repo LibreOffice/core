@@ -51,7 +51,7 @@ class Configuration::ResourceContainer
     : public ::std::set<Reference<XResourceId>, XResourceIdLess>
 {
 public:
-    ResourceContainer() {}
+    ResourceContainer() = default;
 };
 
 //===== Configuration =========================================================
@@ -77,9 +77,7 @@ Configuration::Configuration (
 {
 }
 
-Configuration::~Configuration()
-{
-}
+Configuration::~Configuration() = default;
 
 void SAL_CALL Configuration::disposing()
 {

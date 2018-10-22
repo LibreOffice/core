@@ -1436,9 +1436,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     SetCurPageId(m_nSectionPageId);
 }
 
-SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
-{
-}
+SwInsertSectionTabDialog::~SwInsertSectionTabDialog() = default;
 
 void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -1855,9 +1853,7 @@ SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(TabPageParent pParent, 
     m_xEndNtNumFormatCB->connect_toggled( aLk );
 }
 
-SwSectionFootnoteEndTabPage::~SwSectionFootnoteEndTabPage()
-{
-}
+SwSectionFootnoteEndTabPage::~SwSectionFootnoteEndTabPage() = default;
 
 bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -2081,9 +2077,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     }
 }
 
-SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()
-{
-}
+SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog() = default;
 
 void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -2113,9 +2107,7 @@ SwSectionIndentTabPage::SwSectionIndentTabPage(TabPageParent pParent, const SfxI
     m_xAfterMF->connect_value_changed(aLk);
 }
 
-SwSectionIndentTabPage::~SwSectionIndentTabPage()
-{
-}
+SwSectionIndentTabPage::~SwSectionIndentTabPage() = default;
 
 bool SwSectionIndentTabPage::FillItemSet(SfxItemSet* rSet)
 {

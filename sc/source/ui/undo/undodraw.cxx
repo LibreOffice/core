@@ -33,9 +33,7 @@ ScUndoDraw::ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh
         mnViewShellId = pViewShell->GetViewShellId();
 }
 
-ScUndoDraw::~ScUndoDraw()
-{
-}
+ScUndoDraw::~ScUndoDraw() = default;
 
 OUString ScUndoDraw::GetComment() const
 {

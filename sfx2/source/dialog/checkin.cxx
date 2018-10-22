@@ -18,9 +18,7 @@ SfxCheckinDialog::SfxCheckinDialog(weld::Window* pParent)
     m_xOKBtn->connect_clicked(LINK(this, SfxCheckinDialog, OKHdl));
 }
 
-SfxCheckinDialog::~SfxCheckinDialog()
-{
-}
+SfxCheckinDialog::~SfxCheckinDialog() = default;
 
 OUString SfxCheckinDialog::GetComment( )
 {

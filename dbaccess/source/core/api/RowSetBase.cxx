@@ -1390,9 +1390,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
     m_pImpl->aRow = i_aRow; // yes, create a copy to store the old values
 }
 
-ORowSetNotifier::~ORowSetNotifier( )
-{
-}
+ORowSetNotifier::~ORowSetNotifier() = default;
 
 void ORowSetNotifier::fire()
 {

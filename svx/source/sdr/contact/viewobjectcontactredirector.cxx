@@ -24,14 +24,10 @@
 namespace sdr { namespace contact {
 
 // basic constructor.
-ViewObjectContactRedirector::ViewObjectContactRedirector()
-{
-}
+ViewObjectContactRedirector::ViewObjectContactRedirector() = default;
 
 // The destructor.
-ViewObjectContactRedirector::~ViewObjectContactRedirector()
-{
-}
+ViewObjectContactRedirector::~ViewObjectContactRedirector() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,

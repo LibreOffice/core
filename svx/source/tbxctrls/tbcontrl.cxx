@@ -1489,9 +1489,7 @@ SvxColorWindow::~SvxColorWindow()
     disposeOnce();
 }
 
-ColorWindow::~ColorWindow()
-{
-}
+ColorWindow::~ColorWindow() = default;
 
 void SvxColorWindow::dispose()
 {
@@ -1932,9 +1930,7 @@ BorderColorStatus::BorderColorStatus() :
 {
 }
 
-BorderColorStatus::~BorderColorStatus()
-{
-}
+BorderColorStatus::~BorderColorStatus() = default;
 
 bool BorderColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
@@ -2617,9 +2613,7 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     }
 }
 
-SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
-{
-}
+SvxStyleToolBoxControl::~SvxStyleToolBoxControl() = default;
 
 void SAL_CALL SvxStyleToolBoxControl::initialize( const Sequence< Any >& aArguments )
 {
@@ -2985,9 +2979,7 @@ private:
     VclPtr<SvxFontNameBox_Impl> m_pBox;
 };
 
-SvxFontNameToolBoxControl::SvxFontNameToolBoxControl()
-{
-}
+SvxFontNameToolBoxControl::SvxFontNameToolBoxControl() = default;
 
 void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
@@ -3361,9 +3353,7 @@ SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sa
     aDefaultText = rTbx.GetItemText( nId );
 }
 
-SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
-{
-}
+SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController() = default;
 
 void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -3386,7 +3376,7 @@ SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( const css::uno::Reference<
 {
 }
 
-SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
+SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() = default;
 
 void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
@@ -3781,9 +3771,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Win
     ShowPreview(m_aSelectedColor);
 }
 
-ColorListBox::~ColorListBox()
-{
-}
+ColorListBox::~ColorListBox() = default;
 
 ColorWindow* ColorListBox::getColorWindow() const
 {

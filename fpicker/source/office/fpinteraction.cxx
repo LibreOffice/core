@@ -42,11 +42,7 @@ namespace svt
         SAL_WARN_IF( !m_xMaster.is(), "fpicker.office", "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
-
-    OFilePickerInteractionHandler::~OFilePickerInteractionHandler( )
-    {
-    }
-
+    OFilePickerInteractionHandler::~OFilePickerInteractionHandler() = default;
 
     void SAL_CALL OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest )
     {

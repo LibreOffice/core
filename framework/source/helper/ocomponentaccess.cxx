@@ -45,9 +45,7 @@ OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwne
 
 //  destructor
 
-OComponentAccess::~OComponentAccess()
-{
-}
+OComponentAccess::~OComponentAccess() = default;
 
 //  XEnumerationAccess
 css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration()

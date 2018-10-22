@@ -42,9 +42,7 @@ SwTextAttr::SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
 {
 }
 
-SwTextAttr::~SwTextAttr() COVERITY_NOEXCEPT_FALSE
-{
-}
+SwTextAttr::~SwTextAttr() COVERITY_NOEXCEPT_FALSE = default;
 
 sal_Int32* SwTextAttr::GetEnd()
 {

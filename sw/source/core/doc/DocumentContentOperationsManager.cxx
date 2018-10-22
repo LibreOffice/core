@@ -3568,9 +3568,7 @@ bool DocumentContentOperationsManager::lcl_RstTextAttr( const SwNodePtr& rpNd, v
     return true;
 }
 
-DocumentContentOperationsManager::~DocumentContentOperationsManager()
-{
-}
+DocumentContentOperationsManager::~DocumentContentOperationsManager() = default;
 //Private methods
 
 bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )

@@ -72,8 +72,7 @@ Views::Views(
     : Container( refMutex, origin, pSettings,  getStatics().VIEW )
 {}
 
-Views::~Views()
-{}
+Views::~Views() = default;
 
 void Views::refresh()
 {

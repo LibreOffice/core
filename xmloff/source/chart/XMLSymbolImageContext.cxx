@@ -56,8 +56,7 @@ XMLSymbolImageContext::XMLSymbolImageContext(
 {
 }
 
-XMLSymbolImageContext::~XMLSymbolImageContext()
-{}
+XMLSymbolImageContext::~XMLSymbolImageContext() = default;
 
 void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

@@ -9,11 +9,9 @@
 
 #include "lwpbackgroundoverride.hxx"
 
-LwpBackgroundOverride::LwpBackgroundOverride(LwpBackgroundOverride const &rOther)
-    : LwpOverride(rOther)
-    , m_aStuff(rOther.m_aStuff)
-{
-}
+LwpBackgroundOverride::LwpBackgroundOverride(LwpBackgroundOverride const& rOther)
+
+    = default;
 
 LwpBackgroundOverride* LwpBackgroundOverride::clone() const
 {

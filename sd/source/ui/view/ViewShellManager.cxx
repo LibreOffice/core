@@ -225,9 +225,7 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
 {
 }
 
-ViewShellManager::~ViewShellManager()
-{
-}
+ViewShellManager::~ViewShellManager() = default;
 
 void ViewShellManager::AddSubShellFactory (
     ViewShell const * pViewShell,

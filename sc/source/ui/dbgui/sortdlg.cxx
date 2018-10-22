@@ -47,9 +47,7 @@ ScSortWarningDlg::ScSortWarningDlg(weld::Window* pParent,
     m_xBtnCurSort->connect_clicked( LINK( this, ScSortWarningDlg, BtnHdl ) );
 }
 
-ScSortWarningDlg::~ScSortWarningDlg()
-{
-}
+ScSortWarningDlg::~ScSortWarningDlg() = default;
 
 IMPL_LINK(ScSortWarningDlg, BtnHdl, weld::Button&, rBtn, void)
 {

@@ -93,9 +93,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
     aUpperLocal = ScGlobal::pCharClass->uppercase(aUpperLocal);
 }
 
-ScUnoAddInFuncData::~ScUnoAddInFuncData()
-{
-}
+ScUnoAddInFuncData::~ScUnoAddInFuncData() = default;
 
 const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
 {
@@ -227,9 +225,7 @@ ScUnoAddInCollection::ScUnoAddInCollection() :
 {
 }
 
-ScUnoAddInCollection::~ScUnoAddInCollection()
-{
-}
+ScUnoAddInCollection::~ScUnoAddInCollection() = default;
 
 void ScUnoAddInCollection::Clear()
 {
@@ -1310,10 +1306,8 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rNa
     }
 }
 
-ScUnoAddInCall::~ScUnoAddInCall()
-{
+ScUnoAddInCall::~ScUnoAddInCall() = default;
     // pFuncData is deleted with ScUnoAddInCollection
-}
 
 ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
 {

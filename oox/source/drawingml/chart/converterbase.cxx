@@ -210,9 +210,7 @@ ConverterRoot::ConverterRoot(
 {
 }
 
-ConverterRoot::~ConverterRoot()
-{
-}
+ConverterRoot::~ConverterRoot() = default;
 
 Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceName ) const
 {
@@ -341,9 +339,7 @@ LayoutConverter::LayoutConverter( const ConverterRoot& rParent, LayoutModel& rMo
 {
 }
 
-LayoutConverter::~LayoutConverter()
-{
-}
+LayoutConverter::~LayoutConverter() = default;
 
 bool LayoutConverter::calcAbsRectangle( awt::Rectangle& orRect ) const
 {

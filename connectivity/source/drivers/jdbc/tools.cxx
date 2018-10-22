@@ -63,8 +63,7 @@ void java_util_Properties::setProperty(const OUString& key, const OUString& valu
 }
 jclass java_util_Properties::theClass = nullptr;
 
-java_util_Properties::~java_util_Properties()
-{}
+java_util_Properties::~java_util_Properties() = default;
 
 jclass java_util_Properties::getMyClass() const
 {

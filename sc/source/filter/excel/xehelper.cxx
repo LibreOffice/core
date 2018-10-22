@@ -67,9 +67,7 @@ XclExpProgressBar::XclExpProgressBar( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpProgressBar::~XclExpProgressBar()
-{
-}
+XclExpProgressBar::~XclExpProgressBar() = default;
 
 void XclExpProgressBar::Initialize()
 {
@@ -292,9 +290,7 @@ XclExpHyperlinkHelper::XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScA
 {
 }
 
-XclExpHyperlinkHelper::~XclExpHyperlinkHelper()
-{
-}
+XclExpHyperlinkHelper::~XclExpHyperlinkHelper() = default;
 
 OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 {

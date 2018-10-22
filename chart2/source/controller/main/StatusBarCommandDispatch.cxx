@@ -42,8 +42,7 @@ StatusBarCommandDispatch::StatusBarCommandDispatch(
         m_bIsModified( false )
 {}
 
-StatusBarCommandDispatch::~StatusBarCommandDispatch()
-{}
+StatusBarCommandDispatch::~StatusBarCommandDispatch() = default;
 
 void StatusBarCommandDispatch::initialize()
 {

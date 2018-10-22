@@ -586,7 +586,7 @@ public:
     QuietInteractionContext& operator=(const QuietInteractionContext&) = delete;
 
 private:
-    virtual ~QuietInteractionContext() override {}
+    virtual ~QuietInteractionContext() override = default;
 
     virtual css::uno::Any SAL_CALL getValueByName(
         OUString const & Name) override

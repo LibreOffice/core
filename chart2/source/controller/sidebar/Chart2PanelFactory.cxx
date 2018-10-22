@@ -48,9 +48,7 @@ ChartPanelFactory::ChartPanelFactory()
 {
 }
 
-ChartPanelFactory::~ChartPanelFactory()
-{
-}
+ChartPanelFactory::~ChartPanelFactory() = default;
 
 Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,

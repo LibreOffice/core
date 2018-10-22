@@ -33,8 +33,7 @@ namespace chart
     , m_bSwapXAndY(bSwapXAndY)
 {}
 
-Linear3DTransformation::~Linear3DTransformation()
-{}
+Linear3DTransformation::~Linear3DTransformation() = default;
 
 // ____ XTransformation ____
 Sequence< double > SAL_CALL Linear3DTransformation::transform(

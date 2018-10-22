@@ -50,9 +50,7 @@ OldStylePrintAdaptor::OldStylePrintAdaptor(const VclPtr<Printer>& i_xPrinter, co
 {
 }
 
-OldStylePrintAdaptor::~OldStylePrintAdaptor()
-{
-}
+OldStylePrintAdaptor::~OldStylePrintAdaptor() = default;
 
 void OldStylePrintAdaptor::StartPage()
 {

@@ -371,9 +371,7 @@ FormatterBase::FormatterBase()
     mbDefaultLocale             = true;
 }
 
-FormatterBase::~FormatterBase()
-{
-}
+FormatterBase::~FormatterBase() = default;
 
 LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
@@ -504,9 +502,7 @@ NumericFormatter::NumericFormatter()
     ImplInit();
 }
 
-NumericFormatter::~NumericFormatter()
-{
-}
+NumericFormatter::~NumericFormatter() = default;
 
 void NumericFormatter::SetMin( sal_Int64 nNewMin )
 {
@@ -1346,9 +1342,7 @@ MetricFormatter::MetricFormatter()
     ImplInit();
 }
 
-MetricFormatter::~MetricFormatter()
-{
-}
+MetricFormatter::~MetricFormatter() = default;
 
 void MetricFormatter::SetUnit( FieldUnit eNewUnit )
 {
@@ -1795,13 +1789,9 @@ void CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rO
     rOutStr = CreateFieldText( nTempVal );
 }
 
-CurrencyFormatter::CurrencyFormatter()
-{
-}
+CurrencyFormatter::CurrencyFormatter() = default;
 
-CurrencyFormatter::~CurrencyFormatter()
-{
-}
+CurrencyFormatter::~CurrencyFormatter() = default;
 
 void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 {

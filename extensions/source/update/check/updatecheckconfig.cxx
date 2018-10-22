@@ -75,9 +75,7 @@ static const sal_Char * const aUpdateEntryProperties[] = {
 
 static const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
-NamedValueByNameAccess::~NamedValueByNameAccess()
-{
-}
+NamedValueByNameAccess::~NamedValueByNameAccess() = default;
 
 css::uno::Any NamedValueByNameAccess::getValue(const sal_Char * pName)
 {
@@ -211,8 +209,7 @@ UpdateCheckConfig::UpdateCheckConfig( const uno::Reference<container::XNameConta
     m_rListener( rListener )
 {}
 
-UpdateCheckConfig::~UpdateCheckConfig()
-{}
+UpdateCheckConfig::~UpdateCheckConfig() = default;
 
 ::rtl::Reference< UpdateCheckConfig >
 UpdateCheckConfig::get(

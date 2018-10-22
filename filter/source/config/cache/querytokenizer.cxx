@@ -61,10 +61,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
 }
 
 
-QueryTokenizer::~QueryTokenizer()
-{
-    /*TODO*/
-}
+QueryTokenizer::~QueryTokenizer() = default;
 
 
 bool QueryTokenizer::valid() const

@@ -454,9 +454,7 @@ void Decompression::fillArray()
 HuffmanTreeNode::HuffmanTreeNode(sal_uInt32 nValue):value(nValue)
 {
 }
-HuffmanTreeNode::~HuffmanTreeNode()
-{
-}
+HuffmanTreeNode::~HuffmanTreeNode() = default;
 
 HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char * pInCode)
 {

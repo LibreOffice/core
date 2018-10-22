@@ -241,9 +241,7 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
     mpImpl->SetDisplayDirectory(officecfg::Office::Impress::Sound::Path::get());
 }
 
-SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
-{
-}
+SdOpenSoundFileDialog::~SdOpenSoundFileDialog() = default;
 
 ErrCode SdOpenSoundFileDialog::Execute()
 {

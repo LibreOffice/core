@@ -39,9 +39,7 @@ UpDownBarsContext::UpDownBarsContext( ContextHandler2Helper& rParent, UpDownBars
 {
 }
 
-UpDownBarsContext::~UpDownBarsContext()
-{
-}
+UpDownBarsContext::~UpDownBarsContext() = default;
 
 ContextHandlerRef UpDownBarsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -68,9 +66,7 @@ AreaTypeGroupContext::AreaTypeGroupContext( ContextHandler2Helper& rParent, Type
 {
 }
 
-AreaTypeGroupContext::~AreaTypeGroupContext()
-{
-}
+AreaTypeGroupContext::~AreaTypeGroupContext() = default;
 
 ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -104,9 +100,7 @@ BarTypeGroupContext::BarTypeGroupContext( ContextHandler2Helper& rParent, TypeGr
 {
 }
 
-BarTypeGroupContext::~BarTypeGroupContext()
-{
-}
+BarTypeGroupContext::~BarTypeGroupContext() = default;
 
 ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -152,9 +146,7 @@ BubbleTypeGroupContext::BubbleTypeGroupContext( ContextHandler2Helper& rParent, 
 {
 }
 
-BubbleTypeGroupContext::~BubbleTypeGroupContext()
-{
-}
+BubbleTypeGroupContext::~BubbleTypeGroupContext() = default;
 
 ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -192,9 +184,7 @@ LineTypeGroupContext::LineTypeGroupContext( ContextHandler2Helper& rParent, Type
 {
 }
 
-LineTypeGroupContext::~LineTypeGroupContext()
-{
-}
+LineTypeGroupContext::~LineTypeGroupContext() = default;
 
 ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -238,9 +228,7 @@ PieTypeGroupContext::PieTypeGroupContext( ContextHandler2Helper& rParent, TypeGr
 {
 }
 
-PieTypeGroupContext::~PieTypeGroupContext()
-{
-}
+PieTypeGroupContext::~PieTypeGroupContext() = default;
 
 ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -286,9 +274,7 @@ RadarTypeGroupContext::RadarTypeGroupContext( ContextHandler2Helper& rParent, Ty
 {
 }
 
-RadarTypeGroupContext::~RadarTypeGroupContext()
-{
-}
+RadarTypeGroupContext::~RadarTypeGroupContext() = default;
 
 ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -317,9 +303,7 @@ ScatterTypeGroupContext::ScatterTypeGroupContext( ContextHandler2Helper& rParent
 {
 }
 
-ScatterTypeGroupContext::~ScatterTypeGroupContext()
-{
-}
+ScatterTypeGroupContext::~ScatterTypeGroupContext() = default;
 
 ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -348,9 +332,7 @@ SurfaceTypeGroupContext::SurfaceTypeGroupContext( ContextHandler2Helper& rParent
 {
 }
 
-SurfaceTypeGroupContext::~SurfaceTypeGroupContext()
-{
-}
+SurfaceTypeGroupContext::~SurfaceTypeGroupContext() = default;
 
 ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

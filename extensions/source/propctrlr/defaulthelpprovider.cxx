@@ -61,11 +61,7 @@ namespace pcr
     {
     }
 
-
-    DefaultHelpProvider::~DefaultHelpProvider()
-    {
-    }
-
+    DefaultHelpProvider::~DefaultHelpProvider() = default;
 
     OUString DefaultHelpProvider::getImplementationName_static(  )
     {

@@ -31,8 +31,7 @@ SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :
         mrSchXMLExport( rSchXMLExport )
 {}
 
-SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP()
-{}
+SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP() = default;
 
 void SchXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAttributeList& rAttrList,

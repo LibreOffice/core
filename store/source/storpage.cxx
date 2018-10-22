@@ -46,16 +46,12 @@ const sal_uInt32 OStorePageManager::m_nTypeId = sal_uInt32(0x62190120);
 /*
  * OStorePageManager.
  */
-OStorePageManager::OStorePageManager()
-{
-}
+OStorePageManager::OStorePageManager() = default;
 
 /*
  * ~OStorePageManager.
  */
-OStorePageManager::~OStorePageManager()
-{
-}
+OStorePageManager::~OStorePageManager() = default;
 
 /*
  * isKindOf.

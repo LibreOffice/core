@@ -45,10 +45,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
 }
 
-ODatabaseMetaData::~ODatabaseMetaData()
-{
-}
-
+ODatabaseMetaData::~ODatabaseMetaData() = default;
 
 ODatabaseMetaDataResultSet::ORows& ODatabaseMetaData::getColumnRows(
         const OUString& tableNamePattern,

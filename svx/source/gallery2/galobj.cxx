@@ -241,9 +241,7 @@ SvStream& ReadSgaObject( SvStream& rIn, SgaObject& rObj )
     return rIn;
 }
 
-SgaObjectBmp::SgaObjectBmp()
-{
-}
+SgaObjectBmp::SgaObjectBmp() = default;
 
 SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 {
@@ -307,9 +305,7 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
         bIsValid = false;
 }
 
-SgaObjectSound::~SgaObjectSound()
-{
-}
+SgaObjectSound::~SgaObjectSound() = default;
 
 BitmapEx SgaObjectSound::GetThumbBmp() const
 {
@@ -358,9 +354,7 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     }
 }
 
-SgaObjectAnim::SgaObjectAnim()
-{
-}
+SgaObjectAnim::SgaObjectAnim() = default;
 
 SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
                               const INetURLObject& rURL )
@@ -369,18 +363,14 @@ SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
     bIsValid = CreateThumb( rGraphic );
 }
 
-SgaObjectINet::SgaObjectINet()
-{
-}
+SgaObjectINet::SgaObjectINet() = default;
 
 SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL ) :
             SgaObjectAnim   ( rGraphic, rURL )
 {
 }
 
-SgaObjectSvDraw::SgaObjectSvDraw()
-{
-}
+SgaObjectSvDraw::SgaObjectSvDraw() = default;
 
 SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject& rURL )
 {

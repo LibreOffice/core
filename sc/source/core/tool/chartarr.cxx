@@ -51,9 +51,7 @@ ScMemChart::ScMemChart(SCCOL nCols, SCROW nRows)
     pRowText.reset( new OUString[nRowCnt] );
 }
 
-ScMemChart::~ScMemChart()
-{
-}
+ScMemChart::~ScMemChart() = default;
 
 ScChartArray::ScChartArray(
     ScDocument* pDoc, const ScRangeListRef& rRangeList ) :

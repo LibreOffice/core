@@ -118,9 +118,7 @@ Test::Test() :
 {
 }
 
-Test::~Test()
-{
-}
+Test::~Test() = default;
 
 ScDocShell& Test::getDocShell()
 {

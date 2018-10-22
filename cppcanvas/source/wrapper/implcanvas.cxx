@@ -48,9 +48,7 @@ namespace cppcanvas
             ::canvas::tools::initViewState( maViewState );
         }
 
-        ImplCanvas::~ImplCanvas()
-        {
-        }
+        ImplCanvas::~ImplCanvas() = default;
 
         void ImplCanvas::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
         {

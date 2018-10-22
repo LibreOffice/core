@@ -51,9 +51,7 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     pDependings.reset( new ScChangeActionMap );
 }
 
-ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()
-{
-}
+ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper() = default;
 
 OUString ScChangeTrackingExportHelper::GetChangeID(const sal_uInt32 nActionNumber)
 {

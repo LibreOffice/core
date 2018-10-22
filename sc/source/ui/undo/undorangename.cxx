@@ -39,9 +39,7 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
     }
 }
 
-ScUndoAllRangeNames::~ScUndoAllRangeNames()
-{
-}
+ScUndoAllRangeNames::~ScUndoAllRangeNames() = default;
 
 void ScUndoAllRangeNames::Undo()
 {
@@ -86,9 +84,7 @@ ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, const ScRangeData* pR
 
 }
 
-ScUndoAddRangeData::~ScUndoAddRangeData()
-{
-}
+ScUndoAddRangeData::~ScUndoAddRangeData() = default;
 
 void ScUndoAddRangeData::Undo()
 {

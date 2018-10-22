@@ -64,9 +64,7 @@ XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLHatchStyleImport::~XMLHatchStyleImport()
-{
-}
+XMLHatchStyleImport::~XMLHatchStyleImport() = default;
 
 void XMLHatchStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
@@ -153,9 +151,7 @@ XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
 {
 }
 
-XMLHatchStyleExport::~XMLHatchStyleExport()
-{
-}
+XMLHatchStyleExport::~XMLHatchStyleExport() = default;
 
 void XMLHatchStyleExport::exportXML(
     const OUString& rStrName,

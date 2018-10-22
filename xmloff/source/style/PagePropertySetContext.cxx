@@ -43,9 +43,7 @@ PagePropertySetContext::PagePropertySetContext(
     aType = aTempType;
 }
 
-PagePropertySetContext::~PagePropertySetContext()
-{
-}
+PagePropertySetContext::~PagePropertySetContext() = default;
 
 SvXMLImportContextRef PagePropertySetContext::CreateChildContext(
                    sal_uInt16 nPrefix,

@@ -216,10 +216,7 @@ namespace abp
             OSL_FAIL( "ODataSourceContext::ODataSourceContext: caught an exception!" );
         }
     }
-    ODataSourceContext::~ODataSourceContext()
-    {
-    }
-
+    ODataSourceContext::~ODataSourceContext() = default;
 
     void ODataSourceContext::disambiguate(OUString& _rDataSourceName)
     {
@@ -331,9 +328,7 @@ namespace abp
     {
     }
 
-    ODataSource::~ODataSource( )
-    {
-    }
+    ODataSource::~ODataSource() = default;
 
     void ODataSource::store(const AddressSettings& rSettings)
     {

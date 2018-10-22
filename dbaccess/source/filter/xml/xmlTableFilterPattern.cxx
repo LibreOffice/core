@@ -37,10 +37,7 @@ OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
 
 }
 
-OXMLTableFilterPattern::~OXMLTableFilterPattern()
-{
-
-}
+OXMLTableFilterPattern::~OXMLTableFilterPattern() = default;
 
 void OXMLTableFilterPattern::Characters( const OUString& rChars )
 {

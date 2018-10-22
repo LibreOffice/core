@@ -190,9 +190,7 @@ SvxAngleTabPage::SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     m_aCtlAngle.SetLinkedField(m_xNfAngle.get(), 2);
 }
 
-SvxAngleTabPage::~SvxAngleTabPage()
-{
-}
+SvxAngleTabPage::~SvxAngleTabPage() = default;
 
 void SvxAngleTabPage::Construct()
 {
@@ -425,9 +423,7 @@ SvxSlantTabPage::SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 }
 
-SvxSlantTabPage::~SvxSlantTabPage()
-{
-}
+SvxSlantTabPage::~SvxSlantTabPage() = default;
 
 void SvxSlantTabPage::Construct()
 {
@@ -806,9 +802,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(TabPageParent pParent, const SfxI
     m_xTsbSizeProtect->connect_toggled( LINK( this, SvxPositionSizeTabPage, ChangeSizeProtectHdl ) );
 }
 
-SvxPositionSizeTabPage::~SvxPositionSizeTabPage()
-{
-}
+SvxPositionSizeTabPage::~SvxPositionSizeTabPage() = default;
 
 void SvxPositionSizeTabPage::Construct()
 {

@@ -178,7 +178,7 @@ public:
     // some wrapper classes to temporarily hold values of UNO XNodes
     struct Node
     {
-        virtual ~Node() {}
+        virtual ~Node() = default;
     };
     struct Resource : public Node { };
     struct URI : public Resource

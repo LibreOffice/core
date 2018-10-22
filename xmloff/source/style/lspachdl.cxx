@@ -34,10 +34,7 @@ using ::xmloff::token::XML_CASEMAP_NORMAL;
 // class XMLEscapementPropHdl
 
 
-XMLLineHeightHdl::~XMLLineHeightHdl()
-{
-    // nothing to do
-}
+XMLLineHeightHdl::~XMLLineHeightHdl() = default;
 
 bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
@@ -97,10 +94,7 @@ bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 // class XMLLineHeightAtLeastHdl
 
 
-XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
-{
-    // nothing to do
-}
+XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl() = default;
 
 bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
@@ -137,10 +131,7 @@ bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 // class XMLLineSpacingHdl
 
 
-XMLLineSpacingHdl::~XMLLineSpacingHdl()
-{
-    // nothing to do
-}
+XMLLineSpacingHdl::~XMLLineSpacingHdl() = default;
 
 bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {

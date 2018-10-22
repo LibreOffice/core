@@ -42,9 +42,7 @@ XMLFilterTabPageBasic::XMLFilterTabPageBasic(weld::Widget* pPage)
     }
 }
 
-XMLFilterTabPageBasic::~XMLFilterTabPageBasic()
-{
-}
+XMLFilterTabPageBasic::~XMLFilterTabPageBasic() = default;
 
 static OUString checkExtensions( const OUString& rExtensions )
 {

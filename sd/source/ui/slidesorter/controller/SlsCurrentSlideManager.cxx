@@ -49,9 +49,7 @@ CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     maSwitchPageDelayTimer.SetInvokeHandler(LINK(this,CurrentSlideManager,SwitchPageCallback));
 }
 
-CurrentSlideManager::~CurrentSlideManager()
-{
-}
+CurrentSlideManager::~CurrentSlideManager() = default;
 
 void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
 {

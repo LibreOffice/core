@@ -348,9 +348,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(weld::Window* pParent, Sw
     m_xPreview->EnableScrollBar();
 }
 
-SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog()
-{
-}
+SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog() = default;
 
 void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>& rBlocks,
         sal_uInt16 nSelectedAddress)

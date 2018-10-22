@@ -403,9 +403,7 @@ GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComp
 {
 }
 
-GraphicImport::~GraphicImport()
-{
-}
+GraphicImport::~GraphicImport() = default;
 
 void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 {

@@ -89,9 +89,7 @@ WallFloorWrapper::WallFloorWrapper( bool bWall,
 {
 }
 
-WallFloorWrapper::~WallFloorWrapper()
-{
-}
+WallFloorWrapper::~WallFloorWrapper() = default;
 
 // ____ XComponent ____
 void SAL_CALL WallFloorWrapper::dispose()

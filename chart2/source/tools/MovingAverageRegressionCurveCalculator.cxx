@@ -28,12 +28,9 @@ using namespace ::com::sun::star;
 
 namespace chart
 {
+MovingAverageRegressionCurveCalculator::MovingAverageRegressionCurveCalculator() = default;
 
-MovingAverageRegressionCurveCalculator::MovingAverageRegressionCurveCalculator()
-{}
-
-MovingAverageRegressionCurveCalculator::~MovingAverageRegressionCurveCalculator()
-{}
+MovingAverageRegressionCurveCalculator::~MovingAverageRegressionCurveCalculator() = default;
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(

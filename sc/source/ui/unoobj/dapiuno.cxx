@@ -1068,9 +1068,7 @@ ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUS
 {
 }
 
-ScDataPilotTableObj::~ScDataPilotTableObj()
-{
-}
+ScDataPilotTableObj::~ScDataPilotTableObj() = default;
 
 Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
 {
@@ -1355,9 +1353,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     mpDPObject->SetSheetDesc(aSheetDesc);
 }
 
-ScDataPilotDescriptor::~ScDataPilotDescriptor()
-{
-}
+ScDataPilotDescriptor::~ScDataPilotDescriptor() = default;
 
 ScDPObject* ScDataPilotDescriptor::GetDPObject() const
 {
@@ -1410,9 +1406,7 @@ ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rPa
 {
 }
 
-ScDataPilotChildObjBase::~ScDataPilotChildObjBase()
-{
-}
+ScDataPilotChildObjBase::~ScDataPilotChildObjBase() = default;
 
 ScDPObject* ScDataPilotChildObjBase::GetDPObject() const
 {
@@ -1495,9 +1489,7 @@ ScDataPilotFieldsObj::ScDataPilotFieldsObj( ScDataPilotDescriptorBase& rParent, 
 {
 }
 
-ScDataPilotFieldsObj::~ScDataPilotFieldsObj()
-{
-}
+ScDataPilotFieldsObj::~ScDataPilotFieldsObj() = default;
 
 static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, const Any& rOrient )
 {
@@ -1755,9 +1747,7 @@ ScDataPilotFieldObj::ScDataPilotFieldObj( ScDataPilotDescriptorBase& rParent,
 {
 }
 
-ScDataPilotFieldObj::~ScDataPilotFieldObj()
-{
-}
+ScDataPilotFieldObj::~ScDataPilotFieldObj() = default;
 
 // XNamed
 
@@ -2842,9 +2832,7 @@ ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj( const ScFieldGroups& rGrou
 {
 }
 
-ScDataPilotFieldGroupsObj::~ScDataPilotFieldGroupsObj()
-{
-}
+ScDataPilotFieldGroupsObj::~ScDataPilotFieldGroupsObj() = default;
 
 // XNameAccess
 
@@ -3029,9 +3017,7 @@ ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& r
 {
 }
 
-ScDataPilotFieldGroupObj::~ScDataPilotFieldGroupObj()
-{
-}
+ScDataPilotFieldGroupObj::~ScDataPilotFieldGroupObj() = default;
 
 // XNameAccess
 
@@ -3172,9 +3158,7 @@ ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj( ScDataPilotFieldGrou
 {
 }
 
-ScDataPilotFieldGroupItemObj::~ScDataPilotFieldGroupItemObj()
-{
-}
+ScDataPilotFieldGroupItemObj::~ScDataPilotFieldGroupItemObj() = default;
 
 // XNamed
 
@@ -3197,9 +3181,7 @@ ScDataPilotItemsObj::ScDataPilotItemsObj( ScDataPilotDescriptorBase& rParent, co
 {
 }
 
-ScDataPilotItemsObj::~ScDataPilotItemsObj()
-{
-}
+ScDataPilotItemsObj::~ScDataPilotItemsObj() = default;
 
 // XDataPilotItems
 
@@ -3309,11 +3291,9 @@ ScDataPilotItemObj::ScDataPilotItemObj( ScDataPilotDescriptorBase& rParent, cons
 {
 }
 
-ScDataPilotItemObj::~ScDataPilotItemObj()
-{
-}
+ScDataPilotItemObj::~ScDataPilotItemObj() = default;
 
-                            // XNamed
+// XNamed
 OUString SAL_CALL ScDataPilotItemObj::getName()
 {
     SolarMutexGuard aGuard;

@@ -33,11 +33,7 @@ SdrMediaWindow::SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMedi
 {
 }
 
-
-SdrMediaWindow::~SdrMediaWindow()
-{
-}
-
+SdrMediaWindow::~SdrMediaWindow() = default;
 
 void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
 {

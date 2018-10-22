@@ -2596,9 +2596,7 @@ XclExpFormulaCompiler::XclExpFormulaCompiler( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpFormulaCompiler::~XclExpFormulaCompiler()
-{
-}
+XclExpFormulaCompiler::~XclExpFormulaCompiler() = default;
 
 XclTokenArrayRef XclExpFormulaCompiler::CreateFormula(
         XclFormulaType eType, const ScTokenArray& rScTokArr,

@@ -132,10 +132,7 @@ LwpNoteLayout::LwpNoteLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpNoteLayout::~LwpNoteLayout()
-{
-
-}
+LwpNoteLayout::~LwpNoteLayout() = default;
 
 /**
  * @descr read note layout object
@@ -231,9 +228,7 @@ LwpNoteHeaderLayout::LwpNoteHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStr
 {
 }
 
-LwpNoteHeaderLayout::~LwpNoteHeaderLayout()
-{
-}
+LwpNoteHeaderLayout::~LwpNoteHeaderLayout() = default;
 
 /**
  * @descr read note layout object
@@ -258,9 +253,7 @@ LwpNoteTextLayout::LwpNoteTextLayout(LwpObjectHeader const &objHdr, LwpSvStream*
 {
 }
 
-LwpNoteTextLayout::~LwpNoteTextLayout()
-{
-}
+LwpNoteTextLayout::~LwpNoteTextLayout() = default;
 
 /**
  * @descr read note layout object
@@ -299,9 +292,7 @@ LwpViewportLayout::LwpViewportLayout(LwpObjectHeader const &objHdr, LwpSvStream*
 {
 }
 
-LwpViewportLayout::~LwpViewportLayout()
-{
-}
+LwpViewportLayout::~LwpViewportLayout() = default;
 
 /**
  * @descr read note layout object

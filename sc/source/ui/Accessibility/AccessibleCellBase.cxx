@@ -66,11 +66,9 @@ ScAccessibleCellBase::ScAccessibleCellBase(
 {
 }
 
-ScAccessibleCellBase::~ScAccessibleCellBase()
-{
-}
+ScAccessibleCellBase::~ScAccessibleCellBase() = default;
 
-    //=====  XAccessibleComponent  ============================================
+//=====  XAccessibleComponent  ============================================
 
 bool ScAccessibleCellBase::isVisible()
 {

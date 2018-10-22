@@ -87,9 +87,7 @@ LwpTextStyle(objHdr, pStrm)
 {
 }
 
-LwpParaStyle::~LwpParaStyle()
-{
-}
+LwpParaStyle::~LwpParaStyle() = default;
 
 void LwpParaStyle::Read()
 {

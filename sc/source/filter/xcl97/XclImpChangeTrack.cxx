@@ -504,9 +504,7 @@ XclImpChTrFmlConverter::XclImpChTrFmlConverter(
     ExcelToSc8( rRoot ),
     rChangeTrack( rXclChTr ) {}
 
-XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
-{
-}
+XclImpChTrFmlConverter::~XclImpChTrFmlConverter() = default;
 
 // virtual, called from ExcToSc8::Convert()
 bool XclImpChTrFmlConverter::Read3DTabReference( sal_uInt16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,

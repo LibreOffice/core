@@ -420,9 +420,7 @@ SwAccessibleFrame::SwAccessibleFrame( const SwRect& rVisArea,
     assert(mpFrame);
 }
 
-SwAccessibleFrame::~SwAccessibleFrame()
-{
-}
+SwAccessibleFrame::~SwAccessibleFrame() = default;
 
 const SwFrame* SwAccessibleFrame::GetParent( const SwAccessibleChild& rFrameOrObj,
                                            bool bInPagePreview )

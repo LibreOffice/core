@@ -46,9 +46,7 @@ namespace dbaccess
         m_xOutputStream.set( xStream->getOutputStream(), UNO_SET_THROW );
     }
 
-    StorageOutputStream::~StorageOutputStream()
-    {
-    }
+    StorageOutputStream::~StorageOutputStream() = default;
 
 } // namespace dbaccess
 

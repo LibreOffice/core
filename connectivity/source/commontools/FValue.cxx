@@ -2118,7 +2118,7 @@ namespace detail
         virtual Any                         getObject() const = 0;
         virtual bool                        wasNull() const = 0;
 
-        virtual ~IValueSource() { }
+        virtual ~IValueSource() = default;
     };
 
     class RowValue : public IValueSource

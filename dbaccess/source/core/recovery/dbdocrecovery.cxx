@@ -214,9 +214,7 @@ namespace dbaccess
     {
     }
 
-    DatabaseDocumentRecovery::~DatabaseDocumentRecovery()
-    {
-    }
+    DatabaseDocumentRecovery::~DatabaseDocumentRecovery() = default;
 
     void DatabaseDocumentRecovery::saveModifiedSubComponents( const Reference< XStorage >& i_rTargetStorage,
         const std::vector< Reference< XController > >& i_rControllers )

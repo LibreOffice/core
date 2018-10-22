@@ -42,9 +42,7 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
 {
 }
 
-XMLShapePropertySetContext::~XMLShapePropertySetContext()
-{
-}
+XMLShapePropertySetContext::~XMLShapePropertySetContext() = default;
 
 void XMLShapePropertySetContext::EndElement()
 {

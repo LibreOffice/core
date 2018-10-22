@@ -44,9 +44,7 @@ SwTextTOXMark::SwTextTOXMark( SwTOXMark& rAttr,
     SetOverlapAllowedAttr( true );
 }
 
-SwTextTOXMark::~SwTextTOXMark()
-{
-}
+SwTextTOXMark::~SwTextTOXMark() = default;
 
 sal_Int32* SwTextTOXMark::GetEnd()
 {

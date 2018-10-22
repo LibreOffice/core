@@ -35,9 +35,7 @@ namespace vcl { namespace unohelper {
     {
     }
 
-    TextDataObject::~TextDataObject()
-    {
-    }
+    TextDataObject::~TextDataObject() = default;
 
     void TextDataObject::CopyStringTo( const OUString& rContent,
         const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )

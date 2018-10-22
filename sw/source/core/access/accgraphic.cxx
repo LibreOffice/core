@@ -37,9 +37,7 @@ SwAccessibleGraphic::SwAccessibleGraphic(
 {
 }
 
-SwAccessibleGraphic::~SwAccessibleGraphic()
-{
-}
+SwAccessibleGraphic::~SwAccessibleGraphic() = default;
 
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
 {

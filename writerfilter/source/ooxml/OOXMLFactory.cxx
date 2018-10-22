@@ -29,9 +29,7 @@ using namespace com::sun::star;
 
 // class OOXMLFactory_ns
 
-OOXMLFactory_ns::~OOXMLFactory_ns()
-{
-}
+OOXMLFactory_ns::~OOXMLFactory_ns() = default;
 
 // class OOXMLFactory
 

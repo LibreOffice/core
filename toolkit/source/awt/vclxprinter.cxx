@@ -246,9 +246,7 @@ VCLXPrinter::VCLXPrinter( const OUString& rPrinterName )
 {
 }
 
-VCLXPrinter::~VCLXPrinter()
-{
-}
+VCLXPrinter::~VCLXPrinter() = default;
 
 sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ )
 {
@@ -312,9 +310,7 @@ VCLXInfoPrinter::VCLXInfoPrinter( const OUString& rPrinterName )
 {
 }
 
-VCLXInfoPrinter::~VCLXInfoPrinter()
-{
-}
+VCLXInfoPrinter::~VCLXInfoPrinter() = default;
 
 // css::awt::XInfoPrinter
 css::uno::Reference< css::awt::XDevice > VCLXInfoPrinter::createDevice(  )

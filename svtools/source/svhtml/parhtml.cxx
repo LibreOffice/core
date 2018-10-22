@@ -235,9 +235,7 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     SetSrcEncoding(RTL_TEXTENCODING_UTF8);
 }
 
-HTMLParser::~HTMLParser()
-{
-}
+HTMLParser::~HTMLParser() = default;
 
 void HTMLParser::SetNamespace(const OUString& rNamespace)
 {

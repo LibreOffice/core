@@ -26,14 +26,8 @@ using namespace xmlsearch::qe;
 
 RoleFiller RoleFiller::roleFiller_;
 
+RoleFiller::RoleFiller() = default;
 
-RoleFiller::RoleFiller()
-{
-}
-
-
-RoleFiller::~RoleFiller()
-{
-}
+RoleFiller::~RoleFiller() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

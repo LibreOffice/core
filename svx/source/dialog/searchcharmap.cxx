@@ -395,9 +395,7 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
     aHighHdl.Call( this );
 }
 
-SvxSearchCharSet::~SvxSearchCharSet()
-{
-}
+SvxSearchCharSet::~SvxSearchCharSet() = default;
 
 svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
 {

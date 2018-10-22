@@ -117,9 +117,7 @@ namespace dbaui
         TextConnectionSettingsDialog::bindItemStorages( *m_pDatasourceItems, m_aPropertyValues );
     }
 
-    OTextConnectionSettingsDialog::~OTextConnectionSettingsDialog()
-    {
-    }
+    OTextConnectionSettingsDialog::~OTextConnectionSettingsDialog() = default;
 
     css::uno::Sequence<sal_Int8>
     OTextConnectionSettingsDialog::getImplementationId()

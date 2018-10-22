@@ -31,9 +31,7 @@ MultipleItemConverter::MultipleItemConverter( SfxItemPool& rItemPool )
         : ItemConverter( nullptr, rItemPool )
 {
 }
-MultipleItemConverter::~MultipleItemConverter()
-{
-}
+MultipleItemConverter::~MultipleItemConverter() = default;
 
 void MultipleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

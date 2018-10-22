@@ -1308,9 +1308,7 @@ namespace svgio
             }
         }
 
-        SvgStyleAttributes::~SvgStyleAttributes()
-        {
-        }
+        SvgStyleAttributes::~SvgStyleAttributes() = default;
 
         void SvgStyleAttributes::parseStyleAttribute(
             SVGToken aSVGToken,

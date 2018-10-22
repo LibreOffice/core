@@ -171,10 +171,7 @@ MergeData::MergeData()
 {
 }
 
-MergeData::~MergeData()
-{
-}
-
+MergeData::~MergeData() = default;
 
 // class MergeDataFile
 
@@ -295,9 +292,7 @@ MergeDataFile::MergeDataFile(
     aInputStream.close();
 }
 
-MergeDataFile::~MergeDataFile()
-{
-}
+MergeDataFile::~MergeDataFile() = default;
 
 std::vector<OString> MergeDataFile::GetLanguages() const
 {

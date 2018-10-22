@@ -82,9 +82,7 @@ LwpTocSuperLayout::LwpTocSuperLayout(LwpObjectHeader const &objHdr, LwpSvStream*
 {
 }
 
-LwpTocSuperLayout::~LwpTocSuperLayout()
-{
-}
+LwpTocSuperLayout::~LwpTocSuperLayout() = default;
 
 /**
  * @short   Read TOCSUPERTABLELAYOUT object
@@ -439,9 +437,7 @@ LwpTocLevelData::LwpTocLevelData(LwpObjectHeader const &objHdr, LwpSvStream* pSt
     m_nFlags = 0;
     m_nLevel = 0;
 }
-LwpTocLevelData::~LwpTocLevelData()
-{
-}
+LwpTocLevelData::~LwpTocLevelData() = default;
 /**
  * @short   Register style
  * @param

@@ -68,9 +68,7 @@ XFList::XFList()
     m_bContinueNumber = false;
 }
 
-XFList::~XFList()
-{
-}
+XFList::~XFList() = default;
 
 void    XFList::ToXml(IXFStream *pStrm)
 {

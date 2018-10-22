@@ -587,10 +587,7 @@ BrowseNodeFactoryImpl::BrowseNodeFactoryImpl(
 {
 }
 
-BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
-{
-}
-
+BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl() = default;
 
 // Implementation of XBrowseNodeFactory
 

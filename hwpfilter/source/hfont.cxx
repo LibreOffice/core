@@ -32,11 +32,7 @@ HWPFont::HWPFont()
     }
 }
 
-
-HWPFont::~HWPFont()
-{
-}
-
+HWPFont::~HWPFont() = default;
 
 void HWPFont::AddFont(int lang, const char *font)
 {

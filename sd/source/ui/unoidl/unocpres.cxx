@@ -54,9 +54,7 @@ SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow) throw()
 {
 }
 
-SdXCustomPresentation::~SdXCustomPresentation() throw()
-{
-}
+SdXCustomPresentation::~SdXCustomPresentation() throw() = default;
 
 UNO3_GETIMPLEMENTATION_IMPL( SdXCustomPresentation );
 
@@ -267,9 +265,7 @@ SdXCustomPresentationAccess::SdXCustomPresentationAccess(SdXImpressDocument& rMy
 {
 }
 
-SdXCustomPresentationAccess::~SdXCustomPresentationAccess() throw()
-{
-}
+SdXCustomPresentationAccess::~SdXCustomPresentationAccess() throw() = default;
 
 // XServiceInfo
 OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()

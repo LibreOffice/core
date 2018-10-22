@@ -61,11 +61,7 @@ TextConvWrapper::TextConvWrapper( vcl::Window* pWindow,
     m_aConvSel.Adjust();  // make Start <= End
 }
 
-
-TextConvWrapper::~TextConvWrapper()
-{
-}
-
+TextConvWrapper::~TextConvWrapper() = default;
 
 bool TextConvWrapper::ConvNext_impl()
 {

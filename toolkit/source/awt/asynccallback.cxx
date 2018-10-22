@@ -37,7 +37,7 @@ class AsyncCallback:
         css::awt::XRequestCallback>
 {
 public:
-    AsyncCallback() {}
+    AsyncCallback() = default;
     AsyncCallback(const AsyncCallback&) = delete;
     AsyncCallback& operator=(const AsyncCallback&) = delete;
 
@@ -62,7 +62,7 @@ private:
 
     DECL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, void );
 
-    virtual ~AsyncCallback() override {}
+    virtual ~AsyncCallback() override = default;
 };
 
 // com.sun.star.uno.XServiceInfo:

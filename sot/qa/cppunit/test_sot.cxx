@@ -43,7 +43,7 @@ namespace
         , public test::BootstrapFixtureBase
     {
     public:
-        SotTest() {}
+        SotTest() = default;
 
         bool checkStream( const tools::SvRef<SotStorage> &xObjStor,
                           const OUString &rStreamName,

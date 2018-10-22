@@ -58,9 +58,7 @@ ActionTriggerPropertySet::ActionTriggerPropertySet()
 {
 }
 
-ActionTriggerPropertySet::~ActionTriggerPropertySet()
-{
-}
+ActionTriggerPropertySet::~ActionTriggerPropertySet() = default;
 
 // XInterface
 Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )

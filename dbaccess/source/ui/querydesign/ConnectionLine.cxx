@@ -123,9 +123,7 @@ OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
     *this = _rLine;
 }
 
-OConnectionLine::~OConnectionLine()
-{
-}
+OConnectionLine::~OConnectionLine() = default;
 
 OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 {

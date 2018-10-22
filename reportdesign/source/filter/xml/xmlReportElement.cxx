@@ -76,10 +76,7 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
     }
 }
 
-
-OXMLReportElement::~OXMLReportElement()
-{
-}
+OXMLReportElement::~OXMLReportElement() = default;
 
 SvXMLImportContextRef OXMLReportElement::CreateChildContext(
         sal_uInt16 _nPrefix,

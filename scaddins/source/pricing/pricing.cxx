@@ -73,9 +73,7 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData ) :
     aCompList.push_back(OUString::createFromAscii(rBaseData.pCompName));
 }
 
-ScaFuncData::~ScaFuncData()
-{
-}
+ScaFuncData::~ScaFuncData() = default;
 
 sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 {
@@ -126,13 +124,9 @@ SAL_DLLPUBLIC_EXPORT void * pricing_component_getFactory(
 }   // extern C
 
 //  "normal" service implementation
-ScaPricingAddIn::ScaPricingAddIn()
-{
-}
+ScaPricingAddIn::ScaPricingAddIn() = default;
 
-ScaPricingAddIn::~ScaPricingAddIn()
-{
-}
+ScaPricingAddIn::~ScaPricingAddIn() = default;
 
 static const sal_Char*  pLang[] = { "de", "en" };
 static const sal_Char*  pCoun[] = { "DE", "US" };

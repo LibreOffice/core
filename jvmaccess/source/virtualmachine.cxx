@@ -26,22 +26,16 @@
 
 using jvmaccess::VirtualMachine;
 
-VirtualMachine::AttachGuard::CreationException::CreationException()
-{}
+VirtualMachine::AttachGuard::CreationException::CreationException() = default;
 
-VirtualMachine::AttachGuard::CreationException::CreationException(
-    CreationException const &)
-{}
+VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const&)
+    = default;
 
-VirtualMachine::AttachGuard::CreationException::~CreationException()
-{}
+VirtualMachine::AttachGuard::CreationException::~CreationException() = default;
 
-VirtualMachine::AttachGuard::CreationException &
-VirtualMachine::AttachGuard::CreationException::operator =(
-    CreationException const &)
-{
-    return *this;
-}
+VirtualMachine::AttachGuard::CreationException& VirtualMachine::AttachGuard::CreationException::
+operator=(CreationException const&)
+    = default;
 
 VirtualMachine::AttachGuard::AttachGuard(
     rtl::Reference< VirtualMachine > const & rMachine):

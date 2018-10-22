@@ -36,7 +36,7 @@ typedef std::vector < uno::Sequence< beans::PropertyValue > > IndexedPropertyVal
 class IndexedPropertyValuesContainer : public cppu::WeakImplHelper< container::XIndexContainer, lang::XServiceInfo >
 {
 public:
-    IndexedPropertyValuesContainer() throw();
+    IndexedPropertyValuesContainer();
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement ) override;
@@ -62,9 +62,7 @@ private:
     IndexedPropertyValues maProperties;
 };
 
-IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() throw()
-{
-}
+IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() = default;
 
 // XIndexContainer
 void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )

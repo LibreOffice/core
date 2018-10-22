@@ -53,10 +53,7 @@ SwDocIdle::SwDocIdle( SwDoc &doc )
 {
 }
 
-SwDocIdle::~SwDocIdle()
-{
-}
-
+SwDocIdle::~SwDocIdle() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

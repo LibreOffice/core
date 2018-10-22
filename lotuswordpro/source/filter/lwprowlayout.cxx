@@ -81,8 +81,7 @@ LwpRowLayout::LwpRowLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     m_ConnCellList.clear();
 }
 
-LwpRowLayout::~LwpRowLayout()
-{}
+LwpRowLayout::~LwpRowLayout() = default;
 
 /**
  * @short   register row style
@@ -476,8 +475,7 @@ LwpRowHeadingLayout::LwpRowHeadingLayout(LwpObjectHeader const &objHdr, LwpSvStr
     : LwpRowLayout(objHdr, pStrm)
 {}
 
-LwpRowHeadingLayout::~LwpRowHeadingLayout()
-{}
+LwpRowHeadingLayout::~LwpRowHeadingLayout() = default;
 void LwpRowHeadingLayout::Read()
 {
     LwpRowLayout::Read();

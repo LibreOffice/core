@@ -348,9 +348,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog(weld::Window* pParent, double fDepth,
     m_xMtrDepth->set_value(static_cast<int>(fDepth) * 100, FUNIT_100TH_MM);
 }
 
-ExtrusionDepthDialog::~ExtrusionDepthDialog()
-{
-}
+ExtrusionDepthDialog::~ExtrusionDepthDialog() = default;
 
 double ExtrusionDepthDialog::getDepth() const
 {

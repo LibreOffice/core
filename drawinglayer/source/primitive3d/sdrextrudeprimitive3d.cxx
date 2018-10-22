@@ -443,9 +443,7 @@ namespace drawinglayer
             }
         }
 
-        SdrExtrudePrimitive3D::~SdrExtrudePrimitive3D()
-        {
-        }
+        SdrExtrudePrimitive3D::~SdrExtrudePrimitive3D() = default;
 
         bool SdrExtrudePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {

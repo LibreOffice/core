@@ -67,9 +67,7 @@ StyleSheetEntry::StyleSheetEntry() :
 {
 }
 
-StyleSheetEntry::~StyleSheetEntry()
-{
-}
+StyleSheetEntry::~StyleSheetEntry() = default;
 
 TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     StyleSheetEntry( )
@@ -84,9 +82,7 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     sStyleIdentifierD = rEntry.sStyleIdentifierD;
 }
 
-TableStyleSheetEntry::~TableStyleSheetEntry( )
-{
-}
+TableStyleSheetEntry::~TableStyleSheetEntry() = default;
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapPtr& pProps )
 {
@@ -392,10 +388,7 @@ StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
 {
 }
 
-
-StyleSheetTable::~StyleSheetTable()
-{
-}
+StyleSheetTable::~StyleSheetTable() = default;
 
 PropertyMapPtr const & StyleSheetTable::GetDefaultParaProps()
 {
@@ -858,7 +851,7 @@ class PropValVector
 {
     std::vector<beans::PropertyValue> m_aValues;
 public:
-    PropValVector(){}
+    PropValVector() = default;
 
     void Insert(const beans::PropertyValue& rVal);
     uno::Sequence< uno::Any > getValues();

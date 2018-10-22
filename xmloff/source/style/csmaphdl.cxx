@@ -38,10 +38,7 @@ static const SvXMLEnumMapEntry<sal_uInt16> pXML_Casemap_Enum[] =
 
 // class XMLPosturePropHdl
 
-XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
-{
-    // nothing to do
-}
+XMLCaseMapPropHdl::~XMLCaseMapPropHdl() = default;
 
 bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -73,10 +70,7 @@ bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
 
 // class XMLCaseMapVariantHdl
 
-XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
-{
-    // nothing to do
-}
+XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl() = default;
 
 bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

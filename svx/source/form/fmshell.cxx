@@ -143,10 +143,7 @@ FmDesignModeChangedHint::FmDesignModeChangedHint( bool bDesMode )
 {
 }
 
-
-FmDesignModeChangedHint::~FmDesignModeChangedHint()
-{
-}
+FmDesignModeChangedHint::~FmDesignModeChangedHint() = default;
 
 SFX_IMPL_INTERFACE(FmFormShell, SfxShell)
 

@@ -94,9 +94,7 @@ ZipStorage::ZipStorage( const ZipStorage& rParentStorage, const Reference< XStor
             " - missing storage" );
 }
 
-ZipStorage::~ZipStorage()
-{
-}
+ZipStorage::~ZipStorage() = default;
 
 bool ZipStorage::implIsStorage() const
 {

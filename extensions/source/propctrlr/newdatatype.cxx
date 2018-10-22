@@ -63,9 +63,7 @@ namespace pcr
         OnNameModified(*m_xName);
     }
 
-    NewDataTypeDialog::~NewDataTypeDialog()
-    {
-    }
+    NewDataTypeDialog::~NewDataTypeDialog() = default;
 
     IMPL_LINK_NOARG(NewDataTypeDialog, OnNameModified, weld::Entry&, void)
     {

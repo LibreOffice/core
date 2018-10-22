@@ -230,9 +230,7 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
     }
 }
 
-ScTableConditionalFormat::~ScTableConditionalFormat()
-{
-}
+ScTableConditionalFormat::~ScTableConditionalFormat() = default;
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
@@ -489,9 +487,7 @@ ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aI
     // #i113668# only store the settings, keep no reference to parent object
 }
 
-ScTableConditionalEntry::~ScTableConditionalEntry()
-{
-}
+ScTableConditionalEntry::~ScTableConditionalEntry() = default;
 
 void ScTableConditionalEntry::GetData(ScCondFormatEntryItem& rData) const
 {
@@ -682,9 +678,7 @@ void ScTableValidationObj::ClearData_Impl()
     aErrorMessage.clear();
 }
 
-ScTableValidationObj::~ScTableValidationObj()
-{
-}
+ScTableValidationObj::~ScTableValidationObj() = default;
 
 // XSheetCondition
 

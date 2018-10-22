@@ -67,10 +67,7 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
 {
 }
 
-OColumnsHelper::~OColumnsHelper()
-{
-}
-
+OColumnsHelper::~OColumnsHelper() = default;
 
 sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
 {
