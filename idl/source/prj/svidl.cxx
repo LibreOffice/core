@@ -161,9 +161,9 @@ int main ( int argc, char ** argv)
         bool bErr = false;
         bool bDoMove = aCommand.aTargetFile.isEmpty();
         OUString aErrFile, aErrFile2;
-        if( !bErr && !aCommand.aSlotMapFile.isEmpty() )
+        if (!aCommand.aSlotMapFile.isEmpty())
         {
-            bErr |= !FileMove_Impl( aCommand.aSlotMapFile, aTmpSlotMapFile, bDoMove );
+            bErr = !FileMove_Impl( aCommand.aSlotMapFile, aTmpSlotMapFile, bDoMove );
             if( bErr ) {
                 aErrFile = aCommand.aSlotMapFile;
                 aErrFile2 = aTmpSlotMapFile;
