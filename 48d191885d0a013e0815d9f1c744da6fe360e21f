@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_08da73e8",
+        "filename": "sc/uiconfig/scalc/popupmenu/drawtext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-22T12:27:37Z",
+      "side": 1,
+      "message": "from my point of view i would move the items in the menubar also to a submenu. In all modules it\u0027s in a submenu (only if there is one entry).\n\nI think it\u0027s better to have it in a submenu, if we change it, than everywhere. I don\u0027t care as long as it is consistent.",
+      "parentUuid": "1f1a1f67_68668754",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 45
+      },
+      "revId": "48d191885d0a013e0815d9f1c744da6fe360e21f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_485bcb86",
         "filename": "sc/uiconfig/scalc/popupmenu/drawtext.xml",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-22T12:14:53Z",
       "side": 1,
       "message": "TextAttributes is the only command in this section. Cant we move it into the next section? Valid for all modules.",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 48
+      },
+      "revId": "48d191885d0a013e0815d9f1c744da6fe360e21f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_48d06bca",
+        "filename": "sc/uiconfig/scalc/popupmenu/drawtext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-22T12:27:37Z",
+      "side": 1,
+      "message": "- TextAttributes \nis in the section with \n- TransformDialog\n- FormatLine\n- FormatArea\nwhich is an separate group, but it can be grouped somewhere else too. It should be only consistent.",
+      "parentUuid": "1f1a1f67_485bcb86",
       "range": {
         "startLine": 21,
         "startChar": 1,
