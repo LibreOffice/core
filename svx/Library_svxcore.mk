@@ -250,6 +250,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/primitive2d/sdrcaptionprimitive2d \
     svx/source/sdr/primitive2d/sdrconnectorprimitive2d \
     svx/source/sdr/primitive2d/sdrmeasureprimitive2d \
+    svx/source/sdr/primitive2d/sdrframeborderprimitive2d \
     svx/source/sdr/primitive2d/sdrattributecreator \
     svx/source/sdr/primitive2d/sdrdecompositiontools \
     svx/source/sdr/primitive3d/sdrattributecreator3d \
