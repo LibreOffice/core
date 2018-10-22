@@ -248,7 +248,6 @@ cmd/sc_objectalign.png cmd/sc_objectalignleft.png
 cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_sectionaligntop.png cmd/sc_alignup.png
 cmd/sc_sectionalignbottom.png cmd/sc_aligndown.png
-cmd/sc_alignframemenu.png cmd/sc_alignleft.png
 cmd/sc_alignhorizontalceter.png cmd/sc_alignhorizontalcenter.png
 
 # Graphic
