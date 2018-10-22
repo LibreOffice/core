@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_68668754",
+        "filename": "sc/uiconfig/scalc/popupmenu/drawtext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-22T12:14:53Z",
+      "side": 1,
+      "message": "Don\u0027t remember why we put these two commands in a submenu. Looks weird.",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 45
+      },
+      "revId": "48d191885d0a013e0815d9f1c744da6fe360e21f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_485bcb86",
+        "filename": "sc/uiconfig/scalc/popupmenu/drawtext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-22T12:14:53Z",
+      "side": 1,
+      "message": "TextAttributes is the only command in this section. Cant we move it into the next section? Valid for all modules.",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 48
+      },
+      "revId": "48d191885d0a013e0815d9f1c744da6fe360e21f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
