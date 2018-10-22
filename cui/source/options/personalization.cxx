@@ -30,7 +30,6 @@
 #include <vcl/mnemonic.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
-#include <personalization.hrc>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -169,21 +168,10 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     get( m_pSearchButton, "search_personas" );
     m_pSearchButton->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
-    get( m_vSearchSuggestions[0], "suggestion1" );
-    get( m_vSearchSuggestions[1], "suggestion2" );
-    get( m_vSearchSuggestions[2], "suggestion3" );
-    get( m_vSearchSuggestions[3], "suggestion4" );
-    get( m_vSearchSuggestions[4], "suggestion5" );
-    get( m_vSearchSuggestions[5], "suggestion6" );
-
-    assert(SAL_N_ELEMENTS(RID_SVXSTR_PERSONA_CATEGORIES) >= CATEGORYCOUNT);
-    for(sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
-    {
-        m_vSearchSuggestions[i]->SetText(CuiResId(RID_SVXSTR_PERSONA_CATEGORIES[i]));
-        m_vSearchSuggestions[i]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
-    }
-
     get( m_pEdit, "search_term" );
+
+    get( m_pCategories, "categoriesCB" );
+    m_pCategories->SetSelectHdl( LINK( this, SelectPersonaDialog, SelectCategory ) );
 
     get( m_pProgressLabel, "progress_label" );
 
@@ -208,7 +196,8 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
         nIndex->Disable();
     }
 
-    m_vSearchSuggestions[DEFAULT_PERSONA_CATEGORY]->Click();
+    m_pCategories->SelectEntry("Featured");
+    m_pCategories->GetSelectHdl().Call(*m_pCategories);
 }
 
 SelectPersonaDialog::~SelectPersonaDialog()
@@ -227,12 +216,11 @@ void SelectPersonaDialog::dispose()
         m_pSearchThread->join();
     }
 
+    m_pCategories.clear();
     m_pEdit.clear();
     m_pSearchButton.clear();
     m_pProgressLabel.clear();
     for (VclPtr<PushButton>& vp : m_vResultList)
-        vp.clear();
-    for (VclPtr<PushButton>& vp : m_vSearchSuggestions)
         vp.clear();
     m_pOkButton.clear();
     m_pCancelButton.clear();
@@ -247,43 +235,15 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
     return OUString();
 }
 
-IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, SearchPersonas, Button*, void )
 {
-    /*
-     * English category names should be used for search.
-     * These strings should be in sync with the strings of
-     * RID_SVXSTR_PERSONA_CATEGORIES in personalization.hrc
-     */
-    /* FIXME: These categories are actual categories of Mozilla themes/personas,
-     * but we are using them just as regular search terms, and bringing the first
-     * 9 (MAX_RESULTS) personas which have all the fields set. We should instead bring
-     * results from the actual categories; maybe the most downloaded one, or the ones with
-     * the highest ratings.
-     */
-    static const OUStringLiteral vSuggestionCategories[] =
-        {"LibreOffice", "Abstract", "Color", "Music", "Nature", "Solid"};
-
-    OUString searchTerm;
-    if( m_pSearchThread.is() )
-        m_pSearchThread->StopExecution();
-
-    if( pButton ==  m_pSearchButton )
-        searchTerm = m_pEdit->GetText();
-    else
-    {
-        for ( sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
-        {
-            if( pButton == m_vSearchSuggestions[i] )
-            {
-                // Use the category name in English as search term
-                searchTerm = vSuggestionCategories[i];
-                break;
-            }
-        }
-    }
+    OUString searchTerm = m_pEdit->GetText();
 
     if( searchTerm.isEmpty( ) )
         return;
+
+    if( m_pSearchThread.is() )
+        m_pSearchThread->StopExecution();
 
     // Direct url of a persona given
     if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) )
@@ -350,6 +310,28 @@ IMPL_LINK_NOARG( SelectPersonaDialog, ActionCancel, Button*, void )
         m_pGetPersonaThread->StopExecution();
 
     EndDialog();
+}
+
+IMPL_LINK_NOARG( SelectPersonaDialog, SelectCategory, ListBox&, void )
+{
+    OUString searchTerm = *(static_cast<OUString*>(m_pCategories->GetSelectedEntryData()));
+    OUString rSearchURL;
+
+    if (searchTerm.isEmpty())
+        return;
+
+    if( m_pSearchThread.is() )
+        m_pSearchThread->StopExecution();
+
+    // 15 results so that invalid and duplicate search results whose names, textcolors etc. are null can be skipped
+    if (searchTerm == "featured")
+        rSearchURL = "https://addons.mozilla.org/api/v3/addons/search/?type=persona&app=firefox&status=public&sort=users&featured=true&page_size=15";
+    else
+        rSearchURL = "https://addons.mozilla.org/api/v3/addons/search/?type=persona&app=firefox&category=" + searchTerm + "&status=public&sort=downloads&page_size=15";
+
+    m_pSearchThread = new SearchAndParseThread( this, rSearchURL, false );
+
+    m_pSearchThread->launch();
 }
 
 IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
