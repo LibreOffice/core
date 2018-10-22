@@ -1283,10 +1283,9 @@ STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
     return E_FAIL;
 }
 
-
 BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 {
-   if ( CheckDefHandler() )
+    if (CheckDefHandler())
     {
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, reinterpret_cast<void**>(&pIRunObj) );
@@ -1296,10 +1295,8 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
             return pIRunObj->IsRunning();
     }
 
-    return E_FAIL;
-
+    return FALSE;
 }
-
 
 STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlockCloses )
 {
