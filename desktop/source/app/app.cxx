@@ -372,6 +372,7 @@ void FatalError(const OUString& sMessage)
 
     OUString sTitle = sProductKey + " - Fatal Error";
     Application::ShowNativeErrorBox (sTitle, sMessage);
+    std::cerr << sTitle << ": " << sMessage << std::endl;
     _exit(EXITHELPER_FATAL_ERROR);
 }
 
