@@ -1151,7 +1151,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
     if (findIt == rpCacheMap->aCacheMap.end())
     {
         auto insertIt = rpCacheMap->aCacheMap.emplace_hint(findIt,
-                    rRange, o3tl::make_unique<ScLookupCache>(this, rRange) );
+                    rRange, o3tl::make_unique<ScLookupCache>(this, rRange, *rpCacheMap) );
         pCache = insertIt->second.get();
         // The StartListeningArea() call is not thread-safe, as all threads
         // would access the same SvtBroadcaster.
@@ -1170,29 +1170,17 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
     // a result of user input or recalc). If it turns out this can be the case, locking is needed
     // here and also in ScLookupCache::Notify().
     assert(!IsThreadedGroupCalcInProgress());
-    if( RemoveLookupCacheHelper( GetNonThreadedContext().mScLookupCache, rCache ))
-        return;
-    // The cache may be possibly in the caches stored for other threads.
-    for( ScLookupCacheMap* cacheMap : mThreadStoredScLookupCaches )
-        if( RemoveLookupCacheHelper( cacheMap, rCache ))
-            return;
-    OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
-}
-
-bool ScDocument::RemoveLookupCacheHelper( ScLookupCacheMap* cacheMap, ScLookupCache& rCache )
-{
-    if( cacheMap == nullptr )
-        return false;
-    auto it(cacheMap->aCacheMap.find(rCache.getRange()));
-    if (it != cacheMap->aCacheMap.end())
+    auto & cacheMap = rCache.getCacheMap();
+    auto it(cacheMap.aCacheMap.find(rCache.getRange()));
+    if (it != cacheMap.aCacheMap.end())
     {
         ScLookupCache* pCache = (*it).second.release();
-        cacheMap->aCacheMap.erase(it);
+        cacheMap.aCacheMap.erase(it);
         assert(!IsThreadedGroupCalcInProgress()); // EndListeningArea() is not thread-safe
         EndListeningArea(pCache->getRange(), false, &rCache);
-        return true;
+        return;
     }
-    return false;
+    OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
 }
 
 void ScDocument::ClearLookupCaches()
