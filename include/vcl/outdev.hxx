@@ -1292,7 +1292,7 @@ public:
 
 protected:
 
-    virtual void                InitFont() const;
+    virtual bool                InitFont() const;
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const;
     virtual long                GetFontExtLeading() const;
 

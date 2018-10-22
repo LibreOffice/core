@@ -896,13 +896,8 @@ long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int
 
 long OutputDevice::GetTextHeight() const
 {
-
-    if( mbNewFont )
-        if( !ImplNewFont() )
-            return 0;
-    if( mbInitFont )
-        if( !ImplNewFont() )
-            return 0;
+    if (!InitFont())
+        return 0;
 
     long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
@@ -1252,17 +1247,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
          vcl::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
-    // we need a graphics
-    if( !mpGraphics )
-        if( !AcquireGraphics() )
-            return nullptr;
-
-    // initialize font if needed
-    if( mbNewFont )
-        if( !ImplNewFont() )
-            return nullptr;
-    if( mbInitFont )
-        InitFont();
+    if (!InitFont())
+        return nullptr;
 
     // check string index and length
     if( -1 == nLen || nMinIndex + nLen > rOrigStr.getLength() )
@@ -2411,12 +2397,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth, const long* pDXArray ) const
 {
-    // the fonts need to be initialized
-    if( mbNewFont )
-        ImplNewFont();
-    if( mbInitFont )
-        InitFont();
-    if( !mpFontInstance )
+    if (!InitFont())
         return false;
 
     bool bRet = false;

@@ -1674,12 +1674,14 @@ void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const too
     Pop();
 }
 
-void Printer::InitFont() const
+bool Printer::InitFont() const
 {
     DBG_TESTSOLARMUTEX();
 
+    if (mbNewFont && !ImplNewFont())
+        return false;
     if (!mpFontInstance)
-        return;
+        return false;
 
     if ( mbInitFont )
     {
@@ -1687,6 +1689,7 @@ void Printer::InitFont() const
         mpGraphics->SetFont(mpFontInstance.get(), 0);
         mbInitFont = false;
     }
+    return true;
 }
 
 void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const

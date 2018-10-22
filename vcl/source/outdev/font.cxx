@@ -167,12 +167,8 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
 
 bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const
 {
-    if (mbNewFont)
-        ImplNewFont();
-
-    if (mbInitFont)
-        InitFont();
-
+    if (mbNewFont && !ImplNewFont())
+        return false;
     if (!mpFontInstance)
         return false;
 
@@ -261,15 +257,7 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
 
 bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 {
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-
-    if( mbNewFont )
-        ImplNewFont();
-    if( mbInitFont )
-        InitFont();
-    if( !mpFontInstance )
+    if (!InitFont())
         return false;
 
     FontCharMapRef xFontCharMap ( mpGraphics->GetFontCharMap() );
@@ -286,17 +274,8 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 
 bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const
 {
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
+    if (!InitFont())
         return false;
-
-    if( mbNewFont )
-        ImplNewFont();
-    if( mbInitFont )
-        InitFont();
-    if( !mpFontInstance )
-        return false;
-
     return mpGraphics->GetFontCapabilities(rFontCapabilities);
 }
 
@@ -992,23 +971,30 @@ void OutputDevice::ImplInitFontList() const
     }
 }
 
-void OutputDevice::InitFont() const
+bool OutputDevice::InitFont() const
 {
     DBG_TESTSOLARMUTEX();
 
+    if (!ImplNewFont())
+        return false;
     if (!mpFontInstance)
-        return;
-    if (!mbInitFont)
-        return;
+        return false;
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return false;
+    }
+    else if (!mbInitFont)
+        return true;
 
     mpGraphics->SetFont(mpFontInstance.get(), 0);
     mbInitFont = false;
+    return true;
 }
 
 const LogicalFontInstance* OutputDevice::GetFontInstance() const
 {
-    if (ImplNewFont())
-        InitFont();
+    InitFont();
     return mpFontInstance.get();
 }
 
@@ -1034,7 +1020,7 @@ bool OutputDevice::ImplNewFont() const
         SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no Graphics, no Font");
         return false;
     }
-    SalGraphics* pGraphics = mpGraphics;
+
     ImplInitFontList();
 
     // convert to pixel height
@@ -1080,30 +1066,29 @@ bool OutputDevice::ImplNewFont() const
 
     // mark when lower layers need to get involved
     mbNewFont = false;
-    if( bNewFontInstance )
-        mbInitFont = true;
 
     // select font when it has not been initialized yet
-    if ( !pFontInstance->mbInit )
+    if (!pFontInstance->mbInit)
     {
-        InitFont();
+        if (bNewFontInstance)
+        {
+            mpGraphics->SetFont(mpFontInstance.get(), 0);
+            mbInitFont = false;
+        }
 
         // get metric data from device layers
-        if ( pGraphics )
-        {
-            pFontInstance->mbInit = true;
+        pFontInstance->mbInit = true;
 
-            pFontInstance->mxFontMetric->SetOrientation( sal::static_int_cast<short>(mpFontInstance->GetFontSelectPattern().mnOrientation) );
-            pGraphics->GetFontMetric( pFontInstance->mxFontMetric, 0 );
+        pFontInstance->mxFontMetric->SetOrientation( sal::static_int_cast<short>(mpFontInstance->GetFontSelectPattern().mnOrientation) );
+        mpGraphics->GetFontMetric( pFontInstance->mxFontMetric, 0 );
 
-            pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
-            pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
-            pFontInstance->mxFontMetric->ImplInitFlags( this );
+        pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
+        pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
+        pFontInstance->mxFontMetric->ImplInitFlags( this );
 
-            pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
+        pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
 
-            SetFontOrientation( pFontInstance );
-        }
+        SetFontOrientation( pFontInstance );
     }
 
     // calculate EmphasisArea
