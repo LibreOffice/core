@@ -7354,6 +7354,7 @@ include/svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx
 include/svx/sdr/overlay/overlayselection.hxx
 include/svx/sdr/overlay/overlaytriangle.hxx
 include/svx/sdr/primitive2d/sdrattributecreator.hxx
+include/svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx
 include/svx/sdr/primitive2d/sdrdecompositiontools.hxx
 include/svx/sdr/primitive2d/svx_primitivetypes2d.hxx
 include/svx/sdr/properties/defaultproperties.hxx
@@ -14502,6 +14503,7 @@ svx/source/sdr/overlay/overlaytools.cxx
 svx/source/sdr/overlay/overlaytriangle.cxx
 svx/source/sdr/primitive2d/primitivefactory2d.cxx
 svx/source/sdr/primitive2d/sdrattributecreator.cxx
+svx/source/sdr/primitive2d/sdrframeborderprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrcaptionprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrconnectorprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrcustomshapeprimitive2d.cxx
