@@ -82,7 +82,9 @@ public:
             || fn == SRCDIR "/vcl/source/app/svdata.cxx"
             // I tried doing this, but got very weird unit test failures, apparently sorting this table
             // disturbs some code elsewhere
-            || fn == SRCDIR "/svx/source/unodraw/unoprov.cxx")
+            || fn == SRCDIR "/svx/source/unodraw/unoprov.cxx"
+            // aRTFTokenTab is ordered by useful grouping, so let it sort at runtime
+            || fn == SRCDIR "/svtools/source/svrtf/rtfkeywd.cxx")
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
