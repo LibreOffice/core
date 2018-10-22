@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_08aef3e6",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-10-22T08:09:49Z",
+      "side": 0,
+      "message": "My concern is that aSelectHdl.Call might cause this aDelData to get triggered from !isDeleted to isDeleted so the logic before Call is called may not be the same before Call is called.\n\nI suggest we rework it in more direct terms to make that more obvious",
+      "revId": "8e26fe7588f5904be9237c30d82bbb71fccc6800",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
