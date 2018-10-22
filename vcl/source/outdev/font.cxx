@@ -1005,6 +1005,13 @@ void OutputDevice::InitFont() const
     mbInitFont = false;
 }
 
+const LogicalFontInstance* OutputDevice::GetFontInstance() const
+{
+    if (ImplNewFont())
+        InitFont();
+    return mpFontInstance.get();
+}
+
 bool OutputDevice::ImplNewFont() const
 {
     DBG_TESTSOLARMUTEX();
