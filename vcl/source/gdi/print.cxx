@@ -1677,21 +1677,6 @@ void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const too
     Pop();
 }
 
-void Printer::InitFont() const
-{
-    DBG_TESTSOLARMUTEX();
-
-    if (!mpFontInstance)
-        return;
-
-    if ( mbInitFont )
-    {
-        // select font in the device layers
-        mpGraphics->SetFont(mpFontInstance.get(), 0);
-        mbInitFont = false;
-    }
-}
-
 void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
 {
     pFontEntry->mnOrientation = pFontEntry->mxFontMetric->GetOrientation();

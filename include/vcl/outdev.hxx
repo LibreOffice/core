@@ -1292,7 +1292,7 @@ protected:
     SAL_DLLPRIVATE long GetEmphasisAscent() const { return mnEmphasisAscent; }
     SAL_DLLPRIVATE long GetEmphasisDescent() const { return mnEmphasisDescent; }
 
-    virtual void                InitFont() const;
+    SAL_DLLPRIVATE bool InitFont() const;
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const;
     virtual long                GetFontExtLeading() const;
 
