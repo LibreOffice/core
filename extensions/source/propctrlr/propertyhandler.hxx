@@ -38,6 +38,7 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/interlck.h>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
@@ -69,7 +70,8 @@ namespace pcr
                                                 >   PropertyHandler_Base;
     /** the base class for property handlers
     */
-    class PropertyHandler : public PropertyHandler_Base
+    class PropertyHandler : public ::cppu::BaseMutex
+                          , public PropertyHandler_Base
     {
     private:
         /// cache for getSupportedProperties
@@ -82,7 +84,6 @@ namespace pcr
         PropertyChangeListeners                               m_aPropertyListeners;
 
     protected:
-        mutable ::osl::Mutex                                  m_aMutex;
         /// the context in which the instance was created
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         /// the component we're inspecting
