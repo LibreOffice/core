@@ -64,6 +64,7 @@
 #include <colfrm.hxx>
 #include <sw_primitivetypes2d.hxx>
 
+#include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -2380,8 +2381,10 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     aUpper.Pos() += pUpper->Frame().Pos();
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
-    drawinglayer::primitive2d::Primitive2DContainer aHorizontalSequence;
-    drawinglayer::primitive2d::Primitive2DContainer aVerticalSequence;
+
+    // prepare SdrFrameBorderDataVector
+    std::shared_ptr<drawinglayer::primitive2d::SdrFrameBorderDataVector> aData(
+        std::make_shared<drawinglayer::primitive2d::SdrFrameBorderDataVector>());
 
     while ( true )
     {
@@ -2519,30 +2522,20 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     if(!aX.equalZero())
                     {
                         const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                        svx::frame::StyleVectorTable aStartVector;
-
-                        aStartVector.add(aStyles[ 1 ], aX, -aY, true); // aLFromT
-                        aStartVector.add(aStyles[ 2 ], aX, -aX, true); // aLFromL
-                        aStartVector.add(aStyles[ 3 ], aX, aY, false); // aLFromB
-                        aStartVector.sort();
-
-                        svx::frame::StyleVectorTable aEndVector;
-                        const basegfx::B2DVector aAxis(-aX);
-
-                        aEndVector.add(aStyles[ 4 ], aAxis, -aY, true); // aRFromT
-                        aEndVector.add(aStyles[ 5 ], aAxis, aX, false); // aRFromR
-                        aEndVector.add(aStyles[ 6 ], aAxis, aY, false); // aRFromB
-                        aEndVector.sort();
-
-                        CreateBorderPrimitives(
-                            aHorizontalSequence,
+                        aData->emplace_back(
                             aOrigin,
                             aX,
-                            aStyles[ 0 ],
-                            aStartVector,
-                            aEndVector,
-                            pTmpColor
-                        );
+                            aStyles[0],
+                            pTmpColor);
+                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+
+                        rInstance.addSdrConnectStyleData(true, aStyles[1], -aY, true); // aLFromT
+                        rInstance.addSdrConnectStyleData(true, aStyles[2], -aX, true); // aLFromL
+                        rInstance.addSdrConnectStyleData(true, aStyles[3], aY, false); // aLFromB
+
+                        rInstance.addSdrConnectStyleData(false, aStyles[4], -aY, true); // aRFromT
+                        rInstance.addSdrConnectStyleData(false, aStyles[5], aX, false); // aRFromR
+                        rInstance.addSdrConnectStyleData(false, aStyles[6], aY, false); // aRFromB
                     }
                 }
                 else // vertical
@@ -2553,30 +2546,20 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     if(!aX.equalZero())
                     {
                         const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                        svx::frame::StyleVectorTable aStartVector;
-
-                        aStartVector.add(aStyles[ 3 ], aX, -aY, false); // aTFromR
-                        aStartVector.add(aStyles[ 2 ], aX, -aX, true); // aTFromT
-                        aStartVector.add(aStyles[ 1 ], aX, aY, true); // aTFromL
-                        aStartVector.sort();
-
-                        svx::frame::StyleVectorTable aEndVector;
-                        const basegfx::B2DVector aAxis(-aX);
-
-                        aEndVector.add(aStyles[ 6 ], aAxis, -aY, false); // aBFromR
-                        aEndVector.add(aStyles[ 5 ], aAxis, aX, false); // aBFromB
-                        aEndVector.add(aStyles[ 4 ], aAxis, aY, true); // aBFromL
-                        aEndVector.sort();
-
-                        CreateBorderPrimitives(
-                            aVerticalSequence,
+                        aData->emplace_back(
                             aOrigin,
                             aX,
-                            aStyles[ 0 ],
-                            aStartVector,
-                            aEndVector,
-                            pTmpColor
-                        );
+                            aStyles[0],
+                            pTmpColor);
+                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+
+                        rInstance.addSdrConnectStyleData(true, aStyles[3], -aY, false); // aTFromR
+                        rInstance.addSdrConnectStyleData(true, aStyles[2], -aX, true); // aTFromT
+                        rInstance.addSdrConnectStyleData(true, aStyles[1], aY, true); // aTFromL
+
+                        rInstance.addSdrConnectStyleData(false, aStyles[6], -aY, false); // aBFromR
+                        rInstance.addSdrConnectStyleData(false, aStyles[5], aX, false); // aBFromB
+                        rInstance.addSdrConnectStyleData(false, aStyles[4], aY, true); // aBFromL
                     }
                 }
             }
@@ -2584,15 +2567,19 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
         ++aIter;
     }
 
-    // to stay compatible, create order as it was formally. Also try to
-    // merge primitives as far as possible
-    drawinglayer::primitive2d::Primitive2DContainer aSequence;
-
-    svx::frame::HelperMergeInB2DPrimitiveArray(aHorizontalSequence, aSequence);
-    svx::frame::HelperMergeInB2DPrimitiveArray(aVerticalSequence, aSequence);
-
-    // paint
-    mrTabFrame.ProcessPrimitives(aSequence);
+    // create instance of SdrFrameBorderPrimitive2D if
+    // SdrFrameBorderDataVector is used
+    if(!aData->empty())
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aSequence;
+        aSequence.push_back(
+            drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
+                    aData,
+                    true)));
+        // paint
+        mrTabFrame.ProcessPrimitives(aSequence);
+    }
 
     // restore output device:
     rDev.SetDrawMode( nOldDrawMode );
@@ -4508,6 +4495,10 @@ namespace drawinglayer
             basegfx::B2DPoint aBottomLeft(getB2DHomMatrix() * basegfx::B2DPoint(0.0, 1.0));
             basegfx::B2DPoint aBottomRight(getB2DHomMatrix() * basegfx::B2DPoint(1.0, 1.0));
 
+            // prepare SdrFrameBorderDataVector
+            std::shared_ptr<drawinglayer::primitive2d::SdrFrameBorderDataVector> aData(
+                std::make_shared<drawinglayer::primitive2d::SdrFrameBorderDataVector>());
+
             if(getStyleTop().IsUsed())
             {
                 // move top left/right inwards half border width
@@ -4550,108 +4541,99 @@ namespace drawinglayer
             {
                 // create BorderPrimitive(s) for top border
                 const basegfx::B2DVector aVector(aTopRight - aTopLeft);
-                svx::frame::StyleVectorTable aStartStyleVectorTable;
-                svx::frame::StyleVectorTable aEndStyleVectorTable;
+                aData->emplace_back(
+                    aTopLeft,
+                    aVector,
+                    getStyleTop(),
+                    nullptr);
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
 
                 if(getStyleLeft().IsUsed())
                 {
-                    aStartStyleVectorTable.add(getStyleLeft(), aVector, basegfx::B2DVector(aBottomLeft - aTopLeft), false);
+                    rInstance.addSdrConnectStyleData(true, getStyleLeft(), basegfx::B2DVector(aBottomLeft - aTopLeft), false);
                 }
 
                 if(getStyleRight().IsUsed())
                 {
-                    aEndStyleVectorTable.add(getStyleRight(), -aVector, basegfx::B2DVector(aBottomRight - aTopRight), false);
+                    rInstance.addSdrConnectStyleData(false, getStyleRight(), basegfx::B2DVector(aBottomRight - aTopRight), false);
                 }
-
-                CreateBorderPrimitives(
-                    aRetval,
-                    aTopLeft,
-                    aVector,
-                    getStyleTop(),
-                    aStartStyleVectorTable,
-                    aEndStyleVectorTable,
-                    nullptr);
             }
 
             if(getStyleRight().IsUsed())
             {
                 // create BorderPrimitive(s) for right border
                 const basegfx::B2DVector aVector(aBottomRight - aTopRight);
-                svx::frame::StyleVectorTable aStartStyleVectorTable;
-                svx::frame::StyleVectorTable aEndStyleVectorTable;
+                aData->emplace_back(
+                    aTopRight,
+                    aVector,
+                    getStyleRight(),
+                    nullptr);
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
 
                 if(getStyleTop().IsUsed())
                 {
-                    aStartStyleVectorTable.add(getStyleTop(), aVector, basegfx::B2DVector(aTopLeft - aTopRight), false);
+                    rInstance.addSdrConnectStyleData(true, getStyleTop(), basegfx::B2DVector(aTopLeft - aTopRight), false);
                 }
 
                 if(getStyleBottom().IsUsed())
                 {
-                    aEndStyleVectorTable.add(getStyleBottom(), -aVector, basegfx::B2DVector(aBottomLeft - aBottomRight), false);
+                    rInstance.addSdrConnectStyleData(false, getStyleBottom(), basegfx::B2DVector(aBottomLeft - aBottomRight), false);
                 }
-
-                CreateBorderPrimitives(
-                    aRetval,
-                    aTopRight,
-                    aVector,
-                    getStyleRight(),
-                    aStartStyleVectorTable,
-                    aEndStyleVectorTable,
-                    nullptr);
             }
 
             if(getStyleBottom().IsUsed())
             {
                 // create BorderPrimitive(s) for bottom border
                 const basegfx::B2DVector aVector(aBottomLeft - aBottomRight);
-                svx::frame::StyleVectorTable aStartStyleVectorTable;
-                svx::frame::StyleVectorTable aEndStyleVectorTable;
+                aData->emplace_back(
+                    aBottomRight,
+                    aVector,
+                    getStyleBottom(),
+                    nullptr);
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
 
                 if(getStyleRight().IsUsed())
                 {
-                    aStartStyleVectorTable.add(getStyleRight(), aVector, basegfx::B2DVector(aTopRight - aBottomRight), false);
+                    rInstance.addSdrConnectStyleData(true, getStyleRight(), basegfx::B2DVector(aTopRight - aBottomRight), false);
                 }
 
                 if(getStyleLeft().IsUsed())
                 {
-                    aEndStyleVectorTable.add(getStyleLeft(), -aVector, basegfx::B2DVector(aTopLeft - aBottomLeft), false);
+                    rInstance.addSdrConnectStyleData(false, getStyleLeft(), basegfx::B2DVector(aTopLeft - aBottomLeft), false);
                 }
-
-                CreateBorderPrimitives(
-                    aRetval,
-                    aBottomRight,
-                    aVector,
-                    getStyleBottom(),
-                    aStartStyleVectorTable,
-                    aEndStyleVectorTable,
-                    nullptr);
             }
 
             if(getStyleLeft().IsUsed())
             {
                 // create BorderPrimitive(s) for left border
                 const basegfx::B2DVector aVector(aTopLeft - aBottomLeft);
-                svx::frame::StyleVectorTable aStartStyleVectorTable;
-                svx::frame::StyleVectorTable aEndStyleVectorTable;
+                aData->emplace_back(
+                    aBottomLeft,
+                    aVector,
+                    getStyleLeft(),
+                    nullptr);
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
 
                 if(getStyleBottom().IsUsed())
                 {
-                    aStartStyleVectorTable.add(getStyleBottom(), aVector, basegfx::B2DVector(aBottomRight - aBottomLeft), false);
+                    rInstance.addSdrConnectStyleData(true, getStyleBottom(), basegfx::B2DVector(aBottomRight - aBottomLeft), false);
                 }
 
                 if(getStyleTop().IsUsed())
                 {
-                    aEndStyleVectorTable.add(getStyleTop(), -aVector, basegfx::B2DVector(aTopRight - aTopLeft), false);
+                    rInstance.addSdrConnectStyleData(false, getStyleTop(), basegfx::B2DVector(aTopRight - aTopLeft), false);
                 }
+            }
 
-                CreateBorderPrimitives(
-                    aRetval,
-                    aBottomLeft,
-                    aVector,
-                    getStyleLeft(),
-                    aStartStyleVectorTable,
-                    aEndStyleVectorTable,
-                    nullptr);
+            // create instance of SdrFrameBorderPrimitive2D if
+            // SdrFrameBorderDataVector is used
+            if(!aData->empty())
+            {
+                aRetval.push_back(
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
+                            aData,
+                            true)));
             }
 
             return aRetval;
