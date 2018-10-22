@@ -20,10 +20,10 @@
 #define INCLUDED_I18NUTIL_CASEFOLDING_HXX
 
 #include <sal/types.h>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <i18nutil/i18nutildllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
 enum class TransliterationFlags;
 

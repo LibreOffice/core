@@ -19,7 +19,6 @@
 #ifndef INCLUDED_I18NUTIL_TRANSLITERATION_HXX
 #define INCLUDED_I18NUTIL_TRANSLITERATION_HXX
 
-#include <sal/types.h>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <o3tl/typed_flags_set.hxx>

@@ -22,7 +22,8 @@
 
 #include <i18nutil/i18nutildllapi.h>
 #include <rtl/string.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
 //!! The values of the following enumerators must correspond to the array position
 //!! of the respective paper size in the file i18nutil/source/utility/paper.cxx

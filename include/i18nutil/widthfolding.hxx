@@ -20,9 +20,11 @@
 #define INCLUDED_I18NUTIL_WIDTHFOLDING_HXX
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <i18nutil/oneToOneMapping.hxx>
+#include <rtl/ustring.hxx>
 #include <i18nutil/i18nutildllapi.h>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace i18nutil { class oneToOneMapping; }
 
 namespace i18nutil {
 

@@ -262,3 +262,9 @@ blacklist:
     - com/sun/star/io/XOutputStream.hpp
     - com/sun/star/io/XStream.hpp
     - com/sun/star/io/XTruncate.hpp
+    include/i18nutil/casefolding.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/i18nutil/transliteration.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
