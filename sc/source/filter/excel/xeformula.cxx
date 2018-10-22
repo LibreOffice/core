@@ -1636,7 +1636,11 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
             AppendEuroToolCallToken( rFuncData.GetExtFuncData() );
         break;
         case ocMacro:
-            AppendMacroCallToken( rFuncData.GetExtFuncData() );
+            // Do not write the OOXML <definedName> element.
+            if (GetOutput() == EXC_OUTPUT_XML_2007)
+                AppendNameToken( 0 );     // dummy to keep parameter count valid
+            else
+                AppendMacroCallToken( rFuncData.GetExtFuncData() );
         break;
         default:
         {
