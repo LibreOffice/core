@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_88dc4319",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-22T11:20:56Z",
+      "side": 1,
+      "message": "This change is wrong. The dialog\u0027s \"col\" is \"First column as label\", which are row headers, and vice versa.",
+      "revId": "0296831a2a44ba0c51a929b3071fdd93bec638c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
