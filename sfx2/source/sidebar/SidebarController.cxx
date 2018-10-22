@@ -732,6 +732,8 @@ void SidebarController::SwitchToDeck (
     if (bForceNewPanels && !bForceNewDeck) // already forced if bForceNewDeck
         CreatePanels(rDeckDescriptor.msId, rContext);
 
+    if (mpCurrentDeck && mpCurrentDeck != rDeckDescriptor.mpDeck)
+        mpCurrentDeck->Hide();
     mpCurrentDeck.reset(rDeckDescriptor.mpDeck);
 
     if ( ! mpCurrentDeck)
