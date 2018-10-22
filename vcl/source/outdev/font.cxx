@@ -998,22 +998,11 @@ void OutputDevice::InitFont() const
 
     if (!mpFontInstance)
         return;
+    if (!mbInitFont)
+        return;
 
-    if ( mbInitFont )
-    {
-        // decide if antialiasing is appropriate
-        bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
-        if (!utl::ConfigManager::IsFuzzing())
-        {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);
-            bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontInstance->GetFontSelectPattern().mnHeight);
-        }
-        mpFontInstance->SetNonAntialiased(bNonAntialiased);
-        // select font in the device layers
-        mpGraphics->SetFont(mpFontInstance.get(), 0);
-        mbInitFont = false;
-    }
+    mpGraphics->SetFont(mpFontInstance.get(), 0);
+    mbInitFont = false;
 }
 
 bool OutputDevice::ImplNewFont() const
@@ -1059,10 +1048,19 @@ bool OutputDevice::ImplNewFont() const
     if( (0 == aSize.Width()) && (0 != maFont.GetFontSize().Width()) )
         aSize.setWidth( 1 );
 
+    // decide if antialiasing is appropriate
+    bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);
+        bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > maFont.GetFontSize().Height());
+    }
+
     // get font entry
     rtl::Reference<LogicalFontInstance> pOldFontInstance = mpFontInstance;
-    mpFontInstance = mxFontCache->GetFontInstance( mxFontCollection.get(), maFont, aSize, fExactHeight );
-    bool bNewFontInstance = pOldFontInstance.get() != mpFontInstance.get();
+    mpFontInstance = mxFontCache->GetFontInstance(mxFontCollection.get(), maFont, aSize, fExactHeight, bNonAntialiased);
+    const bool bNewFontInstance = pOldFontInstance.get() != mpFontInstance.get();
     pOldFontInstance.clear();
 
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
