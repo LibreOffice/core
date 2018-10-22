@@ -278,3 +278,9 @@ blacklist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
+    include/i18nutil/casefolding.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/i18nutil/transliteration.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx

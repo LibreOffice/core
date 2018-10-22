@@ -18,6 +18,7 @@
  */
 
 #include <i18nutil/oneToOneMapping.hxx>
+#include <string.h>
 
 namespace i18nutil {
 
