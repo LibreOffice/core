@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_e8ccd762",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-22T11:28:00Z",
+      "side": 1,
+      "message": "This looks wrong. If a sheet is protected, unprotected cells are still editable.",
+      "revId": "a0f3dba6d9cced4016f2a00e77c019d8e661b017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
