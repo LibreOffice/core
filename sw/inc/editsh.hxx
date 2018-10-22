@@ -786,7 +786,7 @@ public:
     static bool HasHyphIter();
 
     void HandleCorrectionError(const OUString& aText, SwPosition aPos, sal_Int32 nBegin,
-                               sal_Int32 nLen, SwPaM* pCursor, const Point* pPt,
+                               sal_Int32 nLen, const Point* pPt,
                                SwRect& rSelectRect);
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
