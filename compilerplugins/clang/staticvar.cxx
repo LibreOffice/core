@@ -79,7 +79,10 @@ public:
             || fn == SRCDIR "/sw/source/filter/ww8/ww8par6.cxx"
             // this only triggers on older versions of clang, not sure why
             // in any case, it is actually about the array in vcl/inc/units.hrc, which we can't change
-            || fn == SRCDIR "/vcl/source/app/svdata.cxx")
+            || fn == SRCDIR "/vcl/source/app/svdata.cxx"
+            // I tried doing this, but got very weird unit test failures, apparently sorting this table
+            // disturbs some code elsewhere
+            || fn == SRCDIR "/svx/source/unodraw/unoprov.cxx")
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
