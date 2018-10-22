@@ -96,18 +96,20 @@ Animation::~Animation()
 
 Animation& Animation::operator=( const Animation& rAnimation )
 {
-    Clear();
+    if (this != &rAnimation)
+    {
+        Clear();
 
-    for(auto const & i : rAnimation.maList)
-        maList.emplace_back( new AnimationBitmap( *i ) );
+        for(auto const & i : rAnimation.maList)
+            maList.emplace_back( new AnimationBitmap( *i ) );
 
-    maGlobalSize = rAnimation.maGlobalSize;
-    maBitmapEx = rAnimation.maBitmapEx;
-    mnLoopCount = rAnimation.mnLoopCount;
-    mnPos = rAnimation.mnPos;
-    mbLoopTerminated = rAnimation.mbLoopTerminated;
-    mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
-
+        maGlobalSize = rAnimation.maGlobalSize;
+        maBitmapEx = rAnimation.maBitmapEx;
+        mnLoopCount = rAnimation.mnLoopCount;
+        mnPos = rAnimation.mnPos;
+        mbLoopTerminated = rAnimation.mbLoopTerminated;
+        mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
+    }
     return *this;
 }
 

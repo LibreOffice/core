@@ -140,9 +140,12 @@ UnoUrlDescriptor::~UnoUrlDescriptor()
 
 UnoUrlDescriptor & UnoUrlDescriptor::operator =(UnoUrlDescriptor const & rOther)
 {
-    std::unique_ptr<Impl> newImpl(rOther.m_pImpl->clone());
-    delete m_pImpl;
-    m_pImpl = newImpl.release();
+    if (this != &rOther)
+    {
+        std::unique_ptr<Impl> newImpl(rOther.m_pImpl->clone());
+        delete m_pImpl;
+        m_pImpl = newImpl.release();
+    }
     return *this;
 }
 
@@ -237,9 +240,12 @@ UnoUrl::~UnoUrl()
 
 UnoUrl & UnoUrl::operator =(UnoUrl const & rOther)
 {
-    std::unique_ptr<Impl> newImpl(rOther.m_pImpl->clone());
-    delete m_pImpl;
-    m_pImpl = newImpl.release();
+    if (this != &rOther)
+    {
+        std::unique_ptr<Impl> newImpl(rOther.m_pImpl->clone());
+        delete m_pImpl;
+        m_pImpl = newImpl.release();
+    }
     return *this;
 }
 

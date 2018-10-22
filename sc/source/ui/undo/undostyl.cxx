@@ -46,10 +46,12 @@ ScStyleSaveData::ScStyleSaveData( const ScStyleSaveData& rOther ) :
 
 ScStyleSaveData& ScStyleSaveData::operator=( const ScStyleSaveData& rOther )
 {
-    aName   = rOther.aName;
-    aParent = rOther.aParent;
-    xItems.reset(rOther.xItems ? new SfxItemSet(*rOther.xItems) : nullptr);
-
+    if (this != &rOther)
+    {
+        aName   = rOther.aName;
+        aParent = rOther.aParent;
+        xItems.reset(rOther.xItems ? new SfxItemSet(*rOther.xItems) : nullptr);
+    }
     return *this;
 }
 

@@ -348,27 +348,29 @@ ScDPObject::~ScDPObject()
 
 ScDPObject& ScDPObject::operator= (const ScDPObject& r)
 {
-    Clear();
+    if (this != &r)
+    {
+        Clear();
 
-    pDoc = r.pDoc;
-    aTableName = r.aTableName;
-    aTableTag = r.aTableTag;
-    aOutRange = r.aOutRange;
-    nHeaderRows = r.nHeaderRows;
-    mbHeaderLayout = r.mbHeaderLayout;
-    bAllowMove = false;
-    bSettingsChanged = false;
-    mbEnableGetPivotData = r.mbEnableGetPivotData;
+        pDoc = r.pDoc;
+        aTableName = r.aTableName;
+        aTableTag = r.aTableTag;
+        aOutRange = r.aOutRange;
+        nHeaderRows = r.nHeaderRows;
+        mbHeaderLayout = r.mbHeaderLayout;
+        bAllowMove = false;
+        bSettingsChanged = false;
+        mbEnableGetPivotData = r.mbEnableGetPivotData;
 
-    if (r.pSaveData)
-        pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
-    if (r.pSheetDesc)
-        pSheetDesc.reset( new ScSheetSourceDesc(*r.pSheetDesc) );
-    if (r.pImpDesc)
-        pImpDesc.reset( new ScImportSourceDesc(*r.pImpDesc) );
-    if (r.pServDesc)
-        pServDesc.reset( new ScDPServiceDesc(*r.pServDesc) );
-
+        if (r.pSaveData)
+            pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
+        if (r.pSheetDesc)
+            pSheetDesc.reset( new ScSheetSourceDesc(*r.pSheetDesc) );
+        if (r.pImpDesc)
+            pImpDesc.reset( new ScImportSourceDesc(*r.pImpDesc) );
+        if (r.pServDesc)
+            pServDesc.reset( new ScDPServiceDesc(*r.pServDesc) );
+    }
     return *this;
 }
 

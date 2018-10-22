@@ -89,11 +89,14 @@ SdOptionsGeneric::SdOptionsGeneric(SdOptionsGeneric const & rSource)
 
 SdOptionsGeneric& SdOptionsGeneric::operator=(SdOptionsGeneric const & rSource)
 {
-    maSubTree = rSource.maSubTree;
-    mpCfgItem.reset(rSource.mpCfgItem ? new SdOptionsItem(*rSource.mpCfgItem) : nullptr );
-    mbImpress = rSource.mbImpress;
-    mbInit = rSource.mbInit;
-    mbEnableModify = rSource.mbEnableModify;
+    if (this != &rSource)
+    {
+        maSubTree = rSource.maSubTree;
+        mpCfgItem.reset(rSource.mpCfgItem ? new SdOptionsItem(*rSource.mpCfgItem) : nullptr );
+        mbImpress = rSource.mbImpress;
+        mbInit = rSource.mbInit;
+        mbEnableModify = rSource.mbEnableModify;
+    }
     return *this;
 }
 

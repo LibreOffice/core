@@ -51,35 +51,36 @@ CGMFList::~CGMFList()
     ImplDeleteList();
 }
 
-
 CGMFList& CGMFList::operator=( const CGMFList& rSource )
 {
-    ImplDeleteList();
-    nFontsAvailable = rSource.nFontsAvailable;
-    nFontNameCount  = rSource.nFontNameCount;
-    nCharSetCount   = rSource.nCharSetCount;
-    for (auto const & pPtr : rSource.aFontEntryList)
+    if (this != &rSource)
     {
-        std::unique_ptr<FontEntry> pCFontEntry(new FontEntry);
-        if ( pPtr->pFontName )
+        ImplDeleteList();
+        nFontsAvailable = rSource.nFontsAvailable;
+        nFontNameCount  = rSource.nFontNameCount;
+        nCharSetCount   = rSource.nCharSetCount;
+        for (auto const & pPtr : rSource.aFontEntryList)
         {
-            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName.get()) ) + 1;
-            pCFontEntry->pFontName.reset( new sal_Int8[ nSize ] );
-            memcpy( pCFontEntry->pFontName.get(), pPtr->pFontName.get(), nSize );
+            std::unique_ptr<FontEntry> pCFontEntry(new FontEntry);
+            if ( pPtr->pFontName )
+            {
+                sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName.get()) ) + 1;
+                pCFontEntry->pFontName.reset( new sal_Int8[ nSize ] );
+                memcpy( pCFontEntry->pFontName.get(), pPtr->pFontName.get(), nSize );
+            }
+            if ( pPtr->pCharSetValue )
+            {
+                sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pCharSetValue.get()) ) + 1;
+                pCFontEntry->pCharSetValue.reset( new sal_Int8[ nSize ] );
+                memcpy( pCFontEntry->pCharSetValue.get(), pPtr->pCharSetValue.get(), nSize );
+            }
+            pCFontEntry->eCharSetType = pPtr->eCharSetType;
+            pCFontEntry->nFontType = pPtr->nFontType;
+            aFontEntryList.push_back( std::move(pCFontEntry) );
         }
-        if ( pPtr->pCharSetValue )
-        {
-            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pCharSetValue.get()) ) + 1;
-            pCFontEntry->pCharSetValue.reset( new sal_Int8[ nSize ] );
-            memcpy( pCFontEntry->pCharSetValue.get(), pPtr->pCharSetValue.get(), nSize );
-        }
-        pCFontEntry->eCharSetType = pPtr->eCharSetType;
-        pCFontEntry->nFontType = pPtr->nFontType;
-        aFontEntryList.push_back( std::move(pCFontEntry) );
     }
     return *this;
 }
-
 
 FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
 {

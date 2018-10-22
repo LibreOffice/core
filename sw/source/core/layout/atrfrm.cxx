@@ -827,19 +827,22 @@ SwFormatCol::~SwFormatCol() {}
 
 SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
 {
-    m_eLineStyle  = rCpy.m_eLineStyle;
-    m_nLineWidth  = rCpy.m_nLineWidth;
-    m_aLineColor  = rCpy.m_aLineColor;
-    m_nLineHeight = rCpy.GetLineHeight();
-    m_eAdj        = rCpy.GetLineAdj();
-    m_nWidth      = rCpy.GetWishWidth();
-    m_aWidthAdjustValue = rCpy.m_aWidthAdjustValue;
-    m_bOrtho      = rCpy.IsOrtho();
-
-    m_aColumns.clear();
-    for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
+    if (this != &rCpy)
     {
-        m_aColumns.emplace_back(rCpy.GetColumns()[i] );
+        m_eLineStyle  = rCpy.m_eLineStyle;
+        m_nLineWidth  = rCpy.m_nLineWidth;
+        m_aLineColor  = rCpy.m_aLineColor;
+        m_nLineHeight = rCpy.GetLineHeight();
+        m_eAdj        = rCpy.GetLineAdj();
+        m_nWidth      = rCpy.GetWishWidth();
+        m_aWidthAdjustValue = rCpy.m_aWidthAdjustValue;
+        m_bOrtho      = rCpy.IsOrtho();
+
+        m_aColumns.clear();
+        for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
+        {
+            m_aColumns.emplace_back(rCpy.GetColumns()[i] );
+        }
     }
     return *this;
 }
@@ -1537,14 +1540,17 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
 
 SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
-    m_eAnchorId  = rAnchor.GetAnchorId();
-    m_nPageNumber   = rAnchor.GetPageNum();
-    // OD 2004-05-05 #i28701# - get always new increased order number
-    m_nOrder = ++m_nOrderCounter;
+    if (this != &rAnchor)
+    {
+        m_eAnchorId  = rAnchor.GetAnchorId();
+        m_nPageNumber   = rAnchor.GetPageNum();
+        // OD 2004-05-05 #i28701# - get always new increased order number
+        m_nOrder = ++m_nOrderCounter;
 
-    m_pContentAnchor.reset( (rAnchor.GetContentAnchor())
-        ? new SwPosition(*(rAnchor.GetContentAnchor()))
-        : nullptr );
+        m_pContentAnchor.reset( (rAnchor.GetContentAnchor())
+            ? new SwPosition(*(rAnchor.GetContentAnchor()))
+            : nullptr );
+    }
     return *this;
 }
 
