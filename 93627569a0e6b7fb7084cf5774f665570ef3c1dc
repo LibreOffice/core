@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_4882abca",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-22T12:02:32Z",
+      "side": 1,
+      "message": "So here we want to test for case significant equality. That doesn\u0027t need OUString::compareTo() which also determines the raw Unicode character order, it can use the simple equal operator, so\n\n bOk \u003d (*pValueSource2 \u003d\u003d rItem.maString.getString());",
+      "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
