@@ -34,10 +34,8 @@ constexpr sal_uInt32 getSwDefaultTextFormat() { return NF_STANDARD_FORMAT_TEXT; 
 
 class SW_DLLPUBLIC SwTableBoxNumFormat : public SfxUInt32Item
 {
-    bool m_bAuto;     ///< automatically given flag
 public:
-    SwTableBoxNumFormat( sal_uInt32 nFormat = getSwDefaultTextFormat(),
-                        bool bAuto = false );
+    SwTableBoxNumFormat( sal_uInt32 nFormat = getSwDefaultTextFormat() );
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -46,7 +44,6 @@ public:
     SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
     {
         SetValue( rAttr.GetValue() );
-        m_bAuto = rAttr.m_bAuto;
         return *this;
     }
 };

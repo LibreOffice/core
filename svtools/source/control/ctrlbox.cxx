@@ -1262,10 +1262,8 @@ void FontSizeBox::ImplInit()
 {
     EnableAutocomplete( false );
 
-    bPtRelative     = false;
     bRelative       = false;
     bStdSize        = false;
-    pFontList       = nullptr;
 
     SetShowTrailingZeros( false );
     SetDecimalDigits( 1 );
@@ -1289,9 +1287,6 @@ void FontSizeBox::Reformat()
 
 void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 {
-    // remember for relative mode
-    pFontList = pList;
-
     // no font sizes need to be set for relative mode
     if ( bRelative )
         return;

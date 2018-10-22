@@ -122,10 +122,9 @@ protected:
 class SdPropertySubControl
 {
 public:
-    explicit SdPropertySubControl(weld::Container* pParent, sal_Int32 nType)
+    explicit SdPropertySubControl(weld::Container* pParent)
         : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui"))
         , mxContainer(mxBuilder->weld_container("EffectFragment"))
-        , mnType( nType )
     {
     }
 
@@ -146,7 +145,6 @@ public:
 protected:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
-    sal_Int32           mnType;
 };
 
 class PropertyControl : public ListBox
