@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_28d08f50",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5090,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-10-22T08:38:55Z",
+      "side": 1,
+      "message": "yes dynamic_cast for a hard-coded item is quite pointless",
+      "revId": "4a8c8fef8e3b4d1bbaba12a7538c4dd5dac1b834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
