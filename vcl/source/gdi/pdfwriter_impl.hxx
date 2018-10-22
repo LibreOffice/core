@@ -36,7 +36,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/wall.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -96,9 +96,10 @@ namespace filter
 class PDFObjectElement;
 }
 
-class PDFWriterImpl
+class PDFWriterImpl : public VirtualDevice
 {
     friend class PDFStreamIf;
+
 public:
     // definition of structs
     struct BuiltinFont
@@ -134,7 +135,7 @@ public:
 
     struct PDFPage
     {
-        PDFWriterImpl*              m_pWriter;
+        VclPtr<PDFWriterImpl>             m_pWriter;
         double const                      m_nPageWidth;           // in inch/72
         double const                      m_nPageHeight;          // in inch/72
         PDFWriter::Orientation const      m_eOrientation;
@@ -611,10 +612,9 @@ public:
     static bool compressStream( SvMemoryStream* );
 
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
+
 private:
     static const BuiltinFont m_aBuiltinFonts[14];
-
-    VclPtr<OutputDevice>                m_pReferenceDevice;
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;
@@ -1049,15 +1049,12 @@ i12626
     void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
 public:
     PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, PDFWriter& );
-    ~PDFWriterImpl();
+    ~PDFWriterImpl() override;
+    void dispose() override;
 
     static css::uno::Reference< css::beans::XMaterialHolder >
            initEncryption( const OUString& i_rOwnerPassword,
                            const OUString& i_rUserPassword );
-
-    /* for documentation of public functions please see pdfwriter.hxx */
-
-    OutputDevice* getReferenceDevice();
 
     /* document structure */
     void newPage( double nPageWidth , double nPageHeight, PDFWriter::Orientation eOrientation );

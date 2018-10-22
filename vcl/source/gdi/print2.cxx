@@ -1096,13 +1096,13 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         Point aPageOffset;
         Size aTmpSize( GetOutputSizePixel() );
-        if( mpPDFWriter )
+        if( GetPDFWriter() )
         {
-            aTmpSize = mpPDFWriter->getCurPageSize();
+            aTmpSize = GetPDFWriter()->getCurPageSize();
             aTmpSize = LogicToPixel( aTmpSize, MapMode( MapUnit::MapPoint ) );
 
             // also add error code to PDFWriter
-            mpPDFWriter->insertError( vcl::PDFWriter::Warning_Transparency_Converted );
+            GetPDFWriter()->insertError( vcl::PDFWriter::Warning_Transparency_Converted );
         }
         else if( meOutDevType == OUTDEV_PRINTER )
         {

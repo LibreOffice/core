@@ -542,7 +542,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
                 if (mxFontCollection && mxFontCollection != pSVData->maGDIData.mxScreenFontList)
                     mxFontCollection->Clear();
 
-                if( mpPDFWriter )
+                if( GetPDFWriter() )
                 {
                     mxFontCollection.reset();
                     mxFontCache.reset();
@@ -579,7 +579,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
             // we need a graphics
             if ( AcquireGraphics() )
             {
-                if( mpPDFWriter )
+                if( GetPDFWriter() )
                 {
                     mxFontCollection = pSVData->maGDIData.mxScreenFontList->Clone();
                     mxFontCache.reset(new ImplFontCache);
@@ -1005,12 +1005,19 @@ void OutputDevice::InitFont() const
     mbInitFont = false;
 }
 
+const LogicalFontInstance* OutputDevice::GetFontInstance() const
+{
+    if (ImplNewFont())
+        InitFont();
+    return mpFontInstance.get();
+}
+
 bool OutputDevice::ImplNewFont() const
 {
     DBG_TESTSOLARMUTEX();
 
     // get correct font list on the PDF writer if necessary
-    if( mpPDFWriter )
+    if( GetPDFWriter() )
     {
         const ImplSVData* pSVData = ImplGetSVData();
         if( mxFontCollection == pSVData->maGDIData.mxScreenFontList
