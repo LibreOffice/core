@@ -94,16 +94,14 @@ namespace bib
 
     void SAL_CALL OComponentAdapterBase::disposing( const EventObject& )
     {
-        if ( m_pListener )
+        if (m_pListener)
         {
             // disconnect the listener
-            if ( m_pListener )  // may have been reset whilest calling into _disposing
-                m_pListener->setAdapter( nullptr );
+            m_pListener->setAdapter( nullptr );
+            m_pListener = nullptr;
         }
 
-        m_pListener = nullptr;
         m_bListening = false;
-
         m_xComponent = nullptr;
     }
 
