@@ -389,7 +389,7 @@ namespace unotools
 
                 // empty polygon - impossible to specify _any_
                 // legal value except 0 here!
-                if( !nPolyCount && nPointIndex )
+                if( !nPolyCount)
                     throw lang::IndexOutOfBoundsException();
 
                 nFirstPoint = nPointIndex;

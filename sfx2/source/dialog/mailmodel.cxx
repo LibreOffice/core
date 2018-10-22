@@ -537,20 +537,17 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     if( bNeedsPreparation && xPrepareDispatch.is() )
                     {
-                        if ( xPrepareDispatch.is() )
+                        try
                         {
-                            try
-                            {
-                                css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
-                                xPrepareDispatch->dispatch( aPrepareURL, aDispatchArgs );
-                            }
-                            catch ( css::uno::RuntimeException& )
-                            {
-                                throw;
-                            }
-                            catch ( css::uno::Exception& )
-                            {
-                            }
+                            css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
+                            xPrepareDispatch->dispatch( aPrepareURL, aDispatchArgs );
+                        }
+                        catch ( css::uno::RuntimeException& )
+                        {
+                            throw;
+                        }
+                        catch ( css::uno::Exception& )
+                        {
                         }
                     }
 

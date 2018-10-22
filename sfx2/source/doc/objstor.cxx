@@ -1558,7 +1558,7 @@ bool SfxObjectShell::SaveTo_Impl
             bTryToPreserveScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
 
         uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
-        if ( bOk && bTryToPreserveScriptSignature )
+        if (bTryToPreserveScriptSignature)
         {
             // if the scripting code was not changed and it is signed the signature should be preserved
             // unfortunately at this point we have only information whether the basic code has changed or not

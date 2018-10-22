@@ -347,9 +347,9 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
         if ( xTable.is() && m_xMetaData.is() )
         {
-            if( m_xMetaData.is() && m_xMetaData->supportsCatalogsInTableDefinitions() )
+            if (m_xMetaData->supportsCatalogsInTableDefinitions())
                 xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-            if( m_xMetaData.is() && m_xMetaData->supportsSchemasInTableDefinitions() )
+            if (m_xMetaData->supportsSchemasInTableDefinitions())
                 xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
             xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 

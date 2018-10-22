@@ -4560,301 +4560,298 @@ OUString getDateStringForType(condformat::ScCondFormatDateType eType)
 void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 {
     ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);
-    if(pCondFormatList)
+    if(!pCondFormatList)
+        return;
+
+    if (pCondFormatList->empty())
+        return;
+
+    SvXMLElementExport aElementCondFormats(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, true, true);
+
+    for(ScConditionalFormatList::const_iterator itr = pCondFormatList->begin();
+            itr != pCondFormatList->end(); ++itr)
     {
-        if(pCondFormatList && pCondFormatList->empty())
-            return;
-
-        SvXMLElementExport aElementCondFormats(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, true, true);
-
-        if(pCondFormatList)
+        OUString sRanges;
+        const ScRangeList& rRangeList = (*itr)->GetRange();
+        ScRangeStringConverter::GetStringFromRangeList( sRanges, &rRangeList, pDoc, formula::FormulaGrammar::CONV_OOO );
+        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, sRanges);
+        SvXMLElementExport aElementCondFormat(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, true, true);
+        size_t nEntries = (*itr)->size();
+        for(size_t i = 0; i < nEntries; ++i)
         {
-            for(ScConditionalFormatList::const_iterator itr = pCondFormatList->begin();
-                    itr != pCondFormatList->end(); ++itr)
+            const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(i);
+            if(pFormatEntry->GetType()==ScFormatEntry::Type::Condition)
             {
-                OUString sRanges;
-                const ScRangeList& rRangeList = (*itr)->GetRange();
-                ScRangeStringConverter::GetStringFromRangeList( sRanges, &rRangeList, pDoc, formula::FormulaGrammar::CONV_OOO );
-                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, sRanges);
-                SvXMLElementExport aElementCondFormat(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, true, true);
-                size_t nEntries = (*itr)->size();
-                for(size_t i = 0; i < nEntries; ++i)
+                const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+                OUStringBuffer aCond;
+                ScAddress aPos = pEntry->GetSrcPos();
+                switch(pEntry->GetOperation())
                 {
-                    const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(i);
-                    if(pFormatEntry->GetType()==ScFormatEntry::Type::Condition)
-                    {
-                        const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
-                        OUStringBuffer aCond;
-                        ScAddress aPos = pEntry->GetSrcPos();
-                        switch(pEntry->GetOperation())
-                        {
-                            case ScConditionMode::Equal:
-                                aCond.append('=');
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                break;
-                            case ScConditionMode::Less:
-                                aCond.append('<');
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                break;
-                            case ScConditionMode::Greater:
-                                aCond.append('>');
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                break;
-                            case ScConditionMode::EqLess:
-                                aCond.append("<=");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                break;
-                            case ScConditionMode::EqGreater:
-                                aCond.append(">=");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                break;
-                            case ScConditionMode::NotEqual:
-                                aCond.append("!=");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                break;
-                            case ScConditionMode::Between:
-                                aCond.append("between(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(',');
-                                aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(')');
-                                break;
-                            case ScConditionMode::NotBetween:
-                                aCond.append("not-between(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(',');
-                                aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(')');
-                                break;
-                            case ScConditionMode::Duplicate:
-                                aCond.append("duplicate");
-                                break;
-                            case ScConditionMode::NotDuplicate:
-                                aCond.append("unique");
-                                break;
-                            case ScConditionMode::Direct:
-                                aCond.append("formula-is(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(')');
-                                break;
-                            case ScConditionMode::Top10:
-                                aCond.append("top-elements(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::Bottom10:
-                                aCond.append("bottom-elements(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::TopPercent:
-                                aCond.append("top-percent(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::BottomPercent:
-                                aCond.append("bottom-percent(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::AboveAverage:
-                                aCond.append("above-average");
-                                break;
-                            case ScConditionMode::BelowAverage:
-                                aCond.append("below-average");
-                                break;
-                            case ScConditionMode::AboveEqualAverage:
-                                aCond.append("above-equal-average");
-                                break;
-                            case ScConditionMode::BelowEqualAverage:
-                                aCond.append("below-equal-average");
-                                break;
-                            case ScConditionMode::Error:
-                                aCond.append("is-error");
-                                break;
-                            case ScConditionMode::NoError:
-                                aCond.append("is-no-error");
-                                break;
-                            case ScConditionMode::BeginsWith:
-                                aCond.append("begins-with(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::EndsWith:
-                                aCond.append("ends-with(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::ContainsText:
-                                aCond.append("contains-text(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::NotContainsText:
-                                aCond.append("not-contains-text(");
-                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                                aCond.append(")");
-                                break;
-                            case ScConditionMode::NONE:
-                                continue;
-                            default:
-                                SAL_WARN("sc", "unimplemented conditional format export");
-                        }
-                        OUString sStyle = ScStyleNameConversion::DisplayToProgrammaticName(pEntry->GetStyle(), SfxStyleFamily::Para);
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
+                    case ScConditionMode::Equal:
+                        aCond.append('=');
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        break;
+                    case ScConditionMode::Less:
+                        aCond.append('<');
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        break;
+                    case ScConditionMode::Greater:
+                        aCond.append('>');
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        break;
+                    case ScConditionMode::EqLess:
+                        aCond.append("<=");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        break;
+                    case ScConditionMode::EqGreater:
+                        aCond.append(">=");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        break;
+                    case ScConditionMode::NotEqual:
+                        aCond.append("!=");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        break;
+                    case ScConditionMode::Between:
+                        aCond.append("between(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(',');
+                        aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(')');
+                        break;
+                    case ScConditionMode::NotBetween:
+                        aCond.append("not-between(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(',');
+                        aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(')');
+                        break;
+                    case ScConditionMode::Duplicate:
+                        aCond.append("duplicate");
+                        break;
+                    case ScConditionMode::NotDuplicate:
+                        aCond.append("unique");
+                        break;
+                    case ScConditionMode::Direct:
+                        aCond.append("formula-is(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(')');
+                        break;
+                    case ScConditionMode::Top10:
+                        aCond.append("top-elements(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::Bottom10:
+                        aCond.append("bottom-elements(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::TopPercent:
+                        aCond.append("top-percent(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::BottomPercent:
+                        aCond.append("bottom-percent(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::AboveAverage:
+                        aCond.append("above-average");
+                        break;
+                    case ScConditionMode::BelowAverage:
+                        aCond.append("below-average");
+                        break;
+                    case ScConditionMode::AboveEqualAverage:
+                        aCond.append("above-equal-average");
+                        break;
+                    case ScConditionMode::BelowEqualAverage:
+                        aCond.append("below-equal-average");
+                        break;
+                    case ScConditionMode::Error:
+                        aCond.append("is-error");
+                        break;
+                    case ScConditionMode::NoError:
+                        aCond.append("is-no-error");
+                        break;
+                    case ScConditionMode::BeginsWith:
+                        aCond.append("begins-with(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::EndsWith:
+                        aCond.append("ends-with(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::ContainsText:
+                        aCond.append("contains-text(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::NotContainsText:
+                        aCond.append("not-contains-text(");
+                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(")");
+                        break;
+                    case ScConditionMode::NONE:
+                        continue;
+                    default:
+                        SAL_WARN("sc", "unimplemented conditional format export");
+                }
+                OUString sStyle = ScStyleNameConversion::DisplayToProgrammaticName(pEntry->GetStyle(), SfxStyleFamily::Para);
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
 
-                        OUString sBaseAddress;
-                        ScRangeStringConverter::GetStringFromAddress( sBaseAddress, aPos, pDoc,formula::FormulaGrammar::CONV_ODF );
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_BASE_CELL_ADDRESS, sBaseAddress);
-                        SvXMLElementExport aElementCondEntry(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITION, true, true);
+                OUString sBaseAddress;
+                ScRangeStringConverter::GetStringFromAddress( sBaseAddress, aPos, pDoc,formula::FormulaGrammar::CONV_ODF );
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_BASE_CELL_ADDRESS, sBaseAddress);
+                SvXMLElementExport aElementCondEntry(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITION, true, true);
+            }
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
+            {
+                SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
+                const ScColorScaleFormat& rColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
+                for(ScColorScaleEntries::const_iterator it = rColorScale.begin();
+                        it != rColorScale.end(); ++it)
+                {
+                    if(it[0]->GetType() == COLORSCALE_FORMULA)
+                    {
+                        OUString sFormula = it[0]->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                     }
-                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
+                    else
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it[0]->GetValue()));
+
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it[0]));
+                    OUStringBuffer aBuffer;
+                    ::sax::Converter::convertColor(aBuffer, it[0]->GetColor());
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLOR, aBuffer.makeStringAndClear());
+                    SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
+                }
+            }
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)
+            {
+                const ScDataBarFormatData* pFormatData = static_cast<const ScDataBarFormat&>(*pFormatEntry).GetDataBarData();
+                if(!pFormatData->mbGradient)
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_FALSE);
+                if(pFormatData->mbOnlyBar)
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
+
+                if (pFormatData->mnMinLength != 0.0)
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MIN_LENGTH, OUString::number(pFormatData->mnMinLength));
+
+                if (pFormatData->mnMaxLength != 0.0)
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MAX_LENGTH, OUString::number(pFormatData->mnMaxLength));
+
+                if(pFormatData->mbNeg)
+                {
+                    if(pFormatData->mpNegativeColor)
                     {
-                        SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
-                        const ScColorScaleFormat& rColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
-                        for(ScColorScaleEntries::const_iterator it = rColorScale.begin();
-                                it != rColorScale.end(); ++it)
-                        {
-                            if(it[0]->GetType() == COLORSCALE_FORMULA)
-                            {
-                                OUString sFormula = it[0]->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                            }
-                            else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it[0]->GetValue()));
-
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it[0]));
-                            OUStringBuffer aBuffer;
-                            ::sax::Converter::convertColor(aBuffer, it[0]->GetColor());
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLOR, aBuffer.makeStringAndClear());
-                            SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
-                        }
-                    }
-                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)
-                    {
-                        const ScDataBarFormatData* pFormatData = static_cast<const ScDataBarFormat&>(*pFormatEntry).GetDataBarData();
-                        if(!pFormatData->mbGradient)
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_FALSE);
-                        if(pFormatData->mbOnlyBar)
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
-
-                        if (pFormatData->mnMinLength != 0.0)
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MIN_LENGTH, OUString::number(pFormatData->mnMinLength));
-
-                        if (pFormatData->mnMaxLength != 0.0)
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MAX_LENGTH, OUString::number(pFormatData->mnMaxLength));
-
-                        if(pFormatData->mbNeg)
-                        {
-                            if(pFormatData->mpNegativeColor)
-                            {
-                                OUStringBuffer aBuffer;
-                                ::sax::Converter::convertColor(aBuffer, *pFormatData->mpNegativeColor);
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
-                            }
-                            else
-                            {
-                                OUStringBuffer aBuffer;
-                                ::sax::Converter::convertColor(aBuffer, COL_LIGHTRED);
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
-                            }
-                        }
-
-                        if(pFormatData->meAxisPosition != databar::AUTOMATIC)
-                        {
-                            if(pFormatData->meAxisPosition == databar::NONE)
-                            {
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, OUString("none"));
-                            }
-                            else
-                            {
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, OUString("middle"));
-                            }
-                        }
-
                         OUStringBuffer aBuffer;
-                        ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor);
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
-
-                        aBuffer.truncate();
-                        ::sax::Converter::convertColor(aBuffer, pFormatData->maAxisColor);
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_COLOR, aBuffer.makeStringAndClear());
-                        SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
-
-                        {
-                            if(pFormatData->mpLowerLimit->GetType() == COLORSCALE_FORMULA)
-                            {
-                                OUString sFormula = pFormatData->mpLowerLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                            }
-                            else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpLowerLimit->GetValue()));
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
-                            SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
-                        }
-
-                        {
-                            if(pFormatData->mpUpperLimit->GetType() == COLORSCALE_FORMULA)
-                            {
-                                OUString sFormula = pFormatData->mpUpperLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                            }
-                            else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpUpperLimit->GetValue()));
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit, false));
-                            SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
-                        }
+                        ::sax::Converter::convertColor(aBuffer, *pFormatData->mpNegativeColor);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                     }
-                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
+                    else
                     {
-                        const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
-                        OUString aIconSetName = OUString::createFromAscii(ScIconSetFormat::getIconSetName(rIconSet.GetIconSetData()->eIconSetType));
-                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
-                        if (rIconSet.GetIconSetData()->mbCustom)
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM, OUString::boolean(true));
-
-                        SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_ICON_SET, true, true);
-
-                        if (rIconSet.GetIconSetData()->mbCustom)
-                        {
-                            for (std::vector<std::pair<ScIconSetType, sal_Int32> >::const_iterator
-                                    it = rIconSet.GetIconSetData()->maCustomVector.begin();
-                                    it != rIconSet.GetIconSetData()->maCustomVector.end(); ++it)
-                            {
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, OUString::createFromAscii(ScIconSetFormat::getIconSetName(it->first)));
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_INDEX, OUString::number(it->second));
-                                SvXMLElementExport aCustomIcon(*this, XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET, true, true);
-                            }
-
-                        }
-
-                        if(!rIconSet.GetIconSetData()->mbShowValue)
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
-                        for (auto const& it : rIconSet)
-                        {
-                            if(it->GetType() == COLORSCALE_FORMULA)
-                            {
-                                OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                            }
-                            else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
-
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
-                            SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
-                        }
-                    }
-                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
-                    {
-                        const ScCondDateFormatEntry& rDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
-                        OUString aDateType = getDateStringForType(rDateFormat.GetDateType());
-                        OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(rDateFormat.GetStyleName(), SfxStyleFamily::Para );
-                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, aStyleName);
-                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_DATE, aDateType);
-                        SvXMLElementExport aElementDateFormat(*this, XML_NAMESPACE_CALC_EXT, XML_DATE_IS, true, true);
+                        OUStringBuffer aBuffer;
+                        ::sax::Converter::convertColor(aBuffer, COL_LIGHTRED);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                     }
                 }
+
+                if(pFormatData->meAxisPosition != databar::AUTOMATIC)
+                {
+                    if(pFormatData->meAxisPosition == databar::NONE)
+                    {
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, OUString("none"));
+                    }
+                    else
+                    {
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, OUString("middle"));
+                    }
+                }
+
+                OUStringBuffer aBuffer;
+                ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor);
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
+
+                aBuffer.truncate();
+                ::sax::Converter::convertColor(aBuffer, pFormatData->maAxisColor);
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_COLOR, aBuffer.makeStringAndClear());
+                SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
+
+                {
+                    if(pFormatData->mpLowerLimit->GetType() == COLORSCALE_FORMULA)
+                    {
+                        OUString sFormula = pFormatData->mpLowerLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                    }
+                    else
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpLowerLimit->GetValue()));
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
+                    SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
+                }
+
+                {
+                    if(pFormatData->mpUpperLimit->GetType() == COLORSCALE_FORMULA)
+                    {
+                        OUString sFormula = pFormatData->mpUpperLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                    }
+                    else
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpUpperLimit->GetValue()));
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit, false));
+                    SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
+                }
+            }
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
+            {
+                const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
+                OUString aIconSetName = OUString::createFromAscii(ScIconSetFormat::getIconSetName(rIconSet.GetIconSetData()->eIconSetType));
+                AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
+                if (rIconSet.GetIconSetData()->mbCustom)
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM, OUString::boolean(true));
+
+                SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_ICON_SET, true, true);
+
+                if (rIconSet.GetIconSetData()->mbCustom)
+                {
+                    for (std::vector<std::pair<ScIconSetType, sal_Int32> >::const_iterator
+                            it = rIconSet.GetIconSetData()->maCustomVector.begin();
+                            it != rIconSet.GetIconSetData()->maCustomVector.end(); ++it)
+                    {
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, OUString::createFromAscii(ScIconSetFormat::getIconSetName(it->first)));
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_INDEX, OUString::number(it->second));
+                        SvXMLElementExport aCustomIcon(*this, XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET, true, true);
+                    }
+
+                }
+
+                if(!rIconSet.GetIconSetData()->mbShowValue)
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
+                for (auto const& it : rIconSet)
+                {
+                    if(it->GetType() == COLORSCALE_FORMULA)
+                    {
+                        OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                    }
+                    else
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
+
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
+                    SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
+                }
+            }
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
+            {
+                const ScCondDateFormatEntry& rDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
+                OUString aDateType = getDateStringForType(rDateFormat.GetDateType());
+                OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(rDateFormat.GetStyleName(), SfxStyleFamily::Para );
+                AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, aStyleName);
+                AddAttribute( XML_NAMESPACE_CALC_EXT, XML_DATE, aDateType);
+                SvXMLElementExport aElementDateFormat(*this, XML_NAMESPACE_CALC_EXT, XML_DATE_IS, true, true);
             }
         }
     }

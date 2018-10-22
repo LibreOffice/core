@@ -141,10 +141,7 @@ void PresenterSpritePane::UpdateCanvases()
 {
     Reference<XComponent> xContentCanvasComponent (mxContentCanvas, UNO_QUERY);
     if (xContentCanvasComponent.is())
-    {
-        if (xContentCanvasComponent.is())
-            xContentCanvasComponent->dispose();
-    }
+        xContentCanvasComponent->dispose();
 
     // The border canvas is the content canvas of the sprite.
     mxBorderCanvas = mpSprite->GetCanvas();

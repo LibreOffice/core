@@ -591,16 +591,13 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                     eState = FAILED;
 
                     OSL_ENSURE( xObjectCollection.is(), "::dbtools::getFieldsByCommandDescriptor: invalid connection (no sdb.Connection, or no Tables-/QueriesSupplier)!");
-                    if ( xObjectCollection.is() )
+                    if ( xObjectCollection.is() && xObjectCollection->hasByName( _rCommand ) )
                     {
-                        if ( xObjectCollection.is() && xObjectCollection->hasByName( _rCommand ) )
-                        {
-                            xObjectCollection->getByName( _rCommand ) >>= xSupplyColumns;
-                                // (xSupplyColumns being NULL will be handled in the next state)
+                        xObjectCollection->getByName( _rCommand ) >>= xSupplyColumns;
+                            // (xSupplyColumns being NULL will be handled in the next state)
 
-                            // next: go for the columns
-                            eState = RETRIEVE_COLUMNS;
-                        }
+                        // next: go for the columns
+                        eState = RETRIEVE_COLUMNS;
                     }
                     break;
 
