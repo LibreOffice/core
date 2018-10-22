@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <iostream>
+
 #include <test/screenshot_test.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
@@ -246,34 +250,27 @@ void ScreenshotTest::processDialogBatchFile(const OUString& rFile)
 
     while (aStream.ReadLine(aNextUIFile))
     {
-        try
+        if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
         {
-            if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
-            {
-                // first check if it's a known dialog
-                ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
+            std::cout << "processing " << aNextUIFile << ":\n";
 
-                if (pDlg)
-                {
-                    // known dialog, dump screenshot to path
-                    dumpDialogToPath(*pDlg);
-                }
-                else
-                {
-                    // unknown dialog, try fallback to generic created
-                    // VclBuilder-generated instance. Keep in mind that Dialogs
-                    // using this mechanism will probably not be layouted well
-                    // since the setup/initialization part is missing. Thus,
-                    // only use for fallback when only the UI file is available.
-                    dumpDialogToPath(aNextUIFile);
-                }
+            // first check if it's a known dialog
+            ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
+
+            if (pDlg)
+            {
+                // known dialog, dump screenshot to path
+                dumpDialogToPath(*pDlg);
             }
-        }
-        catch(...)
-        {
-            OString aMsg("Exception while processing ");
-            aMsg += aNextUIFile;
-            CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), false);
+            else
+            {
+                // unknown dialog, try fallback to generic created
+                // VclBuilder-generated instance. Keep in mind that Dialogs
+                // using this mechanism will probably not be layouted well
+                // since the setup/initialization part is missing. Thus,
+                // only use for fallback when only the UI file is available.
+                dumpDialogToPath(aNextUIFile);
+            }
         }
     }
 }
