@@ -1312,7 +1312,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
     auto pChartWindow(GetChartWindow());
-    if(!pChartWindow || !pDrawViewWrapper)
+    if (!pChartWindow || !pDrawViewWrapper)
         return bReturn;
 
     // handle accelerators
@@ -1433,7 +1433,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     // default 1 mm in each direction
                     double fGrowAmountX = 200.0;
                     double fGrowAmountY = 200.0;
-                    if( bAlternate && pChartWindow )
+                    if (bAlternate)
                     {
                         // together with Alt-key: 1 px in each direction
                         Size aPixelSize = pChartWindow->PixelToLogic( Size( 2, 2 ));
@@ -1460,7 +1460,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     // default 1 mm
                     double fShiftAmountX = 100.0;
                     double fShiftAmountY = 100.0;
-                    if( bAlternate && pChartWindow )
+                    if (bAlternate)
                     {
                         // together with Alt-key: 1 px
                         Size aPixelSize = pChartWindow->PixelToLogic( Size( 1, 1 ));
@@ -1562,7 +1562,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pChartWindow->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           SchResId(STR_ACTION_NOTPOSSIBLE)));
             xInfoBox->run();
