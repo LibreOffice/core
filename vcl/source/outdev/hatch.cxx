@@ -401,9 +401,9 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
         {
             for( long i = 0; i < nPCounter; i += 2 )
             {
-                if( mpPDFWriter )
+                if( GetPDFWriter() )
                 {
-                    mpPDFWriter->drawLine( pPtBuffer[ i ], pPtBuffer[ i+1 ] );
+                    GetPDFWriter()->drawLine( pPtBuffer[ i ], pPtBuffer[ i+1 ] );
                 }
                 else
                 {
