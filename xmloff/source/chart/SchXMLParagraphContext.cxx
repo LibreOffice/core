@@ -38,8 +38,7 @@ SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
 {
 }
 
-SchXMLParagraphContext::~SchXMLParagraphContext()
-{}
+SchXMLParagraphContext::~SchXMLParagraphContext() = default;
 
 void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

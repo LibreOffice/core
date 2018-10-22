@@ -46,10 +46,7 @@ SvXMLEnumMapEntry<style::GraphicLocation> const pXML_BrushVerticalPos[] =
 // class XMLBackGraphicPositionPropHdl
 
 
-XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()
-{
-    // Nothing to do
-}
+XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl() = default;
 
 bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

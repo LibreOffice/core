@@ -87,7 +87,7 @@ class BitmapCache::CacheBitmapContainer
     : public std::unordered_map<CacheKey, CacheEntry, CacheHash>
 {
 public:
-    CacheBitmapContainer() {}
+    CacheBitmapContainer() = default;
 };
 
 namespace {

@@ -1265,11 +1265,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
 
 // class SfxStoringHelper
 
-
-SfxStoringHelper::SfxStoringHelper()
-{
-}
-
+SfxStoringHelper::SfxStoringHelper() = default;
 
 uno::Reference< container::XNameAccess > const & SfxStoringHelper::GetFilterConfiguration()
 {

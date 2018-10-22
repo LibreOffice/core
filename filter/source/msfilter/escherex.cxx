@@ -136,13 +136,9 @@ EscherExAtom::~EscherExAtom()
     }
 }
 
-EscherExClientRecord_Base::~EscherExClientRecord_Base()
-{
-}
+EscherExClientRecord_Base::~EscherExClientRecord_Base() = default;
 
-EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
-{
-}
+EscherExClientAnchor_Base::~EscherExClientAnchor_Base() = default;
 
 EscherPropertyContainer::EscherPropertyContainer(
     EscherGraphicProvider * pGraphProv, SvStream * pPiOutStrm,
@@ -168,9 +164,8 @@ EscherPropertyContainer::EscherPropertyContainer(
     EscherPropertyContainer(&rGraphProv, pPiOutStrm, &rBoundRect)
 {}
 
-EscherPropertyContainer::~EscherPropertyContainer()
-{
-};
+EscherPropertyContainer::~EscherPropertyContainer() = default;
+;
 
 void EscherPropertyContainer::AddOpt(
     sal_uInt16 nPropID,
@@ -3767,13 +3762,9 @@ bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const uno::Refer
     return false;
 }
 
-EscherPersistTable::EscherPersistTable()
-{
-}
+EscherPersistTable::EscherPersistTable() = default;
 
-EscherPersistTable::~EscherPersistTable()
-{
-}
+EscherPersistTable::~EscherPersistTable() = default;
 
 bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 {
@@ -3982,9 +3973,8 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
        .WriteUInt32( 0 );
 }
 
-EscherBlibEntry::~EscherBlibEntry()
-{
-};
+EscherBlibEntry::~EscherBlibEntry() = default;
+;
 
 bool EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) const
 {
@@ -4001,9 +3991,7 @@ EscherGraphicProvider::EscherGraphicProvider( EscherGraphicProviderFlags nFlags 
 {
 }
 
-EscherGraphicProvider::~EscherGraphicProvider()
-{
-}
+EscherGraphicProvider::~EscherGraphicProvider() = default;
 
 void EscherGraphicProvider::SetNewBlipStreamOffset( sal_Int32 nOffset )
 {
@@ -4631,13 +4619,9 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
     return nRule;
 }
 
-EscherSolverContainer::EscherSolverContainer()
-{
-}
+EscherSolverContainer::EscherSolverContainer() = default;
 
-EscherSolverContainer::~EscherSolverContainer()
-{
-}
+EscherSolverContainer::~EscherSolverContainer() = default;
 
 void EscherSolverContainer::AddShape( const uno::Reference<drawing::XShape> & rXShape, sal_uInt32 nId )
 {
@@ -4721,9 +4705,7 @@ EscherExGlobal::EscherExGlobal() :
 {
 }
 
-EscherExGlobal::~EscherExGlobal()
-{
-}
+EscherExGlobal::~EscherExGlobal() = default;
 
 sal_uInt32 EscherExGlobal::GenerateDrawingId()
 {

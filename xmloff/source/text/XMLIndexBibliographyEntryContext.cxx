@@ -53,9 +53,7 @@ XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
 {
 }
 
-XMLIndexBibliographyEntryContext::~XMLIndexBibliographyEntryContext()
-{
-}
+XMLIndexBibliographyEntryContext::~XMLIndexBibliographyEntryContext() = default;
 
 const SvXMLEnumMapEntry<sal_uInt16> aBibliographyDataFieldMap[] =
 {

@@ -56,11 +56,7 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem )
 {
 }
 
-
-SvxBulletItem::~SvxBulletItem()
-{
-}
-
+SvxBulletItem::~SvxBulletItem() = default;
 
 SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 {

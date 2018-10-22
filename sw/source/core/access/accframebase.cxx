@@ -206,9 +206,7 @@ bool SwAccessibleFrameBase::HasCursor()
     return m_bIsSelected;
 }
 
-SwAccessibleFrameBase::~SwAccessibleFrameBase()
-{
-}
+SwAccessibleFrameBase::~SwAccessibleFrameBase() = default;
 
 void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {

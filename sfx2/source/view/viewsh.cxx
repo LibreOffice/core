@@ -229,9 +229,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_nViewShellId(SfxViewShell_Impl::m_nLastViewShellId++)
 {}
 
-SfxViewShell_Impl::~SfxViewShell_Impl()
-{
-}
+SfxViewShell_Impl::~SfxViewShell_Impl() = default;
 
 std::vector< SfxInPlaceClient* > *SfxViewShell_Impl::GetIPClients_Impl( bool bCreate ) const
 {

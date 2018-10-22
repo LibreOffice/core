@@ -141,7 +141,7 @@ void Writer::stop() {
     items_.set();
 }
 
-Writer::~Writer() {}
+Writer::~Writer() = default;
 
 void Writer::execute() {
     try {

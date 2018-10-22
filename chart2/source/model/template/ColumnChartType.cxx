@@ -123,17 +123,13 @@ struct StaticColumnChartTypeInfo : public rtl::StaticAggregate< uno::Reference< 
 
 namespace chart
 {
+ColumnChartType::ColumnChartType() = default;
 
-ColumnChartType::ColumnChartType()
-{}
+ColumnChartType::ColumnChartType(const ColumnChartType& rOther)
 
-ColumnChartType::ColumnChartType( const ColumnChartType & rOther ) :
-        ChartType( rOther )
-{
-}
+    = default;
 
-ColumnChartType::~ColumnChartType()
-{}
+ColumnChartType::~ColumnChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()

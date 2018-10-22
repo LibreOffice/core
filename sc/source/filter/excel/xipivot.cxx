@@ -187,9 +187,7 @@ XclImpPCField::XclImpPCField( const XclImpRoot& rRoot, XclImpPivotCache& rPCache
 {
 }
 
-XclImpPCField::~XclImpPCField()
-{
-}
+XclImpPCField::~XclImpPCField() = default;
 
 // general field/item access --------------------------------------------------
 
@@ -594,9 +592,7 @@ XclImpPivotCache::XclImpPivotCache( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpPivotCache::~XclImpPivotCache()
-{
-}
+XclImpPivotCache::~XclImpPivotCache() = default;
 
 // data access ----------------------------------------------------------------
 
@@ -1245,9 +1241,7 @@ XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpPivotTable::~XclImpPivotTable()
-{
-}
+XclImpPivotTable::~XclImpPivotTable() = default;
 
 // cache/field access, misc. --------------------------------------------------
 
@@ -1617,9 +1611,7 @@ XclImpPivotTableManager::XclImpPivotTableManager( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpPivotTableManager::~XclImpPivotTableManager()
-{
-}
+XclImpPivotTableManager::~XclImpPivotTableManager() = default;
 
 // pivot cache records --------------------------------------------------------
 

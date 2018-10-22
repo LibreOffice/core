@@ -43,7 +43,8 @@ namespace {
 
 class Generated {
 public:
-    virtual ~Generated() {};
+    virtual ~Generated() = default;
+    ;
 
     virtual std::type_info * get() const = 0;
 };

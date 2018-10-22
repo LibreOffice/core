@@ -66,10 +66,7 @@ namespace dbaui
             &m_xRowSet, cppu::UnoType<decltype(m_xRowSet)>::get() );
     }
 
-    ComposerDialog::~ComposerDialog()
-    {
-
-    }
+    ComposerDialog::~ComposerDialog() = default;
 
     css::uno::Sequence<sal_Int8> ComposerDialog::getImplementationId()
     {

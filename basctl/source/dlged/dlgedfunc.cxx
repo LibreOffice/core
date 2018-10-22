@@ -83,9 +83,7 @@ DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
-DlgEdFunc::~DlgEdFunc()
-{
-}
+DlgEdFunc::~DlgEdFunc() = default;
 
 void DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
@@ -431,9 +429,7 @@ DlgEdFuncSelect::DlgEdFuncSelect (DlgEditor& rParent_) :
 {
 }
 
-DlgEdFuncSelect::~DlgEdFuncSelect()
-{
-}
+DlgEdFuncSelect::~DlgEdFuncSelect() = default;
 
 void DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {

@@ -751,7 +751,7 @@ namespace osl_StreamPipe
     {
     public:
         sal_Char buf[256];
-        Pipe_DataSink_Thread( ) { }
+        Pipe_DataSink_Thread() = default;
 
     protected:
         void SAL_CALL run( ) override

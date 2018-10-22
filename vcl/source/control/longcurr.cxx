@@ -257,9 +257,7 @@ LongCurrencyFormatter::LongCurrencyFormatter()
     ImpInit();
 }
 
-LongCurrencyFormatter::~LongCurrencyFormatter()
-{
-}
+LongCurrencyFormatter::~LongCurrencyFormatter() = default;
 
 void LongCurrencyFormatter::SetCurrencySymbol( const OUString& rStr )
 {

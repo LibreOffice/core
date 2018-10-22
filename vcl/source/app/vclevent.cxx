@@ -36,10 +36,7 @@ VclAccessibleEvent::VclAccessibleEvent( VclEventId n, const Reference<XAccessibl
 {
 }
 
-VclAccessibleEvent::~VclAccessibleEvent()
-{
-}
-
+VclAccessibleEvent::~VclAccessibleEvent() = default;
 
 void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
 {
@@ -89,14 +86,13 @@ VclWindowEvent::VclWindowEvent( vcl::Window* pWin, VclEventId n, void* pDat ) : 
     pWindow = pWin; pData = pDat;
 }
 
-VclWindowEvent::~VclWindowEvent() {}
+VclWindowEvent::~VclWindowEvent() = default;
 
 VclMenuEvent::VclMenuEvent( Menu* pM, VclEventId n, sal_uInt16 nPos )
     : VclSimpleEvent(n), pMenu(pM), mnPos(nPos)
 {}
 
-VclMenuEvent::~VclMenuEvent()
-{}
+VclMenuEvent::~VclMenuEvent() = default;
 
 Menu* VclMenuEvent::GetMenu() const
 {

@@ -1521,9 +1521,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
 }
 
-SvXMLNumFormatContext::~SvXMLNumFormatContext()
-{
-}
+SvXMLNumFormatContext::~SvXMLNumFormatContext() = default;
 
 SvXMLImportContextRef SvXMLNumFormatContext::CreateChildContext(
                                     sal_uInt16 nPrfx, const OUString& rLName,

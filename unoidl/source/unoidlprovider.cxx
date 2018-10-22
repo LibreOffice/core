@@ -664,7 +664,7 @@ public:
     {}
 
 private:
-    virtual ~UnoidlCursor() throw () override {}
+    virtual ~UnoidlCursor() throw() override = default;
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -706,7 +706,7 @@ public:
     }
 
 private:
-    virtual ~UnoidlModuleEntity() throw () override {}
+    virtual ~UnoidlModuleEntity() throw() override = default;
 
     virtual std::vector< OUString > getMemberNames() const override;
 
@@ -1399,8 +1399,7 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
     }
 }
 
-UnoidlProvider::~UnoidlProvider() throw () {}
-
+UnoidlProvider::~UnoidlProvider() throw() = default;
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

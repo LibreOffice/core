@@ -506,9 +506,7 @@ void SwRootFrame::DestroyImpl()
     SwLayoutFrame::DestroyImpl();
 }
 
-SwRootFrame::~SwRootFrame()
-{
-}
+SwRootFrame::~SwRootFrame() = default;
 
 void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )
 {

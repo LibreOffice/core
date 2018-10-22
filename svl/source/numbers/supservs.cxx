@@ -43,9 +43,7 @@ SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const
 {
 }
 
-SvNumberFormatsSupplierServiceObject::~SvNumberFormatsSupplierServiceObject()
-{
-}
+SvNumberFormatsSupplierServiceObject::~SvNumberFormatsSupplierServiceObject() = default;
 
 Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type& _rType )
 {

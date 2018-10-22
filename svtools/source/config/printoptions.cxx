@@ -499,9 +499,7 @@ SvtBasePrintOptions::SvtBasePrintOptions()
 {
 }
 
-SvtBasePrintOptions::~SvtBasePrintOptions()
-{
-}
+SvtBasePrintOptions::~SvtBasePrintOptions() = default;
 
 Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
 {

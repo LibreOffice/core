@@ -84,9 +84,7 @@ void SdMoveStyleSheetsUndoAction::Redo()
     Undo();
 }
 
-SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
-{
-}
+SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction() = default;
 
 OUString SdMoveStyleSheetsUndoAction::GetComment() const
 {

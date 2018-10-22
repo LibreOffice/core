@@ -466,9 +466,7 @@ XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
     Init( aEncryptionData );
 }
 
-XclExpBiff8Encrypter::~XclExpBiff8Encrypter()
-{
-}
+XclExpBiff8Encrypter::~XclExpBiff8Encrypter() = default;
 
 void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 pnSaltDigest[16] ) const
 {

@@ -58,11 +58,7 @@ namespace pcr
             m_xFacetInfo = m_xDataType->getPropertySetInfo();
     }
 
-
-    XSDDataType::~XSDDataType()
-    {
-    }
-
+    XSDDataType::~XSDDataType() = default;
 
     sal_Int16 XSDDataType::classify() const
     {

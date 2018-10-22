@@ -125,9 +125,7 @@ SwXFootnote::SwXFootnote(SwDoc & rDoc, SwFormatFootnote & rFormat)
 {
 }
 
-SwXFootnote::~SwXFootnote()
-{
-}
+SwXFootnote::~SwXFootnote() = default;
 
 uno::Reference<text::XFootnote>
 SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteFormat,

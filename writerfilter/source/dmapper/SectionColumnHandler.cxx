@@ -38,9 +38,7 @@ SectionColumnHandler::SectionColumnHandler()
     m_aTempColumn.nWidth = m_aTempColumn.nSpace = 0;
 }
 
-SectionColumnHandler::~SectionColumnHandler()
-{
-}
+SectionColumnHandler::~SectionColumnHandler() = default;
 
 void SectionColumnHandler::lcl_attribute(Id rName, Value & rVal)
 {

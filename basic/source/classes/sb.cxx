@@ -849,8 +849,7 @@ SbClassFactory::SbClassFactory()
     xClassModules = new SbxObject( OUString() );
 }
 
-SbClassFactory::~SbClassFactory()
-{}
+SbClassFactory::~SbClassFactory() = default;
 
 void SbClassFactory::AddClassModule( SbModule* pClassModule )
 {
@@ -1969,8 +1968,7 @@ BasicCollection::BasicCollection( const OUString& rClass )
 
 }
 
-BasicCollection::~BasicCollection()
-{}
+BasicCollection::~BasicCollection() = default;
 
 void BasicCollection::Clear()
 {

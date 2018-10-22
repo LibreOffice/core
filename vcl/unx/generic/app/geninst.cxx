@@ -44,13 +44,9 @@ SalYieldMutex::SalYieldMutex()
 #endif
 }
 
-SalYieldMutex::~SalYieldMutex()
-{
-}
+SalYieldMutex::~SalYieldMutex() = default;
 
-SalGenericInstance::~SalGenericInstance()
-{
-}
+SalGenericInstance::~SalGenericInstance() = default;
 
 OUString SalGenericInstance::getOSVersion()
 {

@@ -58,9 +58,7 @@ ORowSetDataColumn::ORowSetDataColumn( const Reference < XResultSetMetaData >& _x
     registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, cppu::UnoType<decltype(m_aDescription)>::get() );
 }
 
-ORowSetDataColumn::~ORowSetDataColumn()
-{
-}
+ORowSetDataColumn::~ORowSetDataColumn() = default;
 
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
@@ -204,9 +202,7 @@ ORowSetDataColumns::ORowSetDataColumns(
 {
 }
 
-ORowSetDataColumns::~ORowSetDataColumns()
-{
-}
+ORowSetDataColumns::~ORowSetDataColumns() = default;
 
 sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)
 {

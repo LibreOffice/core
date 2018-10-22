@@ -32,9 +32,7 @@ namespace dbaui
     class TextResetOperatorEventFilter : public ::svt::IWindowEventFilter
     {
     public:
-        TextResetOperatorEventFilter()
-        {
-        }
+        TextResetOperatorEventFilter() = default;
 
         // IWindowEventFilter
         virtual bool payAttentionTo( const VclWindowEvent& _rEvent ) const override

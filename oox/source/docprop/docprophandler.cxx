@@ -55,9 +55,7 @@ OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentC
         throw uno::RuntimeException();
 }
 
-OOXMLDocPropHandler::~OOXMLDocPropHandler()
-{
-}
+OOXMLDocPropHandler::~OOXMLDocPropHandler() = default;
 
 void OOXMLDocPropHandler::InitNew()
 {

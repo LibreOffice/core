@@ -108,13 +108,9 @@ XclChAreaFormat::XclChAreaFormat() :
 {
 }
 
-XclChEscherFormat::XclChEscherFormat()
-{
-}
+XclChEscherFormat::XclChEscherFormat() = default;
 
-XclChEscherFormat::~XclChEscherFormat()
-{
-}
+XclChEscherFormat::~XclChEscherFormat() = default;
 
 XclChPicFormat::XclChPicFormat() :
     mnBmpMode( EXC_CHPICFORMAT_NONE ),
@@ -1230,9 +1226,7 @@ XclChRootData::XclChRootData()
     maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_SECONDARY, EXC_CHAXIS_Y ) ] = lclGetSecYAxisTitleShape;
 }
 
-XclChRootData::~XclChRootData()
-{
-}
+XclChRootData::~XclChRootData() = default;
 
 void XclChRootData::InitConversion(const XclRoot& rRoot, const uno::Reference<chart2::XChartDocument> & rxChartDoc, const tools::Rectangle& rChartRect)
 {

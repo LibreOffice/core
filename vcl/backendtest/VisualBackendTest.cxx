@@ -512,8 +512,7 @@ class VisualBackendTestApp : public Application
 {
 
 public:
-    VisualBackendTestApp()
-    {}
+    VisualBackendTestApp() = default;
 
     virtual int Main() override
     {

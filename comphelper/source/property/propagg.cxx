@@ -334,11 +334,7 @@ OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcast
     m_pForwarder.reset( new PropertyForwarder( *this ) );
 }
 
-
-OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
-{
-}
-
+OPropertySetAggregationHelper::~OPropertySetAggregationHelper() = default;
 
 css::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType)
 {

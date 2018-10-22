@@ -41,10 +41,7 @@ using namespace ::xmloff::token;
 // representation of BCP 47 language tags in a Locale if present as done in a
 // LanguageTag.
 
-XMLCharLanguageHdl::~XMLCharLanguageHdl()
-{
-    // nothing to do
-}
+XMLCharLanguageHdl::~XMLCharLanguageHdl() = default;
 
 bool XMLCharLanguageHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
@@ -131,10 +128,7 @@ bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rVal
     return true;
 }
 
-XMLCharScriptHdl::~XMLCharScriptHdl()
-{
-    // nothing to do
-}
+XMLCharScriptHdl::~XMLCharScriptHdl() = default;
 
 bool XMLCharScriptHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
@@ -245,10 +239,7 @@ bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     return !aLanguage.isEmpty() && !rStrExpValue.isEmpty();
 }
 
-XMLCharCountryHdl::~XMLCharCountryHdl()
-{
-    // nothing to do
-}
+XMLCharCountryHdl::~XMLCharCountryHdl() = default;
 
 bool XMLCharCountryHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
@@ -316,10 +307,7 @@ bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     return true;
 }
 
-XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
-{
-    // nothing to do
-}
+XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl() = default;
 
 bool XMLCharRfcLanguageTagHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {

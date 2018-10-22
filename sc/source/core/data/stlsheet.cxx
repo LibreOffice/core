@@ -64,9 +64,7 @@ ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
 {
 }
 
-ScStyleSheet::~ScStyleSheet()
-{
-}
+ScStyleSheet::~ScStyleSheet() = default;
 
 bool ScStyleSheet::HasFollowSupport() const
 {

@@ -44,9 +44,7 @@ ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
     m_aFilenameExtension = "dbf";
 }
 
-ODbaseConnection::~ODbaseConnection()
-{
-}
+ODbaseConnection::~ODbaseConnection() = default;
 
 // XServiceInfo
 

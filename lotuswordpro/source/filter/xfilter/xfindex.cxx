@@ -66,9 +66,7 @@ XFIndex::XFIndex()
     , m_bSeparator(false)
 {}
 
-XFIndex::~XFIndex()
-{
-}
+XFIndex::~XFIndex() = default;
 
 void    XFIndex::AddTemplate(const OUString& level, const OUString& style, XFIndexTemplate* templ)
 {

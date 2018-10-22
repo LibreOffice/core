@@ -711,9 +711,7 @@ void SwTextFrame::DestroyImpl()
     SwContentFrame::DestroyImpl();
 }
 
-SwTextFrame::~SwTextFrame()
-{
-}
+SwTextFrame::~SwTextFrame() = default;
 
 namespace sw {
 

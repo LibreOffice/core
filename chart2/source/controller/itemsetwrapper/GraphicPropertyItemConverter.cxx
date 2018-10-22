@@ -147,8 +147,7 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
         m_xNamedPropertyTableFactory( xNamedPropertyContainerFactory )
 {}
 
-GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
-{}
+GraphicPropertyItemConverter::~GraphicPropertyItemConverter() = default;
 
 const sal_uInt16 * GraphicPropertyItemConverter::GetWhichPairs() const
 {

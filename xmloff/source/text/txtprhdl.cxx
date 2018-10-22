@@ -601,9 +601,7 @@ bool XMLAnchorTypePropHdl::exportXML(
     return bRet;
 }
 
-XMLAnchorTypePropHdl::~XMLAnchorTypePropHdl()
-{
-}
+XMLAnchorTypePropHdl::~XMLAnchorTypePropHdl() = default;
 
 bool XMLAnchorTypePropHdl::convert( const OUString& rStrImpValue,
                  TextContentAnchorType& rType )
@@ -616,9 +614,7 @@ bool XMLAnchorTypePropHdl::convert( const OUString& rStrImpValue,
     return bRet;
 }
 
-XMLTextColumnsPropertyHandler::~XMLTextColumnsPropertyHandler ()
-{
-}
+XMLTextColumnsPropertyHandler::~XMLTextColumnsPropertyHandler() = default;
 
 bool XMLTextColumnsPropertyHandler::equals(
         const Any& r1,
@@ -812,7 +808,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_Emphasize_Enum[] =
 class XMLTextEmphasizePropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    XMLTextEmphasizePropHdl_Impl() {}
+    XMLTextEmphasizePropHdl_Impl() = default;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -908,7 +904,7 @@ bool XMLTextEmphasizePropHdl_Impl::exportXML(
 class XMLTextCombineCharPropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    XMLTextCombineCharPropHdl_Impl() {}
+    XMLTextCombineCharPropHdl_Impl() = default;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -947,7 +943,7 @@ bool XMLTextCombineCharPropHdl_Impl::exportXML(
 class XMLTextRelWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    XMLTextRelWidthHeightPropHdl_Impl() {}
+    XMLTextRelWidthHeightPropHdl_Impl() = default;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1038,7 +1034,7 @@ class XMLTextRotationAnglePropHdl_Impl : public XMLPropertyHandler
 {
 
 public:
-    XMLTextRotationAnglePropHdl_Impl()  {}
+    XMLTextRotationAnglePropHdl_Impl() = default;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1095,7 +1091,7 @@ class XMLNumber8OneBasedHdl : public XMLPropertyHandler
 {
 
 public:
-    XMLNumber8OneBasedHdl() {}
+    XMLNumber8OneBasedHdl() = default;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1136,7 +1132,7 @@ bool XMLNumber8OneBasedHdl::exportXML(
 class XMLGraphicPropertyHandler : public XMLPropertyHandler
 {
 public:
-    XMLGraphicPropertyHandler() {}
+    XMLGraphicPropertyHandler() = default;
 
     virtual bool importXML(const OUString& , uno::Any& , const SvXMLUnitConverter& ) const override
     {

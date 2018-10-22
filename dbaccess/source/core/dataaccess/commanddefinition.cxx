@@ -64,9 +64,7 @@ OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xO
     registerProperties();
 }
 
-OCommandDefinition::~OCommandDefinition()
-{
-}
+OCommandDefinition::~OCommandDefinition() = default;
 
 OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
                                        ,const OUString& _rElementName

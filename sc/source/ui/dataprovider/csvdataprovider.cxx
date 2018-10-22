@@ -77,9 +77,7 @@ CSVFetchThread::CSVFetchThread(
     maConfig.text_qualifier = '"';
 }
 
-CSVFetchThread::~CSVFetchThread()
-{
-}
+CSVFetchThread::~CSVFetchThread() = default;
 
 bool CSVFetchThread::IsRequestedTerminate()
 {

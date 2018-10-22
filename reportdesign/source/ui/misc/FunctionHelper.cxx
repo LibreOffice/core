@@ -32,9 +32,7 @@ FunctionManager::FunctionManager(const uno::Reference< report::meta::XFunctionMa
 : m_xMgr(_xMgr)
 {
 }
-FunctionManager::~FunctionManager()
-{
-}
+FunctionManager::~FunctionManager() = default;
 sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
     switch(_eToken)

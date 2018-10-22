@@ -38,8 +38,7 @@ WrappedDefaultProperty::WrappedDefaultProperty(
         m_aOuterDefaultValue( rNewOuterDefault )
 {}
 
-WrappedDefaultProperty::~WrappedDefaultProperty()
-{}
+WrappedDefaultProperty::~WrappedDefaultProperty() = default;
 
 void WrappedDefaultProperty::setPropertyToDefault(
     const Reference< beans::XPropertyState >& xInnerPropertyState ) const

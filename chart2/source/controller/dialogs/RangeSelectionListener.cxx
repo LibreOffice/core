@@ -35,8 +35,7 @@ RangeSelectionListener::RangeSelectionListener(
         m_aControllerLockGuard( xModelToLockController )
 {}
 
-RangeSelectionListener::~RangeSelectionListener()
-{}
+RangeSelectionListener::~RangeSelectionListener() = default;
 
 // ____ XRangeSelectionListener ____
 void SAL_CALL RangeSelectionListener::done( const sheet::RangeSelectionEvent& aEvent )

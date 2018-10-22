@@ -375,9 +375,7 @@ SwFootNoteOptionPage::SwFootNoteOptionPage(TabPageParent pParent, const SfxItemS
 {
 }
 
-SwFootNoteOptionPage::~SwFootNoteOptionPage()
-{
-}
+SwFootNoteOptionPage::~SwFootNoteOptionPage() = default;
 
 VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(TabPageParent pParent, const SfxItemSet *rSet )
 {

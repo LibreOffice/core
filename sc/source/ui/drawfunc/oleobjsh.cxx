@@ -57,8 +57,6 @@ ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OLE));
 }
 
-ScOleObjectShell::~ScOleObjectShell()
-{
-}
+ScOleObjectShell::~ScOleObjectShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

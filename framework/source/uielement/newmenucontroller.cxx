@@ -293,9 +293,7 @@ NewMenuController::NewMenuController( const css::uno::Reference< css::uno::XComp
 {
 }
 
-NewMenuController::~NewMenuController()
-{
-}
+NewMenuController::~NewMenuController() = default;
 
 // private function
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )

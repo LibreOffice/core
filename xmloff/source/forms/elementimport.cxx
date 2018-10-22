@@ -121,9 +121,7 @@ namespace xmloff
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::OElementImport: invalid parent container!");
     }
 
-    OElementImport::~OElementImport()
-    {
-    }
+    OElementImport::~OElementImport() = default;
 
     OUString OElementImport::determineDefaultServiceName() const
     {

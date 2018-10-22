@@ -31,10 +31,7 @@ using namespace ::xmloff::token;
 // class XMLFmtSplitPropHdl
 
 
-XMLShadowedPropHdl::~XMLShadowedPropHdl()
-{
-    // nothing to do
-}
+XMLShadowedPropHdl::~XMLShadowedPropHdl() = default;
 
 bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {

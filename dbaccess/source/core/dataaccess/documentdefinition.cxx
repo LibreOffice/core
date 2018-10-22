@@ -322,7 +322,7 @@ namespace dbaccess
         Reference<XContent> m_xParentContainer;
 
     public:
-        ODocumentSaveContinuation() { }
+        ODocumentSaveContinuation() = default;
 
         const Reference<XContent>& getContent() const { return m_xParentContainer; }
         const OUString&       getName() const { return m_sName; }

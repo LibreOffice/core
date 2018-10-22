@@ -42,9 +42,7 @@ Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, vcl::Window* pWindow) :
     DBG_ASSERT( GetObject().is(), "No object connected!" );
 }
 
-Client::~Client()
-{
-}
+Client::~Client() = default;
 
 /**
  * If IP active, then we get this request to increase the visible section of the

@@ -103,9 +103,7 @@ public:
     bool IsValid();
 };
 
-XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition()
-{
-}
+XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() = default;
 
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> const & rRange )
 {

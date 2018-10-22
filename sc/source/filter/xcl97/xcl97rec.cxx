@@ -718,9 +718,7 @@ XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& r
     AddRecSize( 24 + 20 );
 }
 
-XclObjDropDown::~XclObjDropDown()
-{
-}
+XclObjDropDown::~XclObjDropDown() = default;
 
 void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 {
@@ -904,9 +902,7 @@ XclObjOle::XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj ) :
 {
 }
 
-XclObjOle::~XclObjOle()
-{
-}
+XclObjOle::~XclObjOle() = default;
 
 void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
@@ -988,9 +984,7 @@ XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& r
 {
 }
 
-XclObjAny::~XclObjAny()
-{
-}
+XclObjAny::~XclObjAny() = default;
 
 void XclObjAny::WriteSubRecs( XclExpStream& rStrm )
 {
@@ -1411,9 +1405,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     }
 }
 
-ExcEScenario::~ExcEScenario()
-{
-}
+ExcEScenario::~ExcEScenario() = default;
 
 bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt )
 {
@@ -1502,9 +1494,7 @@ ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) 
     }
 }
 
-ExcEScenarioManager::~ExcEScenarioManager()
-{
-}
+ExcEScenarioManager::~ExcEScenarioManager() = default;
 
 void ExcEScenarioManager::SaveCont( XclExpStream& rStrm )
 {
@@ -1742,9 +1732,7 @@ XclExpFileEncryption::XclExpFileEncryption( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpFileEncryption::~XclExpFileEncryption()
-{
-}
+XclExpFileEncryption::~XclExpFileEncryption() = default;
 
 void XclExpFileEncryption::WriteBody( XclExpStream& rStrm )
 {
@@ -1786,7 +1774,7 @@ void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
 XclExpInterfaceEnd::XclExpInterfaceEnd() :
     XclExpRecord(0x00E2, 0) {}
 
-XclExpInterfaceEnd::~XclExpInterfaceEnd() {}
+XclExpInterfaceEnd::~XclExpInterfaceEnd() = default;
 
 void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
 {
@@ -1799,9 +1787,7 @@ XclExpWriteAccess::XclExpWriteAccess() :
 {
 }
 
-XclExpWriteAccess::~XclExpWriteAccess()
-{
-}
+XclExpWriteAccess::~XclExpWriteAccess() = default;
 
 void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
 {
@@ -1852,9 +1838,7 @@ XclExpProt4Rev::XclExpProt4Rev() :
 {
 }
 
-XclExpProt4Rev::~XclExpProt4Rev()
-{
-}
+XclExpProt4Rev::~XclExpProt4Rev() = default;
 
 void XclExpProt4Rev::WriteBody( XclExpStream& rStrm )
 {
@@ -1866,9 +1850,7 @@ XclExpProt4RevPass::XclExpProt4RevPass() :
 {
 }
 
-XclExpProt4RevPass::~XclExpProt4RevPass()
-{
-}
+XclExpProt4RevPass::~XclExpProt4RevPass() = default;
 
 void XclExpProt4RevPass::WriteBody( XclExpStream& rStrm )
 {

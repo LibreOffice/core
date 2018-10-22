@@ -66,9 +66,7 @@ ScConsData::ScConsData() :
 {
 }
 
-ScConsData::~ScConsData()
-{
-}
+ScConsData::~ScConsData() = default;
 
 void ScConsData::DeleteData()
 {

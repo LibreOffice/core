@@ -301,9 +301,7 @@ SvpSalYieldMutex::SvpSalYieldMutex()
     m_FeedbackFDs[0] = m_FeedbackFDs[1] = -1;
 }
 
-SvpSalYieldMutex::~SvpSalYieldMutex()
-{
-}
+SvpSalYieldMutex::~SvpSalYieldMutex() = default;
 
 void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
 {
@@ -558,9 +556,7 @@ OpenGLContext* SvpSalInstance::CreateOpenGLContext()
 
 #endif
 
-SvpSalTimer::~SvpSalTimer()
-{
-}
+SvpSalTimer::~SvpSalTimer() = default;
 
 void SvpSalTimer::Stop()
 {

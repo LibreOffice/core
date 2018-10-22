@@ -61,9 +61,7 @@ SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
     return *this;
 }
 
-SfxEventNamesList::~SfxEventNamesList()
-{
-}
+SfxEventNamesList::~SfxEventNamesList() = default;
 
 bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
 {

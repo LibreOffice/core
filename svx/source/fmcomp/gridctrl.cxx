@@ -885,9 +885,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
         m_eStatus = GridRowStatus::Invalid;
 }
 
-DbGridRow::~DbGridRow()
-{
-}
+DbGridRow::~DbGridRow() = default;
 
 void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
 {

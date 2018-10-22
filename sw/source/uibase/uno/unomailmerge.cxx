@@ -323,9 +323,7 @@ namespace
         // Or, we ourself close the document, then we should not be a listener anymore
     }
 
-    DelayedFileDeletion::~DelayedFileDeletion( )
-    {
-    }
+    DelayedFileDeletion::~DelayedFileDeletion() = default;
 }
 
 static bool DeleteTmpFile_Impl(

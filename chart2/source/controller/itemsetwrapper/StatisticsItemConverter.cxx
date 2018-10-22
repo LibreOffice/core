@@ -234,9 +234,7 @@ StatisticsItemConverter::StatisticsItemConverter(
 {
 }
 
-StatisticsItemConverter::~StatisticsItemConverter()
-{
-}
+StatisticsItemConverter::~StatisticsItemConverter() = default;
 
 const sal_uInt16 * StatisticsItemConverter::GetWhichPairs() const
 {

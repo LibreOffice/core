@@ -94,10 +94,7 @@ Submission::Submission() :
     initializePropertySet();
 }
 
-Submission::~Submission() throw()
-{
-}
-
+Submission::~Submission() throw() = default;
 
 void Submission::setModel( const Reference<XModel>& xModel )
 {

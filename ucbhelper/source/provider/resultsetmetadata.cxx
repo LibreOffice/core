@@ -102,10 +102,7 @@ ResultSetMetaData::ResultSetMetaData(
 
 
 // virtual
-ResultSetMetaData::~ResultSetMetaData()
-{
-}
-
+ResultSetMetaData::~ResultSetMetaData() = default;
 
 // XInterface methods.
 

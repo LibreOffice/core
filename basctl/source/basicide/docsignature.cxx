@@ -60,9 +60,7 @@ namespace basctl
         }
     }
 
-    DocumentSignature::~DocumentSignature()
-    {
-    }
+    DocumentSignature::~DocumentSignature() = default;
 
     bool DocumentSignature::supportsSignatures() const
     {

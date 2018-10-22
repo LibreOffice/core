@@ -30,8 +30,7 @@
 
 using namespace com::sun::star;
 
-XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
-{}
+XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl() = default;
 
 bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const

@@ -172,9 +172,7 @@ void PresenterSlideShowView::LateInit()
         >>= msClickToExitPresentationTitle;
 }
 
-PresenterSlideShowView::~PresenterSlideShowView()
-{
-}
+PresenterSlideShowView::~PresenterSlideShowView() = default;
 
 void PresenterSlideShowView::disposing()
 {

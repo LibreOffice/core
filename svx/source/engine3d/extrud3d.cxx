@@ -81,9 +81,7 @@ E3dExtrudeObj::E3dExtrudeObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
-E3dExtrudeObj::~E3dExtrudeObj()
-{
-}
+E3dExtrudeObj::~E3dExtrudeObj() = default;
 
 void E3dExtrudeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {

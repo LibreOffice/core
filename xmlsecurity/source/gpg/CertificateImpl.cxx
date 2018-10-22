@@ -33,9 +33,7 @@ CertificateImpl::CertificateImpl() :
 {
 }
 
-CertificateImpl::~CertificateImpl()
-{
-}
+CertificateImpl::~CertificateImpl() = default;
 
 //Methods from XCertificateImpl
 sal_Int16 SAL_CALL CertificateImpl::getVersion()

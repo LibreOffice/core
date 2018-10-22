@@ -42,9 +42,7 @@ VPolarAngleAxis::VPolarAngleAxis( const AxisProperties& rAxisProperties
 {
 }
 
-VPolarAngleAxis::~VPolarAngleAxis()
-{
-}
+VPolarAngleAxis::~VPolarAngleAxis() = default;
 
 void VPolarAngleAxis::createTextShapes_ForAngleAxis(
                        const uno::Reference< drawing::XShapes >& xTarget

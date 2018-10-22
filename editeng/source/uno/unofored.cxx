@@ -41,10 +41,8 @@ SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
 {
 }
 
-SvxEditEngineForwarder::~SvxEditEngineForwarder()
-{
+SvxEditEngineForwarder::~SvxEditEngineForwarder() = default;
     // the EditEngine may need to be deleted from the outside
-}
 
 sal_Int32 SvxEditEngineForwarder::GetParagraphCount() const
 {

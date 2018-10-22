@@ -70,9 +70,7 @@ IMPL_LINK( SbiDdeControl, Data, const DdeData*, pData, void )
     aData = OUString::createFromAscii( static_cast<const char*>(pData->getData()) );
 }
 
-SbiDdeControl::SbiDdeControl()
-{
-}
+SbiDdeControl::SbiDdeControl() = default;
 
 SbiDdeControl::~SbiDdeControl()
 {

@@ -30,10 +30,7 @@ XMLNumRulePropHdl::XMLNumRulePropHdl( css::uno::Reference< css::ucb::XAnyCompare
 {
 }
 
-XMLNumRulePropHdl::~XMLNumRulePropHdl()
-{
-    // Nothing to do
-}
+XMLNumRulePropHdl::~XMLNumRulePropHdl() = default;
 
 bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 {

@@ -30,10 +30,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 
 namespace oox { namespace drawingml {
-
-TextBody::TextBody()
-{
-}
+TextBody::TextBody() = default;
 
 TextBody::TextBody( const TextBodyPtr& pBody )
 {
@@ -43,9 +40,7 @@ TextBody::TextBody( const TextBodyPtr& pBody )
     }
 }
 
-TextBody::~TextBody()
-{
-}
+TextBody::~TextBody() = default;
 
 TextParagraph& TextBody::addParagraph()
 {

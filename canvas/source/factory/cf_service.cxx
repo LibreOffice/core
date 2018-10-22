@@ -207,10 +207,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     }
 }
 
-CanvasFactory::~CanvasFactory()
-{
-}
-
+CanvasFactory::~CanvasFactory() = default;
 
 // XServiceInfo
 OUString CanvasFactory::getImplementationName()

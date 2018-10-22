@@ -61,10 +61,7 @@ namespace comphelper
     {
     }
 
-    PropertyBag::~PropertyBag()
-    {
-    }
-
+    PropertyBag::~PropertyBag() = default;
 
     void PropertyBag::setAllowEmptyPropertyName( bool i_isAllowed )
     {

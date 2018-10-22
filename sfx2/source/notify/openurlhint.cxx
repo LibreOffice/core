@@ -28,6 +28,6 @@ const OUString& SfxOpenUrlHint::GetDocumentURL() const
     return msDocumentURL;
 }
 
-SfxOpenUrlHint::~SfxOpenUrlHint() {}
+SfxOpenUrlHint::~SfxOpenUrlHint() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

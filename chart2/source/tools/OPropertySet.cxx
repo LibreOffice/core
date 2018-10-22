@@ -65,8 +65,7 @@ void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
     m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault = true;
 }
 
-OPropertySet::~OPropertySet()
-{}
+OPropertySet::~OPropertySet() = default;
 
 Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
 {

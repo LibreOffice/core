@@ -146,9 +146,7 @@ PlaceEditDialog::PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Pl
     m_xTypeGrid->hide();
 }
 
-PlaceEditDialog::~PlaceEditDialog()
-{
-}
+PlaceEditDialog::~PlaceEditDialog() = default;
 
 OUString PlaceEditDialog::GetServerUrl()
 {

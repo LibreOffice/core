@@ -223,8 +223,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aCurrentPageIds = m_aControlIds.end();
 }
 
-OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
-{}
+OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl() = default;
 
 void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
 {

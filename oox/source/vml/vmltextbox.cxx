@@ -34,9 +34,7 @@ namespace vml {
 
 using namespace com::sun::star;
 
-TextFontModel::TextFontModel()
-{
-}
+TextFontModel::TextFontModel() = default;
 
 TextPortionModel::TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText ) :
     maParagraph( rParagraph ),

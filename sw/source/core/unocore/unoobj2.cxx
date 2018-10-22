@@ -764,9 +764,7 @@ SwXTextRange::SwXTextRange(SwFrameFormat& rTableFormat)
     SetPositions( aPam );
 }
 
-SwXTextRange::~SwXTextRange()
-{
-}
+SwXTextRange::~SwXTextRange() = default;
 
 const SwDoc& SwXTextRange::GetDoc() const
 {

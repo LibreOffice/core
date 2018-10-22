@@ -62,7 +62,7 @@ namespace sfx2
 class SvxInternalLink : public sfx2::SvLinkSource
 {
 public:
-    SvxInternalLink() {}
+    SvxInternalLink() = default;
 
     virtual bool Connect( sfx2::SvBaseLink* ) override;
 };

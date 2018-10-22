@@ -110,8 +110,6 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, StreamMode nNewMode, sal_uInt16 nVe
     }
 }
 
-SdIOCompat::~SdIOCompat()
-{
-}
+SdIOCompat::~SdIOCompat() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

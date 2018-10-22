@@ -56,9 +56,7 @@ namespace logging
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     };
 
-    PlainTextFormatter::PlainTextFormatter()
-    {
-    }
+    PlainTextFormatter::PlainTextFormatter() = default;
 
     OUString SAL_CALL PlainTextFormatter::getHead(  )
     {

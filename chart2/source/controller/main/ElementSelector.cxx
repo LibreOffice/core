@@ -252,12 +252,8 @@ css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSup
 {
     return { "com.sun.star.frame.ToolbarController" };
 }
-ElementSelectorToolbarController::ElementSelectorToolbarController()
-{
-}
-ElementSelectorToolbarController::~ElementSelectorToolbarController()
-{
-}
+ElementSelectorToolbarController::ElementSelectorToolbarController() = default;
+ElementSelectorToolbarController::~ElementSelectorToolbarController() = default;
 // XInterface
 Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType )
 {

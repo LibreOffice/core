@@ -130,8 +130,7 @@ ChartTypeTemplate::ChartTypeTemplate(
 {
 }
 
-ChartTypeTemplate::~ChartTypeTemplate()
-{}
+ChartTypeTemplate::~ChartTypeTemplate() = default;
 
 // ____ XChartTypeTemplate ____
 uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource(

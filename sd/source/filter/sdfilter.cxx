@@ -48,9 +48,7 @@ SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell )
 {
 }
 
-SdFilter::~SdFilter()
-{
-}
+SdFilter::~SdFilter() = default;
 
 OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
 {

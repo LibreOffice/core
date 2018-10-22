@@ -129,9 +129,7 @@ Writer::Writer()
     m_bExportPargraphNumbering = true;
 }
 
-Writer::~Writer()
-{
-}
+Writer::~Writer() = default;
 
 /*
  * Document Interface Access

@@ -46,9 +46,7 @@ XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(
 {
 }
 
-XMLIndexIllustrationSourceContext::~XMLIndexIllustrationSourceContext()
-{
-}
+XMLIndexIllustrationSourceContext::~XMLIndexIllustrationSourceContext() = default;
 
 SvXMLImportContextRef XMLIndexIllustrationSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,

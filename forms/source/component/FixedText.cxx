@@ -53,11 +53,7 @@ OFixedTextModel::OFixedTextModel( const OFixedTextModel* _pOriginal, const Refer
 {
 }
 
-
-OFixedTextModel::~OFixedTextModel( )
-{
-}
-
+OFixedTextModel::~OFixedTextModel() = default;
 
 IMPLEMENT_DEFAULT_CLONING( OFixedTextModel )
 

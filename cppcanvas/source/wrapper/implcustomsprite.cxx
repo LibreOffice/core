@@ -43,9 +43,7 @@ namespace cppcanvas
             OSL_ENSURE( mxCustomSprite.is(), "ImplCustomSprite::ImplCustomSprite(): Invalid sprite" );
         }
 
-        ImplCustomSprite::~ImplCustomSprite()
-        {
-        }
+        ImplCustomSprite::~ImplCustomSprite() = default;
 
         CanvasSharedPtr ImplCustomSprite::getContentCanvas() const
         {

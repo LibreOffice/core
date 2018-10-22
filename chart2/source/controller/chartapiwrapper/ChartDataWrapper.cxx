@@ -111,12 +111,8 @@ namespace wrapper
 
 struct lcl_Operator
 {
-    lcl_Operator()
-    {
-    }
-    virtual ~lcl_Operator()
-    {
-    }
+    lcl_Operator() = default;
+    virtual ~lcl_Operator() = default;
     virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) = 0;
 
     virtual bool setsCategories( bool /*bDataInColumns*/ )
@@ -404,14 +400,12 @@ ChartDataWrapper::ChartDataWrapper( const std::shared_ptr<Chart2ModelContact>& s
     osl_atomic_decrement( &m_refCount );
 }
 
-ChartDataWrapper::~ChartDataWrapper()
-{
+ChartDataWrapper::~ChartDataWrapper() = default;
     // @todo: implement XComponent and call this in dispose().  In the DTOR the
     // ref-count is 0, thus creating a stack reference to this calls the DTOR at
     // the end of the block recursively
 //     uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
 //     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
-}
 
 // ____ XChartDataArray (read)____
 Sequence< Sequence< double > > SAL_CALL ChartDataWrapper::getData()

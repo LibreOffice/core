@@ -67,9 +67,7 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
 {
 }
 
-SelectionManager::~SelectionManager()
-{
-}
+SelectionManager::~SelectionManager() = default;
 
 void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 {

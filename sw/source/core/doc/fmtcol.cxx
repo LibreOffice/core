@@ -492,9 +492,7 @@ SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
 {
 }
 
-SwCollCondition::~SwCollCondition()
-{
-}
+SwCollCondition::~SwCollCondition() = default;
 
 void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
 {
@@ -513,9 +511,7 @@ void SwCollCondition::SetCondition( Master_CollCondition nCond, sal_uLong nSubCo
     m_nSubCondition = nSubCond;
 }
 
-SwConditionTextFormatColl::~SwConditionTextFormatColl()
-{
-}
+SwConditionTextFormatColl::~SwConditionTextFormatColl() = default;
 
 const SwCollCondition* SwConditionTextFormatColl::HasCondition(
                         const SwCollCondition& rCond ) const

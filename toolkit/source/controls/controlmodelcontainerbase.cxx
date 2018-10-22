@@ -1088,9 +1088,7 @@ ResourceListener::ResourceListener(
 {
 }
 
-ResourceListener::~ResourceListener()
-{
-}
+ResourceListener::~ResourceListener() = default;
 
 // XInterface
 Any SAL_CALL ResourceListener::queryInterface( const Type& rType )
@@ -1311,9 +1309,7 @@ ControlContainerBase::ControlContainerBase( const Reference< XComponentContext >
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
 }
 
-ControlContainerBase::~ControlContainerBase()
-{
-}
+ControlContainerBase::~ControlContainerBase() = default;
 
 void ControlContainerBase::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer )
 {

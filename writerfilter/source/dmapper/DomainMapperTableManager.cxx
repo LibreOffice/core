@@ -64,10 +64,7 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_pTablePropsHandler->SetTableManager( this );
 }
 
-
-DomainMapperTableManager::~DomainMapperTableManager()
-{
-}
+DomainMapperTableManager::~DomainMapperTableManager() = default;
 
 bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
 {

@@ -43,11 +43,7 @@ static bool SbCompare_UString_PropertyValue_Impl(PropertyValue const & lhs, cons
     return lhs.Name.compareTo(rhs) < 0;
 }
 
-
-SbPropertyValues::SbPropertyValues()
-{
-}
-
+SbPropertyValues::SbPropertyValues() = default;
 
 SbPropertyValues::~SbPropertyValues()
 {

@@ -29,7 +29,7 @@ struct SvxClipboardFormatItem_Impl
     std::vector<OUString> aFmtNms;
     std::vector<SotClipboardFormatId> aFmtIds;
 
-    SvxClipboardFormatItem_Impl() {}
+    SvxClipboardFormatItem_Impl() = default;
 };
 
 SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(0); };
@@ -45,9 +45,7 @@ SvxClipboardFormatItem::SvxClipboardFormatItem( const SvxClipboardFormatItem& rC
 {
 }
 
-SvxClipboardFormatItem::~SvxClipboardFormatItem()
-{
-}
+SvxClipboardFormatItem::~SvxClipboardFormatItem() = default;
 
 bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {

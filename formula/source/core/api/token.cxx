@@ -65,9 +65,7 @@ FormulaToken::FormulaToken( const FormulaToken& r ) :
 {
 }
 
-FormulaToken::~FormulaToken()
-{
-}
+FormulaToken::~FormulaToken() = default;
 
 bool FormulaToken::IsFunction() const
 {
@@ -374,10 +372,7 @@ bool FormulaJumpToken::operator==( const FormulaToken& r ) const
         memcmp( pJump.get()+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
         eInForceArray == r.GetInForceArray();
 }
-FormulaJumpToken::~FormulaJumpToken()
-{
-}
-
+FormulaJumpToken::~FormulaJumpToken() = default;
 
 bool FormulaTokenArray::AddFormulaToken(
     const sheet::FormulaToken& rToken, svl::SharedStringPool& rSPool, ExternalReferenceHelper* /*pExtRef*/)
@@ -1549,9 +1544,7 @@ FormulaTokenIterator::FormulaTokenIterator( const FormulaTokenArray& rArr )
     Push( &rArr );
 }
 
-FormulaTokenIterator::~FormulaTokenIterator()
-{
-}
+FormulaTokenIterator::~FormulaTokenIterator() = default;
 
 void FormulaTokenIterator::Push( const FormulaTokenArray* pArr )
 {
@@ -1854,8 +1847,7 @@ FormulaStringToken::FormulaStringToken( const svl::SharedString& r ) :
 {
 }
 
-FormulaStringToken::FormulaStringToken( const FormulaStringToken& r ) :
-    FormulaToken( r ), maString( r.maString ) {}
+FormulaStringToken::FormulaStringToken(const FormulaStringToken& r) = default;
 
 FormulaToken* FormulaStringToken::Clone() const
 {
@@ -1880,8 +1872,7 @@ bool FormulaStringToken::operator==( const FormulaToken& r ) const
 FormulaStringOpToken::FormulaStringOpToken( OpCode e, const svl::SharedString& r ) :
     FormulaByteToken( e, 0, svString, ParamClass::Unknown ), maString( r ) {}
 
-FormulaStringOpToken::FormulaStringOpToken( const FormulaStringOpToken& r ) :
-    FormulaByteToken( r ), maString( r.maString ) {}
+FormulaStringOpToken::FormulaStringOpToken(const FormulaStringOpToken& r) = default;
 
 FormulaToken* FormulaStringOpToken::Clone() const
 {

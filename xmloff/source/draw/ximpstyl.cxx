@@ -360,10 +360,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     }
 }
 
-SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
-{
-}
-
+SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext() = default;
 
 SdXMLPageMasterContext::SdXMLPageMasterContext(
     SdXMLImport& rImport,
@@ -703,10 +700,7 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
     }
 }
 
-SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
-{
-}
-
+SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext() = default;
 
 SdXMLMasterPageContext::SdXMLMasterPageContext(
     SdXMLImport& rImport,
@@ -801,9 +795,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     DeleteAllShapes();
 }
 
-SdXMLMasterPageContext::~SdXMLMasterPageContext()
-{
-}
+SdXMLMasterPageContext::~SdXMLMasterPageContext() = default;
 
 void SdXMLMasterPageContext::EndElement()
 {

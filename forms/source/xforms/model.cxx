@@ -106,9 +106,7 @@ Model::Model() :
     DBG_INVARIANT();
 }
 
-Model::~Model() throw()
-{
-}
+Model::~Model() throw() = default;
 
 static Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
 {

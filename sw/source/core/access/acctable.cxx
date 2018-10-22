@@ -68,7 +68,7 @@ public:
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) = 0;
 
 protected:
-    ~SwAccTableSelHander_Impl() {}
+    ~SwAccTableSelHander_Impl() = default;
 };
 
 class SwAccessibleTableData_Impl
@@ -485,7 +485,7 @@ public:
 
     inline SwAccSingleTableSelHander_Impl();
 
-    virtual ~SwAccSingleTableSelHander_Impl() {}
+    virtual ~SwAccSingleTableSelHander_Impl() = default;
 
     bool IsSelected() const { return m_bSelected; }
 
@@ -521,9 +521,7 @@ public:
     virtual ~SwAccAllTableSelHander_Impl();
 };
 
-SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
-{
-}
+SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl() = default;
 
 uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 {

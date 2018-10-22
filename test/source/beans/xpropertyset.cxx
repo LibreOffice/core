@@ -20,8 +20,7 @@ using namespace css;
 using namespace css::uno;
 
 namespace apitest {
-
-XPropertySet::~XPropertySet() {}
+XPropertySet::~XPropertySet() = default;
 
 XPropertySet::PropsToTest::PropsToTest() : initialized(false) {}
 

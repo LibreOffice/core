@@ -92,11 +92,7 @@ namespace svxform
     {
     }
 
-
-    ControlBorderManager::~ControlBorderManager()
-    {
-    }
-
+    ControlBorderManager::~ControlBorderManager() = default;
 
     bool ControlBorderManager::canColorBorder( const Reference< XVclWindowPeer >& _rxPeer )
     {

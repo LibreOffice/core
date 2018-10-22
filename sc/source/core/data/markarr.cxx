@@ -41,9 +41,7 @@ ScMarkArray::ScMarkArray( ScMarkArray&& rArray ) :
     rArray.nLimit = 0;
 }
 
-ScMarkArray::~ScMarkArray()
-{
-}
+ScMarkArray::~ScMarkArray() = default;
 
 void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
 {
@@ -491,9 +489,7 @@ ScMarkArrayIter::ScMarkArrayIter( const ScMarkArray* pNewArray ) :
 {
 }
 
-ScMarkArrayIter::~ScMarkArrayIter()
-{
-}
+ScMarkArrayIter::~ScMarkArrayIter() = default;
 
 void ScMarkArrayIter::reset( const ScMarkArray* pNewArray )
 {

@@ -43,9 +43,7 @@ ScMultiSel::ScMultiSel( const ScMultiSel& rMultiSel )
     rMultiSel.aRowSel.CopyMarksTo( aRowSel );
 }
 
-ScMultiSel::~ScMultiSel()
-{
-}
+ScMultiSel::~ScMultiSel() = default;
 
 ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rMultiSel)
 {
@@ -417,9 +415,7 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     }
 }
 
-ScMultiSelIter::~ScMultiSelIter()
-{
-}
+ScMultiSelIter::~ScMultiSelIter() = default;
 
 bool ScMultiSelIter::Next( SCROW& rTop, SCROW& rBottom )
 {

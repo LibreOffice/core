@@ -49,9 +49,7 @@ ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
         mpRect = *rImplWallpaper.mpRect;
 }
 
-ImplWallpaper::~ImplWallpaper()
-{
-}
+ImplWallpaper::~ImplWallpaper() = default;
 
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {

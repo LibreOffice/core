@@ -90,9 +90,7 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer
     return BenErr_OK;
 }
 
-LtcBenContainer::~LtcBenContainer()
-{
-}
+LtcBenContainer::~LtcBenContainer() = default;
 
 BenError
 LtcBenContainer::Open() // delete two inputs

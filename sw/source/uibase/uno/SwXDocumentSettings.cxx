@@ -267,10 +267,7 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
     registerSlave ( new SwXPrintSettings ( SwXPrintSettingsType::Document, mpModel->GetDocShell()->GetDoc() ) );
 }
 
-SwXDocumentSettings::~SwXDocumentSettings()
-    throw()
-{
-}
+SwXDocumentSettings::~SwXDocumentSettings() throw() = default;
 
 Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
 {

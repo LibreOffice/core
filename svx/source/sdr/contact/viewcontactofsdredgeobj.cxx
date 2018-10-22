@@ -34,9 +34,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfSdrEdgeObj::~ViewContactOfSdrEdgeObj()
-        {
-        }
+        ViewContactOfSdrEdgeObj::~ViewContactOfSdrEdgeObj() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
         {

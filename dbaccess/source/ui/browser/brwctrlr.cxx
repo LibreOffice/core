@@ -136,7 +136,7 @@ class OParameterContinuation : public OInteraction< XInteractionSupplyParameters
     Sequence< PropertyValue >       m_aValues;
 
 public:
-    OParameterContinuation() { }
+    OParameterContinuation() = default;
 
     const Sequence< PropertyValue >&  getValues() const { return m_aValues; }
 
@@ -253,10 +253,7 @@ SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowse
     OSL_ENSURE(m_pOwner, "SbaXDataBrowserController::FormControllerImpl::FormControllerImpl : invalid Owner !");
 }
 
-SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
-{
-
-}
+SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl() = default;
 
 Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations()
 {

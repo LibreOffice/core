@@ -814,9 +814,7 @@ bool FrameSelectorImpl::SelectedBordersEqual() const
     return bEqual;
 }
 
-FrameSelector::FrameSelector()
-{
-}
+FrameSelector::FrameSelector() = default;
 
 void FrameSelector::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {

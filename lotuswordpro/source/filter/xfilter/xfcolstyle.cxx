@@ -64,9 +64,7 @@ XFColStyle::XFColStyle()
     m_fWidth = 0;
 }
 
-XFColStyle::~XFColStyle()
-{
-}
+XFColStyle::~XFColStyle() = default;
 
 enumXFStyle XFColStyle::GetStyleFamily()
 {

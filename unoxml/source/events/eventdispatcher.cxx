@@ -79,9 +79,7 @@ namespace DOM { namespace events {
         }
     }
 
-    CEventDispatcher::~CEventDispatcher()
-    {
-    }
+    CEventDispatcher::~CEventDispatcher() = default;
 
     void CEventDispatcher::callListeners(
             TypeListenerMap const& rTMap,

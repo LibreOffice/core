@@ -47,8 +47,7 @@ UndoCommandDispatch::UndoCommandDispatch(
     m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
 }
 
-UndoCommandDispatch::~UndoCommandDispatch()
-{}
+UndoCommandDispatch::~UndoCommandDispatch() = default;
 
 void UndoCommandDispatch::initialize()
 {

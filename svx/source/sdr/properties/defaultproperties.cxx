@@ -95,7 +95,7 @@ namespace sdr
             return std::unique_ptr<BaseProperties>(new DefaultProperties(*this, rObj));
         }
 
-        DefaultProperties::~DefaultProperties() {}
+        DefaultProperties::~DefaultProperties() = default;
 
         const SfxItemSet& DefaultProperties::GetObjectItemSet() const
         {

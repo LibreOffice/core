@@ -519,9 +519,7 @@ SwChartDataProvider::SwChartDataProvider( const SwDoc* pSwDoc ) :
     bDisposed = false;
 }
 
-SwChartDataProvider::~SwChartDataProvider()
-{
-}
+SwChartDataProvider::~SwChartDataProvider() = default;
 
 uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createDataSource(
         const uno::Sequence< beans::PropertyValue >& rArguments, bool bTestOnly )
@@ -1791,9 +1789,7 @@ SwChartDataSource::SwChartDataSource(
 {
 }
 
-SwChartDataSource::~SwChartDataSource()
-{
-}
+SwChartDataSource::~SwChartDataSource() = default;
 
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
 {
@@ -1909,9 +1905,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 #endif
 }
 
-SwChartDataSequence::~SwChartDataSequence()
-{
-}
+SwChartDataSequence::~SwChartDataSequence() = default;
 
 namespace
 {
@@ -2562,9 +2556,7 @@ SwChartLabeledDataSequence::SwChartLabeledDataSequence() :
     bDisposed = false;
 }
 
-SwChartLabeledDataSequence::~SwChartLabeledDataSequence()
-{
-}
+SwChartLabeledDataSequence::~SwChartLabeledDataSequence() = default;
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequence::getValues(  )
 {

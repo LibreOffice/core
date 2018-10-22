@@ -19,9 +19,7 @@ ScMergeCellsDialog::ScMergeCellsDialog(weld::Window * pParent)
     m_xRBKeepContent->set_active(true);
 }
 
-ScMergeCellsDialog::~ScMergeCellsDialog()
-{
-}
+ScMergeCellsDialog::~ScMergeCellsDialog() = default;
 
 ScMergeCellsOption ScMergeCellsDialog::GetMergeCellsOption()
 {

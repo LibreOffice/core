@@ -51,9 +51,7 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
 
 // TODO: VirtualFunctionFinder: This is virtual function!
 
-OGroup::~OGroup()
-{
-}
+OGroup::~OGroup() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
 

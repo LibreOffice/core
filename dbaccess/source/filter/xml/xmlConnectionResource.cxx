@@ -89,10 +89,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
     }
 }
 
-OXMLConnectionResource::~OXMLConnectionResource()
-{
-
-}
+OXMLConnectionResource::~OXMLConnectionResource() = default;
 
 } // namespace dbaxml
 

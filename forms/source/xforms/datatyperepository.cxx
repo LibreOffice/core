@@ -91,11 +91,7 @@ namespace xforms
         m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gDay );
     }
 
-
-    ODataTypeRepository::~ODataTypeRepository( )
-    {
-    }
-
+    ODataTypeRepository::~ODataTypeRepository() = default;
 
     ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const OUString& _rName, bool _bAllowMiss )
     {

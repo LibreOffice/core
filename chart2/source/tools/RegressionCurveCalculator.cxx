@@ -48,8 +48,7 @@ RegressionCurveCalculator::RegressionCurveCalculator() :
     rtl::math::setNan( &mInterceptValue );
 }
 
-RegressionCurveCalculator::~RegressionCurveCalculator()
-{}
+RegressionCurveCalculator::~RegressionCurveCalculator() = default;
 
 bool RegressionCurveCalculator::isLinearScaling(
     const Reference< chart2::XScaling > & xScaling )

@@ -24,11 +24,8 @@
 using namespace dbaccess;
 
 ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
-: m_aIter(_rRH.m_aIter)
-, m_pCache(_rRH.m_pCache)
-,m_pRowSet(_rRH.m_pRowSet)
-{
-}
+
+    = default;
 
 ORowSetCacheIterator::operator ORowSetMatrix::iterator const &()
 {

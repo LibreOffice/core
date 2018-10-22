@@ -46,9 +46,7 @@ FuConstRectangle::FuConstRectangle(ScTabViewShell& rViewSh, vcl::Window* pWin, S
 {
 }
 
-FuConstRectangle::~FuConstRectangle()
-{
-}
+FuConstRectangle::~FuConstRectangle() = default;
 
 /**
  * set line starts and ends for the object to be created

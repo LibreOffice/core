@@ -100,7 +100,7 @@ Unmarshal::Unmarshal(
     end_ = data_ + buffer_.getLength();
 }
 
-Unmarshal::~Unmarshal() {}
+Unmarshal::~Unmarshal() = default;
 
 sal_uInt8 Unmarshal::read8() {
     check(1);

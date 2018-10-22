@@ -77,9 +77,7 @@ PresentationViewShellBase::PresentationViewShellBase (
     }
 }
 
-PresentationViewShellBase::~PresentationViewShellBase()
-{
-}
+PresentationViewShellBase::~PresentationViewShellBase() = default;
 
 void PresentationViewShellBase::InitializeFramework()
 {

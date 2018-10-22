@@ -165,11 +165,7 @@ SfxFilterContainer::SfxFilterContainer( const OUString& rName )
 {
 }
 
-
-SfxFilterContainer::~SfxFilterContainer()
-{
-}
-
+SfxFilterContainer::~SfxFilterContainer() = default;
 
 OUString const & SfxFilterContainer::GetName() const
 {

@@ -65,7 +65,7 @@ GroupNode::GroupNode(GroupNode const & other, bool keepTemplateName):
     }
 }
 
-GroupNode::~GroupNode() {}
+GroupNode::~GroupNode() = default;
 
 Node::Kind GroupNode::kind() const {
     return KIND_GROUP;

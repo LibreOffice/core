@@ -74,9 +74,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pA
     m_xAddBtn->grab_focus();
 }
 
-SdPhotoAlbumDialog::~SdPhotoAlbumDialog()
-{
-}
+SdPhotoAlbumDialog::~SdPhotoAlbumDialog() = default;
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, CancelHdl, weld::Button&, void)
 {

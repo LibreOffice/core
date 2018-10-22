@@ -86,9 +86,7 @@ AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xC
 {
 }
 
-AnalysisAddIn::~AnalysisAddIn()
-{
-}
+AnalysisAddIn::~AnalysisAddIn() = default;
 
 sal_Int32 AnalysisAddIn::getDateMode(
         const uno::Reference< beans::XPropertySet >& xPropSet,

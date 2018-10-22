@@ -37,10 +37,7 @@ CGMBitmap::CGMBitmap( CGM& rCGM ) :
     ImplGetBitmap( *pCGMBitmapDescriptor );
 };
 
-
-CGMBitmap::~CGMBitmap()
-{
-}
+CGMBitmap::~CGMBitmap() = default;
 
 namespace
 {

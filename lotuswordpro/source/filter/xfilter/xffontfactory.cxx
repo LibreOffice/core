@@ -59,13 +59,9 @@
  ************************************************************************/
 #include <xfilter/xffontfactory.hxx>
 
-XFFontFactory::XFFontFactory()
-{
-}
+XFFontFactory::XFFontFactory() = default;
 
-XFFontFactory::~XFFontFactory()
-{
-}
+XFFontFactory::~XFFontFactory() = default;
 
 void XFFontFactory::AddFont(rtl::Reference<XFFont> const & pFont)
 {

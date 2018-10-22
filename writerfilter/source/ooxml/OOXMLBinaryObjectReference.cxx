@@ -31,9 +31,7 @@ OOXMLBinaryObjectReference::OOXMLBinaryObjectReference
 {
 }
 
-OOXMLBinaryObjectReference::~OOXMLBinaryObjectReference()
-{
-}
+OOXMLBinaryObjectReference::~OOXMLBinaryObjectReference() = default;
 
 void OOXMLBinaryObjectReference::read()
 {

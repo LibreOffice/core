@@ -27,10 +27,7 @@ using namespace css;
 using namespace css::uno;
 
 namespace apitest {
-
-XDataPilotTable2::~XDataPilotTable2()
-{
-}
+XDataPilotTable2::~XDataPilotTable2() = default;
 
 void XDataPilotTable2::testGetPositionData()
 {

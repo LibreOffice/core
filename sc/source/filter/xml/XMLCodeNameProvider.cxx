@@ -55,9 +55,7 @@ XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) :
 {
 }
 
-XMLCodeNameProvider::~XMLCodeNameProvider()
-{
-}
+XMLCodeNameProvider::~XMLCodeNameProvider() = default;
 
 sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
 {

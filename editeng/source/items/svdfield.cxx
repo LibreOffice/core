@@ -21,9 +21,7 @@
 #include <editeng/measfld.hxx>
 #include <o3tl/make_unique.hxx>
 
-SdrMeasureField::~SdrMeasureField()
-{
-}
+SdrMeasureField::~SdrMeasureField() = default;
 
 std::unique_ptr<SvxFieldData> SdrMeasureField::Clone() const
 {

@@ -34,9 +34,7 @@ namespace svgio
         {
         }
 
-        SvgSymbolNode::~SvgSymbolNode()
-        {
-        }
+        SvgSymbolNode::~SvgSymbolNode() = default;
 
         const SvgStyleAttributes* SvgSymbolNode::getSvgStyleAttributes() const
         {

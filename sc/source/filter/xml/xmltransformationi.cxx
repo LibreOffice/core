@@ -28,7 +28,7 @@ ScXMLTransformationsContext::ScXMLTransformationsContext(ScXMLImport& rImport)
 {
 }
 
-ScXMLTransformationsContext::~ScXMLTransformationsContext() {}
+ScXMLTransformationsContext::~ScXMLTransformationsContext() = default;
 
 uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLTransformationsContext::createFastChildContext(
@@ -178,7 +178,7 @@ ScXMLColumnSplitContext::ScXMLColumnSplitContext(
     }
 }
 
-ScXMLColumnSplitContext::~ScXMLColumnSplitContext() {}
+ScXMLColumnSplitContext::~ScXMLColumnSplitContext() = default;
 
 ScXMLColumnMergeContext::ScXMLColumnMergeContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
@@ -248,7 +248,7 @@ ScXMLColumnSortContext::ScXMLColumnSortContext(
 {
 }
 
-ScXMLColumnSortContext::~ScXMLColumnSortContext() {}
+ScXMLColumnSortContext::~ScXMLColumnSortContext() = default;
 
 /*
 uno::Reference<xml::sax::XFastContextHandler>

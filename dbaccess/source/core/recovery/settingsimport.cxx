@@ -32,13 +32,9 @@ namespace dbaccess
     using ::com::sun::star::xml::sax::XAttributeList;
 
     // SettingsImport
-    SettingsImport::SettingsImport()
-    {
-    }
+    SettingsImport::SettingsImport() = default;
 
-    SettingsImport::~SettingsImport()
-    {
-    }
+    SettingsImport::~SettingsImport() = default;
 
     void SettingsImport::startElement( const Reference< XAttributeList >& i_rAttributes )
     {
@@ -87,9 +83,7 @@ namespace dbaccess
     {
     }
 
-    OfficeSettingsImport::~OfficeSettingsImport()
-    {
-    }
+    OfficeSettingsImport::~OfficeSettingsImport() = default;
 
     ::rtl::Reference< SettingsImport > OfficeSettingsImport::nextState( const OUString& i_rElementName )
     {
@@ -113,9 +107,7 @@ namespace dbaccess
     {
     }
 
-    ConfigItemImport::~ConfigItemImport()
-    {
-    }
+    ConfigItemImport::~ConfigItemImport() = default;
 
     ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const OUString& )
     {
@@ -186,9 +178,7 @@ namespace dbaccess
     {
     }
 
-    ConfigItemSetImport::~ConfigItemSetImport()
-    {
-    }
+    ConfigItemSetImport::~ConfigItemSetImport() = default;
 
     ::rtl::Reference< SettingsImport > ConfigItemSetImport::nextState( const OUString& i_rElementName )
     {

@@ -249,10 +249,7 @@ LibDescriptorArray::LibDescriptorArray( sal_Int32 nLibCount )
     mpLibs.reset( new LibDescriptor[ mnLibCount ] );
 }
 
-LibDescriptorArray::~LibDescriptorArray()
-{
-}
-
+LibDescriptorArray::~LibDescriptorArray() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

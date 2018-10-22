@@ -25,8 +25,7 @@ CustomPropertyField::CustomPropertyField(OUString const & rName, OUString const 
     , msCurrentPresentation(rCurrentPresentation)
 {}
 
-CustomPropertyField::~CustomPropertyField()
-{}
+CustomPropertyField::~CustomPropertyField() = default;
 
 std::unique_ptr<SvxFieldData> CustomPropertyField::Clone() const
 {

@@ -95,9 +95,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConf
     mxCurrentDocOnly->connect_toggled(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
 }
 
-ScCalcOptionsDialog::~ScCalcOptionsDialog()
-{
-}
+ScCalcOptionsDialog::~ScCalcOptionsDialog() = default;
 
 void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
 {

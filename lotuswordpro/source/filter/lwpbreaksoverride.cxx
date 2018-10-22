@@ -75,9 +75,7 @@ LwpBreaksOverride::LwpBreaksOverride(LwpBreaksOverride const& rOther)
 {
 }
 
-LwpBreaksOverride::~LwpBreaksOverride()
-{
-}
+LwpBreaksOverride::~LwpBreaksOverride() = default;
 
 LwpBreaksOverride* LwpBreaksOverride::clone() const
 {

@@ -196,9 +196,7 @@ namespace accessibility
     {
     }
 
-    EditBrowseBoxTableCellAccess::~EditBrowseBoxTableCellAccess( )
-    {
-    }
+    EditBrowseBoxTableCellAccess::~EditBrowseBoxTableCellAccess() = default;
 
     css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  )
     {

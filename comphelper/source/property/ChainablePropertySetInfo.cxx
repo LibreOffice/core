@@ -39,10 +39,7 @@ ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo const * pMap )
     }
 }
 
-ChainablePropertySetInfo::~ChainablePropertySetInfo()
-    throw()
-{
-}
+ChainablePropertySetInfo::~ChainablePropertySetInfo() throw() = default;
 
 void ChainablePropertySetInfo::remove( const OUString& aName )
 {

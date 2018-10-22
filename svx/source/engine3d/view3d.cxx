@@ -1498,9 +1498,7 @@ void E3dView::End3DCreation(bool bUseDefaultValuesForMirrorAxes)
     }
 }
 
-E3dView::~E3dView ()
-{
-}
+E3dView::~E3dView() = default;
 
 void E3dView::ResetCreationActive ()
 {

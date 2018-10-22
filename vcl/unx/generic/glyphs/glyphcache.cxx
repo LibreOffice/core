@@ -272,9 +272,7 @@ void FreetypeFontInstance::SetFreetypeFont(FreetypeFont* p)
     mpFreetypeFont = p;
 }
 
-FreetypeFontInstance::~FreetypeFontInstance()
-{
-}
+FreetypeFontInstance::~FreetypeFontInstance() = default;
 
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {

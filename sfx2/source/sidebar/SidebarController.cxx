@@ -150,9 +150,7 @@ rtl::Reference<SidebarController> SidebarController::create(
     return instance;
 }
 
-SidebarController::~SidebarController()
-{
-}
+SidebarController::~SidebarController() = default;
 
 SidebarController* SidebarController::GetSidebarControllerForFrame (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)

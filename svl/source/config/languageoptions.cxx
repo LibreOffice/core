@@ -203,9 +203,7 @@ SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     }
 }
 
-SvtSystemLanguageOptions::~SvtSystemLanguageOptions()
-{
-}
+SvtSystemLanguageOptions::~SvtSystemLanguageOptions() = default;
 
 void    SvtSystemLanguageOptions::ImplCommit()
 {

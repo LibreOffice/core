@@ -131,9 +131,7 @@ ViewContactOfE3d::ViewContactOfE3d(E3dObject& rSdrObject)
 {
 }
 
-ViewContactOfE3d::~ViewContactOfE3d()
-{
-}
+ViewContactOfE3d::~ViewContactOfE3d() = default;
 
 drawinglayer::primitive3d::Primitive3DContainer const & ViewContactOfE3d::getVIP3DSWithoutObjectTransform() const
 {

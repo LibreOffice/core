@@ -99,11 +99,7 @@ namespace frm
     {
     }
 
-
-    RichTextEngine::~RichTextEngine( )
-    {
-    }
-
+    RichTextEngine::~RichTextEngine() = default;
 
     void RichTextEngine::registerEngineStatusListener( IEngineStatusListener* _pListener )
     {

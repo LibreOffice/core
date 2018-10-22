@@ -39,9 +39,7 @@ WrappedCharacterHeightProperty_Base::WrappedCharacterHeightProperty_Base(
                            , m_pRefSizePropProvider( pRefSizePropProvider )
 {
 }
-WrappedCharacterHeightProperty_Base::~WrappedCharacterHeightProperty_Base()
-{
-}
+WrappedCharacterHeightProperty_Base::~WrappedCharacterHeightProperty_Base() = default;
 
 void WrappedCharacterHeightProperty::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
             , ReferenceSizePropertyProvider* pRefSizePropProvider  )
@@ -115,25 +113,19 @@ WrappedCharacterHeightProperty::WrappedCharacterHeightProperty( ReferenceSizePro
         : WrappedCharacterHeightProperty_Base( "CharHeight", pRefSizePropProvider )
 {
 }
-WrappedCharacterHeightProperty::~WrappedCharacterHeightProperty()
-{
-}
+WrappedCharacterHeightProperty::~WrappedCharacterHeightProperty() = default;
 
 WrappedAsianCharacterHeightProperty::WrappedAsianCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
         : WrappedCharacterHeightProperty_Base( "CharHeightAsian", pRefSizePropProvider )
 {
 }
-WrappedAsianCharacterHeightProperty::~WrappedAsianCharacterHeightProperty()
-{
-}
+WrappedAsianCharacterHeightProperty::~WrappedAsianCharacterHeightProperty() = default;
 
 WrappedComplexCharacterHeightProperty::WrappedComplexCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
         : WrappedCharacterHeightProperty_Base( "CharHeightComplex", pRefSizePropProvider )
 {
 }
-WrappedComplexCharacterHeightProperty::~WrappedComplexCharacterHeightProperty()
-{
-}
+WrappedComplexCharacterHeightProperty::~WrappedComplexCharacterHeightProperty() = default;
 
 } //namespace wrapper
 } //namespace chart

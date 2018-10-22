@@ -31,10 +31,7 @@ OObjectListener::OObjectListener(OObjectBase* _pObject)
 {
 }
 
-
-OObjectListener::~OObjectListener()
-{
-}
+OObjectListener::~OObjectListener() = default;
 
 // XEventListener
 
@@ -60,11 +57,7 @@ DlgEdHint::DlgEdHint(DlgEdHintKind eHint)
 {
 }
 
-
-DlgEdHint::~DlgEdHint()
-{
-}
-
+DlgEdHint::~DlgEdHint() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,9 +56,7 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     UpdateButtons();
 }
 
-SwCustomizeAddressListDialog::~SwCustomizeAddressListDialog()
-{
-}
+SwCustomizeAddressListDialog::~SwCustomizeAddressListDialog() = default;
 
 IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, weld::TreeView&, void)
 {

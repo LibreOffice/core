@@ -215,9 +215,7 @@ Idlc::Idlc(Options* pOptions)
     m_bGenerateDoc = m_pOptions->isValid("-C");
 }
 
-Idlc::~Idlc()
-{
-}
+Idlc::~Idlc() = default;
 
 void Idlc::init()
 {

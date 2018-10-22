@@ -54,9 +54,7 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxIte
         RemoveTabPage("labelTP_PARA_ASIAN");
 }
 
-SvxSearchFormatDialog::~SvxSearchFormatDialog()
-{
-}
+SvxSearchFormatDialog::~SvxSearchFormatDialog() = default;
 
 void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
@@ -236,8 +234,6 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog(weld::Window* pParent, bool
     m_xRelaxBox->set_active(bRelax);
 }
 
-SvxSearchSimilarityDialog::~SvxSearchSimilarityDialog()
-{
-}
+SvxSearchSimilarityDialog::~SvxSearchSimilarityDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

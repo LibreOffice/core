@@ -26,9 +26,7 @@ SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc, SwTOXBase * _pTOX, const SwT
 {
 }
 
-SwUndoTOXChange::~SwUndoTOXChange()
-{
-}
+SwUndoTOXChange::~SwUndoTOXChange() = default;
 
 void SwUndoTOXChange::UpdateTOXBaseSection()
 {

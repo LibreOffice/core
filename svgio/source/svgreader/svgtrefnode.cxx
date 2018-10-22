@@ -33,9 +33,7 @@ namespace svgio
         {
         }
 
-        SvgTrefNode::~SvgTrefNode()
-        {
-        }
+        SvgTrefNode::~SvgTrefNode() = default;
 
         const SvgStyleAttributes* SvgTrefNode::getSvgStyleAttributes() const
         {

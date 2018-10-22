@@ -656,7 +656,7 @@ class AccumulateOutputRanges
     SCTAB const mnTab;
 public:
     explicit AccumulateOutputRanges(SCTAB nTab) : mnTab(nTab) {}
-    AccumulateOutputRanges(const AccumulateOutputRanges& r) : maRanges(r.maRanges), mnTab(r.mnTab) {}
+    AccumulateOutputRanges(const AccumulateOutputRanges& r) = default;
 
     void operator() (const std::unique_ptr<ScDPObject>& rObj)
     {

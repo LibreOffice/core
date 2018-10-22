@@ -54,9 +54,7 @@ SalTimer* X11SalInstance::CreateSalTimer()
     return new X11SalTimer( mpXLib );
 }
 
-X11SalTimer::~X11SalTimer()
-{
-}
+X11SalTimer::~X11SalTimer() = default;
 
 void X11SalTimer::Stop()
 {

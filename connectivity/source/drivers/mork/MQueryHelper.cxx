@@ -44,13 +44,9 @@ using namespace ::com::sun::star::sdbc;
 static
 std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression const * _aExpr, MQueryHelperResultEntry* entry);
 
-MQueryHelperResultEntry::MQueryHelperResultEntry()
-{
-}
+MQueryHelperResultEntry::MQueryHelperResultEntry() = default;
 
-MQueryHelperResultEntry::~MQueryHelperResultEntry()
-{
-}
+MQueryHelperResultEntry::~MQueryHelperResultEntry() = default;
 
 OUString MQueryHelperResultEntry::getValue( const OString &key ) const
 {

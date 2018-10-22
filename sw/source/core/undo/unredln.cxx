@@ -248,9 +248,7 @@ SwUndoRedlineSort::SwUndoRedlineSort( const SwPaM& rRange,
 {
 }
 
-SwUndoRedlineSort::~SwUndoRedlineSort()
-{
-}
+SwUndoRedlineSort::~SwUndoRedlineSort() = default;
 
 void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {

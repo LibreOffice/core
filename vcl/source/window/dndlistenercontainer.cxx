@@ -31,9 +31,7 @@ DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
     m_nDefaultActions = nDefaultActions;
 }
 
-DNDListenerContainer::~DNDListenerContainer()
-{
-}
+DNDListenerContainer::~DNDListenerContainer() = default;
 
 void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
 {

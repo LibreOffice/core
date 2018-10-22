@@ -40,14 +40,10 @@ IMPL_CHAIN_PROP_INTERFACE(SwitchingToNextBox, bool)
 
 // NOTE: All getters in the class assume that the guy is in the chain
 
-TextChain::TextChain()
-{
-}
+TextChain::TextChain() = default;
 
-TextChain::~TextChain()
-{
+TextChain::~TextChain() = default;
     // XXX: Should free all LinkProperties
-}
 
 namespace {
 

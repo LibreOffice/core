@@ -37,9 +37,7 @@ FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFra
 {
 }
 
-FragmentHandler2::~FragmentHandler2()
-{
-}
+FragmentHandler2::~FragmentHandler2() = default;
 
 // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
 

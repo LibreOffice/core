@@ -38,9 +38,7 @@ GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
         throw css::lang::IllegalArgumentException();
 }
 
-GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() throw()
-{
-}
+GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() throw() = default;
 
 void SAL_CALL GenericConfigurationChangeRequest::execute (
     const Reference<XConfiguration>& rxConfiguration)

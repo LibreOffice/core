@@ -25,9 +25,7 @@ SwDashedLine::SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() ) :
 {
 }
 
-SwDashedLine::~SwDashedLine( )
-{
-}
+SwDashedLine::~SwDashedLine() = default;
 
 void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {

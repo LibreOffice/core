@@ -67,10 +67,7 @@ SwXAutoTextContainer::SwXAutoTextContainer()
 
 }
 
-SwXAutoTextContainer::~SwXAutoTextContainer()
-{
-
-}
+SwXAutoTextContainer::~SwXAutoTextContainer() = default;
 
 sal_Int32 SwXAutoTextContainer::getCount()
 {
@@ -243,9 +240,7 @@ SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
         "SwXAutoTextGroup::SwXAutoTextGroup: to be constructed with a complete name only!" );
 }
 
-SwXAutoTextGroup::~SwXAutoTextGroup()
-{
-}
+SwXAutoTextGroup::~SwXAutoTextGroup() = default;
 
 uno::Sequence< OUString > SwXAutoTextGroup::getTitles()
 {
@@ -972,9 +967,7 @@ SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
 {
 }
 
-SwAutoTextEventDescriptor::~SwAutoTextEventDescriptor()
-{
-}
+SwAutoTextEventDescriptor::~SwAutoTextEventDescriptor() = default;
 
 OUString SwAutoTextEventDescriptor::getImplementationName()
 {

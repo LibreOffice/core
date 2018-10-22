@@ -198,9 +198,7 @@ IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
 
-AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
-{
-}
+AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl() = default;
 
 short AbstractScLinkedAreaDlg_Impl::Execute()
 {

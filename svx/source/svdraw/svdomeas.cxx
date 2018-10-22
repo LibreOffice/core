@@ -70,9 +70,8 @@
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>
 
-
-SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
-SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
+SdrMeasureObjGeoData::SdrMeasureObjGeoData() = default;
+SdrMeasureObjGeoData::~SdrMeasureObjGeoData() = default;
 
 OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const
 {
@@ -220,9 +219,7 @@ SdrMeasureObj::SdrMeasureObj(
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
-SdrMeasureObj::~SdrMeasureObj()
-{
-}
+SdrMeasureObj::~SdrMeasureObj() = default;
 
 void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

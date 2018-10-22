@@ -51,11 +51,7 @@ namespace frm
     {
     }
 
-
-    OEntryListHelper::~OEntryListHelper( )
-    {
-    }
-
+    OEntryListHelper::~OEntryListHelper() = default;
 
     void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource )
     {

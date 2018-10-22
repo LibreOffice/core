@@ -29,10 +29,7 @@
 
 namespace framework
 {
-
-AcceleratorCache::AcceleratorCache()
-{
-}
+AcceleratorCache::AcceleratorCache() = default;
 
 AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
 {

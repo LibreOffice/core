@@ -172,9 +172,7 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     m_bStatusBarItemStartFound      = false;
 }
 
-OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
-{
-}
+OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler() = default;
 
 // XDocumentHandler
 void SAL_CALL OReadStatusBarDocumentHandler::startDocument()
@@ -498,9 +496,7 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
 }
 
-OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
-{
-}
+OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler() = default;
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
 {

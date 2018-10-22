@@ -84,9 +84,7 @@ KeyColumns::KeyColumns(
       m_foreignColumnNames( foreignColumnNames )
 {}
 
-KeyColumns::~KeyColumns()
-{}
-
+KeyColumns::~KeyColumns() = default;
 
 void KeyColumns::refresh()
 {

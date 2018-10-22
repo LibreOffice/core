@@ -63,11 +63,7 @@ void OEvoabPreparedStatement::construct( const OUString& _sql )
     pMeta->setEvoabFields( m_aQueryData.xSelectColumns );
 }
 
-
-OEvoabPreparedStatement::~OEvoabPreparedStatement()
-{
-}
-
+OEvoabPreparedStatement::~OEvoabPreparedStatement() = default;
 
 void SAL_CALL OEvoabPreparedStatement::acquire() throw()
 {

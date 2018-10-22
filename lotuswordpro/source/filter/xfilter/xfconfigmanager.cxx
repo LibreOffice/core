@@ -59,13 +59,9 @@
  ************************************************************************/
 #include <xfilter/xfconfigmanager.hxx>
 
-XFConfigManager::XFConfigManager()
-{
-}
+XFConfigManager::XFConfigManager() = default;
 
-XFConfigManager::~XFConfigManager()
-{
-}
+XFConfigManager::~XFConfigManager() = default;
 
 void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
 {

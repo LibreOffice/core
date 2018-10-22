@@ -86,10 +86,7 @@ AcceleratorExecute::AcceleratorExecute()
 {
 }
 
-AcceleratorExecute::~AcceleratorExecute()
-{
-    // does nothing real
-}
+AcceleratorExecute::~AcceleratorExecute() = default;
 
 
 std::unique_ptr<AcceleratorExecute> AcceleratorExecute::createAcceleratorHelper()

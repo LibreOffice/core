@@ -36,38 +36,31 @@ namespace dbaxml
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::awt;
 
-OPropertyHandlerFactory::OPropertyHandlerFactory()
-{
-}
+    OPropertyHandlerFactory::OPropertyHandlerFactory() = default;
 
-OPropertyHandlerFactory::~OPropertyHandlerFactory()
-{
+    OPropertyHandlerFactory::~OPropertyHandlerFactory() = default;
 
-}
-
-const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
-{
-    const XMLPropertyHandler* pHandler = nullptr;
-
-    switch (_nType)
+    const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
-        case XML_DB_TYPE_EQUAL:
-            if (!m_pDisplayHandler)
-            {
-                static const SvXMLEnumMapEntry<bool> aDisplayMap[] =
+        const XMLPropertyHandler* pHandler = nullptr;
+
+        switch (_nType)
+        {
+            case XML_DB_TYPE_EQUAL:
+                if (!m_pDisplayHandler)
                 {
-                    { XML_VISIBLE,       true },
-                    { XML_COLLAPSE,      false },
-                    { XML_TOKEN_INVALID, false }
-                };
-                m_pDisplayHandler.reset(new XMLConstantsPropertyHandler(aDisplayMap, XML_TOKEN_INVALID ));
-            }
-            pHandler = m_pDisplayHandler.get();
-            break;
-    }
-    if ( !pHandler )
-        pHandler = OControlPropertyHandlerFactory::GetPropertyHandler(_nType);
-    return pHandler;
+                    static const SvXMLEnumMapEntry<bool> aDisplayMap[] = {
+                        { XML_VISIBLE, true }, { XML_COLLAPSE, false }, { XML_TOKEN_INVALID, false }
+                    };
+                    m_pDisplayHandler.reset(
+                        new XMLConstantsPropertyHandler(aDisplayMap, XML_TOKEN_INVALID));
+                }
+                pHandler = m_pDisplayHandler.get();
+                break;
+        }
+        if (!pHandler)
+            pHandler = OControlPropertyHandlerFactory::GetPropertyHandler(_nType);
+        return pHandler;
 }
 
 #define MAP_END() { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFVER_010, false}

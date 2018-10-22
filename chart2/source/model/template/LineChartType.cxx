@@ -132,18 +132,13 @@ struct StaticLineChartTypeInfo : public rtl::StaticAggregate< uno::Reference< be
 
 namespace chart
 {
+LineChartType::LineChartType() = default;
 
-LineChartType::LineChartType()
-{
-}
+LineChartType::LineChartType(const LineChartType& rOther)
 
-LineChartType::LineChartType( const LineChartType & rOther ) :
-        ChartType( rOther )
-{
-}
+    = default;
 
-LineChartType::~LineChartType()
-{}
+LineChartType::~LineChartType() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()

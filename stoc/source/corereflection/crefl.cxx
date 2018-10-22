@@ -54,7 +54,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
 
-IdlReflectionServiceImpl::~IdlReflectionServiceImpl() {}
+IdlReflectionServiceImpl::~IdlReflectionServiceImpl() = default;
 
 // XInterface
 

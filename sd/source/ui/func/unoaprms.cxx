@@ -92,8 +92,6 @@ void SdAnimationPrmsUndoAction::Redo()
     pObject->BroadcastObjectChange();
 }
 
-SdAnimationPrmsUndoAction::~SdAnimationPrmsUndoAction()
-{
-}
+SdAnimationPrmsUndoAction::~SdAnimationPrmsUndoAction() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

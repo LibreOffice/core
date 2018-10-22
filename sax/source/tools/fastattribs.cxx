@@ -29,9 +29,7 @@ namespace sax_fastparser
 {
 
 // wastage to keep MSVC happy vs. an in-line {}
-FastTokenHandlerBase::~FastTokenHandlerBase()
-{
-}
+FastTokenHandlerBase::~FastTokenHandlerBase() = default;
 
 UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value )
     : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( value )

@@ -75,9 +75,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxContro
     }
 }
 
-ShellStackGuard::~ShellStackGuard()
-{
-}
+ShellStackGuard::~ShellStackGuard() = default;
 
 void SAL_CALL ShellStackGuard::disposing()
 {

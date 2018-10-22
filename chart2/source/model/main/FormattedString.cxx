@@ -113,8 +113,7 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
-FormattedString::~FormattedString()
-{}
+FormattedString::~FormattedString() = default;
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()

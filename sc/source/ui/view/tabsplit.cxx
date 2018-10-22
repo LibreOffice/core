@@ -31,9 +31,7 @@ ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, const ScV
     EnableRTL(false);
 }
 
-ScTabSplitter::~ScTabSplitter()
-{
-}
+ScTabSplitter::~ScTabSplitter() = default;
 
 void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 {

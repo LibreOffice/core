@@ -32,9 +32,7 @@ SwFormatWrapInfluenceOnObjPos::SwFormatWrapInfluenceOnObjPos( sal_Int16 _nWrapIn
 {
 }
 
-SwFormatWrapInfluenceOnObjPos::~SwFormatWrapInfluenceOnObjPos()
-{
-}
+SwFormatWrapInfluenceOnObjPos::~SwFormatWrapInfluenceOnObjPos() = default;
 
 bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
 {

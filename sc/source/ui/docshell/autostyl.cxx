@@ -68,9 +68,7 @@ ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell)
     aInitIdle.SetPriority( TaskPriority::HIGHEST );
 }
 
-ScAutoStyleList::~ScAutoStyleList()
-{
-}
+ScAutoStyleList::~ScAutoStyleList() = default;
 
 //  initial short delay (asynchronous call)
 

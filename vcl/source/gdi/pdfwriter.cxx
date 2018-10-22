@@ -23,9 +23,7 @@
 
 using namespace vcl;
 
-PDFWriter::AnyWidget::~AnyWidget()
-{
-}
+PDFWriter::AnyWidget::~AnyWidget() = default;
 
 PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >& xEnc )
         :
@@ -33,9 +31,7 @@ PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const css::un
 {
 }
 
-PDFWriter::~PDFWriter()
-{
-}
+PDFWriter::~PDFWriter() = default;
 
 OutputDevice* PDFWriter::GetReferenceDevice()
 {
@@ -437,9 +433,7 @@ sal_Int32 PDFWriter::CreateControl( const PDFWriter::AnyWidget& rControl )
     return xImplementation->createControl( rControl );
 }
 
-PDFOutputStream::~PDFOutputStream()
-{
-}
+PDFOutputStream::~PDFOutputStream() = default;
 
 void PDFWriter::AddStream( const OUString& rMimeType, PDFOutputStream* pStream )
 {

@@ -274,9 +274,7 @@ InputStream::InputStream( const Reference< XComponentContext >& rxContext, const
     maClosingBracket[ 0 ] = '>';
 }
 
-InputStream::~InputStream()
-{
-}
+InputStream::~InputStream() = default;
 
 sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
 {

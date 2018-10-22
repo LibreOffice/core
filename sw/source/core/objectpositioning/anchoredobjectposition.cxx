@@ -125,8 +125,7 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
     }
 }
 
-SwAnchoredObjectPosition::~SwAnchoredObjectPosition()
-{}
+SwAnchoredObjectPosition::~SwAnchoredObjectPosition() = default;
 
 bool SwAnchoredObjectPosition::IsAnchoredToChar() const
 {

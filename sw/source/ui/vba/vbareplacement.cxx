@@ -28,9 +28,7 @@ SwVbaReplacement::SwVbaReplacement( const uno::Reference< ooo::vba::XHelperInter
 {
 }
 
-SwVbaReplacement::~SwVbaReplacement()
-{
-}
+SwVbaReplacement::~SwVbaReplacement() = default;
 
 OUString SAL_CALL SwVbaReplacement::getText()
 {

@@ -48,9 +48,7 @@ DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nA
     CbClickHdl(*m_xCB_STANDARD);
 }
 
-DlgSize::~DlgSize()
-{
-}
+DlgSize::~DlgSize() = default;
 
 void DlgSize::SetValue( sal_Int32 nVal )
 {

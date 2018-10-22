@@ -20,13 +20,9 @@
 #include <unoreflist.hxx>
 #include <document.hxx>
 
-ScUnoRefList::ScUnoRefList()
-{
-}
+ScUnoRefList::ScUnoRefList() = default;
 
-ScUnoRefList::~ScUnoRefList()
-{
-}
+ScUnoRefList::~ScUnoRefList() = default;
 
 void ScUnoRefList::Add( sal_Int64 nId, const ScRangeList& rOldRanges )
 {
@@ -47,8 +43,6 @@ ScUnoRefUndoHint::ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry ) :
 {
 }
 
-ScUnoRefUndoHint::~ScUnoRefUndoHint()
-{
-}
+ScUnoRefUndoHint::~ScUnoRefUndoHint() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -171,17 +171,17 @@ public:
         : pOut(_pOut), rTxt(_rTxt), nIdx(_nIdx), nLen(_nLen)
         { }
 
-    virtual ~SvxDoCapitals() {}
+        virtual ~SvxDoCapitals() = default;
 
-    virtual void DoSpace( const bool bDraw );
-    virtual void SetSpace();
-    virtual void Do( const OUString &rTxt,
-                     const sal_Int32 nIdx, const sal_Int32 nLen,
-                     const bool bUpper ) = 0;
+        virtual void DoSpace(const bool bDraw);
+        virtual void SetSpace();
+        virtual void Do(const OUString& rTxt, const sal_Int32 nIdx, const sal_Int32 nLen,
+                        const bool bUpper)
+            = 0;
 
-    const OUString &GetTxt() const { return rTxt; }
-    sal_Int32 GetIdx() const { return nIdx; }
-    sal_Int32 GetLen() const { return nLen; }
+        const OUString& GetTxt() const { return rTxt; }
+        sal_Int32 GetIdx() const { return nIdx; }
+        sal_Int32 GetLen() const { return nLen; }
 };
 
 void SvxDoCapitals::DoSpace( const bool /*bDraw*/ ) { }

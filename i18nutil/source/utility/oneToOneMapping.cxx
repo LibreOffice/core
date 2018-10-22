@@ -27,9 +27,7 @@ oneToOneMapping::oneToOneMapping( OneToOneMappingTable_t const *rpTable, const s
 {
 }
 
-oneToOneMapping::~oneToOneMapping()
-{
-}
+oneToOneMapping::~oneToOneMapping() = default;
 
 sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const
 {

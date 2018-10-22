@@ -284,10 +284,7 @@ Content::Content(
 
 
 // virtual
-Content::~Content()
-{
-}
-
+Content::~Content() = default;
 
 // XInterface methods.
 

@@ -58,10 +58,7 @@ java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_
 
 jclass java_sql_PreparedStatement::theClass = nullptr;
 
-java_sql_PreparedStatement::~java_sql_PreparedStatement()
-{
-}
-
+java_sql_PreparedStatement::~java_sql_PreparedStatement() = default;
 
 jclass java_sql_PreparedStatement::getMyClass() const
 {

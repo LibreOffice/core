@@ -106,9 +106,7 @@ BreakPointDialog::BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkPn
     CheckButtons();
 }
 
-BreakPointDialog::~BreakPointDialog()
-{
-}
+BreakPointDialog::~BreakPointDialog() = default;
 
 void BreakPointDialog::SetCurrentBreakPoint( BreakPoint const & rBrk )
 {

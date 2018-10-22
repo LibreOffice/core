@@ -96,9 +96,7 @@ PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter,
     }
 }
 
-PresentationFragmentHandler::~PresentationFragmentHandler() throw()
-{
-}
+PresentationFragmentHandler::~PresentationFragmentHandler() throw() = default;
 
 static void ResolveTextFields( XmlFilterBase const & rFilter )
 {

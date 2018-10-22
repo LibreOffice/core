@@ -65,7 +65,7 @@ class SfxAppDispatchProvider : public ::cppu::WeakImplHelper< css::frame::XAppDi
 {
     css::uno::WeakReference < css::frame::XFrame > m_xFrame;
 public:
-    SfxAppDispatchProvider() {}
+    SfxAppDispatchProvider() = default;
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence<css::uno::Any> const & aArguments) override;

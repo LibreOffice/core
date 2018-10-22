@@ -92,12 +92,7 @@ void FmRecordCountListener::SetPropChangeHandler(const Link<sal_Int32,void>& lnk
         NotifyCurrentCount();
 }
 
-
-FmRecordCountListener::~FmRecordCountListener()
-{
-
-}
-
+FmRecordCountListener::~FmRecordCountListener() = default;
 
 void FmRecordCountListener::DisConnect()
 {

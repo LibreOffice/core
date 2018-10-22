@@ -24,9 +24,7 @@
 #include <txtrfmrk.hxx>
 #include <swfont.hxx>
 
-SwFormatRefMark::~SwFormatRefMark( )
-{
-}
+SwFormatRefMark::~SwFormatRefMark() = default;
 
 SwFormatRefMark::SwFormatRefMark( const OUString& rName )
     : SfxPoolItem(RES_TXTATR_REFMARK)

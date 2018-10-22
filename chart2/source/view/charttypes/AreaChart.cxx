@@ -90,9 +90,7 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
     }
 }
 
-AreaChart::~AreaChart()
-{
-}
+AreaChart::~AreaChart() = default;
 
 double AreaChart::getMaximumX()
 {

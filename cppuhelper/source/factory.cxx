@@ -118,10 +118,7 @@ protected:
     Sequence< OUString >             aServiceNames;
     OUString                         aImplementationName;
 };
-OSingleFactoryHelper::~OSingleFactoryHelper()
-{
-}
-
+OSingleFactoryHelper::~OSingleFactoryHelper() = default;
 
 Any OSingleFactoryHelper::queryInterface( const Type & rType )
 {

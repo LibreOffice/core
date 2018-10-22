@@ -793,7 +793,7 @@ class CellValueGetter : public ValueGetter
 protected:
     uno::Any maValue;
 public:
-    CellValueGetter() {}
+    CellValueGetter() = default;
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
     virtual void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue ) override;
     const uno::Any& getValue() const override { return maValue; }
@@ -1021,7 +1021,7 @@ public:
     virtual void process( const uno::Reference< excel::XRange >& xRange ) = 0;
 
 protected:
-    ~RangeProcessor() {}
+    ~RangeProcessor() = default;
 };
 
 class RangeValueProcessor : public RangeProcessor
@@ -1029,7 +1029,7 @@ class RangeValueProcessor : public RangeProcessor
     const uno::Any& m_aVal;
 public:
     explicit RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
-    virtual ~RangeValueProcessor() {}
+    virtual ~RangeValueProcessor() = default;
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
         xRange->setValue( m_aVal );
@@ -1041,7 +1041,7 @@ class RangeFormulaProcessor : public RangeProcessor
     const uno::Any& m_aVal;
 public:
     explicit RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
-    virtual ~RangeFormulaProcessor() {}
+    virtual ~RangeFormulaProcessor() = default;
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
         xRange->setFormula( m_aVal );
@@ -1053,7 +1053,7 @@ class RangeCountProcessor : public RangeProcessor
     sal_Int32 nCount;
 public:
     RangeCountProcessor():nCount(0){}
-    virtual ~RangeCountProcessor() {}
+    virtual ~RangeCountProcessor() = default;
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
         nCount = nCount + xRange->getCount();
@@ -1459,9 +1459,7 @@ ScVbaRange::ScVbaRange(const uno::Reference< XHelperInterface >& xParent, const 
 
 }
 
-ScVbaRange::~ScVbaRange()
-{
-}
+ScVbaRange::~ScVbaRange() = default;
 
 uno::Reference< XCollection >& ScVbaRange::getBorders()
 {

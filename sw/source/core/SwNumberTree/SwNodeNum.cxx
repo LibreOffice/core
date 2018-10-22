@@ -41,10 +41,7 @@ SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
 {
 }
 
-SwNodeNum::~SwNodeNum()
-{
-}
-
+SwNodeNum::~SwNodeNum() = default;
 
 void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 {

@@ -84,9 +84,7 @@ void LwpTextStyle::Read()
     ReadCommon();
 }
 
-LwpTextStyle::~LwpTextStyle()
-{
-}
+LwpTextStyle::~LwpTextStyle() = default;
 
 void LwpTextStyle::ReadCommon()
 {

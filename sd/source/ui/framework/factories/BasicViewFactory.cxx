@@ -71,14 +71,16 @@ class BasicViewFactory::ViewShellContainer
     : public ::std::vector<std::shared_ptr<ViewDescriptor> >
 {
 public:
-    ViewShellContainer() {};
+    ViewShellContainer() = default;
+    ;
 };
 
 class BasicViewFactory::ViewCache
     : public ::std::vector<std::shared_ptr<ViewDescriptor> >
 {
 public:
-    ViewCache() {};
+    ViewCache() = default;
+    ;
 };
 
 //===== ViewFactory ===========================================================
@@ -95,9 +97,7 @@ BasicViewFactory::BasicViewFactory ()
 {
 }
 
-BasicViewFactory::~BasicViewFactory()
-{
-}
+BasicViewFactory::~BasicViewFactory() = default;
 
 void SAL_CALL BasicViewFactory::disposing()
 {

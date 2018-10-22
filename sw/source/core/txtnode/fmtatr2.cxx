@@ -73,7 +73,7 @@ SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
 {
 }
 
-SwFormatCharFormat::~SwFormatCharFormat() {}
+SwFormatCharFormat::~SwFormatCharFormat() = default;
 
 bool SwFormatCharFormat::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -191,9 +191,7 @@ SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
         mpMacroTable.reset( new SvxMacroTableDtor( *rAttr.GetMacroTable() ) );
 }
 
-SwFormatINetFormat::~SwFormatINetFormat()
-{
-}
+SwFormatINetFormat::~SwFormatINetFormat() = default;
 
 bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -404,9 +402,7 @@ SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
 {
 }
 
-SwFormatRuby::~SwFormatRuby()
-{
-}
+SwFormatRuby::~SwFormatRuby() = default;
 
 SwFormatRuby& SwFormatRuby::operator=( const SwFormatRuby& rAttr )
 {
@@ -639,9 +635,7 @@ Meta::Meta(SwFormatMeta * const i_pFormat)
 {
 }
 
-Meta::~Meta()
-{
-}
+Meta::~Meta() = default;
 
 SwTextMeta * Meta::GetTextAttr() const
 {
@@ -767,9 +761,7 @@ void MetaField::SetNumberFormat(sal_uInt32 nNumberFormat)
     m_nNumberFormat = nNumberFormat;
 }
 
-MetaFieldManager::MetaFieldManager()
-{
-}
+MetaFieldManager::MetaFieldManager() = default;
 
 std::shared_ptr<MetaField>
 MetaFieldManager::makeMetaField(SwFormatMeta * const i_pFormat,

@@ -64,9 +64,7 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
 {
 }
 
-XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
-{
-}
+XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper() = default;
 
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, OUString& sCurrency, bool& bIsStandard)
 {

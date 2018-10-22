@@ -96,9 +96,7 @@ SdrEditView::SdrEditView(
     ImpClearVars();
 }
 
-SdrEditView::~SdrEditView()
-{
-}
+SdrEditView::~SdrEditView() = default;
 
 void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 {

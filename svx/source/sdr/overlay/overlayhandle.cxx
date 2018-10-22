@@ -54,10 +54,7 @@ OverlayHandle::OverlayHandle(const B2DPoint& rBasePos,
 {
 }
 
-OverlayHandle::~OverlayHandle()
-{
-}
-
+OverlayHandle::~OverlayHandle() = default;
 }} // end of namespace sdr::overlay
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

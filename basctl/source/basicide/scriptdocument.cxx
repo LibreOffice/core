@@ -121,7 +121,7 @@ namespace basctl
             {
             }
 
-            virtual ~FilterDocuments() {}
+            virtual ~FilterDocuments() = default;
 
             virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const override;
 

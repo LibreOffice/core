@@ -25,14 +25,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+XMLBitmapLogicalSizePropertyHandler::XMLBitmapLogicalSizePropertyHandler() = default;
 
-XMLBitmapLogicalSizePropertyHandler::XMLBitmapLogicalSizePropertyHandler()
-{
-}
-
-XMLBitmapLogicalSizePropertyHandler::~XMLBitmapLogicalSizePropertyHandler()
-{
-}
+XMLBitmapLogicalSizePropertyHandler::~XMLBitmapLogicalSizePropertyHandler() = default;
 
 bool XMLBitmapLogicalSizePropertyHandler::importXML(
     const OUString& rStrImpValue,

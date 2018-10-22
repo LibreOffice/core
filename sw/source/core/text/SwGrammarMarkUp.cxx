@@ -19,9 +19,7 @@
 
 #include <SwGrammarMarkUp.hxx>
 
-SwGrammarMarkUp::~SwGrammarMarkUp()
-{
-}
+SwGrammarMarkUp::~SwGrammarMarkUp() = default;
 
 SwWrongList* SwGrammarMarkUp::Clone()
 {

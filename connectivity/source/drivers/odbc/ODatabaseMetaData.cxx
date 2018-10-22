@@ -58,9 +58,7 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
     }
 }
 
-ODatabaseMetaData::~ODatabaseMetaData()
-{
-}
+ODatabaseMetaData::~ODatabaseMetaData() = default;
 
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {

@@ -1204,9 +1204,7 @@ namespace svx
         m_xDictNameED->connect_changed( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
     }
 
-    HangulHanjaNewDictDialog::~HangulHanjaNewDictDialog()
-    {
-    }
+    HangulHanjaNewDictDialog::~HangulHanjaNewDictDialog() = default;
 
     bool HangulHanjaNewDictDialog::GetName( OUString& _rRetName ) const
     {

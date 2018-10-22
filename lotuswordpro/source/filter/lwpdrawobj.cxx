@@ -481,9 +481,7 @@ LwpDrawPolyLine::LwpDrawPolyLine(SvStream * pStream, DrawingOffsetAndScale* pTra
 : LwpDrawObj(pStream, pTransData)
 {
 }
-LwpDrawPolyLine::~LwpDrawPolyLine()
-{
-}
+LwpDrawPolyLine::~LwpDrawPolyLine() = default;
 
 /**
  * @descr   reading function of class LwpDrawPolyLine
@@ -567,9 +565,7 @@ LwpDrawPolygon::LwpDrawPolygon(SvStream * pStream, DrawingOffsetAndScale* pTrans
 {
 }
 
-LwpDrawPolygon::~LwpDrawPolygon()
-{
-}
+LwpDrawPolygon::~LwpDrawPolygon() = default;
 
 /**
  * @descr   reading function of class LwpDrawPolygon
@@ -1340,9 +1336,7 @@ LwpDrawBitmap::LwpDrawBitmap(SvStream* pStream) : LwpDrawObj(pStream)
 {
 }
 
-LwpDrawBitmap::~LwpDrawBitmap()
-{
-}
+LwpDrawBitmap::~LwpDrawBitmap() = default;
 
 /**
  * @descr   reading function of class LwpDrawBitmap

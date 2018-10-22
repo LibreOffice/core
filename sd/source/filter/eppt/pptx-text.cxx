@@ -1336,9 +1336,7 @@ bool TextObj::HasExtendedBullets()
     return mpImplTextObj->mbHasExtendedBullets;
 }
 
-FontCollectionEntry::~FontCollectionEntry()
-{
-}
+FontCollectionEntry::~FontCollectionEntry() = default;
 
 void FontCollectionEntry::ImplInit( const OUString& rName )
 {

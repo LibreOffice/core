@@ -55,9 +55,7 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
     populateCache();
 }
 
-ProviderCache::~ProviderCache()
-{
-}
+ProviderCache::~ProviderCache() = default;
 
 Reference< provider::XScriptProvider >
 ProviderCache::getProvider( const OUString& providerName )

@@ -32,9 +32,7 @@ XMLElementPropertyContext::XMLElementPropertyContext (
 {
 }
 
-XMLElementPropertyContext::~XMLElementPropertyContext()
-{
-}
+XMLElementPropertyContext::~XMLElementPropertyContext() = default;
 
 void XMLElementPropertyContext::EndElement( )
 {

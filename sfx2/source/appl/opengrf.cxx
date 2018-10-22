@@ -102,9 +102,7 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, weld::Window*
     mpImpl->aFileDlg.SetTitle(rTitle);
 }
 
-SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
-{
-}
+SvxOpenGraphicDialog::~SvxOpenGraphicDialog() = default;
 
 ErrCode SvxOpenGraphicDialog::Execute()
 {

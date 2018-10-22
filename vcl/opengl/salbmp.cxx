@@ -316,7 +316,7 @@ public:
 
     virtual void StartLine( sal_uInt8* pLine ) { mpData = pLine; }
     virtual const BitmapColor& ReadPixel() = 0;
-    virtual ~ImplPixelFormat() { }
+    virtual ~ImplPixelFormat() = default;
 };
 
 class ImplPixelFormat8 : public ImplPixelFormat

@@ -77,9 +77,7 @@ ViewTabBarModule::ViewTabBarModule (
     }
 }
 
-ViewTabBarModule::~ViewTabBarModule()
-{
-}
+ViewTabBarModule::~ViewTabBarModule() = default;
 
 void SAL_CALL ViewTabBarModule::disposing()
 {

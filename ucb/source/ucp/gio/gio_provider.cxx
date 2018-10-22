@@ -66,9 +66,7 @@ ContentProvider::ContentProvider(
 {
 }
 
-ContentProvider::~ContentProvider()
-{
-}
+ContentProvider::~ContentProvider() = default;
 
 // XInterface
 void SAL_CALL ContentProvider::acquire()

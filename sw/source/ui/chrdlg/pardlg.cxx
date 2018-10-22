@@ -151,9 +151,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
         SetCurPageId(sDefPage);
 }
 
-SwParaDlg::~SwParaDlg()
-{
-}
+SwParaDlg::~SwParaDlg() = default;
 
 void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {

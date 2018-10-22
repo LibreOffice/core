@@ -251,9 +251,7 @@ IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, weld::ToggleButton&, void)
     m_xPageStartNF->set_sensitive(m_xPageStartRB->get_active());
 }
 
-SwTitlePageDlg::~SwTitlePageDlg()
-{
-}
+SwTitlePageDlg::~SwTitlePageDlg() = default;
 
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 {

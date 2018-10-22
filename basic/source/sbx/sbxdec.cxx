@@ -73,9 +73,7 @@ void SbxDecimal::fillAutomationDecimal
 #endif
 }
 
-SbxDecimal::~SbxDecimal()
-{
-}
+SbxDecimal::~SbxDecimal() = default;
 
 void releaseDecimalPtr( SbxDecimal*& rpDecimal )
 {

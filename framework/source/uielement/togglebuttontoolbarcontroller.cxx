@@ -63,9 +63,7 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
         m_pToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
 }
 
-ToggleButtonToolbarController::~ToggleButtonToolbarController()
-{
-}
+ToggleButtonToolbarController::~ToggleButtonToolbarController() = default;
 
 void SAL_CALL ToggleButtonToolbarController::dispose()
 {

@@ -54,10 +54,8 @@ ScServerObjectSvtListenerForwarder::ScServerObjectSvtListenerForwarder(
 {
 }
 
-ScServerObjectSvtListenerForwarder::~ScServerObjectSvtListenerForwarder()
-{
+ScServerObjectSvtListenerForwarder::~ScServerObjectSvtListenerForwarder() = default;
     //! do NOT access pObj
-}
 
 void ScServerObjectSvtListenerForwarder::Notify( const SfxHint& rHint )
 {

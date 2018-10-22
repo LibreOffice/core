@@ -38,9 +38,7 @@ TableContext::TableContext( ContextHandler2Helper const & rParent, const ShapePt
     pShapePtr->setTableType();
 }
 
-TableContext::~TableContext()
-{
-}
+TableContext::~TableContext() = default;
 
 ContextHandlerRef
 TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )

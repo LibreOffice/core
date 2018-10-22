@@ -33,11 +33,7 @@ using namespace ::com::sun::star;
 
 SfxPoolItem* SfxPointItem::CreateDefault() { return new SfxPointItem; }
 
-
-SfxPointItem::SfxPointItem()
-{
-}
-
+SfxPointItem::SfxPointItem() = default;
 
 SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
     SfxPoolItem( nW ),

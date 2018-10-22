@@ -73,9 +73,7 @@ SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface
     mxTextViewCursor = word::getXTextViewCursor( mxModel );
 }
 
-SwVbaSelection::~SwVbaSelection()
-{
-}
+SwVbaSelection::~SwVbaSelection() = default;
 
 uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange()
 {

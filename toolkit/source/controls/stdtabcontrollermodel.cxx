@@ -36,9 +36,7 @@
 
 //  class UnoControlModelEntryList
 
-UnoControlModelEntryList::UnoControlModelEntryList()
-{
-}
+UnoControlModelEntryList::UnoControlModelEntryList() = default;
 
 UnoControlModelEntryList::~UnoControlModelEntryList()
 {
@@ -95,9 +93,7 @@ StdTabControllerModel::StdTabControllerModel()
     mbGroupControl = true;
 }
 
-StdTabControllerModel::~StdTabControllerModel()
-{
-}
+StdTabControllerModel::~StdTabControllerModel() = default;
 
 sal_uInt32 StdTabControllerModel::ImplGetControlCount( const UnoControlModelEntryList& rList ) const
 {

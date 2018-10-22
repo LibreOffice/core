@@ -36,9 +36,7 @@ SvxMSConvertOCXControls::SvxMSConvertOCXControls( const uno::Reference< frame::X
 {
 }
 
-SvxMSConvertOCXControls::~SvxMSConvertOCXControls()
-{
-}
+SvxMSConvertOCXControls::~SvxMSConvertOCXControls() = default;
 
 void SvxMSConvertOCXControls::GetDrawPage()
 {

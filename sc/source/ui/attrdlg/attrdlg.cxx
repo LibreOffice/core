@@ -63,9 +63,7 @@ ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
     AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
 }
 
-ScAttrDlg::~ScAttrDlg()
-{
-}
+ScAttrDlg::~ScAttrDlg() = default;
 
 void ScAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
 {

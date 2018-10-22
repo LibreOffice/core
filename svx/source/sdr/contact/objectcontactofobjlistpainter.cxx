@@ -30,15 +30,10 @@
 #include <memory>
 
 namespace sdr { namespace contact {
-
-ObjectContactPainter::ObjectContactPainter()
-{
-}
+ObjectContactPainter::ObjectContactPainter() = default;
 
 // The destructor.
-ObjectContactPainter::~ObjectContactPainter()
-{
-}
+ObjectContactPainter::~ObjectContactPainter() = default;
 
 sal_uInt32 ObjectContactOfObjListPainter::GetPaintObjectCount() const
 {
@@ -63,9 +58,7 @@ ObjectContactOfObjListPainter::ObjectContactOfObjListPainter(
 {
 }
 
-ObjectContactOfObjListPainter::~ObjectContactOfObjListPainter()
-{
-}
+ObjectContactOfObjListPainter::~ObjectContactOfObjListPainter() = default;
 
 // Process the whole displaying
 void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
@@ -165,9 +158,7 @@ ObjectContactOfPagePainter::ObjectContactOfPagePainter(
 {
 }
 
-ObjectContactOfPagePainter::~ObjectContactOfPagePainter()
-{
-}
+ObjectContactOfPagePainter::~ObjectContactOfPagePainter() = default;
 
 void ObjectContactOfPagePainter::SetStartPage(const SdrPage* pPage)
 {

@@ -193,9 +193,7 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
 {
 }
 
-SwAnchoredDrawObject::~SwAnchoredDrawObject()
-{
-}
+SwAnchoredDrawObject::~SwAnchoredDrawObject() = default;
 
 // --> #i62875#
 void SwAnchoredDrawObject::UpdateLayoutDir()

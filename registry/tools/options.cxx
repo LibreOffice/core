@@ -33,8 +33,7 @@ Options::Options (char const * program)
     : m_program (program)
 {}
 
-Options::~Options()
-{}
+Options::~Options() = default;
 
 // static
 bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg, size_t len)

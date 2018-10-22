@@ -160,9 +160,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     osl_atomic_decrement( &m_refCount );
 }
 
-OResultSet::~OResultSet()
-{
-}
+OResultSet::~OResultSet() = default;
 
 void OResultSet::construct()
 {

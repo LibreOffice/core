@@ -89,8 +89,6 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
     }
 }
 
-ScXMLCellRangeSourceContext::~ScXMLCellRangeSourceContext()
-{
-}
+ScXMLCellRangeSourceContext::~ScXMLCellRangeSourceContext() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

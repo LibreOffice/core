@@ -35,9 +35,7 @@ namespace drawinglayer
         {
         }
 
-        BasePrimitive3D::~BasePrimitive3D()
-        {
-        }
+        BasePrimitive3D::~BasePrimitive3D() = default;
 
         bool BasePrimitive3D::operator==( const BasePrimitive3D& rPrimitive ) const
         {

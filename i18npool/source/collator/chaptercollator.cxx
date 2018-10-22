@@ -34,9 +34,7 @@ ChapterCollator::ChapterCollator( const Reference < XComponentContext >& rxConte
     cclass = CharacterClassification::create( rxContext );
 }
 
-ChapterCollator::~ChapterCollator()
-{
-}
+ChapterCollator::~ChapterCollator() = default;
 
 sal_Int32 SAL_CALL
 ChapterCollator::compareString( const OUString& s1, const OUString& s2)

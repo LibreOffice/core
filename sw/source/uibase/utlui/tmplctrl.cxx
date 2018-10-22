@@ -67,9 +67,7 @@ SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
     GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_TMPLCTRL_HINT));
 }
 
-SwTemplateControl::~SwTemplateControl()
-{
-}
+SwTemplateControl::~SwTemplateControl() = default;
 
 void SwTemplateControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )

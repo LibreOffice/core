@@ -218,15 +218,7 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
 }
 
-SwFootnoteInfo& SwFootnoteInfo::operator=(const SwFootnoteInfo& rInfo)
-{
-    SwEndNoteInfo::operator=(rInfo);
-    aQuoVadis =  rInfo.aQuoVadis;
-    aErgoSum = rInfo.aErgoSum;
-    ePos = rInfo.ePos;
-    eNum = rInfo.eNum;
-    return *this;
-}
+SwFootnoteInfo& SwFootnoteInfo::operator=(const SwFootnoteInfo& rInfo) = default;
 
 bool SwFootnoteInfo::operator==( const SwFootnoteInfo& rInfo ) const
 {

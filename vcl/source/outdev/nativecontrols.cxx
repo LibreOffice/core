@@ -62,9 +62,7 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
     }
 }
 
-ImplControlValue::~ImplControlValue()
-{
-}
+ImplControlValue::~ImplControlValue() = default;
 
 ImplControlValue* ImplControlValue::clone() const
 {
@@ -72,9 +70,7 @@ ImplControlValue* ImplControlValue::clone() const
     return new ImplControlValue( *this );
 }
 
-ScrollbarValue::~ScrollbarValue()
-{
-}
+ScrollbarValue::~ScrollbarValue() = default;
 
 ScrollbarValue* ScrollbarValue::clone() const
 {
@@ -82,9 +78,7 @@ ScrollbarValue* ScrollbarValue::clone() const
     return new ScrollbarValue( *this );
 }
 
-SliderValue::~SliderValue()
-{
-}
+SliderValue::~SliderValue() = default;
 
 SliderValue* SliderValue::clone() const
 {
@@ -92,9 +86,7 @@ SliderValue* SliderValue::clone() const
     return new SliderValue( *this );
 }
 
-TabitemValue::~TabitemValue()
-{
-}
+TabitemValue::~TabitemValue() = default;
 
 TabitemValue* TabitemValue::clone() const
 {
@@ -102,9 +94,7 @@ TabitemValue* TabitemValue::clone() const
     return new TabitemValue( *this );
 }
 
-SpinbuttonValue::~SpinbuttonValue()
-{
-}
+SpinbuttonValue::~SpinbuttonValue() = default;
 
 SpinbuttonValue* SpinbuttonValue::clone() const
 {
@@ -112,9 +102,7 @@ SpinbuttonValue* SpinbuttonValue::clone() const
     return new SpinbuttonValue( *this );
 }
 
-ToolbarValue::~ToolbarValue()
-{
-}
+ToolbarValue::~ToolbarValue() = default;
 
 ToolbarValue* ToolbarValue::clone() const
 {
@@ -122,9 +110,7 @@ ToolbarValue* ToolbarValue::clone() const
     return new ToolbarValue( *this );
 }
 
-MenubarValue::~MenubarValue()
-{
-}
+MenubarValue::~MenubarValue() = default;
 
 MenubarValue* MenubarValue::clone() const
 {
@@ -132,9 +118,7 @@ MenubarValue* MenubarValue::clone() const
     return new MenubarValue( *this );
 }
 
-MenupopupValue::~MenupopupValue()
-{
-}
+MenupopupValue::~MenupopupValue() = default;
 
 MenupopupValue* MenupopupValue::clone() const
 {
@@ -142,9 +126,7 @@ MenupopupValue* MenupopupValue::clone() const
     return new MenupopupValue( *this );
 }
 
-PushButtonValue::~PushButtonValue()
-{
-}
+PushButtonValue::~PushButtonValue() = default;
 
 PushButtonValue* PushButtonValue::clone() const
 {

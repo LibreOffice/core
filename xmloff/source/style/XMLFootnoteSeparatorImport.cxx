@@ -66,9 +66,7 @@ XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
 {
 }
 
-XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport()
-{
-}
+XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport() = default;
 
 void XMLFootnoteSeparatorImport::StartElement(
     const Reference<XAttributeList> & xAttrList)

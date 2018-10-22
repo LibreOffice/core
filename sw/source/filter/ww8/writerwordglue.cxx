@@ -457,9 +457,7 @@ namespace sw
         {
         }
 
-        ParaStyleMapper::~ParaStyleMapper()
-        {
-        }
+        ParaStyleMapper::~ParaStyleMapper() = default;
 
         ParaStyleMapper::StyleResult ParaStyleMapper::GetStyle(
             const OUString& rName, ww::sti eSti)
@@ -472,9 +470,7 @@ namespace sw
         {
         }
 
-        CharStyleMapper::~CharStyleMapper()
-        {
-        }
+        CharStyleMapper::~CharStyleMapper() = default;
 
         CharStyleMapper::StyleResult CharStyleMapper::GetStyle(
             const OUString& rName, ww::sti eSti)

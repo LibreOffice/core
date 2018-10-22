@@ -57,9 +57,7 @@ ScVbaButtonCharacters::ScVbaButtonCharacters(
         mnLength = SAL_MAX_INT32;
 }
 
-ScVbaButtonCharacters::~ScVbaButtonCharacters()
-{
-}
+ScVbaButtonCharacters::~ScVbaButtonCharacters() = default;
 
 // XCharacters attributes
 

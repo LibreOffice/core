@@ -43,9 +43,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    SoundActionContext::~SoundActionContext() throw()
-    {
-    }
+    SoundActionContext::~SoundActionContext() throw() = default;
 
     void SoundActionContext::onEndElement()
     {

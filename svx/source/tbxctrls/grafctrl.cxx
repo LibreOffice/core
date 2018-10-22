@@ -426,9 +426,7 @@ SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     rTbx.Invalidate();
 }
 
-SvxGrafToolBoxControl::~SvxGrafToolBoxControl()
-{
-}
+SvxGrafToolBoxControl::~SvxGrafToolBoxControl() = default;
 
 void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
@@ -513,9 +511,7 @@ SvxGrafModeToolBoxControl::SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uI
 {
 }
 
-SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl()
-{
-}
+SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl() = default;
 
 void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 

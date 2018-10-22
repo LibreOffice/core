@@ -76,7 +76,7 @@ class MasterPageContainerQueue::RequestQueue
     : public ::std::set<PreviewCreationRequest,PreviewCreationRequest::Compare>
 {
 public:
-    RequestQueue() {}
+    RequestQueue() = default;
 };
 
 //===== MasterPageContainerQueue ==============================================

@@ -32,13 +32,9 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
 
-OXMLRptPropHdlFactory::OXMLRptPropHdlFactory()
-{
-}
+    OXMLRptPropHdlFactory::OXMLRptPropHdlFactory() = default;
 
-OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory()
-{
-}
+    OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory() = default;
 
 }// rptxml
 

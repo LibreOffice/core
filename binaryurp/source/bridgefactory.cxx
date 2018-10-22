@@ -81,7 +81,7 @@ BridgeFactory::BridgeFactory():
 {
 }
 
-BridgeFactory::~BridgeFactory() {}
+BridgeFactory::~BridgeFactory() = default;
 
 OUString BridgeFactory::getImplementationName()
 {

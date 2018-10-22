@@ -67,8 +67,7 @@ XMLChartStyleContext::XMLChartStyleContext(
         mrStyles( rStyles )
 {}
 
-XMLChartStyleContext::~XMLChartStyleContext()
-{}
+XMLChartStyleContext::~XMLChartStyleContext() = default;
 
 namespace
 {

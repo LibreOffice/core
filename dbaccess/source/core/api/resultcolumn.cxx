@@ -97,9 +97,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
     }
 }
 
-OResultColumn::~OResultColumn()
-{
-}
+OResultColumn::~OResultColumn() = default;
 
 // css::lang::XTypeProvider
 Sequence< sal_Int8 > OResultColumn::getImplementationId()

@@ -95,9 +95,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     }
 }
 
-XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
-{
-}
+XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext() = default;
 
 void XMLTextFrameHyperlinkContext::EndElement()
 {

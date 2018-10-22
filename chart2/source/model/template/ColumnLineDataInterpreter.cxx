@@ -39,8 +39,7 @@ ColumnLineDataInterpreter::ColumnLineDataInterpreter(
         m_nNumberOfLines( nNumberOfLines )
 {}
 
-ColumnLineDataInterpreter::~ColumnLineDataInterpreter()
-{}
+ColumnLineDataInterpreter::~ColumnLineDataInterpreter() = default;
 
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(

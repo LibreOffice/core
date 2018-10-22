@@ -76,10 +76,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _e
     setType(_eType);
 }
 
-
-ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
-{
-}
+ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet() = default;
 
 void ODatabaseMetaDataResultSet::construct()
 {

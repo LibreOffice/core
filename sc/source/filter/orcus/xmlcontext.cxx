@@ -182,7 +182,7 @@ void loadContentFromURL(const OUString& rURL, std::string& rStrm)
 ScOrcusXMLContextImpl::ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath) :
     ScOrcusXMLContext(), mrDoc(rDoc), maPath(rPath) {}
 
-ScOrcusXMLContextImpl::~ScOrcusXMLContextImpl() {}
+ScOrcusXMLContextImpl::~ScOrcusXMLContextImpl() = default;
 
 void ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam)
 {

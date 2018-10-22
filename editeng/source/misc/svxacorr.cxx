@@ -181,9 +181,7 @@ static bool lcl_IsInAsciiArr( const sal_Char* pArr, const sal_Unicode c )
     return bRet;
 }
 
-SvxAutoCorrDoc::~SvxAutoCorrDoc()
-{
-}
+SvxAutoCorrDoc::~SvxAutoCorrDoc() = default;
 
 // Called by the functions:
 //  - FnCapitalStartWord
@@ -331,10 +329,7 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
 {
 }
 
-
-SvxAutoCorrect::~SvxAutoCorrect()
-{
-}
+SvxAutoCorrect::~SvxAutoCorrect() = default;
 
 void SvxAutoCorrect::GetCharClass_( LanguageType eLang )
 {
@@ -1919,9 +1914,7 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
 {
 }
 
-SvxAutoCorrectLanguageLists::~SvxAutoCorrectLanguageLists()
-{
-}
+SvxAutoCorrectLanguageLists::~SvxAutoCorrectLanguageLists() = default;
 
 bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
 {

@@ -59,9 +59,7 @@ public:
 FieldUpdater::FieldUpdater(EditTextObject const & rObj) : mpImpl(new FieldUpdaterImpl(rObj)) {}
 FieldUpdater::FieldUpdater(const FieldUpdater& r) : mpImpl(new FieldUpdaterImpl(*r.mpImpl)) {}
 
-FieldUpdater::~FieldUpdater()
-{
-}
+FieldUpdater::~FieldUpdater() = default;
 
 void FieldUpdater::updateTableFields(int nTab)
 {

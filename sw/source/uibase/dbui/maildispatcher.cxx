@@ -111,9 +111,7 @@ MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> const & mailse
     m_aRunCondition.wait();
 }
 
-MailDispatcher::~MailDispatcher()
-{
-}
+MailDispatcher::~MailDispatcher() = default;
 
 void MailDispatcher::enqueueMailMessage(uno::Reference<mail::XMailMessage> const & message)
 {

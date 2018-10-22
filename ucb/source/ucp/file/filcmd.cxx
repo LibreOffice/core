@@ -42,10 +42,7 @@ XCommandInfo_impl::XCommandInfo_impl( TaskManager* pMyShell )
 {
 }
 
-XCommandInfo_impl::~XCommandInfo_impl()
-{
-}
-
+XCommandInfo_impl::~XCommandInfo_impl() = default;
 
 void SAL_CALL
 XCommandInfo_impl::acquire()

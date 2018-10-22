@@ -157,9 +157,7 @@ namespace
         REGISTER_PROPERTY( COLUMN,              m_xColumn );
     }
 
-    DataAccessDescriptor::~DataAccessDescriptor()
-    {
-    }
+    DataAccessDescriptor::~DataAccessDescriptor() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( DataAccessDescriptor, DataAccessDescriptor_TypeBase, DataAccessDescriptor_PropertyBase );
 
@@ -214,9 +212,7 @@ namespace
         DataAccessDescriptorFactory();
     };
 
-    DataAccessDescriptorFactory::DataAccessDescriptorFactory()
-    {
-    }
+    DataAccessDescriptorFactory::DataAccessDescriptorFactory() = default;
 
     OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName()
     {

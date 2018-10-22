@@ -125,9 +125,7 @@ TemplateScanner::TemplateScanner()
     //  empty;
 }
 
-TemplateScanner::~TemplateScanner()
-{
-}
+TemplateScanner::~TemplateScanner() = default;
 
 TemplateScanner::State TemplateScanner::GetTemplateRoot()
 {

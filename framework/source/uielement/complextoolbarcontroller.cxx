@@ -59,9 +59,7 @@ ComplexToolbarController::ComplexToolbarController(
     m_xURLTransformer.set( URLTransformer::create(m_xContext) );
 }
 
-ComplexToolbarController::~ComplexToolbarController()
-{
-}
+ComplexToolbarController::~ComplexToolbarController() = default;
 
 void SAL_CALL ComplexToolbarController::dispose()
 {

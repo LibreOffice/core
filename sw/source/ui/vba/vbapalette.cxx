@@ -55,7 +55,7 @@ typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 class DefaultPalette : public XIndexAccess_BASE
 {
 public:
-   DefaultPalette(){}
+    DefaultPalette() = default;
 
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() override

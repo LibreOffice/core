@@ -164,15 +164,11 @@ static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUStrin
     return false;
 }
 
-ScAutoFormatsObj::ScAutoFormatsObj()
-{
+ScAutoFormatsObj::ScAutoFormatsObj() = default;
     //! This object should only exist once and it must be known to Auto-Format-Data,
     //! so that changes can be broadcasted
-}
 
-ScAutoFormatsObj::~ScAutoFormatsObj()
-{
-}
+ScAutoFormatsObj::~ScAutoFormatsObj() = default;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
@@ -595,9 +591,7 @@ ScAutoFormatFieldObj::ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField
 {
 }
 
-ScAutoFormatFieldObj::~ScAutoFormatFieldObj()
-{
-}
+ScAutoFormatFieldObj::~ScAutoFormatFieldObj() = default;
 
 // beans::XPropertySet
 

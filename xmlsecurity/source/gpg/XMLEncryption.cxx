@@ -14,11 +14,9 @@ using namespace css::lang;
 using namespace css::xml::wrapper;
 using namespace css::xml::crypto;
 
-XMLEncryptionGpg::XMLEncryptionGpg() {
-}
+XMLEncryptionGpg::XMLEncryptionGpg() = default;
 
-XMLEncryptionGpg::~XMLEncryptionGpg() {
-}
+XMLEncryptionGpg::~XMLEncryptionGpg() = default;
 
 /* XXMLEncryption */
 Reference< XXMLEncryptionTemplate > SAL_CALL XMLEncryptionGpg::encrypt(const Reference< XXMLEncryptionTemplate >& /*aTemplate*/,

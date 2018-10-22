@@ -299,9 +299,7 @@ namespace drawinglayer
             }
         }
 
-        SdrLathePrimitive3D::~SdrLathePrimitive3D()
-        {
-        }
+        SdrLathePrimitive3D::~SdrLathePrimitive3D() = default;
 
         bool SdrLathePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {

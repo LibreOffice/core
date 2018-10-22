@@ -56,9 +56,7 @@ SwWebDocShell::SwWebDocShell()
 {
 }
 
-SwWebDocShell::~SwWebDocShell()
-{
-}
+SwWebDocShell::~SwWebDocShell() = default;
 
 void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,

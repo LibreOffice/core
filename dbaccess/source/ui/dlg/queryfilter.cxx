@@ -183,9 +183,7 @@ DlgFilterCrit::DlgFilterCrit(weld::Window * pParent,
         m_xET_WHEREVALUE1->grab_focus();
 }
 
-DlgFilterCrit::~DlgFilterCrit()
-{
-}
+DlgFilterCrit::~DlgFilterCrit() = default;
 
 #define LbText(x)       ((x).get_active_text())
 #define LbPos(x)        ((x).get_active())

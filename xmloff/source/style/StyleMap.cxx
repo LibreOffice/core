@@ -34,13 +34,9 @@ class theStyleMapUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theStyleMapU
 
 } // end anonymous namespace
 
-StyleMap::StyleMap()
-{
-}
+StyleMap::StyleMap() = default;
 
-StyleMap::~StyleMap()
-{
-}
+StyleMap::~StyleMap() = default;
 
 // XUnoTunnel & co
 const Sequence<sal_Int8>& StyleMap::getUnoTunnelId() throw()

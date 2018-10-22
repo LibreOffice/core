@@ -53,9 +53,7 @@ private:
 };
 }
 
-PropertyMapImpl::PropertyMapImpl() throw()
-{
-}
+PropertyMapImpl::PropertyMapImpl() throw() = default;
 
 void PropertyMapImpl::add(PropertyMapEntry const * pMap) throw()
 {
@@ -153,9 +151,7 @@ PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) t
     mpImpl->add(pEntries);
 }
 
-PropertySetInfo::~PropertySetInfo() throw()
-{
-}
+PropertySetInfo::~PropertySetInfo() throw() = default;
 
 void PropertySetInfo::add( PropertyMapEntry const * pMap ) throw()
 {

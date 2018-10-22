@@ -62,10 +62,7 @@
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xftextcontent.hxx>
 
-XFTextSpan::XFTextSpan()
-{
-
-}
+XFTextSpan::XFTextSpan() = default;
 
 XFTextSpan::XFTextSpan(const OUString& text,
                        const OUString& style
@@ -75,9 +72,7 @@ XFTextSpan::XFTextSpan(const OUString& text,
     SetStyleName(style);
 }
 
-XFTextSpan::~XFTextSpan()
-{
-}
+XFTextSpan::~XFTextSpan() = default;
 
 enumXFContent XFTextSpan::GetContentType()
 {

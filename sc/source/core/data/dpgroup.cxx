@@ -307,9 +307,7 @@ ScDPGroupItem::ScDPGroupItem( const ScDPItemData& rName ) :
 {
 }
 
-ScDPGroupItem::~ScDPGroupItem()
-{
-}
+ScDPGroupItem::~ScDPGroupItem() = default;
 
 void ScDPGroupItem::AddElement( const ScDPItemData& rName )
 {
@@ -450,9 +448,7 @@ void ScDPNumGroupDimension::DisposeData()
     maMemberEntries.clear();
 }
 
-ScDPNumGroupDimension::~ScDPNumGroupDimension()
-{
-}
+ScDPNumGroupDimension::~ScDPNumGroupDimension() = default;
 
 void ScDPNumGroupDimension::SetDateDimension()
 {
@@ -482,9 +478,7 @@ ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource
     pNumGroups.reset( new ScDPNumGroupDimension[nSourceCount] );
 }
 
-ScDPGroupTableData::~ScDPGroupTableData()
-{
-}
+ScDPGroupTableData::~ScDPGroupTableData() = default;
 
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
 {

@@ -77,7 +77,7 @@ comphelper::ConfigurationChanges::create(
     return TheConfigurationWrapper::get(context).createChanges();
 }
 
-comphelper::ConfigurationChanges::~ConfigurationChanges() {}
+comphelper::ConfigurationChanges::~ConfigurationChanges() = default;
 
 void comphelper::ConfigurationChanges::commit() const {
     access_->commitChanges();
@@ -123,7 +123,7 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     access_(css::configuration::ReadWriteAccess::create(context, "*"))
 {}
 
-comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
+comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() = default;
 
 bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
     const

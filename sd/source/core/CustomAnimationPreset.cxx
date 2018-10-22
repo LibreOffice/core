@@ -230,13 +230,9 @@ bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
     return false;
 }
 
-CustomAnimationPresets::CustomAnimationPresets()
-{
-}
+CustomAnimationPresets::CustomAnimationPresets() = default;
 
-CustomAnimationPresets::~CustomAnimationPresets()
-{
-}
+CustomAnimationPresets::~CustomAnimationPresets() = default;
 
 Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFactory >& xServiceFactory, const OUString& rPath )
 {

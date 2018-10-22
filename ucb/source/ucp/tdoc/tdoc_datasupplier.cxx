@@ -88,9 +88,7 @@ ResultSetDataSupplier::ResultSetDataSupplier(
 }
 
 // virtual
-ResultSetDataSupplier::~ResultSetDataSupplier()
-{
-}
+ResultSetDataSupplier::~ResultSetDataSupplier() = default;
 
 // virtual
 OUString

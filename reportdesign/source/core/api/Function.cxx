@@ -43,9 +43,7 @@ OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
     m_sInitialFormula.IsPresent = false;
 }
 
-OFunction::~OFunction()
-{
-}
+OFunction::~OFunction() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2(OFunction,FunctionBase,FunctionPropertySet)
 

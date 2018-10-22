@@ -1392,9 +1392,7 @@ ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExtern
 {
 }
 
-ScExternalSheetCacheObj::~ScExternalSheetCacheObj()
-{
-}
+ScExternalSheetCacheObj::~ScExternalSheetCacheObj() = default;
 
 void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nRow, const Any& rValue)
 {
@@ -1490,9 +1488,7 @@ ScExternalDocLinkObj::ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefM
 {
 }
 
-ScExternalDocLinkObj::~ScExternalDocLinkObj()
-{
-}
+ScExternalDocLinkObj::~ScExternalDocLinkObj() = default;
 
 uno::Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetCache(
     const OUString& aSheetName, sal_Bool bDynamicCache )
@@ -1610,9 +1606,7 @@ ScExternalDocLinksObj::ScExternalDocLinksObj(ScDocShell* pDocShell) :
 {
 }
 
-ScExternalDocLinksObj::~ScExternalDocLinksObj()
-{
-}
+ScExternalDocLinksObj::~ScExternalDocLinksObj() = default;
 
 uno::Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDocLink(
     const OUString& aDocName )

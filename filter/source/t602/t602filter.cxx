@@ -148,10 +148,7 @@ T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> co
 {
 }
 
-
-T602ImportFilter::~T602ImportFilter()
-{
-}
+T602ImportFilter::~T602ImportFilter() = default;
 
 // XExtendedTypeDetection
 OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
@@ -890,9 +887,7 @@ T602ImportFilterDialog::T602ImportFilterDialog()
 {
 }
 
-T602ImportFilterDialog::~T602ImportFilterDialog()
-{
-}
+T602ImportFilterDialog::~T602ImportFilterDialog() = default;
 
 // XLocalizable
 

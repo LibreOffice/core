@@ -95,11 +95,9 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, "ScHeaderFooterContentObj", "com.sun.star.sheet.HeaderFooterContent" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv.one.Text.Text" )
 
-ScHeaderFooterContentObj::ScHeaderFooterContentObj()
-{
-}
+ScHeaderFooterContentObj::ScHeaderFooterContentObj() = default;
 
-ScHeaderFooterContentObj::~ScHeaderFooterContentObj() {}
+ScHeaderFooterContentObj::~ScHeaderFooterContentObj() = default;
 
 const EditTextObject* ScHeaderFooterContentObj::GetLeftEditObject() const
 {
@@ -277,7 +275,7 @@ void ScHeaderFooterTextObj::CreateUnoText_Impl()
     }
 }
 
-ScHeaderFooterTextObj::~ScHeaderFooterTextObj() {}
+ScHeaderFooterTextObj::~ScHeaderFooterTextObj() = default;
 
 const EditTextObject* ScHeaderFooterTextObj::GetTextObject() const
 {
@@ -569,9 +567,7 @@ ScCellTextCursor::ScCellTextCursor(ScCellObj& rText) :
 {
 }
 
-ScCellTextCursor::~ScCellTextCursor() throw()
-{
-}
+ScCellTextCursor::~ScCellTextCursor() throw() = default;
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
@@ -652,7 +648,8 @@ ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooter
     rTextObj( rText )
 {}
 
-ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() {};
+ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() = default;
+;
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
@@ -738,9 +735,7 @@ ScDrawTextCursor::ScDrawTextCursor( const uno::Reference<text::XText>& xParent,
 {
 }
 
-ScDrawTextCursor::~ScDrawTextCursor() throw()
-{
-}
+ScDrawTextCursor::~ScDrawTextCursor() throw() = default;
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
@@ -842,9 +837,7 @@ ScEditEngineTextObj::ScEditEngineTextObj() :
 {
 }
 
-ScEditEngineTextObj::~ScEditEngineTextObj() throw()
-{
-}
+ScEditEngineTextObj::~ScEditEngineTextObj() throw() = default;
 
 void ScEditEngineTextObj::SetText( const EditTextObject& rTextObject )
 {
@@ -1004,8 +997,6 @@ ScCellTextObj::ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP) :
 {
 }
 
-ScCellTextObj::~ScCellTextObj() throw()
-{
-}
+ScCellTextObj::~ScCellTextObj() throw() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

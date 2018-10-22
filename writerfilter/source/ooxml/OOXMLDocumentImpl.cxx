@@ -70,9 +70,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     pushShapeContext();
 }
 
-OOXMLDocumentImpl::~OOXMLDocumentImpl()
-{
-}
+OOXMLDocumentImpl::~OOXMLDocumentImpl() = default;
 
 void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
                                              OOXMLStream::StreamType_t nType)

@@ -76,9 +76,7 @@ XFFrame::XFFrame(bool isTextBox)
     , m_isTextBox(isTextBox)
 {}
 
-XFFrame::~XFFrame()
-{
-}
+XFFrame::~XFFrame() = default;
 
 void    XFFrame::Add(XFContent *pContent)
 {

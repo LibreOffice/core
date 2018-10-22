@@ -69,9 +69,7 @@ ScDatabaseDPData::ScDatabaseDPData(
 {
 }
 
-ScDatabaseDPData::~ScDatabaseDPData()
-{
-}
+ScDatabaseDPData::~ScDatabaseDPData() = default;
 
 void ScDatabaseDPData::DisposeData()
 {

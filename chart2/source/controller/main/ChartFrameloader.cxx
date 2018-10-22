@@ -41,9 +41,7 @@ ChartFrameLoader::ChartFrameLoader(
     m_oCancelFinished.reset();
 }
 
-ChartFrameLoader::~ChartFrameLoader()
-{
-}
+ChartFrameLoader::~ChartFrameLoader() = default;
 
 bool ChartFrameLoader::impl_checkCancel()
 {

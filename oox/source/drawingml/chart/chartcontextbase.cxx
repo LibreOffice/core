@@ -37,9 +37,7 @@ ShapePrWrapperContext::ShapePrWrapperContext( ContextHandler2Helper& rParent, Sh
 {
 }
 
-ShapePrWrapperContext::~ShapePrWrapperContext()
-{
-}
+ShapePrWrapperContext::~ShapePrWrapperContext() = default;
 
 ContextHandlerRef ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
@@ -51,9 +49,7 @@ LayoutContext::LayoutContext( ContextHandler2Helper& rParent, LayoutModel& rMode
 {
 }
 
-LayoutContext::~LayoutContext()
-{
-}
+LayoutContext::~LayoutContext() = default;
 
 ContextHandlerRef LayoutContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

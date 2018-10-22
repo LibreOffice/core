@@ -37,9 +37,7 @@ ConstraintListContext::ConstraintListContext( ContextHandler2Helper const & rPar
     assert( pNode && "Node must NOT be NULL" );
 }
 
-ConstraintListContext::~ConstraintListContext()
-{
-}
+ConstraintListContext::~ConstraintListContext() = default;
 
 ContextHandlerRef
 ConstraintListContext::onCreateContext( ::sal_Int32 aElement,

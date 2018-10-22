@@ -166,9 +166,7 @@ SdXMLShapeContext::SdXMLShapeContext(
 {
 }
 
-SdXMLShapeContext::~SdXMLShapeContext()
-{
-}
+SdXMLShapeContext::~SdXMLShapeContext() = default;
 
 SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
@@ -948,9 +946,7 @@ SdXMLRectShapeContext::SdXMLRectShapeContext(
 {
 }
 
-SdXMLRectShapeContext::~SdXMLRectShapeContext()
-{
-}
+SdXMLRectShapeContext::~SdXMLRectShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1016,9 +1012,7 @@ SdXMLLineShapeContext::SdXMLLineShapeContext(
 {
 }
 
-SdXMLLineShapeContext::~SdXMLLineShapeContext()
-{
-}
+SdXMLLineShapeContext::~SdXMLLineShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1132,9 +1126,7 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
 {
 }
 
-SdXMLEllipseShapeContext::~SdXMLEllipseShapeContext()
-{
-}
+SdXMLEllipseShapeContext::~SdXMLEllipseShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1272,9 +1264,7 @@ void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
-{
-}
+SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext() = default;
 
 void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -1354,9 +1344,7 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
 {
 }
 
-SdXMLPathShapeContext::~SdXMLPathShapeContext()
-{
-}
+SdXMLPathShapeContext::~SdXMLPathShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1504,9 +1492,7 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
 {
 }
 
-SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext()
-{
-}
+SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1691,9 +1677,7 @@ SdXMLControlShapeContext::SdXMLControlShapeContext(
 {
 }
 
-SdXMLControlShapeContext::~SdXMLControlShapeContext()
-{
-}
+SdXMLControlShapeContext::~SdXMLControlShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1763,9 +1747,7 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
 {
 }
 
-SdXMLConnectorShapeContext::~SdXMLConnectorShapeContext()
-{
-}
+SdXMLConnectorShapeContext::~SdXMLConnectorShapeContext() = default;
 
 bool SvXMLImport::needFixPositionAfterZ() const
 {
@@ -2063,9 +2045,7 @@ SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
 {
 }
 
-SdXMLMeasureShapeContext::~SdXMLMeasureShapeContext()
-{
-}
+SdXMLMeasureShapeContext::~SdXMLMeasureShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -2168,9 +2148,7 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     mbClearDefaultAttributes = false;
 }
 
-SdXMLPageShapeContext::~SdXMLPageShapeContext()
-{
-}
+SdXMLPageShapeContext::~SdXMLPageShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -2256,9 +2234,7 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
 {
 }
 
-SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext()
-{
-}
+SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext() = default;
 
 void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -2488,11 +2464,7 @@ SvXMLImportContextRef SdXMLGraphicObjectShapeContext::CreateChildContext(
     return xContext;
 }
 
-SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
-{
-
-}
-
+SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext() = default;
 
 SdXMLChartShapeContext::SdXMLChartShapeContext(
     SvXMLImport& rImport,
@@ -2599,9 +2571,7 @@ SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt
 {
 }
 
-SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
-{
-}
+SdXMLObjectShapeContext::~SdXMLObjectShapeContext() = default;
 
 void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
 {
@@ -2810,9 +2780,7 @@ SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt
 {
 }
 
-SdXMLAppletShapeContext::~SdXMLAppletShapeContext()
-{
-}
+SdXMLAppletShapeContext::~SdXMLAppletShapeContext() = default;
 
 void SdXMLAppletShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
 {
@@ -2961,9 +2929,7 @@ mbMedia( false )
 {
 }
 
-SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
-{
-}
+SdXMLPluginShapeContext::~SdXMLPluginShapeContext() = default;
 
 void SdXMLPluginShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
 {
@@ -3226,9 +3192,7 @@ SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rIm
 {
 }
 
-SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext()
-{
-}
+SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext() = default;
 
 void SdXMLFloatingFrameShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
 {
@@ -3323,9 +3287,7 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16
 
 }
 
-SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
-{
-}
+SdXMLFrameShapeContext::~SdXMLFrameShapeContext() = default;
 
 void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext)
 {
@@ -3670,9 +3632,7 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     }
 }
 
-SdXMLCustomShapeContext::~SdXMLCustomShapeContext()
-{
-}
+SdXMLCustomShapeContext::~SdXMLCustomShapeContext() = default;
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -3869,9 +3829,7 @@ SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16
     memset( &maTemplateStylesUsed, 0, sizeof( maTemplateStylesUsed ) );
 }
 
-SdXMLTableShapeContext::~SdXMLTableShapeContext()
-{
-}
+SdXMLTableShapeContext::~SdXMLTableShapeContext() = default;
 
 void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {

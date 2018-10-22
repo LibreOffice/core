@@ -83,10 +83,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     }
 }
 
-XMLIndexTemplateContext::~XMLIndexTemplateContext()
-{
-}
-
+XMLIndexTemplateContext::~XMLIndexTemplateContext() = default;
 
 void XMLIndexTemplateContext::addTemplateEntry(
     const PropertyValues& aValues)

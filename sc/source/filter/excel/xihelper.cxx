@@ -272,9 +272,7 @@ XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpHFConverter::~XclImpHFConverter()
-{
-}
+XclImpHFConverter::~XclImpHFConverter() = default;
 
 void XclImpHFConverter::ParseString( const OUString& rHFString )
 {
@@ -805,9 +803,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
     }
 }
 
-XclImpCachedValue::~XclImpCachedValue()
-{
-}
+XclImpCachedValue::~XclImpCachedValue() = default;
 
 FormulaError XclImpCachedValue::GetScError() const
 {
@@ -851,9 +847,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
             maValueList.push_back( o3tl::make_unique<XclImpCachedValue>( rStrm ) );
 }
 
-XclImpCachedMatrix::~XclImpCachedMatrix()
-{
-}
+XclImpCachedMatrix::~XclImpCachedMatrix() = default;
 
 ScMatrixRef XclImpCachedMatrix::CreateScMatrix( svl::SharedStringPool& rPool ) const
 {

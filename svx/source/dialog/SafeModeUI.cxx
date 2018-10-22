@@ -37,9 +37,7 @@ public:
                                         const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 };
 
-SafeModeUI::SafeModeUI()
-{
-}
+SafeModeUI::SafeModeUI() = default;
 
 OUString SAL_CALL SafeModeUI::getImplementationName()
 {

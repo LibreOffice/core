@@ -28,9 +28,7 @@ SwVbaListGallery::SwVbaListGallery( const uno::Reference< ooo::vba::XHelperInter
 {
 }
 
-SwVbaListGallery::~SwVbaListGallery()
-{
-}
+SwVbaListGallery::~SwVbaListGallery() = default;
 
 uno::Any SAL_CALL
 SwVbaListGallery::ListTemplates( const uno::Any& index )

@@ -32,9 +32,7 @@ CRC32::CRC32()
 : nCRC(0)
 {
 }
-CRC32::~CRC32()
-{
-}
+CRC32::~CRC32() = default;
 void CRC32::reset()
 {
     nCRC=0;

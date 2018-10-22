@@ -77,7 +77,7 @@ public:
     {
     }
 
-    virtual ~AddTableDialogContext() {}
+    virtual ~AddTableDialogContext() = default;
 
     // IAddTableDialogContext
     virtual css::uno::Reference< css::sdbc::XConnection >
@@ -144,9 +144,7 @@ OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
 {
 }
 
-OJoinController::~OJoinController()
-{
-}
+OJoinController::~OJoinController() = default;
 
 OJoinDesignView* OJoinController::getJoinView()
 {

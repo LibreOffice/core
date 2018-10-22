@@ -28,8 +28,7 @@ ScPivotLayoutTreeListLabel::ScPivotLayoutTreeListLabel(vcl::Window* pParent, Win
     SetForceMakeVisible(true);
 }
 
-ScPivotLayoutTreeListLabel::~ScPivotLayoutTreeListLabel()
-{}
+ScPivotLayoutTreeListLabel::~ScPivotLayoutTreeListLabel() = default;
 
 void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVector)
 {

@@ -41,9 +41,7 @@ AstInterface::AstInterface(const OString& name,
     }
 }
 
-AstInterface::~AstInterface()
-{
-}
+AstInterface::~AstInterface() = default;
 
 AstInterface::DoubleDeclarations AstInterface::checkInheritedInterfaceClashes(
     AstInterface const * ifc, bool optional) const

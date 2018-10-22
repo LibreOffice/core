@@ -289,9 +289,7 @@ OUString ScCompiler::FindAddInFunction( const OUString& rUpperName, bool bLocalF
     return ScGlobal::GetAddInCollection()->FindFunction(rUpperName, bLocalFirst);    // bLocalFirst=false for english
 }
 
-ScCompiler::Convention::~Convention()
-{
-}
+ScCompiler::Convention::~Convention() = default;
 
 ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
         :
@@ -1064,9 +1062,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 
 struct ConventionXL
 {
-    virtual ~ConventionXL()
-    {
-    }
+    virtual ~ConventionXL() = default;
 
     static void GetTab(
         const ScAddress& rPos, const std::vector<OUString>& rTabNames,
@@ -1824,9 +1820,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
                 eGrammar );
 }
 
-ScCompiler::~ScCompiler()
-{
-}
+ScCompiler::~ScCompiler() = default;
 
 void ScCompiler::CheckTabQuotes( OUString& rString,
                                  const FormulaGrammar::AddressConvention eConv )

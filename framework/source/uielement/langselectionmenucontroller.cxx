@@ -75,9 +75,7 @@ LanguageSelectionMenuController::LanguageSelectionMenuController( const css::uno
 {
 }
 
-LanguageSelectionMenuController::~LanguageSelectionMenuController()
-{
-}
+LanguageSelectionMenuController::~LanguageSelectionMenuController() = default;
 
 // XEventListener
 void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& )

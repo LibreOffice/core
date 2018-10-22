@@ -30,10 +30,7 @@ using namespace ::com::sun::star::uno;
 // class XMLNamedBoolPropertyHdl
 
 
-XMLNamedBoolPropertyHdl::~XMLNamedBoolPropertyHdl()
-{
-    // Nothing to do
-}
+XMLNamedBoolPropertyHdl::~XMLNamedBoolPropertyHdl() = default;
 
 bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {

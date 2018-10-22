@@ -41,9 +41,7 @@ XHatchList::XHatchList(const OUString& rPath, const OUString& rReferer)
 {
 }
 
-XHatchList::~XHatchList()
-{
-}
+XHatchList::~XHatchList() = default;
 
 void XHatchList::Replace(std::unique_ptr<XHatchEntry> pEntry, long nIndex)
 {

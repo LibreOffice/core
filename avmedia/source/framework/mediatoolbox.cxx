@@ -77,11 +77,7 @@ MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, To
         rTbx.Invalidate();
 }
 
-
-MediaToolBoxControl::~MediaToolBoxControl()
-{
-}
-
+MediaToolBoxControl::~MediaToolBoxControl() = default;
 
 void MediaToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {

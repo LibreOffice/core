@@ -52,9 +52,7 @@ AccessiblePageShape::AccessiblePageShape (
     // has to be called from this constructor's caller.
 }
 
-AccessiblePageShape::~AccessiblePageShape()
-{
-}
+AccessiblePageShape::~AccessiblePageShape() = default;
 
 //=====  XAccessibleContext  ==================================================
 

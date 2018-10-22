@@ -46,12 +46,9 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource );
 
 namespace chart
 {
+DataInterpreter::DataInterpreter() = default;
 
-DataInterpreter::DataInterpreter()
-{}
-
-DataInterpreter::~DataInterpreter()
-{}
+DataInterpreter::~DataInterpreter() = default;
 
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL DataInterpreter::interpretDataSource(

@@ -122,10 +122,8 @@ void ContentResultSetWrapper::impl_init()
     xComponentOrigin->addEventListener( static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
 }
 
-ContentResultSetWrapper::~ContentResultSetWrapper()
-{
+ContentResultSetWrapper::~ContentResultSetWrapper() = default;
     //call impl_deinit() at start of destructor of derived class
-};
 
 void ContentResultSetWrapper::impl_deinit()
 {
@@ -1212,10 +1210,7 @@ ContentResultSetWrapperListener::ContentResultSetWrapperListener(
 {
 }
 
-ContentResultSetWrapperListener::~ContentResultSetWrapperListener()
-{
-}
-
+ContentResultSetWrapperListener::~ContentResultSetWrapperListener() = default;
 
 // XInterface methods.
 void SAL_CALL ContentResultSetWrapperListener::acquire()

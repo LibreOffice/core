@@ -59,9 +59,7 @@ SwAccessibleTextFrame::SwAccessibleTextFrame(
     }
 }
 
-SwAccessibleTextFrame::~SwAccessibleTextFrame()
-{
-}
+SwAccessibleTextFrame::~SwAccessibleTextFrame() = default;
 
 void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {

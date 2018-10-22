@@ -30,9 +30,7 @@ CategoryListBox::CategoryListBox( vcl::Window* pParent )
 
 VCL_BUILDER_FACTORY(CategoryListBox)
 
-CategoryListBox::~CategoryListBox()
-{
-}
+CategoryListBox::~CategoryListBox() = default;
 
 void  CategoryListBox::InsertCategory( const OUString& rStr )
 {

@@ -64,9 +64,7 @@ ScPreviewTableInfo::ScPreviewTableInfo() :
 {
 }
 
-ScPreviewTableInfo::~ScPreviewTableInfo()
-{
-}
+ScPreviewTableInfo::~ScPreviewTableInfo() = default;
 
 void ScPreviewTableInfo::SetTab( SCTAB nNewTab )
 {

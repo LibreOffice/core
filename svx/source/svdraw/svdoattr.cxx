@@ -86,9 +86,7 @@ SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
 {
 }
 
-SdrAttrObj::~SdrAttrObj()
-{
-}
+SdrAttrObj::~SdrAttrObj() = default;
 
 const tools::Rectangle& SdrAttrObj::GetSnapRect() const
 {

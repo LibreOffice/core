@@ -59,9 +59,7 @@
  ************************************************************************/
 #include <xfilter/xfdrawline.hxx>
 
-XFDrawLine::XFDrawLine()
-{
-}
+XFDrawLine::XFDrawLine() = default;
 
 void XFDrawLine::ToXml(IXFStream *pStrm)
 {

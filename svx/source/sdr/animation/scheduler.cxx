@@ -33,10 +33,7 @@ namespace sdr
         {
         }
 
-        Event::~Event()
-        {
-        }
-
+        Event::~Event() = default;
 
         void Event::SetTime(sal_uInt32 nNew)
         {

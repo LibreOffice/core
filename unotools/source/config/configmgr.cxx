@@ -169,7 +169,7 @@ utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
         css::uno::UNO_QUERY_THROW);
 }
 
-utl::ConfigManager::ConfigManager() {}
+utl::ConfigManager::ConfigManager() = default;
 
 utl::ConfigManager::~ConfigManager() {
     SAL_WARN_IF(!items_.empty(), "unotools.config", "ConfigManager not empty");

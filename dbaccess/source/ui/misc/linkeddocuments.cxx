@@ -112,9 +112,7 @@ namespace dbaui
         OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
-    OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
-    {
-    }
+    OLinkedDocumentsAccess::~OLinkedDocumentsAccess() = default;
     Reference< XComponent> OLinkedDocumentsAccess::impl_open( const OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {

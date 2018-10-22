@@ -57,8 +57,7 @@ SwToContentAnchoredObjectPosition::SwToContentAnchoredObjectPosition( SdrObject&
       mnToCharTopOfLine( 0 )
 {}
 
-SwToContentAnchoredObjectPosition::~SwToContentAnchoredObjectPosition()
-{}
+SwToContentAnchoredObjectPosition::~SwToContentAnchoredObjectPosition() = default;
 
 bool SwToContentAnchoredObjectPosition::IsAnchoredToChar() const
 {

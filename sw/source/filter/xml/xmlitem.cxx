@@ -38,9 +38,7 @@ SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                            GetImport().GetNamespaceMap() );
 }
 
-SvXMLItemSetContext::~SvXMLItemSetContext()
-{
-}
+SvXMLItemSetContext::~SvXMLItemSetContext() = default;
 
 SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,

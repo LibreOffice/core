@@ -57,9 +57,7 @@ XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
 {
 }
 
-XMLIndexTabStopEntryContext::~XMLIndexTabStopEntryContext()
-{
-}
+XMLIndexTabStopEntryContext::~XMLIndexTabStopEntryContext() = default;
 
 void XMLIndexTabStopEntryContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

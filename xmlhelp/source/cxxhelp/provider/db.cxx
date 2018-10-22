@@ -127,10 +127,7 @@ void Hdf::releaseHashMap()
     m_pStringToValPosMap.reset();
 }
 
-
-Hdf::~Hdf()
-{
-}
+Hdf::~Hdf() = default;
 
 bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
 {

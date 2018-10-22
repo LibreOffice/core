@@ -263,7 +263,7 @@ public:
     virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) override;
 };
 
-TypeConverter_Impl::TypeConverter_Impl() {}
+TypeConverter_Impl::TypeConverter_Impl() = default;
 
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName()

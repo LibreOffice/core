@@ -121,9 +121,7 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet) :
     ::FitToActualSize(aFormatCol, nWidth);
 }
 
-SwColMgr::~SwColMgr()
-{
-}
+SwColMgr::~SwColMgr() = default;
 
 void SwColMgr::SetLineWidthAndColor(SvxBorderLineStyle eStyle, sal_uLong nLWidth, const Color& rCol)
 {

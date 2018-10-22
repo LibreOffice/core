@@ -59,8 +59,7 @@ OUString convert_to_absolute_path(const OUString& path)
 
 }
 
-IconThemeScanner::IconThemeScanner()
-{}
+IconThemeScanner::IconThemeScanner() = default;
 
 void IconThemeScanner::ScanDirectoryForIconThemes(const OUString& paths)
 {

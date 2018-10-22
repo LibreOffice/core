@@ -47,9 +47,7 @@ class SwPageNumAndTypeOfAnchors
         std::vector< tEntry > maObjList;
 
     public:
-        SwPageNumAndTypeOfAnchors()
-        {
-        }
+        SwPageNumAndTypeOfAnchors() = default;
 
         void Collect( SwAnchoredObject& _rAnchoredObj )
         {
@@ -113,9 +111,7 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrame& _rPageFrame,
 {
 }
 
-SwObjectFormatter::~SwObjectFormatter()
-{
-}
+SwObjectFormatter::~SwObjectFormatter() = default;
 
 std::unique_ptr<SwObjectFormatter> SwObjectFormatter::CreateObjFormatter(
                                                       SwFrame& _rAnchorFrame,

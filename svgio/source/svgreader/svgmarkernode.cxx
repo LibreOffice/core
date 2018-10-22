@@ -40,9 +40,7 @@ namespace svgio
         {
         }
 
-        SvgMarkerNode::~SvgMarkerNode()
-        {
-        }
+        SvgMarkerNode::~SvgMarkerNode() = default;
 
         const SvgStyleAttributes* SvgMarkerNode::getSvgStyleAttributes() const
         {

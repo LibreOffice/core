@@ -99,9 +99,7 @@ namespace xmloff
         clear();
     }
 
-    OFormLayerXMLExport_Impl::~OFormLayerXMLExport_Impl()
-    {
-    }
+    OFormLayerXMLExport_Impl::~OFormLayerXMLExport_Impl() = default;
 
     bool OFormLayerXMLExport_Impl::impl_isFormPageContainingForms(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
     {

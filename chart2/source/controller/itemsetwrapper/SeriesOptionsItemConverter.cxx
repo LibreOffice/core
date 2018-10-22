@@ -163,9 +163,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
     }
 }
 
-SeriesOptionsItemConverter::~SeriesOptionsItemConverter()
-{
-}
+SeriesOptionsItemConverter::~SeriesOptionsItemConverter() = default;
 
 const sal_uInt16 * SeriesOptionsItemConverter::GetWhichPairs() const
 {

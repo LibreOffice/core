@@ -90,9 +90,7 @@ namespace
 }
 
 // ICopyTableSourceObject
-ICopyTableSourceObject::~ICopyTableSourceObject()
-{
-}
+ICopyTableSourceObject::~ICopyTableSourceObject() = default;
 
 // ObjectCopySource
 ObjectCopySource::ObjectCopySource( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet >& _rxObject )
@@ -394,7 +392,7 @@ OUString NamedTableCopySource::getSelectStatement() const
 class DummyCopySource : public ICopyTableSourceObject
 {
 public:
-    DummyCopySource() { }
+    DummyCopySource() = default;
 
     static const DummyCopySource& Instance();
 

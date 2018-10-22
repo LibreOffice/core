@@ -62,15 +62,9 @@ namespace
     };
 }
 
-OPropertyContainerHelper::OPropertyContainerHelper()
-{
-}
+OPropertyContainerHelper::OPropertyContainerHelper() = default;
 
-
-OPropertyContainerHelper::~OPropertyContainerHelper()
-{
-}
-
+OPropertyContainerHelper::~OPropertyContainerHelper() = default;
 
 void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int32 _nHandle,
         sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType)

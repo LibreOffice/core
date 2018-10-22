@@ -37,16 +37,7 @@ AccessibleShapeTreeInfo::AccessibleShapeTreeInfo()
 }
 
 
-AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (const AccessibleShapeTreeInfo& rInfo)
-    : mxDocumentWindow (rInfo.mxDocumentWindow),
-      mxModelBroadcaster (rInfo.mxModelBroadcaster),
-      mpView (rInfo.mpView),
-      mxController (rInfo.mxController),
-      mpWindow (rInfo.mpWindow),
-      mpViewForwarder (rInfo.mpViewForwarder)
-{
-    // Empty.
-}
+AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (const AccessibleShapeTreeInfo& rInfo) = default;
 
 void AccessibleShapeTreeInfo::dispose()
 {

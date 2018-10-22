@@ -36,9 +36,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfSdrCircObj::~ViewContactOfSdrCircObj()
-        {
-        }
+        ViewContactOfSdrCircObj::~ViewContactOfSdrCircObj() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCircObj::createViewIndependentPrimitive2DSequence() const
         {

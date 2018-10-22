@@ -29,8 +29,7 @@ SwEnvironmentOfAnchoredObject::SwEnvironmentOfAnchoredObject(
     : mbFollowTextFlow( _bFollowTextFlow )
 {}
 
-SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
-{}
+SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject() = default;
 
 /** determine environment layout frame for possible horizontal object positions */
 const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrame(

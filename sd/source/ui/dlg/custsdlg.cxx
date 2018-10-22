@@ -82,9 +82,7 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     CheckState();
 }
 
-SdCustomShowDlg::~SdCustomShowDlg()
-{
-}
+SdCustomShowDlg::~SdCustomShowDlg() = default;
 
 void SdCustomShowDlg::CheckState()
 {
@@ -326,9 +324,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
     CheckState();
 }
 
-SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
-{
-}
+SdDefineCustomShowDlg::~SdDefineCustomShowDlg() = default;
 
 // CheckState
 void SdDefineCustomShowDlg::CheckState()

@@ -65,9 +65,7 @@ XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
     maStringBuf.setLength(0);
 }
 
-XclExpRootData::~XclExpRootData()
-{
-}
+XclExpRootData::~XclExpRootData() = default;
 
 XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),

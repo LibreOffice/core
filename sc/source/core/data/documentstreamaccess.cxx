@@ -31,9 +31,7 @@ struct DocumentStreamAccessImpl
 DocumentStreamAccess::DocumentStreamAccess( ScDocument& rDoc ) :
     mpImpl(new DocumentStreamAccessImpl(rDoc)) {}
 
-DocumentStreamAccess::~DocumentStreamAccess()
-{
-}
+DocumentStreamAccess::~DocumentStreamAccess() = default;
 
 void DocumentStreamAccess::setNumericCell( const ScAddress& rPos, double fVal )
 {

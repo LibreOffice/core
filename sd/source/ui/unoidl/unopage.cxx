@@ -353,9 +353,7 @@ SdGenericDrawPage::SdGenericDrawPage(SdXImpressDocument* _pModel, SdPage* pInPag
 
 }
 
-SdGenericDrawPage::~SdGenericDrawPage() throw()
-{
-}
+SdGenericDrawPage::~SdGenericDrawPage() throw() = default;
 
 void SdGenericDrawPage::throwIfDisposed() const
 {
@@ -1867,9 +1865,7 @@ SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) throw()
     mpUnoPage = pUnoPage;
 }
 
-SdPageLinkTargets::~SdPageLinkTargets() throw()
-{
-}
+SdPageLinkTargets::~SdPageLinkTargets() throw() = default;
 
 // XElementAccess
 uno::Type SAL_CALL SdPageLinkTargets::getElementType()
@@ -2013,9 +2009,7 @@ SdDrawPage::SdDrawPage(SdXImpressDocument* pModel, SdPage* pPage)
 {
 }
 
-SdDrawPage::~SdDrawPage() throw()
-{
-}
+SdDrawPage::~SdDrawPage() throw() = default;
 
 // XInterface
 Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
@@ -2635,9 +2629,7 @@ SdMasterPage::SdMasterPage(SdXImpressDocument* pModel, SdPage* pPage)
 {
 }
 
-SdMasterPage::~SdMasterPage() throw()
-{
-}
+SdMasterPage::~SdMasterPage() throw() = default;
 
 // XInterface
 Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )

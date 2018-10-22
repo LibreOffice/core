@@ -36,12 +36,9 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-ImageAryData::ImageAryData( const ImageAryData& rData ) :
-    maName( rData.maName ),
-    mnId( rData.mnId ),
-    maBitmapEx( rData.maBitmapEx )
-{
-}
+ImageAryData::ImageAryData(const ImageAryData& rData)
+
+    = default;
 
 ImageAryData::ImageAryData( const OUString &aName,
                             sal_uInt16 nId, const BitmapEx &aBitmap )
@@ -49,18 +46,9 @@ ImageAryData::ImageAryData( const OUString &aName,
 {
 }
 
-ImageAryData::~ImageAryData()
-{
-}
+ImageAryData::~ImageAryData() = default;
 
-ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
-{
-    maName = rData.maName;
-    mnId = rData.mnId;
-    maBitmapEx = rData.maBitmapEx;
-
-    return *this;
-}
+ImageAryData& ImageAryData::operator=(const ImageAryData& rData) = default;
 
 void ImageAryData::Load(const OUString &rPrefix)
 {

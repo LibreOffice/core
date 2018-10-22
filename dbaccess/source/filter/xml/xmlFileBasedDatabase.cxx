@@ -110,10 +110,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     }
 }
 
-OXMLFileBasedDatabase::~OXMLFileBasedDatabase()
-{
-
-}
+OXMLFileBasedDatabase::~OXMLFileBasedDatabase() = default;
 
 } // namespace dbaxml
 

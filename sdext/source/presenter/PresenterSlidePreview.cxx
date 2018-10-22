@@ -104,9 +104,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     Resize();
 }
 
-PresenterSlidePreview::~PresenterSlidePreview()
-{
-}
+PresenterSlidePreview::~PresenterSlidePreview() = default;
 
 void SAL_CALL PresenterSlidePreview::disposing()
 {

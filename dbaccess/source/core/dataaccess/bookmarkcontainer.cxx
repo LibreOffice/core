@@ -60,9 +60,7 @@ void SAL_CALL OBookmarkContainer::release(  ) throw()
     m_rParent.release();
 }
 
-OBookmarkContainer::~OBookmarkContainer()
-{
-}
+OBookmarkContainer::~OBookmarkContainer() = default;
 
 // XServiceInfo
 OUString SAL_CALL OBookmarkContainer::getImplementationName(  )

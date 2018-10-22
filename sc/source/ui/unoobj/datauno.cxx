@@ -451,9 +451,7 @@ ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uIn
     OSL_ENSURE(pDesc, "ScSubTotalFieldObj: Parent is 0");
 }
 
-ScSubTotalFieldObj::~ScSubTotalFieldObj()
-{
-}
+ScSubTotalFieldObj::~ScSubTotalFieldObj() = default;
 
 // XSubTotalField
 
@@ -535,9 +533,7 @@ ScSubTotalDescriptorBase::ScSubTotalDescriptorBase() :
 {
 }
 
-ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase()
-{
-}
+ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase() = default;
 
 // XSubTotalDesctiptor
 
@@ -769,13 +765,9 @@ ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(const uno:
     return pRet;
 }
 
-ScSubTotalDescriptor::ScSubTotalDescriptor()
-{
-}
+ScSubTotalDescriptor::ScSubTotalDescriptor() = default;
 
-ScSubTotalDescriptor::~ScSubTotalDescriptor()
-{
-}
+ScSubTotalDescriptor::~ScSubTotalDescriptor() = default;
 
 void ScSubTotalDescriptor::GetData( ScSubTotalParam& rParam ) const
 {
@@ -797,9 +789,7 @@ ScRangeSubTotalDescriptor::ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar) :
 {
 }
 
-ScRangeSubTotalDescriptor::~ScRangeSubTotalDescriptor()
-{
-}
+ScRangeSubTotalDescriptor::~ScRangeSubTotalDescriptor() = default;
 
 void ScRangeSubTotalDescriptor::GetData( ScSubTotalParam& rParam ) const
 {
@@ -813,13 +803,9 @@ void ScRangeSubTotalDescriptor::PutData( const ScSubTotalParam& rParam )
         mxParent->SetSubTotalParam( rParam );
 }
 
-ScConsolidationDescriptor::ScConsolidationDescriptor()
-{
-}
+ScConsolidationDescriptor::ScConsolidationDescriptor() = default;
 
-ScConsolidationDescriptor::~ScConsolidationDescriptor()
-{
-}
+ScConsolidationDescriptor::~ScConsolidationDescriptor() = default;
 
 void ScConsolidationDescriptor::SetParam( const ScConsolidateParam& rNew )
 {
@@ -1478,9 +1464,7 @@ ScFilterDescriptor::ScFilterDescriptor(ScDocShell* pDocShell)
 {
 }
 
-ScFilterDescriptor::~ScFilterDescriptor()
-{
-}
+ScFilterDescriptor::~ScFilterDescriptor() = default;
 
 void ScFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {
@@ -1503,9 +1487,7 @@ ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocShell, ScDataba
 {
 }
 
-ScRangeFilterDescriptor::~ScRangeFilterDescriptor()
-{
-}
+ScRangeFilterDescriptor::~ScRangeFilterDescriptor() = default;
 
 void ScRangeFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {
@@ -1525,9 +1507,7 @@ ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDocShell* pDocShell, 
 {
 }
 
-ScDataPilotFilterDescriptor::~ScDataPilotFilterDescriptor()
-{
-}
+ScDataPilotFilterDescriptor::~ScDataPilotFilterDescriptor() = default;
 
 void ScDataPilotFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {

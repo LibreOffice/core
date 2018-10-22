@@ -173,11 +173,7 @@ void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyl
     }
 }
 
-
-DocumentListsManager::~DocumentListsManager()
-{
-}
-
+DocumentListsManager::~DocumentListsManager() = default;
 
 const OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggestedUniqueListId )
 {

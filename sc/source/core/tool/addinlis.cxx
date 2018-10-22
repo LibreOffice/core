@@ -54,9 +54,7 @@ ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> const &
     pDocs->insert( pDoc );
 }
 
-ScAddInListener::~ScAddInListener()
-{
-}
+ScAddInListener::~ScAddInListener() = default;
 
 ScAddInListener* ScAddInListener::Get( const uno::Reference<sheet::XVolatileResult>& xVR )
 {

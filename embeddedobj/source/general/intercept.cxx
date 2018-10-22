@@ -58,9 +58,7 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
     m_aInterceptedURL[5] = ".uno:SaveAs";
 }
 
-Interceptor::~Interceptor()
-{
-}
+Interceptor::~Interceptor() = default;
 
 //XDispatch
 void SAL_CALL

@@ -69,9 +69,7 @@ XFCrossRefStart::XFCrossRefStart()
 {
 }
 
-XFCrossRefStart::~XFCrossRefStart()
-{
-}
+XFCrossRefStart::~XFCrossRefStart() = default;
 
 void XFCrossRefStart::ToXml(IXFStream *pStrm)
 {
@@ -94,13 +92,9 @@ void XFCrossRefStart::ToXml(IXFStream *pStrm)
     pStrm->StartElement( "text:bookmark-ref" );
 }
 
-XFCrossRefEnd::XFCrossRefEnd()
-{
-}
+XFCrossRefEnd::XFCrossRefEnd() = default;
 
-XFCrossRefEnd::~XFCrossRefEnd()
-{
-}
+XFCrossRefEnd::~XFCrossRefEnd() = default;
 
 void XFCrossRefEnd::ToXml(IXFStream *pStrm)
 {

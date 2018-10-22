@@ -92,9 +92,7 @@ namespace stoc_connector {
                 reinterpret_cast< sal_IntPtr >(&m_socket)) );
     }
 
-    SocketConnection::~SocketConnection()
-    {
-    }
+    SocketConnection::~SocketConnection() = default;
 
     void SocketConnection::completeConnectionString()
     {

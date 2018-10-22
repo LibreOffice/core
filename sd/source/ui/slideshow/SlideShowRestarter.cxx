@@ -47,9 +47,7 @@ SlideShowRestarter::SlideShowRestarter (
 {
 }
 
-SlideShowRestarter::~SlideShowRestarter()
-{
-}
+SlideShowRestarter::~SlideShowRestarter() = default;
 
 void SlideShowRestarter::Restart (bool bForce)
 {

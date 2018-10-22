@@ -70,9 +70,7 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
 {
 }
 
-SmNode::~SmNode()
-{
-}
+SmNode::~SmNode() = default;
 
 const SmNode * SmNode::GetLeftMost() const
     //  returns leftmost node of current subtree.

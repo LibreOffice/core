@@ -32,7 +32,7 @@ void salhelper::Thread::launch() {
     }
 }
 
-salhelper::Thread::~Thread() {}
+salhelper::Thread::~Thread() = default;
 
 void salhelper::Thread::run() {
     try {

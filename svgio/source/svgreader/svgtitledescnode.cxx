@@ -34,9 +34,7 @@ namespace svgio
             OSL_ENSURE(aType == SVGTokenTitle || aType == SVGTokenDesc, "SvgTitleDescNode should only be used for Title and Desc (!)");
         }
 
-        SvgTitleDescNode::~SvgTitleDescNode()
-        {
-        }
+        SvgTitleDescNode::~SvgTitleDescNode() = default;
 
         void SvgTitleDescNode::concatenate(const OUString& rChars)
         {

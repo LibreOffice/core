@@ -70,11 +70,7 @@ java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connec
 {
 }
 
-
-java_sql_Statement_Base::~java_sql_Statement_Base()
-{
-}
-
+java_sql_Statement_Base::~java_sql_Statement_Base() = default;
 
 void SAL_CALL OStatement_BASE2::disposing()
 {
@@ -745,8 +741,7 @@ void java_sql_Statement_Base::getFastPropertyValue(
 
 jclass java_sql_Statement::theClass = nullptr;
 
-java_sql_Statement::~java_sql_Statement()
-{}
+java_sql_Statement::~java_sql_Statement() = default;
 
 jclass java_sql_Statement::getMyClass() const
 {

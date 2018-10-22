@@ -73,9 +73,7 @@ ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport ) :
     // here are no attributes
 }
 
-ScXMLDDELinkContext::~ScXMLDDELinkContext()
-{
-}
+ScXMLDDELinkContext::~ScXMLDDELinkContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -218,9 +216,7 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLDDESourceContext::~ScXMLDDESourceContext()
-{
-}
+ScXMLDDESourceContext::~ScXMLDDESourceContext() = default;
 
 void SAL_CALL ScXMLDDESourceContext::endFastElement( sal_Int32 /*nElement*/ )
 {
@@ -235,9 +231,7 @@ ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
     // here are no attributes
 }
 
-ScXMLDDETableContext::~ScXMLDDETableContext()
-{
-}
+ScXMLDDETableContext::~ScXMLDDETableContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -278,9 +272,7 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
-{
-}
+ScXMLDDEColumnContext::~ScXMLDDEColumnContext() = default;
 
 ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -299,9 +291,7 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLDDERowContext::~ScXMLDDERowContext()
-{
-}
+ScXMLDDERowContext::~ScXMLDDERowContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -366,9 +356,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLDDECellContext::~ScXMLDDECellContext()
-{
-}
+ScXMLDDECellContext::~ScXMLDDECellContext() = default;
 
 void SAL_CALL ScXMLDDECellContext::endFastElement( sal_Int32 /*nElement*/ )
 {

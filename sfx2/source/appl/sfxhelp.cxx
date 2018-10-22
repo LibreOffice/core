@@ -355,9 +355,7 @@ SfxHelp::SfxHelp() :
     bIsDebug = !sHelpDebug.isEmpty();
 }
 
-SfxHelp::~SfxHelp()
-{
-}
+SfxHelp::~SfxHelp() = default;
 
 static OUString getDefaultModule_Impl()
 {

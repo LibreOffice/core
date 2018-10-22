@@ -57,11 +57,7 @@ DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
 {
 }
 
-
-DocumentLockFile::~DocumentLockFile()
-{
-}
-
+DocumentLockFile::~DocumentLockFile() = default;
 
 void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const uno::Reference< io::XOutputStream >& xOutput )
 {

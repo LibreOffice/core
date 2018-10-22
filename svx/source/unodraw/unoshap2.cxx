@@ -88,9 +88,7 @@ SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
 {
 }
 
-SvxShapeGroup::~SvxShapeGroup() throw()
-{
-}
+SvxShapeGroup::~SvxShapeGroup() throw() = default;
 
 void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
@@ -355,11 +353,7 @@ SvxShapeConnector::SvxShapeConnector(SdrObject* pObj)
 {
 }
 
-
-SvxShapeConnector::~SvxShapeConnector() throw()
-{
-}
-
+SvxShapeConnector::~SvxShapeConnector() throw() = default;
 
 uno::Any SAL_CALL SvxShapeConnector::queryInterface( const uno::Type & rType )
 {
@@ -487,11 +481,7 @@ SvxShapeControl::SvxShapeControl(SdrObject* pObj)
     setShapeKind( OBJ_UNO );
 }
 
-
-SvxShapeControl::~SvxShapeControl() throw()
-{
-}
-
+SvxShapeControl::~SvxShapeControl() throw() = default;
 
 uno::Any SAL_CALL SvxShapeControl::queryInterface( const uno::Type & rType )
 {
@@ -905,18 +895,14 @@ SvxShapeDimensioning::SvxShapeDimensioning(SdrObject* pObj)
 {
 }
 
-SvxShapeDimensioning::~SvxShapeDimensioning() throw()
-{
-}
+SvxShapeDimensioning::~SvxShapeDimensioning() throw() = default;
 
 SvxShapeCircle::SvxShapeCircle(SdrObject* pObj)
     : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CIRCLE), getSvxMapProvider().GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
-SvxShapeCircle::~SvxShapeCircle() throw()
-{
-}
+SvxShapeCircle::~SvxShapeCircle() throw() = default;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -929,9 +915,7 @@ SvxShapePolyPolygon::SvxShapePolyPolygon(
 {
 }
 
-SvxShapePolyPolygon::~SvxShapePolyPolygon() throw()
-{
-}
+SvxShapePolyPolygon::~SvxShapePolyPolygon() throw() = default;
 
 bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {
@@ -1200,9 +1184,7 @@ SvxGraphicObject::SvxGraphicObject(SdrObject* pObj)
 {
 }
 
-SvxGraphicObject::~SvxGraphicObject() throw()
-{
-}
+SvxGraphicObject::~SvxGraphicObject() throw() = default;
 
 bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {
@@ -1539,18 +1521,14 @@ SvxShapeCaption::SvxShapeCaption(SdrObject* pObj)
 {
 }
 
-SvxShapeCaption::~SvxShapeCaption() throw()
-{
-}
+SvxShapeCaption::~SvxShapeCaption() throw() = default;
 
 SvxCustomShape::SvxCustomShape(SdrObject* pObj)
     : SvxShapeText( pObj, getSvxMapProvider().GetMap( SVXMAP_CUSTOMSHAPE ), getSvxMapProvider().GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
-SvxCustomShape::~SvxCustomShape() throw()
-{
-}
+SvxCustomShape::~SvxCustomShape() throw() = default;
 
 uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
 {

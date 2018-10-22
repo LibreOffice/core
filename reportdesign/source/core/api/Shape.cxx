@@ -87,9 +87,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
     osl_atomic_decrement( &m_refCount );
 }
 
-OShape::~OShape()
-{
-}
+OShape::~OShape() = default;
 
 //IMPLEMENT_FORWARD_XINTERFACE2(OShape,ShapeBase,ShapePropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OShape, ShapeBase )

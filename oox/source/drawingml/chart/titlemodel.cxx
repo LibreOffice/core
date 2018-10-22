@@ -23,14 +23,9 @@
 namespace oox {
 namespace drawingml {
 namespace chart {
+TextModel::TextModel() = default;
 
-TextModel::TextModel()
-{
-}
-
-TextModel::~TextModel()
-{
-}
+TextModel::~TextModel() = default;
 
 TitleModel::TitleModel(sal_Int32 nDefaultRotation) :
     mbOverlay( false ),
@@ -38,9 +33,7 @@ TitleModel::TitleModel(sal_Int32 nDefaultRotation) :
 {
 }
 
-TitleModel::~TitleModel()
-{
-}
+TitleModel::~TitleModel() = default;
 
 LegendModel::LegendModel(bool bMSO2007Doc) :
     mnPosition( XML_r ),
@@ -48,9 +41,7 @@ LegendModel::LegendModel(bool bMSO2007Doc) :
 {
 }
 
-LegendModel::~LegendModel()
-{
-}
+LegendModel::~LegendModel() = default;
 
 } // namespace chart
 } // namespace drawingml

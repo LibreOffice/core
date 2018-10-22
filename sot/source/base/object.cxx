@@ -25,9 +25,7 @@ SotObject::SotObject()
 {
 }
 
-SotObject::~SotObject()
-{
-}
+SotObject::~SotObject() = default;
 
 void SotObject::OwnerLock
 (

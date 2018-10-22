@@ -31,9 +31,7 @@ XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter(
 {
 }
 
-XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () throw()
-{
-}
+XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter() throw() = default;
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument()
 {

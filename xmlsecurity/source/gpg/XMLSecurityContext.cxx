@@ -24,9 +24,7 @@ XMLSecurityContextGpg::XMLSecurityContextGpg()
 {
 }
 
-XMLSecurityContextGpg::~XMLSecurityContextGpg()
-{
-}
+XMLSecurityContextGpg::~XMLSecurityContextGpg() = default;
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::addSecurityEnvironment(
     const Reference< XSecurityEnvironment >& aSecurityEnvironment)

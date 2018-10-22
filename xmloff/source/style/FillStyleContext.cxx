@@ -47,9 +47,7 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
     aGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
-XMLGradientStyleContext::~XMLGradientStyleContext()
-{
-}
+XMLGradientStyleContext::~XMLGradientStyleContext() = default;
 
 void XMLGradientStyleContext::EndElement()
 {
@@ -89,9 +87,7 @@ XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPr
     aHatchStyle.importXML( xAttrList, maAny, maStrName );
 }
 
-XMLHatchStyleContext::~XMLHatchStyleContext()
-{
-}
+XMLHatchStyleContext::~XMLHatchStyleContext() = default;
 
 void XMLHatchStyleContext::EndElement()
 {
@@ -130,9 +126,7 @@ XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 n
     XMLImageStyle::importXML( xAttrList, maAny, maStrName, rImport );
 }
 
-XMLBitmapStyleContext::~XMLBitmapStyleContext()
-{
-}
+XMLBitmapStyleContext::~XMLBitmapStyleContext() = default;
 
 SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
 {
@@ -202,9 +196,7 @@ XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport
     aTransGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
-XMLTransGradientStyleContext::~XMLTransGradientStyleContext()
-{
-}
+XMLTransGradientStyleContext::~XMLTransGradientStyleContext() = default;
 
 void XMLTransGradientStyleContext::EndElement()
 {
@@ -244,9 +236,7 @@ XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 n
     aMarkerStyle.importXML( xAttrList, maAny, maStrName );
 }
 
-XMLMarkerStyleContext::~XMLMarkerStyleContext()
-{
-}
+XMLMarkerStyleContext::~XMLMarkerStyleContext() = default;
 
 void XMLMarkerStyleContext::EndElement()
 {
@@ -286,9 +276,7 @@ XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx
     aDashStyle.importXML( xAttrList, maAny, maStrName );
 }
 
-XMLDashStyleContext::~XMLDashStyleContext()
-{
-}
+XMLDashStyleContext::~XMLDashStyleContext() = default;
 
 void XMLDashStyleContext::EndElement()
 {

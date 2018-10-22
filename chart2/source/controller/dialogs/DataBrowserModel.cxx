@@ -257,8 +257,7 @@ DataBrowserModel::DataBrowserModel(
     updateFromModel();
 }
 
-DataBrowserModel::~DataBrowserModel()
-{}
+DataBrowserModel::~DataBrowserModel() = default;
 
 namespace
 {

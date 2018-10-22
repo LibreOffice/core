@@ -31,10 +31,7 @@ namespace svt
 
     //= DialogClosedListener
 
-
-    DialogClosedListener::DialogClosedListener()
-    {
-    }
+    DialogClosedListener::DialogClosedListener() = default;
 
     // XDialogClosedListener methods
     void SAL_CALL DialogClosedListener::dialogClosed( const DialogClosedEvent& aEvent )

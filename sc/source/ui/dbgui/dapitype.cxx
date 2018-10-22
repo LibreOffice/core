@@ -50,9 +50,7 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
     m_xBtnExternal->show(false);
 }
 
-ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
-{
-}
+ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg() = default;
 
 bool ScDataPilotSourceTypeDlg::IsDatabase() const
 {
@@ -105,9 +103,7 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg(weld::Window* pParent, const std::v
     m_xLbService->set_active(0);
 }
 
-ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
-{
-}
+ScDataPilotServiceDlg::~ScDataPilotServiceDlg() = default;
 
 OUString ScDataPilotServiceDlg::GetServiceName() const
 {

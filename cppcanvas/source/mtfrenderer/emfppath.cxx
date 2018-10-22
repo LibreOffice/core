@@ -56,9 +56,7 @@ namespace cppcanvas
                 pPointTypes.reset( new sal_uInt8 [_nPoints] );
         }
 
-        EMFPPath::~EMFPPath ()
-        {
-        }
+        EMFPPath::~EMFPPath() = default;
 
         // TODO: remove rR argument when debug code is no longer needed
         void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, ImplRenderer const & rR)

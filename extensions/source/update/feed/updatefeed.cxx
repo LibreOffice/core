@@ -121,7 +121,8 @@ class ActiveDataSink : public ::cppu::WeakImplHelper< io::XActiveDataSink >
     uno::Reference< io::XInputStream > m_xStream;
 
 public:
-    ActiveDataSink() {};
+    ActiveDataSink() = default;
+    ;
 
     virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream() override { return m_xStream; };
     virtual void SAL_CALL setInputStream( uno::Reference< io::XInputStream > const & rStream ) override { m_xStream = rStream; };
@@ -426,9 +427,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
     return *new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath);
 }
 
-UpdateInformationProvider::~UpdateInformationProvider()
-{
-}
+UpdateInformationProvider::~UpdateInformationProvider() = default;
 
 uno::Any
 UpdateInformationProvider::getConfigurationItemAny(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)

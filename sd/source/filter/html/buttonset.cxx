@@ -265,9 +265,7 @@ ButtonSet::ButtonSet()
 {
 }
 
-ButtonSet::~ButtonSet()
-{
-}
+ButtonSet::~ButtonSet() = default;
 
 int ButtonSet::getCount() const
 {

@@ -121,10 +121,7 @@ XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& 
 {
 }
 
-XSecController::~XSecController()
-{
-}
-
+XSecController::~XSecController() = default;
 
 /*
  * private methods

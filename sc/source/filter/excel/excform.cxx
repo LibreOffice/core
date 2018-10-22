@@ -192,9 +192,7 @@ ExcelToSc::ExcelToSc( XclImpRoot& rRoot ) :
 {
 }
 
-ExcelToSc::~ExcelToSc()
-{
-}
+ExcelToSc::~ExcelToSc() = default;
 
 std::unique_ptr<ScTokenArray> ExcelToSc::GetDummy()
 {

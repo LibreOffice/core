@@ -29,10 +29,7 @@
 
 SfxPoolItem* SfxStringListItem::CreateDefault() { return new SfxStringListItem; }
 
-SfxStringListItem::SfxStringListItem()
-{
-}
-
+SfxStringListItem::SfxStringListItem() = default;
 
 SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUString>* pList ) :
     SfxPoolItem( which )
@@ -65,10 +62,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     }
 }
 
-SfxStringListItem::~SfxStringListItem()
-{
-}
-
+SfxStringListItem::~SfxStringListItem() = default;
 
 std::vector<OUString>& SfxStringListItem::GetList()
 {

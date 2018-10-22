@@ -32,9 +32,7 @@ EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper const& r
 {
 }
 
-EffectPropertiesContext::~EffectPropertiesContext()
-{
-}
+EffectPropertiesContext::~EffectPropertiesContext() = default;
 
 void EffectPropertiesContext::saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs )
 {

@@ -18,7 +18,7 @@ RefQueryFormulaGroup::RefQueryFormulaGroup() :
     SvtListener::QueryBase(SC_LISTENER_QUERY_FORMULA_GROUP_POS),
     maSkipRange(ScAddress::INITIALIZE_INVALID) {}
 
-RefQueryFormulaGroup::~RefQueryFormulaGroup() {}
+RefQueryFormulaGroup::~RefQueryFormulaGroup() = default;
 
 void RefQueryFormulaGroup::setSkipRange( const ScRange& rRange )
 {
@@ -77,9 +77,7 @@ QueryRange::QueryRange() :
     SvtListener::QueryBase(SC_LISTENER_QUERY_FORMULA_GROUP_RANGE),
     mpImpl(new Impl) {}
 
-QueryRange::~QueryRange()
-{
-}
+QueryRange::~QueryRange() = default;
 
 void QueryRange::add( const ScRange& rRange )
 {

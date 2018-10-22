@@ -43,9 +43,7 @@ ScreenshotTest::ScreenshotTest()
     maCurrentLanguage = OUString::fromUtf8(getenv("LO_TEST_LOCALE"));
 }
 
-ScreenshotTest::~ScreenshotTest()
-{
-}
+ScreenshotTest::~ScreenshotTest() = default;
 
 void ScreenshotTest::setUp()
 {

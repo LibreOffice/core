@@ -703,9 +703,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(TabPageParent pParent,  const Sfx
     m_xFLineIndent->set_min(-9999, FUNIT_NONE);    // is set to 0 on default
 }
 
-SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
-{
-}
+SvxStdParagraphTabPage::~SvxStdParagraphTabPage() = default;
 
 void SvxStdParagraphTabPage::EnableNegativeMode()
 {
@@ -1047,9 +1045,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet
     m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
 }
 
-SvxParaAlignTabPage::~SvxParaAlignTabPage()
-{
-}
+SvxParaAlignTabPage::~SvxParaAlignTabPage() = default;
 
 DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -1950,9 +1946,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(TabPageParent pParent, const SfxI
     }
 }
 
-SvxExtParagraphTabPage::~SvxExtParagraphTabPage()
-{
-}
+SvxExtParagraphTabPage::~SvxExtParagraphTabPage() = default;
 
 IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl, weld::ToggleButton&, void)
 {
@@ -2137,9 +2131,7 @@ SvxAsianTabPage::SvxAsianTabPage(TabPageParent pParent, const SfxItemSet& rSet)
 {
 }
 
-SvxAsianTabPage::~SvxAsianTabPage()
-{
-}
+SvxAsianTabPage::~SvxAsianTabPage() = default;
 
 VclPtr<SfxTabPage> SvxAsianTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {

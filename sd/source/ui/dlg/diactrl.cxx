@@ -62,9 +62,7 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
     Show();
 }
 
-SdPagesField::~SdPagesField()
-{
-}
+SdPagesField::~SdPagesField() = default;
 
 void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
@@ -100,9 +98,7 @@ SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox&
 {
 }
 
-SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
-{
-}
+SdTbxCtlDiaPages::~SdTbxCtlDiaPages() = default;
 
 void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
                 SfxItemState eState, const SfxPoolItem* pState )

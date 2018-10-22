@@ -79,11 +79,7 @@ namespace pcr
     {
     }
 
-
-    XSDValidationPropertyHandler::~XSDValidationPropertyHandler()
-    {
-    }
-
+    XSDValidationPropertyHandler::~XSDValidationPropertyHandler() = default;
 
     OUString XSDValidationPropertyHandler::getImplementationName_static(  )
     {

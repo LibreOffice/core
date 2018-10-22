@@ -40,9 +40,7 @@ AccessiblePresentationOLEShape::AccessiblePresentationOLEShape (
 {
 }
 
-AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape()
-{
-}
+AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape() = default;
 
 // XServiceInfo
 

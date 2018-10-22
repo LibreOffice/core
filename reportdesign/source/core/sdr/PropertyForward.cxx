@@ -84,9 +84,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
     osl_atomic_decrement(&m_refCount);
 }
 
-OPropertyMediator::~OPropertyMediator()
-{
-}
+OPropertyMediator::~OPropertyMediator() = default;
 
 void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt )
 {

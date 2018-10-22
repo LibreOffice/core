@@ -182,15 +182,9 @@ namespace frm
         dispose();
     }
 
-    WindowStateGuard::WindowStateGuard()
-    {
-    }
+    WindowStateGuard::WindowStateGuard() = default;
 
-
-    WindowStateGuard::~WindowStateGuard()
-    {
-    }
-
+    WindowStateGuard::~WindowStateGuard() = default;
 
     void WindowStateGuard::attach( const Reference< XWindow2 >& _rxWindow, const Reference< XControlModel >& _rxModel )
     {

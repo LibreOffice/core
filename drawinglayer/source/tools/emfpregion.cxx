@@ -30,28 +30,24 @@
 
 namespace emfplushelper
 {
-    EMFPRegion::EMFPRegion()
-    {
-    }
+EMFPRegion::EMFPRegion() = default;
 
-    EMFPRegion::~EMFPRegion()
-    {
-    }
+EMFPRegion::~EMFPRegion() = default;
 
-    ::basegfx::B2DPolyPolygon EMFPRegion::ReadRegionNode(SvStream& s, EmfPlusHelperData& rR)
-    {
-        // Regions are specified as a binary tree of region nodes, and each node must either be a terminal node
-        // (RegionNodeDataTypeRect, RegionNodeDataTypePath, RegionNodeDataTypeEmpty, RegionNodeDataTypeInfinite)
-        // or specify one or two child nodes
-        // (RegionNodeDataTypeAnd, RegionNodeDataTypeOr, RegionNodeDataTypeXor,
-        // RegionNodeDataTypeExclude, RegionNodeDataTypeComplement).
-        sal_uInt32 dataType;
-        ::basegfx::B2DPolyPolygon polygon;
-        s.ReadUInt32(dataType);
-        SAL_INFO("drawinglayer", "EMF+\t Region node data type 0x" << std::hex << dataType << std::dec);
+::basegfx::B2DPolyPolygon EMFPRegion::ReadRegionNode(SvStream& s, EmfPlusHelperData& rR)
+{
+    // Regions are specified as a binary tree of region nodes, and each node must either be a terminal node
+    // (RegionNodeDataTypeRect, RegionNodeDataTypePath, RegionNodeDataTypeEmpty, RegionNodeDataTypeInfinite)
+    // or specify one or two child nodes
+    // (RegionNodeDataTypeAnd, RegionNodeDataTypeOr, RegionNodeDataTypeXor,
+    // RegionNodeDataTypeExclude, RegionNodeDataTypeComplement).
+    sal_uInt32 dataType;
+    ::basegfx::B2DPolyPolygon polygon;
+    s.ReadUInt32(dataType);
+    SAL_INFO("drawinglayer", "EMF+\t Region node data type 0x" << std::hex << dataType << std::dec);
 
-        switch (dataType)
-        {
+    switch (dataType)
+    {
         case RegionNodeDataTypeAnd: // CombineModeIntersect
         case RegionNodeDataTypeOr: // CombineModeUnion
         case RegionNodeDataTypeXor: // CombineModeXOR

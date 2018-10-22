@@ -106,11 +106,9 @@ rtl::Reference<OQueryContainer> OQueryContainer::create(
     return c;
 }
 
-OQueryContainer::~OQueryContainer()
-{
+OQueryContainer::~OQueryContainer() = default;
     //  dispose();
         //  maybe we're already disposed, but this should be uncritical
-}
 
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
 

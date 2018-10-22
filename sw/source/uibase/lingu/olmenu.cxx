@@ -580,7 +580,7 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->RemoveDisabledEntries(true, true);
 }
 
-SwSpellPopup::~SwSpellPopup() {}
+SwSpellPopup::~SwSpellPopup() = default;
 
 void SwSpellPopup::checkRedline()
 {

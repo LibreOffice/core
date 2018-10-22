@@ -35,9 +35,7 @@ namespace sdr
         {
         }
 
-        RectangleProperties::~RectangleProperties()
-        {
-        }
+        RectangleProperties::~RectangleProperties() = default;
 
         std::unique_ptr<BaseProperties> RectangleProperties::Clone(SdrObject& rObj) const
         {

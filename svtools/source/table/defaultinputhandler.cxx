@@ -52,11 +52,7 @@ namespace svt { namespace table
         m_pImpl->aMouseFunctions.push_back( new ColumnSortHandler );
     }
 
-
-    DefaultInputHandler::~DefaultInputHandler()
-    {
-    }
-
+    DefaultInputHandler::~DefaultInputHandler() = default;
 
     namespace
     {

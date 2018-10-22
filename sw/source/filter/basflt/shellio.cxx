@@ -437,9 +437,7 @@ Reader::Reader()
 {
 }
 
-Reader::~Reader()
-{
-}
+Reader::~Reader() = default;
 
 OUString Reader::GetTemplateName(SwDoc& /*rDoc*/) const
 {

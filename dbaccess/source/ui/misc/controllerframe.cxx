@@ -234,9 +234,7 @@ namespace dbaui
         impl_registerOnFrameContainerWindow_nothrow( true );
     }
 
-    FrameWindowActivationListener::~FrameWindowActivationListener()
-    {
-    }
+    FrameWindowActivationListener::~FrameWindowActivationListener() = default;
 
     void FrameWindowActivationListener::dispose()
     {
@@ -328,9 +326,7 @@ namespace dbaui
     {
     }
 
-    ControllerFrame::~ControllerFrame()
-    {
-    }
+    ControllerFrame::~ControllerFrame() = default;
 
     const Reference< XFrame >& ControllerFrame::attachFrame( const Reference< XFrame >& _rxFrame )
     {

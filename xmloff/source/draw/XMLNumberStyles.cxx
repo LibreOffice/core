@@ -599,9 +599,7 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
     }
 }
 
-SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
-{
-}
+SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext() = default;
 
 void SdXMLNumberFormatImportContext::add( OUString const & rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText )
 {

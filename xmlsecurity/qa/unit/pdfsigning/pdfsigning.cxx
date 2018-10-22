@@ -105,7 +105,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-PDFSigningTest::PDFSigningTest() {}
+PDFSigningTest::PDFSigningTest() = default;
 
 void PDFSigningTest::setUp()
 {

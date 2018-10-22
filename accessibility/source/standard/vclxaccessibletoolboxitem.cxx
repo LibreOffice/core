@@ -111,9 +111,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     }
 }
 
-VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
-{
-}
+VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem() = default;
 
 OUString VCLXAccessibleToolBoxItem::GetText()
 {

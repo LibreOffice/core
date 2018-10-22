@@ -40,13 +40,9 @@ using namespace ::com::sun::star::lang;
 
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 
-SwXFilterOptions::SwXFilterOptions()
-{
-}
+SwXFilterOptions::SwXFilterOptions() = default;
 
-SwXFilterOptions::~SwXFilterOptions()
-{
-}
+SwXFilterOptions::~SwXFilterOptions() = default;
 
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues()
 {

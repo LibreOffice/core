@@ -704,9 +704,7 @@ SwFEShell::SwFEShell( SwEditShell& rShell, vcl::Window *pWindow )
 {
 }
 
-SwFEShell::~SwFEShell()
-{
-}
+SwFEShell::~SwFEShell() = default;
 
 // #i17567# - adjustments for allowing
 //          negative vertical positions for fly frames anchored to paragraph/to character.

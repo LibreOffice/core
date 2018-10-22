@@ -35,9 +35,7 @@ ScTpPrintOptions::ScTpPrintOptions( TabPageParent pPage,
 {
 }
 
-ScTpPrintOptions::~ScTpPrintOptions()
-{
-}
+ScTpPrintOptions::~ScTpPrintOptions() = default;
 
 VclPtr<SfxTabPage> ScTpPrintOptions::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {

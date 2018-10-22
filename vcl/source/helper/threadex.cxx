@@ -29,9 +29,7 @@ SolarThreadExecutor::SolarThreadExecutor()
 {
 }
 
-SolarThreadExecutor::~SolarThreadExecutor()
-{
-}
+SolarThreadExecutor::~SolarThreadExecutor() = default;
 
 IMPL_LINK_NOARG(SolarThreadExecutor, worker, void*, void)
 {

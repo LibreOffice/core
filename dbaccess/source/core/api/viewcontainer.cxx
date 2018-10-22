@@ -64,9 +64,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
 {
 }
 
-OViewContainer::~OViewContainer()
-{
-}
+OViewContainer::~OViewContainer() = default;
 
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)

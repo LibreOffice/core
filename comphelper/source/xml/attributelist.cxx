@@ -109,9 +109,7 @@ AttributeList::AttributeList(const AttributeList &r)
     *m_pImpl = *(r.m_pImpl);
 }
 
-AttributeList::~AttributeList()
-{
-}
+AttributeList::~AttributeList() = default;
 
 void AttributeList::AddAttribute(const OUString &sName,
         const OUString &sType, const OUString &sValue)

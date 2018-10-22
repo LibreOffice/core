@@ -46,9 +46,7 @@ ViewObjectContactOfPageSubObject::ViewObjectContactOfPageSubObject(ObjectContact
 {
 }
 
-ViewObjectContactOfPageSubObject::~ViewObjectContactOfPageSubObject()
-{
-}
+ViewObjectContactOfPageSubObject::~ViewObjectContactOfPageSubObject() = default;
 
 bool ViewObjectContactOfPageSubObject::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -91,9 +89,7 @@ ViewObjectContactOfPageBackground::ViewObjectContactOfPageBackground(ObjectConta
 {
 }
 
-ViewObjectContactOfPageBackground::~ViewObjectContactOfPageBackground()
-{
-}
+ViewObjectContactOfPageBackground::~ViewObjectContactOfPageBackground() = default;
 
 bool ViewObjectContactOfPageBackground::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -153,9 +149,7 @@ ViewObjectContactOfMasterPage::ViewObjectContactOfMasterPage(ObjectContact& rObj
 {
 }
 
-ViewObjectContactOfMasterPage::~ViewObjectContactOfMasterPage()
-{
-}
+ViewObjectContactOfMasterPage::~ViewObjectContactOfMasterPage() = default;
 
 bool ViewObjectContactOfMasterPage::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -180,9 +174,7 @@ ViewObjectContactOfPageFill::ViewObjectContactOfPageFill(ObjectContact& rObjectC
 {
 }
 
-ViewObjectContactOfPageFill::~ViewObjectContactOfPageFill()
-{
-}
+ViewObjectContactOfPageFill::~ViewObjectContactOfPageFill() = default;
 
 bool ViewObjectContactOfPageFill::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -243,9 +235,7 @@ ViewObjectContactOfPageShadow::ViewObjectContactOfPageShadow(ObjectContact& rObj
 {
 }
 
-ViewObjectContactOfPageShadow::~ViewObjectContactOfPageShadow()
-{
-}
+ViewObjectContactOfPageShadow::~ViewObjectContactOfPageShadow() = default;
 
 bool ViewObjectContactOfPageShadow::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -291,9 +281,7 @@ ViewObjectContactOfOuterPageBorder::ViewObjectContactOfOuterPageBorder(ObjectCon
 {
 }
 
-ViewObjectContactOfOuterPageBorder::~ViewObjectContactOfOuterPageBorder()
-{
-}
+ViewObjectContactOfOuterPageBorder::~ViewObjectContactOfOuterPageBorder() = default;
 
 bool ViewObjectContactOfOuterPageBorder::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -319,9 +307,7 @@ ViewObjectContactOfInnerPageBorder::ViewObjectContactOfInnerPageBorder(ObjectCon
 {
 }
 
-ViewObjectContactOfInnerPageBorder::~ViewObjectContactOfInnerPageBorder()
-{
-}
+ViewObjectContactOfInnerPageBorder::~ViewObjectContactOfInnerPageBorder() = default;
 
 bool ViewObjectContactOfInnerPageBorder::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -363,9 +349,7 @@ ViewObjectContactOfPageHierarchy::ViewObjectContactOfPageHierarchy(ObjectContact
 {
 }
 
-ViewObjectContactOfPageHierarchy::~ViewObjectContactOfPageHierarchy()
-{
-}
+ViewObjectContactOfPageHierarchy::~ViewObjectContactOfPageHierarchy() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
 {
@@ -402,9 +386,7 @@ ViewObjectContactOfPageGrid::ViewObjectContactOfPageGrid(ObjectContact& rObjectC
 {
 }
 
-ViewObjectContactOfPageGrid::~ViewObjectContactOfPageGrid()
-{
-}
+ViewObjectContactOfPageGrid::~ViewObjectContactOfPageGrid() = default;
 
 bool ViewObjectContactOfPageGrid::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -480,9 +462,7 @@ ViewObjectContactOfPageHelplines::ViewObjectContactOfPageHelplines(ObjectContact
 {
 }
 
-ViewObjectContactOfPageHelplines::~ViewObjectContactOfPageHelplines()
-{
-}
+ViewObjectContactOfPageHelplines::~ViewObjectContactOfPageHelplines() = default;
 
 bool ViewObjectContactOfPageHelplines::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
 {
@@ -577,9 +557,7 @@ ViewObjectContactOfSdrPage::ViewObjectContactOfSdrPage(ObjectContact& rObjectCon
 {
 }
 
-ViewObjectContactOfSdrPage::~ViewObjectContactOfSdrPage()
-{
-}
+ViewObjectContactOfSdrPage::~ViewObjectContactOfSdrPage() = default;
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
 {

@@ -361,7 +361,7 @@ class OAddThread : public Thread
     ThreadSafeValue<sal_Int32> m_aFlag;
 public:
     //oslThreadIdentifier m_id, m_CurId;
-    OAddThread(){}
+    OAddThread() = default;
     sal_Int32 getValue() { return m_aFlag.getValue(); }
 
     virtual void SAL_CALL suspend() override

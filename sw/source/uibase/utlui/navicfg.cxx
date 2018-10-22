@@ -99,9 +99,7 @@ SwNavigationConfig::SwNavigationConfig() :
     }
 }
 
-SwNavigationConfig::~SwNavigationConfig()
-{
-}
+SwNavigationConfig::~SwNavigationConfig() = default;
 
 void SwNavigationConfig::ImplCommit()
 {

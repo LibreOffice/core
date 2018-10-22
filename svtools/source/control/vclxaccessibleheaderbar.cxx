@@ -42,9 +42,7 @@ VCLXHeaderBar::VCLXHeaderBar(vcl::Window* pHeaderBar)
     SetWindow(pHeaderBar);
 }
 
-VCLXHeaderBar::~VCLXHeaderBar()
-{
-}
+VCLXHeaderBar::~VCLXHeaderBar() = default;
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::CreateAccessibleContext()
 {
@@ -59,11 +57,7 @@ VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     m_pHeadBar = GetAs< HeaderBar >();
 }
 
-
-VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
-{
-}
-
+VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar() = default;
 
 // XServiceInfo
 

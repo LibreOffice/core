@@ -255,9 +255,7 @@ SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeI
     }
 }
 
-SwUndoInsLayFormat::~SwUndoInsLayFormat()
-{
-}
+SwUndoInsLayFormat::~SwUndoInsLayFormat() = default;
 
 void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -475,9 +473,7 @@ SwRewriter SwUndoSetFlyFormat::GetRewriter() const
     return aRewriter;
 }
 
-SwUndoSetFlyFormat::~SwUndoSetFlyFormat()
-{
-}
+SwUndoSetFlyFormat::~SwUndoSetFlyFormat() = default;
 
 void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
                                 sal_uLong nNode, sal_Int32 nContent )

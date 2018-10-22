@@ -124,9 +124,7 @@ ViewTabBar::ViewTabBar (
     }
 }
 
-ViewTabBar::~ViewTabBar()
-{
-}
+ViewTabBar::~ViewTabBar() = default;
 
 void ViewTabBar::disposing()
 {

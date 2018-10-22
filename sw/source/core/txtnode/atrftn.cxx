@@ -172,9 +172,7 @@ void SwFormatFootnote::SetEndNote( bool b )
     }
 }
 
-SwFormatFootnote::~SwFormatFootnote()
-{
-}
+SwFormatFootnote::~SwFormatFootnote() = default;
 
 void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
 {

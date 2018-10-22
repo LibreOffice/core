@@ -138,9 +138,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
 }
 
-ComboboxToolbarController::~ComboboxToolbarController()
-{
-}
+ComboboxToolbarController::~ComboboxToolbarController() = default;
 
 void SAL_CALL ComboboxToolbarController::dispose()
 {

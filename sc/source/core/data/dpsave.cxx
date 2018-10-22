@@ -73,17 +73,11 @@ ScDPSaveMember::ScDPSaveMember(const OUString& rName) :
 {
 }
 
-ScDPSaveMember::ScDPSaveMember(const ScDPSaveMember& r) :
-    aName( r.aName ),
-    mpLayoutName( r.mpLayoutName ),
-    nVisibleMode( r.nVisibleMode ),
-    nShowDetailsMode( r.nShowDetailsMode )
-{
-}
+ScDPSaveMember::ScDPSaveMember(const ScDPSaveMember& r)
 
-ScDPSaveMember::~ScDPSaveMember()
-{
-}
+    = default;
+
+ScDPSaveMember::~ScDPSaveMember() = default;
 
 bool ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
 {
@@ -789,9 +783,7 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
     return true;
 }
 
-ScDPSaveData::~ScDPSaveData()
-{
-}
+ScDPSaveData::~ScDPSaveData() = default;
 
 void ScDPSaveData::SetGrandTotalName(const OUString& rName)
 {

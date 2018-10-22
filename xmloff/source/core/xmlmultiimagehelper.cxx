@@ -97,9 +97,7 @@ MultiImageImportHelper::MultiImageImportHelper()
 {
 }
 
-MultiImageImportHelper::~MultiImageImportHelper()
-{
-}
+MultiImageImportHelper::~MultiImageImportHelper() = default;
 
 SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 {

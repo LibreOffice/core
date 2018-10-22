@@ -110,9 +110,7 @@ LocaleDataWrapper::LocaleDataWrapper(
     invalidateData();
 }
 
-LocaleDataWrapper::~LocaleDataWrapper()
-{
-}
+LocaleDataWrapper::~LocaleDataWrapper() = default;
 
 void LocaleDataWrapper::setLanguageTag( const LanguageTag& rLanguageTag )
 {

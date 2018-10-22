@@ -3069,9 +3069,7 @@ constexpr OUStringLiteral MethodString::m_sGet_API;
         m_xOKBtn->connect_clicked(LINK(this, ManageNamespaceDialog, OKHdl));
     }
 
-    ManageNamespaceDialog::~ManageNamespaceDialog()
-    {
-    }
+    ManageNamespaceDialog::~ManageNamespaceDialog() = default;
 
     IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl, weld::Button&, void)
     {
@@ -3338,9 +3336,7 @@ constexpr OUStringLiteral MethodString::m_sGet_API;
             m_xDialog->set_title(m_xAltTitle->get_label());
     }
 
-    AddModelDialog::~AddModelDialog()
-    {
-    }
+    AddModelDialog::~AddModelDialog() = default;
 
     AddInstanceDialog::AddInstanceDialog(weld::Window* pParent, bool _bEdit)
         : GenericDialogController(pParent, "svx/ui/addinstancedialog.ui", "AddInstanceDialog")
@@ -3361,9 +3357,7 @@ constexpr OUStringLiteral MethodString::m_sGet_API;
         m_sAllFilterName = Translate::get(STR_FILTERNAME_ALL, Translate::Create("fps"));
     }
 
-    AddInstanceDialog::~AddInstanceDialog()
-    {
-    }
+    AddInstanceDialog::~AddInstanceDialog() = default;
 
     IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl, weld::Button&, void)
     {

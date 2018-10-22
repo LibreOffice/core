@@ -31,11 +31,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 
-
-OptimizationStats::OptimizationStats()
-{
-}
-
+OptimizationStats::OptimizationStats() = default;
 
 void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const uno::Any& rStatValue )
 {

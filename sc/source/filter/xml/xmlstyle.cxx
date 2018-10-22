@@ -184,9 +184,7 @@ ScXMLCellExportPropertyMapper::ScXMLCellExportPropertyMapper(
 {
 }
 
-ScXMLCellExportPropertyMapper::~ScXMLCellExportPropertyMapper()
-{
-}
+ScXMLCellExportPropertyMapper::~ScXMLCellExportPropertyMapper() = default;
 
 void ScXMLCellExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
@@ -552,9 +550,7 @@ ScXMLRowExportPropertyMapper::ScXMLRowExportPropertyMapper(
 {
 }
 
-ScXMLRowExportPropertyMapper::~ScXMLRowExportPropertyMapper()
-{
-}
+ScXMLRowExportPropertyMapper::~ScXMLRowExportPropertyMapper() = default;
 
 void ScXMLRowExportPropertyMapper::ContextFilter(
     bool /* bEnableFoFontFamily */,
@@ -570,9 +566,7 @@ ScXMLColumnExportPropertyMapper::ScXMLColumnExportPropertyMapper(
 {
 }
 
-ScXMLColumnExportPropertyMapper::~ScXMLColumnExportPropertyMapper()
-{
-}
+ScXMLColumnExportPropertyMapper::~ScXMLColumnExportPropertyMapper() = default;
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
 void ScXMLColumnExportPropertyMapper::handleSpecialItem(
@@ -592,9 +586,7 @@ ScXMLTableExportPropertyMapper::ScXMLTableExportPropertyMapper(
 {
 }
 
-ScXMLTableExportPropertyMapper::~ScXMLTableExportPropertyMapper()
-{
-}
+ScXMLTableExportPropertyMapper::~ScXMLTableExportPropertyMapper() = default;
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
 void ScXMLTableExportPropertyMapper::handleSpecialItem(
@@ -799,9 +791,7 @@ ScXMLAutoStylePoolP::ScXMLAutoStylePoolP(ScXMLExport& rTempScXMLExport):
 {
 }
 
-ScXMLAutoStylePoolP::~ScXMLAutoStylePoolP()
-{
-}
+ScXMLAutoStylePoolP::~ScXMLAutoStylePoolP() = default;
 
 void ScXMLStyleExport::exportStyleAttributes(
         const css::uno::Reference< css::style::XStyle > & rStyle )
@@ -837,18 +827,14 @@ ScXMLStyleExport::ScXMLStyleExport(
 {
 }
 
-ScXMLStyleExport::~ScXMLStyleExport()
-{
-}
+ScXMLStyleExport::~ScXMLStyleExport() = default;
 
 XMLScPropHdlFactory::XMLScPropHdlFactory()
     : XMLPropertyHandlerFactory()
 {
 }
 
-XMLScPropHdlFactory::~XMLScPropHdlFactory()
-{
-}
+XMLScPropHdlFactory::~XMLScPropHdlFactory() = default;
 
 const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
@@ -939,9 +925,7 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     return pHdl;
 }
 
-XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection()
-{
-}
+XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection() = default;
 
 bool XmlScPropHdl_CellProtection::equals(
     const css::uno::Any& r1,
@@ -1075,9 +1059,7 @@ bool XmlScPropHdl_CellProtection::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_PrintContent::~XmlScPropHdl_PrintContent()
-{
-}
+XmlScPropHdl_PrintContent::~XmlScPropHdl_PrintContent() = default;
 
 bool XmlScPropHdl_PrintContent::equals(
     const css::uno::Any& r1,
@@ -1141,9 +1123,7 @@ bool XmlScPropHdl_PrintContent::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_JustifyMethod::~XmlScPropHdl_JustifyMethod()
-{
-}
+XmlScPropHdl_JustifyMethod::~XmlScPropHdl_JustifyMethod() = default;
 
 bool XmlScPropHdl_JustifyMethod::equals(
     const css::uno::Any& r1,
@@ -1215,9 +1195,7 @@ bool XmlScPropHdl_JustifyMethod::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_HoriJustify::~XmlScPropHdl_HoriJustify()
-{
-}
+XmlScPropHdl_HoriJustify::~XmlScPropHdl_HoriJustify() = default;
 
 bool XmlScPropHdl_HoriJustify::equals(
     const css::uno::Any& r1,
@@ -1319,9 +1297,7 @@ bool XmlScPropHdl_HoriJustify::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_HoriJustifySource::~XmlScPropHdl_HoriJustifySource()
-{
-}
+XmlScPropHdl_HoriJustifySource::~XmlScPropHdl_HoriJustifySource() = default;
 
 bool XmlScPropHdl_HoriJustifySource::equals(
     const css::uno::Any& r1,
@@ -1379,9 +1355,7 @@ bool XmlScPropHdl_HoriJustifySource::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_HoriJustifyRepeat::~XmlScPropHdl_HoriJustifyRepeat()
-{
-}
+XmlScPropHdl_HoriJustifyRepeat::~XmlScPropHdl_HoriJustifyRepeat() = default;
 
 bool XmlScPropHdl_HoriJustifyRepeat::equals(
     const css::uno::Any& r1,
@@ -1439,9 +1413,7 @@ bool XmlScPropHdl_HoriJustifyRepeat::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_Orientation::~XmlScPropHdl_Orientation()
-{
-}
+XmlScPropHdl_Orientation::~XmlScPropHdl_Orientation() = default;
 
 bool XmlScPropHdl_Orientation::equals(
     const css::uno::Any& r1,
@@ -1508,9 +1480,7 @@ bool XmlScPropHdl_Orientation::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_RotateAngle::~XmlScPropHdl_RotateAngle()
-{
-}
+XmlScPropHdl_RotateAngle::~XmlScPropHdl_RotateAngle() = default;
 
 bool XmlScPropHdl_RotateAngle::equals(
     const css::uno::Any& r1,
@@ -1557,9 +1527,7 @@ bool XmlScPropHdl_RotateAngle::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_RotateReference::~XmlScPropHdl_RotateReference()
-{
-}
+XmlScPropHdl_RotateReference::~XmlScPropHdl_RotateReference() = default;
 
 bool XmlScPropHdl_RotateReference::equals(
     const css::uno::Any& r1,
@@ -1654,9 +1622,7 @@ bool XmlScPropHdl_RotateReference::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_VertJustify::~XmlScPropHdl_VertJustify()
-{
-}
+XmlScPropHdl_VertJustify::~XmlScPropHdl_VertJustify() = default;
 
 bool XmlScPropHdl_VertJustify::equals(
     const css::uno::Any& r1,
@@ -1763,9 +1729,7 @@ bool XmlScPropHdl_VertJustify::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_BreakBefore::~XmlScPropHdl_BreakBefore()
-{
-}
+XmlScPropHdl_BreakBefore::~XmlScPropHdl_BreakBefore() = default;
 
 bool XmlScPropHdl_BreakBefore::equals(
     const css::uno::Any& r1,
@@ -1823,9 +1787,7 @@ bool XmlScPropHdl_BreakBefore::exportXML(
     return bRetval;
 }
 
-XmlScPropHdl_IsTextWrapped::~XmlScPropHdl_IsTextWrapped()
-{
-}
+XmlScPropHdl_IsTextWrapped::~XmlScPropHdl_IsTextWrapped() = default;
 
 bool XmlScPropHdl_IsTextWrapped::equals(
     const css::uno::Any& r1,
@@ -1892,9 +1854,7 @@ bool XmlScPropHdl_IsEqual::exportXML( OUString& /* rStrExpValue */,
     return false;
 }
 
-XmlScPropHdl_Vertical::~XmlScPropHdl_Vertical()
-{
-}
+XmlScPropHdl_Vertical::~XmlScPropHdl_Vertical() = default;
 
 bool XmlScPropHdl_Vertical::equals(
     const css::uno::Any& r1,

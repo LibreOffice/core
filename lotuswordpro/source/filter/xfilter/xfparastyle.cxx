@@ -161,9 +161,7 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
     return *this;
 }
 
-XFParaStyle::~XFParaStyle()
-{
-}
+XFParaStyle::~XFParaStyle() = default;
 
 enumXFStyle XFParaStyle::GetStyleFamily()
 {

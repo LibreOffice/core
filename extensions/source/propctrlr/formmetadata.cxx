@@ -591,11 +591,7 @@ namespace pcr
     {
     }
 
-
-    DefaultEnumRepresentation::~DefaultEnumRepresentation()
-    {
-    }
-
+    DefaultEnumRepresentation::~DefaultEnumRepresentation() = default;
 
     std::vector< OUString > DefaultEnumRepresentation::getDescriptions() const
     {

@@ -38,10 +38,7 @@ AccessibleOLEShape::AccessibleOLEShape (
 {
 }
 
-
-AccessibleOLEShape::~AccessibleOLEShape()
-{
-}
+AccessibleOLEShape::~AccessibleOLEShape() = default;
 
 // XAccessibleAction
 sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount()

@@ -27,9 +27,7 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-SvMetaAttribute::SvMetaAttribute()
-{
-}
+SvMetaAttribute::SvMetaAttribute() = default;
 
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
@@ -134,8 +132,7 @@ SvMetaType::SvMetaType( const OString& rName )
     SetName( rName );
 }
 
-SvMetaType::~SvMetaType()
-{}
+SvMetaType::~SvMetaType() = default;
 
 void SvMetaType::SetType( MetaTypeType nT )
 {
@@ -306,13 +303,9 @@ SvMetaTypeString::SvMetaTypeString()
 {
 }
 
-SvMetaEnumValue::SvMetaEnumValue()
-{
-}
+SvMetaEnumValue::SvMetaEnumValue() = default;
 
-SvMetaTypeEnum::SvMetaTypeEnum()
-{
-}
+SvMetaTypeEnum::SvMetaTypeEnum() = default;
 
 SvMetaTypevoid::SvMetaTypevoid()
     : SvMetaType( "void" )

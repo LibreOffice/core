@@ -38,9 +38,7 @@ ScXMLExportDDELinks::ScXMLExportDDELinks(ScXMLExport& rTempExport)
 {
 }
 
-ScXMLExportDDELinks::~ScXMLExportDDELinks()
-{
-}
+ScXMLExportDDELinks::~ScXMLExportDDELinks() = default;
 
 void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {

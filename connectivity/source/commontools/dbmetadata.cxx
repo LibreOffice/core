@@ -207,9 +207,7 @@ namespace dbtools
         return *this;
     }
 
-    DatabaseMetaData::~DatabaseMetaData()
-    {
-    }
+    DatabaseMetaData::~DatabaseMetaData() = default;
 
     bool DatabaseMetaData::isConnected() const
     {

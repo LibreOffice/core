@@ -1591,9 +1591,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     m_pSdrExport.reset(new DocxSdrExport( *this, m_pDocumentFS, m_pDrawingML.get() ));
 }
 
-DocxExport::~DocxExport()
-{
-}
+DocxExport::~DocxExport() = default;
 
 DocxSettingsData::DocxSettingsData()
 : evenAndOddHeaders( false )

@@ -40,9 +40,7 @@ OConnectionPointContainerHelper::OConnectionPointContainerHelper( Mutex& aMutex 
 {
 }
 
-OConnectionPointContainerHelper::~OConnectionPointContainerHelper()
-{
-}
+OConnectionPointContainerHelper::~OConnectionPointContainerHelper() = default;
 
 //  XInterface
 

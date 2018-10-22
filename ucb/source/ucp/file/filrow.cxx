@@ -85,10 +85,7 @@ XRow_impl::XRow_impl( TaskManager* pMyShell,const uno::Sequence< uno::Any >& seq
 {
 }
 
-XRow_impl::~XRow_impl()
-{
-}
-
+XRow_impl::~XRow_impl() = default;
 
 sal_Bool SAL_CALL
 XRow_impl::wasNull()

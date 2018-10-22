@@ -2396,10 +2396,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
     dialog->bConstruct = false;
 }
 
-SvxSearchDialogWrapper::~SvxSearchDialogWrapper ()
-{
-}
-
+SvxSearchDialogWrapper::~SvxSearchDialogWrapper() = default;
 
 SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 {

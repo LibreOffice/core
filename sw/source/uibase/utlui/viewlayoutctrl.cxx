@@ -54,9 +54,7 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
     mpImpl->maImageBookMode_Active      = Image(BitmapEx(RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE));
 }
 
-SwViewLayoutControl::~SwViewLayoutControl()
-{
-}
+SwViewLayoutControl::~SwViewLayoutControl() = default;
 
 void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {

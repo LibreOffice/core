@@ -48,10 +48,7 @@ TextCharAttribList::TextCharAttribList()
 {
 }
 
-TextCharAttribList::~TextCharAttribList()
-{
-    // PTRARR_DEL
-}
+TextCharAttribList::~TextCharAttribList() = default;
 
 void TextCharAttribList::Clear()
 {

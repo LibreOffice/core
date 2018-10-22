@@ -228,9 +228,7 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-ScUndoFillTable::~ScUndoFillTable()
-{
-}
+ScUndoFillTable::~ScUndoFillTable() = default;
 
 OUString ScUndoFillTable::GetComment() const
 {
@@ -501,9 +499,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-ScUndoAutoFill::~ScUndoAutoFill()
-{
-}
+ScUndoAutoFill::~ScUndoAutoFill() = default;
 
 OUString ScUndoAutoFill::GetComment() const
 {
@@ -778,9 +774,7 @@ ScUndoAutoFormat::ScUndoAutoFormat( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoAutoFormat::~ScUndoAutoFormat()
-{
-}
+ScUndoAutoFormat::~ScUndoAutoFormat() = default;
 
 OUString ScUndoAutoFormat::GetComment() const
 {
@@ -1116,9 +1110,7 @@ ScUndoTabOp::ScUndoTabOp( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoTabOp::~ScUndoTabOp()
-{
-}
+ScUndoTabOp::~ScUndoTabOp() = default;
 
 OUString ScUndoTabOp::GetComment() const
 {
@@ -1496,9 +1488,7 @@ ScUndoInsertAreaLink::ScUndoInsertAreaLink( ScDocShell* pShell,
 {
 }
 
-ScUndoInsertAreaLink::~ScUndoInsertAreaLink()
-{
-}
+ScUndoInsertAreaLink::~ScUndoInsertAreaLink() = default;
 
 OUString ScUndoInsertAreaLink::GetComment() const
 {
@@ -1558,9 +1548,7 @@ ScUndoRemoveAreaLink::ScUndoRemoveAreaLink( ScDocShell* pShell,
 {
 }
 
-ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink()
-{
-}
+ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink() = default;
 
 OUString ScUndoRemoveAreaLink::GetComment() const
 {

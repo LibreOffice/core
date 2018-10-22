@@ -68,9 +68,7 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     //  refreshColumns();
 }
 
-OFileTable::~OFileTable( )
-{
-}
+OFileTable::~OFileTable() = default;
 
 void OFileTable::refreshColumns()
 {

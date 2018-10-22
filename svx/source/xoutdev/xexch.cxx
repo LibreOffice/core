@@ -39,9 +39,7 @@ XFillExchangeData::XFillExchangeData( const XFillAttrSetItem& rXFillAttrSetItem 
 {
 }
 
-XFillExchangeData::~XFillExchangeData()
-{
-}
+XFillExchangeData::~XFillExchangeData() = default;
 
 /// binary export (currently w/o version control because it is not persistent)
 SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rData )

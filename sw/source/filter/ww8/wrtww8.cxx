@@ -210,8 +210,7 @@ public:
     void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
 };
 
-WW8_WrtBookmarks::WW8_WrtBookmarks()
-{}
+WW8_WrtBookmarks::WW8_WrtBookmarks() = default;
 
 WW8_WrtBookmarks::~WW8_WrtBookmarks()
 {
@@ -342,9 +341,7 @@ public:
     void Write(WW8Export& rWrt);
 };
 
-WW8_WrtFactoids::WW8_WrtFactoids()
-{
-}
+WW8_WrtFactoids::WW8_WrtFactoids() = default;
 
 void WW8_WrtFactoids::Append(WW8_CP nStartCp, WW8_CP nEndCp, const std::map<OUString, OUString>& rStatements)
 {
@@ -814,9 +811,7 @@ WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
     pData.reset( new sal_uInt8[ nDataLen ] );
 }
 
-WW8_WrPlc1::~WW8_WrPlc1()
-{
-}
+WW8_WrPlc1::~WW8_WrPlc1() = default;
 
 WW8_CP WW8_WrPlc1::Prev() const
 {
@@ -981,9 +976,7 @@ WW8_WrPlcPn::WW8_WrPlcPn(WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc)
     m_Fkps.push_back(o3tl::make_unique<WW8_WrFkp>(ePlc, nStartFc));
 }
 
-WW8_WrPlcPn::~WW8_WrPlcPn()
-{
-}
+WW8_WrPlcPn::~WW8_WrPlcPn() = default;
 
 sal_uInt8 *WW8_WrPlcPn::CopyLastSprms(sal_uInt8 &rLen)
 {
@@ -1347,9 +1340,7 @@ WW8_WrPct::WW8_WrPct(WW8_FC nfcMin)
     AppendPc(nOldFc);
 }
 
-WW8_WrPct::~WW8_WrPct()
-{
-}
+WW8_WrPct::~WW8_WrPct() = default;
 
 // Fill the piece and create a new one
 void WW8_WrPct::AppendPc(WW8_FC nStartFc)
@@ -3663,9 +3654,7 @@ WW8Export::WW8Export( SwWW8Writer *pWriter,
 {
 }
 
-WW8Export::~WW8Export()
-{
-}
+WW8Export::~WW8Export() = default;
 
 AttributeOutputBase& WW8Export::AttrOutput() const
 {
@@ -3687,9 +3676,7 @@ SwWW8Writer::SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL)
     SetBaseURL( rBaseURL );
 }
 
-SwWW8Writer::~SwWW8Writer()
-{
-}
+SwWW8Writer::~SwWW8Writer() = default;
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
 {

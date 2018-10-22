@@ -44,9 +44,7 @@ PageMasterImportPropertyMapper::PageMasterImportPropertyMapper(
 {
 }
 
-PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
-{
-}
+PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper() = default;
 
 bool PageMasterImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,

@@ -39,10 +39,7 @@ namespace uno = com::sun::star::uno;
 using ::com::sun::star::uno::Reference;
 
 namespace dp_manager {
-
-BaseCommandEnv::BaseCommandEnv()
-{
-}
+BaseCommandEnv::BaseCommandEnv() = default;
 
 BaseCommandEnv::BaseCommandEnv(
     Reference< task::XInteractionHandler> const & handler)
@@ -50,9 +47,7 @@ BaseCommandEnv::BaseCommandEnv(
 {
 }
 
-BaseCommandEnv::~BaseCommandEnv()
-{
-}
+BaseCommandEnv::~BaseCommandEnv() = default;
 // XCommandEnvironment
 
 Reference<task::XInteractionHandler> BaseCommandEnv::getInteractionHandler()
@@ -119,10 +114,7 @@ void BaseCommandEnv::pop()
 {
 }
 
-
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
-{
-}
+TmpRepositoryCommandEnv::TmpRepositoryCommandEnv() = default;
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler):
@@ -213,9 +205,7 @@ void NoLicenseCommandEnv::handle(
     handle_(approve, xRequest);
 }
 
-SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
-{
-}
+SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv() = default;
 
 void SilentCheckPrerequisitesCommandEnv::handle(
        Reference< task::XInteractionRequest> const & xRequest )

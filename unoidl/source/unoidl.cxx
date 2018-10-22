@@ -38,7 +38,7 @@ public:
     {}
 
 private:
-    virtual ~AggregatingModule() throw () override {}
+    virtual ~AggregatingModule() throw() override = default;
 
     virtual std::vector< OUString > getMemberNames() const override;
 
@@ -70,7 +70,7 @@ public:
     { findCursor(); }
 
 private:
-    virtual ~AggregatingCursor() throw () override {}
+    virtual ~AggregatingCursor() throw() override = default;
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -125,44 +125,41 @@ rtl::Reference< MapCursor > AggregatingModule::createCursor() const {
 
 }
 
-NoSuchFileException::~NoSuchFileException() throw () {}
+NoSuchFileException::~NoSuchFileException() throw() = default;
 
-FileFormatException::~FileFormatException() throw () {}
+FileFormatException::~FileFormatException() throw() = default;
 
-Entity::~Entity() throw () {}
+Entity::~Entity() throw() = default;
 
-MapCursor::~MapCursor() throw () {}
+MapCursor::~MapCursor() throw() = default;
 
-ModuleEntity::~ModuleEntity() throw () {}
+ModuleEntity::~ModuleEntity() throw() = default;
 
-PublishableEntity::~PublishableEntity() throw () {}
+PublishableEntity::~PublishableEntity() throw() = default;
 
-EnumTypeEntity::~EnumTypeEntity() throw () {}
+EnumTypeEntity::~EnumTypeEntity() throw() = default;
 
-PlainStructTypeEntity::~PlainStructTypeEntity() throw () {}
+PlainStructTypeEntity::~PlainStructTypeEntity() throw() = default;
 
-PolymorphicStructTypeTemplateEntity::~PolymorphicStructTypeTemplateEntity()
-    throw ()
-{}
+PolymorphicStructTypeTemplateEntity::~PolymorphicStructTypeTemplateEntity() throw() = default;
 
-ExceptionTypeEntity::~ExceptionTypeEntity() throw () {}
+ExceptionTypeEntity::~ExceptionTypeEntity() throw() = default;
 
-InterfaceTypeEntity::~InterfaceTypeEntity() throw () {}
+InterfaceTypeEntity::~InterfaceTypeEntity() throw() = default;
 
-TypedefEntity::~TypedefEntity() throw () {}
+TypedefEntity::~TypedefEntity() throw() = default;
 
-ConstantGroupEntity::~ConstantGroupEntity() throw () {}
+ConstantGroupEntity::~ConstantGroupEntity() throw() = default;
 
-SingleInterfaceBasedServiceEntity::~SingleInterfaceBasedServiceEntity() throw ()
-{}
+SingleInterfaceBasedServiceEntity::~SingleInterfaceBasedServiceEntity() throw() = default;
 
-AccumulationBasedServiceEntity::~AccumulationBasedServiceEntity() throw () {}
+AccumulationBasedServiceEntity::~AccumulationBasedServiceEntity() throw() = default;
 
-InterfaceBasedSingletonEntity::~InterfaceBasedSingletonEntity() throw () {}
+InterfaceBasedSingletonEntity::~InterfaceBasedSingletonEntity() throw() = default;
 
-ServiceBasedSingletonEntity::~ServiceBasedSingletonEntity() throw () {}
+ServiceBasedSingletonEntity::~ServiceBasedSingletonEntity() throw() = default;
 
-Provider::~Provider() throw () {}
+Provider::~Provider() throw() = default;
 
 rtl::Reference< Provider > Manager::addProvider(OUString const & uri) {
     rtl::Reference< Provider > p(loadProvider(uri));
@@ -192,7 +189,7 @@ rtl::Reference< MapCursor > Manager::createCursor(rtl::OUString const & name)
     return new AggregatingCursor(providers_, name);
 }
 
-Manager::~Manager() throw () {}
+Manager::~Manager() throw() = default;
 
 rtl::Reference< Provider > Manager::loadProvider(OUString const & uri) {
     osl::DirectoryItem item;

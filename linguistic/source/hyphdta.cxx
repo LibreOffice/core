@@ -64,11 +64,7 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, LanguageType nLang, sal_In
         bIsAltSpelling = rWord != rHyphWord;
 }
 
-
-HyphenatedWord::~HyphenatedWord()
-{
-}
-
+HyphenatedWord::~HyphenatedWord() = default;
 
 OUString SAL_CALL HyphenatedWord::getWord()
 {
@@ -123,11 +119,7 @@ PossibleHyphens::PossibleHyphens(const OUString &rWord, LanguageType nLang,
 {
 }
 
-
-PossibleHyphens::~PossibleHyphens()
-{
-}
-
+PossibleHyphens::~PossibleHyphens() = default;
 
 OUString SAL_CALL PossibleHyphens::getWord()
 {

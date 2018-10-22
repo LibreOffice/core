@@ -194,9 +194,7 @@ TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
         TitleHelper::createTitle( m_eTitleType, OUString(), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
 }
 
-TitleWrapper::~TitleWrapper()
-{
-}
+TitleWrapper::~TitleWrapper() = default;
 
 // ____ XShape ____
 awt::Point SAL_CALL TitleWrapper::getPosition()

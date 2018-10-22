@@ -36,14 +36,14 @@ class AbortContinuation:
     public cppu::WeakImplHelper<css::task::XInteractionAbort>
 {
 public:
-    AbortContinuation() {}
+    AbortContinuation() = default;
     AbortContinuation(const AbortContinuation&) = delete;
     AbortContinuation& operator=(const AbortContinuation&)= delete;
 
     virtual void SAL_CALL select() override {}
 
 private:
-    virtual ~AbortContinuation() override {}
+    virtual ~AbortContinuation() override = default;
 };
 
 }
@@ -61,7 +61,7 @@ public:
     bool isSelected() const;
 
 private:
-    virtual ~RetryContinuation() override {}
+    virtual ~RetryContinuation() override = default;
 
     mutable osl::Mutex m_aMutex;
     bool m_bSelected;
@@ -104,7 +104,6 @@ bool InteractionRequest::retry() const
     return m_xRetryContinuation.is() && m_xRetryContinuation->isSelected();
 }
 
-InteractionRequest::~InteractionRequest()
-{}
+InteractionRequest::~InteractionRequest() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

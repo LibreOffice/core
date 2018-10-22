@@ -43,9 +43,7 @@ SdFieldPopup::SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage
     Fill( eLanguage );
 }
 
-SdFieldPopup::~SdFieldPopup()
-{
-}
+SdFieldPopup::~SdFieldPopup() = default;
 
 void SdFieldPopup::Fill( LanguageType eLanguage )
 {

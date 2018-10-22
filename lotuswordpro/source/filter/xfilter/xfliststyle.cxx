@@ -206,9 +206,7 @@ XFListStyle& XFListStyle::operator=(const XFListStyle& other)
     return *this;
 }
 
-XFListStyle::~XFListStyle()
-{
-}
+XFListStyle::~XFListStyle() = default;
 
 void    XFListStyle::SetDisplayLevel(sal_Int32 level, sal_Int16 nDisplayLevel)
 {

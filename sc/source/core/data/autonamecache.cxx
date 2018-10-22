@@ -33,9 +33,7 @@ ScAutoNameCache::ScAutoNameCache( ScDocument* pD ) :
 {
 }
 
-ScAutoNameCache::~ScAutoNameCache()
-{
-}
+ScAutoNameCache::~ScAutoNameCache() = default;
 
 const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const OUString& rName, SCTAB nTab )
 {

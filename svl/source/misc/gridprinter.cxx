@@ -60,9 +60,7 @@ struct GridPrinter::Impl
 GridPrinter::GridPrinter( size_t nRows, size_t nCols, bool bPrint ) :
     mpImpl(new Impl(nRows, nCols, bPrint)) {}
 
-GridPrinter::~GridPrinter()
-{
-}
+GridPrinter::~GridPrinter() = default;
 
 void GridPrinter::set( size_t nRow, size_t nCol, const OUString& rStr )
 {

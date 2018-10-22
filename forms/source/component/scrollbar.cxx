@@ -102,10 +102,7 @@ namespace frm
         m_nDefaultScrollValue = _pOriginal->m_nDefaultScrollValue;
     }
 
-
-    OScrollBarModel::~OScrollBarModel( )
-    {
-    }
+    OScrollBarModel::~OScrollBarModel() = default;
 
     OUString SAL_CALL OScrollBarModel::getImplementationName()
     {

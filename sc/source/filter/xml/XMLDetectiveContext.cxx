@@ -68,9 +68,7 @@ ScXMLDetectiveContext::ScXMLDetectiveContext(
 {
 }
 
-ScXMLDetectiveContext::~ScXMLDetectiveContext()
-{
-}
+ScXMLDetectiveContext::~ScXMLDetectiveContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -133,9 +131,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
     }
 }
 
-ScXMLDetectiveHighlightedContext::~ScXMLDetectiveHighlightedContext()
-{
-}
+ScXMLDetectiveHighlightedContext::~ScXMLDetectiveHighlightedContext() = default;
 
 void SAL_CALL ScXMLDetectiveHighlightedContext::endFastElement( sal_Int32 /*nElement*/ )
 {
@@ -184,9 +180,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
     aDetectiveOp.aPosition =  rImport.GetTables().GetCurrentCellPos();
 }
 
-ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext()
-{
-}
+ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext() = default;
 
 void SAL_CALL ScXMLDetectiveOperationContext::endFastElement( sal_Int32 /*nElement*/ )
 {

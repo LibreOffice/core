@@ -109,11 +109,7 @@ namespace svxform
     {
     }
 
-
-    FormControlFactory::~FormControlFactory()
-    {
-    }
-
+    FormControlFactory::~FormControlFactory() = default;
 
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const SdrUnoObj& _rObject )
     {

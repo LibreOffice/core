@@ -35,10 +35,7 @@ void XNamed::testSetName()
     CPPUNIT_ASSERT_EQUAL(maTestName, xNamed->getName());
 }
 
-XNamed::~XNamed()
-{
-}
-
+XNamed::~XNamed() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

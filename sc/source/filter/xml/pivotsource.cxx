@@ -27,7 +27,7 @@ PivotTableSources::DBSource::DBSource( ScDPObject* pObj, const ScImportSourceDes
 PivotTableSources::ServiceSource::ServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc ) :
     mpDP(pObj), maDesc(rDesc) {}
 
-PivotTableSources::PivotTableSources() {}
+PivotTableSources::PivotTableSources() = default;
 
 void PivotTableSources::appendSheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc )
 {

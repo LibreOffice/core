@@ -12,7 +12,7 @@
 namespace sc {
 
 RefHint::RefHint( Type eType ) : SfxHint(SfxHintId::ScReference), meType(eType) {}
-RefHint::~RefHint() {}
+RefHint::~RefHint() = default;
 
 RefHint::Type RefHint::getType() const
 {
@@ -22,7 +22,7 @@ RefHint::Type RefHint::getType() const
 RefMovedHint::RefMovedHint( const ScRange& rRange, const ScAddress& rMove, const sc::RefUpdateContext& rCxt ) :
     RefHint(Moved), maRange(rRange), maMoveDelta(rMove), mrCxt(rCxt) {}
 
-RefMovedHint::~RefMovedHint() {}
+RefMovedHint::~RefMovedHint() = default;
 
 const ScRange& RefMovedHint::getRange() const
 {
@@ -42,7 +42,7 @@ const sc::RefUpdateContext& RefMovedHint::getContext() const
 RefColReorderHint::RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
     RefHint(ColumnReordered), mrColMap(rColMap), mnTab(nTab), mnRow1(nRow1), mnRow2(nRow2) {}
 
-RefColReorderHint::~RefColReorderHint() {}
+RefColReorderHint::~RefColReorderHint() = default;
 
 const sc::ColRowReorderMapType& RefColReorderHint::getColMap() const
 {
@@ -67,7 +67,7 @@ SCROW RefColReorderHint::getEndRow() const
 RefRowReorderHint::RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 ) :
     RefHint(RowReordered), mrRowMap(rRowMap), mnTab(nTab), mnCol1(nCol1), mnCol2(nCol2) {}
 
-RefRowReorderHint::~RefRowReorderHint() {}
+RefRowReorderHint::~RefRowReorderHint() = default;
 
 const sc::ColRowReorderMapType& RefRowReorderHint::getRowMap() const
 {
@@ -90,11 +90,10 @@ SCCOL RefRowReorderHint::getEndColumn() const
 }
 
 RefStartListeningHint::RefStartListeningHint() : RefHint(StartListening) {}
-RefStartListeningHint::~RefStartListeningHint() {}
+RefStartListeningHint::~RefStartListeningHint() = default;
 
 RefStopListeningHint::RefStopListeningHint() : RefHint(StopListening) {}
-RefStopListeningHint::~RefStopListeningHint() {}
-
+RefStopListeningHint::~RefStopListeningHint() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

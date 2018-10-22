@@ -25,9 +25,7 @@ Exif::Exif() :
     mbExifPresent(false)
 {}
 
-Exif::~Exif()
-{}
-
+Exif::~Exif() = default;
 
 void Exif::setOrientation(Orientation aOrientation) {
     maOrientation = aOrientation;

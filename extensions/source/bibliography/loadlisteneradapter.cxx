@@ -66,11 +66,7 @@ namespace bib
         m_bListening = true;
     }
 
-
-    OComponentAdapterBase::~OComponentAdapterBase()
-    {
-    }
-
+    OComponentAdapterBase::~OComponentAdapterBase() = default;
 
     void OComponentAdapterBase::dispose()
     {

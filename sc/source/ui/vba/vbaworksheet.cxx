@@ -182,9 +182,7 @@ ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
     mxSheet.set( xNameAccess->getByName( sSheetName ), uno::UNO_QUERY_THROW );
 }
 
-ScVbaWorksheet::~ScVbaWorksheet()
-{
-}
+ScVbaWorksheet::~ScVbaWorksheet() = default;
 
 namespace
 {

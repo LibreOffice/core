@@ -14,9 +14,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <vcl/outdev.hxx>
 
-SdrObjPlusData::SdrObjPlusData()
-{
-}
+SdrObjPlusData::SdrObjPlusData() = default;
 
 SdrObjPlusData::~SdrObjPlusData()
 {

@@ -97,9 +97,7 @@ XMLSectionImportContext::XMLSectionImportContext(
 {
 }
 
-XMLSectionImportContext::~XMLSectionImportContext()
-{
-}
+XMLSectionImportContext::~XMLSectionImportContext() = default;
 
 void XMLSectionImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

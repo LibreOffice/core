@@ -184,8 +184,7 @@ XMLChartPlotAreaOASISTContext::XMLChartPlotAreaOASISTContext(
 {
 }
 
-XMLChartPlotAreaOASISTContext::~XMLChartPlotAreaOASISTContext()
-{}
+XMLChartPlotAreaOASISTContext::~XMLChartPlotAreaOASISTContext() = default;
 
 rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOASISTContext::CreateChildContext(
     sal_uInt16 nPrefix,

@@ -34,17 +34,9 @@
 using namespace com::sun::star;
 
 namespace unographic {
+GraphicTransformer::GraphicTransformer() = default;
 
-
-GraphicTransformer::GraphicTransformer()
-{
-}
-
-
-GraphicTransformer::~GraphicTransformer()
-{
-}
-
+GraphicTransformer::~GraphicTransformer() = default;
 
 // XGraphicTransformer
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(

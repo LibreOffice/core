@@ -36,9 +36,7 @@ ByteChucker::ByteChucker(Reference<XOutputStream> const & xOstream)
 {
 }
 
-ByteChucker::~ByteChucker()
-{
-}
+ByteChucker::~ByteChucker() = default;
 
 void ByteChucker::WriteBytes( const Sequence< sal_Int8 >& aData )
 {

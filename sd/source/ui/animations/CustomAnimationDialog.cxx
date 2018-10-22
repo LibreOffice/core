@@ -175,9 +175,7 @@ Control* PresetPropertyBox::getControl()
     return mpControl;
 }
 
-SdPropertySubControl::~SdPropertySubControl()
-{
-}
+SdPropertySubControl::~SdPropertySubControl() = default;
 
 class SdPresetPropertyBox  : public SdPropertySubControl
 {
@@ -2830,9 +2828,7 @@ CustomAnimationDialog::CustomAnimationDialog(weld::Window* pParent, std::unique_
         mxTabControl->set_current_page(rPage);
 }
 
-CustomAnimationDialog::~CustomAnimationDialog()
-{
-}
+CustomAnimationDialog::~CustomAnimationDialog() = default;
 
 STLPropertySet* CustomAnimationDialog::getResultSet()
 {
@@ -2939,9 +2935,7 @@ void PropertyControl::Resize()
     ListBox::Resize();
 }
 
-PropertySubControl::~PropertySubControl()
-{
-}
+PropertySubControl::~PropertySubControl() = default;
 
 std::unique_ptr<PropertySubControl> PropertySubControl::create( sal_Int32 nType, vcl::Window* pParent, const Any& rValue, const OUString& rPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
 {

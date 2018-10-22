@@ -68,11 +68,7 @@ void DocumentOutlineNodesManager::getOutlineNodes( IDocumentOutlineNodes::tSorte
     }
 }
 
-DocumentOutlineNodesManager::~DocumentOutlineNodesManager()
-{
-}
-
-
+DocumentOutlineNodesManager::~DocumentOutlineNodesManager() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

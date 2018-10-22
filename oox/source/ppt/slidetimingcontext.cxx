@@ -47,10 +47,7 @@ SlideTimingContext::SlideTimingContext( FragmentHandler2 const & rParent, TimeNo
 {
 }
 
-SlideTimingContext::~SlideTimingContext() throw()
-{
-
-}
+SlideTimingContext::~SlideTimingContext() throw() = default;
 
 ::oox::core::ContextHandlerRef SlideTimingContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& )
 {

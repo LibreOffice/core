@@ -50,9 +50,7 @@ XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
 {
 }
 
-XMLIndexSimpleEntryContext::~XMLIndexSimpleEntryContext()
-{
-}
+XMLIndexSimpleEntryContext::~XMLIndexSimpleEntryContext() = default;
 
 void XMLIndexSimpleEntryContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

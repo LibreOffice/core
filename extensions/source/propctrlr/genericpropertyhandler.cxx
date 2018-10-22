@@ -212,9 +212,7 @@ namespace pcr
 
     }
 
-    UrlClickHandler::~UrlClickHandler()
-    {
-    }
+    UrlClickHandler::~UrlClickHandler() = default;
 
     void SAL_CALL UrlClickHandler::actionPerformed( const ActionEvent& rEvent )
     {
@@ -262,9 +260,7 @@ namespace pcr
         m_xTypeConverter = Converter::create(_rxContext);
     }
 
-    GenericPropertyHandler::~GenericPropertyHandler()
-    {
-    }
+    GenericPropertyHandler::~GenericPropertyHandler() = default;
 
     OUString SAL_CALL GenericPropertyHandler::getImplementationName(  )
     {

@@ -27,9 +27,7 @@ SwTextLine::SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion
 {
 }
 
-SwTextLine::~SwTextLine()
-{
-}
+SwTextLine::~SwTextLine() = default;
 
 SwCacheObj *SwTextLineAccess::NewObj()
 {

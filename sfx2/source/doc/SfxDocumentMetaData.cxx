@@ -236,7 +236,7 @@ public:
         const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
 
 protected:
-    virtual ~SfxDocumentMetaData() override {}
+    virtual ~SfxDocumentMetaData() override = default;
     virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 

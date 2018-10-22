@@ -25,14 +25,9 @@ using namespace com::sun::star::lang;
 
 namespace comphelper
 {
+OWeakTypeObject::OWeakTypeObject() = default;
 
-OWeakTypeObject::OWeakTypeObject()
-{
-}
-
-OWeakTypeObject::~OWeakTypeObject()
-{
-}
+OWeakTypeObject::~OWeakTypeObject() = default;
 
 Any SAL_CALL OWeakTypeObject::queryInterface(const Type & rType )
 {

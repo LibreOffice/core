@@ -485,9 +485,7 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
              css::uno::UNO_QUERY );
 }
 
-XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration()
-{
-}
+XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration() = default;
 
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getAllKeyEvents()
 {

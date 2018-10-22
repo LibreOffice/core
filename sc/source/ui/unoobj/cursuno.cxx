@@ -41,9 +41,7 @@ ScCellCursorObj::ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR) :
 {
 }
 
-ScCellCursorObj::~ScCellCursorObj()
-{
-}
+ScCellCursorObj::~ScCellCursorObj() = default;
 
 uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType )
 {

@@ -752,9 +752,7 @@ SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent)
     m_xCancel->connect_clicked(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
 }
 
-SwFindEntryDialog::~SwFindEntryDialog()
-{
-}
+SwFindEntryDialog::~SwFindEntryDialog() = default;
 
 IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl, weld::Button&, void)
 {

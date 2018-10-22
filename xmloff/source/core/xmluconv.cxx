@@ -125,9 +125,7 @@ SvXMLUnitConverter::SvXMLUnitConverter(
 {
 }
 
-SvXMLUnitConverter::~SvXMLUnitConverter()
-{
-}
+SvXMLUnitConverter::~SvXMLUnitConverter() = default;
 
 sal_Int16 SvXMLUnitConverter::GetMeasureUnit(FieldUnit const nFieldUnit)
 {

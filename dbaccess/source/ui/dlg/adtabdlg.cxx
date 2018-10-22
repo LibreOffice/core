@@ -51,9 +51,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace dbtools;
 
-TableObjectListFacade::~TableObjectListFacade()
-{
-}
+TableObjectListFacade::~TableObjectListFacade() = default;
 
 class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade

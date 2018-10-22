@@ -38,10 +38,8 @@ namespace dbaui
     }
 
     OPropertySetItem::OPropertySetItem(const OPropertySetItem& _rSource)
-        :SfxPoolItem(_rSource)
-        ,m_xSet(_rSource.m_xSet)
-    {
-    }
+
+        = default;
 
     bool OPropertySetItem::operator==(const SfxPoolItem& _rItem) const
     {

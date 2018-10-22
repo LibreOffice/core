@@ -85,9 +85,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
 {
 }
 
-ODBTable::~ODBTable()
-{
-}
+ODBTable::~ODBTable() = default;
 
 OColumn* ODBTable::createColumn(const OUString& _rName) const
 {

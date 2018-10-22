@@ -121,9 +121,7 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
     m_bPrintDraw = m_bPrintGraphic;
 }
 
-SwPrintOptions::~SwPrintOptions()
-{
-}
+SwPrintOptions::~SwPrintOptions() = default;
 
 void SwPrintOptions::Notify( const css::uno::Sequence< OUString >& ) {}
 

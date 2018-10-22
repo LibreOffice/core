@@ -43,10 +43,7 @@ OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport,
     rImport.setNewFormat(true);
 }
 
-OXMLConnectionData::~OXMLConnectionData()
-{
-
-}
+OXMLConnectionData::~OXMLConnectionData() = default;
 
 SvXMLImportContextRef OXMLConnectionData::CreateChildContext(
         sal_uInt16 nPrefix,

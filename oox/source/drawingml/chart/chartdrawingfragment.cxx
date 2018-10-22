@@ -126,9 +126,7 @@ ChartDrawingFragment::ChartDrawingFragment( XmlFilterBase& rFilter,
     maChartRectEmu.Height = convertHmmToEmu( rChartSize.Height );
 }
 
-ChartDrawingFragment::~ChartDrawingFragment()
-{
-}
+ChartDrawingFragment::~ChartDrawingFragment() = default;
 
 ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

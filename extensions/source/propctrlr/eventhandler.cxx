@@ -339,10 +339,7 @@ namespace pcr
         ScriptEventDescriptor const & impl_getDescriptor_throw( const OUString& _rEventName ) const;
     };
 
-
-    EventHolder::EventHolder()
-    {
-    }
+    EventHolder::EventHolder() = default;
 
     EventHolder::~EventHolder()
     {
@@ -448,9 +445,7 @@ namespace pcr
     {
     }
 
-    EventHandler::~EventHandler()
-    {
-    }
+    EventHandler::~EventHandler() = default;
 
     OUString SAL_CALL EventHandler::getImplementationName(  )
     {

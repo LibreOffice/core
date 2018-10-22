@@ -121,9 +121,7 @@ SwAccessiblePage::SwAccessiblePage(std::shared_ptr<SwAccessibleMap> const& pInit
     SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );
 }
 
-SwAccessiblePage::~SwAccessiblePage()
-{
-}
+SwAccessiblePage::~SwAccessiblePage() = default;
 
 bool SwAccessiblePage::HasCursor()
 {

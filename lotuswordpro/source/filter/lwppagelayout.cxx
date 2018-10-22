@@ -84,9 +84,7 @@ LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpPageLayout::~LwpPageLayout()
-{
-}
+LwpPageLayout::~LwpPageLayout() = default;
 void LwpPageLayout::Read()
 {
     LwpLayout::Read();
@@ -743,9 +741,7 @@ LwpHeaderLayout::LwpHeaderLayout( LwpObjectHeader const &objHdr, LwpSvStream* pS
 {
 }
 
-LwpHeaderLayout::~LwpHeaderLayout()
-{
-}
+LwpHeaderLayout::~LwpHeaderLayout() = default;
 
 void LwpHeaderLayout::Read()
 {
@@ -907,9 +903,7 @@ LwpFooterLayout::LwpFooterLayout( LwpObjectHeader const &objHdr, LwpSvStream* pS
 {
 }
 
-LwpFooterLayout::~LwpFooterLayout()
-{
-}
+LwpFooterLayout::~LwpFooterLayout() = default;
 
 void LwpFooterLayout::Read()
 {

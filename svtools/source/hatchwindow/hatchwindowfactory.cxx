@@ -37,7 +37,7 @@ class OHatchWindowFactory : public ::cppu::WeakImplHelper<
                                                 lang::XServiceInfo >
 {
 public:
-    OHatchWindowFactory() {}
+    OHatchWindowFactory() = default;
 
     // XHatchWindowFactory
     virtual uno::Reference< embed::XHatchWindow > SAL_CALL createHatchWindowInstance( const uno::Reference< awt::XWindowPeer >& xParent, const awt::Rectangle& aBounds, const awt::Size& aSize ) override;

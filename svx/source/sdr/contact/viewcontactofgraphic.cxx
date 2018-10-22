@@ -65,9 +65,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfGraphic::~ViewContactOfGraphic()
-        {
-        }
+        ViewContactOfGraphic::~ViewContactOfGraphic() = default;
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createVIP2DSForPresObj(
             const basegfx::B2DHomMatrix& rObjectMatrix,

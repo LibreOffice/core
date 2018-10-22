@@ -250,9 +250,7 @@ EditTextObject::EditTextObject( const EditTextObject& r ) :
 {
 }
 
-EditTextObject::~EditTextObject()
-{
-}
+EditTextObject::~EditTextObject() = default;
 
 sal_Int32 EditTextObject::GetParagraphCount() const
 {

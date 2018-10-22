@@ -761,11 +761,7 @@ DXF2GDIMetaFile::DXF2GDIMetaFile()
 {
 }
 
-
-DXF2GDIMetaFile::~DXF2GDIMetaFile()
-{
-}
-
+DXF2GDIMetaFile::~DXF2GDIMetaFile() = default;
 
 bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent)
 {

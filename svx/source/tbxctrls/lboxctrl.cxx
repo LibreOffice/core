@@ -183,9 +183,7 @@ SvxUndoRedoControl::SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
     aDefaultTooltip = rTbx.GetQuickHelpText( nId );
 }
 
-SvxUndoRedoControl::~SvxUndoRedoControl()
-{
-}
+SvxUndoRedoControl::~SvxUndoRedoControl() = default;
 
 void SvxUndoRedoControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )

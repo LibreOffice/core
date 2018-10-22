@@ -179,9 +179,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     osl_atomic_decrement( &m_refCount );
 }
 
-OFixedLine::~OFixedLine()
-{
-}
+OFixedLine::~OFixedLine() = default;
 
 IMPLEMENT_FORWARD_REFCOUNT( OFixedLine, FixedLineBase )
 

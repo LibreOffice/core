@@ -381,9 +381,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper()
 {
 }
 
-SvXMLGraphicHelper::~SvXMLGraphicHelper()
-{
-}
+SvXMLGraphicHelper::~SvXMLGraphicHelper() = default;
 
 void SAL_CALL SvXMLGraphicHelper::disposing()
 {
@@ -951,8 +949,7 @@ protected:
     mutable ::osl::Mutex m_aMutex;
 };
 
-MutexContainer::~MutexContainer()
-{}
+MutexContainer::~MutexContainer() = default;
 
 } // namespace impl
 

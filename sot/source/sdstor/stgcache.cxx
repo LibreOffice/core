@@ -47,9 +47,7 @@ StgPage::StgPage( short nSize, sal_Int32 nPage )
     memset( mpData.get(), 0, mnSize );
 }
 
-StgPage::~StgPage()
-{
-}
+StgPage::~StgPage() = default;
 
 rtl::Reference< StgPage > StgPage::Create( short nData, sal_Int32 nPage )
 {

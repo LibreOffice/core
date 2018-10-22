@@ -58,9 +58,7 @@ ToolBarWrapper::ToolBarWrapper( const Reference< XComponentContext >& rxContext 
 {
 }
 
-ToolBarWrapper::~ToolBarWrapper()
-{
-}
+ToolBarWrapper::~ToolBarWrapper() = default;
 
 // XInterface
 void SAL_CALL ToolBarWrapper::acquire() throw()

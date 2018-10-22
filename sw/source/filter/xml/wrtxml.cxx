@@ -73,9 +73,7 @@ SwXMLWriter::SwXMLWriter( const OUString& rBaseURL )
     SetBaseURL( rBaseURL );
 }
 
-SwXMLWriter::~SwXMLWriter()
-{
-}
+SwXMLWriter::~SwXMLWriter() = default;
 
 ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
                                 const OUString& aDocHierarchicalName )

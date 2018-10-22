@@ -132,9 +132,7 @@ ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::
 {
 }
 
-ToolbarsMenuController::~ToolbarsMenuController()
-{
-}
+ToolbarsMenuController::~ToolbarsMenuController() = default;
 
 void ToolbarsMenuController::addCommand(
     Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& rLabel )

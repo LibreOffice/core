@@ -48,9 +48,7 @@ PresenterPane::PresenterPane (
         UNO_QUERY_THROW);
 }
 
-PresenterPane::~PresenterPane()
-{
-}
+PresenterPane::~PresenterPane() = default;
 
 //----- XPane -----------------------------------------------------------------
 

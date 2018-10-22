@@ -31,9 +31,7 @@ Accessible::Accessible (
 {
 }
 
-Accessible::~Accessible()
-{
-}
+Accessible::~Accessible() = default;
 
 void SAL_CALL Accessible::disposing()
 {

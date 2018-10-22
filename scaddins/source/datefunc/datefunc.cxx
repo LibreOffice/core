@@ -70,9 +70,7 @@ ScaFuncData::ScaFuncData(const ScaFuncDataBase& rBaseData) :
     aCompList.push_back(OUString::createFromAscii(rBaseData.pCompListID[1]));
 }
 
-ScaFuncData::~ScaFuncData()
-{
-}
+ScaFuncData::~ScaFuncData() = default;
 
 sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 {
@@ -123,9 +121,7 @@ SAL_DLLPUBLIC_EXPORT void * date_component_getFactory(
 }   // extern C
 
 //  "normal" service implementation
-ScaDateAddIn::ScaDateAddIn()
-{
-}
+ScaDateAddIn::ScaDateAddIn() = default;
 
 static const sal_Char*  pLang[] = { "de", "en" };
 static const sal_Char*  pCoun[] = { "DE", "US" };

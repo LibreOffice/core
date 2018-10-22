@@ -552,9 +552,7 @@ AddressPreview::AddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow)
     m_xVScrollBar->connect_vadjustment_changed(LINK(this, AddressPreview, ScrollHdl));
 }
 
-AddressPreview::~AddressPreview()
-{
-}
+AddressPreview::~AddressPreview() = default;
 
 IMPL_LINK_NOARG(AddressPreview, ScrollHdl, weld::ScrolledWindow&, void)
 {
@@ -929,9 +927,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
 
 }
 
-SwAuthenticator::~SwAuthenticator()
-{
-}
+SwAuthenticator::~SwAuthenticator() = default;
 
 OUString SwAuthenticator::getUserName( )
 {
@@ -959,9 +955,7 @@ SwConnectionContext::SwConnectionContext(
 {
 }
 
-SwConnectionContext::~SwConnectionContext()
-{
-}
+SwConnectionContext::~SwConnectionContext() = default;
 
 uno::Any SwConnectionContext::getValueByName( const OUString& rName )
 {
@@ -975,9 +969,7 @@ uno::Any SwConnectionContext::getValueByName( const OUString& rName )
     return aRet;
 }
 
-SwConnectionListener::~SwConnectionListener()
-{
-}
+SwConnectionListener::~SwConnectionListener() = default;
 
 void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
 {
@@ -1009,9 +1001,7 @@ SwMailTransferable::SwMailTransferable(const OUString& rURL,
 {
 }
 
-SwMailTransferable::~SwMailTransferable()
-{
-}
+SwMailTransferable::~SwMailTransferable() = default;
 
 uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*aFlavor*/ )
 {
@@ -1102,9 +1092,7 @@ SwMailMessage::SwMailMessage() :
 {
 }
 
-SwMailMessage::~SwMailMessage()
-{
-}
+SwMailMessage::~SwMailMessage() = default;
 
 OUString SwMailMessage::getSenderName()
 {

@@ -220,9 +220,7 @@ SwXTextSection::SwXTextSection(
 {
 }
 
-SwXTextSection::~SwXTextSection()
-{
-}
+SwXTextSection::~SwXTextSection() = default;
 
 namespace
 {

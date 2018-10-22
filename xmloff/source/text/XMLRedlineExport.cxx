@@ -68,11 +68,7 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)
 {
 }
 
-
-XMLRedlineExport::~XMLRedlineExport()
-{
-}
-
+XMLRedlineExport::~XMLRedlineExport() = default;
 
 void XMLRedlineExport::ExportChange(
     const Reference<XPropertySet> & rPropSet,

@@ -88,7 +88,7 @@ struct RequestData
     OUString aContentType;
     OUString aReferer;
 
-    RequestData() {}
+    RequestData() = default;
     RequestData( const OUString & rContentType,
                  const OUString & rReferer )
     : aContentType( rContentType ), aReferer( rReferer ) {}

@@ -98,9 +98,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::uno::XCompon
 {
 }
 
-DispatchRecorder::~DispatchRecorder()
-{
-}
+DispatchRecorder::~DispatchRecorder() = default;
 
 // generate header
 void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& )

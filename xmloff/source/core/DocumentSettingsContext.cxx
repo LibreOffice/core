@@ -279,9 +279,7 @@ XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal
     // here are no attributes
 }
 
-XMLDocumentSettingsContext::~XMLDocumentSettingsContext()
-{
-}
+XMLDocumentSettingsContext::~XMLDocumentSettingsContext() = default;
 
 SvXMLImportContextRef XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p_nPrefix,
                                      const OUString& rLocalName,

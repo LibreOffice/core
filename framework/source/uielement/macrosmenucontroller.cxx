@@ -57,9 +57,7 @@ MacrosMenuController::MacrosMenuController( const css::uno::Reference< css::uno:
 {
 }
 
-MacrosMenuController::~MacrosMenuController()
-{
-}
+MacrosMenuController::~MacrosMenuController() = default;
 
 // private function
 void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )

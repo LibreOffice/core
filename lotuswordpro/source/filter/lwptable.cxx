@@ -67,8 +67,7 @@
  LwpSuperTable::LwpSuperTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
 {}
 
-LwpSuperTable::~LwpSuperTable()
-{}
+LwpSuperTable::~LwpSuperTable() = default;
 
 void LwpSuperTable::Read()
 {
@@ -96,8 +95,7 @@ void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
      , m_nAttributes(0)
 {}
 
-LwpTable::~LwpTable()
-{}
+LwpTable::~LwpTable() = default;
 
 void LwpTable::Read()
 {
@@ -149,8 +147,7 @@ void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
  LwpTableHeading::LwpTableHeading(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
 {}
 
-LwpTableHeading::~LwpTableHeading()
-{}
+LwpTableHeading::~LwpTableHeading() = default;
 
 void LwpTableHeading::Read()
 {
@@ -166,9 +163,7 @@ LwpParallelColumns::LwpParallelColumns(LwpObjectHeader const &objHdr, LwpSvStrea
 {
 }
 
-LwpParallelColumns::~LwpParallelColumns()
-{
-}
+LwpParallelColumns::~LwpParallelColumns() = default;
 
 void LwpParallelColumns::Read()
 {
@@ -183,9 +178,7 @@ LwpGlossary::LwpGlossary(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpP
 {
 }
 
-LwpGlossary::~LwpGlossary()
-{
-}
+LwpGlossary::~LwpGlossary() = default;
 sal_uInt16 LwpGlossary::GetNumIndexRows()
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)

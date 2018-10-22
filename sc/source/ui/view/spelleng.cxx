@@ -74,9 +74,7 @@ ScConversionEngineBase::ScConversionEngineBase(
     mnCurrRow = mnStartRow;
 }
 
-ScConversionEngineBase::~ScConversionEngineBase()
-{
-}
+ScConversionEngineBase::~ScConversionEngineBase() = default;
 
 bool ScConversionEngineBase::FindNextConversionCell()
 {

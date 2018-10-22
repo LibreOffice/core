@@ -35,9 +35,7 @@ SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
 {
 }
 
-SvxFmDrawPage::~SvxFmDrawPage() throw ()
-{
-}
+SvxFmDrawPage::~SvxFmDrawPage() throw() = default;
 
 css::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId()
 {

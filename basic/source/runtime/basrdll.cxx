@@ -57,9 +57,7 @@ BasicDLL::BasicDLL()
     BASIC_DLL = this;
 }
 
-BasicDLL::~BasicDLL()
-{
-}
+BasicDLL::~BasicDLL() = default;
 
 void BasicDLL::EnableBreak( bool bEnable )
 {

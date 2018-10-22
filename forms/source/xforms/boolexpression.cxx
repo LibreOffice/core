@@ -34,9 +34,7 @@ BoolExpression::BoolExpression() : ComputedExpression()
 {
 }
 
-BoolExpression::~BoolExpression()
-{
-}
+BoolExpression::~BoolExpression() = default;
 
 void BoolExpression::setExpression( const OUString& rExpression )
 {

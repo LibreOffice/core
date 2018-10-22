@@ -27,13 +27,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-PDFInteractionHandler::PDFInteractionHandler()
-{
-}
+PDFInteractionHandler::PDFInteractionHandler() = default;
 
-PDFInteractionHandler::~PDFInteractionHandler()
-{
-}
+PDFInteractionHandler::~PDFInteractionHandler() = default;
 
 void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteractionRequest >& i_xRequest )
 {

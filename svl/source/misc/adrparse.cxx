@@ -726,8 +726,6 @@ SvAddressParser::SvAddressParser(const OUString& rInput)
     SvAddressParser_Impl aDoParse(this, rInput);
 }
 
-SvAddressParser::~SvAddressParser()
-{
-}
+SvAddressParser::~SvAddressParser() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,9 +49,7 @@ SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj(SvNumberFormatter* pForm)
 {
 }
 
-SvNumberFormatsSupplierObj::~SvNumberFormatsSupplierObj()
-{
-}
+SvNumberFormatsSupplierObj::~SvNumberFormatsSupplierObj() = default;
 
 ::comphelper::SharedMutex& SvNumberFormatsSupplierObj::getSharedMutex() const
 {

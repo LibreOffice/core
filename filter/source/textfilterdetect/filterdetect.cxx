@@ -131,9 +131,9 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 
 }
 
-PlainTextFilterDetect::PlainTextFilterDetect() {}
+PlainTextFilterDetect::PlainTextFilterDetect() = default;
 
-PlainTextFilterDetect::~PlainTextFilterDetect() {}
+PlainTextFilterDetect::~PlainTextFilterDetect() = default;
 
 OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor)
 {

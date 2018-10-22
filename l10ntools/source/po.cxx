@@ -267,9 +267,7 @@ PoEntry::PoEntry(
     m_bIsInitialized = true;
 }
 
-PoEntry::~PoEntry()
-{
-}
+PoEntry::~PoEntry() = default;
 
 PoEntry::PoEntry( const PoEntry& rPo )
     : m_pGenPo( rPo.m_pGenPo ? new GenPoEntry( *(rPo.m_pGenPo) ) : nullptr )
@@ -444,9 +442,7 @@ PoHeader::PoHeader( const OString& rExtSrc )
     m_bIsInitialized = true;
 }
 
-PoHeader::~PoHeader()
-{
-}
+PoHeader::~PoHeader() = default;
 
 PoOfstream::PoOfstream()
     : m_aOutPut()

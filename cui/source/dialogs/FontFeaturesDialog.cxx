@@ -26,7 +26,7 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rF
     initialize();
 }
 
-FontFeaturesDialog::~FontFeaturesDialog() {}
+FontFeaturesDialog::~FontFeaturesDialog() = default;
 
 static void makeEnumComboBox(weld::ComboBox& rNameBox,
                              vcl::font::FeatureDefinition const& rFeatureDefinition)

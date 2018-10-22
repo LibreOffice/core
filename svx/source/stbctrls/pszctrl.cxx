@@ -235,10 +235,7 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
 
 */
 
-SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
-{
-}
-
+SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl() = default;
 
 /*  [Description]
 

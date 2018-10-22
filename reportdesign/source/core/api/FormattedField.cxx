@@ -74,9 +74,7 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
     osl_atomic_decrement( &m_refCount );
 }
 
-OFormattedField::~OFormattedField()
-{
-}
+OFormattedField::~OFormattedField() = default;
 
 IMPLEMENT_FORWARD_REFCOUNT( OFormattedField, FormattedFieldBase )
 

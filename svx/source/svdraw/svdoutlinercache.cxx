@@ -55,9 +55,7 @@ std::unique_ptr<SdrOutliner> SdrOutlinerCache::createOutliner( OutlinerMode nOut
     return pOutliner;
 }
 
-SdrOutlinerCache::~SdrOutlinerCache()
-{
-}
+SdrOutlinerCache::~SdrOutlinerCache() = default;
 
 void SdrOutlinerCache::disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner )
 {

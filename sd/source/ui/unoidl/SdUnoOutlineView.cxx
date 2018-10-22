@@ -41,9 +41,7 @@ SdUnoOutlineView::SdUnoOutlineView(
 {
 }
 
-SdUnoOutlineView::~SdUnoOutlineView() throw()
-{
-}
+SdUnoOutlineView::~SdUnoOutlineView() throw() = default;
 
 void SAL_CALL SdUnoOutlineView::disposing()
 {

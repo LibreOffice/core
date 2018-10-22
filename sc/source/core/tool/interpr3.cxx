@@ -52,7 +52,7 @@ public:
     virtual double GetValue(double x) const = 0;
 
 protected:
-    ~ScDistFunc() {}
+    ~ScDistFunc() = default;
 };
 
 //  iteration for inverse distributions
@@ -2157,9 +2157,11 @@ public:
             ScGammaDistFunction( ScInterpreter& rI, double fpVal, double fAlphaVal, double fBetaVal ) :
                 rInt(rI), fp(fpVal), fAlpha(fAlphaVal), fBeta(fBetaVal) {}
 
-    virtual ~ScGammaDistFunction() {}
+            virtual ~ScGammaDistFunction() = default;
 
-    double  GetValue( double x ) const override  { return fp - rInt.GetGammaDist(x, fAlpha, fBeta); }
+            double GetValue(double x) const override
+            {
+                return fp - rInt.GetGammaDist(x, fAlpha, fBeta); }
 };
 
 void ScInterpreter::ScGammaInv()
@@ -2197,9 +2199,11 @@ public:
             ScBetaDistFunction( ScInterpreter& rI, double fpVal, double fAlphaVal, double fBetaVal ) :
                 rInt(rI), fp(fpVal), fAlpha(fAlphaVal), fBeta(fBetaVal) {}
 
-    virtual ~ScBetaDistFunction() {}
+            virtual ~ScBetaDistFunction() = default;
 
-    double  GetValue( double x ) const override  { return fp - rInt.GetBetaDist(x, fAlpha, fBeta); }
+            double GetValue(double x) const override
+            {
+                return fp - rInt.GetBetaDist(x, fAlpha, fBeta); }
 };
 
 void ScInterpreter::ScBetaInv()
@@ -2249,9 +2253,9 @@ public:
             ScTDistFunction( ScInterpreter& rI, double fpVal, double fDFVal, int nType ) :
                 rInt( rI ), fp( fpVal ), fDF( fDFVal ), nT( nType ) {}
 
-    virtual ~ScTDistFunction() {}
+            virtual ~ScTDistFunction() = default;
 
-    double  GetValue( double x ) const override  { return fp - rInt.GetTDist( x, fDF, nT ); }
+            double GetValue(double x) const override { return fp - rInt.GetTDist(x, fDF, nT); }
 };
 
 void ScInterpreter::ScTInv( int nType )
@@ -2297,9 +2301,9 @@ public:
             ScFDistFunction( ScInterpreter& rI, double fpVal, double fF1Val, double fF2Val ) :
                 rInt(rI), fp(fpVal), fF1(fF1Val), fF2(fF2Val) {}
 
-    virtual ~ScFDistFunction() {}
+            virtual ~ScFDistFunction() = default;
 
-    double  GetValue( double x ) const override  { return fp - rInt.GetFDist(x, fF1, fF2); }
+            double GetValue(double x) const override { return fp - rInt.GetFDist(x, fF1, fF2); }
 };
 
 void ScInterpreter::ScFInv()
@@ -2353,9 +2357,9 @@ public:
             ScChiDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
                 rInt(rI), fp(fpVal), fDF(fDFVal) {}
 
-    virtual ~ScChiDistFunction() {}
+            virtual ~ScChiDistFunction() = default;
 
-    double  GetValue( double x ) const override  { return fp - rInt.GetChiDist(x, fDF); }
+            double GetValue(double x) const override { return fp - rInt.GetChiDist(x, fDF); }
 };
 
 void ScInterpreter::ScChiInv()
@@ -2388,9 +2392,9 @@ public:
             ScChiSqDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
                 rInt(rI), fp(fpVal), fDF(fDFVal) {}
 
-    virtual ~ScChiSqDistFunction() {}
+            virtual ~ScChiSqDistFunction() = default;
 
-    double  GetValue( double x ) const override  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
+            double GetValue(double x) const override { return fp - rInt.GetChiSqDistCDF(x, fDF); }
 };
 
 void ScInterpreter::ScChiSqInv()

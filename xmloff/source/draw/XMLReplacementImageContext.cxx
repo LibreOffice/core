@@ -66,9 +66,7 @@ XMLReplacementImageContext::XMLReplacementImageContext(
     }
 }
 
-XMLReplacementImageContext::~XMLReplacementImageContext()
-{
-}
+XMLReplacementImageContext::~XMLReplacementImageContext() = default;
 
 void XMLReplacementImageContext::EndElement()
 {

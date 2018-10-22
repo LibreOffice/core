@@ -46,10 +46,7 @@ XMLAutoMarkFileContext::XMLAutoMarkFileContext(
 {
 }
 
-XMLAutoMarkFileContext::~XMLAutoMarkFileContext()
-{
-}
-
+XMLAutoMarkFileContext::~XMLAutoMarkFileContext() = default;
 
 void XMLAutoMarkFileContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

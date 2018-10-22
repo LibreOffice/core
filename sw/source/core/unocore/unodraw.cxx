@@ -393,7 +393,9 @@ namespace
             typedef std::list< css::uno::Any > shapescontainer_t;
             shapescontainer_t m_aShapes;
         protected:
-            virtual ~SwXShapesEnumeration() override {};
+            virtual ~SwXShapesEnumeration() override = default;
+            ;
+
         public:
             explicit SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
 
@@ -2721,9 +2723,7 @@ SwXGroupShape::SwXGroupShape(uno::Reference<XInterface> & xShape,
 #endif
 }
 
-SwXGroupShape::~SwXGroupShape()
-{
-}
+SwXGroupShape::~SwXGroupShape() = default;
 
 uno::Any SwXGroupShape::queryInterface( const uno::Type& rType )
 {

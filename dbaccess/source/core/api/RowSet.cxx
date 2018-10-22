@@ -2841,9 +2841,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
     registerProperty(PROPERTY_ISBOOKMARKABLE,       PROPERTY_ID_ISBOOKMARKABLE,         nRT,                            &m_bIsBookmarkable,      cppu::UnoType<bool>::get());
 }
 
-ORowSetClone::~ORowSetClone()
-{
-}
+ORowSetClone::~ORowSetClone() = default;
 
 // css::XTypeProvider
 Sequence< Type > ORowSetClone::getTypes()

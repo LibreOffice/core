@@ -26,7 +26,7 @@ namespace
         , public test::BootstrapFixtureBase
     {
     public:
-        PackageTest() {}
+        PackageTest() = default;
 
         virtual void setUp() override;
 

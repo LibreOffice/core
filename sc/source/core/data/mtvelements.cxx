@@ -126,7 +126,7 @@ TableColumnBlockPositionSet::TableColumnBlockPositionSet( ScDocument& rDoc, SCTA
 TableColumnBlockPositionSet::TableColumnBlockPositionSet( TableColumnBlockPositionSet&& rOther ) :
     mpImpl(std::move(rOther.mpImpl)) {}
 
-TableColumnBlockPositionSet::~TableColumnBlockPositionSet() {}
+TableColumnBlockPositionSet::~TableColumnBlockPositionSet() = default;
 
 ColumnBlockPosition* TableColumnBlockPositionSet::getBlockPosition( SCCOL nCol )
 {

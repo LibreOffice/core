@@ -47,9 +47,7 @@ TitleResources::TitleResources(weld::Builder& rBuilder, bool bShowSecondaryAxesT
     m_xEd_SecondaryYAxis->show( bShowSecondaryAxesTitle );
 }
 
-TitleResources::~TitleResources()
-{
-}
+TitleResources::~TitleResources() = default;
 
 void TitleResources::connect_changed( const Link<weld::Entry&,void>& rLink )
 {
@@ -152,9 +150,7 @@ SchTitleResources::SchTitleResources(weld::Builder& rBuilder, bool bShowSecondar
     m_xEd_SecondaryYAxis->show(bShowSecondaryAxesTitle);
 }
 
-SchTitleResources::~SchTitleResources()
-{
-}
+SchTitleResources::~SchTitleResources() = default;
 
 void SchTitleResources::writeToResources( const TitleDialogData& rInput )
 {

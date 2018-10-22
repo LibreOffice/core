@@ -58,9 +58,7 @@ LOKInteractionHandler::LOKInteractionHandler(
     assert(m_pLOKit);
 }
 
-LOKInteractionHandler::~LOKInteractionHandler()
-{
-}
+LOKInteractionHandler::~LOKInteractionHandler() = default;
 
 OUString SAL_CALL LOKInteractionHandler::getImplementationName()
 {

@@ -26,10 +26,9 @@
 #include "modifications.hxx"
 
 namespace configmgr {
+Modifications::Modifications() = default;
 
-Modifications::Modifications() {}
-
-Modifications::~Modifications() {}
+Modifications::~Modifications() = default;
 
 void Modifications::add(std::vector<OUString> const & path) {
     Node * p = &root_;

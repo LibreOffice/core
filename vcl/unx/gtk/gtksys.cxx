@@ -49,9 +49,7 @@ GtkSalSystem::GtkSalSystem() : SalGenericSystem()
 #endif
 }
 
-GtkSalSystem::~GtkSalSystem()
-{
-}
+GtkSalSystem::~GtkSalSystem() = default;
 
 int
 GtkSalSystem::GetDisplayXScreenCount()

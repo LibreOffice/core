@@ -115,7 +115,7 @@ XcsParser::XcsParser(int layer, Data & data):
     valueParser_(layer), data_(data), state_(STATE_START), ignoring_()
 {}
 
-XcsParser::~XcsParser() {}
+XcsParser::~XcsParser() = default;
 
 xmlreader::XmlReader::Text XcsParser::getTextMode() {
     return valueParser_.getTextMode();

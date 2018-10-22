@@ -155,9 +155,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 
 }
 
-XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
-{
-}
+XMLTextListAutoStylePool::~XMLTextListAutoStylePool() = default;
 
 void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
 {

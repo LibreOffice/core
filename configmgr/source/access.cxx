@@ -1220,7 +1220,7 @@ Access::Access(Components & components):
 {
 }
 
-Access::~Access() {}
+Access::~Access() = default;
 
 void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     assert(broadcaster != nullptr);

@@ -39,9 +39,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfSdrObjCustomShape::~ViewContactOfSdrObjCustomShape()
-        {
-        }
+        ViewContactOfSdrObjCustomShape::~ViewContactOfSdrObjCustomShape() = default;
 
         basegfx::B2DRange ViewContactOfSdrObjCustomShape::getCorrectedTextBoundRect() const
         {

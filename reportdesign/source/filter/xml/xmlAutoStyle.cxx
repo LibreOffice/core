@@ -74,10 +74,7 @@ OXMLAutoStylePoolP::OXMLAutoStylePoolP(ORptExport& rTempORptExport):
 {
 }
 
-OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
-{
-}
-
+OXMLAutoStylePoolP::~OXMLAutoStylePoolP() = default;
 
 } // namespace rptxml
 

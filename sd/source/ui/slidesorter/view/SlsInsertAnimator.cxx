@@ -46,7 +46,7 @@ public:
     virtual VclPtr<sd::Window> GetContentWindow () = 0;
 
 protected:
-    ~AnimatorAccess() COVERITY_NOEXCEPT_FALSE {}
+    ~AnimatorAccess() COVERITY_NOEXCEPT_FALSE = default;
 };
 
 /** Controller of the position offsets of all page objects in one row or one

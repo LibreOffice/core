@@ -83,9 +83,7 @@ XFSaxStream::XFSaxStream(Reference<XDocumentHandler> const & xHandler)
     m_pAttrList.reset(new XFSaxAttrList );
 }
 
-XFSaxStream::~XFSaxStream()
-{
-}
+XFSaxStream::~XFSaxStream() = default;
 
 void        XFSaxStream::StartDocument()
 {

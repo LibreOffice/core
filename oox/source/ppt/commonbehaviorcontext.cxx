@@ -48,9 +48,7 @@ namespace oox { namespace ppt {
     {
     }
 
-    CommonBehaviorContext::~CommonBehaviorContext( ) throw( )
-    {
-    }
+    CommonBehaviorContext::~CommonBehaviorContext() throw() = default;
 
     void CommonBehaviorContext::onEndElement()
     {

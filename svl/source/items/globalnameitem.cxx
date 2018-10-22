@@ -31,11 +31,7 @@
 
 SfxPoolItem* SfxGlobalNameItem::CreateDefault() { return new SfxGlobalNameItem; }
 
-
-SfxGlobalNameItem::SfxGlobalNameItem()
-{
-}
-
+SfxGlobalNameItem::SfxGlobalNameItem() = default;
 
 SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
 :   SfxPoolItem( nW ),
@@ -43,11 +39,7 @@ SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
 {
 }
 
-
-SfxGlobalNameItem::~SfxGlobalNameItem()
-{
-}
-
+SfxGlobalNameItem::~SfxGlobalNameItem() = default;
 
 bool SfxGlobalNameItem::operator==( const SfxPoolItem& rItem ) const
 {

@@ -39,9 +39,7 @@ SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >
     mxBookmark.set( xBookmarksSupplier->getBookmarks()->getByName( maBookmarkName ), uno::UNO_QUERY_THROW );
 }
 
-SwVbaBookmark::~SwVbaBookmark()
-{
-}
+SwVbaBookmark::~SwVbaBookmark() = default;
 
 void SwVbaBookmark::checkVality()
 {

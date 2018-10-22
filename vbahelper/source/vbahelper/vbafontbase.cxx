@@ -47,9 +47,7 @@ VbaFontBase::VbaFontBase(
 {
 }
 
-VbaFontBase::~VbaFontBase()
-{
-}
+VbaFontBase::~VbaFontBase() = default;
 
 void SAL_CALL
 VbaFontBase::setSuperscript( const uno::Any& aValue )

@@ -60,11 +60,7 @@ namespace rptui
     {
     }
 
-
-    FormatNormalizer::~FormatNormalizer()
-    {
-    }
-
+    FormatNormalizer::~FormatNormalizer() = default;
 
     void FormatNormalizer::notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent )
     {

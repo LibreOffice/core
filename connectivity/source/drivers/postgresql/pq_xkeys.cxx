@@ -81,8 +81,7 @@ Keys::Keys(
       m_tableName( tableName )
 {}
 
-Keys::~Keys()
-{}
+Keys::~Keys() = default;
 
 static sal_Int32 string2keytype( const OUString &type )
 {

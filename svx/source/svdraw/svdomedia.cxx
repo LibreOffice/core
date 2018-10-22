@@ -81,9 +81,7 @@ SdrMediaObj::SdrMediaObj(
 {
 }
 
-SdrMediaObj::~SdrMediaObj()
-{
-}
+SdrMediaObj::~SdrMediaObj() = default;
 
 bool SdrMediaObj::HasTextEdit() const
 {

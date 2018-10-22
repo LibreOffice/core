@@ -29,9 +29,7 @@ ScPageObj::ScPageObj( SdrPage* pPage ) :
 {
 }
 
-ScPageObj::~ScPageObj() throw()
-{
-}
+ScPageObj::~ScPageObj() throw() = default;
 
 uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
 {

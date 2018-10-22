@@ -40,9 +40,7 @@ SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArg
     registerEventHandler( AUTO_CLOSE,       NORMAL,     "AutoClose" );
 }
 
-SwVbaEventsHelper::~SwVbaEventsHelper()
-{
-}
+SwVbaEventsHelper::~SwVbaEventsHelper() = default;
 
 bool SwVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& /*rArgs*/ )

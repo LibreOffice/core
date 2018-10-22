@@ -68,9 +68,7 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     }
 }
 
-ScXMLExternalRefTabSourceContext::~ScXMLExternalRefTabSourceContext()
-{
-}
+ScXMLExternalRefTabSourceContext::~ScXMLExternalRefTabSourceContext() = default;
 
 /**
  * Make sure the URL is a valid relative URL, mainly to avoid storing
@@ -118,9 +116,7 @@ ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
 {
 }
 
-ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
-{
-}
+ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext() = default;
 
 Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
@@ -176,9 +172,7 @@ ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     }
 }
 
-ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext()
-{
-}
+ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext() = default;
 
 Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
@@ -322,9 +316,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     }
 }
 
-ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
-{
-}
+ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext() = default;
 
 Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefCellContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& /*xAttrList*/ )
@@ -379,9 +371,7 @@ ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
 {
 }
 
-ScXMLExternalRefCellTextContext::~ScXMLExternalRefCellTextContext()
-{
-}
+ScXMLExternalRefCellTextContext::~ScXMLExternalRefCellTextContext() = default;
 
 void SAL_CALL ScXMLExternalRefCellTextContext::characters( const OUString& rChars )
 {

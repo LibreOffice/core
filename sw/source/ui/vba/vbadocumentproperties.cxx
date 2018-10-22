@@ -73,7 +73,7 @@ public:
         m_xDocProps.set(xDocPropSupp->getDocumentProperties(),
                 uno::UNO_SET_THROW);
     }
-    virtual ~PropertGetSetHelper() {}
+    virtual ~PropertGetSetHelper() = default;
     virtual uno::Any getPropertyValue( const OUString& rPropName ) = 0;
     virtual void setPropertyValue( const OUString& rPropName, const uno::Any& aValue ) = 0;
     uno::Reference< beans::XPropertySet > getUserDefinedProperties() {

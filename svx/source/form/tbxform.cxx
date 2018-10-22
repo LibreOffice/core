@@ -102,11 +102,7 @@ SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBo
 {
 }
 
-
-SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
-{
-}
-
+SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec() = default;
 
 void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -145,9 +141,7 @@ SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
 {
 }
 
-SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
-{
-}
+SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText() = default;
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {
@@ -169,11 +163,7 @@ SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 n
 {
 }
 
-
-SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
-{
-}
-
+SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText() = default;
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
 {
@@ -196,11 +186,7 @@ SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, To
 {
 }
 
-
-SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
-{
-}
-
+SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal() = default;
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {

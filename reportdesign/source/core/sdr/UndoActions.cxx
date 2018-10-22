@@ -87,9 +87,7 @@ OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,const char* pCommentID)
     if (pCommentID)
         m_strComment = RptResId(pCommentID);
 }
-OCommentUndoAction::~OCommentUndoAction()
-{
-}
+OCommentUndoAction::~OCommentUndoAction() = default;
 
 void OCommentUndoAction::Undo()
 {

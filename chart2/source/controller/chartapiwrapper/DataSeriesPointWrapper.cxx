@@ -489,9 +489,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(eType _eType,
 {
 }
 
-DataSeriesPointWrapper::~DataSeriesPointWrapper()
-{
-}
+DataSeriesPointWrapper::~DataSeriesPointWrapper() = default;
 
 // ____ XComponent ____
 void SAL_CALL DataSeriesPointWrapper::dispose()

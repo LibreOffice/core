@@ -64,9 +64,7 @@ Renderable::Renderable (BaseWindow* pWin)
                                                  OUString(), aPageRangeOpt);
 }
 
-Renderable::~Renderable()
-{
-}
+Renderable::~Renderable() = default;
 
 VclPtr< Printer > Renderable::getPrinter()
 {

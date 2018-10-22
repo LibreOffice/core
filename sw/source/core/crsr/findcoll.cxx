@@ -33,7 +33,7 @@ struct SwFindParaFormatColl : public SwFindParas
     SwFindParaFormatColl(const SwTextFormatColl& rFormatColl, const SwTextFormatColl* pRpColl)
         : pFormatColl( &rFormatColl ), pReplColl( pRpColl )
     {}
-    virtual ~SwFindParaFormatColl() {}
+    virtual ~SwFindParaFormatColl() = default;
     virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
 };

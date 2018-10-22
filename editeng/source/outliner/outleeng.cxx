@@ -41,9 +41,7 @@ OutlinerEditEng::OutlinerEditEng( Outliner* pEngOwner, SfxItemPool* pPool )
     pOwner = pEngOwner;
 }
 
-OutlinerEditEng::~OutlinerEditEng()
-{
-}
+OutlinerEditEng::~OutlinerEditEng() = default;
 
 void OutlinerEditEng::PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long /*nBaseLineY*/, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
 {

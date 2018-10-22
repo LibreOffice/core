@@ -72,10 +72,7 @@ OXMLAutoStylePoolP::OXMLAutoStylePoolP(ODBExport& rTempODBExport):
 
 }
 
-OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
-{
-
-}
+OXMLAutoStylePoolP::~OXMLAutoStylePoolP() = default;
 
 } // namespace dbaxml
 

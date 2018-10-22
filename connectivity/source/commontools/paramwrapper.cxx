@@ -90,11 +90,7 @@ namespace param
         OSL_ENSURE( !m_aIndexes.empty(), "ParameterWrapper::ParameterWrapper: sure about the indexes?" );
     }
 
-
-    ParameterWrapper::~ParameterWrapper()
-    {
-    }
-
+    ParameterWrapper::~ParameterWrapper() = default;
 
     IMPLEMENT_FORWARD_REFCOUNT( ParameterWrapper, UnoBase )
 
@@ -275,11 +271,7 @@ namespace param
         }
     }
 
-
-    ParameterWrapperContainer::~ParameterWrapperContainer()
-    {
-    }
-
+    ParameterWrapperContainer::~ParameterWrapperContainer() = default;
 
     Type SAL_CALL ParameterWrapperContainer::getElementType()
     {

@@ -56,10 +56,7 @@ ContentProvider::ContentProvider(
 
 
 // virtual
-ContentProvider::~ContentProvider()
-{
-}
-
+ContentProvider::~ContentProvider() = default;
 
 // XInterface methods.
 

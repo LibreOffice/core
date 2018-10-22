@@ -35,9 +35,7 @@ SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rP
     mxTableColumns = mxTextTable->getColumns();
 }
 
-SwVbaColumn::~SwVbaColumn()
-{
-}
+SwVbaColumn::~SwVbaColumn() = default;
 
 sal_Int32 SAL_CALL
 SwVbaColumn::getWidth( )

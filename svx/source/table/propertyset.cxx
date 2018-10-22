@@ -31,11 +31,7 @@ FastPropertySetInfo::FastPropertySetInfo( const PropertyVector& rProps )
     addProperties( rProps );
 }
 
-
-FastPropertySetInfo::~FastPropertySetInfo()
-{
-}
-
+FastPropertySetInfo::~FastPropertySetInfo() = default;
 
 void FastPropertySetInfo::addProperties( const PropertyVector& rProps )
 {
@@ -96,11 +92,7 @@ FastPropertySet::FastPropertySet( const rtl::Reference< FastPropertySetInfo >& x
 {
 }
 
-
-FastPropertySet::~FastPropertySet()
-{
-}
-
+FastPropertySet::~FastPropertySet() = default;
 
 // XPropertySet
 

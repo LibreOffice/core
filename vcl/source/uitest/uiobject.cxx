@@ -29,9 +29,7 @@
 #include <memory>
 #include <vector>
 
-UIObject::~UIObject()
-{
-}
+UIObject::~UIObject() = default;
 
 StringMap UIObject::get_state()
 {
@@ -544,9 +542,7 @@ ButtonUIObject::ButtonUIObject(const VclPtr<Button>& xButton):
 {
 }
 
-ButtonUIObject::~ButtonUIObject()
-{
-}
+ButtonUIObject::~ButtonUIObject() = default;
 
 StringMap ButtonUIObject::get_state()
 {
@@ -604,9 +600,7 @@ DialogUIObject::DialogUIObject(const VclPtr<Dialog>& xDialog):
 {
 }
 
-DialogUIObject::~DialogUIObject()
-{
-}
+DialogUIObject::~DialogUIObject() = default;
 
 StringMap DialogUIObject::get_state()
 {
@@ -634,9 +628,7 @@ EditUIObject::EditUIObject(const VclPtr<Edit>& xEdit):
 {
 }
 
-EditUIObject::~EditUIObject()
-{
-}
+EditUIObject::~EditUIObject() = default;
 
 void EditUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
@@ -736,9 +728,7 @@ MultiLineEditUIObject::MultiLineEditUIObject(const VclPtr<VclMultiLineEdit>& xEd
 {
 }
 
-MultiLineEditUIObject::~MultiLineEditUIObject()
-{
-}
+MultiLineEditUIObject::~MultiLineEditUIObject() = default;
 
 void MultiLineEditUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
@@ -797,9 +787,7 @@ CheckBoxUIObject::CheckBoxUIObject(const VclPtr<CheckBox>& xCheckbox):
 {
 }
 
-CheckBoxUIObject::~CheckBoxUIObject()
-{
-}
+CheckBoxUIObject::~CheckBoxUIObject() = default;
 
 void CheckBoxUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
@@ -848,9 +836,7 @@ RadioButtonUIObject::RadioButtonUIObject(const VclPtr<RadioButton>& xRadioButton
 {
 }
 
-RadioButtonUIObject::~RadioButtonUIObject()
-{
-}
+RadioButtonUIObject::~RadioButtonUIObject() = default;
 
 void RadioButtonUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
@@ -898,9 +884,7 @@ TabPageUIObject::TabPageUIObject(const VclPtr<TabPage>& xTabPage):
 {
 }
 
-TabPageUIObject::~TabPageUIObject()
-{
-}
+TabPageUIObject::~TabPageUIObject() = default;
 
 void TabPageUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
@@ -929,9 +913,7 @@ ListBoxUIObject::ListBoxUIObject(const VclPtr<ListBox>& xListBox):
 {
 }
 
-ListBoxUIObject::~ListBoxUIObject()
-{
-}
+ListBoxUIObject::~ListBoxUIObject() = default;
 
 void ListBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
@@ -1010,9 +992,7 @@ ComboBoxUIObject::ComboBoxUIObject(const VclPtr<ComboBox>& xComboBox):
 {
 }
 
-ComboBoxUIObject::~ComboBoxUIObject()
-{
-}
+ComboBoxUIObject::~ComboBoxUIObject() = default;
 
 void ComboBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
@@ -1082,9 +1062,7 @@ SpinUIObject::SpinUIObject(const VclPtr<SpinButton>& xSpinButton):
 {
 }
 
-SpinUIObject::~SpinUIObject()
-{
-}
+SpinUIObject::~SpinUIObject() = default;
 
 void SpinUIObject::execute(const OUString& rAction,
         const StringMap& /*rParameters*/)
@@ -1137,9 +1115,7 @@ SpinFieldUIObject::SpinFieldUIObject(const VclPtr<SpinField>& xSpinField):
 {
 }
 
-SpinFieldUIObject::~SpinFieldUIObject()
-{
-}
+SpinFieldUIObject::~SpinFieldUIObject() = default;
 
 void SpinFieldUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
@@ -1206,9 +1182,7 @@ TabControlUIObject::TabControlUIObject(const VclPtr<TabControl>& xTabControl):
 {
 }
 
-TabControlUIObject::~TabControlUIObject()
-{
-}
+TabControlUIObject::~TabControlUIObject() = default;
 
 void TabControlUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)

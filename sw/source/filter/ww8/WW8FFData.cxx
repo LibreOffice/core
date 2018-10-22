@@ -45,9 +45,7 @@ WW8FFData::WW8FFData()
 {
 }
 
-WW8FFData::~WW8FFData()
-{
-}
+WW8FFData::~WW8FFData() = default;
 
 void WW8FFData::setHelp(const OUString & rHelp)
 {

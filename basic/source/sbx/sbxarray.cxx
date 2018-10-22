@@ -70,9 +70,7 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
     return *this;
 }
 
-SbxArray::~SbxArray()
-{
-}
+SbxArray::~SbxArray() = default;
 
 SbxDataType SbxArray::GetType() const
 {
@@ -468,9 +466,7 @@ SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )
     return *this;
 }
 
-SbxDimArray::~SbxDimArray()
-{
-}
+SbxDimArray::~SbxDimArray() = default;
 
 void SbxDimArray::Clear()
 {

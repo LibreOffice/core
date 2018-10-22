@@ -74,9 +74,7 @@ SdXML3DObjectContext::SdXML3DObjectContext(
     }
 }
 
-SdXML3DObjectContext::~SdXML3DObjectContext()
-{
-}
+SdXML3DObjectContext::~SdXML3DObjectContext() = default;
 
 void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -137,9 +135,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     }
 }
 
-SdXML3DCubeObjectShapeContext::~SdXML3DCubeObjectShapeContext()
-{
-}
+SdXML3DCubeObjectShapeContext::~SdXML3DCubeObjectShapeContext() = default;
 
 void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -219,9 +215,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     }
 }
 
-SdXML3DSphereObjectShapeContext::~SdXML3DSphereObjectShapeContext()
-{
-}
+SdXML3DSphereObjectShapeContext::~SdXML3DSphereObjectShapeContext() = default;
 
 void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -288,9 +282,7 @@ SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     }
 }
 
-SdXML3DPolygonBasedShapeContext::~SdXML3DPolygonBasedShapeContext()
-{
-}
+SdXML3DPolygonBasedShapeContext::~SdXML3DPolygonBasedShapeContext() = default;
 
 void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -342,9 +334,7 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
 {
 }
 
-SdXML3DLatheObjectShapeContext::~SdXML3DLatheObjectShapeContext()
-{
-}
+SdXML3DLatheObjectShapeContext::~SdXML3DLatheObjectShapeContext() = default;
 
 void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -368,9 +358,7 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
 {
 }
 
-SdXML3DExtrudeObjectShapeContext::~SdXML3DExtrudeObjectShapeContext()
-{
-}
+SdXML3DExtrudeObjectShapeContext::~SdXML3DExtrudeObjectShapeContext() = default;
 
 void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {

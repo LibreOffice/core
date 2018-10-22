@@ -125,9 +125,7 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 
 // TODO: VirtualFunctionFinder: This is virtual function!
 
-OSection::~OSection()
-{
-}
+OSection::~OSection() = default;
 
 //IMPLEMENT_FORWARD_XINTERFACE2(OSection,SectionBase,SectionPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OSection, SectionBase )

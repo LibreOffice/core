@@ -159,9 +159,7 @@ FormCache::FormCache( const ScDocument* pDoc1 )
     eLanguage = ScGlobal::eLnge;
 }
 
-FormCache::~FormCache()
-{
-}
+FormCache::~FormCache() = default;
 
 SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
@@ -448,9 +446,7 @@ RangeNameBufferWK3::RangeNameBufferWK3(LOTUS_ROOT* pLotRoot)
     nIntCount = 1;
 }
 
-RangeNameBufferWK3::~RangeNameBufferWK3()
-{
-}
+RangeNameBufferWK3::~RangeNameBufferWK3() = default;
 
 void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )
 {

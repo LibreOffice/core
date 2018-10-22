@@ -55,11 +55,7 @@ namespace svx
         osl_atomic_decrement( &m_refCount );
     }
 
-
-    FmTextControlFeature::~FmTextControlFeature( )
-    {
-    }
-
+    FmTextControlFeature::~FmTextControlFeature() = default;
 
     void FmTextControlFeature::dispatch() const
     {

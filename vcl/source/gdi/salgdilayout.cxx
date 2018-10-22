@@ -62,9 +62,7 @@ SalGraphics::SalGraphics()
         m_nLayout = SalLayoutFlags::BiDiRtl;
 }
 
-SalGraphics::~SalGraphics()
-{
-}
+SalGraphics::~SalGraphics() = default;
 
 #if HAVE_FEATURE_OPENGL
 

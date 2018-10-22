@@ -178,9 +178,7 @@ void SwSectionFrame::DestroyImpl()
     SwLayoutFrame::DestroyImpl();
 }
 
-SwSectionFrame::~SwSectionFrame()
-{
-}
+SwSectionFrame::~SwSectionFrame() = default;
 
 void SwSectionFrame::DelEmpty( bool bRemove )
 {

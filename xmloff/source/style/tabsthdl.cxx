@@ -27,10 +27,7 @@ using namespace ::com::sun::star;
 // class XMLFontFamilyNamePropHdl
 
 
-XMLTabStopPropHdl::~XMLTabStopPropHdl()
-{
-    // Nothing to do
-}
+XMLTabStopPropHdl::~XMLTabStopPropHdl() = default;
 
 bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 {

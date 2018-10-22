@@ -52,7 +52,7 @@ using namespace ::comphelper;
 class DummyHandler_Impl : public ::cppu::WeakImplHelper< task::XInteractionHandler >
 {
 public:
-    DummyHandler_Impl() {}
+    DummyHandler_Impl() = default;
 
     virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& xRequest ) override;
 };

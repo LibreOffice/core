@@ -79,13 +79,9 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
 {
 }
 
-XMLErrors::XMLErrors()
-{
-}
+XMLErrors::XMLErrors() = default;
 
-XMLErrors::~XMLErrors()
-{
-}
+XMLErrors::~XMLErrors() = default;
 
 void XMLErrors::AddRecord(
     sal_Int32 nId,

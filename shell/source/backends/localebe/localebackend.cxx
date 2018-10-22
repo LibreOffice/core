@@ -237,16 +237,9 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
 
 #endif
 
+LocaleBackend::LocaleBackend() = default;
 
-LocaleBackend::LocaleBackend()
-{
-}
-
-
-LocaleBackend::~LocaleBackend()
-{
-}
-
+LocaleBackend::~LocaleBackend() = default;
 
 LocaleBackend* LocaleBackend::createInstance()
 {

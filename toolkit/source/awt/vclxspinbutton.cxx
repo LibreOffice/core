@@ -53,11 +53,7 @@ namespace toolkit
     {
     }
 
-
-    VCLXSpinButton::~VCLXSpinButton()
-    {
-    }
-
+    VCLXSpinButton::~VCLXSpinButton() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( VCLXSpinButton, VCLXWindow, VCLXSpinButton_Base )
 

@@ -45,9 +45,7 @@ PaneDockingWindow::PaneDockingWindow(
     SetSizePixel(LogicToPixel(Size(80,200), MapMode(MapUnit::MapAppFont)));
 }
 
-PaneDockingWindow::~PaneDockingWindow()
-{
-}
+PaneDockingWindow::~PaneDockingWindow() = default;
 
 void PaneDockingWindow::StateChanged( StateChangedType nType )
 {

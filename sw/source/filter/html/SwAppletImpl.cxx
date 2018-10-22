@@ -168,9 +168,7 @@ bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
 }
 #endif
 
-SwApplet_Impl::~SwApplet_Impl()
-{
-}
+SwApplet_Impl::~SwApplet_Impl() = default;
 void SwApplet_Impl::FinishApplet()
 {
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );

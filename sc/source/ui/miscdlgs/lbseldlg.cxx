@@ -37,9 +37,7 @@ ScSelEntryDlg::ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> 
         m_xLb->select(0);
 }
 
-ScSelEntryDlg::~ScSelEntryDlg()
-{
-}
+ScSelEntryDlg::~ScSelEntryDlg() = default;
 
 OUString ScSelEntryDlg::GetSelectedEntry() const
 {

@@ -34,9 +34,7 @@ ChartSpaceModel::ChartSpaceModel(bool bMSO2007Doc) :
 {
 }
 
-ChartSpaceModel::~ChartSpaceModel()
-{
-}
+ChartSpaceModel::~ChartSpaceModel() = default;
 
 } // namespace chart
 } // namespace drawingml

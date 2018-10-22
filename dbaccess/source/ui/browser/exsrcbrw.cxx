@@ -71,10 +71,7 @@ SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< css::uno::XC
 
 }
 
-SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
-{
-
-}
+SbaExternalSourceBrowser::~SbaExternalSourceBrowser() = default;
 
 css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames()
 {

@@ -70,9 +70,7 @@ XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLTransGradientStyleImport::~XMLTransGradientStyleImport()
-{
-}
+XMLTransGradientStyleImport::~XMLTransGradientStyleImport() = default;
 
 void XMLTransGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
@@ -201,9 +199,7 @@ XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
 {
 }
 
-XMLTransGradientStyleExport::~XMLTransGradientStyleExport()
-{
-}
+XMLTransGradientStyleExport::~XMLTransGradientStyleExport() = default;
 
 void XMLTransGradientStyleExport::exportXML(
     const OUString& rStrName,

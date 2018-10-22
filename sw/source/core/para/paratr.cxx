@@ -59,9 +59,7 @@ SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
 {
 }
 
-SwFormatDrop::~SwFormatDrop()
-{
-}
+SwFormatDrop::~SwFormatDrop() = default;
 
 void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
 {

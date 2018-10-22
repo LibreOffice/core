@@ -315,8 +315,6 @@ NeonPropFindRequest::NeonPropFindRequest(
         nError = NE_ERROR;
 }
 
-NeonPropFindRequest::~NeonPropFindRequest( )
-{
-}
+NeonPropFindRequest::~NeonPropFindRequest() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

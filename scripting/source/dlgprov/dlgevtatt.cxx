@@ -181,11 +181,7 @@ namespace dlgprov
             listenersForTypes[ OUString("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
-
-    DialogEventsAttacherImpl::~DialogEventsAttacherImpl()
-    {
-    }
-
+    DialogEventsAttacherImpl::~DialogEventsAttacherImpl() = default;
 
     Reference< script::XScriptListener > const &
     DialogEventsAttacherImpl::getScriptListenerForKey( const OUString& sKey )
@@ -374,11 +370,7 @@ namespace dlgprov
     {
     }
 
-
-    DialogAllListenerImpl::~DialogAllListenerImpl()
-    {
-    }
-
+    DialogAllListenerImpl::~DialogAllListenerImpl() = default;
 
     void DialogAllListenerImpl::firing_impl( const AllEventObject& Event, Any* pRet )
     {
@@ -447,11 +439,7 @@ namespace dlgprov
     {
     }
 
-
-    DialogScriptListenerImpl::~DialogScriptListenerImpl()
-    {
-    }
-
+    DialogScriptListenerImpl::~DialogScriptListenerImpl() = default;
 
     void DialogSFScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {

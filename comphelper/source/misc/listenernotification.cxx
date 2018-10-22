@@ -36,8 +36,7 @@ namespace comphelper
     {
     }
 
-    OListenerContainer::~OListenerContainer() {}
-
+    OListenerContainer::~OListenerContainer() = default;
 
     void OListenerContainer::impl_addListener( const Reference< XEventListener >& _rxListener )
     {

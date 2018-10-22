@@ -35,13 +35,9 @@ const sal_Int32 PROGRESS_RANGE      = 1000000;
 
 } // namespace
 
-IProgressBar::~IProgressBar()
-{
-}
+IProgressBar::~IProgressBar() = default;
 
-ISegmentProgressBar::~ISegmentProgressBar()
-{
-}
+ISegmentProgressBar::~ISegmentProgressBar() = default;
 
 ProgressBar::ProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     mxIndicator( rxIndicator ),

@@ -71,11 +71,7 @@ SearchThread::SearchThread( SearchProgress* pProgress,
 {
 }
 
-
-SearchThread::~SearchThread()
-{
-}
-
+SearchThread::~SearchThread() = default;
 
 void SearchThread::execute()
 {
@@ -268,11 +264,7 @@ TakeThread::TakeThread(
 {
 }
 
-
-TakeThread::~TakeThread()
-{
-}
-
+TakeThread::~TakeThread() = default;
 
 void TakeThread::execute()
 {
@@ -500,9 +492,7 @@ TitleDialog::TitleDialog(weld::Window* pParent, const OUString& rOldTitle)
     m_xEdit->grab_focus();
 }
 
-TitleDialog::~TitleDialog()
-{
-}
+TitleDialog::~TitleDialog() = default;
 
 GalleryIdDialog::GalleryIdDialog(weld::Window* pParent, GalleryTheme* _pThm)
     : GenericDialogController(pParent, "cui/ui/gallerythemeiddialog.ui", "GalleryThemeIDDialog")
@@ -520,9 +510,7 @@ GalleryIdDialog::GalleryIdDialog(weld::Window* pParent, GalleryTheme* _pThm)
     m_xBtnOk->connect_clicked(LINK(this, GalleryIdDialog, ClickOkHdl));
 }
 
-GalleryIdDialog::~GalleryIdDialog()
-{
-}
+GalleryIdDialog::~GalleryIdDialog() = default;
 
 IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, weld::Button&, void)
 {

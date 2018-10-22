@@ -29,11 +29,7 @@ NumberFormatCodeMapper::NumberFormatCodeMapper(
         m_xLocaleData.set( css::i18n::LocaleData2::create( rxContext ) );
 }
 
-
-NumberFormatCodeMapper::~NumberFormatCodeMapper()
-{
-}
-
+NumberFormatCodeMapper::~NumberFormatCodeMapper() = default;
 
 css::i18n::NumberFormatCode SAL_CALL
 NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const css::lang::Locale& rLocale )

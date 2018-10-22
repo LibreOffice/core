@@ -1057,11 +1057,7 @@ HierarchyEntry::iterator::iterator()
 {
 }
 
-
-HierarchyEntry::iterator::~iterator()
-{
-}
-
+HierarchyEntry::iterator::~iterator() = default;
 
 const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 {

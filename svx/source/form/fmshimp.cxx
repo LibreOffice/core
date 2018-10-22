@@ -657,11 +657,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     EnableNotification(aNames);
 }
 
-
-FmXFormShell::~FmXFormShell()
-{
-}
-
+FmXFormShell::~FmXFormShell() = default;
 
 Reference< css::frame::XModel > FmXFormShell::getContextDocument_Lock() const
 {

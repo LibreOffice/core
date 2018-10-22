@@ -36,9 +36,7 @@ ContextChangeBroadcaster::ContextChangeBroadcaster()
 {
 }
 
-ContextChangeBroadcaster::~ContextChangeBroadcaster()
-{
-}
+ContextChangeBroadcaster::~ContextChangeBroadcaster() = default;
 
 void ContextChangeBroadcaster::Initialize (const ::rtl::OUString& rsContextName)
 {

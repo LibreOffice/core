@@ -462,9 +462,7 @@ SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
 {
 }
 
-SdXMLEventsContext::~SdXMLEventsContext()
-{
-}
+SdXMLEventsContext::~SdXMLEventsContext() = default;
 
 SvXMLImportContextRef SdXMLEventsContext::CreateChildContext( sal_uInt16 nPrfx, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )

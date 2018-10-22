@@ -88,8 +88,7 @@ static Reference<XInterface> NamingService_Impl_create(
     return *new NamingService_Impl();
 }
 
-
-NamingService_Impl::NamingService_Impl() {}
+NamingService_Impl::NamingService_Impl() = default;
 
 // XServiceInfo
 OUString NamingService_Impl::getImplementationName()

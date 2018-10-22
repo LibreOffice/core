@@ -79,11 +79,7 @@ namespace pcr
 
     //= ISQLCommandAdapter
 
-
-    ISQLCommandAdapter::~ISQLCommandAdapter()
-    {
-    }
-
+    ISQLCommandAdapter::~ISQLCommandAdapter() = default;
 
     //= SQLCommandDesigner
 
@@ -104,11 +100,7 @@ namespace pcr
         impl_doOpenDesignerFrame_nothrow();
     }
 
-
-    SQLCommandDesigner::~SQLCommandDesigner()
-    {
-    }
-
+    SQLCommandDesigner::~SQLCommandDesigner() = default;
 
     void SAL_CALL SQLCommandDesigner::propertyChange( const PropertyChangeEvent& Event )
     {

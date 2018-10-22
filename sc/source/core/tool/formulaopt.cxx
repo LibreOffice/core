@@ -130,9 +130,7 @@ ScTpFormulaItem::ScTpFormulaItem( const ScFormulaOptions& rOpt ) :
 {
 }
 
-ScTpFormulaItem::~ScTpFormulaItem()
-{
-}
+ScTpFormulaItem::~ScTpFormulaItem() = default;
 
 bool ScTpFormulaItem::operator==( const SfxPoolItem& rItem ) const
 {

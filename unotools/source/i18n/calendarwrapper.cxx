@@ -36,9 +36,7 @@ CalendarWrapper::CalendarWrapper(
     xC = LocaleCalendar2::create(rxContext);
 }
 
-CalendarWrapper::~CalendarWrapper()
-{
-}
+CalendarWrapper::~CalendarWrapper() = default;
 
 void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale )
 {

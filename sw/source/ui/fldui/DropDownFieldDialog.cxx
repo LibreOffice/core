@@ -79,9 +79,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(weld::Window *pParent, SwWrtShell &
     m_xListItemsLB->grab_focus();
 }
 
-sw::DropDownFieldDialog::~DropDownFieldDialog()
-{
-}
+sw::DropDownFieldDialog::~DropDownFieldDialog() = default;
 
 void sw::DropDownFieldDialog::Apply()
 {

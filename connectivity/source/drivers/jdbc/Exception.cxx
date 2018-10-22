@@ -25,8 +25,7 @@ using namespace connectivity;
 
 jclass java_lang_Exception::theClass = nullptr;
 
-java_lang_Exception::~java_lang_Exception()
-{}
+java_lang_Exception::~java_lang_Exception() = default;
 
 jclass java_lang_Exception::getMyClass() const
 {

@@ -37,13 +37,9 @@ ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNew
 {
 }
 
-ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
-    nStart  ( rEntry.nStart ),
-    nSize   ( rEntry.nSize ),
-    bHidden ( rEntry.bHidden ),
-    bVisible( rEntry.bVisible )
-{
-}
+ScOutlineEntry::ScOutlineEntry(const ScOutlineEntry& rEntry)
+
+    = default;
 
 SCCOLROW ScOutlineEntry::GetEnd() const
 {
@@ -87,7 +83,7 @@ void ScOutlineEntry::SetVisible( bool bNewVisible )
     bVisible = bNewVisible;
 }
 
-ScOutlineCollection::ScOutlineCollection() {}
+ScOutlineCollection::ScOutlineCollection() = default;
 
 size_t ScOutlineCollection::size() const
 {
@@ -736,15 +732,11 @@ void ScOutlineArray::finalizeImport(const ScTable& rTable)
     }
 }
 
-ScOutlineTable::ScOutlineTable()
-{
-}
+ScOutlineTable::ScOutlineTable() = default;
 
-ScOutlineTable::ScOutlineTable( const ScOutlineTable& rOutline ) :
-    aColOutline( rOutline.aColOutline ),
-    aRowOutline( rOutline.aRowOutline )
-{
-}
+ScOutlineTable::ScOutlineTable(const ScOutlineTable& rOutline)
+
+    = default;
 
 bool ScOutlineTable::TestInsertCol( SCSIZE nSize )
 {

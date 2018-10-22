@@ -85,10 +85,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     //m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());
 }
 
-OResultSet::~OResultSet()
-{
-}
-
+OResultSet::~OResultSet() = default;
 
 void OResultSet::disposing()
 {

@@ -105,9 +105,7 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
 }
 
-OCommonStatement::~OCommonStatement()
-{
-}
+OCommonStatement::~OCommonStatement() = default;
 
 void OCommonStatement::disposeResultSet()
 {

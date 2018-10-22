@@ -86,8 +86,7 @@ bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
     }
 }
 
-ParseManager::~ParseManager() {}
-
+ParseManager::~ParseManager() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

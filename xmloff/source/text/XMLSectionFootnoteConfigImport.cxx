@@ -58,9 +58,7 @@ XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
 {
 }
 
-XMLSectionFootnoteConfigImport::~XMLSectionFootnoteConfigImport()
-{
-}
+XMLSectionFootnoteConfigImport::~XMLSectionFootnoteConfigImport() = default;
 
 void XMLSectionFootnoteConfigImport::StartElement(
     const Reference<XAttributeList> & xAttrList)

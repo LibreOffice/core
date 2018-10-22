@@ -31,11 +31,7 @@ DXFBlock::DXFBlock()
 {
 }
 
-
-DXFBlock::~DXFBlock()
-{
-}
-
+DXFBlock::~DXFBlock() = default;
 
 void DXFBlock::Read(DXFGroupReader & rDGR)
 {

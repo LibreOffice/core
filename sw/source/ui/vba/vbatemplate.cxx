@@ -52,9 +52,7 @@ SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >
 {
 }
 
-SwVbaTemplate::~SwVbaTemplate()
-{
-}
+SwVbaTemplate::~SwVbaTemplate() = default;
 
 OUString
 SwVbaTemplate::getName()

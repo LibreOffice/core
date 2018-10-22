@@ -49,13 +49,9 @@ using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
-VCLXTopWindow_Base::VCLXTopWindow_Base()
-{
-}
+VCLXTopWindow_Base::VCLXTopWindow_Base() = default;
 
-VCLXTopWindow_Base::~VCLXTopWindow_Base()
-{
-}
+VCLXTopWindow_Base::~VCLXTopWindow_Base() = default;
 
 Any VCLXTopWindow_Base::queryInterface( const Type & rType )
 {
@@ -246,13 +242,9 @@ void VCLXTopWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
-VCLXTopWindow::VCLXTopWindow()
-{
-}
+VCLXTopWindow::VCLXTopWindow() = default;
 
-VCLXTopWindow::~VCLXTopWindow()
-{
-}
+VCLXTopWindow::~VCLXTopWindow() = default;
 
 vcl::Window* VCLXTopWindow::GetWindowImpl()
 {

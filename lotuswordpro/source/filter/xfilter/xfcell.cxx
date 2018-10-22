@@ -74,9 +74,7 @@ XFCell::XFCell()
     , m_bProtect(false)
 {}
 
-XFCell::~XFCell()
-{
-}
+XFCell::~XFCell() = default;
 
 void    XFCell::Add(XFContent *pContent)
 {

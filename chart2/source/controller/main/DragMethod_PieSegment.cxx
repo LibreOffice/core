@@ -67,9 +67,7 @@ DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
     if( m_fDragRange == 0.0 )
         m_fDragRange = 1.0;
 }
-DragMethod_PieSegment::~DragMethod_PieSegment()
-{
-}
+DragMethod_PieSegment::~DragMethod_PieSegment() = default;
 void DragMethod_PieSegment::TakeSdrDragComment(OUString& rStr) const
 {
     rStr = SchResId(STR_STATUS_PIE_SEGMENT_EXPLODED);

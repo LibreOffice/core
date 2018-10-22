@@ -35,9 +35,7 @@ SwVbaCell::SwVbaCell( const uno::Reference< ooo::vba::XHelperInterface >& rParen
 {
 }
 
-SwVbaCell::~SwVbaCell()
-{
-}
+SwVbaCell::~SwVbaCell() = default;
 
 ::sal_Int32 SAL_CALL SwVbaCell::getWidth()
 {

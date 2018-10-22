@@ -60,7 +60,7 @@ IncomingRequest::IncomingRequest(
     assert(member.get()->bComplete);
 }
 
-IncomingRequest::~IncomingRequest() {}
+IncomingRequest::~IncomingRequest() = default;
 
 void IncomingRequest::execute() const {
     BinaryAny ret;

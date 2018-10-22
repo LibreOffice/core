@@ -879,9 +879,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     rPropMap.setProperty(PROP_ShadowFormat, aFormat);
 }
 
-TextpathModel::TextpathModel()
-{
-}
+TextpathModel::TextpathModel() = default;
 
 static beans::PropertyValue lcl_createTextpathProps()
 {

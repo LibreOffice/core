@@ -47,9 +47,7 @@ Font::Font() : mpImplFont(theGlobalDefault::get())
 {
 }
 
-Font::Font( const vcl::Font& rFont ) : mpImplFont( rFont.mpImplFont )
-{
-}
+Font::Font(const vcl::Font& rFont) = default;
 
 Font::Font( vcl::Font&& rFont ) : mpImplFont( std::move(rFont.mpImplFont) )
 {
@@ -74,9 +72,7 @@ Font::Font( FontFamily eFamily, const Size& rSize ) : mpImplFont()
     mpImplFont->SetFontSize( rSize );
 }
 
-Font::~Font()
-{
-}
+Font::~Font() = default;
 
 void Font::SetColor( const Color& rColor )
 {
@@ -279,11 +275,7 @@ void Font::SetWordLineMode( bool bWordLine )
         mpImplFont->mbWordLine = bWordLine;
 }
 
-Font& Font::operator=( const vcl::Font& rFont )
-{
-    mpImplFont = rFont.mpImplFont;
-    return *this;
-}
+Font& Font::operator=(const vcl::Font& rFont) = default;
 
 Font& Font::operator=( vcl::Font&& rFont )
 {
@@ -743,38 +735,9 @@ ImplFont::ImplFont() :
     mnQuality( 0 )
 {}
 
-ImplFont::ImplFont( const ImplFont& rImplFont ) :
-    maFamilyName( rImplFont.maFamilyName ),
-    maStyleName( rImplFont.maStyleName ),
-    meWeight( rImplFont.meWeight ),
-    meFamily( rImplFont.meFamily ),
-    mePitch( rImplFont.mePitch ),
-    meWidthType( rImplFont.meWidthType ),
-    meItalic( rImplFont.meItalic ),
-    meAlign( rImplFont.meAlign ),
-    meUnderline( rImplFont.meUnderline ),
-    meOverline( rImplFont.meOverline ),
-    meStrikeout( rImplFont.meStrikeout ),
-    meRelief( rImplFont.meRelief ),
-    meEmphasisMark( rImplFont.meEmphasisMark ),
-    meKerning( rImplFont.meKerning ),
-    maAverageFontSize( rImplFont.maAverageFontSize ),
-    meCharSet( rImplFont.meCharSet ),
-    maLanguageTag( rImplFont.maLanguageTag ),
-    maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
-    mbSymbolFlag( rImplFont.mbSymbolFlag ),
-    mbOutline( rImplFont.mbOutline ),
-    mbConfigLookup( rImplFont.mbConfigLookup ),
-    mbShadow( rImplFont.mbShadow ),
-    mbVertical( rImplFont.mbVertical ),
-    mbTransparent( rImplFont.mbTransparent ),
-    maColor( rImplFont.maColor ),
-    maFillColor( rImplFont.maFillColor ),
-    maMapNames( rImplFont.maMapNames ),
-    mbWordLine( rImplFont.mbWordLine ),
-    mnOrientation( rImplFont.mnOrientation ),
-    mnQuality( rImplFont.mnQuality )
-{}
+ImplFont::ImplFont(const ImplFont& rImplFont)
+
+    = default;
 
 bool ImplFont::operator==( const ImplFont& rOther ) const
 {

@@ -49,9 +49,7 @@ namespace
 class ScAreaData
 {
 public:
-    ScAreaData()
-    {
-    }
+    ScAreaData() = default;
 
     void Set( const OUString& rName, const OUString& rArea )
     {

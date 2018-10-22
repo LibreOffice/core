@@ -56,9 +56,7 @@ OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
 {
 }
 
-OStatementCommonBase::~OStatementCommonBase()
-{
-}
+OStatementCommonBase::~OStatementCommonBase() = default;
 
 void OStatementCommonBase::disposeResultSet()
 {

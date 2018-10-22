@@ -79,9 +79,7 @@ SdrDragView::SdrDragView(
     ImpClearVars();
 }
 
-SdrDragView::~SdrDragView()
-{
-}
+SdrDragView::~SdrDragView() = default;
 
 bool SdrDragView::IsAction() const
 {

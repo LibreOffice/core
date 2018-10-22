@@ -456,20 +456,20 @@ SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
         m_pDocShell(&rDocShell)
     { }
 
-SwXStyleFamilies::~SwXStyleFamilies()
-    { }
+    SwXStyleFamilies::~SwXStyleFamilies() = default;
 
-uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
-{
-    SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    auto pEntries(lcl_GetStyleFamilyEntries());
-    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
-        [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
-    if(pEntry == pEntries->end())
-        throw container::NoSuchElementException();
-    return getByIndex(pEntry-pEntries->begin());
+    uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
+    {
+        SolarMutexGuard aGuard;
+        if (!IsValid())
+            throw uno::RuntimeException();
+        auto pEntries(lcl_GetStyleFamilyEntries());
+        const auto pEntry
+            = std::find_if(pEntries->begin(), pEntries->end(),
+                           [&Name](const StyleFamilyEntry& e) { return e.m_sName == Name; });
+        if (pEntry == pEntries->end())
+            throw container::NoSuchElementException();
+        return getByIndex(pEntry - pEntries->begin());
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
@@ -3368,9 +3368,7 @@ SwXAutoStyles::SwXAutoStyles(SwDocShell& rDocShell) :
 {
 }
 
-SwXAutoStyles::~SwXAutoStyles()
-{
-}
+SwXAutoStyles::~SwXAutoStyles() = default;
 
 sal_Int32 SwXAutoStyles::getCount()
 {
@@ -3471,9 +3469,7 @@ SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoS
     pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXAutoStyleFamily::~SwXAutoStyleFamily()
-{
-}
+SwXAutoStyleFamily::~SwXAutoStyleFamily() = default;
 
 void SwXAutoStyleFamily::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
@@ -3769,9 +3765,7 @@ SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwA
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
-{
-}
+SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator() = default;
 
 void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
@@ -3823,9 +3817,7 @@ SwXAutoStyle::SwXAutoStyle(
     mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXAutoStyle::~SwXAutoStyle()
-{
-}
+SwXAutoStyle::~SwXAutoStyle() = default;
 
 void SwXAutoStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {

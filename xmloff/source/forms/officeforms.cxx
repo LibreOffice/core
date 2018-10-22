@@ -45,9 +45,7 @@ namespace xmloff
     {
     }
 
-    OFormsRootImport::~OFormsRootImport()
-    {
-    }
+    OFormsRootImport::~OFormsRootImport() = default;
 
     SvXMLImportContextRef OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const Reference< XAttributeList>& xAttrList )
@@ -123,9 +121,7 @@ namespace xmloff
         m_pImplElement.reset( new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, true, true) );
     }
 
-    OFormsRootExport::~OFormsRootExport( )
-    {
-    }
+    OFormsRootExport::~OFormsRootExport() = default;
 
     void OFormsRootExport::implExportBool(SvXMLExport& _rExp, OfficeFormsAttributes _eAttribute,
         const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,

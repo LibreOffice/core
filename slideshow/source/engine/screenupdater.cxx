@@ -86,10 +86,8 @@ namespace internal
     {
     }
 
-    ScreenUpdater::~ScreenUpdater()
-    {
+    ScreenUpdater::~ScreenUpdater() = default;
         // outline because of pimpl
-    }
 
     void ScreenUpdater::notifyUpdate()
     {

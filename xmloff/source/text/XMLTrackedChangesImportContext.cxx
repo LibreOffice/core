@@ -40,9 +40,7 @@ XMLTrackedChangesImportContext::XMLTrackedChangesImportContext(
 {
 }
 
-XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext()
-{
-}
+XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext() = default;
 
 void XMLTrackedChangesImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList )

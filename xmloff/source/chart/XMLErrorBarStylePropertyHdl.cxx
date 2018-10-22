@@ -30,9 +30,7 @@ XMLErrorBarStylePropertyHdl::XMLErrorBarStylePropertyHdl(  const SvXMLEnumMapEnt
 {
 }
 
-XMLErrorBarStylePropertyHdl::~XMLErrorBarStylePropertyHdl()
-{
-}
+XMLErrorBarStylePropertyHdl::~XMLErrorBarStylePropertyHdl() = default;
 
 bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
                                               const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const

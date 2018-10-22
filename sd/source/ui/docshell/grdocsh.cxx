@@ -60,9 +60,7 @@ GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags) :
     SetStyleFamily( SfxStyleFamily::Para );
 }
 
-GraphicDocShell::~GraphicDocShell()
-{
-}
+GraphicDocShell::~GraphicDocShell() = default;
 
 } // end of namespace sd
 

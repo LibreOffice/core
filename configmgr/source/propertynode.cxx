@@ -81,7 +81,7 @@ void PropertyNode::setExternal(int layer, OUString const & descriptor) {
     externalDescriptor_ = descriptor;
 }
 
-PropertyNode::~PropertyNode() {}
+PropertyNode::~PropertyNode() = default;
 
 Node::Kind PropertyNode::kind() const {
     return KIND_PROPERTY;

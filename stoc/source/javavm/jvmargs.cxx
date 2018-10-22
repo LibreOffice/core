@@ -22,10 +22,8 @@
 #include <rtl/ustring.hxx>
 
 namespace stoc_javavm {
-
-JVM::JVM() throw()//: _enabled(sal_False)
-{
-}
+JVM::JVM() throw() //: _enabled(sal_False)
+    = default;
 
 void JVM::pushProp(const OUString & property)
 {

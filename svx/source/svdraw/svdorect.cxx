@@ -100,9 +100,7 @@ SdrRectObj::SdrRectObj(
     bClosedObj=true;
 }
 
-SdrRectObj::~SdrRectObj()
-{
-}
+SdrRectObj::~SdrRectObj() = default;
 
 void SdrRectObj::SetXPolyDirty()
 {

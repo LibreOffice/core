@@ -112,9 +112,7 @@ XFTimeStyle::XFTimeStyle()
     m_bTruncate = true;
 }
 
-XFTimeStyle::~XFTimeStyle()
-{
-}
+XFTimeStyle::~XFTimeStyle() = default;
 
 enumXFStyle XFTimeStyle::GetStyleFamily()
 {

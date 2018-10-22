@@ -187,9 +187,7 @@ SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 n
     SetFieldUnit( *m_xRMEdit, eFUnit );
 }
 
-SvxHFPage::~SvxHFPage()
-{
-}
+SvxHFPage::~SvxHFPage() = default;
 
 bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
 {

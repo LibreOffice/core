@@ -67,9 +67,7 @@ FontMenuController::FontMenuController( const css::uno::Reference< css::uno::XCo
 {
 }
 
-FontMenuController::~FontMenuController()
-{
-}
+FontMenuController::~FontMenuController() = default;
 
 // private function
 void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )

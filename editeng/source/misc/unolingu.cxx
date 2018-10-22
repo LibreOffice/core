@@ -85,7 +85,7 @@ class ThesDummy_Impl :
     void GetThes_Impl();
 
 public:
-    ThesDummy_Impl() {}
+    ThesDummy_Impl() = default;
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL

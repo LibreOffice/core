@@ -105,9 +105,7 @@ void ScHeaderControl::SetWidth( long nNew )
     }
 }
 
-ScHeaderControl::~ScHeaderControl()
-{
-}
+ScHeaderControl::~ScHeaderControl() = default;
 
 void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 {

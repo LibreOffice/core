@@ -60,9 +60,7 @@ void SdPresentationLayoutUndoAction::Redo()
         pPage->SetAutoLayout(eNewAutoLayout, true);
 }
 
-SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
-{
-}
+SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction() = default;
 
 OUString SdPresentationLayoutUndoAction::GetComment() const
 {

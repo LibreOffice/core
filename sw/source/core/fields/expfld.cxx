@@ -1136,9 +1136,7 @@ SwInputField::SwInputField( SwInputFieldType* pFieldType,
 {
 }
 
-SwInputField::~SwInputField()
-{
-}
+SwInputField::~SwInputField() = default;
 
 void SwInputField::SetFormatField( SwFormatField& rFormatField )
 {

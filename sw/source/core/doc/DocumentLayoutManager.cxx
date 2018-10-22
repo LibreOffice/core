@@ -499,10 +499,7 @@ void DocumentLayoutManager::ClearSwLayouterEntries()
     SwLayouter::ClearMoveBwdLayoutInfo( m_rDoc );
 }
 
-DocumentLayoutManager::~DocumentLayoutManager()
-{
-}
-
+DocumentLayoutManager::~DocumentLayoutManager() = default;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

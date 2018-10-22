@@ -74,9 +74,7 @@ ScLookupCache::ScLookupCache( ScDocument * pDoc, const ScRange & rRange ) :
 {
 }
 
-ScLookupCache::~ScLookupCache()
-{
-}
+ScLookupCache::~ScLookupCache() = default;
 
 ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress ) const

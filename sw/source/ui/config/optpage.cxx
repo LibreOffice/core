@@ -367,9 +367,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(TabPageParent pParent,
     m_xProspectCB_RTL->show(aCTLOptions.IsCTLFontEnabled());
 }
 
-SwAddPrinterTabPage::~SwAddPrinterTabPage()
-{
-}
+SwAddPrinterTabPage::~SwAddPrinterTabPage() = default;
 
 void SwAddPrinterTabPage::SetPreview(bool bPrev)
 {
@@ -1557,9 +1555,7 @@ SwMarkPreview::SwMarkPreview( vcl::Window *pParent, WinBits nWinBits ) :
 
 VCL_BUILDER_FACTORY_ARGS(SwMarkPreview, 0)
 
-SwMarkPreview::~SwMarkPreview()
-{
-}
+SwMarkPreview::~SwMarkPreview() = default;
 
 void SwMarkPreview::InitColors()
 {

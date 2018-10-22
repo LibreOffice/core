@@ -29,9 +29,7 @@ GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
 {
 }
 
-GalleryCodec::~GalleryCodec()
-{
-}
+GalleryCodec::~GalleryCodec() = default;
 
 bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {

@@ -47,9 +47,7 @@ WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >
     m_xSeekable.set( m_xInStream, uno::UNO_QUERY_THROW );
 }
 
-WrapStreamForShare::~WrapStreamForShare()
-{
-}
+WrapStreamForShare::~WrapStreamForShare() = default;
 
 // XInputStream
 sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

@@ -56,9 +56,7 @@ SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >
 {
 }
 
-SystemExec::~SystemExec()
-{
-}
+SystemExec::~SystemExec() = default;
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,

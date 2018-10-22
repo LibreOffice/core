@@ -130,9 +130,7 @@ DropdownToolbarController::DropdownToolbarController(
     m_pListBoxControl->SetDropDownLineCount( 5 );
 }
 
-DropdownToolbarController::~DropdownToolbarController()
-{
-}
+DropdownToolbarController::~DropdownToolbarController() = default;
 
 void SAL_CALL DropdownToolbarController::dispose()
 {

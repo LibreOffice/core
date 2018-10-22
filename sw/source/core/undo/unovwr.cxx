@@ -95,9 +95,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     bCacheComment = false;
 }
 
-SwUndoOverwrite::~SwUndoOverwrite()
-{
-}
+SwUndoOverwrite::~SwUndoOverwrite() = default;
 
 bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
@@ -347,9 +345,7 @@ SwUndoTransliterate::SwUndoTransliterate(
 {
 }
 
-SwUndoTransliterate::~SwUndoTransliterate()
-{
-}
+SwUndoTransliterate::~SwUndoTransliterate() = default;
 
 void SwUndoTransliterate::UndoImpl(::sw::UndoRedoContext & rContext)
 {

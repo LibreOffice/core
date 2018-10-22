@@ -162,7 +162,7 @@ void UpdateInstallDialog::Thread::stop() {
     }
 }
 
-UpdateInstallDialog::Thread::~Thread() {}
+UpdateInstallDialog::Thread::~Thread() = default;
 
 void UpdateInstallDialog::Thread::execute()
 {

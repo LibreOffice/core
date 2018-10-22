@@ -93,9 +93,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLFilterContext::~ScXMLFilterContext()
-{
-}
+ScXMLFilterContext::~ScXMLFilterContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLFilterContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -200,9 +198,7 @@ ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
     pFilterContext->OpenConnection(false);
 }
 
-ScXMLAndContext::~ScXMLAndContext()
-{
-}
+ScXMLAndContext::~ScXMLAndContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLAndContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -247,9 +243,7 @@ ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
     pFilterContext->OpenConnection(true);
 }
 
-ScXMLOrContext::~ScXMLOrContext()
-{
-}
+ScXMLOrContext::~ScXMLOrContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLOrContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -334,9 +328,7 @@ ScXMLConditionContext::ScXMLConditionContext(
     }
 }
 
-ScXMLConditionContext::~ScXMLConditionContext()
-{
-}
+ScXMLConditionContext::~ScXMLConditionContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -477,9 +469,7 @@ ScXMLSetItemContext::ScXMLSetItemContext(
     }
 }
 
-ScXMLSetItemContext::~ScXMLSetItemContext()
-{
-}
+ScXMLSetItemContext::~ScXMLSetItemContext() = default;
 
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -537,9 +527,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLDPFilterContext::~ScXMLDPFilterContext()
-{
-}
+ScXMLDPFilterContext::~ScXMLDPFilterContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPFilterContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -603,9 +591,7 @@ ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
     pFilterContext->OpenConnection(false);
 }
 
-ScXMLDPAndContext::~ScXMLDPAndContext()
-{
-}
+ScXMLDPAndContext::~ScXMLDPAndContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPAndContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -647,9 +633,7 @@ ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
     pFilterContext->OpenConnection(true);
 }
 
-ScXMLDPOrContext::~ScXMLDPOrContext()
-{
-}
+ScXMLDPOrContext::~ScXMLDPOrContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPOrContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -730,9 +714,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLDPConditionContext::~ScXMLDPConditionContext()
-{
-}
+ScXMLDPConditionContext::~ScXMLDPConditionContext() = default;
 
 void ScXMLDPConditionContext::getOperatorXML(
     const OUString& sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType)

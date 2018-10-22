@@ -1082,8 +1082,6 @@ bool usesClipActions(const GDIMetaFile& rSource)
     return false;
 }
 
-MetafileAccessor::~MetafileAccessor()
-{
-}
+MetafileAccessor::~MetafileAccessor() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

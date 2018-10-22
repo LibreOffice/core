@@ -323,11 +323,7 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
         mxBroadcaster->addEventListener( this );
 }
 
-
-SfxEvents_Impl::~SfxEvents_Impl()
-{
-}
-
+SfxEvents_Impl::~SfxEvents_Impl() = default;
 
 SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell )
 {

@@ -56,9 +56,7 @@ StatusBarWrapper::StatusBarWrapper(
 {
 }
 
-StatusBarWrapper::~StatusBarWrapper()
-{
-}
+StatusBarWrapper::~StatusBarWrapper() = default;
 
 void SAL_CALL StatusBarWrapper::dispose()
 {

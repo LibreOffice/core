@@ -37,9 +37,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
     }
 }
 
-IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
-{
-}
+IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper() = default;
 
 OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rText,
                                                  const OUString& rTextReading,

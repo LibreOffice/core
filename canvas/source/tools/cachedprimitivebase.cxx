@@ -39,9 +39,7 @@ namespace canvas
     {
     }
 
-    CachedPrimitiveBase::~CachedPrimitiveBase()
-    {
-    }
+    CachedPrimitiveBase::~CachedPrimitiveBase() = default;
 
     void SAL_CALL CachedPrimitiveBase::disposing()
     {

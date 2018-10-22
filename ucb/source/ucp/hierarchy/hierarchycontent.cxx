@@ -147,10 +147,7 @@ HierarchyContent::HierarchyContent(
 
 
 // virtual
-HierarchyContent::~HierarchyContent()
-{
-}
-
+HierarchyContent::~HierarchyContent() = default;
 
 // XInterface methods.
 

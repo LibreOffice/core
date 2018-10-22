@@ -348,9 +348,7 @@ DictionaryEntry::DictionaryEntry( const OUString& rTerm, const OUString& rMappin
         m_nConversionPropertyType = 1;
 }
 
-DictionaryEntry::~DictionaryEntry()
-{
-}
+DictionaryEntry::~DictionaryEntry() = default;
 
 void DictionaryList::setColSizes()
 {

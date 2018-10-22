@@ -66,11 +66,7 @@ namespace xforms
     {
     }
 
-
-    OXSDDataType::~OXSDDataType()
-    {
-    }
-
+    OXSDDataType::~OXSDDataType() = default;
 
     void OXSDDataType::registerProperties()
     {

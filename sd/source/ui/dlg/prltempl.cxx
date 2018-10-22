@@ -213,9 +213,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     m_xDialog->set_title(aTitle);
 }
 
-SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
-{
-}
+SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg() = default;
 
 void SdPresLayoutTemplateDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {

@@ -69,9 +69,7 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
 {
 }
 
-PageStyleContext::~PageStyleContext()
-{
-}
+PageStyleContext::~PageStyleContext() = default;
 
 SvXMLImportContextRef PageStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,

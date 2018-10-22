@@ -38,9 +38,7 @@ SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
 {
 }
 
-SwUndoBookmark::~SwUndoBookmark()
-{
-}
+SwUndoBookmark::~SwUndoBookmark() = default;
 
 void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 {
@@ -108,9 +106,7 @@ SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUSt
 {
 }
 
-SwUndoRenameBookmark::~SwUndoRenameBookmark()
-{
-}
+SwUndoRenameBookmark::~SwUndoRenameBookmark() = default;
 
 static OUString lcl_QuoteName(const OUString& rName)
 {

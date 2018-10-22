@@ -11,8 +11,8 @@
 #include <svdobjuserdatalist.hxx>
 #include <vcl/outdev.hxx>
 
-SdrObjUserDataList::SdrObjUserDataList() {}
-SdrObjUserDataList::~SdrObjUserDataList() {}
+SdrObjUserDataList::SdrObjUserDataList() = default;
+SdrObjUserDataList::~SdrObjUserDataList() = default;
 
 size_t SdrObjUserDataList::GetUserDataCount() const
 {

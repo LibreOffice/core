@@ -129,9 +129,7 @@ SwTOXMark::SwTOXMark( const SwTOXMark& rCopy )
     m_aAltText = rCopy.m_aAltText;
 }
 
-SwTOXMark::~SwTOXMark()
-{
-}
+SwTOXMark::~SwTOXMark() = default;
 
 void SwTOXMark::RegisterToTOXType(SwTOXType& rType)
 {
@@ -595,11 +593,9 @@ void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 }
 
 // TOX specific functions
-SwTOXBase::~SwTOXBase()
-{
+SwTOXBase::~SwTOXBase() = default;
 //    if( GetTOXType()->GetType() == TOX_USER  )
 //        delete aData.pTemplateName;
-}
 
 void SwTOXBase::SetTitle(const OUString& rTitle)
     {   m_aTitle = rTitle; }

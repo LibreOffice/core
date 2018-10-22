@@ -87,9 +87,7 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
 {
 }
 
-SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
-{
-}
+SwXMLTextParagraphExport::~SwXMLTextParagraphExport() = default;
 
 static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,
                          bool bToRel = true )

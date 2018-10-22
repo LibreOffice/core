@@ -111,9 +111,7 @@ void OPreparedStatement::ensurePrepared()
         evaluateStatusVector(m_statusVector, m_sSqlStatement, *this);
 }
 
-OPreparedStatement::~OPreparedStatement()
-{
-}
+OPreparedStatement::~OPreparedStatement() = default;
 
 void SAL_CALL OPreparedStatement::acquire() throw()
 {

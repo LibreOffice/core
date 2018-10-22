@@ -31,17 +31,14 @@ using namespace ::com::sun::star;
 
 namespace chart
 {
-
-DataSource::DataSource()
-{}
+DataSource::DataSource() = default;
 
 DataSource::DataSource(
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > & rSequences ) :
         m_aDataSeq( rSequences )
 {}
 
-DataSource::~DataSource()
-{}
+DataSource::~DataSource() = default;
 
 // ____ XDataSource ____
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSource::getDataSequences()

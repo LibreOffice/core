@@ -172,11 +172,7 @@ namespace svxform
     {
     }
 
-
-    FormScriptListener::~FormScriptListener()
-    {
-    }
-
+    FormScriptListener::~FormScriptListener() = default;
 
     bool FormScriptListener::impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName )
     {
@@ -933,11 +929,7 @@ namespace svxform
         impl_registerOrRevoke_throw( _rxManager, false );
     }
 
-
-    IFormScriptingEnvironment::~IFormScriptingEnvironment()
-    {
-    }
-
+    IFormScriptingEnvironment::~IFormScriptingEnvironment() = default;
 
     namespace
     {

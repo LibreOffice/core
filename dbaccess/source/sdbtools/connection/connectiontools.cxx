@@ -53,9 +53,7 @@ namespace sdbtools
     {
     }
 
-    ConnectionTools::~ConnectionTools()
-    {
-    }
+    ConnectionTools::~ConnectionTools() = default;
 
     Reference< XTableName > SAL_CALL ConnectionTools::createTableName()
     {

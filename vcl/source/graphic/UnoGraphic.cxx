@@ -36,9 +36,7 @@ Graphic::Graphic() :
 {
 }
 
-Graphic::~Graphic() throw()
-{
-}
+Graphic::~Graphic() throw() = default;
 
 void Graphic::init( const ::Graphic& rGraphic )
     throw()

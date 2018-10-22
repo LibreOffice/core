@@ -125,9 +125,7 @@ ORelationController::ORelationController(const Reference< XComponentContext >& _
     InvalidateAll();
 }
 
-ORelationController::~ORelationController()
-{
-}
+ORelationController::~ORelationController() = default;
 
 FeatureState ORelationController::GetState(sal_uInt16 _nId) const
 {
@@ -305,7 +303,7 @@ namespace
         virtual void SAL_CALL run() override;
         virtual void SAL_CALL onTerminated() override;
     protected:
-        virtual ~RelationLoader() override {}
+        virtual ~RelationLoader() override = default;
 
         void loadTableData(const Any& _aTable);
     };

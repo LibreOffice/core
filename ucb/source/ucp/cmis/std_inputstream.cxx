@@ -35,9 +35,7 @@ namespace cmis
         }
     }
 
-    StdInputStream::~StdInputStream()
-    {
-    }
+    StdInputStream::~StdInputStream() = default;
 
     uno::Any SAL_CALL StdInputStream::queryInterface( const uno::Type& rType )
     {

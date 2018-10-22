@@ -131,9 +131,7 @@ void SAL_CALL ODefinitionContainer::disposing()
     m_aDocumentMap.clear();
 }
 
-ODefinitionContainer::~ODefinitionContainer()
-{
-}
+ODefinitionContainer::~ODefinitionContainer() = default;
 
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
 IMPLEMENT_GETTYPES2(ODefinitionContainer,OContentHelper,ODefinitionContainer_Base);

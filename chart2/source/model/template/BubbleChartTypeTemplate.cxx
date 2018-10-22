@@ -104,8 +104,7 @@ BubbleChartTypeTemplate::BubbleChartTypeTemplate(
 {
 }
 
-BubbleChartTypeTemplate::~BubbleChartTypeTemplate()
-{}
+BubbleChartTypeTemplate::~BubbleChartTypeTemplate() = default;
 
 // ____ OPropertySet ____
 uno::Any BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const

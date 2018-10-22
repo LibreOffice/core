@@ -54,9 +54,7 @@ TabWinFactory::TabWinFactory( const css::uno::Reference< css::uno::XComponentCon
 {
 }
 
-TabWinFactory::~TabWinFactory()
-{
-}
+TabWinFactory::~TabWinFactory() = default;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstanceWithContext(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )

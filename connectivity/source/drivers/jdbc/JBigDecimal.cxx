@@ -26,8 +26,7 @@ using namespace connectivity;
 
 jclass java_math_BigDecimal::theClass = nullptr;
 
-java_math_BigDecimal::~java_math_BigDecimal()
-{}
+java_math_BigDecimal::~java_math_BigDecimal() = default;
 
 jclass java_math_BigDecimal::getMyClass() const
 {

@@ -37,9 +37,7 @@ DlgEdTransferableImpl::DlgEdTransferableImpl( const Sequence< DataFlavor >& aSeq
     m_SeqFlavors = aSeqFlavors;
     m_SeqData = aSeqData;
 }
-DlgEdTransferableImpl::~DlgEdTransferableImpl()
-{
-}
+DlgEdTransferableImpl::~DlgEdTransferableImpl() = default;
 bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
     // compare mime content types

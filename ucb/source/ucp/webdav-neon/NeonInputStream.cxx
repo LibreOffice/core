@@ -44,9 +44,7 @@ NeonInputStream::NeonInputStream()
 {
 }
 
-NeonInputStream::~NeonInputStream()
-{
-}
+NeonInputStream::~NeonInputStream() = default;
 
 // Allows the caller to add some data to the "end" of the stream
 void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )

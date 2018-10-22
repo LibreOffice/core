@@ -83,9 +83,7 @@ LoggedStream::LoggedStream(
 {
 }
 
-LoggedStream::~LoggedStream()
-{
-}
+LoggedStream::~LoggedStream() = default;
 
 void LoggedStream::startSectionGroup()
 {
@@ -339,9 +337,7 @@ LoggedProperties::LoggedProperties(
 {
 }
 
-LoggedProperties::~LoggedProperties()
-{
-}
+LoggedProperties::~LoggedProperties() = default;
 
 void LoggedProperties::attribute(Id name, Value & val)
 {
@@ -381,9 +377,7 @@ LoggedTable::LoggedTable(
 {
 }
 
-LoggedTable::~LoggedTable()
-{
-}
+LoggedTable::~LoggedTable() = default;
 
 void LoggedTable::entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref)
 {

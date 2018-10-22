@@ -132,8 +132,7 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
     setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));
 }
 
-ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
-{}
+ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate() = default;
 
 // ____ OPropertySet ____
 uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const

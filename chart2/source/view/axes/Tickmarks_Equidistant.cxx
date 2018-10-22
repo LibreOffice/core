@@ -126,9 +126,7 @@ EquidistantTickFactory::EquidistantTickFactory(
     }
 }
 
-EquidistantTickFactory::~EquidistantTickFactory()
-{
-}
+EquidistantTickFactory::~EquidistantTickFactory() = default;
 
 sal_Int32 EquidistantTickFactory::getTickDepth() const
 {
@@ -478,9 +476,7 @@ void EquidistantTickIter::initIter( sal_Int32 nMaxDepth )
     }
 }
 
-EquidistantTickIter::~EquidistantTickIter()
-{
-}
+EquidistantTickIter::~EquidistantTickIter() = default;
 
 sal_Int32 EquidistantTickIter::getStartDepth() const
 {

@@ -1208,9 +1208,7 @@ DlgEdForm::DlgEdForm(
 {
 }
 
-DlgEdForm::~DlgEdForm()
-{
-}
+DlgEdForm::~DlgEdForm() = default;
 
 void DlgEdForm::SetRectFromProps()
 {

@@ -244,9 +244,7 @@ DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper cons
     pShapePtr->setDiagramType();
 }
 
-DiagramGraphicDataContext::~DiagramGraphicDataContext()
-{
-}
+DiagramGraphicDataContext::~DiagramGraphicDataContext() = default;
 
 ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

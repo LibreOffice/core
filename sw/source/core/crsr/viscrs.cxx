@@ -560,8 +560,7 @@ SwShellCursor::SwShellCursor( SwShellCursor& rICursor )
     , m_pInitialPoint(SwPaM::GetPoint())
 {}
 
-SwShellCursor::~SwShellCursor()
-{}
+SwShellCursor::~SwShellCursor() = default;
 
 bool SwShellCursor::IsReadOnlyAvailable() const
 {
@@ -733,7 +732,7 @@ SwShellTableCursor::SwShellTableCursor( const SwCursorShell& rCursorSh,
     GetPtPos() = rPtPt;
 }
 
-SwShellTableCursor::~SwShellTableCursor() {}
+SwShellTableCursor::~SwShellTableCursor() = default;
 
 void SwShellTableCursor::SetMark()                { SwShellCursor::SetMark(); }
 

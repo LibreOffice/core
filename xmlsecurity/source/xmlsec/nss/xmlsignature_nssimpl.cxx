@@ -80,8 +80,7 @@ public:
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-XMLSignature_NssImpl::XMLSignature_NssImpl() {
-}
+XMLSignature_NssImpl::XMLSignature_NssImpl() = default;
 
 /* XXMLSignature */
 Reference< XXMLSignatureTemplate >

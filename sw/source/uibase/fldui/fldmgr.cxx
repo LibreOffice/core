@@ -375,9 +375,7 @@ SwFieldMgr::SwFieldMgr(SwWrtShell* pSh ) :
     GetCurField();
 }
 
-SwFieldMgr::~SwFieldMgr()
-{
-}
+SwFieldMgr::~SwFieldMgr() = default;
 
 // organise RefMark by names
 bool  SwFieldMgr::CanInsertRefMark( const OUString& rStr )

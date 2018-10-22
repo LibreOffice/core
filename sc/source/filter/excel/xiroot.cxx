@@ -49,9 +49,7 @@ XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
 {
 }
 
-XclImpRootData::~XclImpRootData()
-{
-}
+XclImpRootData::~XclImpRootData() = default;
 
 XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),

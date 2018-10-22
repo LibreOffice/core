@@ -24,9 +24,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-XMLTextOrientationHdl::~XMLTextOrientationHdl()
-{
-}
+XMLTextOrientationHdl::~XMLTextOrientationHdl() = default;
 
 bool XMLTextOrientationHdl::importXML(
     const OUString& rStrImpValue,

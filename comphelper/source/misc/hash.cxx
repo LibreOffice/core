@@ -98,9 +98,7 @@ Hash::Hash(HashType eType):
 {
 }
 
-Hash::~Hash()
-{
-}
+Hash::~Hash() = default;
 
 void Hash::update(const unsigned char* pInput, size_t length)
 {

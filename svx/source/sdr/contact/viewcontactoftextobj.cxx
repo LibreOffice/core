@@ -27,10 +27,7 @@ ViewContactOfTextObj::ViewContactOfTextObj(SdrTextObj& rTextObj)
 {
 }
 
-ViewContactOfTextObj::~ViewContactOfTextObj()
-{
-}
-
+ViewContactOfTextObj::~ViewContactOfTextObj() = default;
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -83,8 +83,7 @@ GridWrapper::GridWrapper(tGridType eType, const std::shared_ptr<Chart2ModelConta
 {
 }
 
-GridWrapper::~GridWrapper()
-{}
+GridWrapper::~GridWrapper() = default;
 
 void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDimensionIndex, bool& rbSubGrid )
 {

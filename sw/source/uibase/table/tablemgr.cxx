@@ -169,9 +169,7 @@ SwTableFUNC::SwTableFUNC(SwWrtShell *pShell)
 {
 }
 
-SwTableFUNC::~SwTableFUNC()
-{
-}
+SwTableFUNC::~SwTableFUNC() = default;
 
 void SwTableFUNC::UpdateChart()
 {

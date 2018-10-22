@@ -82,10 +82,7 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
     }
 }
 
-
-OXMLFormatCondition::~OXMLFormatCondition()
-{
-}
+OXMLFormatCondition::~OXMLFormatCondition() = default;
 
 void OXMLFormatCondition::EndElement()
 {

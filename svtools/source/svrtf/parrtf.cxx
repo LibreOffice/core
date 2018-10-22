@@ -46,10 +46,7 @@ SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     bRTF_InTextRead = false;
 }
 
-SvRTFParser::~SvRTFParser()
-{
-}
-
+SvRTFParser::~SvRTFParser() = default;
 
 int SvRTFParser::GetNextToken_()
 {

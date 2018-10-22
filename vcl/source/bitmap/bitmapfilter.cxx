@@ -14,9 +14,9 @@
 #include <algorithm>
 #include <sal/log.hxx>
 
-BitmapFilter::BitmapFilter() {}
+BitmapFilter::BitmapFilter() = default;
 
-BitmapFilter::~BitmapFilter() {}
+BitmapFilter::~BitmapFilter() = default;
 
 bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter const & rFilter)
 {

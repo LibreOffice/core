@@ -16,10 +16,7 @@
 
 namespace chart {
 namespace sidebar {
-
-ChartSidebarSelectionListenerParent::~ChartSidebarSelectionListenerParent()
-{
-}
+ChartSidebarSelectionListenerParent::~ChartSidebarSelectionListenerParent() = default;
 
 ChartSidebarSelectionListener::ChartSidebarSelectionListener(
         ChartSidebarSelectionListenerParent* pParent):
@@ -35,9 +32,7 @@ ChartSidebarSelectionListener::ChartSidebarSelectionListener(
     maTypes.push_back(eType);
 }
 
-ChartSidebarSelectionListener::~ChartSidebarSelectionListener()
-{
-}
+ChartSidebarSelectionListener::~ChartSidebarSelectionListener() = default;
 
 void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObject& rEvent)
 {

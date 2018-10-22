@@ -84,9 +84,7 @@ LwpCharacterBorderOverride::LwpCharacterBorderOverride(LwpCharacterBorderOverrid
     m_pMargins = std::move(pMargins);
 }
 
-LwpCharacterBorderOverride::~LwpCharacterBorderOverride()
-{
-}
+LwpCharacterBorderOverride::~LwpCharacterBorderOverride() = default;
 
 LwpCharacterBorderOverride* LwpCharacterBorderOverride::clone() const
 {

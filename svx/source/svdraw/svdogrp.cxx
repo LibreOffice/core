@@ -71,9 +71,7 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
     bClosedObj=false;
 }
 
-SdrObjGroup::~SdrObjGroup()
-{
-}
+SdrObjGroup::~SdrObjGroup() = default;
 
 SdrPage* SdrObjGroup::getSdrPageFromSdrObjList() const
 {

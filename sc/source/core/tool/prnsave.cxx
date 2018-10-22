@@ -71,9 +71,7 @@ ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :
         pData.reset( new ScPrintSaverTab[nCount] );
 }
 
-ScPrintRangeSaver::~ScPrintRangeSaver()
-{
-}
+ScPrintRangeSaver::~ScPrintRangeSaver() = default;
 
 ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab)
 {

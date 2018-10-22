@@ -109,9 +109,7 @@ ODataSettings_Base::ODataSettings_Base()
 {
 }
 
-ODataSettings_Base::~ODataSettings_Base()
-{
-}
+ODataSettings_Base::~ODataSettings_Base() = default;
 
 void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
 {

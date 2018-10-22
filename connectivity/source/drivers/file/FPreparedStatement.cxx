@@ -54,11 +54,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
 {
 }
 
-
-OPreparedStatement::~OPreparedStatement()
-{
-}
-
+OPreparedStatement::~OPreparedStatement() = default;
 
 void OPreparedStatement::disposing()
 {

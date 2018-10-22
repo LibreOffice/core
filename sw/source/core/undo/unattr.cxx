@@ -152,9 +152,7 @@ void SwUndoFormatAttr::Init()
     }
 }
 
-SwUndoFormatAttr::~SwUndoFormatAttr()
-{
-}
+SwUndoFormatAttr::~SwUndoFormatAttr() = default;
 
 void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -529,9 +527,7 @@ SwUndoFormatResetAttr::SwUndoFormatResetAttr( SwFormat& rChangedFormat,
     }
 }
 
-SwUndoFormatResetAttr::~SwUndoFormatResetAttr()
-{
-}
+SwUndoFormatResetAttr::~SwUndoFormatResetAttr() = default;
 
 void SwUndoFormatResetAttr::UndoImpl(::sw::UndoRedoContext &)
 {
@@ -565,9 +561,7 @@ SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, sal_uInt16 nFormatId )
     nSttContent = nEndContent = rPos.nContent.GetIndex();
 }
 
-SwUndoResetAttr::~SwUndoResetAttr()
-{
-}
+SwUndoResetAttr::~SwUndoResetAttr() = default;
 
 void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -684,9 +678,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
 {
 }
 
-SwUndoAttr::~SwUndoAttr()
-{
-}
+SwUndoAttr::~SwUndoAttr() = default;
 
 void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
 {
@@ -845,9 +837,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet, const SwDoc* pDoc 
     }
 }
 
-SwUndoDefaultAttr::~SwUndoDefaultAttr()
-{
-}
+SwUndoDefaultAttr::~SwUndoDefaultAttr() = default;
 
 void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -886,9 +876,7 @@ SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
 {
 }
 
-SwUndoMoveLeftMargin::~SwUndoMoveLeftMargin()
-{
-}
+SwUndoMoveLeftMargin::~SwUndoMoveLeftMargin() = default;
 
 void SwUndoMoveLeftMargin::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -928,9 +916,7 @@ SwUndoChangeFootNote::SwUndoChangeFootNote(
 {
 }
 
-SwUndoChangeFootNote::~SwUndoChangeFootNote()
-{
-}
+SwUndoChangeFootNote::~SwUndoChangeFootNote() = default;
 
 void SwUndoChangeFootNote::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -964,9 +950,7 @@ SwUndoFootNoteInfo::SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc
 {
 }
 
-SwUndoFootNoteInfo::~SwUndoFootNoteInfo()
-{
-}
+SwUndoFootNoteInfo::~SwUndoFootNoteInfo() = default;
 
 void SwUndoFootNoteInfo::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -990,9 +974,7 @@ SwUndoEndNoteInfo::SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc* p
 {
 }
 
-SwUndoEndNoteInfo::~SwUndoEndNoteInfo()
-{
-}
+SwUndoEndNoteInfo::~SwUndoEndNoteInfo() = default;
 
 void SwUndoEndNoteInfo::UndoImpl(::sw::UndoRedoContext & rContext)
 {

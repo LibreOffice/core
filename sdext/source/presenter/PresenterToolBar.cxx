@@ -272,7 +272,7 @@ namespace {
         public:
             explicit Listener (const ::rtl::Reference<TimeLabel>& rxLabel)
                 : mxLabel(rxLabel) {}
-            virtual ~Listener() {}
+            virtual ~Listener() = default;
             virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override
             { if (mxLabel.is()) mxLabel->TimeHasChanged(rCurrentTime); }
         private:
@@ -400,9 +400,7 @@ void PresenterToolBar::Initialize (
     }
 }
 
-PresenterToolBar::~PresenterToolBar()
-{
-}
+PresenterToolBar::~PresenterToolBar() = default;
 
 void SAL_CALL PresenterToolBar::disposing()
 {
@@ -1074,9 +1072,7 @@ PresenterToolBarView::PresenterToolBarView (
     }
 }
 
-PresenterToolBarView::~PresenterToolBarView()
-{
-}
+PresenterToolBarView::~PresenterToolBarView() = default;
 
 void SAL_CALL PresenterToolBarView::disposing()
 {
@@ -1766,9 +1762,7 @@ void TimeLabel::ConnectToTimer()
     return ::rtl::Reference<Element>(pElement.get());
 }
 
-CurrentTimeLabel::~CurrentTimeLabel()
-{
-}
+CurrentTimeLabel::~CurrentTimeLabel() = default;
 
 CurrentTimeLabel::CurrentTimeLabel (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)

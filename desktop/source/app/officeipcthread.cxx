@@ -365,7 +365,7 @@ public:
 protected:
     explicit IpcThread(char const * name): Thread(name), m_handler(nullptr) {}
 
-    virtual ~IpcThread() override {}
+    virtual ~IpcThread() override = default;
 
     bool process(OString const & arguments, bool * waitProcessed);
 
@@ -381,7 +381,7 @@ private:
         IpcThread("PipeIPC"), pipe_(pipe)
     {}
 
-    virtual ~PipeIpcThread() override {}
+    virtual ~PipeIpcThread() override = default;
 
     void execute() override;
 
@@ -442,7 +442,7 @@ private:
         IpcThread("DbusIPC"), connection_(std::move(connection))
     {}
 
-    virtual ~DbusIpcThread() override {}
+    virtual ~DbusIpcThread() override = default;
 
     void execute() override;
 

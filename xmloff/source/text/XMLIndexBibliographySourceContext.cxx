@@ -50,9 +50,7 @@ XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
 {
 }
 
-XMLIndexBibliographySourceContext::~XMLIndexBibliographySourceContext()
-{
-}
+XMLIndexBibliographySourceContext::~XMLIndexBibliographySourceContext() = default;
 
 void XMLIndexBibliographySourceContext::ProcessAttribute(
     enum IndexSourceParamEnum,

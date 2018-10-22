@@ -1122,8 +1122,6 @@ XMLTextPropertySetMapper::XMLTextPropertySetMapper( TextPropMap nType, bool bFor
 {
 }
 
-XMLTextPropertySetMapper::~XMLTextPropertySetMapper()
-{
-}
+XMLTextPropertySetMapper::~XMLTextPropertySetMapper() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

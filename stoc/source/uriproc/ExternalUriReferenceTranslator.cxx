@@ -44,7 +44,7 @@ class Translator:
         css::lang::XServiceInfo, css::uri::XExternalUriReferenceTranslator>
 {
 public:
-    Translator() {}
+    Translator() = default;
 
     Translator(const Translator&) = delete;
     Translator& operator=(const Translator&) = delete;
@@ -63,7 +63,7 @@ public:
     translateToExternal(OUString const & internalUriReference) override;
 
 private:
-    virtual ~Translator() override {}
+    virtual ~Translator() override = default;
 };
 
 OUString Translator::getImplementationName()

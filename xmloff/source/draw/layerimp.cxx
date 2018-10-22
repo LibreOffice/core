@@ -168,9 +168,7 @@ SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPr
         mxLayerManager = xLayerSupplier->getLayerManager();
 }
 
-SdXMLLayerSetContext::~SdXMLLayerSetContext()
-{
-}
+SdXMLLayerSetContext::~SdXMLLayerSetContext() = default;
 
 SvXMLImportContextRef SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )

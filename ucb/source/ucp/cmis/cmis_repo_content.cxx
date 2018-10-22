@@ -66,9 +66,7 @@ namespace cmis
             m_sRepositoryId = m_sRepositoryId.copy(1);
     }
 
-    RepoContent::~RepoContent()
-    {
-    }
+    RepoContent::~RepoContent() = default;
 
     uno::Any RepoContent::getBadArgExcept()
     {

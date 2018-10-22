@@ -2360,9 +2360,7 @@ ScChart2DataSequence::HiddenRangeListener::HiddenRangeListener(ScChart2DataSeque
 {
 }
 
-ScChart2DataSequence::HiddenRangeListener::~HiddenRangeListener()
-{
-}
+ScChart2DataSequence::HiddenRangeListener::~HiddenRangeListener() = default;
 
 void ScChart2DataSequence::HiddenRangeListener::notify()
 {

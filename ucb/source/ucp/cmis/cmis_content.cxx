@@ -324,9 +324,7 @@ namespace cmis
         m_sObjectId = m_aURL.getObjectId( );
     }
 
-    Content::~Content()
-    {
-    }
+    Content::~Content() = default;
 
     libcmis::Session* Content::getSession( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {

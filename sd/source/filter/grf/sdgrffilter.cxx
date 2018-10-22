@@ -115,9 +115,7 @@ SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
 {
 }
 
-SdGRFFilter::~SdGRFFilter()
-{
-}
+SdGRFFilter::~SdGRFFilter() = default;
 
 void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStreamError )
 {

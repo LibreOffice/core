@@ -30,9 +30,7 @@ SvLBoxFontString::SvLBoxFontString()
 {
 }
 
-SvLBoxFontString::~SvLBoxFontString()
-{
-}
+SvLBoxFontString::~SvLBoxFontString() = default;
 
 std::unique_ptr<SvLBoxItem> SvLBoxFontString::Clone(SvLBoxItem const *) const
 {

@@ -91,9 +91,7 @@ SvxUnoNumberingRules::SvxUnoNumberingRules(const SvxNumRule& rRule)
 {
 }
 
-SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
-{
-}
+SvxUnoNumberingRules::~SvxUnoNumberingRules() throw() = default;
 
 //XIndexReplace
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )

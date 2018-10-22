@@ -78,13 +78,9 @@ static OUString lclGenerateApiArray(const std::vector<Any>& rRow)
     return aBuffer.makeStringAndClear();
 }
 
-ChartConverter::ChartConverter()
-{
-}
+ChartConverter::ChartConverter() = default;
 
-ChartConverter::~ChartConverter()
-{
-}
+ChartConverter::~ChartConverter() = default;
 
 void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
         ChartSpaceModel& rChartModel, const Reference< XChartDocument >& rxChartDoc,

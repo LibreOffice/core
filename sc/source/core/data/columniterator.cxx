@@ -176,7 +176,7 @@ ColumnIterator::ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW 
 {
 }
 
-ColumnIterator::~ColumnIterator() {}
+ColumnIterator::~ColumnIterator() = default;
 
 void ColumnIterator::next()
 {

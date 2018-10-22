@@ -2770,9 +2770,7 @@ QueryFolderNameDialog::QueryFolderNameDialog(weld::Window* _pParent,
     m_xNameEdit->connect_changed(LINK(this, QueryFolderNameDialog, NameHdl));
 };
 
-QueryFolderNameDialog::~QueryFolderNameDialog()
-{
-}
+QueryFolderNameDialog::~QueryFolderNameDialog() = default;
 
 IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl, weld::Button&, void)
 {

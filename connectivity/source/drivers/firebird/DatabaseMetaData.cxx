@@ -50,9 +50,7 @@ ODatabaseMetaData::ODatabaseMetaData(Connection* _pCon)
             "ODatabaseMetaData::ODatabaseMetaData: No connection set!");
 }
 
-ODatabaseMetaData::~ODatabaseMetaData()
-{
-}
+ODatabaseMetaData::~ODatabaseMetaData() = default;
 
 //----- Catalog Info -- UNSUPPORTED -------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator()

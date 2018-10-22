@@ -103,11 +103,7 @@ namespace toolkit
         pWindow->AddEventListener( LINK( m_pData.get(), WindowStyleSettings_Data, OnWindowEvent ) );
     }
 
-
-    WindowStyleSettings::~WindowStyleSettings()
-    {
-    }
-
+    WindowStyleSettings::~WindowStyleSettings() = default;
 
     void WindowStyleSettings::dispose()
     {

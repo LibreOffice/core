@@ -57,9 +57,7 @@ SwFieldPage::SwFieldPage(vcl::Window *pParent, const OString& rID,
 {
 }
 
-SwFieldPage::~SwFieldPage()
-{
-}
+SwFieldPage::~SwFieldPage() = default;
 
 // initialise TabPage
 void SwFieldPage::Init()

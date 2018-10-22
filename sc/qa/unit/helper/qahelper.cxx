@@ -615,7 +615,7 @@ ScDocShellRef ScBootstrapFixture::loadDoc(
 }
 
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
-ScBootstrapFixture::~ScBootstrapFixture() {}
+ScBootstrapFixture::~ScBootstrapFixture() = default;
 
 namespace {
 OUString EnsureSeparator(const OUStringBuffer& rFilePath)

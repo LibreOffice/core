@@ -110,9 +110,7 @@ SlotManager::SlotManager (SlideSorter& rSlideSorter)
 {
 }
 
-SlotManager::~SlotManager()
-{
-}
+SlotManager::~SlotManager() = default;
 
 void SlotManager::FuTemporary (SfxRequest& rRequest)
 {

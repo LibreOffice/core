@@ -89,8 +89,7 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
     UpdateControlStates();
 }
 
-TrendlineResources::~TrendlineResources()
-{}
+TrendlineResources::~TrendlineResources() = default;
 
 IMPL_LINK( TrendlineResources, SelectTrendLine, Button *, pRadioButton, void )
 {

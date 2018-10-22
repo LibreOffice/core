@@ -105,9 +105,7 @@ PresentationFactory::PresentationFactory (
     }
 }
 
-PresentationFactory::~PresentationFactory()
-{
-}
+PresentationFactory::~PresentationFactory() = default;
 
 void SAL_CALL PresentationFactory::disposing()
 {

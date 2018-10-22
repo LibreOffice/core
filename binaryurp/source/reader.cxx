@@ -93,7 +93,7 @@ Reader::Reader(rtl::Reference< Bridge > const & bridge):
     assert(bridge.is());
 }
 
-Reader::~Reader() {}
+Reader::~Reader() = default;
 
 void Reader::execute() {
     try {

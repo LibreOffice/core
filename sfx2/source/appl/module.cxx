@@ -53,9 +53,7 @@ public:
                                 ~SfxModule_Impl();
 };
 
-SfxModule_Impl::SfxModule_Impl()
-{
-}
+SfxModule_Impl::SfxModule_Impl() = default;
 
 SfxModule_Impl::~SfxModule_Impl()
 {

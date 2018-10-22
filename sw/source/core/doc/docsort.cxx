@@ -101,9 +101,7 @@ void SwSortElement::Finit()
     pBox = nullptr;
 }
 
-SwSortElement::~SwSortElement()
-{
-}
+SwSortElement::~SwSortElement() = default;
 
 double SwSortElement::StrToDouble( const OUString& rStr )
 {
@@ -190,9 +188,7 @@ SwSortTextElement::SwSortTextElement(const SwNodeIndex& rPos)
 {
 }
 
-SwSortTextElement::~SwSortTextElement()
-{
-}
+SwSortTextElement::~SwSortTextElement() = default;
 
 OUString SwSortTextElement::GetKey(sal_uInt16 nId) const
 {
@@ -229,9 +225,7 @@ SwSortBoxElement::SwSortBoxElement( sal_uInt16 nRC )
 {
 }
 
-SwSortBoxElement::~SwSortBoxElement()
-{
-}
+SwSortBoxElement::~SwSortBoxElement() = default;
 
 /// Get Key for a cell
 OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
@@ -762,9 +756,7 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBoxRef) :
     }
 }
 
-FlatFndBox::~FlatFndBox()
-{
-}
+FlatFndBox::~FlatFndBox() = default;
 
 /// All Lines of a Box need to have same number of Boxes
 bool FlatFndBox::CheckLineSymmetry(const FndBox_& rBox)

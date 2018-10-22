@@ -54,9 +54,7 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
 {
 }
 
-XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
-{
-}
+XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext() = default;
 
 void XMLIndexTOCSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,

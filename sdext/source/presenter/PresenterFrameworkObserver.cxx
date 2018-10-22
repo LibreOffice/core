@@ -50,9 +50,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
     }
 }
 
-PresenterFrameworkObserver::~PresenterFrameworkObserver()
-{
-}
+PresenterFrameworkObserver::~PresenterFrameworkObserver() = default;
 
 void PresenterFrameworkObserver::RunOnUpdateEnd (
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,

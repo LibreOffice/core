@@ -172,9 +172,7 @@ VCLXAccessibleToolBox::VCLXAccessibleToolBox( VCLXWindow* pVCLXWindow ) :
 {
 }
 
-VCLXAccessibleToolBox::~VCLXAccessibleToolBox()
-{
-}
+VCLXAccessibleToolBox::~VCLXAccessibleToolBox() = default;
 
 VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( ToolBox::ImplToolItems::size_type _nPos )
 {

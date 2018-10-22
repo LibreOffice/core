@@ -62,10 +62,7 @@ GraphicDescriptor::GraphicDescriptor() :
 {
 }
 
-GraphicDescriptor::~GraphicDescriptor()
-    throw()
-{
-}
+GraphicDescriptor::~GraphicDescriptor() throw() = default;
 
 void GraphicDescriptor::init( const ::Graphic& rGraphic )
 {

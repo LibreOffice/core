@@ -88,9 +88,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     }
 }
 
-SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
-{
-}
+SvtTabAppearanceCfg::~SvtTabAppearanceCfg() = default;
 
 const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 {

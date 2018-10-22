@@ -35,9 +35,7 @@ LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentCo
 {
 }
 
-LoadDispatcher::~LoadDispatcher()
-{
-}
+LoadDispatcher::~LoadDispatcher() = default;
 
 void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,

@@ -894,9 +894,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
 }
 
-SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
-{
-}
+SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog() = default;
 
 void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
 {

@@ -50,9 +50,7 @@ ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent,
 {
 }
 
-ScVbaName::~ScVbaName()
-{
-}
+ScVbaName::~ScVbaName() = default;
 
 OUString
 ScVbaName::getName()

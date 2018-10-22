@@ -86,8 +86,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
         m_pRefSize.reset(*pRefSize);
 }
 
-CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
-{}
+CharacterPropertyItemConverter::~CharacterPropertyItemConverter() = default;
 
 const sal_uInt16 * CharacterPropertyItemConverter::GetWhichPairs() const
 {

@@ -80,9 +80,7 @@ LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpDocument::~LwpDocument()
-{
-}
+LwpDocument::~LwpDocument() = default;
 /**
  * @descr   Read VO_Document from object stream
  **/

@@ -57,8 +57,6 @@ ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Form));
 }
 
-ScDrawFormShell::~ScDrawFormShell()
-{
-}
+ScDrawFormShell::~ScDrawFormShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

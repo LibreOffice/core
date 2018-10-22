@@ -364,9 +364,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
     }
 }
 
-FuInsertGraphic::~FuInsertGraphic()
-{
-}
+FuInsertGraphic::~FuInsertGraphic() = default;
 
 FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
                               vcl::Window*      pWin,
@@ -423,8 +421,6 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
     }
 }
 
-FuInsertMedia::~FuInsertMedia()
-{
-}
+FuInsertMedia::~FuInsertMedia() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

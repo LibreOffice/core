@@ -284,10 +284,7 @@ PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
 
 
 // virtual
-PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
-{
-}
-
+PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler() = default;
 
 // XServiceInfo methods.
 

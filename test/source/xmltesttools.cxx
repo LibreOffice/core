@@ -28,11 +28,9 @@ OUString convert(xmlChar const * string) {
 
 }
 
-XmlTestTools::XmlTestTools()
-{}
+XmlTestTools::XmlTestTools() = default;
 
-XmlTestTools::~XmlTestTools()
-{}
+XmlTestTools::~XmlTestTools() = default;
 
 xmlDocPtr XmlTestTools::parseXml(utl::TempFile const & aTempFile)
 {

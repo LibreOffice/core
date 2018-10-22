@@ -1100,9 +1100,7 @@ XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpXF::~XclImpXF()
-{
-}
+XclImpXF::~XclImpXF() = default;
 
 void XclImpXF::ReadXF2( XclImpStream& rStrm )
 {
@@ -1878,9 +1876,7 @@ XclImpXFRangeBuffer::XclImpXFRangeBuffer( const XclImpRoot& rRoot ) :
 {
 }
 
-XclImpXFRangeBuffer::~XclImpXFRangeBuffer()
-{
-}
+XclImpXFRangeBuffer::~XclImpXFRangeBuffer() = default;
 
 void XclImpXFRangeBuffer::Initialize()
 {

@@ -136,9 +136,7 @@ FormControlHelper::FormControlHelper(FieldId eFieldId,
     m_pImpl->rTextDocument = xTextDocument;
 }
 
-FormControlHelper::~FormControlHelper()
-{
-}
+FormControlHelper::~FormControlHelper() = default;
 
 bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& xTextRange,
                                        const OUString & rControlName)

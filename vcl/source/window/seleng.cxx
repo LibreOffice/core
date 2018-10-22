@@ -22,9 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 
-FunctionSet::~FunctionSet()
-{
-}
+FunctionSet::~FunctionSet() = default;
 
 inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 {

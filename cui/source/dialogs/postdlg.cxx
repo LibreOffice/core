@@ -105,10 +105,7 @@ SvxPostItDialog::SvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreS
         m_xDialog->set_title(m_xAltTitle->get_label());
 }
 
-
-SvxPostItDialog::~SvxPostItDialog()
-{
-}
+SvxPostItDialog::~SvxPostItDialog() = default;
 
 void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {

@@ -65,9 +65,7 @@ namespace dbaccess
         osl_atomic_decrement( &m_refCount );
     }
 
-    OPropertyForward::~OPropertyForward()
-    {
-    }
+    OPropertyForward::~OPropertyForward() = default;
 
     void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt )
     {

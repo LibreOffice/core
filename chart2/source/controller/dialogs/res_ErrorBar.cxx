@@ -157,9 +157,7 @@ ErrorBarResources::ErrorBarResources(weld::Builder* pParent, TabPageParent pPare
     Reset( rInAttrs );
 }
 
-ErrorBarResources::~ErrorBarResources()
-{
-}
+ErrorBarResources::~ErrorBarResources() = default;
 
 void ErrorBarResources::SetErrorBarType( tErrorBarType eNewType )
 {

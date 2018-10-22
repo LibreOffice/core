@@ -88,9 +88,7 @@ namespace cppcanvas
         {
         }
 
-        EMFPPen::~EMFPPen()
-        {
-        }
+        EMFPPen::~EMFPPen() = default;
 
         void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer const & rR, const OutDevState& rState)
         {

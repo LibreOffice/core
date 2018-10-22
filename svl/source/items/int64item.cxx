@@ -21,7 +21,7 @@ SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, SvStream& rStream ) :
     rStream.ReadInt64(mnValue);
 }
 
-SfxInt64Item::~SfxInt64Item() {}
+SfxInt64Item::~SfxInt64Item() = default;
 
 bool SfxInt64Item::operator== ( const SfxPoolItem& rItem ) const
 {

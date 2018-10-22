@@ -226,9 +226,7 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     mxColumnImportPropertySetMapper = new SvXMLImportPropertyMapper( xColMapper, rImport );
 }
 
-XMLTableImport::~XMLTableImport()
-{
-}
+XMLTableImport::~XMLTableImport() = default;
 
 SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange > const & xColumnRowRange )
 {

@@ -54,9 +54,7 @@ ShapeContextHandler::ShapeContextHandler(uno::Reference< uno::XComponentContext 
     }
 }
 
-ShapeContextHandler::~ShapeContextHandler()
-{
-}
+ShapeContextHandler::~ShapeContextHandler() = default;
 
 uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getLockedCanvasContext(sal_Int32 nElement)
 {

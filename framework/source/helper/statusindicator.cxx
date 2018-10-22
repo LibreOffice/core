@@ -29,9 +29,7 @@ StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
 {
 }
 
-StatusIndicator::~StatusIndicator()
-{
-}
+StatusIndicator::~StatusIndicator() = default;
 
 void SAL_CALL StatusIndicator::start(const OUString& sText ,
                                      sal_Int32       nRange)

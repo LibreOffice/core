@@ -113,9 +113,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
     }
 }
 
-XMLIndexTOCContext::~XMLIndexTOCContext()
-{
-}
+XMLIndexTOCContext::~XMLIndexTOCContext() = default;
 
 void XMLIndexTOCContext::StartElement(
     const Reference<XAttributeList> & xAttrList)

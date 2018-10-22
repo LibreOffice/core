@@ -100,9 +100,7 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile )
     m_aName = aObj.GetBase();
 }
 
-SwImpBlocks::~SwImpBlocks()
-{
-}
+SwImpBlocks::~SwImpBlocks() = default;
 
 /**
  * Delete the document's content
@@ -244,9 +242,7 @@ SwTextBlocks::SwTextBlocks( const OUString& rFile )
         nErr = ERR_SWG_FILE_FORMAT_ERROR;
 }
 
-SwTextBlocks::~SwTextBlocks()
-{
-}
+SwTextBlocks::~SwTextBlocks() = default;
 
 OUString SwTextBlocks::GetName()
 {

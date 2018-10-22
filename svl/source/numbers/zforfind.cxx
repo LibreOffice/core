@@ -83,11 +83,7 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
     ChangeIntl();
 }
 
-
-ImpSvNumberInputScan::~ImpSvNumberInputScan()
-{
-}
-
+ImpSvNumberInputScan::~ImpSvNumberInputScan() = default;
 
 void ImpSvNumberInputScan::Reset()
 {

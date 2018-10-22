@@ -86,9 +86,7 @@ SimplePasswordRequest::SimplePasswordRequest()
     mxPassword = new PasswordContinuation;
 }
 
-SimplePasswordRequest::~SimplePasswordRequest()
-{
-}
+SimplePasswordRequest::~SimplePasswordRequest() = default;
 
 bool SimplePasswordRequest::isPassword() const
 {
@@ -138,9 +136,7 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
     mxPassword = new PasswordContinuation;
 }
 
-DocPasswordRequest::~DocPasswordRequest()
-{
-}
+DocPasswordRequest::~DocPasswordRequest() = default;
 
 bool DocPasswordRequest::isPassword() const
 {

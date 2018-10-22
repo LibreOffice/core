@@ -95,9 +95,7 @@ FullScreenPane::FullScreenPane (
     mpWindow->GrabFocus();
 }
 
-FullScreenPane::~FullScreenPane() throw()
-{
-}
+FullScreenPane::~FullScreenPane() throw() = default;
 
 void SAL_CALL FullScreenPane::disposing()
 {

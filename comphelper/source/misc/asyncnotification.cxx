@@ -30,28 +30,23 @@
 
 namespace comphelper
 {
-    AnyEvent::AnyEvent()
+AnyEvent::AnyEvent() = default;
+
+AnyEvent::~AnyEvent() = default;
+
+struct ProcessableEvent
+{
+    AnyEventRef aEvent;
+    ::rtl::Reference<IEventProcessor> xProcessor;
+
+    ProcessableEvent() = default;
+
+    ProcessableEvent(const AnyEventRef& _rEvent,
+                     const ::rtl::Reference<IEventProcessor>& _xProcessor)
+        : aEvent(_rEvent)
+        , xProcessor(_xProcessor)
     {
     }
-
-    AnyEvent::~AnyEvent()
-    {
-    }
-
-    struct ProcessableEvent
-    {
-        AnyEventRef                         aEvent;
-        ::rtl::Reference< IEventProcessor > xProcessor;
-
-        ProcessableEvent()
-        {
-        }
-
-        ProcessableEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
-            :aEvent( _rEvent )
-            ,xProcessor( _xProcessor )
-        {
-        }
     };
 
 
@@ -91,11 +86,7 @@ namespace comphelper
     {
     }
 
-
-    AsyncEventNotifierBase::~AsyncEventNotifierBase()
-    {
-    }
-
+    AsyncEventNotifierBase::~AsyncEventNotifierBase() = default;
 
     void AsyncEventNotifierBase::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
@@ -164,9 +155,7 @@ namespace comphelper
     {
     }
 
-    AsyncEventNotifier::~AsyncEventNotifier()
-    {
-    }
+    AsyncEventNotifier::~AsyncEventNotifier() = default;
 
     void AsyncEventNotifier::execute()
     {

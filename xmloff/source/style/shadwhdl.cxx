@@ -36,10 +36,7 @@ using namespace ::xmloff::token;
 // class XMLMeasurePropHdl
 
 
-XMLShadowPropHdl::~XMLShadowPropHdl()
-{
-    // nothing to do
-}
+XMLShadowPropHdl::~XMLShadowPropHdl() = default;
 
 bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {

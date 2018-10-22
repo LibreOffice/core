@@ -3110,7 +3110,5 @@ CellShell_Impl::CellShell_Impl() :
         m_pLinkedDlg(),
         m_pRequest( nullptr ) {}
 
-CellShell_Impl::~CellShell_Impl()
-{
-}
+CellShell_Impl::~CellShell_Impl() = default;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

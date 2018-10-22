@@ -22,15 +22,9 @@
 
 using ::rtl::OString;
 
-Options::Options()
-{
-}
+Options::Options() = default;
 
-Options::~Options()
-{
-
-}
-
+Options::~Options() = default;
 
 bool Options::isValid(const OString& option) const
 {

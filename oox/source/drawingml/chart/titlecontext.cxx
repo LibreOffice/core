@@ -44,9 +44,7 @@ TextContext::TextContext( ContextHandler2Helper& rParent, TextModel& rModel ) :
 {
 }
 
-TextContext::~TextContext()
-{
-}
+TextContext::~TextContext() = default;
 
 ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
@@ -87,9 +85,7 @@ TitleContext::TitleContext( ContextHandler2Helper& rParent, TitleModel& rModel )
 {
 }
 
-TitleContext::~TitleContext()
-{
-}
+TitleContext::~TitleContext() = default;
 
 ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -121,9 +117,7 @@ LegendContext::LegendContext( ContextHandler2Helper& rParent, LegendModel& rMode
 {
 }
 
-LegendContext::~LegendContext()
-{
-}
+LegendContext::~LegendContext() = default;
 
 ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {

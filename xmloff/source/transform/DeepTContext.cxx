@@ -70,9 +70,7 @@ XMLPersElemContentTContext::XMLPersElemContentTContext(
 {
 }
 
-XMLPersElemContentTContext::~XMLPersElemContentTContext()
-{
-}
+XMLPersElemContentTContext::~XMLPersElemContentTContext() = default;
 
 rtl::Reference<XMLTransformerContext> XMLPersElemContentTContext::CreateChildContext(
         sal_uInt16 nPrefix,

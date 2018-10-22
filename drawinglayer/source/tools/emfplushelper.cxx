@@ -30,9 +30,7 @@ namespace emfplushelper
     {
     }
 
-    EmfPlusHelper::~EmfPlusHelper()
-    {
-    }
+    EmfPlusHelper::~EmfPlusHelper() = default;
 
     void EmfPlusHelper::processEmfPlusData(
         SvMemoryStream& rMS,

@@ -91,11 +91,7 @@ OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XCom
     implInitializeImageURL();
 }
 
-
-OButtonModel::~OButtonModel()
-{
-}
-
+OButtonModel::~OButtonModel() = default;
 
 void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {

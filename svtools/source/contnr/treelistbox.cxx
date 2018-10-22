@@ -253,10 +253,7 @@ SvLBoxTab::SvLBoxTab( const SvLBoxTab& rTab )
     nFlags = rTab.nFlags;
 }
 
-SvLBoxTab::~SvLBoxTab()
-{
-}
-
+SvLBoxTab::~SvLBoxTab() = default;
 
 long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
 {
@@ -291,14 +288,9 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
 // class SvLBoxItem
 // ***************************************************************
 
+SvLBoxItem::SvLBoxItem() = default;
 
-SvLBoxItem::SvLBoxItem()
-{
-}
-
-SvLBoxItem::~SvLBoxItem()
-{
-}
+SvLBoxItem::~SvLBoxItem() = default;
 
 const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const
 {

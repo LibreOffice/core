@@ -43,11 +43,7 @@ HelpInterceptor_Impl::HelpInterceptor_Impl() :
 {
 }
 
-
-HelpInterceptor_Impl::~HelpInterceptor_Impl()
-{
-}
-
+HelpInterceptor_Impl::~HelpInterceptor_Impl() = default;
 
 void HelpInterceptor_Impl::addURL( const OUString& rURL )
 {

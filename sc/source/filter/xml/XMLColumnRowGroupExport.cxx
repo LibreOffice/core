@@ -53,9 +53,7 @@ ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExpor
 {
 }
 
-ScMyOpenCloseColumnRowGroup::~ScMyOpenCloseColumnRowGroup()
-{
-}
+ScMyOpenCloseColumnRowGroup::~ScMyOpenCloseColumnRowGroup() = default;
 
 void ScMyOpenCloseColumnRowGroup::NewTable()
 {

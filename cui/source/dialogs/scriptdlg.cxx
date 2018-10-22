@@ -1384,9 +1384,7 @@ SvxScriptErrorDialog::SvxScriptErrorDialog( css::uno::Any const & aException )
     m_sMessage = GetErrorMessage( aException );
 }
 
-SvxScriptErrorDialog::~SvxScriptErrorDialog()
-{
-}
+SvxScriptErrorDialog::~SvxScriptErrorDialog() = default;
 
 short SvxScriptErrorDialog::Execute()
 {

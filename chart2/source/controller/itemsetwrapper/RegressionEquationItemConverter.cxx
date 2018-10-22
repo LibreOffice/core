@@ -65,9 +65,7 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 }
 
-RegressionEquationItemConverter::~RegressionEquationItemConverter()
-{
-}
+RegressionEquationItemConverter::~RegressionEquationItemConverter() = default;
 
 void RegressionEquationItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

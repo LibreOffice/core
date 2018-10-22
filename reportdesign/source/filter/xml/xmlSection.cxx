@@ -97,9 +97,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
     }
 }
 
-OXMLSection::~OXMLSection()
-{
-}
+OXMLSection::~OXMLSection() = default;
 
 SvXMLImportContextRef OXMLSection::CreateChildContext(
         sal_uInt16 _nPrefix,

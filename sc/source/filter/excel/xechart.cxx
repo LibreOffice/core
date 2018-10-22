@@ -302,9 +302,7 @@ XclExpChRoot::XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData )
 {
 }
 
-XclExpChRoot::~XclExpChRoot()
-{
-}
+XclExpChRoot::~XclExpChRoot() = default;
 
 Reference< XChartDocument > const & XclExpChRoot::GetChartDocument() const
 {
@@ -432,9 +430,7 @@ XclExpChGroupBase::XclExpChGroupBase( const XclExpChRoot& rRoot,
 {
 }
 
-XclExpChGroupBase::~XclExpChGroupBase()
-{
-}
+XclExpChGroupBase::~XclExpChGroupBase() = default;
 
 void XclExpChGroupBase::Save( XclExpStream& rStrm )
 {
@@ -724,13 +720,9 @@ void XclExpChEscherFormat::WriteBody( XclExpStream& rStrm )
     rStrm.CopyFromStream( aMemStrm );
 }
 
-XclExpChFrameBase::XclExpChFrameBase()
-{
-}
+XclExpChFrameBase::XclExpChFrameBase() = default;
 
-XclExpChFrameBase::~XclExpChFrameBase()
-{
-}
+XclExpChFrameBase::~XclExpChFrameBase() = default;
 
 void XclExpChFrameBase::ConvertFrameBase( const XclExpChRoot& rRoot,
         const ScfPropertySet& rPropSet, XclChObjectType eObjType )
@@ -1130,9 +1122,7 @@ void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )
     rStrm << maData.mnFlags << aXclSep;
 }
 
-XclExpChFontBase::~XclExpChFontBase()
-{
-}
+XclExpChFontBase::~XclExpChFontBase() = default;
 
 void XclExpChFontBase::ConvertFontBase( const XclExpChRoot& rRoot, sal_uInt16 nFontIdx )
 {
@@ -3464,9 +3454,7 @@ XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
     }
 }
 
-XclExpChartDrawing::~XclExpChartDrawing()
-{
-}
+XclExpChartDrawing::~XclExpChartDrawing() = default;
 
 void XclExpChartDrawing::Save( XclExpStream& rStrm )
 {

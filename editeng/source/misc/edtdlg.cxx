@@ -25,8 +25,6 @@ EditAbstractDialogFactory* EditAbstractDialogFactory::Create()
     return dynamic_cast <EditAbstractDialogFactory*>( VclAbstractDialogFactory::Create() );
 }
 
-EditAbstractDialogFactory::~EditAbstractDialogFactory()
-{
-}
+EditAbstractDialogFactory::~EditAbstractDialogFactory() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

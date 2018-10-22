@@ -42,7 +42,7 @@ class SfxItemPropertyMap_Impl : public SfxItemPropertyHashMap_t
 public:
     mutable uno::Sequence< beans::Property > m_aPropSeq;
 
-    SfxItemPropertyMap_Impl(){}
+    SfxItemPropertyMap_Impl() = default;
     explicit SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource );
 };
 
@@ -67,9 +67,7 @@ SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap& rSource ) :
 {
 }
 
-SfxItemPropertyMap::~SfxItemPropertyMap()
-{
-}
+SfxItemPropertyMap::~SfxItemPropertyMap() = default;
 
 const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( const OUString &rName ) const
 {
@@ -158,9 +156,7 @@ sal_uInt32 SfxItemPropertyMap::getSize() const
     return m_pImpl->size();
 }
 
-SfxItemPropertySet::~SfxItemPropertySet()
-{
-}
+SfxItemPropertySet::~SfxItemPropertySet() = default;
 
 void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
             const SfxItemSet& rSet, Any& rAny ) const
@@ -305,9 +301,7 @@ Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
     return m_aOwnMap.getProperties();
 }
 
-SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
-{
-}
+SfxItemPropertySetInfo::~SfxItemPropertySetInfo() = default;
 
 Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
 {
@@ -326,9 +320,7 @@ SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEn
     aExtMap.mergeProperties( rPropSeq );
 }
 
-SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo()
-{
-}
+SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo() = default;
 
 Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  )
 {

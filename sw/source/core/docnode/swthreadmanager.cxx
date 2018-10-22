@@ -35,9 +35,7 @@ SwThreadManager::SwThreadManager()
     mbThreadManagerInstantiated = true;
 }
 
-SwThreadManager::~SwThreadManager()
-{
-}
+SwThreadManager::~SwThreadManager() = default;
 
 struct InitInstance : public rtl::Static<SwThreadManager, InitInstance> {};
 

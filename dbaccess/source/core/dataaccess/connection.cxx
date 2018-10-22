@@ -354,9 +354,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     osl_atomic_decrement( &m_refCount );
 }
 
-OConnection::~OConnection()
-{
-}
+OConnection::~OConnection() = default;
 
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings()

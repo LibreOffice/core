@@ -169,7 +169,8 @@ void SwIntrnlRefLink::Closed()
     SvBaseLink::Closed();
 }
 
-sw::LinkAnchorSearchHint::~LinkAnchorSearchHint() {};
+sw::LinkAnchorSearchHint::~LinkAnchorSearchHint() = default;
+;
 
 const SwNode* SwIntrnlRefLink::GetAnchor() const
 {

@@ -38,9 +38,7 @@ SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
 {
 }
 
-SwGlobalDocShell::~SwGlobalDocShell()
-{
-}
+SwGlobalDocShell::~SwGlobalDocShell() = default;
 
 void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,

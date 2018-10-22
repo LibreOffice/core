@@ -41,9 +41,7 @@ SwUndoField::SwUndoField(const SwPosition & rPos )
     pDoc = rPos.GetDoc();
 }
 
-SwUndoField::~SwUndoField()
-{
-}
+SwUndoField::~SwUndoField() = default;
 
 SwPosition SwUndoField::GetPosition()
 {
@@ -70,9 +68,7 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
     OSL_ENSURE(pDoc, "No document!");
 }
 
-SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
-{
-}
+SwUndoFieldFromDoc::~SwUndoFieldFromDoc() = default;
 
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
@@ -118,9 +114,7 @@ SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
 {
 }
 
-SwUndoFieldFromAPI::~SwUndoFieldFromAPI()
-{
-}
+SwUndoFieldFromAPI::~SwUndoFieldFromAPI() = default;
 
 void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 {

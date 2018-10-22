@@ -40,9 +40,7 @@ using namespace ::com::sun::star;
 
 // implementation of an effect duration property handler
 
-XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
-{
-}
+XMLDurationPropertyHdl::~XMLDurationPropertyHdl() = default;
 
 bool XMLDurationPropertyHdl::importXML(
     const OUString& rStrImpValue,
@@ -96,9 +94,7 @@ XMLOpacityPropertyHdl::XMLOpacityPropertyHdl( SvXMLImport* pImport )
 {
 }
 
-XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
-{
-}
+XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl() = default;
 
 bool XMLOpacityPropertyHdl::importXML(
     const OUString& rStrImpValue,
@@ -171,9 +167,7 @@ bool XMLOpacityPropertyHdl::exportXML(
 
 // implementation of an text animation step amount
 
-XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
-{
-}
+XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl() = default;
 
 bool XMLTextAnimationStepPropertyHdl::importXML(
     const OUString& rStrImpValue,
@@ -239,9 +233,7 @@ XMLDateTimeFormatHdl::XMLDateTimeFormatHdl( SvXMLExport* pExport )
 {
 }
 
-XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
-{
-}
+XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl() = default;
 
 bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

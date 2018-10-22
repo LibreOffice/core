@@ -26,9 +26,7 @@ ScPageTableParam::ScPageTableParam()
     Reset();
 }
 
-ScPageTableParam::~ScPageTableParam()
-{
-}
+ScPageTableParam::~ScPageTableParam() = default;
 
 void ScPageTableParam::Reset()
 {
@@ -49,9 +47,7 @@ ScPageAreaParam::ScPageAreaParam()
     Reset();
 }
 
-ScPageAreaParam::~ScPageAreaParam()
-{
-}
+ScPageAreaParam::~ScPageAreaParam() = default;
 
 void ScPageAreaParam::Reset()
 {

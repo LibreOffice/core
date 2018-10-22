@@ -182,9 +182,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     }
 }
 
-SwOutlineTabDialog::~SwOutlineTabDialog()
-{
-}
+SwOutlineTabDialog::~SwOutlineTabDialog() = default;
 
 void SwOutlineTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
 {
@@ -712,9 +710,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl, weld::ComboBox&, void)
     }
 }
 
-SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
-{
-}
+SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage() = default;
 
 void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {

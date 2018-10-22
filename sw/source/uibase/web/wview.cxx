@@ -88,9 +88,7 @@ SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
 {
 }
 
-SwWebView::~SwWebView()
-{
-}
+SwWebView::~SwWebView() = default;
 
 void SwWebView::SelectShell()
 {

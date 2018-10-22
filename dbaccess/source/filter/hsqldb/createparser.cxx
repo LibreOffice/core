@@ -224,7 +224,7 @@ ColumnTypeParts lcl_getColumnTypeParts(const OUString& sFullTypeName)
 
 namespace dbahsql
 {
-CreateStmtParser::CreateStmtParser() {}
+CreateStmtParser::CreateStmtParser() = default;
 
 void CreateStmtParser::parsePrimaryKeys(const OUString& sPrimaryPart)
 {

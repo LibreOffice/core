@@ -31,9 +31,7 @@ SaveMonitor::SaveMonitor(weld::Window *pParent)
 {
 }
 
-SaveMonitor::~SaveMonitor()
-{
-}
+SaveMonitor::~SaveMonitor() = default;
 
 PrintMonitor::PrintMonitor(weld::Window *pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/printmonitordialog.ui",
@@ -44,9 +42,7 @@ PrintMonitor::PrintMonitor(weld::Window *pParent)
 {
 }
 
-PrintMonitor::~PrintMonitor()
-{
-}
+PrintMonitor::~PrintMonitor() = default;
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor(weld::Window *pParent)
@@ -61,9 +57,7 @@ CreateMonitor::CreateMonitor(weld::Window *pParent)
     m_xCounting->set_label("...");
 }
 
-CreateMonitor::~CreateMonitor()
-{
-}
+CreateMonitor::~CreateMonitor() = default;
 
 void CreateMonitor::UpdateCountingText()
 {

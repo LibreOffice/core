@@ -56,10 +56,7 @@ HierarchyContentProvider::HierarchyContentProvider(
 
 
 // virtual
-HierarchyContentProvider::~HierarchyContentProvider()
-{
-}
-
+HierarchyContentProvider::~HierarchyContentProvider() = default;
 
 // XInterface methods.
 

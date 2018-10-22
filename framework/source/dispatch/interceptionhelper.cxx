@@ -32,9 +32,7 @@ InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XF
 {
 }
 
-InterceptionHelper::~InterceptionHelper()
-{
-}
+InterceptionHelper::~InterceptionHelper() = default;
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
                                                                                         const OUString& sTargetFrameName,

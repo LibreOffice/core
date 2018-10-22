@@ -160,9 +160,7 @@ void ModifyPageUndoAction::Redo()
         SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 }
 
-ModifyPageUndoAction::~ModifyPageUndoAction()
-{
-}
+ModifyPageUndoAction::~ModifyPageUndoAction() = default;
 
 RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
     SdDrawDocument* pDocument,

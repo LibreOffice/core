@@ -48,9 +48,7 @@ SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
 {
 }
 
-SwXTextDefaults::~SwXTextDefaults ()
-{
-}
+SwXTextDefaults::~SwXTextDefaults() = default;
 
 uno::Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(  )
 {

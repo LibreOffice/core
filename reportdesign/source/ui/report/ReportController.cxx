@@ -298,9 +298,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 
 }
 
-OReportController::~OReportController()
-{
-}
+OReportController::~OReportController() = default;
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OReportController,OReportController_BASE,OReportController_Listener)
 IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportController_Listener)

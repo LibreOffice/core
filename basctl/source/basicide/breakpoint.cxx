@@ -25,9 +25,7 @@
 
 namespace basctl
 {
-
-BreakPointList::BreakPointList()
-{}
+BreakPointList::BreakPointList() = default;
 
 BreakPointList::BreakPointList(BreakPointList const & rList)
 {
@@ -35,9 +33,7 @@ BreakPointList::BreakPointList(BreakPointList const & rList)
         maBreakPoints.push_back( BreakPoint(rList.at( i )) );
 }
 
-BreakPointList::~BreakPointList()
-{
-}
+BreakPointList::~BreakPointList() = default;
 
 void BreakPointList::reset()
 {

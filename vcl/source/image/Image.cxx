@@ -38,9 +38,7 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-Image::Image()
-{
-}
+Image::Image() = default;
 
 Image::Image(const BitmapEx& rBitmapEx)
 {

@@ -195,9 +195,7 @@ ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     pExcRoot->pFmlaConverter = pFormConv.get();
 }
 
-ImportExcel8::~ImportExcel8()
-{
-}
+ImportExcel8::~ImportExcel8() = default;
 
 void ImportExcel8::Calccount()
 {

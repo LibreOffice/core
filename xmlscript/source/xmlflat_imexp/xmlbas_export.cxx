@@ -46,9 +46,7 @@ namespace xmlscript
     {
     }
 
-    XMLBasicExporterBase::~XMLBasicExporterBase()
-    {
-    }
+    XMLBasicExporterBase::~XMLBasicExporterBase() = default;
 
     // XServiceInfo
     sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName )
@@ -339,9 +337,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     {
     }
 
-    XMLBasicExporter::~XMLBasicExporter()
-    {
-    }
+    XMLBasicExporter::~XMLBasicExporter() = default;
 
     // XServiceInfo
 
@@ -363,9 +359,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     {
     }
 
-    XMLOasisBasicExporter::~XMLOasisBasicExporter()
-    {
-    }
+    XMLOasisBasicExporter::~XMLOasisBasicExporter() = default;
 
     // XServiceInfo
 

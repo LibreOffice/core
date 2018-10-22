@@ -183,9 +183,7 @@ SalClipRegion::SalClipRegion()
     maxClipRectangles = 0;
 }
 
-SalClipRegion::~SalClipRegion()
-{
-}
+SalClipRegion::~SalClipRegion() = default;
 
 void
 SalClipRegion::BeginSetClipRegion( sal_uLong nRects )

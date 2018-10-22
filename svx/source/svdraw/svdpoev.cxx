@@ -52,9 +52,7 @@ SdrPolyEditView::SdrPolyEditView(
     ImpResetPolyPossibilityFlags();
 }
 
-SdrPolyEditView::~SdrPolyEditView()
-{
-}
+SdrPolyEditView::~SdrPolyEditView() = default;
 
 void SdrPolyEditView::ImpCheckPolyPossibilities()
 {

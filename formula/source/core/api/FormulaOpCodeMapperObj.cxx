@@ -42,9 +42,7 @@ FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler
 {
 }
 
-FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
-{
-}
+FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj() = default;
 
 ::sal_Int32 SAL_CALL FormulaOpCodeMapperObj::getOpCodeExternal()
 {

@@ -59,9 +59,7 @@ SbxBase::SbxBase( const SbxBase& r )
     nFlags  = r.nFlags;
 }
 
-SbxBase::~SbxBase()
-{
-}
+SbxBase::~SbxBase() = default;
 
 SbxBase& SbxBase::operator=( const SbxBase& r )
 {
@@ -259,9 +257,7 @@ bool SbxBase::LoadCompleted()
 
 //////////////////////////////// SbxFactory
 
-SbxFactory::~SbxFactory()
-{
-}
+SbxFactory::~SbxFactory() = default;
 
 SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
 {
@@ -275,8 +271,7 @@ SbxObject* SbxFactory::CreateObject( const OUString& )
 
 ///////////////////////////////// SbxInfo
 
-SbxInfo::~SbxInfo()
-{}
+SbxInfo::~SbxInfo() = default;
 
 void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, SbxFlagBits nFlags)
 {

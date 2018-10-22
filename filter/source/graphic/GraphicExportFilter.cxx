@@ -34,8 +34,7 @@ GraphicExportFilter::GraphicExportFilter( const uno::Reference< uno::XComponentC
     , mbSelectionOnly(false)
 {}
 
-GraphicExportFilter::~GraphicExportFilter()
-{}
+GraphicExportFilter::~GraphicExportFilter() = default;
 
 void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::PropertyValue > & rProperties )
 {

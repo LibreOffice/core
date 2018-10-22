@@ -42,9 +42,7 @@ OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx
 
 }
 
-OXMLTableFilterList::~OXMLTableFilterList()
-{
-}
+OXMLTableFilterList::~OXMLTableFilterList() = default;
 
 SvXMLImportContextRef OXMLTableFilterList::CreateChildContext(
         sal_uInt16 nPrefix,

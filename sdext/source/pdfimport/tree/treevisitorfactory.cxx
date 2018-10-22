@@ -26,7 +26,7 @@ namespace pdfi
 {
     struct WriterTreeVisitorFactory : public TreeVisitorFactory
     {
-        WriterTreeVisitorFactory() {}
+        WriterTreeVisitorFactory() = default;
 
         virtual std::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const override
         {
@@ -48,7 +48,7 @@ namespace pdfi
 
     struct ImpressTreeVisitorFactory : public TreeVisitorFactory
     {
-        ImpressTreeVisitorFactory() {}
+        ImpressTreeVisitorFactory() = default;
 
         virtual std::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const override
         {
@@ -72,7 +72,7 @@ namespace pdfi
 
     struct DrawTreeVisitorFactory : public TreeVisitorFactory
     {
-        DrawTreeVisitorFactory() {}
+        DrawTreeVisitorFactory() = default;
 
         virtual std::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const override
         {

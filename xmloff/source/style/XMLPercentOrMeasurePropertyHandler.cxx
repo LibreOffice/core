@@ -31,14 +31,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler() = default;
 
-XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler()
-{
-}
-
-XMLPercentOrMeasurePropertyHandler::~XMLPercentOrMeasurePropertyHandler()
-{
-}
+XMLPercentOrMeasurePropertyHandler::~XMLPercentOrMeasurePropertyHandler() = default;
 
 bool XMLPercentOrMeasurePropertyHandler::importXML(
     const OUString& rStrImpValue,

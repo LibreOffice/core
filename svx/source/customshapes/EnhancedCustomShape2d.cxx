@@ -620,9 +620,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
         *pAny >>= seqHandles;
 }
 
-EnhancedCustomShape2d::~EnhancedCustomShape2d()
-{
-}
+EnhancedCustomShape2d::~EnhancedCustomShape2d() = default;
 
 void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
 {

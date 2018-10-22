@@ -74,10 +74,7 @@ m_ctx(ctx)
 {
 }
 
-
-OO3ExtensionMigration::~OO3ExtensionMigration()
-{
-}
+OO3ExtensionMigration::~OO3ExtensionMigration() = default;
 
 void OO3ExtensionMigration::scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions )
 {
@@ -359,14 +356,9 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
 
 // TmpRepositoryCommandEnv
 
+TmpRepositoryCommandEnv::TmpRepositoryCommandEnv() = default;
 
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
-{
-}
-
-TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv()
-{
-}
+TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv() = default;
 // XCommandEnvironment
 
 uno::Reference< task::XInteractionHandler > TmpRepositoryCommandEnv::getInteractionHandler()

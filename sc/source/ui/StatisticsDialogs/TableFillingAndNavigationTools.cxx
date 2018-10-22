@@ -218,8 +218,7 @@ DataCellIterator::DataCellIterator(const ScRange& aInputRange, bool aByColumn)
         mRow = aInputRange.aStart.Row();
 }
 
-DataCellIterator::~DataCellIterator()
-{}
+DataCellIterator::~DataCellIterator() = default;
 
 bool DataCellIterator::hasNext()
 {
@@ -275,8 +274,7 @@ DataRangeIterator::DataRangeIterator(const ScRange& aInputRange) :
     mIndex(0)
 {}
 
-DataRangeIterator::~DataRangeIterator()
-{}
+DataRangeIterator::~DataRangeIterator() = default;
 
 sal_Int32 DataRangeIterator::index()
 {

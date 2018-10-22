@@ -37,9 +37,7 @@ TokenStack::TokenStack(  )
     Reset();
 }
 
-TokenStack::~TokenStack()
-{
-}
+TokenStack::~TokenStack() = default;
 
 // !ATTENTION!": to the outside the numbering starts with 1!
 // !ATTENTION!": SC-Token are stored with an offset nScTokenOff

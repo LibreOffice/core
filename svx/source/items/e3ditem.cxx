@@ -26,11 +26,7 @@
 
 using namespace ::com::sun::star;
 
-
-SvxB3DVectorItem::~SvxB3DVectorItem()
-{
-}
-
+SvxB3DVectorItem::~SvxB3DVectorItem() = default;
 
 SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
@@ -38,13 +34,9 @@ SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector
 {
 }
 
+SvxB3DVectorItem::SvxB3DVectorItem(const SvxB3DVectorItem& rItem)
 
-SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
-    SfxPoolItem( rItem ),
-    aVal( rItem.aVal )
-{
-}
-
+    = default;
 
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {

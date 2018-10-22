@@ -34,9 +34,7 @@ OOXMLFootnoteHandler::OOXMLFootnoteHandler(OOXMLFastContextHandler * pContext)
 {
 }
 
-OOXMLFootnoteHandler::~OOXMLFootnoteHandler()
-{
-}
+OOXMLFootnoteHandler::~OOXMLFootnoteHandler() = default;
 
 void OOXMLFootnoteHandler::attribute(Id name, Value & val)
 {
@@ -62,9 +60,7 @@ OOXMLEndnoteHandler::OOXMLEndnoteHandler(OOXMLFastContextHandler * pContext)
 {
 }
 
-OOXMLEndnoteHandler::~OOXMLEndnoteHandler()
-{
-}
+OOXMLEndnoteHandler::~OOXMLEndnoteHandler() = default;
 
 void OOXMLEndnoteHandler::attribute(Id name, Value & val)
 {
@@ -90,9 +86,7 @@ OOXMLCommentHandler::OOXMLCommentHandler(OOXMLFastContextHandler * pContext)
 {
 }
 
-OOXMLCommentHandler::~OOXMLCommentHandler()
-{
-}
+OOXMLCommentHandler::~OOXMLCommentHandler() = default;
 
 void OOXMLCommentHandler::attribute(Id name, Value & val)
 {
@@ -118,9 +112,7 @@ OOXMLOLEHandler::OOXMLOLEHandler(OOXMLFastContextHandler * pContext)
 {
 }
 
-OOXMLOLEHandler::~OOXMLOLEHandler()
-{
-}
+OOXMLOLEHandler::~OOXMLOLEHandler() = default;
 
 void OOXMLOLEHandler::attribute(Id name, Value & val)
 {
@@ -150,9 +142,7 @@ OOXMLEmbeddedFontHandler::OOXMLEmbeddedFontHandler(OOXMLFastContextHandler * pCo
 {
 }
 
-OOXMLEmbeddedFontHandler::~OOXMLEmbeddedFontHandler()
-{
-}
+OOXMLEmbeddedFontHandler::~OOXMLEmbeddedFontHandler() = default;
 
 void OOXMLEmbeddedFontHandler::attribute(Id name, Value & val)
 {
@@ -289,9 +279,7 @@ OOXMLPictureHandler::OOXMLPictureHandler(OOXMLFastContextHandler * pContext)
 {
 }
 
-OOXMLPictureHandler::~OOXMLPictureHandler()
-{
-}
+OOXMLPictureHandler::~OOXMLPictureHandler() = default;
 
 void OOXMLPictureHandler::attribute(Id name, Value & val)
 {
@@ -324,9 +312,7 @@ OOXMLHyperlinkHandler::OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext)
 {
 }
 
-OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
-{
-}
+OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler() = default;
 
 void OOXMLHyperlinkHandler::writetext()
 {

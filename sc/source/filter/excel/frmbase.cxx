@@ -22,13 +22,9 @@
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
-ScRangeListTabs::ScRangeListTabs()
-{
-}
+ScRangeListTabs::ScRangeListTabs() = default;
 
-ScRangeListTabs::~ScRangeListTabs()
-{
-}
+ScRangeListTabs::~ScRangeListTabs() = default;
 
 void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
 {
@@ -157,9 +153,7 @@ ConverterBase::ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuff
     pBuffer.reset( new sal_Char[ nNewBuffer ] );
 }
 
-ConverterBase::~ConverterBase()
-{
-}
+ConverterBase::~ConverterBase() = default;
 
 void ConverterBase::Reset()
 {
@@ -172,9 +166,7 @@ ExcelConverterBase::ExcelConverterBase( svl::SharedStringPool& rSPool ) :
 {
 }
 
-ExcelConverterBase::~ExcelConverterBase()
-{
-}
+ExcelConverterBase::~ExcelConverterBase() = default;
 
 void ExcelConverterBase::Reset( const ScAddress& rEingPos )
 {
@@ -195,9 +187,7 @@ LotusConverterBase::LotusConverterBase( SvStream &rStr, svl::SharedStringPool& r
 {
 }
 
-LotusConverterBase::~LotusConverterBase()
-{
-}
+LotusConverterBase::~LotusConverterBase() = default;
 
 void LotusConverterBase::Reset( const ScAddress& rEingPos )
 {

@@ -53,9 +53,7 @@ m_rAligns(rAligns)
 {
 }
 
-PositionHandler::~PositionHandler( )
-{
-}
+PositionHandler::~PositionHandler() = default;
 
 void PositionHandler::lcl_attribute( Id aName, Value& rVal )
 {
@@ -201,9 +199,7 @@ LoggedProperties("WrapHandler"),
 {
 }
 
-WrapHandler::~WrapHandler( )
-{
-}
+WrapHandler::~WrapHandler() = default;
 
 void WrapHandler::lcl_attribute( Id aName, Value& rVal )
 {

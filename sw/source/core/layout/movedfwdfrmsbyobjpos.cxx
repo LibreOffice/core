@@ -23,9 +23,7 @@
 #include <pagefrm.hxx>
 #include <calbck.hxx>
 
-SwMovedFwdFramesByObjPos::SwMovedFwdFramesByObjPos()
-{
-}
+SwMovedFwdFramesByObjPos::SwMovedFwdFramesByObjPos() = default;
 
 SwMovedFwdFramesByObjPos::~SwMovedFwdFramesByObjPos()
 {

@@ -102,9 +102,7 @@ namespace vcl
     {
     }
 
-    QuickSelectionEngine::~QuickSelectionEngine()
-    {
-    }
+    QuickSelectionEngine::~QuickSelectionEngine() = default;
 
     void QuickSelectionEngine::SetEnabled( bool b )
     {

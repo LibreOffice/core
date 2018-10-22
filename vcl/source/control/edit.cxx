@@ -2296,9 +2296,7 @@ TextFilter::TextFilter(const OUString &rForbiddenChars)
 {
 }
 
-TextFilter::~TextFilter()
-{
-}
+TextFilter::~TextFilter() = default;
 
 OUString TextFilter::filter(const OUString &rText)
 {

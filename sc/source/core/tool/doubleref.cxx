@@ -247,9 +247,7 @@ ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc) :
 {
 }
 
-ScDBRangeBase::~ScDBRangeBase()
-{
-}
+ScDBRangeBase::~ScDBRangeBase() = default;
 
 bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const
 {
@@ -274,9 +272,7 @@ ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
 {
 }
 
-ScDBInternalRange::~ScDBInternalRange()
-{
-}
+ScDBInternalRange::~ScDBInternalRange() = default;
 
 SCCOL ScDBInternalRange::getColSize() const
 {
@@ -392,9 +388,7 @@ ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) 
     mnRows = static_cast<SCROW>(nR);
 }
 
-ScDBExternalRange::~ScDBExternalRange()
-{
-}
+ScDBExternalRange::~ScDBExternalRange() = default;
 
 SCCOL ScDBExternalRange::getColSize() const
 {

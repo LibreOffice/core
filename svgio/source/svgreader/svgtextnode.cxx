@@ -39,9 +39,7 @@ namespace svgio
         {
         }
 
-        SvgTextNode::~SvgTextNode()
-        {
-        }
+        SvgTextNode::~SvgTextNode() = default;
 
         const SvgStyleAttributes* SvgTextNode::getSvgStyleAttributes() const
         {

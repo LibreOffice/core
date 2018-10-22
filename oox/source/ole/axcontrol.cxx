@@ -225,9 +225,7 @@ ControlConverter::ControlConverter( const Reference< XModel >& rxDocModel,
     OSL_ENSURE( mxDocModel.is(), "ControlConverter::ControlConverter - missing document model" );
 }
 
-ControlConverter::~ControlConverter()
-{
-}
+ControlConverter::~ControlConverter() = default;
 
 // Generic conversion ---------------------------------------------------------
 
@@ -579,9 +577,7 @@ ControlModelBase::ControlModelBase() :
 {
 }
 
-ControlModelBase::~ControlModelBase()
-{
-}
+ControlModelBase::~ControlModelBase() = default;
 
 OUString ControlModelBase::getServiceName() const
 {
@@ -814,9 +810,7 @@ void ComCtlProgressBarModel::importControlData( BinaryInputStream& rInStrm )
     }
 }
 
-AxControlModelBase::AxControlModelBase()
-{
-}
+AxControlModelBase::AxControlModelBase() = default;
 
 void AxControlModelBase::importProperty( sal_Int32 nPropId, const OUString& rValue )
 {
@@ -2461,9 +2455,7 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
-AxPageModel::AxPageModel()
-{
-}
+AxPageModel::AxPageModel() = default;
 
 ApiControlType AxPageModel::getControlType() const
 {
@@ -2524,9 +2516,7 @@ void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlCo
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
-AxUserFormModel::AxUserFormModel()
-{
-}
+AxUserFormModel::AxUserFormModel() = default;
 
 ApiControlType AxUserFormModel::getControlType() const
 {
@@ -2542,9 +2532,7 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
-HtmlSelectModel::HtmlSelectModel()
-{
-}
+HtmlSelectModel::HtmlSelectModel() = default;
 
 bool
 HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
@@ -2618,9 +2606,7 @@ HtmlSelectModel::convertProperties( PropertyMap& rPropMap, const ControlConverte
    AxListBoxModel::convertProperties( rPropMap, rConv );
 }
 
-HtmlTextBoxModel::HtmlTextBoxModel()
-{
-}
+HtmlTextBoxModel::HtmlTextBoxModel() = default;
 
 bool
 HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )

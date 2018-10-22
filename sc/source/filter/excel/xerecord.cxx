@@ -29,9 +29,7 @@ using namespace ::oox;
 
 // Base classes to export Excel records =======================================
 
-XclExpRecordBase::~XclExpRecordBase()
-{
-}
+XclExpRecordBase::~XclExpRecordBase() = default;
 
 void XclExpRecordBase::Save( XclExpStream& /*rStrm*/ )
 {
@@ -46,11 +44,9 @@ XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord ) :
 {
 }
 
-XclExpDelegatingRecord::~XclExpDelegatingRecord()
-{
+XclExpDelegatingRecord::~XclExpDelegatingRecord() = default;
     // Do Nothing; we use Delegating Record for other objects we "know" will
     // survive...
-}
 
 void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -63,18 +59,14 @@ XclExpXmlElementRecord::XclExpXmlElementRecord(sal_Int32 const nElement)
 {
 }
 
-XclExpXmlElementRecord::~XclExpXmlElementRecord()
-{
-}
+XclExpXmlElementRecord::~XclExpXmlElementRecord() = default;
 
 XclExpXmlStartElementRecord::XclExpXmlStartElementRecord(sal_Int32 const nElement)
     : XclExpXmlElementRecord(nElement)
 {
 }
 
-XclExpXmlStartElementRecord::~XclExpXmlStartElementRecord()
-{
-}
+XclExpXmlStartElementRecord::~XclExpXmlStartElementRecord() = default;
 
 void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -89,9 +81,7 @@ XclExpXmlEndElementRecord::XclExpXmlEndElementRecord( sal_Int32 nElement )
 {
 }
 
-XclExpXmlEndElementRecord::~XclExpXmlEndElementRecord()
-{
-}
+XclExpXmlEndElementRecord::~XclExpXmlEndElementRecord() = default;
 
 void XclExpXmlEndElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -104,9 +94,7 @@ XclExpXmlStartSingleElementRecord::XclExpXmlStartSingleElementRecord(
 {
 }
 
-XclExpXmlStartSingleElementRecord::~XclExpXmlStartSingleElementRecord()
-{
-}
+XclExpXmlStartSingleElementRecord::~XclExpXmlStartSingleElementRecord() = default;
 
 void XclExpXmlStartSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -114,13 +102,9 @@ void XclExpXmlStartSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStream->write( "<" )->writeId( mnElement );
 }
 
-XclExpXmlEndSingleElementRecord::XclExpXmlEndSingleElementRecord()
-{
-}
+XclExpXmlEndSingleElementRecord::XclExpXmlEndSingleElementRecord() = default;
 
-XclExpXmlEndSingleElementRecord::~XclExpXmlEndSingleElementRecord()
-{
-}
+XclExpXmlEndSingleElementRecord::~XclExpXmlEndSingleElementRecord() = default;
 
 void XclExpXmlEndSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -133,9 +117,7 @@ XclExpRecord::XclExpRecord( sal_uInt16 nRecId, std::size_t nRecSize ) :
 {
 }
 
-XclExpRecord::~XclExpRecord()
-{
-}
+XclExpRecord::~XclExpRecord() = default;
 
 void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, std::size_t nRecSize )
 {

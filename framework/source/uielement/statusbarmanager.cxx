@@ -142,9 +142,7 @@ StatusBarManager::StatusBarManager(
     m_pStatusBar->SetDoubleClickHdl( LINK( this, StatusBarManager, DoubleClick ) );
 }
 
-StatusBarManager::~StatusBarManager()
-{
-}
+StatusBarManager::~StatusBarManager() = default;
 
 StatusBar* StatusBarManager::GetStatusBar() const
 {

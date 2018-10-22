@@ -99,9 +99,7 @@ OSortIndex::OSortIndex( const std::vector<OKeyType>& _aKeyType,
 {
 }
 
-OSortIndex::~OSortIndex()
-{
-}
+OSortIndex::~OSortIndex() = default;
 
 void OSortIndex::AddKeyValue(std::unique_ptr<OKeyValue> pKeyValue)
 {
@@ -136,9 +134,7 @@ OKeyValue::OKeyValue(sal_Int32 nVal)
 {
 }
 
-OKeyValue::~OKeyValue()
-{
-}
+OKeyValue::~OKeyValue() = default;
 
 std::unique_ptr<OKeyValue> OKeyValue::createKeyValue(sal_Int32 _nVal)
 {

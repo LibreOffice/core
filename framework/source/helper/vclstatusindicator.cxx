@@ -36,9 +36,7 @@ VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWin
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 
-VCLStatusIndicator::~VCLStatusIndicator()
-{
-}
+VCLStatusIndicator::~VCLStatusIndicator() = default;
 
 void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)

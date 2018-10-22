@@ -1137,9 +1137,7 @@ WW8PLCFx_PCD::WW8PLCFx_PCD(const WW8Fib& rFib, WW8PLCFpcd* pPLCFpcd,
     bVer67= bVer67P;
 }
 
-WW8PLCFx_PCD::~WW8PLCFx_PCD()
-{
-}
+WW8PLCFx_PCD::~WW8PLCFx_PCD() = default;
 
 sal_uInt32 WW8PLCFx_PCD::GetIMax() const
 {
@@ -3346,9 +3344,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     pPieceIter = rSBase.m_pPieceIter.get();
 }
 
-WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP()
-{
-}
+WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP() = default;
 
 void WW8PLCFx_Cp_FKP::ResetAttrStartEnd()
 {
@@ -3693,9 +3689,7 @@ WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTableSt,
     pSprms.reset( new sal_uInt8[nArrMax] );     // maximum length
 }
 
-WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
-{
-}
+WW8PLCFx_SEPX::~WW8PLCFx_SEPX() = default;
 
 sal_uInt32 WW8PLCFx_SEPX::GetIdx() const
 {
@@ -4004,9 +3998,7 @@ WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
         pPLCF.reset( new WW8PLCFspecial( pSt, nFc, nLen, 2 ) );
 }
 
-WW8PLCFx_FLD::~WW8PLCFx_FLD()
-{
-}
+WW8PLCFx_FLD::~WW8PLCFx_FLD() = default;
 
 sal_uInt32 WW8PLCFx_FLD::GetIdx() const
 {
@@ -4281,9 +4273,7 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTableSt, const WW8Fib& rFib)
     }
 }
 
-WW8PLCFx_Book::~WW8PLCFx_Book()
-{
-}
+WW8PLCFx_Book::~WW8PLCFx_Book() = default;
 
 sal_uInt32 WW8PLCFx_Book::GetIdx() const
 {
@@ -4531,9 +4521,7 @@ WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTableSt, const WW8Fib& rFib)
     }
 }
 
-WW8PLCFx_AtnBook::~WW8PLCFx_AtnBook()
-{
-}
+WW8PLCFx_AtnBook::~WW8PLCFx_AtnBook() = default;
 
 sal_uInt32 WW8PLCFx_AtnBook::GetIdx() const
 {
@@ -4660,9 +4648,7 @@ WW8PLCFx_FactoidBook::WW8PLCFx_FactoidBook(SvStream* pTableSt, const WW8Fib& rFi
     }
 }
 
-WW8PLCFx_FactoidBook::~WW8PLCFx_FactoidBook()
-{
-}
+WW8PLCFx_FactoidBook::~WW8PLCFx_FactoidBook() = default;
 
 sal_uInt32 WW8PLCFx_FactoidBook::GetIdx() const
 {

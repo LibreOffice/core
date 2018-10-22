@@ -53,9 +53,7 @@ ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
 {
 }
 
-ScQueryEntry::~ScQueryEntry()
-{
-}
+ScQueryEntry::~ScQueryEntry() = default;
 
 ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 {

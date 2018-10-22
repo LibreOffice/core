@@ -109,9 +109,7 @@ SvNumberFormatterServiceObj::SvNumberFormatterServiceObj()
 {
 }
 
-SvNumberFormatterServiceObj::~SvNumberFormatterServiceObj()
-{
-}
+SvNumberFormatterServiceObj::~SvNumberFormatterServiceObj() = default;
 
 // XNumberFormatter
 
@@ -351,9 +349,7 @@ SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::
 {
 }
 
-SvNumberFormatsObj::~SvNumberFormatsObj()
-{
-}
+SvNumberFormatsObj::~SvNumberFormatsObj() = default;
 
 // XNumberFormats
 
@@ -590,9 +586,7 @@ SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_u
 {
 }
 
-SvNumberFormatObj::~SvNumberFormatObj()
-{
-}
+SvNumberFormatObj::~SvNumberFormatObj() = default;
 
 // XPropertySet
 
@@ -800,9 +794,7 @@ SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj
 {
 }
 
-SvNumberFormatSettingsObj::~SvNumberFormatSettingsObj()
-{
-}
+SvNumberFormatSettingsObj::~SvNumberFormatSettingsObj() = default;
 
 // XPropertySet
 

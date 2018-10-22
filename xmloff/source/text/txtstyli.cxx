@@ -143,8 +143,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 {
 }
 
-XMLTextStyleContext::~XMLTextStyleContext()
-{}
+XMLTextStyleContext::~XMLTextStyleContext() = default;
 
 SvXMLImportContextRef XMLTextStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,

@@ -57,9 +57,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Window* pParent)
     UpdateEnable();
 }
 
-ScLinkedAreaDlg::~ScLinkedAreaDlg()
-{
-}
+ScLinkedAreaDlg::~ScLinkedAreaDlg() = default;
 
 #define FILTERNAME_HTML  "HTML (StarCalc)"
 #define FILTERNAME_QUERY "calc_HTML_WebQuery"

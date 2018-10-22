@@ -51,10 +51,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
 #endif
 }
 
-ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
-{
-}
-
+ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj() = default;
 
 vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {

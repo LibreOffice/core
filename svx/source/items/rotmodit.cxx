@@ -47,14 +47,11 @@ SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
 {
 }
 
-SvxRotateModeItem::SvxRotateModeItem( const SvxRotateModeItem& rItem )
-    : SfxEnumItem( rItem )
-{
-}
+SvxRotateModeItem::SvxRotateModeItem(const SvxRotateModeItem& rItem)
 
-SvxRotateModeItem::~SvxRotateModeItem()
-{
-}
+    = default;
+
+SvxRotateModeItem::~SvxRotateModeItem() = default;
 
 SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
 {

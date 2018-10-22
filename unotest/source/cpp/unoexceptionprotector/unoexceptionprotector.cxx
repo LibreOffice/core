@@ -46,7 +46,7 @@ std::string convert(OUString const & s16) {
 class Prot : public CppUnit::Protector
 {
 public:
-    Prot() {}
+    Prot() = default;
 
     Prot(const Prot&) = delete;
     Prot& operator=(const Prot&) = delete;

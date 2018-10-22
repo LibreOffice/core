@@ -36,9 +36,7 @@ ScSortKeyWindow::ScSortKeyWindow(weld::Container* pBox)
 {
 }
 
-ScSortKeyWindow::~ScSortKeyWindow()
-{
-}
+ScSortKeyWindow::~ScSortKeyWindow() = default;
 
 void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
 {

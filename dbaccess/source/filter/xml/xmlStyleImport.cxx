@@ -56,10 +56,7 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
 
 }
 
-OTableStyleContext::~OTableStyleContext()
-{
-
-}
+OTableStyleContext::~OTableStyleContext() = default;
 
 void OTableStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
@@ -149,10 +146,7 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
 
 }
 
-OTableStylesContext::~OTableStylesContext()
-{
-
-}
+OTableStylesContext::~OTableStylesContext() = default;
 
 void OTableStylesContext::EndElement()
 {

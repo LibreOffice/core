@@ -47,9 +47,7 @@ DateTickFactory::DateTickFactory(
     }
 }
 
-DateTickFactory::~DateTickFactory()
-{
-}
+DateTickFactory::~DateTickFactory() = default;
 
 void DateTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos, bool bShifted ) const
 {

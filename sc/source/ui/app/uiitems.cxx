@@ -53,9 +53,7 @@ ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem ) :
 {
 }
 
-ScInputStatusItem::~ScInputStatusItem()
-{
-}
+ScInputStatusItem::~ScInputStatusItem() = default;
 
 bool ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -90,9 +88,7 @@ ScTablesHint::ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2) :
 {
 }
 
-ScTablesHint::~ScTablesHint()
-{
-}
+ScTablesHint::~ScTablesHint() = default;
 
 ScIndexHint::ScIndexHint(SfxHintId nNewId, sal_uInt16 nIdx) :
     SfxHint( nNewId ),
@@ -100,9 +96,7 @@ ScIndexHint::ScIndexHint(SfxHintId nNewId, sal_uInt16 nIdx) :
 {
 }
 
-ScIndexHint::~ScIndexHint()
-{
-}
+ScIndexHint::~ScIndexHint() = default;
 
 /**
  * Create new EditView for Cursorposition
@@ -113,9 +107,7 @@ ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress&
 {
 }
 
-ScEditViewHint::~ScEditViewHint()
-{
-}
+ScEditViewHint::~ScEditViewHint() = default;
 
 /**
  * Data for the sorting dialog
@@ -196,9 +188,7 @@ ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
 {
 }
 
-ScQueryItem::~ScQueryItem()
-{
-}
+ScQueryItem::~ScQueryItem() = default;
 
 void ScQueryItem::SetAdvancedQuerySource(const ScRange* pSource)
 {
@@ -296,9 +286,7 @@ ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
         pUserList.reset( new ScUserList( *(rItem.pUserList) ) );
 }
 
-ScUserListItem::~ScUserListItem()
-{
-}
+ScUserListItem::~ScUserListItem() = default;
 
 bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -375,9 +363,7 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
     pSaveData.reset( new ScDPSaveData(*rItem.pSaveData) );
 }
 
-ScPivotItem::~ScPivotItem()
-{
-}
+ScPivotItem::~ScPivotItem() = default;
 
 bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 {

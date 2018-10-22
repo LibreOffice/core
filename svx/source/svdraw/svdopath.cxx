@@ -1610,9 +1610,7 @@ SdrPathObjGeoData::SdrPathObjGeoData()
 {
 }
 
-SdrPathObjGeoData::~SdrPathObjGeoData()
-{
-}
+SdrPathObjGeoData::~SdrPathObjGeoData() = default;
 
 // DrawContact section
 

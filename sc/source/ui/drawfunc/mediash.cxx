@@ -53,9 +53,7 @@ ScMediaShell::ScMediaShell(ScViewData* pData) :
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Media));
 }
 
-ScMediaShell::~ScMediaShell()
-{
-}
+ScMediaShell::~ScMediaShell() = default;
 
 void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 {

@@ -64,8 +64,7 @@ namespace svx
         }
     }
 
-    ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
-    {}
+    ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater() = default;
 
     void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
     {

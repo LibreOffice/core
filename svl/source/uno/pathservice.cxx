@@ -36,8 +36,7 @@ class PathService : public ::cppu::WeakImplHelper< css::frame::XConfigManager, c
     SvtPathOptions const m_aOptions;
 
 public:
-    PathService()
-        {}
+    PathService() = default;
 
     virtual OUString SAL_CALL getImplementationName() override
         {

@@ -266,9 +266,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     }
 }
 
-VDataSeries::~VDataSeries()
-{
-}
+VDataSeries::~VDataSeries() = default;
 
 void VDataSeries::doSortByXValues()
 {

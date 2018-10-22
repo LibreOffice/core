@@ -788,9 +788,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
     OSL_ENSURE(m_pImpl->m_xManifest.is(), "manifest is null");
 }
 
-DocumentMetadataAccess::~DocumentMetadataAccess()
-{
-}
+DocumentMetadataAccess::~DocumentMetadataAccess() = default;
 
 // css::rdf::XRepositorySupplier:
 uno::Reference< rdf::XRepository > SAL_CALL

@@ -33,9 +33,7 @@ SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterfa
 {
 }
 
-SwVbaListFormat::~SwVbaListFormat()
-{
-}
+SwVbaListFormat::~SwVbaListFormat() = default;
 
 void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const css::uno::Any& ContinuePreviousList, const css::uno::Any& ApplyTo, const css::uno::Any& DefaultListBehavior )
 {

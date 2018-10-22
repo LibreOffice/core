@@ -70,11 +70,7 @@ namespace pcr
         }
     }
 
-
-    PropertyControlExtender::~PropertyControlExtender()
-    {
-    }
-
+    PropertyControlExtender::~PropertyControlExtender() = default;
 
     void SAL_CALL PropertyControlExtender::keyPressed( const KeyEvent& _event )
     {

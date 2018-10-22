@@ -170,9 +170,7 @@ LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,
     mpNode->setName( rAttribs.getString( XML_name ).get() );
 }
 
-LayoutNodeContext::~LayoutNodeContext()
-{
-}
+LayoutNodeContext::~LayoutNodeContext() = default;
 
 ContextHandlerRef
 LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,

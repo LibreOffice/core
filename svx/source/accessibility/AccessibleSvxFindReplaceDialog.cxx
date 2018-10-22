@@ -32,9 +32,7 @@ VCLXAccessibleSvxFindReplaceDialog::VCLXAccessibleSvxFindReplaceDialog(VCLXWindo
 
 }
 
-VCLXAccessibleSvxFindReplaceDialog::~VCLXAccessibleSvxFindReplaceDialog()
-{
-}
+VCLXAccessibleSvxFindReplaceDialog::~VCLXAccessibleSvxFindReplaceDialog() = default;
 
 void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {

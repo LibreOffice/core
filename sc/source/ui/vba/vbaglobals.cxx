@@ -49,9 +49,7 @@ ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Referen
     init( aInitArgs );
 }
 
-ScVbaGlobals::~ScVbaGlobals()
-{
-}
+ScVbaGlobals::~ScVbaGlobals() = default;
 
 // XGlobals
 

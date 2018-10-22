@@ -673,9 +673,7 @@ ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::u
 {
     m_pShapeHelper.reset( new ShapeHelper( xShape ) );
 }
-ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
-{
-}
+ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes() = default;
 
 PointerStyle getPointerStyle( const uno::Reference< frame::XModel >& xModel )
 {

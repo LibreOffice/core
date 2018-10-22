@@ -112,9 +112,7 @@ UpDownBarsConverter::UpDownBarsConverter( const ConverterRoot& rParent, UpDownBa
 {
 }
 
-UpDownBarsConverter::~UpDownBarsConverter()
-{
-}
+UpDownBarsConverter::~UpDownBarsConverter() = default;
 
 void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxChartType )
 {
@@ -187,9 +185,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
     maTypeInfo = lclGetTypeInfoFromTypeId( eTypeId );
 }
 
-TypeGroupConverter::~TypeGroupConverter()
-{
-}
+TypeGroupConverter::~TypeGroupConverter() = default;
 
 bool TypeGroupConverter::isStacked() const
 {

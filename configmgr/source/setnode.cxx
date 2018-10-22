@@ -80,7 +80,7 @@ SetNode::SetNode(SetNode const & other, bool keepTemplateName):
     }
 }
 
-SetNode::~SetNode() {}
+SetNode::~SetNode() = default;
 
 Node::Kind SetNode::kind() const {
     return KIND_SET;

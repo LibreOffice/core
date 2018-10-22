@@ -26,11 +26,7 @@ CGMElements::CGMElements()
     Init();
 };
 
-
-CGMElements::~CGMElements()
-{
-}
-
+CGMElements::~CGMElements() = default;
 
 CGMElements& CGMElements::operator=( const CGMElements& rSource )
 {

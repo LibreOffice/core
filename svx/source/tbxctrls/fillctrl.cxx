@@ -76,9 +76,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     addStatusListener( ".uno:BitmapListState");
 }
 
-SvxFillToolBoxControl::~SvxFillToolBoxControl()
-{
-}
+SvxFillToolBoxControl::~SvxFillToolBoxControl() = default;
 
 void SvxFillToolBoxControl::StateChanged(
     sal_uInt16 nSID,

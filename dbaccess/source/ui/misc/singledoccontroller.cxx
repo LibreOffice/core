@@ -56,9 +56,7 @@ namespace dbaui
     {
     }
 
-    OSingleDocumentController::~OSingleDocumentController()
-    {
-    }
+    OSingleDocumentController::~OSingleDocumentController() = default;
 
     void SAL_CALL OSingleDocumentController::disposing()
     {

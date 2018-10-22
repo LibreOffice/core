@@ -27,11 +27,7 @@ TrackChangesHandler::TrackChangesHandler( sal_Int32 nToken ) :
     m_pRedlineParams->m_nToken = nToken;
 }
 
-
-TrackChangesHandler::~TrackChangesHandler()
-{
-}
-
+TrackChangesHandler::~TrackChangesHandler() = default;
 
 void TrackChangesHandler::lcl_attribute(Id rName, Value & rVal)
 {

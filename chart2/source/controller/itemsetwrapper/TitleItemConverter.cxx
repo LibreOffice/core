@@ -116,9 +116,7 @@ TitleItemConverter::TitleItemConverter(
     }
 }
 
-TitleItemConverter::~TitleItemConverter()
-{
-}
+TitleItemConverter::~TitleItemConverter() = default;
 
 void TitleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

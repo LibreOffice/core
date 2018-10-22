@@ -178,9 +178,7 @@ SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
     }
 }
 
-SbxErrObject::~SbxErrObject()
-{
-}
+SbxErrObject::~SbxErrObject() = default;
 
 uno::Reference< vba::XErrObject > const &
 SbxErrObject::getUnoErrObject()

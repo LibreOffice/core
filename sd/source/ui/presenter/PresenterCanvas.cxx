@@ -118,9 +118,7 @@ PresenterCanvas::PresenterCanvas (
     }
 }
 
-PresenterCanvas::~PresenterCanvas()
-{
-}
+PresenterCanvas::~PresenterCanvas() = default;
 
 void SAL_CALL PresenterCanvas::disposing()
 {

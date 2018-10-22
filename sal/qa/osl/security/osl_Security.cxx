@@ -315,9 +315,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
 {
     public:
-    MyTestPlugInImpl() {};
-    void initialize( CPPUNIT_NS::TestFactoryRegistry *registry,
-                   const CPPUNIT_NS::PlugInParameters &parameters ) override;
+        MyTestPlugInImpl() = default;
+        ;
+        void initialize(CPPUNIT_NS::TestFactoryRegistry* registry,
+                        const CPPUNIT_NS::PlugInParameters& parameters) override;
 };
 
 void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,

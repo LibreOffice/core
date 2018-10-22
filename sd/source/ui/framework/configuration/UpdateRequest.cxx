@@ -33,9 +33,7 @@ UpdateRequest::UpdateRequest()
 {
 }
 
-UpdateRequest::~UpdateRequest() throw()
-{
-}
+UpdateRequest::~UpdateRequest() throw() = default;
 
 void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>&)
 {

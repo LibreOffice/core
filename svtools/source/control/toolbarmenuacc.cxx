@@ -527,11 +527,7 @@ ToolbarMenuEntryAcc::ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent )
 {
 }
 
-
-ToolbarMenuEntryAcc::~ToolbarMenuEntryAcc()
-{
-}
-
+ToolbarMenuEntryAcc::~ToolbarMenuEntryAcc() = default;
 
 void SAL_CALL ToolbarMenuEntryAcc::disposing()
 {

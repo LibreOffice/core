@@ -44,19 +44,10 @@ AccessibleShapeInfo::AccessibleShapeInfo (
     // empty.
 }
 
-AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
-    : mxShape (rOther.mxShape),
-      mxParent (rOther.mxParent),
-      mpChildrenManager (rOther.mpChildrenManager)
-{
-    // empty.
-}
+AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther) = default;
 
 
-AccessibleShapeInfo::~AccessibleShapeInfo()
-{
-    // empty.
-}
+AccessibleShapeInfo::~AccessibleShapeInfo() = default;
 
 } // end of namespace accessibility.
 

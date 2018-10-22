@@ -197,9 +197,7 @@ FilterBase::FilterBase( const Reference< XComponentContext >& rxContext ) :
 {
 }
 
-FilterBase::~FilterBase()
-{
-}
+FilterBase::~FilterBase() = default;
 
 bool FilterBase::isImportFilter() const
 {

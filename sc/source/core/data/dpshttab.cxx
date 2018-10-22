@@ -66,9 +66,7 @@ ScSheetDPData::ScSheetDPData(const ScDocument* pD, const ScSheetSourceDesc& rDes
     }
 }
 
-ScSheetDPData::~ScSheetDPData()
-{
-}
+ScSheetDPData::~ScSheetDPData() = default;
 
 void ScSheetDPData::DisposeData()
 {

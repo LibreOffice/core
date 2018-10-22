@@ -87,9 +87,7 @@ namespace sdr
         }
 
         // The destructor.
-        ViewContactOfMasterPageDescriptor::~ViewContactOfMasterPageDescriptor()
-        {
-        }
+        ViewContactOfMasterPageDescriptor::~ViewContactOfMasterPageDescriptor() = default;
 
         sal_uInt32 ViewContactOfMasterPageDescriptor::GetObjectCount() const
         {

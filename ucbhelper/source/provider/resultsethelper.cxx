@@ -61,10 +61,7 @@ ResultSetImplHelper::ResultSetImplHelper(
 
 
 // virtual
-ResultSetImplHelper::~ResultSetImplHelper()
-{
-}
-
+ResultSetImplHelper::~ResultSetImplHelper() = default;
 
 // XInterface methods.
 void SAL_CALL ResultSetImplHelper::acquire()

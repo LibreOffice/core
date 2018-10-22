@@ -83,9 +83,7 @@ namespace sdr
             mbAllowsAnimation = true;
         }
 
-        OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()
-        {
-        }
+        OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx() = default;
 
         void OverlayAnimatedBitmapEx::Trigger(sal_uInt32 nTime)
         {

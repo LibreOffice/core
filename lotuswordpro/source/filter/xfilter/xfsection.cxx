@@ -64,9 +64,7 @@ XFSection::XFSection()
     m_strSectionName = XFGlobal::GenSectionName();
 }
 
-XFSection::~XFSection()
-{
-}
+XFSection::~XFSection() = default;
 
 void    XFSection::ToXml(IXFStream *pStrm)
 {

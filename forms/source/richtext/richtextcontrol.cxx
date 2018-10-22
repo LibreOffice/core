@@ -54,11 +54,7 @@ namespace frm
     {
     }
 
-
-    ORichTextControl::~ORichTextControl()
-    {
-    }
-
+    ORichTextControl::~ORichTextControl() = default;
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextControl, UnoEditControl, ORichTextControl_Base )
 
@@ -275,16 +271,9 @@ namespace frm
         return pPeer;
     }
 
+    ORichTextPeer::ORichTextPeer() = default;
 
-    ORichTextPeer::ORichTextPeer()
-    {
-    }
-
-
-    ORichTextPeer::~ORichTextPeer()
-    {
-    }
-
+    ORichTextPeer::~ORichTextPeer() = default;
 
     void ORichTextPeer::dispose( )
     {

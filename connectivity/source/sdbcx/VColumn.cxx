@@ -106,9 +106,7 @@ OColumn::OColumn(   const OUString& Name,
     construct();
 }
 
-OColumn::~OColumn()
-{
-}
+OColumn::~OColumn() = default;
 
 ::cppu::IPropertyArrayHelper* OColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {

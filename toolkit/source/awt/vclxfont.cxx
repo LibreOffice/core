@@ -39,9 +39,7 @@ VCLXFont::VCLXFont()
     mpFontMetric = nullptr;
 }
 
-VCLXFont::~VCLXFont()
-{
-}
+VCLXFont::~VCLXFont() = default;
 
 void VCLXFont::Init( css::awt::XDevice& rxDev, const vcl::Font& rFont )
 {

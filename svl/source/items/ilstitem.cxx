@@ -28,9 +28,7 @@
 
 SfxPoolItem* SfxIntegerListItem::CreateDefault() { return new SfxIntegerListItem; }
 
-SfxIntegerListItem::SfxIntegerListItem()
-{
-}
+SfxIntegerListItem::SfxIntegerListItem() = default;
 
 SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < sal_Int32 >& rList )
     : SfxPoolItem( which )
@@ -46,9 +44,7 @@ SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequen
         m_aList[n] = rList[n];
 }
 
-SfxIntegerListItem::~SfxIntegerListItem()
-{
-}
+SfxIntegerListItem::~SfxIntegerListItem() = default;
 
 bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {

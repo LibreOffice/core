@@ -173,7 +173,7 @@ public:
     virtual bool next(OUString *) = 0;
 
 protected:
-    virtual ~Tokens() {} // avoid warnings
+    virtual ~Tokens() = default; // avoid warnings
 };
 
 class SequentialTokens: public Tokens {

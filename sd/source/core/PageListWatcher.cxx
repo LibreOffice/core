@@ -71,9 +71,7 @@ ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
 {
 }
 
-ImpPageListWatcher::~ImpPageListWatcher()
-{
-}
+ImpPageListWatcher::~ImpPageListWatcher() = default;
 
 SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
 {
@@ -191,9 +189,7 @@ ImpDrawPageListWatcher::ImpDrawPageListWatcher(const SdrModel& rModel)
 {
 }
 
-ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
-{
-}
+ImpDrawPageListWatcher::~ImpDrawPageListWatcher() = default;
 
 sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
 {
@@ -210,8 +206,6 @@ ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)
 {
 }
 
-ImpMasterPageListWatcher::~ImpMasterPageListWatcher()
-{
-}
+ImpMasterPageListWatcher::~ImpMasterPageListWatcher() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

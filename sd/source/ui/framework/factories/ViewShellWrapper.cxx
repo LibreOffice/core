@@ -64,9 +64,7 @@ ViewShellWrapper::ViewShellWrapper (
 {
 }
 
-ViewShellWrapper::~ViewShellWrapper()
-{
-}
+ViewShellWrapper::~ViewShellWrapper() = default;
 
 void SAL_CALL ViewShellWrapper::disposing()
 {

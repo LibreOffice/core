@@ -88,25 +88,21 @@ namespace drawinglayer
         {
         }
 
-        SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(const SdrFormTextOutlineAttribute& rCandidate)
-        :   mpSdrFormTextOutlineAttribute(rCandidate.mpSdrFormTextOutlineAttribute)
-        {
-        }
+        SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
+            const SdrFormTextOutlineAttribute& rCandidate)
 
-        SdrFormTextOutlineAttribute::~SdrFormTextOutlineAttribute()
-        {
-        }
+            = default;
+
+        SdrFormTextOutlineAttribute::~SdrFormTextOutlineAttribute() = default;
 
         bool SdrFormTextOutlineAttribute::isDefault() const
         {
             return mpSdrFormTextOutlineAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(const SdrFormTextOutlineAttribute& rCandidate)
-        {
-            mpSdrFormTextOutlineAttribute = rCandidate.mpSdrFormTextOutlineAttribute;
-            return *this;
-        }
+        SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::
+        operator=(const SdrFormTextOutlineAttribute& rCandidate)
+            = default;
 
         SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(SdrFormTextOutlineAttribute&& rCandidate)
         {

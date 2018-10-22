@@ -457,9 +457,7 @@ SelectionHelper::SelectionHelper( SdrObject* pSelectedObj )
 {
 
 }
-SelectionHelper::~SelectionHelper()
-{
-}
+SelectionHelper::~SelectionHelper() = default;
 
 bool SelectionHelper::getFrameDragSingles()
 {

@@ -459,9 +459,7 @@ bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
     return bRet;
 }
 
-SwDontExpandItem::~SwDontExpandItem()
-{
-}
+SwDontExpandItem::~SwDontExpandItem() = default;
 
 void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
 {

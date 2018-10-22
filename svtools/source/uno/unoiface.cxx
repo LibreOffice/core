@@ -179,9 +179,7 @@ VCLXMultiLineEdit::VCLXMultiLineEdit()
 {
 }
 
-VCLXMultiLineEdit::~VCLXMultiLineEdit()
-{
-}
+VCLXMultiLineEdit::~VCLXMultiLineEdit() = default;
 
 css::uno::Any VCLXMultiLineEdit::queryInterface( const css::uno::Type & rType )
 {
@@ -813,11 +811,7 @@ SVTXFormattedField::SVTXFormattedField()
 {
 }
 
-
-SVTXFormattedField::~SVTXFormattedField()
-{
-}
-
+SVTXFormattedField::~SVTXFormattedField() = default;
 
 void SVTXFormattedField::SetWindow( const VclPtr< vcl::Window > &_pWindow )
 {
@@ -1390,9 +1384,7 @@ SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
 {
 }
 
-SVTXRoadmap::~SVTXRoadmap()
-{
-}
+SVTXRoadmap::~SVTXRoadmap() = default;
 
 void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -1636,13 +1628,9 @@ void SVTXRoadmap::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 //  class SVTXNumericField
 
-SVTXNumericField::SVTXNumericField()
-{
-}
+SVTXNumericField::SVTXNumericField() = default;
 
-SVTXNumericField::~SVTXNumericField()
-{
-}
+SVTXNumericField::~SVTXNumericField() = default;
 
 css::uno::Any SVTXNumericField::queryInterface( const css::uno::Type & rType )
 {
@@ -1803,13 +1791,9 @@ void SVTXNumericField::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 //  class SVTXCurrencyField
 
-SVTXCurrencyField::SVTXCurrencyField()
-{
-}
+SVTXCurrencyField::SVTXCurrencyField() = default;
 
-SVTXCurrencyField::~SVTXCurrencyField()
-{
-}
+SVTXCurrencyField::~SVTXCurrencyField() = default;
 
 css::uno::Any SVTXCurrencyField::queryInterface( const css::uno::Type & rType )
 {
@@ -2043,9 +2027,7 @@ VCLXProgressBar::VCLXProgressBar()
 {
 }
 
-VCLXProgressBar::~VCLXProgressBar()
-{
-}
+VCLXProgressBar::~VCLXProgressBar() = default;
 
 void VCLXProgressBar::ImplUpdateValue()
 {
@@ -2286,9 +2268,7 @@ SVTXDateField::SVTXDateField()
 {
 }
 
-SVTXDateField::~SVTXDateField()
-{
-}
+SVTXDateField::~SVTXDateField() = default;
 
 void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
 {

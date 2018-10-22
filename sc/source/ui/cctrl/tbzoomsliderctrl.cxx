@@ -47,10 +47,7 @@ ScZoomSliderControl::ScZoomSliderControl(
     rTbx.Invalidate();
 }
 
-ScZoomSliderControl::~ScZoomSliderControl()
-{
-
-}
+ScZoomSliderControl::~ScZoomSliderControl() = default;
 
 void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState,
                                        const SfxPoolItem* pState )

@@ -1346,9 +1346,7 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
 
 FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl) {}
 
-FastSaxParser::~FastSaxParser()
-{
-}
+FastSaxParser::~FastSaxParser() = default;
 
 void SAL_CALL
 FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)

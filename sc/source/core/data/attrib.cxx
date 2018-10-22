@@ -102,9 +102,7 @@ ScMergeAttr::ScMergeAttr(const ScMergeAttr& rItem):
     nRowMerge = rItem.nRowMerge;
 }
 
-ScMergeAttr::~ScMergeAttr()
-{
-}
+ScMergeAttr::~ScMergeAttr() = default;
 
 bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
@@ -141,9 +139,7 @@ ScMergeFlagAttr::ScMergeFlagAttr(ScMF nFlags):
 {
 }
 
-ScMergeFlagAttr::~ScMergeFlagAttr()
-{
-}
+ScMergeFlagAttr::~ScMergeFlagAttr() = default;
 
 SfxPoolItem * ScMergeFlagAttr::Clone(SfxItemPool *) const
 {
@@ -204,9 +200,7 @@ ScProtectionAttr::ScProtectionAttr(const ScProtectionAttr& rItem):
     bHidePrint   = rItem.bHidePrint;
 }
 
-ScProtectionAttr::~ScProtectionAttr()
-{
-}
+ScProtectionAttr::~ScProtectionAttr() = default;
 
 bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -392,9 +386,7 @@ ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
         pRightArea = rItem.pRightArea->Clone();
 }
 
-ScPageHFItem::~ScPageHFItem()
-{
-}
+ScPageHFItem::~ScPageHFItem() = default;
 
 bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
@@ -504,9 +496,7 @@ ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP, ScVObjMode eMode
 {
 }
 
-ScViewObjectModeItem::~ScViewObjectModeItem()
-{
-}
+ScViewObjectModeItem::~ScViewObjectModeItem() = default;
 
 bool ScViewObjectModeItem::GetPresentation
 (
@@ -597,9 +587,7 @@ SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
     return new ScDoubleItem( *this );
 }
 
-ScDoubleItem::~ScDoubleItem()
-{
-}
+ScDoubleItem::~ScDoubleItem() = default;
 
 ScPageScaleToItem::ScPageScaleToItem() :
     SfxPoolItem( ATTR_PAGE_SCALETO ),
@@ -615,9 +603,7 @@ ScPageScaleToItem::ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight ) :
 {
 }
 
-ScPageScaleToItem::~ScPageScaleToItem()
-{
-}
+ScPageScaleToItem::~ScPageScaleToItem() = default;
 
 ScPageScaleToItem* ScPageScaleToItem::Clone( SfxItemPool* ) const
 {
@@ -714,9 +700,7 @@ ScCondFormatItem::ScCondFormatItem( const std::vector<sal_uInt32>& rIndex ):
 {
 }
 
-ScCondFormatItem::~ScCondFormatItem()
-{
-}
+ScCondFormatItem::~ScCondFormatItem() = default;
 
 bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
 {

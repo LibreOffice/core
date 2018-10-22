@@ -100,13 +100,9 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
     return nullptr;
 }
 
-OOXMLFormulaParser::OOXMLFormulaParser()
-{
-}
+OOXMLFormulaParser::OOXMLFormulaParser() = default;
 
-OOXMLFormulaParser::~OOXMLFormulaParser()
-{
-}
+OOXMLFormulaParser::~OOXMLFormulaParser() = default;
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 OUString SAL_CALL OOXMLFormulaParser::getImplementationName()

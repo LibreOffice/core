@@ -40,9 +40,7 @@ Seekable::Seekable(GSeekable *pStream) : mpStream(pStream)
         throw io::NotConnectedException();
 }
 
-Seekable::~Seekable()
-{
-}
+Seekable::~Seekable() = default;
 
 void SAL_CALL Seekable::truncate()
 {

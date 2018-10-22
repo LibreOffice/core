@@ -66,9 +66,7 @@ PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxCont
 #endif
 }
 
-PowerPointImport::~PowerPointImport()
-{
-}
+PowerPointImport::~PowerPointImport() = default;
 
 /// Visits the relations from pRelations which are of type rType.
 static void visitRelations(PowerPointImport& rImport, const core::RelationsRef& pRelations, const OUString& rType, std::vector<OUString>& rImageFragments)

@@ -32,7 +32,7 @@
 struct CoordinateData2D : public basegfx::B2DPoint
 {
 public:
-    CoordinateData2D() {}
+    CoordinateData2D() = default;
 
     explicit CoordinateData2D(const basegfx::B2DPoint& rData)
     :   B2DPoint(rData)
@@ -200,7 +200,7 @@ class ControlVectorPair2D
     basegfx::B2DVector                          maNextVector;
 
 public:
-    explicit ControlVectorPair2D() {}
+    explicit ControlVectorPair2D() = default;
 
     const basegfx::B2DVector& getPrevVector() const
     {

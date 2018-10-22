@@ -113,8 +113,7 @@ OString newKey(OUString const & id) {
 #endif
 
 namespace dp_manager {
-
-ActivePackages::ActivePackages() {}
+ActivePackages::ActivePackages() = default;
 
 ActivePackages::ActivePackages(OUString const & url)
 #if HAVE_FEATURE_EXTENSIONS
@@ -126,7 +125,7 @@ ActivePackages::ActivePackages(OUString const & url)
 #endif
 }
 
-ActivePackages::~ActivePackages() {}
+ActivePackages::~ActivePackages() = default;
 
 bool ActivePackages::has(
     OUString const & id, OUString const & fileName) const

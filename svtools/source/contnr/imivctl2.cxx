@@ -30,9 +30,7 @@ IcnCursor_Impl::IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner )
     nRows       = 0;
 }
 
-IcnCursor_Impl::~IcnCursor_Impl()
-{
-}
+IcnCursor_Impl::~IcnCursor_Impl() = default;
 
 sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, long nValue,
     bool bVertical )
@@ -481,9 +479,7 @@ IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)
     _nGridRows = 0;
 }
 
-IcnGridMap_Impl::~IcnGridMap_Impl()
-{
-}
+IcnGridMap_Impl::~IcnGridMap_Impl() = default;
 
 void IcnGridMap_Impl::Expand()
 {

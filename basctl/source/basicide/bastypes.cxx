@@ -642,12 +642,9 @@ sal_uInt32 CalcLineCount( SvStream& rStream )
 
 // LibInfo
 
+LibInfo::LibInfo() = default;
 
-LibInfo::LibInfo ()
-{ }
-
-LibInfo::~LibInfo ()
-{ }
+LibInfo::~LibInfo() = default;
 
 void LibInfo::InsertInfo (
     ScriptDocument const& rDocument,
@@ -683,8 +680,7 @@ LibInfo::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :
     m_aDocument(rDocument), m_aLibName(rLibName)
 { }
 
-LibInfo::Key::~Key ()
-{ }
+LibInfo::Key::~Key() = default;
 
 bool LibInfo::Key::operator == (Key const& rKey) const
 {
@@ -704,8 +700,7 @@ LibInfo::Item::Item (
     m_eCurrentType(eCurrentType)
 { }
 
-LibInfo::Item::~Item ()
-{ }
+LibInfo::Item::~Item() = default;
 
 static bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)
 {

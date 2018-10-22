@@ -40,9 +40,7 @@ XMLPersTextContentTContext::XMLPersTextContentTContext(
 {
 }
 
-XMLPersTextContentTContext::~XMLPersTextContentTContext()
-{
-}
+XMLPersTextContentTContext::~XMLPersTextContentTContext() = default;
 
 void XMLPersTextContentTContext::Characters( const OUString& rChars )
 {

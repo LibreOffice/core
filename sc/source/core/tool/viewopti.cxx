@@ -87,9 +87,7 @@ ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
     *this = rCpy;
 }
 
-ScViewOptions::~ScViewOptions()
-{
-}
+ScViewOptions::~ScViewOptions() = default;
 
 void ScViewOptions::SetDefaults()
 {
@@ -181,9 +179,7 @@ ScTpViewItem::ScTpViewItem( const ScViewOptions& rOpt )
 {
 }
 
-ScTpViewItem::~ScTpViewItem()
-{
-}
+ScTpViewItem::~ScTpViewItem() = default;
 
 bool ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {

@@ -91,9 +91,7 @@ ToolboxController::ToolboxController() :
         &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());
 }
 
-ToolboxController::~ToolboxController()
-{
-}
+ToolboxController::~ToolboxController() = default;
 
 Reference< XFrame > ToolboxController::getFrameInterface() const
 {

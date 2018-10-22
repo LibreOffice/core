@@ -228,11 +228,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     EnableNotification( lcl_GetNotifyNames() );
 }
 
-
-SvxSearchItem::~SvxSearchItem()
-{
-}
-
+SvxSearchItem::~SvxSearchItem() = default;
 
 SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 {

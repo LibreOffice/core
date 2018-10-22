@@ -269,9 +269,7 @@ LegendWrapper::LegendWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2
 {
 }
 
-LegendWrapper::~LegendWrapper()
-{
-}
+LegendWrapper::~LegendWrapper() = default;
 
 // ____ XShape ____
 awt::Point SAL_CALL LegendWrapper::getPosition()

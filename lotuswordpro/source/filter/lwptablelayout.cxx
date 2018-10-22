@@ -91,9 +91,7 @@ LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStr
     m_pFrame.reset(new LwpFrame(this) );
 }
 
-LwpSuperTableLayout::~LwpSuperTableLayout()
-{
-}
+LwpSuperTableLayout::~LwpSuperTableLayout() = default;
 /**
  * @short    Read super table layout record
  */
@@ -1434,8 +1432,7 @@ LwpColumnLayout::LwpColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pSt
     , cwidth(0)
 {}
 
-LwpColumnLayout::~LwpColumnLayout()
-{}
+LwpColumnLayout::~LwpColumnLayout() = default;
 void LwpColumnLayout::Read()
 {
     LwpObjectStream* pStrm = m_pObjStrm.get();
@@ -1465,8 +1462,7 @@ LwpTableHeadingLayout::LwpTableHeadingLayout(LwpObjectHeader const &objHdr, LwpS
     , cEndRow(0)
 {}
 
-LwpTableHeadingLayout::~LwpTableHeadingLayout()
-{}
+LwpTableHeadingLayout::~LwpTableHeadingLayout() = default;
 /**
  * @short   read table heading layout
  * @param
@@ -1497,8 +1493,7 @@ void LwpTableHeadingLayout::GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nE
 LwpSuperParallelColumnLayout::LwpSuperParallelColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpSuperTableLayout(objHdr, pStrm)
 {
 }
-LwpSuperParallelColumnLayout::~LwpSuperParallelColumnLayout()
-{}
+LwpSuperParallelColumnLayout::~LwpSuperParallelColumnLayout() = default;
 
 void LwpSuperParallelColumnLayout::Read()
 {
@@ -1511,9 +1506,7 @@ LwpSuperGlossaryLayout::LwpSuperGlossaryLayout(LwpObjectHeader const &objHdr, Lw
 {
 }
 
-LwpSuperGlossaryLayout::~LwpSuperGlossaryLayout()
-{
-}
+LwpSuperGlossaryLayout::~LwpSuperGlossaryLayout() = default;
 
 void LwpSuperGlossaryLayout::Read()
 {
@@ -1525,9 +1518,7 @@ LwpParallelColumnsLayout::LwpParallelColumnsLayout(LwpObjectHeader const &objHdr
 {
 }
 
-LwpParallelColumnsLayout::~LwpParallelColumnsLayout()
-{
-}
+LwpParallelColumnsLayout::~LwpParallelColumnsLayout() = default;
 
 void LwpParallelColumnsLayout::Read()
 {

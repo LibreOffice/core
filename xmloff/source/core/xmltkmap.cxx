@@ -82,9 +82,7 @@ SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
     }
 }
 
-SvXMLTokenMap::~SvXMLTokenMap()
-{
-}
+SvXMLTokenMap::~SvXMLTokenMap() = default;
 
 sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
                                const OUString& rLName ) const

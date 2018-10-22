@@ -51,9 +51,7 @@ namespace drawinglayer
             }
         }
 
-        TextBreakupHelper::~TextBreakupHelper()
-        {
-        }
+        TextBreakupHelper::~TextBreakupHelper() = default;
 
         void TextBreakupHelper::breakupPortion(Primitive2DContainer& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode)
         {

@@ -44,9 +44,7 @@ OFlatDatabaseMetaData::OFlatDatabaseMetaData(::connectivity::file::OConnection* 
 {
 }
 
-OFlatDatabaseMetaData::~OFlatDatabaseMetaData()
-{
-}
+OFlatDatabaseMetaData::~OFlatDatabaseMetaData() = default;
 
 Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 {

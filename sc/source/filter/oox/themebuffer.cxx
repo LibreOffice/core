@@ -34,9 +34,7 @@ ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     mxDefFontModel->mfHeight = 11.0;
 }
 
-ThemeBuffer::~ThemeBuffer()
-{
-}
+ThemeBuffer::~ThemeBuffer() = default;
 
 ::Color ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
 {

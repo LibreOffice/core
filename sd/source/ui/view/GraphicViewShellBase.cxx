@@ -59,9 +59,7 @@ GraphicViewShellBase::GraphicViewShellBase (
 {
 }
 
-GraphicViewShellBase::~GraphicViewShellBase()
-{
-}
+GraphicViewShellBase::~GraphicViewShellBase() = default;
 
 void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 {

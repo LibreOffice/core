@@ -62,11 +62,7 @@ TableRow::TableRow( const TableModelRef& xTableModel, sal_Int32 nRow, sal_Int32 
     }
 }
 
-
-TableRow::~TableRow()
-{
-}
-
+TableRow::~TableRow() = default;
 
 void TableRow::dispose()
 {

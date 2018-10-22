@@ -91,10 +91,7 @@ void ControllerItem::RequestUpdate()
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState.get(), IsEnabled(eState));
 }
 
-ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
-{
-}
-
+ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface() = default;
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

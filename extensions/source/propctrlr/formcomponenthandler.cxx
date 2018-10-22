@@ -152,10 +152,7 @@ namespace pcr
         registerProperty(PROPERTY_ROWSET,PROPERTY_ID_ROWSET,0,&m_xRowSet,cppu::UnoType<decltype(m_xRowSet)>::get());
     }
 
-
-    FormComponentPropertyHandler::~FormComponentPropertyHandler()
-    {
-    }
+    FormComponentPropertyHandler::~FormComponentPropertyHandler() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,FormComponentPropertyHandler_Base,::comphelper::OPropertyContainer)
 

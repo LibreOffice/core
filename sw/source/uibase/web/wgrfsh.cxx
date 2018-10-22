@@ -55,8 +55,6 @@ SwWebGrfShell::SwWebGrfShell(SwView &_rView) :
     SetName("Graphic");
 }
 
-SwWebGrfShell::~SwWebGrfShell()
-{
-}
+SwWebGrfShell::~SwWebGrfShell() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

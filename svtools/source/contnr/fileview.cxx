@@ -1390,9 +1390,7 @@ NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
 {
 }
 
-NameTranslator_Impl::~NameTranslator_Impl()
-{
-}
+NameTranslator_Impl::~NameTranslator_Impl() = default;
 
 void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 {
@@ -2181,10 +2179,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(weld::Widget* pParent, const OUString& 
     m_xDialog->set_secondary_text(m_xDialog->get_secondary_text().replaceFirst("%s", rName));
 }
 
-QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl()
-{
-}
-
+QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl() = default;
 }
 
 namespace {

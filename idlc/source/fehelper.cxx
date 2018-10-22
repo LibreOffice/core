@@ -26,9 +26,7 @@ FeDeclarator::FeDeclarator(const OString& name)
 {
 }
 
-FeDeclarator::~FeDeclarator()
-{
-}
+FeDeclarator::~FeDeclarator() = default;
 
 bool FeDeclarator::checkType(AstDeclaration const * type) const
 {

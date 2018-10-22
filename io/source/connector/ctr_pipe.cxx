@@ -42,9 +42,7 @@ namespace stoc_connector {
                 reinterpret_cast< sal_IntPtr >(&m_pipe)) );
     }
 
-    PipeConnection::~PipeConnection()
-    {
-    }
+    PipeConnection::~PipeConnection() = default;
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
     {

@@ -51,11 +51,7 @@ SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
 {
 }
 
-
-SvxViewLayoutItem::~SvxViewLayoutItem()
-{
-}
-
+SvxViewLayoutItem::~SvxViewLayoutItem() = default;
 
 SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 {

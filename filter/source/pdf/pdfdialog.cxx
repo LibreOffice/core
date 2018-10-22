@@ -59,11 +59,7 @@ PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )
 {
 }
 
-
-PDFDialog::~PDFDialog()
-{
-}
-
+PDFDialog::~PDFDialog() = default;
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 {

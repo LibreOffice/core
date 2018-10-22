@@ -33,13 +33,9 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace std;
 
-TypeDetectionImporter::TypeDetectionImporter()
-{
-}
+TypeDetectionImporter::TypeDetectionImporter() = default;
 
-TypeDetectionImporter::~TypeDetectionImporter()
-{
-}
+TypeDetectionImporter::~TypeDetectionImporter() = default;
 
 void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& xIS, XMLFilterVector& rFilters )
 {

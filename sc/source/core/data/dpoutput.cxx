@@ -686,9 +686,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     }
 }
 
-ScDPOutput::~ScDPOutput()
-{
-}
+ScDPOutput::~ScDPOutput() = default;
 
 void ScDPOutput::SetPosition( const ScAddress& rPos )
 {

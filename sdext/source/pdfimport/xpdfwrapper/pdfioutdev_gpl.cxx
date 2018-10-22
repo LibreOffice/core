@@ -518,9 +518,7 @@ PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
     m_bSkipImages(false)
 {
 }
-PDFOutDev::~PDFOutDev()
-{
-}
+PDFOutDev::~PDFOutDev() = default;
 
 void PDFOutDev::startPage(int /*pageNum*/, GfxState* state
 #if POPPLER_CHECK_VERSION(0, 23, 0) ||  POPPLER_CHECK_VERSION(0, 24, 0)

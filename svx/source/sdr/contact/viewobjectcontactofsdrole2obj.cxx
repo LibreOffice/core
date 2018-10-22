@@ -140,10 +140,7 @@ ViewObjectContactOfSdrOle2Obj::ViewObjectContactOfSdrOle2Obj(ObjectContact& rObj
 {
 }
 
-ViewObjectContactOfSdrOle2Obj::~ViewObjectContactOfSdrOle2Obj()
-{
-}
-
+ViewObjectContactOfSdrOle2Obj::~ViewObjectContactOfSdrOle2Obj() = default;
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

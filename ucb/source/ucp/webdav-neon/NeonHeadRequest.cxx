@@ -145,8 +145,6 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
     ne_request_destroy( req );
 }
 
-NeonHeadRequest::~NeonHeadRequest()
-{
-}
+NeonHeadRequest::~NeonHeadRequest() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

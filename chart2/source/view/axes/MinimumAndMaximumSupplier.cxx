@@ -28,13 +28,9 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-MergedMinimumAndMaximumSupplier::MergedMinimumAndMaximumSupplier()
-{
-}
+MergedMinimumAndMaximumSupplier::MergedMinimumAndMaximumSupplier() = default;
 
-MergedMinimumAndMaximumSupplier::~MergedMinimumAndMaximumSupplier()
-{
-}
+MergedMinimumAndMaximumSupplier::~MergedMinimumAndMaximumSupplier() = default;
 
 void MergedMinimumAndMaximumSupplier::addMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier )
 {

@@ -67,9 +67,7 @@ UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
     }
 }
 
-UndoRemovePresObjectImpl::~UndoRemovePresObjectImpl()
-{
-}
+UndoRemovePresObjectImpl::~UndoRemovePresObjectImpl() = default;
 
 void UndoRemovePresObjectImpl::Undo()
 {
@@ -190,9 +188,7 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
     }
 }
 
-UndoObjectSetText::~UndoObjectSetText()
-{
-}
+UndoObjectSetText::~UndoObjectSetText() = default;
 
 void UndoObjectSetText::Undo()
 {

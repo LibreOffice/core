@@ -4052,9 +4052,7 @@ ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
     *this = rCpy;
 }
 
-ScInputHdlState::~ScInputHdlState()
-{
-}
+ScInputHdlState::~ScInputHdlState() = default;
 
 bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
 {

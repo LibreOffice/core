@@ -68,9 +68,7 @@ FontProvider::FontProvider()
 {
 }
 
-FontProvider::~FontProvider()
-{
-}
+FontProvider::~FontProvider() = default;
 
 void FontProvider::Invalidate()
 {

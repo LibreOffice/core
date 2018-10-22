@@ -114,9 +114,7 @@ TextEffectsContext::TextEffectsContext(
 {
 }
 
-TextEffectsContext::~TextEffectsContext()
-{
-}
+TextEffectsContext::~TextEffectsContext() = default;
 
 void TextEffectsContext::pushAttributeToGrabBag (sal_Int32 aAttributeId, const OUString& rElementName, const AttributeList& rAttribs)
 {

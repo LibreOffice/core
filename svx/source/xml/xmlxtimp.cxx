@@ -316,9 +316,7 @@ SvxXMLXTableImport::SvxXMLXTableImport(
                         XML_NAMESPACE_DRAW );
 }
 
-SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
-{
-}
+SvxXMLXTableImport::~SvxXMLXTableImport() throw() = default;
 
 static void openStorageStream( xml::sax::InputSource *pParserInput,
                                rtl::Reference<SvXMLGraphicHelper>& rxGraphicHelper,

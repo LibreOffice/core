@@ -132,9 +132,7 @@ PresenterNotesView::PresenterNotesView (
     }
 }
 
-PresenterNotesView::~PresenterNotesView()
-{
-}
+PresenterNotesView::~PresenterNotesView() = default;
 
 void SAL_CALL PresenterNotesView::disposing()
 {

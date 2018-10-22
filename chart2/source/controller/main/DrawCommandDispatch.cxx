@@ -62,9 +62,7 @@ DrawCommandDispatch::DrawCommandDispatch( const Reference< uno::XComponentContex
 {
 }
 
-DrawCommandDispatch::~DrawCommandDispatch()
-{
-}
+DrawCommandDispatch::~DrawCommandDispatch() = default;
 
 bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
 {

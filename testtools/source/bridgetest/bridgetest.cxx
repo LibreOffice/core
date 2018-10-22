@@ -337,10 +337,7 @@ public:
     MyClass();
 };
 
-
-MyClass::MyClass()
-{
-}
+MyClass::MyClass() = default;
 
 static bool performTest(
     const Reference<XComponentContext> & xContext,

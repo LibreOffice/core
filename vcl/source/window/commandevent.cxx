@@ -51,9 +51,7 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
     mbOnlyCursor    = rData.mbOnlyCursor;
 }
 
-CommandExtTextInputData::~CommandExtTextInputData()
-{
-}
+CommandExtTextInputData::~CommandExtTextInputData() = default;
 
 CommandWheelData::CommandWheelData()
 {

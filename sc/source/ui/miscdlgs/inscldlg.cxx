@@ -69,9 +69,7 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent,bool bDisallowCellMove)
     }
 }
 
-ScInsertCellDlg::~ScInsertCellDlg()
-{
-}
+ScInsertCellDlg::~ScInsertCellDlg() = default;
 
 InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {

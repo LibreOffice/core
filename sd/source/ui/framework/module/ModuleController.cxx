@@ -44,7 +44,7 @@ class ModuleController::ResourceToFactoryMap
     OUString>
 {
 public:
-    ResourceToFactoryMap() {}
+    ResourceToFactoryMap() = default;
 };
 
 class ModuleController::LoadedFactoryContainer
@@ -53,7 +53,7 @@ class ModuleController::LoadedFactoryContainer
     WeakReference<XInterface>>
 {
 public:
-    LoadedFactoryContainer() {}
+    LoadedFactoryContainer() = default;
 };
 
 //===== ModuleController ======================================================
@@ -99,9 +99,7 @@ ModuleController::ModuleController (const Reference<XComponentContext>& rxContex
     }
 }
 
-ModuleController::~ModuleController() throw()
-{
-}
+ModuleController::~ModuleController() throw() = default;
 
 void SAL_CALL ModuleController::disposing()
 {

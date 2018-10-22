@@ -715,9 +715,7 @@ SwXTextCursor::SwXTextCursor(uno::Reference< text::XText > const& xParent,
 {
 }
 
-SwXTextCursor::~SwXTextCursor()
-{
-}
+SwXTextCursor::~SwXTextCursor() = default;
 
 void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         const bool bForceExpandHints)

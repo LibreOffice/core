@@ -37,9 +37,7 @@ namespace sdr
         {
         }
 
-        ViewContactOfSdrPathObj::~ViewContactOfSdrPathObj()
-        {
-        }
+        ViewContactOfSdrPathObj::~ViewContactOfSdrPathObj() = default;
 
         static sal_uInt32 ensureGeometry(basegfx::B2DPolyPolygon& rUnitPolyPolygon)
         {

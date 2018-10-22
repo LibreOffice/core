@@ -78,10 +78,7 @@ SdrViewEvent::SdrViewEvent()
 {
 }
 
-SdrViewEvent::~SdrViewEvent()
-{
-}
-
+SdrViewEvent::~SdrViewEvent() = default;
 
 // helper class for all D&D overlays
 
@@ -140,12 +137,10 @@ SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const Point& rS
         basegfx::B2DPolyPolygon(aB2DPolygon));
 }
 
-SdrDropMarkerOverlay::~SdrDropMarkerOverlay()
-{
+SdrDropMarkerOverlay::~SdrDropMarkerOverlay() = default;
     // The OverlayObjects are cleared using the destructor of OverlayObjectList.
     // That destructor calls clear() at the list which removes all objects from the
     // OverlayManager and deletes them.
-}
 
 SdrView::SdrView(
     SdrModel& rSdrModel,

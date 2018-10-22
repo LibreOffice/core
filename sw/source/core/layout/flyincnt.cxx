@@ -53,9 +53,7 @@ void SwFlyInContentFrame::DestroyImpl()
     SwFlyFrame::DestroyImpl();
 }
 
-SwFlyInContentFrame::~SwFlyInContentFrame()
-{
-}
+SwFlyInContentFrame::~SwFlyInContentFrame() = default;
 
 // #i28701#
 

@@ -41,9 +41,7 @@ struct SharedStringPool::Impl
 SharedStringPool::SharedStringPool( const CharClass& rCharClass ) :
     mpImpl(new Impl(rCharClass)) {}
 
-SharedStringPool::~SharedStringPool()
-{
-}
+SharedStringPool::~SharedStringPool() = default;
 
 SharedString SharedStringPool::intern( const OUString& rStr )
 {

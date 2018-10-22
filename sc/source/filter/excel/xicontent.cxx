@@ -508,9 +508,7 @@ XclImpCondFormat::XclImpCondFormat( const XclImpRoot& rRoot, sal_uInt32 nFormatI
 {
 }
 
-XclImpCondFormat::~XclImpCondFormat()
-{
-}
+XclImpCondFormat::~XclImpCondFormat() = default;
 
 void XclImpCondFormat::ReadCondfmt( XclImpStream& rStrm )
 {

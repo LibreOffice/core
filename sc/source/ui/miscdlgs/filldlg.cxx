@@ -73,9 +73,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
     Init(nPossDir);
 }
 
-ScFillSeriesDlg::~ScFillSeriesDlg()
-{
-}
+ScFillSeriesDlg::~ScFillSeriesDlg() = default;
 
 void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 {

@@ -53,8 +53,8 @@ using namespace com::sun::star::xml::dom;
 class DomVisitor
 {
 public:
-    DomVisitor() {}
-    virtual ~DomVisitor() {}
+    DomVisitor() = default;
+    virtual ~DomVisitor() = default;
     virtual void element( const Reference<XElement>& ) {}
     virtual void character( const Reference<XCharacterData>& ) {}
     virtual void endElement( const Reference<XElement>& ) {}

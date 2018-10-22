@@ -301,9 +301,7 @@ struct GrfSimpleCacheObj
                     maGraphic( rGraphic ), maAttr( rAttr ) {}
 };
 
-GraphicObject::GraphicObject()
-{
-}
+GraphicObject::GraphicObject() = default;
 
 GraphicObject::GraphicObject(const Graphic& rGraphic)
     : maGraphic(rGraphic)
@@ -317,9 +315,7 @@ GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
 {
 }
 
-GraphicObject::~GraphicObject()
-{
-}
+GraphicObject::~GraphicObject() = default;
 
 GraphicType GraphicObject::GetType() const
 {

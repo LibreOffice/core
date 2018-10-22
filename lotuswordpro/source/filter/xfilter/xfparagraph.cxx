@@ -62,14 +62,9 @@
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xftextcontent.hxx>
 
-XFParagraph::XFParagraph()
-{
+XFParagraph::XFParagraph() = default;
 
-}
-
-XFParagraph::~XFParagraph()
-{
-}
+XFParagraph::~XFParagraph() = default;
 
 enumXFContent XFParagraph::GetContentType()
 {

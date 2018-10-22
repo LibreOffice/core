@@ -56,9 +56,7 @@ Theme::Theme()
     SetupPropertyMaps();
 }
 
-Theme::~Theme()
-{
-}
+Theme::~Theme() = default;
 
 Image Theme::GetImage (const ThemeItem eItem)
 {

@@ -80,9 +80,7 @@ XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLDashStyleImport::~XMLDashStyleImport()
-{
-}
+XMLDashStyleImport::~XMLDashStyleImport() = default;
 
 void XMLDashStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
@@ -207,9 +205,7 @@ XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
 {
 }
 
-XMLDashStyleExport::~XMLDashStyleExport()
-{
-}
+XMLDashStyleExport::~XMLDashStyleExport() = default;
 
 void XMLDashStyleExport::exportXML(
     const OUString& rStrName,

@@ -1189,10 +1189,8 @@ ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
     nDimCount = pSource->GetData()->GetColumnCount() + 1 + pSource->GetDupCount();
 }
 
-ScDPDimensions::~ScDPDimensions()
-{
+ScDPDimensions::~ScDPDimensions() = default;
     //TODO: release pSource
-}
 
 void ScDPDimensions::CountChanged()
 {
@@ -1302,10 +1300,8 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     //TODO: hold pSource
 }
 
-ScDPDimension::~ScDPDimension()
-{
+ScDPDimension::~ScDPDimension() = default;
     //TODO: release pSource
-}
 
 ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
 {
@@ -1636,10 +1632,8 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
     //TODO: hold pSource
 }
 
-ScDPHierarchies::~ScDPHierarchies()
-{
+ScDPHierarchies::~ScDPHierarchies() = default;
     //TODO: release pSource
-}
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
@@ -1726,10 +1720,8 @@ ScDPHierarchy::ScDPHierarchy( ScDPSource* pSrc, long nD, long nH ) :
     //TODO: hold pSource
 }
 
-ScDPHierarchy::~ScDPHierarchy()
-{
+ScDPHierarchy::~ScDPHierarchy() = default;
     //TODO: release pSource
-}
 
 ScDPLevels* ScDPHierarchy::GetLevelsObject()
 {
@@ -1797,10 +1789,8 @@ ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
         nLevCount = 1;
 }
 
-ScDPLevels::~ScDPLevels()
-{
+ScDPLevels::~ScDPLevels() = default;
     //TODO: release pSource
-}
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
@@ -1920,10 +1910,8 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     //  aSubTotals is empty
 }
 
-ScDPLevel::~ScDPLevel()
-{
+ScDPLevel::~ScDPLevel() = default;
     //TODO: release pSource
-}
 
 void ScDPLevel::EvaluateSortOrder()
 {
@@ -2266,9 +2254,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
         nMbrCount = pSource->GetData()->GetMembersCount( nSrcDim );
 }
 
-ScDPMembers::~ScDPMembers()
-{
-}
+ScDPMembers::~ScDPMembers() = default;
 
 // XNameAccess implementation using getCount/getByIndex
 
@@ -2484,10 +2470,8 @@ ScDPMember::ScDPMember(
     //TODO: hold pSource
 }
 
-ScDPMember::~ScDPMember()
-{
+ScDPMember::~ScDPMember() = default;
     //TODO: release pSource
-}
 
 bool ScDPMember::IsNamedItem(SCROW nIndex) const
 {

@@ -102,9 +102,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLSortContext::~ScXMLSortContext()
-{
-}
+ScXMLSortContext::~ScXMLSortContext() = default;
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -233,9 +231,7 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLSortByContext::~ScXMLSortByContext()
-{
-}
+ScXMLSortByContext::~ScXMLSortByContext() = default;
 
 void SAL_CALL ScXMLSortByContext::endFastElement( sal_Int32 /*nElement*/ )
 {

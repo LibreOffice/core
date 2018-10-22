@@ -45,9 +45,7 @@ OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 {
 }
 
-OReportUndoFactory::~OReportUndoFactory()
-{
-}
+OReportUndoFactory::~OReportUndoFactory() = default;
 
 std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject, const Size& rDist )
 {

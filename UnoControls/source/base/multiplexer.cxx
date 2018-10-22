@@ -85,9 +85,7 @@ OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListener
 {
 }
 
-OMRCListenerMultiplexerHelper::~OMRCListenerMultiplexerHelper()
-{
-}
+OMRCListenerMultiplexerHelper::~OMRCListenerMultiplexerHelper() = default;
 
 //  XInterface
 

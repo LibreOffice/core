@@ -32,9 +32,7 @@
 #include "image.h"
 #include "ImageList.hxx"
 
-ImageList::ImageList()
-{
-}
+ImageList::ImageList() = default;
 
 ImageList::ImageList(const std::vector< OUString >& rNameVector,
                      const OUString& rPrefix)

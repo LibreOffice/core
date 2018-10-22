@@ -167,9 +167,7 @@ public:
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) = 0;
 };
 
-BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
-{
-}
+BaseFrameProperties_Impl::~BaseFrameProperties_Impl() = default;
 
 void BaseFrameProperties_Impl::SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal)
 {
@@ -3068,9 +3066,7 @@ SwXTextFrame::SwXTextFrame(SwFrameFormat& rFormat) :
 
 }
 
-SwXTextFrame::~SwXTextFrame()
-{
-}
+SwXTextFrame::~SwXTextFrame() = default;
 
 uno::Reference<text::XTextFrame>
 SwXTextFrame::CreateXTextFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
@@ -3329,9 +3325,7 @@ SwXTextGraphicObject::SwXTextGraphicObject(SwFrameFormat& rFormat)
 {
 }
 
-SwXTextGraphicObject::~SwXTextGraphicObject()
-{
-}
+SwXTextGraphicObject::~SwXTextGraphicObject() = default;
 
 uno::Reference<text::XTextContent>
 SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
@@ -3376,9 +3370,7 @@ SwXTextEmbeddedObject::SwXTextEmbeddedObject(SwFrameFormat& rFormat)
 {
 }
 
-SwXTextEmbeddedObject::~SwXTextEmbeddedObject()
-{
-}
+SwXTextEmbeddedObject::~SwXTextEmbeddedObject() = default;
 
 uno::Reference<text::XTextContent>
 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
@@ -3509,8 +3501,7 @@ SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > c
 {
 }
 
-SwXOLEListener::~SwXOLEListener()
-{}
+SwXOLEListener::~SwXOLEListener() = default;
 
 void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
 {

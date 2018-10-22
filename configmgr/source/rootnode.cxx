@@ -20,7 +20,7 @@ namespace configmgr {
 
 RootNode::RootNode(): Node(Data::NO_LAYER) {}
 
-RootNode::~RootNode() {}
+RootNode::~RootNode() = default;
 
 Node::Kind RootNode::kind() const {
     return KIND_ROOT;

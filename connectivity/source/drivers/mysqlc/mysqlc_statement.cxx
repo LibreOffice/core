@@ -56,7 +56,7 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection)
 {
 }
 
-OCommonStatement::~OCommonStatement() {}
+OCommonStatement::~OCommonStatement() = default;
 
 void OCommonStatement::disposeResultSet()
 {

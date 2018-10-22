@@ -50,9 +50,7 @@ ScDPTableData::ScDPTableData(const ScDocument* pDoc) :
     //TODO: reset before new calculation (in case the base date is changed)
 }
 
-ScDPTableData::~ScDPTableData()
-{
-}
+ScDPTableData::~ScDPTableData() = default;
 
 OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
 {

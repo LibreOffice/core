@@ -122,9 +122,7 @@ CellTextProvider::CellTextProvider(const sdr::table::CellRef& rCell)
 {
 }
 
-CellTextProvider::~CellTextProvider()
-{
-}
+CellTextProvider::~CellTextProvider() = default;
 
 sal_Int32 CellTextProvider::getTextCount() const
 {

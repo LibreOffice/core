@@ -33,10 +33,7 @@ using namespace ::com::sun::star;
 // class XMLEscapementPropHdl
 
 
-XMLCharHeightHdl::~XMLCharHeightHdl()
-{
-    // nothing to do
-}
+XMLCharHeightHdl::~XMLCharHeightHdl() = default;
 
 bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -79,10 +76,7 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 // class XMLEscapementHeightPropHdl
 
 
-XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
-{
-    // nothing to do
-}
+XMLCharHeightPropHdl::~XMLCharHeightPropHdl() = default;
 
 bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -117,10 +111,7 @@ bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 // class XMLEscapementPropHdl
 
 
-XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
-{
-    // nothing to do
-}
+XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl() = default;
 
 bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {

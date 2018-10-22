@@ -28,26 +28,17 @@ namespace drawinglayer
 {
     namespace animation
     {
+    AnimationEntry::AnimationEntry() = default;
 
+    AnimationEntry::~AnimationEntry() = default;
 
-        AnimationEntry::AnimationEntry()
-        {
+    AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
+        : mfDuration(fDuration)
+        , mfState(fState)
+    {
         }
 
-        AnimationEntry::~AnimationEntry()
-        {
-        }
-
-
-        AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
-        :   mfDuration(fDuration),
-            mfState(fState)
-        {
-        }
-
-        AnimationEntryFixed::~AnimationEntryFixed()
-        {
-        }
+        AnimationEntryFixed::~AnimationEntryFixed() = default;
 
         std::unique_ptr<AnimationEntry> AnimationEntryFixed::clone() const
         {
@@ -94,9 +85,7 @@ namespace drawinglayer
         {
         }
 
-        AnimationEntryLinear::~AnimationEntryLinear()
-        {
-        }
+        AnimationEntryLinear::~AnimationEntryLinear() = default;
 
         std::unique_ptr<AnimationEntry> AnimationEntryLinear::clone() const
         {
@@ -179,9 +168,7 @@ namespace drawinglayer
         {
         }
 
-        AnimationEntryList::~AnimationEntryList()
-        {
-        }
+        AnimationEntryList::~AnimationEntryList() = default;
 
         std::unique_ptr<AnimationEntry> AnimationEntryList::clone() const
         {
@@ -276,9 +263,7 @@ namespace drawinglayer
         {
         }
 
-        AnimationEntryLoop::~AnimationEntryLoop()
-        {
-        }
+        AnimationEntryLoop::~AnimationEntryLoop() = default;
 
         std::unique_ptr<AnimationEntry> AnimationEntryLoop::clone() const
         {

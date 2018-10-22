@@ -155,11 +155,7 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-
-    Content::~Content()
-    {
-    }
-
+    Content::~Content() = default;
 
     OUString SAL_CALL Content::getImplementationName()
     {

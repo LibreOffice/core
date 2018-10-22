@@ -350,16 +350,9 @@ namespace oglcanvas
         mpRecordedActions()
     {}
 
-    CanvasHelper::~CanvasHelper()
-    {}
+    CanvasHelper::~CanvasHelper() = default;
 
-    CanvasHelper& CanvasHelper::operator=( const CanvasHelper& rSrc )
-    {
-        mpDevice = rSrc.mpDevice;
-        mpDeviceHelper = rSrc.mpDeviceHelper;
-        mpRecordedActions = rSrc.mpRecordedActions;
-        return *this;
-    }
+    CanvasHelper& CanvasHelper::operator=(const CanvasHelper& rSrc) = default;
 
     void CanvasHelper::disposing()
     {

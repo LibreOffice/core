@@ -73,9 +73,7 @@ XFRow::XFRow()
 {
 }
 
-XFRow::~XFRow()
-{
-}
+XFRow::~XFRow() = default;
 
 void XFRow::AddCell(rtl::Reference<XFCell> const & rCell)
 {

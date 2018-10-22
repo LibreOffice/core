@@ -295,9 +295,7 @@ void SwPageFrame::DestroyImpl()
     SwFootnoteBossFrame::DestroyImpl();
 }
 
-SwPageFrame::~SwPageFrame()
-{
-}
+SwPageFrame::~SwPageFrame() = default;
 
 void SwPageFrame::CheckGrid( bool bInvalidate )
 {

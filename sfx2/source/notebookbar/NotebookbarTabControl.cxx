@@ -135,9 +135,7 @@ NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 {
 }
 
-NotebookbarTabControl::~NotebookbarTabControl()
-{
-}
+NotebookbarTabControl::~NotebookbarTabControl() = default;
 
 void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 {

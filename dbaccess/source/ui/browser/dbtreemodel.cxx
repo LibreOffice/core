@@ -26,9 +26,7 @@ namespace dbaui
         :eType(SbaTableQueryBrowser::etQuery)
     {
     }
-    DBTreeListUserData::~DBTreeListUserData()
-    {
-    }
+    DBTreeListUserData::~DBTreeListUserData() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

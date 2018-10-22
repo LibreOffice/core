@@ -85,9 +85,7 @@ namespace dbaui
             throw IllegalArgumentException();
     }
 
-    HierarchicalNameCheck::~HierarchicalNameCheck()
-    {
-    }
+    HierarchicalNameCheck::~HierarchicalNameCheck() = default;
 
     bool HierarchicalNameCheck::isNameValid( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay ) const
     {
@@ -136,9 +134,7 @@ namespace dbaui
         m_pImpl->nCommandType = _nCommandType;
     }
 
-    DynamicTableOrQueryNameCheck::~DynamicTableOrQueryNameCheck()
-    {
-    }
+    DynamicTableOrQueryNameCheck::~DynamicTableOrQueryNameCheck() = default;
 
     bool DynamicTableOrQueryNameCheck::isNameValid( const OUString& _rObjectName, ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay ) const
     {

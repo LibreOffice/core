@@ -42,10 +42,7 @@ OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
 
 }
 
-OXMLDataSourceSettings::~OXMLDataSourceSettings()
-{
-
-}
+OXMLDataSourceSettings::~OXMLDataSourceSettings() = default;
 
 SvXMLImportContextRef OXMLDataSourceSettings::CreateChildContext(
         sal_uInt16 nPrefix,

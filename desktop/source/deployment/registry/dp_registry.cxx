@@ -147,11 +147,7 @@ void PackageRegistryImpl::disposing()
     t_helper::disposing();
 }
 
-
-PackageRegistryImpl::~PackageRegistryImpl()
-{
-}
-
+PackageRegistryImpl::~PackageRegistryImpl() = default;
 
 OUString normalizeMediaType( OUString const & mediaType )
 {

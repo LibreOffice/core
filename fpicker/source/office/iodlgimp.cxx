@@ -48,11 +48,7 @@ SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const
     m_aType = m_aType.toAsciiLowerCase();
 }
 
-
-SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
-{
-}
-
+SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl() = default;
 
 // SvtFileDialogFilterList_Impl
 
@@ -101,11 +97,7 @@ SvtUpButton_Impl::SvtUpButton_Impl( vcl::Window *pParent, SvtFileDialog* pDlg, W
 {
 }
 
-
-SvtUpButton_Impl::~SvtUpButton_Impl()
-{
-}
-
+SvtUpButton_Impl::~SvtUpButton_Impl() = default;
 
 void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 {

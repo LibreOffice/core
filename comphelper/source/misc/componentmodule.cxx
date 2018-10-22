@@ -42,18 +42,14 @@ namespace comphelper
         OModuleImpl();
     };
 
-    OModuleImpl::OModuleImpl()
-    {
-    }
+    OModuleImpl::OModuleImpl() = default;
 
     OModule::OModule()
         : m_pImpl(new OModuleImpl)
     {
     }
 
-    OModule::~OModule()
-    {
-    }
+    OModule::~OModule() = default;
 
     void OModule::registerImplementation( const ComponentDescription& _rComp )
     {

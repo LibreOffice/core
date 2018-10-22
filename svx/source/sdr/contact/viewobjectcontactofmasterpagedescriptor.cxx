@@ -40,8 +40,7 @@ namespace sdr
         }
 
         ViewObjectContactOfMasterPageDescriptor::~ViewObjectContactOfMasterPageDescriptor()
-        {
-        }
+            = default;
 
         bool ViewObjectContactOfMasterPageDescriptor::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
         {

@@ -46,9 +46,7 @@ OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) 
 {
 }
 
-OEvoabDriver::~OEvoabDriver()
-{
-}
+OEvoabDriver::~OEvoabDriver() = default;
 
 void OEvoabDriver::disposing()
 {

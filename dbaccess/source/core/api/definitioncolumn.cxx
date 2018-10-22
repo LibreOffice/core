@@ -137,9 +137,7 @@ OTableColumn::OTableColumn( const OUString& _rName )
     m_sName = _rName;
 }
 
-OTableColumn::~OTableColumn()
-{
-}
+OTableColumn::~OTableColumn() = default;
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
@@ -214,9 +212,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     osl_atomic_decrement( &m_refCount );
 }
 
-OQueryColumn::~OQueryColumn()
-{
-}
+OQueryColumn::~OQueryColumn() = default;
 
 Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const Reference< XConnection >& _rxConnection )
 {
@@ -336,9 +332,7 @@ OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bo
     }
 }
 
-OColumnWrapper::~OColumnWrapper()
-{
-}
+OColumnWrapper::~OColumnWrapper() = default;
 
 OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const
 {
@@ -565,9 +559,7 @@ OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol,
     osl_atomic_decrement( &m_refCount );
 }
 
-OTableColumnWrapper::~OTableColumnWrapper()
-{
-}
+OTableColumnWrapper::~OTableColumnWrapper() = default;
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 

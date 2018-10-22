@@ -45,9 +45,7 @@ namespace xmloff
     {
     }
 
-    OFormLayerXMLExport::~OFormLayerXMLExport()
-    {
-    }
+    OFormLayerXMLExport::~OFormLayerXMLExport() = default;
 
     bool OFormLayerXMLExport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
@@ -117,9 +115,7 @@ namespace xmloff
     {
     }
 
-    OOfficeFormsExport::~OOfficeFormsExport()
-    {
-    }
+    OOfficeFormsExport::~OOfficeFormsExport() = default;
 
 }   // namespace xmloff
 

@@ -640,13 +640,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     return eRet;
 }
 
-SfxMailModel::SfxMailModel()
-{
-}
+SfxMailModel::SfxMailModel() = default;
 
-SfxMailModel::~SfxMailModel()
-{
-}
+SfxMailModel::~SfxMailModel() = default;
 
 void SfxMailModel::AddToAddress( const OUString& rAddress )
 {

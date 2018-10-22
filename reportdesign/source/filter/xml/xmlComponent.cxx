@@ -82,11 +82,7 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
     }
 }
 
-
-OXMLComponent::~OXMLComponent()
-{
-}
-
+OXMLComponent::~OXMLComponent() = default;
 
 } // namespace rptxml
 

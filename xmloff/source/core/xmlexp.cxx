@@ -159,9 +159,7 @@ public:
     {
     }
 
-    virtual ~SettingsExportFacade()
-    {
-    }
+    virtual ~SettingsExportFacade() = default;
 
     virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
                                   const OUString& i_rValue ) override;

@@ -51,9 +51,7 @@ void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogic
     m_aCID = rCID;
 }
 
-PlotterBase::~PlotterBase()
-{
-}
+PlotterBase::~PlotterBase() = default;
 
 void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {

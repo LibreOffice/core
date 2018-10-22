@@ -30,9 +30,7 @@ SfxHintPoster::SfxHintPoster(const std::function<void (std::unique_ptr<SfxReques
 {
 }
 
-SfxHintPoster::~SfxHintPoster()
-{
-}
+SfxHintPoster::~SfxHintPoster() = default;
 
 void SfxHintPoster::Post( std::unique_ptr<SfxRequest> pHintToPost )
 {

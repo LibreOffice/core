@@ -105,9 +105,7 @@ PPTExBulletProvider::PPTExBulletProvider()
 {
 }
 
-PPTExBulletProvider::~PPTExBulletProvider()
-{
-}
+PPTExBulletProvider::~PPTExBulletProvider() = default;
 
 sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSize )
 {

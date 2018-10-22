@@ -42,13 +42,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using utl::MediaDescriptor;
 
-SdFilterDetect::SdFilterDetect()
-{
-}
+SdFilterDetect::SdFilterDetect() = default;
 
-SdFilterDetect::~SdFilterDetect()
-{
-}
+SdFilterDetect::~SdFilterDetect() = default;
 
 OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor )
 {

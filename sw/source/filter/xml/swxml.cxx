@@ -121,9 +121,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
     }
 }
 
-XMLReader::XMLReader()
-{
-}
+XMLReader::XMLReader() = default;
 
 SwReaderType XMLReader::GetReaderType()
 {

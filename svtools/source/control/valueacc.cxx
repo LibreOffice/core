@@ -95,11 +95,7 @@ ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
 {
 }
 
-
-ValueSetAcc::~ValueSetAcc()
-{
-}
-
+ValueSetAcc::~ValueSetAcc() = default;
 
 void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
@@ -699,9 +695,7 @@ ValueItemAcc::ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisa
 {
 }
 
-ValueItemAcc::~ValueItemAcc()
-{
-}
+ValueItemAcc::~ValueItemAcc() = default;
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
@@ -1068,9 +1062,7 @@ SvtValueItemAcc::SvtValueItemAcc( SvtValueSetItem* pParent, bool bIsTransientChi
 {
 }
 
-SvtValueItemAcc::~SvtValueItemAcc()
-{
-}
+SvtValueItemAcc::~SvtValueItemAcc() = default;
 
 namespace
 {
@@ -1431,11 +1423,7 @@ SvtValueSetAcc::SvtValueSetAcc( SvtValueSet* pParent ) :
 {
 }
 
-
-SvtValueSetAcc::~SvtValueSetAcc()
-{
-}
-
+SvtValueSetAcc::~SvtValueSetAcc() = default;
 
 void SvtValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {

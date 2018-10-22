@@ -548,9 +548,7 @@ SwFormatContent::SwFormatContent( const SwStartNode *pStartNd )
     m_pStartNode.reset( pStartNd ? new SwNodeIndex( *pStartNd ) : nullptr);
 }
 
-SwFormatContent::~SwFormatContent()
-{
-}
+SwFormatContent::~SwFormatContent() = default;
 
 void SwFormatContent::SetNewContentIdx( const SwNodeIndex *pIdx )
 {
@@ -606,7 +604,7 @@ SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
     return *this;
 }
 
- SwFormatPageDesc::~SwFormatPageDesc() {}
+SwFormatPageDesc::~SwFormatPageDesc() = default;
 
 bool SwFormatPageDesc::KnowsPageDesc() const
 {
@@ -823,7 +821,7 @@ SwFormatCol::SwFormatCol( const SwFormatCol& rCpy )
     }
 }
 
-SwFormatCol::~SwFormatCol() {}
+SwFormatCol::~SwFormatCol() = default;
 
 SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
 {
@@ -1513,9 +1511,7 @@ SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
 {
 }
 
-SwFormatAnchor::~SwFormatAnchor()
-{
-}
+SwFormatAnchor::~SwFormatAnchor() = default;
 
 void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
 {
@@ -1737,9 +1733,7 @@ SwFormatURL::SwFormatURL( const SwFormatURL &rURL) :
         m_pMap.reset( new ImageMap( *rURL.GetMap() ) );
 }
 
-SwFormatURL::~SwFormatURL()
-{
-}
+SwFormatURL::~SwFormatURL() = default;
 
 bool SwFormatURL::operator==( const SfxPoolItem &rAttr ) const
 {
@@ -2108,9 +2102,7 @@ SwFormatLineNumber::SwFormatLineNumber() :
     bCountLines = true;
 }
 
-SwFormatLineNumber::~SwFormatLineNumber()
-{
-}
+SwFormatLineNumber::~SwFormatLineNumber() = default;
 
 bool SwFormatLineNumber::operator==( const SfxPoolItem &rAttr ) const
 {
@@ -2179,9 +2171,7 @@ SwTextGridItem::SwTextGridItem()
 {
 }
 
-SwTextGridItem::~SwTextGridItem()
-{
-}
+SwTextGridItem::~SwTextGridItem() = default;
 
 bool SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -3316,17 +3306,17 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 
 namespace sw
 {
-    DrawFrameFormatHint::~DrawFrameFormatHint() {}
-    CheckDrawFrameFormatLayerHint::~CheckDrawFrameFormatLayerHint() {}
-    ContactChangedHint::~ContactChangedHint() {}
-    DrawFormatLayoutCopyHint::~DrawFormatLayoutCopyHint() {}
-    WW8AnchorConvHint::~WW8AnchorConvHint() {}
-    RestoreFlyAnchorHint::~RestoreFlyAnchorHint() {}
-    CreatePortionHint::~CreatePortionHint() {}
-    FindSdrObjectHint::~FindSdrObjectHint() {}
-    CollectTextObjectsHint::~CollectTextObjectsHint() {}
-    GetZOrderHint::~GetZOrderHint() {}
-    GetObjectConnectedHint::~GetObjectConnectedHint() {}
+DrawFrameFormatHint::~DrawFrameFormatHint() = default;
+CheckDrawFrameFormatLayerHint::~CheckDrawFrameFormatLayerHint() = default;
+ContactChangedHint::~ContactChangedHint() = default;
+DrawFormatLayoutCopyHint::~DrawFormatLayoutCopyHint() = default;
+WW8AnchorConvHint::~WW8AnchorConvHint() = default;
+RestoreFlyAnchorHint::~RestoreFlyAnchorHint() = default;
+CreatePortionHint::~CreatePortionHint() = default;
+FindSdrObjectHint::~FindSdrObjectHint() = default;
+CollectTextObjectsHint::~CollectTextObjectsHint() = default;
+GetZOrderHint::~GetZOrderHint() = default;
+GetObjectConnectedHint::~GetObjectConnectedHint() = default;
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

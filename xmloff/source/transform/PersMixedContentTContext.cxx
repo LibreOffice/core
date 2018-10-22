@@ -123,9 +123,7 @@ XMLPersMixedContentTContext::XMLPersMixedContentTContext(
 {
 }
 
-XMLPersMixedContentTContext::~XMLPersMixedContentTContext()
-{
-}
+XMLPersMixedContentTContext::~XMLPersMixedContentTContext() = default;
 
 void XMLPersMixedContentTContext::Characters( const OUString& rChars )
 {

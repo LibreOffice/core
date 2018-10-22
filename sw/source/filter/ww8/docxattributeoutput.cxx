@@ -9096,9 +9096,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
     PushRelIdCache();
 }
 
-DocxAttributeOutput::~DocxAttributeOutput()
-{
-}
+DocxAttributeOutput::~DocxAttributeOutput() = default;
 
 DocxExport& DocxAttributeOutput::GetExport()
 {

@@ -31,9 +31,7 @@ TextListStyle::TextListStyle()
     }
 }
 
-TextListStyle::~TextListStyle()
-{
-}
+TextListStyle::~TextListStyle() = default;
 
 TextListStyle::TextListStyle(const TextListStyle& rStyle)
 {

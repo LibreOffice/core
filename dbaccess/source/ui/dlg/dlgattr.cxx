@@ -46,9 +46,7 @@ SbaSbAttrDlg::SbaSbAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs,
     AddTabPage("alignment", RID_SVXPAGE_ALIGNMENT);
 }
 
-SbaSbAttrDlg::~SbaSbAttrDlg()
-{
-}
+SbaSbAttrDlg::~SbaSbAttrDlg() = default;
 
 void SbaSbAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
 {

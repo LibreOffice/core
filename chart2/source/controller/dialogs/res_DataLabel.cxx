@@ -156,9 +156,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     m_aDC_Dial.SetLinkedField(m_xNF_Degrees.get());
 }
 
-DataLabelResources::~DataLabelResources()
-{
-}
+DataLabelResources::~DataLabelResources() = default;
 
 void DataLabelResources::SetNumberFormatter( SvNumberFormatter* pFormatter )
 {

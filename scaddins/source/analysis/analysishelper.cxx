@@ -1387,9 +1387,7 @@ FuncData::FuncData(const FuncDataBase& r) :
     aCompList[1] = OUString(r.pCompListID[1], strlen(r.pCompListID[1]), RTL_TEXTENCODING_UTF8);
 }
 
-FuncData::~FuncData()
-{
-}
+FuncData::~FuncData() = default;
 
 sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 {
@@ -1408,15 +1406,9 @@ void InitFuncDataList(FuncDataList& rList)
         rList.push_back(FuncData(rFuncData));
 }
 
-SortedIndividualInt32List::SortedIndividualInt32List()
-{
-}
+SortedIndividualInt32List::SortedIndividualInt32List() = default;
 
-
-SortedIndividualInt32List::~SortedIndividualInt32List()
-{
-}
-
+SortedIndividualInt32List::~SortedIndividualInt32List() = default;
 
 void SortedIndividualInt32List::Insert( sal_Int32 nDay )
 {
@@ -2028,11 +2020,7 @@ void Complex::Csch()
     }
 }
 
-
-ComplexList::~ComplexList()
-{
-}
-
+ComplexList::~ComplexList() = default;
 
 void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, ComplListAppendHandl eAH )
 {
@@ -2115,9 +2103,7 @@ ConvertData::ConvertData(const sal_Char p[], double fC, ConvertDataClass e, bool
 {
 }
 
-ConvertData::~ConvertData()
-{
-}
+ConvertData::~ConvertData() = default;
 
 sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 {
@@ -2259,9 +2245,7 @@ double ConvertData::ConvertFromBase( double f, sal_Int16 n ) const
     return ::rtl::math::pow10Exp( f * fConst, -n );
 }
 
-ConvertDataLinear::~ConvertDataLinear()
-{
-}
+ConvertDataLinear::~ConvertDataLinear() = default;
 
 double ConvertDataLinear::Convert(
     double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const
@@ -2478,11 +2462,7 @@ ConvertDataList::ConvertDataList()
     NEWDP( "byte",  1.25E-01, CDC_Information); // *** Byte
 }
 
-
-ConvertDataList::~ConvertDataList()
-{
-}
-
+ConvertDataList::~ConvertDataList() = default;
 
 double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo )
 {
@@ -2567,17 +2547,9 @@ ScaDate::ScaDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase )
     setDay();
 }
 
-ScaDate::ScaDate( const ScaDate& rCopy ) :
-    nOrigDay( rCopy.nOrigDay ),
-    nDay( rCopy.nDay ),
-    nMonth( rCopy.nMonth ),
-    nYear( rCopy.nYear ),
-    bLastDayMode( rCopy.bLastDayMode ),
-    bLastDay( rCopy.bLastDay ),
-    b30Days( rCopy.b30Days ),
-    bUSMode( rCopy.bUSMode )
-{
-}
+ScaDate::ScaDate(const ScaDate& rCopy)
+
+    = default;
 
 ScaDate& ScaDate::operator=( const ScaDate& rCopy )
 {
@@ -2748,9 +2720,7 @@ ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >
     xFormatter = util::NumberFormatter::create(xContext);
 }
 
-ScaAnyConverter::~ScaAnyConverter()
-{
-}
+ScaAnyConverter::~ScaAnyConverter() = default;
 
 void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSet )
 {

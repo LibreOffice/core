@@ -17,7 +17,7 @@ namespace sc {
 UndoSetCells::UndoSetCells( ScDocShell* pDocSh, const ScAddress& rTopPos ) :
     ScSimpleUndo(pDocSh), maTopPos(rTopPos) {}
 
-UndoSetCells::~UndoSetCells() {}
+UndoSetCells::~UndoSetCells() = default;
 
 void UndoSetCells::DoChange( const CellValues& rValues )
 {

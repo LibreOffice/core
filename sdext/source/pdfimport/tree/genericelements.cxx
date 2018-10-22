@@ -32,10 +32,7 @@
 
 namespace pdfi
 {
-
-Element::~Element()
-{
-}
+Element::~Element() = default;
 
 void Element::applyToChildren( ElementTreeVisitor& rVisitor )
 {
@@ -255,9 +252,7 @@ TextElement* ParagraphElement::getFirstTextChild() const
     return pText;
 }
 
-PageElement::~PageElement()
-{
-}
+PageElement::~PageElement() = default;
 
 void PageElement::visitedBy( ElementTreeVisitor&                          rVisitor,
                              const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt )
@@ -425,9 +420,7 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
     }
 }
 
-DocumentElement::~DocumentElement()
-{
-}
+DocumentElement::~DocumentElement() = default;
 
 void DocumentElement::visitedBy( ElementTreeVisitor&                          rVisitor,
                                  const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt)

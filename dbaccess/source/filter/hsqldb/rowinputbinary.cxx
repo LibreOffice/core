@@ -136,7 +136,7 @@ using namespace boost::gregorian;
 
 typedef std::vector<ColumnDefinition> ColumnTypeVector;
 
-HsqlRowInputStream::HsqlRowInputStream() {}
+HsqlRowInputStream::HsqlRowInputStream() = default;
 
 void HsqlRowInputStream::setInputStream(Reference<XInputStream> const& rStream)
 {

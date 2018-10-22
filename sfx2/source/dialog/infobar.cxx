@@ -434,9 +434,7 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_u
     SetAlignment(SfxChildAlignment::LOWESTTOP);
 }
 
-SfxInfoBarContainerChild::~SfxInfoBarContainerChild()
-{
-}
+SfxInfoBarContainerChild::~SfxInfoBarContainerChild() = default;
 
 SfxChildWinInfo SfxInfoBarContainerChild::GetInfo() const
 {

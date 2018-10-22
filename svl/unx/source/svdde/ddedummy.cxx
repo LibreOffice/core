@@ -28,9 +28,7 @@ struct DdeDataImp
 {
 };
 
-DdeData::DdeData()
-{
-}
+DdeData::DdeData() = default;
 
 DdeData::DdeData( const OUString& )
 {
@@ -48,9 +46,7 @@ DdeData::DdeData( const void*, long, SotClipboardFormatId)
 {
 }
 
-DdeData::~DdeData()
-{
-}
+DdeData::~DdeData() = default;
 
 void DdeData::SetFormat( SAL_UNUSED_PARAMETER SotClipboardFormatId )
 {
@@ -94,9 +90,7 @@ DdeConnection::DdeConnection( const OUString&, const OUString& )
 {
 }
 
-DdeConnection::~DdeConnection()
-{
-}
+DdeConnection::~DdeConnection() = default;
 
 const OUString DdeConnection::GetServiceName()
 {
@@ -130,9 +124,7 @@ void DdeTransaction::Data( SAL_UNUSED_PARAMETER const DdeData* )
 {
 }
 
-DdeTransaction::~DdeTransaction()
-{
-}
+DdeTransaction::~DdeTransaction() = default;
 
 DdeRequest::DdeRequest( DdeConnection& rConnection, const OUString& rString, long lLong )
     : DdeTransaction( rConnection, rString, lLong )
@@ -155,9 +147,7 @@ DdeTopic::DdeTopic( const OUString& )
 {
 }
 
-DdeTopic::~DdeTopic()
-{
-}
+DdeTopic::~DdeTopic() = default;
 
 void DdeTopic::InsertItem( SAL_UNUSED_PARAMETER DdeItem* )
 {
@@ -228,9 +218,7 @@ OUString DdeService::Status()
     return OUString();
 }
 
-DdeService::~DdeService()
-{
-}
+DdeService::~DdeService() = default;
 
 void DdeService::AddFormat(SAL_UNUSED_PARAMETER SotClipboardFormatId)
 {
@@ -276,9 +264,7 @@ DdeItem::DdeItem( const DdeItem& )
 {
 }
 
-DdeItem::~DdeItem()
-{
-}
+DdeItem::~DdeItem() = default;
 
 void DdeItem::NotifyClient()
 {
@@ -313,9 +299,7 @@ DdeLink::DdeLink( DdeConnection& rConnection, const OUString& rString, long l )
 {
 }
 
-DdeLink::~DdeLink()
-{
-}
+DdeLink::~DdeLink() = default;
 
 void DdeLink::Notify()
 {

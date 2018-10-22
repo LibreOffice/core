@@ -876,8 +876,6 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
         m_nBorder = m_nInnerBorder;
 }
 
-SwWriteTable::~SwWriteTable()
-{
-}
+SwWriteTable::~SwWriteTable() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

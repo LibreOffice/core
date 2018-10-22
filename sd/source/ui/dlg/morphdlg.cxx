@@ -60,9 +60,7 @@ MorphDlg::MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObjec
     }
 }
 
-MorphDlg::~MorphDlg()
-{
-}
+MorphDlg::~MorphDlg() = default;
 
 void MorphDlg::LoadSettings()
 {

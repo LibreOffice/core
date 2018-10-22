@@ -38,14 +38,12 @@
 
 namespace vcl
 {
+DefaultTextLayout::~DefaultTextLayout() = default;
 
-    DefaultTextLayout::~DefaultTextLayout()
-    {
-    }
-
-    long DefaultTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
-    {
-        return m_rTargetDevice.GetTextWidth( _rText, _nStartIndex, _nLength );
+long DefaultTextLayout::GetTextWidth(const OUString& _rText, sal_Int32 _nStartIndex,
+                                     sal_Int32 _nLength) const
+{
+    return m_rTargetDevice.GetTextWidth(_rText, _nStartIndex, _nLength);
     }
 
     void DefaultTextLayout::DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex,
@@ -335,9 +333,7 @@ namespace vcl
     {
     }
 
-    ControlTextRenderer::~ControlTextRenderer()
-    {
-    }
+    ControlTextRenderer::~ControlTextRenderer() = default;
 
     tools::Rectangle ControlTextRenderer::DrawText( const tools::Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle,
         MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize )

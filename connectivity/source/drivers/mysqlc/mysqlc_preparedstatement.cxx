@@ -78,7 +78,7 @@ OPreparedStatement::OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pS
     }
 }
 
-OPreparedStatement::~OPreparedStatement() {}
+OPreparedStatement::~OPreparedStatement() = default;
 
 void SAL_CALL OPreparedStatement::acquire() throw() { OCommonStatement::acquire(); }
 

@@ -41,13 +41,9 @@
 
 //  class VCLXSystemDependentWindow
 
-VCLXSystemDependentWindow::VCLXSystemDependentWindow()
-{
-}
+VCLXSystemDependentWindow::VCLXSystemDependentWindow() = default;
 
-VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
-{
-}
+VCLXSystemDependentWindow::~VCLXSystemDependentWindow() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & rType )

@@ -49,9 +49,7 @@ namespace ww8
     {
     }
 
-    WW8Struct::~WW8Struct()
-    {
-    }
+    WW8Struct::~WW8Struct() = default;
 
     sal_uInt8 WW8Struct::getU8(sal_uInt32 nOffset)
     {

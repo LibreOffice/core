@@ -28,9 +28,7 @@ SEInitializerGpg::SEInitializerGpg()
     GpgME::initializeLibrary();
 }
 
-SEInitializerGpg::~SEInitializerGpg()
-{
-}
+SEInitializerGpg::~SEInitializerGpg() = default;
 
 /* XSEInitializer */
 Reference< XXMLSecurityContext > SAL_CALL SEInitializerGpg::createSecurityContext( const OUString& )

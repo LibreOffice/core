@@ -20,10 +20,7 @@
 #include <xmloff/xmlprhdl.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-XMLPropertyHandler::~XMLPropertyHandler()
-{
-     // does nothing
-}
+XMLPropertyHandler::~XMLPropertyHandler() = default;
 
 bool XMLPropertyHandler::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {

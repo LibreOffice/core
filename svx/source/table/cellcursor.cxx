@@ -43,11 +43,7 @@ CellCursor::CellCursor( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32
 {
 }
 
-
-CellCursor::~CellCursor()
-{
-}
-
+CellCursor::~CellCursor() = default;
 
 // XCellCursor
 

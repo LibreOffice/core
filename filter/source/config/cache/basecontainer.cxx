@@ -43,11 +43,7 @@ BaseContainer::BaseContainer()
     TheFilterCache::get().load(FilterCache::E_CONTAINS_STANDARD);
 }
 
-
-BaseContainer::~BaseContainer()
-{
-}
-
+BaseContainer::~BaseContainer() = default;
 
 void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext              ,
                          const OUString&                                        sImplementationName,

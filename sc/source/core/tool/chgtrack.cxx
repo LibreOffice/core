@@ -691,9 +691,7 @@ ScChangeActionIns::ScChangeActionIns(
 {
 }
 
-ScChangeActionIns::~ScChangeActionIns()
-{
-}
+ScChangeActionIns::~ScChangeActionIns() = default;
 
 void ScChangeActionIns::GetDescription(
     OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const

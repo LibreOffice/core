@@ -173,10 +173,7 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
     }
 }
 
-
-SvxLanguageBoxBase::~SvxLanguageBoxBase()
-{
-}
+SvxLanguageBoxBase::~SvxLanguageBoxBase() = default;
 
 namespace {
 

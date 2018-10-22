@@ -37,9 +37,7 @@ namespace dbaui
         // add available types to list
     }
 
-    OJoinExchObj::~OJoinExchObj()
-    {
-    }
+    OJoinExchObj::~OJoinExchObj() = default;
 
     void OJoinExchObj::StartDrag( vcl::Window* _pWindow, sal_Int8 _nDragSourceActions, IDragTransferableListener* _pListener )
     {

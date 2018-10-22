@@ -60,9 +60,7 @@ namespace slideshow
             class TValueExpression : public ExpressionNode
             {
             public:
-                TValueExpression()
-                {
-                }
+                TValueExpression() = default;
 
                 virtual double operator()( double t ) const override
                 {

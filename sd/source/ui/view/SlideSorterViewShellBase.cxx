@@ -59,9 +59,7 @@ SlideSorterViewShellBase::SlideSorterViewShellBase (
 {
 }
 
-SlideSorterViewShellBase::~SlideSorterViewShellBase()
-{
-}
+SlideSorterViewShellBase::~SlideSorterViewShellBase() = default;
 
 } // end of namespace sd
 

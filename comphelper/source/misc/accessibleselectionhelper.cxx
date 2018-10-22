@@ -29,12 +29,9 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    OCommonAccessibleSelection::OCommonAccessibleSelection( )
-    {
-    }
+    OCommonAccessibleSelection::OCommonAccessibleSelection() = default;
 
-    OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
-
+    OCommonAccessibleSelection::~OCommonAccessibleSelection() = default;
 
     void OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex )
     {
@@ -101,10 +98,7 @@ namespace comphelper
         implSelect( nSelectedChildIndex, false );
     }
 
-    OAccessibleSelectionHelper::OAccessibleSelectionHelper()
-    {
-    }
-
+    OAccessibleSelectionHelper::OAccessibleSelectionHelper() = default;
 
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )

@@ -265,10 +265,7 @@ bool operator<( const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2)
     return r1.mnFamily < r2.mnFamily;
 }
 
-
-XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
-{
-}
+XMLAutoStylePoolParent::~XMLAutoStylePoolParent() = default;
 
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
@@ -392,9 +389,7 @@ SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
 {
 }
 
-SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
-{
-}
+SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl() = default;
 
 // Adds stylefamily-information to sorted list
 

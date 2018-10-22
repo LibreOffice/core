@@ -60,9 +60,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
     SetName(GetResource(pResId, &sArg));
 }
 
-SwAccessibleFootnote::~SwAccessibleFootnote()
-{
-}
+SwAccessibleFootnote::~SwAccessibleFootnote() = default;
 
 OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 {

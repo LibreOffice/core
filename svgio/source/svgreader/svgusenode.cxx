@@ -39,9 +39,7 @@ namespace svgio
         {
         }
 
-        SvgUseNode::~SvgUseNode()
-        {
-        }
+        SvgUseNode::~SvgUseNode() = default;
 
         const SvgStyleAttributes* SvgUseNode::getSvgStyleAttributes() const
         {

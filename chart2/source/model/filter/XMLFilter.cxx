@@ -190,8 +190,7 @@ XMLFilter::XMLFilter( Reference< uno::XComponentContext > const & xContext ) :
         m_bCancelOperation( false )
 {}
 
-XMLFilter::~XMLFilter()
-{}
+XMLFilter::~XMLFilter() = default;
 
 // ____ XFilter ____
 sal_Bool SAL_CALL XMLFilter::filter(

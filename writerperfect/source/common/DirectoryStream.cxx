@@ -111,7 +111,7 @@ DirectoryStream::DirectoryStream(const css::uno::Reference<css::ucb::XContent>& 
 {
 }
 
-DirectoryStream::~DirectoryStream() {}
+DirectoryStream::~DirectoryStream() = default;
 
 bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent>& xContent)
 {

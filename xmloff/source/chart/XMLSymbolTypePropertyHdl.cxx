@@ -108,8 +108,7 @@ XMLSymbolTypePropertyHdl::XMLSymbolTypePropertyHdl( bool bIsNamedSymbol )
         : m_bIsNamedSymbol( bIsNamedSymbol )
 {}
 
-XMLSymbolTypePropertyHdl::~XMLSymbolTypePropertyHdl()
-{}
+XMLSymbolTypePropertyHdl::~XMLSymbolTypePropertyHdl() = default;
 
 bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const

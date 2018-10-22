@@ -61,9 +61,7 @@ ScMyValidation::ScMyValidation()
 {
 }
 
-ScMyValidation::~ScMyValidation()
-{
-}
+ScMyValidation::~ScMyValidation() = default;
 
 bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 {
@@ -98,9 +96,7 @@ ScMyValidationsContainer::ScMyValidationsContainer()
 {
 }
 
-ScMyValidationsContainer::~ScMyValidationsContainer()
-{
-}
+ScMyValidationsContainer::~ScMyValidationsContainer() = default;
 
 void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     sal_Int32& nValidationIndex)
@@ -529,9 +525,7 @@ ScRowFormatRanges::ScRowFormatRanges(const ScRowFormatRanges* pRanges)
 {
 }
 
-ScRowFormatRanges::~ScRowFormatRanges()
-{
-}
+ScRowFormatRanges::~ScRowFormatRanges() = default;
 
 void ScRowFormatRanges::Clear()
 {
@@ -701,9 +695,7 @@ ScFormatRangeStyles::ScFormatRangeStyles()
 {
 }
 
-ScFormatRangeStyles::~ScFormatRangeStyles()
-{
-}
+ScFormatRangeStyles::~ScFormatRangeStyles() = default;
 
 void ScFormatRangeStyles::AddNewTable(const sal_Int32 nTable)
 {
@@ -951,9 +943,7 @@ ScColumnRowStylesBase::ScColumnRowStylesBase()
 {
 }
 
-ScColumnRowStylesBase::~ScColumnRowStylesBase()
-{
-}
+ScColumnRowStylesBase::~ScColumnRowStylesBase() = default;
 
 sal_Int32 ScColumnRowStylesBase::AddStyleName(const OUString & rString)
 {
@@ -997,9 +987,7 @@ ScColumnStyles::ScColumnStyles()
 {
 }
 
-ScColumnStyles::~ScColumnStyles()
-{
-}
+ScColumnStyles::~ScColumnStyles() = default;
 
 void ScColumnStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 {
@@ -1054,9 +1042,7 @@ ScRowStyles::ScRowStyles()
 {
 }
 
-ScRowStyles::~ScRowStyles()
-{
-}
+ScRowStyles::~ScRowStyles() = default;
 
 void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 {

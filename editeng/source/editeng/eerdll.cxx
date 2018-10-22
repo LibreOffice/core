@@ -198,9 +198,7 @@ EditDLL::EditDLL()
 {
 }
 
-EditDLL::~EditDLL()
-{
-}
+EditDLL::~EditDLL() = default;
 
 editeng::SharedVclResources::SharedVclResources()
     : m_pVirDev(VclPtr<VirtualDevice>::Create())

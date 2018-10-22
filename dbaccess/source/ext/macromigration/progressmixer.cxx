@@ -116,9 +116,7 @@ namespace dbmm
     {
     }
 
-    ProgressMixer::~ProgressMixer()
-    {
-    }
+    ProgressMixer::~ProgressMixer() = default;
 
     void ProgressMixer::registerPhase( const PhaseID _nID, const PhaseWeight _nWeight )
     {

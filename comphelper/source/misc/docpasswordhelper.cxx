@@ -80,11 +80,7 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, 
     return aResult;
 }
 
-
-IDocPasswordVerifier::~IDocPasswordVerifier()
-{
-}
-
+IDocPasswordVerifier::~IDocPasswordVerifier() = default;
 
 uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const OUString& aPassword )
 {

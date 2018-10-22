@@ -826,7 +826,7 @@ WPXSvInputStream::WPXSvInputStream(Reference<XInputStream> const& xStream)
 {
 }
 
-WPXSvInputStream::~WPXSvInputStream() {}
+WPXSvInputStream::~WPXSvInputStream() = default;
 
 #define BUFFER_MAX 65536
 

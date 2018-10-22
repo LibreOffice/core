@@ -53,9 +53,7 @@ namespace cmis
         mbCountFinal = true;
     }
 
-    DataSupplier::~DataSupplier()
-    {
-    }
+    DataSupplier::~DataSupplier() = default;
 
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     {

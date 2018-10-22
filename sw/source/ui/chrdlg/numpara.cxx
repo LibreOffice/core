@@ -94,9 +94,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(TabPageParent pParent, const SfxIte
     m_xEditNumStyleBtn->connect_clicked(LINK(this, SwParagraphNumTabPage, EditNumStyleHdl_Impl));
 }
 
-SwParagraphNumTabPage::~SwParagraphNumTabPage()
-{
-}
+SwParagraphNumTabPage::~SwParagraphNumTabPage() = default;
 
 VclPtr<SfxTabPage> SwParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {

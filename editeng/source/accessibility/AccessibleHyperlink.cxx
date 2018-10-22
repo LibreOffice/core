@@ -47,9 +47,7 @@ namespace accessibility
         aDescription = rD;
     }
 
-    AccessibleHyperlink::~AccessibleHyperlink()
-    {
-    }
+    AccessibleHyperlink::~AccessibleHyperlink() = default;
 
     // XAccessibleAction
     sal_Int32 SAL_CALL AccessibleHyperlink::getAccessibleActionCount()

@@ -85,9 +85,7 @@ ExcelToSc8::ExcelToSc8( XclImpRoot& rRoot ) :
 {
 }
 
-ExcelToSc8::~ExcelToSc8()
-{
-}
+ExcelToSc8::~ExcelToSc8() = default;
 
 bool ExcelToSc8::GetExternalFileIdFromXti( sal_uInt16 nIxti, sal_uInt16& rFileId ) const
 {

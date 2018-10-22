@@ -66,8 +66,7 @@ namespace comphelper
         ::cppu::IEventNotificationHook *i_pFireEvents)
         :   ::cppu::OPropertySetHelper2(rBHlp, i_pFireEvents) { }
 
-    OPropertyStateHelper::~OPropertyStateHelper() {}
-
+    OPropertyStateHelper::~OPropertyStateHelper() = default;
 
     void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  css::uno::Any& aNewValue, const  css::uno::Any& aOldValue)
     {
@@ -178,11 +177,7 @@ namespace comphelper
     {
     }
 
-
-    OStatefulPropertySet::~OStatefulPropertySet()
-    {
-    }
-
+    OStatefulPropertySet::~OStatefulPropertySet() = default;
 
     Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes()
     {

@@ -69,9 +69,7 @@ SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     setInterceptions(lInterceptions);
 }
 
-SimpleFileAccessInteraction::~SimpleFileAccessInteraction()
-{
-}
+SimpleFileAccessInteraction::~SimpleFileAccessInteraction() = default;
 
 ucbhelper::InterceptedInteraction::EInterceptionState SimpleFileAccessInteraction::intercepted(
     const ::ucbhelper::InterceptedInteraction::InterceptedRequest& aRequest,

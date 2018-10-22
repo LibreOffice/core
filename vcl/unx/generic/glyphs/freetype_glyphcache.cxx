@@ -180,9 +180,7 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     maDevFontAttributes.IncreaseQualityBy( mpFontFile->GetLangBoost() );
 }
 
-FreetypeFontInfo::~FreetypeFontInfo()
-{
-}
+FreetypeFontInfo::~FreetypeFontInfo() = default;
 
 FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
 {

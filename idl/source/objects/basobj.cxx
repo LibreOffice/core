@@ -61,9 +61,7 @@ void SvMetaObject::Back2Delimiter( SvStream & rOutStm )
         rOutStm.Seek( nPos );
 }
 
-SvMetaObject::SvMetaObject()
-{
-}
+SvMetaObject::SvMetaObject() = default;
 
 void SvMetaObject::SetName( const OString& rName )
 {
@@ -137,10 +135,6 @@ bool SvMetaObject::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return bOk;
 }
 
-
-SvMetaReference::SvMetaReference()
-{
-}
-
+SvMetaReference::SvMetaReference() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -107,9 +107,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
     }
 }
 
-PresenterPaneFactory::~PresenterPaneFactory()
-{
-}
+PresenterPaneFactory::~PresenterPaneFactory() = default;
 
 void SAL_CALL PresenterPaneFactory::disposing()
 {

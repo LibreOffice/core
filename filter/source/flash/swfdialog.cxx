@@ -65,11 +65,7 @@ SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :
 {
 }
 
-
-SWFDialog::~SWFDialog()
-{
-}
-
+SWFDialog::~SWFDialog() = default;
 
 Any SAL_CALL SWFDialog::queryInterface( const Type& rType )
 {

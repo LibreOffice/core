@@ -103,8 +103,7 @@ RegressionCurveItemConverter::RegressionCurveItemConverter(
         m_xCurveContainer( xContainer )
 {}
 
-RegressionCurveItemConverter::~RegressionCurveItemConverter()
-{}
+RegressionCurveItemConverter::~RegressionCurveItemConverter() = default;
 
 void RegressionCurveItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {

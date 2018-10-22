@@ -26,11 +26,8 @@ ScUndoTabColorInfo::ScUndoTabColorInfo(SCTAB nTab) :
 {
 }
 
-ScUndoTabColorInfo::ScUndoTabColorInfo(const ScUndoTabColorInfo& r) :
-    mnTabId(r.mnTabId),
-    maOldTabBgColor(r.maOldTabBgColor),
-    maNewTabBgColor(r.maNewTabBgColor)
-{
-}
+ScUndoTabColorInfo::ScUndoTabColorInfo(const ScUndoTabColorInfo& r)
+
+    = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

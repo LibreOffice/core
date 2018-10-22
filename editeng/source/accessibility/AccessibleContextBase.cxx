@@ -70,9 +70,7 @@ AccessibleContextBase::AccessibleContextBase (
     mxRelationSet = pRelationSet;
 }
 
-AccessibleContextBase::~AccessibleContextBase()
-{
-}
+AccessibleContextBase::~AccessibleContextBase() = default;
 
 bool AccessibleContextBase::SetState (sal_Int16 aState)
 {

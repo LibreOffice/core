@@ -377,9 +377,7 @@ VCLXButton::VCLXButton()
 {
 }
 
-VCLXButton::~VCLXButton()
-{
-}
+VCLXButton::~VCLXButton() = default;
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
 {
@@ -643,13 +641,9 @@ void VCLXImageControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
-VCLXImageControl::VCLXImageControl()
-{
-}
+VCLXImageControl::VCLXImageControl() = default;
 
-VCLXImageControl::~VCLXImageControl()
-{
-}
+VCLXImageControl::~VCLXImageControl() = default;
 
 void VCLXImageControl::ImplSetNewImage()
 {
@@ -2159,13 +2153,9 @@ void VCLXMessageBox::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXTopWindow::ImplGetPropertyIds( rIds );
 }
 
-VCLXMessageBox::VCLXMessageBox()
-{
-}
+VCLXMessageBox::VCLXMessageBox() = default;
 
-VCLXMessageBox::~VCLXMessageBox()
-{
-}
+VCLXMessageBox::~VCLXMessageBox() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXMessageBox::queryInterface( const css::uno::Type & rType )
@@ -2441,9 +2431,7 @@ void VCLXMultiPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
-VCLXMultiPage::~VCLXMultiPage()
-{
-}
+VCLXMultiPage::~VCLXMultiPage() = default;
 void SAL_CALL VCLXMultiPage::dispose()
 {
     SolarMutexGuard aGuard;
@@ -2689,9 +2677,7 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 //  class VCLXTabPage
 
-VCLXTabPage::VCLXTabPage()
-{
-}
+VCLXTabPage::VCLXTabPage() = default;
 
 void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -2714,9 +2700,7 @@ void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
-VCLXTabPage::~VCLXTabPage()
-{
-}
+VCLXTabPage::~VCLXTabPage() = default;
 
 // css::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXTabPage )
@@ -2821,9 +2805,7 @@ VCLXFixedHyperlink::VCLXFixedHyperlink() :
 {
 }
 
-VCLXFixedHyperlink::~VCLXFixedHyperlink()
-{
-}
+VCLXFixedHyperlink::~VCLXFixedHyperlink() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXFixedHyperlink::queryInterface( const css::uno::Type & rType )
@@ -3128,13 +3110,9 @@ void VCLXFixedText::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
-VCLXFixedText::VCLXFixedText()
-{
-}
+VCLXFixedText::VCLXFixedText() = default;
 
-VCLXFixedText::~VCLXFixedText()
-{
-}
+VCLXFixedText::~VCLXFixedText() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXFixedText::queryInterface( const css::uno::Type & rType )
@@ -4606,9 +4584,7 @@ VCLXFormattedSpinField::VCLXFormattedSpinField()
 {
 }
 
-VCLXFormattedSpinField::~VCLXFormattedSpinField()
-{
-}
+VCLXFormattedSpinField::~VCLXFormattedSpinField() = default;
 
 void VCLXFormattedSpinField::setStrictFormat( bool bStrict )
 {
@@ -4736,13 +4712,9 @@ void VCLXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
 
-VCLXDateField::VCLXDateField()
-{
-}
+VCLXDateField::VCLXDateField() = default;
 
-VCLXDateField::~VCLXDateField()
-{
-}
+VCLXDateField::~VCLXDateField() = default;
 
 //change the window type here to match the role
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
@@ -5083,13 +5055,9 @@ void VCLXTimeField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
 
-VCLXTimeField::VCLXTimeField()
-{
-}
+VCLXTimeField::VCLXTimeField() = default;
 
-VCLXTimeField::~VCLXTimeField()
-{
-}
+VCLXTimeField::~VCLXTimeField() = default;
 
 //change the window type here to match the role
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
@@ -5393,13 +5361,9 @@ void VCLXNumericField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
 
-VCLXNumericField::VCLXNumericField()
-{
-}
+VCLXNumericField::VCLXNumericField() = default;
 
-VCLXNumericField::~VCLXNumericField()
-{
-}
+VCLXNumericField::~VCLXNumericField() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXNumericField::queryInterface( const css::uno::Type & rType )
@@ -5734,13 +5698,9 @@ void VCLXMetricField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
 
-VCLXMetricField::VCLXMetricField()
-{
-}
+VCLXMetricField::VCLXMetricField() = default;
 
-VCLXMetricField::~VCLXMetricField()
-{
-}
+VCLXMetricField::~VCLXMetricField() = default;
 
 MetricFormatter *VCLXMetricField::GetMetricFormatter()
 {
@@ -5987,13 +5947,9 @@ void VCLXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
 
-VCLXCurrencyField::VCLXCurrencyField()
-{
-}
+VCLXCurrencyField::VCLXCurrencyField() = default;
 
-VCLXCurrencyField::~VCLXCurrencyField()
-{
-}
+VCLXCurrencyField::~VCLXCurrencyField() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXCurrencyField::queryInterface( const css::uno::Type & rType )
@@ -6336,13 +6292,9 @@ void VCLXPatternField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
 
-VCLXPatternField::VCLXPatternField()
-{
-}
+VCLXPatternField::VCLXPatternField() = default;
 
-VCLXPatternField::~VCLXPatternField()
-{
-}
+VCLXPatternField::~VCLXPatternField() = default;
 
 // css::uno::XInterface
 css::uno::Any VCLXPatternField::queryInterface( const css::uno::Type & rType )
@@ -6476,13 +6428,9 @@ css::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName )
 
 //  class VCLXToolBox
 
-VCLXToolBox::VCLXToolBox()
-{
-}
+VCLXToolBox::VCLXToolBox() = default;
 
-VCLXToolBox::~VCLXToolBox()
-{
-}
+VCLXToolBox::~VCLXToolBox() = default;
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
 {
@@ -6492,9 +6440,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXToolBox::Creat
 
 //  class VCLXFrame
 
-VCLXFrame::VCLXFrame()
-{
-}
+VCLXFrame::VCLXFrame() = default;
 
 void VCLXFrame::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -6513,9 +6459,7 @@ void VCLXFrame::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
-VCLXFrame::~VCLXFrame()
-{
-}
+VCLXFrame::~VCLXFrame() = default;
 
 // css::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXFrame )

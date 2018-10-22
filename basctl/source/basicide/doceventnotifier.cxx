@@ -223,9 +223,7 @@ namespace basctl
         m_pImpl(new Impl(rListener, Reference<XModel>()))
     { }
 
-    DocumentEventNotifier::~DocumentEventNotifier()
-    {
-    }
+    DocumentEventNotifier::~DocumentEventNotifier() = default;
 
     void DocumentEventNotifier::dispose()
     {
@@ -234,9 +232,7 @@ namespace basctl
 
     // DocumentEventListener
 
-    DocumentEventListener::~DocumentEventListener()
-    {
-    }
+    DocumentEventListener::~DocumentEventListener() = default;
 
 } // namespace basctl
 

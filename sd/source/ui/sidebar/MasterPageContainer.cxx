@@ -215,9 +215,7 @@ MasterPageContainer::MasterPageContainer()
     mpImpl->LateInit();
 }
 
-MasterPageContainer::~MasterPageContainer()
-{
-}
+MasterPageContainer::~MasterPageContainer() = default;
 
 void MasterPageContainer::AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)
 {

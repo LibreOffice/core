@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-vcl::unohelper::DragAndDropClient::~DragAndDropClient() COVERITY_NOEXCEPT_FALSE {}
+vcl::unohelper::DragAndDropClient::~DragAndDropClient() COVERITY_NOEXCEPT_FALSE = default;
 
 void vcl::unohelper::DragAndDropClient::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& /*dge*/ )
 {
@@ -54,9 +54,7 @@ vcl::unohelper::DragAndDropWrapper::DragAndDropWrapper( DragAndDropClient* pClie
     mpClient = pClient;
 }
 
-vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
-{
-}
+vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper() = default;
 
 // uno::XInterface
 uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType )

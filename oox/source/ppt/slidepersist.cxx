@@ -74,9 +74,7 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
 css::uno::WeakReference< css::drawing::XDrawPage > SlidePersist::mxDebugPage;
 #endif
 
-SlidePersist::~SlidePersist()
-{
-}
+SlidePersist::~SlidePersist() = default;
 
 sal_Int16 SlidePersist::getLayoutFromValueToken()
 {

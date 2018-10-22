@@ -65,7 +65,7 @@ public:
         css::uno::Reference< css::uri::XUriReference > const & authority) override;
 
 private:
-    virtual ~Factory() override {}
+    virtual ~Factory() override = default;
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
 };

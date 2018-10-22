@@ -103,9 +103,7 @@ ResourceManager::ResourceManager()
     ReadLastActive();
 }
 
-ResourceManager::~ResourceManager()
-{
-}
+ResourceManager::~ResourceManager() = default;
 
 void ResourceManager::InitDeckContext(const Context& rContext)
 {

@@ -96,10 +96,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
         UNO_QUERY);
 }
 
-OXMLTable::~OXMLTable()
-{
-
-}
+OXMLTable::~OXMLTable() = default;
 
 SvXMLImportContextRef OXMLTable::CreateChildContext(
         sal_uInt16 nPrefix,

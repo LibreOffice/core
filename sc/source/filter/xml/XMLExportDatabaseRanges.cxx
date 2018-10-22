@@ -123,9 +123,7 @@ ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
 {
 }
 
-ScXMLExportDatabaseRanges::~ScXMLExportDatabaseRanges()
-{
-}
+ScXMLExportDatabaseRanges::~ScXMLExportDatabaseRanges() = default;
 
 ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRanges()
 {

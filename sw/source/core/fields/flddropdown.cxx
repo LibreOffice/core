@@ -37,9 +37,7 @@ SwDropDownFieldType::SwDropDownFieldType()
 {
 }
 
-SwDropDownFieldType::~SwDropDownFieldType()
-{
-}
+SwDropDownFieldType::~SwDropDownFieldType() = default;
 
 SwFieldType * SwDropDownFieldType::Copy() const
 {
@@ -58,9 +56,7 @@ SwDropDownField::SwDropDownField(const SwDropDownField & rSrc)
 {
 }
 
-SwDropDownField::~SwDropDownField()
-{
-}
+SwDropDownField::~SwDropDownField() = default;
 
 OUString SwDropDownField::Expand() const
 {

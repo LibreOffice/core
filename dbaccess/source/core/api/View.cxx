@@ -65,9 +65,7 @@ namespace dbaccess
         }
     }
 
-    View::~View()
-    {
-    }
+    View::~View() = default;
 
     IMPLEMENT_FORWARD_REFCOUNT( View, View_Base )
     IMPLEMENT_GET_IMPLEMENTATION_ID( View )

@@ -79,9 +79,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
     ProvideFrameworkControllers();
 }
 
-DrawController::~DrawController() throw()
-{
-}
+DrawController::~DrawController() throw() = default;
 
 void DrawController::SetSubController (
     const Reference<drawing::XDrawSubController>& rxSubController)

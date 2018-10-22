@@ -44,9 +44,7 @@ Options::Options(char const * progname)
 {
 }
 
-Options::~Options()
-{
-}
+Options::~Options() = default;
 
 // static
 bool Options::checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len)

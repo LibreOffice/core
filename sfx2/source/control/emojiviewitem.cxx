@@ -32,10 +32,7 @@ EmojiViewItem::EmojiViewItem (ThumbnailView &rView, sal_uInt16 nId)
 {
 }
 
-EmojiViewItem::~EmojiViewItem ()
-{
-}
-
+EmojiViewItem::~EmojiViewItem() = default;
 
 void EmojiViewItem::calculateItemsPosition (const long /*nThumbnailHeight*/, const long,
                                                 const long /*nPadding*/, sal_uInt32 nMaxTextLength,

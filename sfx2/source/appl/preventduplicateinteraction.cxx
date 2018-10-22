@@ -34,9 +34,7 @@ PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Referen
 {
 }
 
-PreventDuplicateInteraction::~PreventDuplicateInteraction()
-{
-}
+PreventDuplicateInteraction::~PreventDuplicateInteraction() = default;
 
 void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
 {

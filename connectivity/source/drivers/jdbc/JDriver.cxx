@@ -47,9 +47,7 @@ java_sql_Driver::java_sql_Driver(const Reference< css::uno::XComponentContext >&
 {
 }
 
-java_sql_Driver::~java_sql_Driver()
-{
-}
+java_sql_Driver::~java_sql_Driver() = default;
 
 // static ServiceInfo
 

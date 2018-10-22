@@ -54,9 +54,8 @@ EmPicture::EmPicture(size_t tsize)
 #ifdef _WIN32
 #define unlink _unlink
 #endif
-EmPicture::~EmPicture()
-{
-};
+EmPicture::~EmPicture() = default;
+;
 
 bool EmPicture::Read(HWPFile & hwpf)
 {

@@ -48,9 +48,7 @@ ScPanelFactory::ScPanelFactory()
 {
 }
 
-ScPanelFactory::~ScPanelFactory()
-{
-}
+ScPanelFactory::~ScPanelFactory() = default;
 
 Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,

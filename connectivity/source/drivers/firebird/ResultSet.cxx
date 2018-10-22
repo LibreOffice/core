@@ -108,9 +108,7 @@ OResultSet::OResultSet(Connection* pConnection,
 
 }
 
-OResultSet::~OResultSet()
-{
-}
+OResultSet::~OResultSet() = default;
 
 // ---- XResultSet -- Row retrieval methods ------------------------------------
 sal_Int32 SAL_CALL OResultSet::getRow()

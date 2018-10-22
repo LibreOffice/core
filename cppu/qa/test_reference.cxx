@@ -76,9 +76,7 @@ public:
     }
 
 protected:
-    virtual ~Foo()
-    {
-    }
+    virtual ~Foo() = default;
 
 private:
     oslInterlockedCount m_refCount;

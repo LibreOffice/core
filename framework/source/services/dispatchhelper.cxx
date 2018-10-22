@@ -49,9 +49,7 @@ DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentC
 
 /** dtor.
 */
-DispatchHelper::~DispatchHelper()
-{
-}
+DispatchHelper::~DispatchHelper() = default;
 
 /** capsulate all steps of a dispatch request and provide so an easy way for dispatches.
 

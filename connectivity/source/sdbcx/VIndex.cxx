@@ -84,9 +84,7 @@ OIndex::OIndex( const OUString& Name,
     m_Name = Name;
 }
 
-OIndex::~OIndex( )
-{
-}
+OIndex::~OIndex() = default;
 
 ::cppu::IPropertyArrayHelper* OIndex::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {

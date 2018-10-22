@@ -20,15 +20,9 @@
 #include <drawingml/table/tablestyle.hxx>
 
 namespace oox { namespace drawingml { namespace table {
+TableStyle::TableStyle() = default;
 
-TableStyle::TableStyle()
-{
-}
-
-TableStyle::~TableStyle()
-{
-}
-
+TableStyle::~TableStyle() = default;
 } } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

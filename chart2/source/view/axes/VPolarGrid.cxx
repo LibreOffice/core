@@ -49,9 +49,7 @@ VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
 }
 
-VPolarGrid::~VPolarGrid()
-{
-}
+VPolarGrid::~VPolarGrid() = default;
 
 void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
 {

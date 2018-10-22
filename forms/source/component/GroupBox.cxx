@@ -67,11 +67,7 @@ css::uno::Sequence<OUString> SAL_CALL OGroupBoxModel::getSupportedServiceNames()
     return aSupported;
 }
 
-
-OGroupBoxModel::~OGroupBoxModel()
-{
-}
-
+OGroupBoxModel::~OGroupBoxModel() = default;
 
 IMPLEMENT_DEFAULT_CLONING( OGroupBoxModel )
 

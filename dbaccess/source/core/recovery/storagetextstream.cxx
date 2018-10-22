@@ -53,9 +53,7 @@ namespace dbaccess
         m_pData->xTextOutput->setOutputStream( getOutputStream() );
     }
 
-    StorageTextOutputStream::~StorageTextOutputStream()
-    {
-    }
+    StorageTextOutputStream::~StorageTextOutputStream() = default;
 
     void StorageTextOutputStream::writeLine( const OUString& i_rLine )
     {

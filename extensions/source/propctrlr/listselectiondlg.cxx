@@ -47,9 +47,7 @@ namespace pcr
         initialize( );
     }
 
-    ListSelectionDialog::~ListSelectionDialog()
-    {
-    }
+    ListSelectionDialog::~ListSelectionDialog() = default;
 
     short ListSelectionDialog::execute()
     {

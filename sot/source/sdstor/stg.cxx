@@ -54,9 +54,7 @@ StorageBase::StorageBase()
     m_nError = ERRCODE_NONE;
 }
 
-StorageBase::~StorageBase()
-{
-}
+StorageBase::~StorageBase() = default;
 
 // The following three methods are declared as const, since they
 // may be called from within a const method.

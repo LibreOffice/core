@@ -32,9 +32,7 @@ SvXMLAttrContainerData::SvXMLAttrContainerData(const SvXMLAttrContainerData &rCo
 
 // Need destructor defined (despite it being empty) to avoid "checked_delete"
 // compiler errors.
-SvXMLAttrContainerData::~SvXMLAttrContainerData()
-{
-}
+SvXMLAttrContainerData::~SvXMLAttrContainerData() = default;
 
 bool SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) const
 {

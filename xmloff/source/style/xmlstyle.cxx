@@ -148,9 +148,7 @@ SvXMLStyleContext::SvXMLStyleContext(
 {
 }
 
-SvXMLStyleContext::~SvXMLStyleContext()
-{
-}
+SvXMLStyleContext::~SvXMLStyleContext() = default;
 
 SvXMLImportContextRef SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
                                                            const OUString& rLocalName,
@@ -751,9 +749,7 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
 {
 }
 
-SvXMLStylesContext::~SvXMLStylesContext()
-{
-}
+SvXMLStylesContext::~SvXMLStylesContext() = default;
 
 SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
                                                             const OUString& rLocalName,

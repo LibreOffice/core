@@ -47,9 +47,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, weld::Window* pParent)
     UpdateEnable();
 }
 
-DataStreamDlg::~DataStreamDlg()
-{
-}
+DataStreamDlg::~DataStreamDlg() = default;
 
 IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, weld::Button&, void)
 {

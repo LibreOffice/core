@@ -107,7 +107,7 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
     m_xDialog->set_title(title);
 }
 
-WPFTEncodingDialog::~WPFTEncodingDialog() {}
+WPFTEncodingDialog::~WPFTEncodingDialog() = default;
 
 OUString WPFTEncodingDialog::GetEncoding() const { return getEncoding(*m_xLbCharset); }
 

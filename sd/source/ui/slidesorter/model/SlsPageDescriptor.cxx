@@ -61,9 +61,7 @@ PageDescriptor::PageDescriptor (
     }
 }
 
-PageDescriptor::~PageDescriptor()
-{
-}
+PageDescriptor::~PageDescriptor() = default;
 
 void PageDescriptor::SetPageIndex (const sal_Int32 nNewIndex)
 {

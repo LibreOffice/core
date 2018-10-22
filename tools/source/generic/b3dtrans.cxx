@@ -34,9 +34,7 @@ B3dTransformationSet::B3dTransformationSet()
     Reset();
 }
 
-B3dTransformationSet::~B3dTransformationSet()
-{
-}
+B3dTransformationSet::~B3dTransformationSet() = default;
 
 void B3dTransformationSet::Orientation(basegfx::B3DHomMatrix& rTarget, const basegfx::B3DPoint& aVRP, basegfx::B3DVector aVPN, basegfx::B3DVector aVUP)
 {
@@ -359,9 +357,7 @@ B3dViewport::B3dViewport()
     CalcOrientation();
 }
 
-B3dViewport::~B3dViewport()
-{
-}
+B3dViewport::~B3dViewport() = default;
 
 void B3dViewport::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
@@ -399,9 +395,7 @@ B3dCamera::B3dCamera(
     CalcNewViewportValues();
 }
 
-B3dCamera::~B3dCamera()
-{
-}
+B3dCamera::~B3dCamera() = default;
 
 void B3dCamera::DeviceRectangleChange()
 {

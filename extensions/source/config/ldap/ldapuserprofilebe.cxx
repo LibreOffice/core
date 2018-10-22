@@ -81,10 +81,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     }
 }
 
-LdapUserProfileBe::~LdapUserProfileBe()
-{
-}
-
+LdapUserProfileBe::~LdapUserProfileBe() = default;
 
 bool LdapUserProfileBe::readLdapConfiguration(
     css::uno::Reference< css::uno::XComponentContext > const & context,

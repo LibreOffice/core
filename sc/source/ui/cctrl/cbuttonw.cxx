@@ -33,9 +33,7 @@ ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     SetOptSizePixel();
 }
 
-ScDDComboBoxButton::~ScDDComboBoxButton()
-{
-}
+ScDDComboBoxButton::~ScDDComboBoxButton() = default;
 
 void ScDDComboBoxButton::SetOutputDevice( OutputDevice* pOutputDevice )
 {

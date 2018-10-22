@@ -101,9 +101,7 @@ protected:
         m_bDumpMode = bDumpMode;
     }
 
-    virtual ~Chart2DumpTest() override
-    {
-    }
+    virtual ~Chart2DumpTest() override = default;
 
     bool isInDumpMode () const {return m_bDumpMode;}
 

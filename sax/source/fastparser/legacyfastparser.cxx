@@ -63,9 +63,7 @@ public:
     virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
-NamespaceHandler::NamespaceHandler()
-{
-}
+NamespaceHandler::NamespaceHandler() = default;
 
 void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList )
 {

@@ -45,9 +45,7 @@ AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
         "extended/AccessibleBrowseBoxHeaderBar - invalid object type" );
 }
 
-AccessibleBrowseBoxHeaderBar::~AccessibleBrowseBoxHeaderBar()
-{
-}
+AccessibleBrowseBoxHeaderBar::~AccessibleBrowseBoxHeaderBar() = default;
 
 // XAccessibleContext ---------------------------------------------------------
 

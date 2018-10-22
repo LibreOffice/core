@@ -166,9 +166,7 @@ void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::An
     }
 }
 
-SfxPrintHelper::~SfxPrintHelper()
-{
-}
+SfxPrintHelper::~SfxPrintHelper() = default;
 
 namespace
 {

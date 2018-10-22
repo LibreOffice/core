@@ -48,9 +48,7 @@ OGroup::OGroup(const OUString& Name, bool _bCase) :  OGroup_BASE(m_aMutex)
     m_Name = Name;
 }
 
-OGroup::~OGroup()
-{
-}
+OGroup::~OGroup() = default;
 
 Any SAL_CALL OGroup::queryInterface( const Type & rType )
 {

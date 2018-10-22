@@ -128,7 +128,8 @@ class ExtensionRemoveGuard
     css::uno::Reference<css::deployment::XPackageManager> m_xPackageManager;
 
 public:
-    ExtensionRemoveGuard(){};
+    ExtensionRemoveGuard() = default;
+    ;
     ExtensionRemoveGuard(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager):
@@ -173,9 +174,7 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     m_repositoryNames.emplace_back("bundled");
 }
 
-ExtensionManager::~ExtensionManager()
-{
-}
+ExtensionManager::~ExtensionManager() = default;
 
 Reference<css::deployment::XPackageManager> ExtensionManager::getUserRepository()
 {

@@ -294,9 +294,7 @@ Layouter::Layouter (
 {
 }
 
-Layouter::~Layouter()
-{
-}
+Layouter::~Layouter() = default;
 
 std::shared_ptr<PageObjectLayouter> const & Layouter::GetPageObjectLayouter() const
 {
@@ -467,9 +465,7 @@ Layouter::Implementation::Implementation (const Implementation& rImplementation)
 {
 }
 
-Layouter::Implementation::~Implementation()
-{
-}
+Layouter::Implementation::~Implementation() = default;
 
 bool Layouter::Implementation::Rearrange (
     const Size& rWindowSize,

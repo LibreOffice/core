@@ -129,8 +129,7 @@ Trie::Trie() :
     mRoot(new TrieNode())
 {}
 
-Trie::~Trie()
-{}
+Trie::~Trie() = default;
 
 void Trie::insert(const OUString& sInputString) const
 {

@@ -68,7 +68,7 @@ using namespace com::sun::star;
 class LpsolveSolver : public SolverComponent
 {
 public:
-    LpsolveSolver() {}
+    LpsolveSolver() = default;
 
 private:
     virtual void SAL_CALL solve() override;

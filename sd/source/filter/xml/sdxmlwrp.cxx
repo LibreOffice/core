@@ -171,9 +171,7 @@ SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, SdX
 {
 }
 
-SdXMLFilter::~SdXMLFilter()
-{
-}
+SdXMLFilter::~SdXMLFilter() = default;
 
 namespace
 {

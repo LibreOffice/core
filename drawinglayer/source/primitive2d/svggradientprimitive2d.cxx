@@ -289,9 +289,7 @@ namespace drawinglayer
         {
         }
 
-        SvgGradientHelper::~SvgGradientHelper()
-        {
-        }
+        SvgGradientHelper::~SvgGradientHelper() = default;
 
         bool SvgGradientHelper::operator==(const SvgGradientHelper& rSvgGradientHelper) const
         {
@@ -553,9 +551,7 @@ namespace drawinglayer
         {
         }
 
-        SvgLinearGradientPrimitive2D::~SvgLinearGradientPrimitive2D()
-        {
-        }
+        SvgLinearGradientPrimitive2D::~SvgLinearGradientPrimitive2D() = default;
 
         bool SvgLinearGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
@@ -844,9 +840,7 @@ namespace drawinglayer
             }
         }
 
-        SvgRadialGradientPrimitive2D::~SvgRadialGradientPrimitive2D()
-        {
-        }
+        SvgRadialGradientPrimitive2D::~SvgRadialGradientPrimitive2D() = default;
 
         bool SvgRadialGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
@@ -1087,9 +1081,7 @@ namespace drawinglayer
             }
         }
 
-        SvgRadialAtomPrimitive2D::~SvgRadialAtomPrimitive2D()
-        {
-        }
+        SvgRadialAtomPrimitive2D::~SvgRadialAtomPrimitive2D() = default;
 
         bool SvgRadialAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {

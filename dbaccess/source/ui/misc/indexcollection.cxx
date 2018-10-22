@@ -37,9 +37,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
 
     // OIndexCollection
-    OIndexCollection::OIndexCollection()
-    {
-    }
+    OIndexCollection::OIndexCollection() = default;
 
     OIndexCollection::OIndexCollection(const OIndexCollection& _rSource)
     {

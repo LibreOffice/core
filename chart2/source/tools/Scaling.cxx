@@ -51,9 +51,7 @@ LogarithmicScaling::LogarithmicScaling( double fBase ) :
 {
 }
 
-LogarithmicScaling::~LogarithmicScaling()
-{
-}
+LogarithmicScaling::~LogarithmicScaling() = default;
 
 double SAL_CALL LogarithmicScaling::doScaling( double value )
 {
@@ -100,9 +98,7 @@ ExponentialScaling::ExponentialScaling( double fBase ) :
 {
 }
 
-ExponentialScaling::~ExponentialScaling()
-{
-}
+ExponentialScaling::~ExponentialScaling() = default;
 
 double SAL_CALL ExponentialScaling::doScaling( double value )
 {
@@ -149,8 +145,7 @@ LinearScaling::LinearScaling( double fSlope, double fOffset ) :
         m_fOffset( fOffset )
 {}
 
-LinearScaling::~LinearScaling()
-{}
+LinearScaling::~LinearScaling() = default;
 
 double SAL_CALL LinearScaling::doScaling( double value )
 {
@@ -200,8 +195,7 @@ PowerScaling::PowerScaling( double fExponent ) :
         m_fExponent( fExponent )
 {}
 
-PowerScaling::~PowerScaling()
-{}
+PowerScaling::~PowerScaling() = default;
 
 double SAL_CALL PowerScaling::doScaling( double value )
 {

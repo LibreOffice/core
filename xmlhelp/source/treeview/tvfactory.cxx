@@ -38,9 +38,7 @@ TVFactory::TVFactory( const uno::Reference< XComponentContext >& xContext )
 {
 }
 
-TVFactory::~TVFactory()
-{
-}
+TVFactory::~TVFactory() = default;
 
 // XServiceInfo methods.
 

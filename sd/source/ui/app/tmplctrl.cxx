@@ -70,9 +70,7 @@ SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
     GetStatusBar().SetQuickHelpText(GetId(), SdResId(STR_STATUSBAR_MASTERPAGE));
 }
 
-SdTemplateControl::~SdTemplateControl()
-{
-}
+SdTemplateControl::~SdTemplateControl() = default;
 
 void SdTemplateControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )

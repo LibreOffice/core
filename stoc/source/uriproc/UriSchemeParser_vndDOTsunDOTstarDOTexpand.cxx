@@ -122,7 +122,7 @@ public:
         css::uno::Reference< css::util::XMacroExpander > const & expander) override;
 
 private:
-    virtual ~UrlReference() override {}
+    virtual ~UrlReference() override = default;
 
     stoc::uriproc::UriReference base_;
 };
@@ -141,7 +141,7 @@ class Parser:
         css::lang::XServiceInfo, css::uri::XUriSchemeParser>
 {
 public:
-    Parser() {}
+    Parser() = default;
 
     Parser(const Parser&) = delete;
     Parser& operator=(const Parser&) = delete;
@@ -160,7 +160,7 @@ public:
         OUString const & schemeSpecificPart) override;
 
 private:
-    virtual ~Parser() override {}
+    virtual ~Parser() override = default;
 };
 
 OUString Parser::getImplementationName()

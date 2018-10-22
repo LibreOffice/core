@@ -1889,9 +1889,7 @@ IMPL_LINK_NOARG(SvtLineListBox, NoneHdl, weld::Button&, void)
     ValueSelectHdl(nullptr);
 }
 
-SvtLineListBox::~SvtLineListBox()
-{
-}
+SvtLineListBox::~SvtLineListBox() = default;
 
 sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos )
 {

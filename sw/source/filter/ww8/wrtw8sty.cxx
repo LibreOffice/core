@@ -163,9 +163,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
     BuildStyleIds();
 }
 
-MSWordStyles::~MSWordStyles()
-{
-}
+MSWordStyles::~MSWordStyles() = default;
 
 // Sty_SetWWSlot() dependencies for the styles -> zero is allowed
 sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
@@ -1025,13 +1023,9 @@ WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
     aCps.push_back( 0 );
 }
 
-MSWordSections::~MSWordSections()
-{
-}
+MSWordSections::~MSWordSections() = default;
 
-WW8_WrPlcSepx::~WW8_WrPlcSepx()
-{
-}
+WW8_WrPlcSepx::~WW8_WrPlcSepx() = default;
 
 bool MSWordSections::HeaderFooterWritten()
 {
@@ -1926,13 +1920,9 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
 // and Plcs at the end of the document.
 // WW8_WrPlcFootnoteEdn is the class for Footnotes and Endnotes
 
-WW8_WrPlcSubDoc::WW8_WrPlcSubDoc()
-{
-}
+WW8_WrPlcSubDoc::WW8_WrPlcSubDoc() = default;
 
-WW8_WrPlcSubDoc::~WW8_WrPlcSubDoc()
-{
-}
+WW8_WrPlcSubDoc::~WW8_WrPlcSubDoc() = default;
 
 void WW8_WrPlcFootnoteEdn::Append( WW8_CP nCp, const SwFormatFootnote& rFootnote )
 {

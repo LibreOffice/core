@@ -47,16 +47,9 @@ namespace migration
 
     // WordbookMigration
 
+    WordbookMigration::WordbookMigration() = default;
 
-    WordbookMigration::WordbookMigration()
-    {
-    }
-
-
-    WordbookMigration::~WordbookMigration()
-    {
-    }
-
+    WordbookMigration::~WordbookMigration() = default;
 
     TStringVectorPtr WordbookMigration::getFiles( const OUString& rBaseURL ) const
     {

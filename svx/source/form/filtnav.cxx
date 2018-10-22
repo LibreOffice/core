@@ -135,9 +135,7 @@ Image FmFilterData::GetImage() const
     return Image();
 }
 
-FmParentData::~FmParentData()
-{
-}
+FmParentData::~FmParentData() = default;
 
 Image FmFormItem::GetImage() const
 {
@@ -216,13 +214,13 @@ public:
 class FilterClearingHint : public SfxHint
 {
 public:
-    FilterClearingHint(){}
+    FilterClearingHint() = default;
 };
 
 class FmFilterCurrentChangedHint : public SfxHint
 {
 public:
-    FmFilterCurrentChangedHint(){}
+    FmFilterCurrentChangedHint() = default;
 };
 
 // class FmFilterAdapter, listener at the FilterControls

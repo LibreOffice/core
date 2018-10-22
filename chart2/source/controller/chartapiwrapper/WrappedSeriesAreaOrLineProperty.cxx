@@ -36,9 +36,7 @@ WrappedSeriesAreaOrLineProperty::WrappedSeriesAreaOrLineProperty(
     , m_aInnerLineTypeName( rInnerLineTypeName )
 {
 }
-WrappedSeriesAreaOrLineProperty::~WrappedSeriesAreaOrLineProperty()
-{
-}
+WrappedSeriesAreaOrLineProperty::~WrappedSeriesAreaOrLineProperty() = default;
 
 //virtual
 OUString WrappedSeriesAreaOrLineProperty::getInnerName() const

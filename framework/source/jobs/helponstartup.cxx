@@ -98,9 +98,7 @@ HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentCont
 {
 }
 
-HelpOnStartup::~HelpOnStartup()
-{
-}
+HelpOnStartup::~HelpOnStartup() = default;
 
 // css.task.XJob
 css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)

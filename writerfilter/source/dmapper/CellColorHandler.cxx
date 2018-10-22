@@ -44,9 +44,7 @@ m_bFillSpecified( false ),
 {
 }
 
-CellColorHandler::~CellColorHandler()
-{
-}
+CellColorHandler::~CellColorHandler() = default;
 
 // ST_Shd strings are converted to integers by the tokenizer, store strings in
 // the InteropGrabBag

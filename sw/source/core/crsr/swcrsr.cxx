@@ -132,9 +132,7 @@ SwCursor::SwCursor(SwCursor const& rCpy, SwPaM *const pRing)
 {
 }
 
-SwCursor::~SwCursor()
-{
-}
+SwCursor::~SwCursor() = default;
 
 SwCursor* SwCursor::Create( SwPaM* pRing ) const
 {
@@ -2280,7 +2278,7 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos )
     m_nTableMkCnt = 0;
 }
 
-SwTableCursor::~SwTableCursor() {}
+SwTableCursor::~SwTableCursor() = default;
 
 static bool
 lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,

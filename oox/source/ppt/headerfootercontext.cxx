@@ -49,10 +49,7 @@ namespace oox { namespace ppt {
         }
     }
 
-    HeaderFooterContext::~HeaderFooterContext( )
-    {
-    }
-
+    HeaderFooterContext::~HeaderFooterContext() = default;
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

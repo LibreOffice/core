@@ -16,9 +16,7 @@ TemplateContainerItem::TemplateContainerItem (sal_uInt16 nId)
 {
 }
 
-TemplateContainerItem::~TemplateContainerItem ()
-{
-}
+TemplateContainerItem::~TemplateContainerItem() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

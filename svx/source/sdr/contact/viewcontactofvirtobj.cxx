@@ -32,9 +32,7 @@ ViewContactOfVirtObj::ViewContactOfVirtObj(SdrVirtObj& rObj)
 {
 }
 
-ViewContactOfVirtObj::~ViewContactOfVirtObj()
-{
-}
+ViewContactOfVirtObj::~ViewContactOfVirtObj() = default;
 
 SdrVirtObj& ViewContactOfVirtObj::GetVirtObj() const
 {

@@ -104,9 +104,7 @@ LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
 {
 }
 
-LwpFribPageBreak::~LwpFribPageBreak()
-{
-}
+LwpFribPageBreak::~LwpFribPageBreak() = default;
 
 void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 {

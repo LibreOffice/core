@@ -888,9 +888,7 @@ PageSettingsConverter::PageSettingsConverter( const WorkbookHelper& rHelper ) :
 {
 }
 
-PageSettingsConverter::~PageSettingsConverter()
-{
-}
+PageSettingsConverter::~PageSettingsConverter() = default;
 
 void PageSettingsConverter::writePageSettingsProperties(
         PropertySet& rPropSet, const PageSettingsModel& rModel, WorksheetType eSheetType )

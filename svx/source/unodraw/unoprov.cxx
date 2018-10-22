@@ -877,10 +877,7 @@ SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
     }
 }
 
-SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
-{
-}
-
+SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider() = default;
 
 const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {

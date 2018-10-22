@@ -136,9 +136,7 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument,
     pCode->SetFromRangeName(true);
 }
 
-ScRangeData::~ScRangeData()
-{
-}
+ScRangeData::~ScRangeData() = default;
 
 void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
 {
@@ -651,7 +649,7 @@ public:
 
 }
 
-ScRangeName::ScRangeName() {}
+ScRangeName::ScRangeName() = default;
 
 ScRangeName::ScRangeName(const ScRangeName& r)
 {

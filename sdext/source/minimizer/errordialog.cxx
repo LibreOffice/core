@@ -91,6 +91,6 @@ ErrorDialog::ErrorDialog(const Reference<XComponentContext>& rxContext,
     InitDialog();
 }
 
-ErrorDialog::~ErrorDialog() {}
+ErrorDialog::~ErrorDialog() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

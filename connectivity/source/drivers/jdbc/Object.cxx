@@ -67,9 +67,7 @@ SDBThreadAttach::SDBThreadAttach()
     OSL_ENSURE(pEnv,"Environment is nULL!");
 }
 
-SDBThreadAttach::~SDBThreadAttach()
-{
-}
+SDBThreadAttach::~SDBThreadAttach() = default;
 
 static oslInterlockedCount& getJavaVMRefCount()
 {

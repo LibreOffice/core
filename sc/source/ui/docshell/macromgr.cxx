@@ -96,9 +96,7 @@ ScMacroManager::ScMacroManager(ScDocument* pDoc) :
 {
 }
 
-ScMacroManager::~ScMacroManager()
-{
-}
+ScMacroManager::~ScMacroManager() = default;
 
 typedef ::cppu::WeakImplHelper< css::container::XContainerListener > ContainerListenerHelper;
 

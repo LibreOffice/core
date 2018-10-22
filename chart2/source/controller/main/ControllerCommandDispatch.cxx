@@ -481,9 +481,7 @@ ControllerCommandDispatch::ControllerCommandDispatch(
 {
 }
 
-ControllerCommandDispatch::~ControllerCommandDispatch()
-{
-}
+ControllerCommandDispatch::~ControllerCommandDispatch() = default;
 
 void ControllerCommandDispatch::initialize()
 {

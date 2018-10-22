@@ -46,9 +46,7 @@ ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext )
     bundledDirString = "bundled";
 }
 
-ActiveMSPList::~ActiveMSPList()
-{
-}
+ActiveMSPList::~ActiveMSPList() = default;
 
 Reference< provider::XScriptProvider >
 ActiveMSPList::createNewMSP( const uno::Any& context )

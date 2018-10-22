@@ -49,7 +49,7 @@ class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XI
 {
     Font        m_aFont;
 public:
-FontIdentificator() {}
+    FontIdentificator() = default;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

@@ -41,9 +41,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 
-SalSession::~SalSession()
-{
-}
+SalSession::~SalSession() = default;
 
 class VCLSession:
     private cppu::BaseMutex,
@@ -73,7 +71,7 @@ class VCLSession:
 
     static void SalSessionEventProc( void* pData, SalSessionEvent* pEvent );
 
-    virtual ~VCLSession() override {}
+    virtual ~VCLSession() override = default;
 
     virtual void SAL_CALL addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
     virtual void SAL_CALL removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) override;

@@ -201,11 +201,7 @@ ConvDic::ConvDic(
     }
 }
 
-
-ConvDic::~ConvDic()
-{
-}
-
+ConvDic::~ConvDic() = default;
 
 void ConvDic::Load()
 {

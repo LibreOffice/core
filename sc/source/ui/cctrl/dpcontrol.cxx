@@ -43,9 +43,7 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
         maZoomY = Fraction(1, 1);
 }
 
-ScDPFieldButton::~ScDPFieldButton()
-{
-}
+ScDPFieldButton::~ScDPFieldButton() = default;
 
 void ScDPFieldButton::setText(const OUString& rText)
 {

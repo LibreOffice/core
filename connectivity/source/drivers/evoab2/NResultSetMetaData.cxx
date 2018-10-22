@@ -35,9 +35,7 @@ OEvoabResultSetMetaData::OEvoabResultSetMetaData(const OUString& _aTableName)
 
 }
 
-OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
-{
-}
+OEvoabResultSetMetaData::~OEvoabResultSetMetaData() = default;
 
 void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {

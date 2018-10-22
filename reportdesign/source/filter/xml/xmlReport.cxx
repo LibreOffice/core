@@ -104,11 +104,7 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
     }
 }
 
-
-OXMLReport::~OXMLReport()
-{
-}
-
+OXMLReport::~OXMLReport() = default;
 
 void OXMLReport::impl_initRuntimeDefaults() const
 {

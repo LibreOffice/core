@@ -149,9 +149,7 @@ XMLFontAutoStylePool::XMLFontAutoStylePool(SvXMLExport& rExp, bool bTryToEmbedFo
 {
 }
 
-XMLFontAutoStylePool::~XMLFontAutoStylePool()
-{
-}
+XMLFontAutoStylePool::~XMLFontAutoStylePool() = default;
 
 OUString XMLFontAutoStylePool::Add(
             const OUString& rFamilyName,

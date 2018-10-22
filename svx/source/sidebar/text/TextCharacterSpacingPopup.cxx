@@ -32,9 +32,7 @@ TextCharacterSpacingPopup::TextCharacterSpacingPopup(sal_uInt16 nSlotId, sal_uIn
     rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
-TextCharacterSpacingPopup::~TextCharacterSpacingPopup()
-{
-}
+TextCharacterSpacingPopup::~TextCharacterSpacingPopup() = default;
 
 VclPtr<SfxPopupWindow> TextCharacterSpacingPopup::CreatePopupWindow()
 {

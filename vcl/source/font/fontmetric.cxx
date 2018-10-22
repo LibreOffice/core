@@ -46,10 +46,9 @@ FontMetric::FontMetric()
 :   mxImplMetric( new ImplFontMetric() )
 {}
 
-FontMetric::FontMetric( const FontMetric& rFontMetric )
-    : Font( rFontMetric )
-    , mxImplMetric( rFontMetric.mxImplMetric )
-{}
+FontMetric::FontMetric(const FontMetric& rFontMetric)
+
+    = default;
 
 FontMetric::~FontMetric()
 {

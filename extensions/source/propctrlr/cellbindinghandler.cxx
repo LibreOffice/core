@@ -80,11 +80,7 @@ namespace pcr
             m_pHelper.reset( new CellBindingHelper( m_xComponent, xDocument ) );
     }
 
-
-    CellBindingPropertyHandler::~CellBindingPropertyHandler( )
-    {
-    }
-
+    CellBindingPropertyHandler::~CellBindingPropertyHandler() = default;
 
     Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( )
     {

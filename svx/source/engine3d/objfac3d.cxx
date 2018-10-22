@@ -39,9 +39,7 @@ E3dObjFactory::E3dObjFactory()
     }
 }
 
-E3dObjFactory::~E3dObjFactory()
-{
-}
+E3dObjFactory::~E3dObjFactory() = default;
 
 // Generate chart internal objects
 

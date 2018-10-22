@@ -66,9 +66,7 @@ ScUndoDoOutline::ScUndoDoOutline( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoDoOutline::~ScUndoDoOutline()
-{
-}
+ScUndoDoOutline::~ScUndoDoOutline() = default;
 
 OUString ScUndoDoOutline::GetComment() const
 {   // Show outline" "Hide outline"
@@ -154,9 +152,7 @@ ScUndoMakeOutline::ScUndoMakeOutline( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoMakeOutline::~ScUndoMakeOutline()
-{
-}
+ScUndoMakeOutline::~ScUndoMakeOutline() = default;
 
 OUString ScUndoMakeOutline::GetComment() const
 {   // "Grouping" "Undo grouping"
@@ -882,9 +878,7 @@ ScUndoAutoFilter::ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRa
 {
 }
 
-ScUndoAutoFilter::~ScUndoAutoFilter()
-{
-}
+ScUndoAutoFilter::~ScUndoAutoFilter() = default;
 
 OUString ScUndoAutoFilter::GetComment() const
 {
@@ -961,9 +955,7 @@ ScUndoDBData::ScUndoDBData( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoDBData::~ScUndoDBData()
-{
-}
+ScUndoDBData::~ScUndoDBData() = default;
 
 OUString ScUndoDBData::GetComment() const
 {   // "Change database range";
@@ -1687,9 +1679,7 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rNam
     Init();
 }
 
-ScUndoChartData::~ScUndoChartData()
-{
-}
+ScUndoChartData::~ScUndoChartData() = default;
 
 OUString ScUndoChartData::GetComment() const
 {

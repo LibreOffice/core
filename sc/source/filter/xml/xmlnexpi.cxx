@@ -126,9 +126,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     pInserter->insert(pNamedExpression);
 }
 
-ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
-{
-}
+ScXMLNamedRangeContext::~ScXMLNamedRangeContext() = default;
 
 ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
     ScXMLImport& rImport,
@@ -165,8 +163,6 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
     pInserter->insert(pNamedExpression);
 }
 
-ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
-{
-}
+ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,9 +42,7 @@ ScOverlayDashedBorder::ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, 
     maRange = rRange;
 }
 
-ScOverlayDashedBorder::~ScOverlayDashedBorder()
-{
-}
+ScOverlayDashedBorder::~ScOverlayDashedBorder() = default;
 
 void ScOverlayDashedBorder::Trigger(sal_uInt32 nTime)
 {

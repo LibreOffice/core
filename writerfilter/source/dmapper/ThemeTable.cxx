@@ -51,9 +51,7 @@ ThemeTable::ThemeTable()
 
 }
 
-ThemeTable::~ThemeTable()
-{
-}
+ThemeTable::~ThemeTable() = default;
 
 void ThemeTable::lcl_attribute(Id Name, Value & val)
 {

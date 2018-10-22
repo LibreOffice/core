@@ -34,9 +34,7 @@ WrappedAddInProperty::WrappedAddInProperty( ChartDocumentWrapper& rChartDocument
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
-WrappedAddInProperty::~WrappedAddInProperty()
-{
-}
+WrappedAddInProperty::~WrappedAddInProperty() = default;
 
 void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
@@ -57,9 +55,7 @@ WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rC
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
-WrappedBaseDiagramProperty::~WrappedBaseDiagramProperty()
-{
-}
+WrappedBaseDiagramProperty::~WrappedBaseDiagramProperty() = default;
 
 void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
@@ -80,9 +76,7 @@ WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentW
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
-WrappedAdditionalShapesProperty::~WrappedAdditionalShapesProperty()
-{
-}
+WrappedAdditionalShapesProperty::~WrappedAdditionalShapesProperty() = default;
 
 void WrappedAdditionalShapesProperty::setPropertyValue( const Any& /*rOuterValue*/, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
@@ -99,9 +93,7 @@ WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDoc
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
-WrappedRefreshAddInAllowedProperty::~WrappedRefreshAddInAllowedProperty()
-{
-}
+WrappedRefreshAddInAllowedProperty::~WrappedRefreshAddInAllowedProperty() = default;
 
 void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
 {

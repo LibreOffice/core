@@ -24,7 +24,7 @@ AsyncFunc::AsyncFunc(const std::function<void()>& rAsyncFunc)
 {
 }
 
-AsyncFunc::~AsyncFunc() {}
+AsyncFunc::~AsyncFunc() = default;
 
 void AsyncFunc::Execute()
 {

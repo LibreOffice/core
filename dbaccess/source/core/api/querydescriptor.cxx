@@ -57,9 +57,7 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     ODataSettings::registerPropertiesFor(this);
 }
 
-OQueryDescriptor::~OQueryDescriptor()
-{
-}
+OQueryDescriptor::~OQueryDescriptor() = default;
 
 css::uno::Sequence<sal_Int8> OQueryDescriptor::getImplementationId()
 {

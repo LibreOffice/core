@@ -238,9 +238,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadInt32( nTmp32 ); mnIndentAt = nTmp32;
 }
 
-SvxNumberFormat::~SvxNumberFormat()
-{
-}
+SvxNumberFormat::~SvxNumberFormat() = default;
 
 void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
 {
@@ -916,9 +914,7 @@ SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
 {
 }
 
-SvxNumBulletItem::~SvxNumBulletItem()
-{
-}
+SvxNumBulletItem::~SvxNumBulletItem() = default;
 
 bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 {

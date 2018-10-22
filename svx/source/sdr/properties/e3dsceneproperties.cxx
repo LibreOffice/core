@@ -40,9 +40,7 @@ namespace sdr
         {
         }
 
-        E3dSceneProperties::~E3dSceneProperties()
-        {
-        }
+        E3dSceneProperties::~E3dSceneProperties() = default;
 
         std::unique_ptr<BaseProperties> E3dSceneProperties::Clone(SdrObject& rObj) const
         {

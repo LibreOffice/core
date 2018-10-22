@@ -94,7 +94,7 @@ Marshal::Marshal(rtl::Reference< Bridge > const & bridge, WriterState & state):
     assert(bridge.is());
 }
 
-Marshal::~Marshal() {}
+Marshal::~Marshal() = default;
 
 void Marshal::write8(std::vector< unsigned char > * buffer, sal_uInt8 value) {
     assert(buffer != nullptr);

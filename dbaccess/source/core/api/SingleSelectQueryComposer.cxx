@@ -260,9 +260,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     }
 }
 
-OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
-{
-}
+OSingleSelectQueryComposer::~OSingleSelectQueryComposer() = default;
 
 // OComponentHelper
 void SAL_CALL OSingleSelectQueryComposer::disposing()

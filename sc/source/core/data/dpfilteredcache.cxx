@@ -50,9 +50,7 @@ std::vector<ScDPItemData> ScDPFilteredCache::SingleFilter::getMatchValues() cons
     return aValues;
 }
 
-ScDPFilteredCache::GroupFilter::GroupFilter()
-{
-}
+ScDPFilteredCache::GroupFilter::GroupFilter() = default;
 
 bool ScDPFilteredCache::GroupFilter::match(const ScDPItemData& rCellData) const
 {
@@ -92,9 +90,7 @@ ScDPFilteredCache::ScDPFilteredCache(const ScDPCache& rCache) :
 {
 }
 
-ScDPFilteredCache::~ScDPFilteredCache()
-{
-}
+ScDPFilteredCache::~ScDPFilteredCache() = default;
 
 sal_Int32 ScDPFilteredCache::getRowSize() const
 {

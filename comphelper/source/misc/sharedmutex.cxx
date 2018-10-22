@@ -30,11 +30,7 @@ namespace comphelper
     {
     }
 
-
-    RefCountedMutex::~RefCountedMutex()
-    {
-    }
-
+    RefCountedMutex::~RefCountedMutex() = default;
 
 } // namespace comphelper
 

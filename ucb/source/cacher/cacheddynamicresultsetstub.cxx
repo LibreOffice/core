@@ -147,10 +147,7 @@ CachedDynamicResultSetStubFactory::CachedDynamicResultSetStubFactory(
     m_xContext = rxContext;
 }
 
-CachedDynamicResultSetStubFactory::~CachedDynamicResultSetStubFactory()
-{
-}
-
+CachedDynamicResultSetStubFactory::~CachedDynamicResultSetStubFactory() = default;
 
 // CachedDynamicResultSetStubFactory XInterface methods.
 void SAL_CALL CachedDynamicResultSetStubFactory::acquire()

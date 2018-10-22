@@ -65,9 +65,7 @@ SvXMLImportItemMapper::SvXMLImportItemMapper(
 {
 }
 
-SvXMLImportItemMapper::~SvXMLImportItemMapper()
-{
-}
+SvXMLImportItemMapper::~SvXMLImportItemMapper() = default;
 
 void
 SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )

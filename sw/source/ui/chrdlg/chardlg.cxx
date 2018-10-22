@@ -95,9 +95,7 @@ SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCore
         RemoveTabPage("borders");
 }
 
-SwCharDlg::~SwCharDlg()
-{
-}
+SwCharDlg::~SwCharDlg() = default;
 
 // set FontList
 void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)

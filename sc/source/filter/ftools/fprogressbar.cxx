@@ -34,9 +34,7 @@ ScfProgressBar::ScfProgressSegment::ScfProgressSegment( std::size_t nSize ) :
 {
 }
 
-ScfProgressBar::ScfProgressSegment::~ScfProgressSegment()
-{
-}
+ScfProgressBar::ScfProgressSegment::~ScfProgressSegment() = default;
 
 ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText ) :
     maText( rText )
@@ -57,9 +55,7 @@ ScfProgressBar::ScfProgressBar( ScfProgressBar& rParProgress, ScfProgressSegment
     mpParentSegment = pParSegment;
 }
 
-ScfProgressBar::~ScfProgressBar()
-{
-}
+ScfProgressBar::~ScfProgressBar() = default;
 
 void ScfProgressBar::Init( SfxObjectShell* pDocShell )
 {

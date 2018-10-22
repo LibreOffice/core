@@ -37,9 +37,7 @@ namespace svgio
         {
         }
 
-        SvgEllipseNode::~SvgEllipseNode()
-        {
-        }
+        SvgEllipseNode::~SvgEllipseNode() = default;
 
         const SvgStyleAttributes* SvgEllipseNode::getSvgStyleAttributes() const
         {

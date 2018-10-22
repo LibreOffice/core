@@ -47,10 +47,7 @@ LayoutFragmentHandler::LayoutFragmentHandler(XmlFilterBase& rFilter, const OUStr
 {
 }
 
-LayoutFragmentHandler::~LayoutFragmentHandler()
-{
-
-}
+LayoutFragmentHandler::~LayoutFragmentHandler() = default;
 
 ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

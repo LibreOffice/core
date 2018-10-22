@@ -62,9 +62,7 @@ ModuleImageManager::ModuleImageManager( const uno::Reference< uno::XComponentCon
 {
 }
 
-ModuleImageManager::~ModuleImageManager()
-{
-}
+ModuleImageManager::~ModuleImageManager() = default;
 
 // XComponent
 void SAL_CALL ModuleImageManager::dispose()

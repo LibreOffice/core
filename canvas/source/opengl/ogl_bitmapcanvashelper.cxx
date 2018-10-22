@@ -20,20 +20,15 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    BitmapCanvasHelper::BitmapCanvasHelper()
-    {}
+BitmapCanvasHelper::BitmapCanvasHelper() = default;
 
-    void BitmapCanvasHelper::disposing()
-    {
-        CanvasHelper::disposing();
-    }
+void BitmapCanvasHelper::disposing() { CanvasHelper::disposing(); }
 
-    void BitmapCanvasHelper::init( rendering::XGraphicDevice&     rDevice,
-                                   SpriteDeviceHelper&            rDeviceHelper,
-                                   const geometry::IntegerSize2D& rSize )
-    {
-        maSize = rSize;
-        CanvasHelper::init(rDevice,rDeviceHelper);
+void BitmapCanvasHelper::init(rendering::XGraphicDevice& rDevice, SpriteDeviceHelper& rDeviceHelper,
+                              const geometry::IntegerSize2D& rSize)
+{
+    maSize = rSize;
+    CanvasHelper::init(rDevice, rDeviceHelper);
     }
 
     uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,

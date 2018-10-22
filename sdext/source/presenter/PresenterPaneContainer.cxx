@@ -47,9 +47,7 @@ PresenterPaneContainer::PresenterPaneContainer (
     }
 }
 
-PresenterPaneContainer::~PresenterPaneContainer()
-{
-}
+PresenterPaneContainer::~PresenterPaneContainer() = default;
 
 void PresenterPaneContainer::PreparePane (
     const Reference<XResourceId>& rxPaneId,

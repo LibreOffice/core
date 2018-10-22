@@ -27,9 +27,7 @@ WW8FibData::WW8FibData()
 {
 }
 
-WW8FibData::~WW8FibData()
-{
-}
+WW8FibData::~WW8FibData() = default;
 
 void WW8FibData::setReadOnlyRecommended(bool bReadOnlyRecommended)
 {

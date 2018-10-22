@@ -159,8 +159,7 @@ ScatterChartTypeTemplate::ScatterChartTypeTemplate(
         m_bHasSymbols = false;
 }
 
-ScatterChartTypeTemplate::~ScatterChartTypeTemplate()
-{}
+ScatterChartTypeTemplate::~ScatterChartTypeTemplate() = default;
 
 // ____ OPropertySet ____
 uno::Any ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const

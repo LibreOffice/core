@@ -1498,9 +1498,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     EnhancedPDFExport();
 }
 
-SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
-{
-}
+SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper() = default;
 
 tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* pCurrPage,
     const tools::Rectangle& rRectangle) const

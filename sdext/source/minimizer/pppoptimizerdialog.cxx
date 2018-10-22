@@ -38,9 +38,7 @@ PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xC
 {
 }
 
-PPPOptimizerDialog::~PPPOptimizerDialog()
-{
-}
+PPPOptimizerDialog::~PPPOptimizerDialog() = default;
 
 void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
 {

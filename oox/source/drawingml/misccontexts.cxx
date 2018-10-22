@@ -208,9 +208,7 @@ DuotoneContext::DuotoneContext( ContextHandler2Helper const & rParent,
     mrBlipProps.maDuotoneColors[1].setUnused();
 }
 
-DuotoneContext::~DuotoneContext()
-{
-}
+DuotoneContext::~DuotoneContext() = default;
 
 ::oox::core::ContextHandlerRef DuotoneContext::onCreateContext(
         sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
@@ -306,9 +304,7 @@ BlipExtensionContext::BlipExtensionContext( ContextHandler2Helper const & rParen
 {
 }
 
-BlipExtensionContext::~BlipExtensionContext()
-{
-}
+BlipExtensionContext::~BlipExtensionContext() = default;
 
 ContextHandlerRef BlipExtensionContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& )
@@ -330,9 +326,7 @@ ArtisticEffectContext::ArtisticEffectContext( ContextHandler2Helper const & rPar
 {
 }
 
-ArtisticEffectContext::~ArtisticEffectContext()
-{
-}
+ArtisticEffectContext::~ArtisticEffectContext() = default;
 
 ContextHandlerRef ArtisticEffectContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& rAttribs )

@@ -550,8 +550,7 @@ SalLayout::SalLayout()
     maDrawOffset( 0, 0 )
 {}
 
-SalLayout::~SalLayout()
-{}
+SalLayout::~SalLayout() = default;
 
 void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -1001,9 +1000,7 @@ void MultiSalLayout::SetIncomplete(bool bIncomplete)
     maFallbackRuns[mnLevel-1] = ImplLayoutRuns();
 }
 
-MultiSalLayout::~MultiSalLayout()
-{
-}
+MultiSalLayout::~MultiSalLayout() = default;
 
 void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
     ImplLayoutRuns const & rFallbackRuns, const PhysicalFontFace* pFallbackFont )

@@ -40,9 +40,7 @@ OSystemParseContext::OSystemParseContext()
         m_aLocalizedKeywords.push_back(SvxResId(RID_RSC_SQL_INTERNATIONAL[i]));
 }
 
-OSystemParseContext::~OSystemParseContext()
-{
-}
+OSystemParseContext::~OSystemParseContext() = default;
 
 css::lang::Locale OSystemParseContext::getPreferredLocale( ) const
 {

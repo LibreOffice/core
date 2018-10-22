@@ -32,11 +32,7 @@ MediaEventListenersImpl::MediaEventListenersImpl( vcl::Window& rEventWindow ) :
 {
 }
 
-
-MediaEventListenersImpl::~MediaEventListenersImpl()
-{
-}
-
+MediaEventListenersImpl::~MediaEventListenersImpl() = default;
 
 void MediaEventListenersImpl::cleanUp()
 {

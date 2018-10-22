@@ -352,9 +352,7 @@ SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
 {
 }
 
-SwGetRefField::~SwGetRefField()
-{
-}
+SwGetRefField::~SwGetRefField() = default;
 
 OUString SwGetRefField::GetDescription() const
 {

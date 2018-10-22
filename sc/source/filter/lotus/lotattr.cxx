@@ -43,9 +43,7 @@ LotAttrCache::ENTRY::ENTRY (std::unique_ptr<ScPatternAttr> p)
 {
 }
 
-LotAttrCache::ENTRY::~ENTRY ()
-{
-}
+LotAttrCache::ENTRY::~ENTRY() = default;
 
 LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
     : mpLotusRoot(pLotRoot)
@@ -72,9 +70,7 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
     pWhite.reset( new SvxColorItem( COL_WHITE, ATTR_FONT_COLOR ) );
 }
 
-LotAttrCache::~LotAttrCache()
-{
-}
+LotAttrCache::~LotAttrCache() = default;
 
 const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 {
