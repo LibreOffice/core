@@ -103,7 +103,7 @@ bool create_folder(
         // invalid: has to be at least "auth:/..."
         if (throw_exc)
             throw ContentCreationException(
-                "Cannot create folder (invalid path): " + url,
+                "Cannot create folder (invalid path): '" + url + "'",
                 Reference<XInterface>(), ContentCreationError_UNKNOWN );
         return false;
     }
@@ -154,7 +154,7 @@ bool create_folder(
     }
     if (throw_exc)
         throw ContentCreationException(
-            "Cannot create folder: " + url,
+            "Cannot create folder: '" + url + "'",
             Reference<XInterface>(), ContentCreationError_UNKNOWN );
     return false;
 }
