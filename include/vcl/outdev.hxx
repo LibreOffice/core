@@ -1201,7 +1201,6 @@ private:
     SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
 
-    SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const vcl::Font& );
 
     static
     SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );

@@ -163,9 +163,20 @@ public:
 
     typedef o3tl::cow_wrapper< ImplFont > ImplType;
 
+    inline bool IsUnderlineAbove() const;
+
 private:
     ImplType mpImplFont;
 };
+
+inline bool Font::IsUnderlineAbove() const
+{
+    if (!IsVertical())
+        return false;
+    // the underline is right for Japanese only
+    return (LANGUAGE_JAPANESE == GetLanguage()) ||
+           (LANGUAGE_JAPANESE == GetCJKContextLanguage());
+}
 
 }
 

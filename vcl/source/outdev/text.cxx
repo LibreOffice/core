@@ -300,7 +300,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     if( bTextLines )
         ImplDrawTextLines( rSalLayout,
             maFont.GetStrikeout(), maFont.GetUnderline(), maFont.GetOverline(),
-            maFont.IsWordLineMode(), ImplIsUnderlineAbove( maFont ) );
+            maFont.IsWordLineMode(), maFont.IsUnderlineAbove() );
 
     // emphasis marks
     if( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
