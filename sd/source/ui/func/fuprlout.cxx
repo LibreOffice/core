@@ -39,6 +39,7 @@
 #include <app.hrc>
 #include <DrawDocShell.hxx>
 #include <SlideSorterViewShell.hxx>
+#include <Window.hxx>
 #include <unprlout.hxx>
 #include <unchss.hxx>
 #include <unmovss.hxx>
@@ -170,7 +171,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     else
     {
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSdPresLayoutDlg> pDlg(pFact->CreateSdPresLayoutDlg(rReq.GetFrameWeld(), mpDocSh, aSet));
+        ScopedVclPtr<AbstractSdPresLayoutDlg> pDlg(pFact->CreateSdPresLayoutDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, mpDocSh, aSet));
 
         sal_uInt16 nResult = pDlg->Execute();
 
