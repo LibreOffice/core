@@ -18,15 +18,8 @@
 #include <array>
 #include <atomic>
 
-#define CATEGORYCOUNT 6         // Number of persona categories
 #define MAX_RESULTS 9           // Maximum number of search results
 #define MAX_DEFAULT_PERSONAS 6  // Maximum number of default personas
-/*
- * The category which will be loaded initially.
-   Should be a non-negative integer lower than CATEGORYCOUNT
-   Categories are defined in RID_SVXSTR_PERSONA_CATEGORIES
- */
-#define DEFAULT_PERSONA_CATEGORY 0
 
 class FixedText;
 class FixedHyperlink;
@@ -107,7 +100,7 @@ private:
     VclPtr<PushButton> m_pSearchButton;                     ///< The search button
     VclPtr<FixedText> m_pProgressLabel;                     ///< The label for showing progress of search
     VclPtr<PushButton> m_vResultList[MAX_RESULTS];                    ///< List of buttons to show search results
-    VclPtr<PushButton> m_vSearchSuggestions[CATEGORYCOUNT]; ///< List of buttons for the search suggestions
+    VclPtr<ListBox> m_pCategories;                         ///< The list of categories
     VclPtr<PushButton> m_pOkButton;                         ///< The OK button
     VclPtr<PushButton> m_pCancelButton;                     ///< The Cancel button
 
@@ -133,6 +126,8 @@ public:
 private:
     /// Handle the Search button
     DECL_LINK( SearchPersonas, Button*, void );
+    /// Handle persona categories list box
+    DECL_LINK( SelectCategory, ListBox&, void );
     DECL_LINK( SelectPersona, Button*, void );
     DECL_LINK( ActionOK, Button*, void );
     DECL_LINK( ActionCancel, Button*, void );
