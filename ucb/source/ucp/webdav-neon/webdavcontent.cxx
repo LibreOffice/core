@@ -1380,28 +1380,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 {
                     sal_Int32 nProps = 0;
                     sal_Int32 nCount = rProperties.getLength();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    for ( sal_Int32 n = 0; n < nCount; ++n, ++nProps )
                     {
-                        const OUString & rName = rProperties[ n ].Name;
-
-                        std::vector< OUString >::const_iterator end
-                            = m_aFailedPropNames.end();
-
-                        auto it = std::find(m_aFailedPropNames.cbegin(), end, rName);
-                        if ( it != end )
-                        {
-                            // the failed property in cache is the same as the requested one,
-                            // so add it to the requested properties list
-                            aProperties[ nProps ] = rProperties[ n ];
-                            nProps++;
-                        }
-
-                        // XXX something strange happens here: identical code for different conditions
-                        if ( it == end )
-                        {
-                            aProperties[ nProps ] = rProperties[ n ];
-                            nProps++;
-                        }
+                        aProperties[ nProps ] = rProperties[ n ];
                     }
 
                     aProperties.realloc( nProps );
