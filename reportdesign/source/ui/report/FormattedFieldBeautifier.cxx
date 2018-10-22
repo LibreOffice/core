@@ -100,10 +100,9 @@ namespace rptui
                     if ( bSet )
                         sDataField = aFormula.getEqualUndecoratedContent();
                 }
-            }
 
-            if ( xControlModel.is() )
                 setPlaceholderText( getVclWindowPeer( xControlModel.get() ), sDataField );
+            }
         }
         catch (const uno::Exception &)
         {

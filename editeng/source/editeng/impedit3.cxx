@@ -2695,10 +2695,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             pOut->SetTextLineColor( rTextLineColor.GetColor() );
         else
             pOut->SetTextLineColor();
-    }
 
-    if ( pOut )
-    {
         const SvxOverlineItem& rOverlineColor = pNode->GetContentAttribs().GetItem( EE_CHAR_OVERLINE );
         if ( rOverlineColor.GetColor() != COL_TRANSPARENT )
             pOut->SetOverlineColor( rOverlineColor.GetColor() );
