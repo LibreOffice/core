@@ -839,7 +839,17 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
     {
         QWindow* const pWindow = windowHandle();
         if (pWindow)
-            pWindow->setScreen(QApplication::screens()[nScreen]);
+        {
+            QList<QScreen*> screens = QApplication::screens();
+            if (static_cast<int>(nScreen) < screens.size())
+                pWindow->setScreen(QApplication::screens()[nScreen]);
+            else
+            {
+                // index outta bounds, use primary screen
+                QScreen* primaryScreen = QApplication::primaryScreen();
+                pWindow->setScreen(primaryScreen);
+            }
+        }
     }
 }
 
