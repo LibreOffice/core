@@ -425,6 +425,7 @@ public:
     SwNumRule *GetNumRule(bool bInParent = true) const;
 
     const SwNodeNum* GetNum(SwRootFrame const* pLayout = nullptr) const;
+    void DoNum(std::function<void (SwNodeNum &)> const&);
 
     SwNumberTree::tNumberVector GetNumberVector(SwRootFrame const* pLayout = nullptr) const;
 

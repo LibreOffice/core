@@ -4033,6 +4033,21 @@ const SwNodeNum* SwTextNode::GetNum(SwRootFrame const*const pLayout) const
     return pLayout && pLayout->IsHideRedlines() ? mpNodeNumRLHidden : mpNodeNum;
 }
 
+void SwTextNode::DoNum(std::function<void (SwNodeNum &)> const& rFunc)
+{
+    // temp. clear because GetActualListLevel() may be called and the assert
+    // there triggered during update, which is unhelpful
+    SwNodeNum * pBackup(mpNodeNumRLHidden);
+    mpNodeNumRLHidden = nullptr;
+    assert(mpNodeNum);
+    rFunc(*mpNodeNum);
+    if (pBackup)
+    {
+        mpNodeNumRLHidden = pBackup;
+        rFunc(*mpNodeNumRLHidden);
+    }
+}
+
 SwNumberTree::tNumberVector
 SwTextNode::GetNumberVector(SwRootFrame const*const pLayout) const
 {
@@ -4894,20 +4909,24 @@ namespace {
         {
             if ( mbUpdateListLevel && mrTextNode.IsInList() )
             {
-                const_cast<SwNodeNum*>(mrTextNode.GetNum())->SetLevelInListTree(
-                                                    mrTextNode.GetAttrListLevel() );
+                auto const nLevel(mrTextNode.GetAttrListLevel());
+                mrTextNode.DoNum(
+                    [nLevel](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel); });
             }
 
             if ( mbUpdateListRestart && mrTextNode.IsInList() )
             {
-                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTextNode.GetNum());
-                pNodeNum->InvalidateMe();
-                pNodeNum->NotifyInvalidSiblings();
+                mrTextNode.DoNum(
+                    [](SwNodeNum & rNum) {
+                        rNum.InvalidateMe();
+                        rNum.NotifyInvalidSiblings();
+                    });
             }
 
             if ( mbUpdateListCount && mrTextNode.IsInList() )
             {
-                const_cast<SwNodeNum*>(mrTextNode.GetNum())->InvalidateAndNotifyTree();
+                mrTextNode.DoNum(
+                    [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
             }
         }
 
@@ -5213,21 +5232,24 @@ namespace {
         {
             if ( mbUpdateListLevel )
             {
-                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTextNode.GetNum());
-                pNodeNum->SetLevelInListTree( mrTextNode.GetAttrListLevel() );
+                auto const nLevel(mrTextNode.GetAttrListLevel());
+                mrTextNode.DoNum(
+                    [nLevel](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel); });
             }
 
             if ( mbUpdateListRestart )
             {
-                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTextNode.GetNum());
-                pNodeNum->InvalidateMe();
-                pNodeNum->NotifyInvalidSiblings();
+                mrTextNode.DoNum(
+                    [](SwNodeNum & rNum) {
+                        rNum.InvalidateMe();
+                        rNum.NotifyInvalidSiblings();
+                    });
             }
 
             if ( mbUpdateListCount )
             {
-                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTextNode.GetNum());
-                pNodeNum->InvalidateAndNotifyTree();
+                mrTextNode.DoNum(
+                    [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
             }
         }
     }
