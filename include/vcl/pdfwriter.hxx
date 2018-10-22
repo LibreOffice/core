@@ -78,7 +78,11 @@ class VCL_DLLPUBLIC PDFOutputStream
 
 class VCL_DLLPUBLIC PDFWriter
 {
-    std::unique_ptr<PDFWriterImpl> xImplementation;
+    VclPtr<PDFWriterImpl> xImplementation;
+
+    PDFWriter(const PDFWriter&) = delete;
+    PDFWriter& operator=(const PDFWriter&) = delete;
+
 public:
     // extended line info
     enum CapType { capButt, capRound, capSquare };
