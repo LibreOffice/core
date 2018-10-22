@@ -755,15 +755,14 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pHistory )
     {
-        auto pSave = std::move(pHistory);
-        SwHistory aHst;
-        pHistory.reset( &aHst );
+        auto xSave = o3tl::make_unique<SwHistory>();
+        std::swap(pHistory, xSave);
+
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
         m_nSetPos = pHistory->Count();
 
-        pHistory.release();
-        pHistory = std::move(pSave);
-        pHistory->Move( 0, &aHst );
+        std::swap(xSave, pHistory);
+        pHistory->Move(0, xSave.get());
     }
     else
     {
