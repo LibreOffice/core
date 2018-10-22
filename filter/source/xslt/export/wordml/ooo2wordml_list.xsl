@@ -228,12 +228,15 @@
             <xsl:when test="$number-format = 'I'">
                 <!-- nfcUCRoman: Uppercase roman -->
                 <w:nfc w:val="1"/>
+            </xsl:when>
             <xsl:when test="$number-format = '1st'">
                 <!-- nfcUCOrdinal: Ordinal indicator -->
                 <w:nfc w:val="5"/>
+            </xsl:when>
             <xsl:when test="$number-format = 'One'">
                 <!-- nfcCardText: Cardinal -->
                 <w:nfc w:val="6"/>
+            </xsl:when>
             <xsl:when test="$number-format = 'First'">
                 <!-- nfcOrdText: Ordinal -->
                 <w:nfc w:val="7"/>
