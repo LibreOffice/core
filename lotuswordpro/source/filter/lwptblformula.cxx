@@ -99,12 +99,12 @@ void LwpFormulaInfo::ReadText()
     m_pObjStrm->QuickReadInt16(); //Disk Size
     sal_uInt16 nStrLen = m_pObjStrm->QuickReadInt16();
 
-    std::unique_ptr<char[]> pBuf(new char[nStrLen+1]);
-    m_pObjStrm->QuickRead( pBuf.get(), nStrLen );
-    *(pBuf.get()+nStrLen)='\0';
+    std::vector<char> aBuf(nStrLen + 1);
+    m_pObjStrm->QuickRead(aBuf.data(), nStrLen);
+    aBuf[nStrLen]= '\0';
     OUString aText;
     aText += "\"";
-    aText += OUString(pBuf.get(), nStrLen, osl_getThreadTextEncoding());
+    aText += OUString(aBuf.data(), nStrLen, osl_getThreadTextEncoding());
     aText += "\"";
 
     m_aStack.push_back(o3tl::make_unique<LwpFormulaText>(aText));
