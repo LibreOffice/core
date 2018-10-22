@@ -90,7 +90,6 @@ namespace
         DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo*, void);
         DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
 
-        static bool impIsUnderlineAbove(const vcl::Font& rFont);
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
         static drawinglayer::primitive2d::BasePrimitive2D* impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
         void impFlushTextPortionPrimitivesToLinePrimitives();
@@ -151,17 +150,6 @@ namespace
 
         drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence();
     };
-
-    bool impTextBreakupHandler::impIsUnderlineAbove(const vcl::Font& rFont)
-    {
-        if(!rFont.IsVertical())
-        {
-            return false;
-        }
-
-        // the underline is right for Japanese only
-        return (LANGUAGE_JAPANESE == rFont.GetLanguage()) || (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage());
-    }
 
     void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)
     {
@@ -284,7 +272,7 @@ namespace
 
             // check UnderlineAbove
             const bool bUnderlineAbove(
-                drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && impIsUnderlineAbove(rInfo.mrFont));
+                drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && rInfo.mrFont.IsUnderlineAbove());
 
             // prepare strikeout data
             const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(

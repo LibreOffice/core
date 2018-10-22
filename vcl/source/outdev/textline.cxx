@@ -36,16 +36,6 @@
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
-bool OutputDevice::ImplIsUnderlineAbove( const vcl::Font& rFont )
-{
-    if ( !rFont.IsVertical() )
-        return false;
-
-    // the underline is right for Japanese only
-    return (LANGUAGE_JAPANESE == rFont.GetLanguage()) ||
-           (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage());
-}
-
 void OutputDevice::ImplInitTextLineSize()
 {
     mpFontInstance->mxFontMetric->ImplInitTextLineSize( this );
