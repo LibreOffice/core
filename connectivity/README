@@ -1,1 +1,13 @@
 Contains database pieces, drivers, etc.
+
+
+=== mysql_test ===
+
+- The CppunitTest_mysql_test unit test can be used to test the mysqlc
+  library with any versions of mysql or mariadb server of your choice.
+  
+- This test does not run automatically. It can be triggered with setting
+  the environment variable "CONNECTIVITY_TEST_MYSQL_DRIVER".
+  
+- The environment variable should contain an URL of the following format:
+  [user]/[passwd]@sdbc:mysql:mysqlc:[host]:[port]/[db_name]
