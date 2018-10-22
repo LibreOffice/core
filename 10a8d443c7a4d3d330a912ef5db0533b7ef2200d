@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_a846df4e",
+        "filename": "sw/source/core/undo/SwUndoFmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-10-22T08:01:36Z",
+      "side": 1,
+      "message": "I guess its possible that pNew-\u003eGetName() returns \"\" so this might change the logic",
+      "revId": "10a8d443c7a4d3d330a912ef5db0533b7ef2200d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
