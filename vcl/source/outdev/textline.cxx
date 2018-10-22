@@ -930,10 +930,6 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return;
-
     if( mbInitClipRegion )
         InitClipRegion();
 
@@ -942,11 +938,8 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
 
     // initialize font if needed to get text offsets
     // TODO: only needed for mnTextOff!=(0,0)
-    if( mbNewFont && !ImplNewFont() )
+    if (!InitFont())
         return;
-
-    if( mbInitFont )
-        InitFont();
 
     Point aPos = ImplLogicToDevicePixel( rPos );
     DeviceCoordinate fWidth;
@@ -975,7 +968,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     if ( mbOutputClipped )
         return;
 
-    if( mbNewFont && !ImplNewFont() )
+    if (!InitFont())
         return;
 
     Point   aStartPt = ImplLogicToDevicePixel( rStartPos );
