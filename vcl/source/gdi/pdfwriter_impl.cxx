@@ -6839,7 +6839,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
          )
         )
     {
-        bool bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
+        bool bUnderlineAbove = m_aCurrentPDFState.m_aFont.IsUnderlineAbove();
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             Point aStartPt;
