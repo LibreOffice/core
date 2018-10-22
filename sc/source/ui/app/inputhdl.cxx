@@ -4067,14 +4067,16 @@ bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
 
 ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
 {
-    aCursorPos  = r.aCursorPos;
-    aStartPos   = r.aStartPos;
-    aEndPos     = r.aEndPos;
-    aString     = r.aString;
-    pEditData.reset();
-    if (r.pEditData)
-        pEditData = r.pEditData->Clone();
-
+    if (this != &r)
+    {
+        aCursorPos  = r.aCursorPos;
+        aStartPos   = r.aStartPos;
+        aEndPos     = r.aEndPos;
+        aString     = r.aString;
+        pEditData.reset();
+        if (r.pEditData)
+            pEditData = r.pEditData->Clone();
+    }
     return *this;
 }
 

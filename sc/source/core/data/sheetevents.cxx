@@ -83,12 +83,15 @@ ScSheetEvents::ScSheetEvents(const ScSheetEvents& rOther)
 
 ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
 {
-    Clear();
-    if (rOther.mpScriptNames)
+    if (this != &rOther)
     {
-        mpScriptNames.reset( new boost::optional<OUString>[COUNT] );
-        for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
-            mpScriptNames[nEvent] = rOther.mpScriptNames[nEvent];
+        Clear();
+        if (rOther.mpScriptNames)
+        {
+            mpScriptNames.reset( new boost::optional<OUString>[COUNT] );
+            for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
+                mpScriptNames[nEvent] = rOther.mpScriptNames[nEvent];
+        }
     }
     return *this;
 }

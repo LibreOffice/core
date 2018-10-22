@@ -217,20 +217,23 @@ void SdrMarkList::Clear()
 
 SdrMarkList& SdrMarkList::operator=(const SdrMarkList& rLst)
 {
-    Clear();
-
-    for(size_t i = 0; i < rLst.GetMarkCount(); ++i)
+    if (this != &rLst)
     {
-        SdrMark* pMark = rLst.GetMark(i);
-        maList.emplace_back(new SdrMark(*pMark));
-    }
+        Clear();
 
-    maMarkName = rLst.maMarkName;
-    mbNameOk = rLst.mbNameOk;
-    maPointName = rLst.maPointName;
-    mbPointNameOk = rLst.mbPointNameOk;
-    maGluePointName = rLst.maGluePointName;
-    mbSorted = rLst.mbSorted;
+        for(size_t i = 0; i < rLst.GetMarkCount(); ++i)
+        {
+            SdrMark* pMark = rLst.GetMark(i);
+            maList.emplace_back(new SdrMark(*pMark));
+        }
+
+        maMarkName = rLst.maMarkName;
+        mbNameOk = rLst.mbNameOk;
+        maPointName = rLst.maPointName;
+        mbPointNameOk = rLst.mbPointNameOk;
+        maGluePointName = rLst.maGluePointName;
+        mbSorted = rLst.mbSorted;
+    }
     return *this;
 }
 

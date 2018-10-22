@@ -68,8 +68,11 @@ SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
 
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
-    aSvxMacroTable.clear();
-    aSvxMacroTable.insert(rTbl.aSvxMacroTable.begin(), rTbl.aSvxMacroTable.end());
+    if (this != &rTbl)
+    {
+        aSvxMacroTable.clear();
+        aSvxMacroTable.insert(rTbl.aSvxMacroTable.begin(), rTbl.aSvxMacroTable.end());
+    }
     return *this;
 }
 

@@ -624,35 +624,37 @@ void ImageMap::ClearImageMap()
 
 ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
 {
-    size_t nCount = rImageMap.GetIMapObjectCount();
-
-    ClearImageMap();
-
-    for ( size_t i = 0; i < nCount; i++ )
+    if (this != &rImageMap)
     {
-        IMapObject* pCopyObj = rImageMap.GetIMapObject( i );
+        size_t nCount = rImageMap.GetIMapObjectCount();
 
-        switch( pCopyObj->GetType() )
+        ClearImageMap();
+
+        for ( size_t i = 0; i < nCount; i++ )
         {
-            case IMAP_OBJ_RECTANGLE:
-                maList.emplace_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>(pCopyObj) ) );
-            break;
+            IMapObject* pCopyObj = rImageMap.GetIMapObject( i );
 
-            case IMAP_OBJ_CIRCLE:
-                maList.emplace_back( new IMapCircleObject( *static_cast<IMapCircleObject*>(pCopyObj) ) );
-            break;
+            switch( pCopyObj->GetType() )
+            {
+                case IMAP_OBJ_RECTANGLE:
+                    maList.emplace_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>(pCopyObj) ) );
+                break;
 
-            case IMAP_OBJ_POLYGON:
-                maList.emplace_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>(pCopyObj) ) );
-            break;
+                case IMAP_OBJ_CIRCLE:
+                    maList.emplace_back( new IMapCircleObject( *static_cast<IMapCircleObject*>(pCopyObj) ) );
+                break;
 
-            default:
-            break;
+                case IMAP_OBJ_POLYGON:
+                    maList.emplace_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>(pCopyObj) ) );
+                break;
+
+                default:
+                break;
+            }
         }
+
+        aName = rImageMap.aName;
     }
-
-    aName = rImageMap.aName;
-
     return *this;
 }
 

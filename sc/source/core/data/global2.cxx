@@ -139,23 +139,26 @@ void ScConsolidateParam::Clear()
 
 ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 {
-    nCol            = r.nCol;
-    nRow            = r.nRow;
-    nTab            = r.nTab;
-    bByCol          = r.bByCol;
-    bByRow          = r.bByRow;
-    bReferenceData  = r.bReferenceData;
-    eFunction       = r.eFunction;
-    nDataAreaCount  = r.nDataAreaCount;
-    if ( r.nDataAreaCount > 0 )
+    if (this != &r)
     {
-        nDataAreaCount = r.nDataAreaCount;
-        pDataAreas.reset( new ScArea[nDataAreaCount] );
-        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
-            pDataAreas[i] = r.pDataAreas[i];
+        nCol            = r.nCol;
+        nRow            = r.nRow;
+        nTab            = r.nTab;
+        bByCol          = r.bByCol;
+        bByRow          = r.bByRow;
+        bReferenceData  = r.bReferenceData;
+        eFunction       = r.eFunction;
+        nDataAreaCount  = r.nDataAreaCount;
+        if ( r.nDataAreaCount > 0 )
+        {
+            nDataAreaCount = r.nDataAreaCount;
+            pDataAreas.reset( new ScArea[nDataAreaCount] );
+            for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
+                pDataAreas[i] = r.pDataAreas[i];
+        }
+        else
+            pDataAreas.reset();
     }
-    else
-        pDataAreas.reset();
     return *this;
 }
 

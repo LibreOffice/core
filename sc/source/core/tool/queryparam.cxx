@@ -89,20 +89,22 @@ ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
 
 ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
 {
-    eSearchType = r.eSearchType;
-    bHasHeader  = r.bHasHeader;
-    bByRow = r.bByRow;
-    bInplace = r.bInplace;
-    bCaseSens = r.bCaseSens;
-    bDuplicate = r.bDuplicate;
-    mbRangeLookup = r.mbRangeLookup;
-
-    m_Entries.clear();
-    for (auto const& it : r.m_Entries)
+    if (this != &r)
     {
-        m_Entries.push_back(o3tl::make_unique<ScQueryEntry>(*it));
-    }
+        eSearchType = r.eSearchType;
+        bHasHeader  = r.bHasHeader;
+        bByRow = r.bByRow;
+        bInplace = r.bInplace;
+        bCaseSens = r.bCaseSens;
+        bDuplicate = r.bDuplicate;
+        mbRangeLookup = r.mbRangeLookup;
 
+        m_Entries.clear();
+        for (auto const& it : r.m_Entries)
+        {
+            m_Entries.push_back(o3tl::make_unique<ScQueryEntry>(*it));
+        }
+    }
     return *this;
 }
 

@@ -333,17 +333,20 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
 
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
-    SbxValue::operator=( r );
-    mpImpl.reset();
-    if( r.mpImpl != nullptr )
+    if (this != &r)
     {
-        mpImpl.reset( new SbxVariableImpl( *r.mpImpl ) );
-#if HAVE_FEATURE_SCRIPTING
-        if( mpImpl->m_xComListener.is() )
+        SbxValue::operator=( r );
+        mpImpl.reset();
+        if( r.mpImpl != nullptr )
         {
-            registerComListenerVariableForBasic( this, mpImpl->m_pComListenerParentBasic );
-        }
+            mpImpl.reset( new SbxVariableImpl( *r.mpImpl ) );
+#if HAVE_FEATURE_SCRIPTING
+            if( mpImpl->m_xComListener.is() )
+            {
+                registerComListenerVariableForBasic( this, mpImpl->m_pComListenerParentBasic );
+            }
 #endif
+        }
     }
     return *this;
 }
