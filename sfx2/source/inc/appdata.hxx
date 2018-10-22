@@ -100,7 +100,6 @@ public:
 
     sal_uInt16                              nDocModalMode;              // counts documents in modal mode
     sal_uInt16                              nRescheduleLocks;
-    sal_uInt16                              nInReschedule;
 
     rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
 

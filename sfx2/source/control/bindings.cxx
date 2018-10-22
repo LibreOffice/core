@@ -1269,7 +1269,7 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
     pImpl->aAutoTimer.SetTimeout(TIMEOUT_UPDATING);
 
     // at least 10 loops and further if more jobs are available but no input
-    bool bPreEmptive = pTimer && !pSfxApp->Get_Impl()->nInReschedule;
+    bool bPreEmptive = pTimer;
     sal_uInt16 nLoops = 10;
     pImpl->bInNextJob = true;
     const std::size_t nCount = pImpl->pCaches.size();

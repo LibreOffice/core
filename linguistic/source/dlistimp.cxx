@@ -70,7 +70,6 @@ class DicEvtListenerHelper :
     >
 {
     comphelper::OInterfaceContainerHelper2  aDicListEvtListeners;
-    std::vector< DictionaryEvent >          aCollectDicEvt;
     uno::Reference< XDictionaryList >       xMyDicList;
 
     sal_Int16                               nCondensedEvt;
@@ -242,7 +241,6 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
 
         // clear "list" of events
         nCondensedEvt = 0;
-        aCollectDicEvt.clear();
     }
 
     return nNumCollectEvtListeners;

@@ -82,6 +82,8 @@ connectivity/source/inc/OTypeInfo.hxx:34
     connectivity::OTypeInfo nPrecision sal_Int32
 connectivity/source/inc/OTypeInfo.hxx:36
     connectivity::OTypeInfo nMaximumScale sal_Int16
+connectivity/source/inc/OTypeInfo.hxx:38
+    connectivity::OTypeInfo nType sal_Int16
 cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
     cppcanvas::internal::EMFPBrush wrapMode sal_Int32
 cppcanvas/source/mtfrenderer/emfppen.hxx:42
@@ -148,12 +150,18 @@ cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:288
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
+dbaccess/source/ui/inc/propertysetitem.hxx:34
+    dbaui::OPropertySetItem m_xSet css::uno::Reference<css::beans::XPropertySet>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:371
      input_mode long
+drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:44
+    drawinglayer::attribute::ImpSdrFillGraphicAttribute mbLogSize _Bool
+drawinglayer/source/attribute/sdrsceneattribute3d.cxx:32
+    drawinglayer::attribute::ImpSdrSceneAttribute mfDistance double
 drawinglayer/source/tools/emfpbrush.hxx:104
     emfplushelper::EMFPBrush wrapMode sal_Int32
 drawinglayer/source/tools/emfpcustomlinecap.hxx:33
@@ -218,8 +226,20 @@ include/canvas/base/canvascustomspritehelper.hxx:219
     canvas::CanvasCustomSpriteHelper mbPrioDirty _Bool
 include/canvas/base/canvascustomspritehelper.hxx:222
     canvas::CanvasCustomSpriteHelper mbVisibilityDirty _Bool
+include/drawinglayer/attribute/sdrallattribute3d.hxx:44
+    drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const class drawinglayer::attribute::SdrLineStartEndAttribute
+include/drawinglayer/primitive2d/mediaprimitive2d.hxx:51
+    drawinglayer::primitive2d::MediaPrimitive2D maURL class rtl::OUString
+include/drawinglayer/texture/texture.hxx:77
+    drawinglayer::texture::GeoTexSvxGradient maDefinitionRange basegfx::B2DRange
+include/drawinglayer/texture/texture.hxx:80
+    drawinglayer::texture::GeoTexSvxGradient mfBorder double
+include/drawinglayer/texture/texture.hxx:278
+    drawinglayer::texture::GeoTexSvxHatch mfAngle double
 include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
+include/editeng/outlobj.hxx:42
+    OutlinerParaObjData mbIsEditDoc _Bool
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
 include/LibreOfficeKit/LibreOfficeKit.h:310
@@ -234,10 +254,26 @@ include/opencl/platforminfo.hxx:30
     OpenCLDeviceInfo mnComputeUnits size_t
 include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
+include/sfx2/minfitem.hxx:35
+    SfxMacroInfoItem aCommentText const class rtl::OUString
+include/svtools/brwbox.hxx:252
+    BrowseBox::CursorMoveAttempt m_nCol const long
+include/svtools/brwbox.hxx:253
+    BrowseBox::CursorMoveAttempt m_nRow const long
+include/svtools/brwbox.hxx:254
+    BrowseBox::CursorMoveAttempt m_bScrolledToReachCell const _Bool
+include/svtools/ctrlbox.hxx:448
+    FontSizeBox pFontList const class FontList *
+include/svtools/ctrlbox.hxx:450
+    FontSizeBox bPtRelative _Bool
 include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
+include/svx/ofaitem.hxx:44
+    OfaRefItem mxRef rtl::Reference<reference_type>
+include/svx/svdlayer.hxx:70
+    SdrLayer nType sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
@@ -246,6 +282,8 @@ include/vcl/salnativewidgets.hxx:507
     PushButtonValue mbBevelButton _Bool
 include/vcl/salnativewidgets.hxx:508
     PushButtonValue mbSingleLine _Bool
+include/vcl/textrectinfo.hxx:31
+    TextRectInfo mnLineCount sal_uInt16
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
@@ -262,16 +300,18 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
+linguistic/source/dlistimp.cxx:73
+    DicEvtListenerHelper aCollectDicEvt std::vector<DictionaryEvent>
 registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflread.cxx:467
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b2 sal_uInt32
 registry/source/reflread.cxx:534
-    FieldList m_pCP class ConstantPool *
+    FieldList m_pCP class ConstantPool *const
 registry/source/reflread.cxx:718
-    ReferenceList m_pCP class ConstantPool *
+    ReferenceList m_pCP class ConstantPool *const
 registry/source/reflread.cxx:819
-    MethodList m_pCP class ConstantPool *
+    MethodList m_pCP class ConstantPool *const
 sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
 sal/rtl/alloc_arena.hxx:36
@@ -294,6 +334,8 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
+sc/inc/attrib.hxx:229
+    ScDoubleItem nValue double
 sc/inc/compiler.hxx:256
     ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:257
@@ -302,14 +344,24 @@ sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
 sc/inc/document.hxx:2528
     ScMutationDisable mpDocument class ScDocument *
+sc/inc/lookupcache.hxx:61
+    ScLookupCache::QueryCriteria  union ScLookupCache::QueryCriteria::(anonymous at /media/noel/disk2/libo6/sc/inc/lookupcache.hxx:61:9)
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
     ScDPLabelData mbIsValue _Bool
+sc/inc/scmatrix.hxx:120
+    ScMatrix mbCloneIfConst _Bool
+sc/inc/tabopparams.hxx:38
+    ScInterpreterTableOpParams bValid _Bool
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
 sc/source/core/data/column4.cxx:1316
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
+sc/source/core/data/column.cxx:1389
+    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
+sc/source/core/data/column.cxx:1390
+    (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:24
@@ -342,6 +394,10 @@ sc/source/filter/inc/exp_op.hxx:47
     ExportBiff5 pExcRoot struct RootData *
 sc/source/filter/inc/imp_op.hxx:84
     ImportExcel::LastFormula mpCell class ScFormulaCell *
+sc/source/filter/inc/namebuff.hxx:36
+    StringHashEntry aString const class rtl::OUString
+sc/source/filter/inc/namebuff.hxx:37
+    StringHashEntry nHash const sal_uInt32
 sc/source/filter/inc/orcusinterface.hxx:446
     ScOrcusStyles::xf mnStyleXf size_t
 sc/source/filter/inc/orcusinterface.hxx:466
@@ -361,11 +417,15 @@ sc/source/filter/xml/xmldrani.hxx:75
 sc/source/filter/xml/xmlexternaltabi.hxx:112
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
-    ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
-sc/source/ui/inc/datastream.hxx:108
+    ScAccessiblePreviewHeaderCellTextData mbRowHeader const _Bool
+sc/source/ui/inc/datastream.hxx:105
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
+sc/source/ui/inc/uiitems.hxx:48
+    ScInputStatusItem aStartPos const class ScAddress
+sc/source/ui/inc/uiitems.hxx:49
+    ScInputStatusItem aEndPos const class ScAddress
 sd/source/filter/eppt/eppt.hxx:142
     PPTWriter mnTxId sal_uInt32
 sd/source/filter/ppt/ppt97animations.hxx:41
@@ -382,6 +442,8 @@ sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:100
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
+sfx2/source/control/dispatch.cxx:100
+    SfxObjectBars_Impl pIFace class SfxInterface *
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -396,6 +458,10 @@ starmath/inc/view.hxx:158
     SmCmdBoxWindow aController class SmEditController
 store/source/storbase.hxx:248
     store::PageData m_aMarked store::PageData::L
+store/source/storbios.cxx:58
+    OStoreSuperBlock m_nMarked sal_uInt32
+store/source/storbios.cxx:59
+    OStoreSuperBlock m_aMarked OStoreSuperBlock::L
 svl/source/crypto/cryptosign.cxx:145
     (anonymous namespace)::(anonymous) version SECItem
 svl/source/crypto/cryptosign.cxx:147
@@ -410,12 +476,24 @@ svl/source/crypto/cryptosign.cxx:194
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
 svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
+svx/inc/sdr/overlay/overlaytools.hxx:41
+    drawinglayer::primitive2d::OverlayStaticRectanglePrimitive mfRotation const double
+svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx:46
+    drawinglayer::primitive2d::SdrOleContentPrimitive2D mnGraphicVersion const sal_uInt32
 svx/source/dialog/contimp.hxx:56
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/form/dataaccessdescriptor.cxx:44
     svx::ODADescriptorImpl m_bSetOutOfDate _Bool
 svx/source/form/formcontroller.cxx:211
     svxform::ColumnInfo nNullable sal_Int32
+svx/source/inc/fmitems.hxx:28
+    FmInterfaceItem xInterface css::uno::Reference<css::uno::XInterface>
+svx/source/sdr/attribute/sdrformtextattribute.cxx:155
+    drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp const sal_uInt16
+svx/source/sdr/attribute/sdrtextattribute.cxx:53
+    drawinglayer::attribute::ImpSdrTextAttribute maPropertiesVersion sal_uInt32
+svx/source/sdr/attribute/sdrtextattribute.cxx:67
+    drawinglayer::attribute::ImpSdrTextAttribute mbWrongSpell const _Bool
 svx/source/sidebar/line/LinePropertyPanel.hxx:97
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:98
@@ -434,10 +512,14 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
+svx/source/svdraw/svdibrow.cxx:89
+    ImpItemListRow pType const std::type_info *
 svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
+sw/inc/cellatr.hxx:37
+    SwTableBoxNumFormat m_bAuto _Bool
 sw/inc/shellio.hxx:147
     SwReader aFileName const class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:186
@@ -452,12 +534,6 @@ sw/source/core/inc/swfont.hxx:976
     SvStatistics nDrawStretchText sal_uInt16
 sw/source/core/inc/swfont.hxx:977
     SvStatistics nChangeFont sal_uInt16
-sw/source/filter/html/htmlcss1.cxx:77
-    SwCSS1ItemIds nFormatBreak const sal_uInt16
-sw/source/filter/html/htmlcss1.cxx:78
-    SwCSS1ItemIds nFormatPageDesc const sal_uInt16
-sw/source/filter/html/htmlcss1.cxx:79
-    SwCSS1ItemIds nFormatKeep const sal_uInt16
 sw/source/filter/inc/rtf.hxx:28
     RTFSurround::(anonymous union)::(anonymous) nGoldCut sal_uInt8
 sw/source/filter/inc/rtf.hxx:29
@@ -466,6 +542,8 @@ sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo6/sw/source/filter/inc/rtf.hxx:27:9)
+sw/source/uibase/inc/labimg.hxx:50
+    SwLabItem m_aBin class rtl::OUString
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -482,6 +560,8 @@ vbahelper/source/vbahelper/vbafillformat.hxx:36
     ScVbaFillFormat m_nForeColor sal_Int32
 vcl/inc/accel.h:33
     ImplAccelEntry mpAutoAccel class Accelerator *
+vcl/inc/fontselect.hxx:62
+    FontSelectPattern mfExactHeight float
 vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
@@ -514,20 +594,38 @@ vcl/inc/salwtype.hxx:248
     SalSwipeEvent mnVelocityY double
 vcl/inc/sft.hxx:462
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
+vcl/inc/unx/gtk/gtkframe.hxx:88
+    GtkSalFrame::IMHandler::PreviousKeyPress window GdkWindow *
+vcl/inc/unx/gtk/gtkframe.hxx:89
+    GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
+vcl/inc/unx/gtk/gtkframe.hxx:90
+    GtkSalFrame::IMHandler::PreviousKeyPress time guint32
 vcl/inc/unx/gtk/gtkframe.hxx:215
     GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
 vcl/opengl/salbmp.cxx:440
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/source/filter/graphicfilter.cxx:1010
+vcl/source/filter/graphicfilter.cxx:906
+    ImpFilterLibCacheEntry maFiltername const class rtl::OUString
+vcl/source/filter/graphicfilter.cxx:1005
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
 vcl/source/filter/jpeg/Exif.hxx:57
     Exif::ExifIFD count sal_uInt32
+vcl/source/gdi/pdfwriter_impl.hxx:200
+    vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
+vcl/source/gdi/pdfwriter_impl.hxx:201
+    vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/unx/generic/app/wmadaptor.cxx:1269
     _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
+vcl/unx/generic/gdi/cairotextrender.cxx:53
+    (anonymous namespace)::CairoFontsCache::CacheId maFace (anonymous namespace)::FT_Face
+vcl/unx/generic/gdi/cairotextrender.cxx:55
+    (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
+vcl/unx/generic/gdi/cairotextrender.cxx:56
+    (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk/a11y/atkwrapper.hxx:80

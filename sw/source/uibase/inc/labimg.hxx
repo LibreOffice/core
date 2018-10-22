@@ -47,7 +47,6 @@ public:
     OUString   m_aWriting; // label
     OUString   m_aMake;   // label mark
     OUString   m_aType;   // label type
-    OUString   m_aBin;    // printer shaft
     sal_Int32       m_lHDist;  // horizontal distance (user)
     sal_Int32       m_lVDist;  // vertical distance (user)
     sal_Int32       m_lWidth;  // width (user)

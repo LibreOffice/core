@@ -37,24 +37,22 @@
 // The advantage is that this is the pool's default item value and some places
 // benefit from this special treatment in that they don't have to handle/store
 // attribute specifics, especially when writing a document.
-SwTableBoxNumFormat::SwTableBoxNumFormat( sal_uInt32 nFormat, bool bFlag )
+SwTableBoxNumFormat::SwTableBoxNumFormat( sal_uInt32 nFormat )
     : SfxUInt32Item( RES_BOXATR_FORMAT,
             (((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == getSwDefaultTextFormat()) ?
              getSwDefaultTextFormat() : nFormat))
-    , m_bAuto( bFlag )
 {
 }
 
 bool SwTableBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return GetValue() == static_cast<const SwTableBoxNumFormat&>(rAttr).GetValue() &&
-           m_bAuto == static_cast<const SwTableBoxNumFormat&>(rAttr).m_bAuto;
+    return GetValue() == static_cast<const SwTableBoxNumFormat&>(rAttr).GetValue();
 }
 
 SfxPoolItem* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
 {
-    return new SwTableBoxNumFormat( GetValue(), m_bAuto );
+    return new SwTableBoxNumFormat( GetValue() );
 }
 
 SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
