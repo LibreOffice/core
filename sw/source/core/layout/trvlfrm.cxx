@@ -214,7 +214,9 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                 pCMS->m_bStop = true;
                 return false;
             }
+
             const SwContentFrame *pCnt = GetContentPos( aPoint, false, false, pCMS, false );
+            // GetContentPos may have modified pCMS
             if ( pCMS && pCMS->m_bStop )
                 return false;
 
@@ -1185,7 +1187,7 @@ static const SwLayoutFrame* lcl_Inside( const SwContentFrame *pCnt, Point const 
 const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                                             const bool bDontLeave,
                                             const bool bBodyOnly,
-                                            const SwCursorMoveState *pCMS,
+                                            SwCursorMoveState *pCMS,
                                             const bool bDefaultExpand ) const
 {
     //Determine the first ContentFrame.
@@ -1330,7 +1332,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
         const SwTabFrame *pTab = pActual->FindTabFrame();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
         {
-            const_cast<SwCursorMoveState*>(pCMS)->m_bStop = true;
+            pCMS->m_bStop = true;
             return nullptr;
         }
     }
