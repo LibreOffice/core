@@ -31,7 +31,7 @@ const char FontSelectPattern::FEAT_PREFIX = ':';
 const char FontSelectPattern::FEAT_SEPARATOR = '&';
 
 FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
-    const OUString& rSearchName, const Size& rSize, float fExactHeight )
+    const OUString& rSearchName, const Size& rSize, float fExactHeight, bool bNonAntialias)
     : maSearchName( rSearchName )
     , mnWidth( rSize.Width() )
     , mnHeight( rSize.Height() )
@@ -39,7 +39,7 @@ FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     , mnOrientation( rFont.GetOrientation() )
     , meLanguage( rFont.GetLanguage() )
     , mbVertical( rFont.IsVertical() )
-    , mbNonAntialiased( false )
+    , mbNonAntialiased(bNonAntialias)
     , mbEmbolden( false )
 {
     maTargetName = GetFamilyName();

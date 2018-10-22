@@ -82,8 +82,8 @@ public:
     ImplFontCache();
     ~ImplFontCache();
 
-    rtl::Reference<LogicalFontInstance> GetFontInstance( PhysicalFontCollection const *,
-                             const vcl::Font&, const Size& rPixelSize, float fExactHeight);
+    rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const *,
+                             const vcl::Font&, const Size& rPixelSize, float fExactHeight, bool bNonAntialias = false);
     rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
                             LogicalFontInstance* pLogicalFont,
                             int nFallbackLevel, OUString& rMissingCodes );
