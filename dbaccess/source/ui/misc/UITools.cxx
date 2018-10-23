@@ -66,6 +66,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
 #include <comphelper/stl_types.hxx>
@@ -257,7 +258,7 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
         }
         else
         {
-            showError( aSQLError, _pErrorMessageParent, _rxContext );
+            showError( aSQLError, VCLUnoHelper::GetInterface(_pErrorMessageParent), _rxContext );
         }
     }
 
@@ -279,12 +280,6 @@ Reference< XInterface > getDataSourceOrModel(const Reference< XInterface >& _xOb
     }
 
     return xRet;
-}
-
-void showError(const SQLExceptionInfo& _rInfo, vcl::Window* _pParent,const Reference< XComponentContext >& _rxContext)
-{
-    OSL_ENSURE(_pParent,"showError: Parent window must be NOT NULL!");
-    ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent), _rxContext);
 }
 
 TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,

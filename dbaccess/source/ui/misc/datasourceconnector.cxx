@@ -197,7 +197,7 @@ namespace dbaui
             }
             else
             {
-                showError( aInfo, m_pErrorMessageParent, m_xContext );
+                showError(aInfo, VCLUnoHelper::GetInterface(m_pErrorMessageParent), m_xContext);
             }
         }
         return xConnection;

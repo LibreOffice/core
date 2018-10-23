@@ -199,8 +199,8 @@ IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
     }
     catch( const SQLException& )
     {
-        ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
-                            this,
+        ::dbtools::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
+                            VCLUnoHelper::GetInterface(this),
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
     }
     catch( const Exception& )
