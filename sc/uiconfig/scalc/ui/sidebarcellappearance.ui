@@ -42,7 +42,6 @@
                 <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|cellbackgroundcolor|tooltip_text">Select the background color of the selected cells.</property>
                 <child>
                   <object class="GtkMenuToolButton" id="cellbackground">
-                    <property name="use_action_appearance">False</property>
                     <property name="width_request">105</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -84,7 +83,6 @@
                 <property name="valign">center</property>
                 <child>
                   <object class="GtkMenuToolButton" id="bordertype">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
@@ -118,7 +116,6 @@
                     <property name="can_focus">True</property>
                     <child>
                       <object class="GtkMenuToolButton" id="linestyle">
-                        <property name="use_action_appearance">False</property>
                         <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -154,7 +151,6 @@
                     <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|borderlinecolor|tooltip_text">Select the line color of the borders.</property>
                     <child>
                       <object class="GtkMenuToolButton" id="linecolor">
-                        <property name="use_action_appearance">False</property>
                         <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>

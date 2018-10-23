@@ -57,7 +57,6 @@
         <child>
           <object class="GtkRadioButton" id="yesRadiobutton">
             <property name="label" translatable="yes" context="optiondbfieldpage|yesRadiobutton">_Yes, I want to save it in the following database field:</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -77,7 +76,6 @@
         <child>
           <object class="GtkRadioButton" id="noRadiobutton">
             <property name="label" translatable="yes" context="optiondbfieldpage|noRadiobutton">_No, I only want to save the value in the form.</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

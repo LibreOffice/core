@@ -67,7 +67,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="currency">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatCurrency</property>
@@ -80,7 +79,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="percent">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatPercent</property>
@@ -93,7 +91,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="numericfield">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatDecimal</property>
@@ -259,7 +256,6 @@
         <child>
           <object class="GtkCheckButton" id="negativenumbersred">
             <property name="label" translatable="yes" context="sidebarnumberformat|negativenumbersred">_Negative numbers in red</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -278,7 +274,6 @@
         <child>
           <object class="GtkCheckButton" id="thousandseparator">
             <property name="label" translatable="yes" context="sidebarnumberformat|thousandseparator">_Thousands separator</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -297,7 +292,6 @@
         <child>
           <object class="GtkCheckButton" id="engineeringnotation">
             <property name="label" translatable="yes" context="sidebarnumberformat|engineeringnotation">_Engineering notation</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

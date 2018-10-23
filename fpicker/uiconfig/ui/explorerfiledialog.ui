@@ -70,7 +70,6 @@
                     <child>
                       <object class="GtkButton" id="connect_to_server">
                         <property name="label" translatable="yes" context="explorerfiledialog|connect_to_server">Servers...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -105,7 +104,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="new_folder">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
@@ -165,7 +163,6 @@
                         <child>
                           <object class="GtkButton" id="open">
                             <property name="label">gtk-open</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
@@ -183,7 +180,6 @@
                         <child>
                           <object class="GtkButton" id="cancel">
                             <property name="label">gtk-cancel</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -198,7 +194,6 @@
                         <child>
                           <object class="GtkButton" id="help">
                             <property name="label">gtk-help</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -213,7 +208,6 @@
                         <child>
                           <object class="GtkButton" id="play">
                             <property name="label">gtk-media-play</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_stock">True</property>
@@ -337,7 +331,6 @@
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkCheckButton" id="link">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
@@ -352,7 +345,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="cb_preview">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
@@ -374,7 +366,6 @@
                             <child>
                               <object class="GtkCheckButton" id="readonly">
                                 <property name="label" translatable="yes" context="explorerfiledialog|readonly">_Read-only</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
@@ -398,7 +389,6 @@
                                 <child>
                                   <object class="GtkCheckButton" id="password">
                                     <property name="label" translatable="yes" context="explorerfiledialog|password">Save with password</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
@@ -413,7 +403,6 @@
                                 <child>
                                   <object class="GtkCheckButton" id="extension">
                                     <property name="label" translatable="yes" context="explorerfiledialog|extension">_Automatic file name extension</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
@@ -428,7 +417,6 @@
                                 <child>
                                   <object class="GtkCheckButton" id="options">
                                     <property name="label" translatable="yes" context="explorerfiledialog|options">Edit _filter settings</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
@@ -444,7 +432,6 @@
                                   <object class="GtkCheckButton" id="selection">
                                     <property name="label">
 </property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>

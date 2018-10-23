@@ -310,7 +310,6 @@
                 <child>
                   <object class="GtkCheckButton" id="advancedCheckbutton">
                     <property name="label" translatable="yes" context="sanedialog|advancedCheckbutton">Show advanced options</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -415,7 +414,6 @@
                         <child>
                           <object class="GtkButton" id="optionsButton">
                             <property name="label" translatable="yes" context="sanedialog|optionsButton">Se_t</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -454,7 +452,6 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="boolCheckbutton">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -597,7 +594,6 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -614,7 +610,6 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -629,7 +624,6 @@
             <child>
               <object class="GtkButton" id="deviceInfoButton">
                 <property name="label" translatable="yes" context="sanedialog|deviceInfoButton">About Dev_ice</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -644,7 +638,6 @@
             <child>
               <object class="GtkButton" id="previewButton">
                 <property name="label" translatable="yes" context="sanedialog|previewButton">Create Previe_w</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -659,7 +652,6 @@
             <child>
               <object class="GtkButton" id="scanButton">
                 <property name="label" translatable="yes" context="sanedialog|scanButton">_Scan</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

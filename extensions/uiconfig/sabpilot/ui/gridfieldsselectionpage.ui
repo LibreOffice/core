@@ -229,7 +229,6 @@
                         <child>
                           <object class="GtkButton" id="fieldright">
                             <property name="label" translatable="yes" context="gridfieldsselectionpage|fieldright">-&gt;</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -243,7 +242,6 @@
                         <child>
                           <object class="GtkButton" id="allfieldsright">
                             <property name="label" translatable="yes" context="gridfieldsselectionpage|allfieldsright">=&gt;&gt;</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -271,7 +269,6 @@
                         <child>
                           <object class="GtkButton" id="fieldleft">
                             <property name="label" translatable="yes" context="gridfieldsselectionpage|fieldleft">&lt;-</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -285,7 +282,6 @@
                         <child>
                           <object class="GtkButton" id="allfieldsleft">
                             <property name="label" translatable="yes" context="gridfieldsselectionpage|allfieldsleft">&lt;&lt;=</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>

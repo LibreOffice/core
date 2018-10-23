@@ -820,7 +820,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="grow">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
@@ -834,7 +833,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="shrink">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
@@ -1058,7 +1056,6 @@
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkMenuToolButton" id="backgroundcolor">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="is_important">True</property>
@@ -1086,7 +1083,6 @@
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkMenuToolButton" id="highlight">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="is_important">True</property>
@@ -1114,7 +1110,6 @@
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkMenuToolButton" id="fontcolor">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="is_important">True</property>

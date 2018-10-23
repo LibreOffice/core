@@ -81,7 +81,6 @@
                     <child>
                       <object class="GtkButton" id="add">
                         <property name="label" translatable="yes" context="useradminpage|add">_Add User...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -96,7 +95,6 @@
                     <child>
                       <object class="GtkButton" id="changepass">
                         <property name="label" translatable="yes" context="useradminpage|changepass">Change _Password...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -111,7 +109,6 @@
                     <child>
                       <object class="GtkButton" id="delete">
                         <property name="label" translatable="yes" context="useradminpage|delete">_Delete User...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

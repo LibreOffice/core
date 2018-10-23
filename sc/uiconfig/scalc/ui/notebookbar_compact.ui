@@ -6903,7 +6903,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Image-GraphicFilterToolbox">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:GraphicFilterToolbox</property>
@@ -7005,7 +7004,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Image-GrafLuminance">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -7018,7 +7016,6 @@
                             </child>
                             <child>
                               <object class="GtkMenuToolButton" id="Image-GrafContrast">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -7031,7 +7028,6 @@
                             </child>
                             <child>
                               <object class="GtkMenuToolButton" id="Image-GrafTransparence">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -7090,7 +7086,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Image-AnchorMenu">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -7548,7 +7543,6 @@
                             </child>
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-XLineStyle">
-                                <property name="use_action_appearance">False</property>
                                 <property name="width_request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -7562,7 +7556,6 @@
                             </child>
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-LineWidth">
-                                <property name="use_action_appearance">False</property>
                                 <property name="width_request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -7702,7 +7695,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-AnchorMenu">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AnchorMenu</property>
@@ -8371,7 +8363,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Object-AnchorMenu">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>

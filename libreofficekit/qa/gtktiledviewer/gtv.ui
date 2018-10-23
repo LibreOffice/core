@@ -223,7 +223,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator1">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -262,7 +261,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator2">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -329,7 +327,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator3">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -354,7 +351,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator4">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -460,7 +456,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator5">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -506,7 +501,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator6">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -606,7 +600,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator7">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -645,7 +638,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator8">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -712,7 +704,6 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem" id="separator9">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>

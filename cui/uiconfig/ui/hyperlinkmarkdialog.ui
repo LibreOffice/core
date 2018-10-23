@@ -20,7 +20,6 @@
             <child>
               <object class="GtkButton" id="apply">
                 <property name="label" translatable="yes" context="hyperlinkmarkdialog|apply">_Apply</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -37,7 +36,6 @@
             <child>
               <object class="GtkButton" id="close">
                 <property name="label" translatable="yes" context="hyperlinkmarkdialog|close">_Close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

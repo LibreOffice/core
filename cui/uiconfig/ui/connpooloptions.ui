@@ -37,7 +37,6 @@
                 <child>
                   <object class="GtkCheckButton" id="connectionpooling">
                     <property name="label" translatable="yes" context="connpooloptions|connectionpooling">Connection pooling enabled</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -131,7 +130,6 @@
                     <child>
                       <object class="GtkCheckButton" id="enablepooling">
                         <property name="label" translatable="yes" context="connpooloptions|enablepooling">Enable pooling for this driver</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

@@ -772,7 +772,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="NumberFormatType">
-                                <property name="use_action_appearance">False</property>
                                 <property name="width_request">150</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -863,7 +862,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="currency">
-                                <property name="use_action_appearance">False</property>
                                 <property name="height_request">30</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -877,7 +875,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="percent">
-                                <property name="use_action_appearance">False</property>
                                 <property name="height_request">30</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -891,7 +888,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="numericfield">
-                                <property name="use_action_appearance">False</property>
                                 <property name="height_request">30</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -905,7 +901,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="NumberFormatIncDecimals">
-                                <property name="use_action_appearance">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NumberFormatIncDecimals</property>
                                 <property name="use_underline">True</property>
@@ -917,7 +912,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="NumberFormatDecDecimals">
-                                <property name="use_action_appearance">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NumberFormatDecDecimals</property>
                                 <property name="use_underline">True</property>
@@ -942,7 +936,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="grow">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
@@ -956,7 +949,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="shrink">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
@@ -1180,7 +1172,6 @@
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkToolButton" id="wraptextb">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="is_important">True</property>
@@ -1208,7 +1199,6 @@
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkMenuToolButton" id="backgroundcolor">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="is_important">True</property>
@@ -1236,7 +1226,6 @@
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkMenuToolButton" id="fontcolor">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="is_important">True</property>
@@ -1511,7 +1500,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="borderstyleb">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
@@ -1539,7 +1527,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="borderlineb">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
@@ -1567,7 +1554,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="bordercolorb">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>

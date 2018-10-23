@@ -158,7 +158,6 @@
                 <child>
                   <object class="GtkCheckButton" id="UPDATE_ALL">
                     <property name="label" translatable="yes" context="updatedialog|UPDATE_ALL">_Show all updates</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>

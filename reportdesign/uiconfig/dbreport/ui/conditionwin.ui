@@ -214,7 +214,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="ToolBoxItem1">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:Bold</property>
@@ -229,7 +228,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="ToolBoxItem2">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:Italic</property>
@@ -244,7 +242,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="ToolBoxItem3">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:Underline</property>
@@ -269,7 +266,6 @@
                 </child>
                 <child>
                   <object class="GtkMenuToolButton" id="ToolBoxItem4">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:BackgroundColor</property>
@@ -284,7 +280,6 @@
                 </child>
                 <child>
                   <object class="GtkMenuToolButton" id="ToolBoxItem5">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:FontColor</property>
@@ -299,7 +294,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="ToolBoxItem6">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:FontDialog</property>

@@ -60,7 +60,6 @@
         <child>
           <object class="GtkRadioButton" id="hostport">
             <property name="label" translatable="yes" context="mysqlnativesettings|hostport">Se_rver/port</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -177,7 +176,6 @@
         <child>
           <object class="GtkRadioButton" id="socketlabel">
             <property name="label" translatable="yes" context="mysqlnativesettings|socketlabel">So_cket:</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -219,7 +217,6 @@
         <child>
           <object class="GtkRadioButton" id="namedpipelabel">
             <property name="label" translatable="yes" context="mysqlnativesettings|namedpipelabel">Named p_ipe:</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

@@ -181,7 +181,6 @@
     <child>
       <object class="GtkCheckButton" id="userdatacb">
         <property name="label" translatable="yes" context="documentinfopage|userdatacb">_Apply user data</property>
-        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>
@@ -198,7 +197,6 @@
       <object class="GtkCheckButton" id="thumbnailsavecb">
         <property name="visible">True</property>
         <property name="label" translatable="yes" context="documentinfopage|thumbnailsavecb">Save preview image with this document</property>
-        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>
@@ -215,7 +213,6 @@
     <child>
       <object class="GtkButton" id="reset">
         <property name="label" translatable="yes" context="documentinfopage|reset">Reset Properties</property>
-        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
@@ -229,7 +226,6 @@
     <child>
       <object class="GtkButton" id="signature">
         <property name="label" translatable="yes" context="documentinfopage|signature">Di_gital Signatures...</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="has_focus">True</property>
@@ -330,7 +326,6 @@
     <child>
       <object class="GtkButton" id="changepass">
         <property name="label" translatable="yes" context="documentinfopage|changepass">Change _Password</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>

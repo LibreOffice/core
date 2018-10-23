@@ -472,7 +472,6 @@
                         <child>
                           <object class="GtkCheckButton" id="skip_empty">
                             <property name="label" translatable="yes" context="pastespecial|skip_empty">S_kip empty cells</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -490,7 +489,6 @@
                         <child>
                           <object class="GtkCheckButton" id="transpose">
                             <property name="label" translatable="yes" context="pastespecial|transpose">_Transpose</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -507,7 +505,6 @@
                         <child>
                           <object class="GtkCheckButton" id="link">
                             <property name="label" translatable="yes" context="pastespecial|link">_Link</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -598,7 +595,6 @@
                         <child>
                           <object class="GtkRadioButton" id="move_right">
                             <property name="label" translatable="yes" context="pastespecial|move_right">_Right</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

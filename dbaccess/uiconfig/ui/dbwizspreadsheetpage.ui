@@ -71,11 +71,9 @@
                     <child>
                       <object class="GtkButton" id="browse">
                         <property name="label" translatable="yes" context="dbwizspreadsheetpage|browse">Browse</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -87,11 +85,9 @@
                     <child>
                       <object class="GtkButton" id="create">
                         <property name="label" translatable="yes" context="dbwizspreadsheetpage|create">Create New</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -145,11 +141,9 @@
     <child>
       <object class="GtkCheckButton" id="passwordrequired">
         <property name="label" translatable="yes" context="dbwizspreadsheetpage|passwordrequired">_Password required</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>

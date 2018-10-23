@@ -59,7 +59,6 @@
                 <child>
                   <object class="GtkButton" id="adressbook">
                     <property name="label" translatable="yes" context="hyperlinkmailpage|adressbook">Data Sources…</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -246,7 +245,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="script">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

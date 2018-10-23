@@ -23,7 +23,6 @@
             <child>
               <object class="GtkCheckButton" id="suppressemptypages">
                 <property name="label" translatable="yes" context="printeroptions|suppressemptypages">Suppress output of empty pages</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
