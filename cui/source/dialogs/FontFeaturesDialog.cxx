@@ -197,9 +197,9 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     return sResultFontName;
 }
 
-short FontFeaturesDialog::execute()
+short FontFeaturesDialog::run()
 {
-    short nResult = m_xDialog->run();
+    short nResult = GenericDialogController::run();
     if (nResult == RET_OK)
     {
         m_sResultFontName = createFontNameWithFeatures();

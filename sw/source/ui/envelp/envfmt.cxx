@@ -292,7 +292,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         const OUString sFormatStr = pColl->GetName();
         SwParaDlg aDlg(GetDialogFrameWeld(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
 
-        if (aDlg.execute() == RET_OK)
+        if (aDlg.run() == RET_OK)
         {
             // maybe relocate defaults
             const SfxPoolItem* pItem = nullptr;

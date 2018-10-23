@@ -1286,7 +1286,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
         aDlg.SetEditHelpId( HID_CHG_PROTECT );
         if ( !bProtected )
             aDlg.ShowExtras(SfxShowExtras::CONFIRM);
-        if (aDlg.execute() == RET_OK)
+        if (aDlg.run() == RET_OK)
             aPassword = aDlg.GetPassword();
 
         if (!aPassword.isEmpty())

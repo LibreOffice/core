@@ -77,9 +77,9 @@ public:
     void      SetCharacterStyle(const OUString& rStyle);
     OUString  GetCharacterStyle() const;
 
-    short execute()
+    virtual short run() override
     {
-        int nRet = run();
+        int nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG( SwCaptionDialog, OptionHdl, Button*, void )
     aDlg.SetApplyBorderAndShadow(bCopyAttributes);
     aDlg.SetCharacterStyle( sCharacterStyle );
     aDlg.SetOrderNumberingFirst( bOrderNumberingFirst );
-    aDlg.execute();
+    aDlg.run();
     bCopyAttributes = aDlg.IsApplyBorderAndShadow();
     sCharacterStyle = aDlg.GetCharacterStyle();
     //#i61007# order of captions

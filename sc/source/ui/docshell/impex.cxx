@@ -1487,7 +1487,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             {
                 vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
                 ScReplaceWarnBox aBox(pWin ? pWin->GetFrameWeld() : nullptr);
-                if (aBox.execute() != RET_YES)
+                if (aBox.run() != RET_YES)
                 {
                     return false;
                 }

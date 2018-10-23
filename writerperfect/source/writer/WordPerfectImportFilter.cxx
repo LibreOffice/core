@@ -121,7 +121,7 @@ bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValu
         {
             SfxPasswordDialog aPasswdDlg(Application::GetFrameWeld(xDialogParent));
             aPasswdDlg.SetMinLen(0);
-            if (!aPasswdDlg.execute())
+            if (!aPasswdDlg.run())
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);

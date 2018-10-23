@@ -931,7 +931,7 @@ void OGenericUnoController::clearView()
 
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
-    ::dbaui::showError(_rInfo,getView(),getORB());
+    ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(getView()),getORB());
 }
 
 Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame)

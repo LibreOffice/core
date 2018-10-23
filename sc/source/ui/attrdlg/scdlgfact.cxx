@@ -137,7 +137,7 @@ short AbstractScInsertContentsDlg_Impl::Execute()
 
 short AbstractScInsertTableDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractScSelEntryDlg_Impl::Execute()
@@ -169,7 +169,7 @@ IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
 
 short AbstractScDPShowDetailDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl);
@@ -691,7 +691,7 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 
 short ScAbstractTabController_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool ScAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)

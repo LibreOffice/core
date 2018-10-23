@@ -75,9 +75,9 @@ MasterLayoutDialog::~MasterLayoutDialog()
 {
 }
 
-short MasterLayoutDialog::execute()
+short MasterLayoutDialog::run()
 {
-    if (m_xDialog->run() == RET_OK)
+    if (GenericDialogController::run() == RET_OK)
         applyChanges();
     return RET_OK;
 }
