@@ -23,11 +23,6 @@
   <menu:menuitem menu:id=".uno:IncrementLevel"/>
   <menu:menuitem menu:id=".uno:DecrementLevel"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:FontDialog"/>
-  <menu:menuitem menu:id=".uno:ParagraphDialog"/>
-  <menu:menuitem menu:id=".uno:OutlineBullet"/>
-  <menu:menuitem menu:id=".uno:PageDialog"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:UpdateCurIndex"/>
   <menu:menuitem menu:id=".uno:EditCurIndex"/>
   <menu:menuitem menu:id=".uno:RemoveTableOf"/>
@@ -42,9 +37,14 @@
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
   <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:FontDialog"/>
+  <menu:menuitem menu:id=".uno:ParagraphDialog"/>
+  <menu:menuitem menu:id=".uno:OutlineBullet"/>
+  <menu:menuitem menu:id=".uno:PageDialog"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
   <menu:menu menu:id=".uno:FormatStylesMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ResetAttributes"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuseparator/>
