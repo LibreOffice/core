@@ -46,7 +46,8 @@ namespace {
 
 // Begin initializer and accessor public functions
 
-OutputDevice::OutputDevice() :
+OutputDevice::OutputDevice(OutDevType eOutDevType) :
+    meOutDevType(eOutDevType),
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
@@ -85,7 +86,6 @@ OutputDevice::OutputDevice() :
     if( AllSettings::GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
         mnTextLayoutMode            = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
 
-    meOutDevType                    = OUTDEV_DONTKNOW;
     meOutDevViewType                = OutDevViewType::DontKnow;
     mbMap                           = false;
     mbClipRegion                    = false;

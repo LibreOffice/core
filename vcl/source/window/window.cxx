@@ -86,20 +86,18 @@ using namespace ::com::sun::star::datatransfer::dnd;
 
 namespace vcl {
 
-Window::Window( WindowType nType ) :
-    mpWindowImpl(new WindowImpl( nType ))
+Window::Window( WindowType nType )
+    : OutputDevice(OUTDEV_WINDOW)
+    , mpWindowImpl(new WindowImpl( nType ))
 {
-    meOutDevType = OUTDEV_WINDOW;
-
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();
 }
 
-Window::Window( vcl::Window* pParent, WinBits nStyle ) :
-    mpWindowImpl(new WindowImpl( WindowType::WINDOW ))
+Window::Window( vcl::Window* pParent, WinBits nStyle )
+    : OutputDevice(OUTDEV_WINDOW)
+    , mpWindowImpl(new WindowImpl( WindowType::WINDOW ))
 {
-    meOutDevType = OUTDEV_WINDOW;
-
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();
 
