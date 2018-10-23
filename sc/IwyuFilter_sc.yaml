@@ -10,9 +10,6 @@ blacklist:
     sc/inc/AccessibleFilterMenuItem.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleAction.hpp
-    sc/inc/address.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/Sequence.hxx
     sc/inc/addruno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -79,6 +76,8 @@ blacklist:
     sc/inc/conditio.hxx:
     # base class has to be a complete type
     - tools/link.hxx
+    # Used as type for a boost::optional variable
+    - tools/color.hxx
     sc/inc/dapiuno.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp
@@ -202,6 +201,7 @@ blacklist:
     - memory
     # needed for conditionally enabled code path
     - struct ScFormulaCellGroup
+    - namespace osl { class File; }
     sc/inc/formulaparserpool.hxx:
     # base class has to be a complete type
     - com/sun/star/sheet/XFormulaParser.hpp
@@ -215,7 +215,6 @@ blacklist:
     - com/sun/star/sheet/XFunctionAccess.hpp
     sc/inc/global.hxx:
     # base class has to be a complete type
-    - com/sun/star/uno/Reference.hxx
     - tools/ref.hxx
     sc/inc/linkuno.hxx:
     # base class has to be a complete type

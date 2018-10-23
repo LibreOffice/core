@@ -28,12 +28,6 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-    namespace accessibility {
-        struct AccessibleEventObject;
-    }
-}}}
-
 class ScMenuFloatingWindow;
 
 typedef ::cppu::ImplHelper1<

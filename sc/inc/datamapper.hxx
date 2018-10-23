@@ -24,7 +24,6 @@ namespace sc {
 
 class ScDBDataManager;
 class DataProvider;
-class ScDBDataManager;
 class DataTransformation;
 
 class SC_DLLPUBLIC ExternalDataSource
