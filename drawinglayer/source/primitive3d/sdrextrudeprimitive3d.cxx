@@ -154,7 +154,7 @@ namespace drawinglayer
                         for(a = 0; a < nCount; a++)
                         {
                             const sal_uInt32 nReducedCount(aReducedLoops.count());
-                            const basegfx::B3DPolygon aCandidate(aVerLine.getB3DPolygon(a));
+                            const basegfx::B3DPolygon& aCandidate(aVerLine.getB3DPolygon(a));
                             bool bAdd(true);
 
                             if(nReducedCount)
@@ -182,8 +182,8 @@ namespace drawinglayer
                             for(sal_uInt32 b(1); b < nReducedCount; b++)
                             {
                                 // get loop pair
-                                const basegfx::B3DPolygon aCandA(aReducedLoops.getB3DPolygon(b - 1));
-                                const basegfx::B3DPolygon aCandB(aReducedLoops.getB3DPolygon(b));
+                                const basegfx::B3DPolygon& aCandA(aReducedLoops.getB3DPolygon(b - 1));
+                                const basegfx::B3DPolygon& aCandB(aReducedLoops.getB3DPolygon(b));
 
                                 // for each loop pair create the connection edges
                                 createReducedOutlines(

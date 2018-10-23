@@ -146,12 +146,12 @@ namespace drawinglayer
 
                     if(!maFront.equal(maBack))
                     {
-                           const basegfx::B3DPolyPolygon& rPolyPolygon = rPrimitive.getB3DPolyPolygon();
+                        const basegfx::B3DPolyPolygon& rPolyPolygon = rPrimitive.getB3DPolyPolygon();
                         const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
                         if(nPolyCount)
                         {
-                               const basegfx::B3DPolygon aPolygon(rPolyPolygon.getB3DPolygon(0));
+                            const basegfx::B3DPolygon& aPolygon(rPolyPolygon.getB3DPolygon(0));
                             const sal_uInt32 nPointCount(aPolygon.count());
 
                             if(nPointCount > 2)

@@ -123,7 +123,7 @@ namespace dbaui
                         ++aTypeLoop
                     )
                 {
-                    const OUString sURLPrefix = aTypeLoop.getURLPrefix();
+                    const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
                     if ( !sURLPrefix.isEmpty() )
                     {
                         // skip mysql connection variations. It is handled in another window.
@@ -166,7 +166,7 @@ namespace dbaui
                         ++aTypeLoop
                     )
                 {
-                    const OUString sURLPrefix = aTypeLoop.getURLPrefix();
+                    const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
                     if ( !sURLPrefix.isEmpty() )
                     {
                         OUString sDisplayName = aTypeLoop.getDisplayName();

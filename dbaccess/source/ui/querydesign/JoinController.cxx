@@ -181,7 +181,7 @@ void OJoinController::impl_onModifyChanged()
 void OJoinController::SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffsetX, long nOffsetY)
 {
     // the data for the window
-    TTableWindowData::value_type pData = pTabWin->GetData();
+    const TTableWindowData::value_type& pData = pTabWin->GetData();
     OSL_ENSURE(pData != nullptr, "SaveTabWinPosSize : TabWin has no data !");
 
     // set Position & Size of data anew (with current window parameters)

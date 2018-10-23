@@ -233,7 +233,7 @@ namespace dbaui
             m_pUserName->SetText(pUidItem->GetValue());
             m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
 
-            OUString sUrl = pUrlItem->GetValue();
+            const OUString& sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
             const bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;

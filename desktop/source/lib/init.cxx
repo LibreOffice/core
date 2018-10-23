@@ -2888,7 +2888,7 @@ static char* getFontSubset (const OString& aFontName)
         {
             FontCharMapRef xFontCharMap (new FontCharMap());
             auto aDevice(VclPtr<VirtualDevice>::Create(nullptr, Size(1, 1), DeviceFormat::DEFAULT));
-            vcl::Font aFont(pList->GetFontName(nItFont));
+            const vcl::Font& aFont(pList->GetFontName(nItFont));
 
             aDevice->SetFont(aFont);
             aDevice->GetFontCharMap(xFontCharMap);

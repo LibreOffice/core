@@ -152,7 +152,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
     for(PathId i = 1;aIter != aEnd;++aIter,++i)
     {
-        const OUString sURLPrefix = aIter.getURLPrefix();
+        const OUString& sURLPrefix = aIter.getURLPrefix();
         svt::RoadmapWizardTypes::WizardPath aPath;
         aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
         m_pCollection->fillPageIds(sURLPrefix,aPath);
