@@ -2303,7 +2303,7 @@ void SdXMLExport::ExportMasterStyles_()
                 ImpXMLEXPPageMasterInfo* pInfo = mpHandoutPageMaster;
                 if(pInfo)
                 {
-                    OUString sString = pInfo->GetName();
+                    const OUString& sString = pInfo->GetName();
                     AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString );
                 }
 
@@ -2348,7 +2348,7 @@ void SdXMLExport::ExportMasterStyles_()
             ImpXMLEXPPageMasterInfo* pInfo = mvPageMasterUsageList.at( nMPageId );
             if(pInfo)
             {
-                OUString sString = pInfo->GetName();
+                const OUString& sString = pInfo->GetName();
                 AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString );
             }
 
@@ -2383,7 +2383,7 @@ void SdXMLExport::ExportMasterStyles_()
                             ImpXMLEXPPageMasterInfo* pMasterInfo = mvNotesPageMasterUsageList.at( nMPageId );
                             if(pMasterInfo)
                             {
-                                OUString sString = pMasterInfo->GetName();
+                                const OUString& sString = pMasterInfo->GetName();
                                 AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString);
                             }
 

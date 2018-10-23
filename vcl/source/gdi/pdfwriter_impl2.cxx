@@ -265,7 +265,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
         pDummyVDev->EnableOutput( false );
         pDummyVDev->SetMapMode( i_rMtf.GetPrefMapMode() );
     }
-    GDIMetaFile aMtf( i_rMtf );
+    const GDIMetaFile& aMtf( i_rMtf );
 
     for( sal_uInt32 i = 0, nCount = aMtf.GetActionSize(); i < nCount; )
     {
@@ -506,7 +506,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::EPS:
                 {
                     const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
-                    const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
+                    const GDIMetaFile&      aSubstitute( pA->GetSubstitute() );
 
                     m_rOuterFace.Push();
                     pDummyVDev->Push();
@@ -822,7 +822,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEX:
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
-                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                    const BitmapEx& aBitmapEx( pA->GetBitmapEx() );
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
@@ -902,7 +902,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             m_rOuterFace.SetClipRegion( basegfx::B2DPolyPolygon() );
                         else
                         {
-                            vcl::Region aReg( pA->GetRegion() );
+                            const vcl::Region& aReg( pA->GetRegion() );
                             m_rOuterFace.SetClipRegion( aReg.GetAsB2DPolyPolygon() );
                         }
                     }
@@ -921,7 +921,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::ISECTREGIONCLIPREGION:
                 {
                     const MetaISectRegionClipRegionAction* pA = static_cast<const MetaISectRegionClipRegionAction*>(pAction);
-                    vcl::Region aReg( pA->GetRegion() );
+                    const vcl::Region& aReg( pA->GetRegion() );
                     m_rOuterFace.IntersectClipRegion( aReg.GetAsB2DPolyPolygon() );
                 }
                 break;

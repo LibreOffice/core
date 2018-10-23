@@ -475,7 +475,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
     }
     if( pPolyPoly->Count() == 1 )
     {
-        const tools::Polygon rPoly = pPolyPoly->GetObject( 0 );
+        const tools::Polygon& rPoly = pPolyPoly->GetObject( 0 );
         sal_uInt16 nSize = rPoly.GetSize();
 
         if( nSize >= 2 )

@@ -3849,7 +3849,7 @@ Content::ResourceType Content::getResourceType(
                 {
                     // extract host name and connection port
                     NeonUri   theUri( rURL );
-                    OUString  aHostName  = theUri.GetHost();
+                    const OUString&  aHostName  = theUri.GetHost();
                     sal_Int32 nPort      = theUri.GetPort();
                     throw DAVException( DAVException::DAV_HTTP_TIMEOUT,
                                         NeonUri::makeConnectionEndPointString( aHostName,

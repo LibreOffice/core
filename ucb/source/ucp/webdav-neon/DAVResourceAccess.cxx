@@ -1021,7 +1021,7 @@ void DAVResourceAccess::initialize()
     if ( m_aPath.isEmpty() )
     {
         NeonUri aURI( m_aURL );
-        OUString aPath( aURI.GetPath() );
+        const OUString& aPath( aURI.GetPath() );
 
         /* #134089# - Check URI */
         if ( aPath.isEmpty() )

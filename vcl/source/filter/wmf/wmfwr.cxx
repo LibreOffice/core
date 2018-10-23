@@ -1398,7 +1398,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     {
                         if( pA->GetMapMode().GetMapUnit() == MapUnit::MapRelative )
                         {
-                            MapMode aMM = pA->GetMapMode();
+                            const MapMode& aMM = pA->GetMapMode();
                             Fraction aScaleX = aMM.GetScaleX();
                             Fraction aScaleY = aMM.GetScaleY();
 
@@ -1526,7 +1526,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case MetaActionType::EPS :
                 {
                     const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
-                    const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
+                    const GDIMetaFile& aGDIMetaFile( pA->GetSubstitute() );
 
                     size_t nCount = aGDIMetaFile.GetActionSize();
                     for ( size_t i = 0; i < nCount; i++ )

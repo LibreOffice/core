@@ -717,7 +717,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             }
 
             XInteractionRequestImpl request;
-            Reference<XInteractionRequest> xReq(request.getRequest());
+            const Reference<XInteractionRequest>& xReq(request.getRequest());
             xInt->handle(xReq);
             if (request.approved()) {
                 bReplace = true;

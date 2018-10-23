@@ -189,7 +189,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
              msContinueListId.isEmpty() )
         {
-            OUString Last( rTextListsHelper.GetLastProcessedListId() );
+            const OUString& Last( rTextListsHelper.GetLastProcessedListId() );
             if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
                  && Last != msListId )
             {

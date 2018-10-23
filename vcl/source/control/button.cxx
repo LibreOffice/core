@@ -2256,9 +2256,8 @@ void RadioButton::ImplUncheckAllOther()
 
     std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup(false));
     // iterate over radio button group and checked buttons
-    for (auto const& elem : aGroup)
+    for (VclPtr<RadioButton>& pWindow : aGroup)
     {
-        VclPtr<RadioButton> pWindow = elem;
         if ( pWindow->IsChecked() )
         {
             pWindow->SetState( false );

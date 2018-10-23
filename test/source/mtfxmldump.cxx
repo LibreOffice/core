@@ -541,7 +541,6 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 writeStartPoint(rWriter, pMetaLineAction->GetStartPoint());
                 writeEndPoint(rWriter, pMetaLineAction->GetEndPoint());
 
-                LineInfo aLineInfo = pMetaLineAction->GetLineInfo();
                 writeLineInfo(rWriter, pMetaLineAction->GetLineInfo());
                 rWriter.endElement();
             }

@@ -1126,7 +1126,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         case NS_ooxml::LN_CT_DocPartGallery_val:
         {
-            OUString sGlossaryEntryGallery = sStringValue;
+            const OUString& sGlossaryEntryGallery = sStringValue;
             if(m_pImpl->GetTopContext().get())
             {
                 OUString sName = sGlossaryEntryGallery + ":" + m_sGlossaryEntryName;
