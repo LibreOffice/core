@@ -84,6 +84,46 @@ namespace dbaui
         return bChangedSomething;
     }
 
+    DBCharSetListBox::DBCharSetListBox(std::unique_ptr<weld::ComboBox> xControl)
+        : m_xControl(std::move(xControl))
+    {
+        for (auto const& charset : m_aCharSets)
+        {
+            m_xControl->append_text(charset.getDisplayName());
+        }
+    }
+
+    void DBCharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
+    {
+        OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
+        if (aFind == m_aCharSets.end())
+        {
+            OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
+            aFind = m_aCharSets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
+        }
+
+        if (aFind == m_aCharSets.end())
+            m_xControl->set_active(-1);
+        else
+            m_xControl->set_active_text((*aFind).getDisplayName());
+    }
+
+    bool DBCharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
+    {
+        bool bChangedSomething = false;
+        if (m_xControl->get_value_changed_from_saved())
+        {
+            OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName(m_xControl->get_active_text());
+            OSL_ENSURE( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
+            if ( aFind != m_aCharSets.end() )
+            {
+                _rSet.Put( SfxStringItem( _nItemId, (*aFind).getIanaName() ) );
+                bChangedSomething = true;
+            }
+        }
+        return bChangedSomething;
+    }
+
 } // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

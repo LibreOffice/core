@@ -23,6 +23,7 @@
 #include "charsets.hxx"
 
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 class SfxItemSet;
 
@@ -40,6 +41,24 @@ namespace dbaui
 
     private:
         OCharsetDisplay     m_aCharSets;
+    };
+
+    // CharSetListBox
+    class DBCharSetListBox
+    {
+    public:
+        DBCharSetListBox(std::unique_ptr<weld::ComboBox> xControl);
+
+        void    SelectEntryByIanaName( const OUString& _rIanaName );
+        bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );
+
+        weld::ComboBox* get_widget() { return m_xControl.get(); }
+        void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
+        void show() { m_xControl->show(); }
+
+    private:
+        OCharsetDisplay     m_aCharSets;
+        std::unique_ptr<weld::ComboBox> m_xControl;
     };
 
 } // namespace dbaui
