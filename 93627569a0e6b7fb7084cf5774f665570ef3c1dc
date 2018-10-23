@@ -52,6 +52,24 @@
       "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_5f081e27",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-10-23T07:44:39Z",
+      "side": 1,
+      "message": "Why other methods do not use this advantage?\n\n    friend bool     operator \u003d\u003d ( const OUString\u0026 rStr1,    const sal_Unicode * pStr2 )\n                        { return rStr1.compareTo( pStr2 ) \u003d\u003d 0; }\n    friend bool     operator \u003d\u003d ( const sal_Unicode * pStr1,    const OUString\u0026 rStr2 )\n                        { return OUString( pStr1 ).compareTo( rStr2 ) \u003d\u003d 0; }\n\n    friend bool     operator \u003c  ( const OUString\u0026 rStr1,    const OUString\u0026 rStr2 )\n                        { return rStr1.compareTo( rStr2 ) \u003c 0; }\n    friend bool     operator \u003e  ( const OUString\u0026 rStr1,    const OUString\u0026 rStr2 )\n                        { return rStr1.compareTo( rStr2 ) \u003e 0; }\n    friend bool     operator \u003c\u003d ( const OUString\u0026 rStr1,    const OUString\u0026 rStr2 )\n                        { return rStr1.compareTo( rStr2 ) \u003c\u003d 0; }\n    friend bool     operator \u003e\u003d ( const OUString\u0026 rStr1,    const OUString\u0026 rStr2 )\n                        { return rStr1.compareTo( rStr2 ) \u003e\u003d 0; }",
+      "parentUuid": "1f1a1f67_5c838c05",
+      "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
