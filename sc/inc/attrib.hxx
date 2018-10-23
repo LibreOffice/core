@@ -214,21 +214,6 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 };
 
-class ScDoubleItem : public SfxPoolItem
-{
-public:
-                static SfxPoolItem* CreateDefault();
-                ScDoubleItem( sal_uInt16 nWhich, double nVal );
-                ScDoubleItem( const ScDoubleItem& rItem );
-                virtual ~ScDoubleItem() override;
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-private:
-    double  nValue;
-};
-
 /** Member ID for "page scale to width" value in QueryValue() and PutValue(). */
 const sal_uInt8 SC_MID_PAGE_SCALETO_WIDTH    = 1;
 /** Member ID for "page scale to height" value in QueryValue() and PutValue(). */

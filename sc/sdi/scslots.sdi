@@ -30,7 +30,6 @@ module StarCalc
     };
     item ScProtection ScProtectionAttr;
 
-    item double ScDoubleItem;
     item INT32 SfxIntegerListItem;
 
 
