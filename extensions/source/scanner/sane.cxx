@@ -570,7 +570,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     if( ( nOption = GetOptionByName( "resolution" ) ) != -1 )
         (void)GetOptionValue( nOption, fResl );
 
-    sal_uInt8* pBuffer = nullptr;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
 
     SANE_Status nStatus = SANE_STATUS_GOOD;
 
@@ -636,7 +636,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
 #endif
             if( ! pBuffer )
             {
-                pBuffer = new sal_uInt8[ BYTE_BUFFER_SIZE < 4*aParams.bytes_per_line ? 4*aParams.bytes_per_line : BYTE_BUFFER_SIZE ];
+                pBuffer.reset(new sal_uInt8[ BYTE_BUFFER_SIZE < 4*aParams.bytes_per_line ? 4*aParams.bytes_per_line : BYTE_BUFFER_SIZE ]);
             }
 
             if( aParams.last_frame )
@@ -710,12 +710,12 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                         fprintf( stderr, "Timeout on sane_read descriptor\n" );
                 }
                 nLen = 0;
-                nStatus = p_read( maHandle, pBuffer, BYTE_BUFFER_SIZE, &nLen );
+                nStatus = p_read( maHandle, pBuffer.get(), BYTE_BUFFER_SIZE, &nLen );
                 CheckConsistency( "sane_read" );
                 if( nLen && ( nStatus == SANE_STATUS_GOOD ||
                               nStatus == SANE_STATUS_EOF ) )
                 {
-                    bSuccess = (static_cast<size_t>(nLen) == fwrite( pBuffer, 1, nLen, pFrame ));
+                    bSuccess = (static_cast<size_t>(nLen) == fwrite( pBuffer.get(), 1, nLen, pFrame ));
                     if (!bSuccess)
                         break;
                 }
@@ -793,13 +793,13 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     ( eType == FrameStyle_Gray && aParams.depth == 8 )
                     )
                 {
-                    SANE_Int items_read = fread( pBuffer, 1, aParams.bytes_per_line, pFrame );
+                    SANE_Int items_read = fread( pBuffer.get(), 1, aParams.bytes_per_line, pFrame );
                     if (items_read != aParams.bytes_per_line)
                     {
                         SAL_WARN( "extensions.scanner", "short read, padding with zeros" );
-                        memset(pBuffer + items_read, 0, aParams.bytes_per_line - items_read);
+                        memset(pBuffer.get() + items_read, 0, aParams.bytes_per_line - items_read);
                     }
-                    aConverter.WriteBytes(pBuffer, aParams.bytes_per_line);
+                    aConverter.WriteBytes(pBuffer.get(), aParams.bytes_per_line);
                 }
                 else if( eType == FrameStyle_Gray )
                 {
@@ -875,7 +875,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
         p_cancel( maHandle );
         CheckConsistency( "sane_cancel" );
     }
-    delete [] pBuffer;
+    pBuffer.reset();
 
     ReloadOptions();
 
