@@ -16,10 +16,7 @@ namespace writerperfect
 {
 template <> struct DocumentHandlerFor<OdgGenerator>
 {
-    static const rtl::OUString name()
-    {
-        return rtl::OUString("com.sun.star.comp.Draw.XMLOasisImporter");
-    }
+    static const OUString name() { return OUString("com.sun.star.comp.Draw.XMLOasisImporter"); }
 };
 }
 

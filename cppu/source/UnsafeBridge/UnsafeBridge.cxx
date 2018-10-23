@@ -43,7 +43,7 @@ public:
     virtual void v_enter() override;
     virtual void v_leave() override;
 
-    virtual bool v_isValid(rtl::OUString * pReason) override;
+    virtual bool v_isValid(OUString * pReason) override;
 };
 
 UnsafeBridge::UnsafeBridge()
@@ -103,7 +103,7 @@ void UnsafeBridge::v_leave()
     m_mutex.release();
 }
 
-bool UnsafeBridge::v_isValid(rtl::OUString * pReason)
+bool UnsafeBridge::v_isValid(OUString * pReason)
 {
     bool result = m_count > 0;
     if (!result)

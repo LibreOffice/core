@@ -155,7 +155,7 @@ RDFaExportHelper::AddRDFa(
                 xContent->getValue());
         }
 
-        ::std::vector<::rtl::OUString> curies;
+        ::std::vector<OUString> curies;
         for (rdf::Statement const& rStatement : rStatements)
         {
             curies.push_back(makeCURIE(&m_rExport, rStatement.Predicate));

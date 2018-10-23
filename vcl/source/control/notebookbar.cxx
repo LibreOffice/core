@@ -49,7 +49,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
         if (i)
             aName += OUString::number(i);
 
-        pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8)));
+        pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>(OUStringToOString(aName, RTL_TEXTENCODING_UTF8)));
         if (pContextContainer)
             m_pContextContainers.push_back(pContextContainer);
         i++;

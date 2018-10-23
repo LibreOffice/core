@@ -47,11 +47,11 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    WpftLoader createCalcLoader(const rtl::OUString& rFile) const;
+    WpftLoader createCalcLoader(const OUString& rFile) const;
 
-    WpftLoader createLoader(const rtl::OUString& rUrl, const rtl::OUString& rFactoryUrl) const;
+    WpftLoader createLoader(const OUString& rUrl, const OUString& rFactoryUrl) const;
 
-    rtl::OUString makeUrl(const rtl::OUString& rFile) const;
+    OUString makeUrl(const OUString& rFile) const;
 
 private:
     uno::Reference<lang::XMultiServiceFactory> m_xFilterFactory;
@@ -83,13 +83,12 @@ void ImportTest::testWK3WithFM3()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), nCharColor); // blue text
 }
 
-WpftLoader ImportTest::createCalcLoader(const rtl::OUString& rFile) const
+WpftLoader ImportTest::createCalcLoader(const OUString& rFile) const
 {
     return createLoader(makeUrl(rFile), "private:factory/scalc");
 }
 
-WpftLoader ImportTest::createLoader(const rtl::OUString& rUrl,
-                                    const rtl::OUString& rFactoryUrl) const
+WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFactoryUrl) const
 {
     utl::MediaDescriptor aDesc;
     aDesc[utl::MediaDescriptor::PROP_URL()] <<= rUrl;
@@ -97,7 +96,7 @@ WpftLoader ImportTest::createLoader(const rtl::OUString& rUrl,
     uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());
     m_xTypeDetection->queryTypeByDescriptor(lDesc, true);
     aDesc = lDesc;
-    rtl::OUString sFilter;
+    OUString sFilter;
     aDesc[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilter;
     CPPUNIT_ASSERT(!sFilter.isEmpty());
     const uno::Reference<document::XFilter> xFilter(m_xFilterFactory->createInstance(sFilter),
@@ -106,7 +105,7 @@ WpftLoader ImportTest::createLoader(const rtl::OUString& rUrl,
     return WpftLoader(rUrl, xFilter, rFactoryUrl, m_xDesktop, m_xTypeMap, m_xContext);
 }
 
-rtl::OUString ImportTest::makeUrl(const rtl::OUString& rFile) const
+OUString ImportTest::makeUrl(const OUString& rFile) const
 {
     return const_cast<ImportTest*>(this)->m_directories.getURLFromSrc("/" TEST_DIR "/" + rFile);
 }

@@ -165,7 +165,7 @@ OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
 }
 
 /// Store display index together with name in user data
-sal_Int32 SdStartPresentationDlg::InsertDisplayEntry(const rtl::OUString &aName,
+sal_Int32 SdStartPresentationDlg::InsertDisplayEntry(const OUString &aName,
                                                      sal_Int32            nDisplay)
 {
     m_xLBMonitor->append(OUString::number(nDisplay), aName);

@@ -1653,7 +1653,7 @@ double DemoRenderer::getAndResetBenchmark(const RenderStyle style)
         double avgtime = maRenderers[i]->sumTime / maRenderers[i]->countTime;
         geomean *= avgtime;
         fprintf(stderr, "%s: %f (iteration: %d*%d*%d)\n",
-                rtl::OUStringToOString(maRenderers[i]->getName(),
+                OUStringToOString(maRenderers[i]->getName(),
                 RTL_TEXTENCODING_UTF8).getStr(), avgtime,
                 maRenderers[i]->countTime, maRenderers[i]->getTestRepeatCount(),
                 (style == RENDER_THUMB) ? THUMB_REPEAT_FACTOR : 1);
@@ -2170,7 +2170,7 @@ class DemoApp : public Application
         fprintf(stderr,"  --show <renderer>  - start with a given renderer, options are:\n");
         OUString aRenderers(rRenderer.getRendererList());
         fprintf(stderr,"         %s\n",
-                rtl::OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
         fprintf(stderr,"  --test <iterCount> - create benchmark data\n");
         fprintf(stderr,"  --widgets          - launch the widget test.\n");
         fprintf(stderr,"  --threads          - render from multiple threads.\n");
@@ -2224,7 +2224,7 @@ public:
                 else if (aArg.startsWith("--"))
                 {
                     fprintf(stderr,"Unknown argument '%s'\n",
-                            rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8).getStr());
+                            OUStringToOString(aArg, RTL_TEXTENCODING_UTF8).getStr());
                     return showHelp(aRenderer);
                 }
             }

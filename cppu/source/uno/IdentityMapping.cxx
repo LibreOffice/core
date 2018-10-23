@@ -46,7 +46,7 @@ static void s_free(uno_Mapping * pMapping)
 
 static void s_acquire(uno_Mapping * pMapping)
 {
-    static rtl::OUString s_purpose;
+    static OUString s_purpose;
 
     if (1 == osl_atomic_increment(&static_cast<IdentityMapping *>(pMapping)->m_nRef))
     {

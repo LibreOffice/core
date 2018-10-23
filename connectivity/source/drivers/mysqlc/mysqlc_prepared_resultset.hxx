@@ -95,11 +95,11 @@ class OPreparedResultSet final : public OBase_Mutex,
     virtual ~OPreparedResultSet() override = default;
 
 public:
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OPreparedResultSet(OConnection& rConn, OPreparedStatement* pStmt, MYSQL_STMT* pMyStmt);
 
@@ -147,7 +147,7 @@ public:
     // XRow
     sal_Bool SAL_CALL wasNull() override;
 
-    rtl::OUString SAL_CALL getString(sal_Int32 column) override;
+    OUString SAL_CALL getString(sal_Int32 column) override;
 
     sal_Bool SAL_CALL getBoolean(sal_Int32 column) override;
     sal_Int8 SAL_CALL getByte(sal_Int32 column) override;
@@ -205,7 +205,7 @@ public:
     void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x) override;
     void SAL_CALL updateFloat(sal_Int32 column, float x) override;
     void SAL_CALL updateDouble(sal_Int32 column, double x) override;
-    void SAL_CALL updateString(sal_Int32 column, const rtl::OUString& x) override;
+    void SAL_CALL updateString(sal_Int32 column, const OUString& x) override;
     void SAL_CALL updateBytes(sal_Int32 column, const css::uno::Sequence<sal_Int8>& x) override;
     void SAL_CALL updateDate(sal_Int32 column, const css::util::Date& x) override;
     void SAL_CALL updateTime(sal_Int32 column, const css::util::Time& x) override;
@@ -220,7 +220,7 @@ public:
     void SAL_CALL updateNumericObject(sal_Int32 column, const Any& x, sal_Int32 scale) override;
 
     // XColumnLocate
-    sal_Int32 SAL_CALL findColumn(const rtl::OUString& columnName) override;
+    sal_Int32 SAL_CALL findColumn(const OUString& columnName) override;
 
     // XRowLocate
     Any SAL_CALL getBookmark() override;

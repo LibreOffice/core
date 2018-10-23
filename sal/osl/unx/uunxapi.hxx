@@ -60,7 +60,7 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
 
 namespace osl
 {
-    inline int access(const rtl::OUString& ustrPath, int mode)
+    inline int access(const OUString& ustrPath, int mode)
     {
         return access_u(ustrPath.pData, mode);
     }
@@ -79,18 +79,18 @@ namespace osl
      **********************************/
 
     inline bool realpath(
-        const rtl::OUString& ustrFileName,
-        rtl::OUString& ustrResolvedName)
+        const OUString& ustrFileName,
+        OUString& ustrResolvedName)
     {
         return realpath_u(ustrFileName.pData, &ustrResolvedName.pData);
     }
 
-    inline int lstat(const rtl::OUString& ustrPath, struct stat& buf)
+    inline int lstat(const OUString& ustrPath, struct stat& buf)
     {
         return lstat_u(ustrPath.pData, &buf);
     }
 
-    inline int mkdir(const rtl::OUString& aPath, mode_t aMode)
+    inline int mkdir(const OUString& aPath, mode_t aMode)
     {
         return mkdir_u(aPath.pData, aMode);
     }

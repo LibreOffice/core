@@ -458,7 +458,7 @@ public:
     /** Set the name of the sidebar context that is broadcast on calls
         to Activation().
     */
-    void SetContextName (const ::rtl::OUString& rsContextName);
+    void SetContextName (const OUString& rsContextName);
 
     /** Broadcast a sidebar context change.
         This method is typically called from Activate() or

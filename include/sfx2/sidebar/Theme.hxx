@@ -155,27 +155,27 @@ public:
     // beans::XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue (
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsPropertyName,
         const css::uno::Any& rValue) override;
     virtual css::uno::Any SAL_CALL getPropertyValue (
-        const ::rtl::OUString& rsPropertyName) override;
+        const OUString& rsPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
     virtual void SAL_CALL removePropertyChangeListener(
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
     virtual void SAL_CALL addVetoableChangeListener(
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     // beans::XPropertySetInfo
     virtual css::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override;
-    virtual css::beans::Property SAL_CALL getPropertyByName (const ::rtl::OUString& rsName) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName (const ::rtl::OUString& rsName) override;
+    virtual css::beans::Property SAL_CALL getPropertyByName (const OUString& rsName) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName (const OUString& rsName) override;
 
 private:
     static Theme& GetCurrentTheme();
@@ -189,9 +189,9 @@ private:
     bool mbIsHighContrastMode;
     bool mbIsHighContrastModeSetManually;
 
-    typedef std::unordered_map<rtl::OUString,ThemeItem> PropertyNameToIdMap;
+    typedef std::unordered_map<OUString,ThemeItem> PropertyNameToIdMap;
     PropertyNameToIdMap maPropertyNameToIdMap;
-    typedef std::vector<rtl::OUString> PropertyIdToNameMap;
+    typedef std::vector<OUString> PropertyIdToNameMap;
     PropertyIdToNameMap maPropertyIdToNameMap;
     typedef ::std::vector<css::uno::Any> RawValueContainer;
     RawValueContainer maRawValues;

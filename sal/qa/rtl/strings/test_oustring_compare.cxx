@@ -48,18 +48,18 @@ void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
     const char* const abc = "abc";
     const char* const abcd = "abcd";
     const char* const empty = "";
-    CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAscii(abc));
-    CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAsciiL(abc,3));
-    CPPUNIT_ASSERT(!rtl::OUString("abc").
+    CPPUNIT_ASSERT(!OUString().equalsIgnoreAsciiCaseAscii(abc));
+    CPPUNIT_ASSERT(!OUString().equalsIgnoreAsciiCaseAsciiL(abc,3));
+    CPPUNIT_ASSERT(!OUString("abc").
                    equalsIgnoreAsciiCaseAscii(empty));
-    CPPUNIT_ASSERT(!rtl::OUString("abc").
+    CPPUNIT_ASSERT(!OUString("abc").
                    equalsIgnoreAsciiCaseAsciiL(empty,0));
 
-    CPPUNIT_ASSERT(rtl::OUString("abc").
+    CPPUNIT_ASSERT(OUString("abc").
                    equalsIgnoreAsciiCaseAscii(abc));
-    CPPUNIT_ASSERT(!rtl::OUString("abcd").
+    CPPUNIT_ASSERT(!OUString("abcd").
                    equalsIgnoreAsciiCaseAscii(abc));
-    CPPUNIT_ASSERT(!rtl::OUString("abc").
+    CPPUNIT_ASSERT(!OUString("abc").
                    equalsIgnoreAsciiCaseAscii(abcd));
 }
 
@@ -67,12 +67,12 @@ void test::oustring::Compare::compareToIgnoreAsciiCase()
 {
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
-        rtl::OUString("abc").compareToIgnoreAsciiCase("ABC"));
+        OUString("abc").compareToIgnoreAsciiCase("ABC"));
     CPPUNIT_ASSERT(
-        rtl::OUString("ABC").compareToIgnoreAsciiCase("abcdef")
+        OUString("ABC").compareToIgnoreAsciiCase("abcdef")
         < 0);
     CPPUNIT_ASSERT(
-        rtl::OUString("A").compareToIgnoreAsciiCase("_") > 0);
+        OUString("A").compareToIgnoreAsciiCase("_") > 0);
 }
 
 void test::oustring::Compare::compareTo()

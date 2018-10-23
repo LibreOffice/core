@@ -702,7 +702,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles()
 namespace
 {
 
-bool lcl_matchFilter( const rtl::OUString& rFilter, const rtl::OUString& rExt )
+bool lcl_matchFilter( const OUString& rFilter, const OUString& rExt )
 {
     const sal_Unicode cSep {';'};
     sal_Int32 nIdx {0};

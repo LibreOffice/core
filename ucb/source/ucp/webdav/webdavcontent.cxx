@@ -90,8 +90,8 @@ namespace
 {
 void lcl_sendPartialGETRequest( bool &bError,
                                 DAVException &aLastException,
-                                const std::vector< rtl::OUString >& rProps,
-                                std::vector< rtl::OUString > &aHeaderNames,
+                                const std::vector< OUString >& rProps,
+                                std::vector< OUString > &aHeaderNames,
                                 const std::unique_ptr< DAVResourceAccess > &xResAccess,
                                 std::unique_ptr< ContentProperties > &xProps,
                                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -104,7 +104,7 @@ void lcl_sendPartialGETRequest( bool &bError,
             OUString( "bytes=0-0" )));
 
     bool bIsRequestSize = std::any_of(aHeaderNames.begin(), aHeaderNames.end(),
-        [](const rtl::OUString& rHeaderName) { return rHeaderName == "Content-Length"; });
+        [](const OUString& rHeaderName) { return rHeaderName == "Content-Length"; });
 
     if ( bIsRequestSize )
     {
@@ -126,7 +126,7 @@ void lcl_sendPartialGETRequest( bool &bError,
             // the ContentProperties maps "Content-Length" to the UCB "Size" property
             // This would have an unrealistic value of 1 byte because we did only a partial GET
             // Solution: if "Content-Range" is present, map it with UCB "Size" property
-            rtl::OUString aAcceptRanges, aContentRange, aContentLength;
+            OUString aAcceptRanges, aContentRange, aContentLength;
             std::vector< DAVPropertyValue > &aResponseProps = aResource.properties;
             for ( const auto& rResponseProp : aResponseProps )
             {
@@ -157,7 +157,7 @@ void lcl_sendPartialGETRequest( bool &bError,
                 sal_Int32 nSlash = aContentRange.lastIndexOf( '/' );
                 if ( nSlash != -1 )
                 {
-                    rtl::OUString aSize = aContentRange.copy( nSlash + 1 );
+                    OUString aSize = aContentRange.copy( nSlash + 1 );
                     // "*" means that the instance-length is unknown at the time when the response was generated
                     if ( aSize != "*" )
                     {
@@ -710,7 +710,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "removeProperty" )
     {
-        rtl::OUString sPropName;
+        OUString sPropName;
         if ( !( aCommand.Argument >>= sPropName ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -815,7 +815,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
 
     // Take into account special properties with custom namespace
     // using <prop:the_propname xmlns:prop="the_namespace">
-    rtl::OUString aSpecialName;
+    OUString aSpecialName;
     bool bIsSpecial = DAVProperties::isUCBSpecialProperty( aProperty.Name, aSpecialName );
 
     // Note: This requires network access!
@@ -912,7 +912,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
     }
 }
 
-void Content::removeProperty( const rtl::OUString& Name,
+void Content::removeProperty( const OUString& Name,
                               const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
 #if 0
@@ -1016,7 +1016,7 @@ void Content::removeProperty( const rtl::OUString& Name,
 }
 
 // virtual
-void SAL_CALL Content::addProperty( const rtl::OUString& Name,
+void SAL_CALL Content::addProperty( const OUString& Name,
                                     sal_Int16 Attributes,
                                     const uno::Any& DefaultValue )
 {
@@ -1031,7 +1031,7 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
 }
 
 // virtual
-void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
+void SAL_CALL Content::removeProperty( const OUString& Name )
 {
     removeProperty( Name,
                     uno::Reference< ucb::XCommandEnvironment >() );
@@ -1709,7 +1709,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Optional props.
 
 
-            rtl::OUString aSpecialName;
+            OUString aSpecialName;
             bool bIsSpecial = DAVProperties::isUCBSpecialProperty( rName, aSpecialName );
 
             if ( !xInfo.is() )

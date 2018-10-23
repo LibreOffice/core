@@ -48,7 +48,7 @@ namespace connectivity
                                     public  OPreparedStatement_Base
         {
         protected:
-            ::rtl::OUString                                       m_sSqlStatement;
+            OUString                                              m_sSqlStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
 
             XSQLDA*         m_pOutSqlda;
@@ -88,7 +88,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // a constructor, which is required for returning objects:
             OPreparedStatement( Connection* _pConnection,
-                                const ::rtl::OUString& sql);
+                                const OUString& sql);
 
             //XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -109,7 +109,7 @@ namespace connectivity
 
             // XParameters
             virtual void SAL_CALL setNull(sal_Int32 nIndex, sal_Int32 nValue) override;
-            virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) override;
+            virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
             virtual void SAL_CALL setBoolean( sal_Int32 nIndex, sal_Bool nValue) override;
             virtual void SAL_CALL setByte(sal_Int32 nIndex, sal_Int8 nValue) override;
             virtual void SAL_CALL setShort(sal_Int32 nIndex, sal_Int16 nValue) override;
@@ -117,7 +117,7 @@ namespace connectivity
             virtual void SAL_CALL setLong(sal_Int32 nIndex, sal_Int64 nValue) override;
             virtual void SAL_CALL setFloat( sal_Int32 parameterIndex, float x ) override;
             virtual void SAL_CALL setDouble( sal_Int32 parameterIndex, double x ) override;
-            virtual void SAL_CALL setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) override;
+            virtual void SAL_CALL setString( sal_Int32 parameterIndex, const OUString& x ) override;
             virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x ) override;
             virtual void SAL_CALL setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
             virtual void SAL_CALL setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;

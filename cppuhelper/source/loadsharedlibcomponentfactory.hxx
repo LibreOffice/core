@@ -28,12 +28,12 @@ namespace rtl { class OUString; }
 namespace cppuhelper { namespace detail {
 
 css::uno::Environment getEnvironment(
-    rtl::OUString const & name, rtl::OUString const & implementation);
+    OUString const & name, OUString const & implementation);
 
 void loadSharedLibComponentFactory(
-    rtl::OUString const & uri, rtl::OUString const & environment,
-    rtl::OUString const & prefix, rtl::OUString const & implementation,
-    rtl::OUString const & constructor,
+    OUString const & uri, OUString const & environment,
+    OUString const & prefix, OUString const & implementation,
+    OUString const & constructor,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
     WrapperConstructorFn * constructorFunction,
     css::uno::Reference<css::uno::XInterface> * factory);

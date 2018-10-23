@@ -28,14 +28,14 @@ namespace framework
 
 struct AddonStatusbarItemData
 {
-    rtl::OUString     aLabel;
+    OUString     aLabel;
 };
 
 struct AddonStatusbarItem
 {
-    rtl::OUString     aCommandURL;
-    rtl::OUString     aLabel;
-    rtl::OUString     aContext;
+    OUString     aCommandURL;
+    OUString     aLabel;
+    OUString     aContext;
     StatusBarItemBits nItemBits;
     sal_Int16         nWidth;
 };
@@ -44,25 +44,25 @@ typedef ::std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;
 
 namespace StatusbarMerger
 {
-    bool IsCorrectContext( const ::rtl::OUString& aContext );
+    bool IsCorrectContext( const OUString& aContext );
 
     bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                        AddonStatusbarItemContainer& rContainer );
 
     sal_uInt16 FindReferencePos( StatusBar* pStatusbar,
-                                        const ::rtl::OUString& rReferencePoint );
+                                        const OUString& rReferencePoint );
 
     bool ProcessMergeOperation( StatusBar* pStatusbar,
                                        sal_uInt16 nPos,
                                        sal_uInt16& rItemId,
-                                       const ::rtl::OUString& rMergeCommand,
-                                       const ::rtl::OUString& rMergeCommandParameter,
+                                       const OUString& rMergeCommand,
+                                       const OUString& rMergeCommandParameter,
                                        const AddonStatusbarItemContainer& rItems );
 
     bool ProcessMergeFallback( StatusBar* pStatusbar,
                                       sal_uInt16& rItemId,
-                                      const ::rtl::OUString& rMergeCommand,
-                                      const ::rtl::OUString& rMergeFallback,
+                                      const OUString& rMergeCommand,
+                                      const OUString& rMergeFallback,
                                       const AddonStatusbarItemContainer& rItems );
 }
 

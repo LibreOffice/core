@@ -27,7 +27,7 @@ bool EBookImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStr
                                          OdtGenerator& rGenerator,
                                          utl::MediaDescriptor& rDescriptor)
 {
-    rtl::OUString aFilterName;
+    OUString aFilterName;
 
     rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
     assert(!aFilterName.isEmpty());

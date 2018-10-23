@@ -589,7 +589,7 @@ STDMETHODIMP CMAccessible::get_accHelpTopic(BSTR *, VARIANT, long *)
     return E_NOTIMPL;
 }
 
-static bool GetMnemonicChar( const ::rtl::OUString& aStr, sal_Unicode* wStr)
+static bool GetMnemonicChar( const OUString& aStr, sal_Unicode* wStr)
 {
     for (sal_Int32 i = 0;; i += 2) {
         i = aStr.indexOf('~', i);
@@ -724,7 +724,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                         if(!pRXIE.is())
                             return S_FALSE;
 
-                        ::rtl::OUString ouStr = pRXIE->getTitledBorderText();
+                        OUString ouStr = pRXIE->getTitledBorderText();
                         sal_Unicode key;
                         if(GetMnemonicChar(ouStr, &key))
                         {
@@ -2725,18 +2725,18 @@ OUString CMAccessible::get_StringFromAny(Any const & pAny)
         }
     case TypeClass_STRING:
         {
-            ::rtl::OUString val;
+            OUString val;
             pAny >>= val;
             return val;
         }
     case TypeClass_SEQUENCE:
         {
-            if(pAny.getValueType() == cppu::UnoType<Sequence< ::rtl::OUString >>::get())
+            if(pAny.getValueType() == cppu::UnoType<Sequence< OUString >>::get())
             {
-                Sequence < ::rtl::OUString > val;
+                Sequence < OUString > val;
                 pAny >>= val;
 
-                ::rtl::OUStringBuffer pString;
+                OUStringBuffer pString;
 
                 int count = val.getLength();
 
@@ -2947,7 +2947,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         case TypeClass_STRING:
             {
                 pvData->vt = VT_BSTR;
-                ::rtl::OUString val;
+                OUString val;
                 rAnyVal >>= val;
                 pvData->bstrVal = SysAllocString(o3tl::toW(val.getStr()));
                 break;
@@ -3200,7 +3200,7 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
         pRXAttr = pRXI.get();
         css::uno::Any  anyVal = pRXAttr->getExtendedAttributes();
 
-        ::rtl::OUString val;
+        OUString val;
         anyVal >>= val;
 
         if(*pAttr)

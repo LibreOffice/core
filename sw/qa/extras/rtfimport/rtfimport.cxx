@@ -775,8 +775,7 @@ public:
 
     void Import()
     {
-        struct DefaultLocale
-            : public comphelper::ConfigurationProperty<DefaultLocale, rtl::OUString>
+        struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, OUString>
         {
             static OUString path()
             {

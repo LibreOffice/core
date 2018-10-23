@@ -22,7 +22,7 @@
 #include <sal/log.hxx>
 
 @implementation NSURL (OOoAdditions)
-- (rtl::OUString) OUStringForInfo:(InfoType)info
+- (OUString) OUStringForInfo:(InfoType)info
 {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
@@ -66,7 +66,7 @@
             break;
     }
 
-    rtl::OUString sResult = [sURLString OUString];
+    OUString sResult = [sURLString OUString];
     [sURLString release];
 
     [pool release];

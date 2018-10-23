@@ -39,7 +39,7 @@ public:
     public:
         Context maContext;
         bool mbIsInitiallyVisible;
-        ::rtl::OUString msMenuCommand;
+        OUString msMenuCommand;
     };
 
     /** Return <TRUE/> when the given context matches any of the stored contexts.
@@ -52,7 +52,7 @@ public:
     void AddContextDescription (
         const Context& rContext,
         const bool bIsInitiallyVisible,
-        const ::rtl::OUString& rsMenuCommand);
+        const OUString& rsMenuCommand);
 
     void ToggleVisibilityForContext( const Context& rContext,const bool bIsInitiallyVisible );
     const ::std::vector<Entry>& GetEntries() const {return maEntries;};

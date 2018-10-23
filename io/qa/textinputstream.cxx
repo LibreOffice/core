@@ -117,8 +117,8 @@ void Test::testReadLine() {
     css::uno::Reference<css::io::XTextInputStream2> s(
         css::io::TextInputStream::create(getComponentContext()));
     s->setInputStream(new Input);
-    rtl::OUString l(s->readLine());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("123456789"), l);
+    OUString l(s->readLine());
+    CPPUNIT_ASSERT_EQUAL(OUString("123456789"), l);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

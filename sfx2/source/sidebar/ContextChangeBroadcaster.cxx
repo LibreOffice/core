@@ -24,7 +24,6 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 
-using ::rtl::OUString;
 using namespace css;
 using namespace css::uno;
 
@@ -40,7 +39,7 @@ ContextChangeBroadcaster::~ContextChangeBroadcaster()
 {
 }
 
-void ContextChangeBroadcaster::Initialize (const ::rtl::OUString& rsContextName)
+void ContextChangeBroadcaster::Initialize (const OUString& rsContextName)
 {
     msContextName = rsContextName;
 }
@@ -71,8 +70,8 @@ bool ContextChangeBroadcaster::SetBroadcasterEnabled (const bool bIsEnabled)
 
 void ContextChangeBroadcaster::BroadcastContextChange (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    const ::rtl::OUString& rsModuleName,
-    const ::rtl::OUString& rsContextName)
+    const OUString& rsModuleName,
+    const OUString& rsContextName)
 {
     if ( ! mbIsBroadcasterEnabled)
         return;

@@ -30,7 +30,7 @@ namespace rtl_locale
     // default locale for test purpose
     static void setDefaultLocale()
     {
-        rtl_locale_setDefault(rtl::OUString("de").getStr(), rtl::OUString("DE").getStr(), /* rtl::OUString() */ rtl::OUString("hochdeutsch").getStr() );
+        rtl_locale_setDefault(OUString("de").getStr(), OUString("DE").getStr(), /* OUString() */ OUString("hochdeutsch").getStr() );
     }
 
 class getDefault : public CppUnit::TestFixture
@@ -76,7 +76,7 @@ public:
     // insert your test code here.
     void setDefault_001()
     {
-        rtl_locale_setDefault(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
+        rtl_locale_setDefault(OUString("en").getStr(), OUString("US").getStr(), OUString().getStr());
         rtl_Locale* pData = rtl_locale_getDefault();
         CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != nullptr);
 
@@ -106,13 +106,13 @@ public:
     void getLanguage_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        rtl::OUString suLanguage = pData->Language;
+        OUString suLanguage = pData->Language;
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale language must be 'de'", OUString("de"), suLanguage );
     }
     void getLanguage_002()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        rtl::OUString suLanguage(rtl_locale_getLanguage(pData), SAL_NO_ACQUIRE);
+        OUString suLanguage(rtl_locale_getLanguage(pData), SAL_NO_ACQUIRE);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale language must be 'de'", OUString("de"), suLanguage );
     }
 
@@ -140,13 +140,13 @@ public:
     void getCountry_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        rtl::OUString suCountry = pData->Country;
+        OUString suCountry = pData->Country;
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale country must be 'DE'", OUString("DE"), suCountry );
     }
     void getCountry_002()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        rtl::OUString suCountry(rtl_locale_getCountry(pData), SAL_NO_ACQUIRE);
+        OUString suCountry(rtl_locale_getCountry(pData), SAL_NO_ACQUIRE);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale country must be 'DE'", OUString("DE"), suCountry );
     }
 
@@ -174,13 +174,13 @@ public:
     void getVariant_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        rtl::OUString suVariant = pData->Variant;
+        OUString suVariant = pData->Variant;
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale variant must be 'hochdeutsch'", OUString("hochdeutsch"), suVariant );
     }
     void getVariant_002()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        rtl::OUString suVariant(rtl_locale_getVariant(pData), SAL_NO_ACQUIRE);
+        OUString suVariant(rtl_locale_getVariant(pData), SAL_NO_ACQUIRE);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale variant must be 'hochdeutsch'", OUString("hochdeutsch"), suVariant );
     }
 
@@ -241,8 +241,8 @@ public:
     // insert your test code here.
     void equals_001()
     {
-        rtl_Locale* pData1 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
-        rtl_Locale* pData2 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
+        rtl_Locale* pData1 = rtl_locale_register(OUString("en").getStr(), OUString("US").getStr(), OUString().getStr());
+        rtl_Locale* pData2 = rtl_locale_register(OUString("en").getStr(), OUString("US").getStr(), OUString().getStr());
 
         bool bLocaleAreEqual = (pData1 == pData2);
 
@@ -251,8 +251,8 @@ public:
 
     void equals_002()
     {
-        rtl_Locale* pData1 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
-        rtl_Locale* pData2 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
+        rtl_Locale* pData1 = rtl_locale_register(OUString("en").getStr(), OUString("US").getStr(), OUString().getStr());
+        rtl_Locale* pData2 = rtl_locale_register(OUString("en").getStr(), OUString("US").getStr(), OUString().getStr());
 
         sal_Int32 nEqual = rtl_locale_equals(pData1, pData2);
         CPPUNIT_ASSERT(nEqual != 0);

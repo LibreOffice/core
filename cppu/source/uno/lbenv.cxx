@@ -45,8 +45,6 @@
 #include <stdio.h>
 
 
-using ::rtl::OUString;
-
 namespace
 {
 
@@ -677,7 +675,7 @@ void writeLine(
 void writeLine(
     void * stream, const OUString & rLine, const sal_Char * pFilter )
 {
-    ::rtl::OString aLine( ::rtl::OUStringToOString(
+    OString aLine( OUStringToOString(
                               rLine, RTL_TEXTENCODING_ASCII_US ) );
     writeLine( stream, aLine.getStr(), pFilter );
 }
@@ -689,7 +687,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( pEnv, "### null ptr!" );
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
 
     if (! pEnv->pExtEnv)
     {
@@ -781,7 +779,7 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     }
     else
     {
-        ::rtl::OUStringBuffer buf( 32 );
+        OUStringBuffer buf( 32 );
         buf.append( "environment \"" );
         buf.append( pEnvDcp );
         buf.append( "\" does not exist!" );
@@ -798,7 +796,7 @@ namespace
     public:
         makeOIdPart()
         {
-            ::rtl::OUStringBuffer aRet( 64 );
+            OUStringBuffer aRet( 64 );
             aRet.append( "];" );
             // pid
             oslProcessInfo info;
@@ -855,7 +853,7 @@ static void unoenv_computeObjectIdentifier(
     {
         (*pUnoI->release)( pUnoI );
         // interface
-        ::rtl::OUStringBuffer oid( 64 );
+        OUStringBuffer oid( 64 );
         oid.append( reinterpret_cast< sal_Int64 >(pUnoI), 16 );
         oid.append( ';' );
         // environment[context]
@@ -1084,7 +1082,7 @@ static uno_Environment * initDefaultEnvironment(
         OUString envPurpose = cppu::EnvDcp::getPurpose(rEnvDcp);
         if (!envPurpose.isEmpty())
         {
-            rtl::OUString libStem(
+            OUString libStem(
                 envPurpose.copy(envPurpose.lastIndexOf(':') + 1) + "_uno_uno");
             if(!loadEnv(libStem, pEnv))
             {

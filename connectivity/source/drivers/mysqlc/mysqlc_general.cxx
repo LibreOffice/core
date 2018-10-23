@@ -90,16 +90,16 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
 void throwFeatureNotImplementedException(const sal_Char* _pAsciiFeatureName,
                                          const css::uno::Reference<XInterface>& _rxContext)
 {
-    const rtl::OUString sMessage
-        = rtl::OUString::createFromAscii(_pAsciiFeatureName) + ": feature not implemented.";
+    const OUString sMessage
+        = OUString::createFromAscii(_pAsciiFeatureName) + ": feature not implemented.";
     throw SQLException(sMessage, _rxContext, "HYC00", 0, Any());
 }
 
 void throwInvalidArgumentException(const sal_Char* _pAsciiFeatureName,
                                    const css::uno::Reference<XInterface>& _rxContext)
 {
-    const rtl::OUString sMessage
-        = rtl::OUString::createFromAscii(_pAsciiFeatureName) + ": invalid arguments.";
+    const OUString sMessage
+        = OUString::createFromAscii(_pAsciiFeatureName) + ": invalid arguments.";
     throw SQLException(sMessage, _rxContext, "HYC00", 0, Any());
 }
 
@@ -107,10 +107,10 @@ void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
                               const css::uno::Reference<css::uno::XInterface>& _context,
                               const rtl_TextEncoding encoding)
 {
-    rtl::OString errorMsg{ msg };
+    OString errorMsg{ msg };
     // TODO error code?
-    throw SQLException(rtl::OStringToOUString(errorMsg, encoding), _context, rtl::OUString(),
-                       errorNum, Any());
+    throw SQLException(OStringToOUString(errorMsg, encoding), _context, OUString(), errorNum,
+                       Any());
 }
 
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
@@ -182,7 +182,7 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
     return css::sdbc::DataType::VARCHAR;
 }
 
-sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType)
+sal_Int32 mysqlStrToOOOType(const OUString& sType)
 {
     // TODO other types.
     if (sType.equalsIgnoreAsciiCase("tiny") || sType.equalsIgnoreAsciiCase("tinyint"))
@@ -225,7 +225,7 @@ sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType)
     return css::sdbc::DataType::VARCHAR;
 }
 
-rtl::OUString mysqlTypeToStr(MYSQL_FIELD* field)
+OUString mysqlTypeToStr(MYSQL_FIELD* field)
 {
     bool isUnsigned = (field->flags & UNSIGNED_FLAG) != 0;
     bool isZerofill = (field->flags & ZEROFILL_FLAG) != 0;
@@ -322,9 +322,9 @@ rtl::OUString mysqlTypeToStr(MYSQL_FIELD* field)
     }
 }
 
-rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
+OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
-    return rtl::OUString(_string.c_str(), _string.size(), encoding);
+    return OUString(_string.c_str(), _string.size(), encoding);
 }
 
 } /* namespace */

@@ -37,7 +37,7 @@ public:
     explicit Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
     virtual  ~Player() override;
 
-    bool create( const ::rtl::OUString& rURL );
+    bool create( const OUString& rURL );
     bool create( AVAsset* );
 
     // XPlayer
@@ -61,9 +61,9 @@ public:
     virtual css::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
     virtual css::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber(  ) override;
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) override;
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     AVPlayer* getAVPlayer() const { return mpPlayer; }
     virtual bool handleObservation( NSString* pKeyPath ) override;

@@ -147,10 +147,10 @@ def build_pretty_printers():
     printer.add('_rtl_String', RtlStringPrinter)
     printer.add('_rtl_uString', lambda name, val: RtlStringPrinter(name,
         val, 'utf-16le'))
-    printer.add('rtl::OString', StringPrinter)
-    printer.add('rtl::OUString', lambda name, val: StringPrinter(name, val, 'utf-16'))
-    printer.add('rtl::OStringBuffer', StringPrinter)
-    printer.add('rtl::OUStringBuffer', lambda name, val: StringPrinter(name, val, 'utf-16'))
+    printer.add('OString', StringPrinter)
+    printer.add('OUString', lambda name, val: StringPrinter(name, val, 'utf-16'))
+    printer.add('OStringBuffer', StringPrinter)
+    printer.add('OUStringBuffer', lambda name, val: StringPrinter(name, val, 'utf-16'))
     printer.add('sal_Unicode', SalUnicodePrinter, SalUnicodePrinter.query)
 
     # other stuff

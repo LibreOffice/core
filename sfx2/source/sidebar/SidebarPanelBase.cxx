@@ -34,7 +34,7 @@ using namespace css::uno;
 namespace sfx2 { namespace sidebar {
 
 Reference<ui::XUIElement> SidebarPanelBase::Create (
-    const ::rtl::OUString& rsResourceURL,
+    const OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     vcl::Window* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
@@ -49,7 +49,7 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 }
 
 SidebarPanelBase::SidebarPanelBase (
-    const ::rtl::OUString& rsResourceURL,
+    const OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     vcl::Window* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
@@ -118,7 +118,7 @@ css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame()
     return mxFrame;
 }
 
-::rtl::OUString SAL_CALL SidebarPanelBase::getResourceURL()
+OUString SAL_CALL SidebarPanelBase::getResourceURL()
 {
     return msResourceURL;
 }

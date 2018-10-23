@@ -1027,7 +1027,7 @@ const OUString & DAVResourceAccess::getRequestURI() const
 // static
 void DAVResourceAccess::getUserRequestHeaders(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv,
-    const rtl::OUString & rURI,
+    const OUString & rURI,
     ucb::WebDAVHTTPMethod eMethod,
     DAVRequestHeaders & rRequestHeaders )
 {

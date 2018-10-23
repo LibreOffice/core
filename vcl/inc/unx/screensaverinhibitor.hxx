@@ -24,7 +24,7 @@
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
-    void inhibit( bool bInhibit, const rtl::OUString& sReason,
+    void inhibit( bool bInhibit, const OUString& sReason,
                   bool bIsX11, const boost::optional<unsigned int>& xid, boost::optional<Display*> pDisplay );
 
 private:

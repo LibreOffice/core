@@ -63,7 +63,7 @@ class SvtRulerAccessible final : public ::cppu::BaseMutex, public SvtRulerAccess
 public:
     //=====  internal  ========================================================
     SvtRulerAccessible(
-        const css::uno::Reference< css::accessibility::XAccessible>& rxParent, Ruler& rRepresentation, const ::rtl::OUString& rName );
+        const css::uno::Reference< css::accessibility::XAccessible>& rxParent, Ruler& rRepresentation, const OUString& rName );
 
     /// @throws css::uno::RuntimeException
     bool
@@ -119,10 +119,10 @@ public:
     virtual sal_Int16 SAL_CALL
         getAccessibleRole() override;
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription() override;
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleName() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
@@ -143,13 +143,13 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName() override;
 
     virtual sal_Bool SAL_CALL
-        supportsService( const ::rtl::OUString& sServiceName ) override;
+        supportsService( const OUString& sServiceName ) override;
 
-    virtual css::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
@@ -180,7 +180,7 @@ private:
     tools::Rectangle GetBoundingBox();
 
     /// Name of this object.
-    ::rtl::OUString const               msName;
+    OUString const               msName;
 
     /// Reference to the parent object.
     css::uno::Reference< css::accessibility::XAccessible >

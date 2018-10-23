@@ -102,7 +102,7 @@ OString const & getCacheFolder()
 
         osl::Directory::create(url);
 
-        aCacheFolder = rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+        aCacheFolder = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
     }
     return aCacheFolder;
 }
@@ -221,7 +221,7 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
     assert(pDevID == gpuEnv.mpDevID);
 
     OString fileName = createFileName(gpuEnv.mpDevID, clFileName);
-    auto pNewFile = std::make_shared<osl::File>(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
+    auto pNewFile = std::make_shared<osl::File>(OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
     if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
         aGeneratedFiles.push_back(pNewFile);
@@ -237,7 +237,7 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
 
 bool writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
-    osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
+    osl::File file(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     osl::FileBase::RC status = file.open(
             osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
@@ -350,7 +350,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
         }
 
         OString aBuildLogFileURL = getCacheFolder() + "kernel-build.log";
-        osl::File aBuildLogFile(rtl::OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
+        osl::File aBuildLogFile(OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
         osl::FileBase::RC status = aBuildLogFile.open(
                 osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 

@@ -46,8 +46,8 @@ namespace {
 
 void writeToStream(std::ofstream& strm, const OUString& rKey, const OUString& rValue)
 {
-    strm << rtl::OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
-    strm << rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+    strm << OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
+    strm << OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
 }
 
 }

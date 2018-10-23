@@ -68,8 +68,8 @@ namespace com { namespace sun { namespace star {
 
 namespace {
 
-std::ostream & operator <<(std::ostream & out, rtl::OUString const & value) {
-    return out << rtl::OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr();
+std::ostream & operator <<(std::ostream & out, OUString const & value) {
+    return out << OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr();
 }
 
 std::ostream & operator <<(std::ostream & out, css::uno::Type const & value) {
@@ -254,34 +254,34 @@ void Test::testEmpty2(
         static_cast< sal_Int32 >(0), info->getProperties().getLength());
     try {
         info->getPropertyByName(
-            rtl::OUString("any"));
+            OUString("any"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     CPPUNIT_ASSERT(
         !info->hasPropertyByName(
-            rtl::OUString("any")));
+            OUString("any")));
     try {
         empty2p->setPropertyValue(
-            rtl::OUString("any"), css::uno::Any());
+            OUString("any"), css::uno::Any());
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         empty2p->getPropertyValue(
-            rtl::OUString("any"));
+            OUString("any"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     rtl::Reference< BoundListener > boundListener1(new BoundListener);
-    empty2p->addPropertyChangeListener(rtl::OUString(), boundListener1.get());
-    empty2p->addPropertyChangeListener(rtl::OUString(), boundListener1.get());
+    empty2p->addPropertyChangeListener(OUString(), boundListener1.get());
+    empty2p->addPropertyChangeListener(OUString(), boundListener1.get());
     rtl::Reference< BoundListener > boundListener2(new BoundListener);
     empty2p->removePropertyChangeListener(
-        rtl::OUString(), boundListener2.get());
+        OUString(), boundListener2.get());
     rtl::Reference< VetoListener > vetoListener1(new VetoListener);
-    empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener1.get());
-    empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener1.get());
+    empty2p->addVetoableChangeListener(OUString(), vetoListener1.get());
+    empty2p->addVetoableChangeListener(OUString(), vetoListener1.get());
     rtl::Reference< VetoListener > vetoListener2(new VetoListener);
-    empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener2.get());
-    empty2p->removeVetoableChangeListener(rtl::OUString(), vetoListener2.get());
+    empty2p->addVetoableChangeListener(OUString(), vetoListener2.get());
+    empty2p->removeVetoableChangeListener(OUString(), vetoListener2.get());
     css::uno::Reference< css::beans::XFastPropertySet > empty2f(
         empty2, css::uno::UNO_QUERY);
     CPPUNIT_ASSERT(empty2f.is());
@@ -309,10 +309,10 @@ void Test::testEmpty2(
     empty2a->setPropertyValues(
         css::uno::Sequence< css::beans::PropertyValue >());
     css::uno::Sequence< css::beans::PropertyValue > vs(2);
-    vs[0].Name = rtl::OUString("any1");
+    vs[0].Name = OUString("any1");
     vs[0].Handle = -1;
     vs[0].State = css::beans::PropertyState_DIRECT_VALUE;
-    vs[0].Name = rtl::OUString("any2");
+    vs[0].Name = OUString("any2");
     vs[0].Handle = -1;
     vs[0].State = css::beans::PropertyState_DIRECT_VALUE;
     try {
@@ -329,23 +329,23 @@ void Test::testEmpty2(
     CPPUNIT_ASSERT_EQUAL(2, vetoListener1->count());
     CPPUNIT_ASSERT_EQUAL(0, vetoListener2->count());
     empty2p->removePropertyChangeListener(
-        rtl::OUString(), boundListener1.get());
+        OUString(), boundListener1.get());
     empty2p->removePropertyChangeListener(
-        rtl::OUString(), boundListener2.get());
-    empty2p->removeVetoableChangeListener(rtl::OUString(), vetoListener1.get());
-    empty2p->removeVetoableChangeListener(rtl::OUString(), vetoListener2.get());
-    empty2p->addPropertyChangeListener(rtl::OUString(), boundListener1.get());
-    empty2p->addPropertyChangeListener(rtl::OUString(), boundListener2.get());
-    empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener1.get());
-    empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener2.get());
+        OUString(), boundListener2.get());
+    empty2p->removeVetoableChangeListener(OUString(), vetoListener1.get());
+    empty2p->removeVetoableChangeListener(OUString(), vetoListener2.get());
+    empty2p->addPropertyChangeListener(OUString(), boundListener1.get());
+    empty2p->addPropertyChangeListener(OUString(), boundListener2.get());
+    empty2p->addVetoableChangeListener(OUString(), vetoListener1.get());
+    empty2p->addVetoableChangeListener(OUString(), vetoListener2.get());
     try {
         empty2p->addPropertyChangeListener(
-            rtl::OUString(),
+            OUString(),
             css::uno::Reference< css::beans::XPropertyChangeListener >());
     } catch (css::uno::RuntimeException &) {}
     try {
         empty2p->addVetoableChangeListener(
-            rtl::OUString(),
+            OUString(),
             css::uno::Reference< css::beans::XVetoableChangeListener >());
     } catch (css::uno::RuntimeException &) {}
     CPPUNIT_ASSERT_EQUAL(3, boundListener1->count());
@@ -370,16 +370,16 @@ void Test::testFull(
         static_cast< sal_Int32 >(3), info->getProperties().getLength());
     css::beans::Property prop(
         info->getPropertyByName(
-            rtl::OUString("First")));
+            OUString("First")));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("First"), prop.Name);
+        OUString("First"), prop.Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), prop.Handle);
     CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(), prop.Type);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int16 >(0), prop.Attributes);
     prop = info->getPropertyByName(
-        rtl::OUString("Second"));
+        OUString("Second"));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("Second"), prop.Name);
+        OUString("Second"), prop.Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(1), prop.Handle);
     CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(), prop.Type);
     CPPUNIT_ASSERT_EQUAL(
@@ -393,13 +393,13 @@ void Test::testFull(
         prop.Attributes);
     try {
         info->getPropertyByName(
-            rtl::OUString("Third"));
+            OUString("Third"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     prop = info->getPropertyByName(
-        rtl::OUString("Fourth"));
+        OUString("Fourth"));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("Fourth"), prop.Name);
+        OUString("Fourth"), prop.Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(3), prop.Handle);
     CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(), prop.Type);
     CPPUNIT_ASSERT_EQUAL(
@@ -407,93 +407,93 @@ void Test::testFull(
         prop.Attributes);
     try {
         info->getPropertyByName(
-            rtl::OUString("first"));
+            OUString("first"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     CPPUNIT_ASSERT(
         info->hasPropertyByName(
-            rtl::OUString("First")));
+            OUString("First")));
     CPPUNIT_ASSERT(
         info->hasPropertyByName(
-            rtl::OUString("Second")));
+            OUString("Second")));
     CPPUNIT_ASSERT(
         !info->hasPropertyByName(
-            rtl::OUString("Third")));
+            OUString("Third")));
     CPPUNIT_ASSERT(
         info->hasPropertyByName(
-            rtl::OUString("Fourth")));
+            OUString("Fourth")));
     CPPUNIT_ASSERT(
         !info->hasPropertyByName(
-            rtl::OUString("first")));
+            OUString("first")));
     CPPUNIT_ASSERT_EQUAL(
         css::uno::Any(static_cast< sal_Int32 >(0)),
         fullp->getPropertyValue(
-            rtl::OUString("First")));
+            OUString("First")));
     fullp->setPropertyValue(
-        rtl::OUString("First"),
+        OUString("First"),
         css::uno::Any(static_cast< sal_Int32 >(-100)));
     CPPUNIT_ASSERT_EQUAL(
         css::uno::Any(static_cast< sal_Int32 >(-100)),
         fullp->getPropertyValue(
-            rtl::OUString("First")));
+            OUString("First")));
     css::uno::Any voidAny;
     CPPUNIT_ASSERT_EQUAL(
         voidAny,
         fullp->getPropertyValue(
-            rtl::OUString("Second")));
+            OUString("Second")));
     fullp->setPropertyValue(
-        rtl::OUString("Second"),
+        OUString("Second"),
         css::uno::Any(static_cast< sal_Int32 >(100)));
     CPPUNIT_ASSERT_EQUAL(
         css::uno::Any(static_cast< sal_Int32 >(100)),
         fullp->getPropertyValue(
-            rtl::OUString("Second")));
+            OUString("Second")));
     CPPUNIT_ASSERT(full->getSecond().Value.Value.IsPresent);
     CPPUNIT_ASSERT_EQUAL(
         static_cast< sal_Int32 >(100), full->getSecond().Value.Value.Value);
     CPPUNIT_ASSERT(!full->getSecond().Value.IsDefaulted);
     CPPUNIT_ASSERT(!full->getSecond().IsAmbiguous);
     fullp->setPropertyValue(
-        rtl::OUString("Second"),
+        OUString("Second"),
         css::uno::Any());
     CPPUNIT_ASSERT_EQUAL(
         voidAny,
         fullp->getPropertyValue(
-            rtl::OUString("Second")));
+            OUString("Second")));
     CPPUNIT_ASSERT(!full->getSecond().Value.Value.IsPresent);
     CPPUNIT_ASSERT(!full->getSecond().Value.IsDefaulted);
     CPPUNIT_ASSERT(!full->getSecond().IsAmbiguous);
     try {
         fullp->setPropertyValue(
-            rtl::OUString("Third"),
+            OUString("Third"),
             css::uno::Any(static_cast< sal_Int32 >(100)));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->getPropertyValue(
-            rtl::OUString("Third"));
+            OUString("Third"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->setPropertyValue(
-            rtl::OUString("Fourth"),
+            OUString("Fourth"),
             css::uno::Any(static_cast< sal_Int32 >(100)));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->getPropertyValue(
-            rtl::OUString("Fourth"));
+            OUString("Fourth"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->setPropertyValue(
-            rtl::OUString("first"),
+            OUString("first"),
             css::uno::Any());
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->getPropertyValue(
-            rtl::OUString("first"));
+            OUString("first"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     css::uno::Reference< css::beans::XFastPropertySet > fullf(
@@ -520,13 +520,13 @@ void Test::testFull(
         fulla->getPropertyValues());
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(2), vs.getLength());
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("First"), vs[0].Name);
+        OUString("First"), vs[0].Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), vs[0].Handle);
     CPPUNIT_ASSERT_EQUAL(
         css::uno::Any(static_cast< sal_Int32 >(0)), vs[0].Value);
     CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DIRECT_VALUE, vs[0].State);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("Second"), vs[1].Name);
+        OUString("Second"), vs[1].Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(1), vs[1].Handle);
     CPPUNIT_ASSERT_EQUAL(voidAny, vs[1].Value);
     CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DIRECT_VALUE, vs[1].State);
@@ -537,12 +537,12 @@ void Test::testFull(
     vs = fulla->getPropertyValues();
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(2), vs.getLength());
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("First"), vs[0].Name);
+        OUString("First"), vs[0].Name);
     CPPUNIT_ASSERT_EQUAL(
         css::uno::Any(static_cast< sal_Int32 >(-100)), vs[0].Value);
     CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DIRECT_VALUE, vs[0].State);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("Second"), vs[1].Name);
+        OUString("Second"), vs[1].Name);
     CPPUNIT_ASSERT_EQUAL(
         css::uno::Any(static_cast< sal_Int32 >(100)), vs[1].Value);
     CPPUNIT_ASSERT_EQUAL(
@@ -555,76 +555,76 @@ void Test::testFull(
     css::uno::Reference< css::beans::XPropertyChangeListener > boundListener(
         new BoundListener);
     fullp->addPropertyChangeListener(
-        rtl::OUString("First"), boundListener);
+        OUString("First"), boundListener);
     fullp->removePropertyChangeListener(
-        rtl::OUString("First"), boundListener);
+        OUString("First"), boundListener);
     fullp->addPropertyChangeListener(
-        rtl::OUString("Second"), boundListener);
+        OUString("Second"), boundListener);
     fullp->removePropertyChangeListener(
-        rtl::OUString("Second"), boundListener);
+        OUString("Second"), boundListener);
     try {
         fullp->addPropertyChangeListener(
-            rtl::OUString("Third"),
+            OUString("Third"),
             boundListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->removePropertyChangeListener(
-            rtl::OUString("Third"),
+            OUString("Third"),
             boundListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     fullp->addPropertyChangeListener(
-        rtl::OUString("Fourth"), boundListener);
+        OUString("Fourth"), boundListener);
     fullp->removePropertyChangeListener(
-        rtl::OUString("Fourth"), boundListener);
+        OUString("Fourth"), boundListener);
     try {
         fullp->addPropertyChangeListener(
-            rtl::OUString("Fifth"),
+            OUString("Fifth"),
             boundListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->removePropertyChangeListener(
-            rtl::OUString("Fifth"),
+            OUString("Fifth"),
             boundListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     css::uno::Reference< css::beans::XVetoableChangeListener > vetoListener(
         new VetoListener);
     fullp->addVetoableChangeListener(
-        rtl::OUString("First"), vetoListener);
+        OUString("First"), vetoListener);
     fullp->removeVetoableChangeListener(
-        rtl::OUString("First"), vetoListener);
+        OUString("First"), vetoListener);
     fullp->addVetoableChangeListener(
-        rtl::OUString("Second"), vetoListener);
+        OUString("Second"), vetoListener);
     fullp->removeVetoableChangeListener(
-        rtl::OUString("Second"), vetoListener);
+        OUString("Second"), vetoListener);
     try {
         fullp->addVetoableChangeListener(
-            rtl::OUString("Third"),
+            OUString("Third"),
             vetoListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->removeVetoableChangeListener(
-            rtl::OUString("Third"),
+            OUString("Third"),
             vetoListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     fullp->addVetoableChangeListener(
-        rtl::OUString("Fourth"), vetoListener);
+        OUString("Fourth"), vetoListener);
     fullp->removeVetoableChangeListener(
-        rtl::OUString("Fourth"), vetoListener);
+        OUString("Fourth"), vetoListener);
     try {
         fullp->addVetoableChangeListener(
-            rtl::OUString("Fifth"),
+            OUString("Fifth"),
             vetoListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
     try {
         fullp->removeVetoableChangeListener(
-            rtl::OUString("Fifth"),
+            OUString("Fifth"),
             vetoListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}

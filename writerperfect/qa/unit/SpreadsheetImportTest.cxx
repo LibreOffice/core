@@ -37,13 +37,12 @@ public:
     }
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
-    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
-                                rtl::OUString& rTypeName) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
                                   OdsGenerator& rGenerator,
                                   utl::MediaDescriptor& rDescriptor) override;
@@ -58,24 +57,24 @@ bool SpreadsheetImportFilter::doImportDocument(weld::Window*, librevenge::RVNGIn
     return true;
 }
 
-bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream&, rtl::OUString& rTypeName)
+bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
     rTypeName = "WpftDummySpreadsheet";
     return true;
 }
 
 // XServiceInfo
-rtl::OUString SAL_CALL SpreadsheetImportFilter::getImplementationName()
+OUString SAL_CALL SpreadsheetImportFilter::getImplementationName()
 {
     return OUString("org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter");
 }
 
-sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const rtl::OUString& rServiceName)
+sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SpreadsheetImportFilter::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL SpreadsheetImportFilter::getSupportedServiceNames()
 {
     return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
@@ -131,7 +130,7 @@ void SpreadsheetImportTest::test()
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
     CPPUNIT_ASSERT(xCell.is());
     CPPUNIT_ASSERT_EQUAL(table::CellContentType_TEXT, xCell->getType());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xCell->getFormula());
+    CPPUNIT_ASSERT_EQUAL(OUString("My hovercraft is full of eels."), xCell->getFormula());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpreadsheetImportTest);

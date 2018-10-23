@@ -42,7 +42,7 @@ public:
     Service() {}
 
     virtual ::test::types::Data SAL_CALL getData() {
-        return ::test::types::Data(rtl::OUString("Hello"), 42);
+        return ::test::types::Data(OUString("Hello"), 42);
     }
 
 private:
@@ -60,12 +60,12 @@ css::uno::Reference< css::uno::XInterface > create(
     return static_cast< ::cppu::OWeakObject * >(new Service);
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString("test.cpp.cppserver.Component");
+OUString getImplementationName() {
+    return OUString("test.cpp.cppserver.Component");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< rtl::OUString >();
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    return css::uno::Sequence< OUString >();
 }
 
 }

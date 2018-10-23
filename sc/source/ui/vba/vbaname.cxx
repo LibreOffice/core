@@ -131,7 +131,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
 OUString
 ScVbaName::getValue()
 {
-    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+    OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 
     return sResult;
 }
@@ -169,7 +169,7 @@ ScVbaName::setRefersToLocal( const OUString & rRefersTo )
 OUString
 ScVbaName::getRefersToR1C1()
 {
-    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
+    OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
     return  sResult;
 }
 

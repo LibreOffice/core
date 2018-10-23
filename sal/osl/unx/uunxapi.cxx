@@ -31,9 +31,9 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-static rtl::OString OUStringToOString(const rtl_uString* s)
+static OString OUStringToOString(const rtl_uString* s)
 {
-    return rtl::OUStringToOString(rtl::OUString(const_cast<rtl_uString*>(s)),
+    return OUStringToOString(OUString(const_cast<rtl_uString*>(s)),
                                   osl_getThreadTextEncoding());
 }
 
@@ -142,16 +142,16 @@ typedef void accessFilePathState;
 #ifdef MACOSX
 /*
  * Helper function for resolving Mac native alias files (not the same as unix alias files)
- * and to return the resolved alias as rtl::OString
+ * and to return the resolved alias as OString
  */
-static rtl::OString macxp_resolveAliasAndConvert(rtl::OString const & p)
+static OString macxp_resolveAliasAndConvert(OString const & p)
 {
     sal_Char path[PATH_MAX];
     if (p.getLength() < PATH_MAX)
     {
         strcpy(path, p.getStr());
         macxp_resolveAlias(path, PATH_MAX);
-        return rtl::OString(path);
+        return OString(path);
     }
     return p;
 }
@@ -159,7 +159,7 @@ static rtl::OString macxp_resolveAliasAndConvert(rtl::OString const & p)
 
 int access_u(const rtl_uString* pustrPath, int mode)
 {
-    rtl::OString fn = OUStringToOString(pustrPath);
+    OString fn = OUStringToOString(pustrPath);
 #ifdef ANDROID
     if (fn == "/assets" || fn.startsWith("/assets/"))
     {
@@ -197,7 +197,7 @@ int access_u(const rtl_uString* pustrPath, int mode)
 
 bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
 {
-    rtl::OString fn = OUStringToOString(pustrFileName);
+    OString fn = OUStringToOString(pustrFileName);
 #ifdef ANDROID
     if (fn == "/assets" || fn.startsWith("/assets/"))
     {
@@ -229,7 +229,7 @@ bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedNa
 
     if (bRet)
     {
-        rtl::OUString resolved = rtl::OStringToOUString(rtl::OString(static_cast<sal_Char*>(rp)),
+        OUString resolved = OStringToOUString(OString(static_cast<sal_Char*>(rp)),
                                                         osl_getThreadTextEncoding());
 
         rtl_uString_assign(ppustrResolvedName, resolved.pData);
@@ -292,7 +292,7 @@ int lstat_c(const char* cpPath, struct stat* buf)
 
 int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
 {
-    rtl::OString fn = OUStringToOString(pustrPath);
+    OString fn = OUStringToOString(pustrPath);
 
 #ifdef MACOSX
     fn = macxp_resolveAliasAndConvert(fn);
@@ -303,7 +303,7 @@ int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
 
 int mkdir_u(const rtl_uString* path, mode_t mode)
 {
-    rtl::OString fn = OUStringToOString(path);
+    OString fn = OUStringToOString(path);
 
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
@@ -388,7 +388,7 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
      * abstraction layer that keeps the pathname around.
      */
 
-    rtl::OString fn = rtl::OString(path);
+    OString fn = OString(path);
 
 #ifdef MACOSX
     fn = macxp_resolveAliasAndConvert(fn);

@@ -39,7 +39,6 @@
 #include "ChartLinePanel.hxx"
 
 using namespace css::uno;
-using ::rtl::OUString;
 
 namespace chart { namespace sidebar {
 
@@ -53,7 +52,7 @@ ChartPanelFactory::~ChartPanelFactory()
 }
 
 Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
-    const ::rtl::OUString& rsResourceURL,
+    const OUString& rsResourceURL,
     const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     Reference<css::ui::XUIElement> xElement;

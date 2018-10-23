@@ -270,7 +270,7 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
         return OUString();
     }
 
-    rtl::OUString retVal;
+    OUString retVal;
     if ([pControl class] == [NSPopUpButton class]) {
         NSString *temp = m_aMapListLabels[pControl];
         if (temp != nil)

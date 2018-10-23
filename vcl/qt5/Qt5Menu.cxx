@@ -184,7 +184,7 @@ void Qt5Menu::EnableItem(unsigned nPos, bool bEnable)
     }
 }
 
-void Qt5Menu::SetItemText(unsigned, SalMenuItem* pItem, const rtl::OUString& rText)
+void Qt5Menu::SetItemText(unsigned, SalMenuItem* pItem, const OUString& rText)
 {
     Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
     if (pSalMenuItem->mpAction)

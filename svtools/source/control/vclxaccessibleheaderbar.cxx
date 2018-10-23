@@ -68,13 +68,13 @@ VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 // XServiceInfo
 
 
-::rtl::OUString VCLXAccessibleHeaderBar::getImplementationName()
+OUString VCLXAccessibleHeaderBar::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
 }
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames()
+Sequence< OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames()
 {
     Sequence<OUString> aNames { "com.sun.star.awt.AccessibleHeaderBar" };
     return aNames;

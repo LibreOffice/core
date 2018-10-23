@@ -35,12 +35,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* avmediaMacAVF_component_getFactory( const 
 
     if( rtl_str_compare( pImplName, AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( AVMEDIA_MACAVF_MANAGER_SERVICENAME );
+        const OUString aServiceName( AVMEDIA_MACAVF_MANAGER_SERVICENAME );
 
         xFactory.set( ::cppu::createSingleFactory(
                         static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME,
-                        create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
+                        create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 
     if( xFactory.is() )

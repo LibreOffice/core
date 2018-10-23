@@ -543,7 +543,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 "removeProperty",
                 -1,
-                cppu::UnoType<rtl::OUString>::get() );
+                cppu::UnoType<OUString>::get() );
 
     bool bFolder = false;
 
