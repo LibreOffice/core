@@ -84,6 +84,7 @@ namespace dxcanvas
         FontSharedPtr                               mpFont;
         css::rendering::FontRequest    maFontRequest;
         css::geometry::Matrix2D        maFontMatrix;
+        css::uno::Sequence<css::beans::PropertyValue>     maExtraFontProperties;
     };
 
 }
