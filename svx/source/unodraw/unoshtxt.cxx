@@ -311,7 +311,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                         sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mpObject );
                         if(pTableObj)
                         {
-                            sdr::table::CellRef xCell = pTableObj->getActiveCell();
+                            const sdr::table::CellRef& xCell = pTableObj->getActiveCell();
                             if (xCell.is())
                             {
                                 sdr::table::Cell* pCellObj = dynamic_cast< sdr::table::Cell* >( mpText );

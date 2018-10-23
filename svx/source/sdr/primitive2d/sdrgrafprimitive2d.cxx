@@ -37,7 +37,7 @@ namespace drawinglayer
             Primitive2DContainer  aRetval;
 
             // create unit outline polygon
-            basegfx::B2DPolygon aUnitOutline(basegfx::utils::createUnitPolygon());
+            const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
 
             // add fill, but only when graphic is transparent
             if(!getSdrLFSTAttribute().getFill().isDefault() && isTransparent())

@@ -587,7 +587,7 @@ namespace sdr
                     if(pExtendedHint
                         && SfxHintId::StyleSheetModified == pExtendedHint->GetId())
                     {
-                        OUString aOldName(pExtendedHint->GetOldName());
+                        const OUString& aOldName(pExtendedHint->GetOldName());
                         OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());
                         SfxStyleFamily eFamily = pExtendedHint->GetStyleSheet()->GetFamily();
 

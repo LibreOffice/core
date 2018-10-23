@@ -168,7 +168,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
     for(sal_uInt32 a(0); a < mrView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = mrView.GetPaintWindow(a);
-        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        const rtl::Reference< sdr::overlay::OverlayManager >& xTargetOverlay = pCandidate->GetOverlayManager();
 
         if(xTargetOverlay.is())
         {

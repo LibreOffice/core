@@ -58,7 +58,7 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
     for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        const rtl::Reference< sdr::overlay::OverlayManager >& xTargetOverlay = pCandidate->GetOverlayManager();
 
         if (xTargetOverlay.is())
         {
@@ -132,7 +132,7 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
     for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        const rtl::Reference< sdr::overlay::OverlayManager >& xTargetOverlay = pCandidate->GetOverlayManager();
 
         if (xTargetOverlay.is())
         {

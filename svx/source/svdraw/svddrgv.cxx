@@ -784,7 +784,7 @@ void SdrDragView::ShowDragObj()
         for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
         {
             SdrPaintWindow* pCandidate = GetPaintWindow(a);
-            rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pCandidate->GetOverlayManager();
+            const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager = pCandidate->GetOverlayManager();
 
             if (xOverlayManager.is())
             {

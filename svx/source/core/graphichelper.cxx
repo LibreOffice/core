@@ -352,7 +352,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
         SvtPathOptions aPathOpt;
-        OUString sGraphicPath( aPathOpt.GetGraphicPath() );
+        const OUString& sGraphicPath( aPathOpt.GetGraphicPath() );
 
         FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
         Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();

@@ -1502,7 +1502,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
 
     // transfer value to the model
     DbGridColumn* pCol = DbGridControl::GetColumns()[ GetModelColumnPos(nId) ].get();
-    Reference< css::beans::XPropertySet >  xColModel(pCol->getModel());
+    const Reference< css::beans::XPropertySet >&  xColModel(pCol->getModel());
     if (xColModel.is())
     {
         Any aWidth;

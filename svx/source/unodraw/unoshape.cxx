@@ -2809,8 +2809,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         SdrLayer* pLayer = GetSdrObject()->getSdrModelFromSdrObject().GetLayerAdmin().GetLayerPerID(GetSdrObject()->GetLayer());
         if( pLayer )
         {
-            OUString aName( pLayer->GetName() );
-            rValue <<= aName;
+            rValue <<= pLayer->GetName();
         }
         break;
     }

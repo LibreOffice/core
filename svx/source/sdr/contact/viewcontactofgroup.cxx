@@ -63,7 +63,7 @@ namespace sdr
                 for(sal_uInt32 a(0); a < nObjectCount; a++)
                 {
                     const ViewContact& rCandidate(GetViewContact(a));
-                    const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
+                    const drawinglayer::primitive2d::Primitive2DContainer& aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
 
                     xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
                 }

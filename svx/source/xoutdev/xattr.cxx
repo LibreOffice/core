@@ -200,7 +200,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     }
                     else
                     {
-                        const OUString aEntryName = pEntry->GetName();
+                        const OUString& aEntryName = pEntry->GetName();
                         if(aEntryName.getLength() >= aUser.getLength())
                         {
                             sal_Int32 nThisIndex = aEntryName.copy( aUser.getLength() ).toInt32();

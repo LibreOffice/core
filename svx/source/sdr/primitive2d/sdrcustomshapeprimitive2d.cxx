@@ -41,7 +41,7 @@ namespace drawinglayer
             // add text
             if(!getSdrSTAttribute().getText().isDefault())
             {
-                const basegfx::B2DPolygon aUnitOutline(basegfx::utils::createUnitPolygon());
+                const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
 
                 aRetval.push_back(
                     createTextPrimitive(

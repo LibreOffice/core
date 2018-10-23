@@ -938,7 +938,7 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
         sdr::table::SdrTableObj* pTableObj = pController->GetTableObj();
         if ( pTableObj )
         {
-            sdr::table::CellRef xCellRef (pTableObj->getActiveCell());
+            const sdr::table::CellRef& xCellRef (pTableObj->getActiveCell());
             if ( xCellRef.is() )
             {
                 try
