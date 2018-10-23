@@ -94,7 +94,7 @@ SidebarController::SidebarController (
       mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
               rxFrame,
-              [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
+              [this](const OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
               [this](const tools::Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
       mxFrame(rxFrame),
@@ -581,7 +581,7 @@ void SidebarController::SwitchToDefaultDeck()
 }
 
 void SidebarController::SwitchToDeck (
-    const ::rtl::OUString& rsDeckId)
+    const OUString& rsDeckId)
 {
     if (  msCurrentDeckId != rsDeckId
         || ! mbIsDeckOpen
@@ -594,11 +594,11 @@ void SidebarController::SwitchToDeck (
     }
 }
 
-void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId) {
+void SidebarController::CreateDeck(const OUString& rDeckId) {
     CreateDeck(rDeckId, maCurrentContext);
 }
 
-void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, const Context& rContext, bool bForceCreate)
+void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rContext, bool bForceCreate)
 {
     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
@@ -620,7 +620,7 @@ void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, const Context
     }
 }
 
-void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId, const Context& rContext)
+void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rContext)
 {
      std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
@@ -854,7 +854,7 @@ VclPtr<Panel> SidebarController::CreatePanel (
 
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
     const Reference<awt::XWindowPeer>& rxWindow,
-    const ::rtl::OUString& rsImplementationURL,
+    const OUString& rsImplementationURL,
     const bool bWantsCanvas,
     const Context& rContext)
 {
@@ -1348,7 +1348,7 @@ ResourceManager::DeckContextDescriptorContainer SidebarController::GetMatchingDe
     return aDecks;
 }
 
-ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingPanels(const ::rtl::OUString& rDeckId)
+ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingPanels(const OUString& rDeckId)
 {
     ResourceManager::PanelContextDescriptorContainer aPanels;
 

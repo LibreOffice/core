@@ -69,7 +69,7 @@ public:
     GLuint Id() { return mnId; }
 
     bool Load( const OUString& rVertexShader, const OUString& rFragmentShader,
-               const rtl::OString& preamble, const rtl::OString& rDigest );
+               const OString& preamble, const OString& rDigest );
     void Use();
     void Reuse();
     void Clean();

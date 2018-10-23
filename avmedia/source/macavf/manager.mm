@@ -36,7 +36,7 @@ Manager::~Manager()
 {}
 
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
 {
     Player*                             pPlayer( new Player( mxMgr ) );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
@@ -49,19 +49,19 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
 }
 
 
-::rtl::OUString SAL_CALL Manager::getImplementationName(  )
+OUString SAL_CALL Manager::getImplementationName(  )
 {
-    return ::rtl::OUString( AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME );
 }
 
 
-sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_MANAGER_SERVICENAME;
 }
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_MANAGER_SERVICENAME };
 }

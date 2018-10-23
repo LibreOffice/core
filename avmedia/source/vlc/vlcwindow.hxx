@@ -42,9 +42,9 @@ public:
     css::media::ZoomLevel SAL_CALL getZoomLevel() override;
     void SAL_CALL setPointerType( ::sal_Int32 SystemPointerType ) override;
 
-    ::rtl::OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) override;
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& serviceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void SAL_CALL dispose() override;
     void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;

@@ -694,7 +694,7 @@ void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
 {
 }
 
-void SfxShell::SetContextName (const ::rtl::OUString& rsContextName)
+void SfxShell::SetContextName (const OUString& rsContextName)
 {
     pImpl->maContextChangeBroadcaster.Initialize(rsContextName);
 }

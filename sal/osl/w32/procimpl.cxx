@@ -45,7 +45,7 @@ namespace /* private */
        second one. */
     struct less_environment_variable
     {
-        bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const
+        bool operator() (const OUString& lhs, const OUString& rhs) const
         {
             OSL_ENSURE((lhs.indexOf(L'=') > -1) &&
                         (rhs.indexOf(L'=') > -1),
@@ -70,7 +70,7 @@ namespace /* private */
 
         sum_of_string_lengths() : sum_(0) {}
 
-        void operator() (const rtl::OUString& string)
+        void operator() (const OUString& string)
         {
             OSL_ASSERT(string.getLength());
 
@@ -128,7 +128,7 @@ namespace /* private */
 
         for (sal_uInt32 i = 0; i < env_vars_count; i++)
         {
-            rtl::OUString env_var = rtl::OUString(env_vars[i]);
+            OUString env_var = OUString(env_vars[i]);
 
             if (env_var.getLength() == 0)
                 return false;
@@ -236,9 +236,9 @@ namespace /* private */
 
     // Add a quote sign to the start and the end of a string
     // if not already present
-    rtl::OUString quote_string(const rtl::OUString& string)
+    OUString quote_string(const OUString& string)
     {
-        rtl::OUStringBuffer quoted;
+        OUStringBuffer quoted;
         if (string.indexOf(L'"') != 0)
             quoted.append('"');
 
@@ -256,9 +256,9 @@ namespace /* private */
     // may not have the file extension ".exe". However, if the file on disk has the
     // ".exe" extension, then the function will fail. In this case a second attempt
     // is started by adding the parameter "extension" to "path".
-    rtl::OUString getShortPath(rtl::OUString const & path, rtl::OUString const & extension)
+    OUString getShortPath(OUString const & path, OUString const & extension)
     {
-        rtl::OUString ret(path);
+        OUString ret(path);
         if (path.getLength() > 260)
         {
             std::vector<sal_Unicode> vec(path.getLength() + 1);
@@ -269,16 +269,16 @@ namespace /* private */
             if (!len && GetLastError() == ERROR_FILE_NOT_FOUND
                 && extension.getLength())
             {
-                const rtl::OUString extPath(path + extension);
+                const OUString extPath(path + extension);
                 std::vector<sal_Unicode> vec2(
                     extPath.getLength() + 1);
                 const DWORD len2 = GetShortPathNameW(
                     o3tl::toW(extPath.getStr()), o3tl::toW(&vec2[0]), extPath.getLength() + 1);
-                ret = rtl::OUString(&vec2[0], len2);
+                ret = OUString(&vec2[0], len2);
             }
             else
             {
-                ret = rtl::OUString(&vec[0], len);
+                ret = OUString(&vec[0], len);
             }
         }
         return ret;
@@ -288,26 +288,26 @@ namespace /* private */
     // be provided via the strImageName parameter or as first
     // element of the strArguments list.
     // The returned path will be quoted if it contains spaces.
-    rtl::OUString get_executable_path(
+    OUString get_executable_path(
         rtl_uString* image_name,
         rtl_uString* cmdline_args[],
         sal_uInt32 n_cmdline_args,
         bool search_path)
     {
-        rtl::OUString exe_name;
+        OUString exe_name;
 
         if (image_name)
             exe_name = image_name;
         else if (n_cmdline_args)
-            exe_name = rtl::OUString(cmdline_args[0]);
+            exe_name = OUString(cmdline_args[0]);
 
-        rtl::OUString exe_url = exe_name;
+        OUString exe_url = exe_name;
         if (search_path)
             osl_searchFileURL(exe_name.pData, nullptr, &exe_url.pData);
 
-        rtl::OUString exe_path;
+        OUString exe_path;
         if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
-            return rtl::OUString();
+            return OUString();
 
         exe_path = getShortPath(exe_path, ".exe");
 
@@ -317,27 +317,27 @@ namespace /* private */
         return exe_path;
     }
 
-    rtl::OUString get_file_extension(const rtl::OUString& file_name)
+    OUString get_file_extension(const OUString& file_name)
     {
         sal_Int32 index = file_name.lastIndexOf('.');
         if ((index != -1) && ((index + 1) < file_name.getLength()))
             return file_name.copy(index + 1);
 
-        return rtl::OUString();
+        return OUString();
     }
 
-    bool is_batch_file(const rtl::OUString& file_name)
+    bool is_batch_file(const OUString& file_name)
     {
-        rtl::OUString ext = get_file_extension(file_name);
+        OUString ext = get_file_extension(file_name);
         return (ext.equalsIgnoreAsciiCase("bat") ||
                 ext.equalsIgnoreAsciiCase("cmd") ||
                 ext.equalsIgnoreAsciiCase("btm"));
     }
 
-    const rtl::OUString ENV_COMSPEC ("COMSPEC");
-    rtl::OUString get_batch_processor()
+    const OUString ENV_COMSPEC ("COMSPEC");
+    OUString get_batch_processor()
     {
-        rtl::OUString comspec;
+        OUString comspec;
         osl_getEnvironment(ENV_COMSPEC.pData, &comspec.pData);
 
         OSL_ASSERT(comspec.getLength());
@@ -390,7 +390,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     oslFileHandle *pProcessOutputRead,
     oslFileHandle *pProcessErrorRead)
 {
-    rtl::OUString exe_path = get_executable_path(
+    OUString exe_path = get_executable_path(
         ustrImageName, ustrArguments, nArguments, (Options & osl_Process_SEARCHPATH) != 0);
 
     if (0 == exe_path.getLength())
@@ -400,11 +400,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         return osl_Process_E_InvalidError;
 
     DWORD flags = NORMAL_PRIORITY_CLASS;
-    rtl::OUStringBuffer command_line;
+    OUStringBuffer command_line;
 
     if (is_batch_file(exe_path))
     {
-        rtl::OUString batch_processor = get_batch_processor();
+        OUString batch_processor = get_batch_processor();
 
         if (batch_processor.getLength())
         {
@@ -430,7 +430,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         command_line.append(" ");
 
         /* Quote arguments containing blanks */
-        if (rtl::OUString(ustrArguments[n]).indexOf(' ') != -1)
+        if (OUString(ustrArguments[n]).indexOf(' ') != -1)
             command_line.append(quote_string(ustrArguments[n]));
         else
             command_line.append(ustrArguments[n]);
@@ -449,7 +449,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         p_environment = &environment[0];
     }
 
-    rtl::OUString cwd;
+    OUString cwd;
     if (ustrDirectory && ustrDirectory->length && (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
            return osl_Process_E_InvalidError;
 
@@ -510,7 +510,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
             startup_info.wShowWindow = SW_NORMAL;
     }
 
-    rtl::OUString cmdline = command_line.makeStringAndClear();
+    OUString cmdline = command_line.makeStringAndClear();
     PROCESS_INFORMATION process_info;
     BOOL bRet = FALSE;
 

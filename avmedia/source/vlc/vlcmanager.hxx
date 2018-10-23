@@ -37,15 +37,15 @@ public:
     explicit Manager();
     virtual ~Manager() override;
 
-    css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) override;
+    css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const OUString& aURL ) override;
 
-    rtl::OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService( const rtl::OUString& serviceName ) override;
-    css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& serviceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     css::uno::Reference< css::media::XPlayer >             mPlayer;
-    rtl::OUString                                          mURL;
+    OUString                                               mURL;
     bool                                                   m_is_vlc_found;
 };
 

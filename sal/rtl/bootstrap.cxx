@@ -55,10 +55,6 @@
 using osl::DirectoryItem;
 using osl::FileStatus;
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OUStringToOString;
-
 struct Bootstrap_Impl;
 
 namespace
@@ -66,12 +62,12 @@ namespace
 
 static char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
 
-bool isPathnameUrl(rtl::OUString const & url)
+bool isPathnameUrl(OUString const & url)
 {
     return url.matchIgnoreAsciiCase(VND_SUN_STAR_PATHNAME);
 }
 
-bool resolvePathnameUrl(rtl::OUString * url)
+bool resolvePathnameUrl(OUString * url)
 {
     OSL_ASSERT(url);
     if (!isPathnameUrl(*url) ||
@@ -81,7 +77,7 @@ bool resolvePathnameUrl(rtl::OUString * url)
     {
         return true;
     }
-    *url = rtl::OUString();
+    *url = OUString();
     return false;
 }
 
@@ -92,23 +88,23 @@ enum LookupMode {
 struct ExpandRequestLink {
     ExpandRequestLink const * next;
     Bootstrap_Impl const * file;
-    rtl::OUString const key;
+    OUString const key;
 };
 
-rtl::OUString expandMacros(
-    Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
+OUString expandMacros(
+    Bootstrap_Impl const * file, OUString const & text, LookupMode mode,
     ExpandRequestLink const * requestStack);
 
-rtl::OUString recursivelyExpandMacros(
-    Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
-    Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
+OUString recursivelyExpandMacros(
+    Bootstrap_Impl const * file, OUString const & text, LookupMode mode,
+    Bootstrap_Impl const * requestFile, OUString const & requestKey,
     ExpandRequestLink const * requestStack)
 {
     for (; requestStack; requestStack = requestStack->next) {
         if (requestStack->file == requestFile &&
             requestStack->key == requestKey)
         {
-            return rtl::OUString("***RECURSION DETECTED***");
+            return OUString("***RECURSION DETECTED***");
         }
     }
     ExpandRequestLink link = { requestStack, requestFile, requestKey };
@@ -133,8 +129,8 @@ struct rtl_bootstrap_NameValue
 typedef std::vector<rtl_bootstrap_NameValue> NameValueVector;
 
 static bool find(
-    NameValueVector const & vector, rtl::OUString const & key,
-    rtl::OUString * value)
+    NameValueVector const & vector, OUString const & key,
+    OUString * value)
 {
     OSL_ASSERT(value);
     for (NameValueVector::const_iterator i(vector.begin()); i != vector.end(); ++i)
@@ -155,7 +151,7 @@ namespace
 }
 
 static bool getFromCommandLineArgs(
-    rtl::OUString const & key, rtl::OUString * value )
+    OUString const & key, OUString * value )
 {
     OSL_ASSERT(value);
 
@@ -243,13 +239,13 @@ static OUString & getIniFileName_Impl()
         // possibility to have several "applications" in the same
         // installation location with different inifiles.
         const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
-        fileName = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
+        fileName = OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
         resolvePathnameUrl(&fileName);
 #elif defined ANDROID
         // Apps are self-contained on Android, too, can as well hardcode
         // it as "rc" in the "/assets" directory, i.e.  inside the app's
         // .apk (zip) archive as the /assets/rc file.
-        fileName = rtl::OUString("vnd.sun.star.pathname:/assets/rc");
+        fileName = OUString("vnd.sun.star.pathname:/assets/rc");
         resolvePathnameUrl(&fileName);
 #else
         if (getFromCommandLineArgs("INIFILENAME", &fileName))
@@ -300,7 +296,7 @@ static OUString & getIniFileName_Impl()
 
 // ensure the given file url has no final slash
 
-static void EnsureNoFinalSlash (rtl::OUString & url)
+static void EnsureNoFinalSlash (OUString & url)
 {
     sal_Int32 i = url.getLength();
 
@@ -325,18 +321,18 @@ struct Bootstrap_Impl
         { free (p); }
 
     bool getValue(
-        rtl::OUString const & key, rtl_uString ** value,
+        OUString const & key, rtl_uString ** value,
         rtl_uString * defaultValue, LookupMode mode, bool override,
         ExpandRequestLink const * requestStack) const;
     bool getDirectValue(
-        rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
+        OUString const & key, rtl_uString ** value, LookupMode mode,
         ExpandRequestLink const * requestStack) const;
     bool getAmbienceValue(
-        rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
+        OUString const & key, rtl_uString ** value, LookupMode mode,
         ExpandRequestLink const * requestStack) const;
     void expandValue(
-        rtl_uString ** value, rtl::OUString const & text, LookupMode mode,
-        Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
+        rtl_uString ** value, OUString const & text, LookupMode mode,
+        Bootstrap_Impl const * requestFile, OUString const & requestKey,
         ExpandRequestLink const * requestStack) const;
 };
 
@@ -443,7 +439,7 @@ struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
 }
 
 bool Bootstrap_Impl::getValue(
-    rtl::OUString const & key, rtl_uString ** value, rtl_uString * defaultValue,
+    OUString const & key, rtl_uString ** value, rtl_uString * defaultValue,
     LookupMode mode, bool override, ExpandRequestLink const * requestStack)
     const
 {
@@ -456,14 +452,14 @@ bool Bootstrap_Impl::getValue(
     if (key == "_OS")
     {
         rtl_uString_assign(
-            value, rtl::OUString(RTL_OS).pData);
+            value, OUString(RTL_OS).pData);
         return true;
     }
 
     if (key == "_ARCH")
     {
         rtl_uString_assign(
-            value, rtl::OUString(RTL_ARCH).pData);
+            value, OUString(RTL_ARCH).pData);
         return true;
     }
 
@@ -471,7 +467,7 @@ bool Bootstrap_Impl::getValue(
     {
         rtl_uString_assign(
             value,
-            (rtl::OUString(
+            (OUString(
                 SAL_STRINGIFY(CPPU_ENV)).
              pData));
         return true;
@@ -482,7 +478,7 @@ bool Bootstrap_Impl::getValue(
     {
         const char *app_data_dir = lo_get_app_data_dir();
         rtl_uString_assign(
-            value, rtl::OUString(app_data_dir, strlen(app_data_dir), RTL_TEXTENCODING_UTF8).pData);
+            value, OUString(app_data_dir, strlen(app_data_dir), RTL_TEXTENCODING_UTF8).pData);
         return true;
     }
 #endif
@@ -492,7 +488,7 @@ bool Bootstrap_Impl::getValue(
     {
         const char *app_data_dir = [[[[NSBundle mainBundle] bundlePath] stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLPathAllowedCharacterSet]] UTF8String];
         rtl_uString_assign(
-            value, rtl::OUString(app_data_dir, strlen(app_data_dir), RTL_TEXTENCODING_UTF8).pData);
+            value, OUString(app_data_dir, strlen(app_data_dir), RTL_TEXTENCODING_UTF8).pData);
         return true;
     }
 #endif
@@ -511,7 +507,7 @@ bool Bootstrap_Impl::getValue(
 
     if (key == "SYSUSERCONFIG")
     {
-        rtl::OUString v;
+        OUString v;
         bool b = osl::Security().getConfigDir(v);
         EnsureNoFinalSlash(v);
         rtl_uString_assign(value, v.pData);
@@ -520,7 +516,7 @@ bool Bootstrap_Impl::getValue(
 
     if (key == "SYSUSERHOME")
     {
-        rtl::OUString v;
+        OUString v;
         bool b = osl::Security().getHomeDir(v);
         EnsureNoFinalSlash(v);
         rtl_uString_assign(value, v.pData);
@@ -558,10 +554,10 @@ bool Bootstrap_Impl::getValue(
 }
 
 bool Bootstrap_Impl::getDirectValue(
-    rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
+    OUString const & key, rtl_uString ** value, LookupMode mode,
     ExpandRequestLink const * requestStack) const
 {
-    rtl::OUString v;
+    OUString v;
     if (find(_nameValueVector, key, &v))
     {
         expandValue(value, v, mode, this, key, requestStack);
@@ -572,10 +568,10 @@ bool Bootstrap_Impl::getDirectValue(
 }
 
 bool Bootstrap_Impl::getAmbienceValue(
-    rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
+    OUString const & key, rtl_uString ** value, LookupMode mode,
     ExpandRequestLink const * requestStack) const
 {
-    rtl::OUString v;
+    OUString v;
     bool f;
 
     {
@@ -594,8 +590,8 @@ bool Bootstrap_Impl::getAmbienceValue(
 }
 
 void Bootstrap_Impl::expandValue(
-    rtl_uString ** value, rtl::OUString const & text, LookupMode mode,
-    Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
+    rtl_uString ** value, OUString const & text, LookupMode mode,
+    Bootstrap_Impl const * requestFile, OUString const & requestKey,
     ExpandRequestLink const * requestStack) const
 {
     rtl_uString_assign(
@@ -613,7 +609,7 @@ namespace {
 
 struct bootstrap_map {
     typedef std::unordered_map<
-        rtl::OUString, Bootstrap_Impl * > t;
+        OUString, Bootstrap_Impl * > t;
 
     bootstrap_map(const bootstrap_map&) = delete;
     bootstrap_map& operator=(const bootstrap_map&) = delete;
@@ -830,7 +826,7 @@ void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 void rtl_bootstrap_encode(rtl_uString const * value, rtl_uString ** encoded)
 {
     OSL_ASSERT(value);
-    rtl::OUStringBuffer b;
+    OUStringBuffer b;
     for (sal_Int32 i = 0; i < value->length; ++i)
     {
         sal_Unicode c = value->buffer[i];
@@ -853,7 +849,7 @@ int hex(sal_Unicode c)
         c >= 'a' && c <= 'f' ? c - 'a' + 10 : -1;
 }
 
-sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped)
+sal_Unicode read(OUString const & text, sal_Int32 * pos, bool * escaped)
 {
     OSL_ASSERT(pos && *pos >= 0 && *pos < text.getLength() && escaped);
     sal_Unicode c = text[(*pos)++];
@@ -883,22 +879,22 @@ sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped)
     return c;
 }
 
-rtl::OUString lookup(
+OUString lookup(
     Bootstrap_Impl const * file, LookupMode mode, bool override,
-    rtl::OUString const & key, ExpandRequestLink const * requestStack)
+    OUString const & key, ExpandRequestLink const * requestStack)
 {
-    rtl::OUString v;
+    OUString v;
     (file == nullptr ? get_static_bootstrap_handle() : file)->getValue(
         key, &v.pData, nullptr, mode, override, requestStack);
     return v;
 }
 
-rtl::OUString expandMacros(
-    Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
+OUString expandMacros(
+    Bootstrap_Impl const * file, OUString const & text, LookupMode mode,
     ExpandRequestLink const * requestStack)
 {
     SAL_INFO("sal.bootstrap", "expandMacros called with: " << text);
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
 
     for (sal_Int32 i = 0; i < text.getLength();)
     {
@@ -915,7 +911,7 @@ rtl::OUString expandMacros(
                 ++i;
                 sal_Int32 p = i;
                 sal_Int32 nesting = 0;
-                rtl::OUString seg[3];
+                OUString seg[3];
                 int n = 0;
 
                 while (i < text.getLength())
@@ -992,20 +988,20 @@ rtl::OUString expandMacros(
                         // replacement text (and if it did, it would fail to
                         // detect cycles that pass through here):
                         buf.append(
-                            rtl::OStringToOUString(
+                            OStringToOUString(
                                 osl::Profile(seg[0]).readString(
-                                    rtl::OUStringToOString(
+                                    OUStringToOString(
                                         seg[1], RTL_TEXTENCODING_UTF8),
-                                    rtl::OUStringToOString(
+                                    OUStringToOString(
                                         seg[2], RTL_TEXTENCODING_UTF8),
-                                    rtl::OString()),
+                                    OString()),
                                 RTL_TEXTENCODING_UTF8));
                     }
                 }
             }
             else
             {
-                rtl::OUStringBuffer kbuf;
+                OUStringBuffer kbuf;
                 for (; i < text.getLength();)
                 {
                     sal_Int32 j = i;

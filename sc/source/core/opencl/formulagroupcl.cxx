@@ -300,7 +300,7 @@ public:
             throw Unhandled(__FILE__, __LINE__);
         }
 
-        const rtl::OUString s = ref->GetString().getString().toAsciiUpperCase();
+        const OUString s = ref->GetString().getString().toAsciiUpperCase();
         hashCode = s.hashCode();
 
         // Pass the scalar result back to the rest of the formula kernel

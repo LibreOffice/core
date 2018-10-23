@@ -53,9 +53,6 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
 namespace cppu
 {
 

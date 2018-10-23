@@ -25,13 +25,13 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
             , m_sServiceBaseUrl("https://api.libreoffice.org/docs/idl/ref")
             {};
         // XServiceDocumenter
-        virtual ::rtl::OUString SAL_CALL getCoreBaseUrl() override
+        virtual OUString SAL_CALL getCoreBaseUrl() override
             { return m_sCoreBaseUrl; };
-        virtual void SAL_CALL setCoreBaseUrl( const ::rtl::OUString& sCoreBaseUrl ) override
+        virtual void SAL_CALL setCoreBaseUrl( const OUString& sCoreBaseUrl ) override
             { m_sCoreBaseUrl = sCoreBaseUrl; };
-        virtual ::rtl::OUString SAL_CALL getServiceBaseUrl() override
+        virtual OUString SAL_CALL getServiceBaseUrl() override
             { return m_sServiceBaseUrl; };
-        virtual void SAL_CALL setServiceBaseUrl( const ::rtl::OUString& sServiceBaseUrl ) override
+        virtual void SAL_CALL setServiceBaseUrl( const OUString& sServiceBaseUrl ) override
             { m_sServiceBaseUrl = sServiceBaseUrl; };
         virtual void SAL_CALL showServiceDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) override;
         virtual void SAL_CALL showInterfaceDocs( const ::css::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) override;

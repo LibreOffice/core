@@ -121,14 +121,14 @@ void SAL_CALL OStatement::clearBatch()
     // if you support batches clear it here
 }
 
-sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
+sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
+    const OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
 
-    rtl::OString toExec
-        = rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding);
+    OString toExec
+        = OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding);
 
     MYSQL* pMySql = m_xConnection->getMysqlConnection();
 
@@ -145,14 +145,13 @@ sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
     return !failure;
 }
 
-Reference<XResultSet> SAL_CALL OCommonStatement::executeQuery(const rtl::OUString& sql)
+Reference<XResultSet> SAL_CALL OCommonStatement::executeQuery(const OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement
-        = sql; // TODO m_xConnection->transFormPreparedStatement( sql );
-    rtl::OString toExec
-        = rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding);
+    const OUString sSqlStatement = sql; // TODO m_xConnection->transFormPreparedStatement( sql );
+    OString toExec
+        = OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding);
 
     MYSQL* pMySql = m_xConnection->getMysqlConnection();
     // toExec = mysqlc_sdbc_driver::escapeSql(toExec);
@@ -194,7 +193,7 @@ Any SAL_CALL OStatement::queryInterface(const Type& rType)
     return aRet;
 }
 
-void SAL_CALL OStatement::addBatch(const rtl::OUString&)
+void SAL_CALL OStatement::addBatch(const OUString&)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -209,7 +208,7 @@ Sequence<sal_Int32> SAL_CALL OStatement::executeBatch()
     return aRet;
 }
 
-sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const rtl::OUString& sql)
+sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -255,7 +254,7 @@ void SAL_CALL OCommonStatement::clearWarnings()
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
     pProperties[nPos++]
-        = Property("CursorName", PROPERTY_ID_CURSORNAME, cppu::UnoType<rtl::OUString>::get(), 0);
+        = Property("CursorName", PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
     pProperties[nPos++]
         = Property("EscapeProcessing", PROPERTY_ID_ESCAPEPROCESSING, cppu::UnoType<bool>::get(), 0);
     pProperties[nPos++] = Property("FetchDirection", PROPERTY_ID_FETCHDIRECTION,
@@ -328,19 +327,16 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
     }
 }
 
-rtl::OUString OStatement::getImplementationName()
-{
-    return rtl::OUString("com.sun.star.sdbcx.OStatement");
-}
+OUString OStatement::getImplementationName() { return OUString("com.sun.star.sdbcx.OStatement"); }
 
-css::uno::Sequence<rtl::OUString> OStatement::getSupportedServiceNames()
+css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
 {
-    css::uno::Sequence<rtl::OUString> s(1);
+    css::uno::Sequence<OUString> s(1);
     s[0] = "com.sun.star.sdbc.Statement";
     return s;
 }
 
-sal_Bool OStatement::supportsService(rtl::OUString const& ServiceName)
+sal_Bool OStatement::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -861,7 +861,7 @@ sal_uInt16 addFieldInit(
     OString name(codemaker::convertString(fieldName));
     OUString nucleus;
     sal_Int32 rank;
-    std::vector< rtl::OUString > args;
+    std::vector< OUString > args;
     rtl::Reference< unoidl::Entity > ent;
     codemaker::UnoType::Sort sort = manager->decompose(
         fieldType, true, &nucleus, &rank, &args, &ent);

@@ -72,10 +72,10 @@ public:
         const cssu::Reference<cssu::XInterface>& rxEventFocus) override;
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService  (
-        const ::rtl::OUString& rsServiceName) override;
-    virtual cssu::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+        const OUString& rsServiceName) override;
+    virtual cssu::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XEventListener
     virtual void SAL_CALL disposing (
@@ -86,8 +86,8 @@ public:
     {
     public:
         ListenerContainer maListeners;
-        ::rtl::OUString msCurrentApplicationName;
-        ::rtl::OUString msCurrentContextName;
+        OUString msCurrentApplicationName;
+        OUString msCurrentContextName;
     };
     typedef ::std::map<cssu::Reference<cssu::XInterface>, FocusDescriptor> ListenerMap;
     ListenerMap maListeners;
@@ -288,7 +288,7 @@ OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()
     return OUString("org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer");
 }
 
-sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const ::rtl::OUString& rsServiceName)
+sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)
 {
     return cppu::supportsService(this, rsServiceName);
 }

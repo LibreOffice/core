@@ -31,8 +31,8 @@ namespace cppu { namespace detail {
 
 #ifndef DISABLE_DYNLOADING
 
-bool loadModule(osl::Module& rModule, rtl::OUString const & name) {
-    rtl::OUStringBuffer b;
+bool loadModule(osl::Module& rModule, OUString const & name) {
+    OUStringBuffer b;
 #if defined SAL_DLLPREFIX
     b.append(SAL_DLLPREFIX);
 #endif

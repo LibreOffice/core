@@ -108,7 +108,7 @@ void TextCharacterSpacingControl::Initialize()
     if(aWinOpt.Exists())
     {
         css::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if(aSeq.getLength())
             aSeq[0].Value >>= aTmp;
 

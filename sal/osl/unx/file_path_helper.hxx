@@ -184,7 +184,7 @@ namespace osl
 
   ******************************************/
 
- inline void systemPathRemoveSeparator(/*inout*/ rtl::OUString& Path)
+ inline void systemPathRemoveSeparator(/*inout*/ OUString& Path)
  {
      osl_systemPathRemoveSeparator(Path.pData);
  }
@@ -206,7 +206,7 @@ namespace osl
 
   ******************************************/
 
- inline void systemPathEnsureSeparator(/*inout*/ rtl::OUString& Path)
+ inline void systemPathEnsureSeparator(/*inout*/ OUString& Path)
  {
      osl_systemPathEnsureSeparator(&Path.pData);
  }
@@ -225,7 +225,7 @@ namespace osl
 
   ******************************************/
 
- inline bool systemPathIsRelativePath(const rtl::OUString& Path)
+ inline bool systemPathIsRelativePath(const OUString& Path)
  {
     return osl_systemPathIsRelativePath(Path.pData);
  }
@@ -265,9 +265,9 @@ namespace osl
   *****************************************/
 
  inline void systemPathMakeAbsolutePath(
-     const rtl::OUString& BasePath,
-    const rtl::OUString& RelPath,
-    rtl::OUString&       AbsolutePath)
+     const OUString& BasePath,
+    const OUString& RelPath,
+    OUString&       AbsolutePath)
  {
     osl_systemPathMakeAbsolutePath(
         BasePath.pData, RelPath.pData, &AbsolutePath.pData);
@@ -291,7 +291,7 @@ namespace osl
  *********************************************/
 
  inline bool systemPathIsHiddenFileOrDirectoryEntry(
-     const rtl::OUString& Path)
+     const OUString& Path)
  {
     return osl_systemPathIsHiddenFileOrDirectoryEntry(Path.pData);
  }
@@ -301,9 +301,9 @@ namespace osl
   ***********************************************/
 
  inline bool searchPath(
-     const rtl::OUString& ustrFilePath,
-    const rtl::OUString& ustrSearchPathList,
-    rtl::OUString& ustrPathFound)
+     const OUString& ustrFilePath,
+    const OUString& ustrSearchPathList,
+    OUString& ustrPathFound)
  {
      return osl_searchPath(
         ustrFilePath.pData,

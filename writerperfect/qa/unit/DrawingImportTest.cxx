@@ -38,13 +38,12 @@ public:
     }
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
-    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
-                                rtl::OUString& rTypeName) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
                                   OdgGenerator& rGenerator,
                                   utl::MediaDescriptor& rDescriptor) override;
@@ -59,24 +58,24 @@ bool DrawingImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputS
     return true;
 }
 
-bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream&, rtl::OUString& rTypeName)
+bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
     rTypeName = "WpftDummyDrawing";
     return true;
 }
 
 // XServiceInfo
-rtl::OUString SAL_CALL DrawingImportFilter::getImplementationName()
+OUString SAL_CALL DrawingImportFilter::getImplementationName()
 {
     return OUString("org.libreoffice.comp.Wpft.QA.DrawingImportFilter");
 }
 
-sal_Bool SAL_CALL DrawingImportFilter::supportsService(const rtl::OUString& rServiceName)
+sal_Bool SAL_CALL DrawingImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL DrawingImportFilter::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL DrawingImportFilter::getSupportedServiceNames()
 {
     return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
@@ -146,10 +145,9 @@ void DrawingImportTest::test()
     uno::Reference<drawing::XShapeDescriptor> xShapeDesc;
     CPPUNIT_ASSERT(aShape >>= xShapeDesc);
     CPPUNIT_ASSERT(xShapeDesc.is());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("com.sun.star.drawing.TextShape"),
-                         xShapeDesc->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShapeDesc->getShapeType());
     uno::Reference<text::XText> xText(xShapeDesc, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xText->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("My hovercraft is full of eels."), xText->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DrawingImportTest);

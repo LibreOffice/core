@@ -65,7 +65,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                                : 0;
         if ( nPropCount > 0 )
         {
-            rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             // add PropPatch xml header in front
             aBuffer.append( PROPPATCH_HEADER );
 
@@ -137,7 +137,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
             // add PropPatch xml trailer at end
             aBuffer.append( PROPPATCH_TRAILER );
 
-            aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+            aBodyText = OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
             body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
                                                        aBodyText.getLength(),
                                                        pSerfBucketAlloc );

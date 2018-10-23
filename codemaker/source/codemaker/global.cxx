@@ -333,30 +333,30 @@ FileStream &operator<<(FileStream& o, char const * s) {
     osl_writeFile(o.m_file, s, strlen(s), &writtenBytes);
     return o;
 }
-FileStream &operator<<(FileStream& o, ::rtl::OString const * s) {
+FileStream &operator<<(FileStream& o, OString const * s) {
     sal_uInt64 writtenBytes;
     osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
-FileStream &operator<<(FileStream& o, const ::rtl::OString& s) {
+FileStream &operator<<(FileStream& o, const OString& s) {
     sal_uInt64 writtenBytes;
     osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 
 }
-FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer const * s) {
+FileStream &operator<<(FileStream& o, OStringBuffer const * s) {
     sal_uInt64 writtenBytes;
     osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
-FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s) {
+FileStream &operator<<(FileStream& o, const OStringBuffer& s) {
     sal_uInt64 writtenBytes;
     osl_writeFile(
         o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
 
-FileStream & operator <<(FileStream & out, rtl::OUString const & s) {
+FileStream & operator <<(FileStream & out, OUString const & s) {
     return out << OUStringToOString(s, RTL_TEXTENCODING_UTF8);
 }
 

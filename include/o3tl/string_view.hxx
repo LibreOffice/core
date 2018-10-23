@@ -28,7 +28,7 @@
 #include <sal/types.h>
 
 // An approximation of C++17 <string_view>, including implicit conversion
-// from rtl::OString and rtl::OUString.
+// from OString and OUString.
 
 namespace o3tl {
 
@@ -547,7 +547,7 @@ public:
         data_(s.data()), size_(s.size()) {}
 
     // For std::string_view, this will be provided by a (LIBO_INTERNAL_ONLY)
-    // non-explicit conversion operator from rtl::OString:
+    // non-explicit conversion operator from OString:
     template<typename T = charT> basic_string_view(
         OString const & s,
         typename std::enable_if<
@@ -556,7 +556,7 @@ public:
         data_(s.getStr()), size_(s.getLength()) {}
 
     // For std::u16string_view, this will be provided by a (LIBO_INTERNAL_ONLY)
-    // non-explicit conversion operator from rtl::OUString:
+    // non-explicit conversion operator from OUString:
     template<typename T = charT> basic_string_view(
         OUString const & s,
         typename std::enable_if<
@@ -566,10 +566,10 @@ public:
 
     // For std::u16string_view, this would either be provided by a
     // (LIBO_INTERNAL_ONLY) non-explicit conversion operator from
-    // rtl::OUStringLiteral, or rtl::OUStringLiteral would be given up in favor
+    // OUStringLiteral, or OUStringLiteral would be given up in favor
     // of std::u16string_view anyway (but this constructor also serves to reject
     // as ambiguous construction of a o3tl::u16string_view from a narrow string
-    // literal, which would otherwise go via the above rtl::OUString
+    // literal, which would otherwise go via the above OUString
     // constructor):
     template<typename T = charT> constexpr basic_string_view(
         OUStringLiteral literal,
@@ -858,7 +858,7 @@ namespace o3tl {
 // LO-specific convenience functions:
 
 // For std::u16string_view, this will be provided by a (LIBO_INTERNAL_ONLY)
-// rtl::OUString constructor:
+// OUString constructor:
 inline OUString toOUString(u16string_view s)
 { return OUString(s.data(), s.size()); }
 

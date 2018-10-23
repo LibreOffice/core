@@ -40,14 +40,14 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::ToString);
 
 void test::oustringbuffer::ToString::testToString() {
-    rtl::OUStringBuffer sb(rtl::OUString("test string"));
-    rtl::OUString str = sb.toString();
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString("test string"), str );
+    OUStringBuffer sb(OUString("test string"));
+    OUString str = sb.toString();
+    CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
     // returned OUString must be independent from sb
     sb.append( 'a' );
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString("test string"), str );
+    CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
     sb.setLength(0);
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString("test string"), str );
+    CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

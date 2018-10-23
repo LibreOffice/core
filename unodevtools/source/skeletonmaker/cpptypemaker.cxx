@@ -376,10 +376,10 @@ static void printSetPropertyMixinBody(
             o << "    v <<= " << buffer2.makeStringAndClear() << ";\n\n";
         }
 
-        o << "    prepareSet(\n        rtl::OUString(\""
+        o << "    prepareSet(\n        OUString(\""
           << attribute.name << "\"),\n        css::uno::Any(), v, ";
     } else {
-        o << "    prepareSet(\n        rtl::OUString(\""
+        o << "    prepareSet(\n        OUString(\""
           << attribute.name << "\"),\n        css::uno::Any(), css::uno::Any(), ";
     }
 
@@ -439,9 +439,9 @@ void printMethods(std::ostream & o,
     if (body && options.componenttype == 2) {
         if (name == "com.sun.star.lang.XServiceName") {
             o << "// ::com::sun::star::lang::XServiceName:\n"
-                "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
+                "OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
-                "return ::rtl::OUString("
+                "return OUString("
                 "sADDIN_SERVICENAME);\n}\n";
             generated.add(u2b(name));
             return;

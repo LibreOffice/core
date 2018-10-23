@@ -30,8 +30,6 @@ using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-using rtl::OUString;
-
 namespace
 {
     OUString str_ac_singleton()

@@ -70,7 +70,7 @@ public:
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
 
     // XAccessibleContext
-    ::rtl::OUString SAL_CALL getAccessibleName(  ) override;
+    OUString SAL_CALL getAccessibleName(  ) override;
 
 };
 

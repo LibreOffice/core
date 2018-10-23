@@ -128,7 +128,7 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
         const sal_uInt32 nSmartTagCount = xRecognizer->getSmartTagCount();
         for ( sal_uInt32 j = 0; j < nSmartTagCount && !bCallRecognizer; ++j )
         {
-            const rtl::OUString aSmartTagName = xRecognizer->getSmartTagName(j);
+            const OUString aSmartTagName = xRecognizer->getSmartTagName(j);
             if ( IsSmartTagTypeEnabled( aSmartTagName ) )
                 bCallRecognizer = true;
         }

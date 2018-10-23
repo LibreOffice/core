@@ -26,8 +26,8 @@ namespace salhelper
 typedef void* (*ApiInitFunction) ();
 
 ORealDynamicLoader::ORealDynamicLoader(ORealDynamicLoader ** ppSetToZeroInDestructor_,
-                       const rtl::OUString& moduleName,
-                       const rtl::OUString& initFunction,
+                       const OUString& moduleName,
+                       const OUString& initFunction,
                        void* pApi,
                        oslModule pModule)
     : m_pApi(pApi)
@@ -40,8 +40,8 @@ ORealDynamicLoader::ORealDynamicLoader(ORealDynamicLoader ** ppSetToZeroInDestru
 }
 
 ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetToZeroInDestructor,
-                                  const rtl::OUString& moduleName,
-                                  const rtl::OUString& initFunction)
+                                  const OUString& moduleName,
+                                  const OUString& initFunction)
 {
 #ifdef DISABLE_DYNLOADING
     (void) ppSetToZeroInDestructor;

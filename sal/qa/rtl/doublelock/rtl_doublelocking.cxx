@@ -46,9 +46,9 @@
 #define CONST_TEST_STRING "gregorian"
 
 namespace {
-struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
-    const rtl::OUString operator () () {
-        return rtl::OUString( CONST_TEST_STRING );
+struct Gregorian : public rtl::StaticWithInit<OUString, Gregorian> {
+    const OUString operator () () {
+        return OUString( CONST_TEST_STRING );
     }
 };
 }
@@ -83,7 +83,7 @@ class OGetThread : public osl::Thread
     sal_Int32 m_nOK;
     sal_Int32 m_nFails;
 
-    rtl::OUString m_sConstStr;
+    OUString m_sConstStr;
 public:
     OGetThread()
             :m_nOK(0),
@@ -105,7 +105,7 @@ protected:
         {
             while(schedule())
             {
-                rtl::OUString aStr = Gregorian::get();
+                OUString aStr = Gregorian::get();
                 if (aStr == m_sConstStr)
                 {
                     m_nOK++;
@@ -141,7 +141,7 @@ namespace rtl_DoubleLocking
 
         void getValue_001()
             {
-                rtl::OUString aStr = Gregorian::get();
+                OUString aStr = Gregorian::get();
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Gregorian::get() failed, wrong value expected.",

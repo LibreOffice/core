@@ -107,7 +107,7 @@ private:
 
 template< typename Val >
 RegexpMapConstIter< Val >::RegexpMapConstIter():
-    m_aEntry(rtl::OUString(), 0),
+    m_aEntry(OUString(), 0),
     m_pMap(nullptr),
     m_nList(-1),
     m_bEntrySet(false)
@@ -116,7 +116,7 @@ RegexpMapConstIter< Val >::RegexpMapConstIter():
 template< typename Val >
 RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
                                             bool bBegin):
-    m_aEntry(rtl::OUString(), 0),
+    m_aEntry(OUString(), 0),
     m_pMap(pTheMap),
     m_bEntrySet(false)
 {
@@ -137,7 +137,7 @@ template< typename Val >
 inline RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
                                                    int nTheList,
                                                    ListIterator aTheIndex):
-    m_aEntry(rtl::OUString(), 0),
+    m_aEntry(OUString(), 0),
     m_aIndex(aTheIndex),
     m_pMap(pTheMap),
     m_nList(nTheList),
@@ -299,7 +299,7 @@ private:
 };
 
 template< typename Val >
-void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
+void RegexpMap< Val >::add(OUString const & rKey, Val const & rValue)
 {
     Regexp aRegexp(Regexp::parse(rKey));
 
@@ -328,7 +328,7 @@ void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
 }
 
 template< typename Val >
-typename RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const & rKey)
+typename RegexpMap< Val >::iterator RegexpMap< Val >::find(OUString const & rKey)
 {
     Regexp aRegexp(Regexp::parse(rKey));
 
@@ -399,7 +399,7 @@ typename RegexpMap< Val >::size_type RegexpMap< Val >::size() const
 }
 
 template< typename Val >
-Val const * RegexpMap< Val >::map(rtl::OUString const & rString) const
+Val const * RegexpMap< Val >::map(OUString const & rString) const
 {
     for (int n = Regexp::KIND_DOMAIN; n >= Regexp::KIND_PREFIX; --n)
     {

@@ -1144,10 +1144,10 @@ void SdDrawDocument::InitLayoutVector()
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration
-    Sequence< rtl::OUString > aFiles(
+    Sequence< OUString > aFiles(
         officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
 
-    rtl::OUString sFilename;
+    OUString sFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
         sFilename = comphelper::getExpandedUri(xContext, aFiles[i]);
@@ -1183,10 +1183,10 @@ void SdDrawDocument::InitObjectVector()
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration
-    Sequence< rtl::OUString > aFiles(
+    Sequence< OUString > aFiles(
        officecfg::Office::Impress::Misc::PresObjListFiles::get(xContext) );
 
-    rtl::OUString sFilename;
+    OUString sFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
         sFilename = comphelper::getExpandedUri(xContext, aFiles[i]);

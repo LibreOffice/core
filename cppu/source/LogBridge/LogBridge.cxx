@@ -51,7 +51,7 @@ public:
     virtual void v_enter() override;
     virtual void v_leave() override;
 
-    virtual bool v_isValid(rtl::OUString * pReason) override;
+    virtual bool v_isValid(OUString * pReason) override;
 };
 
 LogBridge::LogBridge()
@@ -108,7 +108,7 @@ void LogBridge::v_leave()
     m_mutex.release();
 }
 
-bool LogBridge::v_isValid(rtl::OUString * pReason)
+bool LogBridge::v_isValid(OUString * pReason)
 {
     bool result = m_count > 0;
     if (!result)
@@ -134,7 +134,7 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
         switch(_pTypeRef->eTypeClass)
         {
             case typelib_TypeClass_STRING:
-                SAL_INFO("cppu.log", "" << *static_cast< ::rtl::OUString*>(pArg));
+                SAL_INFO("cppu.log", "" << *static_cast< OUString*>(pArg));
                 break;
             case typelib_TypeClass_BOOLEAN:
                SAL_INFO("cppu.log", "" << *static_cast<sal_Bool*>(pArg));
@@ -201,9 +201,9 @@ static void LogProbe(
     void                              * pArgs[],
     uno_Any                          ** ppException )
 {
-    ::rtl::OString sTemp;
+    OString sTemp;
     if ( pMemberType && pMemberType->pTypeName )
-        sTemp = ::rtl::OUStringToOString(pMemberType->pTypeName,RTL_TEXTENCODING_ASCII_US);
+        sTemp = OUStringToOString(pMemberType->pTypeName,RTL_TEXTENCODING_ASCII_US);
     if ( pre  )
     {
         SAL_INFO("cppu.log", "{ LogBridge () " << sTemp );

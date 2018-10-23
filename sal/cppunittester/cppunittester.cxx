@@ -72,14 +72,14 @@ void usageFailure() {
     std::exit(EXIT_FAILURE);
 }
 
-rtl::OUString getArgument(sal_Int32 index) {
-    rtl::OUString arg;
+OUString getArgument(sal_Int32 index) {
+    OUString arg;
     osl_getCommandArg(index, &arg.pData);
     return arg;
 }
 
-std::string convertLazy(rtl::OUString const & s16) {
-    rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
+std::string convertLazy(OUString const & s16) {
+    OString s8(OUStringToOString(s16, osl_getThreadTextEncoding()));
     static_assert(sizeof (sal_Int32) <= sizeof (std::string::size_type), "must be at least the same size");
         // ensure following cast is legitimate
     return std::string(
@@ -398,7 +398,7 @@ SAL_IMPLEMENT_MAIN()
         sal_uInt32 index = 0;
         while (index < osl_getCommandArgCount())
         {
-            rtl::OUString arg = getArgument(index);
+            OUString arg = getArgument(index);
             if (arg.startsWith("-env:CPPUNITTESTTARGET=", &path))
             {
                 ++index;
@@ -413,13 +413,13 @@ SAL_IMPLEMENT_MAIN()
             {
                 if (testlib.empty())
                 {
-                    testlib = rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                    testlib = OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
                     args += testlib;
                 }
                 else
                 {
                     args += ' ';
-                    args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                    args += OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
                 }
                 ++index;
                 continue;
@@ -427,8 +427,8 @@ SAL_IMPLEMENT_MAIN()
             if (osl_getCommandArgCount() - index < 3) {
                 usageFailure();
             }
-            rtl::OUString lib(getArgument(index + 1));
-            rtl::OUString sym(getArgument(index + 2));
+            OUString lib(getArgument(index + 1));
+            OUString sym(getArgument(index + 2));
 #ifndef DISABLE_DYNLOADING
             osl::Module mod(lib, SAL_LOADMODULE_GLOBAL);
             oslGenericFunction fn = mod.getFunctionSymbol(sym);

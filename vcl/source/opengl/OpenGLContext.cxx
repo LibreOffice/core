@@ -756,7 +756,7 @@ void OpenGLContext::ReleaseFramebuffers()
     BindFramebuffer( nullptr );
 }
 
-OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const rtl::OString& preamble )
+OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
     OpenGLZone aZone;
 
@@ -764,7 +764,7 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
     // based on only the names and the preamble. We don't expect
     // shader source files to change during the lifetime of a
     // LibreOffice process.
-    rtl::OString aNameBasedKey = OUStringToOString(rVertexShader + "+" + rFragmentShader, RTL_TEXTENCODING_UTF8) + "+" + preamble;
+    OString aNameBasedKey = OUStringToOString(rVertexShader + "+" + rFragmentShader, RTL_TEXTENCODING_UTF8) + "+" + preamble;
     if( !aNameBasedKey.isEmpty() )
     {
         ProgramCollection::iterator it = maPrograms.find( aNameBasedKey );
@@ -776,7 +776,7 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
     // LibreOffice process instances) based on a hash of their source
     // code, as the source code can and will change between
     // LibreOffice versions even if the shader names don't change.
-    rtl::OString aPersistentKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
+    OString aPersistentKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
     std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
     if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aPersistentKey ) )
         return nullptr;

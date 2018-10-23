@@ -1677,16 +1677,16 @@ RegistryTypeReader::~RegistryTypeReader()
 RTTypeClass RegistryTypeReader::getTypeClass() const
 {  return typereg_reader_getTypeClass(m_hImpl); }
 
-rtl::OUString RegistryTypeReader::getTypeName() const
+OUString RegistryTypeReader::getTypeName() const
 {
-    rtl::OUString sRet;
+    OUString sRet;
     typereg_reader_getTypeName(m_hImpl, &sRet.pData);
     return sRet;
 }
 
-rtl::OUString RegistryTypeReader::getSuperTypeName() const
+OUString RegistryTypeReader::getSuperTypeName() const
 {
-    rtl::OUString sRet;
+    OUString sRet;
     ::getSuperTypeName(m_hImpl, &sRet.pData);
     return sRet;
 }
@@ -1694,16 +1694,16 @@ rtl::OUString RegistryTypeReader::getSuperTypeName() const
 sal_uInt32 RegistryTypeReader::getFieldCount() const
 {   return ::getFieldCount(m_hImpl); }
 
-rtl::OUString RegistryTypeReader::getFieldName( sal_uInt16 index ) const
+OUString RegistryTypeReader::getFieldName( sal_uInt16 index ) const
 {
-    rtl::OUString sRet;
+    OUString sRet;
     typereg_reader_getFieldName(m_hImpl, &sRet.pData, index);
     return sRet;
 }
 
-rtl::OUString RegistryTypeReader::getFieldType( sal_uInt16 index ) const
+OUString RegistryTypeReader::getFieldType( sal_uInt16 index ) const
 {
-    rtl::OUString sRet;
+    OUString sRet;
     typereg_reader_getFieldTypeName(m_hImpl, &sRet.pData, index);
     return sRet;
 }
@@ -1718,16 +1718,16 @@ RTConstValue RegistryTypeReader::getFieldConstValue( sal_uInt16 index ) const
     return ret;
 }
 
-rtl::OUString RegistryTypeReader::getFieldDoku( sal_uInt16 index ) const
+OUString RegistryTypeReader::getFieldDoku( sal_uInt16 index ) const
 {
-    rtl::OUString sRet;
+    OUString sRet;
     typereg_reader_getFieldDocumentation(m_hImpl, &sRet.pData, index);
     return sRet;
 }
 
-rtl::OUString RegistryTypeReader::getFieldFileName( sal_uInt16 index ) const
+OUString RegistryTypeReader::getFieldFileName( sal_uInt16 index ) const
 {
-    rtl::OUString sRet;
+    OUString sRet;
     typereg_reader_getFieldFileName(m_hImpl, &sRet.pData, index);
     return sRet;
 }

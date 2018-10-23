@@ -78,7 +78,7 @@ namespace rtl {
     class OUString;
 }
 
-typedef rtl::OUString ChainLinkId;
+typedef OUString ChainLinkId;
 
 enum class CursorChainingEvent
 {

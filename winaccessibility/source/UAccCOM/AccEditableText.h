@@ -104,7 +104,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleEditableText> pRXEdtTxt;
 
-    static void get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, css::uno::Any &rAny);
+    static void get_AnyFromOLECHAR(const OUString &ouName, const OUString &ouValue, css::uno::Any &rAny);
 
     css::accessibility::XAccessibleEditableText* GetXInterface()
     {

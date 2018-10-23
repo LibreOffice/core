@@ -412,12 +412,12 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
     Color** ppColor = &pColor;
     if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
     {
-        rtl::OString aMessage = "GetPreviewString( \"";
-        aMessage += rtl::OUStringToOString( sCode, RTL_TEXTENCODING_ASCII_US );
+        OString aMessage = "GetPreviewString( \"";
+        aMessage += OUStringToOString( sCode, RTL_TEXTENCODING_ASCII_US );
         aMessage += "\", ";
-        aMessage += rtl::OString::number( fPreviewNumber );
+        aMessage += OString::number( fPreviewNumber );
         aMessage += ", sStr, ppColor, ";
-        aMessage += rtl::OString::number( static_cast<sal_uInt16>(eLang) );
+        aMessage += OString::number( static_cast<sal_uInt16>(eLang) );
         aMessage += " ) failed";
         CPPUNIT_FAIL( aMessage.getStr() );
     }

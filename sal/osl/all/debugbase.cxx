@@ -34,14 +34,14 @@ struct StaticDebugBaseAddressFilter
     std::vector<OString> operator()() const {
         std::vector<OString> vec;
         rtl_uString * pStr = nullptr;
-        rtl::OUString const name(
+        OUString const name(
             "OSL_DEBUGBASE_STORE_ADDRESSES" );
         if (osl_getEnvironment( name.pData, &pStr ) == osl_Process_E_None) {
-            rtl::OUString const str(pStr);
+            OUString const str(pStr);
             rtl_uString_release(pStr);
             sal_Int32 nIndex = 0;
             do {
-                vec.push_back( rtl::OUStringToOString(
+                vec.push_back( OUStringToOString(
                                    str.getToken( 0, ';', nIndex ),
                                    RTL_TEXTENCODING_ASCII_US ) );
             }
@@ -51,7 +51,7 @@ struct StaticDebugBaseAddressFilter
     }
 };
 
-bool isSubStr( char const* pStr, rtl::OString const& subStr )
+bool isSubStr( char const* pStr, OString const& subStr )
 {
     return rtl_str_indexOfStr( pStr, subStr.getStr() ) >= 0;
 }
@@ -85,7 +85,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
     if (rVec.empty())
         return false;
     // check for "all":
-    rtl::OString const& rFirst = rVec[0];
+    OString const& rFirst = rVec[0];
     if ( rFirst == "all" )
         return true;
     auto const iEnd( rVec.cend() );

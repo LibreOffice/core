@@ -39,15 +39,15 @@
 #endif
 
 css::uno::Environment cppuhelper::detail::getEnvironment(
-    rtl::OUString const & name, rtl::OUString const & implementation)
+    OUString const & name, OUString const & implementation)
 {
-    rtl::OUString n(name);
+    OUString n(name);
     if (!implementation.isEmpty()) {
         static char const * log = std::getenv("UNO_ENV_LOG");
         if (log != nullptr && *log != 0) {
-            rtl::OString imps(log);
+            OString imps(log);
             for (sal_Int32 i = 0; i != -1;) {
-                rtl::OString imp(imps.getToken(0, ';', i));
+                OString imp(imps.getToken(0, ';', i));
                 //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
                 if (implementation.equalsAsciiL(imp.getStr(), imp.getLength()))
                 {
@@ -66,11 +66,11 @@ namespace {
 
 css::uno::Environment getEnvironmentFromModule(
     osl::Module const & module, css::uno::Environment const & target,
-    rtl::OUString const & implementation, rtl::OUString const & prefix)
+    OUString const & implementation, OUString const & prefix)
 {
     char const * name = nullptr;
     css::uno::Environment env;
-    rtl::OUString fullPrefix(prefix);
+    OUString fullPrefix(prefix);
     if (!fullPrefix.isEmpty()) {
         fullPrefix += "_";
     }
@@ -80,7 +80,7 @@ css::uno::Environment getEnvironmentFromModule(
     if (fp1 != nullptr) {
         (*fp1)(
             &name, reinterpret_cast<uno_Environment **>(&env),
-            (rtl::OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US)
+            (OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US)
              .getStr()),
             target.get());
     } else {
@@ -95,7 +95,7 @@ css::uno::Environment getEnvironmentFromModule(
     }
     if (!env.is() && name != nullptr) {
         env = cppuhelper::detail::getEnvironment(
-            rtl::OUString::createFromAscii(name), implementation);
+            OUString::createFromAscii(name), implementation);
     }
     return env;
 }
@@ -104,7 +104,7 @@ css::uno::Environment getEnvironmentFromModule(
 
 extern "C" void getFactory(va_list * args) {
     component_getFactoryFunc fn = va_arg(*args, component_getFactoryFunc);
-    rtl::OString const * implementation = va_arg(*args, rtl::OString const *);
+    OString const * implementation = va_arg(*args, OString const *);
     void * smgr = va_arg(*args, void *);
     void ** factory = va_arg(*args, void **);
     *factory = (*fn)(implementation->getStr(), smgr, nullptr);
@@ -112,8 +112,8 @@ extern "C" void getFactory(va_list * args) {
 
 css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
     css::uno::Environment const & source, css::uno::Environment const & target,
-    component_getFactoryFunc function, rtl::OUString const & uri,
-    rtl::OUString const & implementation,
+    component_getFactoryFunc function, OUString const & uri,
+    OUString const & implementation,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager)
 {
     if (!(source.is() && target.is())) {
@@ -121,8 +121,8 @@ css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
             "cannot get environments",
             css::uno::Reference<css::uno::XInterface>());
     }
-    rtl::OString impl(
-        rtl::OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US));
+    OString impl(
+        OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US));
     if (source.get() == target.get()) {
         return css::uno::Reference<css::uno::XInterface>(
             static_cast<css::uno::XInterface *>(
@@ -230,9 +230,9 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
 }
 
 void cppuhelper::detail::loadSharedLibComponentFactory(
-    rtl::OUString const & uri, rtl::OUString const & environment,
-    rtl::OUString const & prefix, rtl::OUString const & implementation,
-    rtl::OUString const & constructor,
+    OUString const & uri, OUString const & environment,
+    OUString const & prefix, OUString const & implementation,
+    OUString const & constructor,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
     WrapperConstructorFn * constructorFunction,
     css::uno::Reference<css::uno::XInterface> * factory)
@@ -255,7 +255,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         if (curEnv.get() != env.get()) {
             std::abort();//TODO
         }
-        rtl::OUString name(prefix == "direct" ? implementation : uri);
+        OUString name(prefix == "direct" ? implementation : uri);
         SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);
         lib_to_factory_mapping const * map = lo_get_factory_map();
         component_getFactoryFunc fp = 0;
@@ -299,7 +299,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             css::uno::Reference<css::uno::XInterface>());
     }
     if (constructor.isEmpty()) {
-        rtl::OUString sym;
+        OUString sym;
         SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);
         if (prefix == "direct") {
             sym = implementation.replace('.', '_') + "_" COMPONENT_GETFACTORY;
@@ -345,8 +345,8 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 }
 
 css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
-    rtl::OUString const & uri, rtl::OUString const & rPath,
-    rtl::OUString const & rImplName,
+    OUString const & uri, OUString const & rPath,
+    OUString const & rImplName,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
     css::uno::Reference<css::registry::XRegistryKey> const & xKey)
 {
@@ -373,7 +373,7 @@ extern "C" void writeInfo(va_list * args) {
 }
 
 void cppu::writeSharedLibComponentInfo(
-    rtl::OUString const & uri, rtl::OUString const & rPath,
+    OUString const & uri, OUString const & rPath,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
     css::uno::Reference<css::registry::XRegistryKey> const & xKey)
 {

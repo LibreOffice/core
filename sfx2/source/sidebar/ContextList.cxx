@@ -19,8 +19,6 @@
 #include <sfx2/sidebar/ContextList.hxx>
 #include <sfx2/sidebar/Context.hxx>
 
-using ::rtl::OUString;
-
 namespace sfx2 { namespace sidebar {
 
 ContextList::ContextList()

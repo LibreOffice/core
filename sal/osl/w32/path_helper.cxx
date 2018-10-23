@@ -25,15 +25,15 @@
 #include <algorithm>
 #include <wchar.h>
 
-const rtl::OUString BACKSLASH ("\\");
-const rtl::OUString SLASH     ("/");
+const OUString BACKSLASH ("\\");
+const OUString SLASH     ("/");
 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
     OSL_PRECOND(ppustrPath && (nullptr != *ppustrPath),
                 "osl_systemPathEnsureSeparator: Invalid parameter");
 
-     rtl::OUString path(*ppustrPath);
+     OUString path(*ppustrPath);
     sal_Int32     i = std::max<sal_Int32>(path.lastIndexOf(BACKSLASH), path.lastIndexOf(SLASH));
 
     if (i < (path.getLength()-1))
@@ -49,7 +49,7 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 
 void osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
-    rtl::OUString path(*ppustrPath);
+    OUString path(*ppustrPath);
 
     if (!osl::systemPathIsLogicalDrivePattern(path))
     {
@@ -57,7 +57,7 @@ void osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 
         if (i > -1 && (i == (path.getLength() - 1)))
         {
-            path = rtl::OUString(path.getStr(), path.getLength() - 1);
+            path = OUString(path.getStr(), path.getLength() - 1);
             rtl_uString_assign(ppustrPath, path.pData);
         }
     }

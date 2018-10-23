@@ -56,8 +56,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::reflection;
 
-using rtl::OUString;
-
 namespace cppu
 {
 

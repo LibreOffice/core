@@ -182,7 +182,7 @@ private:
     /// @throws css::beans::PropertyExistException
     /// @throws css::beans::NotRemoveableException
     /// @throws css::uno::RuntimeException
-    void removeProperty( const rtl::OUString& Name,
+    void removeProperty( const OUString& Name,
                          const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 public:
     /// @throws css::ucb::ContentCreationException

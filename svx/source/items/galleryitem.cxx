@@ -74,7 +74,7 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
     bool bAllConverted( true );
 
     sal_Int8 nType(0);
-    rtl::OUString aURL, aFilterName;
+    OUString aURL, aFilterName;
     css::uno::Reference< css::lang::XComponent > xDrawing;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 

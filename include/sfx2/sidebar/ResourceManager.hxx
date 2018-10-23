@@ -102,7 +102,7 @@ private:
 
     typedef std::vector<std::shared_ptr<PanelDescriptor>> PanelContainer;
     PanelContainer maPanels;
-    mutable std::set<rtl::OUString> maProcessedApplications;
+    mutable std::set<OUString> maProcessedApplications;
     std::map<OUString, OUString> maLastActiveDecks;
 
     SvtMiscOptions const maMiscOptions;

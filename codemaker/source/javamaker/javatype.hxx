@@ -30,7 +30,7 @@ class JavaOptions;
 class TypeManager;
 
 void produce(
-    rtl::OUString const & name, rtl::Reference< TypeManager > const & manager,
+    OUString const & name, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions const & options);
 
 #endif

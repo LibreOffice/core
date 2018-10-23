@@ -65,11 +65,11 @@ class OPreparedStatement final : public OCommonStatement, public OPreparedStatem
     virtual ~OPreparedStatement() override;
 
 public:
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pStmt);
 
@@ -96,7 +96,7 @@ public:
     void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType) override;
 
     void SAL_CALL setObjectNull(sal_Int32 parameter, sal_Int32 sqlType,
-                                const rtl::OUString& typeName) override;
+                                const OUString& typeName) override;
 
     void SAL_CALL setBoolean(sal_Int32 parameter, sal_Bool x) override;
 
@@ -112,7 +112,7 @@ public:
 
     void SAL_CALL setDouble(sal_Int32 parameter, double x) override;
 
-    void SAL_CALL setString(sal_Int32 parameter, const rtl::OUString& x) override;
+    void SAL_CALL setString(sal_Int32 parameter, const OUString& x) override;
 
     void SAL_CALL setBytes(sal_Int32 parameter, const css::uno::Sequence<sal_Int8>& x) override;
 

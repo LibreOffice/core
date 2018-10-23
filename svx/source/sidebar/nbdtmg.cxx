@@ -448,8 +448,8 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
         return sal_uInt16(0xFFFF);
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
-    //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
+    //sal_Unicode cPrefix = OUString(aFmt.GetPrefix())[0];
+    //sal_Unicode cSuffix = OUString(aFmt.GetSuffix())[0];
     OUString sPrefix = aFmt.GetPrefix();
     OUString sLclSuffix = aFmt.GetSuffix();
     sal_Int16 eNumType = aFmt.GetNumberingType();

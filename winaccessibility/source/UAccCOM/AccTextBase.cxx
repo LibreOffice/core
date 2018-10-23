@@ -112,7 +112,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
 
     OUStringBuffer strAttrs("Version:1;");
 
-    Sequence< css::beans::PropertyValue > pValues = GetXInterface()->getCharacterAttributes(offset, Sequence< rtl::OUString >());
+    Sequence< css::beans::PropertyValue > pValues = GetXInterface()->getCharacterAttributes(offset, Sequence< OUString >());
     int nCount = pValues.getLength();
 
     sal_Int16 numberingLevel = 0;
@@ -477,7 +477,7 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
         return E_FAIL;
     }
 
-    ::rtl::OUString ouStr;
+    OUString ouStr;
     if (endOffset == -1 )
     {
         long nLen=0;
@@ -575,7 +575,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     }
 
     TextSegment segment = GetXInterface()->getTextBeforeIndex( offset, sal_Int16(lUnoBoundaryType));
-    ::rtl::OUString ouStr = segment.SegmentText;
+    OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
@@ -661,7 +661,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
     }
 
     TextSegment segment = GetXInterface()->getTextBehindIndex( offset, sal_Int16(lUnoBoundaryType));
-    ::rtl::OUString ouStr = segment.SegmentText;
+    OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
@@ -748,7 +748,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     }
 
     TextSegment segment = GetXInterface()->getTextAtIndex( offset, sal_Int16(lUnoBoundaryType));
-    ::rtl::OUString ouStr = segment.SegmentText;
+    OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     *startOffset = segment.SegmentStart;

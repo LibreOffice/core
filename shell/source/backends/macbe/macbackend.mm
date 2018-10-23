@@ -156,7 +156,7 @@ MacOSXBackend* MacOSXBackend::createInstance()
     return new MacOSXBackend;
 }
 
-static rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
+static OUString CFStringToOUString(const CFStringRef sOrig) {
     CFRetain(sOrig);
 
     CFIndex nStringLen = CFStringGetLength(sOrig)+1;
@@ -168,18 +168,18 @@ static rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
 
     CFRelease(sOrig);
 
-    return rtl::OUString::createFromAscii(sBuffer);
+    return OUString::createFromAscii(sBuffer);
 }
 
-static rtl::OUString GetOUString( NSString* pStr )
+static OUString GetOUString( NSString* pStr )
 {
     if( ! pStr )
-        return rtl::OUString();
+        return OUString();
     int nLen = [pStr length];
     if( nLen == 0 )
-        return rtl::OUString();
+        return OUString();
 
-    rtl::OUStringBuffer aBuf( nLen+1 );
+    OUStringBuffer aBuf( nLen+1 );
     aBuf.setLength( nLen );
     [pStr getCharacters:
      reinterpret_cast<unichar *>(const_cast<sal_Unicode*>(aBuf.getStr()))];
@@ -187,7 +187,7 @@ static rtl::OUString GetOUString( NSString* pStr )
 }
 
 void MacOSXBackend::setPropertyValue(
-    rtl::OUString const &, css::uno::Any const &)
+    OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
         "setPropertyValue not supported",
@@ -195,17 +195,17 @@ void MacOSXBackend::setPropertyValue(
 }
 
 css::uno::Any MacOSXBackend::getPropertyValue(
-    rtl::OUString const & PropertyName)
+    OUString const & PropertyName)
 {
     if ( PropertyName == "WorkPathVariable" )
     {
-        rtl::OUString aDocDir;
+        OUString aDocDir;
         NSArray* pPaths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, true );
         if( pPaths && [pPaths count] > 0 )
         {
             aDocDir = GetOUString( [pPaths objectAtIndex: 0] );
 
-            rtl::OUString aDocURL;
+            OUString aDocURL;
             if( aDocDir.getLength() > 0 &&
                 osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
             {
@@ -233,7 +233,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal)
         {
-            auto const Server = rtl::OUString::createFromAscii( host );
+            auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
                 return css::uno::makeAny(
@@ -267,7 +267,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal)
         {
-            auto const Server = rtl::OUString::createFromAscii( host );
+            auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
                 return css::uno::makeAny(
@@ -301,7 +301,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal)
         {
-            auto const Server = rtl::OUString::createFromAscii( host );
+            auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
                 return css::uno::makeAny(
@@ -333,7 +333,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
                 true, uno::makeAny( sal_Int32(1) ) ) );
     } else if ( PropertyName == "ooInetNoProxy" )
     {
-        rtl::OUString aProxyBypassList;
+        OUString aProxyBypassList;
 
         CFArrayRef rExceptionsList;
         CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(nullptr);
@@ -374,29 +374,29 @@ css::uno::Any MacOSXBackend::getPropertyValue(
     }
 }
 
-rtl::OUString MacOSXBackend::getBackendName(void)
+OUString MacOSXBackend::getBackendName(void)
 {
-    return rtl::OUString("com.sun.star.comp.configuration.backend.MacOSXBackend");
+    return OUString("com.sun.star.comp.configuration.backend.MacOSXBackend");
 }
 
-rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
+OUString SAL_CALL MacOSXBackend::getImplementationName(void)
 {
     return getBackendName();
 }
 
-uno::Sequence<rtl::OUString> MacOSXBackend::getBackendServiceNames(void)
+uno::Sequence<OUString> MacOSXBackend::getBackendServiceNames(void)
 {
     uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.MacOSXBackend" };
 
     return aServiceNameList;
 }
 
-sal_Bool SAL_CALL MacOSXBackend::supportsService(const rtl::OUString& aServiceName)
+sal_Bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
+uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
 {
     return getBackendServiceNames();
 }

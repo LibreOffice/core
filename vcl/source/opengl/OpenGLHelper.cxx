@@ -104,8 +104,8 @@ OString& getShaderSource(const OUString& rFilename)
 }
 
 namespace {
-    int LogCompilerError(GLuint nId, const rtl::OUString &rDetail,
-                         const rtl::OUString &rName, bool bShaderNotProgram)
+    int LogCompilerError(GLuint nId, const OUString &rDetail,
+                         const OUString &rName, bool bShaderNotProgram)
     {
         OpenGLZone aZone;
 
@@ -248,14 +248,14 @@ namespace
 
         osl::Directory::create(url);
 
-        return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+        return OUStringToOString(url, RTL_TEXTENCODING_UTF8);
     }
 
 
     bool writeProgramBinary( const OString& rBinaryFileName,
                              const std::vector<sal_uInt8>& rBinary )
     {
-        osl::File aFile(rtl::OStringToOUString(rBinaryFileName, RTL_TEXTENCODING_UTF8));
+        osl::File aFile(OStringToOUString(rBinaryFileName, RTL_TEXTENCODING_UTF8));
         osl::FileBase::RC eStatus = aFile.open(
                 osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
@@ -284,7 +284,7 @@ namespace
     bool readProgramBinary( const OString& rBinaryFileName,
                             std::vector<sal_uInt8>& rBinary )
     {
-        osl::File aFile( rtl::OStringToOUString( rBinaryFileName, RTL_TEXTENCODING_UTF8 ) );
+        osl::File aFile( OStringToOUString( rBinaryFileName, RTL_TEXTENCODING_UTF8 ) );
         if(aFile.open( osl_File_OpenFlag_Read ) == osl::FileBase::E_None)
         {
             sal_uInt64 nSize = 0;
@@ -311,10 +311,10 @@ namespace
     {
         OString aFileName;
         aFileName += getCacheFolder();
-        aFileName += rtl::OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
-        aFileName += rtl::OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
+        aFileName += OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
+        aFileName += OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         if (!rGeometryShaderName.isEmpty())
-            aFileName += rtl::OUStringToOString( rGeometryShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
+            aFileName += OUStringToOString( rGeometryShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         aFileName += rDigest + ".bin";
         return aFileName;
     }
@@ -374,7 +374,7 @@ namespace
     }
 }
 
-rtl::OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
+OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
                                       const OUString& rFragmentShaderName,
                                       const OString& rPreamble )
 {

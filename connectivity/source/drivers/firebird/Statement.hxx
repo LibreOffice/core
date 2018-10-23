@@ -58,15 +58,15 @@ namespace connectivity
 
             // XStatement
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
-                executeQuery(const ::rtl::OUString& sql) override;
-            virtual sal_Int32 SAL_CALL executeUpdate(const ::rtl::OUString& sqlIn) override;
+                executeQuery(const OUString& sql) override;
+            virtual sal_Int32 SAL_CALL executeUpdate(const OUString& sqlIn) override;
             virtual sal_Bool SAL_CALL
-                execute(const ::rtl::OUString& sql) override;
+                execute(const OUString& sql) override;
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL
                 getConnection() override;
 
             // XBatchExecution - UNSUPPORTED
-            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) override;
+            virtual void SAL_CALL addBatch( const OUString& sql ) override;
             virtual void SAL_CALL clearBatch(  ) override;
             virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
 

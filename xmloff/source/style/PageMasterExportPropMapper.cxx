@@ -418,7 +418,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTF_PM_FOOTERFILLBITMAPNAME:
             case CTF_PM_FOOTERFILLTRANSNAME:
             {
-                rtl::OUString aStr;
+                OUString aStr;
 
                 if( (pProp->maValue >>= aStr) && 0 == aStr.getLength() )
                 {

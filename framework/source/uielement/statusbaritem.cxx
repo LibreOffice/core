@@ -24,8 +24,6 @@
 #include <com/sun/star/ui/ItemStyle.hpp>
 
 using namespace com::sun::star::ui;
-
-using rtl::OUString;
 using com::sun::star::uno::RuntimeException;
 
 namespace framework
@@ -64,7 +62,7 @@ sal_uInt16 impl_convertItemBitsToItemStyle( StatusBarItemBits nItemBits )
 StatusbarItem::StatusbarItem(
     StatusBar              *pStatusBar,
     sal_uInt16              nId,
-    const rtl::OUString&    aCommand )
+    const OUString&    aCommand )
     : StatusbarItem_Base( m_aMutex )
     , m_pStatusBar( pStatusBar )
     , m_nId( nId )

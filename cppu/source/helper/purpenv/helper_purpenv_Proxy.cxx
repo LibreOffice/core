@@ -195,7 +195,7 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
              uno_Environment                     * pFrom,
              uno_Interface                       * pUnoI,
              typelib_InterfaceTypeDescription    * pTypeDescr,
-             rtl::OUString                 const & rOId,
+             OUString                      const & rOId,
              cppu::helper::purpenv::ProbeFun     * probeFun,
              void                                * pProbeContext
 )

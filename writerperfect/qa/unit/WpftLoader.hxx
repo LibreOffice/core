@@ -63,15 +63,14 @@ namespace test
 class WPFTQAHELPER_DLLPUBLIC WpftLoader
 {
 public:
-    WpftLoader(const rtl::OUString& rURL,
-               const css::uno::Reference<css::document::XFilter>& rxFilter,
-               const rtl::OUString& rFactoryURL,
+    WpftLoader(const OUString& rURL, const css::uno::Reference<css::document::XFilter>& rxFilter,
+               const OUString& rFactoryURL,
                const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
                const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
                const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
                const css::uno::Reference<css::document::XFilter>& rxFilter,
-               const rtl::OUString& rFactoryURL,
+               const OUString& rFactoryURL,
                const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
                const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     ~WpftLoader();
@@ -83,12 +82,12 @@ private:
     void impl_dispose();
 
     void impl_detectFilterName(css::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
-                               const rtl::OUString& rTypeName);
+                               const OUString& rTypeName);
 
 private:
-    const rtl::OUString m_aURL;
+    const OUString m_aURL;
     const css::uno::Reference<css::io::XInputStream> m_xInputStream;
-    const rtl::OUString m_aFactoryURL;
+    const OUString m_aFactoryURL;
     const css::uno::Reference<css::document::XFilter> m_xFilter;
     const css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
     const css::uno::Reference<css::container::XNameAccess> m_xTypeMap;

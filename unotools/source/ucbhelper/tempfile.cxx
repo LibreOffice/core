@@ -238,7 +238,7 @@ namespace
     class TempDirCreatedObserver : public DirectoryCreationObserver
     {
     public:
-        virtual void DirectoryCreated(const rtl::OUString& aDirectoryUrl) override
+        virtual void DirectoryCreated(const OUString& aDirectoryUrl) override
         {
             File::setAttributes( aDirectoryUrl, osl_File_Attribute_OwnRead |
                 osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnExe );

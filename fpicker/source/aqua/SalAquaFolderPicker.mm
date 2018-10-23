@@ -51,9 +51,9 @@ using namespace ::com::sun::star::uno;
 namespace
 {
     // controlling event notifications
-    uno::Sequence<rtl::OUString> FolderPicker_getSupportedServiceNames()
+    uno::Sequence<OUString> FolderPicker_getSupportedServiceNames()
     {
-        uno::Sequence<rtl::OUString> aRet(2);
+        uno::Sequence<OUString> aRet(2);
         aRet[0] = "com.sun.star.ui.dialogs.SystemFolderPicker";
         aRet[1] = "com.sun.star.ui.dialogs.AquaFolderPicker";
         return aRet;
@@ -68,7 +68,7 @@ SalAquaFolderPicker::SalAquaFolderPicker( const uno::Reference<lang::XMultiServi
 
 // XExecutableDialog
 
-void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle )
+void SAL_CALL SalAquaFolderPicker::setTitle( const OUString& aTitle )
 {
     SolarMutexGuard aGuard;
 
@@ -103,14 +103,14 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute()
 
 // XFolderPicker
 
-void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const rtl::OUString& aDirectory )
+void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 {
     SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(aDirectory);
 }
 
-rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory()
+OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory()
 {
     SolarMutexGuard aGuard;
 
@@ -119,7 +119,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory()
     return aDirectory;
 }
 
-rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory()
+OUString SAL_CALL SalAquaFolderPicker::getDirectory()
 {
     SolarMutexGuard aGuard;
 
@@ -135,7 +135,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory()
         throw uno::RuntimeException("no directory selected", static_cast< cppu::OWeakObject * >( this ));
     }
 
-    rtl::OUString aDirectory;
+    OUString aDirectory;
 
     NSURL *url = [files objectAtIndex:0];
 
@@ -146,24 +146,24 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory()
     return aDirectory;
 }
 
-void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescription )
+void SAL_CALL SalAquaFolderPicker::setDescription( const OUString& rDescription )
 {
     [m_pDialog setMessage:[NSString stringWithOUString:rDescription]];
 }
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
+OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
     return FOLDER_PICKER_IMPL_NAME;
 }
 
-sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const rtl::OUString& sServiceName )
+sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
 {
     return FolderPicker_getSupportedServiceNames();
 }

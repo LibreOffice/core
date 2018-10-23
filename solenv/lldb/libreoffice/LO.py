@@ -99,8 +99,8 @@ def sal_unicode_string(buffer_ptr, length):
 # Automatically install the above summary functions when this is loaded
 def __lldb_init_module(debugger, dict):
     debugger.HandleCommand("type summary add --skip-references --python-function LO.rtl_String_summary rtl_String")
-    debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.rtl_OString_summary rtl::OString")
+    debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.rtl_OString_summary OString")
     debugger.HandleCommand("type summary add --skip-references --python-function LO.rtl_uString_summary rtl_uString")
-    debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.rtl_OUString_summary rtl::OUString")
+    debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.rtl_OUString_summary OUString")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

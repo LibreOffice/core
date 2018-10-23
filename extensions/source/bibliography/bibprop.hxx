@@ -19,16 +19,16 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBPROP_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBPROP_HXX
 
-extern rtl::OUString FM_PROP_LABEL;
-extern rtl::OUString FM_PROP_NAME;
-extern rtl::OUString FM_PROP_CONTROLSOURCE;
-extern rtl::OUString FM_PROP_FORMATKEY;
-extern rtl::OUString FM_PROP_VALUE;
-extern rtl::OUString FM_PROP_EDITMODE;
-extern rtl::OUString FM_PROP_DATASOURCE;
-extern rtl::OUString FM_PROP_CURSORSOURCE;
-extern rtl::OUString FM_PROP_CURSORSOURCETYPE;
-extern rtl::OUString FM_PROP_TEXT;
+extern OUString FM_PROP_LABEL;
+extern OUString FM_PROP_NAME;
+extern OUString FM_PROP_CONTROLSOURCE;
+extern OUString FM_PROP_FORMATKEY;
+extern OUString FM_PROP_VALUE;
+extern OUString FM_PROP_EDITMODE;
+extern OUString FM_PROP_DATASOURCE;
+extern OUString FM_PROP_CURSORSOURCE;
+extern OUString FM_PROP_CURSORSOURCETYPE;
+extern OUString FM_PROP_TEXT;
 
 #endif
 

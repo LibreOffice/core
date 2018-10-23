@@ -35,9 +35,6 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 extern "C"
 {
 

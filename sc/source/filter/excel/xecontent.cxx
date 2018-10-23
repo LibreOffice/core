@@ -206,7 +206,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
             "sharedStrings.xml",
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
-            rtl::OUStringToOString(oox::getRelationship(Relationship::SHAREDSTRINGS), RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(oox::getRelationship(Relationship::SHAREDSTRINGS), RTL_TEXTENCODING_UTF8).getStr());
     rStrm.PushStream( pSst );
 
     pSst->startElement( XML_sst,

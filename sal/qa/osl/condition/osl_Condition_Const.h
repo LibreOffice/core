@@ -38,7 +38,7 @@
 
 // condition names
 
-::rtl::OUString aTestCon( "testcondition" );
+OUString aTestCon( "testcondition" );
 
 const char pTestString[17] = "Sun Microsystems";
 

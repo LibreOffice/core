@@ -472,7 +472,7 @@ void Test::testBigStruct() {
 
 void Test::testPolyStruct() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(
+        OUString(
                 "test.codemaker.cppumaker.Struct<char,short>"),
         (css::uno::makeAny(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).

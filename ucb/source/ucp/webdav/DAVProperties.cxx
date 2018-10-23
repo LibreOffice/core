@@ -180,7 +180,7 @@ bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
                == 0 ) );
 }
 
-bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OUString& rParsedName)
+bool DAVProperties::isUCBSpecialProperty(const OUString& rFullName, OUString& rParsedName)
 {
     sal_Int32 nLen = rFullName.getLength();
     if ( nLen <= 0 ||
@@ -193,7 +193,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
     if ( nEnd == -1 )
         return false;
 
-    rtl::OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
+    OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
     if ( !sPropName.getLength() )
         return false;
 
@@ -206,11 +206,11 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
     if ( nEnd != nLen - RTL_CONSTASCII_LENGTH( "\">" ) )
         return false;
 
-    rtl::OUString sNamesp = rFullName.copy( nStart, nEnd - nStart );
+    OUString sNamesp = rFullName.copy( nStart, nEnd - nStart );
     if ( !( nLen = sNamesp.getLength() ) )
         return false;
 
-    rtl::OUStringBuffer aBuff( sNamesp );
+    OUStringBuffer aBuff( sNamesp );
     if ( sNamesp[nLen - 1] != '/' )
         aBuff.append( '/' );
     aBuff.append( sPropName );

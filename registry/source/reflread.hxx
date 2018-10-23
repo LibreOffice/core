@@ -59,11 +59,11 @@ public:
 
     /** returns the full qualified name of the type.
      */
-    rtl::OUString  getTypeName() const;
+    OUString  getTypeName() const;
 
     /** returns the full qualified name of the supertype.
      */
-    rtl::OUString  getSuperTypeName() const;
+    OUString  getSuperTypeName() const;
 
     /** returns the number of fields (attributes/properties, enum values or number
         of constants in a module).
@@ -73,11 +73,11 @@ public:
 
     /** returns the name of the field specified by index.
      */
-    rtl::OUString  getFieldName( sal_uInt16 index ) const;
+    OUString  getFieldName( sal_uInt16 index ) const;
 
     /** returns the full qualified name of the field specified by index.
      */
-    rtl::OUString  getFieldType( sal_uInt16 index ) const;
+    OUString  getFieldType( sal_uInt16 index ) const;
 
     /** returns the access mode of the field specified by index.
      */
@@ -93,14 +93,14 @@ public:
 
         Each field of a type can have their own documentation.
      */
-    rtl::OUString  getFieldDoku( sal_uInt16 index ) const;
+    OUString  getFieldDoku( sal_uInt16 index ) const;
 
     /** returns the IDL filename of the field specified by index.
 
         The IDL filename of a field can differ from the filename of the ype itself
         because modules and also constants can be defined in different IDL files.
      */
-    rtl::OUString  getFieldFileName( sal_uInt16 index ) const;
+    OUString  getFieldFileName( sal_uInt16 index ) const;
 
 private:
     RegistryTypeReader(RegistryTypeReader &) = delete;

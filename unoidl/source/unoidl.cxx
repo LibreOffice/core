@@ -174,7 +174,7 @@ rtl::Reference< Provider > Manager::addProvider(OUString const & uri) {
     return p;
 }
 
-rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
+rtl::Reference< Entity > Manager::findEntity(OUString const & name) const {
     //TODO: caching? (here or in cppuhelper::TypeManager?)
     osl::MutexGuard g(mutex_);
     for (auto & i: providers_) {
@@ -186,7 +186,7 @@ rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
     return rtl::Reference< Entity >();
 }
 
-rtl::Reference< MapCursor > Manager::createCursor(rtl::OUString const & name)
+rtl::Reference< MapCursor > Manager::createCursor(OUString const & name)
     const
 {
     return new AggregatingCursor(providers_, name);

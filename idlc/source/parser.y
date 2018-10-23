@@ -58,15 +58,10 @@
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OStringBuffer;
-
 extern int yylex(void);
 static void yyerror(char const *);
 
-static void checkIdentifier(::rtl::OString const * id)
+static void checkIdentifier(OString const * id)
 {
     static short check = 0;
     if (check == 0) {
@@ -80,7 +75,7 @@ static void checkIdentifier(::rtl::OString const * id)
         if ( (id->pData->buffer[0] >= 97 && id->pData->buffer[0] <= 122)
              || id->pData->buffer[0] == '_') {
             if (check == 1) {
-                ::rtl::OStringBuffer msg(25 + id->getLength());
+                OStringBuffer msg(25 + id->getLength());
                 msg.append("mismatched identifier '");
                 msg.append(*id);
                 msg.append("'");
@@ -103,8 +98,8 @@ static void reportDoubleMemberDeclarations(
 }
 
 static void addInheritedInterface(
-    AstInterface * ifc, rtl::OString const & name, bool optional,
-    rtl::OUString const & documentation)
+    AstInterface * ifc, OString const & name, bool optional,
+    OUString const & documentation)
 {
     AstDeclaration * decl = ifc->lookupByName(name);
     AstDeclaration const * resolved = resolveTypedefs(decl);
@@ -141,7 +136,7 @@ static void addInheritedInterface(
 }
 
 static AstDeclaration const * createNamedType(
-    rtl::OString const * scopedName, DeclList const * typeArgs)
+    OString const * scopedName, DeclList const * typeArgs)
 {
     AstDeclaration * decl = idlc()->scopes()->topNonNull()->lookupByName(
         *scopedName);
@@ -219,8 +214,8 @@ static bool includes(AstDeclaration const * type1, AstDeclaration const * type2)
     FeDeclarator*           fdval;      /* declarator value */
     FeDeclList*         dlval;      /* declarator list value */
     FeInheritanceHeader*    ihval;      /* inheritance header value */
-    ::rtl::OString*     sval;       /* OString value */
-    std::vector< rtl::OString > * svals;
+    OString*     sval;       /* OString value */
+    std::vector< OString > * svals;
     sal_Char*           strval; /* sal_Char* value */
     bool                bval;       /* sal_Boolean* value */
     sal_Int64               ival;       /* sal_Int64 value */
@@ -631,8 +626,8 @@ interface_dcl :
             && ifc->getScopedName() != "com::sun::star::uno::XInterface")
         {
             addInheritedInterface(
-                ifc, rtl::OString("::com::sun::star::uno::XInterface"), false,
-                rtl::OUString());
+                ifc, OString("::com::sun::star::uno::XInterface"), false,
+                OUString());
         }
         ifc->setDefined();
         idlc()->setParseState(PS_InterfaceBodySeen);
@@ -887,8 +882,8 @@ opt_attribute_get_raises:
 attribute_get_raises:
     IDL_GET raises ';'
     {
-        $$.documentation = new rtl::OUString(
-            rtl::OStringToOUString(
+        $$.documentation = new OUString(
+            OStringToOUString(
                 idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         $$.exceptions = $2;
     }
@@ -910,8 +905,8 @@ attribute_set_raises:
     }
     raises ';'
     {
-        $$.documentation = new rtl::OUString(
-            rtl::OStringToOUString(
+        $$.documentation = new OUString(
+            OStringToOUString(
                 idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         $$.exceptions = $3;
     }
@@ -1194,7 +1189,7 @@ interface_inheritance_decl:
         } else {
             addInheritedInterface(
                 ifc, *$4, $1,
-                rtl::OStringToOUString(
+                OStringToOUString(
                     idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         }
         delete $4;
@@ -2176,7 +2171,7 @@ scoped_name :
     identifier
     {
         checkIdentifier($4);
-        *$1 += ::rtl::OString("::");
+        *$1 += OString("::");
         *$1 += *$4;
         delete $4;
         $$ = $1;
@@ -2478,7 +2473,7 @@ opt_type_params:
 type_params:
     identifier
     {
-        $$ = new std::vector< rtl::OString >;
+        $$ = new std::vector< OString >;
         $$->push_back(*$1);
         delete $1;
     }

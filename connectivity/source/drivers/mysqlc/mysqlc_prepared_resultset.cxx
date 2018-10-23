@@ -52,20 +52,20 @@ using ::osl::MutexGuard;
 
 #include <stdio.h>
 
-rtl::OUString SAL_CALL OPreparedResultSet::getImplementationName()
+OUString SAL_CALL OPreparedResultSet::getImplementationName()
 {
-    return rtl::OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
+    return OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL OPreparedResultSet::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL OPreparedResultSet::getSupportedServiceNames()
 {
-    uno::Sequence<rtl::OUString> aSupported(2);
+    uno::Sequence<OUString> aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
 }
 
-sal_Bool SAL_CALL OPreparedResultSet::supportsService(const rtl::OUString& _rServiceName)
+sal_Bool SAL_CALL OPreparedResultSet::supportsService(const OUString& _rServiceName)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -112,7 +112,7 @@ uno::Sequence<Type> SAL_CALL OPreparedResultSet::getTypes()
     return concatSequences(aTypes.getTypes(), OPreparedResultSet_BASE::getTypes());
 }
 
-sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const rtl::OUString& columnName)
+sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const OUString& columnName)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
@@ -370,7 +370,7 @@ sal_Int16 SAL_CALL OPreparedResultSet::getShort(sal_Int32 column)
     return *static_cast<sal_Int16*>(m_aData[column - 1].buffer);
 }
 
-rtl::OUString SAL_CALL OPreparedResultSet::getString(sal_Int32 column)
+OUString SAL_CALL OPreparedResultSet::getString(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
@@ -391,7 +391,7 @@ rtl::OUString SAL_CALL OPreparedResultSet::getString(sal_Int32 column)
 
     const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
 
-    OUString sReturn = rtl::OUString(sStr, *m_aData[column - 1].length, m_encoding);
+    OUString sReturn = OUString(sStr, *m_aData[column - 1].length, m_encoding);
     return sReturn;
 }
 
@@ -827,7 +827,7 @@ void SAL_CALL OPreparedResultSet::updateDouble(sal_Int32 column, double /* x */)
                                                             *this);
 }
 
-void SAL_CALL OPreparedResultSet::updateString(sal_Int32 column, const rtl::OUString& /* x */)
+void SAL_CALL OPreparedResultSet::updateString(sal_Int32 column, const OUString& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
@@ -1036,7 +1036,7 @@ void OPreparedResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw uno::Exception("cannot set prop " + rtl::OUString::number(nHandle), nullptr);
+            throw uno::Exception("cannot set prop " + OUString::number(nHandle), nullptr);
         case PROPERTY_ID_FETCHDIRECTION:
             break;
         case PROPERTY_ID_FETCHSIZE:
@@ -1083,11 +1083,11 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OPreparedResultSet::g
 void OPreparedResultSet::checkColumnIndex(sal_Int32 index)
 {
     if (!m_aData)
-        throw SQLException("Cursor out of range", *this, rtl::OUString(), 1, Any());
+        throw SQLException("Cursor out of range", *this, OUString(), 1, Any());
     if (index < 1 || index > static_cast<int>(m_nFieldCount))
     {
         /* static object for efficiency or thread safety is a problem ? */
-        throw SQLException("index out of range", *this, rtl::OUString(), 1, Any());
+        throw SQLException("index out of range", *this, OUString(), 1, Any());
     }
 }
 
