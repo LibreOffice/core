@@ -316,17 +316,17 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
      return hmem->skipBlock(size - common_size ) != 0;
 }
 
-static HWPDrawingObject *LoadDrawingObject(void)
+static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(void)
 {
-    HWPDrawingObject *hdo, *head, *prev;
+    HWPDrawingObject *prev = nullptr;
+    std::unique_ptr<HWPDrawingObject> hdo, head;
 
     unsigned short link_info;
 
-    head = prev = nullptr;
     do
     {
-        hdo = new HWPDrawingObject;
-        if (!LoadCommonHeader(hdo, &link_info))
+        hdo.reset(new HWPDrawingObject);
+        if (!LoadCommonHeader(hdo.get(), &link_info))
         {
             goto error;
         }
@@ -340,7 +340,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         }
         else
         {
-            switch (int res = HWPDOFunc(hdo, OBJFUNC_LOAD, nullptr, 0))
+            switch (int res = HWPDOFunc(hdo.get(), OBJFUNC_LOAD, nullptr, 0))
             {
                 case OBJRET_FILE_ERROR:
                     goto error;
@@ -355,22 +355,28 @@ static HWPDrawingObject *LoadDrawingObject(void)
         }
         if (link_info & HDOFILE_HAS_CHILD)
         {
-            hdo->child.reset( LoadDrawingObject() );
+            hdo->child = LoadDrawingObject();
             if (hdo->child == nullptr)
             {
                 goto error;
             }
         }
         if (prev == nullptr)
-            head = hdo;
+        {
+            prev = hdo.get();
+            head = std::move(hdo);
+        }
         else
-            prev->next.reset( hdo );
-        prev = hdo;
+        {
+            prev = hdo.get();
+            prev->next = std::move( hdo );
+        }
     }
     while (link_info & HDOFILE_HAS_NEXT);
 
     return head;
-    error:
+
+error:
 // drawing object can be list.
 // hdo = current item, head = list;
 
@@ -378,8 +384,8 @@ static HWPDrawingObject *LoadDrawingObject(void)
     {
         hdo->type = HWPDO_RECT;
     }
-    HWPDOFunc(hdo, OBJFUNC_FREE, nullptr, 0);
-    delete hdo;
+    HWPDOFunc(hdo.get(), OBJFUNC_FREE, nullptr, 0);
+    hdo.reset();
 
     if( prev )
     {
@@ -417,7 +423,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
         !hmem->skipBlock(size - HDOFILE_HEADER_SIZE))
         return false;
 
-    pic->picinfo.picdraw.hdo = LoadDrawingObject();
+    pic->picinfo.picdraw.hdo = LoadDrawingObject().release();
     if (pic->picinfo.picdraw.hdo == nullptr)
         return false;
     return true;
