@@ -329,7 +329,11 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
                         {
                             sal_Int32 nSttReg = rResult.startOffset[j];
                             sal_Int32 nRegLen = rResult.endOffset[j];
-                            if( nRegLen > nSttReg )
+                            if (nSttReg < 0 || nRegLen < 0) // A "not found" optional capture
+                            {
+                                nSttReg = nRegLen = 0; // Copy empty string
+                            }
+                            else if (nRegLen >= nSttReg)
                             {
                                 nRegLen = nRegLen - nSttReg;
                             }
