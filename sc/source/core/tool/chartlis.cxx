@@ -24,6 +24,7 @@
 #include <brdcst.hxx>
 #include <document.hxx>
 #include <reftokenhelper.hxx>
+#include <formula/token.hxx>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
 using namespace com::sun::star;

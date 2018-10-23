@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-class ExternalLink;
-
 /** This class implements importing the sheetData element in external sheets.
 
     The sheetData element embedded in the externalBook element contains cached

@@ -18,7 +18,6 @@
 class ScFormulaCell;
 class ScDocument;
 class ScAddress;
-struct ScFormulaCellGroup;
 
 namespace formula {
 

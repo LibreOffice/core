@@ -58,7 +58,6 @@ public:
 private:
 
     struct MemberNode;
-    struct DimensionNode;
     typedef std::map<OUString, std::shared_ptr<MemberNode> > MembersType;
 
     struct DimensionNode
