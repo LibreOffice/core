@@ -149,9 +149,9 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     mpGraphics->SetFillColor( GetTextFillColor() );
     mbInitFillColor = true;
 
-    ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent),
+    ImplDrawTextRect( nX, nY, 0, -(std::round(mpFontInstance->mxFontMetric->GetAscentf()) + mnEmphasisAscent),
                       nWidth,
-                      mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
+                      std::round(mpFontInstance->mfLineHeight)+mnEmphasisAscent+mnEmphasisDescent );
 }
 
 tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
@@ -161,9 +161,9 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
     long nY = aPoint.Y();
 
     long nWidth = rSalLayout.GetTextWidth();
-    long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    long nHeight = std::round(mpFontInstance->mfLineHeight) + mnEmphasisAscent + mnEmphasisDescent;
 
-    nY -= mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
+    nY -= std::round(mpFontInstance->mxFontMetric->GetAscentf()) + mnEmphasisAscent;
 
     if ( mpFontInstance->mnOrientation )
     {
@@ -204,8 +204,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     {
         // guess vertical text extents if GetBoundRect failed
         long nRight = rSalLayout.GetTextWidth();
-        long nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
-        long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+        long nTop = std::round(mpFontInstance->mxFontMetric->GetAscentf()) + mnEmphasisAscent;
+        long nHeight = std::round(mpFontInstance->mfLineHeight) + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = tools::Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }
 
@@ -370,7 +370,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     {
         if ( maFont.IsShadow() )
         {
-            long nOff = 1 + ((mpFontInstance->mnLineHeight-24)/24);
+            long nOff = 1 + (std::round(mpFontInstance->mfLineHeight-24)/24);
             if ( maFont.IsOutline() )
                 nOff++;
             SetTextLineColor();
@@ -904,12 +904,12 @@ long OutputDevice::GetTextHeight() const
         if( !ImplNewFont() )
             return 0;
 
-    long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    double fHeight = mpFontInstance->mfLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
     if ( mbMap )
-        nHeight = ImplDevicePixelToLogicHeight( nHeight );
+        fHeight = ImplFloatDevicePixelToLogicHeight( fHeight );
 
-    return nHeight;
+    return std::round(fHeight);
 }
 
 float OutputDevice::approximate_char_width() const

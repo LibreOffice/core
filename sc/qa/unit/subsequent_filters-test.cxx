@@ -2809,7 +2809,7 @@ void ScFiltersTest::testOptimalHeightReset()
     // be triggered ) *and* you can't delete cell contents.
     int nHeight = rDoc.GetRowHeight(nRow, nTab, false);
     // Due to some minor differences on Mac this comparison is made bit fuzzy
-    CPPUNIT_ASSERT_LESSEQUAL( 8, abs( nHeight - 701 ) );
+    CPPUNIT_ASSERT_LESSEQUAL( 19, abs( nHeight - 701 ) );
 
     ScDocFunc &rFunc = xDocSh->GetDocFunc();
 
