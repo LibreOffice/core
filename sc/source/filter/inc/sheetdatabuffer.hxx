@@ -26,6 +26,7 @@
 
 #include "richstring.hxx"
 #include "worksheethelper.hxx"
+#include "addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace util { struct DateTime; }
@@ -151,7 +152,6 @@ public:
                             const ScAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
 private:
-    struct XfIdRowRange;
 
     /** Creates a formula token array representing the shared formula with the
         passed identifier. */

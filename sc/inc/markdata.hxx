@@ -30,7 +30,6 @@
 
 namespace sc {
 
-struct RowSpan;
 struct ColRowSpan;
 
 }
