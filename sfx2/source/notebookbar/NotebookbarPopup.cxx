@@ -18,7 +18,7 @@ NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
     get(m_pBox, "box");
     m_pBox->SetSizePixel(Size(100, 75));
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+    const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
 
     if (!aPersona.IsEmpty())
         m_pBox->SetBackground(Wallpaper(aPersona));
@@ -120,7 +120,7 @@ void NotebookbarPopup::dispose()
 void NotebookbarPopup::ApplyBackground(vcl::Window* pWindow)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+    const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
 
     if (!aPersona.IsEmpty())
         pWindow->SetBackground(Wallpaper(aPersona));

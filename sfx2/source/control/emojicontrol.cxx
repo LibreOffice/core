@@ -160,7 +160,7 @@ IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
 
 IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
-    OUString sHexText = pItem->getTitle();
+    const OUString& sHexText = pItem->getTitle();
     sal_uInt32 cEmojiChar = sHexText.toUInt32(16);
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );

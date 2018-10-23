@@ -1570,7 +1570,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                 else
                 {
                     css::uno::Any aAny = xBind->GetStatus().State;
-                    css::uno::Type aType = aAny.getValueType();
+                    const css::uno::Type& aType = aAny.getValueType();
 
                     if ( aType == cppu::UnoType<bool>::get() )
                     {

@@ -90,7 +90,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
             eState = SfxItemState::DEFAULT;
             css::uno::Any aAny = aStatus.State;
 
-            css::uno::Type aType = aAny.getValueType();
+            const css::uno::Type& aType = aAny.getValueType();
             if ( aType == cppu::UnoType< bool >::get() )
             {
                 bool bTemp = false;

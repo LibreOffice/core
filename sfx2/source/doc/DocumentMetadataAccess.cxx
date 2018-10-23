@@ -1073,11 +1073,11 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
     try {
         const ::std::vector< uno::Reference< rdf::XURI > > parts(
             getAllParts(*m_pImpl) );
-        const uno::Reference<rdf::XURI> xContentFile(
+        const uno::Reference<rdf::XURI>& xContentFile(
             getURI<rdf::URIs::ODF_CONTENTFILE>(m_pImpl->m_xContext));
-        const uno::Reference<rdf::XURI> xStylesFile(
+        const uno::Reference<rdf::XURI>& xStylesFile(
             getURI<rdf::URIs::ODF_STYLESFILE>(m_pImpl->m_xContext));
-        const uno::Reference<rdf::XURI> xMetadataFile(
+        const uno::Reference<rdf::XURI>& xMetadataFile(
             getURI<rdf::URIs::PKG_METADATAFILE>(m_pImpl->m_xContext));
         const sal_Int32 len( baseURI.getLength() );
         for (::std::vector< uno::Reference< rdf::XURI > >::const_iterator it

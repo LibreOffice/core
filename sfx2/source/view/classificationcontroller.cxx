@@ -187,7 +187,7 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, vo
     {
         OUString aEntry = rCategory.GetSelectedEntry();
 
-        OUString aType = getCategoryType();
+        const OUString& aType = getCategoryType();
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
             {"Name", uno::makeAny(aEntry)},
             {"Type", uno::makeAny(aType)},

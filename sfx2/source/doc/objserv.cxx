@@ -488,7 +488,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         {
                             // user has done some changes to DocumentInfo
                             pDocInfoItem->UpdateDocumentInfo(getDocProperties());
-                            uno::Sequence< document::CmisProperty > aNewCmisProperties =
+                            const uno::Sequence< document::CmisProperty >& aNewCmisProperties =
                                 pDocInfoItem->GetCmisProperties( );
                             if ( aNewCmisProperties.getLength( ) > 0 )
                                 xCmisDoc->updateCmisProperties( aNewCmisProperties );
