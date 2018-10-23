@@ -1348,7 +1348,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         sal_Int32 nCurrentPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
 
-        const SfxItemSet aSet(rEditObj.GetParaAttribs(n));
+        const SfxItemSet& aSet(rEditObj.GetParaAttribs(n));
         bool bIsRTLPara = false;
         const SfxPoolItem *pItem;
         if(SfxItemState::SET == aSet.GetItemState(EE_PARA_WRITINGDIR, true, &pItem))
@@ -1634,7 +1634,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
     }
     else
     {
-        Graphic         aGraphic(pGrfNd->GetGrf());
+        const Graphic&  aGraphic(pGrfNd->GetGrf());
         GraphicObject   aGraphicObject( aGraphic );
         OString aUniqueId = aGraphicObject.GetUniqueID();
 

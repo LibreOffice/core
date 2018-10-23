@@ -195,7 +195,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         {
             ConstCustomShape* pConstCustomShape = static_cast<ConstCustomShape*>(pFuncPtr);
             OUString aNew = ConstCustomShape::GetShapeTypeFromRequest( rReq );
-            OUString aOld = pConstCustomShape->GetShapeType();
+            const OUString& aOld = pConstCustomShape->GetShapeType();
             if( aNew == aOld )
             {
                 bDeselect = true;

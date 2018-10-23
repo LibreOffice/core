@@ -755,7 +755,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             case SID_GET_COLORLIST:
             {
                 const SvxColorListItem* pColItem = GetItem(SID_COLOR_TABLE);
-                XColorListRef pList = pColItem->GetColorList();
+                const XColorListRef& pList = pColItem->GetColorList();
                 rReq.SetReturnValue(OfaRefItem<XColorList>(SID_GET_COLORLIST, pList));
             }
             break;

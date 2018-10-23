@@ -187,7 +187,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         case FN_FAX:
         {
             SwPrintOptions* pPrintOptions = SW_MOD()->GetPrtOptions(bWeb);
-            OUString sFaxName(pPrintOptions->GetFaxName());
+            const OUString& sFaxName(pPrintOptions->GetFaxName());
             if (!sFaxName.isEmpty())
             {
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);

@@ -35,7 +35,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(xContext));
     SvtPathOptions aPathOpt;
     // FIXME: temporary the STARTUP path is located in $OO/basic3.1/program/addin
-    OUString aAddinPath = aPathOpt.GetAddinPath();
+    const OUString& aAddinPath = aPathOpt.GetAddinPath();
     SAL_INFO("sw.vba", "lcl_getAddinCollection: " << aAddinPath );
     if( xSFA->isFolder( aAddinPath ) )
     {

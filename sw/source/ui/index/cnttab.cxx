@@ -1089,7 +1089,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
     {
-        const OUString sBrackets(rDesc.GetAuthBrackets());
+        const OUString& sBrackets(rDesc.GetAuthBrackets());
         if(sBrackets.isEmpty() || sBrackets == "  ")
             m_pBracketLB->SelectEntryPos(0);
         else
@@ -2056,7 +2056,7 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet* )
     if(TOX_INDEX == aCurType.eType)
     {
         SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-        const OUString sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
+        const OUString& sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
         if(!sMainEntryCharStyle.isEmpty())
         {
             if( LISTBOX_ENTRY_NOTFOUND ==

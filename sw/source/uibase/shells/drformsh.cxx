@@ -101,7 +101,7 @@ void SwDrawFormShell::Execute(SfxRequest const &rReq)
                     }
                     else
                     {
-                        uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
+                        const uno::Reference< awt::XControlModel >&  xControlModel = pUnoCtrl->GetUnoControlModel();
 
                         OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                         if( !xControlModel.is() )
@@ -176,7 +176,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                     SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
                     if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
                     {
-                        uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
+                        const uno::Reference< awt::XControlModel >&  xControlModel = pUnoCtrl->GetUnoControlModel();
 
                         OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                         if( !xControlModel.is() )

@@ -3108,7 +3108,7 @@ bool SwTextNode::HasNumber() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule )
     {
-        SwNumFormat aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
+        const SwNumFormat& aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
 
         // #i40041#
         bResult = aFormat.IsEnumeration() &&
@@ -3125,7 +3125,7 @@ bool SwTextNode::HasBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule )
     {
-        SwNumFormat aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
+        const SwNumFormat& aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
 
         bResult = aFormat.IsItemize();
     }
@@ -3400,7 +3400,7 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
     ExpandMode eMode = ExpandMode::ExpandFields | eAdditionalMode;
 
     ModelToViewHelper aConversionMap(*this, eMode);
-    const OUString aExpandText = aConversionMap.getViewText();
+    const OUString& aExpandText = aConversionMap.getViewText();
     const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nIdx );
     sal_Int32 nEnd = nLen == -1 ? GetText().getLength() : nIdx + nLen;
     const sal_Int32 nExpandEnd = aConversionMap.ConvertToViewPosition( nEnd );
@@ -4308,7 +4308,7 @@ OUString SwTextNode::GetListId() const
 {
     const SfxStringItem& rListIdItem =
                 dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
-    const OUString sListId {rListIdItem.GetValue()};
+    const OUString& sListId {rListIdItem.GetValue()};
 
     // As long as no explicit list id attribute is set, use the list id of
     // the list, which has been created for the applied list style.

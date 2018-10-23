@@ -79,8 +79,8 @@ namespace
         bool operator()( const SwAnchoredObject* pListedAnchoredObj,
                          const SwAnchoredObject* pNewAnchoredObj )
         {
-            const SwRect aBoundRectOfListedObj( pListedAnchoredObj->GetObjRectWithSpaces() );
-            const SwRect aBoundRectOfNewObj( pNewAnchoredObj->GetObjRectWithSpaces() );
+            const SwRect& aBoundRectOfListedObj( pListedAnchoredObj->GetObjRectWithSpaces() );
+            const SwRect& aBoundRectOfNewObj( pNewAnchoredObj->GetObjRectWithSpaces() );
             if ( ( mbR2L &&
                    ( (aBoundRectOfListedObj.*mfnRect->fnGetRight)() ==
                      (aBoundRectOfNewObj.*mfnRect->fnGetRight)() ) ) ||
@@ -740,7 +740,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             if( bEvade )
             {
                 // #i68520#
-                SwRect aTmp( _pAnchoredObj->GetObjRectWithSpaces() );
+                const SwRect& aTmp( _pAnchoredObj->GetObjRectWithSpaces() );
                 if ( !aTmp.IsOver( mpCurrAnchoredObj->GetObjRectWithSpaces() ) )
                     bEvade = false;
             }
@@ -981,7 +981,7 @@ SwTwips SwTextFly::CalcMinBottom() const
                                     pAnchoredObj->GetFrameFormat().GetVertOrient();
                 if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
                 {
-                    const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
+                    const SwRect& aBound( pAnchoredObj->GetObjRectWithSpaces() );
                     if( aBound.Top() < nEndOfFrame )
                         nRet = std::max( nRet, aBound.Bottom() );
                 }
@@ -1207,7 +1207,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
     {
         // #i68520#
         const SwAnchoredObject* pNext = (*mpAnchoredObjList)[ nFlyPos ];
-        const SwRect aTmp( pNext->GetObjRectWithSpaces() );
+        const SwRect& aTmp( pNext->GetObjRectWithSpaces() );
         if( aRectFnSet.GetLeft(aTmp) >= nFlyLeft )
             break;
     }
@@ -1343,7 +1343,7 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
         SwRectFnSet aRectFnSet(m_pCurrFrame);
         const long nCurrLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
         const long nCurrRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
-        const SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
+        const SwRect& aRect( pAnchoredObj->GetObjRectWithSpaces() );
         long nFlyLeft = aRectFnSet.GetLeft(aRect);
         long nFlyRight = aRectFnSet.GetRight(aRect);
 

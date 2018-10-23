@@ -1739,7 +1739,7 @@ bool DrawFillAttributes(
                 // tdf#86578 the awful lcl_SubtractFlys hack
                 if (rPaintRegion.size() > 1 || rPaintRegion[0] != rPaintRegion.GetOrigin())
                 {
-                    basegfx::B2DPolyPolygon const maskRegion(rClipState.getClipPoly());
+                    basegfx::B2DPolyPolygon const& maskRegion(rClipState.getClipPoly());
                     primitives.resize(1);
                     primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
                             maskRegion, rSequence);
@@ -3859,7 +3859,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         bool bInGenerateThumbnail = pShell->GetDoc()->GetDocShell()->IsInGenerateAndStoreThumbnail();
         if (bInGenerateThumbnail)
         {
-            SwRect aVisRect = pShell->VisArea();
+            const SwRect& aVisRect = pShell->VisArea();
             if (!aVisRect.IsOver(getFrameArea()))
                 return;
         }

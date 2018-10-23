@@ -1024,7 +1024,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                 }
                 else if (FILE_LINK_SECTION == pSect->GetType())
                 {
-                    const OUString sRet( pSect->GetLinkFileName() );
+                    const OUString& sRet( pSect->GetLinkFileName() );
                     sal_Int32 nIndex(0);
                     aLink.FileURL =
                         sRet.getToken(0, sfx2::cTokenSeparator, nIndex);

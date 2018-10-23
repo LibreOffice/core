@@ -648,7 +648,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_SBL );
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLineSpacingItem aLR = aEditAttr.Get( EE_PARA_SBL );
+                    const SvxLineSpacingItem& aLR = aEditAttr.Get( EE_PARA_SBL );
                     rSet.Put(aLR);
                 }
                 else
@@ -1741,7 +1741,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
         SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
-        OUString sSymbolFont = aOpt.GetSymbolFont();
+        const OUString& sSymbolFont = aOpt.GetSymbolFont();
         if( !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else

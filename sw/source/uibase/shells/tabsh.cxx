@@ -928,7 +928,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 // -->after inserting,reset the inner table borders
                 if ( bSetInnerBorders )
                 {
-                    const SvxBoxInfoItem aBoxInfo(aCoreSet.Get(SID_ATTR_BORDER_INNER));
+                    const SvxBoxInfoItem& aBoxInfo(aCoreSet.Get(SID_ATTR_BORDER_INNER));
                     SfxItemSet aSet( GetPool(), svl::Items<SID_ATTR_BORDER_INNER,
                                                 SID_ATTR_BORDER_INNER>{});
                     aSet.Put( aBoxInfo );

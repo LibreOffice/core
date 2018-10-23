@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, Button*, void)
     {
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
-        const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
+        const OUString& sGlosPath( aPathOpt.GetAutoTextPath() );
         const sal_Int32 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
         bool bIsWritable = false;
         for(sal_Int32 nPath = 0; nPath < nPaths; nPath++)

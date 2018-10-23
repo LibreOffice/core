@@ -3485,7 +3485,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case ContentTypeId::INDEX:
         {
-            const OUString sName(pCnt->GetName());
+            const OUString& sName(pCnt->GetName());
             if (!m_pActiveShell->GotoNextTOXBase(&sName))
                 m_pActiveShell->GotoPrevTOXBase(&sName);
         }

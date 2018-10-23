@@ -636,7 +636,7 @@ bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
     for(int i = 0; i < AUTH_FIELD_END; ++i)
     {
         pValues[i].Name = OUString::createFromAscii(aFieldNames[i]);
-        const OUString sField = pAuthEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
+        const OUString& sField = pAuthEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
         if(i == AUTH_FIELD_AUTHORITY_TYPE)
             pValues[i].Value <<= sal_Int16(sField.toInt32());
         else

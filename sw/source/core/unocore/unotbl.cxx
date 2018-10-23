@@ -2996,8 +2996,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_TEMPLATE_NAME:
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
-                    OUString sName = pTable->GetTableStyleName();
-                    aRet <<= sName;
+                    aRet <<= pTable->GetTableStyleName();
                 }
                 break;
 

@@ -1407,12 +1407,12 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
         sw::mark::IMark* pMark = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : nullptr;
         if ( pMark )
         {
-            const SwPosition rStart = pMark->GetMarkStart();
+            const SwPosition& rStart = pMark->GetMarkStart();
             GetPoint()->nNode = rStart.nNode;
             GetPoint()->nContent = rStart.nContent;
             ++GetPoint()->nContent; // Don't select the start delimiter
 
-            const SwPosition rEnd = pMark->GetMarkEnd();
+            const SwPosition& rEnd = pMark->GetMarkEnd();
 
             if ( rStart != rEnd )
             {

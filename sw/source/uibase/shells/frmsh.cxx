@@ -717,7 +717,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
             {
                 case RES_FRM_SIZE:
                 {
-                    SwFormatFrameSize aSz(aMgr.GetFrameSize());
+                    const SwFormatFrameSize& aSz(aMgr.GetFrameSize());
                     rSet.Put(aSz);
                 }
                 break;

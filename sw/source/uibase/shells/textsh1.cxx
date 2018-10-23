@@ -1436,7 +1436,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             LanguageType nLang = rSh.GetCurLang();
             LanguageTag aLanguageTag( nLang);
-            lang::Locale aLocale( aLanguageTag.getLocale());
+            const lang::Locale& aLocale( aLanguageTag.getLocale());
 
             // disable "Thesaurus" context menu entry if there is nothing to look up
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );

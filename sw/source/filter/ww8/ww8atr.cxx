@@ -2030,7 +2030,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 {
                                     // Need to create a separate run for separator character
                                     SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
-                                    const OUString aText = rNode.GetText();
+                                    const OUString& aText = rNode.GetText();
                                     const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
                                     const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
                                     bool bCategoryFirst = nCategoryStart < pHt->GetStart();
@@ -2210,7 +2210,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if(SwTOXElement::IndexEntryType & pTOX->GetCreateType())
                 {
                     sStr += "\\f ";
-                    OUString sName = pTOX->GetEntryTypeName();
+                    const OUString& sName = pTOX->GetEntryTypeName();
                     if(!sName.isEmpty())
                     {
                        sStr += sName;
@@ -2248,7 +2248,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     sStr = FieldString(eCode);
 
                     sStr += "\\c ";
-                    OUString seqName = pTOX->GetSequenceName();
+                    const OUString& seqName = pTOX->GetSequenceName();
                     if(!seqName.isEmpty())
                     {
                         sStr += "\"";
@@ -2311,7 +2311,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     if(SwTOXElement::Bookmark & pTOX->GetCreateType())
                     {
                         sStr += "\\b \"";
-                        OUString bName = pTOX->GetBookmarkName();
+                        const OUString& bName = pTOX->GetBookmarkName();
                         sStr += bName;
                         sStr += sEntryEnd;
                     }

@@ -232,7 +232,7 @@ void SwGlossaryList::Update()
         Start();
 
     SvtPathOptions aPathOpt;
-    OUString sTemp( aPathOpt.GetAutoTextPath() );
+    const OUString& sTemp( aPathOpt.GetAutoTextPath() );
     if(sTemp != sPath)
     {
         sPath = sTemp;

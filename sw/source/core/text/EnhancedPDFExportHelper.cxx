@@ -2088,7 +2088,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 //get the name
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 mrSh.SwCursorShell::ClearMark();
-                OUString sBkName = pBkmk->GetName();
+                const OUString& sBkName = pBkmk->GetName();
 
                 //jump to it
                 JumpToSwMark( &mrSh, sBkName );

@@ -672,7 +672,7 @@ ASK_ADJUST:
                 SfxItemState eState = aEditAttr.GetItemState(EE_PARA_SBL);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLineSpacingItem aLR = aEditAttr.Get( EE_PARA_SBL );
+                    const SvxLineSpacingItem& aLR = aEditAttr.Get( EE_PARA_SBL );
                     rSet.Put(aLR);
                 }
                 else

@@ -703,7 +703,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_MAILMERGE_CURRENT_ENTRY:
         {
             SwView* pView = ::GetActiveView();
-            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
+            const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
             if (!xConfigItem)
                 return;
 

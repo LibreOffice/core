@@ -842,7 +842,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl, weld::Button&, void)
             SwNumRule aTmpNumRule( pWrtSh->GetUniqueNumRuleName(),
                                    aNumFormat.GetPositionAndSpaceMode(),
                                    pOutlineDlg ? OUTLINE_RULE : NUM_RULE );
-            SwNumFormat aTempFormat(aTmpNumRule.Get( i ));
+            const SwNumFormat& aTempFormat(aTmpNumRule.Get( i ));
             aNumFormat.SetPositionAndSpaceMode( aTempFormat.GetPositionAndSpaceMode() );
             if ( aTempFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
