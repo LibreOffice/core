@@ -450,7 +450,7 @@ public:
     SmSymDefineDialog(weld::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     virtual ~SmSymDefineDialog() override;
 
-    short execute();
+    virtual short run() override;
 
     void SelectOldSymbolSet(const OUString &rSymbolSetName)
     {

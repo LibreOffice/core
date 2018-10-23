@@ -156,7 +156,7 @@ SvInsertOleDlg::SvInsertOleDlg(weld::Window* pParent, const Reference<embed::XSt
     m_xRbNewObject->set_active(true);
 }
 
-short SvInsertOleDlg::execute()
+short SvInsertOleDlg::run()
 {
     short nRet = RET_OK;
     SvObjectServerList  aObjS;
@@ -176,7 +176,7 @@ short SvInsertOleDlg::execute()
     OUString aName;
 
     DBG_ASSERT( m_xStorage.is(), "No storage!");
-    if ( m_xStorage.is() && ( nRet = run() ) == RET_OK )
+    if ( m_xStorage.is() && ( nRet = InsertObjectDialog_Impl::run() ) == RET_OK )
     {
         OUString aFileName;
         bool bCreateNew = IsCreateNew();
@@ -383,7 +383,7 @@ void SfxInsertFloatingFrameDialog::Init()
     m_xBTOpen->connect_clicked(LINK(this, SfxInsertFloatingFrameDialog, OpenHdl));
 }
 
-short SfxInsertFloatingFrameDialog::execute()
+short SfxInsertFloatingFrameDialog::run()
 {
     short nRet = RET_OK;
     bool bOK = false;
@@ -475,7 +475,7 @@ short SfxInsertFloatingFrameDialog::execute()
         bOK = m_xStorage.is();
     }
 
-    if ( bOK && ( nRet = run() ) == RET_OK )
+    if ( bOK && ( nRet = InsertObjectDialog_Impl::run() ) == RET_OK )
     {
         OUString aURL;
         if (!m_xEDURL->get_text().isEmpty())

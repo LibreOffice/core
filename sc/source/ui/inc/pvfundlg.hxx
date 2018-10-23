@@ -193,7 +193,7 @@ public:
                                css::sheet::DataPilotFieldOrientation nOrient);
     virtual ~ScDPShowDetailDlg() override;
 
-    short execute();
+    virtual short run() override;
 
     /**
      * @return String internal name of the selected field.  Note that this may

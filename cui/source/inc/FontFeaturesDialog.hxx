@@ -63,7 +63,7 @@ private:
 public:
     FontFeaturesDialog(weld::Window* pParent, OUString const& rFontName);
     ~FontFeaturesDialog() override;
-    short execute();
+    virtual short run() override;
 
     OUString const& getResultFontName() { return m_sResultFontName; }
 

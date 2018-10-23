@@ -23,6 +23,7 @@
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
 #include <editeng/svxenum.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <connectivity/dbtools.hxx>
 
@@ -46,6 +47,7 @@ namespace com { namespace sun { namespace star {
     namespace awt
     {
         struct FontDescriptor;
+        class XWindow;
     }
     namespace sdbc
     {
@@ -102,15 +104,6 @@ namespace dbaui
                                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                                     css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
                                     css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
-
-    /**  creates a error dialog which displays the SQLExceptionInfo. Also it supports a "more" button where detailed information are available
-        @param  _rInfo                  the error which should be shown, if the info is not valid no error dialog will appear
-        @param  _pParent                the parent of the error dialog
-        @param  _rxContext              need to create the dialog
-    */
-    void showError( const ::dbtools::SQLExceptionInfo& _rInfo,
-                    vcl::Window* _pParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
     /** fills a map and a vector with localized type names
         @param  _rxConnection   the connection to access the metadata

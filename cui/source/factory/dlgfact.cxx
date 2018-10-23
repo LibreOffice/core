@@ -153,7 +153,7 @@ short AbstractSvxSearchSimilarityDialog_Impl::Execute()
 
 short AbstractSvxTransformTabDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool AbstractSvxTransformTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
@@ -163,7 +163,7 @@ bool AbstractSvxTransformTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
 
 short AbstractSvxCaptionDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool AbstractSvxCaptionDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
@@ -219,7 +219,7 @@ short AbstractGraphicFilterDialog_Impl::Execute()
 
 short AbstractSvxAreaTabDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool AbstractSvxAreaTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
@@ -234,7 +234,7 @@ short AbstractPasteDialog_Impl::Execute()
 
 short AbstractInsertObjectDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
@@ -267,12 +267,12 @@ void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
 
 short AbstractSignatureLineDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSignSignatureLineDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
@@ -345,7 +345,7 @@ void CuiAbstractTabDialog_Impl::SetText( const OUString& rStr )
 
 short CuiAbstractTabController_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool CuiAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)

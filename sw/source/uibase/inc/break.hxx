@@ -57,7 +57,7 @@ class SwBreakDlg : public weld::GenericDialogController
 
 public:
     SwBreakDlg(weld::Window *pParent, SwWrtShell &rSh);
-    short execute();
+    virtual short run() override;
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::boost::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }

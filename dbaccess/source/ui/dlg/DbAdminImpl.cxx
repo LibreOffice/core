@@ -134,9 +134,9 @@ namespace
 }
 
     // ODbDataSourceAdministrationHelper
-ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XComponentContext >& _xORB, vcl::Window* _pParent,IItemSetHelper* _pItemSetHelper)
+ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XComponentContext >& _xORB, weld::Window* pParent, weld::Window* pTopParent, IItemSetHelper* _pItemSetHelper)
         : m_xContext(_xORB)
-        , m_pParent(_pParent)
+        , m_pParent(pParent)
         , m_pItemSetHelper(_pItemSetHelper)
 {
     /// initialize the property translation map
@@ -201,8 +201,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     }
     catch(const Exception&)
     {
-        vcl::Window* pTopParent = _pParent->GetParent();
-        ShowServiceNotAvailableError(pTopParent ? pTopParent->GetFrameWeld() : nullptr, "com.sun.star.sdb.DatabaseContext", true);
+        ShowServiceNotAvailableError(pTopParent, "com.sun.star.sdb.DatabaseContext", true);
     }
 }
 
@@ -353,7 +352,7 @@ std::pair< Reference<XConnection>,bool> ODbDataSourceAdministrationHelper::creat
         SQLExceptionInfo aErrorInfo;
         try
         {
-            WaitObject aWaitCursor(m_pParent);
+            weld::WaitObject aWaitCursor(m_pParent);
             aRet.first = getDriver()->connect(getConnectionURL(), aConnectionParams);
             aRet.second = true;
         }
@@ -361,7 +360,7 @@ std::pair< Reference<XConnection>,bool> ODbDataSourceAdministrationHelper::creat
         catch (const SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
         catch (const SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
 
-        showError(aErrorInfo,m_pParent,getORB());
+        showError(aErrorInfo,m_pParent->GetXWindow(),getORB());
     }
     if ( aRet.first.is() )
         successfullyConnected();// notify the admindlg to save the password

@@ -729,7 +729,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     }
     catch( const SQLException&)
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), aWizard.get(), m_xContext );
+        ::dbtools::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), VCLUnoHelper::GetInterface(aWizard.get()), m_xContext );
         bError = true;
     }
     catch( const Exception& )

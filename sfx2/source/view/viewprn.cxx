@@ -447,7 +447,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute, weld::Button&, void)
     SfxPrintOptionsDialog aDlg(_rSetupParent.GetFrameWeld(), _pViewSh, _pOptions.get() );
     if (_bHelpDisabled)
         aDlg.DisableHelp();
-    if (aDlg.execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
         _pOptions = aDlg.GetOptions().Clone();
     }
@@ -834,7 +834,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
 
                 aPrintSetupDlg.SetPrinter( pDlgPrinter );
-                nDialogRet = aPrintSetupDlg.execute();
+                nDialogRet = aPrintSetupDlg.run();
 
                 if ( pExecutor && pExecutor->GetOptions() )
                 {

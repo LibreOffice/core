@@ -343,19 +343,17 @@ namespace dbaui
     }
 
     // AdvancedSettingsDialog
-    AdvancedSettingsDialog::AdvancedSettingsDialog( vcl::Window* _pParent, SfxItemSet* _pItems,
+    AdvancedSettingsDialog::AdvancedSettingsDialog(weld::Window* pParent, SfxItemSet* _pItems,
         const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
-        : SfxTabDialog(_pParent, "AdvancedSettingsDialog",
-            "dbaccess/ui/advancedsettingsdialog.ui", _pItems)
+        : SfxTabDialogController(pParent, "dbaccess/ui/advancedsettingsdialog.ui", "AdvancedSettingsDialog", _pItems)
     {
-        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,_pParent,this));
+        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext, m_xDialog.get(), pParent, this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);
         SetInputSet(_pItems);
         // propagate this set as our new input set and reset the example set
-        delete m_pExampleSet;
-        m_pExampleSet = new SfxItemSet(*GetInputSetImpl());
+        m_xExampleSet.reset(new SfxItemSet(*GetInputSetImpl()));
 
         const OUString eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*_pItems);
 
@@ -380,14 +378,7 @@ namespace dbaui
 
     AdvancedSettingsDialog::~AdvancedSettingsDialog()
     {
-        disposeOnce();
-    }
-
-    void AdvancedSettingsDialog::dispose()
-    {
         SetInputSet(nullptr);
-        DELETEZ(m_pExampleSet);
-        SfxTabDialog::dispose();
     }
 
     bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const OUString& _sURL )
@@ -397,38 +388,33 @@ namespace dbaui
         return rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting();
     }
 
-    short AdvancedSettingsDialog::Execute()
+    short AdvancedSettingsDialog::Ok()
     {
-        short nRet = SfxTabDialog::Execute();
+        short nRet = SfxTabDialogController::Ok();
         if ( nRet == RET_OK )
         {
-            m_pExampleSet->Put(*GetOutputItemSet());
-            m_pImpl->saveChanges(*m_pExampleSet);
+            m_xExampleSet->Put(*GetOutputItemSet());
+            m_pImpl->saveChanges(*m_xExampleSet);
         }
         return nRet;
     }
 
-    void AdvancedSettingsDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
+    void AdvancedSettingsDialog::PageCreated(const OString& rId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
-
-        vcl::Window *pWin = GetViewWindow();
-        if(pWin)
-            pWin->Invalidate();
-
-        SfxTabDialog::PageCreated(_nId, _rPage);
+        SfxTabDialogController::PageCreated(rId, _rPage);
     }
 
     const SfxItemSet* AdvancedSettingsDialog::getOutputSet() const
     {
-        return m_pExampleSet;
+        return m_xExampleSet.get();
     }
 
     SfxItemSet* AdvancedSettingsDialog::getWriteOutputSet()
     {
-        return m_pExampleSet;
+        return m_xExampleSet.get();
     }
 
     std::pair< Reference< XConnection >, bool > AdvancedSettingsDialog::createConnection()
@@ -458,7 +444,7 @@ namespace dbaui
 
     void AdvancedSettingsDialog::setTitle(const OUString& _sTitle)
     {
-        SetText(_sTitle);
+        m_xDialog->set_title(_sTitle);
     }
 
     void AdvancedSettingsDialog::enableConfirmSettings( bool ) {}

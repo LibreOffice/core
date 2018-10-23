@@ -29,7 +29,7 @@ SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(vcl::Window const * i_pParent, 
     SvxCharacterMap aDlg(i_pParent ? i_pParent->GetFrameWeld() : nullptr, nullptr, false);
     aDlg.DisableFontSelection();
     aDlg.SetCharFont(i_rFont);
-    if (aDlg.execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
         sal_UCS4 cChar = aDlg.GetChar();
         // using the new UCS4 constructor

@@ -1167,7 +1167,7 @@ IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, voi
     if (!sFontName.isEmpty() && pNameBox)
     {
         cui::FontFeaturesDialog aDialog(GetDialogFrameWeld(), sFontName);
-        if (aDialog.execute() == RET_OK)
+        if (aDialog.run() == RET_OK)
         {
             pNameBox->set_active_text(aDialog.getResultFontName());
             UpdatePreview_Impl();
@@ -3093,7 +3093,7 @@ void SvxCharTwoLinesPage::SelectCharacter(weld::TreeView* pBox)
     SvxCharacterMap aDlg(GetFrameWeld(), nullptr, false);
     aDlg.DisableFontSelection();
 
-    if (aDlg.execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
         sal_Unicode cChar = static_cast<sal_Unicode>(aDlg.GetChar());
         SetBracket( cChar, bStart );
