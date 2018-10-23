@@ -161,18 +161,17 @@ namespace dbaui
     };
 
     // OOdbcDetailsPage
-    class OOdbcDetailsPage : public OCommonBehaviourTabPage
+    class OOdbcDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OOdbcDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OOdbcDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
         virtual ~OOdbcDetailsPage() override;
-        virtual void dispose() override;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
     private:
-        VclPtr<CheckBox>           m_pUseCatalog;
+        std::unique_ptr<weld::CheckButton> m_xUseCatalog;
     };
 
     // OUserDriverDetailsPage
