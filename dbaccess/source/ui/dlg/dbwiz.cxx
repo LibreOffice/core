@@ -31,7 +31,6 @@
 #include "adminpages.hxx"
 #include "generalpage.hxx"
 #include <stringlistitem.hxx>
-#include <propertysetitem.hxx>
 #include <unotools/confignode.hxx>
 #include "ConnectionPage.hxx"
 #include "DriverSettings.hxx"

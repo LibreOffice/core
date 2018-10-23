@@ -32,7 +32,6 @@
 #include <dsitems.hxx>
 #include "dsnItem.hxx"
 #include "optionalboolitem.hxx"
-#include <propertysetitem.hxx>
 #include <stringlistitem.hxx>
 
 #include <unotools/confignode.hxx>
@@ -321,7 +320,6 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemP
     *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, false);
     *pCounter++ = new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100);
     *pCounter++ = new SfxBoolItem(DSID_SUPPRESSVERSIONCL, false);
-    *pCounter++ = new OPropertySetItem(DSID_DATASOURCE_UNO);
     *pCounter++ = new SfxBoolItem(DSID_CONN_SHUTSERVICE, false);
     *pCounter++ = new SfxInt32Item(DSID_CONN_DATAINC, 20);
     *pCounter++ = new SfxInt32Item(DSID_CONN_CACHESIZE, 20);
@@ -422,7 +420,6 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemP
         {0,false},
         {0,false},
         {0,false},
-        {0,false}
     };
 
     OSL_ENSURE(SAL_N_ELEMENTS(aItemInfos) == DSID_LAST_ITEM_ID,"Invalid Ids!");
