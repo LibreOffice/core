@@ -27,11 +27,12 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace util { class XURLTransformer; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class WeakReference; } } } }
 
 namespace sd { namespace framework {
 

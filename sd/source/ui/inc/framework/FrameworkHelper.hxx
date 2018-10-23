@@ -24,16 +24,16 @@
 
 #include <tools/SdGlobalResourceContainer.hxx>
 
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-
 #include <functional>
 #include <map>
 #include <memory>
 
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XView; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { struct ConfigurationChangeEvent; } } } } }
+
 namespace sd {
-class ViewShell;
 class ViewShellBase;
 }
 

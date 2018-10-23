@@ -23,13 +23,13 @@
 #include <MutexOwner.hxx>
 
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>
-#include <set>
+
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace sd { namespace framework {
 
@@ -38,7 +38,7 @@ typedef ::cppu::WeakComponentImplHelper <
     css::lang::XInitialization
     > ModuleControllerInterfaceBase;
 
-/** The ModuleController has to tasks:
+/** The ModuleController has two tasks:
 
     1. It reads the
     org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories

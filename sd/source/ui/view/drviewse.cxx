@@ -96,6 +96,7 @@
 #include <Window.hxx>
 #include <fuformatpaintbrush.hxx>
 #include <fuzoom.hxx>
+#include <sdmod.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

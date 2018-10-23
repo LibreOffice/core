@@ -20,7 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_DRAWMODULE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_DRAWMODULE_HXX
 
-#include <com/sun/star/frame/XController.hpp>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 namespace sd { namespace framework {
 

@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <com/sun/star/drawing/framework/XView.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <sfx2/viewfrm.hxx>

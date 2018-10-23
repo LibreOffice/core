@@ -134,4 +134,55 @@ blacklist:
     - com/sun/star/drawing/framework/XTabBar.hpp
     - com/sun/star/drawing/framework/XToolBar.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
-
+    sd/source/ui/inc/framework/Configuration.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/drawing/framework/XConfiguration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/framework/ConfigurationController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationController.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/inc/framework/DrawModule.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/inc/framework/ImpressModule.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/inc/framework/ModuleController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XModuleController.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/inc/framework/Pane.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XPane.hpp
+    - com/sun/star/drawing/framework/XPane2.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    sd/source/ui/inc/framework/PresentationModule.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/inc/framework/PresentationFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XResourceFactory.hpp
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    sd/source/ui/inc/framework/ResourceId.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XResourceId.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/framework/ViewShellWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/drawing/framework/XRelocatableResource.hpp
+    - com/sun/star/drawing/framework/XView.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    sd/source/ui/inc/tools/IdleDetection.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    sd/source/ui/inc/tools/PropertySet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    sd/source/ui/inc/tools/SlotStateListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp

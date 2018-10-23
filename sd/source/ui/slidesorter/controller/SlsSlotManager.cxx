@@ -65,6 +65,7 @@
 #include <unmodpg.hxx>
 #include <DrawViewShell.hxx>
 #include <sdabstdlg.hxx>
+#include <sdmod.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -62,6 +62,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
 #include <boost/optional.hpp>
+#include <sdmod.hxx>
 
 namespace {
 static const sal_uInt32 SINGLE_CLICK             (0x00000001);

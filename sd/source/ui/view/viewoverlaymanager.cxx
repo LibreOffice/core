@@ -46,6 +46,7 @@
 #include <bitmaps.hlst>
 #include <sdresid.hxx>
 #include <EventMultiplexer.hxx>
+#include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
