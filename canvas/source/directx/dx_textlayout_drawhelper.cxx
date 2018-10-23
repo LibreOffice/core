@@ -125,6 +125,13 @@ namespace dxcanvas
             aFont.SetColor( aColor );
             aFont.SetFillColor( aColor );
 
+            const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties
+                = rCanvasFont->getExtraFontProperties();
+
+            CanvasFont::ImplRef pFont(tools::canvasFontFromXFont(rCanvasFont));
+            if (pFont.is() && pFont->getEmphasisMark())
+                aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
+
             // adjust to stretched font
             if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
             {
@@ -269,6 +276,10 @@ namespace dxcanvas
 
             aFont.SetAverageFontWidth( nNewWidth );
         }
+
+        CanvasFont::ImplRef pFont(tools::canvasFontFromXFont(rCanvasFont));
+        if (pFont.is() && pFont->getEmphasisMark())
+            aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
 
         // set font
         xVirtualDevice->SetFont(aFont);
