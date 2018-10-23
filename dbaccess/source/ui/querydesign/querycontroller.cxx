@@ -23,7 +23,6 @@
 #include <strings.hrc>
 #include <query.hrc>
 #include <dbu_reghelper.hxx>
-#include <dbu_pageids.hxx>
 #include <stringconstants.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>

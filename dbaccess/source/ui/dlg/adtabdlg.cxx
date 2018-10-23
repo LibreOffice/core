@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <core_resource.hxx>
-#include <dbu_pageids.hxx>
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <sfx2/sfxsids.hrc>

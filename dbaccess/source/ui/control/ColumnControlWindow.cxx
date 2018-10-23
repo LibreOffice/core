@@ -23,7 +23,6 @@
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
 #include <core_resource.hxx>
-#include <dbu_pageids.hxx>
 #include <strings.hrc>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
