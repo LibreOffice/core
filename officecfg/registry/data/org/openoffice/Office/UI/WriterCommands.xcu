@@ -3273,6 +3273,46 @@
           <value xml:lang="en-US">Roman Lowercase List</value>
         </prop>
       </node>
+      <node oor:name=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Default Style</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Academic&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Academic</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Elegant&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Elegant</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Financial&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Financial</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Box List Blue&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Box List Blue</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Box List Green&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Box List Green</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Box List Red&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Box List Red</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Box List Yellow&amp;FamilyName:string=TableStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Box List Yellow</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RomanLowListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Roman Lowercase List</value>
