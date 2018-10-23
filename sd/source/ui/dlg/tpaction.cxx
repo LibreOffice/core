@@ -220,7 +220,7 @@ void SdTPAction::Construct()
     }
     else if( pOleObj )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+        const uno::Reference < embed::XEmbeddedObject >& xObj = pOleObj->GetObjRef();
         if ( xObj.is() )
         {
             bOLEAction = true;

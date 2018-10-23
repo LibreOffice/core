@@ -279,7 +279,7 @@ private:
                 nullptr;
             if (pCustomPropertyField)
             {
-                OUString aKey = pCustomPropertyField->GetName();
+                const OUString& aKey = pCustomPropertyField->GetName();
                 if (m_aKeyCreator.isMarkingTextKey(aKey))
                 {
                     OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
@@ -785,7 +785,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 OUString aTitle = SdResId(STR_TITLE_RENAMESLIDE);
                 OUString aDescr = SdResId(STR_DESC_RENAMESLIDE);
-                OUString aPageName = pCurrentPage->GetName();
+                const OUString& aPageName = pCurrentPage->GetName();
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
@@ -1310,7 +1310,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                     else if (nState == RET_NO)
                     {
-                        GraphicObject aGraphicObject(pObj->GetGraphicObject());
+                        const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
                         GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), "");
                     }
                 }

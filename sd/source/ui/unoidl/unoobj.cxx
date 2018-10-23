@@ -649,8 +649,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
     }
     else
     {
-        uno::Any aAny( aValue );
-        mpShape->_setPropertyValue(aPropertyName, aAny);
+        mpShape->_setPropertyValue(aPropertyName, aValue);
     }
 
     if( mpModel )

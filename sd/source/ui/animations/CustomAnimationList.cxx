@@ -618,10 +618,8 @@ void CustomAnimationList::update()
 
         auto rInteractiveSequenceVector = mpMainSequence->getInteractiveSequenceVector();
 
-        for (auto const& interactiveSequence : rInteractiveSequenceVector)
+        for (InteractiveSequencePtr const& pIS : rInteractiveSequenceVector)
         {
-            InteractiveSequencePtr pIS( interactiveSequence );
-
             Reference< XShape > xShape( pIS->getTriggerShape() );
             if( xShape.is() )
             {
@@ -857,7 +855,7 @@ EffectSequence CustomAnimationList::getSelection() const
             {
                 if( !IsSelected( pChild ) )
                 {
-                    CustomAnimationEffectPtr pChildEffect( pChild->getEffect() );
+                    const CustomAnimationEffectPtr& pChildEffect( pChild->getEffect() );
                     if( pChildEffect.get() )
                         aSelection.push_back( pChildEffect );
                 }

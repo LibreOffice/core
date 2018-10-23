@@ -827,9 +827,8 @@ void CustomAnimationPane::updateMotionPathTags()
         bChanges = updateMotionPathImpl( *this, *pView, mpMainSequence->getBegin(), mpMainSequence->getEnd(), aTags, maMotionPathTags );
 
         auto rInteractiveSequenceVector = mpMainSequence->getInteractiveSequenceVector();
-        for (auto const& interactiveSequence : rInteractiveSequenceVector)
+        for (InteractiveSequencePtr const& pIS : rInteractiveSequenceVector)
         {
-            InteractiveSequencePtr pIS(interactiveSequence);
             bChanges |= updateMotionPathImpl( *this, *pView, pIS->getBegin(), pIS->getEnd(), aTags, maMotionPathTags );
         }
     }

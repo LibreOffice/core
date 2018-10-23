@@ -74,7 +74,7 @@ SAL_DLLPUBLIC_EXPORT void * sd_component_getFactory(
         uno::Reference<lang::XSingleServiceFactory> xFactory;
         uno::Reference<lang::XSingleComponentFactory> xComponentFactory;
 
-        std::shared_ptr<FactoryMap> pFactoryMap (GetFactoryMap());
+        const std::shared_ptr<FactoryMap>& pFactoryMap (GetFactoryMap());
         OUString sImplementationName (OUString::createFromAscii(pImplName));
         FactoryMap::const_iterator iFactory (pFactoryMap->find(sImplementationName));
         if (iFactory != pFactoryMap->end())

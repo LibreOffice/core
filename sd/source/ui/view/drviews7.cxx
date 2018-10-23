@@ -1465,7 +1465,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             if ( pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor() )
             {
-                uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
+                const uno::Reference< awt::XControlModel >& xControlModel( pUnoCtrl->GetUnoControlModel() );
                 if( xControlModel.is() )
                 {
                     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );

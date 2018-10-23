@@ -694,7 +694,7 @@ namespace dlgprov
         Reference< XWindowPeer > xParentPeer;
         if ( aArguments.has( "ParentWindow" ) )
         {
-            const Any aParentWindow( aArguments.get( "ParentWindow" ) );
+            const Any& aParentWindow( aArguments.get( "ParentWindow" ) );
             if ( !( aParentWindow >>= xParentPeer ) )
             {
                 const Reference< XControl > xParentControl( aParentWindow, UNO_QUERY );
