@@ -138,7 +138,7 @@ OUString SAL_CALL
     if ( pSdView )
     {
         SdDrawDocument& rDoc = pSdView->GetDoc();
-        rtl::OUString sFileName = rDoc.getDocAccTitle();
+        OUString sFileName = rDoc.getDocAccTitle();
         if (sFileName.isEmpty())
         {
             ::sd::DrawDocShell* pDocSh = pSdView->GetDocSh();

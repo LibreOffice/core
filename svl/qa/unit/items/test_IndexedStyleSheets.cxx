@@ -23,7 +23,7 @@ using namespace svl;
 class MockedStyleSheet : public SfxStyleSheetBase
 {
     public:
-    MockedStyleSheet(const rtl::OUString& name, SfxStyleFamily fam = SfxStyleFamily::Char)
+    MockedStyleSheet(const OUString& name, SfxStyleFamily fam = SfxStyleFamily::Char)
     : SfxStyleSheetBase(name, nullptr, fam, SfxStyleSearchBits::Auto)
     {}
 
@@ -117,8 +117,8 @@ void IndexedStyleSheetsTest::RemovingStyleSheetWhichIsNotAvailableHasNoEffect()
 
 void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
 {
-    rtl::OUString name1("name1");
-    rtl::OUString name2("name2");
+    OUString name1("name1");
+    OUString name2("name2");
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2));
     rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name1));
@@ -142,8 +142,8 @@ void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
 
 void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
 {
-    rtl::OUString const name1("name1");
-    rtl::OUString const name2("name2");
+    OUString const name1("name1");
+    OUString const name2("name2");
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name2));
@@ -182,7 +182,7 @@ void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
 
 void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()
 {
-    rtl::OUString name("name1");
+    OUString name("name1");
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name, SfxStyleFamily::Char));
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name, SfxStyleFamily::Para));
     rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name, SfxStyleFamily::Char));

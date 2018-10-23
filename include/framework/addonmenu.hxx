@@ -63,7 +63,7 @@ class FWE_DLLPUBLIC AddonMenuManager
                                      sal_uInt16&     nUniqueMenuId,
                                      const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& aAddonMenuDefinition,
                                      const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                     const ::rtl::OUString& rModuleIdentifier );
+                                     const OUString& rModuleIdentifier );
 
         // Retrieve the menu entry property values from a sequence
         static void       GetMenuEntry( const css::uno::Sequence< css::beans::PropertyValue >& rAddonMenuEntry,

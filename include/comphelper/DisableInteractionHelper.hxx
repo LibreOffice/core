@@ -29,7 +29,7 @@ public:
 private:
     virtual ~NoEnableJavaInteractionContext() override {}
 
-    virtual css::uno::Any SAL_CALL getValueByName(rtl::OUString const& Name) override
+    virtual css::uno::Any SAL_CALL getValueByName(OUString const& Name) override
     {
         if (Name == "DontEnableJava")
             return css::uno::Any(true);

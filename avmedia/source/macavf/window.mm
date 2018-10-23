@@ -239,19 +239,19 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 
 // XServiceInfo
 
-::rtl::OUString SAL_CALL Window::getImplementationName(  )
+OUString SAL_CALL Window::getImplementationName(  )
 {
-    return ::rtl::OUString( AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME );
 }
 
 
-sal_Bool SAL_CALL Window::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_WINDOW_SERVICENAME;
 }
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_WINDOW_SERVICENAME };
 }

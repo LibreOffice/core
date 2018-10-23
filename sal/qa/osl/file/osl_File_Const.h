@@ -109,7 +109,7 @@ OUString aUserDirectorySys( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
 // common used URL:temp, canonical, root, relative, link,etc
 
 OUString aCanURL1( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/canonical.name" );
-rtl::OUString aCanURL2(
+OUString aCanURL2(
     RTL_CONSTASCII_USTRINGPARAM("ca@#;+.,$///78no\0ni..name"));
 OUString aCanURL3( "ca@#;+.,$//tmp/678nonical//name" );
 OUString aCanURL4( "canonical.name" );

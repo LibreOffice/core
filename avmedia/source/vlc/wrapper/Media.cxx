@@ -35,9 +35,9 @@ namespace
     char* ( *libvlc_media_get_mrl )(libvlc_media_t *p_md);
 
 
-    libvlc_media_t* InitMedia( const rtl::OUString& url, Instance& instance )
+    libvlc_media_t* InitMedia( const OUString& url, Instance& instance )
     {
-        rtl::OString dest;
+        OString dest;
         url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
 
         return libvlc_media_new_location(instance, dest.getStr());
@@ -61,7 +61,7 @@ bool Media::LoadSymbols()
     return InitApiMap( VLC_MEDIA_API );
 }
 
-Media::Media( const rtl::OUString& url, Instance& instance )
+Media::Media( const OUString& url, Instance& instance )
     : mMedia( InitMedia( url, instance ) )
 {
     if (mMedia == nullptr)

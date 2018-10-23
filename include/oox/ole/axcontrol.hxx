@@ -598,8 +598,8 @@ public:
     sal_uInt32   mnTabStyle;
     sal_uInt32   mnTabData;
     sal_uInt32   mnVariousPropertyBits;
-    std::vector< ::rtl::OUString > maItems; // captions for each tab
-    std::vector< ::rtl::OUString > maTabNames; // names for each tab
+    std::vector< OUString > maItems; // captions for each tab
+    std::vector< OUString > maTabNames; // names for each tab
 };
 
 

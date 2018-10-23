@@ -27,11 +27,11 @@ namespace rtl { class OUString; }
 
 namespace cppu {
 
-rtl::OUString getUnoIniUri();
+OUString getUnoIniUri();
 
-bool nextDirectoryItem(osl::Directory & directory, rtl::OUString * url);
+bool nextDirectoryItem(osl::Directory & directory, OUString * url);
 
-void decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory);
+void decodeRdbUri(OUString * uri, bool * optional, bool * directory);
 
 }
 

@@ -46,7 +46,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::Utf32);
 
 namespace {
 
-void appendString(rtl::OStringBuffer & buffer, rtl::OUString const & string) {
+void appendString(OStringBuffer & buffer, OUString const & string) {
     buffer.append('"');
     for (int i = 0; i < string.getLength(); ++i) {
         buffer.append("\\u");
@@ -67,8 +67,8 @@ void appendString(rtl::OStringBuffer & buffer, rtl::OUString const & string) {
 }
 
 void createMessage(
-    rtl::OStringBuffer & message, rtl::OUString const & string1,
-    rtl::OUString const & string2)
+    OStringBuffer & message, OUString const & string1,
+    OUString const & string2)
 {
     message.setLength(0);
     appendString(message, string1);
@@ -85,19 +85,19 @@ void test::oustringbuffer::Utf32::appendUtf32() {
     sal_Unicode const str2[str2Len] = { 'a', 'b', 'c', 'd' };
     int const str3Len = 6;
     sal_Unicode const str3[str3Len] = { 'a', 'b', 'c', 'd', 0xD800, 0xDC00 };
-    rtl::OStringBuffer message;
-    rtl::OUStringBuffer buf1(rtl::OUString(str1, str1Len));
+    OStringBuffer message;
+    OUStringBuffer buf1(OUString(str1, str1Len));
     buf1.appendUtf32('d');
-    rtl::OUString res1(buf1.makeStringAndClear());
-    createMessage(message, res1, rtl::OUString(str2, str2Len));
+    OUString res1(buf1.makeStringAndClear());
+    createMessage(message, res1, OUString(str2, str2Len));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), rtl::OUString(str2, str2Len), res1);
-    rtl::OUStringBuffer buf2(rtl::OUString(str2, str2Len));
+        message.getStr(), OUString(str2, str2Len), res1);
+    OUStringBuffer buf2(OUString(str2, str2Len));
     buf2.appendUtf32(0x10000);
-    rtl::OUString res2(buf2.makeStringAndClear());
-    createMessage(message, res2, rtl::OUString(str3, str3Len));
+    OUString res2(buf2.makeStringAndClear());
+    createMessage(message, res2, OUString(str3, str3Len));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), rtl::OUString(str3, str3Len), res2);
+        message.getStr(), OUString(str3, str3Len), res2);
 }
 
 void test::oustringbuffer::Utf32::insertUtf32() {
@@ -107,19 +107,19 @@ void test::oustringbuffer::Utf32::insertUtf32() {
     sal_Unicode const str2[str2Len] = { 'a', 'b', 'd', 'c' };
     int const str3Len = 6;
     sal_Unicode const str3[str3Len] = { 'a', 'b', 0xDBFF, 0xDFFF, 'd', 'c' };
-    rtl::OStringBuffer message;
-    rtl::OUStringBuffer buf1(rtl::OUString(str1, str1Len));
+    OStringBuffer message;
+    OUStringBuffer buf1(OUString(str1, str1Len));
     buf1.insertUtf32(2, 'd');
-    rtl::OUString res1(buf1.makeStringAndClear());
-    createMessage(message, res1, rtl::OUString(str2, str2Len));
+    OUString res1(buf1.makeStringAndClear());
+    createMessage(message, res1, OUString(str2, str2Len));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), rtl::OUString(str2, str2Len), res1);
-    rtl::OUStringBuffer buf2(rtl::OUString(str2, str2Len));
+        message.getStr(), OUString(str2, str2Len), res1);
+    OUStringBuffer buf2(OUString(str2, str2Len));
     buf2.insertUtf32(2, 0x10FFFF);
-    rtl::OUString res2(buf2.makeStringAndClear());
-    createMessage(message, res2, rtl::OUString(str3, str3Len));
+    OUString res2(buf2.makeStringAndClear());
+    createMessage(message, res2, OUString(str3, str3Len));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), rtl::OUString(str3, str3Len), res2);
+        message.getStr(), OUString(str3, str3Len), res2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

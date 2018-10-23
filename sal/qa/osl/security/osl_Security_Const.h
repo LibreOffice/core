@@ -47,9 +47,9 @@
 #define BUFSIZE 1024
 const char pTestString[17] = "Sun Microsystems";
 
-::rtl::OUString aLogonUser, aLogonPasswd, aFileServer, aStringForward;
-::rtl::OUString strUserName, strComputerName, strHomeDirectory;
-::rtl::OUString strConfigDirectory, strUserID;
+OUString aLogonUser, aLogonPasswd, aFileServer, aStringForward;
+OUString strUserName, strComputerName, strHomeDirectory;
+OUString strConfigDirectory, strUserID;
 
 bool isAdmin = false;
 

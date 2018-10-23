@@ -38,12 +38,12 @@ using namespace rtl;
 
 /** print a UNI_CODE String.
 */
-static void printUString( const ::rtl::OUString & str )
+static void printUString( const OUString & str )
 {
-    rtl::OString aString;
+    OString aString;
 
     //t_print("#printUString_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
+    aString = OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     t_print("%s\n", aString.getStr( ) );
 }
 
@@ -74,11 +74,11 @@ namespace osl_Security
     }; // class ctors
 
     /** testing the methods:
-        inline sal_Bool SAL_CALL logonUser(const ::rtl::OUString& strName,
-                                       const ::rtl::OUString& strPasswd);
-        inline sal_Bool SAL_CALL logonUser(const ::rtl::OUString & strName,
-                                       const ::rtl::OUString & strPasswd,
-                                       const ::rtl::OUString & strFileServer);
+        inline sal_Bool SAL_CALL logonUser(const OUString& strName,
+                                       const OUString& strPasswd);
+        inline sal_Bool SAL_CALL logonUser(const OUString & strName,
+                                       const OUString & strPasswd,
+                                       const OUString & strFileServer);
     */
     class logonUser : public CppUnit::TestFixture
     {
@@ -118,7 +118,7 @@ namespace osl_Security
     }; // class logonUser
 
     /** testing the method:
-        inline sal_Bool Security::getUserIdent( rtl::OUString& strIdent) const
+        inline sal_Bool Security::getUserIdent( OUString& strIdent) const
     */
     class getUserIdent : public CppUnit::TestFixture
     {
@@ -128,14 +128,14 @@ namespace osl_Security
         void getUserIdent_001( )
         {
             ::osl::Security aSec;
-            ::rtl::OUString strID;
+            OUString strID;
             bRes = aSec.getUserIdent( strID );
 
-            rtl::OStringBuffer aMessage;
+            OStringBuffer aMessage;
             aMessage.append("strUserID: ");
-            aMessage.append(rtl::OUStringToOString(strUserID, osl_getThreadTextEncoding()));
+            aMessage.append(OUStringToOString(strUserID, osl_getThreadTextEncoding()));
             aMessage.append(", strID: ");
-            aMessage.append(rtl::OUStringToOString(strID, osl_getThreadTextEncoding()));
+            aMessage.append(OUStringToOString(strID, osl_getThreadTextEncoding()));
             aMessage.append(", bRes: ");
             aMessage.append(bRes);
 
@@ -149,7 +149,7 @@ namespace osl_Security
     }; // class getUserIdent
 
     /** testing the method:
-        inline sal_Bool SAL_CALL getUserName( ::rtl::OUString& strName) const;
+        inline sal_Bool SAL_CALL getUserName( OUString& strName) const;
     */
     class getUserName : public CppUnit::TestFixture
     {
@@ -160,9 +160,9 @@ namespace osl_Security
         {
             ::osl::Security aSec;
 #ifdef _WIN32
-            ::rtl::OUString strName( strUserName ), strGetName;
+            OUString strName( strUserName ), strGetName;
 #else
-            ::rtl::OUString strName( strUserName ), strGetName;
+            OUString strName( strUserName ), strGetName;
 #endif
             bRes = aSec.getUserName( strGetName );
 
@@ -183,7 +183,7 @@ namespace osl_Security
     }; // class getUserName
 
     /** testing the method:
-        inline sal_Bool Security::getConfigDir( rtl::OUString& strDirectory ) const
+        inline sal_Bool Security::getConfigDir( OUString& strDirectory ) const
     */
     class getConfigDir : public CppUnit::TestFixture
     {
@@ -193,7 +193,7 @@ namespace osl_Security
         void getConfigDir_001( )
         {
             ::osl::Security aSec;
-            ::rtl::OUString strConfig;
+            OUString strConfig;
             bRes = aSec.getConfigDir( strConfig );
 
             CPPUNIT_ASSERT_MESSAGE( "failed to find a ConfigDir!", bRes );
@@ -279,9 +279,9 @@ namespace osl_Security
 
         void loginUserOnFileServer_001( )
             {
-                rtl::OUString suUserName;
-                rtl::OUString suPassword;
-                rtl::OUString suFileServer;
+                OUString suUserName;
+                OUString suPassword;
+                OUString suFileServer;
                 ::osl::Security aSec;
                 oslSecurity pSec = aSec.getHandle();
 
@@ -342,14 +342,14 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     strUserID = OUString::number( getuid( ) );
 
     /// get user Name;
-    strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );
+    strUserName = OUString::createFromAscii( pw->pw_name );
 
     /// get home directory;
     char *pw_dir = pw->pw_dir;
     if( getenv( "FAKEROOTKEY" ) )
         pw_dir = getenv("HOME");
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
-                            ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
+                            ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
 
     /// get config directory;
     strConfigDirectory = strHomeDirectory.copy(0);
@@ -553,12 +553,12 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         t_print("Administrator.\n" );
 
     /// get and display forwarded text if available.
-    rtl::OUString args[ 3 ];
+    OUString args[ 3 ];
     int argsCount = 0;
     sal_uInt32 n = rtl_getAppCommandArgCount();
     for (sal_uInt32 i = 0; i < n; ++i)
     {
-        rtl::OUString arg;
+        OUString arg;
         rtl_getAppCommandArg(i, &arg.pData);
         if( arg.startsWith("-") )
             continue;

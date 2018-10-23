@@ -24,7 +24,7 @@
 template <class T> class VclStatusListener : public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 public:
-    VclStatusListener<T>(T* widget, const rtl::OUString& aCommand);
+    VclStatusListener<T>(T* widget, const OUString& aCommand);
 
 private:
     VclPtr<T> mWidget; /** The widget on which actions are performed */
@@ -47,7 +47,7 @@ public:
 };
 
 template<class T>
-VclStatusListener<T>::VclStatusListener(T* widget, const rtl::OUString& aCommand) {
+VclStatusListener<T>::VclStatusListener(T* widget, const OUString& aCommand) {
     mWidget = widget;
 
     css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();

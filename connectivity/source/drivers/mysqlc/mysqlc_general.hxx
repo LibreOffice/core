@@ -107,11 +107,11 @@ void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
 
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept;
 
-rtl::OUString mysqlTypeToStr(MYSQL_FIELD* pField);
+OUString mysqlTypeToStr(MYSQL_FIELD* pField);
 
-sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType);
+sal_Int32 mysqlStrToOOOType(const OUString& sType);
 
-rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
+OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 }
 
 #endif

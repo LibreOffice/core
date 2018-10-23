@@ -18,10 +18,10 @@
 #include <sal/types.h>
 
 bool cppu::supportsService(
-    css::lang::XServiceInfo * implementation, rtl::OUString const & name)
+    css::lang::XServiceInfo * implementation, OUString const & name)
 {
     assert(implementation != nullptr);
-    css::uno::Sequence< rtl::OUString > s(
+    css::uno::Sequence< OUString > s(
         implementation->getSupportedServiceNames());
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
         if (s[i] == name) {

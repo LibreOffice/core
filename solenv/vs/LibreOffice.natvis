@@ -8,11 +8,11 @@
  *
 -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-  <Type Name="rtl::OUString">
+  <Type Name="OUString">
     <DisplayString>{*pData}</DisplayString>
     <StringView>*pData,su</StringView>
   </Type>
-  <Type Name="rtl::OString">
+  <Type Name="OString">
     <DisplayString>{*pData}</DisplayString>
     <StringView>*pData,s</StringView>
   </Type>
@@ -54,7 +54,7 @@
     <DisplayString Condition="pType->eTypeClass == 9" >{*((unsigned __int64*)pData),d} (UNSIGNED_HYPER)</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
     <DisplayString Condition="pType->eTypeClass == 10">{*((float*)pData)} (FLOAT)</DisplayString><!-- typelib_TypeClass_FLOAT -->
     <DisplayString Condition="pType->eTypeClass == 11">{*((double*)pData)} (DOUBLE)</DisplayString><!-- typelib_TypeClass_DOUBLE -->
-    <DisplayString Condition="pType->eTypeClass == 12">{*((rtl::OUString*)pData)} (STRING)</DisplayString><!-- typelib_TypeClass_STRING -->
+    <DisplayString Condition="pType->eTypeClass == 12">{*((OUString*)pData)} (STRING)</DisplayString><!-- typelib_TypeClass_STRING -->
     <DisplayString Condition="pType->eTypeClass == 13">{*((com::sun::star::uno::Type*)pData)} (TYPE)</DisplayString><!-- typelib_TypeClass_TYPE -->
     <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} (ANY)</DisplayString><!-- typelib_TypeClass_ANY -->
     <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} (ENUM)</DisplayString><!-- typelib_TypeClass_ENUM -->

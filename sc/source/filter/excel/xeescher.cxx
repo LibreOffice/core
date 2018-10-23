@@ -1434,7 +1434,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( "../", "comments", mnTab + 1 ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
-            rtl::OUStringToOString(oox::getRelationship(Relationship::COMMENTS), RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(oox::getRelationship(Relationship::COMMENTS), RTL_TEXTENCODING_UTF8).getStr());
     rStrm.PushStream( rComments );
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )

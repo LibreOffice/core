@@ -40,8 +40,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
         rtl_getAppCommandArg( i , &(suArg[i].pData) );
-        rtl::OString aString;
-        aString = ::rtl::OUStringToOString( suArg[i], RTL_TEXTENCODING_ASCII_US );
+        OString aString;
+        aString = OUStringToOString( suArg[i], RTL_TEXTENCODING_ASCII_US );
         printf(
             "# Parameter[%ld] is %s\n", sal::static_int_cast< long >(i),
             aString.getStr());

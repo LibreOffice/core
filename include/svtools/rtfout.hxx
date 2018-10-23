@@ -33,7 +33,7 @@ class SvStream;
 namespace RTFOutFuncs {
 
 SVT_DLLPUBLIC SvStream& Out_String(
-    SvStream&, const rtl::OUString&,
+    SvStream&, const OUString&,
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
 
 }

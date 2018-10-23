@@ -40,17 +40,17 @@ namespace writerperfect
 {
 namespace test
 {
-typedef std::unordered_map<rtl::OUString, bool> WpftOptionalMap_t;
+typedef std::unordered_map<OUString, bool> WpftOptionalMap_t;
 
 class WPFTQAHELPER_DLLPUBLIC WpftFilterTestBase : public ::test::FiltersTest,
                                                   public WpftFilterFixture
 {
 public:
-    explicit WpftFilterTestBase(const rtl::OUString& rFactoryURL);
+    explicit WpftFilterTestBase(const OUString& rFactoryURL);
 
 protected:
-    void doTest(const rtl::OUString& rFilter, const rtl::OUString& rPath);
-    void doTest(const rtl::OUString& rFilter, const rtl::OUString& rPath,
+    void doTest(const OUString& rFilter, const OUString& rPath);
+    void doTest(const OUString& rFilter, const OUString& rPath,
                 const WpftOptionalMap_t& rOptionalMap);
 
 private:
@@ -58,7 +58,7 @@ private:
                       SotClipboardFormatId, unsigned int) override;
 
 private:
-    const rtl::OUString m_aFactoryURL;
+    const OUString m_aFactoryURL;
     css::uno::Reference<css::document::XFilter> m_xFilter;
     const WpftOptionalMap_t* m_pOptionalMap;
 };

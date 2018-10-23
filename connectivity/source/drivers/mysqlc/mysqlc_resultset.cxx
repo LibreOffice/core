@@ -79,24 +79,24 @@ void OResultSet::checkRowIndex()
 {
     if (m_nRowPosition <= 0 || m_nRowPosition > m_nRowCount)
     {
-        throw SQLException("Cursor position out of range", *this, rtl::OUString(), 1, Any());
+        throw SQLException("Cursor position out of range", *this, OUString(), 1, Any());
     }
 }
 
-rtl::OUString SAL_CALL OResultSet::getImplementationName()
+OUString SAL_CALL OResultSet::getImplementationName()
 {
-    return rtl::OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
+    return OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL OResultSet::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL OResultSet::getSupportedServiceNames()
 {
-    uno::Sequence<rtl::OUString> aSupported(2);
+    uno::Sequence<OUString> aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
 }
 
-sal_Bool SAL_CALL OResultSet::supportsService(const rtl::OUString& _rServiceName)
+sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -149,7 +149,7 @@ uno::Sequence<Type> SAL_CALL OResultSet::getTypes()
     return concatSequences(aTypes.getTypes(), OResultSet_BASE::getTypes());
 }
 
-sal_Int32 SAL_CALL OResultSet::findColumn(const rtl::OUString& columnName)
+sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -255,8 +255,8 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
         return d;
     }
 
-    rtl::OString dateString(dateStr);
-    rtl::OString token;
+    OString dateString(dateStr);
+    OString token;
     sal_Int32 nIndex = 0, i = 0;
     do
     {
@@ -443,7 +443,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     return std::atoi(pValue);
 }
 
-rtl::OUString SAL_CALL OResultSet::getString(sal_Int32 column)
+OUString SAL_CALL OResultSet::getString(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -454,10 +454,10 @@ rtl::OUString SAL_CALL OResultSet::getString(sal_Int32 column)
     if (!pValue)
     {
         m_bWasNull = true;
-        return rtl::OUString{};
+        return OUString{};
     }
     m_bWasNull = false;
-    return rtl::OUString(pValue, static_cast<sal_Int32>(m_aLengths[column - 1]), m_encoding);
+    return OUString(pValue, static_cast<sal_Int32>(m_aLengths[column - 1]), m_encoding);
 }
 
 Time SAL_CALL OResultSet::getTime(sal_Int32 column)
@@ -474,8 +474,8 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
         m_bWasNull = true;
         return t;
     }
-    rtl::OUString timeString{ pValue, static_cast<sal_Int32>(m_aLengths[column - 1]), m_encoding };
-    rtl::OUString token;
+    OUString timeString{ pValue, static_cast<sal_Int32>(m_aLengths[column - 1]), m_encoding };
+    OUString token;
     sal_Int32 nIndex, i = 0;
 
     nIndex = timeString.indexOf(' ') + 1;
@@ -516,8 +516,8 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
     }
 
     // YY-MM-DD HH:MM:SS
-    std::vector<rtl::OUString> dateAndTime = lcl_split(
-        rtl::OUString{ pValue, static_cast<sal_Int32>(m_aLengths[column - 1]), m_encoding }, u' ');
+    std::vector<OUString> dateAndTime = lcl_split(
+        OUString{ pValue, static_cast<sal_Int32>(m_aLengths[column - 1]), m_encoding }, u' ');
 
     auto dateParts = lcl_split(dateAndTime.at(0), u'-');
     auto timeParts = lcl_split(dateAndTime.at(1), u':');
@@ -859,7 +859,7 @@ void SAL_CALL OResultSet::updateDouble(sal_Int32 column, double /* x */)
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateDouble", *this);
 }
 
-void SAL_CALL OResultSet::updateString(sal_Int32 column, const rtl::OUString& /* x */)
+void SAL_CALL OResultSet::updateString(sal_Int32 column, const OUString& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1062,7 +1062,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& 
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw uno::Exception("cannot set prop " + rtl::OUString::number(nHandle), nullptr);
+            throw uno::Exception("cannot set prop " + OUString::number(nHandle), nullptr);
         case PROPERTY_ID_FETCHDIRECTION:
             break;
         case PROPERTY_ID_FETCHSIZE:
@@ -1111,7 +1111,7 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
     if (index < 1 || index > static_cast<int>(fieldCount))
     {
         /* static object for efficiency or thread safety is a problem ? */
-        throw SQLException("index out of range", *this, rtl::OUString(), 1, Any());
+        throw SQLException("index out of range", *this, OUString(), 1, Any());
     }
 }
 

@@ -78,8 +78,6 @@ const char * const aSource2[ ] =
 };
 #endif
 
-using ::rtl::OUString;
-
 void oldtestfile::test_file_001()
 {
 #ifndef _WIN32

@@ -45,7 +45,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 using rtl::Bootstrap;
-using rtl::OUString;
 
 namespace cppu
 {
@@ -76,8 +75,8 @@ static Bootstrap const & get_unorc()
 
 namespace cppuhelper { namespace detail {
 
-rtl::OUString expandMacros(rtl::OUString const & text) {
-    rtl::OUString t(text);
+OUString expandMacros(OUString const & text) {
+    OUString t(text);
     rtl_bootstrap_expandMacros_from_handle(
         cppu::get_unorc().getHandle(), &t.pData);
     return t;

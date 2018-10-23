@@ -995,7 +995,7 @@ readUnsignedNumber(const OUString & rString,
 
 static Result
 readUnsignedNumberMaxDigits(int maxDigits,
-                            const ::rtl::OUString & rString, sal_Int32 & io_rnPos,
+                            const OUString & rString, sal_Int32 & io_rnPos,
                             sal_Int32 & o_rNumber)
 {
     bool bOverflow(false);

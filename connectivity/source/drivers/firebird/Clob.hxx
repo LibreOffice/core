@@ -48,12 +48,12 @@ namespace connectivity
             // ---- XClob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL
                 length() override;
-            virtual ::rtl::OUString SAL_CALL
+            virtual OUString SAL_CALL
                 getSubString(sal_Int64 aPosition, sal_Int32 aLength) override;
             virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
                 getCharacterStream() override;
             virtual sal_Int64 SAL_CALL
-                position(const ::rtl::OUString& rPattern,
+                position(const OUString& rPattern,
                          sal_Int32 aStart) override;
             virtual sal_Int64 SAL_CALL
                 positionOfClob(const ::css::uno::Reference< ::css::sdbc::XClob >& rPattern,

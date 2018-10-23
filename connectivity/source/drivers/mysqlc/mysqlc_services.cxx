@@ -31,23 +31,23 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 typedef Reference<XSingleServiceFactory> (*createFactoryFunc)(
-    const Reference<XMultiServiceFactory>& rServiceManager, const rtl::OUString& rComponentName,
-    ::cppu::ComponentInstantiation pCreateFunction, const Sequence<rtl::OUString>& rServiceNames,
+    const Reference<XMultiServiceFactory>& rServiceManager, const OUString& rComponentName,
+    ::cppu::ComponentInstantiation pCreateFunction, const Sequence<OUString>& rServiceNames,
     rtl_ModuleCount*);
 
 struct ProviderRequest
 {
     Reference<XSingleServiceFactory> xRet;
     Reference<XMultiServiceFactory> const xServiceManager;
-    rtl::OUString const sImplementationName;
+    OUString const sImplementationName;
 
     ProviderRequest(void* pServiceManager, sal_Char const* pImplementationName)
         : xServiceManager(static_cast<XMultiServiceFactory*>(pServiceManager))
-        , sImplementationName(rtl::OUString::createFromAscii(pImplementationName))
+        , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
     }
 
-    bool CREATE_PROVIDER(const rtl::OUString& Implname, const Sequence<rtl::OUString>& Services,
+    bool CREATE_PROVIDER(const OUString& Implname, const Sequence<OUString>& Services,
                          ::cppu::ComponentInstantiation Factory, createFactoryFunc creator)
     {
         if (!xRet.is() && (Implname == sImplementationName))

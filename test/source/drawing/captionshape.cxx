@@ -25,7 +25,7 @@ namespace apitest
 void CaptionShape::testCaptionShapeProperties()
 {
     uno::Reference<beans::XPropertySet> xCaptionShape(init(), UNO_QUERY_THROW);
-    rtl::OUString propName;
+    OUString propName;
     uno::Any aNewValue;
 
     propName = "CornerRadius";

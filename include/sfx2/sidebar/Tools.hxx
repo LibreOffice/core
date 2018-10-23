@@ -37,23 +37,23 @@ class SFX2_DLLPUBLIC Tools
 {
 public:
     static Image GetImage (
-        const ::rtl::OUString& rsImageURL,
-        const ::rtl::OUString& rsHighContrastImageURL,
+        const OUString& rsImageURL,
+        const OUString& rsHighContrastImageURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     static Image GetImage (
-        const ::rtl::OUString& rsURL,
+        const OUString& rsURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     static css::awt::Gradient VclToAwtGradient (const Gradient& rGradient);
     static Gradient AwtToVclGradient (const css::awt::Gradient& rGradient);
 
-    static css::util::URL GetURL (const ::rtl::OUString& rsCommand);
+    static css::util::URL GetURL (const OUString& rsCommand);
     static css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const css::util::URL& rURL);
 
-    static ::rtl::OUString GetModuleName (
+    static OUString GetModuleName (
         const css::uno::Reference<css::frame::XController>& rxFrame);
 };
 

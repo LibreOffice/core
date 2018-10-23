@@ -71,8 +71,8 @@ public:
      */
     storeError create (
         storeFileHandle       hFile,
-        rtl::OUString const & rPath,
-        rtl::OUString const & rName,
+        OUString const & rPath,
+        OUString const & rName,
         storeAccessMode       eMode)
     {
         if (m_hImpl)
@@ -181,8 +181,8 @@ public:
      */
     storeError create (
         storeFileHandle       hFile,
-        rtl::OUString const & rPath,
-        rtl::OUString const & rName,
+        OUString const & rPath,
+        OUString const & rName,
         storeAccessMode       eMode)
     {
         if (m_hImpl)
@@ -284,7 +284,7 @@ public:
         @see store_openFile()
      */
     storeError create(
-        rtl::OUString const & rFilename,
+        OUString const & rFilename,
         storeAccessMode       eAccessMode )
     {
         if (m_hImpl)
@@ -335,7 +335,7 @@ public:
         @see store_remove()
      */
     storeError remove (
-        rtl::OUString const & rPath, rtl::OUString const & rName)
+        OUString const & rPath, OUString const & rName)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;

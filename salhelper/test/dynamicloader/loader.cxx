@@ -24,7 +24,7 @@
 
 using namespace salhelper;
 
-using ::rtl::OUString;
+using OUString;
 
 
 class SampleLibLoader
@@ -33,8 +33,8 @@ class SampleLibLoader
 public:
     SampleLibLoader():
         ::salhelper::ODynamicLoader<SampleLib_Api>
-            (::rtl::OUString( SAL_MODULENAME( "samplelib") ),
-             ::rtl::OUString( SAMPLELIB_INIT_FUNCTION_NAME) )
+            (OUString( SAL_MODULENAME( "samplelib") ),
+             OUString( SAMPLELIB_INIT_FUNCTION_NAME) )
         {}
 
 };

@@ -22,14 +22,14 @@
 
 @implementation NSString (OOoAdditions) 
 
-+ (id) stringWithOUString:(const rtl::OUString&)ouString
++ (id) stringWithOUString:(const OUString&)ouString
 {
     NSString *string = [[NSString alloc] initWithCharacters:reinterpret_cast<unichar const *>(ouString.getStr()) length:ouString.getLength()];
 
     return [string autorelease];
 }
 
-- (rtl::OUString) OUString
+- (OUString) OUString
 {
     unsigned int nFileNameLength = [self length];
 
@@ -40,7 +40,7 @@
 
     [self getCharacters:unichars];
 
-    return rtl::OUString(reinterpret_cast<sal_Unicode *>(unichars));
+    return OUString(reinterpret_cast<sal_Unicode *>(unichars));
 }
 
 @end

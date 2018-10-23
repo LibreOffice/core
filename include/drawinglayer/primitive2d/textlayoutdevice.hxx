@@ -82,19 +82,19 @@ namespace drawinglayer
             double getStrikeoutOffset() const;
 
             double getTextWidth(
-                const rtl::OUString& rText,
+                const OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
 
             void getTextOutlines(
                 basegfx::B2DPolyPolygonVector&,
-                const rtl::OUString& rText,
+                const OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength,
                 const ::std::vector< double >& rDXArray) const;
 
             basegfx::B2DRange getTextBoundRect(
-                const rtl::OUString& rText,
+                const OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
 
@@ -103,12 +103,12 @@ namespace drawinglayer
 
             void addTextRectActions(
                 const tools::Rectangle& rRectangle,
-                const rtl::OUString& rText,
+                const OUString& rText,
                 DrawTextFlags nStyle,
                 GDIMetaFile& rGDIMetaFile) const;
 
             ::std::vector< double > getTextArray(
-                const rtl::OUString& rText,
+                const OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
         };

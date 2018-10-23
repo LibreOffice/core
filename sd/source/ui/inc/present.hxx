@@ -73,7 +73,7 @@ private:
         MONITOR_NORMAL,
         MONITOR_IS_EXTERNAL,
     };
-    sal_Int32           InsertDisplayEntry(const rtl::OUString &aName,
+    sal_Int32           InsertDisplayEntry(const OUString &aName,
                                            sal_Int32            nDisplay);
     OUString            GetDisplayName( sal_Int32 nDisplay,
                                         DisplayType eType );

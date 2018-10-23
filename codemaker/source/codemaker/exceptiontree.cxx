@@ -33,7 +33,7 @@
 using codemaker::ExceptionTree;
 using codemaker::ExceptionTreeNode;
 
-ExceptionTreeNode * ExceptionTreeNode::add(rtl::OString const & theName) {
+ExceptionTreeNode * ExceptionTreeNode::add(OString const & theName) {
     std::unique_ptr< ExceptionTreeNode > node(new ExceptionTreeNode(theName));
     children.push_back(std::move(node));
     return children.back().get();
@@ -44,11 +44,11 @@ void ExceptionTreeNode::clearChildren() {
 }
 
 void ExceptionTree::add(
-    rtl::OString const & name, rtl::Reference< TypeManager > const & manager)
+    OString const & name, rtl::Reference< TypeManager > const & manager)
 {
-    std::vector< rtl::OString > list;
+    std::vector< OString > list;
     bool bRuntimeException = false;
-    for (rtl::OString n(name); n != "com.sun.star.uno.Exception";) {
+    for (OString n(name); n != "com.sun.star.uno.Exception";) {
         if (n == "com.sun.star.uno.RuntimeException") {
             bRuntimeException = true;
             break;
@@ -65,7 +65,7 @@ void ExceptionTree::add(
     }
     if (!bRuntimeException) {
         ExceptionTreeNode * node = &m_root;
-        for (std::vector< rtl::OString >::reverse_iterator i(list.rbegin());
+        for (std::vector< OString >::reverse_iterator i(list.rbegin());
              !node->present; ++i)
         {
             if (i == list.rend()) {

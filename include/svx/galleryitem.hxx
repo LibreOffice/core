@@ -39,8 +39,8 @@
 class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
 {
     sal_Int8 m_nType;
-    rtl::OUString m_aURL;
-    rtl::OUString m_aFilterName;
+    OUString m_aURL;
+    OUString m_aFilterName;
     css::uno::Reference< css::lang::XComponent > m_xDrawing;
     css::uno::Reference< css::graphic::XGraphic > m_xGraphic;
 
@@ -52,7 +52,7 @@ public:
     virtual ~SvxGalleryItem() override;
 
     sal_Int8 GetType() const { return m_nType; }
-    const rtl::OUString& GetURL() const { return m_aURL; }
+    const OUString& GetURL() const { return m_aURL; }
     const css::uno::Reference< css::graphic::XGraphic >& GetGraphic() const { return m_xGraphic; }
 
     // pure virtual methods from SfxPoolItem

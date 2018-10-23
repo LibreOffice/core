@@ -166,7 +166,7 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if ( static_cast<OUString *>(pDestElements)[nPos] != static_cast<const ::rtl::OUString *>(pSourceElements)[nPos] )
+            if ( static_cast<OUString *>(pDestElements)[nPos] != static_cast<const OUString *>(pSourceElements)[nPos] )
                 return false;
         }
         return true;

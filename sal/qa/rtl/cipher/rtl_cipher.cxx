@@ -154,7 +154,7 @@ class decode : public CppUnit::TestFixture
 {
 public:
 
-    void test_encode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
+    void test_encode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, OString const& _sPlainTextStr)
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
@@ -209,7 +209,7 @@ public:
 #endif
         }
 
-    void test_encode_and_decode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
+    void test_encode_and_decode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, OString const& _sPlainTextStr)
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
 #if defined LIBO_CIPHER_OPENSSL_BACKEND

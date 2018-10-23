@@ -99,7 +99,7 @@ namespace
        required on network file systems not using unix semantics (AFS, see
        fdo#43095).
     */
-    void set_file_access_rights(const rtl::OUString& file_path, oslFileStatus* pStat)
+    void set_file_access_rights(const OUString& file_path, oslFileStatus* pStat)
     {
         pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
 
@@ -110,7 +110,7 @@ namespace
             pStat->uAttributes |= osl_File_Attribute_Executable;
     }
 
-    void set_file_hidden_status(const rtl::OUString& file_path, oslFileStatus* pStat)
+    void set_file_hidden_status(const OUString& file_path, oslFileStatus* pStat)
     {
         pStat->uAttributes   = osl::systemPathIsHiddenFileOrDirectoryEntry(file_path) ? osl_File_Attribute_Hidden : 0;
         pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
@@ -119,7 +119,7 @@ namespace
     /* the set_file_access_rights must be called after set_file_hidden_status(...) and
        set_file_access_mask(...) because of the hack in set_file_access_rights(...) */
     void set_file_attributes(
-        const rtl::OUString& file_path, const struct stat& file_stat, const sal_uInt32 uFieldMask, oslFileStatus* pStat)
+        const OUString& file_path, const struct stat& file_stat, const sal_uInt32 uFieldMask, oslFileStatus* pStat)
     {
         set_file_hidden_status(file_path, pStat);
         set_file_access_mask(file_stat, pStat);
@@ -168,9 +168,9 @@ namespace
                 (field_mask & osl_FileStatus_Mask_Validate));
     }
 
-    oslFileError set_link_target_url(const rtl::OUString& file_path, oslFileStatus* pStat)
+    oslFileError set_link_target_url(const OUString& file_path, oslFileStatus* pStat)
     {
-        rtl::OUString link_target;
+        OUString link_target;
         if (!osl::realpath(file_path, link_target))
             return oslTranslateFileError(errno);
 
@@ -183,12 +183,12 @@ namespace
     }
 
     oslFileError setup_osl_getFileStatus(
-        DirectoryItem_Impl * pImpl, oslFileStatus* pStat, rtl::OUString& file_path)
+        DirectoryItem_Impl * pImpl, oslFileStatus* pStat, OUString& file_path)
     {
         if ((pImpl == nullptr) || (pStat == nullptr))
             return osl_File_E_INVAL;
 
-        file_path = rtl::OUString(pImpl->m_ustrFilePath);
+        file_path = OUString(pImpl->m_ustrFilePath);
         OSL_ASSERT(!file_path.isEmpty());
         if (file_path.isEmpty())
             return osl_File_E_INVAL;
@@ -203,7 +203,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
 
-    rtl::OUString file_path;
+    OUString file_path;
     oslFileError  osl_error = setup_osl_getFileStatus(pImpl, pStat, file_path);
     if (osl_error != osl_File_E_None)
         return osl_error;
@@ -432,8 +432,8 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 
     struct stat a_stat, b_stat;
 
-    if (osl::lstat(rtl::OUString(pA->m_ustrFilePath), a_stat) != 0 ||
-        osl::lstat(rtl::OUString(pB->m_ustrFilePath), b_stat) != 0)
+    if (osl::lstat(OUString(pA->m_ustrFilePath), a_stat) != 0 ||
+        osl::lstat(OUString(pB->m_ustrFilePath), b_stat) != 0)
         return false;
 
     return (a_stat.st_ino == b_stat.st_ino);

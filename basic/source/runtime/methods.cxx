@@ -593,7 +593,7 @@ void SbRtl_MkDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
                 pPar->Insert( pParam.get(), pPar->Count() );
                 SbRtl_CurDir( pBasic, *pPar, bWrite );
 
-                rtl::OUString sCurPathURL;
+                OUString sCurPathURL;
                 File::getFileURLFromSystemPath( pPar->Get(0)->GetOUString(), sCurPathURL );
 
                 aURLObj.SetURL( sCurPathURL );

@@ -49,7 +49,7 @@ enum PredefinedClrSchemeId {
     Count
 };
 
-static std::map<PredefinedClrSchemeId, rtl::OUString> PredefinedClrNames =
+static std::map<PredefinedClrSchemeId, OUString> PredefinedClrNames =
 {
     //{ dk1,  "dk1" },
     //{ lt1, "lt1" },

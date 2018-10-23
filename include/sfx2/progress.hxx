@@ -42,12 +42,12 @@ class SFX2_DLLPUBLIC SfxProgress
 
 public:
                             SfxProgress( SfxObjectShell* pObjSh,
-                                         const rtl::OUString& rText,
+                                         const OUString& rText,
                                          sal_uInt32 nRange,
                                          bool bWait = true);
     virtual                 ~SfxProgress();
 
-    void                    SetStateText( sal_uInt32 nVal, const rtl::OUString &rVal );
+    void                    SetStateText( sal_uInt32 nVal, const OUString &rVal );
     void                    SetState( sal_uInt32 nVal, sal_uInt32 nNewRange = 0 );
     sal_uInt32              GetState() const { return nVal; }
 

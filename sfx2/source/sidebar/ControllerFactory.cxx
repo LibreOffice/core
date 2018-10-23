@@ -33,7 +33,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::rtl::OUString;
 
 namespace sfx2 { namespace sidebar {
 

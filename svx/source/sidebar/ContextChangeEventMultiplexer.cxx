@@ -60,7 +60,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 }
 
 
-::rtl::OUString ContextChangeEventMultiplexer::GetModuleName (
+OUString ContextChangeEventMultiplexer::GetModuleName (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     try

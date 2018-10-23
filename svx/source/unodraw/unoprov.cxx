@@ -724,7 +724,7 @@ static SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT),    OWN_ATTR_BOUNDRECT, cppu::UnoType<css::awt::Rectangle>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME, cppu::UnoType<rtl::OUString>::get(),    0,      0},
+        { OUString(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME, cppu::UnoType<OUString>::get(),    0,      0},
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString("Model"),                        OWN_ATTR_OLEMODEL               , cppu::UnoType<css::table::XTable>::get(), css::beans::PropertyAttribute::READONLY, 0},

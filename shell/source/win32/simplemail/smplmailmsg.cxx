@@ -31,12 +31,12 @@ CSmplMailMsg::CSmplMailMsg( )
 {
 }
 
-void SAL_CALL CSmplMailMsg::setBody( const ::rtl::OUString& aBody )
+void SAL_CALL CSmplMailMsg::setBody( const OUString& aBody )
 {
     m_aBody = aBody;
 }
 
-::rtl::OUString SAL_CALL CSmplMailMsg::getBody(  )
+OUString SAL_CALL CSmplMailMsg::getBody(  )
 {
     return m_aBody;
 }

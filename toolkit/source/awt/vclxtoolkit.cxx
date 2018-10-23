@@ -815,7 +815,7 @@ static const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
 };
 
 bool lcl_convertMessageBoxType(
-    rtl::OUString &sType,
+    OUString &sType,
     css::awt::MessageBoxType eType )
 {
     const MessageBoxTypeInfo *pMap = aMessageBoxTypeInfo;
@@ -826,7 +826,7 @@ bool lcl_convertMessageBoxType(
         if ( pMap->eType == eType )
         {
             eVal = eType;
-            sType = rtl::OUString( pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US );
+            sType = OUString( pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US );
             break;
         }
         pMap++;
@@ -1759,7 +1759,7 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
     if ( sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_IGNORE )
         nAddWinBits |= MessBoxStyle::DefaultIgnore;
 
-    rtl::OUString aType;
+    OUString aType;
     lcl_convertMessageBoxType( aType, eType );
 
     aDescriptor.Type              = css::awt::WindowClass_MODALTOP;

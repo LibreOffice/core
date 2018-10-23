@@ -2210,9 +2210,9 @@ namespace comphelper
 
     /////////////////// helpers ///////////////////////
 
-    const rtl::OUString BackupFileHelper::getPackURL()
+    const OUString BackupFileHelper::getPackURL()
     {
-        return rtl::OUString(maUserConfigWorkURL + "/pack");
+        return OUString(maUserConfigWorkURL + "/pack");
     }
 
     /////////////////// file push helpers ///////////////////////

@@ -83,7 +83,7 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
         digit += '0';
 
     /* Resize and return the resulting string. */
-    return rtl::OStringToOUString(OString(scratch.data(), scratch.size()), RTL_TEXTENCODING_UTF8);
+    return OStringToOUString(OString(scratch.data(), scratch.size()), RTL_TEXTENCODING_UTF8);
 }
 
 OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)

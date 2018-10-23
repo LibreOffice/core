@@ -40,7 +40,7 @@ namespace rtl_string
 
         void getLength_001()
             {
-                rtl::OString aStr("Test Length.");
+                OString aStr("Test Length.");
                 sal_Int32 nValue = rtl_string_getLength( aStr.pData );
 
                 CPPUNIT_ASSERT_MESSAGE("Length must equal getLength()", aStr.getLength() == nValue);
@@ -72,12 +72,12 @@ namespace rtl_string
 
         void newFromString_001()
             {
-                rtl::OString aStr("Test Length.");
+                OString aStr("Test Length.");
                 rtl_String *pStr = NULL;
 
                 rtl_string_newFromString( &pStr, aStr.pData );
 
-                rtl::OString aNewStr(pStr);
+                OString aNewStr(pStr);
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", aStr.equals(aNewStr) == sal_True);
 
                 rtl_string_release(pStr);
@@ -104,44 +104,44 @@ namespace rtl_string
 
         void convertUStringToString_001()
             {
-                rtl::OUString suString("Hello");
-                rtl::OString sString;
+                OUString suString("Hello");
+                OString sString;
                 sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(rtl::OString("Hello")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("Hello")) == sal_True);
             }
 
         void convertUStringToString_002()
             {
-                rtl::OString sStr("H\xE4llo");
-                rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
+                OString sStr("H\xE4llo");
+                OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
-                rtl::OString sString;
+                OString sString;
                 sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(rtl::OString("H\xE4llo")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("H\xE4llo")) == sal_True);
             }
 
         void convertUStringToString_003()
             {
-                rtl::OString sStr("H\xC3\xA4llo");
-                rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_UTF8);
+                OString sStr("H\xC3\xA4llo");
+                OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_UTF8);
 
-                rtl::OString sString;
+                OString sString;
                 sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(rtl::OString("H\xE4llo")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("H\xE4llo")) == sal_True);
             }
 
         void convertUStringToString_004()
             {
-                rtl::OString sStr("Tsch\xFC\xDF");
-                rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
-                rtl::OString sString;
+                OString sStr("Tsch\xFC\xDF");
+                OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
+                OString sString;
 
                 sal_Bool       bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
                 /* sal_Bool */ bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(rtl::OString("Tsch\xFC\xDF")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("Tsch\xFC\xDF")) == sal_True);
             }
 
         // Change the following lines only, if you add, remove or rename
