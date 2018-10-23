@@ -117,7 +117,13 @@ public:
 
     OUString GetSelectedPersona() const;
     void SetProgress( const OUString& );
-    void SetImages( const Image&, sal_Int32 );
+    /**
+     * @brief Assings preview images to result buttons
+     * @param aPreviewImage Persona preview image
+     * @param sName Name of the persona
+     * @param nIndex Index number of the result button
+     */
+    void SetImages(const Image& aPreviewImage, const OUString& sName, const sal_Int32& nIndex );
     void AddPersonaSetting( OUString const & );
     void ClearSearchResults();
     void SetAppliedPersonaSetting( OUString const & );

@@ -383,10 +383,11 @@ void SelectPersonaDialog::SetProgress( const OUString& rProgress )
     }
 }
 
-void SelectPersonaDialog::SetImages( const Image& aImage, sal_Int32 nIndex )
+void SelectPersonaDialog::SetImages( const Image& aImage, const OUString& sName, const sal_Int32& nIndex )
 {
     m_vResultList[nIndex]->Enable();
     m_vResultList[nIndex]->SetModeImage( aImage );
+    m_vResultList[nIndex]->SetQuickHelpText( sName );
 }
 
 void SelectPersonaDialog::AddPersonaSetting( OUString const & rPersonaSetting )
@@ -894,11 +895,11 @@ void SearchAndParseThread::execute()
 
                 INetURLObject aURLObj( aPreviewFile );
 
-                OUString aPersonaSetting = personaInfos[nIndex].sSlug
-                        + ";" + personaInfos[nIndex].sName
-                        + ";" + personaInfos[nIndex].sHeaderURL
-                        + ";" + personaInfos[nIndex].sFooterURL
-                        + ";" + personaInfos[nIndex].sTextColor;
+                OUString aPersonaSetting = personaInfo.sSlug
+                        + ";" + personaInfo.sName
+                        + ";" + personaInfo.sHeaderURL
+                        + ";" + personaInfo.sFooterURL
+                        + ";" + personaInfo.sTextColor;
 
                 m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
 
@@ -907,10 +908,10 @@ void SearchAndParseThread::execute()
                 aFilter.ImportGraphic( aGraphic, aURLObj );
                 BitmapEx aBmp = aGraphic.GetBitmapEx();
 
-                m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
+                m_pPersonaDialog->SetImages( Image( aBmp ), personaInfo.sName, nIndex );
                 m_pPersonaDialog->setOptimalLayoutSize();
 
-                if (nIndex >= MAX_RESULTS)
+                if (++nIndex >= MAX_RESULTS)
                     break;
             }
 
@@ -969,7 +970,7 @@ void SearchAndParseThread::execute()
             aFilter.ImportGraphic( aGraphic, aURLObj );
             BitmapEx aBmp = aGraphic.GetBitmapEx();
 
-            m_pPersonaDialog->SetImages( Image( aBmp ), 0 );
+            m_pPersonaDialog->SetImages( Image( aBmp ), aPersonaInfo.sName, 0 );
             m_pPersonaDialog->setOptimalLayoutSize();
         }
 
