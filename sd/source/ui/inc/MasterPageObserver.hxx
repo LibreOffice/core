@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_MASTERPAGEOBSERVER_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/link.hxx>
 #include "tools/SdGlobalResourceContainer.hxx"
 #include <memory>
 #include <set>

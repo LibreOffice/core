@@ -21,13 +21,15 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_CONFIGURATIONACCESS_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <vector>
 #include <functional>
+
+namespace com { namespace sun { namespace star { namespace container { class XHierarchicalNameAccess; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace sd { namespace tools {
 

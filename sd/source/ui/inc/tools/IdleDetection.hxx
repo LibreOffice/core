@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TOOLS_IDLEDETECTION_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_IDLEDETECTION_HXX
 
-#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace vcl { class Window; }

@@ -24,15 +24,15 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XRelocatableResource.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
 namespace sd { class ViewShell; }
 namespace sd { namespace slidesorter { class SlideSorterViewShell; } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 
 namespace sd { namespace framework {
 

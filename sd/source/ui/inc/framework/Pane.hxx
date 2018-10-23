@@ -24,11 +24,9 @@
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XPane2.hpp>
-#include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
-#include <memory>
 
 namespace vcl { class Window; }
 

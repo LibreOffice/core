@@ -182,6 +182,7 @@
 #include <unmodpg.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <sdmod.hxx>
 
 #include <ViewShellBase.hxx>
 #include <memory>

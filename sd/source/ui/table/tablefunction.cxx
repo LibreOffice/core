@@ -61,6 +61,7 @@
 #include <Window.hxx>
 #include <drawview.hxx>
 #include <undo/undoobjects.hxx>
+#include <sdmod.hxx>
 
 #include <memory>
 

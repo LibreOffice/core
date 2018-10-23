@@ -22,13 +22,14 @@
 
 #include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace util { class XCloneable; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationControllerBroadcaster; } } } } }
 
 namespace sd { namespace framework {
 

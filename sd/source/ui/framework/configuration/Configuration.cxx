@@ -21,6 +21,8 @@
 
 #include <framework/FrameworkHelper.hxx>
 
+#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
 #include <comphelper/sequence.hxx>
 #include <facreg.hxx>
 #include <sal/log.hxx>

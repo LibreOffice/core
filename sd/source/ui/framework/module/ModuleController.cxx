@@ -18,6 +18,9 @@
  */
 
 #include <framework/ModuleController.hxx>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <tools/ConfigurationAccess.hxx>
 #include <comphelper/processfactory.hxx>

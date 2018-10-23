@@ -26,6 +26,7 @@
 #include <glob.hxx>
 #include <helpids.h>
 #include <pres.hxx>
+#include <sdmod.hxx>
 
 #include <sdpage.hxx>
 #include <sdresid.hxx>

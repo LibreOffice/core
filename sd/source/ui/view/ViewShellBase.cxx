@@ -52,6 +52,7 @@
 #include <DocumentRenderer.hxx>
 #include <sdattr.hxx>
 #include <optsitem.hxx>
+#include <sdmod.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>

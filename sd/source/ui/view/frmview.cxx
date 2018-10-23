@@ -22,6 +22,7 @@
 #include <svx/svxids.hrc>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
+#include <com/sun/star/drawing/framework/XView.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <unokywds.hxx>
 #include <vcl/settings.hxx>

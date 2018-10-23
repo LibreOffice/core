@@ -22,12 +22,13 @@
 
 #include <MutexOwner.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XDispatch; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XDispatchProvider; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XStatusListener; } } } }
+namespace com { namespace sun { namespace star { namespace frame { struct FeatureStateEvent; } } } }
 
 namespace sd { namespace tools {
 
