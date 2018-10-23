@@ -176,7 +176,7 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
         // not a chart object.
         return;
 
-    uno::Reference<embed::XEmbeddedObject> xObj = rObj.GetObjRef();
+    const uno::Reference<embed::XEmbeddedObject>& xObj = rObj.GetObjRef();
     if (!xObj.is())
         return;
 

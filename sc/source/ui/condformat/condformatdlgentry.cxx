@@ -152,8 +152,7 @@ void FillStyleListBox( const ScDocument* pDoc, ListBox& rLbStyle )
     SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SfxStyleFamily::Para );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
     {
-        OUString aName = pStyle->GetName();
-        aStyleNames.insert(aName);
+        aStyleNames.insert(pStyle->GetName());
     }
     for(std::set<OUString>::const_iterator itr = aStyleNames.begin(), itrEnd = aStyleNames.end();
                         itr != itrEnd; ++itr)
@@ -213,8 +212,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry(vcl::Window* pParent, ScDocument* pDo
 
     if(pFormatEntry)
     {
-        OUString aStyleName = pFormatEntry->GetStyle();
-        maLbStyle->SelectEntry(aStyleName);
+        maLbStyle->SelectEntry(pFormatEntry->GetStyle());
         StyleSelectHdl(*maLbStyle.get());
         ScConditionMode eMode = pFormatEntry->GetOperation();
 
@@ -507,7 +505,7 @@ void StyleSelect( ListBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& 
         bool bFound = false;
         for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
         {
-            OUString aName = pStyle->GetName();
+            const OUString& aName = pStyle->GetName();
             if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
             {
                 for( sal_Int32 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
@@ -1239,8 +1237,7 @@ ScDateFrmtEntry::ScDateFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
         sal_Int32 nPos = static_cast<sal_Int32>(pFormat->GetDateType());
         maLbDateEntry->SelectEntryPos(nPos);
 
-        OUString aStyleName = pFormat->GetStyleName();
-        maLbStyle->SelectEntry(aStyleName);
+        maLbStyle->SelectEntry(pFormat->GetStyleName());
     }
 
     StyleSelectHdl(*maLbStyle.get());

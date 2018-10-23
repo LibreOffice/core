@@ -246,7 +246,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             if( eState >= SfxItemState::DEFAULT)
             {
                 const SfxStringItem* pItem = static_cast<const SfxStringItem*>(pState);
-                OUString aCode = pItem->GetValue();
+                const OUString& aCode = pItem->GetValue();
                 sal_Int32 nIndex = 0;
                 sal_Int32 aFormat[4] = {0};
                 for (sal_Int32 & rn : aFormat)

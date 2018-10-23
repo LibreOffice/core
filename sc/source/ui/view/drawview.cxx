@@ -482,7 +482,7 @@ void ScDrawView::MarkListHasChanged()
     uno::Sequence< embed::VerbDescriptor > aVerbs;
     if ( pOle2Obj && !bOle )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
+        const uno::Reference < embed::XEmbeddedObject >& xObj = pOle2Obj->GetObjRef();
         OSL_ENSURE( xObj.is(), "SdrOle2Obj without ObjRef" );
         if (xObj.is())
             aVerbs = xObj->getSupportedVerbs();

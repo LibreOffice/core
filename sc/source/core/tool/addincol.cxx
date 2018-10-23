@@ -146,7 +146,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
     if ( !rCompNames.empty() )
     {
         LanguageTag aLanguageTag( eDestLang);
-        const OUString aSearch( aLanguageTag.getBcp47());
+        const OUString& aSearch( aLanguageTag.getBcp47());
 
         // First, check exact match without fallback overhead.
         ::std::vector<LocalizedName>::const_iterator itNames( rCompNames.begin());

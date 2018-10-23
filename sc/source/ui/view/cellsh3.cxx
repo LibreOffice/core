@@ -235,8 +235,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     = static_cast<const ScInputStatusItem*>(&pReqArgs->
                             Get( FID_INPUTLINE_STATUS ));
 
-                ScAddress aCursorPos = pStatusItem->GetPos();
-                OUString aString = pStatusItem->GetString();
+                const ScAddress& aCursorPos = pStatusItem->GetPos();
+                const OUString& aString = pStatusItem->GetString();
                 const EditTextObject* pData = pStatusItem->GetEditData();
 
                 if (pData)

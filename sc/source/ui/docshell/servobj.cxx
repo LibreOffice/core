@@ -229,7 +229,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             bDataChanged = true;
         else if (const ScAreaChangedHint *pChgHint = dynamic_cast<const ScAreaChangedHint*>(&rHint))      // position of broadcaster changed
         {
-            ScRange aNewRange = pChgHint->GetRange();
+            const ScRange& aNewRange = pChgHint->GetRange();
             if ( aRange != aNewRange )
             {
                 bRefreshListener = true;

@@ -1870,7 +1870,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                         break;
                     case ATTR_PAGE_SCALETO:
                         {
-                            ScPageScaleToItem aItem(pItemSet->Get(ATTR_PAGE_SCALETO));
+                            const ScPageScaleToItem& aItem(pItemSet->Get(ATTR_PAGE_SCALETO));
                             if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
                                 aAny <<= static_cast<sal_Int16>(aItem.GetWidth());
                             else

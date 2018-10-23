@@ -2397,7 +2397,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_ID, &pId) )
             {
                 const SvxPostItIdItem* pIdItem = static_cast<const SvxPostItIdItem*>(pId);
-                OUString aCellId = pIdItem->GetValue();
+                const OUString& aCellId = pIdItem->GetValue();
                 if (!aCellId.isEmpty())
                 {
                     SetTabNoAndCursor( GetViewData(), aCellId );

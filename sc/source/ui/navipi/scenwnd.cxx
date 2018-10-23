@@ -256,7 +256,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 
         if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
         {
-            OUString aNewEntry( pStringItem->GetValue() );
+            const OUString& aNewEntry( pStringItem->GetValue() );
 
             if ( !aNewEntry.isEmpty() )
                 aLbScenario->SelectEntry( aNewEntry );

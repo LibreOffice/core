@@ -216,7 +216,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     if (rCell.aPos.Row() == rCell.GetSharedTopRow())
     {
         // Top of the shared range.
-        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+        const ScFormulaCellGroupRef& xGroup = rCell.GetCellGroup();
         if (xGroup->mnLength == 2)
         {
             // Group consists of only two cells. Mark the second one non-shared.
@@ -242,7 +242,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
     {
         // Bottom of the shared range.
-        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+        const ScFormulaCellGroupRef& xGroup = rCell.GetCellGroup();
         if (xGroup->mnLength == 2)
         {
             // Mark the top cell non-shared.

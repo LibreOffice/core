@@ -325,7 +325,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
     if ( !pInfo->GetMacro().isEmpty() )
     {
         SvxMacroTableDtor aTab;
-        OUString sMacro = pInfo->GetMacro();
+        const OUString& sMacro = pInfo->GetMacro();
         aTab.Insert(SvMacroItemId::OnClick, SvxMacro(sMacro, OUString()));
         aItem.SetMacroTable( aTab );
     }

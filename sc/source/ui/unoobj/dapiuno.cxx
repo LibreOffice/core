@@ -344,8 +344,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
                 {
                     if ( nFound == nIndex )
                     {
-                        OUString aName = rDPObj.GetName();
-                        return new ScDataPilotTableObj( pDocShell, nTab, aName );
+                        return new ScDataPilotTableObj( pDocShell, nTab, rDPObj.GetName() );
                     }
                     ++nFound;
                 }
@@ -2538,7 +2537,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        OUString aDimName = pDim->GetName();
+        const OUString& aDimName = pDim->GetName();
 
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
         ScDPDimensionSaveData* pDimData = aSaveData.GetDimensionData();     // created if not there
