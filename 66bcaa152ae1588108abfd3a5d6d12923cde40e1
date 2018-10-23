@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_7fc2baeb",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-23T17:53:04Z",
+      "side": 1,
+      "message": "Bah, my bad. So this could work as intended, but in ScConditionEntry::UpdateReference() for URM_MOVE the old position is also passed as new position to ScTokenArray::AdjustReferenceOnMove(...,rOldPos,rNewPos) so effectively nothing is changed if the reference points outside the moved range.\n\nProbably ScConditionEntry::UpdateReference() in this case needs to calculate the old position also for URM_MOVE, similar to what it does for URM_INSDEL.\n\nThat looks suspicious to me anyway, because the same effect kicks in when cut\u0026paste a cell with conditional format, so the conditional formula does not point to the original cells anymore. But I didn\u0027t check implications it would have when generally changing that. Might be that then is also wrong if a cell is cut from an existing range and the range is not split into several conditional formats.\n\nSo maybe best introduce an optional parameter to ScConditionEntry::UpdateReference() to handle this specific case here.",
+      "parentUuid": "7f231b9d_396fcbc6",
+      "revId": "66bcaa152ae1588108abfd3a5d6d12923cde40e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f231b9d_164a9c7f",
         "filename": "sc/source/ui/condformat/condformatdlg.cxx",
         "patchSetId": 2
