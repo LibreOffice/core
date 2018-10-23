@@ -21,8 +21,8 @@
 #define INCLUDED_VCL_VIRDEV_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/salgtype.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/salgtype.hxx>
 #include <memory>
 
 class SalVirtualDevice;
@@ -89,8 +89,12 @@ protected:
         Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
         indicate: take default screen depth. Only DeviceFormat::BITMASK
         is the other possibility to denote a binary mask.
+
+        @param eOutDevType
+        This real virtual output device type.
      */
-    explicit VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat);
+    explicit VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
+                           DeviceFormat eAlphaFormat, OutDevType eOutDevType);
 
 public:
 
@@ -102,7 +106,7 @@ public:
         is the other possibility to denote a binary mask.
      */
     explicit VirtualDevice(DeviceFormat eFormat = DeviceFormat::DEFAULT)
-        : VirtualDevice(nullptr, eFormat, DeviceFormat::NONE) {}
+        : VirtualDevice(nullptr, eFormat, DeviceFormat::NONE, OUTDEV_VIRDEV) {}
 
     /** Create a virtual device of size 1x1
 
@@ -116,7 +120,7 @@ public:
      */
     explicit VirtualDevice(const OutputDevice& rCompDev,
                            DeviceFormat eFormat = DeviceFormat::DEFAULT)
-        : VirtualDevice(&rCompDev, eFormat, DeviceFormat::NONE) {}
+        : VirtualDevice(&rCompDev, eFormat, DeviceFormat::NONE, OUTDEV_VIRDEV) {}
 
     /** Create a virtual device  of size 1x1 with alpha channel
 
@@ -135,7 +139,7 @@ public:
      */
     explicit VirtualDevice(const OutputDevice& rCompDev,
                            DeviceFormat eFormat, DeviceFormat eAlphaFormat)
-        : VirtualDevice(&rCompDev, eFormat, eAlphaFormat) {}
+        : VirtualDevice(&rCompDev, eFormat, eAlphaFormat, OUTDEV_VIRDEV) {}
 
     /** Create a virtual device using an existing system dependent device or graphics context
         Any rendering will happen directly on the context and not on any intermediate bitmap.

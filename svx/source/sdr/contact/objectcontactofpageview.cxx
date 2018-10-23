@@ -396,7 +396,7 @@ namespace sdr
         // pdf export?
         bool ObjectContactOfPageView::isOutputToPDFFile() const
         {
-            return (nullptr != mrPageWindow.GetPaintWindow().GetOutputDevice().GetPDFWriter());
+            return OUTDEV_PDF == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType();
         }
 
         // gray display mode

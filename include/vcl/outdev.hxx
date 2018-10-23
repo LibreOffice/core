@@ -298,7 +298,7 @@ namespace o3tl
     template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0007> {};
 }
 
-enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
+enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV, OUTDEV_PDF };
 
 enum class OutDevViewType { DontKnow, PrintPreview, SlideShow };
 
@@ -346,7 +346,6 @@ private:
     std::unique_ptr<OutDevStateStack>               mpOutDevStateStack;
     std::unique_ptr<ImplOutDevData>                 mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
-    VclPtr<OutputDevice>            mpPDFWriter;
     vcl::ExtOutDevData*             mpExtOutDevData;
 
     // TEMP TEMP TEMP
@@ -542,14 +541,16 @@ public:
     }
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
+    bool IsVirtual() const
+    {
+        return (meOutDevType == OUTDEV_VIRDEV) || (meOutDevType == OUTDEV_PDF);
+    }
 
     /** Query an OutputDevice to see whether it supports a specific operation
 
      @returns true if operation supported, else false
     */
     bool                        SupportsOperation( OutDevSupportType ) const;
-
-    vcl::PDFWriterImpl*         GetPDFWriter() const;
 
     void                        SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
     vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
@@ -1290,7 +1291,6 @@ protected:
     SAL_DLLPRIVATE const LogicalFontInstance* GetFontInstance() const;
     SAL_DLLPRIVATE long GetEmphasisAscent() const { return mnEmphasisAscent; }
     SAL_DLLPRIVATE long GetEmphasisDescent() const { return mnEmphasisDescent; }
-    SAL_DLLPRIVATE void SetPDFWriter(vcl::PDFWriterImpl* pPDFWriter);
 
     virtual void                InitFont() const;
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const;

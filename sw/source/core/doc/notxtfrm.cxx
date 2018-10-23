@@ -1108,8 +1108,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                         pVout = pOut;
                         pOut = pShell->GetOut();
                     }
-                    else if( pShell->GetWin() &&
-                             OUTDEV_VIRDEV == pOut->GetOutDevType() )
+                    else if( pShell->GetWin() && pOut->IsVirtual() )
                     {
                         pVout = pOut;
                         pOut = pShell->GetWin();
@@ -1117,7 +1116,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     else
                         pVout = nullptr;
 
-                    OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
+                    OSL_ENSURE( !pOut->IsVirtual() ||
                             pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
                             "pOut should not be a virtual device" );
 

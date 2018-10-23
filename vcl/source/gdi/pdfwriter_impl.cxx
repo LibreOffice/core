@@ -1683,7 +1683,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
  PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
                                const css::uno::Reference< css::beans::XMaterialHolder >& xEnc,
                                PDFWriter& i_rOuterFace)
-        : VirtualDevice(DeviceFormat::DEFAULT),
+        : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::NONE, OUTDEV_PDF),
         m_aMapMode( MapUnit::MapPoint, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
@@ -1810,7 +1810,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 
     SetOutputSizePixel( Size( 640, 480 ) );
     SetMapMode(MapMode(MapUnit::MapMM));
-    SetPDFWriter(this);
 }
 
 PDFWriterImpl::~PDFWriterImpl()

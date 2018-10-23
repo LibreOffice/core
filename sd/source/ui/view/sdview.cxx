@@ -470,19 +470,13 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
                 SdrOutliner& rOutl = mrDoc.GetDrawOutliner();
                 bool bScreenDisplay(true);
 
-                if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
-                {
-                    // #i75566# printing; suppress AutoColor BackgroundColor generation
-                    // for visibility reasons by giving GetPageBackgroundColor()
-                    // the needed hint
+                // #i75566# printing; suppress AutoColor BackgroundColor generation
+                // for visibility reasons by giving GetPageBackgroundColor()
+                // the needed hint
+                // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see printing)
+                if (pOutDev && ((OUTDEV_PRINTER == pOutDev->GetOutDevType())
+                        || (OUTDEV_PDF == pOutDev->GetOutDevType())))
                     bScreenDisplay = false;
-                }
-
-                if(bScreenDisplay && pOutDev && pOutDev->GetPDFWriter())
-                {
-                    // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
-                    bScreenDisplay = false;
-                }
 
                 // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
                 // hint value if screen display. Only then the AutoColor mechanisms shall be applied

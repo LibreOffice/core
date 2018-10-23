@@ -665,6 +665,7 @@ protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAliasB2DDraw : 1;
 
+    inline long GetDeviceWidth(const OutputDevice* pOutDev) const;
 };
 
 #endif // INCLUDED_VCL_INC_SALGDI_HXX

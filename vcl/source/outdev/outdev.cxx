@@ -34,8 +34,6 @@
 #include <outdevstatestack.hxx>
 #include <PhysicalFontCollection.hxx>
 
-#include "../gdi/pdfwriter_impl.hxx"
-
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
 // exist in the tools library, so put them in the anonymous namespace
@@ -64,7 +62,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpDeviceFontList                = nullptr;
     mpDeviceFontSizeList            = nullptr;
     mpOutDevStateStack.reset(new OutDevStateStack);
-    mpPDFWriter                     = nullptr;
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
     mnOutOffX                       = 0;
@@ -144,8 +141,6 @@ OutputDevice::~OutputDevice()
 
 void OutputDevice::dispose()
 {
-    mpPDFWriter.disposeAndClear();
-
     if ( GetUnoGraphicsList() )
     {
         UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper( false );
@@ -760,17 +755,6 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
 
     return bDrawn;
-}
-
-vcl::PDFWriterImpl* OutputDevice::GetPDFWriter() const
-{
-    return static_cast<vcl::PDFWriterImpl*>(mpPDFWriter.get());
-}
-
-void OutputDevice::SetPDFWriter(vcl::PDFWriterImpl* pPDFWriter)
-{
-    mpPDFWriter = pPDFWriter;
-    ImplUpdateFontData();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
