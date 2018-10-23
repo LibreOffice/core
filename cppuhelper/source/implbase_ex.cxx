@@ -35,8 +35,6 @@ using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-using rtl::OUString;
-
 namespace
 {
     class theImplHelperInitMutex : public rtl::Static<Mutex, theImplHelperInitMutex>{};

@@ -519,7 +519,7 @@ static int create_dir_with_callback(
     {
         if (aDirectoryCreationCallbackFunc)
         {
-            rtl::OUString url;
+            OUString url;
             osl::FileBase::getFileURLFromSystemPath(directory_path, url);
             aDirectoryCreationCallbackFunc(pData, url.pData);
         }
@@ -570,7 +570,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     if (aDirectoryUrl == nullptr)
         return osl_File_E_INVAL;
 
-    rtl::OUString sys_path;
+    OUString sys_path;
     oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(aDirectoryUrl, &sys_path.pData);
 
     if (osl_error != osl_File_E_None)
@@ -811,12 +811,12 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 {
     int      nRet=0;
 
-    rtl::OString tmpDestFile;
+    OString tmpDestFile;
     if ( DestFileExists )
     {
         //TODO: better pick a temp file name instead of adding .osl-tmp:
         // use the destination file to avoid EXDEV /* Cross-device link */
-        tmpDestFile = rtl::OString(pszDestFileName) + ".osl-tmp";
+        tmpDestFile = OString(pszDestFileName) + ".osl-tmp";
         if (rename(pszDestFileName, tmpDestFile.getStr()) != 0)
         {
             int e = errno;

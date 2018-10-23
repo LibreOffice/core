@@ -163,9 +163,9 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
     // ones are used when a FillStyle is defined
     if(!m_bIsFillStyleAlreadyConverted && !GetProperties().empty())
     {
-        static ::rtl::OUString s_FillStyle("FillStyle");
-        static ::rtl::OUString s_HeaderFillStyle("HeaderFillStyle");
-        static ::rtl::OUString s_FooterFillStyle("FooterFillStyle");
+        static OUString s_FillStyle("FillStyle");
+        static OUString s_HeaderFillStyle("HeaderFillStyle");
+        static OUString s_FooterFillStyle("FooterFillStyle");
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {
@@ -256,7 +256,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
                     case CTF_PM_FOOTERFILLBITMAPNAME:
                     {
                         struct XMLPropertyState& rState = GetProperties()[nIndex];
-                        rtl::OUString sStyleName;
+                        OUString sStyleName;
                         rState.maValue >>= sStyleName;
 
                         // translate the used name from ODF intern to the name used in the Model
@@ -265,7 +265,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
                         try
                         {
                             // set property
-                            const rtl::OUString& rPropertyName = rMapper->GetEntryAPIName(rState.mnIndex);
+                            const OUString& rPropertyName = rMapper->GetEntryAPIName(rState.mnIndex);
 
                             if(!xInfo.is())
                             {

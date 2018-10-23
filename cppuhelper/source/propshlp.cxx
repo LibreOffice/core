@@ -35,8 +35,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace cppu;
 
-using ::rtl::OUString;
-
 namespace cppu {
 
 IPropertyArrayHelper::~IPropertyArrayHelper()

@@ -28,8 +28,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <string.h>
 
-using ::rtl::OStringBuffer;
-using ::rtl::OString;
 // This file contains cppunit tests for the
 // OString and OStringBuffer classes
 
@@ -42,7 +40,7 @@ namespace rtl_OStringBuffer
 
         void ctor_001()
         {
-            ::rtl::OStringBuffer aStrBuf;
+            OStringBuffer aStrBuf;
             const sal_Char* pStr = aStrBuf.getStr();
 
             CPPUNIT_ASSERT_MESSAGE
@@ -64,14 +62,14 @@ namespace rtl_OStringBuffer
 
         void ctor_002()
         {
-            ::rtl::OString       aStrtmp( kTestStr1 );
-            ::rtl::OStringBuffer aStrBuftmp( aStrtmp );
-            ::rtl::OStringBuffer aStrBuf( aStrBuftmp );
+            OString       aStrtmp( kTestStr1 );
+            OStringBuffer aStrBuftmp( aStrtmp );
+            OStringBuffer aStrBuf( aStrBuftmp );
             // sal_Bool res = cmpstr(aStrBuftmp.getStr(),aStrBuf.getStr());
 
             sal_Int32 nLenStrBuftmp = aStrBuftmp.getLength();
 
-            rtl::OString sStr(aStrBuftmp.getStr());
+            OString sStr(aStrBuftmp.getStr());
             bool res = aStrtmp == sStr;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -94,8 +92,8 @@ namespace rtl_OStringBuffer
 
         void ctor_003()
         {
-            ::rtl::OStringBuffer aStrBuf1(kTestStr2Len);
-            ::rtl::OStringBuffer aStrBuf2(0);
+            OStringBuffer aStrBuf1(kTestStr2Len);
+            OStringBuffer aStrBuf2(0);
 
             const sal_Char* pStr1 = aStrBuf1.getStr();
             const sal_Char* pStr2 = aStrBuf2.getStr();
@@ -135,8 +133,8 @@ namespace rtl_OStringBuffer
 
         void ctor_004()
         {
-            ::rtl::OString aStrtmp( kTestStr1 );
-            ::rtl::OStringBuffer aStrBuf( aStrtmp );
+            OString aStrtmp( kTestStr1 );
+            OStringBuffer aStrBuf( aStrtmp );
             sal_Int32 leg = aStrBuf.getLength();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -158,10 +156,10 @@ namespace rtl_OStringBuffer
         }
 
         void ctor_005() {
-            rtl::OStringBuffer b1;
+            OStringBuffer b1;
             auto dummy = b1.makeStringAndClear();
             (void)dummy;
-            rtl::OStringBuffer b2(b1);
+            OStringBuffer b2(b1);
             (void)b2;
         }
 
@@ -169,7 +167,7 @@ namespace rtl_OStringBuffer
         {
             //pass in a const char*, get a temp
             //OString
-            ::rtl::OStringBuffer aStrBuf(kTestStr1);
+            OStringBuffer aStrBuf(kTestStr1);
             sal_Int32 leg = aStrBuf.getLength();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -212,8 +210,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_001()
         {
-            ::rtl::OStringBuffer   aStrBuf1;
-            ::rtl::OString         aStr1;
+            OStringBuffer   aStrBuf1;
+            OString         aStr1;
 
             bool lastRes = (aStrBuf1.makeStringAndClear() ==  aStr1 );
 
@@ -237,8 +235,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_002()
         {
-            ::rtl::OStringBuffer   aStrBuf2(26);
-            ::rtl::OString         aStr2;
+            OStringBuffer   aStrBuf2(26);
+            OString         aStr2;
 
             bool lastRes = (aStrBuf2.makeStringAndClear() == aStr2 );
 
@@ -253,8 +251,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_003()
         {
-            ::rtl::OStringBuffer   aStrBuf3(arrOUS[0]);
-            ::rtl::OString        aStr3(arrOUS[0]);
+            OStringBuffer   aStrBuf3(arrOUS[0]);
+            OString        aStr3(arrOUS[0]);
 
             bool lastRes = (aStrBuf3.makeStringAndClear() == aStr3 );
 
@@ -269,8 +267,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_004()
         {
-            ::rtl::OStringBuffer   aStrBuf4(arrOUS[1]);
-            ::rtl::OString         aStr4(arrOUS[1]);
+            OStringBuffer   aStrBuf4(arrOUS[1]);
+            OString         aStr4(arrOUS[1]);
 
             bool lastRes = (aStrBuf4.makeStringAndClear() ==  aStr4 );
 
@@ -284,8 +282,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_005()
         {
-            ::rtl::OStringBuffer   aStrBuf5(arrOUS[2]);
-            ::rtl::OString         aStr5(arrOUS[2]);
+            OStringBuffer   aStrBuf5(arrOUS[2]);
+            OString         aStr5(arrOUS[2]);
 
             bool lastRes = (aStrBuf5.makeStringAndClear() ==  aStr5 );
 
@@ -299,8 +297,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_006()
         {
-            ::rtl::OStringBuffer   aStrBuf6(arrOUS[3]);
-            ::rtl::OString         aStr6(arrOUS[3]);
+            OStringBuffer   aStrBuf6(arrOUS[3]);
+            OString         aStr6(arrOUS[3]);
 
             bool lastRes = (aStrBuf6.makeStringAndClear() == aStr6 );
 
@@ -314,8 +312,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_007()
         {
-            ::rtl::OStringBuffer   aStrBuf7(arrOUS[4]);
-            ::rtl::OString         aStr7(arrOUS[4]);
+            OStringBuffer   aStrBuf7(arrOUS[4]);
+            OString         aStr7(arrOUS[4]);
 
             bool lastRes = (aStrBuf7.makeStringAndClear() == aStr7 );
 
@@ -329,8 +327,8 @@ namespace rtl_OStringBuffer
 
         void makeStringAndClear_008()
         {
-            ::rtl::OStringBuffer   aStrBuf8(arrOUS[5]);
-            ::rtl::OString         aStr8(arrOUS[5]);
+            OStringBuffer   aStrBuf8(arrOUS[5]);
+            OString         aStr8(arrOUS[5]);
 
             bool lastRes = (aStrBuf8.makeStringAndClear() == aStr8 );
 
@@ -359,7 +357,7 @@ namespace rtl_OStringBuffer
     public:
         void remove_001()
         {
-            ::rtl::OStringBuffer sb(
+            OStringBuffer sb(
                 RTL_CONSTASCII_STRINGPARAM("Red Hat, Inc."));
 
             sb.remove(0, 4);
@@ -409,7 +407,7 @@ namespace rtl_OStringBuffer
 
         void getLength_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal = kTestStr1Len;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -422,7 +420,7 @@ namespace rtl_OStringBuffer
 
         void getLength_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Int32              expVal = 1;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -434,7 +432,7 @@ namespace rtl_OStringBuffer
 
         void getLength_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal = 0;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -446,7 +444,7 @@ namespace rtl_OStringBuffer
 
         void getLength_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal = 0;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -458,7 +456,7 @@ namespace rtl_OStringBuffer
 
         void getLength_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal = 1;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -470,7 +468,7 @@ namespace rtl_OStringBuffer
 
         void getLength_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal = kTestStr2Len;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -482,7 +480,7 @@ namespace rtl_OStringBuffer
 
         void getLength_007()
         {
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              expVal = 0;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -494,7 +492,7 @@ namespace rtl_OStringBuffer
 
         void getLength_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( 26 );
+            OStringBuffer   aStrBuf( 26 );
             sal_Int32               expVal   = 0;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -534,7 +532,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal = kTestStr1Len+16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -547,7 +545,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Int32              expVal = 1+16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -559,7 +557,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal = 0+16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -571,7 +569,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal = 0+16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -583,7 +581,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal = 1+16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -595,7 +593,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal = kTestStr2Len+16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -607,7 +605,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_007()
         {
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              expVal = 16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -619,7 +617,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( 16 );
+            OStringBuffer   aStrBuf( 16 );
             sal_Int32              expVal = 16;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -631,7 +629,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( 6 );
+            OStringBuffer   aStrBuf( 6 );
             sal_Int32              expVal = 6;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -643,7 +641,7 @@ namespace rtl_OStringBuffer
 
         void getCapacity_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( 0 );
+            OStringBuffer   aStrBuf( 0 );
             sal_Int32              expVal = 0;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -672,7 +670,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_001()
         {
             sal_Int32          expVal = 16;
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              input = 5;
 
             aStrBuf.ensureCapacity( input );
@@ -688,7 +686,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_002()
         {
             sal_Int32          expVal = 16;
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              input = -5;
 
             aStrBuf.ensureCapacity( input );
@@ -704,7 +702,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_003()
         {
             sal_Int32          expVal = 16;
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              input = 0;
 
             aStrBuf.ensureCapacity( input );
@@ -720,7 +718,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_004()           //the testcase is based on comments
         {
             sal_Int32          expVal = 20;
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              input = 20;
 
             aStrBuf.ensureCapacity( input );
@@ -736,7 +734,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_005()
         {
             sal_Int32          expVal = 50;
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             sal_Int32              input = 50;
 
             aStrBuf.ensureCapacity( input );
@@ -752,7 +750,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_006()
         {
             sal_Int32          expVal = 20;
-            ::rtl::OStringBuffer   aStrBuf( 6 );
+            OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = 20;
 
             aStrBuf.ensureCapacity( input );
@@ -768,7 +766,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_007()
         {
             sal_Int32          expVal = 6;
-            ::rtl::OStringBuffer   aStrBuf( 6 );
+            OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = 2;
 
             aStrBuf.ensureCapacity( input );
@@ -784,7 +782,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_008()
         {
             sal_Int32          expVal = 6;
-            ::rtl::OStringBuffer   aStrBuf( 6 );
+            OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = -6;
 
             aStrBuf.ensureCapacity( input );
@@ -800,7 +798,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_009()      //the testcase is based on comments
         {
             sal_Int32          expVal = 10;
-            ::rtl::OStringBuffer   aStrBuf( 6 );
+            OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = 10;
 
             aStrBuf.ensureCapacity( input );
@@ -816,7 +814,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_010()
         {
             sal_Int32          expVal = 6;
-            ::rtl::OStringBuffer   aStrBuf( 0 );
+            OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = 6;
 
             aStrBuf.ensureCapacity( input );
@@ -832,7 +830,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_011()       //the testcase is based on comments
         {
             sal_Int32          expVal = 2;  // capacity is x = (str->length + 1) * 2; minimum < x ? x : minimum
-            ::rtl::OStringBuffer   aStrBuf( 0 );
+            OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = 1;
 
             aStrBuf.ensureCapacity( input );
@@ -848,7 +846,7 @@ namespace rtl_OStringBuffer
         void ensureCapacity_012()
         {
             sal_Int32          expVal = 0;
-            ::rtl::OStringBuffer   aStrBuf( 0 );
+            OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = -1;
 
             aStrBuf.ensureCapacity( input );
@@ -895,9 +893,9 @@ namespace rtl_OStringBuffer
 
         void setLength_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal1 = 50;
-            ::rtl::OString         expVal2( kTestStr1 );
+            OString         expVal2( kTestStr1 );
             sal_Int32              expVal3 = 50;
             sal_Int32              input   = 50;
 
@@ -915,9 +913,9 @@ namespace rtl_OStringBuffer
 
         void setLength_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal1 = kTestStr13Len;
-            ::rtl::OString         expVal2( kTestStr1 );
+            OString         expVal2( kTestStr1 );
             sal_Int32              expVal3 = 32;
             sal_Int32              input   = kTestStr13Len;
 
@@ -935,9 +933,9 @@ namespace rtl_OStringBuffer
 
         void setLength_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal1 = kTestStr1Len;
-            ::rtl::OString         expVal2( kTestStr1 );
+            OString         expVal2( kTestStr1 );
             sal_Int32              expVal3 = 32;
             sal_Int32              input   = kTestStr1Len;
 
@@ -955,9 +953,9 @@ namespace rtl_OStringBuffer
 
         void setLength_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal1 = kTestStr7Len;
-            ::rtl::OString         expVal2( kTestStr7 );
+            OString         expVal2( kTestStr7 );
             sal_Int32              expVal3 = 32;
             sal_Int32              input   = kTestStr7Len;
 
@@ -975,9 +973,9 @@ namespace rtl_OStringBuffer
 
         void setLength_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal1 = 0;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 32;
             sal_Int32              input   = 0;
 
@@ -995,9 +993,9 @@ namespace rtl_OStringBuffer
 
         void setLength_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Int32              expVal1 = 25;
-            ::rtl::OString         expVal2( arrOUS[1] );
+            OString         expVal2( arrOUS[1] );
             sal_Int32              expVal3 = 25;
             sal_Int32              input   = 25;
 
@@ -1015,9 +1013,9 @@ namespace rtl_OStringBuffer
 
         void setLength_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Int32              expVal1 = kTestStr27Len;
-            ::rtl::OString         expVal2( arrOUS[1] );
+            OString         expVal2( arrOUS[1] );
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = kTestStr27Len;
 
@@ -1035,9 +1033,9 @@ namespace rtl_OStringBuffer
 
         void setLength_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Int32              expVal1 = 0;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = 0;
 
@@ -1055,9 +1053,9 @@ namespace rtl_OStringBuffer
 
         void setLength_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal1 = 20;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 20;
             sal_Int32              input   = 20;
 
@@ -1075,9 +1073,9 @@ namespace rtl_OStringBuffer
 
         void setLength_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal1 = 3;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 3;
 
@@ -1095,9 +1093,9 @@ namespace rtl_OStringBuffer
 
         void setLength_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal1 = 0;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 0;
 
@@ -1115,9 +1113,9 @@ namespace rtl_OStringBuffer
 
         void setLength_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal1 = 20;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 20;
             sal_Int32              input   = 20;
 
@@ -1135,9 +1133,9 @@ namespace rtl_OStringBuffer
 
         void setLength_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal1 = 5;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 5;
 
@@ -1155,9 +1153,9 @@ namespace rtl_OStringBuffer
 
         void setLength_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal1 = 0;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 0;
 
@@ -1175,9 +1173,9 @@ namespace rtl_OStringBuffer
 
         void setLength_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal1 = 20;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 20;
             sal_Int32              input   = 20;
 
@@ -1195,9 +1193,9 @@ namespace rtl_OStringBuffer
 
         void setLength_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal1 = 5;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = 5;
 
@@ -1215,9 +1213,9 @@ namespace rtl_OStringBuffer
 
         void setLength_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal1 = 0;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = 0;
 
@@ -1235,9 +1233,9 @@ namespace rtl_OStringBuffer
 
         void setLength_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal1 = 50;
-            ::rtl::OString         expVal2( kTestStr2 );
+            OString         expVal2( kTestStr2 );
             sal_Int32              expVal3 = 66;
             sal_Int32              input   = 50;
 
@@ -1255,9 +1253,9 @@ namespace rtl_OStringBuffer
 
         void setLength_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal1 = 40;
-            ::rtl::OString         expVal2(kTestStr2);
+            OString         expVal2(kTestStr2);
             sal_Int32              expVal3 = 48;
             sal_Int32              input   = 40;
 
@@ -1275,9 +1273,9 @@ namespace rtl_OStringBuffer
 
         void setLength_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal1 = kTestStr2Len;
-            ::rtl::OString         expVal2(kTestStr2);
+            OString         expVal2(kTestStr2);
             sal_Int32              expVal3 = 48;
             sal_Int32              input   = kTestStr2Len;
 
@@ -1295,9 +1293,9 @@ namespace rtl_OStringBuffer
 
         void setLength_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal1 = kTestStr7Len;
-            ::rtl::OString         expVal2(kTestStr7);
+            OString         expVal2(kTestStr7);
             sal_Int32              expVal3 = 48;
             sal_Int32              input   = kTestStr7Len;
 
@@ -1315,9 +1313,9 @@ namespace rtl_OStringBuffer
 
         void setLength_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[5] );
+            OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal1 = 0;
-            ::rtl::OString         expVal2;
+            OString         expVal2;
             sal_Int32              expVal3 = 48;
             sal_Int32              input   = 0;
 
@@ -1364,7 +1362,7 @@ namespace rtl_OStringBuffer
         void csuc_001()
         {
             const sal_Char*        expVal = kTestStr1;
-            ::rtl::OStringBuffer   aStrBuf( kTestStr1 );
+            OStringBuffer   aStrBuf( kTestStr1 );
             sal_Int32              cmpLen = kTestStr1Len;
 
             // LLA: wrong access! const sal_Char* pstr = *&aStrBuf;
@@ -1382,7 +1380,7 @@ namespace rtl_OStringBuffer
 
         void csuc_002()
         {
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
 
             // LLA: wrong access! const sal_Char* pstr = *&aStrBuf;
             const sal_Char* pstr = aStrBuf.getStr();
@@ -1408,7 +1406,7 @@ namespace rtl_OStringBuffer
         void getStr_001()
         {
             const sal_Char*        expVal = kTestStr1;
-            ::rtl::OStringBuffer   aStrBuf( kTestStr1 );
+            OStringBuffer   aStrBuf( kTestStr1 );
             sal_Int32              cmpLen = kTestStr1Len;
 
             const sal_Char* pstr = aStrBuf.getStr();
@@ -1424,7 +1422,7 @@ namespace rtl_OStringBuffer
 
         void getStr_002()
         {
-            ::rtl::OStringBuffer   aStrBuf;
+            OStringBuffer   aStrBuf;
             const sal_Char* pstr = aStrBuf.getStr();
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1459,7 +1457,7 @@ namespace rtl_OStringBuffer
         void append_001_001()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                input2( kTestStr8 );
 
             aStrBuf.append( input2 );
@@ -1475,7 +1473,7 @@ namespace rtl_OStringBuffer
         void append_001_002()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                input2( kTestStr36 );
 
             aStrBuf.append( input2 );
@@ -1492,7 +1490,7 @@ namespace rtl_OStringBuffer
         void append_001_003()
         {
             OString                expVal( kTestStr37 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                input2( kTestStr23 );
 
             aStrBuf.append( input2 );
@@ -1509,7 +1507,7 @@ namespace rtl_OStringBuffer
         void append_001_004()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                input2;
 
             aStrBuf.append( input2 );
@@ -1526,7 +1524,7 @@ namespace rtl_OStringBuffer
         void append_001_005()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                input2( kTestStr7 );
 
             aStrBuf.append( input2 );
@@ -1543,7 +1541,7 @@ namespace rtl_OStringBuffer
         void append_001_006()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                input2( kTestStr2 );
 
             aStrBuf.append( input2 );
@@ -1560,7 +1558,7 @@ namespace rtl_OStringBuffer
         void append_001_007()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                input2( kTestStr1 );
 
             aStrBuf.append( input2 );
@@ -1577,7 +1575,7 @@ namespace rtl_OStringBuffer
         void append_001_008()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                input2;
 
             aStrBuf.append( input2 );
@@ -1594,7 +1592,7 @@ namespace rtl_OStringBuffer
         void append_001_009()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                input2( kTestStr7 );
 
             aStrBuf.append( input2 );
@@ -1611,7 +1609,7 @@ namespace rtl_OStringBuffer
         void append_001_010()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                input2( kTestStr2 );
 
             aStrBuf.append( input2 );
@@ -1628,7 +1626,7 @@ namespace rtl_OStringBuffer
         void append_001_011()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                input2( kTestStr1 );
 
             aStrBuf.append( input2 );
@@ -1645,7 +1643,7 @@ namespace rtl_OStringBuffer
         void append_001_012()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                input2;
 
             aStrBuf.append( input2 );
@@ -1662,7 +1660,7 @@ namespace rtl_OStringBuffer
         void append_001_013()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                input2( kTestStr7 );
 
             aStrBuf.append( input2 );
@@ -1679,7 +1677,7 @@ namespace rtl_OStringBuffer
         void append_001_014()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                input2( kTestStr2 );
 
             aStrBuf.append( input2 );
@@ -1696,7 +1694,7 @@ namespace rtl_OStringBuffer
         void append_001_015()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                input2( kTestStr1 );
 
             aStrBuf.append( input2 );
@@ -1713,7 +1711,7 @@ namespace rtl_OStringBuffer
         void append_001_016()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                input2;
 
             aStrBuf.append( input2 );
@@ -1730,7 +1728,7 @@ namespace rtl_OStringBuffer
         void append_001_017()
         {
             OString                expVal( kTestStr29 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                input2( kTestStr38 );
 
             aStrBuf.append( input2 );
@@ -1747,7 +1745,7 @@ namespace rtl_OStringBuffer
         void append_001_018()
         {
             OString                expVal( kTestStr39 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                input2( kTestStr17 );
 
             aStrBuf.append( input2 );
@@ -1764,7 +1762,7 @@ namespace rtl_OStringBuffer
         void append_001_019()
         {
             OString                expVal( kTestStr40 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                input2( kTestStr31 );
 
             aStrBuf.append( input2 );
@@ -1781,7 +1779,7 @@ namespace rtl_OStringBuffer
         void append_001_020()
         {
             OString                expVal( kTestStr28 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                input2;
 
             aStrBuf.append( input2 );
@@ -1797,7 +1795,7 @@ namespace rtl_OStringBuffer
 
         void append_null()
         {
-            ::rtl::OStringBuffer   aStrBuf("hello world");
+            OStringBuffer   aStrBuf("hello world");
 
             aStrBuf.append('\0');
             aStrBuf.append('\1');
@@ -1860,7 +1858,7 @@ namespace rtl_OStringBuffer
         void append_002_001()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input = kTestStr8;
 
             aStrBuf.append( input );
@@ -1876,7 +1874,7 @@ namespace rtl_OStringBuffer
         void append_002_002()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input = kTestStr36;
 
             aStrBuf.append( input );
@@ -1892,7 +1890,7 @@ namespace rtl_OStringBuffer
         void append_002_003()
         {
             OString                expVal( kTestStr37 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input = kTestStr23;
 
             aStrBuf.append( input );
@@ -1908,7 +1906,7 @@ namespace rtl_OStringBuffer
         void append_002_004()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input = kTestStr25;
 
             aStrBuf.append( input );
@@ -1924,7 +1922,7 @@ namespace rtl_OStringBuffer
         void append_002_005()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input = kTestStr7;
 
             aStrBuf.append( input );
@@ -1940,7 +1938,7 @@ namespace rtl_OStringBuffer
         void append_002_006()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input = kTestStr2;
 
             aStrBuf.append( input );
@@ -1956,7 +1954,7 @@ namespace rtl_OStringBuffer
         void append_002_007()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input = kTestStr1;
 
             aStrBuf.append( input );
@@ -1972,7 +1970,7 @@ namespace rtl_OStringBuffer
         void append_002_008()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input = kTestStr25;
 
             aStrBuf.append( input );
@@ -1988,7 +1986,7 @@ namespace rtl_OStringBuffer
         void append_002_009()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input = kTestStr7;
 
             aStrBuf.append( input );
@@ -2004,7 +2002,7 @@ namespace rtl_OStringBuffer
         void append_002_010()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input = kTestStr2;
 
             aStrBuf.append( input );
@@ -2020,7 +2018,7 @@ namespace rtl_OStringBuffer
         void append_002_011()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input = kTestStr1;
 
             aStrBuf.append( input );
@@ -2036,7 +2034,7 @@ namespace rtl_OStringBuffer
         void append_002_012()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input = kTestStr25;
 
             aStrBuf.append( input );
@@ -2052,7 +2050,7 @@ namespace rtl_OStringBuffer
         void append_002_013()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input = kTestStr7;
 
             aStrBuf.append( input );
@@ -2068,7 +2066,7 @@ namespace rtl_OStringBuffer
         void append_002_014()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input = kTestStr2;
 
             aStrBuf.append( input );
@@ -2084,7 +2082,7 @@ namespace rtl_OStringBuffer
         void append_002_015()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input = kTestStr1;
 
             aStrBuf.append( input );
@@ -2100,7 +2098,7 @@ namespace rtl_OStringBuffer
         void append_002_016()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input = kTestStr25;
 
             aStrBuf.append( input );
@@ -2116,7 +2114,7 @@ namespace rtl_OStringBuffer
         void append_002_017()
         {
             OString                expVal( kTestStr29 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input = kTestStr38;
 
             aStrBuf.append( input );
@@ -2132,7 +2130,7 @@ namespace rtl_OStringBuffer
         void append_002_018()
         {
             OString                expVal( kTestStr39 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input = kTestStr17;
 
             aStrBuf.append( input );
@@ -2148,7 +2146,7 @@ namespace rtl_OStringBuffer
         void append_002_019()
         {
             OString                expVal( kTestStr40 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input = kTestStr31;
 
             aStrBuf.append( input );
@@ -2164,7 +2162,7 @@ namespace rtl_OStringBuffer
         void append_002_020()
         {
             OString                expVal( kTestStr28 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input = kTestStr25;
 
             aStrBuf.append( input );
@@ -2181,7 +2179,7 @@ namespace rtl_OStringBuffer
         void append_002_021()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             const sal_Char*        input = kTestStr25;
 
             aStrBuf.append( input );
@@ -2240,7 +2238,7 @@ namespace rtl_OStringBuffer
         void append_003_001()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input1 = kTestStr36;
             sal_Int32              input2 = 12;
 
@@ -2257,7 +2255,7 @@ namespace rtl_OStringBuffer
         void append_003_002()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input1 = kTestStr36;
             sal_Int32              input2 = 28;
 
@@ -2274,7 +2272,7 @@ namespace rtl_OStringBuffer
         void append_003_003()
         {
             OString                expVal( kTestStr37 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input1 = kTestStr23;
             sal_Int32              input2 = 16;
 
@@ -2291,7 +2289,7 @@ namespace rtl_OStringBuffer
         void append_003_004()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
@@ -2308,7 +2306,7 @@ namespace rtl_OStringBuffer
         void append_003_006()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 4;
 
@@ -2325,7 +2323,7 @@ namespace rtl_OStringBuffer
         void append_003_007()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 32;
 
@@ -2342,7 +2340,7 @@ namespace rtl_OStringBuffer
         void append_003_008()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 16;
 
@@ -2359,7 +2357,7 @@ namespace rtl_OStringBuffer
         void append_003_009()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
@@ -2376,7 +2374,7 @@ namespace rtl_OStringBuffer
         void append_003_011()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 4;
 
@@ -2393,7 +2391,7 @@ namespace rtl_OStringBuffer
         void append_003_012()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 32;
 
@@ -2410,7 +2408,7 @@ namespace rtl_OStringBuffer
         void append_003_013()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 16;
 
@@ -2427,7 +2425,7 @@ namespace rtl_OStringBuffer
         void append_003_014()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
@@ -2444,7 +2442,7 @@ namespace rtl_OStringBuffer
         void append_003_016()
         {
             OString                expVal( kTestStr7 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 4;
 
@@ -2461,7 +2459,7 @@ namespace rtl_OStringBuffer
         void append_003_017()
         {
             OString                expVal( kTestStr2 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 32;
 
@@ -2478,7 +2476,7 @@ namespace rtl_OStringBuffer
         void append_003_018()
         {
             OString                expVal( kTestStr1 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 16;
 
@@ -2495,7 +2493,7 @@ namespace rtl_OStringBuffer
         void append_003_019()
         {
             OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
@@ -2512,7 +2510,7 @@ namespace rtl_OStringBuffer
         void append_003_021()
         {
             OString                expVal( kTestStr29 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input1 = kTestStr38;
             sal_Int32              input2 = 7;
 
@@ -2529,7 +2527,7 @@ namespace rtl_OStringBuffer
         void append_003_022()
         {
             OString                expVal( kTestStr39 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input1 = kTestStr17;
             sal_Int32              input2 = 22;
 
@@ -2546,7 +2544,7 @@ namespace rtl_OStringBuffer
         void append_003_023()
         {
             OString                expVal( kTestStr40 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input1 = kTestStr31;
             sal_Int32              input2 = 16;
 
@@ -2563,7 +2561,7 @@ namespace rtl_OStringBuffer
         void append_003_024()
         {
             OString                expVal( kTestStr28 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             const sal_Char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
@@ -2619,7 +2617,7 @@ namespace rtl_OStringBuffer
         void append_004_001()
         {
             OString                expVal( kTestStr45 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             bool               input = true;
 
             aStrBuf.append( input );
@@ -2635,7 +2633,7 @@ namespace rtl_OStringBuffer
         void append_004_002()
         {
             OString                expVal( kTestStr46 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             bool               input = false;
 
             aStrBuf.append( input );
@@ -2651,7 +2649,7 @@ namespace rtl_OStringBuffer
         void append_004_003()
         {
             OString                expVal( kTestStr47 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             bool               input = true;
 
             aStrBuf.append( input );
@@ -2667,7 +2665,7 @@ namespace rtl_OStringBuffer
         void append_004_004()
         {
             OString                expVal( kTestStr48 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             bool               input = false;
 
             aStrBuf.append( input );
@@ -2683,7 +2681,7 @@ namespace rtl_OStringBuffer
         void append_004_005()
         {
             OString                expVal( kTestStr47 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             bool               input = true;
 
             aStrBuf.append( input );
@@ -2699,7 +2697,7 @@ namespace rtl_OStringBuffer
         void append_004_006()
         {
             OString                expVal( kTestStr48 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             bool               input = false;
 
             aStrBuf.append( input );
@@ -2715,7 +2713,7 @@ namespace rtl_OStringBuffer
         void append_004_007()
         {
             OString                expVal( kTestStr47 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             bool               input = true;
 
             aStrBuf.append( input );
@@ -2731,7 +2729,7 @@ namespace rtl_OStringBuffer
         void append_004_008()
         {
             OString                expVal( kTestStr48 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             bool               input = false;
 
             aStrBuf.append( input );
@@ -2747,7 +2745,7 @@ namespace rtl_OStringBuffer
         void append_004_009()
         {
             OString                expVal( kTestStr49 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             bool               input = true;
 
             aStrBuf.append( input );
@@ -2763,7 +2761,7 @@ namespace rtl_OStringBuffer
         void append_004_010()
         {
             OString                expVal( kTestStr50 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             bool               input = false;
 
             aStrBuf.append( input );
@@ -2780,7 +2778,7 @@ namespace rtl_OStringBuffer
         void append_004_011()
         {
             OString                expVal( kTestStr47 );
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             sal_Bool               input = sal_True;
 
             aStrBuf.append( input );
@@ -2796,7 +2794,7 @@ namespace rtl_OStringBuffer
         void append_004_012()
         {
             OString                expVal( kTestStr48 );
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             sal_Bool               input = sal_False;
 
             aStrBuf.append( input );
@@ -2848,7 +2846,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             OString                expVal( kTestStr51 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Char               input = 'M';
 
             aStrBuf.append( input );
@@ -2864,7 +2862,7 @@ namespace rtl_OStringBuffer
         void append_002()
         {
             OString                expVal( kTestStr143 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
@@ -2880,7 +2878,7 @@ namespace rtl_OStringBuffer
         void append_003()
         {
             OString                expVal( kTestStr27 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Char               input = 's';
 
             aStrBuf.append( input );
@@ -2896,7 +2894,7 @@ namespace rtl_OStringBuffer
         void append_004()
         {
             OString                expVal( kTestStr144 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
@@ -2912,7 +2910,7 @@ namespace rtl_OStringBuffer
         void append_005_005()
         {
             OString                expVal( kTestStr27 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Char               input = 's';
 
             aStrBuf.append( input );
@@ -2928,7 +2926,7 @@ namespace rtl_OStringBuffer
         void append_006()
         {
             OString                expVal( kTestStr144 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
@@ -2944,7 +2942,7 @@ namespace rtl_OStringBuffer
         void append_007()
         {
             OString                expVal( kTestStr27 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Char               input = 's';
 
             aStrBuf.append( input );
@@ -2960,7 +2958,7 @@ namespace rtl_OStringBuffer
         void append_008()
         {
             OString                expVal( kTestStr144 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
@@ -2976,7 +2974,7 @@ namespace rtl_OStringBuffer
         void append_009()
         {
             OString                expVal( kTestStr56 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Char               input = 's';
 
             aStrBuf.append( input );
@@ -2992,7 +2990,7 @@ namespace rtl_OStringBuffer
         void append_010()
         {
             OString                expVal( kTestStr145 );
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
@@ -3009,7 +3007,7 @@ namespace rtl_OStringBuffer
         void append_011()
         {
             OString                expVal( kTestStr27 );
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             sal_Char               input = 's';
 
             aStrBuf.append( input );
@@ -3025,7 +3023,7 @@ namespace rtl_OStringBuffer
         void append_012()
         {
             OString                expVal( kTestStr144 );
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
@@ -3074,7 +3072,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
@@ -3093,7 +3091,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
@@ -3112,7 +3110,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
@@ -3131,7 +3129,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
@@ -3150,7 +3148,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
@@ -3169,7 +3167,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
@@ -3188,7 +3186,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
@@ -3207,7 +3205,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
@@ -3226,7 +3224,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
@@ -3245,7 +3243,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
@@ -3264,7 +3262,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
@@ -3283,7 +3281,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
@@ -3302,7 +3300,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
@@ -3321,7 +3319,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
@@ -3340,7 +3338,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
@@ -3359,7 +3357,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
@@ -3378,7 +3376,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
@@ -3397,7 +3395,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
@@ -3416,7 +3414,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
@@ -3435,7 +3433,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
@@ -3454,7 +3452,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
@@ -3473,7 +3471,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
@@ -3492,7 +3490,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
@@ -3511,7 +3509,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
@@ -3530,7 +3528,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
@@ -3549,7 +3547,7 @@ namespace rtl_OStringBuffer
 
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
@@ -3568,7 +3566,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
@@ -3587,7 +3585,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
@@ -3606,7 +3604,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
@@ -3625,7 +3623,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
@@ -3644,7 +3642,7 @@ namespace rtl_OStringBuffer
 
         void append_031()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
@@ -3663,7 +3661,7 @@ namespace rtl_OStringBuffer
 
         void append_032()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
@@ -3682,7 +3680,7 @@ namespace rtl_OStringBuffer
 
         void append_033()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
@@ -3701,7 +3699,7 @@ namespace rtl_OStringBuffer
 
         void append_034()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
@@ -3720,7 +3718,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
@@ -3739,7 +3737,7 @@ namespace rtl_OStringBuffer
 
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
@@ -3758,7 +3756,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
@@ -3777,7 +3775,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
@@ -3796,7 +3794,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
@@ -3815,7 +3813,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
@@ -3834,7 +3832,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
@@ -3853,7 +3851,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
@@ -3872,7 +3870,7 @@ namespace rtl_OStringBuffer
 
         void append_043()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
@@ -3891,7 +3889,7 @@ namespace rtl_OStringBuffer
 
         void append_044()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
@@ -3910,7 +3908,7 @@ namespace rtl_OStringBuffer
 
         void append_045()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
@@ -3929,7 +3927,7 @@ namespace rtl_OStringBuffer
 
         void append_046()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
@@ -3948,7 +3946,7 @@ namespace rtl_OStringBuffer
 
         void append_047()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
@@ -3967,7 +3965,7 @@ namespace rtl_OStringBuffer
 
         void append_048()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
@@ -3986,7 +3984,7 @@ namespace rtl_OStringBuffer
 
         void append_049()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
@@ -4005,7 +4003,7 @@ namespace rtl_OStringBuffer
 
         void append_050()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
@@ -4024,7 +4022,7 @@ namespace rtl_OStringBuffer
 
         void append_051()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
@@ -4043,7 +4041,7 @@ namespace rtl_OStringBuffer
 
         void append_052()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
@@ -4062,7 +4060,7 @@ namespace rtl_OStringBuffer
 
         void append_053()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
@@ -4081,7 +4079,7 @@ namespace rtl_OStringBuffer
 
         void append_054()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
@@ -4100,7 +4098,7 @@ namespace rtl_OStringBuffer
 
         void append_055()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
@@ -4119,7 +4117,7 @@ namespace rtl_OStringBuffer
 
         void append_056()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
@@ -4138,7 +4136,7 @@ namespace rtl_OStringBuffer
 
         void append_057()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
@@ -4157,7 +4155,7 @@ namespace rtl_OStringBuffer
 
         void append_058()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
@@ -4176,7 +4174,7 @@ namespace rtl_OStringBuffer
 
         void append_059()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
@@ -4195,7 +4193,7 @@ namespace rtl_OStringBuffer
 
         void append_060()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
@@ -4214,7 +4212,7 @@ namespace rtl_OStringBuffer
 
         void append_061()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
@@ -4233,7 +4231,7 @@ namespace rtl_OStringBuffer
 
         void append_062()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
@@ -4252,7 +4250,7 @@ namespace rtl_OStringBuffer
 
         void append_063()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
@@ -4271,7 +4269,7 @@ namespace rtl_OStringBuffer
 
         void append_064()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
@@ -4290,7 +4288,7 @@ namespace rtl_OStringBuffer
 
         void append_065()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
@@ -4309,7 +4307,7 @@ namespace rtl_OStringBuffer
 
         void append_066()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
@@ -4328,7 +4326,7 @@ namespace rtl_OStringBuffer
 
         void append_067()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
@@ -4347,7 +4345,7 @@ namespace rtl_OStringBuffer
 
         void append_068()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
@@ -4366,7 +4364,7 @@ namespace rtl_OStringBuffer
 
         void append_069()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
@@ -4385,7 +4383,7 @@ namespace rtl_OStringBuffer
 
         void append_070()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
@@ -4404,7 +4402,7 @@ namespace rtl_OStringBuffer
 
         void append_071()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
@@ -4423,7 +4421,7 @@ namespace rtl_OStringBuffer
 
         void append_072()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
@@ -4442,7 +4440,7 @@ namespace rtl_OStringBuffer
 
         void append_073()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
@@ -4461,7 +4459,7 @@ namespace rtl_OStringBuffer
 
         void append_074()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
@@ -4480,7 +4478,7 @@ namespace rtl_OStringBuffer
 
         void append_075()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
@@ -4499,7 +4497,7 @@ namespace rtl_OStringBuffer
 
         void append_076()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
@@ -4518,7 +4516,7 @@ namespace rtl_OStringBuffer
 
         void append_077()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
@@ -4537,7 +4535,7 @@ namespace rtl_OStringBuffer
 
         void append_078()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
@@ -4556,7 +4554,7 @@ namespace rtl_OStringBuffer
 
         void append_079()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
@@ -4575,7 +4573,7 @@ namespace rtl_OStringBuffer
 
         void append_080()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
@@ -4594,7 +4592,7 @@ namespace rtl_OStringBuffer
 
         void append_081()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
@@ -4613,7 +4611,7 @@ namespace rtl_OStringBuffer
 
         void append_082()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
@@ -4632,7 +4630,7 @@ namespace rtl_OStringBuffer
 
         void append_083()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
@@ -4651,7 +4649,7 @@ namespace rtl_OStringBuffer
 
         void append_084()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
@@ -4670,7 +4668,7 @@ namespace rtl_OStringBuffer
 
         void append_085()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
@@ -4689,7 +4687,7 @@ namespace rtl_OStringBuffer
 
         void append_086()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
@@ -4708,7 +4706,7 @@ namespace rtl_OStringBuffer
 
         void append_087()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
@@ -4727,7 +4725,7 @@ namespace rtl_OStringBuffer
 
         void append_088()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
@@ -4746,7 +4744,7 @@ namespace rtl_OStringBuffer
 
         void append_089()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
@@ -4765,7 +4763,7 @@ namespace rtl_OStringBuffer
 
         void append_090()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
@@ -4784,7 +4782,7 @@ namespace rtl_OStringBuffer
 
         void append_091()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
@@ -4803,7 +4801,7 @@ namespace rtl_OStringBuffer
 
         void append_092()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
@@ -4822,7 +4820,7 @@ namespace rtl_OStringBuffer
 
         void append_093()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
@@ -4841,7 +4839,7 @@ namespace rtl_OStringBuffer
 
         void append_094()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
@@ -4860,7 +4858,7 @@ namespace rtl_OStringBuffer
 
         void append_095()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
@@ -4879,7 +4877,7 @@ namespace rtl_OStringBuffer
 
         void append_096()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
@@ -4898,7 +4896,7 @@ namespace rtl_OStringBuffer
 
         void append_097()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
@@ -4917,7 +4915,7 @@ namespace rtl_OStringBuffer
 
         void append_098()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
@@ -4936,7 +4934,7 @@ namespace rtl_OStringBuffer
 
         void append_099()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
@@ -4955,7 +4953,7 @@ namespace rtl_OStringBuffer
 
         void append_100()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
@@ -5053,7 +5051,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -5072,7 +5070,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
@@ -5091,7 +5089,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -5110,7 +5108,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
@@ -5129,7 +5127,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -5148,7 +5146,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
@@ -5167,7 +5165,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -5186,7 +5184,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
@@ -5205,7 +5203,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -5224,7 +5222,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
@@ -5243,7 +5241,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -5262,7 +5260,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
@@ -5281,7 +5279,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -5300,7 +5298,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
@@ -5319,7 +5317,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -5338,7 +5336,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
@@ -5357,7 +5355,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -5376,7 +5374,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
@@ -5395,7 +5393,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -5414,7 +5412,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
@@ -5433,7 +5431,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -5452,7 +5450,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
@@ -5471,7 +5469,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -5490,7 +5488,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
@@ -5509,7 +5507,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -5528,7 +5526,7 @@ namespace rtl_OStringBuffer
 
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
@@ -5547,7 +5545,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -5566,7 +5564,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
@@ -5585,7 +5583,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -5604,7 +5602,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
@@ -5623,7 +5621,7 @@ namespace rtl_OStringBuffer
 
         void append_031()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -5642,7 +5640,7 @@ namespace rtl_OStringBuffer
 
         void append_032()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
@@ -5661,7 +5659,7 @@ namespace rtl_OStringBuffer
 
         void append_033()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -5680,7 +5678,7 @@ namespace rtl_OStringBuffer
 
         void append_034()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
@@ -5699,7 +5697,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -5718,7 +5716,7 @@ namespace rtl_OStringBuffer
 
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
@@ -5737,7 +5735,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -5756,7 +5754,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
@@ -5775,7 +5773,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -5794,7 +5792,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
@@ -5813,7 +5811,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -5832,7 +5830,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
@@ -5851,7 +5849,7 @@ namespace rtl_OStringBuffer
 
         void append_043()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -5870,7 +5868,7 @@ namespace rtl_OStringBuffer
 
         void append_044()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
@@ -5889,7 +5887,7 @@ namespace rtl_OStringBuffer
 
         void append_045()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -5908,7 +5906,7 @@ namespace rtl_OStringBuffer
 
         void append_046()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
@@ -5927,7 +5925,7 @@ namespace rtl_OStringBuffer
 
         void append_047()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -5946,7 +5944,7 @@ namespace rtl_OStringBuffer
 
         void append_048()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
@@ -5965,7 +5963,7 @@ namespace rtl_OStringBuffer
 
         void append_049()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -5984,7 +5982,7 @@ namespace rtl_OStringBuffer
 
         void append_050()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
@@ -6057,7 +6055,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
@@ -6076,7 +6074,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
@@ -6096,7 +6094,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
@@ -6116,7 +6114,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
@@ -6136,7 +6134,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
@@ -6155,7 +6153,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
@@ -6175,7 +6173,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
@@ -6195,7 +6193,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
@@ -6215,7 +6213,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
@@ -6234,7 +6232,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
@@ -6254,7 +6252,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
@@ -6274,7 +6272,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
@@ -6294,7 +6292,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
@@ -6313,7 +6311,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
@@ -6333,7 +6331,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
@@ -6353,7 +6351,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
@@ -6373,7 +6371,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
@@ -6392,7 +6390,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
@@ -6412,7 +6410,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
@@ -6432,7 +6430,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
@@ -6452,7 +6450,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
@@ -6471,7 +6469,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
@@ -6491,7 +6489,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
@@ -6511,7 +6509,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
@@ -6531,7 +6529,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
@@ -6550,7 +6548,7 @@ namespace rtl_OStringBuffer
 
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
@@ -6570,7 +6568,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
@@ -6590,7 +6588,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
@@ -6610,7 +6608,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
@@ -6629,7 +6627,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
@@ -6649,7 +6647,7 @@ namespace rtl_OStringBuffer
 
         void append_031()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
@@ -6669,7 +6667,7 @@ namespace rtl_OStringBuffer
 
         void append_032()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
@@ -6689,7 +6687,7 @@ namespace rtl_OStringBuffer
 
         void append_033()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
@@ -6708,7 +6706,7 @@ namespace rtl_OStringBuffer
 
         void append_034()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
@@ -6728,7 +6726,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
@@ -6748,7 +6746,7 @@ namespace rtl_OStringBuffer
 
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
@@ -6768,7 +6766,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
@@ -6787,7 +6785,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
@@ -6807,7 +6805,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
@@ -6827,7 +6825,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
@@ -6847,7 +6845,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
@@ -6866,7 +6864,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
@@ -6886,7 +6884,7 @@ namespace rtl_OStringBuffer
 
         void append_043()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
@@ -6906,7 +6904,7 @@ namespace rtl_OStringBuffer
 
         void append_044()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
@@ -6926,7 +6924,7 @@ namespace rtl_OStringBuffer
 
         void append_045()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
@@ -6945,7 +6943,7 @@ namespace rtl_OStringBuffer
 
         void append_046()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
@@ -6965,7 +6963,7 @@ namespace rtl_OStringBuffer
 
         void append_047()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
@@ -6985,7 +6983,7 @@ namespace rtl_OStringBuffer
 
         void append_048()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
@@ -7005,7 +7003,7 @@ namespace rtl_OStringBuffer
 
         void append_049()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
@@ -7024,7 +7022,7 @@ namespace rtl_OStringBuffer
 
         void append_050()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
@@ -7044,7 +7042,7 @@ namespace rtl_OStringBuffer
 
         void append_051()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
@@ -7064,7 +7062,7 @@ namespace rtl_OStringBuffer
 
         void append_052()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
@@ -7084,7 +7082,7 @@ namespace rtl_OStringBuffer
 
         void append_053()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
@@ -7103,7 +7101,7 @@ namespace rtl_OStringBuffer
 
         void append_054()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
@@ -7123,7 +7121,7 @@ namespace rtl_OStringBuffer
 
         void append_055()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
@@ -7143,7 +7141,7 @@ namespace rtl_OStringBuffer
 
         void append_056()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
@@ -7163,7 +7161,7 @@ namespace rtl_OStringBuffer
 
         void append_057()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
@@ -7182,7 +7180,7 @@ namespace rtl_OStringBuffer
 
         void append_058()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
@@ -7202,7 +7200,7 @@ namespace rtl_OStringBuffer
 
         void append_059()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
@@ -7222,7 +7220,7 @@ namespace rtl_OStringBuffer
 
         void append_060()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
@@ -7242,7 +7240,7 @@ namespace rtl_OStringBuffer
 
         void append_061()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
@@ -7261,7 +7259,7 @@ namespace rtl_OStringBuffer
 
         void append_062()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
@@ -7281,7 +7279,7 @@ namespace rtl_OStringBuffer
 
         void append_063()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
@@ -7301,7 +7299,7 @@ namespace rtl_OStringBuffer
 
         void append_064()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
@@ -7321,7 +7319,7 @@ namespace rtl_OStringBuffer
 
         void append_065()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
@@ -7340,7 +7338,7 @@ namespace rtl_OStringBuffer
 
         void append_066()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
@@ -7360,7 +7358,7 @@ namespace rtl_OStringBuffer
 
         void append_067()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
@@ -7380,7 +7378,7 @@ namespace rtl_OStringBuffer
 
         void append_068()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
@@ -7400,7 +7398,7 @@ namespace rtl_OStringBuffer
 
         void append_069()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
@@ -7419,7 +7417,7 @@ namespace rtl_OStringBuffer
 
         void append_070()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
@@ -7439,7 +7437,7 @@ namespace rtl_OStringBuffer
 
         void append_071()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
@@ -7459,7 +7457,7 @@ namespace rtl_OStringBuffer
 
         void append_072()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
@@ -7479,7 +7477,7 @@ namespace rtl_OStringBuffer
 
         void append_073()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
@@ -7498,7 +7496,7 @@ namespace rtl_OStringBuffer
 
         void append_074()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
@@ -7518,7 +7516,7 @@ namespace rtl_OStringBuffer
 
         void append_075()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
@@ -7538,7 +7536,7 @@ namespace rtl_OStringBuffer
 
         void append_076()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
@@ -7558,7 +7556,7 @@ namespace rtl_OStringBuffer
 
         void append_077()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
@@ -7577,7 +7575,7 @@ namespace rtl_OStringBuffer
 
         void append_078()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
@@ -7597,7 +7595,7 @@ namespace rtl_OStringBuffer
 
         void append_079()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
@@ -7617,7 +7615,7 @@ namespace rtl_OStringBuffer
 
         void append_080()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
@@ -7637,7 +7635,7 @@ namespace rtl_OStringBuffer
 
         void append_081()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
@@ -7656,7 +7654,7 @@ namespace rtl_OStringBuffer
 
         void append_082()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
@@ -7676,7 +7674,7 @@ namespace rtl_OStringBuffer
 
         void append_083()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
@@ -7696,7 +7694,7 @@ namespace rtl_OStringBuffer
 
         void append_084()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
@@ -7716,7 +7714,7 @@ namespace rtl_OStringBuffer
 
         void append_085()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
@@ -7735,7 +7733,7 @@ namespace rtl_OStringBuffer
 
         void append_086()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
@@ -7755,7 +7753,7 @@ namespace rtl_OStringBuffer
 
         void append_087()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
@@ -7775,7 +7773,7 @@ namespace rtl_OStringBuffer
 
         void append_088()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
@@ -7795,7 +7793,7 @@ namespace rtl_OStringBuffer
 
         void append_089()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
@@ -7814,7 +7812,7 @@ namespace rtl_OStringBuffer
 
         void append_090()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
@@ -7834,7 +7832,7 @@ namespace rtl_OStringBuffer
 
         void append_091()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
@@ -7854,7 +7852,7 @@ namespace rtl_OStringBuffer
 
         void append_092()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
@@ -7874,7 +7872,7 @@ namespace rtl_OStringBuffer
 
         void append_093()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
@@ -7893,7 +7891,7 @@ namespace rtl_OStringBuffer
 
         void append_094()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
@@ -7913,7 +7911,7 @@ namespace rtl_OStringBuffer
 
         void append_095()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
@@ -7933,7 +7931,7 @@ namespace rtl_OStringBuffer
 
         void append_096()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
@@ -7953,7 +7951,7 @@ namespace rtl_OStringBuffer
 
         void append_097()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
@@ -7972,7 +7970,7 @@ namespace rtl_OStringBuffer
 
         void append_098()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
@@ -7991,7 +7989,7 @@ namespace rtl_OStringBuffer
 
         void append_099()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
@@ -8010,7 +8008,7 @@ namespace rtl_OStringBuffer
 
         void append_100()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
@@ -8097,7 +8095,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr59 );
             sal_Int32              input = 11;
 
@@ -8114,7 +8112,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr62 );
             sal_Int32              input = 0;
 
@@ -8131,7 +8129,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr63 );
             sal_Int32              input = -11;
 
@@ -8148,7 +8146,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr64 );
             sal_Int32              input = 2147483647;
 
@@ -8165,7 +8163,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr65 );
             sal_Int32              input = kNonSInt32Max;
 
@@ -8182,7 +8180,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr60 );
             sal_Int32              input = 11;
 
@@ -8199,7 +8197,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr66 );
             sal_Int32              input = 0;
 
@@ -8216,7 +8214,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr67 );
             sal_Int32              input = -11;
 
@@ -8233,7 +8231,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr68 );
             sal_Int32              input = 2147483647;
 
@@ -8250,7 +8248,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr69 );
             sal_Int32              input = SAL_MIN_INT32 /*-2147483648*/;
 
@@ -8267,7 +8265,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr60 );
             sal_Int32              input = 11;
 
@@ -8284,7 +8282,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr66 );
             sal_Int32              input = 0;
 
@@ -8301,7 +8299,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr67 );
             sal_Int32              input = -11;
 
@@ -8318,7 +8316,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr68 );
             sal_Int32              input = 2147483647;
 
@@ -8335,7 +8333,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr69 );
             sal_Int32              input = SAL_MIN_INT32;
 
@@ -8352,7 +8350,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr60 );
             sal_Int32              input = 11;
 
@@ -8369,7 +8367,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr66 );
             sal_Int32              input = 0;
 
@@ -8386,7 +8384,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr67 );
             sal_Int32              input = -11;
 
@@ -8403,7 +8401,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr68 );
             sal_Int32              input = 2147483647;
 
@@ -8420,7 +8418,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr69 );
             sal_Int32              input = SAL_MIN_INT32;
 
@@ -8437,7 +8435,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr61 );
             sal_Int32              input = 11;
 
@@ -8454,7 +8452,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr70 );
             sal_Int32              input = 0;
 
@@ -8471,7 +8469,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr71 );
             sal_Int32              input = -11;
 
@@ -8488,7 +8486,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr72 );
             sal_Int32              input = 2147483647;
 
@@ -8505,7 +8503,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr73 );
             sal_Int32              input = SAL_MIN_INT32;
 
@@ -8522,7 +8520,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             OString                expVal( kTestStr60 );
             sal_Int32              input = 11;
 
@@ -8539,7 +8537,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             OString                expVal( kTestStr66 );
             sal_Int32              input = 0;
 
@@ -8556,7 +8554,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             OString                expVal( kTestStr67 );
             sal_Int32              input = -11;
 
@@ -8573,7 +8571,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             OString                expVal( kTestStr68 );
             sal_Int32              input = 2147483647;
 
@@ -8590,7 +8588,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             OString                expVal( kTestStr69 );
             sal_Int32              input = SAL_MIN_INT32;
 
@@ -8664,7 +8662,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
@@ -8683,7 +8681,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
@@ -8702,7 +8700,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
@@ -8721,7 +8719,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
@@ -8740,7 +8738,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
@@ -8759,7 +8757,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
@@ -8778,7 +8776,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
@@ -8797,7 +8795,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
@@ -8816,7 +8814,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64             input = 0;
             sal_Int16              radix = 10;
@@ -8835,7 +8833,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
@@ -8854,7 +8852,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
@@ -8873,7 +8871,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
@@ -8892,7 +8890,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
@@ -8911,7 +8909,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
@@ -8930,7 +8928,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
@@ -8949,7 +8947,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
@@ -8968,7 +8966,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
@@ -8987,7 +8985,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
@@ -9006,7 +9004,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
@@ -9025,7 +9023,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
@@ -9044,7 +9042,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
@@ -9063,7 +9061,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
@@ -9082,7 +9080,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
@@ -9101,7 +9099,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
@@ -9120,7 +9118,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
@@ -9139,7 +9137,7 @@ namespace rtl_OStringBuffer
 
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
@@ -9158,7 +9156,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
@@ -9177,7 +9175,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
@@ -9196,7 +9194,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
@@ -9215,7 +9213,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
@@ -9234,7 +9232,7 @@ namespace rtl_OStringBuffer
 
         void append_031()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
@@ -9253,7 +9251,7 @@ namespace rtl_OStringBuffer
 
         void append_032()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
@@ -9272,7 +9270,7 @@ namespace rtl_OStringBuffer
 
         void append_033()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
@@ -9291,7 +9289,7 @@ namespace rtl_OStringBuffer
 
         void append_034()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
@@ -9310,7 +9308,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
@@ -9329,7 +9327,7 @@ namespace rtl_OStringBuffer
 
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
@@ -9348,7 +9346,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
@@ -9367,7 +9365,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
@@ -9386,7 +9384,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
@@ -9405,7 +9403,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
@@ -9424,7 +9422,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
@@ -9443,7 +9441,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
@@ -9462,7 +9460,7 @@ namespace rtl_OStringBuffer
 
         void append_043()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
@@ -9481,7 +9479,7 @@ namespace rtl_OStringBuffer
 
         void append_044()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
@@ -9500,7 +9498,7 @@ namespace rtl_OStringBuffer
 
         void append_045()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
@@ -9519,7 +9517,7 @@ namespace rtl_OStringBuffer
 
         void append_046()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
@@ -9538,7 +9536,7 @@ namespace rtl_OStringBuffer
 
         void append_047()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
@@ -9557,7 +9555,7 @@ namespace rtl_OStringBuffer
 
         void append_048()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
@@ -9576,7 +9574,7 @@ namespace rtl_OStringBuffer
 
         void append_049()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
@@ -9595,7 +9593,7 @@ namespace rtl_OStringBuffer
 
         void append_050()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
@@ -9614,7 +9612,7 @@ namespace rtl_OStringBuffer
 
         void append_051()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
@@ -9633,7 +9631,7 @@ namespace rtl_OStringBuffer
 
         void append_052()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
@@ -9652,7 +9650,7 @@ namespace rtl_OStringBuffer
 
         void append_053()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
@@ -9671,7 +9669,7 @@ namespace rtl_OStringBuffer
 
         void append_054()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
@@ -9690,7 +9688,7 @@ namespace rtl_OStringBuffer
 
         void append_055()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
@@ -9709,7 +9707,7 @@ namespace rtl_OStringBuffer
 
         void append_056()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
@@ -9728,7 +9726,7 @@ namespace rtl_OStringBuffer
 
         void append_057()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
@@ -9747,7 +9745,7 @@ namespace rtl_OStringBuffer
 
         void append_058()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
@@ -9766,7 +9764,7 @@ namespace rtl_OStringBuffer
 
         void append_059()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
@@ -9785,7 +9783,7 @@ namespace rtl_OStringBuffer
 
         void append_060()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
@@ -9804,7 +9802,7 @@ namespace rtl_OStringBuffer
 
         void append_061()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
@@ -9823,7 +9821,7 @@ namespace rtl_OStringBuffer
 
         void append_062()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
@@ -9842,7 +9840,7 @@ namespace rtl_OStringBuffer
 
         void append_063()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
@@ -9861,7 +9859,7 @@ namespace rtl_OStringBuffer
 
         void append_064()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
@@ -9880,7 +9878,7 @@ namespace rtl_OStringBuffer
 
         void append_065()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
@@ -9899,7 +9897,7 @@ namespace rtl_OStringBuffer
 
         void append_066()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
@@ -9918,7 +9916,7 @@ namespace rtl_OStringBuffer
 
         void append_067()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
@@ -9937,7 +9935,7 @@ namespace rtl_OStringBuffer
 
         void append_068()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
@@ -9956,7 +9954,7 @@ namespace rtl_OStringBuffer
 
         void append_069()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
@@ -9975,7 +9973,7 @@ namespace rtl_OStringBuffer
 
         void append_070()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
@@ -9994,7 +9992,7 @@ namespace rtl_OStringBuffer
 
         void append_071()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
@@ -10013,7 +10011,7 @@ namespace rtl_OStringBuffer
 
         void append_072()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
@@ -10032,7 +10030,7 @@ namespace rtl_OStringBuffer
 
         void append_073()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
@@ -10051,7 +10049,7 @@ namespace rtl_OStringBuffer
 
         void append_074()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
@@ -10070,7 +10068,7 @@ namespace rtl_OStringBuffer
 
         void append_075()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
@@ -10089,7 +10087,7 @@ namespace rtl_OStringBuffer
 
         void append_076()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
@@ -10108,7 +10106,7 @@ namespace rtl_OStringBuffer
 
         void append_077()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
@@ -10127,7 +10125,7 @@ namespace rtl_OStringBuffer
 
         void append_078()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
@@ -10146,7 +10144,7 @@ namespace rtl_OStringBuffer
 
         void append_079()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
@@ -10165,7 +10163,7 @@ namespace rtl_OStringBuffer
 
         void append_080()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
@@ -10184,7 +10182,7 @@ namespace rtl_OStringBuffer
 
         void append_081()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
@@ -10203,7 +10201,7 @@ namespace rtl_OStringBuffer
 
         void append_082()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
@@ -10222,7 +10220,7 @@ namespace rtl_OStringBuffer
 
         void append_083()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
@@ -10241,7 +10239,7 @@ namespace rtl_OStringBuffer
 
         void append_084()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
@@ -10260,7 +10258,7 @@ namespace rtl_OStringBuffer
 
         void append_085()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
@@ -10279,7 +10277,7 @@ namespace rtl_OStringBuffer
 
         void append_086()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
@@ -10298,7 +10296,7 @@ namespace rtl_OStringBuffer
 
         void append_087()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
@@ -10317,7 +10315,7 @@ namespace rtl_OStringBuffer
 
         void append_088()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
@@ -10336,7 +10334,7 @@ namespace rtl_OStringBuffer
 
         void append_089()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
@@ -10355,7 +10353,7 @@ namespace rtl_OStringBuffer
 
         void append_090()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
@@ -10374,7 +10372,7 @@ namespace rtl_OStringBuffer
 
         void append_091()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
@@ -10393,7 +10391,7 @@ namespace rtl_OStringBuffer
 
         void append_092()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
@@ -10412,7 +10410,7 @@ namespace rtl_OStringBuffer
 
         void append_093()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
@@ -10431,7 +10429,7 @@ namespace rtl_OStringBuffer
 
         void append_094()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
@@ -10450,7 +10448,7 @@ namespace rtl_OStringBuffer
 
         void append_095()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
@@ -10469,7 +10467,7 @@ namespace rtl_OStringBuffer
 
         void append_096()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
@@ -10488,7 +10486,7 @@ namespace rtl_OStringBuffer
 
         void append_097()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
@@ -10507,7 +10505,7 @@ namespace rtl_OStringBuffer
 
         void append_098()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
@@ -10526,7 +10524,7 @@ namespace rtl_OStringBuffer
 
         void append_099()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
@@ -10545,7 +10543,7 @@ namespace rtl_OStringBuffer
 
         void append_100()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
@@ -10643,7 +10641,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -10662,7 +10660,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
@@ -10681,7 +10679,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -10700,7 +10698,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64             input = kSInt64Max;
             sal_Int16              radix = 8;
@@ -10719,7 +10717,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -10738,7 +10736,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
@@ -10757,7 +10755,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -10776,7 +10774,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
@@ -10795,7 +10793,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -10814,7 +10812,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
@@ -10833,7 +10831,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -10852,7 +10850,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
@@ -10871,7 +10869,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -10890,7 +10888,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
@@ -10909,7 +10907,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -10928,7 +10926,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
@@ -10947,7 +10945,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -10966,7 +10964,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
@@ -10985,7 +10983,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -11004,7 +11002,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
@@ -11023,7 +11021,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -11042,7 +11040,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
@@ -11061,7 +11059,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -11080,7 +11078,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
@@ -11099,7 +11097,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -11118,7 +11116,7 @@ namespace rtl_OStringBuffer
 
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
@@ -11137,7 +11135,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -11156,7 +11154,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
@@ -11175,7 +11173,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -11194,7 +11192,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
@@ -11213,7 +11211,7 @@ namespace rtl_OStringBuffer
 
         void append_031()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -11232,7 +11230,7 @@ namespace rtl_OStringBuffer
 
         void append_032()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
@@ -11251,7 +11249,7 @@ namespace rtl_OStringBuffer
 
         void append_033()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -11270,7 +11268,7 @@ namespace rtl_OStringBuffer
 
         void append_034()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
@@ -11289,7 +11287,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -11308,7 +11306,7 @@ namespace rtl_OStringBuffer
 
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
@@ -11327,7 +11325,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -11346,7 +11344,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
@@ -11365,7 +11363,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -11384,7 +11382,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
@@ -11403,7 +11401,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
@@ -11422,7 +11420,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
@@ -11441,7 +11439,7 @@ namespace rtl_OStringBuffer
 
         void append_043()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
@@ -11460,7 +11458,7 @@ namespace rtl_OStringBuffer
 
         void append_044()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
@@ -11479,7 +11477,7 @@ namespace rtl_OStringBuffer
 
         void append_045()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
@@ -11498,7 +11496,7 @@ namespace rtl_OStringBuffer
 
         void append_046()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
@@ -11517,7 +11515,7 @@ namespace rtl_OStringBuffer
 
         void append_047()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
@@ -11536,7 +11534,7 @@ namespace rtl_OStringBuffer
 
         void append_048()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
@@ -11555,7 +11553,7 @@ namespace rtl_OStringBuffer
 
         void append_049()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
@@ -11574,7 +11572,7 @@ namespace rtl_OStringBuffer
 
         void append_050()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
@@ -11647,7 +11645,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
@@ -11666,7 +11664,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
@@ -11686,7 +11684,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
@@ -11706,7 +11704,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
@@ -11726,7 +11724,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
@@ -11745,7 +11743,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
@@ -11765,7 +11763,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
@@ -11785,7 +11783,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
@@ -11805,7 +11803,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
@@ -11824,7 +11822,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
@@ -11844,7 +11842,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
@@ -11864,7 +11862,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
@@ -11884,7 +11882,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
@@ -11903,7 +11901,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
@@ -11923,7 +11921,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
@@ -11943,7 +11941,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
@@ -11963,7 +11961,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
@@ -11982,7 +11980,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
@@ -12002,7 +12000,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
@@ -12022,7 +12020,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
@@ -12042,7 +12040,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
@@ -12061,7 +12059,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
@@ -12081,7 +12079,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
@@ -12101,7 +12099,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
@@ -12121,7 +12119,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
@@ -12140,7 +12138,7 @@ namespace rtl_OStringBuffer
 
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
@@ -12160,7 +12158,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
@@ -12180,7 +12178,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
@@ -12200,7 +12198,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
@@ -12219,7 +12217,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
@@ -12239,7 +12237,7 @@ namespace rtl_OStringBuffer
 
         void append_031()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
@@ -12259,7 +12257,7 @@ namespace rtl_OStringBuffer
 
         void append_032()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
@@ -12279,7 +12277,7 @@ namespace rtl_OStringBuffer
 
         void append_033()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
@@ -12298,7 +12296,7 @@ namespace rtl_OStringBuffer
 
         void append_034()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
@@ -12318,7 +12316,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
@@ -12338,7 +12336,7 @@ namespace rtl_OStringBuffer
 
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
@@ -12358,7 +12356,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
@@ -12377,7 +12375,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
@@ -12397,7 +12395,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
@@ -12417,7 +12415,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
@@ -12437,7 +12435,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
@@ -12456,7 +12454,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
@@ -12476,7 +12474,7 @@ namespace rtl_OStringBuffer
 
         void append_043()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
@@ -12496,7 +12494,7 @@ namespace rtl_OStringBuffer
 
         void append_044()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
@@ -12516,7 +12514,7 @@ namespace rtl_OStringBuffer
 
         void append_045()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
@@ -12535,7 +12533,7 @@ namespace rtl_OStringBuffer
 
         void append_046()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
@@ -12555,7 +12553,7 @@ namespace rtl_OStringBuffer
 
         void append_047()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
@@ -12575,7 +12573,7 @@ namespace rtl_OStringBuffer
 
         void append_048()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
@@ -12595,7 +12593,7 @@ namespace rtl_OStringBuffer
 
         void append_049()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
@@ -12614,7 +12612,7 @@ namespace rtl_OStringBuffer
 
         void append_050()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
@@ -12634,7 +12632,7 @@ namespace rtl_OStringBuffer
 
         void append_051()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
@@ -12654,7 +12652,7 @@ namespace rtl_OStringBuffer
 
         void append_052()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
@@ -12674,7 +12672,7 @@ namespace rtl_OStringBuffer
 
         void append_053()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
@@ -12693,7 +12691,7 @@ namespace rtl_OStringBuffer
 
         void append_054()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
@@ -12713,7 +12711,7 @@ namespace rtl_OStringBuffer
 
         void append_055()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
@@ -12733,7 +12731,7 @@ namespace rtl_OStringBuffer
 
         void append_056()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
@@ -12753,7 +12751,7 @@ namespace rtl_OStringBuffer
 
         void append_057()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
@@ -12772,7 +12770,7 @@ namespace rtl_OStringBuffer
 
         void append_058()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
@@ -12792,7 +12790,7 @@ namespace rtl_OStringBuffer
 
         void append_059()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
@@ -12812,7 +12810,7 @@ namespace rtl_OStringBuffer
 
         void append_060()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
@@ -12832,7 +12830,7 @@ namespace rtl_OStringBuffer
 
         void append_061()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
@@ -12851,7 +12849,7 @@ namespace rtl_OStringBuffer
 
         void append_062()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
@@ -12871,7 +12869,7 @@ namespace rtl_OStringBuffer
 
         void append_063()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
@@ -12891,7 +12889,7 @@ namespace rtl_OStringBuffer
 
         void append_064()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
@@ -12911,7 +12909,7 @@ namespace rtl_OStringBuffer
 
         void append_065()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
@@ -12930,7 +12928,7 @@ namespace rtl_OStringBuffer
 
         void append_066()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
@@ -12950,7 +12948,7 @@ namespace rtl_OStringBuffer
 
         void append_067()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
@@ -12970,7 +12968,7 @@ namespace rtl_OStringBuffer
 
         void append_068()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
@@ -12990,7 +12988,7 @@ namespace rtl_OStringBuffer
 
         void append_069()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
@@ -13009,7 +13007,7 @@ namespace rtl_OStringBuffer
 
         void append_070()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
@@ -13029,7 +13027,7 @@ namespace rtl_OStringBuffer
 
         void append_071()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
@@ -13049,7 +13047,7 @@ namespace rtl_OStringBuffer
 
         void append_072()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
@@ -13069,7 +13067,7 @@ namespace rtl_OStringBuffer
 
         void append_073()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
@@ -13088,7 +13086,7 @@ namespace rtl_OStringBuffer
 
         void append_074()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
@@ -13108,7 +13106,7 @@ namespace rtl_OStringBuffer
 
         void append_075()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
@@ -13128,7 +13126,7 @@ namespace rtl_OStringBuffer
 
         void append_076()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
@@ -13148,7 +13146,7 @@ namespace rtl_OStringBuffer
 
         void append_077()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
@@ -13167,7 +13165,7 @@ namespace rtl_OStringBuffer
 
         void append_078()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
@@ -13187,7 +13185,7 @@ namespace rtl_OStringBuffer
 
         void append_079()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
@@ -13207,7 +13205,7 @@ namespace rtl_OStringBuffer
 
         void append_080()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
@@ -13227,7 +13225,7 @@ namespace rtl_OStringBuffer
 
         void append_081()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
@@ -13246,7 +13244,7 @@ namespace rtl_OStringBuffer
 
         void append_082()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
@@ -13266,7 +13264,7 @@ namespace rtl_OStringBuffer
 
         void append_083()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
@@ -13286,7 +13284,7 @@ namespace rtl_OStringBuffer
 
         void append_084()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
@@ -13306,7 +13304,7 @@ namespace rtl_OStringBuffer
 
         void append_085()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
@@ -13325,7 +13323,7 @@ namespace rtl_OStringBuffer
 
         void append_086()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
@@ -13345,7 +13343,7 @@ namespace rtl_OStringBuffer
 
         void append_087()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
@@ -13365,7 +13363,7 @@ namespace rtl_OStringBuffer
 
         void append_088()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
@@ -13385,7 +13383,7 @@ namespace rtl_OStringBuffer
 
         void append_089()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
@@ -13404,7 +13402,7 @@ namespace rtl_OStringBuffer
 
         void append_090()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
@@ -13424,7 +13422,7 @@ namespace rtl_OStringBuffer
 
         void append_091()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
@@ -13444,7 +13442,7 @@ namespace rtl_OStringBuffer
 
         void append_092()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
@@ -13464,7 +13462,7 @@ namespace rtl_OStringBuffer
 
         void append_093()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
@@ -13483,7 +13481,7 @@ namespace rtl_OStringBuffer
 
         void append_094()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
@@ -13503,7 +13501,7 @@ namespace rtl_OStringBuffer
 
         void append_095()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
@@ -13523,7 +13521,7 @@ namespace rtl_OStringBuffer
 
         void append_096()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
@@ -13543,7 +13541,7 @@ namespace rtl_OStringBuffer
 
         void append_097()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
@@ -13562,7 +13560,7 @@ namespace rtl_OStringBuffer
 
         void append_098()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
@@ -13582,7 +13580,7 @@ namespace rtl_OStringBuffer
 
         void append_099()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
@@ -13602,7 +13600,7 @@ namespace rtl_OStringBuffer
 
         void append_100()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( aStrBuf.getStr() );
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
@@ -13690,7 +13688,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr59 );
             sal_Int64              input = 11;
 
@@ -13707,7 +13705,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr62 );
             sal_Int64              input = 0;
 
@@ -13724,7 +13722,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr63 );
             sal_Int64              input = -11;
 
@@ -13741,7 +13739,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr116 );
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
@@ -13757,7 +13755,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             OString                expVal( kTestStr117 );
             sal_Int64              input = SAL_MIN_INT64/*-9223372036854775808*/; // LLA: this is not the same :-( kNonSInt64Max;
 
@@ -13774,7 +13772,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr60 );
             sal_Int64              input = 11;
 
@@ -13791,7 +13789,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr66 );
             sal_Int64              input = 0;
 
@@ -13808,7 +13806,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr67 );
             sal_Int64              input = -11;
 
@@ -13825,7 +13823,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr118 );
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
@@ -13841,7 +13839,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             OString                expVal( kTestStr119 );
             sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
@@ -13858,7 +13856,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr60 );
             sal_Int64              input = 11;
 
@@ -13875,7 +13873,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr66 );
             sal_Int64              input = 0;
 
@@ -13892,7 +13890,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr67 );
             sal_Int64              input = -11;
 
@@ -13909,7 +13907,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr118 );
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
@@ -13925,7 +13923,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             OString                expVal( kTestStr119 );
             sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
@@ -13942,7 +13940,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr60 );
             sal_Int64              input = 11;
 
@@ -13959,7 +13957,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr66 );
             sal_Int64              input = 0;
 
@@ -13976,7 +13974,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr67 );
             sal_Int64              input = -11;
 
@@ -13993,7 +13991,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr118 );
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
@@ -14009,7 +14007,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             OString                expVal( kTestStr119 );
             sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
@@ -14026,7 +14024,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr61 );
             sal_Int64              input = 11;
 
@@ -14043,7 +14041,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr70 );
             sal_Int64              input = 0;
 
@@ -14060,7 +14058,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr71 );
             sal_Int64              input = -11;
 
@@ -14077,7 +14075,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr120 );
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
@@ -14093,7 +14091,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             OString                expVal( kTestStr121 );
             sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
@@ -14110,7 +14108,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         void append_026()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr60 );
             sal_Int64              input = 11;
 
@@ -14127,7 +14125,7 @@ namespace rtl_OStringBuffer
 
         void append_027()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr66 );
             sal_Int64              input = 0;
 
@@ -14144,7 +14142,7 @@ namespace rtl_OStringBuffer
 
         void append_028()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr67 );
             sal_Int64              input = -11;
 
@@ -14161,7 +14159,7 @@ namespace rtl_OStringBuffer
 
         void append_029()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr118 );
             sal_Int64              input = 9223372036854775807;
 
@@ -14178,7 +14176,7 @@ namespace rtl_OStringBuffer
 
         void append_030()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr119 );
             sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
 
@@ -14235,7 +14233,7 @@ namespace rtl_OStringBuffer
     class checkfloat : public CppUnit::TestFixture
     {
     public:
-        bool checkIfStrBufContainAtPosTheFloat(rtl::OStringBuffer const& _sStrBuf, sal_Int32 _nLen, float _nFloat)
+        bool checkIfStrBufContainAtPosTheFloat(OStringBuffer const& _sStrBuf, sal_Int32 _nLen, float _nFloat)
             {
                 OString sFloatValue;
                 sFloatValue = OString::number(_nFloat);
@@ -14262,7 +14260,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.0"));
 
             // LLA:
@@ -14282,7 +14280,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14298,7 +14296,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14314,7 +14312,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14330,7 +14328,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14346,7 +14344,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14362,7 +14360,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14378,7 +14376,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14394,7 +14392,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14410,7 +14408,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14426,7 +14424,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14442,7 +14440,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14458,7 +14456,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14474,7 +14472,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14490,7 +14488,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14506,7 +14504,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14522,7 +14520,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14538,7 +14536,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14554,7 +14552,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14570,7 +14568,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14586,7 +14584,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14602,7 +14600,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14618,7 +14616,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14634,7 +14632,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14650,7 +14648,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14667,7 +14665,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14683,7 +14681,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14699,7 +14697,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14715,7 +14713,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14731,7 +14729,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14747,7 +14745,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14763,7 +14761,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14832,7 +14830,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14848,7 +14846,7 @@ namespace rtl_OStringBuffer
 
         void append_002()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14864,7 +14862,7 @@ namespace rtl_OStringBuffer
 
         void append_003()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14880,7 +14878,7 @@ namespace rtl_OStringBuffer
 
         void append_004()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14896,7 +14894,7 @@ namespace rtl_OStringBuffer
 
         void append_005()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14912,7 +14910,7 @@ namespace rtl_OStringBuffer
 
         void append_006()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14928,7 +14926,7 @@ namespace rtl_OStringBuffer
 
         void append_007()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             float                  input = static_cast<float>(atof("-3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14944,7 +14942,7 @@ namespace rtl_OStringBuffer
 
         void append_008()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14960,7 +14958,7 @@ namespace rtl_OStringBuffer
 
         void append_009()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14976,7 +14974,7 @@ namespace rtl_OStringBuffer
 
         void append_010()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14992,7 +14990,7 @@ namespace rtl_OStringBuffer
 
         void append_011()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15008,7 +15006,7 @@ namespace rtl_OStringBuffer
 
         void append_012()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15024,7 +15022,7 @@ namespace rtl_OStringBuffer
 
         void append_013()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15040,7 +15038,7 @@ namespace rtl_OStringBuffer
 
         void append_014()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[1] );
+            OStringBuffer   aStrBuf( arrOUS[1] );
             float                  input = static_cast<float>(atof("-3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15056,7 +15054,7 @@ namespace rtl_OStringBuffer
 
         void append_015()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15072,7 +15070,7 @@ namespace rtl_OStringBuffer
 
         void append_016()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15088,7 +15086,7 @@ namespace rtl_OStringBuffer
 
         void append_017()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15104,7 +15102,7 @@ namespace rtl_OStringBuffer
 
         void append_018()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15120,7 +15118,7 @@ namespace rtl_OStringBuffer
 
         void append_019()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15136,7 +15134,7 @@ namespace rtl_OStringBuffer
 
         void append_020()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15152,7 +15150,7 @@ namespace rtl_OStringBuffer
 
         void append_021()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[2] );
+            OStringBuffer   aStrBuf( arrOUS[2] );
             float                  input = static_cast<float>(atof("-3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15168,7 +15166,7 @@ namespace rtl_OStringBuffer
 
         void append_022()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15184,7 +15182,7 @@ namespace rtl_OStringBuffer
 
         void append_023()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15200,7 +15198,7 @@ namespace rtl_OStringBuffer
 
         void append_024()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15216,7 +15214,7 @@ namespace rtl_OStringBuffer
 
         void append_025()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[3] );
+            OStringBuffer   aStrBuf( arrOUS[3] );
             float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15233,7 +15231,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         void append_036()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15249,7 +15247,7 @@ namespace rtl_OStringBuffer
 
         void append_037()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15265,7 +15263,7 @@ namespace rtl_OStringBuffer
 
         void append_038()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15281,7 +15279,7 @@ namespace rtl_OStringBuffer
 
         void append_039()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15297,7 +15295,7 @@ namespace rtl_OStringBuffer
 
         void append_040()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15313,7 +15311,7 @@ namespace rtl_OStringBuffer
 
         void append_041()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15329,7 +15327,7 @@ namespace rtl_OStringBuffer
 
         void append_042()
         {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OStringBuffer   aStrBuf( kSInt32Max );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15385,7 +15383,7 @@ namespace rtl_OStringBuffer
     class checkdouble : public CppUnit::TestFixture
     {
     public:
-        bool checkIfStrBufContainAtPosTheDouble(rtl::OStringBuffer const& _sStrBuf, sal_Int32 _nLen, double _nDouble)
+        bool checkIfStrBufContainAtPosTheDouble(OStringBuffer const& _sStrBuf, sal_Int32 _nLen, double _nDouble)
             {
                 OString sDoubleValue;
                 sDoubleValue = OString::number(_nDouble);
@@ -15412,7 +15410,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             double                 input = atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15428,7 +15426,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             double                 input = atof("3.141592653589793238462643");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15466,7 +15464,7 @@ namespace rtl_OStringBuffer
 
         void append_001()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[0] );
+            OStringBuffer   aStrBuf( arrOUS[0] );
             double                 input = atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15482,7 +15480,7 @@ namespace rtl_OStringBuffer
 
         void append_035()
         {
-            ::rtl::OStringBuffer   aStrBuf( arrOUS[4] );
+            OStringBuffer   aStrBuf( arrOUS[4] );
             double                 input = atof("-3.141592653589793238462643");
 
             sal_Int32 nLen = aStrBuf.getLength();

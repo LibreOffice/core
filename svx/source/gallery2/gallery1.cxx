@@ -53,7 +53,7 @@
 using namespace ::com::sun::star;
 
 
-static bool FileExists( const INetURLObject &rURL, const rtl::OUString &rExt )
+static bool FileExists( const INetURLObject &rURL, const OUString &rExt )
 {
     INetURLObject aURL( rURL );
     aURL.setExtension( rExt );

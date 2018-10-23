@@ -639,7 +639,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
         SfxStyleSheetBase* pSheet = rSourcePool.GetStyleSheetByPositionInIndex( *it );
         if( !pSheet )
             continue;
-        rtl::OUString aName( pSheet->GetName() );
+        OUString aName( pSheet->GetName() );
 
         // now check whether we already have a sheet with the same name
         std::vector<unsigned> aSheetsWithName = GetIndexedStyleSheets().FindPositionsByName(aName);

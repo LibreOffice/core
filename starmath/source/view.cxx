@@ -1608,7 +1608,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     if (aDataHelper.HasFormat(nId = SotClipboardFormatId::STRING))
                     {
                         // In case of FORMAT_STRING no stream exists, need to generate one
-                        ::rtl::OUString aString;
+                        OUString aString;
                         if (aDataHelper.GetString( nId, aString))
                         {
                             std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());

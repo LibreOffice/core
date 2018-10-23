@@ -313,7 +313,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
     {
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         URL aTargetURL;
-        aTargetURL.Complete = rtl::OUString::createFromAscii(m_bNewMenu ? aSlotNewDocDirect : aSlotAutoPilot);
+        aTargetURL.Complete = OUString::createFromAscii(m_bNewMenu ? aSlotNewDocDirect : aSlotAutoPilot);
         m_xURLTransformer->parseStrict( aTargetURL );
         Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
         if(xMenuItemDispatch == nullptr)

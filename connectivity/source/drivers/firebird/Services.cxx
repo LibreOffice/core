@@ -24,7 +24,6 @@
 #include <sal/types.h>
 
 using namespace connectivity::firebird;
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;

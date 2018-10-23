@@ -33,8 +33,8 @@ class valueOf : public CppUnit::TestFixture
 {
     void valueOf_float_test_impl(float _nValue)
         {
-            rtl::OString sValue;
-            sValue = rtl::OString::valueOf( _nValue );
+            OString sValue;
+            sValue = OString::valueOf( _nValue );
             printf("nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
             float nValueATOF = static_cast<float>(atof( sValue.getStr() ));
@@ -102,8 +102,8 @@ private:
 
     void valueOf_double_test_impl(double _nValue)
         {
-            rtl::OString sValue;
-            sValue = rtl::OString::valueOf( _nValue );
+            OString sValue;
+            sValue = OString::valueOf( _nValue );
             printf("nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
 
             double nValueATOF = atof( sValue.getStr() );
@@ -200,23 +200,23 @@ public:
             // testPrecision a;
         }
 
-    void toDouble_test_impl(rtl::OString const& _sValue)
+    void toDouble_test_impl(OString const& _sValue)
         {
             double nValueATOF = atof( _sValue.getStr() );
 
-            // rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
+            // OUString suValue = OUString::createFromAscii( _sValue.getStr() );
             double nValueToDouble = _sValue.toDouble();
 
             bool bEqualResult = is_double_equal(nValueToDouble, nValueATOF);
             CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
         }
 
-    void toDouble_test(rtl::OString const& _sValue)
+    void toDouble_test(OString const& _sValue)
         {
             toDouble_test_impl(_sValue);
 
             // test also the negative part.
-            rtl::OString sNegativValue("-");
+            OString sNegativValue("-");
             sNegativValue += _sValue;
             toDouble_test_impl(sNegativValue);
         }
@@ -246,64 +246,64 @@ public:
 
     void toDouble_test_3()
         {
-            rtl::OString sValue("3");
+            OString sValue("3");
             toDouble_test(sValue);
         }
     void toDouble_test_3_5()
         {
-            rtl::OString sValue("3.5");
+            OString sValue("3.5");
             toDouble_test(sValue);
         }
     void toDouble_test_3_0625()
         {
-            rtl::OString sValue("3.0625");
+            OString sValue("3.0625");
             toDouble_test(sValue);
         }
     void toDouble_test_pi()
         {
             // value from http://www.angio.net/pi/digits/50.txt
-            rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
+            OString sValue("3.141592653589793238462643383279502884197169399375");
             toDouble_test(sValue);
         }
 
     void toDouble_test_1()
         {
-            rtl::OString sValue("1");
+            OString sValue("1");
             toDouble_test(sValue);
         }
     void toDouble_test_10()
         {
-            rtl::OString sValue("10");
+            OString sValue("10");
             toDouble_test(sValue);
         }
     void toDouble_test_100()
         {
-            rtl::OString sValue("100");
+            OString sValue("100");
             toDouble_test(sValue);
         }
     void toDouble_test_1000()
         {
-            rtl::OString sValue("1000");
+            OString sValue("1000");
             toDouble_test(sValue);
         }
     void toDouble_test_10000()
         {
-            rtl::OString sValue("10000");
+            OString sValue("10000");
             toDouble_test(sValue);
         }
     void toDouble_test_1e99()
         {
-            rtl::OString sValue("1e99");
+            OString sValue("1e99");
             toDouble_test(sValue);
         }
     void toDouble_test_1e_n99()
         {
-            rtl::OString sValue("1e-99");
+            OString sValue("1e-99");
             toDouble_test(sValue);
         }
     void toDouble_test_1e308()
         {
-            rtl::OString sValue("1e308");
+            OString sValue("1e308");
             toDouble_test(sValue);
         }
 
@@ -337,12 +337,12 @@ class getToken : public CppUnit::TestFixture
 public:
     void getToken_000()
         {
-            rtl::OString sTokenStr;
+            OString sTokenStr;
 
             sal_Int32 nIndex = 0;
             do
             {
-                rtl::OString sToken = sTokenStr.getToken( 0, ';', nIndex );
+                OString sToken = sTokenStr.getToken( 0, ';', nIndex );
             }
             while ( nIndex >= 0 );
             // printf("Index %d\n", nIndex);
@@ -351,68 +351,68 @@ public:
 
     void getToken_001()
         {
-            rtl::OString sTokenStr = "a;b";
+            OString sTokenStr = "a;b";
 
             sal_Int32 nIndex = 0;
 
-            rtl::OString sToken = sTokenStr.getToken( 0, ';', nIndex );
+            OString sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
     void getToken_002()
         {
-            rtl::OString sTokenStr = "a;b.c";
+            OString sTokenStr = "a;b.c";
 
             sal_Int32 nIndex = 0;
 
-            rtl::OString sToken = sTokenStr.getToken( 0, ';', nIndex );
+            OString sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", sToken.equals("c") == sal_True);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
     void getToken_003()
         {
-            rtl::OString sTokenStr = "a;;b";
+            OString sTokenStr = "a;;b";
 
             sal_Int32 nIndex = 0;
 
-            rtl::OString sToken = sTokenStr.getToken( 0, ';', nIndex );
+            OString sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.isEmpty());
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
     void getToken_004()
         {
-            rtl::OString sTokenStr = "longer.then.ever.";
+            OString sTokenStr = "longer.then.ever.";
 
             sal_Int32 nIndex = 0;
 
-            rtl::OString sToken = sTokenStr.getToken( 0, '.', nIndex );
+            OString sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", sToken.equals("longer") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", sToken.equals("then") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", sToken.equals("ever") == sal_True);
 
-            /* rtl::OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
+            /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.isEmpty());
 
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
@@ -437,10 +437,10 @@ class replaceAt : public CppUnit::TestFixture
 {
 
 public:
-    sal_Bool check_replaceAt( const rtl::OString* expVal, const rtl::OString* input,
-        const rtl::OString* newStr, sal_Int32  index, sal_Int32 count)
+    sal_Bool check_replaceAt( const OString* expVal, const OString* input,
+        const OString* newStr, sal_Int32  index, sal_Int32 count)
     {
-         ::rtl::OString aStr1;
+         OString aStr1;
         aStr1= input->replaceAt( index, count, *newStr );
 
         printf("the result OString is %s#\n", aStr1.getStr() );
@@ -451,37 +451,37 @@ public:
 
    void replaceAt_001()
         {
-        sal_Bool bRes = check_replaceAt(new rtl::OString("Java@Sun"),
-            new rtl::OString("Sun java"), new rtl::OString("Java@Sun"), 0, 8 );
+        sal_Bool bRes = check_replaceAt(new OString("Java@Sun"),
+            new OString("Sun java"), new OString("Java@Sun"), 0, 8 );
             CPPUNIT_ASSERT_MESSAGE("string differs, replace whole string", bRes == sal_True);
         }
 
     void replaceAt_002()
         {
-            sal_Bool bRes = check_replaceAt(new rtl::OString("Sun Java desktop system"),
-            new rtl::OString("Sun "), new rtl::OString("Java desktop system"), 10, 8 );
+            sal_Bool bRes = check_replaceAt(new OString("Sun Java desktop system"),
+            new OString("Sun "), new OString("Java desktop system"), 10, 8 );
             CPPUNIT_ASSERT_MESSAGE("index > length of input string", bRes == sal_True);
         }
 
     void replaceAt_003()
         {
-            sal_Bool bRes = check_replaceAt(new rtl::OString("SuJava desktop system"),
-            new rtl::OString("Sun "), new rtl::OString("Java desktop system"), 2, 64 );
+            sal_Bool bRes = check_replaceAt(new OString("SuJava desktop system"),
+            new OString("Sun "), new OString("Java desktop system"), 2, 64 );
             CPPUNIT_ASSERT_MESSAGE("larger count", bRes == sal_True);
         }
 
     void replaceAt_004()
         {
 
-            sal_Bool bRes = check_replaceAt(new rtl::OString("Java desktop system"),
-            new rtl::OString("Sun "), new rtl::OString("Java desktop system"), -4, 8 );
+            sal_Bool bRes = check_replaceAt(new OString("Java desktop system"),
+            new OString("Sun "), new OString("Java desktop system"), -4, 8 );
             CPPUNIT_ASSERT_MESSAGE("navigate index", bRes == sal_True);
         }
     void replaceAt_005()
         {
 
-            sal_Bool bRes = check_replaceAt(new rtl::OString("Sun Jesktop System"),
-            new rtl::OString("Sun Java Desktop System"), new rtl::OString(""), 5, 5 );
+            sal_Bool bRes = check_replaceAt(new OString("Sun Jesktop System"),
+            new OString("Sun Java Desktop System"), new OString(""), 5, 5 );
             CPPUNIT_ASSERT_MESSAGE("replace with null string", bRes == sal_True);
         }
 

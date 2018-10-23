@@ -50,10 +50,10 @@ class  SVX_DLLPUBLIC NumSettings_Impl
         SvxAdjust       eNumAlign;
         long            nNumAlignAt;
         long            nNumIndentAt;
-        rtl::OUString   sPrefix;
-        rtl::OUString   sSuffix;
-        rtl::OUString   sBulletChar;
-        rtl::OUString   sBulletFont;
+        OUString   sPrefix;
+        OUString   sSuffix;
+        OUString   sBulletChar;
+        OUString   sBulletFont;
         SvxBrushItem   *pBrushItem;
         Size            aSize;
 
@@ -103,7 +103,7 @@ class  SVX_DLLPUBLIC OutlineSettings_Impl
 {
     public:
         bool            bIsCustomized;
-        rtl::OUString   sDescription;
+        OUString   sDescription;
         NumSettingsArr_Impl *pNumSettingsArr;
     public:
         OutlineSettings_Impl() :

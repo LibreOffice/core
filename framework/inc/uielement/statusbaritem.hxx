@@ -40,26 +40,26 @@ public:
     explicit StatusbarItem(
                             StatusBar              *pStatusBar,
                             sal_uInt16              nId,
-                            const rtl::OUString&   aCommand );
+                            const OUString&   aCommand );
     virtual ~StatusbarItem() override;
 
     void SAL_CALL disposing() override;
 
     // css::ui::XStatusbarItem Attributes
-    virtual ::rtl::OUString SAL_CALL getCommand() override;
+    virtual OUString SAL_CALL getCommand() override;
     virtual ::sal_uInt16 SAL_CALL getItemId() override;
     virtual ::sal_uInt32 SAL_CALL getWidth() override;
     virtual ::sal_uInt16 SAL_CALL getStyle() override;
     virtual ::sal_Int32 SAL_CALL getOffset() override;
     virtual css::awt::Rectangle SAL_CALL getItemRect() override;
-    virtual ::rtl::OUString SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const rtl::OUString& rText ) override;
-    virtual ::rtl::OUString SAL_CALL getHelpText() override;
-    virtual void SAL_CALL setHelpText( const rtl::OUString& rHelpText ) override;
-    virtual ::rtl::OUString SAL_CALL getQuickHelpText() override;
-    virtual void SAL_CALL setQuickHelpText( const rtl::OUString& rQuickHelpText ) override;
-    virtual ::rtl::OUString SAL_CALL getAccessibleName() override;
-    virtual void SAL_CALL setAccessibleName( const rtl::OUString& rAccessibleName ) override;
+    virtual OUString SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const OUString& rText ) override;
+    virtual OUString SAL_CALL getHelpText() override;
+    virtual void SAL_CALL setHelpText( const OUString& rHelpText ) override;
+    virtual OUString SAL_CALL getQuickHelpText() override;
+    virtual void SAL_CALL setQuickHelpText( const OUString& rQuickHelpText ) override;
+    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual void SAL_CALL setAccessibleName( const OUString& rAccessibleName ) override;
     virtual sal_Bool SAL_CALL getVisible() override;
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
 
@@ -70,7 +70,7 @@ private:
     VclPtr<StatusBar>       m_pStatusBar;
     sal_uInt16              m_nId;
     sal_uInt16              m_nStyle;
-    rtl::OUString           m_aCommand;
+    OUString           m_aCommand;
 
 };
 

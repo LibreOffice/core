@@ -38,12 +38,12 @@ oslModule SAL_CALL osl_loadModuleRelative(
     oslGenericFunction const baseModule, rtl_uString * const relativePath,
     sal_Int32 const mode)
 {
-    rtl::OUString base;
+    OUString base;
     if (!osl::Module::getUrlFromAddress(baseModule, base)) {
         SAL_INFO("sal.osl","osl::Module::getUrlFromAddress failed");
         return nullptr;
     }
-    rtl::OUString abs;
+    OUString abs;
     try {
         abs = rtl::Uri::convertRelToAbs(base, relativePath);
     } catch (const rtl::MalformedUriException & e) {

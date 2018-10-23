@@ -311,7 +311,7 @@ EmbeddedObjectContainer::GetEmbeddedObject(
 uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
         const OUString& rName,
         const uno::Reference<embed::XEmbeddedObject>& xCopy,
-        rtl::OUString const*const pBaseURL)
+        OUString const*const pBaseURL)
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     try

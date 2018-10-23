@@ -384,7 +384,7 @@ Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo()
 }
 
 void SAL_CALL Theme::setPropertyValue (
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Any& rValue)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
@@ -427,7 +427,7 @@ void SAL_CALL Theme::setPropertyValue (
 }
 
 Any SAL_CALL Theme::getPropertyValue (
-    const ::rtl::OUString& rsPropertyName)
+    const OUString& rsPropertyName)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -443,7 +443,7 @@ Any SAL_CALL Theme::getPropertyValue (
 }
 
 void SAL_CALL Theme::addPropertyChangeListener(
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
     ThemeItem eItem (AnyItem_);
@@ -465,7 +465,7 @@ void SAL_CALL Theme::addPropertyChangeListener(
 }
 
 void SAL_CALL Theme::removePropertyChangeListener(
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
     ThemeItem eItem (AnyItem_);
@@ -497,7 +497,7 @@ void SAL_CALL Theme::removePropertyChangeListener(
 }
 
 void SAL_CALL Theme::addVetoableChangeListener(
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
     ThemeItem eItem (AnyItem_);
@@ -519,7 +519,7 @@ void SAL_CALL Theme::addVetoableChangeListener(
 }
 
 void SAL_CALL Theme::removeVetoableChangeListener(
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
     ThemeItem eItem (AnyItem_);
@@ -574,7 +574,7 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
         aProperties.size());
 }
 
-beans::Property SAL_CALL Theme::getPropertyByName (const ::rtl::OUString& rsPropertyName)
+beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyName)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -593,7 +593,7 @@ beans::Property SAL_CALL Theme::getPropertyByName (const ::rtl::OUString& rsProp
         0);
 }
 
-sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyName)
+sal_Bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -846,7 +846,7 @@ css::uno::Type const & Theme::GetCppuType (const PropertyType eType)
     switch(eType)
     {
         case PT_Image:
-            return cppu::UnoType<rtl::OUString>::get();
+            return cppu::UnoType<OUString>::get();
 
         case PT_Color:
             return cppu::UnoType<sal_uInt32>::get();
@@ -989,7 +989,7 @@ void Theme::ProcessNewValue (
     {
         case PT_Image:
         {
-            ::rtl::OUString sURL;
+            OUString sURL;
             if (rValue >>= sURL)
             {
                 maImages[nIndex] = Tools::GetImage(sURL, nullptr);

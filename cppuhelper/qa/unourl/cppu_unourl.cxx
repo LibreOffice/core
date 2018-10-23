@@ -75,7 +75,7 @@ namespace cppu_unourl
                 bool bValid = false;
                 try
                 {
-                    cppu::UnoUrlDescriptor aDescriptor(rtl::OUString::createFromAscii(
+                    cppu::UnoUrlDescriptor aDescriptor(OUString::createFromAscii(
                                                            aTests[i].pInput));
                     (void)aDescriptor;
                     bValid = true;
@@ -123,10 +123,10 @@ namespace cppu_unourl
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
-                rtl::OUString aDescriptor;
+                OUString aDescriptor;
                 try
                 {
-                    aDescriptor = cppu::UnoUrlDescriptor(rtl::OUString::createFromAscii(
+                    aDescriptor = cppu::UnoUrlDescriptor(OUString::createFromAscii(
                                                              aTests[i].pInput)).
                         getDescriptor();
                     bValid = true;
@@ -171,10 +171,10 @@ namespace cppu_unourl
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
-                rtl::OUString aName;
+                OUString aName;
                 try
                 {
-                    aName = cppu::UnoUrlDescriptor(rtl::OUString::createFromAscii(
+                    aName = cppu::UnoUrlDescriptor(OUString::createFromAscii(
                                                        aTests[i].pInput)).getName();
                     bValid = true;
                 }
@@ -219,9 +219,9 @@ namespace cppu_unourl
                 bool bPresent = false;
                 try
                 {
-                    bPresent = cppu::UnoUrlDescriptor(rtl::OUString::createFromAscii(
+                    bPresent = cppu::UnoUrlDescriptor(OUString::createFromAscii(
                                                           aTests[i].pInput)).
-                        hasParameter(rtl::OUString::createFromAscii(aTests[i].pKey));
+                        hasParameter(OUString::createFromAscii(aTests[i].pKey));
                     bValid = true;
                 }
                 catch (rtl::MalformedUriException &)
@@ -286,12 +286,12 @@ namespace cppu_unourl
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
-                rtl::OUString aValue;
+                OUString aValue;
                 try
                 {
-                    aValue = cppu::UnoUrlDescriptor(rtl::OUString::createFromAscii(
+                    aValue = cppu::UnoUrlDescriptor(OUString::createFromAscii(
                                                         aTests[i].pInput)).
-                        getParameter(rtl::OUString::createFromAscii(aTests[i].pKey));
+                        getParameter(OUString::createFromAscii(aTests[i].pKey));
                     bValid = true;
                 }
                 catch (rtl::MalformedUriException &)
@@ -331,7 +331,7 @@ namespace cppu_unourl
                 bool bValid = false;
                 try
                 {
-                    cppu::UnoUrl aUrl(rtl::OUString::createFromAscii(aTests[i].pInput));
+                    cppu::UnoUrl aUrl(OUString::createFromAscii(aTests[i].pInput));
                     (void)aUrl;
                     bValid = true;
                 }
@@ -367,10 +367,10 @@ namespace cppu_unourl
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
-                rtl::OUString aConnection;
+                OUString aConnection;
                 try
                 {
-                    aConnection = cppu::UnoUrl(rtl::OUString::createFromAscii(
+                    aConnection = cppu::UnoUrl(OUString::createFromAscii(
                                                    aTests[i].pInput)).
                         getConnection().getDescriptor();
                     bValid = true;
@@ -401,10 +401,10 @@ namespace cppu_unourl
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
-                rtl::OUString aProtocol;
+                OUString aProtocol;
                 try
                 {
-                    aProtocol = cppu::UnoUrl(rtl::OUString::createFromAscii(
+                    aProtocol = cppu::UnoUrl(OUString::createFromAscii(
                                                  aTests[i].pInput)).
                         getProtocol().getDescriptor();
                     bValid = true;
@@ -438,10 +438,10 @@ namespace cppu_unourl
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
-                rtl::OUString aObjectName;
+                OUString aObjectName;
                 try
                 {
-                    aObjectName = cppu::UnoUrl(rtl::OUString::createFromAscii(
+                    aObjectName = cppu::UnoUrl(OUString::createFromAscii(
                                                    aTests[i].pInput)).getObjectName();
                     bValid = true;
                 }

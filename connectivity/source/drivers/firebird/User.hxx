@@ -31,7 +31,7 @@ namespace connectivity
             /**
              * For a user that already exists in the db.
              */
-            User(const ::rtl::OUString& rName);
+            User(const OUString& rName);
 
             // IRefreshableGroups::
             virtual void refreshGroups() override;

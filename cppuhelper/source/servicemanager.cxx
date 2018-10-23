@@ -74,14 +74,14 @@ void insertImplementationMap(
 
 void removeFromImplementationMap(
     cppuhelper::ServiceManager::Data::ImplementationMap * map,
-    std::vector< rtl::OUString > const & elements,
+    std::vector< OUString > const & elements,
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         const & implementation)
 {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called:
     assert(map != nullptr);
-    for (std::vector< rtl::OUString >::const_iterator i(elements.begin());
+    for (std::vector< OUString >::const_iterator i(elements.begin());
          i != elements.end(); ++i)
     {
         cppuhelper::ServiceManager::Data::ImplementationMap::iterator j(
@@ -105,7 +105,7 @@ void removeFromImplementationMap(
 class Parser {
 public:
     Parser(
-        rtl::OUString const & uri,
+        OUString const & uri,
         css::uno::Reference< css::uno::XComponentContext > const & alienContext,
         cppuhelper::ServiceManager::Data * data);
 
@@ -121,21 +121,21 @@ private:
 
     void handleSingleton();
 
-    rtl::OUString getNameAttribute();
+    OUString getNameAttribute();
 
     xmlreader::XmlReader reader_;
     css::uno::Reference< css::uno::XComponentContext > alienContext_;
     cppuhelper::ServiceManager::Data * data_;
-    rtl::OUString attrLoader_;
-    rtl::OUString attrUri_;
-    rtl::OUString attrEnvironment_;
-    rtl::OUString attrPrefix_;
+    OUString attrLoader_;
+    OUString attrUri_;
+    OUString attrEnvironment_;
+    OUString attrPrefix_;
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         implementation_;
 };
 
 Parser::Parser(
-    rtl::OUString const & uri,
+    OUString const & uri,
     css::uno::Reference< css::uno::XComponentContext > const & alienContext,
     cppuhelper::ServiceManager::Data * data):
     reader_(uri), alienContext_(alienContext), data_(data)
@@ -239,10 +239,10 @@ Parser::Parser(
 }
 
 void Parser::handleComponent() {
-    attrLoader_ = rtl::OUString();
-    attrUri_ = rtl::OUString();
-    attrEnvironment_ = rtl::OUString();
-    attrPrefix_ = rtl::OUString();
+    attrLoader_ = OUString();
+    attrUri_ = OUString();
+    attrEnvironment_ = OUString();
+    attrPrefix_ = OUString();
     xmlreader::Span name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
@@ -328,8 +328,8 @@ void Parser::handleComponent() {
 }
 
 void Parser::handleImplementation() {
-    rtl::OUString attrName;
-    rtl::OUString attrConstructor;
+    OUString attrName;
+    OUString attrConstructor;
     xmlreader::Span name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
@@ -394,19 +394,19 @@ void Parser::handleImplementation() {
 }
 
 void Parser::handleService() {
-    rtl::OUString name(getNameAttribute());
+    OUString name(getNameAttribute());
     implementation_->info->services.push_back(name);
     data_->services[name].push_back(implementation_);
 }
 
 void Parser::handleSingleton() {
-    rtl::OUString name(getNameAttribute());
+    OUString name(getNameAttribute());
     implementation_->info->singletons.push_back(name);
     data_->singletons[name].push_back(implementation_);
 }
 
-rtl::OUString Parser::getNameAttribute() {
-    rtl::OUString attrName;
+OUString Parser::getNameAttribute() {
+    OUString attrName;
     xmlreader::Span name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
@@ -566,11 +566,11 @@ private:
     createInstanceWithArguments(
         css::uno::Sequence< css::uno::Any > const & Arguments) override;
 
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
@@ -614,19 +614,19 @@ ImplementationWrapper::createInstanceWithArguments(
         Arguments, manager_->getContext());
 }
 
-rtl::OUString ImplementationWrapper::getImplementationName()
+OUString ImplementationWrapper::getImplementationName()
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
     return impl->info->name;
 }
 
-sal_Bool ImplementationWrapper::supportsService(rtl::OUString const & ServiceName)
+sal_Bool ImplementationWrapper::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 ImplementationWrapper::getSupportedServiceNames()
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
@@ -639,10 +639,10 @@ ImplementationWrapper::getSupportedServiceNames()
              + " supports too many services"),
             static_cast< cppu::OWeakObject * >(this));
     }
-    css::uno::Sequence< rtl::OUString > names(
+    css::uno::Sequence< OUString > names(
         static_cast< sal_Int32 >(impl->info->services.size()));
     sal_Int32 i = 0;
-    for (std::vector< rtl::OUString >::const_iterator j(
+    for (std::vector< OUString >::const_iterator j(
              impl->info->services.begin());
          j != impl->info->services.end(); ++j)
     {
@@ -762,7 +762,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             return;
         }
     }
-    rtl::OUString uri;
+    OUString uri;
     try {
         uri = cppu::bootstrap_expandUri(implementation->info->uri);
     } catch (css::lang::IllegalArgumentException & e) {
@@ -813,7 +813,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             smgr->createInstanceWithContext(implementation->info->loader, ctxt),
             css::uno::UNO_QUERY_THROW);
         f0 = loader->activate(
-            implementation->info->name, rtl::OUString(), uri,
+            implementation->info->name, OUString(), uri,
             css::uno::Reference< css::registry::XRegistryKey >());
     }
     css::uno::Reference<css::lang::XSingleComponentFactory> f1;
@@ -916,22 +916,22 @@ void cppuhelper::ServiceManager::initialize(
     preloadImplementations();
 }
 
-rtl::OUString cppuhelper::ServiceManager::getImplementationName()
+OUString cppuhelper::ServiceManager::getImplementationName()
 {
-    return rtl::OUString(
+    return OUString(
         "com.sun.star.comp.cppuhelper.bootstrap.ServiceManager");
 }
 
 sal_Bool cppuhelper::ServiceManager::supportsService(
-    rtl::OUString const & ServiceName)
+    OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getSupportedServiceNames()
 {
-    css::uno::Sequence< rtl::OUString > names(2);
+    css::uno::Sequence< OUString > names(2);
     names[0] = "com.sun.star.lang.MultiServiceFactory";
     names[1] = "com.sun.star.lang.ServiceManager";
     return names;
@@ -939,7 +939,7 @@ cppuhelper::ServiceManager::getSupportedServiceNames()
 
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstance(
-    rtl::OUString const & aServiceSpecifier)
+    OUString const & aServiceSpecifier)
 {
     assert(context_.is());
     return createInstanceWithContext(aServiceSpecifier, context_);
@@ -947,7 +947,7 @@ cppuhelper::ServiceManager::createInstance(
 
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArguments(
-    rtl::OUString const & ServiceSpecifier,
+    OUString const & ServiceSpecifier,
     css::uno::Sequence< css::uno::Any > const & Arguments)
 {
     assert(context_.is());
@@ -955,12 +955,12 @@ cppuhelper::ServiceManager::createInstanceWithArguments(
         ServiceSpecifier, Arguments, context_);
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getAvailableServiceNames()
 {
     osl::MutexGuard g(rBHelper.rMutex);
     if (isDisposed()) {
-        return css::uno::Sequence< rtl::OUString >();
+        return css::uno::Sequence< OUString >();
     }
     Data::ImplementationMap::size_type n = data_.services.size();
     if (n > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
@@ -968,7 +968,7 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
             "getAvailableServiceNames: too many services",
             static_cast< cppu::OWeakObject * >(this));
     }
-    css::uno::Sequence< rtl::OUString > names(static_cast< sal_Int32 >(n));
+    css::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
     sal_Int32 i = 0;
     for (Data::ImplementationMap::const_iterator j(data_.services.begin());
          j != data_.services.end(); ++j)
@@ -981,7 +981,7 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
 
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithContext(
-    rtl::OUString const & aServiceSpecifier,
+    OUString const & aServiceSpecifier,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< Data::Implementation > impl(
@@ -992,7 +992,7 @@ cppuhelper::ServiceManager::createInstanceWithContext(
 
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
-    rtl::OUString const & ServiceSpecifier,
+    OUString const & ServiceSpecifier,
     css::uno::Sequence< css::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
@@ -1034,11 +1034,11 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
 {
     css::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
-        std::vector< rtl::OUString > uris;
+        std::vector< OUString > uris;
         css::uno::Reference< css::uno::XComponentContext > alienContext;
         for (sal_Int32 i = 0; i < args.getLength(); ++i) {
             if (args[i].Name == "uri") {
-                rtl::OUString uri;
+                OUString uri;
                 if (!(args[i].Value >>= uri)) {
                     throw css::lang::IllegalArgumentException(
                         "Bad uri argument",
@@ -1097,13 +1097,13 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
 {
     css::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
-        std::vector< rtl::OUString > uris;
+        std::vector< OUString > uris;
         for (sal_Int32 i = 0; i < args.getLength(); ++i) {
             if (args[i].Name != "uri") {
                 throw css::lang::IllegalArgumentException(
                     "Bad argument " + args[i].Name,
                     static_cast< cppu::OWeakObject * >(this), 0);
-            }              rtl::OUString uri;
+            }              OUString uri;
             if (!(args[i].Value >>= uri)) {
                 throw css::lang::IllegalArgumentException(
                     "Bad uri argument",
@@ -1123,7 +1123,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
         }
         return;
     }
-    rtl::OUString impl;
+    OUString impl;
     if (aElement >>= impl) {
         // For live-removal of extensions:
         removeImplementation(impl);
@@ -1135,7 +1135,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
 
 css::uno::Reference< css::container::XEnumeration >
 cppuhelper::ServiceManager::createContentEnumeration(
-    rtl::OUString const & aServiceName)
+    OUString const & aServiceName)
 {
     std::vector< std::shared_ptr< Data::Implementation > > impls;
     {
@@ -1191,7 +1191,7 @@ cppuhelper::ServiceManager::getPropertySetInfo()
 }
 
 void cppuhelper::ServiceManager::setPropertyValue(
-    rtl::OUString const & aPropertyName, css::uno::Any const &)
+    OUString const & aPropertyName, css::uno::Any const &)
 {
     if (aPropertyName == "DefaultContext") {
         throw css::beans::PropertyVetoException(
@@ -1203,7 +1203,7 @@ void cppuhelper::ServiceManager::setPropertyValue(
 }
 
 css::uno::Any cppuhelper::ServiceManager::getPropertyValue(
-    rtl::OUString const & PropertyName)
+    OUString const & PropertyName)
 {
     if (PropertyName != "DefaultContext") {
         throw css::beans::UnknownPropertyException(
@@ -1214,7 +1214,7 @@ css::uno::Any cppuhelper::ServiceManager::getPropertyValue(
 }
 
 void cppuhelper::ServiceManager::addPropertyChangeListener(
-    rtl::OUString const & aPropertyName,
+    OUString const & aPropertyName,
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         xListener)
 {
@@ -1227,7 +1227,7 @@ void cppuhelper::ServiceManager::addPropertyChangeListener(
 }
 
 void cppuhelper::ServiceManager::removePropertyChangeListener(
-    rtl::OUString const & aPropertyName,
+    OUString const & aPropertyName,
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         aListener)
 {
@@ -1240,7 +1240,7 @@ void cppuhelper::ServiceManager::removePropertyChangeListener(
 }
 
 void cppuhelper::ServiceManager::addVetoableChangeListener(
-    rtl::OUString const & PropertyName,
+    OUString const & PropertyName,
     css::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
 {
@@ -1253,7 +1253,7 @@ void cppuhelper::ServiceManager::addVetoableChangeListener(
 }
 
 void cppuhelper::ServiceManager::removeVetoableChangeListener(
-    rtl::OUString const & PropertyName,
+    OUString const & PropertyName,
     css::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
 {
@@ -1273,7 +1273,7 @@ cppuhelper::ServiceManager::getProperties() {
 }
 
 css::beans::Property cppuhelper::ServiceManager::getPropertyByName(
-    rtl::OUString const & aName)
+    OUString const & aName)
 {
     if (aName != "DefaultContext") {
         throw css::beans::UnknownPropertyException(
@@ -1283,7 +1283,7 @@ css::beans::Property cppuhelper::ServiceManager::getPropertyByName(
 }
 
 sal_Bool cppuhelper::ServiceManager::hasPropertyByName(
-    rtl::OUString const & Name)
+    OUString const & Name)
 {
     return Name == "DefaultContext";
 }
@@ -1312,9 +1312,9 @@ void cppuhelper::ServiceManager::removeEventListenerFromComponent(
     }
 }
 
-void cppuhelper::ServiceManager::init(rtl::OUString const & rdbUris) {
+void cppuhelper::ServiceManager::init(OUString const & rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        rtl::OUString uri(rdbUris.getToken(0, ' ', i));
+        OUString uri(rdbUris.getToken(0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }
@@ -1330,7 +1330,7 @@ void cppuhelper::ServiceManager::init(rtl::OUString const & rdbUris) {
 }
 
 void cppuhelper::ServiceManager::readRdbDirectory(
-    rtl::OUString const & uri, bool optional)
+    OUString const & uri, bool optional)
 {
     osl::Directory dir(uri);
     switch (dir.open()) {
@@ -1348,7 +1348,7 @@ void cppuhelper::ServiceManager::readRdbDirectory(
             static_cast< cppu::OWeakObject * >(this));
     }
     for (;;) {
-        rtl::OUString url;
+        OUString url;
         if (!cppu::nextDirectoryItem(dir, &url)) {
             break;
         }
@@ -1357,7 +1357,7 @@ void cppuhelper::ServiceManager::readRdbDirectory(
 }
 
 void cppuhelper::ServiceManager::readRdbFile(
-    rtl::OUString const & uri, bool optional)
+    OUString const & uri, bool optional)
 {
     try {
         Parser(
@@ -1382,7 +1382,7 @@ void cppuhelper::ServiceManager::readRdbFile(
     }
 }
 
-bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
+bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
     Registry reg;
     switch (reg.open(uri, RegAccessMode::READONLY)) {
     case RegError::NO_ERROR:
@@ -1427,7 +1427,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
     for (sal_uInt32 i = 0; i != impls.getLength(); ++i) {
         RegistryKey implKey(impls.getElement(i));
         assert(implKey.getName().match("/IMPLEMENTATIONS/"));
-        rtl::OUString name(
+        OUString name(
             implKey.getName().copy(RTL_CONSTASCII_LENGTH("/IMPLEMENTATIONS/")));
         std::shared_ptr< Data::Implementation > impl(
             new Data::Implementation(
@@ -1441,7 +1441,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
         }
         readLegacyRdbStrings(
             uri, implKey, "UNO/SERVICES", &impl->info->services);
-        for (std::vector< rtl::OUString >::const_iterator j(
+        for (std::vector< OUString >::const_iterator j(
                  impl->info->services.begin());
              j != impl->info->services.end(); ++j)
         {
@@ -1449,7 +1449,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
         }
         readLegacyRdbStrings(
             uri, implKey, "UNO/SINGLETONS", &impl->info->singletons);
-        for (std::vector< rtl::OUString >::const_iterator j(
+        for (std::vector< OUString >::const_iterator j(
                  impl->info->singletons.begin());
              j != impl->info->singletons.end(); ++j)
         {
@@ -1459,14 +1459,14 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
     return true;
 }
 
-rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
-    rtl::OUString const & uri, RegistryKey & key, rtl::OUString const & path)
+OUString cppuhelper::ServiceManager::readLegacyRdbString(
+    OUString const & uri, RegistryKey & key, OUString const & path)
 {
     RegistryKey subkey;
     RegValueType t;
     sal_uInt32 s(0);
     if (key.openKey(path, subkey) != RegError::NO_ERROR
-        || subkey.getValueInfo(rtl::OUString(), &t, &s) != RegError::NO_ERROR
+        || subkey.getValueInfo(OUString(), &t, &s) != RegError::NO_ERROR
         || t != RegValueType::STRING
         || s == 0 || s > static_cast< sal_uInt32 >(SAL_MAX_INT32))
     {
@@ -1474,9 +1474,9 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::OUString val;
+    OUString val;
     std::vector< char > v(s); // assuming sal_uInt32 fits into vector::size_type
-    if (subkey.getValue(rtl::OUString(), &v[0]) != RegError::NO_ERROR
+    if (subkey.getValue(OUString(), &v[0]) != RegError::NO_ERROR
         || v.back() != '\0'
         || !rtl_convertStringToUString(
             &val.pData, &v[0], static_cast< sal_Int32 >(s - 1),
@@ -1493,8 +1493,8 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
 }
 
 void cppuhelper::ServiceManager::readLegacyRdbStrings(
-    rtl::OUString const & uri, RegistryKey & key, rtl::OUString const & path,
-    std::vector< rtl::OUString > * strings)
+    OUString const & uri, RegistryKey & key, OUString const & path,
+    std::vector< OUString > * strings)
 {
     assert(strings != nullptr);
     RegistryKey subkey;
@@ -1508,9 +1508,9 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::OUString prefix(subkey.getName() + "/");
+    OUString prefix(subkey.getName() + "/");
     RegistryKeyNames names;
-    if (subkey.getKeyNames(rtl::OUString(), names) != RegError::NO_ERROR) {
+    if (subkey.getKeyNames(OUString(), names) != RegError::NO_ERROR) {
         throw css::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
@@ -1522,11 +1522,11 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
 }
 
 void cppuhelper::ServiceManager::insertRdbFiles(
-    std::vector< rtl::OUString > const & uris,
+    std::vector< OUString > const & uris,
     css::uno::Reference< css::uno::XComponentContext > const & alienContext)
 {
     Data extra;
-    for (std::vector< rtl::OUString >::const_iterator i(uris.begin());
+    for (std::vector< OUString >::const_iterator i(uris.begin());
          i != uris.end(); ++i)
     {
         try {
@@ -1548,7 +1548,7 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
     css::uno::Reference< css::lang::XServiceInfo > const & factoryInfo)
 {
     assert(factoryInfo.is());
-    rtl::OUString name(factoryInfo->getImplementationName());
+    OUString name(factoryInfo->getImplementationName());
     css::uno::Reference< css::lang::XSingleComponentFactory > f1(
         factoryInfo, css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XSingleServiceFactory > f2;
@@ -1570,7 +1570,7 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
         extra.namedImplementations.emplace(name, impl);
     }
     extra.dynamicImplementations.emplace(factoryInfo, impl);
-    css::uno::Sequence< rtl::OUString > services(
+    css::uno::Sequence< OUString > services(
         factoryInfo->getSupportedServiceNames());
     for (sal_Int32 i = 0; i != services.getLength(); ++i) {
         impl->info->services.push_back(services[i]);
@@ -1631,7 +1631,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
                  extra.singletons.begin());
              i != extra.singletons.end(); ++i)
         {
-            rtl::OUString name("/singletons/" + i->first);
+            OUString name("/singletons/" + i->first);
             //TODO: Update should be atomic:
             try {
                 cont->removeByName(name + "/arguments");
@@ -1662,7 +1662,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
 }
 
 void cppuhelper::ServiceManager::removeRdbFiles(
-    std::vector< rtl::OUString > const & uris)
+    std::vector< OUString > const & uris)
 {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called (and that if it is called,
@@ -1670,7 +1670,7 @@ void cppuhelper::ServiceManager::removeRdbFiles(
     std::vector< std::shared_ptr< Data::Implementation > > clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
-        for (std::vector< rtl::OUString >::const_iterator i(uris.begin());
+        for (std::vector< OUString >::const_iterator i(uris.begin());
              i != uris.end(); ++i)
         {
             for (Data::NamedImplementations::iterator j(
@@ -1732,7 +1732,7 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
     return true;
 }
 
-void cppuhelper::ServiceManager::removeImplementation(const rtl::OUString & name) {
+void cppuhelper::ServiceManager::removeImplementation(const OUString & name) {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called:
     std::shared_ptr< Data::Implementation > clear;
@@ -1771,7 +1771,7 @@ void cppuhelper::ServiceManager::removeImplementation(const rtl::OUString & name
 std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
 cppuhelper::ServiceManager::findServiceImplementation(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    rtl::OUString const & specifier)
+    OUString const & specifier)
 {
     std::shared_ptr< Data::Implementation > impl;
     bool loaded;
@@ -1806,7 +1806,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
 
 /// Make a simpler unique name for preload / progress reporting.
 #ifndef DISABLE_DYNLOADING
-static rtl::OUString simplifyModule(const rtl::OUString &uri)
+static OUString simplifyModule(const OUString &uri)
 {
     sal_Int32 nIdx;
     OUStringBuffer edit(uri);
@@ -1837,7 +1837,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 #ifdef DISABLE_DYNLOADING
     abort();
 #else
-    rtl::OUString aUri;
+    OUString aUri;
     osl::MutexGuard g(rBHelper.rMutex);
     css::uno::Environment aSourceEnv(css::uno::Environment::getCurrent());
 
@@ -1851,7 +1851,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     {
         try
         {
-            const rtl::OUString &aLibrary = iterator->second->info->uri;
+            const OUString &aLibrary = iterator->second->info->uri;
 
             if (aLibrary.isEmpty())
                 continue;
@@ -1926,7 +1926,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                     if (aSourceEnv.get() == aTargetEnv.get())
                     {
                         // invoke function component factory
-                        OString aImpl(rtl::OUStringToOString(iterator->second->info->name, RTL_TEXTENCODING_ASCII_US));
+                        OString aImpl(OUStringToOString(iterator->second->info->name, RTL_TEXTENCODING_ASCII_US));
                         xFactory.set(css::uno::Reference<css::uno::XInterface>(static_cast<css::uno::XInterface *>(
                             (*fpComponentFactory)(aImpl.getStr(), this, nullptr)), SAL_NO_ACQUIRE));
                     }

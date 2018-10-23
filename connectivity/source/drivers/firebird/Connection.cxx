@@ -123,7 +123,7 @@ struct ConnectionGuard
     }
 };
 
-void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
+void Connection::construct(const OUString& url, const Sequence< PropertyValue >& info)
 {
     ConnectionGuard aGuard(m_refCount);
 

@@ -34,7 +34,7 @@ namespace connectivity
             // OCollection
             virtual void impl_refresh() override;
             virtual ::connectivity::sdbcx::ObjectType createObject(
-                                                const ::rtl::OUString& rName) override;
+                                                const OUString& rName) override;
             virtual css::uno::Reference< css::beans::XPropertySet >
                     createDescriptor() override;
             virtual ::connectivity::sdbcx::ObjectType appendObject(
@@ -51,7 +51,7 @@ namespace connectivity
             // XAppend,  etc., but all are optional.
 
             // XDrop
-            virtual void dropObject(sal_Int32 nPosition, const ::rtl::OUString& rName) override;
+            virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
 
         };
 

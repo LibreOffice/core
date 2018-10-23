@@ -60,7 +60,7 @@ public:
     virtual void SAL_CALL deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) override;
 
 protected:
-    UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString &rUINode  );
+    UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString &rUINode  );
     bool                                                    m_bConfigRead;
     css::uno::Reference< css::uno::XComponentContext >       m_xContext;
     rtl::Reference<ConfigurationAccess_ControllerFactory>    m_pConfigAccess;
@@ -71,7 +71,7 @@ private:
 
 UIControllerFactory::UIControllerFactory(
     const Reference< XComponentContext >& xContext,
-    const rtl::OUString &rConfigurationNode )
+    const OUString &rConfigurationNode )
     : UIControllerFactory_BASE(m_aMutex)
     , m_bConfigRead( false )
     , m_xContext( xContext )

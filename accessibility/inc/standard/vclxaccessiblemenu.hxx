@@ -71,7 +71,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nChildIndex ) override;
 
     // XAccessibleAction
-    virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
+    virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEMENU_HXX

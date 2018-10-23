@@ -56,8 +56,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     //   MYSQL_FIELD::charsetnr is the collation identifier
     //   _ci postfix means it's insensitive
     MYSQL_FIELD* pField = getField(column);
-    rtl::OUStringBuffer sql{ "SHOW COLLATION WHERE Id =" };
-    sql.append(rtl::OUString::number(pField->charsetnr));
+    OUStringBuffer sql{ "SHOW COLLATION WHERE Id =" };
+    sql.append(OUString::number(pField->charsetnr));
 
     Reference<XStatement> stmt = m_rConnection.createStatement();
     Reference<XResultSet> rs = stmt->executeQuery(sql.makeStringAndClear());
@@ -66,42 +66,42 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     if (!rs->next()) // fetch first and only row
         return false;
 
-    rtl::OUString sColName = xRow->getString(1); // first column is Collation name
+    OUString sColName = xRow->getString(1); // first column is Collation name
 
     return !sColName.isEmpty() && !sColName.endsWith("_ci");
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
 
-    return rtl::OStringToOUString(pField->db, m_rConnection.getConnectionEncoding());
+    return OStringToOUString(pField->db, m_rConnection.getConnectionEncoding());
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 {
     checkColumnIndex(column);
 
     MYSQL_FIELD* pField = getField(column);
-    return rtl::OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
+    return OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
-    return rtl::OStringToOUString(pField->table, m_rConnection.getConnectionEncoding());
+    return OStringToOUString(pField->table, m_rConnection.getConnectionEncoding());
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
-    return rtl::OStringToOUString(pField->catalog, m_rConnection.getConnectionEncoding());
+    return OStringToOUString(pField->catalog, m_rConnection.getConnectionEncoding());
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
@@ -109,18 +109,18 @@ rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
     return mysqlc_sdbc_driver::mysqlTypeToStr(pField);
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
-    return rtl::OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
+    return OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
 }
 
-rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
 {
     checkColumnIndex(column);
 
-    rtl::OUString aRet = rtl::OUString();
+    OUString aRet = OUString();
     return aRet;
 }
 
@@ -192,13 +192,13 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     unsigned nColCount = mysql_num_fields(m_pRes);
     if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(nColCount))
     {
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.append("Column index out of range (expected 1 to ");
         buf.append(sal_Int32(nColCount));
         buf.append(", got ");
         buf.append(columnIndex);
         buf.append('.');
-        throw SQLException(buf.makeStringAndClear(), *this, rtl::OUString(), 1, Any());
+        throw SQLException(buf.makeStringAndClear(), *this, OUString(), 1, Any());
     }
 }
 

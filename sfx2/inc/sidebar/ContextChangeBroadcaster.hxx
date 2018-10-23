@@ -34,7 +34,7 @@ public:
     ContextChangeBroadcaster();
     ~ContextChangeBroadcaster();
 
-    void Initialize (const ::rtl::OUString& rsContextName);
+    void Initialize (const OUString& rsContextName);
 
     void Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame);
     void Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame);
@@ -48,14 +48,14 @@ public:
     bool SetBroadcasterEnabled (const bool bIsEnabled);
 
 private:
-    rtl::OUString msContextName;
+    OUString msContextName;
     bool mbIsBroadcasterEnabled;
 
     void BroadcastContextChange (
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const ::rtl::OUString& rsModuleName,
-        const ::rtl::OUString& rsContextName);
-    static ::rtl::OUString GetModuleName (
+        const OUString& rsModuleName,
+        const OUString& rsContextName);
+    static OUString GetModuleName (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 

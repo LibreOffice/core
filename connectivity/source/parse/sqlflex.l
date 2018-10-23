@@ -82,9 +82,9 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = nullptr;
 #define SQL_NEW_KEYWORD(token)                      \
         SQLyylval.pParseNode = new OSQLInternalNode("", SQLNodeType::Keyword, (token));       return token;
 
-#define SQL_NEW_INTNUM      SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::IntNum); return SQL_TOKEN_INTNUM;
-#define SQL_NEW_APPROXNUM   SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::ApproxNum); return SQL_TOKEN_APPROXNUM;
-#define SQL_NEW_DATE        SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::AccessDate); return SQL_TOKEN_ACCESS_DATE;
+#define SQL_NEW_INTNUM      SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::IntNum); return SQL_TOKEN_INTNUM;
+#define SQL_NEW_APPROXNUM   SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::ApproxNum); return SQL_TOKEN_APPROXNUM;
+#define SQL_NEW_DATE        SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::AccessDate); return SQL_TOKEN_ACCESS_DATE;
 
 #define YY_INPUT(buf,result,max_size)               \
 {                                                   \
@@ -422,14 +422,14 @@ YEARDAY             {SQL_NEW_KEYWORD(SQL_TOKEN_YEARDAY);  }
 
 ZONE                {SQL_NEW_KEYWORD(SQL_TOKEN_ZONE);  }
 
-"<"                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Less);return SQL_LESS;}
-">"                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Great);return SQL_GREAT;}
-"="                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Equal);return SQL_EQUAL;}
-"<="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::LessEq);return SQL_LESSEQ;}
-">="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::GreatEq);return SQL_GREATEQ;}
-"<>"                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::NotEqual);return SQL_NOTEQUAL;}
-"!="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::NotEqual);return SQL_NOTEQUAL;}
-"||"                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Concat);return SQL_CONCAT;}
+"<"                 { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Less);return SQL_LESS;}
+">"                 { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Great);return SQL_GREAT;}
+"="                 { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Equal);return SQL_EQUAL;}
+"<="                { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::LessEq);return SQL_LESSEQ;}
+">="                { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::GreatEq);return SQL_GREATEQ;}
+"<>"                { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::NotEqual);return SQL_NOTEQUAL;}
+"!="                { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::NotEqual);return SQL_NOTEQUAL;}
+"||"                { SQL_NEW_NODE(OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Concat);return SQL_CONCAT;}
 
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
@@ -523,7 +523,7 @@ inline bool checkeof(int c) { return c == 0 || c == EOF; }
 sal_Int32 gatherString(int delim, sal_Int32 nTyp)
 {
     int ch;
-    ::rtl::OStringBuffer sBuffer(256);
+    OStringBuffer sBuffer(256);
 
     while (!checkeof(ch = yyinput()))
     {
@@ -537,13 +537,13 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
                 switch(nTyp)
                 {
                 case 0:
-                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
+                    SQL_NEW_NODE(OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
                     return SQL_TOKEN_NAME;
                 case 1:
-                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::String);
+                    SQL_NEW_NODE(OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::String);
                     return SQL_TOKEN_STRING;
                 case 2:
-                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::AccessDate);
+                    SQL_NEW_NODE(OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::AccessDate);
                     return SQL_TOKEN_ACCESS_DATE;
                 }
             }
@@ -638,7 +638,7 @@ sal_Int32 gatherName(const sal_Char* text)
             SQL_NEW_KEYWORD(nToken);
             break;
         default:
-            SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
+            SQL_NEW_NODE(OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
             return SQL_TOKEN_NAME;
     }
 }
@@ -684,17 +684,17 @@ sal_Int32 gatherNamePre(const sal_Char* text)
         default:
         // we need a special handling for parameter
         {
-            ::rtl::OString sStmt = xxx_pGLOBAL_SQLSCAN->getStatement();
+            OString sStmt = xxx_pGLOBAL_SQLSCAN->getStatement();
             sal_Int32 nLength = strlen(text);
             sal_Int32 nPos = xxx_pGLOBAL_SQLSCAN->GetCurrentPos() - nLength - 2;
             if (sStmt.getStr()[nPos] == ':')
             {
-                SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
+                SQL_NEW_NODE(OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
                 nToken = SQL_TOKEN_NAME;
             }
             else
             {
-                SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQLNodeType::String);
+                SQL_NEW_NODE(OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQLNodeType::String);
                 nToken = SQL_TOKEN_STRING;
             }
         }
@@ -728,12 +728,12 @@ void OSQLScanner::SQLyyerror(char const *fmt)
     IN_SQLyyerror = true;
 
     OSL_ENSURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");
-    m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
+    m_sErrorMessage = OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
     if (m_nCurrentPos < m_sStatement.getLength())
     {
         m_sErrorMessage += ": ";
 
-        ::rtl::OUString aError;
+        OUString aError;
         OUStringBuffer Buffer(256);
 
         int ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
@@ -762,13 +762,13 @@ void OSQLScanner::SQLyyerror(char const *fmt)
 }
 
 //------------------------------------------------------------------------------
-void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, bool bInternational)
+void OSQLScanner::prepareScan(const OUString & rNewStatement, const IParseContext* pContext, bool bInternational)
 {
     YY_FLUSH_BUFFER;
     BEGIN(m_nRule);
 
-    m_sErrorMessage = ::rtl::OUString();
-    m_sStatement = ::rtl::OUStringToOString(rNewStatement, RTL_TEXTENCODING_UTF8);
+    m_sErrorMessage = OUString();
+    m_sStatement = OUStringToOString(rNewStatement, RTL_TEXTENCODING_UTF8);
     m_nCurrentPos = 0;
     m_bInternational = bInternational;
     m_pContext = pContext;
@@ -786,7 +786,7 @@ sal_Int32 OSQLScanner::SQLyygetc(void)
 IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
 {
     OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");
-    return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::InternationalKeyCode::None;
+    return (m_bInternational) ? m_pContext->getIntlKeyCode(OString(sToken) ) : IParseContext::InternationalKeyCode::None;
 }
 sal_Int32	OSQLScanner::GetGERRule()		{ return PREDICATE_GER; }
 sal_Int32	OSQLScanner::GetENGRule()		{ return PREDICATE_ENG; }

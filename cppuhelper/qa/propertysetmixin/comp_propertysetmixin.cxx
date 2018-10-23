@@ -63,7 +63,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context):
         cppu::PropertySetMixin< css::lang::XComponent >(
             context, static_cast< Implements >(0),
-            css::uno::Sequence< rtl::OUString >())
+            css::uno::Sequence< OUString >())
     {}
 
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
@@ -121,7 +121,7 @@ public:
             static_cast< Implements >(
                 IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET
                 | IMPLEMENTS_PROPERTY_ACCESS),
-            css::uno::Sequence< rtl::OUString >())
+            css::uno::Sequence< OUString >())
     {}
 
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
@@ -167,8 +167,8 @@ css::uno::Any Empty2::queryInterface(css::uno::Type const & type)
             type);
 }
 
-css::uno::Sequence< rtl::OUString > sequenceThird() {
-    css::uno::Sequence<OUString> s { rtl::OUString("Third") };
+css::uno::Sequence< OUString > sequenceThird() {
+    css::uno::Sequence<OUString> s { OUString("Third") };
     return s;
 }
 
@@ -273,7 +273,7 @@ sal_Int32 Full::getFirst() throw (css::uno::RuntimeException) {
 
 void Full::setFirst(sal_Int32 value) throw (css::uno::RuntimeException) {
     prepareSet(
-        rtl::OUString("First"), css::uno::Any(),
+        OUString("First"), css::uno::Any(),
         css::uno::Any(), 0);
     osl::MutexGuard g(m_mutex);
     m_a1 = value;
@@ -302,7 +302,7 @@ void Full::setSecond(
     }
     BoundListeners l;
     prepareSet(
-        rtl::OUString("Second"), css::uno::Any(),
+        OUString("Second"), css::uno::Any(),
         v, &l);
     {
         osl::MutexGuard g(m_mutex);
@@ -315,7 +315,7 @@ sal_Int32 Full::getThird()
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     throw css::beans::UnknownPropertyException(
-        rtl::OUString("Third"),
+        OUString("Third"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -323,7 +323,7 @@ void Full::setThird(sal_Int32)
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     throw css::beans::UnknownPropertyException(
-        rtl::OUString("Third"),
+        OUString("Third"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -331,7 +331,7 @@ sal_Int32 Full::getFourth()
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     throw css::beans::UnknownPropertyException(
-        rtl::OUString("Fourth"),
+        OUString("Fourth"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -339,7 +339,7 @@ void Full::setFourth(sal_Int32)
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     throw css::beans::UnknownPropertyException(
-        rtl::OUString("Fourth"),
+        OUString("Fourth"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -379,14 +379,14 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     return static_cast< cppu::OWeakObject * >(new Supplier(context));
 }
 
-rtl::OUString SAL_CALL getImplementationName() {
-    return rtl::OUString(
+OUString SAL_CALL getImplementationName() {
+    return OUString(
             "test.cppuhelper.propertysetmixin.comp.CppSupplier");
 }
 
-css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
 {
-    css::uno::Sequence< rtl::OUString > s { "test.cppuhelper.propertysetmixin.CppSupplier") };
+    css::uno::Sequence< OUString > s { "test.cppuhelper.propertysetmixin.CppSupplier") };
     return s;
 }
 

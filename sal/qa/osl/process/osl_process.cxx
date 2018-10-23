@@ -65,15 +65,11 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-
 /** get binary Path.
 */
-static ::rtl::OUString getExecutablePath()
+static OUString getExecutablePath()
 {
-    ::rtl::OUString dirPath;
+    OUString dirPath;
     osl::Module::getUrlFromAddress(
         reinterpret_cast<oslGenericFunction>(&getExecutablePath), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
@@ -405,9 +401,9 @@ public:
     {
         oslProcess process;
 #if defined(_WIN32)
-        rtl::OUString suBatch = suCWD + "/batch.bat";
+        OUString suBatch = suCWD + "/batch.bat";
 #else
-        rtl::OUString suBatch = suCWD + "/batch.sh";
+        OUString suBatch = suCWD + "/batch.sh";
 #endif
         oslProcessError osl_error = osl_executeProcess(
             suBatch.pData,

@@ -177,7 +177,7 @@ static void ChildStatusProc(void *pData)
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 SAL_WARN("sal.osl", "Failed to change uid and guid: " << UnixErrnoString(errno));
 
-            const rtl::OUString envVar("HOME");
+            const OUString envVar("HOME");
             osl_clearEnvironment(envVar.pData);
         }
 
@@ -393,25 +393,25 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                             oslFileHandle   *pErrorRead
                                             )
 {
-    rtl::OUString image;
+    OUString image;
     if (ustrImageName == nullptr)
     {
         if (nArguments == 0)
         {
             return osl_Process_E_InvalidError;
         }
-        image = rtl::OUString::unacquired(ustrArguments);
+        image = OUString::unacquired(ustrArguments);
     }
     else
     {
         osl::FileBase::RC e = osl::FileBase::getSystemPathFromFileURL(
-            rtl::OUString::unacquired(&ustrImageName), image);
+            OUString::unacquired(&ustrImageName), image);
         if (e != osl::FileBase::E_None)
         {
             SAL_INFO(
                 "sal.osl",
                 "getSystemPathFromFileURL("
-                    << rtl::OUString::unacquired(&ustrImageName)
+                    << OUString::unacquired(&ustrImageName)
                     << ") failed with " << e);
             return osl_Process_E_Unknown;
         }
@@ -419,7 +419,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ((Options & osl_Process_SEARCHPATH) != 0)
     {
-        rtl::OUString path;
+        OUString path;
         if (osl::detail::find_in_PATH(image, path))
         {
             image = path;
@@ -452,7 +452,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         {
             SAL_INFO(
                 "sal.osl",
-                "FileURLToPath(" << rtl::OUString::unacquired(&ustrWorkDir)
+                "FileURLToPath(" << OUString::unacquired(&ustrWorkDir)
                     << ") failed with " << e);
             return osl_Process_E_Unknown;
         }

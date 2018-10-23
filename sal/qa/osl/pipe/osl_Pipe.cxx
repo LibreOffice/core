@@ -39,9 +39,6 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-
 /** print last error of pipe system.
  */
 static void printPipeError( ::osl::Pipe const & aPipe )
@@ -90,9 +87,9 @@ static void printPipeError( ::osl::Pipe const & aPipe )
 
 // pipe name and transfer contents
 
-const rtl::OUString aTestPipeName("testpipe2");
-const rtl::OUString aTestPipe1("testpipe1");
-const rtl::OUString aTestString("Sun Microsystems");
+const OUString aTestPipeName("testpipe2");
+const OUString aTestPipe1("testpipe1");
+const OUString aTestString("Sun Microsystems");
 
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");
@@ -108,8 +105,8 @@ namespace osl_Pipe
 
     /** testing the methods:
         inline Pipe();
-        inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options);
-        inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity);
+        inline Pipe(const OUString& strName, oslPipeOptions Options);
+        inline Pipe(const OUString& strName, oslPipeOptions Options,const Security & rSecurity);
         inline Pipe(const Pipe& pipe);
         inline Pipe(oslPipe pipe, __sal_NoAcquire noacquire );
         inline Pipe(oslPipe Pipe);
@@ -264,9 +261,9 @@ namespace osl_Pipe
     };
 
     /** testing the methods:
-        inline sal_Bool create( const ::rtl::OUString & strName,
+        inline sal_Bool create( const OUString & strName,
         oslPipeOptions Options, const Security &rSec );
-        nline sal_Bool create( const ::rtl::OUString & strName,
+        nline sal_Bool create( const OUString & strName,
         oslPipeOptions Options = osl_Pipe_OPEN );
     */
     class create : public CppUnit::TestFixture
@@ -611,8 +608,8 @@ namespace osl_StreamPipe
         inline StreamPipe();
         inline StreamPipe(oslPipe Pipe);
         inline StreamPipe(const StreamPipe& Pipe);
-        inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options = osl_Pipe_OPEN);
-        inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec );
+        inline StreamPipe(const OUString& strName, oslPipeOptions Options = osl_Pipe_OPEN);
+        inline StreamPipe(const OUString& strName, oslPipeOptions Options, const Security &rSec );
         inline StreamPipe( oslPipe pipe, __sal_NoAcquire noacquire );
     */
     class ctors : public CppUnit::TestFixture

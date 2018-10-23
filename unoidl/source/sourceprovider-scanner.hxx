@@ -197,12 +197,12 @@ public:
     struct Constructor {
         struct Parameter {
             Parameter(
-                rtl::OUString const & theName,
+                OUString const & theName,
                 SourceProviderType const & theType, bool theRest):
                 name(theName), type(theType), rest(theRest)
             {}
 
-            rtl::OUString name;
+            OUString name;
 
             SourceProviderType const type;
 
@@ -210,18 +210,18 @@ public:
         };
 
         Constructor(
-            rtl::OUString const & theName,
-            std::vector< rtl::OUString > const & theAnnotations):
+            OUString const & theName,
+            std::vector< OUString > const & theAnnotations):
             name(theName), annotations(theAnnotations)
         {}
 
-        rtl::OUString const name;
+        OUString const name;
 
         std::vector< Parameter > parameters;
 
-        std::vector< rtl::OUString > exceptions;
+        std::vector< OUString > exceptions;
 
-        std::vector< rtl::OUString > const annotations;
+        std::vector< OUString > const annotations;
     };
 
     explicit SourceProviderSingleInterfaceBasedServiceEntityPad(

@@ -71,10 +71,10 @@ typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContaine
 
 struct FWE_DLLPUBLIC MergeStatusbarInstruction
 {
-    ::rtl::OUString     aMergePoint;
-    ::rtl::OUString     aMergeCommand;
-    ::rtl::OUString     aMergeCommandParameter;
-    ::rtl::OUString     aMergeContext;
+    OUString     aMergePoint;
+    OUString     aMergeCommand;
+    OUString     aMergeCommandParameter;
+    OUString     aMergeContext;
     css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeStatusbarItems;
 };
 

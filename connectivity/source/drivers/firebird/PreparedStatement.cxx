@@ -766,7 +766,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 nIndex, sal_Int32, const ::rtl::OUString& )
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 nIndex, sal_Int32, const OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);

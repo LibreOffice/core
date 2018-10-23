@@ -138,7 +138,7 @@ public:
     /// @throws DAVException
     void
     GET0( DAVRequestHeaders & rRequestHeaders,
-          const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+          const std::vector< OUString > & rHeaderNames, // empty == 'all'
           DAVResource & rResource,
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 

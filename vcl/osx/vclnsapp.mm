@@ -233,7 +233,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     while( (pFile = [it nextObject]) != nil )
     {
-        const rtl::OUString aFile( GetOUString( pFile ) );
+        const OUString aFile( GetOUString( pFile ) );
         if( ! AquaSalInstance::isOnCommandLine( aFile ) )
         {
             aFileList.push_back( aFile );

@@ -63,9 +63,9 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    uno::Sequence<rtl::OUString> FilePicker_getSupportedServiceNames()
+    uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     {
-        uno::Sequence<rtl::OUString> aRet(3);
+        uno::Sequence<OUString> aRet(3);
         aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
         aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
         aRet[2] = "com.sun.star.ui.dialogs.AquaFilePicker";
@@ -108,7 +108,7 @@ void SAL_CALL SalAquaFilePicker::removeFilePickerListener( const uno::Reference<
 
 #pragma mark XAsynchronousExecutableDialog
 
-void SAL_CALL SalAquaFilePicker::setTitle( const rtl::OUString& aTitle )
+void SAL_CALL SalAquaFilePicker::setTitle( const OUString& aTitle )
 {
     SolarMutexGuard aGuard;
     implsetTitle(aTitle);
@@ -140,7 +140,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
             if (nullptr != frontWindow) {
                 NSString *windowTitle = [frontWindow title];
                 if (windowTitle != nil) {
-                    rtl::OUString ouName = [windowTitle OUString];
+                    OUString ouName = [windowTitle OUString];
                     //a window title will typically be something like "Untitled1 - OpenOffice.org Writer"
                     //but we only want the "Untitled1" part of it
                     sal_Int32 indexOfDash = ouName.indexOf(" - ");
@@ -200,30 +200,30 @@ void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( sal_Bool /* bMode */ )
     }
 }
 
-void SAL_CALL SalAquaFilePicker::setDefaultName( const rtl::OUString& aName )
+void SAL_CALL SalAquaFilePicker::setDefaultName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
     m_sSaveFileName = aName;
 }
 
-void SAL_CALL SalAquaFilePicker::setDisplayDirectory( const rtl::OUString& rDirectory )
+void SAL_CALL SalAquaFilePicker::setDisplayDirectory( const OUString& rDirectory )
 {
     SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(rDirectory);
 }
 
-rtl::OUString SAL_CALL SalAquaFilePicker::getDisplayDirectory()
+OUString SAL_CALL SalAquaFilePicker::getDisplayDirectory()
 {
-    rtl::OUString retVal = implgetDisplayDirectory();
+    OUString retVal = implgetDisplayDirectory();
 
     return retVal;
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles()
+uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getFiles()
 {
-    uno::Sequence< rtl::OUString > aSelectedFiles = getSelectedFiles();
+    uno::Sequence< OUString > aSelectedFiles = getSelectedFiles();
     // multiselection doesn't really work with getFiles
     // so just retrieve the first url
     if (aSelectedFiles.getLength() > 1)
@@ -232,7 +232,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles()
     return aSelectedFiles;
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
+uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
 {
     SolarMutexGuard aGuard;
 
@@ -258,7 +258,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
     long nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
-    uno::Sequence< rtl::OUString > aSelectedFiles(nFiles);
+    uno::Sequence< OUString > aSelectedFiles(nFiles);
 
     for(long nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
@@ -296,7 +296,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
 
 #pragma mark XFilterManager
 
-void SAL_CALL SalAquaFilePicker::appendFilter( const rtl::OUString& aTitle, const rtl::OUString& aFilter )
+void SAL_CALL SalAquaFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
 {
     SolarMutexGuard aGuard;
 
@@ -305,7 +305,7 @@ void SAL_CALL SalAquaFilePicker::appendFilter( const rtl::OUString& aTitle, cons
     m_pControlHelper->setFilterControlNeeded(true);
 }
 
-void SAL_CALL SalAquaFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
+void SAL_CALL SalAquaFilePicker::setCurrentFilter( const OUString& aTitle )
 {
     SolarMutexGuard aGuard;
 
@@ -316,7 +316,7 @@ void SAL_CALL SalAquaFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
     updateSaveFileNameExtension();
 }
 
-rtl::OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
+OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
 {
     SolarMutexGuard aGuard;
 
@@ -327,7 +327,7 @@ rtl::OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
 
 #pragma mark XFilterGroupManager
 
-void SAL_CALL SalAquaFilePicker::appendFilterGroup( const rtl::OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters )
+void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters )
 {
     SolarMutexGuard aGuard;
 
@@ -361,7 +361,7 @@ void SAL_CALL SalAquaFilePicker::enableControl( sal_Int16 nControlId, sal_Bool b
     m_pControlHelper->enableControl(nControlId, bEnable);
 }
 
-void SAL_CALL SalAquaFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUString& aLabel )
+void SAL_CALL SalAquaFilePicker::setLabel( sal_Int16 nControlId, const OUString& aLabel )
 {
     SolarMutexGuard aGuard;
 
@@ -369,7 +369,7 @@ void SAL_CALL SalAquaFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OU
     m_pControlHelper->setLabel( nControlId, sLabel ) ;
 }
 
-rtl::OUString SAL_CALL SalAquaFilePicker::getLabel( sal_Int16 nControlId )
+OUString SAL_CALL SalAquaFilePicker::getLabel( sal_Int16 nControlId )
 {
     return m_pControlHelper->getLabel(nControlId);
 }
@@ -476,17 +476,17 @@ void SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 
 #pragma mark XServiceInfo
 
-rtl::OUString SAL_CALL SalAquaFilePicker::getImplementationName()
+OUString SAL_CALL SalAquaFilePicker::getImplementationName()
 {
     return FILE_PICKER_IMPL_NAME;
 }
 
-sal_Bool SAL_CALL SalAquaFilePicker::supportsService( const rtl::OUString& sServiceName )
+sal_Bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
 }
@@ -557,7 +557,7 @@ void SalAquaFilePicker::updateSaveFileNameExtension()
         if( aStringList.empty()) // #i9328#
             return;
 
-        rtl::OUString suffix = (*(aStringList.begin())).copy(1);
+        OUString suffix = (*(aStringList.begin())).copy(1);
         NSString *requiredFileType = [NSString stringWithOUString:suffix];
 
         [m_pDialog setAllowedFileTypes:[NSArray arrayWithObjects:requiredFileType, nil]];

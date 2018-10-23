@@ -54,8 +54,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-
 namespace cppu
 {
 

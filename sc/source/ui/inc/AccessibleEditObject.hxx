@@ -179,7 +179,7 @@ private:
 
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
-    sal_Int32 GetFgBgColor(  const rtl::OUString &strPropColor) ;
+    sal_Int32 GetFgBgColor(  const OUString &strPropColor) ;
 };
 
 #endif

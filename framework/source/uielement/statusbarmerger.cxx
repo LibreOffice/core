@@ -18,7 +18,6 @@
  */
 #include <uielement/statusbarmerger.hxx>
 
-using rtl::OUString;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::uno::Sequence;
 
@@ -138,7 +137,7 @@ bool lcl_ReplaceItem( StatusBar* pStatusbar,
 
 bool lcl_RemoveItems( StatusBar* pStatusbar,
                              sal_uInt16 nPos,
-                             const ::rtl::OUString& rMergeCommandParameter )
+                             const OUString& rMergeCommandParameter )
 {
     sal_Int32 nCount = rMergeCommandParameter.toInt32();
     if ( nCount > 0 )
@@ -180,7 +179,7 @@ sal_uInt16 StatusbarMerger::FindReferencePos(
 {
     for ( sal_uInt16 nPos = 0; nPos < pStatusbar->GetItemCount(); nPos++ )
     {
-        const ::rtl::OUString rCmd = pStatusbar->GetItemCommand( pStatusbar->GetItemId( nPos ) );
+        const OUString rCmd = pStatusbar->GetItemCommand( pStatusbar->GetItemId( nPos ) );
         if ( rReferencePoint == rCmd )
             return nPos;
     }
@@ -192,8 +191,8 @@ bool StatusbarMerger::ProcessMergeOperation(
     StatusBar* pStatusbar,
     sal_uInt16 nPos,
     sal_uInt16& rItemId,
-    const ::rtl::OUString& rMergeCommand,
-    const ::rtl::OUString& rMergeCommandParameter,
+    const OUString& rMergeCommand,
+    const OUString& rMergeCommandParameter,
     const AddonStatusbarItemContainer& rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
@@ -211,8 +210,8 @@ bool StatusbarMerger::ProcessMergeOperation(
 bool StatusbarMerger::ProcessMergeFallback(
     StatusBar* pStatusbar,
     sal_uInt16& rItemId,
-    const ::rtl::OUString& rMergeCommand,
-    const ::rtl::OUString& rMergeFallback,
+    const OUString& rMergeCommand,
+    const OUString& rMergeFallback,
     const AddonStatusbarItemContainer& rItems )
 {
     // fallback IGNORE or REPLACE/REMOVE item not found

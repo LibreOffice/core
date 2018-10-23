@@ -55,7 +55,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-void lcl_executeUpdate(MYSQL* pMySql, const rtl::OString& sql)
+void lcl_executeUpdate(MYSQL* pMySql, const OString& sql)
 {
     mysql_real_query(pMySql, sql.getStr(), sql.getLength());
     // TODO handle error
@@ -78,7 +78,7 @@ OConnection::~OConnection()
     }
 }
 
-void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyValue>& info)
+void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& info)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -90,10 +90,10 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
     mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, &protocol);
 
     sal_Int32 nIndex;
-    rtl::OUString token;
-    rtl::OUString aHostName("localhost");
+    OUString token;
+    OUString aHostName("localhost");
     sal_Int32 nPort = 3306;
-    rtl::OUString aDbName;
+    OUString aDbName;
 
     m_settings.encoding = MysqlCDriver::getDefaultEncoding();
 
@@ -114,7 +114,7 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
     if (!token.isEmpty())
     {
         sal_Int32 nIndex1 = 0;
-        rtl::OUString hostandport = token.getToken(0, ':', nIndex1);
+        OUString hostandport = token.getToken(0, ':', nIndex1);
         if (!hostandport.isEmpty())
         {
             aHostName = hostandport;
@@ -134,7 +134,7 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
     // get user and password for mysql connection
     const PropertyValue* pIter = info.getConstArray();
     const PropertyValue* pEnd = pIter + info.getLength();
-    rtl::OUString aUser, aPass, sUnixSocket, sNamedPipe;
+    OUString aUser, aPass, sUnixSocket, sNamedPipe;
     bool unixSocketPassed = false;
     bool namedPipePassed = false;
 
@@ -169,18 +169,18 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
         }
     }
 
-    rtl::OString host_str = rtl::OUStringToOString(aHostName, m_settings.encoding);
-    rtl::OString user_str = rtl::OUStringToOString(aUser, m_settings.encoding);
-    rtl::OString pass_str = rtl::OUStringToOString(aPass, m_settings.encoding);
-    rtl::OString schema_str = rtl::OUStringToOString(aDbName, m_settings.encoding);
-    rtl::OString socket_str;
+    OString host_str = OUStringToOString(aHostName, m_settings.encoding);
+    OString user_str = OUStringToOString(aUser, m_settings.encoding);
+    OString pass_str = OUStringToOString(aPass, m_settings.encoding);
+    OString schema_str = OUStringToOString(aDbName, m_settings.encoding);
+    OString socket_str;
     if (unixSocketPassed)
     {
-        socket_str = rtl::OUStringToOString(sUnixSocket, m_settings.encoding);
+        socket_str = OUStringToOString(sUnixSocket, m_settings.encoding);
     }
     else if (namedPipePassed)
     {
-        socket_str = rtl::OUStringToOString(sNamedPipe, m_settings.encoding);
+        socket_str = OUStringToOString(sNamedPipe, m_settings.encoding);
     }
 
     // flags can also be passed as last parameter
@@ -195,26 +195,26 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
     if (getMysqlVersion() < 40100)
     {
         throw SQLException("MariaDB LibreOffice Connector requires MySQL Server 4.1 or above",
-                           *this, rtl::OUString(), 0, Any());
+                           *this, OUString(), 0, Any());
     }
 
-    lcl_executeUpdate(&m_mysql, rtl::OString{ "SET session sql_mode='ANSI_QUOTES'" });
-    lcl_executeUpdate(&m_mysql, rtl::OString{ "SET NAMES utf8" });
+    lcl_executeUpdate(&m_mysql, OString{ "SET session sql_mode='ANSI_QUOTES'" });
+    lcl_executeUpdate(&m_mysql, OString{ "SET NAMES utf8" });
 }
 
-rtl::OUString OConnection::getImplementationName()
+OUString OConnection::getImplementationName()
 {
-    return rtl::OUString("com.sun.star.sdbc.drivers.mysqlc.OConnection");
+    return OUString("com.sun.star.sdbc.drivers.mysqlc.OConnection");
 }
 
-css::uno::Sequence<rtl::OUString> OConnection::getSupportedServiceNames()
+css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()
 {
-    css::uno::Sequence<rtl::OUString> s(1);
+    css::uno::Sequence<OUString> s(1);
     s[0] = "com.sun.star.sdbc.Connection";
     return s;
 }
 
-sal_Bool OConnection::supportsService(rtl::OUString const& ServiceName)
+sal_Bool OConnection::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -233,12 +233,12 @@ Reference<XStatement> SAL_CALL OConnection::createStatement()
     return xReturn;
 }
 
-Reference<XPreparedStatement> SAL_CALL OConnection::prepareStatement(const rtl::OUString& _sSql)
+Reference<XPreparedStatement> SAL_CALL OConnection::prepareStatement(const OUString& _sSql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    const rtl::OString sSqlStatement
-        = rtl::OUStringToOString(_sSql, getConnectionEncoding()); // FIXME transform statement ?
+    const OString sSqlStatement
+        = OUStringToOString(_sSql, getConnectionEncoding()); // FIXME transform statement ?
 
     MYSQL_STMT* pStmt = mysql_stmt_init(&m_mysql);
     mysql_stmt_prepare(pStmt, sSqlStatement.getStr(), sSqlStatement.getLength());
@@ -254,7 +254,7 @@ Reference<XPreparedStatement> SAL_CALL OConnection::prepareStatement(const rtl::
     return xStatement;
 }
 
-Reference<XPreparedStatement> SAL_CALL OConnection::prepareCall(const rtl::OUString& /*_sSql*/)
+Reference<XPreparedStatement> SAL_CALL OConnection::prepareCall(const OUString& /*_sSql*/)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -263,12 +263,12 @@ Reference<XPreparedStatement> SAL_CALL OConnection::prepareCall(const rtl::OUStr
     return Reference<XPreparedStatement>();
 }
 
-rtl::OUString SAL_CALL OConnection::nativeSQL(const rtl::OUString& /*_sSql*/)
+OUString SAL_CALL OConnection::nativeSQL(const OUString& /*_sSql*/)
 {
     MutexGuard aGuard(m_aMutex);
 
-    // const rtl::OUString sSqlStatement = transFormPreparedStatement( _sSql );
-    rtl::OUString sNativeSQL;
+    // const OUString sSqlStatement = transFormPreparedStatement( _sSql );
+    OUString sNativeSQL;
     // TODO
     return sNativeSQL;
 }
@@ -355,7 +355,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly()
     return m_settings.readOnly;
 }
 
-void SAL_CALL OConnection::setCatalog(const rtl::OUString& /*catalog*/)
+void SAL_CALL OConnection::setCatalog(const OUString& /*catalog*/)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -363,7 +363,7 @@ void SAL_CALL OConnection::setCatalog(const rtl::OUString& /*catalog*/)
     // TODO How?
 }
 
-rtl::OUString SAL_CALL OConnection::getCatalog()
+OUString SAL_CALL OConnection::getCatalog()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -464,9 +464,9 @@ sal_Int32 OConnection::getMysqlVersion()
     return static_cast<sal_Int32>(version);
 }
 
-rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL)
+OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
 {
-    rtl::OUString sSqlStatement = _sSQL;
+    OUString sSqlStatement = _sSQL;
     if (!m_xParameterSubstitution.is())
     {
         try

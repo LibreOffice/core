@@ -115,7 +115,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     if(!pRXAct.is())
         return E_FAIL;
 
-    ::rtl::OUString ouStr = GetXInterface()->getAccessibleActionDescription(actionIndex);
+    OUString ouStr = GetXInterface()->getAccessibleActionDescription(actionIndex);
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);

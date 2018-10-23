@@ -78,7 +78,7 @@ void doTest(util::Duration const & rid, char const*const pis,
 {
     char const*const pos(i_pos ? i_pos : pis);
     util::Duration od;
-    OUString is(::rtl::OUString::createFromAscii(pis));
+    OUString is(OUString::createFromAscii(pis));
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");
     bool bSuccess = Converter::convertDuration(od, is);
     SAL_INFO("sax.cppunit","" << (od.Negative ? "-" : "+")  << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");

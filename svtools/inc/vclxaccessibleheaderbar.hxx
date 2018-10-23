@@ -48,8 +48,8 @@ public:
 
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 public:
     virtual void SAL_CALL disposing() override;

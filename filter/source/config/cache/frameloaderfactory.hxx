@@ -116,11 +116,11 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
         static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
       // Overrides to resolve ambiguity
-      virtual css::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) override
+      virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
         { return BaseContainer::getByName(aName); }
-      virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() override
+      virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
         { return BaseContainer::getElementNames(); }
-      virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) override
+      virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
         { return BaseContainer::hasByName(aName); }
 
       virtual css::uno::Type SAL_CALL getElementType() override
@@ -128,7 +128,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
       virtual sal_Bool SAL_CALL hasElements() override
         { return BaseContainer::hasElements(); }
 
-      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) override
+      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const OUString& Query ) override
         { return BaseContainer::createSubSetEnumerationByQuery(Query); }
       virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const css::uno::Sequence< css::beans::NamedValue >& Properties ) override
         { return BaseContainer::createSubSetEnumerationByProperties(Properties); }

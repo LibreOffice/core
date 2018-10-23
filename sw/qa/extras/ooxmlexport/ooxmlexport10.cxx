@@ -1023,7 +1023,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90810, "tdf90810short.docx")
     uno::Reference<container::XIndexAccess> xFootnoteIdxAcc(xFootnoteSupp->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XFootnote> xFootnote(xFootnoteIdxAcc->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
-    rtl::OUString sFootnoteText = xFootnoteText->getString();
+    OUString sFootnoteText = xFootnoteText->getString();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(89), sFootnoteText.getLength());
 }
 

@@ -300,7 +300,7 @@ void FormulaLogger::writeAscii( const char* s, size_t n )
 
 void FormulaLogger::write( const OUString& ou )
 {
-    OString s = rtl::OUStringToOString(ou, RTL_TEXTENCODING_UTF8).getStr();
+    OString s = OUStringToOString(ou, RTL_TEXTENCODING_UTF8).getStr();
     writeAscii(s.getStr(), s.getLength());
 }
 

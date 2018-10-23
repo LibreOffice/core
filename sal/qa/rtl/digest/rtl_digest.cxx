@@ -248,7 +248,7 @@ public:
 
         CPPUNIT_ASSERT_EQUAL(rtl_Digest_E_None, aError);
 
-        rtl::OString aKey = createHex(pKeyBuffer.get(), nKeyLen);
+        OString aKey = createHex(pKeyBuffer.get(), nKeyLen);
 
         // OString sSalt = createHex(pSaltData, nSaltDataLen);
         // printf("Salt: %s\n", sSalt.getStr());

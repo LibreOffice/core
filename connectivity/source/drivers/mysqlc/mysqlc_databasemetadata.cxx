@@ -79,7 +79,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon, MYSQL* pMySql)
 
 ODatabaseMetaData::~ODatabaseMetaData() {}
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator() { return rtl::OUString(); }
+OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator() { return OUString(); }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength() { return 16777208L; }
 
@@ -172,11 +172,11 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength() { return 256; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns() { return true; }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return rtl::OUString("n/a"); }
+OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return OUString("n/a"); }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return rtl::OUString("\""); }
+OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return OUString("\""); }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return rtl::OUString("#@"); }
+OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return OUString("#@"); }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames() { return true; }
 
@@ -355,39 +355,33 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds()
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL() { return false; }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getURL()
+OUString SAL_CALL ODatabaseMetaData::getURL()
 {
     return m_rConnection.getConnectionSettings().connectionURL;
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getUserName()
+OUString SAL_CALL ODatabaseMetaData::getUserName()
 {
     // TODO execute "SELECT USER()"
     SAL_WARN("connectivity.mysqlc", "method not implemented");
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName()
+OUString SAL_CALL ODatabaseMetaData::getDriverName() { return OUString("MySQL Connector/OO.org"); }
+
+OUString SAL_CALL ODatabaseMetaData::getDriverVersion() { return OUString("0.9.2"); }
+
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
 {
-    return rtl::OUString("MySQL Connector/OO.org");
+    return OStringToOUString(mysql_get_server_info(m_pMySql),
+                             m_rConnection.getConnectionEncoding());
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion() { return rtl::OUString("0.9.2"); }
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName() { return OUString("MySQL"); }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
-{
-    return rtl::OStringToOUString(mysql_get_server_info(m_pMySql),
-                                  m_rConnection.getConnectionEncoding());
-}
+OUString SAL_CALL ODatabaseMetaData::getProcedureTerm() { return OUString("procedure"); }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName()
-{
-    return rtl::OUString("MySQL");
-}
-
-rtl::OUString SAL_CALL ODatabaseMetaData::getProcedureTerm() { return rtl::OUString("procedure"); }
-
-rtl::OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return rtl::OUString("database"); }
+OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return OUString("database"); }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
 {
@@ -409,87 +403,87 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
     return MARIADBC_VERSION_MINOR;
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
+OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
 {
-    return rtl::OUString("ACCESSIBLE, ADD, ALL,"
-                         "ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, BEFORE,"
-                         "BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL,"
-                         "CASCADE, CASE, CHANGE, CHAR, CHARACTER, CHECK,"
-                         "COLLATE, COLUMN, CONDITION, CONNECTION, CONSTRAINT,"
-                         "CONTINUE, CONVERT, CREATE, CROSS, CURRENT_DATE,"
-                         "CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURSOR,"
-                         "DATABASE, DATABASES, DAY_HOUR, DAY_MICROSECOND,"
-                         "DAY_MINUTE, DAY_SECOND, DEC, DECIMAL, DECLARE,"
-                         "DEFAULT, DELAYED, DELETE, DESC, DESCRIBE,"
-                         "DETERMINISTIC, DISTINCT, DISTINCTROW, DIV, DOUBLE,"
-                         "DROP, DUAL, EACH, ELSE, ELSEIF, ENCLOSED,"
-                         "ESCAPED, EXISTS, EXIT, EXPLAIN, FALSE, FETCH,"
-                         "FLOAT, FLOAT4, FLOAT8, FOR, FORCE, FOREIGN, FROM,"
-                         "FULLTEXT, GRANT, GROUP, HAVING, HIGH_PRIORITY,"
-                         "HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF,"
-                         "IGNORE, IN, INDEX, INFILE, INNER, INOUT,"
-                         "INSENSITIVE, INSERT, INT, INT1, INT2, INT3, INT4,"
-                         "INT8, INTEGER, INTERVAL, INTO, IS, ITERATE, JOIN,"
-                         "KEY, KEYS, KILL, LEADING, LEAVE, LEFT, LIKE,"
-                         "LOCALTIMESTAMP, LOCK, LONG, LONGBLOB, LONGTEXT,"
-                         "LOOP, LOW_PRIORITY, MATCH, MEDIUMBLOB, MEDIUMINT,"
-                         "MEDIUMTEXT, MIDDLEINT, MINUTE_MICROSECOND,"
-                         "MINUTE_SECOND, MOD, MODIFIES, NATURAL, NOT,"
-                         "NO_WRITE_TO_BINLOG, NULL, NUMERIC, ON, OPTIMIZE,"
-                         "OPTION, OPTIONALLY, OR, ORDER, OUT, OUTER,"
-                         "OUTFILE, PRECISION, PRIMARY, PROCEDURE, PURGE,"
-                         "RANGE, READ, READS, READ_ONLY, READ_WRITE, REAL,"
-                         "REFERENCES, REGEXP, RELEASE, RENAME, REPEAT,"
-                         "REPLACE, REQUIRE, RESTRICT, RETURN, REVOKE, RIGHT,"
-                         "RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SELECT,"
-                         "SENSITIVE, SEPARATOR, SET, SHOW, SMALLINT, SPATIAL,"
-                         "SPECIFIC, SQL, SQLEXCEPTION, SQLSTATE, SQLWARNING,"
-                         "SQL_BIG_RESULT, SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT,"
-                         "SSL, STARTING, STRAIGHT_JOIN, TABLE, TERMINATED,"
-                         "THEN, TINYBLOB, TINYINT, TINYTEXT, TO, TRAILING,"
-                         "TRIGGER, TRUE, UNDO, UNION, UNIQUE, UNLOCK,"
-                         "UNSIGNED, UPDATE, USAGE, USE, USING, UTC_DATE,"
-                         "UTC_TIME, UTC_TIMESTAMP, VALUES, VARBINARY, VARCHAR,"
-                         "VARCHARACTER, VARYING, WHEN, WHERE, WHILE, WITH,"
-                         "WRITE, X509, XOR, YEAR_MONTH, ZEROFILL"
-                         "GENERAL, IGNORE_SERVER_IDS, MASTER_HEARTBEAT_PERIOD,"
-                         "MAXVALUE, RESIGNAL, SIGNAL, SLOW");
+    return OUString("ACCESSIBLE, ADD, ALL,"
+                    "ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, BEFORE,"
+                    "BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL,"
+                    "CASCADE, CASE, CHANGE, CHAR, CHARACTER, CHECK,"
+                    "COLLATE, COLUMN, CONDITION, CONNECTION, CONSTRAINT,"
+                    "CONTINUE, CONVERT, CREATE, CROSS, CURRENT_DATE,"
+                    "CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURSOR,"
+                    "DATABASE, DATABASES, DAY_HOUR, DAY_MICROSECOND,"
+                    "DAY_MINUTE, DAY_SECOND, DEC, DECIMAL, DECLARE,"
+                    "DEFAULT, DELAYED, DELETE, DESC, DESCRIBE,"
+                    "DETERMINISTIC, DISTINCT, DISTINCTROW, DIV, DOUBLE,"
+                    "DROP, DUAL, EACH, ELSE, ELSEIF, ENCLOSED,"
+                    "ESCAPED, EXISTS, EXIT, EXPLAIN, FALSE, FETCH,"
+                    "FLOAT, FLOAT4, FLOAT8, FOR, FORCE, FOREIGN, FROM,"
+                    "FULLTEXT, GRANT, GROUP, HAVING, HIGH_PRIORITY,"
+                    "HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF,"
+                    "IGNORE, IN, INDEX, INFILE, INNER, INOUT,"
+                    "INSENSITIVE, INSERT, INT, INT1, INT2, INT3, INT4,"
+                    "INT8, INTEGER, INTERVAL, INTO, IS, ITERATE, JOIN,"
+                    "KEY, KEYS, KILL, LEADING, LEAVE, LEFT, LIKE,"
+                    "LOCALTIMESTAMP, LOCK, LONG, LONGBLOB, LONGTEXT,"
+                    "LOOP, LOW_PRIORITY, MATCH, MEDIUMBLOB, MEDIUMINT,"
+                    "MEDIUMTEXT, MIDDLEINT, MINUTE_MICROSECOND,"
+                    "MINUTE_SECOND, MOD, MODIFIES, NATURAL, NOT,"
+                    "NO_WRITE_TO_BINLOG, NULL, NUMERIC, ON, OPTIMIZE,"
+                    "OPTION, OPTIONALLY, OR, ORDER, OUT, OUTER,"
+                    "OUTFILE, PRECISION, PRIMARY, PROCEDURE, PURGE,"
+                    "RANGE, READ, READS, READ_ONLY, READ_WRITE, REAL,"
+                    "REFERENCES, REGEXP, RELEASE, RENAME, REPEAT,"
+                    "REPLACE, REQUIRE, RESTRICT, RETURN, REVOKE, RIGHT,"
+                    "RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SELECT,"
+                    "SENSITIVE, SEPARATOR, SET, SHOW, SMALLINT, SPATIAL,"
+                    "SPECIFIC, SQL, SQLEXCEPTION, SQLSTATE, SQLWARNING,"
+                    "SQL_BIG_RESULT, SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT,"
+                    "SSL, STARTING, STRAIGHT_JOIN, TABLE, TERMINATED,"
+                    "THEN, TINYBLOB, TINYINT, TINYTEXT, TO, TRAILING,"
+                    "TRIGGER, TRUE, UNDO, UNION, UNIQUE, UNLOCK,"
+                    "UNSIGNED, UPDATE, USAGE, USE, USING, UTC_DATE,"
+                    "UTC_TIME, UTC_TIMESTAMP, VALUES, VARBINARY, VARCHAR,"
+                    "VARCHARACTER, VARYING, WHEN, WHERE, WHILE, WITH,"
+                    "WRITE, X509, XOR, YEAR_MONTH, ZEROFILL"
+                    "GENERAL, IGNORE_SERVER_IDS, MASTER_HEARTBEAT_PERIOD,"
+                    "MAXVALUE, RESIGNAL, SIGNAL, SLOW");
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape() { return rtl::OUString("\\"); }
+OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape() { return OUString("\\"); }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getStringFunctions()
+OUString SAL_CALL ODatabaseMetaData::getStringFunctions()
 {
-    return rtl::OUString("ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
-                         "CONCAT_WS,CONV,ELT,EXPORT_SET,FIELD,FIND_IN_SET,HEX,INSERT,"
-                         "INSTR,LCASE,LEFT,LENGTH,LOAD_FILE,LOCATE,LOCATE,LOWER,LPAD,"
-                         "LTRIM,MAKE_SET,MATCH,MID,OCT,OCTET_LENGTH,ORD,POSITION,"
-                         "QUOTE,REPEAT,REPLACE,REVERSE,RIGHT,RPAD,RTRIM,SOUNDEX,"
-                         "SPACE,STRCMP,SUBSTRING,SUBSTRING,SUBSTRING,SUBSTRING,"
-                         "SUBSTRING_INDEX,TRIM,UCASE,UPPER");
+    return OUString("ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
+                    "CONCAT_WS,CONV,ELT,EXPORT_SET,FIELD,FIND_IN_SET,HEX,INSERT,"
+                    "INSTR,LCASE,LEFT,LENGTH,LOAD_FILE,LOCATE,LOCATE,LOWER,LPAD,"
+                    "LTRIM,MAKE_SET,MATCH,MID,OCT,OCTET_LENGTH,ORD,POSITION,"
+                    "QUOTE,REPEAT,REPLACE,REVERSE,RIGHT,RPAD,RTRIM,SOUNDEX,"
+                    "SPACE,STRCMP,SUBSTRING,SUBSTRING,SUBSTRING,SUBSTRING,"
+                    "SUBSTRING_INDEX,TRIM,UCASE,UPPER");
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions()
+OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions()
 {
-    return rtl::OUString("DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
-                         "MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,PERIOD_ADD,"
-                         "PERIOD_DIFF,TO_DAYS,FROM_DAYS,DATE_FORMAT,TIME_FORMAT,"
-                         "CURDATE,CURRENT_DATE,CURTIME,CURRENT_TIME,NOW,SYSDATE,"
-                         "CURRENT_TIMESTAMP,UNIX_TIMESTAMP,FROM_UNIXTIME,"
-                         "SEC_TO_TIME,TIME_TO_SEC");
+    return OUString("DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
+                    "MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,PERIOD_ADD,"
+                    "PERIOD_DIFF,TO_DAYS,FROM_DAYS,DATE_FORMAT,TIME_FORMAT,"
+                    "CURDATE,CURRENT_DATE,CURTIME,CURRENT_TIME,NOW,SYSDATE,"
+                    "CURRENT_TIMESTAMP,UNIX_TIMESTAMP,FROM_UNIXTIME,"
+                    "SEC_TO_TIME,TIME_TO_SEC");
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getSystemFunctions()
+OUString SAL_CALL ODatabaseMetaData::getSystemFunctions()
 {
-    return rtl::OUString("DATABASE,USER,SYSTEM_USER,"
-                         "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION");
+    return OUString("DATABASE,USER,SYSTEM_USER,"
+                    "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION");
 }
 
-rtl::OUString SAL_CALL ODatabaseMetaData::getNumericFunctions()
+OUString SAL_CALL ODatabaseMetaData::getNumericFunctions()
 {
-    return rtl::OUString("ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
-                         "COT,DEGREES,EXP,FLOOR,LOG,LOG10,MAX,MIN,MOD,PI,POW,"
-                         "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE");
+    return OUString("ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
+                    "COT,DEGREES,EXP,FLOOR,LOG,LOG10,MAX,MIN,MOD,PI,POW,"
+                    "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE");
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar() { return false; }
@@ -643,11 +637,11 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
 
-    rtl::OUString sSql
+    OUString sSql
         = m_rConnection.getMysqlVersion() > 49999
-              ? rtl::OUString{ "SELECT SCHEMA_NAME AS TABLE_SCHEM, CATALOG_NAME AS TABLE_CATALOG "
-                               "FROM INFORMATION_SCHEMA.SCHEMATA ORDER BY SCHEMA_NAME" }
-              : rtl::OUString{ "SHOW DATABASES" };
+              ? OUString{ "SELECT SCHEMA_NAME AS TABLE_SCHEM, CATALOG_NAME AS TABLE_CATALOG "
+                          "FROM INFORMATION_SCHEMA.SCHEMATA ORDER BY SCHEMA_NAME" }
+              : OUString{ "SHOW DATABASES" };
 
     Reference<XStatement> statement = m_rConnection.createStatement();
     Reference<XInterface> executed = statement->executeQuery(sSql);
@@ -663,7 +657,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
         bool informationSchema = false;
         for (sal_uInt32 i = 1; i <= columns; i++)
         {
-            rtl::OUString columnStringValue = xRow->getString(i);
+            OUString columnStringValue = xRow->getString(i);
             if (i == 1)
             { // TABLE_SCHEM
                 informationSchema = !columnStringValue.equalsIgnoreAsciiCase("information_schema");
@@ -680,16 +674,17 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
     return xResultSet;
 }
 
-Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumnPrivileges(
-    const Any& /*catalog*/, const rtl::OUString& schema, const rtl::OUString& table,
-    const rtl::OUString& columnNamePattern)
+Reference<XResultSet>
+    SAL_CALL ODatabaseMetaData::getColumnPrivileges(const Any& /*catalog*/, const OUString& schema,
+                                                    const OUString& table,
+                                                    const OUString& columnNamePattern)
 {
-    rtl::OUString query("SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS "
-                        "TABLE_SCHEM, TABLE_NAME, COLUMN_NAME, NULL AS GRANTOR, "
-                        "GRANTEE, PRIVILEGE_TYPE AS PRIVILEGE, IS_GRANTABLE FROM "
-                        "INFORMATION_SCHEMA.COLUMN_PRIVILEGES WHERE TABLE_SCHEMA LIKE "
-                        "'?' AND TABLE_NAME='?' AND COLUMN_NAME LIKE '?' ORDER BY "
-                        "COLUMN_NAME, PRIVILEGE_TYPE");
+    OUString query("SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS "
+                   "TABLE_SCHEM, TABLE_NAME, COLUMN_NAME, NULL AS GRANTOR, "
+                   "GRANTEE, PRIVILEGE_TYPE AS PRIVILEGE, IS_GRANTABLE FROM "
+                   "INFORMATION_SCHEMA.COLUMN_PRIVILEGES WHERE TABLE_SCHEMA LIKE "
+                   "'?' AND TABLE_NAME='?' AND COLUMN_NAME LIKE '?' ORDER BY "
+                   "COLUMN_NAME, PRIVILEGE_TYPE");
 
     query = query.replaceFirst("?", schema);
     query = query.replaceFirst("?", table);
@@ -701,34 +696,34 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalog*/,
-                                                             const rtl::OUString& /*schemaPattern*/,
-                                                             const rtl::OUString& tableNamePattern,
-                                                             const rtl::OUString& columnNamePattern)
+                                                             const OUString& /*schemaPattern*/,
+                                                             const OUString& tableNamePattern,
+                                                             const OUString& columnNamePattern)
 {
-    rtl::OUStringBuffer queryBuf("SELECT TABLE_CATALOG AS TABLE_CAT, " // 1
-                                 "TABLE_SCHEMA AS TABLE_SCHEM, " // 2
-                                 "TABLE_NAME, " // 3
-                                 "COLUMN_NAME, " // 4
-                                 "DATA_TYPE, " // 5
-                                 // TYPE_NAME missing
-                                 "CHARACTER_MAXIMUM_LENGTH, " // 6
-                                 "NUMERIC_PRECISION, " // 7
-                                 // buffer length missing
-                                 "NUMERIC_SCALE AS DECIMAL_DIGITS, " // 8
-                                 // NUM_PREC_RADIX missing
-                                 // NULLABLE missing
-                                 "COLUMN_COMMENT AS REMARKS, " // 9
-                                 "COLUMN_DEFAULT AS COLUMN_DEF," // 10
-                                 "CHARACTER_OCTET_LENGTH, " // 11
-                                 "ORDINAL_POSITION, " // 12
-                                 "IS_NULLABLE, " // 13
-                                 "COLUMN_TYPE " // 14
-                                 "FROM INFORMATION_SCHEMA.COLUMNS "
-                                 "WHERE (1 = 1) ");
+    OUStringBuffer queryBuf("SELECT TABLE_CATALOG AS TABLE_CAT, " // 1
+                            "TABLE_SCHEMA AS TABLE_SCHEM, " // 2
+                            "TABLE_NAME, " // 3
+                            "COLUMN_NAME, " // 4
+                            "DATA_TYPE, " // 5
+                            // TYPE_NAME missing
+                            "CHARACTER_MAXIMUM_LENGTH, " // 6
+                            "NUMERIC_PRECISION, " // 7
+                            // buffer length missing
+                            "NUMERIC_SCALE AS DECIMAL_DIGITS, " // 8
+                            // NUM_PREC_RADIX missing
+                            // NULLABLE missing
+                            "COLUMN_COMMENT AS REMARKS, " // 9
+                            "COLUMN_DEFAULT AS COLUMN_DEF," // 10
+                            "CHARACTER_OCTET_LENGTH, " // 11
+                            "ORDINAL_POSITION, " // 12
+                            "IS_NULLABLE, " // 13
+                            "COLUMN_TYPE " // 14
+                            "FROM INFORMATION_SCHEMA.COLUMNS "
+                            "WHERE (1 = 1) ");
 
     if (!tableNamePattern.isEmpty())
     {
-        rtl::OUString sAppend;
+        OUString sAppend;
         if (tableNamePattern.match("%"))
             sAppend = "AND TABLE_NAME LIKE '%' ";
         else
@@ -737,7 +732,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
     }
     if (!columnNamePattern.isEmpty())
     {
-        rtl::OUString sAppend;
+        OUString sAppend;
         if (columnNamePattern.match("%"))
             sAppend = "AND COLUMN_NAME LIKE '%' ";
         else
@@ -745,7 +740,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         queryBuf.append(sAppend.replaceAll("%", columnNamePattern));
     }
 
-    rtl::OUString query = queryBuf.makeStringAndClear();
+    OUString query = queryBuf.makeStringAndClear();
     Reference<XStatement> statement = m_rConnection.createStatement();
     Reference<XResultSet> rs = statement->executeQuery(query.getStr());
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
@@ -767,13 +762,13 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         // column name
         aRow.push_back(makeAny(xRow->getString(4)));
         // data type
-        rtl::OUString sDataType = xRow->getString(5);
+        OUString sDataType = xRow->getString(5);
         aRow.push_back(makeAny(mysqlc_sdbc_driver::mysqlStrToOOOType(sDataType)));
         // type name
         aRow.push_back(makeAny(sDataType)); // TODO
         // column size
         sal_Int32 nColumnSize = 0;
-        rtl::OUString sColumnType = xRow->getString(14);
+        OUString sColumnType = xRow->getString(14);
         sal_Int32 nCharMaxLen = xRow->getShort(6);
         bool bIsCharMax = !xRow->wasNull();
         if (sDataType.equalsIgnoreAsciiCase("year"))
@@ -796,7 +791,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         // num_prec_radix
         aRow.push_back(makeAny(sal_Int32(10)));
         // nullable
-        rtl::OUString sIsNullable = xRow->getString(13);
+        OUString sIsNullable = xRow->getString(13);
         if (xRow->wasNull())
             aRow.push_back(makeAny(ColumnValue::NULLABLE_UNKNOWN));
         else if (sIsNullable.equalsIgnoreAsciiCase("YES"))
@@ -823,11 +818,12 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
     return xResultSet;
 }
 
-Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(
-    const Any& /*catalog*/, const rtl::OUString& schemaPattern,
-    const rtl::OUString& tableNamePattern, const Sequence<rtl::OUString>& /*types */)
+Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(const Any& /*catalog*/,
+                                                            const OUString& schemaPattern,
+                                                            const OUString& tableNamePattern,
+                                                            const Sequence<OUString>& /*types */)
 {
-    rtl::OUString query(
+    OUString query(
         "SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS TABLE_SCHEM, TABLE_NAME,"
         "IF(STRCMP(TABLE_TYPE,'BASE TABLE'), TABLE_TYPE, 'TABLE') AS TABLE_TYPE, TABLE_COMMENT AS "
         "REMARKS "
@@ -845,8 +841,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getProcedureColumns(
-    const Any& /* catalog */, const rtl::OUString& /* schemaPattern */,
-    const rtl::OUString& /* procedureNamePattern */, const rtl::OUString& /* columnNamePattern */)
+    const Any& /* catalog */, const OUString& /* schemaPattern */,
+    const OUString& /* procedureNamePattern */, const OUString& /* columnNamePattern */)
 {
     // Currently there is no information available
     return nullptr;
@@ -854,8 +850,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getProcedureColumns(
 
 Reference<XResultSet>
     SAL_CALL ODatabaseMetaData::getProcedures(const Any& /*catalog*/,
-                                              const rtl::OUString& /*schemaPattern*/,
-                                              const rtl::OUString& /*procedureNamePattern*/)
+                                              const OUString& /*schemaPattern*/,
+                                              const OUString& /*procedureNamePattern*/)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
@@ -867,8 +863,9 @@ Reference<XResultSet>
     return xResultSet;
 }
 
-Reference<XResultSet> SAL_CALL ODatabaseMetaData::getVersionColumns(
-    const Any& /* catalog */, const rtl::OUString& /* schema */, const rtl::OUString& /* table */)
+Reference<XResultSet> SAL_CALL ODatabaseMetaData::getVersionColumns(const Any& /* catalog */,
+                                                                    const OUString& /* schema */,
+                                                                    const OUString& /* table */)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
@@ -879,8 +876,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getVersionColumns(
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getExportedKeys(const Any& /*catalog */,
-                                                                  const rtl::OUString& /*schema */,
-                                                                  const rtl::OUString& /*table */)
+                                                                  const OUString& /*schema */,
+                                                                  const OUString& /*table */)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
@@ -893,14 +890,14 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getExportedKeys(const Any& /*c
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*catalog*/,
-                                                                  const rtl::OUString& schema,
-                                                                  const rtl::OUString& table)
+                                                                  const OUString& schema,
+                                                                  const OUString& table)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
                                      UNO_QUERY);
 
-    rtl::OUString query(
+    OUString query(
         "SELECT refi.CONSTRAINT_CATALOG, k.COLUMN_NAME, "
         " refi.UNIQUE_CONSTRAINT_CATALOG, "
         " refi.UNIQUE_CONSTRAINT_SCHEMA, refi.REFERENCED_TABLE_NAME, k.REFERENCED_COLUMN_NAME, "
@@ -959,16 +956,15 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getPrimaryKeys(const Any& /*catalog*/,
-                                                                 const rtl::OUString& schema,
-                                                                 const rtl::OUString& table)
+                                                                 const OUString& schema,
+                                                                 const OUString& table)
 {
-    rtl::OUString query(
-        "SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA "
-        "AS TABLE_SCHEM, TABLE_NAME, "
-        "COLUMN_NAME, SEQ_IN_INDEX AS KEY_SEQ,"
-        "INDEX_NAME AS PK_NAME FROM INFORMATION_SCHEMA.STATISTICS "
-        "WHERE TABLE_SCHEMA LIKE '?' AND TABLE_NAME LIKE '?' AND INDEX_NAME='PRIMARY' "
-        "ORDER BY TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX");
+    OUString query("SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA "
+                   "AS TABLE_SCHEM, TABLE_NAME, "
+                   "COLUMN_NAME, SEQ_IN_INDEX AS KEY_SEQ,"
+                   "INDEX_NAME AS PK_NAME FROM INFORMATION_SCHEMA.STATISTICS "
+                   "WHERE TABLE_SCHEMA LIKE '?' AND TABLE_NAME LIKE '?' AND INDEX_NAME='PRIMARY' "
+                   "ORDER BY TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX");
 
     // TODO use prepared stmt instead
     // TODO escape schema, table name ?
@@ -981,8 +977,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getPrimaryKeys(const Any& /*ca
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getIndexInfo(const Any& /*catalog*/,
-                                                               const rtl::OUString& /*schema*/,
-                                                               const rtl::OUString& /*table*/,
+                                                               const OUString& /*schema*/,
+                                                               const OUString& /*table*/,
                                                                sal_Bool /*unique*/,
                                                                sal_Bool /*approximate*/)
 {
@@ -996,9 +992,11 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getIndexInfo(const Any& /*cata
     return xResultSet;
 }
 
-Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
-    const Any& /*catalog*/, const rtl::OUString& /*schema*/, const rtl::OUString& /*table*/,
-    sal_Int32 /*scope*/, sal_Bool /*nullable*/)
+Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(const Any& /*catalog*/,
+                                                                       const OUString& /*schema*/,
+                                                                       const OUString& /*table*/,
+                                                                       sal_Int32 /*scope*/,
+                                                                       sal_Bool /*nullable*/)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
@@ -1010,10 +1008,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     return xResultSet;
 }
 
-Reference<XResultSet>
-    SAL_CALL ODatabaseMetaData::getTablePrivileges(const Any& /*catalog*/,
-                                                   const rtl::OUString& /*schemaPattern*/,
-                                                   const rtl::OUString& /*tableNamePattern*/)
+Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTablePrivileges(
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
@@ -1026,9 +1022,9 @@ Reference<XResultSet>
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
-    const Any& /*primaryCatalog*/, const rtl::OUString& /*primarySchema_*/,
-    const rtl::OUString& /*primaryTable_*/, const Any& /*foreignCatalog*/,
-    const rtl::OUString& /*foreignSchema*/, const rtl::OUString& /*foreignTable*/)
+    const Any& /*primaryCatalog*/, const OUString& /*primarySchema_*/,
+    const OUString& /*primaryTable_*/, const Any& /*foreignCatalog*/,
+    const OUString& /*foreignSchema*/, const OUString& /*foreignTable*/)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
@@ -1040,9 +1036,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
     return xResultSet;
 }
 
-Reference<XResultSet> SAL_CALL ODatabaseMetaData::getUDTs(
-    const Any& /* catalog */, const rtl::OUString& /* schemaPattern */,
-    const rtl::OUString& /* typeNamePattern */, const Sequence<sal_Int32>& /* types */)
+Reference<XResultSet> SAL_CALL ODatabaseMetaData::getUDTs(const Any& /* catalog */,
+                                                          const OUString& /* schemaPattern */,
+                                                          const OUString& /* typeNamePattern */,
+                                                          const Sequence<sal_Int32>& /* types */)
 {
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getUDTs", *this);
     return nullptr;

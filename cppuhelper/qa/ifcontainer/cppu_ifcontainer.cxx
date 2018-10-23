@@ -209,7 +209,7 @@ namespace cppu_ifcontainer
                 ::cppu::UnoType< ::sal_uInt32 >::get(),
                 ::cppu::UnoType< ::sal_Int32 >::get(),
                 ::cppu::UnoType< ::sal_Int16 >::get(),
-                ::cppu::UnoType< ::rtl::OUString >::get(),
+                ::cppu::UnoType< OUString >::get(),
                 ::cppu::UnoType< ::sal_Int8 >::get()
             };
             doContainerTest< cppu::OMultiTypeInterfaceContainerHelper,

@@ -56,7 +56,7 @@ public:
         const vcl::EnumContext::Context eContext);
 
 private:
-    static ::rtl::OUString GetModuleName (
+    static OUString GetModuleName (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 

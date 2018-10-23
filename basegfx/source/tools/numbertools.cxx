@@ -27,7 +27,7 @@ namespace basegfx { namespace utils
         // }
         // config here
 
-        rtl::OStringBuffer aNum;
+        OStringBuffer aNum;
         rtl::math::doubleToStringBuffer(aNum,
                                          fValue,
                                          rtl_math_StringFormat_F,

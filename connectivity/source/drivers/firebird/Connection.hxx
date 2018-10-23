@@ -75,13 +75,13 @@ namespace connectivity
                                                                     //  DatabaseMetaData.getTypeInfo.
 
             /** The URL passed to us when opening, i.e. of the form sdbc:* */
-            ::rtl::OUString     m_sConnectionURL;
+            OUString     m_sConnectionURL;
             /**
              * The URL passed to firebird, i.e. either a local file (for a
              * temporary .fdb extracted from a .odb or a normal local file) or
              * a remote url.
              */
-            ::rtl::OUString     m_sFirebirdURL;
+            OUString     m_sFirebirdURL;
 
             /* EMBEDDED MODE DATA */
             /** Denotes that we have a database stored within a .odb file. */
@@ -117,7 +117,7 @@ namespace connectivity
              *
              * (The temporary .fdb is our m_sFirebirdURL.)
              */
-            ::rtl::OUString m_sFBKPath;
+            OUString m_sFBKPath;
 
             void loadDatabaseFile(const OUString& pSrcLocation, const OUString& pTmpLocation);
 
@@ -169,7 +169,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void construct( const ::rtl::OUString& url,
+            void construct( const OUString& url,
                                     const css::uno::Sequence< css::beans::PropertyValue >& info);
 
             const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
@@ -217,9 +217,9 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // XConnection
             virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) override;
-            virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql ) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
             virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
             virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
             virtual void SAL_CALL commit(  ) override;
@@ -228,8 +228,8 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
             virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
             virtual sal_Bool SAL_CALL isReadOnly(  ) override;
-            virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) override;
-            virtual ::rtl::OUString SAL_CALL getCatalog(  ) override;
+            virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
+            virtual OUString SAL_CALL getCatalog(  ) override;
             virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
             virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
             virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;

@@ -68,9 +68,9 @@ inline std::vector<char> readIpcStringArg(std::istream& stream)
     return buffer;
 }
 
-void readIpcArg(std::istream& stream, rtl::OUString& string);
+void readIpcArg(std::istream& stream, OUString& string);
 void readIpcArg(std::istream& stream, QString& string);
-void readIpcArg(std::istream& stream, css::uno::Sequence<rtl::OUString>& seq);
+void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq);
 
 inline void readIpcArg(std::istream& stream, Commands& value)
 {
@@ -120,7 +120,7 @@ inline void readIpcArgs(std::istream& stream, T& arg, Args&... args)
     readIpcArgs(stream, args...);
 }
 
-void sendIpcArg(std::ostream& stream, const rtl::OUString& string);
+void sendIpcArg(std::ostream& stream, const OUString& string);
 void sendIpcArg(std::ostream& stream, const QString& string);
 
 inline void sendIpcStringArg(std::ostream& stream, uint32_t length, const char* string)

@@ -118,8 +118,8 @@ public:
         const Application eApplication,
         const Context eContext);
     EnumContext (
-        const ::rtl::OUString& rsApplicationName,
-        const ::rtl::OUString& rsContextName);
+        const OUString& rsApplicationName,
+        const OUString& rsContextName);
 
     /** This variant of the GetCombinedContext() method treats some
         application names as identical to each other.  Replacements
@@ -143,11 +143,11 @@ public:
     const static sal_Int32 NoMatch;
     const static sal_Int32 OptimalMatch;
 
-    static Application GetApplicationEnum (const ::rtl::OUString& rsApplicationName);
-    static const ::rtl::OUString& GetApplicationName (const Application eApplication);
+    static Application GetApplicationEnum (const OUString& rsApplicationName);
+    static const OUString& GetApplicationName (const Application eApplication);
 
-    static Context GetContextEnum (const ::rtl::OUString& rsContextName);
-    static const ::rtl::OUString& GetContextName (const Context eContext);
+    static Context GetContextEnum (const OUString& rsContextName);
+    static const OUString& GetContextName (const Context eContext);
 
 private:
     Application meApplication;
@@ -155,8 +155,8 @@ private:
 
     static void ProvideApplicationContainers();
     static void ProvideContextContainers();
-    static void AddEntry (const ::rtl::OUString& rsName, const Application eApplication);
-    static void AddEntry (const ::rtl::OUString& rsName, const Context eContext);
+    static void AddEntry (const OUString& rsName, const Application eApplication);
+    static void AddEntry (const OUString& rsName, const Context eContext);
 };
 
 

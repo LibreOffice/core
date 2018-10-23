@@ -20,10 +20,10 @@
 #include <sal/log.hxx>
 #include "CFStringUtilities.hxx"
 
-rtl::OUString CFStringToOUString(const CFStringRef sOrig)
+OUString CFStringToOUString(const CFStringRef sOrig)
 {
     if (nullptr == sOrig) {
-        return rtl::OUString();
+        return OUString();
     }
 
     CFRetain(sOrig);
@@ -38,23 +38,23 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig)
     //we no longer need the original string
     CFRelease(sOrig);
 
-    return rtl::OUString(reinterpret_cast<sal_Unicode *>(unichars));
+    return OUString(reinterpret_cast<sal_Unicode *>(unichars));
 }
 
-CFStringRef CFStringCreateWithOUString(const rtl::OUString& aString)
+CFStringRef CFStringCreateWithOUString(const OUString& aString)
 {
     CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(aString.getStr()), aString.getLength());
 
     return ref;
 }
 
-rtl::OUString FSRefToOUString(FSRef const & fsRef, InfoType info)
+OUString FSRefToOUString(FSRef const & fsRef, InfoType info)
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 CFURLCreateFromFSRef
     CFURLRef aUrlRef = CFURLCreateFromFSRef(nullptr, &fsRef);
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    rtl::OUString sResult = CFURLRefToOUString(aUrlRef, info);
+    OUString sResult = CFURLRefToOUString(aUrlRef, info);
 
     //we no longer need the CFURLRef
     CFRelease(aUrlRef);
@@ -62,7 +62,7 @@ rtl::OUString FSRefToOUString(FSRef const & fsRef, InfoType info)
     return sResult;
 }
 
-rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
+OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
 {
     CFStringRef sURLString = nullptr;
 
@@ -97,7 +97,7 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
             break;
     }
 
-    rtl::OUString sResult = CFStringToOUString(sURLString);
+    OUString sResult = CFStringToOUString(sURLString);
 
     CFRelease(sURLString);
 

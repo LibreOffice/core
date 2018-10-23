@@ -61,7 +61,7 @@ namespace osl
  drive alone
 */
 
-inline void systemPathEnsureSeparator(/*inout*/ rtl::OUString& Path)
+inline void systemPathEnsureSeparator(/*inout*/ OUString& Path)
 {
     osl_systemPathEnsureSeparator(&Path.pData);
 }
@@ -71,12 +71,12 @@ inline void systemPathEnsureSeparator(/*inout*/ rtl::OUString& Path)
  if the path is not the root path '\'
 */
 
-inline void systemPathRemoveSeparator(/*inout*/ rtl::OUString& Path)
+inline void systemPathRemoveSeparator(/*inout*/ OUString& Path)
 {
     osl_systemPathRemoveSeparator(&Path.pData);
 }
 
-inline bool systemPathIsLogicalDrivePattern(/*in*/ const rtl::OUString& path)
+inline bool systemPathIsLogicalDrivePattern(/*in*/ const OUString& path)
 {
     return osl_systemPathIsLogicalDrivePattern(path.pData);
 }

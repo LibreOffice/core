@@ -129,17 +129,17 @@ namespace comphelper
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-        virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const css::uno::Any& p2) override
+        virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) override
            { OPropertyBag_PBase::setPropertyValue(p1, p2); }
-        virtual css::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) override
+        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
            { return OPropertyBag_PBase::getPropertyValue(p1); }
-        virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
            { OPropertyBag_PBase::addPropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
            { OPropertyBag_PBase::removePropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
            { OPropertyBag_PBase::addVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
            { OPropertyBag_PBase::removeVetoableChangeListener(p1, p2); }
 
         // XSet

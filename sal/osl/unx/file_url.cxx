@@ -454,7 +454,7 @@ namespace
        PATH_MAX else osl_File_E_NAMETOOLONG is the result
     */
 
-    oslFileError osl_getAbsoluteFileURL_impl_(const rtl::OUString& unresolved_path, rtl::OUString& resolved_path)
+    oslFileError osl_getAbsoluteFileURL_impl_(const OUString& unresolved_path, OUString& resolved_path)
     {
         /* the given unresolved path must not exceed PATH_MAX */
         if (unresolved_path.getLength() >= (PATH_MAX - 2))
@@ -569,7 +569,7 @@ namespace
 
         OSL_ASSERT(len < PATH_MAX);
 
-        resolved_path = rtl::OUString(path_resolved_so_far, len);
+        resolved_path = OUString(path_resolved_so_far, len);
 
         return osl_File_E_None;
     }
@@ -584,13 +584,13 @@ oslFileError osl_getAbsoluteFileURL(
     /* Work around the below call to getSystemPathFromFileURL rejecting input
        that starts with "/" (for whatever reason it behaves that way; but
        changing that would start to break lots of tests at least) */
-    rtl::OUString relUrl(ustrRelativeURL);
+    OUString relUrl(ustrRelativeURL);
     if (relUrl.startsWith("//"))
         relUrl = "file:" + relUrl;
     else if (relUrl.startsWith("/"))
         relUrl = "file://" + relUrl;
 
-    rtl::OUString unresolved_path;
+    OUString unresolved_path;
 
     FileBase::RC frc = FileBase::getSystemPathFromFileURL(relUrl, unresolved_path);
     if (frc != FileBase::E_None)
@@ -598,18 +598,18 @@ oslFileError osl_getAbsoluteFileURL(
 
     if (systemPathIsRelativePath(unresolved_path))
     {
-        rtl::OUString base_path;
+        OUString base_path;
         oslFileError rc = osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
         if (rc != osl_File_E_None)
             return rc;
 
-        rtl::OUString abs_path;
+        OUString abs_path;
         systemPathMakeAbsolutePath(base_path, unresolved_path, abs_path);
 
         unresolved_path = abs_path;
     }
 
-    rtl::OUString resolved_path;
+    OUString resolved_path;
     oslFileError rc = osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
     if (rc == osl_File_E_None)
     {
@@ -627,11 +627,11 @@ namespace detail {
      No separate error code if unicode to text conversion or getenv fails because for the
      caller there is no difference why a file could not be found in $PATH
     */
-    bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result)
+    bool find_in_PATH(const OUString& file_path, OUString& result)
     {
         bool bfound = false;
-        rtl::OUString path("PATH");
-        rtl::OUString env_path;
+        OUString path("PATH");
+        OUString env_path;
 
         if (osl_getEnvironment(path.pData, &env_path.pData) == osl_Process_E_None)
             bfound = osl::searchPath(file_path, env_path, result);
@@ -647,23 +647,23 @@ namespace
      No separate error code if unicode to text conversion or getcwd fails because for the
      caller there is no difference why a file could not be found in CDW
     */
-    bool find_in_CWD(const rtl::OUString& file_path, rtl::OUString& result)
+    bool find_in_CWD(const OUString& file_path, OUString& result)
     {
         bool bfound = false;
-        rtl::OUString cwd_url;
+        OUString cwd_url;
 
         if (osl_getProcessWorkingDir(&cwd_url.pData) == osl_Process_E_None)
         {
-            rtl::OUString cwd;
+            OUString cwd;
             FileBase::getSystemPathFromFileURL(cwd_url, cwd);
             bfound = osl::searchPath(file_path, cwd, result);
         }
         return bfound;
     }
 
-    bool find_in_searchPath(const rtl::OUString& file_path, rtl_uString* search_path, rtl::OUString& result)
+    bool find_in_searchPath(const OUString& file_path, rtl_uString* search_path, OUString& result)
     {
-        return (search_path && osl::searchPath(file_path, rtl::OUString(search_path), result));
+        return (search_path && osl::searchPath(file_path, OUString(search_path), result));
     }
 
 }
@@ -673,7 +673,7 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
     OSL_PRECOND(ustrFilePath && pustrURL, "osl_searchFileURL: invalid parameter");
 
     FileBase::RC  rc;
-    rtl::OUString file_path;
+    OUString file_path;
 
     // try to interpret search path as file url else assume it's a system path list
     rc = FileBase::getSystemPathFromFileURL(ustrFilePath, file_path);
@@ -683,13 +683,13 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
         return oslFileError(rc);
 
     bool          bfound = false;
-    rtl::OUString result;
+    OUString result;
 
     if (find_in_searchPath(file_path, ustrSearchPath, result) ||
         osl::detail::find_in_PATH(file_path, result) ||
         find_in_CWD(file_path, result))
     {
-        rtl::OUString resolved;
+        OUString resolved;
 
         if (osl::realpath(result, resolved))
         {

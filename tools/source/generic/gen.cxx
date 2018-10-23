@@ -41,7 +41,7 @@ SvStream& WritePair( SvStream& rOStream, const Pair& rPair )
     return rOStream;
 }
 
-rtl::OString Pair::toString() const
+OString Pair::toString() const
 {
     std::stringstream ss;
     // Note that this is not just used for debugging output but the

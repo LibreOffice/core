@@ -55,7 +55,7 @@ STDMETHODIMP CAccImage::get_description(BSTR * description)
     if( !pRXImg.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr = GetXInterface()->getAccessibleImageDescription();
+    OUString ouStr = GetXInterface()->getAccessibleImageDescription();
     SAFE_SYSFREESTRING(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
 
