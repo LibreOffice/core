@@ -446,7 +446,7 @@ void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(_pOverlappedObj);
     if ( pObj )
     {
-        uno::Reference<report::XReportComponent> xComponent = pObj->getReportComponent();
+        const uno::Reference<report::XReportComponent>& xComponent = pObj->getReportComponent();
         if (xComponent.is() && xComponent != m_xOverlappingObj)
         {
             OReportModel& rRptModel(static_cast< OReportModel& >(_pOverlappedObj->getSdrModelFromSdrObject()));
