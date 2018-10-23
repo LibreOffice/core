@@ -71,7 +71,7 @@ OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nT
 
     if( oValue.has() )
     {
-        const OUString aString(oValue.get());
+        const OUString& aString(oValue.get());
         const sal_Int32 nLength(aString.getLength());
 
         if(nLength > 0)

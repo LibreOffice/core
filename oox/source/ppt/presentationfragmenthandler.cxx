@@ -105,7 +105,7 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
     const oox::core::TextFieldStack& rTextFields = rFilter.getTextFieldStack();
     if ( !rTextFields.empty() )
     {
-        Reference< frame::XModel > xModel( rFilter.getModel() );
+        const Reference< frame::XModel >& xModel( rFilter.getModel() );
         for (auto const& textField : rTextFields)
         {
             const OUString sURL = "URL";

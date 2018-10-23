@@ -220,7 +220,7 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
         return;
     }
 
-    ShapePtr pCurrShape(rAtom.getShapeTemplate());
+    const ShapePtr& pCurrShape(rAtom.getShapeTemplate());
 
     // TODO(F3): cloned shape shares all properties by reference,
     // don't change them!
