@@ -89,7 +89,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 
     //4--guessed language
-    uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( rLangGuessHelper.GetGuesser() );
+    const uno::Reference< linguistic2::XLanguageGuessing >& xLangGuesser( rLangGuessHelper.GetGuesser() );
     if ( xLangGuesser.is() && !rGuessedTextLang.isEmpty())
     {
         css::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( rGuessedTextLang, 0, rGuessedTextLang.getLength()) );

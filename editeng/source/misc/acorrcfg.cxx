@@ -48,7 +48,8 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     bSearchInAllCategories(false)
 {
     SvtPathOptions aPathOpt;
-    OUString sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
+    OUString sSharePath, sUserPath;
+    OUString const & sAutoPath( aPathOpt.GetAutoCorrectPath() );
 
     sSharePath = sAutoPath.getToken(0, ';');
     sUserPath = sAutoPath.getToken(1, ';');

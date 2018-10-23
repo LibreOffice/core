@@ -1492,7 +1492,7 @@ IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl, ComboBox&, void)
 
 IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
 {
-    OUString sCurrentFolder( pView->GetViewURL() );
+    const OUString& sCurrentFolder( pView->GetViewURL() );
     // check if we can create new folders
     EnableControl( pImpl->_pBtnNewFolder, ContentCanMakeFolder( sCurrentFolder ) );
 

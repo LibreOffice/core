@@ -49,7 +49,7 @@ namespace frm
 
         RichTextEngine* pReturn = new RichTextEngine( pPool );
         OutputDevice* pOutputDevice = pReturn->GetRefDevice();
-        MapMode aDeviceMapMode( pOutputDevice->GetMapMode() );
+        const MapMode& aDeviceMapMode( pOutputDevice->GetMapMode() );
 
         pReturn->SetStatusEventHdl( LINK( pReturn, RichTextEngine, EditEngineStatusChanged ) );
 

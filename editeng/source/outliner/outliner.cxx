@@ -969,7 +969,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 
                 if(bStrippingPortions)
                 {
-                    const vcl::Font aSvxFont(pOutDev->GetFont());
+                    const vcl::Font& aSvxFont(pOutDev->GetFont());
                     std::unique_ptr<long[]> pBuf(new long[ pPara->GetText().getLength() ]);
                     pOutDev->GetTextArray( pPara->GetText(), pBuf.get() );
 

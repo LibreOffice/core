@@ -471,7 +471,7 @@ Any BibliographyLoader::getByName(const OUString& rName)
                     const Mapping* pMapping = pConfig->GetMapping(aBibDesc);
                     for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
                     {
-                        const OUString sColName = pConfig->GetDefColumnName(
+                        const OUString& sColName = pConfig->GetDefColumnName(
                                                     nEntry);
                         pValues[nEntry].Name = sColName;
                         pValues[nEntry].Value <<= lcl_AddProperty(xColumns, pMapping, sColName);

@@ -1250,7 +1250,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
         {
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
-                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                const basegfx::B2DPolygon& aCandidate(aLinePolyPolygon.getB2DPolygon(a));
                 Impl_writePolygon( tools::Polygon(aCandidate), false );
             }
         }
@@ -1500,7 +1500,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case MetaActionType::EPS:
             {
                 const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
-                const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
+                const GDIMetaFile&      aGDIMetaFile( pA->GetSubstitute() );
                 bool                bFound = false;
 
                 for( size_t j = 0, nC = aGDIMetaFile.GetActionSize(); ( j < nC ) && !bFound; j++ )

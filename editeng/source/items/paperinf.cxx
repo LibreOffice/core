@@ -65,7 +65,7 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
 
         if ( aPaperSize == aInvalidSize )
             return GetPaperSize(PAPER_A4);
-        MapMode aMap1 = pPrinter->GetMapMode();
+        const MapMode& aMap1 = pPrinter->GetMapMode();
         MapMode aMap2;
 
         if ( aMap1 == aMap2 )

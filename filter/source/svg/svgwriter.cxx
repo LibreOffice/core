@@ -3025,7 +3025,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
-                    const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
+                    const GDIMetaFile&      aGDIMetaFile( pA->GetSubstitute() );
                     bool                bFound = false;
 
                     for( sal_uInt32 k = 0, nCount2 = aGDIMetaFile.GetActionSize(); ( k < nCount2 ) && !bFound; ++k )

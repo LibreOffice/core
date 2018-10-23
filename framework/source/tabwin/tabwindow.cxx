@@ -233,7 +233,7 @@ IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl, void )
 
     sal_Int32 nPageId = pTabControl->GetCurPageId();
 
-    OUString aTitle = pTabControl->GetPageText( sal_uInt16( nPageId ));
+    const OUString& aTitle = pTabControl->GetPageText( sal_uInt16( nPageId ));
     impl_SetTitle( aTitle );
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -664,7 +664,7 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindow::getTabProps( ::
         if ( nPos == TAB_PAGE_NOTFOUND )
             throw css::lang::IndexOutOfBoundsException();
 
-        OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
+        const OUString& aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
                   nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
 
         css::uno::Sequence< css::beans::NamedValue > aSeq

@@ -427,9 +427,8 @@ void myparser::traverse( xmlNodePtr parentNode )
                 //TODO: make these asserts and flush out all our broken help ids
                 SAL_WARN_IF(hidstr.empty(), "helpcompiler", "hid='' for text:" << text);
                 SAL_WARN_IF(!hidstr.empty() && extendedHelpText.empty(), "helpcompiler", "hid='.' with no hid bookmark branches in file: " << fileName + " for text: " << text);
-                for (auto const& elem : extendedHelpText)
+                for (const std::string& name : extendedHelpText)
                 {
-                    std::string name = elem;
                     (*helptexts)[name] = text;
                 }
             }
