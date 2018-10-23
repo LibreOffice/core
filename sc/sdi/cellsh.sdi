@@ -76,7 +76,6 @@ interface CellSelection
     SID_RANGE_ROW           [ StateMethod = GetState; ]
     SID_RANGE_COL           [ StateMethod = GetState; ]
     SID_RANGE_TABLE         [ StateMethod = GetState; ]
-    SID_RANGE_VALUE         [ StateMethod = GetState; ]
     SID_RANGE_FORMULA       [ StateMethod = GetState; ]
     SID_RANGE_TEXTVALUE     [ StateMethod = GetState; ]
     SID_RANGE_NOTETEXT      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
