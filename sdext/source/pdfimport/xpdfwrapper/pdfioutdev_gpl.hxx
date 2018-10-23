@@ -234,40 +234,28 @@ namespace pdfi
         //----- image drawing
         virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
                                    int width, int height, GBool invert,
-#if POPPLER_CHECK_VERSION(0, 12, 0)
                                    GBool interpolate,
-#endif
                                    GBool inlineImg) override;
         virtual void drawImage(GfxState *state, Object *ref, Stream *str,
                                int width, int height, GfxImageColorMap *colorMap,
-#if POPPLER_CHECK_VERSION(0, 12, 0)
                                GBool interpolate,
-#endif
                                int *maskColors, GBool inlineImg) override;
         virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
                                      int width, int height,
                                      GfxImageColorMap *colorMap,
-#if POPPLER_CHECK_VERSION(0, 12, 0)
                                      GBool interpolate,
-#endif
                                      Stream *maskStr, int maskWidth, int maskHeight,
                                      GBool maskInvert
-#if POPPLER_CHECK_VERSION(0, 12, 0)
                                      , GBool maskInterpolate
-#endif
                                     ) override;
         virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
                                          int width, int height,
                                          GfxImageColorMap *colorMap,
-#if POPPLER_CHECK_VERSION(0, 12, 0)
                                          GBool interpolate,
-#endif
                                          Stream *maskStr,
                                          int maskWidth, int maskHeight,
                                          GfxImageColorMap *maskColorMap
-#if POPPLER_CHECK_VERSION(0, 12, 0)
                                          , GBool maskInterpolate
-#endif
                                         ) override;
 
         static void setPageNum( int nNumPages );
