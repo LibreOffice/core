@@ -363,15 +363,16 @@ namespace dbaui
     }
 
     // OAdoDetailsPage
-    OAdoDetailsPage::OAdoDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, "AutoCharset", "dbaccess/ui/autocharsetpage.ui", _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
+    OAdoDetailsPage::OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
 
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateAdo( TabPageParent pParent,   const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateAdo(TabPageParent pParent, const SfxItemSet* rAttrSet)
     {
-        return VclPtr<OAdoDetailsPage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<OAdoDetailsPage>::Create(pParent, *rAttrSet);
     }
 
     // OOdbcDetailsPage
