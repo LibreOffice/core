@@ -738,6 +738,11 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
     get(maEdMax, "edcolscalemax");
     get(maLbColMin, "lbcolmin");
     get(maLbColMax, "lbcolmax");
+    get(maFtMin, "Label_minimum");
+    get(maFtMax, "Label_maximum");
+
+    maFtMin->Show();
+    maFtMax->Show();
 
     // remove the automatic entry from color scales
     maLbEntryTypeMin->RemoveEntry(0);
@@ -877,6 +882,11 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
     get(maLbColMin, "lbcolmin");
     get(maLbColMiddle, "lbcolmiddle");
     get(maLbColMax, "lbcolmax");
+    get(maFtMin, "Label_minimum");
+    get(maFtMax, "Label_maximum");
+
+    maFtMin->Show();
+    maFtMax->Show();
 
     // remove the automatic entry from color scales
     maLbEntryTypeMin->RemoveEntry(0);
