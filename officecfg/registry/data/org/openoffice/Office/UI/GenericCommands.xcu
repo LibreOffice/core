@@ -6271,6 +6271,21 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:TableInsertMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Insert</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TableDeleteMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Delete</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TableAutoFitMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Si~ze</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PickList" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~File</value>
