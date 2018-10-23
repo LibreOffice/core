@@ -154,10 +154,10 @@ namespace dbaui
     };
 
     // OAdoDetailsPage
-    class OAdoDetailsPage : public OCommonBehaviourTabPage
+    class OAdoDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
-        OAdoDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
     };
 
     // OOdbcDetailsPage
