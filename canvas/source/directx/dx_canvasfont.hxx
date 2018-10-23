@@ -82,6 +82,7 @@ namespace dxcanvas
         GDIPlusUserSharedPtr                        mpGdiPlusUser;
         FontFamilySharedPtr                         mpFontFamily;
         FontSharedPtr                               mpFont;
+        css::uno::Sequence<css::beans::PropertyValue>     maExtraFontProperties;
         css::rendering::FontRequest    maFontRequest;
         css::geometry::Matrix2D        maFontMatrix;
     };

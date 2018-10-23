@@ -125,6 +125,16 @@ namespace dxcanvas
             aFont.SetColor( aColor );
             aFont.SetFillColor( aColor );
 
+            const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties
+                = rCanvasFont->getExtraFontProperties();
+
+            sal_uInt32 nEmphasisMark = 0;
+
+            ::canvas::tools::extractExtraFontProperties(rExtraFontProperties, nEmphasisMark);
+
+            if (nEmphasisMark)
+                aFont.SetEmphasisMark(FontEmphasisMark(nEmphasisMark));
+
             // adjust to stretched font
             if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
             {

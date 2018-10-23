@@ -47,14 +47,14 @@ namespace dxcanvas
     }
 
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    /*extraFontProperties*/,
+                            const uno::Sequence< beans::PropertyValue >&    extraFontProperties,
                             const geometry::Matrix2D&                       fontMatrix ) :
         CanvasFont_Base( m_aMutex ),
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
-        // TODO(F1): extraFontProperties, fontMatrix
         mpFontFamily(),
         mpFont(),
         maFontRequest( rFontRequest ),
+        maExtraFontProperties(extraFontProperties),
         maFontMatrix( fontMatrix )
     {
         mpFontFamily.reset( new Gdiplus::FontFamily(o3tl::toW(rFontRequest.FontDescription.FamilyName.getStr()),nullptr) );
@@ -93,8 +93,7 @@ namespace dxcanvas
 
     uno::Sequence< beans::PropertyValue > SAL_CALL CanvasFont::getExtraFontProperties(  )
     {
-        // TODO
-        return uno::Sequence< beans::PropertyValue >();
+        return maExtraFontProperties;
     }
 
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )
