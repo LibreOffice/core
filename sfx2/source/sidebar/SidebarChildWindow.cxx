@@ -60,7 +60,7 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
     }
     SetHideNotDelete(true);
 
-    GetWindow()->Show();
+    GetWindow()->Show(true, ShowFlags::NoFocusChange);
 }
 
 sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window const * pWindow)
