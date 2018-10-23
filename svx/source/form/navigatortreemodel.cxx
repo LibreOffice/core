@@ -883,8 +883,7 @@ namespace svxform
         if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
         {
             FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
-            Reference< XForm >  xForm( pFormData->GetFormIface());
-            xFormComponent = xForm;
+            xFormComponent = pFormData->GetFormIface();
         }
 
         if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )

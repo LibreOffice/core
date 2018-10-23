@@ -110,7 +110,7 @@ namespace drawinglayer
 
                     for(sal_uInt32 a(0); a < nPolyCount; a++)
                     {
-                           const basegfx::B3DPolygon aPolygon(rPolyPolygon.getB3DPolygon(a));
+                        const basegfx::B3DPolygon& aPolygon(rPolyPolygon.getB3DPolygon(a));
                         const sal_uInt32 nCount(aPolygon.count());
 
                         for(sal_uInt32 b(0); b < nCount; b++)

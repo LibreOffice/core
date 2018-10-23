@@ -1120,7 +1120,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
         if( nCount > 0 )
         {
             // get single polygon
-            const basegfx::B2DPolygon aPoly(aPolyPoly.getB2DPolygon(0));
+            const basegfx::B2DPolygon& aPoly(aPolyPoly.getB2DPolygon(0));
 
             // get pointer to arrays
             awt::Point* pSequence = aRetval.getArray();

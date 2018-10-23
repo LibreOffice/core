@@ -308,7 +308,7 @@ basegfx::B3DRange E3dObject::RecalcBoundVolume() const
     if(pVCOfE3D)
     {
         // BoundVolume is without 3D object transformation, use correct sequence
-        const drawinglayer::primitive3d::Primitive3DContainer xLocalSequence(pVCOfE3D->getVIP3DSWithoutObjectTransform());
+        const drawinglayer::primitive3d::Primitive3DContainer& xLocalSequence(pVCOfE3D->getVIP3DSWithoutObjectTransform());
 
         if(!xLocalSequence.empty())
         {

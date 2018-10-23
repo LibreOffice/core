@@ -401,7 +401,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
         {
             try
             {
-                Reference< XIndexContainer > xObjectParent = pObj->GetOriginalParent();
+                const Reference< XIndexContainer >& xObjectParent = pObj->GetOriginalParent();
 
                 FmFormPage& rPage(dynamic_cast< FmFormPage& >( *pObj->getSdrPageFromSdrObject()));
                 Reference< XIndexAccess >  xForms( rPage.GetForms(), UNO_QUERY_THROW );

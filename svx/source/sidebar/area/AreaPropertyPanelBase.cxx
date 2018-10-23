@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             const SvxHatchListItem* pItem( pSh->GetItem(SID_HATCH_LIST) );
             if(pItem)
             {
-                XHatchListRef pXHatchList(pItem->GetHatchList());
+                const XHatchListRef& pXHatchList(pItem->GetHatchList());
                 mpLbFillAttr->Enable();
                 mpLbFillAttr->Clear();
                 mpLbFillAttr->Fill(pXHatchList);
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                 const SvxBitmapListItem* pItem = pSh->GetItem(SID_BITMAP_LIST);
                 if(pItem)
                 {
-                    XBitmapListRef pXBitmapList(pItem->GetBitmapList());
+                    const XBitmapListRef& pXBitmapList(pItem->GetBitmapList());
                     mpLbFillAttr->Fill(pXBitmapList);
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();
@@ -408,7 +408,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                 const SvxPatternListItem* pItem = pSh->GetItem(SID_PATTERN_LIST);
                 if(pItem)
                 {
-                    XPatternListRef pXPatternList(pItem->GetPatternList());
+                    const XPatternListRef& pXPatternList(pItem->GetPatternList());
                     mpLbFillAttr->Fill(pXPatternList);
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();

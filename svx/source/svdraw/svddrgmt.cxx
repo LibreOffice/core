@@ -475,7 +475,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
                 if(pPath)
                 {
-                    const basegfx::B2DPolyPolygon aPathXPP = pPath->GetPathPoly();
+                    const basegfx::B2DPolyPolygon& aPathXPP = pPath->GetPathPoly();
 
                     if(aPathXPP.count())
                     {

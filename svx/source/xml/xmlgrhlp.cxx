@@ -104,10 +104,8 @@ public:
 };
 
 
-GraphicInputStream::GraphicInputStream(GraphicObject const & raGraphicObject, const OUString & rMimeType)
+GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, const OUString & rMimeType)
 {
-    GraphicObject aGraphicObject(raGraphicObject);
-
     maTempFile.EnableKillingFile();
 
     if (aGraphicObject.GetType() != GraphicType::NONE)
@@ -116,7 +114,7 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & raGraphicObject, co
 
         if (pStream)
         {
-            Graphic aGraphic(aGraphicObject.GetGraphic());
+            const Graphic& aGraphic(aGraphicObject.GetGraphic());
             const GfxLink aGfxLink(aGraphic.GetGfxLink());
             bool bRet = false;
 

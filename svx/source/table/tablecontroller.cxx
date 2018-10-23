@@ -2204,7 +2204,7 @@ void SvxTableController::updateSelectionOverlay()
                 SdrPaintWindow* pPaintWindow = mrView.GetPaintWindow(nIndex);
                 if( pPaintWindow )
                 {
-                    rtl::Reference < sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
+                    const rtl::Reference < sdr::overlay::OverlayManager >& xOverlayManager = pPaintWindow->GetOverlayManager();
                     if( xOverlayManager.is() )
                     {
                         std::unique_ptr<sdr::overlay::OverlayObjectCell> pOverlay(new sdr::overlay::OverlayObjectCell( aHighlight, aRanges ));

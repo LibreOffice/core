@@ -1412,7 +1412,7 @@ bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, 
     else if(bMakeLines && 1 == nPolygonCount)
     {
         // #i69172# ..or with at least 2 edges (curves or lines)
-        const basegfx::B2DPolygon aPolygon(rPpolyPolygon.getB2DPolygon(0));
+        const basegfx::B2DPolygon& aPolygon(rPpolyPolygon.getB2DPolygon(0));
         const sal_uInt32 nPointCount(aPolygon.count());
 
         if(nPointCount > 2)

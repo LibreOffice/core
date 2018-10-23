@@ -707,7 +707,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
     drawing::DoubleSequence* pOuterSequenceZ = aRetval.SequenceZ.getArray();
     for(sal_uInt32 a(0);a<rSourcePolyPolygon.count();a++)
     {
-        const basegfx::B3DPolygon aPoly(rSourcePolyPolygon.getB3DPolygon(a));
+        const basegfx::B3DPolygon& aPoly(rSourcePolyPolygon.getB3DPolygon(a));
         sal_Int32 nPointCount(aPoly.count());
         if(aPoly.isClosed()) nPointCount++;
         pOuterSequenceX->realloc(nPointCount);

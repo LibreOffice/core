@@ -1189,7 +1189,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
                         if (rPageWindow.GetPaintWindow().OutputToWindow())
                         {
-                            rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                            const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
                             if (xManager.is())
                             {
                                 std::unique_ptr<TextEditOverlayObject> pNewTextEditOverlayObject(new TextEditOverlayObject(

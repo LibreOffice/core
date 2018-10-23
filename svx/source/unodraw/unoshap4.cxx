@@ -160,7 +160,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
             if( pOle )
             {
                 GraphicObject aGrafObj( xGraphic );
-                const Graphic aGraphic( aGrafObj.GetGraphic() );
+                const Graphic& aGraphic( aGrafObj.GetGraphic() );
                 pOle->SetGraphicToObj( aGraphic );
             }
             return true;
@@ -540,7 +540,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 
         if (rHexCLSID.isEmpty())
         {
-            uno::Reference < embed::XEmbeddedObject > xObj( pOle2Obj->GetObjRef() );
+            const uno::Reference < embed::XEmbeddedObject >& xObj( pOle2Obj->GetObjRef() );
             if ( xObj.is() )
             {
                 aClassName = SvGlobalName( xObj->getClassID() );

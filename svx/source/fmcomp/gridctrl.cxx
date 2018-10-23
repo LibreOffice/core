@@ -861,7 +861,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
                 m_eStatus = (pCur->isAfterLast() || pCur->isBeforeFirst()) ? GridRowStatus::Invalid : GridRowStatus::Clean;
             else
             {
-                Reference< XPropertySet > xSet = pCur->getPropertySet();
+                const Reference< XPropertySet >& xSet = pCur->getPropertySet();
                 if (xSet.is())
                 {
                     m_bIsNew = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
@@ -903,7 +903,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
             m_eStatus = GridRowStatus::Clean;
             if (!bPaintCursor)
             {
-                Reference< XPropertySet > xSet = pCur->getPropertySet();
+                const Reference< XPropertySet >& xSet = pCur->getPropertySet();
                 DBG_ASSERT(xSet.is(), "DbGridRow::SetState : invalid cursor !");
 
                 if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED)))

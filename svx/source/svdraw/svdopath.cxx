@@ -2603,7 +2603,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
     {
         if(0 == nPoly)
         {
-            const basegfx::B2DPolygon aCandidate(aLocalPolyPolygon.getB2DPolygon(nPoly));
+            const basegfx::B2DPolygon& aCandidate(aLocalPolyPolygon.getB2DPolygon(nPoly));
             const sal_uInt32 nPointCount(aCandidate.count());
 
             if(nPointCount)

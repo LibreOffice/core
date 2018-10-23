@@ -545,7 +545,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
     if ( !pFormPage )
         return;
 
-    Reference< XControlContainer > xCC = rWindow.GetControlContainer();
+    const Reference< XControlContainer >& xCC = rWindow.GetControlContainer();
     if  (   xCC.is()
         &&  ( !findWindow( xCC ).is() )
         )
@@ -1470,7 +1470,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
         else {
 
             // create a button control
-            const MapMode eTargetMode( pOutDev->GetMapMode() );
+            const MapMode& eTargetMode( pOutDev->GetMapMode() );
             const MapMode eSourceMode(MapUnit::Map100thMM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
