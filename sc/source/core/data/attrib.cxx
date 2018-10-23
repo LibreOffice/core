@@ -45,7 +45,6 @@ using namespace com::sun::star;
 
 
 SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }
-SfxPoolItem* ScDoubleItem::CreateDefault() { SAL_WARN( "sc", "No ScDoubleItem factory available"); return nullptr; }
 
 /**
  * General Help Function
@@ -568,37 +567,6 @@ SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) const
 {
     return 1;
-}
-
-/**
- * Double
- */
-ScDoubleItem::ScDoubleItem( sal_uInt16 nWhichP, double nVal )
-    :   SfxPoolItem ( nWhichP ),
-        nValue  ( nVal )
-{
-}
-
-ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
-    :   SfxPoolItem ( rItem )
-{
-        nValue = rItem.nValue;
-}
-
-bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-    const ScDoubleItem& _rItem = static_cast<const ScDoubleItem&>(rItem);
-    return nValue == _rItem.nValue;
-}
-
-SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
-{
-    return new ScDoubleItem( *this );
-}
-
-ScDoubleItem::~ScDoubleItem()
-{
 }
 
 ScPageScaleToItem::ScPageScaleToItem() :
