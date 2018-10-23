@@ -1961,19 +1961,13 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
                             bool bScreenDisplay(true);
 
-                            if(bScreenDisplay && pOut && OUTDEV_PRINTER == pOut->GetOutDevType())
-                            {
-                                // #i75566# printing; suppress AutoColor BackgroundColor generation
-                                // for visibility reasons by giving GetPageBackgroundColor()
-                                // the needed hint
+                            // #i75566# printing; suppress AutoColor BackgroundColor generation
+                            // for visibility reasons by giving GetPageBackgroundColor()
+                            // the needed hint
+                            // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see printing)
+                            if (pOut && ((OUTDEV_PRINTER == pOut->GetOutDevType())
+                                    || (OUTDEV_PDF == pOut->GetOutDevType())))
                                 bScreenDisplay = false;
-                            }
-
-                            if(bScreenDisplay && pOut && pOut->GetPDFWriter())
-                            {
-                                // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
-                                bScreenDisplay = false;
-                            }
 
                             // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
                             // hint value if screen display. Only then the AutoColor mechanisms shall be applied

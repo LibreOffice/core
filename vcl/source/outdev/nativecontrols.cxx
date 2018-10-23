@@ -50,6 +50,8 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
             }
         }
 
+    case OUTDEV_PDF:
+        SAL_FALLTHROUGH;
     case OUTDEV_VIRDEV:
     {
         const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );

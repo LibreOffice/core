@@ -575,7 +575,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     //! SetUseStyleColor ??
 
-    if ( bMetaFile && pDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if ( bMetaFile && pDev->IsVirtual() )
         aOutputData.SetSnapPixel();
 
     Point aLogStart = pDev->PixelToLogic(Point(nScrX, nScrY), MapMode(MapUnit::Map100thMM));
@@ -1199,7 +1199,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
 
                         GraphicObject aObject( *pGraphic );
 
-                        if( pOut->GetPDFWriter() &&
+                        if( pOut->GetOutDevType() == OUTDEV_PDF &&
                             (aObject.GetType() == GraphicType::Bitmap || aObject.GetType() == GraphicType::Default) )
                         {
                             // For PDF export, every draw

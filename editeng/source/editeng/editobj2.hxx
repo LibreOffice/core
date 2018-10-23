@@ -112,10 +112,11 @@ public:
     OutputDevice*       GetRefDevPtr() const        { return nRefDevPtr; }
     sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
     OutDevType      GetRefDevType() const       { return eRefDevType; }
+    bool RefDevIsVirtual() const
+        { return (eRefDevType == OUTDEV_VIRDEV) || (eRefDevType == OUTDEV_PDF); }
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
     sal_uInt16  GetStretchX() const         { return nStretchX; }
     sal_uInt16  GetStretchY() const         { return nStretchY; }
-
 };
 
 class ContentInfo

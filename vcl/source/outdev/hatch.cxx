@@ -401,10 +401,8 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
         {
             for( long i = 0; i < nPCounter; i += 2 )
             {
-                if( GetPDFWriter() )
-                {
-                    GetPDFWriter()->drawLine( pPtBuffer[ i ], pPtBuffer[ i+1 ] );
-                }
+                if (GetOutDevType() == OUTDEV_PDF)
+                    static_cast<vcl::PDFWriterImpl*>(this)->drawLine(pPtBuffer[ i ], pPtBuffer[ i+1 ]);
                 else
                 {
                     const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );

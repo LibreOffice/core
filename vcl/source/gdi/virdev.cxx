@@ -164,7 +164,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
         mbScreenComp = false;
-    else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    else if ( pOutDev->IsVirtual() )
         mbScreenComp = static_cast<const VirtualDevice*>(pOutDev)->mbScreenComp;
 
     mbDevOutput     = true;
@@ -198,13 +198,15 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
-VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
-    : OutputDevice(OUTDEV_VIRDEV)
+VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
+                             DeviceFormat eAlphaFormat, OutDevType eOutDevType)
+    : OutputDevice(eOutDevType)
     , meFormat(eFormat)
     , meAlphaFormat(eAlphaFormat)
 {
-    SAL_INFO( "vcl.virdev",
-            "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << ", " << static_cast<int>(eAlphaFormat) << " )" );
+    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat)
+                            << ", " << static_cast<int>(eAlphaFormat)
+                            << ", " << static_cast<int>(eOutDevType) << " )" );
 
     ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
 }

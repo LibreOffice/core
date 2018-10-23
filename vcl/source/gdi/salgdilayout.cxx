@@ -118,14 +118,15 @@ long SalGraphics::mirror2( long x, const OutputDevice *pOutDev ) const
     return x;
 }
 
+inline long SalGraphics::GetDeviceWidth(const OutputDevice* pOutDev) const
+{
+    return (pOutDev && pOutDev->IsVirtual())
+        ? pOutDev->GetOutputWidthPixel() : GetGraphicsWidth();
+}
+
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
 {
-    long w;
-    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
-        w = pOutDev->GetOutputWidthPixel();
-    else
-        w = GetGraphicsWidth();
-
+    const long w = GetDeviceWidth(pOutDev);
     if( w )
     {
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
@@ -150,12 +151,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
 
 void SalGraphics::mirror( long& x, long nWidth, const OutputDevice *pOutDev, bool bBack ) const
 {
-    long w;
-    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
-        w = pOutDev->GetOutputWidthPixel();
-    else
-        w = GetGraphicsWidth();
-
+    const long w = GetDeviceWidth(pOutDev);
     if( w )
     {
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
@@ -181,18 +177,12 @@ void SalGraphics::mirror( long& x, long nWidth, const OutputDevice *pOutDev, boo
         }
         else if( m_nLayout & SalLayoutFlags::BiDiRtl )
             x = w-nWidth-x;
-
     }
 }
 
 bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const
 {
-    long w;
-    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
-        w = pOutDev->GetOutputWidthPixel();
-    else
-        w = GetGraphicsWidth();
-
+    const long w = GetDeviceWidth(pOutDev);
     if( w )
     {
         sal_uInt32 i, j;
@@ -315,9 +305,7 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
 const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutDev ) const
 {
     // get mirroring transformation
-    const long w(nullptr != i_pOutDev && OUTDEV_VIRDEV == i_pOutDev->GetOutDevType()
-        ? i_pOutDev->GetOutputWidthPixel()
-        : GetGraphicsWidth());
+    const long w = GetDeviceWidth(i_pOutDev);
     SAL_WARN_IF( !w, "vcl", "missing graphics width" );
 
     if(w != m_aLastMirrorW)

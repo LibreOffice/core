@@ -90,8 +90,7 @@ void ChartWindow::PrePaint(vcl::RenderContext& )
 
 void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    if (comphelper::LibreOfficeKit::isActive()
-        && rRenderContext.GetOutDevType() != OutDevType::OUTDEV_VIRDEV)
+    if (comphelper::LibreOfficeKit::isActive() && !rRenderContext.IsVirtual())
         return;
 
     m_bInPaint = true;

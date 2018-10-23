@@ -527,27 +527,20 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
             mpGraphics->ReleaseFonts();
     }
 
-//    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (mxFontCache && mxFontCache != pSVData->maGDIData.mxScreenFontCache)
+        mxFontCache->Invalidate();
+
+    if (bNewFontLists && AcquireGraphics())
     {
-        ImplSVData* pSVData = ImplGetSVData();
+        if (mxFontCollection && mxFontCollection != pSVData->maGDIData.mxScreenFontList)
+            mxFontCollection->Clear();
 
-        if (mxFontCache && mxFontCache != pSVData->maGDIData.mxScreenFontCache)
-            mxFontCache->Invalidate();
-
-        if ( bNewFontLists )
+        if (GetOutDevType() == OUTDEV_PDF)
         {
-            // we need a graphics
-            if ( AcquireGraphics() )
-            {
-                if (mxFontCollection && mxFontCollection != pSVData->maGDIData.mxScreenFontList)
-                    mxFontCollection->Clear();
-
-                if( GetPDFWriter() )
-                {
-                    mxFontCollection.reset();
-                    mxFontCache.reset();
-                }
-            }
+            mxFontCollection.reset();
+            mxFontCache.reset();
         }
     }
 
@@ -570,26 +563,17 @@ void OutputDevice::RefreshFontData( const bool bNewFontLists )
 
 void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
 {
-//    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
+    ImplSVData* pSVData = ImplGetSVData();
 
-        if ( bNewFontLists )
+    if (bNewFontLists && AcquireGraphics())
+    {
+        if (GetOutDevType() == OUTDEV_PDF)
         {
-            // we need a graphics
-            if ( AcquireGraphics() )
-            {
-                if( GetPDFWriter() )
-                {
-                    mxFontCollection = pSVData->maGDIData.mxScreenFontList->Clone();
-                    mxFontCache.reset(new ImplFontCache);
-                }
-                else
-                {
-                    mpGraphics->GetDevFontList( mxFontCollection.get() );
-                }
-            }
+            mxFontCollection = pSVData->maGDIData.mxScreenFontList->Clone();
+            mxFontCache.reset(new ImplFontCache);
         }
+        else
+            mpGraphics->GetDevFontList( mxFontCollection.get() );
     }
 
     // also update child windows if needed
@@ -1017,7 +1001,7 @@ bool OutputDevice::ImplNewFont() const
     DBG_TESTSOLARMUTEX();
 
     // get correct font list on the PDF writer if necessary
-    if( GetPDFWriter() )
+    if (GetOutDevType() == OUTDEV_PDF)
     {
         const ImplSVData* pSVData = ImplGetSVData();
         if( mxFontCollection == pSVData->maGDIData.mxScreenFontList

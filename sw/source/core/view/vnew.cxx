@@ -85,7 +85,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     SAL_INFO( "sw.core", "View::Init - before InitPrt" );
     OutputDevice* pPDFOut = nullptr;
 
-    if ( mpOut && mpOut->GetPDFWriter() )
+    if (mpOut && (OUTDEV_PDF == mpOut->GetOutDevType()))
         pPDFOut = mpOut;
 
     // Only setup the printer if we need one:
