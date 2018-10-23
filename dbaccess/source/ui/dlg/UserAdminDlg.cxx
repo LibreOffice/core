@@ -24,7 +24,6 @@
 #include <strings.hrc>
 #include "DriverSettings.hxx"
 #include <dsitems.hxx>
-#include <propertysetitem.hxx>
 #include <UITools.hxx>
 #include "UserAdmin.hxx"
 #include <UserAdminDlg.hxx>

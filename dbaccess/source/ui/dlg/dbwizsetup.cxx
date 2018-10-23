@@ -37,7 +37,6 @@
 #include <unotools/ucbhelper.hxx>
 #include "generalpage.hxx"
 #include <stringlistitem.hxx>
-#include <propertysetitem.hxx>
 #include <unotools/confignode.hxx>
 #include "DbAdminImpl.hxx"
 #include <helpids.h>

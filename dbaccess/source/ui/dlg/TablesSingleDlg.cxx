@@ -21,9 +21,6 @@
 #include "DbAdminImpl.hxx"
 #include "tablespage.hxx"
 #include <dsitems.hxx>
-
-#include <propertysetitem.hxx>
-
 #include <dbu_dlg.hxx>
 
 namespace dbaui

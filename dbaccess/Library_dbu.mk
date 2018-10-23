@@ -165,7 +165,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/misc/imageprovider \
     dbaccess/source/ui/misc/indexcollection \
     dbaccess/source/ui/misc/linkeddocuments \
-    dbaccess/source/ui/misc/propertysetitem \
     dbaccess/source/ui/misc/propertystorage \
     dbaccess/source/ui/misc/RowSetDrop \
     dbaccess/source/ui/misc/RtfReader \

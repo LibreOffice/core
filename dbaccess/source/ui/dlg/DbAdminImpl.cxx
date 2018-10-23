@@ -36,7 +36,6 @@
 #include <dsitems.hxx>
 #include "dsnItem.hxx"
 #include "optionalboolitem.hxx"
-#include <propertysetitem.hxx>
 #include <stringlistitem.hxx>
 #include <OAuthenticationContinuation.hxx>
 
@@ -617,7 +616,6 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
 
     try
     {
-        _rDest.Put(OPropertySetItem(DSID_DATASOURCE_UNO, _rxSource));
         Reference<XStorable> xStore(getDataSourceOrModel(_rxSource),UNO_QUERY);
         _rDest.Put(SfxBoolItem(DSID_READONLY, !xStore.is() || xStore->isReadonly() ));
     }
