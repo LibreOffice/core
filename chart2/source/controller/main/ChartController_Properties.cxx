@@ -792,7 +792,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         }
 
         //open the dialog
-        if (aDlg.execute() == RET_OK || (bSuccessOnUnchanged && aDlg.DialogWasClosedWithOK()))
+        if (aDlg.run() == RET_OK || (bSuccessOnUnchanged && aDlg.DialogWasClosedWithOK()))
         {
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if(pOutItemSet)

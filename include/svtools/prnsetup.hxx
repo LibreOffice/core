@@ -56,7 +56,7 @@ public:
     void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
     Printer*        GetPrinter() const { return mpPrinter; }
 
-    short   execute();
+    virtual short   run() override;
 
     weld::Window*   GetFrameWeld() const { return m_xDialog.get(); }
 

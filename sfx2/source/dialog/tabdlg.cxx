@@ -2161,10 +2161,10 @@ OString SfxTabDialogController::GetCurPageId() const
     return m_xTabCtrl->get_current_page_ident();
 }
 
-short SfxTabDialogController::execute()
+short SfxTabDialogController::run()
 {
     Start_Impl();
-    return m_xDialog->run();
+    return SfxDialogController::run();
 }
 
 bool SfxTabDialogController::runAsync(const std::shared_ptr<SfxTabDialogController>& rController,

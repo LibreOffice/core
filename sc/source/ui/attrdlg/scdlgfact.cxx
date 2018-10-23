@@ -691,7 +691,7 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 
 short ScAbstractTabController_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool ScAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)

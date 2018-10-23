@@ -729,7 +729,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
         ImpUserData* pUserData = static_cast<ImpUserData*>(m_pCheckLB->FirstSelected()->GetUserData());
         aMapDlg.SetCharFont(*pUserData->pFont);
         aMapDlg.SetChar( (*pUserData->pString)[0] );
-        if (RET_OK == aMapDlg.execute())
+        if (RET_OK == aMapDlg.run())
         {
             const vcl::Font& aFont(aMapDlg.GetCharFont());
             *pUserData->pFont = aFont;
@@ -2077,7 +2077,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
     }
     aMap.SetChar(  cDlg );
     aMap.DisableFontSelection();
-    if (aMap.execute() == RET_OK)
+    if (aMap.run() == RET_OK)
     {
         sal_UCS4 cNewChar = aMap.GetChar();
         switch( nMode )

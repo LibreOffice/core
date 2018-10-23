@@ -853,7 +853,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
     if (!bIsEmpty)
     {
         ScReplaceWarnBox aBox(pParentWnd);
-        if (aBox.execute() != RET_YES)
+        if (aBox.run() != RET_YES)
         {
             //  changing the configuration is within the ScReplaceWarnBox
             return false;

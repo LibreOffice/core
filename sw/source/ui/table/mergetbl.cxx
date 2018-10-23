@@ -33,9 +33,9 @@ void SwMergeTableDlg::Apply()
     m_rMergePrev = m_xMergePrevRB->get_active();
 }
 
-short SwMergeTableDlg::execute()
+short SwMergeTableDlg::run()
 {
-    int nRet = run();
+    int nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

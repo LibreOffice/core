@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
         m_xParamDlg->DisableButtons();   //disable add, edit and remove button when dialog is reopened
     }
 
-    if (m_xParamDlg->execute() == RET_OK)
+    if (m_xParamDlg->run() == RET_OK)
     {
         if ( aParameterList != m_xParamDlg->GetParameters() )
         {
@@ -810,11 +810,11 @@ void SvxJavaParameterDlg::EditParameter()
     }
 }
 
-short SvxJavaParameterDlg::execute()
+short SvxJavaParameterDlg::run()
 {
     m_xParameterEdit->grab_focus();
     m_xAssignedList->select(-1);
-    return m_xDialog->run();
+    return GenericDialogController::run();
 }
 
 std::vector< OUString > SvxJavaParameterDlg::GetParameters() const

@@ -184,7 +184,7 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
     m_xSearchSet->Hide();
 }
 
-short SvxCharacterMap::execute()
+short SvxCharacterMap::run()
 {
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
@@ -202,7 +202,7 @@ short SvxCharacterMap::execute()
         m_xOKBtn->set_sensitive(true);
     }
 
-    return run();
+    return SfxDialogController::run();
 }
 
 void SvxCharacterMap::SetChar( sal_UCS4 c )
