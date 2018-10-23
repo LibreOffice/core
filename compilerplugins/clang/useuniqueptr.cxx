@@ -119,6 +119,13 @@ public:
         // ZipOutputStream, ownership of ZipEntry is horribly complicated here
         if (fn == SRCDIR "/package/source/zipapi/ZipOutputStream.cxx")
             return;
+        // custom deleter
+        if (fn == SRCDIR "/sal/rtl/locale.cxx")
+            return;
+        // std::vector<ScLookupCacheMap*> is tricky, changing it would require moving lots of class definitions around
+        if (fn == SRCDIR "/sc/source/core/data/documen2.cxx"
+            || fn == SRCDIR "/sc/source/core/tool/interpretercontext.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
