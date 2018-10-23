@@ -46,8 +46,8 @@ public:
     void            SetOrientation(short nOrientation)                              { mnOrientation=nOrientation; }
 
     // font metrics measured for the font instance
-    long            GetAscent() const                                               { return mnAscent; }
-    long            GetDescent() const                                              { return mnDescent; }
+    double          GetAscentf() const                                              { return mnAscentf; }
+    double          GetDescentf() const                                             { return mnDescentf; }
     long            GetInternalLeading() const                                      { return mnIntLeading; }
     long            GetExternalLeading() const                                      { return mnExtLeading; }
     int             GetSlant() const                                                { return mnSlant; }
@@ -105,8 +105,8 @@ private:
     short           mnOrientation;              // Rotation in 1/10 degrees
 
     // font metrics measured for the font instance
-    long            mnAscent;                   // Ascent
-    long            mnDescent;                  // Descent
+    double          mnAscentf;                  // Ascent
+    double          mnDescentf;                 // Descent
     long            mnIntLeading;               // Internal Leading
     long            mnExtLeading;               // External Leading
     int             mnSlant;                    // Slant (Italic/Oblique)

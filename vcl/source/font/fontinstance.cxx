@@ -43,7 +43,7 @@ namespace std
 LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPattern& rFontSelData )
     : mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
-    , mnLineHeight( 0 )
+    , mfLineHeight( 0 )
     , mnOwnOrientation( 0 )
     , mnOrientation( 0 )
     , mbInit( false )

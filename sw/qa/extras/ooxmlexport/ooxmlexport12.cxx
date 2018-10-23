@@ -782,7 +782,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
     sal_Int32 nHeight = xShape->getSize().Height;
 
     // Rounding errors
-    sal_Int32 nDifference = 5150 - nHeight;
+    sal_Int32 nDifference = 5100 - nHeight;
     std::stringstream ss;
     ss << "Difference: " << nDifference << " TotalHeight: " << nHeight;
 #ifndef _WIN32
