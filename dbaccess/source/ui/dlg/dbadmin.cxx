@@ -46,17 +46,17 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 // ODbAdminDialog
-ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
-                               , SfxItemSet const * _pItems
-                               , const Reference< XComponentContext >& _rxContext)
-    : SfxTabDialog(_pParent, "AdminDialog",
-        "dbaccess/ui/admindialog.ui", _pItems)
+ODbAdminDialog::ODbAdminDialog(weld::Window* pParent,
+                               SfxItemSet const * _pItems,
+                               const Reference< XComponentContext >& _rxContext)
+    : SfxTabDialogController(pParent, "dbaccess/ui/admindialog.ui", "AdminDialog", _pItems)
     , m_bUIEnabled(true)
+    , m_sMainPageID("advanced")
 {
-    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,GetFrameWeld(), _pParent ? _pParent->GetFrameWeld() : nullptr, this));
+    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext, m_xDialog.get(), pParent, this));
 
     // add the initial tab page
-    m_nMainPageID = AddTabPage("advanced", OConnectionTabPage::Create, nullptr);
+    AddTabPage(m_sMainPageID, OConnectionTabPage::Create, nullptr);
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -64,41 +64,29 @@ ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
 
 ODbAdminDialog::~ODbAdminDialog()
 {
-    disposeOnce();
-}
-
-void ODbAdminDialog::dispose()
-{
     SetInputSet(nullptr);
-    DELETEZ(m_pExampleSet);
-    SfxTabDialog::dispose();
 }
 
 short ODbAdminDialog::Ok()
 {
-    SfxTabDialog::Ok();
+    SfxTabDialogController::Ok();
     m_bUIEnabled = false;
     return ( AR_LEAVE_MODIFIED == implApplyChanges() ) ? RET_OK : RET_CANCEL;
         // TODO : AR_ERROR is not handled correctly, we always close the dialog here
 }
 
-void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
+void ODbAdminDialog::PageCreated(const OString& rId, SfxTabPage& _rPage)
 {
     // register ourself as modified listener
     static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
     static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
-    vcl::Window *pWin = GetViewWindow();
-    if(pWin)
-        pWin->Invalidate();
-
-    SfxTabDialog::PageCreated(_nId, _rPage);
+    SfxTabDialogController::PageCreated(rId, _rPage);
 }
 
-void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, const char* pTextId, CreateTabPage _pCreateFunc)
+void ODbAdminDialog::addDetailPage(const OString& rPageId, const char* pTextId, CreateTabPage pCreateFunc)
 {
-    AddTabPage(_nPageId, DBA_RES(pTextId), _pCreateFunc);
-    m_aCurrentDetailPages.push(_nPageId);
+    AddTabPage(rPageId, DBA_RES(pTextId), pCreateFunc, nullptr);
 }
 
 void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName)
@@ -115,35 +103,35 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
     switch ( eType )
     {
         case  ::dbaccess::DST_DBASE:
-            addDetailPage(PAGE_DBASE, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
+            addDetailPage("dbase", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
             break;
 
         case  ::dbaccess::DST_ADO:
-            addDetailPage(PAGE_ADO, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdo);
+            addDetailPage("ado", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdo);
             break;
 
         case  ::dbaccess::DST_FLAT:
-            addDetailPage(PAGE_TEXT, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
+            addDetailPage("text", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
             break;
 
         case  ::dbaccess::DST_ODBC:
-            addDetailPage(PAGE_ODBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateODBC);
+            addDetailPage("odbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateODBC);
             break;
 
         case  ::dbaccess::DST_MYSQL_ODBC:
-            addDetailPage(PAGE_MYSQL_ODBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLODBC);
+            addDetailPage("mysqlodbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLODBC);
             break;
 
         case  ::dbaccess::DST_MYSQL_JDBC:
-            addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
+            addDetailPage("mysqljdbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
             break;
 
         case  ::dbaccess::DST_ORACLE_JDBC:
-            addDetailPage(PAGE_ORACLE_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
+            addDetailPage("oraclejdbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
             break;
 
         case  ::dbaccess::DST_LDAP:
-            addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
+            addDetailPage("ldap",STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;
         case  ::dbaccess::DST_USERDEFINE1:  /// first user defined driver
         case  ::dbaccess::DST_USERDEFINE2:
@@ -157,8 +145,7 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
         case  ::dbaccess::DST_USERDEFINE10:
             {
                 OUString aTitle(DBA_RES(STR_PAGETITLE_ADVANCED));
-                AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 1);
-                m_aCurrentDetailPages.push(PAGE_USERDRIVER);
+                AddTabPage("user" + OString(static_cast<int>(eType)), aTitle, ODriversSettings::CreateUser, nullptr);
             }
             break;
         default:
@@ -176,7 +163,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     // reset the pages
 
     // prevent flicker
-    SetUpdateMode(false);
+    m_xDialog->freeze();
 
     // remove all items which relate to indirect properties from the input set
     // (without this, the following may happen: select an arbitrary data source where some indirect properties
@@ -190,33 +177,33 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     m_pImpl->translateProperties(_rxDatasource, *GetInputSetImpl());
 
     // reset the example set
-    delete m_pExampleSet;
-    m_pExampleSet = new SfxItemSet(*GetInputSetImpl());
+    m_xExampleSet.reset(new SfxItemSet(*GetInputSetImpl()));
 
     // special case: MySQL Native does not have the generic "advanced" page
 
     const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*getOutputSet()->GetItem(DSID_TYPECOLLECTION));
     ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
-    if ( pCollection->determineType(getDatasourceType( *m_pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
+    if ( pCollection->determineType(getDatasourceType( *m_xExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
-        AddTabPage( PAGE_MYSQL_NATIVE, DBA_RES(STR_PAGETITLE_CONNECTION), ODriversSettings::CreateMySQLNATIVE );
+        OString sMySqlNative("mysqlnative");
+        AddTabPage(sMySqlNative, DBA_RES(STR_PAGETITLE_CONNECTION), ODriversSettings::CreateMySQLNATIVE, nullptr);
         RemoveTabPage("advanced");
-        m_nMainPageID = PAGE_MYSQL_NATIVE;
+        m_sMainPageID = sMySqlNative;
     }
 
-    ShowPage( m_nMainPageID );
-    SfxTabPage* pConnectionPage = GetTabPage( m_nMainPageID );
+    SetCurPageId(m_sMainPageID);
+    SfxTabPage* pConnectionPage = GetTabPage(m_sMainPageID);
     if ( pConnectionPage )
         pConnectionPage->Reset(GetInputSetImpl());
     // if this is NULL, the page has not been created yet, which means we're called before the
     // dialog was displayed (probably from inside the ctor)
 
-    SetUpdateMode(true);
+    m_xDialog->thaw();
 }
 
-void ODbAdminDialog::setTitle(const OUString& _sTitle)
+void ODbAdminDialog::setTitle(const OUString& rTitle)
 {
-    SetText(_sTitle);
+    m_xDialog->set_title(rTitle);
 }
 
 void ODbAdminDialog::enableConfirmSettings( bool ) {}
@@ -233,14 +220,8 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
         return AR_KEEP;
     }
 
-    if ( !m_pImpl->saveChanges(*m_pExampleSet) )
+    if ( !m_pImpl->saveChanges(*m_xExampleSet) )
         return AR_KEEP;
-
-    if ( m_bUIEnabled )
-        ShowPage(GetCurPageId());
-        // This does the usual ActivatePage, so the pages can save their current status.
-        // This way, next time they're asked what has changed since now and here, they really
-        // can compare with the status they have _now_ (not the one they had before this apply call).
 
     return AR_LEAVE_MODIFIED;
 }
@@ -257,7 +238,7 @@ const SfxItemSet* ODbAdminDialog::getOutputSet() const
 
 SfxItemSet* ODbAdminDialog::getWriteOutputSet()
 {
-    return m_pExampleSet;
+    return m_xExampleSet.get();
 }
 
 std::pair< Reference<XConnection>,bool> ODbAdminDialog::createConnection()

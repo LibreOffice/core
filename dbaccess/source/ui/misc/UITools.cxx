@@ -22,7 +22,6 @@
 #include <callbacks.hxx>
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
-#include <dbu_pageids.hxx>
 #include <dlgsave.hxx>
 #include <dbtreelistbox.hxx>
 #include <defaultobjectnamecheck.hxx>

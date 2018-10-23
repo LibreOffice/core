@@ -25,7 +25,6 @@
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <dbu_pageids.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

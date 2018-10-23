@@ -18,7 +18,6 @@
  */
 
 #include <imageprovider.hxx>
-#include <dbu_pageids.hxx>
 #include <stringconstants.hxx>
 #include <bitmaps.hlst>
 

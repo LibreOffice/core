@@ -37,7 +37,6 @@
 #include <TokenWriter.hxx>
 #include <UITools.hxx>
 #include <dbaccess/dataview.hxx>
-#include <dbu_pageids.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>

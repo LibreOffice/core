@@ -19,7 +19,6 @@
 
 #include <textconnectionsettings.hxx>
 #include "TextConnectionHelper.hxx"
-#include <dbu_pageids.hxx>
 #include <dsitems.hxx>
 #include <stringconstants.hxx>
 

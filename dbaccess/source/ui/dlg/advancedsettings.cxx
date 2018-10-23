@@ -27,7 +27,6 @@
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
 #include "optionalboolitem.hxx"
-#include <dbu_pageids.hxx>
 #include <dbu_dlg.hxx>
 
 #include <svl/eitem.hxx>

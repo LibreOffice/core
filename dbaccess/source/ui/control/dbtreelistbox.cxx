@@ -18,7 +18,6 @@
  */
 
 #include <dbtreelistbox.hxx>
-#include <dbu_pageids.hxx>
 #include <browserids.hxx>
 #include <listviewitems.hxx>
 #include <callbacks.hxx>

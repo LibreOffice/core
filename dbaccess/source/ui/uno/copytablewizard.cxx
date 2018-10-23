@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <dbu_reghelper.hxx>
-#include <dbu_pageids.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <stringconstants.hxx>

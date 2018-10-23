@@ -94,13 +94,13 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
 
 svt::OGenericUnoDialog::Dialog ODataSourcePropertyDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    VclPtrInstance<ODbAdminDialog> pDialog(VCLUnoHelper::GetWindow(rParent), m_pDatasourceItems.get(), m_aContext);
+    std::unique_ptr<ODbAdminDialog> xDialog(new ODbAdminDialog(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext));
 
     // the initial selection
     if ( m_aInitialSelection.hasValue() )
-        pDialog->selectDataSource(m_aInitialSelection);
+        xDialog->selectDataSource(m_aInitialSelection);
 
-    return svt::OGenericUnoDialog::Dialog(pDialog);
+    return svt::OGenericUnoDialog::Dialog(std::move(xDialog));
 }
 
 }   // namespace dbaui

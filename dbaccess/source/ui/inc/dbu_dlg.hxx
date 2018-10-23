@@ -19,8 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
 
-#include "dbu_pageids.hxx"
-
 #define PAGE_X              281
 #define PAGE_Y              215
 #define WIZARD_PAGE_X       225
