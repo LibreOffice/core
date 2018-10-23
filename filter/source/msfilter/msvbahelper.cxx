@@ -315,7 +315,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
         if( bSearchGlobalTemplates )
         {
             SvtPathOptions aPathOpt;
-            OUString aAddinPath = aPathOpt.GetAddinPath();
+            const OUString& aAddinPath = aPathOpt.GetAddinPath();
             if( sDocUrlOrPath.startsWith( aAddinPath ) )
                 pFoundShell = pShell;
         }

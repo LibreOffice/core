@@ -898,7 +898,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pMA);
                 tools::Rectangle   aRect = pA->GetRect();
-                Wallpaper   aWallpaper = pA->GetWallpaper();
+                const Wallpaper&   aWallpaper = pA->GetWallpaper();
 
                 if ( aWallpaper.IsBitmap() )
                 {
@@ -946,7 +946,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::CLIPREGION:
             {
                 const MetaClipRegionAction* pA = static_cast<const MetaClipRegionAction*>(pMA);
-                vcl::Region aRegion( pA->GetRegion() );
+                const vcl::Region& aRegion( pA->GetRegion() );
                 ImplSetClipRegion( aRegion );
             }
             break;
@@ -954,7 +954,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::ISECTREGIONCLIPREGION:
             {
                 const MetaISectRegionClipRegionAction* pA = static_cast<const MetaISectRegionClipRegionAction*>(pMA);
-                vcl::Region aRegion( pA->GetRegion() );
+                const vcl::Region& aRegion( pA->GetRegion() );
                 ImplSetClipRegion( aRegion );
             }
             break;
