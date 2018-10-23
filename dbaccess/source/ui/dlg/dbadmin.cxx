@@ -54,7 +54,7 @@ ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
         "dbaccess/ui/admindialog.ui", _pItems)
     , m_bUIEnabled(true)
 {
-    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
+    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,GetFrameWeld(), _pParent ? _pParent->GetFrameWeld() : nullptr, this));
 
     // add the initial tab page
     m_nMainPageID = AddTabPage("advanced", OConnectionTabPage::Create, nullptr);

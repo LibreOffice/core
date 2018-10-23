@@ -57,7 +57,7 @@ namespace dbaui
         , m_xConnection(_xConnection)
         , m_bOwnConnection(!_xConnection.is())
     {
-        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
+        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,GetFrameWeld(),_pParent ? _pParent->GetFrameWeld() : nullptr, this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);
@@ -108,7 +108,7 @@ namespace dbaui
         }
         catch(const SQLException&)
         {
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
+            ::dbtools::showError(::dbtools::SQLExceptionInfo(::cppu::getCaughtException()), VCLUnoHelper::GetInterface(GetParent()), getORB());
             return RET_CANCEL;
         }
         catch(const Exception&)

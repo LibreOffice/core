@@ -944,7 +944,7 @@ OUString SwAuthenticator::getPassword(  )
     {
        SfxPasswordDialog aPasswdDlg(m_pParentWindow);
        aPasswdDlg.SetMinLen(0);
-       if (RET_OK == aPasswdDlg.execute())
+       if (RET_OK == aPasswdDlg.run())
             m_aPassword = aPasswdDlg.GetPassword();
     }
     return m_aPassword;

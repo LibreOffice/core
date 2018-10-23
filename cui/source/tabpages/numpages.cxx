@@ -1983,7 +1983,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
         aMap.SetCharFont(aActBulletFont);
     if (bSameBullet)
         aMap.SetChar(cBullet);
-    if (aMap.execute() == RET_OK)
+    if (aMap.run() == RET_OK)
     {
         // change Font Numrules
         aActBulletFont = aMap.GetCharFont();

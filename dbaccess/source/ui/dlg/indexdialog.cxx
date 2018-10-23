@@ -221,7 +221,7 @@ namespace dbaui
         }
         catch(SQLException& e)
         {
-            ::dbaui::showError(SQLExceptionInfo(e),_pParent,_rxContext);
+            ::dbtools::showError(SQLExceptionInfo(e),VCLUnoHelper::GetInterface(_pParent),_rxContext);
         }
         catch(Exception&)
         {
@@ -345,7 +345,7 @@ namespace dbaui
         updateToolbox();
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, this, m_xContext);
+            showError(aExceptionInfo, VCLUnoHelper::GetInterface(this), m_xContext);
         else
         {
             m_pUnique->SaveValue();
@@ -445,7 +445,7 @@ namespace dbaui
         catch(SQLException& e) { aExceptionInfo = SQLExceptionInfo(e); }
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, this, m_xContext);
+            showError(aExceptionInfo, VCLUnoHelper::GetInterface(this), m_xContext);
         else if (bSuccess && _bRemoveFromCollection)
         {
             SvTreeList* pModel = m_pIndexList->GetModel();
@@ -526,7 +526,7 @@ namespace dbaui
         catch(SQLException& e) { aExceptionInfo = SQLExceptionInfo(e); }
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, this, m_xContext);
+            showError(aExceptionInfo, VCLUnoHelper::GetInterface(this), m_xContext);
         else
             m_pIndexList->SetEntryText(pSelected, aResetPos->sName);
 

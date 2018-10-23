@@ -314,7 +314,7 @@ IMPL_LINK(PrinterSetupDialog, ImplDataChangedHdl, VclSimpleEvent&, rEvt, void)
     ImplSetInfo();
 }
 
-short PrinterSetupDialog::execute()
+short PrinterSetupDialog::run()
 {
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
@@ -329,7 +329,7 @@ short PrinterSetupDialog::execute()
     maStatusTimer.Start();
 
     // start dialog
-    short nRet = m_xDialog->run();
+    short nRet = GenericDialogController::run();
 
     // update data if the dialog was terminated with OK
     if ( nRet == RET_OK )

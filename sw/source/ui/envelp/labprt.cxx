@@ -76,7 +76,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
 
         PrinterSetupDialog aDlg(GetFrameWeld());
         aDlg.SetPrinter(pPrinter);
-        aDlg.execute();
+        aDlg.run();
         rButton.grab_focus();
         m_xPrinterInfo->set_label(pPrinter->GetName());
         return;

@@ -55,7 +55,7 @@ bool StarOfficeWriterImportFilter::doImportDocument(weld::Window* pParent,
         {
             SfxPasswordDialog aPasswdDlg(pParent);
             aPasswdDlg.SetMinLen(0);
-            if (!aPasswdDlg.execute())
+            if (!aPasswdDlg.run())
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);

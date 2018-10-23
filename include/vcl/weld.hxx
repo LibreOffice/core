@@ -1232,7 +1232,7 @@ public:
     {
         return const_cast<DialogController*>(this)->getDialog();
     }
-    short run() { return getDialog()->run(); }
+    virtual short run() { return getDialog()->run(); }
     static bool runAsync(const std::shared_ptr<DialogController>& rController,
                          const std::function<void(sal_Int32)>&);
     void set_title(const OUString& rTitle) { getDialog()->set_title(rTitle); }
