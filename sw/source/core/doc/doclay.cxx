@@ -1441,7 +1441,7 @@ void SwDoc::SetAllUniqueFlyNames()
     {
         if( RES_FLYFRMFMT == (pFlyFormat = (*GetSpzFrameFormats())[ --n ])->Which() )
         {
-            const OUString aNm = pFlyFormat->GetName();
+            const OUString& aNm = pFlyFormat->GetName();
             if ( !aNm.isEmpty() )
             {
                 sal_Int32 *pNum = nullptr;

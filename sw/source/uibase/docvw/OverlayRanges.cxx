@@ -115,7 +115,7 @@ namespace sw
             if ( pView != nullptr )
             {
                 SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-                rtl::Reference<sdr::overlay::OverlayManager> xTargetOverlay = pCandidate->GetOverlayManager();
+                const rtl::Reference<sdr::overlay::OverlayManager>& xTargetOverlay = pCandidate->GetOverlayManager();
 
                 if ( xTargetOverlay.is() )
                 {

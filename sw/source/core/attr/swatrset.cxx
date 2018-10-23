@@ -334,7 +334,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 {
                     const SwList* pList = pSrcDoc->getIDocumentListsAccess().getListByName( sListId );
                     // copy list style, if needed
-                    const OUString sDefaultListStyleName =
+                    const OUString& sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
                     // #i92811#
                     const SwNumRule* pDstDocNumRule =

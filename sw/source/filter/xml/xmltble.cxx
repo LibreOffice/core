@@ -763,7 +763,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         const SwFrameFormat *pFrameFormat = rBox.GetFrameFormat();
         if( pFrameFormat )
         {
-            const OUString sName = pFrameFormat->GetName();
+            const OUString& sName = pFrameFormat->GetName();
             if( !sName.isEmpty() )
             {
                 AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
@@ -896,7 +896,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
     const SwFrameFormat *pFrameFormat = rLine.GetFrameFormat();
     if( pFrameFormat )
     {
-        const OUString sName = pFrameFormat->GetName();
+        const OUString& sName = pFrameFormat->GetName();
         if( !sName.isEmpty() )
         {
             AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
@@ -1111,7 +1111,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
                           pDDEFieldType->GetName() );
 
             // DDE command
-            const OUString sCmd = pDDEFieldType->GetCmd();
+            const OUString& sCmd = pDDEFieldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
                           sCmd.getToken(0, sfx2::cTokenSeparator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,

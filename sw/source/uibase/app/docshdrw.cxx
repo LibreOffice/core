@@ -57,7 +57,7 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
                 if(pColItemFromDocShell)
                 {
                     // the DocShell has a ColorTable, use it also in DrawingLayer
-                    XColorListRef xCol(pColItemFromDocShell->GetColorList());
+                    const XColorListRef& xCol(pColItemFromDocShell->GetColorList());
                     pSwDrawDocument->SetPropertyList(static_cast<XPropertyList*>(xCol.get()));
                 }
                 else

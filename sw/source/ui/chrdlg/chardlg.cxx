@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
                                 FileDialogFlags::NONE, GetFrameWeld());
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        Reference<XFilePicker3> xFP = aDlgHelper.GetFilePicker();
+        const Reference<XFilePicker3>& xFP = aDlgHelper.GetFilePicker();
         m_xURLED->set_text(xFP->getSelectedFiles().getConstArray()[0]);
     }
 }

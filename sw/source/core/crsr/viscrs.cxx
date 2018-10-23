@@ -343,7 +343,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         else if(!empty())
         {
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-            rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+            const rtl::Reference< sdr::overlay::OverlayManager >& xTargetOverlay = pCandidate->GetOverlayManager();
 
             if (xTargetOverlay.is())
             {
@@ -454,7 +454,7 @@ void SwSelPaintRects::HighlightInputField()
         {
             SdrView* pView = const_cast<SdrView*>(GetShell()->GetDrawView());
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-            rtl::Reference<sdr::overlay::OverlayManager> xTargetOverlay = pCandidate->GetOverlayManager();
+            const rtl::Reference<sdr::overlay::OverlayManager>& xTargetOverlay = pCandidate->GetOverlayManager();
 
             if (xTargetOverlay.is())
             {

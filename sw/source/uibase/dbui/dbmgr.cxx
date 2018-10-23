@@ -2823,7 +2823,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 OUString const sOutputExt = ".odb";
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
-                OUString sTmpName = aTempFile.GetURL();
+                const OUString& sTmpName = aTempFile.GetURL();
                 xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
             }
             else
@@ -3320,7 +3320,7 @@ void SwDBManager::RevokeLastRegistrations()
         SwView* pView = ( m_pDoc && m_pDoc->GetDocShell() ) ? m_pDoc->GetDocShell()->GetView() : nullptr;
         if (pView)
         {
-            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
+            const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
             if (xConfigItem)
             {
                 xConfigItem->DisposeResultSet();

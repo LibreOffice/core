@@ -252,7 +252,7 @@ bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
 
 bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGuess )
 {
-    Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
+    const Reference< XHyphenatedWord >&  xHyphWord = rGuess.HyphWord();
 
     OSL_ENSURE( !pPortion, "SwTextPortion::CreateHyphen(): another portion, another planet..." );
     OSL_ENSURE( xHyphWord.is(), "SwTextPortion::CreateHyphen(): You are lucky! The code is robust here." );

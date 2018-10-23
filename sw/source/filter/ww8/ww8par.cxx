@@ -4748,7 +4748,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 SfxMedium* pMedium = m_pDocShell->GetMedium();
                 if ( pMedium )
                 {
-                    OUString aName = pMedium->GetName();
+                    const OUString& aName = pMedium->GetName();
                     INetURLObject aURL( aName );
                     sTemplateURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                     if ( !sTemplateURL.isEmpty() )
@@ -4858,7 +4858,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         return;
 
     SvtPathOptions aPathOpt;
-    OUString aAddinPath = aPathOpt.GetAddinPath();
+    const OUString& aAddinPath = aPathOpt.GetAddinPath();
     uno::Sequence< OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP

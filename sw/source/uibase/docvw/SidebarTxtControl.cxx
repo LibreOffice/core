@@ -337,8 +337,8 @@ void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     GetTextView()->MouseButtonDown( rMEvt );
                     SwWrtShell &rSh = mrDocView.GetWrtShell();
-                    OUString sURL( pURL->GetURL() );
-                    OUString sTarget( pURL->GetTargetFrame() );
+                    const OUString& sURL( pURL->GetURL() );
+                    const OUString& sTarget( pURL->GetTargetFrame() );
                     ::LoadURL(rSh, sURL, LoadUrlFlags::NONE, sTarget);
                     return;
                 }

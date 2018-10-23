@@ -1748,7 +1748,7 @@ public:
             // Need to explicitly draw the overlay on m_pRef, since by default
             // they would be only drawn for m_pOriginalValue.
             SdrPaintWindow* pOldPaintWindow = m_pShell->Imp()->GetDrawView()->GetPaintWindow(0);
-            rtl::Reference<sdr::overlay::OverlayManager> xOldManager = pOldPaintWindow->GetOverlayManager();
+            const rtl::Reference<sdr::overlay::OverlayManager>& xOldManager = pOldPaintWindow->GetOverlayManager();
             if (xOldManager.is())
             {
                 if (SdrPaintWindow* pNewPaintWindow = m_pShell->Imp()->GetDrawView()->FindPaintWindow(*m_pRef))

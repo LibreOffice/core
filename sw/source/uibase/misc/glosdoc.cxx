@@ -354,7 +354,7 @@ static OUString lcl_makePath(const std::vector<OUString>& rPaths)
 void SwGlossaries::UpdateGlosPath(bool bFull)
 {
     SvtPathOptions aPathOpt;
-    OUString aNewPath( aPathOpt.GetAutoTextPath() );
+    const OUString& aNewPath( aPathOpt.GetAutoTextPath() );
     bool bPathChanged = m_aPath != aNewPath;
     if (bFull || bPathChanged)
     {
