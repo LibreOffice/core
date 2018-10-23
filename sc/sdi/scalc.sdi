@@ -5725,25 +5725,6 @@ SfxVoidItem CurrentValidation FID_CURRENTVALIDATION
 ]
 
 
-ScDoubleItem Value SID_RANGE_VALUE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Intern;
-]
-
-
 SvxVerJustifyItem VerticalAlignment SID_V_ALIGNCELL
 
 [
