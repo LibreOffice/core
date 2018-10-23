@@ -28,10 +28,6 @@
 #include <unordered_set>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
-
 class ScDPDimensionSaveData;
 
 /**

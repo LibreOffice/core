@@ -40,7 +40,6 @@ namespace formula { struct VectorRefArray; }
 
 namespace sc {
 
-struct FormulaGroupContext;
 struct FormulaGroupEntry;
 class StartListeningContext;
 class EndListeningContext;
@@ -49,7 +48,6 @@ class CopyToClipContext;
 class CopyToDocContext;
 class MixDocContext;
 class ColumnSpanSet;
-struct ColumnBlockPosition;
 class SingleColumnSpanSet;
 struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
@@ -64,7 +62,6 @@ struct RowSpan;
 class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
-class RefMovedHint;
 enum class MatrixEdge;
 class ColumnIterator;
 

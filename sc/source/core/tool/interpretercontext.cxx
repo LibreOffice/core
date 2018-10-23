@@ -18,7 +18,7 @@
  */
 
 #include <interpretercontext.hxx>
-
+#include <formula/token.hxx>
 #include <lookupcache.hxx>
 
 ScInterpreterContext::~ScInterpreterContext()

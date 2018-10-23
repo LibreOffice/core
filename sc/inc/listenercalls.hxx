@@ -28,9 +28,6 @@ namespace com { namespace sun { namespace star {
     namespace util {
         class XModifyListener;
     }
-    namespace lang {
-        struct EventObject;
-    }
 } } }
 
 struct ScUnoListenerEntry

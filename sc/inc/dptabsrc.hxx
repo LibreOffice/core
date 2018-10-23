@@ -55,9 +55,6 @@ namespace com { namespace sun { namespace star {
         struct DataPilotFieldFilter;
         struct MemberResult;
     }
-    namespace table {
-        struct CellAddress;
-    }
 }}}
 
 class ScDPResultMember;

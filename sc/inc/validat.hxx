@@ -23,7 +23,6 @@
 #include "conditio.hxx"
 #include "scdllapi.h"
 
-namespace vcl { class Window; }
 namespace weld { class Window; }
 
 namespace sc {

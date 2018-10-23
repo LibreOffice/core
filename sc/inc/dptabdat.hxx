@@ -28,10 +28,6 @@
 #include <unordered_set>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
-
 #define SC_DAPI_HIERARCHY_FLAT      0
 #define SC_DAPI_HIERARCHY_QUARTER   1
 #define SC_DAPI_HIERARCHY_WEEK      2

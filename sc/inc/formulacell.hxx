@@ -32,7 +32,6 @@
 
 namespace sc {
 
-class CompiledFormula;
 class StartListeningContext;
 class EndListeningContext;
 struct RefUpdateContext;

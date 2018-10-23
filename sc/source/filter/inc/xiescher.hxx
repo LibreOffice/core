@@ -46,8 +46,6 @@ class XclImpChart;
 class XclImpDffConverter;
 class XclImpDrawing;
 
-struct SdrObjectFreeOp;
-
 // Drawing objects ============================================================
 
 class XclImpDrawObjBase;
