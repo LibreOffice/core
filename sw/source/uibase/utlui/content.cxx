@@ -1683,18 +1683,18 @@ void SwContentTree::Display( bool bActive )
         {
             for( ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>() )
             {
-                SwContentType** ppContentT = bActive ?
-                                &m_aActiveContentArr[nCntType] :
-                                    &m_aHiddenContentArr[nCntType];
-                if(!*ppContentT)
-                    (*ppContentT) = new SwContentType(pShell, nCntType, m_nOutlineLevel );
+                std::unique_ptr<SwContentType>& rpContentT = bActive ?
+                                    m_aActiveContentArr[nCntType] :
+                                    m_aHiddenContentArr[nCntType];
+                if(!rpContentT)
+                    rpContentT.reset(new SwContentType(pShell, nCntType, m_nOutlineLevel ));
 
-                OUString sEntry = (*ppContentT)->GetName();
+                OUString sEntry = rpContentT->GetName();
                 SvTreeListEntry* pEntry;
                 Image aImage(GetBitmapForContentTypeId(nCntType));
-                bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
+                bool bChOnDemand = 0 != rpContentT->GetMemberCount();
                 pEntry = InsertEntry(sEntry, aImage, aImage,
-                                nullptr, bChOnDemand, TREELIST_APPEND, (*ppContentT));
+                                nullptr, bChOnDemand, TREELIST_APPEND, rpContentT.get());
                 if(nCntType == m_nLastSelType)
                     pSelEntry = pEntry;
                 sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
@@ -1737,21 +1737,21 @@ void SwContentTree::Display( bool bActive )
         }
         else
         {
-            SwContentType** ppRootContentT = bActive ?
-                                &m_aActiveContentArr[m_nRootType] :
-                                    &m_aHiddenContentArr[m_nRootType];
-            if(!(*ppRootContentT))
-                (*ppRootContentT) = new SwContentType(pShell, m_nRootType, m_nOutlineLevel );
+            std::unique_ptr<SwContentType>& rpRootContentT = bActive ?
+                                    m_aActiveContentArr[m_nRootType] :
+                                    m_aHiddenContentArr[m_nRootType];
+            if(!rpRootContentT)
+                rpRootContentT.reset(new SwContentType(pShell, m_nRootType, m_nOutlineLevel ));
             Image aImage(GetBitmapForContentTypeId(m_nRootType));
             SvTreeListEntry* pParent = InsertEntry(
-                    (*ppRootContentT)->GetName(), aImage, aImage,
-                        nullptr, false, TREELIST_APPEND, *ppRootContentT);
+                    rpRootContentT->GetName(), aImage, aImage,
+                        nullptr, false, TREELIST_APPEND, rpRootContentT.get());
 
             if(m_nRootType != ContentTypeId::OUTLINE)
             {
-                for(size_t i = 0; i < (*ppRootContentT)->GetMemberCount(); ++i)
+                for(size_t i = 0; i < rpRootContentT->GetMemberCount(); ++i)
                 {
-                    const SwContent* pCnt = (*ppRootContentT)->GetMember(i);
+                    const SwContent* pCnt = rpRootContentT->GetMember(i);
                     if(pCnt)
                     {
                         OUString sEntry = pCnt->GetName();
@@ -2051,7 +2051,7 @@ bool SwContentTree::HasContentChanged()
             assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
             const ContentTypeId nType = static_cast<SwContentType*>(pEntry->GetUserData())->GetType();
             bOutline = m_nRootType == ContentTypeId::OUTLINE;
-            SwContentType* pArrType = m_aActiveContentArr[nType];
+            SwContentType* pArrType = m_aActiveContentArr[nType].get();
             if(!pArrType)
                 bRepaint = true;
             else
@@ -2130,7 +2130,7 @@ bool SwContentTree::HasContentChanged()
             SwContentType* pTreeType = static_cast<SwContentType*>(pEntry->GetUserData());
             const size_t nTreeCount = pTreeType->GetMemberCount();
             const ContentTypeId nType = pTreeType->GetType();
-            SwContentType* pArrType = m_aActiveContentArr[nType];
+            SwContentType* pArrType = m_aActiveContentArr[nType].get();
             if(!pArrType)
                 bRepaint = true;
             else
@@ -2269,7 +2269,7 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
     FindActiveTypeAndRemoveUserData();
     for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
-        DELETEZ(m_aHiddenContentArr[i]);
+        m_aHiddenContentArr[i].reset();
     }
     Display(false);
 
@@ -2306,7 +2306,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         FindActiveTypeAndRemoveUserData();
         for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
         {
-            DELETEZ(m_aActiveContentArr[i]);
+            m_aActiveContentArr[i].reset();
         }
         Display(true);
     }
@@ -2322,7 +2322,7 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
     FindActiveTypeAndRemoveUserData();
     for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
-        DELETEZ(m_aActiveContentArr[i]);
+        m_aActiveContentArr[i].reset();
     }
     Display(true);
 }
@@ -3133,13 +3133,13 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
 {
     m_nOutlineLevel = nSet;
     m_pConfig->SetOutlineLevel( m_nOutlineLevel );
-    SwContentType** ppContentT = (State::ACTIVE == m_eState)
-            ? &m_aActiveContentArr[ContentTypeId::OUTLINE]
-            : &m_aHiddenContentArr[ContentTypeId::OUTLINE];
-    if(*ppContentT)
+    std::unique_ptr<SwContentType>& rpContentT = (State::ACTIVE == m_eState)
+            ? m_aActiveContentArr[ContentTypeId::OUTLINE]
+            : m_aHiddenContentArr[ContentTypeId::OUTLINE];
+    if(rpContentT)
     {
-        (*ppContentT)->SetOutlineLevel(m_nOutlineLevel);
-        (*ppContentT)->Init();
+        rpContentT->SetOutlineLevel(m_nOutlineLevel);
+        rpContentT->Init();
     }
     Display(State::ACTIVE == m_eState);
 }
