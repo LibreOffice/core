@@ -1396,8 +1396,7 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, void )
             SfxTemplateItem *pState = pFamilyState[nActFamily-1].get();
             if(pState)
             {
-                const OUString aStyle(pState->GetStyleName());
-                SelectStyle(aStyle);
+                SelectStyle(pState->GetStyleName());
                 EnableDelete();
             }
         }

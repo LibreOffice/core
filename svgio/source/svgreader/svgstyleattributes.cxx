@@ -677,7 +677,7 @@ namespace svgio
                         // the geometry for a single dot
                         if(1 == rPath.count())
                         {
-                            const basegfx::B2DPolygon aSingle(rPath.getB2DPolygon(0));
+                            const basegfx::B2DPolygon& aSingle(rPath.getB2DPolygon(0));
 
                             if(2 == aSingle.count() && aSingle.getB2DPoint(0).equal(aSingle.getB2DPoint(1)))
                             {
@@ -925,7 +925,7 @@ namespace svgio
                     for (sal_uInt32 a(0); a < nSubPathCount; a++)
                     {
                         // iterate over sub-paths
-                        const basegfx::B2DPolygon aSubPolygonPath(rPath.getB2DPolygon(a));
+                        const basegfx::B2DPolygon& aSubPolygonPath(rPath.getB2DPolygon(a));
                         const sal_uInt32 nSubPolygonPointCount(aSubPolygonPath.count());
                         const bool bSubPolygonPathIsClosed(aSubPolygonPath.isClosed());
 

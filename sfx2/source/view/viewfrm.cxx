@@ -202,7 +202,7 @@ bool IsSignPDF(const SfxObjectShellRef& xObjSh)
     SfxMedium* pMedium = xObjSh->GetMedium();
     if (pMedium && !pMedium->IsOriginallyReadOnly())
     {
-        std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+        const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter();
         if (pFilter && pFilter->GetName() == "draw_pdf_import")
             return true;
     }

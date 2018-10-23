@@ -733,7 +733,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         OUString aNoChangeStr( ' ' );
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
         {
-            OUString sValue = pEnumItem->GetValueTextByPos(static_cast<sal_uInt16>(nPath));
+            const OUString& sValue = pEnumItem->GetValueTextByPos(static_cast<sal_uInt16>(nPath));
             if ( sValue != aNoChangeStr )
             {
                 switch( nPath )

@@ -1564,7 +1564,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
                 {
                     // Unpack Stream  in TempDir
                     ::utl::TempFile aTempFile;
-                    OUString          aTmpName = aTempFile.GetURL();
+                    const OUString& aTmpName = aTempFile.GetURL();
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
                     pStream->ReadStream( aTmpStream );

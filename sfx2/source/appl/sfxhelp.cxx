@@ -691,7 +691,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
 static bool impl_showOfflineHelp( const OUString& rURL )
 {
-    OUString aBaseInstallPath = getHelpRootURL();
+    const OUString& aBaseInstallPath = getHelpRootURL();
     OUString const aInternal( "vnd.sun.star.help://"  );
 
     OUString aHelpLink( aBaseInstallPath + "/index.html?" );

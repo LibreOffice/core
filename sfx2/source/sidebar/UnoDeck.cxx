@@ -69,7 +69,7 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
     if (xDeckDescriptor)
     {
         Deck* pDeck = xDeckDescriptor->mpDeck;
-        VclPtr<DeckTitleBar> pTitleBar = pDeck->GetTitleBar();
+        const VclPtr<DeckTitleBar>& pTitleBar = pDeck->GetTitleBar();
         pTitleBar->SetTitle(newTitle);
 
         xDeckDescriptor->msTitle = newTitle;

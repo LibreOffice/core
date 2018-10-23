@@ -359,7 +359,7 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
         try
         {
             // get vcl window related to the frame and lock it if it is still not locked
-            Reference< frame::XFrame > xFrame = rSfxFrame.GetFrameInterface();
+            const Reference< frame::XFrame >& xFrame = rSfxFrame.GetFrameInterface();
             vcl::Window* pWindow = GetVCLWindow( xFrame );
             if ( !pWindow )
                 throw RuntimeException();
@@ -1726,7 +1726,7 @@ namespace {
 
 OUString getFilterProvider( SfxMedium const & rMedium )
 {
-    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
+    const std::shared_ptr<const SfxFilter>& pFilter = rMedium.GetFilter();
     if (!pFilter)
         return OUString();
 
@@ -2856,7 +2856,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
             if ( pMedium )
             {
-                std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+                const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter();
                 if ( pFilter && aFilterName == pFilter->GetFilterName() )
                 {
                     // #i119366# - If the former file saving with password, do not trying in StoreSelf anyway...

@@ -52,7 +52,7 @@ css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController()
             SfxInPlaceClient* pIPClient = mpViewShell->GetIPClient();
             if (pIPClient)
             {
-                css::uno::Reference< ::css::embed::XEmbeddedObject > xEmbObj = pIPClient->GetObject();
+                const css::uno::Reference< ::css::embed::XEmbeddedObject >& xEmbObj = pIPClient->GetObject();
                 if( xEmbObj.is() )
                 {
                     ::css::uno::Reference< ::css::chart2::XChartDocument > xChart( xEmbObj->getComponent(), uno::UNO_QUERY );
@@ -138,7 +138,7 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                 {
                     // In all cases, the following code fragment
                     // returns the chart bounding box in twips.
-                    MapMode aCWMapMode = pWindow->GetMapMode();
+                    const MapMode& aCWMapMode = pWindow->GetMapMode();
                     double fXScale( aCWMapMode.GetScaleX() );
                     double fYScale( aCWMapMode.GetScaleY() );
                     Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);

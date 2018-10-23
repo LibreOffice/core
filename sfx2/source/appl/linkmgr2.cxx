@@ -217,7 +217,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         OUString* pFilter )
 {
     bool bRet = false;
-    const OUString sLNm( pLink->GetLinkSourceName() );
+    const OUString& sLNm( pLink->GetLinkSourceName() );
     if( !sLNm.isEmpty() )
     {
         switch( pLink->GetObjType() )

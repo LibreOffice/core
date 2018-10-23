@@ -577,7 +577,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
 
     if (aDlg.run() == RET_OK)
     {
-        OUString sCategory = aDlg.GetSelectedCategory();
+        const OUString& sCategory = aDlg.GetSelectedCategory();
         bool bIsNewCategory = aDlg.IsNewCategoryCreated();
         if(bIsNewCategory)
         {
@@ -616,7 +616,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
 
     if (aDlg.run() == RET_OK)
     {
-        OUString sCategory = aDlg.GetSelectedCategory();
+        const OUString& sCategory = aDlg.GetSelectedCategory();
         bool bIsNewCategory = aDlg.IsNewCategoryCreated();
         if(bIsNewCategory)
         {
@@ -1176,7 +1176,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
 
     if (aDlg.run() == RET_OK)
     {
-        OUString sCategory = aDlg.GetSelectedCategory();
+        const OUString& sCategory = aDlg.GetSelectedCategory();
         std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
                                                       SfxResId(STR_QMSG_SEL_FOLDER_DELETE)));
         if (popupDlg->run() != RET_YES)

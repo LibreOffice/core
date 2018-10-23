@@ -518,7 +518,7 @@ namespace svgio
                     if(pCandidate)
                     {
                         const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
-                        const drawinglayer::primitive2d::Primitive2DContainer aResult(
+                        const drawinglayer::primitive2d::Primitive2DContainer& aResult(
                             alocalTextBreakupHelper.getResult());
 
                         if(!aResult.empty())
