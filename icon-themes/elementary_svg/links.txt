@@ -1540,6 +1540,7 @@ res/fileopen.svg cmd/sc_open.svg
 res/foldercl.svg formula/res/fapclose.svg
 res/folderop.svg cmd/sc_open.svg
 res/fp010.svg cmd/sc_open.svg
+res/grafikei.svg cmd/sc_graphic.svg
 res/info.svg cmd/lc_helpindex.svg
 res/info_16.svg cmd/sc_helpindex.svg
 res/im30827.svg res/im30820.svg
@@ -1620,7 +1621,7 @@ res/sc10864.svg cmd/sc_grafcontrast.svg
 res/sc10865.svg cmd/sc_grafred.svg
 res/sc10866.svg cmd/sc_grafgreen.svg
 res/sc10867.svg cmd/sc_grafblue.svg
-res/sc10868.svg cmd/sc_graphicfilterinvert.svg
+res/sc10868.svg cmd/sc_grafgamma.svg
 res/sc10869.svg cmd/sc_graftransparence.svg
 
 res/sc_helperdialog.svg cmd/sc_helpindex.svg
@@ -1699,10 +1700,12 @@ sd/res/breakplayingblue_16.svg cmd/sc_mediapause.svg
 sd/res/comments_indicator.svg cmd/sc_showannotations.svg
 sd/res/get1obj.svg cmd/sc_selectobject.svg
 sd/res/getallob.svg cmd/sc_selectall.svg
+sd/res/graphic.svg cmd/sc_graphic.svg
 sd/res/group.svg cmd/sc_group.svg
-sd/res/ole.svg cmd/lc_insertobject.svg
-sd/res/page.svg cmd/lc_adddirect.svg
-sd/res/pipette.svg cmd/lc_bmpmask.svg
+sd/res/objects.svg cmd/sc_choosepolygon.svg
+sd/res/ole.svg sc/res/nc05.svg
+sd/res/page.svg cmd/sc_adddirect.svg
+sd/res/pipette.svg cmd/sc_bmpmask.svg
 sd/res/playblue_16.svg cmd/sc_runbasic.svg
 sd/res/stopplayingblue_16.svg cmd/sc_basicstop.svg
 sd/res/time_16.svg cmd/sc_timefield.svg

@@ -1540,6 +1540,7 @@ res/fileopen.png cmd/sc_open.png
 res/foldercl.png formula/res/fapclose.png
 res/folderop.png cmd/sc_open.png
 res/fp010.png cmd/sc_open.png
+res/grafikei.png cmd/sc_graphic.png
 res/info.png cmd/lc_helpindex.png
 res/info_16.png cmd/sc_helpindex.png
 res/im30827.png res/im30820.png
@@ -1620,7 +1621,7 @@ res/sc10864.png cmd/sc_grafcontrast.png
 res/sc10865.png cmd/sc_grafred.png
 res/sc10866.png cmd/sc_grafgreen.png
 res/sc10867.png cmd/sc_grafblue.png
-res/sc10868.png cmd/sc_graphicfilterinvert.png
+res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
 
 res/sc_helperdialog.png cmd/sc_helpindex.png
@@ -1699,10 +1700,12 @@ sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_showannotations.png
 sd/res/get1obj.png cmd/sc_selectobject.png
 sd/res/getallob.png cmd/sc_selectall.png
+sd/res/graphic.png cmd/sc_graphic.png
 sd/res/group.png cmd/sc_group.png
-sd/res/ole.png cmd/lc_insertobject.png
-sd/res/page.png cmd/lc_adddirect.png
-sd/res/pipette.png cmd/lc_bmpmask.png
+sd/res/objects.png cmd/sc_choosepolygon.png
+sd/res/ole.png sc/res/nc05.png
+sd/res/page.png cmd/sc_adddirect.png
+sd/res/pipette.png cmd/sc_bmpmask.png
 sd/res/playblue_16.png cmd/sc_runbasic.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
