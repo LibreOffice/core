@@ -329,9 +329,8 @@ void ConvDicXMLExport::ExportContent_()
     for (auto const& elem : rDic.aFromLeft)
         aKeySet.insert( elem.first );
 
-    for (auto const& elem : aKeySet)
+    for (const OUString& aLeftText : aKeySet)
     {
-        OUString aLeftText(elem);
         AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
         if (rDic.pConvPropType) // property-type list available?
         {
