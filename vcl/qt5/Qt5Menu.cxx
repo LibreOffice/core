@@ -132,6 +132,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
                             pQAG->setExclusive(true);
                         }
                         pQAG->addAction(pAction);
+                        pAction->setChecked(bChecked);
                     }
 
                     pAction->setEnabled(pSalMenuItem->mbEnabled);
