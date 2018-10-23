@@ -70,6 +70,24 @@
       "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_ff680a22",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-23T15:36:18Z",
+      "side": 1,
+      "message": "Because both operator\u003d\u003d() with a sal_Unicode* don\u0027t know the length in advance, and for operator\u003c() and all the others they don\u0027t test equality so actually need the compareTo() functionality.",
+      "parentUuid": "1f1a1f67_5f081e27",
+      "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
