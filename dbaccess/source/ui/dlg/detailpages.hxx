@@ -263,25 +263,25 @@ namespace dbaui
     };
 
     // OOdbcDetailsPage
-    class OLDAPDetailsPage : public OCommonBehaviourTabPage
+    class OLDAPDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OLDAPDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OLDAPDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
         virtual ~OLDAPDetailsPage() override;
-        virtual void dispose() override;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
     private:
-        VclPtr<Edit>               m_pETBaseDN;
-        VclPtr<CheckBox>           m_pCBUseSSL;
-        VclPtr<NumericField>       m_pNFPortNumber;
-        VclPtr<NumericField>       m_pNFRowCount;
+        sal_Int32 m_iSSLPort;
+        sal_Int32 m_iNormalPort;
 
-        sal_Int32           m_iSSLPort;
-        sal_Int32           m_iNormalPort;
-        DECL_LINK( OnCheckBoxClick, Button*, void );
+        std::unique_ptr<weld::Entry> m_xETBaseDN;
+        std::unique_ptr<weld::CheckButton> m_xCBUseSSL;
+        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
+        std::unique_ptr<weld::SpinButton> m_xNFRowCount;
+
+        DECL_LINK(OnCheckBoxClick, weld::ToggleButton&, void);
     };
 
     // OTextDetailsPage
