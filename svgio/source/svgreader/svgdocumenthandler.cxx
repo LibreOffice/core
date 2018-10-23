@@ -507,7 +507,7 @@ namespace svgio
 
                 if(pSvgTitleDescNode && mpTarget)
                 {
-                    const OUString aText(pSvgTitleDescNode->getText());
+                    const OUString& aText(pSvgTitleDescNode->getText());
 
                     if(!aText.isEmpty())
                     {

@@ -418,7 +418,7 @@ namespace svgio
                                             fPosition,
                                             rTextStart);
 
-                                        const drawinglayer::primitive2d::Primitive2DContainer aResult(
+                                        const drawinglayer::primitive2d::Primitive2DContainer& aResult(
                                             aPathTextBreakupHelper.getResult());
 
                                         if(!aResult.empty())

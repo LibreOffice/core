@@ -2041,7 +2041,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
             uno::Reference< frame::XModel > xModel = GetModel();
             if ( xModel.is() )
             {
-                const OUString aURL {pNewMed->GetOrigURL()};
+                const OUString& aURL {pNewMed->GetOrigURL()};
                 uno::Sequence< beans::PropertyValue > aMediaDescr;
                 TransformItems( SID_OPENDOC, *pNewMed->GetItemSet(), aMediaDescr );
                 try

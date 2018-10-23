@@ -227,8 +227,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
             }
 
             const SfxStringItem *pURL = dynamic_cast< const SfxStringItem* >(pState);
-            OUString aRep( pURL->GetValue() );
-            INetURLObject aURL( aRep );
+            INetURLObject aURL( pURL->GetValue() );
             INetProtocol eProt = aURL.GetProtocol();
             if ( eProt == INetProtocol::File )
             {

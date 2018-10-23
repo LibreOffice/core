@@ -289,7 +289,7 @@ static void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPoly
 
     for ( sal_uInt32 i = 0; i < aPolygons.count( ); i++ )
     {
-        basegfx::B2DPolygon aDash = aPolygons.getB2DPolygon( i );
+        const basegfx::B2DPolygon& aDash = aPolygons.getB2DPolygon( i );
         basegfx::B2DPoint aStart = aDash.getB2DPoint( 0 );
         basegfx::B2DPoint aEnd = aDash.getB2DPoint( aDash.count() - 1 );
 
@@ -851,7 +851,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         tools::Rectangle aTextRect;
 
         // Preview the font name
-        OUString sFontName = rFontMetric.GetFamilyName();
+        const OUString& sFontName = rFontMetric.GetFamilyName();
 
         //If it shouldn't or can't draw its own name because it doesn't have the glyphs
         if (!canRenderNameOfSelectedFont(*pRenderContext))

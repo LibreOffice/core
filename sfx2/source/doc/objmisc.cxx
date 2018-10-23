@@ -1576,7 +1576,7 @@ vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
     const SfxUnoFrameItem* pUnoItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pSet, SID_FILLFRAME, false);
     if ( pUnoItem )
     {
-        uno::Reference < frame::XFrame > xFrame( pUnoItem->GetFrame() );
+        const uno::Reference < frame::XFrame >& xFrame( pUnoItem->GetFrame() );
         pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
     }
 
