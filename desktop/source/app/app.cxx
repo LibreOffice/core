@@ -1256,7 +1256,7 @@ int Desktop::Main()
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
 #if HAVE_FEATURE_DESKTOP
-    OUString aUnknown( rCmdLineArgs.GetUnknown() );
+    const OUString& aUnknown( rCmdLineArgs.GetUnknown() );
     if ( !aUnknown.isEmpty() )
     {
         displayCmdlineHelp( aUnknown );

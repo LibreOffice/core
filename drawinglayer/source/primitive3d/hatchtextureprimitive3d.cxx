@@ -88,7 +88,7 @@ namespace drawinglayer
 
                                         for(sal_uInt32 b(0); b < nPolyCount; b++)
                                         {
-                                            const basegfx::B3DPolygon aPartPoly(aFillPolyPolygon.getB3DPolygon(b));
+                                            const basegfx::B3DPolygon& aPartPoly(aFillPolyPolygon.getB3DPolygon(b));
                                             const sal_uInt32 nPointCount(aPartPoly.count());
                                             basegfx::B2DPolygon aTexPolygon;
 

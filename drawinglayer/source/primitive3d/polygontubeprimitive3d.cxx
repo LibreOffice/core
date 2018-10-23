@@ -262,7 +262,7 @@ namespace drawinglayer
 
                             for (sal_uInt32 a = 0; a < nCount; ++a)
                             {
-                                const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
+                                const basegfx::B3DPolygon& aPartPolygon(aSphere.getB3DPolygon(a));
                                 const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
 
                                 // need to create one primitive per Polygon since the primitive
@@ -318,7 +318,7 @@ namespace drawinglayer
 
                             for(sal_uInt32 a(0); a < aSphere.count(); a++)
                             {
-                                const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
+                                const basegfx::B3DPolygon& aPartPolygon(aSphere.getB3DPolygon(a));
                                 const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
                                 BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false);
                                 aResultVector.push_back(pNew);

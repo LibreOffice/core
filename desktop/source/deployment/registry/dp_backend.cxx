@@ -218,7 +218,7 @@ OUString PackageRegistryBackend::createFolder(
 
     const OUString baseDir(sDataFolder);
     ::utl::TempFile aTemp(&baseDir, true);
-    const OUString url = aTemp.GetURL();
+    const OUString& url = aTemp.GetURL();
     return sDataFolder + url.copy(url.lastIndexOf('/'));
 }
 

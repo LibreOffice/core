@@ -288,7 +288,7 @@ void ODBExport::exportDataSource()
 
         ::connectivity::DriversConfig aDriverConfig(getComponentContext());
         const OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
-        ::comphelper::NamedValueCollection aDriverSupportedProperties( aDriverConfig.getProperties( sURL ) );
+        const ::comphelper::NamedValueCollection& aDriverSupportedProperties( aDriverConfig.getProperties( sURL ) );
 
         static OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
         static OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));

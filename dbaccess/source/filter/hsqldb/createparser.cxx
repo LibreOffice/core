@@ -49,12 +49,11 @@ sal_Int32 lcl_IndexOfUnicode(const OString& rSource, const sal_Int32 nFrom = 0)
 }
 
 //Convert ascii escaped unicode to utf-8
-OUString lcl_ConvertToUTF8(const OString& rText)
+OUString lcl_ConvertToUTF8(const OString& original)
 {
-    OString original = rText;
-    OString sResult = rText;
+    OString sResult = original;
     sal_Int32 nIndex = lcl_IndexOfUnicode(sResult);
-    while (nIndex != -1 && nIndex < rText.getLength())
+    while (nIndex != -1 && nIndex < original.getLength())
     {
         const OString sHex = original.copy(nIndex + 2, 4);
         const sal_Unicode cDec = static_cast<sal_Unicode>(strtol(sHex.getStr(), nullptr, 16));

@@ -138,7 +138,7 @@ namespace dbaui
         // forward the values to the controls
         if ( bValid )
         {
-            OUString sUrl = pUrlItem->GetValue();
+            const OUString& sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
             checkTestConnection();

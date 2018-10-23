@@ -45,7 +45,7 @@ namespace
     {
         bool bGrabFocus = false;
         SbaGridControl* pVclControl = _pView->getVclControl();
-        Reference< css::awt::XControl > xGrid = _pView->getGridControl();
+        const Reference< css::awt::XControl >& xGrid = _pView->getGridControl();
         if (pVclControl && xGrid.is())
         {
             bGrabFocus = true;
