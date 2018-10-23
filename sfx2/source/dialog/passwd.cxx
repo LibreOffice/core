@@ -150,7 +150,7 @@ void SfxPasswordDialog::ShowMinLengthText(bool bShow)
     m_xMinLengthFT->show(bShow);
 }
 
-short SfxPasswordDialog::execute()
+short SfxPasswordDialog::run()
 {
     m_xUserFT->hide();
     m_xUserED->hide();
@@ -188,7 +188,7 @@ short SfxPasswordDialog::execute()
         m_xConfirm2ED->show();
     }
 
-    return m_xDialog->run();
+    return GenericDialogController::run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -264,8 +264,6 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
 
     // remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
-
-    Start_Impl();
 }
 
 ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
@@ -1165,7 +1163,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
     aPwdDialog.set_title(msStrSetPwd);
     aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
     aPwdDialog.AllowAsciiOnly();
-    if (aPwdDialog.execute() == RET_OK)  // OK issued get password and set it
+    if (aPwdDialog.run() == RET_OK)  // OK issued get password and set it
     {
         OUString aUserPW(aPwdDialog.GetPassword());
         OUString aOwnerPW(aPwdDialog.GetPassword2());

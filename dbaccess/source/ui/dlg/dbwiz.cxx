@@ -70,7 +70,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
                                )
     :OWizardMachine(_pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
 {
-    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
+    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,GetFrameWeld(), _pParent ? _pParent->GetFrameWeld() : nullptr, this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet.reset(new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() ));
