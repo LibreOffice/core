@@ -18,7 +18,6 @@
 class ScFormulaCell;
 class ScDocument;
 class ScAddress;
-struct ScFormulaCellGroup;
 
 namespace formula {
 
@@ -26,8 +25,6 @@ class FormulaToken;
 struct VectorRefArray;
 
 }
-
-namespace osl { class File; }
 
 namespace sc {
 

@@ -11,8 +11,12 @@
 #define INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
 
 #include <vector>
-#include <formula/token.hxx>
 #include "types.hxx"
+
+namespace formula
+{
+class FormulaToken;
+}
 
 #define TOKEN_CACHE_SIZE 8
 

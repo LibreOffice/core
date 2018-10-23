@@ -39,8 +39,6 @@ class SvNumberFormatter;
 class ScMatrixImpl;
 enum class FormulaError : sal_uInt16;
 
-namespace formula { class DoubleVectorRefToken; }
-
 namespace sc {
 
 struct Compare;

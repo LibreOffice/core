@@ -33,12 +33,6 @@
 // Matrix token constants.
 #define MATRIX_TOKEN_HAS_RANGE 1
 
-namespace sc {
-
-struct RangeMatrix;
-
-}
-
 class ScJumpMatrix;
 class ScMatrix;
 
