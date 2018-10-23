@@ -34,9 +34,9 @@ class CSmplMailMsg : public cppu::WeakImplHelper< css::system::XSimpleMailMessag
 public:
     CSmplMailMsg( );
 
-    virtual void SAL_CALL setBody( const ::rtl::OUString& aBody ) override;
+    virtual void SAL_CALL setBody( const OUString& aBody ) override;
 
-    virtual ::rtl::OUString SAL_CALL getBody(  ) override;
+    virtual OUString SAL_CALL getBody(  ) override;
 
 
     virtual void SAL_CALL setRecipient( const OUString& aRecipient ) override;

@@ -1295,8 +1295,8 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
 }
 
 RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
-                                              const rtl::OUString&    typeName,
-                                              const rtl::OUString&    superTypeName,
+                                              const OUString&    typeName,
+                                              const OUString&    superTypeName,
                                               sal_uInt16                fieldCount)
     : m_hImpl(nullptr)
 {
@@ -1312,10 +1312,10 @@ RegistryTypeWriter::~RegistryTypeWriter()
 }
 
 void RegistryTypeWriter::setFieldData( sal_uInt16              index,
-                                              const rtl::OUString&    name,
-                                              const rtl::OUString&    typeName,
-                                              const rtl::OUString&    doku,
-                                              const rtl::OUString&    fileName,
+                                              const OUString&    name,
+                                              const OUString&    typeName,
+                                              const OUString&    doku,
+                                              const OUString&    fileName,
                                               RTFieldAccess           access,
                                               const RTConstValue&     constValue)
 {

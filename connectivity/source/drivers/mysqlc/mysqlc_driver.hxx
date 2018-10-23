@@ -37,7 +37,6 @@ using css::uno::Exception;
 using css::uno::Reference;
 using css::uno::RuntimeException;
 using css::uno::Sequence;
-using rtl::OUString;
 
 Reference<css::uno::XInterface>
 MysqlCDriver_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);

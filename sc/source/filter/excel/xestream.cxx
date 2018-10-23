@@ -1089,7 +1089,7 @@ bool XclExpXmlStream::exportDocument()
     PushStream( CreateOutputStream( workbook, workbook,
                                     uno::Reference <XOutputStream>(),
                                     pWorkbookContentType,
-                                    rtl::OUStringToOString(oox::getRelationship(Relationship::OFFICEDOCUMENT), RTL_TEXTENCODING_UTF8).getStr() ) );
+                                    OUStringToOString(oox::getRelationship(Relationship::OFFICEDOCUMENT), RTL_TEXTENCODING_UTF8).getStr() ) );
 
     if (mbExportVBA)
     {

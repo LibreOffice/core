@@ -27,15 +27,15 @@ namespace vcl {
 
 namespace {
 
-typedef ::std::map<rtl::OUString,EnumContext::Application> ApplicationMap;
+typedef ::std::map<OUString,EnumContext::Application> ApplicationMap;
 
 static ApplicationMap maApplicationMap;
-static o3tl::enumarray<EnumContext::Application, rtl::OUString> maApplicationVector;
+static o3tl::enumarray<EnumContext::Application, OUString> maApplicationVector;
 
-typedef ::std::map<rtl::OUString,EnumContext::Context> ContextMap;
+typedef ::std::map<OUString,EnumContext::Context> ContextMap;
 
 static ContextMap maContextMap;
-static o3tl::enumarray<EnumContext::Context, rtl::OUString> maContextVector;
+static o3tl::enumarray<EnumContext::Context, OUString> maContextVector;
 
 }
 
@@ -57,8 +57,8 @@ EnumContext::EnumContext (
 }
 
 EnumContext::EnumContext (
-    const ::rtl::OUString& rsApplicationName,
-    const ::rtl::OUString& rsContextName)
+    const OUString& rsApplicationName,
+    const OUString& rsContextName)
     : meApplication(GetApplicationEnum(rsApplicationName)),
       meContext(GetContextEnum(rsContextName))
 {
@@ -102,7 +102,7 @@ bool EnumContext::operator!= (const EnumContext& rOther)
         || meContext!=rOther.meContext;
 }
 
-void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eApplication)
+void EnumContext::AddEntry (const OUString& rsName, const Application eApplication)
 {
     maApplicationMap[rsName] = eApplication;
     OSL_ASSERT(eApplication<=Application::LAST);
@@ -131,7 +131,7 @@ void EnumContext::ProvideApplicationContainers()
 
 }
 
-EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString& rsApplicationName)
+EnumContext::Application EnumContext::GetApplicationEnum (const OUString& rsApplicationName)
 {
     ProvideApplicationContainers();
 
@@ -143,13 +143,13 @@ EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString&
         return EnumContext::Application::NONE;
 }
 
-const ::rtl::OUString& EnumContext::GetApplicationName (const Application eApplication)
+const OUString& EnumContext::GetApplicationName (const Application eApplication)
 {
     ProvideApplicationContainers();
     return maApplicationVector[eApplication];
 }
 
-void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eContext)
+void EnumContext::AddEntry (const OUString& rsName, const Context eContext)
 {
     maContextMap[rsName] = eContext;
     maContextVector[eContext] = rsName;
@@ -199,7 +199,7 @@ void EnumContext::ProvideContextContainers()
     AddEntry("empty", Context::Empty);
 }
 
-EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsContextName)
+EnumContext::Context EnumContext::GetContextEnum (const OUString& rsContextName)
 {
     ProvideContextContainers();
 
@@ -210,7 +210,7 @@ EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsConte
         return EnumContext::Context::Unknown;
 }
 
-const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)
+const OUString& EnumContext::GetContextName (const Context eContext)
 {
     ProvideContextContainers();
     return maContextVector[eContext];

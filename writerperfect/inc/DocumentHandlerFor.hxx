@@ -16,7 +16,7 @@ namespace writerperfect
   */
 template <class Generator> struct DocumentHandlerFor
 {
-    // static const rtl::OUString name();
+    // static const OUString name();
 };
 }
 

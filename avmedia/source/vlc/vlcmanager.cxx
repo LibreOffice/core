@@ -27,8 +27,8 @@ namespace vlc {
 
 namespace
 {
-    const rtl::OUString VLC_IMPLEMENTATION_NAME = "com.sun.star.comp.avmedia.Manager_VLC";
-    const ::rtl::OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
+    const OUString VLC_IMPLEMENTATION_NAME = "com.sun.star.comp.avmedia.Manager_VLC";
+    const OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
 
     const char * const VLC_ARGS[] = {
         "--demux",
@@ -82,7 +82,7 @@ Manager::~Manager()
     mEventHandler.stop();
 }
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUString& rURL )
+uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
 {
     if ( !m_is_vlc_found )
         throw uno::RuntimeException("VLC not found", nullptr);
@@ -105,17 +105,17 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
     return mPlayer;
 }
 
-rtl::OUString SAL_CALL Manager::getImplementationName()
+OUString SAL_CALL Manager::getImplementationName()
 {
     return VLC_IMPLEMENTATION_NAME;
 }
 
-sal_Bool SAL_CALL Manager::supportsService( const rtl::OUString& serviceName )
+sal_Bool SAL_CALL Manager::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames()
 {
     return { VLC_SERVICENAME };
 }

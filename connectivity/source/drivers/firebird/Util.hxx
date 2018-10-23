@@ -66,7 +66,7 @@ public:
             OUString const & getCharacterSet() const { return m_sCharsetName; }
 
             sal_Int32 getSdbcType() const;
-            ::rtl::OUString getColumnTypeName() const;
+            OUString getColumnTypeName() const;
 
         };
 
@@ -96,7 +96,7 @@ public:
          * @throws css::sdbc::SQLException
          */
         void evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
-                                  const ::rtl::OUString& aCause,
+                                  const OUString& aCause,
                                   const css::uno::Reference< css::uno::XInterface >& _rxContext);
 
         /**

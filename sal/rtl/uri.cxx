@@ -145,7 +145,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
         }
         else
         {
-            rtl::OStringBuffer aBuf;
+            OStringBuffer aBuf;
             aBuf.append(static_cast< char >(nChar));
             rtl_TextToUnicodeConverter aConverter
                 = rtl_createTextToUnicodeConverter(eCharset);
@@ -425,7 +425,7 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
 }
 
 void appendPath(
-    rtl::OUStringBuffer & buffer, sal_Int32 bufferStart, bool precedingSlash,
+    OUStringBuffer & buffer, sal_Int32 bufferStart, bool precedingSlash,
     sal_Unicode const * pathBegin, sal_Unicode const * pathEnd)
 {
     while (precedingSlash || pathBegin != pathEnd)
@@ -755,7 +755,7 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
 {
     // Use the strict parser algorithm from RFC 3986, section 5.2, to turn the
     // relative URI into an absolute one:
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     Components aRelComponents;
     parseUriRef(pRelUriRef, &aRelComponents);
 
@@ -788,8 +788,8 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
         {
             rtl_uString_assign(
                 pException,
-                (rtl::OUString(
-                    "<" + rtl::OUString(pBaseUriRef)
+                (OUString(
+                    "<" + OUString(pBaseUriRef)
                     + "> does not start with a scheme component")
                  .pData));
             return false;

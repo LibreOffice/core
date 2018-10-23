@@ -27,7 +27,7 @@ private:
 void AppendChar::testAppendChar() {
     // Check that append('a') does not unexpectedly pick
     // append(sal_Int32 i, sal_Int16 radix = 10):
-    rtl::OUStringBuffer s;
+    OUStringBuffer s;
     s.append('a');
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s.getLength());
     CPPUNIT_ASSERT_EQUAL(u'a', s[0]);

@@ -289,9 +289,9 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "rtl::OUString", OUString("2"), b );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -303,11 +303,11 @@ void Test::testVoid() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>", !(a >>= b));
+            "css::uno::Sequence<OUString>", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>", sal_Int32(2), b.getLength());
+            "css::uno::Sequence<OUString>", sal_Int32(2), b.getLength());
     }
     {
         Enum1 b = Enum1_M2;
@@ -321,7 +321,7 @@ void Test::testVoid() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -397,9 +397,9 @@ void Test::testBoolean() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "rtl::OUString", OUString("2"), b );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -411,12 +411,12 @@ void Test::testBoolean() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -431,7 +431,7 @@ void Test::testBoolean() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -502,8 +502,8 @@ void Test::testByte() {
         }
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -512,9 +512,9 @@ void Test::testByte() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -527,7 +527,7 @@ void Test::testByte() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -593,8 +593,8 @@ void Test::testShort() {
         }
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -603,9 +603,9 @@ void Test::testShort() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -618,7 +618,7 @@ void Test::testShort() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -686,8 +686,8 @@ void Test::testUnsignedShort() {
         }
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -696,9 +696,9 @@ void Test::testUnsignedShort() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -711,7 +711,7 @@ void Test::testUnsignedShort() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -773,8 +773,8 @@ void Test::testLong() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -783,9 +783,9 @@ void Test::testLong() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -798,7 +798,7 @@ void Test::testLong() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -860,8 +860,8 @@ void Test::testUnsignedLong() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -870,9 +870,9 @@ void Test::testUnsignedLong() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -885,7 +885,7 @@ void Test::testUnsignedLong() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -947,8 +947,8 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -957,9 +957,9 @@ void Test::testHyper() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -972,7 +972,7 @@ void Test::testHyper() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1034,8 +1034,8 @@ void Test::testUnsignedHyper() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1044,9 +1044,9 @@ void Test::testUnsignedHyper() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1059,7 +1059,7 @@ void Test::testUnsignedHyper() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1121,8 +1121,8 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1131,9 +1131,9 @@ void Test::testFloat() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1146,7 +1146,7 @@ void Test::testFloat() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1208,8 +1208,8 @@ void Test::testDouble() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1218,9 +1218,9 @@ void Test::testDouble() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1233,7 +1233,7 @@ void Test::testDouble() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1300,8 +1300,8 @@ void Test::testChar() {
         }
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1310,9 +1310,9 @@ void Test::testChar() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1325,7 +1325,7 @@ void Test::testChar() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1336,7 +1336,7 @@ void Test::testChar() {
 }
 
 void Test::testString() {
-    css::uno::Any a(rtl::OUString("1"));
+    css::uno::Any a(OUString("1"));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<OUString>::get()));
     {
         bool b = true;
@@ -1387,8 +1387,8 @@ void Test::testString() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", (a >>= b) && b == "1" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", (a >>= b) && b == "1" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1397,9 +1397,9 @@ void Test::testString() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1412,7 +1412,7 @@ void Test::testString() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1474,8 +1474,8 @@ void Test::testType() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1483,9 +1483,9 @@ void Test::testType() {
             "css::uno::Type", (a >>= b) && b == cppu::UnoType<sal_Int32>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1498,7 +1498,7 @@ void Test::testType() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1563,8 +1563,8 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1573,9 +1573,9 @@ void Test::testSequence() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1594,7 +1594,7 @@ void Test::testSequence() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1656,8 +1656,8 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1666,9 +1666,9 @@ void Test::testEnum() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1685,7 +1685,7 @@ void Test::testEnum() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1747,8 +1747,8 @@ void Test::testStruct() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1757,9 +1757,9 @@ void Test::testStruct() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1785,7 +1785,7 @@ void Test::testStruct() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -1807,7 +1807,7 @@ void Test::testPoly() {
 void Test::testException() {
     css::uno::Any a(
         Exception2a(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 1,
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 1,
             3));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Exception2a>::get()));
     {
@@ -1859,8 +1859,8 @@ void Test::testException() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1869,9 +1869,9 @@ void Test::testException() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1884,24 +1884,24 @@ void Test::testException() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
         Exception2 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception2", (a >>= b) && b.member == 1);
     }
     {
         Exception2a b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
             2);
         CPPUNIT_ASSERT_MESSAGE(
             "Exception2a", (a >>= b) && b.member == 1 && b.member2 == 3);
     }
     {
         Exception2b b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
             2);
         CPPUNIT_ASSERT_MESSAGE("Exception2b", !(a >>= b) && b.member == 2);
     }
@@ -1965,8 +1965,8 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1975,9 +1975,9 @@ void Test::testInterface() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -1990,7 +1990,7 @@ void Test::testInterface() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {
@@ -2069,8 +2069,8 @@ void Test::testNull() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        OUString b("2");
+        CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -2079,9 +2079,9 @@ void Test::testNull() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Sequence< rtl::OUString > b(2);
+        css::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
+            "css::uno::Sequence<OUString>",
             !(a >>= b) && b.getLength() == 2);
     }
     {
@@ -2094,7 +2094,7 @@ void Test::testNull() {
     }
     {
         Exception1 b(
-            rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
     }
     {

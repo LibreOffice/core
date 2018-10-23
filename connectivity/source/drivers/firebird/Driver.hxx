@@ -68,19 +68,19 @@ namespace connectivity
             virtual void SAL_CALL disposing() override;
             // XInterface
             /// @throws css::uno::RuntimeException
-            static ::rtl::OUString getImplementationName_Static(  );
+            static OUString getImplementationName_Static(  );
             /// @throws css::uno::RuntimeException
-            static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  );
+            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
 
             // XServiceInfo
-            virtual ::rtl::OUString SAL_CALL getImplementationName(  ) override;
-            virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) override;
-            virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) override;
+            virtual OUString SAL_CALL getImplementationName(  ) override;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
             // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const ::rtl::OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const ::rtl::OUString& url ) override;
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const ::rtl::OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
             virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 

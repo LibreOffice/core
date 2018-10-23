@@ -129,7 +129,7 @@ private:
     ListLevel::Pointer                         m_pCurrentLevel;
 
     // The style name linked to.
-    ::rtl::OUString                      m_sNumStyleLink;
+    OUString                      m_sNumStyleLink;
 
 public:
     typedef tools::SvRef< AbstractListDef > Pointer;

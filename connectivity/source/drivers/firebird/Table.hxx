@@ -33,7 +33,7 @@ namespace connectivity
              * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
              * Includes a trailing space.
              */
-            ::rtl::OUString getAlterTableColumn(const ::rtl::OUString& rColumn);
+            OUString getAlterTableColumn(const OUString& rColumn);
 
         protected:
             void construct() override;
@@ -45,9 +45,9 @@ namespace connectivity
             Table(Tables* pTables,
                   ::osl::Mutex& rMutex,
                   const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
-                  const ::rtl::OUString& rName,
-                  const ::rtl::OUString& rType,
-                  const ::rtl::OUString& rDescription);
+                  const OUString& rName,
+                  const OUString& rType,
+                  const OUString& rDescription);
 
             // OTableHelper
             virtual ::connectivity::sdbcx::OCollection* createColumns(
@@ -63,11 +63,11 @@ namespace connectivity
              * rDescriptor.
              */
             virtual void SAL_CALL alterColumnByName(
-                    const ::rtl::OUString& rColName,
+                    const OUString& rColName,
                     const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
 
             // XRename -- UNSUPPORTED
-            virtual void SAL_CALL rename(const ::rtl::OUString& sName) override;
+            virtual void SAL_CALL rename(const OUString& sName) override;
 
             //XInterface
             virtual css::uno::Any

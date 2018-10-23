@@ -83,7 +83,7 @@ typedef struct
 
 namespace
 {
-rtl::OUString lcl_normalizeSubStreamPath(const rtl::OUString& rPath)
+OUString lcl_normalizeSubStreamPath(const OUString& rPath)
 {
     // accept paths which begin by '/'
     // TODO: maybe this should to a full normalization
@@ -95,7 +95,7 @@ rtl::OUString lcl_normalizeSubStreamPath(const rtl::OUString& rPath)
 
 namespace
 {
-const rtl::OUString concatPath(const rtl::OUString& lhs, const rtl::OUString& rhs)
+const OUString concatPath(const OUString& lhs, const OUString& rhs)
 {
     if (lhs.isEmpty())
         return rhs;
@@ -104,26 +104,26 @@ const rtl::OUString concatPath(const rtl::OUString& lhs, const rtl::OUString& rh
 
 struct OLEStreamData
 {
-    OLEStreamData(const rtl::OString& rName, const rtl::OString& rvngName);
+    OLEStreamData(const OString& rName, const OString& rvngName);
 
     SotStorageStreamRefWrapper stream;
 
     /** Name of the stream.
       *
-      * This is not @c rtl::OUString, because we need to be able to
+      * This is not @c OUString, because we need to be able to
       * produce const char* from it.
       */
-    rtl::OString const name;
+    OString const name;
     /** librevenge name of the stream.
       *
-      * This is not @c rtl::OUString, because we need to be able to
+      * This is not @c OUString, because we need to be able to
       * produce const char* from it.
       */
-    rtl::OString const RVNGname;
+    OString const RVNGname;
 };
 
-typedef std::unordered_map<rtl::OUString, std::size_t> NameMap_t;
-typedef std::unordered_map<rtl::OUString, SotStorageRefWrapper> OLEStorageMap_t;
+typedef std::unordered_map<OUString, std::size_t> NameMap_t;
+typedef std::unordered_map<OUString, SotStorageRefWrapper> OLEStorageMap_t;
 
 /** Representation of an OLE2 storage.
   *
@@ -147,13 +147,13 @@ struct OLEStorageImpl
 
     void initialize(std::unique_ptr<SvStream> pStream);
 
-    tools::SvRef<SotStorageStream> getStream(const rtl::OUString& rPath);
+    tools::SvRef<SotStorageStream> getStream(const OUString& rPath);
     tools::SvRef<SotStorageStream> const& getStream(std::size_t nId);
 
 private:
-    void traverse(const tools::SvRef<SotStorage>& rStorage, const rtl::OUString& rPath);
+    void traverse(const tools::SvRef<SotStorage>& rStorage, const OUString& rPath);
 
-    tools::SvRef<SotStorageStream> createStream(const rtl::OUString& rPath);
+    tools::SvRef<SotStorageStream> createStream(const OUString& rPath);
 
 public:
     SotStorageRefWrapper mxRootStorage; //< root storage of the OLE2
@@ -163,7 +163,7 @@ public:
     bool mbInitialized;
 };
 
-OLEStreamData::OLEStreamData(const rtl::OString& rName, const rtl::OString& rvngName)
+OLEStreamData::OLEStreamData(const OString& rName, const OString& rvngName)
     : stream()
     , name(rName)
     , RVNGname(rvngName)
@@ -191,9 +191,9 @@ void OLEStorageImpl::initialize(std::unique_ptr<SvStream> pStream)
     mbInitialized = true;
 }
 
-tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString& rPath)
+tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const OUString& rPath)
 {
-    const rtl::OUString aPath(lcl_normalizeSubStreamPath(rPath));
+    const OUString aPath(lcl_normalizeSubStreamPath(rPath));
     NameMap_t::iterator aIt = maNameMap.find(aPath);
 
     // For the while don't return stream in this situation.
@@ -203,8 +203,8 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString& rP
         return tools::SvRef<SotStorageStream>();
 
     if (!maStreams[aIt->second].stream.ref.is())
-        maStreams[aIt->second].stream.ref = createStream(
-            rtl::OStringToOUString(maStreams[aIt->second].name, RTL_TEXTENCODING_UTF8));
+        maStreams[aIt->second].stream.ref
+            = createStream(OStringToOUString(maStreams[aIt->second].name, RTL_TEXTENCODING_UTF8));
 
     return maStreams[aIt->second].stream.ref;
 }
@@ -213,12 +213,12 @@ tools::SvRef<SotStorageStream> const& OLEStorageImpl::getStream(const std::size_
 {
     if (!maStreams[nId].stream.ref.is())
         maStreams[nId].stream.ref
-            = createStream(rtl::OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
+            = createStream(OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
 
     return maStreams[nId].stream.ref;
 }
 
-void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const rtl::OUString& rPath)
+void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const OUString& rPath)
 {
     SvStorageInfoList infos;
 
@@ -228,18 +228,18 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const rt
     {
         if (info.IsStream())
         {
-            rtl::OUString baseName = info.GetName(), rvngName = baseName;
+            OUString baseName = info.GetName(), rvngName = baseName;
             // librevenge::RVNGOLEStream ignores the first character when is a control code, so ...
             if (!rvngName.isEmpty() && rvngName.toChar() < 32)
                 rvngName = rvngName.copy(1);
             maStreams.emplace_back(
-                rtl::OUStringToOString(concatPath(rPath, baseName), RTL_TEXTENCODING_UTF8),
-                rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8));
+                OUStringToOString(concatPath(rPath, baseName), RTL_TEXTENCODING_UTF8),
+                OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8));
             maNameMap[concatPath(rPath, rvngName)] = maStreams.size() - 1;
         }
         else if (info.IsStorage())
         {
-            const rtl::OUString aPath = concatPath(rPath, info.GetName());
+            const OUString aPath = concatPath(rPath, info.GetName());
             SotStorageRefWrapper aStorage;
             aStorage.ref = rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ);
             maStorageMap[aPath] = aStorage;
@@ -255,15 +255,15 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const rt
     }
 }
 
-tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const rtl::OUString& rPath)
+tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const OUString& rPath)
 {
     const sal_Int32 nDelim = rPath.lastIndexOf(u'/');
 
     if (-1 == nDelim)
         return mxRootStorage.ref->OpenSotStream(rPath, StreamMode::STD_READ);
 
-    const rtl::OUString aDir = rPath.copy(0, nDelim);
-    const rtl::OUString aName = rPath.copy(nDelim + 1);
+    const OUString aDir = rPath.copy(0, nDelim);
+    const OUString aName = rPath.copy(nDelim + 1);
 
     const OLEStorageMap_t::const_iterator aIt = maStorageMap.find(aDir);
 
@@ -278,16 +278,16 @@ namespace
 {
 struct ZipStreamData
 {
-    explicit ZipStreamData(const rtl::OString& rName);
+    explicit ZipStreamData(const OString& rName);
 
     Reference<XInputStream> xStream;
 
     /** Name of the stream.
       *
-      * This is not @c rtl::OUString, because we need to be able to
+      * This is not @c OUString, because we need to be able to
       * produce const char* from it.
       */
-    rtl::OString const aName;
+    OString const aName;
 };
 
 /** Representation of a Zip storage.
@@ -307,13 +307,13 @@ struct ZipStorageImpl
       */
     void initialize();
 
-    Reference<XInputStream> getStream(const rtl::OUString& rPath);
+    Reference<XInputStream> getStream(const OUString& rPath);
     Reference<XInputStream> const& getStream(std::size_t nId);
 
 private:
     void traverse(const Reference<container::XNameAccess>& rxEnum);
 
-    Reference<XInputStream> createStream(const rtl::OUString& rPath);
+    Reference<XInputStream> createStream(const OUString& rPath);
 
 public:
     Reference<container::XNameAccess> mxContainer; //< root of the Zip
@@ -322,7 +322,7 @@ public:
     bool mbInitialized;
 };
 
-ZipStreamData::ZipStreamData(const rtl::OString& rName)
+ZipStreamData::ZipStreamData(const OString& rName)
     : xStream()
     , aName(rName)
 {
@@ -344,9 +344,9 @@ void ZipStorageImpl::initialize()
     mbInitialized = true;
 }
 
-Reference<XInputStream> ZipStorageImpl::getStream(const rtl::OUString& rPath)
+Reference<XInputStream> ZipStorageImpl::getStream(const OUString& rPath)
 {
-    const rtl::OUString aPath(lcl_normalizeSubStreamPath(rPath));
+    const OUString aPath(lcl_normalizeSubStreamPath(rPath));
     NameMap_t::iterator aIt = maNameMap.find(aPath);
 
     // For the while don't return stream in this situation.
@@ -365,14 +365,14 @@ Reference<XInputStream> const& ZipStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].xStream.is())
         maStreams[nId].xStream
-            = createStream(rtl::OStringToOUString(maStreams[nId].aName, RTL_TEXTENCODING_UTF8));
+            = createStream(OStringToOUString(maStreams[nId].aName, RTL_TEXTENCODING_UTF8));
 
     return maStreams[nId].xStream;
 }
 
 void ZipStorageImpl::traverse(const Reference<container::XNameAccess>& rxContainer)
 {
-    const Sequence<rtl::OUString> lNames = rxContainer->getElementNames();
+    const Sequence<OUString> lNames = rxContainer->getElementNames();
 
     maStreams.reserve(lNames.getLength());
 
@@ -380,13 +380,13 @@ void ZipStorageImpl::traverse(const Reference<container::XNameAccess>& rxContain
     {
         if (!lNames[n].endsWith("/")) // skip dirs
         {
-            maStreams.emplace_back(rtl::OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8));
+            maStreams.emplace_back(OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8));
             maNameMap[lNames[n]] = maStreams.size() - 1;
         }
     }
 }
 
-Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString& rPath)
+Reference<XInputStream> ZipStorageImpl::createStream(const OUString& rPath)
 {
     Reference<XInputStream> xStream;
 
@@ -632,7 +632,7 @@ bool WPXSvInputStreamImpl::existsSubStream(const char* const name)
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
+    const OUString aName(OStringToOUString(OString(name), RTL_TEXTENCODING_UTF8));
 
     if (isOLE())
     {
@@ -662,7 +662,7 @@ librevenge::RVNGInputStream* WPXSvInputStreamImpl::getSubStreamByName(const char
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
+    const OUString aName(OStringToOUString(OString(name), RTL_TEXTENCODING_UTF8));
 
     if (isOLE())
     {

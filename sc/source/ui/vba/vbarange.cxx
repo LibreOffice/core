@@ -1961,7 +1961,7 @@ ScVbaRange::getFormulaArray()
     uno::Any aSingleValueOrMatrix;
     // When dealing with a single element ( embedded in the sequence of sequence ) unwrap and return
     // that value
-    uno::Sequence< uno::Sequence<rtl::OUString> > aTmpSeq = xCellRangeFormula->getFormulaArray();
+    uno::Sequence< uno::Sequence<OUString> > aTmpSeq = xCellRangeFormula->getFormulaArray();
     if ( aTmpSeq.getLength() == 1 )
     {
         if ( aTmpSeq[ 0 ].getLength() == 1  )

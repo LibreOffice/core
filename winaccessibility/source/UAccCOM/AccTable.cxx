@@ -129,7 +129,7 @@ STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
     if(!pRXTable.is())
         return E_FAIL;
 
-    const ::rtl::OUString& ouStr = GetXInterface()->getAccessibleColumnDescription(column);
+    const OUString& ouStr = GetXInterface()->getAccessibleColumnDescription(column);
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
@@ -348,7 +348,7 @@ STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
     if(!pRXTable.is())
         return E_FAIL;
 
-    const ::rtl::OUString& ouStr = GetXInterface()->getAccessibleRowDescription(row);
+    const OUString& ouStr = GetXInterface()->getAccessibleRowDescription(row);
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);

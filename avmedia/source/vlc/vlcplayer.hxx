@@ -44,12 +44,12 @@ class VLCPlayer : public ::cppu::BaseMutex,
     wrapper::Media         mMedia;
     wrapper::Player        mPlayer;
     wrapper::EventManager  mEventManager;
-    const rtl::OUString    mUrl;
+    const OUString         mUrl;
     bool                   mPlaybackLoop;
     css::uno::Reference< css::media::XFrameGrabber > mrFrameGrabber;
     intptr_t               mPrevWinID;
 public:
-    VLCPlayer( const rtl::OUString& url,
+    VLCPlayer( const OUString& url,
                wrapper::Instance& instance,
                wrapper::EventHandler& eh );
 
@@ -73,9 +73,9 @@ public:
     css::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
     css::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber() override;
 
-    ::rtl::OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) override;
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& serviceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void replay();

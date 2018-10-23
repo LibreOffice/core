@@ -155,7 +155,7 @@ namespace connectivity
             virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement(  ) override;
             // XRow
             virtual sal_Bool SAL_CALL wasNull(  ) override;
-            virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
+            virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
             virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
             virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
             virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
@@ -183,7 +183,7 @@ namespace connectivity
             // XWarningsSupplier
 
             // XColumnLocate
-            virtual sal_Int32 SAL_CALL findColumn(const ::rtl::OUString& columnName) override;
+            virtual sal_Int32 SAL_CALL findColumn(const OUString& columnName) override;
 
         };
 
@@ -208,7 +208,7 @@ namespace connectivity
              OResultSet::retrieveValue(
                  const sal_Int32 nColumnIndex,
                  const ISC_SHORT nType);
-        template <> ::rtl::OUString
+        template <> OUString
             OResultSet::retrieveValue(
                 const sal_Int32 nColumnIndex,
                 const ISC_SHORT nType);

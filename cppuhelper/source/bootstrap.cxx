@@ -48,7 +48,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 using rtl::Bootstrap;
-using rtl::OUString;
 
 namespace cppu
 {
@@ -57,7 +56,7 @@ BootstrapException::BootstrapException()
 {
 }
 
-BootstrapException::BootstrapException( const ::rtl::OUString & rMessage )
+BootstrapException::BootstrapException( const OUString & rMessage )
     :m_aMessage( rMessage )
 {
 }
@@ -77,7 +76,7 @@ BootstrapException & BootstrapException::operator=( const BootstrapException & e
     return *this;
 }
 
-const ::rtl::OUString & BootstrapException::getMessage() const
+const OUString & BootstrapException::getMessage() const
 {
     return m_aMessage;
 }
@@ -93,7 +92,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             throw BootstrapException(
                 "no soffice installation found!");
         }
-        rtl::OUString p2;
+        OUString p2;
 #if defined(_WIN32)
         p2 = o3tl::toU(p1);
         free(p1);
@@ -148,7 +147,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             != rtl_Random_E_None )
             throw BootstrapException( "random pool error!" );
         rtl_random_destroyPool( hPool );
-        ::rtl::OUStringBuffer buf("uno");
+        OUStringBuffer buf("uno");
         for (unsigned char byte : bytes)
             buf.append( static_cast< sal_Int32 >( byte ) );
         OUString sPipeName( buf.makeStringAndClear() );

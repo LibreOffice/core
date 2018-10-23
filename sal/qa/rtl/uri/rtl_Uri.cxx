@@ -33,35 +33,35 @@ namespace Stringtest
     class Convert : public CppUnit::TestFixture
     {
     public:
-        rtl::OString convertToOString(rtl::OUString const& _suStr)
+        OString convertToOString(OUString const& _suStr)
             {
-                return rtl::OUStringToOString(_suStr, osl_getThreadTextEncoding()/*RTL_TEXTENCODING_ASCII_US*/);
+                return OUStringToOString(_suStr, osl_getThreadTextEncoding()/*RTL_TEXTENCODING_ASCII_US*/);
             }
 
-        void showContent(rtl::OUString const& _suStr)
+        void showContent(OUString const& _suStr)
             {
-                rtl::OString sStr = convertToOString(_suStr);
+                OString sStr = convertToOString(_suStr);
                 printf("%s\n", sStr.getStr());
             }
 
         void test_FromUTF8_001()
             {
                 // string --> ustring
-                rtl::OString sStrUTF8("h%C3%A4llo");
-                rtl::OUString suStrUTF8 = rtl::OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
+                OString sStrUTF8("h%C3%A4llo");
+                OUString suStrUTF8 = OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
 
                 // UTF8 --> real ustring
-                rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+                OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
                 showContent(suStr_UriDecodeToIuri);
 
                 // string --> ustring
-                rtl::OString sStr("h\xE4llo", strlen("h\xE4llo"));
-                rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
+                OString sStr("h\xE4llo", strlen("h\xE4llo"));
+                OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must be equal", suString, suStr_UriDecodeToIuri);
 
                 // ustring --> ustring (UTF8)
-                rtl::OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+                OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                 showContent(suStr2);
 
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must be equal", suStr2, suStrUTF8);

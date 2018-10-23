@@ -37,8 +37,8 @@ using namespace css::uno;
 namespace sfx2 { namespace sidebar {
 
 Image Tools::GetImage (
-    const ::rtl::OUString& rsImageURL,
-    const ::rtl::OUString& rsHighContrastImageURL,
+    const OUString& rsImageURL,
+    const OUString& rsHighContrastImageURL,
     const Reference<frame::XFrame>& rxFrame)
 {
     if (Theme::IsHighContrastMode())
@@ -48,7 +48,7 @@ Image Tools::GetImage (
 }
 
 Image Tools::GetImage (
-    const ::rtl::OUString& rsURL,
+    const OUString& rsURL,
     const Reference<frame::XFrame>& rxFrame)
 {
     if (rsURL.getLength() > 0)
@@ -98,7 +98,7 @@ Gradient Tools::AwtToVclGradient (const css::awt::Gradient& rAwtGradient)
     return aVclGradient;
 }
 
-util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
+util::URL Tools::GetURL (const OUString& rsCommand)
 {
     util::URL aURL;
     aURL.Complete = rsCommand;
@@ -115,15 +115,15 @@ Reference<frame::XDispatch> Tools::GetDispatch (
     const util::URL& rURL)
 {
     Reference<frame::XDispatchProvider> xProvider (rxFrame, UNO_QUERY_THROW);
-    Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, ::rtl::OUString(), 0));
+    Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, OUString(), 0));
     return xDispatch;
 }
 
-::rtl::OUString Tools::GetModuleName (
+OUString Tools::GetModuleName (
     const css::uno::Reference<css::frame::XController>& rxController)
 {
     if (!rxController.is())
-        return ::rtl::OUString();
+        return OUString();
 
     try
     {
@@ -135,7 +135,7 @@ Reference<frame::XDispatch> Tools::GetDispatch (
     {
         // Ignored.
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 } } // end of namespace sfx2::sidebar

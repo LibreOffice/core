@@ -66,7 +66,7 @@ public:
     virtual void  v_enter() override;
     virtual void  v_leave() override;
 
-    virtual bool v_isValid(rtl::OUString * pReason) override;
+    virtual bool v_isValid(OUString * pReason) override;
 
     void innerDispatch();
     void outerDispatch(bool loop);
@@ -311,7 +311,7 @@ void AffineBridge::v_leave()
     m_innerMutex.release();
 }
 
-bool AffineBridge::v_isValid(rtl::OUString * pReason)
+bool AffineBridge::v_isValid(OUString * pReason)
 {
     bool result = m_enterCount > 0;
     if (!result)

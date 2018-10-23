@@ -101,21 +101,21 @@ namespace frm
 #define PROPERTY_ID_BORDER              (PROPERTY_ID_START + 62)    // UINT16
 #define PROPERTY_ID_ALIGN               (PROPERTY_ID_START + 63)    // UINT16
 #define PROPERTY_ID_DROPDOWN            (PROPERTY_ID_START + 64)    // BOOL
-#define PROPERTY_ID_UNCHECKED_REFVALUE  (PROPERTY_ID_START + 65)    // ::rtl::OUString
+#define PROPERTY_ID_UNCHECKED_REFVALUE  (PROPERTY_ID_START + 65)    // OUString
 #define PROPERTY_ID_HSCROLL             (PROPERTY_ID_START + 66)    // BOOL
 #define PROPERTY_ID_VSCROLL             (PROPERTY_ID_START + 67)    // BOOL
 #define PROPERTY_ID_TABSTOP             (PROPERTY_ID_START + 68)    // BOOL
-#define PROPERTY_ID_REFVALUE            (PROPERTY_ID_START + 69)    // ::rtl::OUString
+#define PROPERTY_ID_REFVALUE            (PROPERTY_ID_START + 69)    // OUString
 #define PROPERTY_ID_BUTTONTYPE          (PROPERTY_ID_START + 70)    // UINT16
-#define PROPERTY_ID_DEFAULT_TEXT        (PROPERTY_ID_START + 71)    // ::rtl::OUString
+#define PROPERTY_ID_DEFAULT_TEXT        (PROPERTY_ID_START + 71)    // OUString
 #define PROPERTY_ID_SUBMIT_ACTION       (PROPERTY_ID_START + 72)    // string
 #define PROPERTY_ID_SUBMIT_METHOD       (PROPERTY_ID_START + 73)    // FmSubmitMethod
 #define PROPERTY_ID_SUBMIT_ENCODING     (PROPERTY_ID_START + 74)    // FmSubmitEncoding
-#define PROPERTY_ID_DEFAULT_VALUE       (PROPERTY_ID_START + 75)    // ::rtl::OUString
-#define PROPERTY_ID_SUBMIT_TARGET       (PROPERTY_ID_START + 76)    // ::rtl::OUString
+#define PROPERTY_ID_DEFAULT_VALUE       (PROPERTY_ID_START + 75)    // OUString
+#define PROPERTY_ID_SUBMIT_TARGET       (PROPERTY_ID_START + 76)    // OUString
 #define PROPERTY_ID_DEFAULT_STATE       (PROPERTY_ID_START + 77)    // UINT16
 #define PROPERTY_ID_VALUE_SEQ           (PROPERTY_ID_START + 78)    // StringSeq
-#define PROPERTY_ID_IMAGE_URL           (PROPERTY_ID_START + 79)    // ::rtl::OUString
+#define PROPERTY_ID_IMAGE_URL           (PROPERTY_ID_START + 79)    // OUString
 #define PROPERTY_ID_SELECT_VALUE        (PROPERTY_ID_START + 80)    // StringSeq
 #define PROPERTY_ID_SELECT_VALUE_SEQ    (PROPERTY_ID_START + 81)    // StringSeq
     // free
@@ -142,9 +142,9 @@ namespace frm
 #define PROPERTY_ID_VALUEMIN            (PROPERTY_ID_START +103)    // INT32
 #define PROPERTY_ID_VALUEMAX            (PROPERTY_ID_START +104)    // INT32
 #define PROPERTY_ID_VALUESTEP           (PROPERTY_ID_START +105)    // INT32
-#define PROPERTY_ID_CURRENCYSYMBOL      (PROPERTY_ID_START +106)    // ::rtl::OUString
-#define PROPERTY_ID_EDITMASK            (PROPERTY_ID_START +107)    // ::rtl::OUString
-#define PROPERTY_ID_LITERALMASK         (PROPERTY_ID_START +108)    // ::rtl::OUString
+#define PROPERTY_ID_CURRENCYSYMBOL      (PROPERTY_ID_START +106)    // OUString
+#define PROPERTY_ID_EDITMASK            (PROPERTY_ID_START +107)    // OUString
+#define PROPERTY_ID_LITERALMASK         (PROPERTY_ID_START +108)    // OUString
 #define PROPERTY_ID_ENABLED             (PROPERTY_ID_START +109)    // BOOL
 #define PROPERTY_ID_AUTOCOMPLETE        (PROPERTY_ID_START +110)    // BOOL
 #define PROPERTY_ID_LINECOUNT           (PROPERTY_ID_START +111)    // UINT16
@@ -154,9 +154,9 @@ namespace frm
 #define PROPERTY_ID_SHOWTHOUSANDSEP     (PROPERTY_ID_START +115)    // BOOL
 #define PROPERTY_ID_HARDLINEBREAKS      (PROPERTY_ID_START +116)    // BOOL
 #define PROPERTY_ID_PRINTABLE           (PROPERTY_ID_START +117)    // BOOL
-#define PROPERTY_ID_TARGET_URL          (PROPERTY_ID_START +118)    // ::rtl::OUString
-#define PROPERTY_ID_TARGET_FRAME        (PROPERTY_ID_START +119)    // ::rtl::OUString
-#define PROPERTY_ID_TAG                 (PROPERTY_ID_START +120)    // ::rtl::OUString
+#define PROPERTY_ID_TARGET_URL          (PROPERTY_ID_START +118)    // OUString
+#define PROPERTY_ID_TARGET_FRAME        (PROPERTY_ID_START +119)    // OUString
+#define PROPERTY_ID_TAG                 (PROPERTY_ID_START +120)    // OUString
 #define PROPERTY_ID_ECHO_CHAR           (PROPERTY_ID_START +121)    // UINT16
 #define PROPERTY_ID_SHOW_POSITION       (PROPERTY_ID_START +122)    // sal_Bool
 #define PROPERTY_ID_SHOW_NAVIGATION     (PROPERTY_ID_START +123)    // sal_Bool
@@ -167,13 +167,13 @@ namespace frm
 #define PROPERTY_ID_DATE_SHOW_CENTURY   (PROPERTY_ID_START +128)    // Bool
 #define PROPERTY_ID_TRISTATE            (PROPERTY_ID_START +129)    // Bool
 #define PROPERTY_ID_DEFAULT_BUTTON      (PROPERTY_ID_START +130)    // Bool
-#define PROPERTY_ID_HIDDEN_VALUE        (PROPERTY_ID_START +131)    // ::rtl::OUString
+#define PROPERTY_ID_HIDDEN_VALUE        (PROPERTY_ID_START +131)    // OUString
 #define PROPERTY_ID_DECIMALS            (PROPERTY_ID_START +132)    // UINT16
 #define PROPERTY_ID_AUTOINCREMENT       (PROPERTY_ID_START +133)    // UINT16
     // free
-#define PROPERTY_ID_FILTER              (PROPERTY_ID_START +135)    // ::rtl::OUString
-#define PROPERTY_ID_HAVINGCLAUSE        (PROPERTY_ID_START +136)    // ::rtl::OUString
-#define PROPERTY_ID_QUERY               (PROPERTY_ID_START +137)    // ::rtl::OUString
+#define PROPERTY_ID_FILTER              (PROPERTY_ID_START +135)    // OUString
+#define PROPERTY_ID_HAVINGCLAUSE        (PROPERTY_ID_START +136)    // OUString
+#define PROPERTY_ID_QUERY               (PROPERTY_ID_START +137)    // OUString
 #define PROPERTY_ID_DEFAULT_LONG_VALUE  (PROPERTY_ID_START +138)    // Double
 #define PROPERTY_ID_DEFAULT_DATE        (PROPERTY_ID_START +139)    // UINT32
 #define PROPERTY_ID_DEFAULT_TIME        (PROPERTY_ID_START +140)
@@ -188,7 +188,7 @@ namespace frm
 #define PROPERTY_ID_FONT_UNDERLINE      (PROPERTY_ID_START +149)
 #define PROPERTY_ID_FONT_STRIKEOUT      (PROPERTY_ID_START +150)
 #define PROPERTY_ID_ISPASSTHROUGH       (PROPERTY_ID_START +151)
-#define PROPERTY_ID_HELPURL             (PROPERTY_ID_START +152)    // ::rtl::OUString
+#define PROPERTY_ID_HELPURL             (PROPERTY_ID_START +152)    // OUString
 #define PROPERTY_ID_RECORDMARKER        (PROPERTY_ID_START +153)
 #define PROPERTY_ID_BOUNDFIELD          (PROPERTY_ID_START +154)
 #define PROPERTY_ID_FORMATSSUPPLIER     (PROPERTY_ID_START +155)    // XNumberFormatsSupplier
@@ -215,7 +215,7 @@ namespace frm
 #define PROPERTY_ID_ISMODIFIED          (PROPERTY_ID_START +177)    // BOOL
 #define PROPERTY_ID_ISNEW               (PROPERTY_ID_START +178)    // BOOL
 #define PROPERTY_ID_PRIVILEGES          (PROPERTY_ID_START +179)    // INT32
-#define PROPERTY_ID_DETAILFIELDS        (PROPERTY_ID_START +180)    // Sequence< ::rtl::OUString >
+#define PROPERTY_ID_DETAILFIELDS        (PROPERTY_ID_START +180)    // Sequence< OUString >
 #define PROPERTY_ID_COMMAND             (PROPERTY_ID_START +181)    // String
 #define PROPERTY_ID_COMMANDTYPE         (PROPERTY_ID_START +182)    // INT32 (css::sdb::CommandType)
 #define PROPERTY_ID_RESULTSET_CONCURRENCY   (PROPERTY_ID_START +183)// INT32 (css::sdbc::ResultSetConcurrency)

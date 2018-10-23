@@ -42,7 +42,7 @@ class Proxy : public uno_Interface
     // mapping information
     uno_Interface                    *  m_pUnoI; // wrapped interface
     typelib_InterfaceTypeDescription *  m_pTypeDescr;
-    rtl::OUString                       m_aOId;
+    OUString                            m_aOId;
 
     cppu::helper::purpenv::ProbeFun   * m_probeFun;
     void                              * m_pProbeContext;
@@ -53,7 +53,7 @@ public:
                    uno_Environment                        * pFrom,
                    uno_Interface                          * pUnoI,
                    typelib_InterfaceTypeDescription       * pTypeDescr,
-                   rtl::OUString                    const & rOId,
+                   OUString                         const & rOId,
                    cppu::helper::purpenv::ProbeFun        * probeFun,
                    void                                   * pProbeContext);
     ~Proxy();

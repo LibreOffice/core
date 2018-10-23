@@ -83,7 +83,7 @@ public:
         context_(context) {}
 
     virtual ::sal_Int32 SAL_CALL run(
-        css::uno::Sequence< ::rtl::OUString > const &);
+        css::uno::Sequence< OUString > const &);
 
 private:
     Service(Service &); // not defined
@@ -93,17 +93,17 @@ private:
 
     void test(
         css::uno::Reference< test::types::XTest > const & test,
-        ::rtl::OUString const & name);
+        OUString const & name);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-::sal_Int32 Service::run(css::uno::Sequence< ::rtl::OUString > const &) {
+::sal_Int32 Service::run(css::uno::Sequence< OUString > const &) {
     osl_getThreadIdentifier(0); // check for sal
     (new salhelper::SimpleReferenceObject)->release(); // check for salhelper
     css::uno::getCurrentContext(); // check for cppu
     try { // check for cppuhelper
-        std::auto_ptr< cppu::UnoUrl > dummy(new cppu::UnoUrl(rtl::OUString()));
+        std::auto_ptr< cppu::UnoUrl > dummy(new cppu::UnoUrl(OUString()));
     } catch (rtl::MalformedUriException &) {}
     static char const * const services[] = {
         "com.sun.star.io.DataInputStream",
@@ -121,7 +121,7 @@ private:
         "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"
     };
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
-        ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
+        OUString name(OUString::createFromAscii(services[i]));
         css::uno::Reference< css::uno::XInterface > instance;
         try {
             instance = context_->getServiceManager()->createInstanceWithContext(
@@ -130,7 +130,7 @@ private:
             throw;
         } catch (css::uno::Exception &) {
             throw css::uno::RuntimeException(
-                ::rtl::OUString("error creating instance"),
+                OUString("error creating instance"),
                 static_cast< ::cppu::OWeakObject * >(this));
         }
         if (!instance.is()) {
@@ -168,22 +168,22 @@ private:
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(singletons); ++i) {
         css::uno::Reference< css::uno::XInterface > instance(
             context_->getValueByName(
-                "/singletons/" + rtl::OUString::createFromAscii(singletons[i])),
+                "/singletons/" + OUString::createFromAscii(singletons[i])),
             css::uno::UNO_QUERY_THROW);
     }
     css::util::theMacroExpander::get(context_);
     test(
         ::test::types::CppTest::create(context_),
-        ::rtl::OUString("test.types.CppTest"));
+        OUString("test.types.CppTest"));
     test(
         ::test::types::JavaTest::create(context_),
-        ::rtl::OUString("test.types.JavaTest"));
+        OUString("test.types.JavaTest"));
     return 0;
 }
 
 void Service::test(
     css::uno::Reference< test::types::XTest > const & test,
-    ::rtl::OUString const & name)
+    OUString const & name)
 {
     bool ok = false;
     try {
@@ -194,7 +194,7 @@ void Service::test(
     if (!ok) {
         throw css::uno::RuntimeException(
             (name
-             + ::rtl::OUString(".throwException failed")),
+             + OUString(".throwException failed")),
             static_cast< ::cppu::OWeakObject * >(this));
     }
 }
@@ -207,12 +207,12 @@ css::uno::Reference< css::uno::XInterface > create(
     return static_cast< ::cppu::OWeakObject * >(new Service(context));
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString("test.cpp.cppmain.Component");
+OUString getImplementationName() {
+    return OUString("test.cpp.cppmain.Component");
 }
 
-css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< ::rtl::OUString >();
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    return css::uno::Sequence< OUString >();
 }
 
 }

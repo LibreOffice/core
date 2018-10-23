@@ -36,8 +36,8 @@ Context::Context()
 }
 
 Context::Context (
-    const ::rtl::OUString& rsApplication,
-    const ::rtl::OUString& rsContext)
+    const OUString& rsApplication,
+    const OUString& rsContext)
     : msApplication(rsApplication),
       msContext(rsContext)
 {

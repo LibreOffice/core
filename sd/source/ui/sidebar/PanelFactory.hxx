@@ -56,7 +56,7 @@ public:
     // XUIElementFactory
 
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
-        const ::rtl::OUString& rsResourceURL,
+        const OUString& rsResourceURL,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 };
 

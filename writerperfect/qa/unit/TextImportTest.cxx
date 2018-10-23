@@ -36,13 +36,12 @@ public:
     }
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
-    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
-                                rtl::OUString& rTypeName) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
                                   OdtGenerator& rGenerator,
                                   utl::MediaDescriptor& rDescriptor) override;
@@ -57,24 +56,24 @@ bool TextImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStre
     return true;
 }
 
-bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream&, rtl::OUString& rTypeName)
+bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
     rTypeName = "WpftDummyText";
     return true;
 }
 
 // XServiceInfo
-rtl::OUString SAL_CALL TextImportFilter::getImplementationName()
+OUString SAL_CALL TextImportFilter::getImplementationName()
 {
     return OUString("org.libreoffice.comp.Wpft.QA.TextImportFilter");
 }
 
-sal_Bool SAL_CALL TextImportFilter::supportsService(const rtl::OUString& rServiceName)
+sal_Bool SAL_CALL TextImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL TextImportFilter::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL TextImportFilter::getSupportedServiceNames()
 {
     return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
@@ -130,12 +129,12 @@ void TextImportTest::test()
     CPPUNIT_ASSERT(xPortions->hasMoreElements());
     uno::Reference<beans::XPropertySet> xPortionProps(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPortionProps.is());
-    rtl::OUString aPortionType;
+    OUString aPortionType;
     CPPUNIT_ASSERT(xPortionProps->getPropertyValue("TextPortionType") >>= aPortionType);
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("Text"), aPortionType);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), aPortionType);
     uno::Reference<text::XTextRange> xPortion(xPortionProps, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPortion.is());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("My hovercraft is full of eels."), xPortion->getString());
     CPPUNIT_ASSERT(!xPortions->hasMoreElements());
     CPPUNIT_ASSERT(!xParas->hasMoreElements());
 }

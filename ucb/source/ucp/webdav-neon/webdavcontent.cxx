@@ -104,8 +104,8 @@ namespace
     // implement a GET to substitute HEAD, when HEAD not available
     void lcl_sendPartialGETRequest( bool &bError,
                                            DAVException &aLastException,
-                                           const std::vector< rtl::OUString >& rProps,
-                                           std::vector< rtl::OUString > &aHeaderNames,
+                                           const std::vector< OUString >& rProps,
+                                           std::vector< OUString > &aHeaderNames,
                                            const std::unique_ptr< DAVResourceAccess > &xResAccess,
                                            std::unique_ptr< ContentProperties > &xProps,
                                            const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -116,7 +116,7 @@ namespace
                                   OUString( "bytes=0-0" ) );
 
         bool bIsRequestSize = std::any_of(aHeaderNames.begin(), aHeaderNames.end(),
-            [](const rtl::OUString& rHeaderName) { return rHeaderName == "Content-Length"; });
+            [](const OUString& rHeaderName) { return rHeaderName == "Content-Length"; });
 
         if ( bIsRequestSize )
         {
@@ -135,7 +135,7 @@ namespace
                 // the ContentProperties maps "Content-Length" to the UCB "Size" property
                 // This would have an unrealistic value of 1 byte because we did only a partial GET
                 // Solution: if "Content-Range" is present, map it with UCB "Size" property
-                rtl::OUString aAcceptRanges, aContentRange, aContentLength;
+                OUString aAcceptRanges, aContentRange, aContentLength;
                 std::vector< DAVPropertyValue > &aResponseProps = aResource.properties;
                 for ( const auto& rResponseProp : aResponseProps )
                 {
@@ -169,7 +169,7 @@ namespace
                     sal_Int32 nSlash = aContentRange.lastIndexOf( '/' );
                     if ( nSlash != -1 )
                     {
-                        rtl::OUString aSize = aContentRange.copy( nSlash + 1 );
+                        OUString aSize = aContentRange.copy( nSlash + 1 );
                         // "*" means that the instance-length is unknown at the time when the response was generated
                         if ( aSize != "*" )
                         {
@@ -4165,7 +4165,7 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
                                   const std::unique_ptr< DAVResourceAccess > & rResAccess,
                                   DAVOptions& rDAVOptions )
 {
-    std::vector< rtl::OUString > aHeaderNames;
+    std::vector< OUString > aHeaderNames;
     DAVResource aResource;
 
     try

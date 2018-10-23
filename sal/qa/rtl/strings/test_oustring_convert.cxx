@@ -55,14 +55,14 @@ struct TestConvertToString
 
 void testConvertToString(TestConvertToString const & rTest)
 {
-    const rtl::OUString aSource(rTest.aSource, rTest.nLength);
-    rtl::OString aStrict(RTL_CONSTASCII_STRINGPARAM("12345"));
+    const OUString aSource(rTest.aSource, rTest.nLength);
+    OString aStrict(RTL_CONSTASCII_STRINGPARAM("12345"));
     bool bSuccess = aSource.convertToString(&aStrict, rTest.nEncoding,
                                             rTest.nFlags);
-    rtl::OString aRelaxed(rtl::OUStringToOString(aSource, rTest.nEncoding,
+    OString aRelaxed(OUStringToOString(aSource, rTest.nEncoding,
                                                  rTest.nFlags));
 
-    rtl::OStringBuffer aPrefix;
+    OStringBuffer aPrefix;
     aPrefix.append("{");
     for (sal_Int32 i = 0; i < rTest.nLength; ++i)
     {
@@ -81,7 +81,7 @@ void testConvertToString(TestConvertToString const & rTest)
     {
         if (rTest.pStrict == nullptr || aStrict != rTest.pStrict)
         {
-            rtl::OStringBuffer aMessage(aPrefix);
+            OStringBuffer aMessage(aPrefix);
             aMessage.append("strict = \"");
             aMessage.append(aStrict);
             aMessage.append("\"");
@@ -90,22 +90,22 @@ void testConvertToString(TestConvertToString const & rTest)
     }
     else
     {
-        if (aStrict != rtl::OString(RTL_CONSTASCII_STRINGPARAM("12345")))
+        if (aStrict != OString(RTL_CONSTASCII_STRINGPARAM("12345")))
         {
-            rtl::OStringBuffer aMessage(aPrefix);
+            OStringBuffer aMessage(aPrefix);
             aMessage.append("modified output");
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
         if (rTest.pStrict != nullptr)
         {
-            rtl::OStringBuffer aMessage(aPrefix);
+            OStringBuffer aMessage(aPrefix);
             aMessage.append("failed");
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
     }
     if (aRelaxed != rTest.pRelaxed)
     {
-        rtl::OStringBuffer aMessage(aPrefix);
+        OStringBuffer aMessage(aPrefix);
         aMessage.append("relaxed = \"");
         aMessage.append(aRelaxed);
         aMessage.append("\"");

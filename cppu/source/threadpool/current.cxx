@@ -239,7 +239,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     // release inout parameter
     if (*ppCurrentContext)
     {
-        target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
+        target_env = Environment(OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return false;
@@ -258,7 +258,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
 
     if (! target_env.is())
     {
-        target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
+        target_env = Environment(OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return false;

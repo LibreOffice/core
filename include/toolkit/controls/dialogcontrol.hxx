@@ -139,13 +139,13 @@ public:
         { UnoDialogControl_Base::ControlContainerBase::addPaintListener(p1); }
     virtual void SAL_CALL removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) override
         { UnoDialogControl_Base::ControlContainerBase::removePaintListener(p1); }
-    virtual void SAL_CALL setStatusText(const rtl::OUString& p1) override
+    virtual void SAL_CALL setStatusText(const OUString& p1) override
         { UnoDialogControl_Base::ControlContainerBase::setStatusText(p1); }
     virtual css::uno::Sequence<css::uno::Reference<css::awt::XControl> > SAL_CALL getControls() override
         { return UnoDialogControl_Base::ControlContainerBase::getControls(); }
-    virtual css::uno::Reference<css::awt::XControl> SAL_CALL getControl(const rtl::OUString& p1) override
+    virtual css::uno::Reference<css::awt::XControl> SAL_CALL getControl(const OUString& p1) override
         { return UnoDialogControl_Base::ControlContainerBase::getControl(p1); }
-    virtual void SAL_CALL addControl(const rtl::OUString& p1, const css::uno::Reference<css::awt::XControl>& p2) override
+    virtual void SAL_CALL addControl(const OUString& p1, const css::uno::Reference<css::awt::XControl>& p2) override
         { UnoDialogControl_Base::ControlContainerBase::addControl(p1, p2); }
     virtual void SAL_CALL removeControl(const css::uno::Reference<css::awt::XControl>& p1) override
         { UnoDialogControl_Base::ControlContainerBase::removeControl(p1); }

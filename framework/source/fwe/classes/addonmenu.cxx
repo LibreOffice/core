@@ -57,7 +57,7 @@ VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& 
     if ( rAddonMenuEntries.getLength() > 0 )
     {
         pAddonMenu = VclPtr<PopupMenu>::Create();
-        ::rtl::OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier( rFrame );
+        OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier( rFrame );
         AddonMenuManager::BuildMenu( pAddonMenu, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
 
         // Don't return an empty Add-On menu
@@ -119,7 +119,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MenuItemType::SEPARATOR )
                 nInsSepAfterPos = nInsPos;
 
-            ::rtl::OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
+            OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
             AddonMenuManager::BuildMenu( pHelpMenu, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
 
             if ( pHelpMenu->GetItemCount() > nItemCount )
@@ -197,7 +197,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                                   sal_uInt16&                           nUniqueMenuId,
                                   const Sequence< Sequence< PropertyValue > >& aAddonMenuDefinition,
                                   const Reference< XFrame >&            rFrame,
-                                  const ::rtl::OUString&               rModuleIdentifier )
+                                  const OUString&               rModuleIdentifier )
 {
     Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
     bool                                    bInsertSeparator    = false;

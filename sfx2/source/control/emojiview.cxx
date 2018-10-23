@@ -133,15 +133,15 @@ void EmojiView::Populate()
                 // get values of parameters in AppendItem() function
                 if(emojiParam == "unicode")
                 {
-                    sTitle = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    sTitle = OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
                 else if(emojiParam == "category")
                 {
-                    sCategory = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    sCategory = OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
                 else if(emojiParam == "name")
                 {
-                    sName = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    sName = OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
                 else if(emojiParam == "duplicate")
                 {

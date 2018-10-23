@@ -23,19 +23,17 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-
 /** get dll file URL.
 */
-static ::rtl::OUString getDllURL()
+static OUString getDllURL()
 {
 #if defined(_WIN32)        // lib in Unix and lib in Windows are not same in file name.
-    ::rtl::OUString libPath( "test_Module_DLL.dll" );
+    OUString libPath( "test_Module_DLL.dll" );
 #else
-    ::rtl::OUString libPath( "libtest_Module_DLL.so" );
+    OUString libPath( "libtest_Module_DLL.so" );
 #endif
 
-    ::rtl::OUString dirPath, dllPath;
+    OUString dirPath, dllPath;
     osl::Module::getUrlFromAddress(
         reinterpret_cast<oslGenericFunction>(&getDllURL), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
@@ -61,7 +59,7 @@ namespace osl_Module
 
     /** testing the methods:
         Module();
-        Module( const ::rtl::OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
+        Module( const OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
     */
     class ctors : public CppUnit::TestFixture
     {
@@ -105,7 +103,7 @@ namespace osl_Module
     }; // class ctors
 
     /** testing the methods:
-        static sal_Bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl)
+        static sal_Bool getUrlFromAddress(void * addr, OUString & libraryUrl)
     */
     class getUrlFromAddress : public CppUnit::TestFixture
     {
@@ -164,7 +162,7 @@ namespace osl_Module
     }; // class getUrlFromAddress
 
     /** testing the method:
-        sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
+        sal_Bool SAL_CALL load( const OUString& strModuleName,
                                                  sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     */
     class load : public CppUnit::TestFixture
@@ -252,7 +250,7 @@ namespace osl_Module
     }; // class is
 
     /** testing the methods:
-        void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
+        void* SAL_CALL getSymbol( const OUString& strSymbolName)
     */
     class getSymbol : public CppUnit::TestFixture
     {
@@ -312,7 +310,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            ::rtl::OUString funcName( "firstfunc" );
+            OUString funcName( "firstfunc" );
 
             FuncPtr pFunc = reinterpret_cast<FuncPtr>(osl_getSymbol( static_cast<oslModule>(aMod), funcName.pData ));
             bRes = false;
@@ -333,7 +331,7 @@ namespace osl_Module
     }; // class optr_oslModule
 
     /** testing the methods:
-        oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
+        oslGenericFunction SAL_CALL getFunctionSymbol( const OUString& ustrFunctionSymbolName )
     */
     class getFunctionSymbol : public CppUnit::TestFixture
     {
@@ -346,7 +344,7 @@ namespace osl_Module
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
             oslGenericFunction oslFunc = aMod.getFunctionSymbol( "firstfunc" );
-            ::rtl::OUString aLibraryURL;
+            OUString aLibraryURL;
             bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
             aMod.unload();
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",

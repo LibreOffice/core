@@ -208,7 +208,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     Reference< XSimpleMailMessage2 > xMessage( xSimpleMailMessage, UNO_QUERY );
     if ( xMessage.is() )
     {
-        rtl::OUString sBody = xMessage->getBody();
+        OUString sBody = xMessage->getBody();
         if ( sBody.getLength() > 0 )
         {
             aBuffer.append(" --body ");

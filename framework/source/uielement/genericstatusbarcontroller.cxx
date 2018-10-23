@@ -31,8 +31,6 @@
 #include <com/sun/star/awt/XGraphics2.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 
-using ::rtl::OUString;
-
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -89,7 +87,7 @@ void SAL_CALL GenericStatusbarController::statusChanged(
 
     m_bEnabled = rEvent.IsEnabled;
 
-    rtl::OUString aStrValue;
+    OUString aStrValue;
     Reference< graphic::XGraphic > aGraphic;
 
     if ( rEvent.State >>= aStrValue )

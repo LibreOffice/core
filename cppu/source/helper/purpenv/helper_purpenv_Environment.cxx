@@ -72,19 +72,19 @@ public:
 
     void registerProxyInterface (void                                  ** ppProxy,
                                  uno_freeProxyFunc                        freeProxy,
-                                 rtl::OUString                    const & oid,
+                                 OUString                         const & oid,
                                  typelib_InterfaceTypeDescription       * pTypeDescr);
     void revokeInterface        (void                                   * pInterface);
     void getObjectIdentifier    (void                                   * pInterface,
-                                 rtl::OUString                          * pOid);
+                                 OUString                               * pOid);
     void getRegisteredInterface (void                                  **,
-                                 rtl::OUString                    const & oid,
+                                 OUString                    const & oid,
                                  typelib_InterfaceTypeDescription       *);
     void getRegisteredInterfaces(void                                 ***,
                                  sal_Int32                              * pnLen,
                                  uno_memAlloc                             memAlloc);
     void computeObjectIdentifier(void                                   * pInterface,
-                                 rtl::OUString                          * pOid);
+                                 OUString                               * pOid);
     void acquireInterface       (void                                   * pInterface);
     void releaseInterface       (void                                   * pInterface);
 
@@ -92,7 +92,7 @@ public:
     virtual void v_leave() override;
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) override;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) override;
-    virtual bool v_isValid   (rtl::OUString * pReason) override;
+    virtual bool v_isValid   (OUString * pReason) override;
 
 protected:
     oslInterlockedCount    m_nRef;
@@ -170,7 +170,7 @@ static void s_getObjectIdentifier(uno_ExtEnvironment *  pExtEnv,
                                                       void               *  pInterface)
 {
     Base * pBase = static_cast<Base *>(pExtEnv->aBase.pReserved);
-    pBase->getObjectIdentifier(pInterface, reinterpret_cast<rtl::OUString *>(ppOId));
+    pBase->getObjectIdentifier(pInterface, reinterpret_cast<OUString *>(ppOId));
 }
 
 static void s_getRegisteredInterface(uno_ExtEnvironment *  pExtEnv,
@@ -196,7 +196,7 @@ static void s_computeObjectIdentifier(uno_ExtEnvironment *  pExtEnv,
                                                           void               *  pInterface)
 {
     Base * pBase = static_cast<Base *>(pExtEnv->aBase.pReserved);
-    pBase->computeObjectIdentifier(pInterface, reinterpret_cast<rtl::OUString *>(ppOId));
+    pBase->computeObjectIdentifier(pInterface, reinterpret_cast<OUString *>(ppOId));
 }
 
 static void s_acquireInterface(uno_ExtEnvironment * pExtEnv, void * pInterface) {
@@ -317,7 +317,7 @@ extern "C" { static void s_registerProxyInterface_v(va_list * pParam)
 
 void Base::registerProxyInterface(void                                  ** ppProxy,
                                   uno_freeProxyFunc                        freeProxy,
-                                  rtl::OUString                    const & oid,
+                                  OUString                         const & oid,
                                   typelib_InterfaceTypeDescription       * pTypeDescr)
 {
      uno_Environment_invoke(m_pEnv,
@@ -354,14 +354,14 @@ extern "C" { static void s_getObjectIdentifier_v(va_list * pParam)
 {
     uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
     void               * pInterface = va_arg(*pParam, void *);
-    rtl::OUString      * pOId       = va_arg(*pParam, rtl::OUString *);
+    OUString      * pOId       = va_arg(*pParam, OUString *);
     ExtEnv_getObjectIdentifier * pGetObjectIdentifier
         = va_arg(*pParam, ExtEnv_getObjectIdentifier *);
 
     pGetObjectIdentifier(pExtEnv, reinterpret_cast<rtl_uString **>(pOId), pInterface);
 }}
 
-void Base::getObjectIdentifier(void * pInterface, rtl::OUString * pOid)
+void Base::getObjectIdentifier(void * pInterface, OUString * pOid)
 {
      uno_Environment_invoke(m_pEnv,
                            s_getObjectIdentifier_v,
@@ -385,7 +385,7 @@ extern "C" { static void s_getRegisteredInterface_v(va_list * pParam)
 }}
 
 void Base::getRegisteredInterface(void ** ppInterface,
-                                  rtl::OUString const & oid,
+                                  OUString const & oid,
                                   typelib_InterfaceTypeDescription * pTypeDescr)
 {
      uno_Environment_invoke(m_pEnv,
@@ -428,14 +428,14 @@ extern "C" { static void s_computeObjectIdentifier_v(va_list * pParam)
 {
     uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
     void               * pInterface = va_arg(*pParam, void *);
-    rtl::OUString      * pOId       = va_arg(*pParam, rtl::OUString *);
+    OUString      * pOId       = va_arg(*pParam, OUString *);
     ExtEnv_computeObjectIdentifier * pComputeObjectIdentifier
         = va_arg(*pParam, ExtEnv_computeObjectIdentifier *);
 
     pComputeObjectIdentifier(pExtEnv, reinterpret_cast<rtl_uString **>(pOId), pInterface);
 }}
 
-void Base::computeObjectIdentifier(void * pInterface, rtl::OUString * pOid)
+void Base::computeObjectIdentifier(void * pInterface, OUString * pOid)
 {
      uno_Environment_invoke(m_pEnv,
                            s_computeObjectIdentifier_v,
@@ -501,7 +501,7 @@ void Base::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
     m_pEnterable->callOut_v(pCallee, pParam);
 }
 
-bool Base::v_isValid(rtl::OUString * pReason)
+bool Base::v_isValid(OUString * pReason)
 {
     return m_pEnterable->isValid(pReason);
 }

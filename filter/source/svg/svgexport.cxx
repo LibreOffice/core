@@ -2303,7 +2303,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
 void SVGExport::writeMtf( const GDIMetaFile& rMtf )
 {
     const Size aSize( OutputDevice::LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapMode(MapUnit::MapMM)) );
-    rtl::OUString aAttr;
+    OUString aAttr;
     Reference< XExtendedDocumentHandler> xExtDocHandler( GetDocHandler(), UNO_QUERY );
 
     if( xExtDocHandler.is() && IsUseDTDString() )

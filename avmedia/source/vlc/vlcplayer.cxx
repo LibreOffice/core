@@ -33,13 +33,13 @@ namespace vlc {
 
 namespace
 {
-    const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
-    const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
+    const OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
+    const OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
     const int MS_IN_SEC = 1000; // Millisec in sec
 }
 
-VLCPlayer::VLCPlayer( const rtl::OUString& url,
+VLCPlayer::VLCPlayer( const OUString& url,
                       wrapper::Instance& instance,
                       wrapper::EventHandler& eh )
     : VLC_Base( m_aMutex )
@@ -232,17 +232,17 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
     return mrFrameGrabber;
 }
 
-::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()
+OUString SAL_CALL VLCPlayer::getImplementationName()
 {
     return AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME;
 }
 
-sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName )
+sal_Bool SAL_CALL VLCPlayer::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-::uno::Sequence< ::rtl::OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
+::uno::Sequence< OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
 {
     return { AVMEDIA_VLC_PLAYER_SERVICENAME };
 }

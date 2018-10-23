@@ -108,7 +108,7 @@ bool Player::handleObservation( NSString* pKeyPath )
 }
 
 
-bool Player::create( const ::rtl::OUString& rURL )
+bool Player::create( const OUString& rURL )
 {
     // get the media asset
     NSString* aNSStr = [NSString stringWithCharacters:reinterpret_cast<unichar const *>(rURL.getStr()) length:rURL.getLength()];
@@ -342,19 +342,19 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 }
 
 
-::rtl::OUString SAL_CALL Player::getImplementationName(  )
+OUString SAL_CALL Player::getImplementationName(  )
 {
-    return ::rtl::OUString( AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME );
 }
 
 
-sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_PLAYER_SERVICENAME;
 }
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
 }

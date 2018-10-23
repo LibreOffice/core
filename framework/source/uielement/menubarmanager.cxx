@@ -1303,7 +1303,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHan
         const sal_uInt32 nCount = aMenuShortCuts.size();
         for ( sal_uInt32 i = 0; i < nCount; ++i )
         {
-            rtl::OUString aItemURL = aMenuShortCuts[i]->aMenuItemURL;
+            OUString aItemURL = aMenuShortCuts[i]->aMenuItemURL;
             if( aItemURL.isEmpty() && aMenuShortCuts[i]->xSubMenuManager.is())
                 aItemURL = "-"; // tdf#99527 prevent throw in case of empty commands
             aSeq[i] = aItemURL;

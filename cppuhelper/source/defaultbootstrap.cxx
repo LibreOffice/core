@@ -23,8 +23,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
-using rtl::OUString;
-
 #include "macro_expander.hxx"
 #include "paths.hxx"
 #include "servicemanager.hxx"
@@ -32,10 +30,10 @@ using rtl::OUString;
 
 namespace {
 
-rtl::OUString getBootstrapVariable(
-    rtl::Bootstrap const & bootstrap, rtl::OUString const & name)
+OUString getBootstrapVariable(
+    rtl::Bootstrap const & bootstrap, OUString const & name)
 {
-    rtl::OUString v;
+    OUString v;
     if (!bootstrap.getFrom(name, v)) {
         throw css::uno::DeploymentException(
             "Cannot obtain " + name + " from uno ini");
@@ -46,7 +44,7 @@ rtl::OUString getBootstrapVariable(
 }
 
 css::uno::Reference< css::uno::XComponentContext >
-cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
+cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
 {
     rtl::Bootstrap bs(iniUri);
     if (bs.getHandle() == nullptr) {
@@ -83,12 +81,12 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/services/com.sun.star.security.AccessController/mode",
-            css::uno::Any(rtl::OUString("off")), false));
+            css::uno::Any(OUString("off")), false));
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.security.theAccessController",
             css::uno::Any(
-                rtl::OUString("com.sun.star.security.AccessController")),
+                OUString("com.sun.star.security.AccessController")),
             true));
     assert(!context_values.empty());
     css::uno::Reference< css::uno::XComponentContext > context(

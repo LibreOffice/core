@@ -15,8 +15,6 @@
 #include <algorithm>
 #include <utility>
 
-using rtl::OUString;
-
 
 namespace {
 const size_t NUMBER_OF_FAMILIES = 7;
@@ -100,7 +98,7 @@ IndexedStyleSheets::AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& sty
 bool
 IndexedStyleSheets::RemoveStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {
-    rtl::OUString styleName = style->GetName();
+    OUString styleName = style->GetName();
     std::vector<unsigned> positions = FindPositionsByName(styleName);
     bool found = false;
     unsigned stylePosition = 0;
@@ -121,7 +119,7 @@ IndexedStyleSheets::RemoveStyleSheet(const rtl::Reference< SfxStyleSheetBase >& 
 }
 
 std::vector<unsigned>
-IndexedStyleSheets::FindPositionsByName(const rtl::OUString& name) const
+IndexedStyleSheets::FindPositionsByName(const OUString& name) const
 {
     std::vector<unsigned> r;
     std::pair<MapType::const_iterator, MapType::const_iterator> range = mPositionsByName.equal_range(name);
@@ -132,7 +130,7 @@ IndexedStyleSheets::FindPositionsByName(const rtl::OUString& name) const
 }
 
 std::vector<unsigned>
-IndexedStyleSheets::FindPositionsByNameAndPredicate(const rtl::OUString& name,
+IndexedStyleSheets::FindPositionsByNameAndPredicate(const OUString& name,
         StyleSheetPredicate& predicate, SearchBehavior behavior) const
 {
     std::vector<unsigned> r;
@@ -212,7 +210,7 @@ IndexedStyleSheets::~IndexedStyleSheets()
 bool
 IndexedStyleSheets::HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style) const
 {
-    rtl::OUString styleName = style->GetName();
+    OUString styleName = style->GetName();
     std::vector<unsigned> positions = FindPositionsByName(styleName);
     for (std::vector<unsigned>::const_iterator it = positions.begin();
                                                it != positions.end(); ++it) {

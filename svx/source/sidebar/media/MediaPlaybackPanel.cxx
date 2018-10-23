@@ -26,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
-using ::rtl::OUString;
 using namespace avmedia;
 
 namespace svx { namespace sidebar {

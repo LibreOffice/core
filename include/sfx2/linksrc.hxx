@@ -68,14 +68,14 @@ public:
     void                SetUpdateTimeout( sal_uInt64 nTimeMs );
                         // notify the sink, the mime type is not
                         // a selection criterion
-    void                DataChanged( const rtl::OUString & rMimeType,
+    void                DataChanged( const OUString & rMimeType,
                                     const css::uno::Any & rVal );
     void                SendDataChanged();
     void                NotifyDataChanged();
 
     virtual bool        Connect( SvBaseLink* );
     virtual bool        GetData( css::uno::Any & rData /*out param*/,
-                                const rtl::OUString & rMimeType,
+                                const OUString & rMimeType,
                                 bool bSynchron = false );
 
                         // sal_True => waitinmg for data
@@ -86,7 +86,7 @@ public:
     virtual void        Edit(weld::Window *, SvBaseLink *, const Link<const OUString&, void>& rEndEditHdl);
 
 
-    void                AddDataAdvise( SvBaseLink *, const rtl::OUString & rMimeType,
+    void                AddDataAdvise( SvBaseLink *, const OUString & rMimeType,
                                         sal_uInt16 nAdviceMode );
     void                RemoveAllDataAdvise( SvBaseLink const * );
 

@@ -37,26 +37,22 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-static void printUString( const ::rtl::OUString & str, const sal_Char * msg )
+static void printUString( const OUString & str, const sal_Char * msg )
 {
     if ( msg != nullptr )
     {
         printf("#%s #printUString_u# ", msg );
     }
-    rtl::OString aString;
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
+    OString aString;
+    aString = OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     printf("%s\n", aString.getStr( ) );
 }
 
-static ::rtl::OUString getModulePath()
+static OUString getModulePath()
 {
-    ::rtl::OUString suDirPath;
+    OUString suDirPath;
     ::osl::Module::getUrlFromAddress(
         reinterpret_cast< oslGenericFunction >(getModulePath), suDirPath );
 
@@ -75,12 +71,12 @@ public:
     void getAppCommandArg_001()
     {
 #if defined(_WIN32)
-    const rtl::OUString EXECUTABLE_NAME("child_process.exe");
+    const OUString EXECUTABLE_NAME("child_process.exe");
 #else
-    const rtl::OUString EXECUTABLE_NAME("child_process");
+    const OUString EXECUTABLE_NAME("child_process");
 #endif
-        rtl::OUString suCWD = getModulePath();
-        // rtl::OUString suCWD2 = getExecutableDirectory();
+        OUString suCWD = getModulePath();
+        // OUString suCWD2 = getExecutableDirectory();
 
         printUString(suCWD, "path to the current module");
         // printUString(suCWD2, "suCWD2");
@@ -95,7 +91,7 @@ public:
         pParameters[2] = suParam2.pData;
         pParameters[3] = suParam3.pData;
 
-        rtl::OUString suFileURL = suCWD + "/" + EXECUTABLE_NAME;
+        OUString suFileURL = suCWD + "/" + EXECUTABLE_NAME;
 
         oslProcessError osl_error = osl_executeProcess(
             suFileURL.pData,
@@ -200,9 +196,9 @@ public:
     void getGlobalProcessId_002()
     {
 #if defined(_WIN32)
-    const rtl::OUString EXEC_NAME("child_process_id.exe");
+    const OUString EXEC_NAME("child_process_id.exe");
 #else
-    const rtl::OUString EXEC_NAME("child_process_id");
+    const OUString EXEC_NAME("child_process_id");
 #endif
         sal_uInt8 pTargetUUID1[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
@@ -211,9 +207,9 @@ public:
           printUuidtoBuffer( pTargetUUID1, pUUID1 );
     printf("# UUID to String is %s\n", pUUID1);
 
-    rtl::OUString suCWD = getModulePath();
+    OUString suCWD = getModulePath();
         oslProcess hProcess = nullptr;
-       rtl::OUString suFileURL = suCWD + "/" + EXEC_NAME;
+       OUString suFileURL = suCWD + "/" + EXEC_NAME;
     oslFileHandle* pChildOutputRead = new oslFileHandle();
         oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(
             suFileURL.pData,

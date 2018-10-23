@@ -183,7 +183,7 @@ void GalApp::Init()
         css::ucb::UniversalContentBroker::create(xComponentContext);
     } catch (const uno::Exception &e) {
         fprintf( stderr, "Bootstrap exception '%s'\n",
-                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                 OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         exit( 1 );
     }
 }
@@ -192,7 +192,7 @@ static std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
 {
     osl::File file(rInput);
     osl::FileBase::RC rc = file.open(osl_File_OpenFlag_Read);
-    OString const uInput(rtl::OUStringToOString(rInput, RTL_TEXTENCODING_UTF8));
+    OString const uInput(OUStringToOString(rInput, RTL_TEXTENCODING_UTF8));
     if (osl::FileBase::E_None != rc)
     {
         fprintf(stderr, "error while opening response file: %s (%d)\n",

@@ -48,8 +48,6 @@
 
 using namespace osl;
 
-using ::rtl::OString;
-
 // Small stopwatch
 class StopWatch {
     TimeValue t1,t2;                                // Start and stoptime
@@ -935,9 +933,9 @@ namespace osl_Thread
     {
     public:
         // insert your test code here.
-        rtl::OString getPrioName(oslThreadPriority _aPriority)
+        OString getPrioName(oslThreadPriority _aPriority)
             {
-                rtl::OString sPrioStr;
+                OString sPrioStr;
                 switch (_aPriority)
                 {
                 case osl_Thread_PriorityHighest:
@@ -997,7 +995,7 @@ namespace osl_Thread
                 sal_Int32 nValueNormal2 = 0;
                 nValueNormal2 = p2Thread->getValue();
 
-                rtl::OString sPrio = getPrioName(_aPriority);
+                OString sPrio = getPrioName(_aPriority);
                 t_print("After 10 tenth seconds\n");
 
                 t_print("nValue in %s Prio Thread is  %d\n",sPrio.getStr(), static_cast<int>(nValueNormal));

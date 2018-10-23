@@ -85,17 +85,17 @@ public:
         { return OInterfaceContainer::getElementType(); }
     virtual sal_Bool SAL_CALL hasElements() override
         { return OInterfaceContainer::hasElements(); }
-    virtual css::uno::Any SAL_CALL getByName(const rtl::OUString& p1) override
+    virtual css::uno::Any SAL_CALL getByName(const OUString& p1) override
         { return OInterfaceContainer::getByName(p1); }
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getElementNames() override
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
         { return OInterfaceContainer::getElementNames(); }
-    virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& p1) override
+    virtual sal_Bool SAL_CALL hasByName(const OUString& p1) override
         { return OInterfaceContainer::hasByName(p1); }
-    virtual void SAL_CALL replaceByName(const rtl::OUString& p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL replaceByName(const OUString& p1, const css::uno::Any& p2) override
         { OInterfaceContainer::replaceByName(p1, p2); }
-    virtual void SAL_CALL insertByName(const rtl::OUString& p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL insertByName(const OUString& p1, const css::uno::Any& p2) override
         { OInterfaceContainer::insertByName(p1, p2); }
-    virtual void SAL_CALL removeByName(const rtl::OUString& p1) override
+    virtual void SAL_CALL removeByName(const OUString& p1) override
         { OInterfaceContainer::removeByName(p1); }
     virtual sal_Int32 SAL_CALL getCount() override
         { return OInterfaceContainer::getCount(); }
@@ -113,7 +113,7 @@ public:
         { OInterfaceContainer::registerScriptEvent(p1, p2); }
     virtual void SAL_CALL registerScriptEvents(sal_Int32 p1, const css::uno::Sequence<css::script::ScriptEventDescriptor>& p2) override
         { OInterfaceContainer::registerScriptEvents(p1, p2); }
-    virtual void SAL_CALL revokeScriptEvent(sal_Int32 p1, const rtl::OUString& p2, const rtl::OUString& p3, const rtl::OUString& p4) override
+    virtual void SAL_CALL revokeScriptEvent(sal_Int32 p1, const OUString& p2, const OUString& p3, const OUString& p4) override
         { OInterfaceContainer::revokeScriptEvent(p1, p2, p3, p4); }
     virtual void SAL_CALL revokeScriptEvents(sal_Int32 p1) override
         { OInterfaceContainer::revokeScriptEvents(p1); }

@@ -31,7 +31,7 @@ namespace connectivity
                  const ::std::vector< OUString>& rNames);
 
         // OKeysHelper / XDrop
-        void dropObject(sal_Int32 nPosition, const ::rtl::OUString& sName) override;
+        void dropObject(sal_Int32 nPosition, const OUString& sName) override;
 
         };
     }

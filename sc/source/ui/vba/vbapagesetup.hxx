@@ -79,10 +79,10 @@ public:
 
     virtual sal_Bool SAL_CALL getPrintGridlines() override;
     virtual void SAL_CALL setPrintGridlines( sal_Bool _printgridlines ) override;
-    virtual ::rtl::OUString SAL_CALL getPrintTitleRows() override;
-    virtual void SAL_CALL setPrintTitleRows( const ::rtl::OUString& _printtitlerows ) override;
-    virtual ::rtl::OUString SAL_CALL getPrintTitleColumns() override;
-    virtual void SAL_CALL setPrintTitleColumns( const ::rtl::OUString& _printtitlecolumns ) override;
+    virtual OUString SAL_CALL getPrintTitleRows() override;
+    virtual void SAL_CALL setPrintTitleRows( const OUString& _printtitlerows ) override;
+    virtual OUString SAL_CALL getPrintTitleColumns() override;
+    virtual void SAL_CALL setPrintTitleColumns( const OUString& _printtitlecolumns ) override;
     virtual sal_Int32 SAL_CALL getPaperSize() override;
     virtual void SAL_CALL setPaperSize( sal_Int32 papersize ) override;
     // XHelperInterface

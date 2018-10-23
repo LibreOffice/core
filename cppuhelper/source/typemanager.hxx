@@ -56,29 +56,29 @@ public:
     using TypeManager_Base::acquire;
     using TypeManager_Base::release;
 
-    void init(rtl::OUString const & rdbUris);
+    void init(OUString const & rdbUris);
 
-    css::uno::Any find(rtl::OUString const & name);
+    css::uno::Any find(OUString const & name);
 
     css::uno::Reference< css::reflection::XTypeDescription > resolve(
-        rtl::OUString const & name);
+        OUString const & name);
 
 private:
     virtual ~TypeManager() throw () override;
 
     virtual void SAL_CALL disposing() override;
 
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
-        rtl::OUString const & aName) override;
+        OUString const & aName) override;
 
-    virtual sal_Bool SAL_CALL hasByHierarchicalName(rtl::OUString const & aName) override;
+    virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
 
     virtual css::uno::Type SAL_CALL getElementType() override;
 
@@ -95,36 +95,36 @@ private:
 
     virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
     SAL_CALL createTypeDescriptionEnumeration(
-        rtl::OUString const & moduleName,
+        OUString const & moduleName,
         css::uno::Sequence< css::uno::TypeClass > const & types,
         css::reflection::TypeDescriptionSearchDepth depth) override;
 
-    void readRdbDirectory(rtl::OUString const & uri, bool optional);
+    void readRdbDirectory(OUString const & uri, bool optional);
 
-    void readRdbFile(rtl::OUString const & uri, bool optional);
+    void readRdbFile(OUString const & uri, bool optional);
 
-    css::uno::Any getSequenceType(rtl::OUString const & name);
+    css::uno::Any getSequenceType(OUString const & name);
 
     css::uno::Any getInstantiatedStruct(
-        rtl::OUString const & name, sal_Int32 separator);
+        OUString const & name, sal_Int32 separator);
 
     css::uno::Any getInterfaceMember(
-        rtl::OUString const & name, sal_Int32 separator);
+        OUString const & name, sal_Int32 separator);
 
     css::uno::Any getNamed(
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::Entity > const & entity);
 
     static css::uno::Any getEnumMember(
         rtl::Reference< unoidl::EnumTypeEntity > const & entity,
-        rtl::OUString const & member);
+        OUString const & member);
 
     static css::uno::Any getConstant(
-        rtl::OUString const & constantGroupName,
+        OUString const & constantGroupName,
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
-        rtl::OUString const & member);
+        OUString const & member);
 
-    rtl::Reference< unoidl::Entity > findEntity(rtl::OUString const & name);
+    rtl::Reference< unoidl::Entity > findEntity(OUString const & name);
 
     rtl::Reference< unoidl::Manager > manager_;
 };

@@ -175,7 +175,7 @@ void ScInterpreter::ScFilterXML()
                     {
                         if( nSize > nNode )
                         {
-                            rtl::OUString aResult;
+                            OUString aResult;
                             if(pNodeSet->nodeTab[nNode]->type == XML_NAMESPACE_DECL)
                             {
                                 xmlNsPtr ns = reinterpret_cast<xmlNsPtr>(pNodeSet->nodeTab[nNode]);

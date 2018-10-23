@@ -462,7 +462,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         {
             uno::Reference< security::XCertificateExtension >element = extensions[i];
 
-            const rtl::OString aId ( reinterpret_cast<const sal_Char *>(const_cast<const signed char *>(element->getExtensionId().getArray())), element->getExtensionId().getLength());
+            const OString aId ( reinterpret_cast<const sal_Char *>(const_cast<const signed char *>(element->getExtensionId().getArray())), element->getExtensionId().getLength());
             if ( aId.equals( OID_SUBJECT_ALTERNATIVE_NAME ) )
             {
                 uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
@@ -471,7 +471,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
             }
         }
 
-        uno::Sequence< ::rtl::OUString > certHostNames(altNames.getLength() + 1);
+        uno::Sequence< OUString > certHostNames(altNames.getLength() + 1);
         certHostNames[0] = sServerCertificateSubject;
         for( int n = 0; n < altNames.getLength(); ++n )
         {

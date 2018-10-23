@@ -37,7 +37,7 @@ namespace cppu { namespace detail {
 
     @return false if the module could not be loaded, otherwise true
 */
-bool loadModule(osl::Module & rModule, ::rtl::OUString const & name);
+bool loadModule(osl::Module & rModule, OUString const & name);
 
 #endif
 

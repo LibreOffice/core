@@ -35,7 +35,7 @@ using namespace ::codemaker::cpp;
 
 namespace skeletonmaker {
 
-void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
+void printLicenseHeader(std::ostream& o, OString const & filename)
 {
     sal_Int32 index;
 #ifdef SAL_UNX
@@ -570,7 +570,7 @@ static void generateFunctionParameterMap(std::ostream& o,
         {
             if ( options.language == 2 ) {
                 o << "        fpm[" << n
-                  << "] = ::rtl::OUString(\""
+                  << "] = OUString(\""
                   << rParam.name
                   << "\");\n";
             }
@@ -583,7 +583,7 @@ static void generateFunctionParameterMap(std::ostream& o,
         }
 
         if ( options.language == 2 ) {
-            o << "        m_functionMap[::rtl::OUString(\""
+            o << "        m_functionMap[OUString(\""
               << rMethod.name << "\")] = fpm;\n\n";
         }
         else {
