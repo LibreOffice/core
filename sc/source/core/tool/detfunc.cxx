@@ -353,7 +353,7 @@ static bool lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
     //  test if rPolygon is the line end for "other table" (rectangle)
     if(1 == rPolyPolygon.count())
     {
-        const basegfx::B2DPolygon aSubPoly(rPolyPolygon.getB2DPolygon(0));
+        const basegfx::B2DPolygon& aSubPoly(rPolyPolygon.getB2DPolygon(0));
 
         // #i73305# circle consists of 4 segments, too, distinguishable from square by
         // the use of control points

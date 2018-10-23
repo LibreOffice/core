@@ -286,7 +286,7 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
             }
             else if (nState == RET_NO)
             {
-                GraphicObject aGraphicObject(pObj->GetGraphicObject());
+                const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
                 GraphicHelper::ExportGraphic(pWinFrame, aGraphicObject.GetGraphic(), "");
             }
         }

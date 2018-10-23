@@ -189,9 +189,9 @@ bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(weld::Window* pWin)
         else
         {
             // Update failed.  Notify the user.
-            OUString aFile = pDdeLink->GetTopic();
-            OUString aElem = pDdeLink->GetItem();
-            OUString aType = pDdeLink->GetAppl();
+            const OUString& aFile = pDdeLink->GetTopic();
+            const OUString& aElem = pDdeLink->GetItem();
+            const OUString& aType = pDdeLink->GetAppl();
 
             OUStringBuffer aBuf;
             aBuf.append(ScResId(SCSTR_DDEDOC_NOT_LOADED));

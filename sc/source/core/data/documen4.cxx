@@ -794,7 +794,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                     {
                         ScAddress aPos(nCol, nRow, nTab);
                         ScRefCellValue aCell(const_cast<ScDocument&>(*this), aPos);
-                        OUString aStyle = pForm->GetCellStyle(aCell, aPos);
+                        const OUString& aStyle = pForm->GetCellStyle(aCell, aPos);
                         if (!aStyle.isEmpty())
                         {
                             SfxStyleSheetBase* pStyleSheet = mxPoolHelper->GetStylePool()->Find(

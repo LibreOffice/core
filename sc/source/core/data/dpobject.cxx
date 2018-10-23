@@ -828,8 +828,7 @@ void ScDPObject::ReloadGroupTableData()
         if (pData)
         {
             // Replace the existing group table data with the source data.
-            shared_ptr<ScDPTableData> pSource = pData->GetSourceTableData();
-            mpTableData = pSource;
+            mpTableData = pData->GetSourceTableData();
         }
         return;
     }
@@ -839,7 +838,7 @@ void ScDPObject::ReloadGroupTableData()
     {
         // This is already a group table data. Salvage the source data and
         // re-create a new group data.
-        shared_ptr<ScDPTableData> pSource = pData->GetSourceTableData();
+        const shared_ptr<ScDPTableData>& pSource = pData->GetSourceTableData();
         shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pSource, pDoc));
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;

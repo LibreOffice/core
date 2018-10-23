@@ -132,7 +132,7 @@ void UnitConverter::finalizeImport()
         if( const oox::xls::Font* pDefFont = getStyles().getDefaultFont().get() )
         {
             // XDevice expects pixels in font descriptor, but font contains twips
-            FontDescriptor aDesc = pDefFont->getFontDescriptor();
+            const FontDescriptor& aDesc = pDefFont->getFontDescriptor();
             Reference< XFont > xFont = xDevice->getFont( aDesc );
             if( xFont.is() )
             {

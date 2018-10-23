@@ -1703,8 +1703,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rR
             }
             else
             {
-                svl::SharedString aStr( nMatVal.GetString());
-                FormulaTokenRef xRes = new FormulaStringToken( aStr);
+                FormulaTokenRef xRes = new FormulaStringToken( nMatVal.GetString() );
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
                 rRetTypeExpr = SvNumFormatType::TEXT;
             }
@@ -3037,8 +3036,7 @@ void ScInterpreter::ScExternal()
             }
             else if ( aCall.HasMatrix() )
             {
-                ScMatrixRef xMat = aCall.GetMatrix();
-                PushMatrix( xMat );
+                PushMatrix( aCall.GetMatrix() );
             }
             else if ( aCall.HasString() )
             {

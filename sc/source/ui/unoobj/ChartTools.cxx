@@ -39,7 +39,7 @@ getPivotTableDataProvider(const SdrOle2Obj* pOleObject)
 {
     uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
 
-    uno::Reference<embed::XEmbeddedObject> xObject = pOleObject->GetObjRef();
+    const uno::Reference<embed::XEmbeddedObject>& xObject = pOleObject->GetObjRef();
     if (xObject.is())
     {
         uno::Reference<chart2::XChartDocument> xChartDoc(xObject->getComponent(), uno::UNO_QUERY);
