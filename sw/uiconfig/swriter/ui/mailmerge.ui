@@ -23,7 +23,6 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -40,7 +39,6 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -55,7 +53,6 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -129,7 +126,6 @@
                             <child>
                               <object class="GtkRadioButton" id="all">
                                 <property name="label" translatable="yes" context="mailmerge|all">_All</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -147,7 +143,6 @@
                             <child>
                               <object class="GtkRadioButton" id="selected">
                                 <property name="label" translatable="yes" context="mailmerge|selected">_Selected records</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -170,7 +165,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="rbfrom">
                                     <property name="label" translatable="yes" context="mailmerge|rbfrom">_From:</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -281,7 +275,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="printer">
                                     <property name="label" translatable="yes" context="mailmerge|printer">_Printer</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -299,7 +292,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="electronic">
                                     <property name="label" translatable="yes" context="mailmerge|electronic">_Electronic</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -317,7 +309,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="file">
                                     <property name="label" translatable="yes" context="mailmerge|file">File</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -342,7 +333,6 @@
                             <child>
                               <object class="GtkCheckButton" id="singlejobs">
                                 <property name="label" translatable="yes" context="mailmerge|singlejobs">_Single print jobs</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -391,7 +381,6 @@
                                                 <child>
                                                   <object class="GtkCheckButton" id="generate">
                                                     <property name="label" translatable="yes" context="mailmerge|generate">Generate file name from _database</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">False</property>
@@ -473,7 +462,6 @@
                                                 <child>
                                                   <object class="GtkButton" id="pathpb">
                                                     <property name="label">_...</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
@@ -550,7 +538,6 @@
                                                 <child>
                                                   <object class="GtkButton" id="attach">
                                                     <property name="label">_...</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
@@ -590,7 +577,6 @@
                                                 <child>
                                                   <object class="GtkCheckButton" id="html">
                                                     <property name="label" translatable="yes" context="mailmerge|html">HTM_L</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
@@ -607,7 +593,6 @@
                                                 <child>
                                                   <object class="GtkCheckButton" id="rtf">
                                                     <property name="label" translatable="yes" context="mailmerge|rtf">RT_F</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
@@ -624,7 +609,6 @@
                                                 <child>
                                                   <object class="GtkCheckButton" id="swriter">
                                                     <property name="label" translatable="yes" context="mailmerge|swriter">%PRODUCTNAME Writer</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
@@ -675,7 +659,6 @@
                                             <child>
                                               <object class="GtkRadioButton" id="singledocument">
                                                 <property name="label" translatable="yes" context="mailmerge|singledocument">S_ave as single document</property>
-                                                <property name="use_action_appearance">False</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
@@ -693,7 +676,6 @@
                                             <child>
                                               <object class="GtkRadioButton" id="individualdocuments">
                                                 <property name="label" translatable="yes" context="mailmerge|individualdocuments">Sa_ve as individual documents</property>
-                                                <property name="use_action_appearance">False</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>

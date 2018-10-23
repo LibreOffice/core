@@ -86,7 +86,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="bold">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -100,7 +99,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="italic">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -114,7 +112,6 @@
                 </child>
                 <child>
                   <object class="GtkMenuToolButton" id="underline">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -128,7 +125,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="strikeout">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -142,7 +138,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="shadowed">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -168,7 +163,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="grow">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -182,7 +176,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="shrink">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -221,7 +214,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkMenuToolButton" id="fontcolor">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -235,7 +227,6 @@
                 </child>
                 <child>
                   <object class="GtkMenuToolButton" id="highlight">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -260,7 +251,6 @@
                 <property name="can_focus">True</property>
                 <child>
                   <object class="GtkMenuToolButton" id="color">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -285,7 +275,6 @@
                 <property name="can_focus">True</property>
                  <child>
                   <object class="GtkMenuToolButton" id="backgroundcolor">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -311,7 +300,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="superscript">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:SuperScript</property>
@@ -324,7 +312,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="subscript">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:SubScript</property>
@@ -349,7 +336,6 @@
                 <property name="can_focus">True</property>
                 <child>
                   <object class="GtkToolButton" id="spacing">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>

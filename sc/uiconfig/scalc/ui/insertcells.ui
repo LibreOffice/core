@@ -23,7 +23,6 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -40,7 +39,6 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -55,7 +53,6 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -98,7 +95,6 @@
                     <child>
                       <object class="GtkRadioButton" id="down">
                         <property name="label" translatable="yes" context="insertcells|down">Shift cells _down</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -116,7 +112,6 @@
                     <child>
                       <object class="GtkRadioButton" id="right">
                         <property name="label" translatable="yes" context="insertcells|right">Shift cells _right</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -134,7 +129,6 @@
                     <child>
                       <object class="GtkRadioButton" id="rows">
                         <property name="label" translatable="yes" context="insertcells|rows">Entire ro_w</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -152,7 +146,6 @@
                     <child>
                       <object class="GtkRadioButton" id="cols">
                         <property name="label" translatable="yes" context="insertcells|cols">Entire _column</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

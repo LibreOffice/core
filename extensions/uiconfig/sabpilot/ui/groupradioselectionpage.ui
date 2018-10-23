@@ -228,7 +228,6 @@
                     <child>
                       <object class="GtkButton" id="toright">
                         <property name="label" translatable="yes" context="groupradioselectionpage|toright">_&gt;&gt;</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -243,7 +242,6 @@
                     <child>
                       <object class="GtkButton" id="toleft">
                         <property name="label" translatable="yes" context="groupradioselectionpage|toleft">_&lt;&lt;</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

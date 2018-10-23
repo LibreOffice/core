@@ -22,7 +22,6 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkRadioButton" id="buttonnone">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -46,7 +45,6 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonparallel">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -70,7 +68,6 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonoptimal">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="use_underline">True</property>
@@ -94,7 +91,6 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonbefore">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -118,7 +114,6 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonafter">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -142,7 +137,6 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonthrough">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

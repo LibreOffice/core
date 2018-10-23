@@ -17,11 +17,9 @@
         <property name="layout_style">center</property>
         <child>
           <object class="GtkButton" id="up">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -31,11 +29,9 @@
         </child>
         <child>
           <object class="GtkButton" id="down">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -46,12 +42,10 @@
         <child>
           <object class="GtkButton" id="all">
             <property name="label" translatable="yes" context="namematchingpage|all">_All</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="hexpand">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -63,12 +57,10 @@
         <child>
           <object class="GtkButton" id="none">
             <property name="label" translatable="yes" context="namematchingpage|none">Non_e</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="hexpand">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -183,11 +175,9 @@
         <property name="layout_style">center</property>
         <child>
           <object class="GtkButton" id="up_right">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -197,11 +187,9 @@
         </child>
         <child>
           <object class="GtkButton" id="down_right">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="expand">False</property>

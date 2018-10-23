@@ -77,7 +77,6 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -94,7 +93,6 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -109,7 +107,6 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -279,7 +276,6 @@
                             <child>
                               <object class="GtkRadioButton" id="redRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|redRadiobutton">_Red:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -296,7 +292,6 @@
                             <child>
                               <object class="GtkRadioButton" id="greenRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|greenRadiobutton">_Green:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -313,7 +308,6 @@
                             <child>
                               <object class="GtkRadioButton" id="blueRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|blueRadiobutton">_Blue:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -436,7 +430,6 @@
                             <child>
                               <object class="GtkRadioButton" id="hueRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|hueRadiobutton">H_ue:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -453,7 +446,6 @@
                             <child>
                               <object class="GtkRadioButton" id="satRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|satRadiobutton">_Saturation:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -470,7 +462,6 @@
                             <child>
                               <object class="GtkRadioButton" id="brightRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|brightRadiobutton">Bright_ness:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>

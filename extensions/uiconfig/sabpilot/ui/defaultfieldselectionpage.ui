@@ -35,7 +35,6 @@
         <child>
           <object class="GtkRadioButton" id="defaultselectionyes">
             <property name="label" translatable="yes" context="defaultfieldselectionpage|defaultselectionyes">_Yes, the following:</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -77,7 +76,6 @@
     <child>
       <object class="GtkRadioButton" id="defaultselectionno">
         <property name="label" translatable="yes" context="defaultfieldselectionpage|defaultselectionno">No, one particular field is not going to be selected.</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>

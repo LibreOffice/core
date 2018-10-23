@@ -61,7 +61,6 @@
                 <child>
                   <object class="GtkButton" id="create">
                     <property name="label" translatable="yes" context="connectionpage|create">_Create New</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -75,7 +74,6 @@
                 <child>
                   <object class="GtkButton" id="browse">
                     <property name="label" translatable="yes" context="connectionpage|browse">_Browse…</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -159,7 +157,6 @@
                 <child>
                   <object class="GtkCheckButton" id="passCheckbutton">
                     <property name="label" translatable="yes" context="connectionpage|passCheckbutton">Password required</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -249,7 +246,6 @@
                 <child>
                   <object class="GtkButton" id="driverButton">
                     <property name="label" translatable="yes" context="connectionpage|driverButton">Test Class</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -284,7 +280,6 @@
     <child>
       <object class="GtkButton" id="connectionButton">
         <property name="label" translatable="yes" context="connectionpage|connectionButton">Test Connection</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>

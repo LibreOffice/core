@@ -212,7 +212,6 @@
             </child>
             <child>
               <object class="GtkButton" id="FX1">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -227,7 +226,6 @@
             </child>
             <child>
               <object class="GtkButton" id="FX2">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -242,7 +240,6 @@
             </child>
             <child>
               <object class="GtkButton" id="FX3">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -257,7 +254,6 @@
             </child>
             <child>
               <object class="GtkButton" id="FX4">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -272,7 +268,6 @@
             </child>
             <child>
               <object class="foruilo-RefButton" id="RB_ARG1">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -288,7 +283,6 @@
             </child>
             <child>
               <object class="foruilo-RefButton" id="RB_ARG2">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -304,7 +298,6 @@
             </child>
             <child>
               <object class="foruilo-RefButton" id="RB_ARG3">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -320,7 +313,6 @@
             </child>
             <child>
               <object class="foruilo-RefButton" id="RB_ARG4">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

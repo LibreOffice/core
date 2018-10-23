@@ -7926,7 +7926,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="SetBorderStyle3">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:SetBorderStyle</property>
@@ -7938,7 +7937,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="FrameLineColor1">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:FrameLineColor</property>
@@ -8005,7 +8003,6 @@
                                     <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkMenuToolButton" id="LineStyle1">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:LineStyle</property>
@@ -8672,7 +8669,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="BackgroundColor">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:BackgroundColor</property>
@@ -10645,7 +10641,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="AnchorMenu2">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:AnchorMenu</property>

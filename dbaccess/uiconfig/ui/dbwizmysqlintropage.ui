@@ -67,7 +67,6 @@ Please contact your system administrator if you are unsure about the following s
                             <child>
                               <object class="GtkRadioButton" id="odbc">
                                 <property name="label" translatable="yes" context="dbwizmysqlintropage|odbc">Connect using ODBC (Open Database Connectivity)</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -84,7 +83,6 @@ Please contact your system administrator if you are unsure about the following s
                             <child>
                               <object class="GtkRadioButton" id="jdbc">
                                 <property name="label" translatable="yes" context="dbwizmysqlintropage|jdbc">Connect using JDBC (Java Database Connectivity)</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -103,7 +101,6 @@ Please contact your system administrator if you are unsure about the following s
                             <child>
                               <object class="GtkRadioButton" id="directly">
                                 <property name="label" translatable="yes" context="dbwizmysqlintropage|directly">Connect directly</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>

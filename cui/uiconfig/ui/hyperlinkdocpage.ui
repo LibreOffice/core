@@ -59,7 +59,6 @@
                 <child>
                   <object class="GtkButton" id="fileopen">
                     <property name="label" translatable="yes" context="hyperlinkdocpage|fileopen">Open File</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -141,7 +140,6 @@
                 <child>
                   <object class="GtkButton" id="browse">
                     <property name="label" translatable="yes" context="hyperlinkdocpage|browse">Target in Document</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -318,7 +316,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="script">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

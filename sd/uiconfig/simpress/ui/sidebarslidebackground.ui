@@ -87,7 +87,6 @@
         <child>
           <object class="GtkCheckButton" id="displaymasterobjects">
             <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterobjects">Master Objects</property>
-            <property name="use_action_appearance">True</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

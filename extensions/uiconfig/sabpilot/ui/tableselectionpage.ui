@@ -101,7 +101,6 @@ Please note that the settings made on this page will take effect immediately upo
                     <child>
                       <object class="GtkButton" id="search">
                         <property name="label" translatable="yes" context="tableselectionpage|search">_...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

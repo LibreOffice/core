@@ -28,7 +28,6 @@
                 <child>
                   <object class="GtkCheckButton" id="pagebackground">
                     <property name="label" translatable="yes" context="printeroptions|pagebackground">Page background</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -45,7 +44,6 @@
                 <child>
                   <object class="GtkCheckButton" id="pictures">
                     <property name="label" translatable="yes" context="printeroptions|pictures">Images and other graphic objects</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -62,7 +60,6 @@
                 <child>
                   <object class="GtkCheckButton" id="hiddentext">
                     <property name="label" translatable="yes" context="printeroptions|hiddentext">Hidden text</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -79,7 +76,6 @@
                 <child>
                   <object class="GtkCheckButton" id="placeholders">
                     <property name="label" translatable="yes" context="printeroptions|placeholders">Text placeholders</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -96,7 +92,6 @@
                 <child>
                   <object class="GtkCheckButton" id="formcontrols">
                     <property name="label" translatable="yes" context="printeroptions|formcontrols">Form controls</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -146,7 +141,6 @@
             <child>
               <object class="GtkCheckButton" id="textinblack">
                 <property name="label" translatable="yes" context="printeroptions|textinblack">Print text in black</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -189,7 +183,6 @@
             <child>
               <object class="GtkCheckButton" id="autoblankpages">
                 <property name="label" translatable="yes" context="printeroptions|autoblankpages">Print automatically inserted blank pages</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

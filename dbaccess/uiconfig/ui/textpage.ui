@@ -37,7 +37,6 @@
                 <child>
                   <object class="GtkRadioButton" id="textfile">
                     <property name="label" translatable="yes" context="textpage|textfile">Plain text files (*.txt)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -55,7 +54,6 @@
                 <child>
                   <object class="GtkRadioButton" id="csvfile">
                     <property name="label" translatable="yes" context="textpage|csvfile">Comma-separated value files (*.csv)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -73,7 +71,6 @@
                 <child>
                   <object class="GtkRadioButton" id="custom">
                     <property name="label" translatable="yes" context="textpage|custom">Custom:</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -158,7 +155,6 @@
                 <child>
                   <object class="GtkCheckButton" id="containsheaders">
                     <property name="label" translatable="yes" context="textpage|containsheaders">_Text contains headers</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

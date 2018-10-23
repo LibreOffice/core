@@ -84,7 +84,6 @@
         <child>
           <object class="GtkCheckButton" id="passRequiredCheckbutton">
             <property name="label" translatable="yes" context="authentificationpage|passRequiredCheckbutton">Password re_quired</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -109,7 +108,6 @@
     <child>
       <object class="GtkButton" id="testConnectionButton">
         <property name="label" translatable="yes" context="authentificationpage|testConnectionButton">_Test Connection</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="can_default">True</property>

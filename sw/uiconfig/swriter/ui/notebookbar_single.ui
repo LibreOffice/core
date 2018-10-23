@@ -358,7 +358,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="underline">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
@@ -623,7 +622,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="increaseindent">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
@@ -638,7 +636,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="decreaseindent">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
@@ -742,7 +739,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="comment">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>

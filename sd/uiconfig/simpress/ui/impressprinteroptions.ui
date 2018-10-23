@@ -30,7 +30,6 @@
                 <child>
                   <object class="GtkCheckButton" id="printname">
                     <property name="label" translatable="yes" context="impressprinteroptions|printname">Slide name</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -47,7 +46,6 @@
                 <child>
                   <object class="GtkCheckButton" id="printdatetime">
                     <property name="label" translatable="yes" context="impressprinteroptions|printdatetime">Date and time</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -64,7 +62,6 @@
                 <child>
                   <object class="GtkCheckButton" id="printhidden">
                     <property name="label" translatable="yes" context="impressprinteroptions|printhidden">Hidden pages</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -120,7 +117,6 @@
                 <child>
                   <object class="GtkRadioButton" id="originalcolors">
                     <property name="label" translatable="yes" context="impressprinteroptions|originalcolors">Original size</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -139,7 +135,6 @@
                 <child>
                   <object class="GtkRadioButton" id="grayscale">
                     <property name="label" translatable="yes" context="impressprinteroptions|grayscale">Grayscale</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -158,7 +153,6 @@
                 <child>
                   <object class="GtkRadioButton" id="blackandwhite">
                     <property name="label" translatable="yes" context="impressprinteroptions|blackandwhite">Black &amp; white</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -216,7 +210,6 @@
                 <child>
                   <object class="GtkRadioButton" id="originalsize">
                     <property name="label" translatable="yes" context="impressprinteroptions|originalsize">Original size</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -235,7 +228,6 @@
                 <child>
                   <object class="GtkRadioButton" id="fittoprintable">
                     <property name="label" translatable="yes" context="impressprinteroptions|fittoprintable">Fit to printable page</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -254,7 +246,6 @@
                 <child>
                   <object class="GtkRadioButton" id="distributeonmultiple">
                     <property name="label" translatable="yes" context="impressprinteroptions|distributeonmultiple">Distribute on multiple sheets of paper</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -273,7 +264,6 @@
                 <child>
                   <object class="GtkRadioButton" id="tilesheet">
                     <property name="label" translatable="yes" context="impressprinteroptions|tilesheet">Tile sheet of paper with repeated slides</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

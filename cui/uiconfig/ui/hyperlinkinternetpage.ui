@@ -40,7 +40,6 @@
                     <child>
                       <object class="GtkRadioButton" id="linktyp_internet">
                         <property name="label" translatable="yes" context="hyperlinkinternetpage|linktyp_internet">_Web</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -57,7 +56,6 @@
                     <child>
                       <object class="GtkRadioButton" id="linktyp_ftp">
                         <property name="label" translatable="yes" context="hyperlinkinternetpage|linktyp_ftp">_FTP</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -159,7 +157,6 @@
                 <child>
                   <object class="GtkCheckButton" id="anonymous">
                     <property name="label" translatable="yes" context="hyperlinkinternetpage|anonymous">Anonymous _user</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -318,7 +315,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="script">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

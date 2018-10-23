@@ -42,7 +42,6 @@
                     <child>
                       <object class="GtkRadioButton" id="editnow">
                         <property name="label" translatable="yes" context="hyperlinknewdocpage|editnow">Edit _now</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -59,7 +58,6 @@
                     <child>
                       <object class="GtkRadioButton" id="editlater">
                         <property name="label" translatable="yes" context="hyperlinknewdocpage|editlater">Edit _later</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -109,7 +107,6 @@
                 <child>
                   <object class="GtkButton" id="create">
                     <property name="label" translatable="yes" context="hyperlinknewdocpage|create">Select Path</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -299,7 +296,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="script">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

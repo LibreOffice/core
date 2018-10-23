@@ -19,7 +19,6 @@
             <child>
               <object class="GtkButton" id="pbSearchAgain">
                 <property name="label" translatable="yes" context="fmsearchdialog|pbSearchAgain">S_earch</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -36,7 +35,6 @@
             <child>
               <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -52,7 +50,6 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -140,7 +137,6 @@
                                     <child>
                                       <object class="GtkRadioButton" id="rbSearchForText">
                                         <property name="label" translatable="yes" context="fmsearchdialog|rbSearchForText">_Text:</property>
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -164,7 +160,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="rbSearchForNull">
                                     <property name="label" translatable="yes" context="fmsearchdialog|rbSearchForNull">Field content is _NULL</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -183,7 +178,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="rbSearchForNotNull">
                                     <property name="label" translatable="yes" context="fmsearchdialog|rbSearchForNotNull">Field content is not NU_LL</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -270,7 +264,6 @@
                                         <child>
                                           <object class="GtkRadioButton" id="rbSingleField">
                                             <property name="label" translatable="yes" context="fmsearchdialog|rbSingleField">_Single field:</property>
-                                            <property name="use_action_appearance">False</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -307,7 +300,6 @@
                                     <child>
                                       <object class="GtkRadioButton" id="rbAllFields">
                                         <property name="label" translatable="yes" context="fmsearchdialog|rbAllFields">_All fields</property>
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -494,7 +486,6 @@
                             <child>
                               <object class="GtkCheckButton" id="HalfFullFormsCJK">
                                 <property name="label" translatable="yes" context="fmsearchdialog|HalfFullFormsCJK">Match character wi_dth</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -515,7 +506,6 @@
                                 <child>
                                   <object class="GtkCheckButton" id="SoundsLikeCJK">
                                     <property name="label" translatable="yes" context="fmsearchdialog|SoundsLikeCJK">Sounds like (_Japanese)</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -556,7 +546,6 @@
                                 <child>
                                   <object class="GtkCheckButton" id="cbApprox">
                                     <property name="label" translatable="yes" context="fmsearchdialog|cbApprox">S_imilarity search</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -593,7 +582,6 @@
                             <child>
                               <object class="GtkCheckButton" id="cbCase">
                                 <property name="label" translatable="yes" context="fmsearchdialog|cbCase">_Match case</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -609,7 +597,6 @@
                             <child>
                               <object class="GtkCheckButton" id="cbStartOver">
                                 <property name="label" translatable="yes" context="fmsearchdialog|cbStartOver">Fr_om top</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -625,7 +612,6 @@
                             <child>
                               <object class="GtkCheckButton" id="cbRegular">
                                 <property name="label" translatable="yes" context="fmsearchdialog|cbRegular">_Regular expression</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -641,7 +627,6 @@
                             <child>
                               <object class="GtkCheckButton" id="cbUseFormat">
                                 <property name="label" translatable="yes" context="fmsearchdialog|cbUseFormat">Appl_y field format</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -657,7 +642,6 @@
                             <child>
                               <object class="GtkCheckButton" id="cbBackwards">
                                 <property name="label" translatable="yes" context="fmsearchdialog|cbBackwards">Search _backwards</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -673,7 +657,6 @@
                             <child>
                               <object class="GtkCheckButton" id="cbWildCard">
                                 <property name="label" translatable="yes" context="fmsearchdialog|cbWildCard">_Wildcard expression</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>

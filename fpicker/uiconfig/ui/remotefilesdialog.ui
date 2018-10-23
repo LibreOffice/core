@@ -200,7 +200,6 @@
             </child>
             <child>
               <object class="GtkButton" id="new_folder">
-                <property name="use_action_appearance">False</property>
                 <property name="width_request">25</property>
                 <property name="height_request">25</property>
                 <property name="visible">True</property>

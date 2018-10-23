@@ -102,7 +102,6 @@
                 <child>
                   <object class="GtkCheckButton" id="showDelRowsCheckbutton">
                     <property name="label" translatable="yes" context="dbasepage|showDelRowsCheckbutton">Display deleted records as well</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -155,7 +154,6 @@
     <child>
       <object class="GtkButton" id="indiciesButton">
         <property name="label" translatable="yes" context="dbasepage|indiciesButton">Indexes...</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>

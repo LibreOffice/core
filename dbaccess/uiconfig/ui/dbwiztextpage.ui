@@ -71,11 +71,9 @@
                     <child>
                       <object class="GtkButton" id="browse">
                         <property name="label" translatable="yes" context="dbwiztextpage|browse">Browse</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -87,11 +85,9 @@
                     <child>
                       <object class="GtkButton" id="create">
                         <property name="label" translatable="yes" context="dbwiztextpage|create">Create New</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>

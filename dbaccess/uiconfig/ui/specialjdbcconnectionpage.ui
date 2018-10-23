@@ -193,7 +193,6 @@
         <child>
           <object class="GtkButton" id="testDriverButton">
             <property name="label" translatable="yes" context="specialjdbcconnectionpage|testDriverButton">_Test Class</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

@@ -38,7 +38,6 @@
                 <property name="toolbar_style">icons</property>
                 <child>
                   <object class="GtkToolButton" id="TBI_APPLY">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -63,7 +62,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_WORKPLACE">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -88,7 +86,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_SELECT">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -103,7 +100,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_RECT">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -118,7 +114,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_CIRCLE">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -133,7 +128,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_POLY">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -158,7 +152,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_POLYEDIT">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -173,7 +166,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_POLYMOVE">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -188,7 +180,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_POLYINSERT">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -203,7 +194,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_POLYDELETE">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -252,7 +242,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_UNDO">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -267,7 +256,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_REDO">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -282,7 +270,6 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="TBI_PIPETTE">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>

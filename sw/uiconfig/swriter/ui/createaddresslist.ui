@@ -21,7 +21,6 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -36,7 +35,6 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -51,7 +49,6 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -147,7 +144,6 @@
                         <child>
                           <object class="GtkButton" id="START">
                             <property name="label" translatable="yes" context="createaddresslist|START">|&lt;</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -160,7 +156,6 @@
                         <child>
                           <object class="GtkButton" id="PREV">
                             <property name="label" translatable="yes" context="createaddresslist|PREV">&lt;</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -173,7 +168,6 @@
                         <child>
                           <object class="GtkButton" id="END">
                             <property name="label" translatable="yes" context="createaddresslist|END">&gt;|</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -186,7 +180,6 @@
                         <child>
                           <object class="GtkButton" id="NEXT">
                             <property name="label" translatable="yes" context="createaddresslist|NEXT">&gt;</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -237,7 +230,6 @@
                 <child>
                   <object class="GtkButton" id="NEW">
                     <property name="label" translatable="yes" context="createaddresslist|NEW">_New</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -252,7 +244,6 @@
                 <child>
                   <object class="GtkButton" id="DELETE">
                     <property name="label" translatable="yes" context="createaddresslist|DELETE">_Delete</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -267,7 +258,6 @@
                 <child>
                   <object class="GtkButton" id="FIND">
                     <property name="label" translatable="yes" context="createaddresslist|FIND">_Find...</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -282,7 +272,6 @@
                 <child>
                   <object class="GtkButton" id="CUSTOMIZE">
                     <property name="label" translatable="yes" context="createaddresslist|CUSTOMIZE">C_ustomize...</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

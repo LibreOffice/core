@@ -30,7 +30,6 @@
                 <child>
                   <object class="GtkCheckButton" id="printname">
                     <property name="label" translatable="yes" context="drawprinteroptions|printname">Page name</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -47,7 +46,6 @@
                 <child>
                   <object class="GtkCheckButton" id="printdatetime">
                     <property name="label" translatable="yes" context="drawprinteroptions|printdatetime">Date and time</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -103,7 +101,6 @@
                 <child>
                   <object class="GtkRadioButton" id="originalcolors">
                     <property name="label" translatable="yes" context="drawprinteroptions|originalcolors">Original size</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -122,7 +119,6 @@
                 <child>
                   <object class="GtkRadioButton" id="grayscale">
                     <property name="label" translatable="yes" context="drawprinteroptions|grayscale">Grayscale</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -141,7 +137,6 @@
                 <child>
                   <object class="GtkRadioButton" id="blackandwhite">
                     <property name="label" translatable="yes" context="drawprinteroptions|blackandwhite">Black &amp; white</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -199,7 +194,6 @@
                 <child>
                   <object class="GtkRadioButton" id="originalsize">
                     <property name="label" translatable="yes" context="drawprinteroptions|originalsize">Original size</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -218,7 +212,6 @@
                 <child>
                   <object class="GtkRadioButton" id="fittoprintable">
                     <property name="label" translatable="yes" context="drawprinteroptions|fittoprintable">Fit to printable page</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -237,7 +230,6 @@
                 <child>
                   <object class="GtkRadioButton" id="distributeonmultiple">
                     <property name="label" translatable="yes" context="drawprinteroptions|distributeonmultiple">Distribute on multiple sheets of paper</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -256,7 +248,6 @@
                 <child>
                   <object class="GtkRadioButton" id="tilesheet">
                     <property name="label" translatable="yes" context="drawprinteroptions|tilesheet">Tile sheet of paper with repeated pages</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
