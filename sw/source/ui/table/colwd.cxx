@@ -68,9 +68,9 @@ void SwTableWidthDlg::Apply()
                        static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP))));
 }
 
-short SwTableWidthDlg::execute()
+short SwTableWidthDlg::run()
 {
-    short nRet = run();
+    short nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

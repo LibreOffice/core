@@ -37,7 +37,7 @@ public:
     ScInsertTableDlg(weld::Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile);
     virtual ~ScInsertTableDlg() override;
 
-    short       execute(); // override to set parent dialog
+    virtual short run() override; // override to set parent dialog
 
     bool        GetTablesFromFile() const { return m_xBtnFromFile->get_active(); }
     bool        GetTablesAsLink() const { return m_xBtnLink->get_active(); }

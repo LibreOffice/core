@@ -2529,7 +2529,7 @@ namespace pcr
         OUString sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
         ListSelectionDialog aDialog(impl_getDefaultDialogFrame_nothrow(), m_xComponent, _rProperty, sPropertyUIName);
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog.execute() );
+        return ( RET_OK == aDialog.run() );
     }
 
     bool FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow( bool _bFilter, OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
@@ -2787,7 +2787,7 @@ namespace pcr
             // destroyItemSet
             ControlCharacterDialog aDlg(impl_getDefaultDialogFrame_nothrow(), *pSet);
             _rClearBeforeDialog.clear();
-            if (RET_OK == aDlg.execute())
+            if (RET_OK == aDlg.run())
             {
                 const SfxItemSet* pOut = aDlg.GetOutputItemSet();
                 if ( pOut )

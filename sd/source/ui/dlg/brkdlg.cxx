@@ -138,10 +138,10 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
  * open a modal dialog and start a timer which calls the working function after
  * the opening of the dialog
  */
-short BreakDlg::execute()
+short BreakDlg::run()
 {
     m_aUpdateIdle.Start();
-    return run();
+    return SfxDialogController::run();
 }
 
 /**

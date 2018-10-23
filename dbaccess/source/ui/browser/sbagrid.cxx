@@ -1445,7 +1445,7 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
             if (m_pMasterListener)
                 m_pMasterListener->AfterDrop();
             Show();
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo(e), this, getContext() );
+            ::dbtools::showError( ::dbtools::SQLExceptionInfo(e), VCLUnoHelper::GetInterface(this), getContext() );
         }
         catch(const Exception& )
         {

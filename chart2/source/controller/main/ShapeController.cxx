@@ -513,7 +513,7 @@ void ShapeController::executeDispatch_FontDialog()
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
             ShapeFontDialog aDlg(pChartWindow->GetFrameWeld(), &aAttr, &aViewElementListProvider);
-            if (aDlg.execute() == RET_OK)
+            if (aDlg.run() == RET_OK)
             {
                 const SfxItemSet* pOutAttr = aDlg.GetOutputItemSet();
                 pDrawViewWrapper->SetAttributes( *pOutAttr );
@@ -548,7 +548,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
             aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
             ShapeParagraphDialog aDlg(pChartWindow->GetFrameWeld(), &aNewAttr);
-            if (aDlg.execute() == RET_OK)
+            if (aDlg.run() == RET_OK)
             {
                 const SfxItemSet* pOutAttr = aDlg.GetOutputItemSet();
                 pDrawViewWrapper->SetAttributes( *pOutAttr );
