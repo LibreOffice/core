@@ -284,7 +284,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 
     if( rTok.IsIdentifier() )
     {
-        OString aName = rTok.GetString();
+        const OString& aName = rTok.GetString();
         for( const auto& aType : GetTypeList() )
         {
             if( aType->GetName() == aName )

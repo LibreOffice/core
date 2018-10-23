@@ -45,7 +45,7 @@ static void checkStyleNames(const OString& aLanguage)
 
         if( !aPoEntry.isFuzzy() && aPoEntry.getMsgCtxt().startsWith("STR_POOLCOLL") )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            const OString& aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedStyleNames.find(aMsgStr) == aLocalizedStyleNames.end() )
@@ -57,7 +57,7 @@ static void checkStyleNames(const OString& aLanguage)
         }
         if( !aPoEntry.isFuzzy() && aPoEntry.getMsgCtxt().startsWith("STR_POOLNUMRULE") )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            const OString& aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedNumStyleNames.find(aMsgStr) == aLocalizedNumStyleNames.end() )
@@ -163,7 +163,7 @@ static void checkFunctionNames(const OString& aLanguage)
             break;
         if( !aPoEntry.isFuzzy() && aPoEntry.getMsgCtxt() == "RID_STRLIST_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            const OString& aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) == aLocalizedCoreFunctionNames.end() )
