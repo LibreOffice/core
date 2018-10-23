@@ -77,12 +77,14 @@ namespace dxcanvas
         double              getEmHeight() const;
         FontSharedPtr       getFont() const;
         const css::geometry::Matrix2D& getFontMatrix() const;
+        sal_uInt32          getEmphasisMark() const { return mnEmphasisMark; }
 
     private:
         GDIPlusUserSharedPtr                        mpGdiPlusUser;
         FontFamilySharedPtr                         mpFontFamily;
         FontSharedPtr                               mpFont;
         css::rendering::FontRequest    maFontRequest;
+        sal_uInt32                     mnEmphasisMark;
         css::geometry::Matrix2D        maFontMatrix;
     };
 

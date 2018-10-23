@@ -47,14 +47,14 @@ namespace dxcanvas
     }
 
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    /*extraFontProperties*/,
+                            const uno::Sequence< beans::PropertyValue >&    extraFontProperties,
                             const geometry::Matrix2D&                       fontMatrix ) :
         CanvasFont_Base( m_aMutex ),
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
-        // TODO(F1): extraFontProperties, fontMatrix
         mpFontFamily(),
         mpFont(),
         maFontRequest( rFontRequest ),
+        mnEmphasisMark(0),
         maFontMatrix( fontMatrix )
     {
         mpFontFamily.reset( new Gdiplus::FontFamily(o3tl::toW(rFontRequest.FontDescription.FamilyName.getStr()),nullptr) );
@@ -65,6 +65,8 @@ namespace dxcanvas
                                          static_cast<Gdiplus::REAL>(rFontRequest.CellSize),
                                          calcFontStyle( rFontRequest ),
                                          Gdiplus::UnitWorld ));
+
+        ::canvas::tools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }
 
     void SAL_CALL CanvasFont::disposing()
