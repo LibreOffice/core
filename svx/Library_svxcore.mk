@@ -443,7 +443,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/fmdpage \
     svx/source/form/fmexch \
     svx/source/form/fmexpl \
-    svx/source/form/fmitems \
     svx/source/form/fmmodel \
     svx/source/form/fmobj \
     svx/source/form/fmpage \

@@ -23,7 +23,6 @@
 #include <fmservs.hxx>
 #include <fmprop.hxx>
 #include <fmpgeimp.hxx>
-#include <fmitems.hxx>
 #include <fmundo.hxx>
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
