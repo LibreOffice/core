@@ -41,7 +41,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
             ,const css::uno::Any& _aDataSourceName)
     : SfxSingleTabDialog(pParent, _pItems, "TablesFilterDialog",
         "dbaccess/ui/tablesfilterdialog.ui")
-    , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
+    , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, GetFrameWeld(), pParent ? pParent->GetFrameWeld() : nullptr, this ) )
     , m_bStopExecution(false)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);

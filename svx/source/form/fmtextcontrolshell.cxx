@@ -645,7 +645,7 @@ namespace svx
             xDialog = o3tl::make_unique<TextControlCharAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems, *pFontList);
         else
             xDialog = o3tl::make_unique<TextControlParaAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems);
-        if ( RET_OK == xDialog->execute() )
+        if ( RET_OK == xDialog->run() )
         {
             const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();
             for ( WhichId nWhich = pPool->GetFirstWhich(); nWhich <= pPool->GetLastWhich(); ++nWhich )

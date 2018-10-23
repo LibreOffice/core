@@ -234,6 +234,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
+    SAL_DLLPRIVATE void Start_Impl();
     SAL_DLLPRIVATE void CreatePages();
     SAL_DLLPRIVATE void setPreviewsToSamePlace();
 
@@ -255,8 +256,6 @@ protected:
     /** save the position of the TabDialog and which tab page is the currently active one
      */
     void SavePosAndId();
-
-    void Start_Impl();
 public:
     SfxTabDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
                            const SfxItemSet * = nullptr, bool bEditFmt = false);
@@ -299,7 +298,7 @@ public:
     void                RemoveResetButton();
     void                RemoveStandardButton();
 
-    short               execute();
+    virtual short       run();
     static bool runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
                          const std::function<void(sal_Int32)>&);
 

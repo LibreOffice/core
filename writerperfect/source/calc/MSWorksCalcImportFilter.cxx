@@ -248,7 +248,7 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
         {
             SfxPasswordDialog aPasswdDlg(pParent);
             aPasswdDlg.SetMinLen(1);
-            if (!aPasswdDlg.execute())
+            if (!aPasswdDlg.run())
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);

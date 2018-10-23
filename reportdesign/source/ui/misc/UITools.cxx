@@ -714,7 +714,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
                 aDlg.RemoveTabPage("background");
-            bSuccess = aDlg.execute() == RET_OK;
+            bSuccess = aDlg.run() == RET_OK;
             if ( bSuccess )
             {
                 lcl_itemsToCharProperties( lcl_getReportControlFont( _rxReportControlFormat,WESTERN ),

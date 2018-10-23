@@ -242,7 +242,7 @@ bool OTableGrantControl::SaveModified()
     catch(SQLException& e)
     {
         bErg = false;
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xContext);
+        ::dbtools::showError(::dbtools::SQLExceptionInfo(e),VCLUnoHelper::GetInterface(GetParent()),m_xContext);
     }
     if(bErg && Controller().is())
         Controller()->ClearModified();
@@ -302,7 +302,7 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
         }
         catch(SQLException& e)
         {
-            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xContext);
+            ::dbtools::showError(::dbtools::SQLExceptionInfo(e),VCLUnoHelper::GetInterface(GetParent()),m_xContext);
         }
         catch(Exception& )
         {

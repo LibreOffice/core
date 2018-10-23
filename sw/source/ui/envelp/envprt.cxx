@@ -120,7 +120,7 @@ IMPL_LINK(SwEnvPrtPage, ButtonHdl, weld::Button&, rBtn, void)
         {
             PrinterSetupDialog aDlg(GetDialogFrameWeld());
             aDlg.SetPrinter(m_xPrt);
-            aDlg.execute();
+            aDlg.run();
             rBtn.grab_focus();
             m_xPrinterInfo->set_label(m_xPrt->GetName());
         }
