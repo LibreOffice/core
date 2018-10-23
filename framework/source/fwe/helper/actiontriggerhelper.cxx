@@ -159,7 +159,7 @@ static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Refer
                                     {
                                         // This is our own optimized implementation of menu images!
                                         ImageWrapper* pImageWrapper = reinterpret_cast< ImageWrapper * >( nPointer );
-                                        Image aMenuImage = pImageWrapper->GetImage();
+                                        const Image& aMenuImage = pImageWrapper->GetImage();
 
                                         if ( !!aMenuImage )
                                             pSubMenu->SetItemImage( nNewItemId, aMenuImage );

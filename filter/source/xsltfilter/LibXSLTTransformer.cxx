@@ -421,10 +421,8 @@ namespace XSLT
     void
     LibXSLTTransformer::start()
     {
-        ListenerList* l = &m_listeners;
-        for (auto const& elem : *l)
+        for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
         {
-            css::uno::Reference<XStreamListener> xl = elem;
             xl.get()->started();
         }
         OSL_ENSURE(!m_Reader.is(), "Somebody forgot to call terminate *and* holds a reference to this LibXSLTTransformer instance");
@@ -435,12 +433,10 @@ namespace XSLT
     void
     LibXSLTTransformer::error(const OUString& msg)
     {
-        ListenerList* l = &m_listeners;
         Any arg;
         arg <<= Exception(msg, *this);
-        for (auto const& elem : *l)
+        for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
         {
-            css::uno::Reference<XStreamListener> xl = elem;
             if (xl.is())
             {
                 xl.get()->error(arg);
@@ -451,10 +447,8 @@ namespace XSLT
     void
     LibXSLTTransformer::done()
     {
-        ListenerList* l = &m_listeners;
-        for (auto const& elem : *l)
+        for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
         {
-            css::uno::Reference<XStreamListener> xl = elem;
             if (xl.is())
             {
                 xl.get()->closed();

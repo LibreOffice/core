@@ -684,7 +684,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon const & rPolyPolygon 
 
         for( sal_uInt32 a = 0; a < nNumPolys; a++ )
         {
-            tools::Polygon aPolygon( rPolyPolygon.GetObject( a ) );
+            const tools::Polygon& aPolygon( rPolyPolygon.GetObject( a ) );
             sal_uInt32 nNumPoints = aPolygon.GetSize();
 
             // make room in arrays

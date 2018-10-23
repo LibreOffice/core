@@ -255,7 +255,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     if (variantNode)
     {
         // If given Variant must be at least ll-Ssss and language must be 'qlt'
-        OUString aVariant( variantNode->getValue());
+        const OUString& aVariant( variantNode->getValue());
         if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-') >= 2)))
             incErrorStr( "Error: invalid Variant '%s'\n", aVariant);
         if (!(aVariant.isEmpty() || aLanguage == "qlt"))
@@ -693,7 +693,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         if (sTheCompatibleCurrency.isEmpty() &&
                                 ((nStart = n->getValue().indexOf("[$")) >= 0))
                         {
-                            OUString aCode( n->getValue());
+                            const OUString& aCode( n->getValue());
                             sal_Int32 nHyphen = aCode.indexOf( '-', nStart);
                             if (nHyphen >= nStart + 3)
                                 sTheCompatibleCurrency = aCode.copy( nStart + 2, nHyphen - nStart - 2);
@@ -709,7 +709,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     // and not parenthesized [C]###0;([C]###0) if not en_US.
                     if (strcmp( of.getLocale(), "en_US") != 0)
                     {
-                        OUString aCode( n->getValue());
+                        const OUString& aCode( n->getValue());
                         OUString const aPar1( "0)");
                         OUString const aPar2( "-)" );
                         OUString const aPar3( " )" );
@@ -721,7 +721,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     // Check if we have replaceTo for "[CURRENCY]" placeholder.
                     if (sTheCurrencyReplaceTo.isEmpty())
                     {
-                        OUString aCode( n->getValue());
+                        const OUString& aCode( n->getValue());
                         if (aCode.indexOf( "[CURRENCY]" ) >= 0)
                             incErrorInt( "Error: [CURRENCY] replaceTo not found for formatindex=\"%d\".\n", formatindex);
                     }
@@ -730,7 +730,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (aUsage == "SCIENTIFIC_NUMBER")
                     {
                         // Check for presence of  ##0.00E+00
-                        OUString aCode( n->getValue());
+                        const OUString& aCode( n->getValue());
                         // Simple check without decimal separator (assumed to
                         // be one UTF-16 character). May be prefixed with
                         // [NatNum1] or other tags.
@@ -744,7 +744,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             if (pCtype)
             {
                 int nSavErr = nError;
-                OUString aCode( n->getValue());
+                const OUString& aCode( n->getValue());
                 if (formatindex == cssi::NumberFormatIndex::NUMBER_1000DEC2)
                 {
                     sal_Int32 nDec = -1;
