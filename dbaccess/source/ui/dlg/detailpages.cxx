@@ -183,16 +183,15 @@ namespace dbaui
     }
 
     // ODbaseDetailsPage
-    ODbaseDetailsPage::ODbaseDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, "DbasePage", "dbaccess/ui/dbasepage.ui", _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+    ODbaseDetailsPage::ODbaseDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/dbasepage.ui", "DbasePage",
+                                    _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        , m_xShowDeleted(m_xBuilder->weld_check_button("showDelRowsCheckbutton"))
+        , m_xFT_Message(m_xBuilder->weld_label("specMessageLabel"))
+        , m_xIndexes(m_xBuilder->weld_button("indiciesButton"))
     {
-        get(m_pShowDeleted, "showDelRowsCheckbutton");
-        get(m_pFT_Message, "specMessageLabel");
-        get(m_pIndexes, "indiciesButton");
-        set_height_request(300);
-
-        m_pIndexes->SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
-        m_pShowDeleted->SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
+        m_xIndexes->connect_clicked(LINK(this, ODbaseDetailsPage, OnButtonClicked));
+        m_xShowDeleted->connect_clicked(LINK(this, ODbaseDetailsPage, OnButtonClicked));
     }
 
     ODbaseDetailsPage::~ODbaseDetailsPage()
@@ -200,17 +199,119 @@ namespace dbaui
         disposeOnce();
     }
 
-    void ODbaseDetailsPage::dispose()
+    DBOCommonBehaviourTabPage::DBOCommonBehaviourTabPage(TabPageParent pParent,
+        const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rCoreAttrs,
+        OCommonBehaviourTabPageFlags nControlFlags)
+        : OGenericAdministrationPage(pParent, rUIXMLDescription, rId, rCoreAttrs)
+        , m_nControlFlags(nControlFlags)
     {
-        m_pShowDeleted.clear();
-        m_pFT_Message.clear();
-        m_pIndexes.clear();
-        OCommonBehaviourTabPage::dispose();
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+        {
+            m_xOptionsLabel = m_xBuilder->weld_label("optionslabel");
+            m_xOptionsLabel->show();
+            m_xOptions = m_xBuilder->weld_entry("options");
+            m_xOptions->show();
+            m_xOptions->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+        }
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+        {
+            m_xDataConvertLabel = m_xBuilder->weld_label("charsetheader");
+            m_xDataConvertLabel->show();
+            m_xCharsetLabel = m_xBuilder->weld_label("charsetlabel");
+            m_xCharsetLabel->show();
+            m_xCharset.reset(new DBCharSetListBox(m_xBuilder->weld_combo_box("charset")));
+            m_xCharset->show();
+            m_xCharset->connect_changed(LINK(this, DBOCommonBehaviourTabPage, CharsetSelectHdl));
+        }
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateDbase( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    IMPL_LINK_NOARG(DBOCommonBehaviourTabPage, CharsetSelectHdl, weld::ComboBox&, void)
     {
-        return VclPtr<ODbaseDetailsPage>::Create( pParent.pParent, *_rAttrSet );
+        callModifiedHdl();
+    }
+
+    DBOCommonBehaviourTabPage::~DBOCommonBehaviourTabPage()
+    {
+        disposeOnce();
+    }
+
+    void DBOCommonBehaviourTabPage::dispose()
+    {
+        m_xCharset.reset();
+        OGenericAdministrationPage::dispose();
+    }
+
+    void DBOCommonBehaviourTabPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+        {
+            _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xOptionsLabel.get()));
+        }
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+        {
+            _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xCharsetLabel.get()));
+        }
+    }
+
+    void DBOCommonBehaviourTabPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+            _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xOptions.get()));
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+            _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xCharset->get_widget()));
+    }
+
+    void DBOCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        // collect the items
+        const SfxStringItem* pOptionsItem = _rSet.GetItem<SfxStringItem>(DSID_ADDITIONALOPTIONS);
+        const SfxStringItem* pCharsetItem = _rSet.GetItem<SfxStringItem>(DSID_CHARSET);
+
+        // forward the values to the controls
+        if (bValid)
+        {
+            if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+            {
+                m_xOptions->set_text(pOptionsItem->GetValue());
+                m_xOptions->save_value();
+            }
+
+            if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+            {
+                m_xCharset->SelectEntryByIanaName( pCharsetItem->GetValue() );
+            }
+        }
+        OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
+    }
+
+    bool DBOCommonBehaviourTabPage::FillItemSet(SfxItemSet* _rSet)
+    {
+        bool bChangedSomething = false;
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+        {
+            fillString(*_rSet,m_xOptions.get(),DSID_ADDITIONALOPTIONS,bChangedSomething);
+        }
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+        {
+            if ( m_xCharset->StoreSelectedCharSet( *_rSet, DSID_CHARSET ) )
+                bChangedSomething = true;
+        }
+
+        return bChangedSomething;
+    }
+
+    VclPtr<SfxTabPage> ODriversSettings::CreateDbase(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    {
+        return VclPtr<ODbaseDetailsPage>::Create(pParent, *_rAttrSet);
     }
 
     void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -231,31 +332,31 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_pShowDeleted->Check( pDeletedItem->GetValue() );
-            m_pFT_Message->Show(m_pShowDeleted->IsChecked());
+            m_xShowDeleted->set_active(pDeletedItem->GetValue());
+            m_xFT_Message->show(m_xShowDeleted->get_active());
         }
 
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     bool ODbaseDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillBool(*_rSet,m_pShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
+        fillBool(*_rSet, m_xShowDeleted.get(), DSID_SHOWDELETEDROWS, false, bChangedSomething);
         return bChangedSomething;
     }
 
-    IMPL_LINK( ODbaseDetailsPage, OnButtonClicked, Button*, pButton, void )
+    IMPL_LINK(ODbaseDetailsPage, OnButtonClicked, weld::Button&, rButton, void)
     {
-        if (m_pIndexes == pButton)
+        if (m_xIndexes.get() == &rButton)
         {
             ODbaseIndexDialog aIndexDialog(GetDialogFrameWeld(), m_sDsn);
             aIndexDialog.run();
         }
         else
         {
-            m_pFT_Message->Show(m_pShowDeleted->IsChecked());
+            m_xFT_Message->show(m_xShowDeleted->get_active());
             // it was one of the checkboxes -> we count as modified from now on
             callModifiedHdl();
         }

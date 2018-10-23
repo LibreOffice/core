@@ -90,27 +90,67 @@ namespace dbaui
         DECL_LINK(CharsetSelectHdl, ListBox&, void);
     };
 
+    class DBOCommonBehaviourTabPage : public OGenericAdministrationPage
+    {
+    protected:
+
+        OCommonBehaviourTabPageFlags m_nControlFlags;
+
+        std::unique_ptr<weld::Label> m_xOptionsLabel;
+        std::unique_ptr<weld::Entry> m_xOptions;
+
+        std::unique_ptr<weld::Label> m_xDataConvertLabel;
+        std::unique_ptr<weld::Label> m_xCharsetLabel;
+        std::unique_ptr<DBCharSetListBox> m_xCharset;
+
+        std::unique_ptr<weld::CheckButton> m_xAutoRetrievingEnabled;
+        std::unique_ptr<weld::Label> m_xAutoIncrementLabel;
+        std::unique_ptr<weld::Entry> m_xAutoIncrement;
+        std::unique_ptr<weld::Label> m_xAutoRetrievingLabel;
+        std::unique_ptr<weld::Entry> m_xAutoRetrieving;
+
+    public:
+        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
+
+        DBOCommonBehaviourTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
+    protected:
+
+        virtual ~DBOCommonBehaviourTabPage() override;
+        virtual void dispose() override;
+
+        // subclasses must override this, but it isn't pure virtual
+        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+
+        // <method>OGenericAdministrationPage::fillControls</method>
+        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+
+        // <method>OGenericAdministrationPage::fillWindows</method>
+        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+    private:
+        DECL_LINK(CharsetSelectHdl, weld::ComboBox&, void);
+    };
+
+
     // ODbaseDetailsPage
-    class ODbaseDetailsPage : public OCommonBehaviourTabPage
+    class ODbaseDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        ODbaseDetailsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        ODbaseDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~ODbaseDetailsPage() override;
-        virtual void dispose() override;
     private:
-        VclPtr<CheckBox>           m_pShowDeleted;
-        VclPtr<FixedText>          m_pFT_Message;
-        VclPtr<PushButton>         m_pIndexes;
-
         OUString            m_sDsn;
+
+        std::unique_ptr<weld::CheckButton> m_xShowDeleted;
+        std::unique_ptr<weld::Label> m_xFT_Message;
+        std::unique_ptr<weld::Button> m_xIndexes;
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
     private:
-        DECL_LINK( OnButtonClicked, Button *, void );
+        DECL_LINK(OnButtonClicked, weld::Button&, void);
     };
 
     // OAdoDetailsPage
