@@ -2126,7 +2126,20 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         return;
     }
 
-#if defined(UNX) && !defined(MACOSX)
+#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
+
+    // Painting of zoomed or hi-dpi spreadsheets is special, we actually draw
+    // everything at 100%, and only set cairo's scale factor accordingly, so
+    // that everything is painted bigger or smaller.  This is different to
+    // what Calc's internal scaling would do - because that one is trying to
+    // fit the lines between cells to integer multiples of pixels.
+    comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
+    if (doc_getDocumentType(pThis) == LOK_DOCTYPE_SPREADSHEET)
+    {
+        double fDPIScaleX = (nCanvasWidth * 3840.0) / (256.0 * nTileWidth);
+        assert(fabs(fDPIScaleX - ((nCanvasHeight * 3840.0) / (256.0 * nTileHeight))) < 0.0001);
+        comphelper::LibreOfficeKit::setDPIScale(fDPIScaleX);
+    }
 
 #if defined(IOS)
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8, nCanvasWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);

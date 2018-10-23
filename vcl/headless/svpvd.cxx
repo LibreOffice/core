@@ -25,6 +25,7 @@
 #include <headless/svpgdi.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
+#include <comphelper/lok.hxx>
 
 #include <cairo.h>
 
@@ -90,9 +91,17 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
             double fXScale, fYScale;
-            cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-            nNewDX *= fXScale;
-            nNewDY *= fYScale;
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // Force scaling of the painting
+                fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
+            }
+            else
+            {
+                cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
+                nNewDX *= fXScale;
+                nNewDY *= fYScale;
+            }
 #endif
 
             m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
