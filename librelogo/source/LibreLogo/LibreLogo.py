@@ -516,6 +516,9 @@ class LogoProgram(threading.Thread):
         with __lock__:
             __thread__ = None
 
+# to check LibreLogo program termination (in that case, return value is False)
+def __is_alive__():
+    return __thread__ != None
 
 def __encodestring__(m):
     __strings__.append(re.sub("\\[^\\]", "", m.group(2)))
