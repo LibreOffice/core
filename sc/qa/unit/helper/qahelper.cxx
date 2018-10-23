@@ -757,7 +757,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
                     CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
                 }
                 // Due to some minor differences on Mac this comparison is made bit fuzzy
-                CPPUNIT_ASSERT_LESSEQUAL( 15, abs( nHeight - nExpectedHeight ) );
+                CPPUNIT_ASSERT_LESSEQUAL( 26, abs( nHeight - nExpectedHeight ) );
             }
         }
         xShell->DoClose();

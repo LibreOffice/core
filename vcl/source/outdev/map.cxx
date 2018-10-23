@@ -472,6 +472,14 @@ long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
                              maThresRes.mnThresPixToLogY );
 }
 
+float OutputDevice::ImplFloatDevicePixelToLogicHeight(float fHeight) const
+{
+    if (!mbMap)
+        return fHeight;
+    fHeight = (fHeight * maMapRes.mnMapScDenomY) / (mnDPIY * maMapRes.mnMapScNumY);
+    return fHeight;
+}
+
 Point OutputDevice::ImplLogicToDevicePixel( const Point& rLogicPt ) const
 {
     if ( !mbMap )

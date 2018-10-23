@@ -196,8 +196,8 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , mnHeight ( rFontSelData.mnHeight )
     , mnWidth ( rFontSelData.mnWidth )
     , mnOrientation( static_cast<short>(rFontSelData.mnOrientation) )
-    , mnAscent( 0 )
-    , mnDescent( 0 )
+    , mnAscentf( 0 )
+    , mnDescentf( 0 )
     , mnIntLeading( 0 )
     , mnExtLeading( 0 )
     , mnSlant( 0 )
@@ -238,10 +238,12 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
-    long nDescent = mnDescent;
+    const long nAscentRounded = std::round(mnAscentf);
+    const long nDescentRounded = std::round(mnDescentf);
+    long nDescent = nDescentRounded;
     if ( nDescent <= 0 )
     {
-        nDescent = mnAscent / 10;
+        nDescent = nAscentRounded / 10;
         if ( !nDescent )
             nDescent = 1;
     }
@@ -249,8 +251,8 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     // #i55341# for some fonts it is not a good idea to calculate
     // their text line metrics from the real font descent
     // => work around this problem just for these fonts
-    if( 3*nDescent > mnAscent )
-        nDescent = mnAscent / 3;
+    if (3 * nDescent > nAscentRounded)
+        nDescent = nAscentRounded / 3;
 
     long nLineHeight = ((nDescent*25)+50) / 100;
     if ( !nLineHeight )
@@ -282,8 +284,8 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 
     const vcl::Font& rFont ( pDev->GetFont() );
     bool bCJKVertical = MsLangId::isCJK(rFont.GetLanguage()) && rFont.IsVertical();
-    long nUnderlineOffset = bCJKVertical ? mnDescent : (mnDescent/2 + 1);
-    long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
+    long nUnderlineOffset = bCJKVertical ? nDescentRounded : (nDescentRounded / 2 + 1);
+    long nStrikeoutOffset = -((nAscentRounded - mnIntLeading) / 3);
 
     mnUnderlineSize        = nLineHeight;
     mnUnderlineOffset      = nUnderlineOffset - nLineHeight2;
@@ -295,7 +297,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDUnderlineOffset1    = nUnderlineOffset - n2LineDY2 - n2LineHeight;
     mnDUnderlineOffset2    = mnDUnderlineOffset1 + n2LineDY + n2LineHeight;
 
-    long nWCalcSize = mnDescent;
+    long nWCalcSize = nDescentRounded;
     if ( nWCalcSize < 6 )
     {
         if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
@@ -328,12 +330,13 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 
 void ImplFontMetricData::ImplInitAboveTextLineSize()
 {
+    const long nAscentRounded = std::round(mnAscentf);
     long nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)
     // if no leading is available, we assume 15% of the ascent
     if ( nIntLeading <= 0 )
     {
-        nIntLeading = mnAscent*15/100;
+        nIntLeading = nAscentRounded * 15 / 100;
         if ( !nIntLeading )
             nIntLeading = 1;
     }
@@ -350,7 +353,7 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
     if ( !n2LineHeight )
         n2LineHeight = 1;
 
-    long nCeiling = -mnAscent;
+    long nCeiling = -nAscentRounded;
 
     mnAboveUnderlineSize       = nLineHeight;
     mnAboveUnderlineOffset     = nCeiling + (nIntLeading - nLineHeight + 1) / 2;
@@ -437,7 +440,7 @@ bool ImplFontMetricData::ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo)
 void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaData,
         const std::vector<uint8_t>& rOS2Data, int nUPEM)
 {
-    mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
+    mnAscentf = mnDescentf = mnExtLeading = mnIntLeading = 0;
 
     double fScale = static_cast<double>(mnHeight) / nUPEM;
     double fAscent = 0, fDescent = 0, fExtLeading = 0;
@@ -477,12 +480,14 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
         }
     }
 
-    mnAscent = round(fAscent);
-    mnDescent = round(fDescent);
+    mnAscentf = fAscent;
+    mnDescentf = fDescent;
     mnExtLeading = round(fExtLeading);
+    const long nAscentRounded = std::round(mnAscentf);
+    const long nDescentRounded = std::round(mnDescentf);
 
-    if (mnAscent || mnDescent)
-        mnIntLeading = mnAscent + mnDescent - mnHeight;
+    if (nAscentRounded || nDescentRounded)
+        mnIntLeading = nAscentRounded + nDescentRounded - mnHeight;
 
     SAL_INFO("vcl.gdi.fontmetric",
                   "fsSelection: "   << rInfo.fsSelection

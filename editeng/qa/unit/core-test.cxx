@@ -211,20 +211,20 @@ void Test::testLineSpacing()
     };
 
     // Test first case - 60%
-    doTest(60, 122, 153);
+    doTest(60, 128, 160);
 
     // Force multiple lines
     aEditEngine.SetPaperSize(Size(1000, 6000));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aEditEngine.GetLineCount(0));
 
     // Test second case - 150%
-    doTest(150, 337, 382);
+    doTest(150, 351, 402);
 
     // Test lower Word limit - 6% (factor 0.06)
-    doTest(6, 12, 15);
+    doTest(6, 12, 16);
 
     // Test upper Word limit - 13200% (factor 132)
-    doTest(13200, 33615, 33660);
+    doTest(13200, 35325, 35376);
 }
 #endif
 
