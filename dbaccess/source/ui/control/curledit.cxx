@@ -150,6 +150,68 @@ void OConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
         m_pForcedPrefix->Show(m_bShowPrefix);
 }
 
+DBOConnectionURLEdit::DBOConnectionURLEdit(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::Label> xForcedPrefix)
+    : m_pTypeCollection(nullptr)
+    , m_bShowPrefix(false)
+    , m_xEntry(std::move(xEntry))
+    , m_xForcedPrefix(std::move(xForcedPrefix))
+{
+}
+
+DBOConnectionURLEdit::~DBOConnectionURLEdit()
+{
+}
+
+void DBOConnectionURLEdit::SetTextNoPrefix(const OUString& _rText)
+{
+    m_xEntry->set_text(_rText);
+}
+
+OUString DBOConnectionURLEdit::GetTextNoPrefix() const
+{
+    return m_xEntry->get_text();
+}
+
+void DBOConnectionURLEdit::SetText(const OUString& _rStr)
+{
+    Selection aNoSelection(0,0);
+    SetText(_rStr, aNoSelection);
+}
+
+void DBOConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
+{
+    m_xForcedPrefix->show(m_bShowPrefix);
+
+    bool bIsEmpty = _rStr.isEmpty();
+    // calc the prefix
+    OUString sPrefix;
+    if (!bIsEmpty)
+    {
+        // determine the type of the new URL described by the new text
+        sPrefix = m_pTypeCollection->getPrefix(_rStr);
+    }
+
+    // the fixed text gets the prefix
+    m_xForcedPrefix->set_label(sPrefix);
+
+    // do the real SetText
+    OUString sNewText( _rStr );
+    if ( !bIsEmpty )
+        sNewText  = m_pTypeCollection->cutPrefix( _rStr );
+    m_xEntry->set_text(sNewText);
+}
+
+OUString DBOConnectionURLEdit::GetText() const
+{
+    return m_xForcedPrefix->get_label() + m_xEntry->get_text();
+}
+
+void DBOConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
+{
+    m_bShowPrefix = _bShowPrefix;
+    m_xForcedPrefix->show(m_bShowPrefix);
+}
+
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

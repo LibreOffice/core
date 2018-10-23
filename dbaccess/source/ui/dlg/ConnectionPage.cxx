@@ -76,52 +76,36 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    VclPtr<SfxTabPage> OConnectionTabPage::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> OConnectionTabPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<OConnectionTabPage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<OConnectionTabPage>::Create(pParent, *_rAttrSet);
     }
 
     // OConnectionTabPage
-    OConnectionTabPage::OConnectionTabPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs)
-        :OConnectionHelper(pParent, "ConnectionPage", "dbaccess/ui/connectionpage.ui", _rCoreAttrs)
+    OConnectionTabPage::OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+        : DBOConnectionHelper(pParent, "dbaccess/ui/connectionpage.ui", "ConnectionPage", _rCoreAttrs)
+        , m_xFL2(m_xBuilder->weld_label("userlabel"))
+        , m_xUserNameLabel(m_xBuilder->weld_label("userNameLabel"))
+        , m_xUserName(m_xBuilder->weld_entry("userNameEntry"))
+        , m_xPasswordRequired(m_xBuilder->weld_check_button("passCheckbutton"))
+        , m_xFL3(m_xBuilder->weld_label("JDBCLabel"))
+        , m_xJavaDriverLabel(m_xBuilder->weld_label("javaDriverLabel"))
+        , m_xJavaDriver(m_xBuilder->weld_entry("driverEntry"))
+        , m_xTestJavaDriver(m_xBuilder->weld_button("driverButton"))
+        , m_xTestConnection(m_xBuilder->weld_button("connectionButton"))
     {
-        get(m_pFL2, "userlabel");
-        get(m_pUserNameLabel, "userNameLabel");
-        get(m_pUserName, "userNameEntry");
-        get(m_pPasswordRequired, "passCheckbutton");
-        get(m_pFL3, "JDBCLabel");
-        get(m_pJavaDriverLabel, "javaDriverLabel");
-        get(m_pJavaDriver, "driverEntry");
-        get(m_pTestJavaDriver, "driverButton");
-        get(m_pTestConnection, "connectionButton");
+        m_xConnectionURL->connect_changed(LINK(this, OConnectionTabPage, OnEditModified));
+        m_xJavaDriver->connect_changed(LINK(this, OConnectionTabPage, OnEditModified));
+        m_xUserName->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
+        m_xPasswordRequired->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
 
-        m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_pJavaDriver->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
-        m_pJavaDriver->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_pUserName->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
-        m_pPasswordRequired->SetClickHdl(LINK(this, OGenericAdministrationPage, OnControlModifiedClick));
-
-        m_pTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
-        m_pTestJavaDriver->SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
+        m_xTestConnection->connect_clicked(LINK(this,OGenericAdministrationPage,OnTestConnectionButtonClickHdl));
+        m_xTestJavaDriver->connect_clicked(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
     }
 
     OConnectionTabPage::~OConnectionTabPage()
     {
         disposeOnce();
-    }
-
-    void OConnectionTabPage::dispose()
-    {
-        m_pFL2.clear();
-        m_pUserNameLabel.clear();
-        m_pUserName.clear();
-        m_pPasswordRequired.clear();
-        m_pFL3.clear();
-        m_pJavaDriverLabel.clear();
-        m_pJavaDriver.clear();
-        m_pTestJavaDriver.clear();
-        m_pTestConnection.clear();
-        OConnectionHelper::dispose();
     }
 
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -131,60 +115,60 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
-        OConnectionHelper::implInitControls( _rSet, _bSaveValue);
+        DBOConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
         ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
         switch( eType )
         {
             case  ::dbaccess::DST_DBASE:
-                m_pFT_Connection->SetText(DBA_RES(STR_DBASE_PATH_OR_FILE));
-                m_pConnectionURL->SetHelpId(HID_DSADMIN_DBASE_PATH);
+                m_xFT_Connection->set_label(DBA_RES(STR_DBASE_PATH_OR_FILE));
+                m_xConnectionURL->set_help_id(HID_DSADMIN_DBASE_PATH);
                 break;
             case  ::dbaccess::DST_FLAT:
-                m_pFT_Connection->SetText(DBA_RES(STR_FLAT_PATH_OR_FILE));
-                m_pConnectionURL->SetHelpId(HID_DSADMIN_FLAT_PATH);
+                m_xFT_Connection->set_label(DBA_RES(STR_FLAT_PATH_OR_FILE));
+                m_xConnectionURL->set_help_id(HID_DSADMIN_FLAT_PATH);
                 break;
             case  ::dbaccess::DST_CALC:
-                m_pFT_Connection->SetText(DBA_RES(STR_CALC_PATH_OR_FILE));
-                m_pConnectionURL->SetHelpId(HID_DSADMIN_CALC_PATH);
+                m_xFT_Connection->set_label(DBA_RES(STR_CALC_PATH_OR_FILE));
+                m_xConnectionURL->set_help_id(HID_DSADMIN_CALC_PATH);
                 break;
             case  ::dbaccess::DST_WRITER:
-                m_pFT_Connection->SetText(DBA_RES(STR_WRITER_PATH_OR_FILE));
-                m_pConnectionURL->SetHelpId(HID_DSADMIN_WRITER_PATH);
+                m_xFT_Connection->set_label(DBA_RES(STR_WRITER_PATH_OR_FILE));
+                m_xConnectionURL->set_help_id(HID_DSADMIN_WRITER_PATH);
                 break;
             case  ::dbaccess::DST_ADO:
-                m_pFT_Connection->SetText(DBA_RES(STR_COMMONURL));
+                m_xFT_Connection->set_label(DBA_RES(STR_COMMONURL));
                 break;
             case  ::dbaccess::DST_MSACCESS:
             case  ::dbaccess::DST_MSACCESS_2007:
-                m_pFT_Connection->SetText(DBA_RES(STR_MSACCESS_MDB_FILE));
-                m_pConnectionURL->SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
+                m_xFT_Connection->set_label(DBA_RES(STR_MSACCESS_MDB_FILE));
+                m_xConnectionURL->set_help_id(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
             case  ::dbaccess::DST_MYSQL_NATIVE:
             case  ::dbaccess::DST_MYSQL_JDBC:
-                m_pFT_Connection->SetText(DBA_RES(STR_MYSQL_DATABASE_NAME));
-                m_pConnectionURL->SetHelpId( HID_DSADMIN_MYSQL_DATABASE );
+                m_xFT_Connection->set_label(DBA_RES(STR_MYSQL_DATABASE_NAME));
+                m_xConnectionURL->set_help_id( HID_DSADMIN_MYSQL_DATABASE );
                 break;
             case  ::dbaccess::DST_ORACLE_JDBC:
-                m_pFT_Connection->SetText(DBA_RES(STR_ORACLE_DATABASE_NAME));
-                m_pConnectionURL->SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
+                m_xFT_Connection->set_label(DBA_RES(STR_ORACLE_DATABASE_NAME));
+                m_xConnectionURL->set_help_id(HID_DSADMIN_ORACLE_DATABASE);
                 break;
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
-                m_pFT_Connection->SetText(DBA_RES(STR_NAME_OF_ODBC_DATASOURCE));
-                m_pConnectionURL->SetHelpId( eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
+                m_xFT_Connection->set_label(DBA_RES(STR_NAME_OF_ODBC_DATASOURCE));
+                m_xConnectionURL->set_help_id( eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
                 break;
             case  ::dbaccess::DST_LDAP:
-                m_pFT_Connection->SetText(DBA_RES(STR_HOSTNAME));
-                m_pConnectionURL->SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
+                m_xFT_Connection->set_label(DBA_RES(STR_HOSTNAME));
+                m_xConnectionURL->set_help_id( HID_DSADMIN_LDAP_HOSTNAME );
                 break;
             case  ::dbaccess::DST_MOZILLA:
-                m_pFT_Connection->SetText(DBA_RES(STR_MOZILLA_PROFILE_NAME));
-                m_pConnectionURL->SetHelpId( HID_DSADMIN_MOZILLA_PROFILE_NAME );
+                m_xFT_Connection->set_label(DBA_RES(STR_MOZILLA_PROFILE_NAME));
+                m_xConnectionURL->set_help_id( HID_DSADMIN_MOZILLA_PROFILE_NAME );
                 break;
             case  ::dbaccess::DST_THUNDERBIRD:
-                m_pFT_Connection->SetText(DBA_RES(STR_THUNDERBIRD_PROFILE_NAME));
-                m_pConnectionURL->SetHelpId( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
+                m_xFT_Connection->set_label(DBA_RES(STR_THUNDERBIRD_PROFILE_NAME));
+                m_xConnectionURL->set_help_id( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
                 break;
             case  ::dbaccess::DST_OUTLOOK:
             case  ::dbaccess::DST_OUTLOOKEXP:
@@ -193,18 +177,18 @@ namespace dbaui
             case  ::dbaccess::DST_EVOLUTION_LDAP:
             case  ::dbaccess::DST_KAB:
             case  ::dbaccess::DST_MACAB:
-                m_pFT_Connection->SetText(DBA_RES(STR_NO_ADDITIONAL_SETTINGS));
+                m_xFT_Connection->set_label(DBA_RES(STR_NO_ADDITIONAL_SETTINGS));
                 {
-                    OUString sText = m_pFT_Connection->GetText();
-                    sText = sText.replaceAll("%test",m_pTestConnection->GetText());
+                    OUString sText = m_xFT_Connection->get_label();
+                    sText = sText.replaceAll("%test",m_xTestConnection->get_label());
                     sText = sText.replaceAll("~","");
-                    m_pFT_Connection->SetText(sText);
+                    m_xFT_Connection->set_label(sText);
                 }
-                m_pConnectionURL->Hide();
+                m_xConnectionURL->hide();
                 break;
             case  ::dbaccess::DST_JDBC:
             default:
-                m_pFT_Connection->SetText(DBA_RES(STR_COMMONURL));
+                m_xFT_Connection->set_label(DBA_RES(STR_COMMONURL));
                 break;
         }
 
@@ -212,13 +196,11 @@ namespace dbaui
         bool bShowUserAuthenfication = ( eAuthMode != AuthNone );
         bool bShowUser = ( eAuthMode == AuthUserPwd );
 
-        m_pPB_Connection->SetHelpId(HID_DSADMIN_BROWSECONN);
-        m_pFL2->Show( bShowUserAuthenfication );
-        m_pUserNameLabel->Show( bShowUser && bShowUserAuthenfication );
-        m_pUserName->Show( bShowUser && bShowUserAuthenfication );
-        m_pPasswordRequired->Show( bShowUserAuthenfication );
-        if ( !bShowUser && bShowUserAuthenfication )
-            m_pPasswordRequired->SetPosPixel(m_pUserNameLabel->GetPosPixel());
+        m_xPB_Connection->set_help_id(HID_DSADMIN_BROWSECONN);
+        m_xFL2->show( bShowUserAuthenfication );
+        m_xUserNameLabel->show( bShowUser && bShowUserAuthenfication );
+        m_xUserName->show( bShowUser && bShowUserAuthenfication );
+        m_xPasswordRequired->show( bShowUserAuthenfication );
 
         // collect the items
         const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
@@ -230,8 +212,8 @@ namespace dbaui
         // forward the values to the controls
         if ( bValid )
         {
-            m_pUserName->SetText(pUidItem->GetValue());
-            m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
+            m_xUserName->set_text(pUidItem->GetValue());
+            m_xPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
 
             const OUString& sUrl = pUrlItem->GetValue();
             setURL( sUrl );
@@ -241,25 +223,22 @@ namespace dbaui
             {
                 OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
                 if ( !sDefaultJdbcDriverName.isEmpty() )
-                {
-                    m_pJavaDriver->SetText(sDefaultJdbcDriverName);
-                    m_pJavaDriver->SetModifyFlag();
-                }
+                    m_xJavaDriver->set_text(sDefaultJdbcDriverName);
             }
             else
-                m_pJavaDriver->SetText(pJdbcDrvItem->GetValue());
+                m_xJavaDriver->set_text(pJdbcDrvItem->GetValue());
 
-            m_pJavaDriverLabel->Show(bEnableJDBC);
-            m_pJavaDriver->Show(bEnableJDBC);
-            m_pTestJavaDriver->Show(bEnableJDBC);
-            m_pTestJavaDriver->Enable( !m_pJavaDriver->GetText().trim().isEmpty() );
-            m_pFL3->Show(bEnableJDBC);
+            m_xJavaDriverLabel->show(bEnableJDBC);
+            m_xJavaDriver->show(bEnableJDBC);
+            m_xTestJavaDriver->show(bEnableJDBC);
+            m_xTestJavaDriver->set_sensitive( !m_xJavaDriver->get_text().trim().isEmpty() );
+            m_xFL3->show(bEnableJDBC);
 
             checkTestConnection();
 
-            m_pUserName->ClearModifyFlag();
-            m_pConnectionURL->ClearModifyFlag();
-            m_pJavaDriver->ClearModifyFlag();
+            m_xUserName->save_value();
+            m_xConnectionURL->save_value();
+            m_xJavaDriver->save_value();
         }
     }
 
@@ -267,36 +246,36 @@ namespace dbaui
     {
         bool bChangedSomething = false;
 
-        if (m_pUserName->IsValueChangedFromSaved())
+        if (m_xUserName->get_value_changed_from_saved())
         {
-            _rSet->Put(SfxStringItem(DSID_USER, m_pUserName->GetText()));
+            _rSet->Put(SfxStringItem(DSID_USER, m_xUserName->get_text()));
             _rSet->Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
 
-        fillBool(*_rSet,m_pPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,m_xPasswordRequired.get(),DSID_PASSWORDREQUIRED,false, bChangedSomething);
 
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
         {
-            fillString(*_rSet,m_pJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
+            fillString(*_rSet,m_xJavaDriver.get(), DSID_JDBCDRIVERCLASS, bChangedSomething);
         }
 
-        fillString(*_rSet,m_pConnectionURL, DSID_CONNECTURL, bChangedSomething);
+        fillString(*_rSet,m_xConnectionURL.get(), DSID_CONNECTURL, bChangedSomething);
 
         return bChangedSomething;
     }
-    IMPL_LINK_NOARG(OConnectionTabPage, OnTestJavaClickHdl, Button*, void)
+    IMPL_LINK_NOARG(OConnectionTabPage, OnTestJavaClickHdl, weld::Button&, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_pJavaDriver->GetText().trim().isEmpty() )
+            if ( !m_xJavaDriver->get_text().trim().isEmpty() )
             {
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                m_pJavaDriver->SetText(m_pJavaDriver->GetText().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pJavaDriver->GetText().trim());
+                m_xJavaDriver->set_text(m_xJavaDriver->get_text().trim()); // fdo#68341
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xJavaDriver->get_text().trim());
             }
         }
         catch(Exception&)
@@ -312,16 +291,16 @@ namespace dbaui
     bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        bool bEnableTestConnection = !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
+        bool bEnableTestConnection = !m_xConnectionURL->get_visible() || !m_xConnectionURL->GetTextNoPrefix().isEmpty();
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
-            bEnableTestConnection = bEnableTestConnection && (!m_pJavaDriver->GetText().trim().isEmpty());
-        m_pTestConnection->Enable(bEnableTestConnection);
+            bEnableTestConnection = bEnableTestConnection && (!m_xJavaDriver->get_text().trim().isEmpty());
+        m_xTestConnection->set_sensitive(bEnableTestConnection);
         return true;
     }
-    IMPL_LINK(OConnectionTabPage, OnEditModified, Edit&, _rEdit, void)
+    IMPL_LINK(OConnectionTabPage, OnEditModified, weld::Entry&, rEdit, void)
     {
-        if ( &_rEdit == m_pJavaDriver )
-            m_pTestJavaDriver->Enable( !m_pJavaDriver->GetText().trim().isEmpty() );
+        if (&rEdit == m_xJavaDriver.get())
+            m_xTestJavaDriver->set_sensitive( !m_xJavaDriver->get_text().trim().isEmpty() );
 
         checkTestConnection();
         // tell the listener we were modified
