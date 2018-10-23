@@ -92,9 +92,9 @@ void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
     }
 }
 
-short ODateTimeDialog::execute()
+short ODateTimeDialog::run()
 {
-    short nRet = m_xDialog->run();
+    short nRet = GenericDialogController::run();
     if (nRet == RET_OK && (m_xDate->get_active() || m_xTime->get_active()))
     {
         try

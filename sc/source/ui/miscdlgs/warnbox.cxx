@@ -33,12 +33,12 @@ ScReplaceWarnBox::ScReplaceWarnBox(weld::Window* pParent)
     m_xDialog->set_default_response(RET_YES);
 }
 
-short ScReplaceWarnBox::execute()
+short ScReplaceWarnBox::run()
 {
     short nRet = RET_YES;
     if( SC_MOD()->GetInputOptions().GetReplaceCellsWarn() )
     {
-        nRet = m_xDialog->run();
+        nRet = MessageDialogController::run();
         if (!m_xWarningOnBox->get_active())
         {
             ScModule* pScMod = SC_MOD();

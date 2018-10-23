@@ -226,9 +226,9 @@ sal_Unicode SwSortDlg::GetDelimChar() const
     return cRet;
 }
 
-short SwSortDlg::execute()
+short SwSortDlg::run()
 {
-    short nRet = run();
+    short nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

@@ -116,12 +116,12 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     }
 }
 
-short ScInsertTableDlg::execute()
+short ScInsertTableDlg::run()
 {
     if (m_xBtnFromFile->get_active())
         aBrowseTimer.Start();
 
-    return m_xDialog->run();
+    return GenericDialogController::run();
 }
 
 void ScInsertTableDlg::SetNewTable_Impl()

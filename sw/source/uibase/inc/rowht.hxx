@@ -38,7 +38,7 @@ private:
 
 public:
     SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS);
-    short execute();
+    virtual short run() override;
 };
 
 #endif

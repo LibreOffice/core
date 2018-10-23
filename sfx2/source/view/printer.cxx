@@ -187,13 +187,14 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
     pPage.disposeAndClear();
 }
 
-short SfxPrintOptionsDialog::execute()
+short SfxPrintOptionsDialog::run()
 {
-    if( ! pPage )
+    if (!pPage)
         return RET_CANCEL;
 
-    short nRet = m_xDialog->run();
-    if ( nRet == RET_OK )
+    short nRet = GenericDialogController::run();
+
+    if (nRet == RET_OK)
         pPage->FillItemSet( pOptions.get() );
     else
         pPage->Reset( pOptions.get() );

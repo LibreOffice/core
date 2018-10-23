@@ -79,7 +79,7 @@ public:
     SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
                     bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat);
 
-    short execute();
+    virtual short run() override;
 
     SwTableAutoFormat* FillAutoFormatOfIndex() const;
 

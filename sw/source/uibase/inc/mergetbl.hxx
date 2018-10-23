@@ -31,7 +31,7 @@ private:
 
 public:
     SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev);
-    short execute();
+    virtual short run() override;
 };
 
 #endif

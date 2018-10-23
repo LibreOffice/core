@@ -71,9 +71,9 @@ public:
             return m_xNumberCharEdit->get_text();
         return OUString();
     }
-    short execute()
+    virtual short run() override
     {
-        short nRet = run();
+        short nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;

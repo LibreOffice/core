@@ -141,7 +141,7 @@ private:
 
 public:
     SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, const bool bInsert=true);
-    short execute();
+    virtual short run() override;
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
 

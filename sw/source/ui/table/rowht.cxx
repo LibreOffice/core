@@ -70,9 +70,9 @@ SwTableHeightDlg::SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS)
     }
 }
 
-short SwTableHeightDlg::execute()
+short SwTableHeightDlg::run()
 {
-    short nRet = run();
+    short nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

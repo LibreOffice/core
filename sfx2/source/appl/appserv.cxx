@@ -319,9 +319,9 @@ namespace
         {
         }
 
-        short execute()
+        virtual short run() override
         {
-            short nRet = m_xDialog->run();
+            short nRet = GenericDialogController::run();
             if (nRet == RET_OK)
                 showDocument("LICENSE");
             return nRet;
@@ -336,9 +336,9 @@ namespace
         {
         }
 
-        short execute()
+        virtual short run() override
         {
-            short nRet = m_xDialog->run();
+            short nRet = MessageDialogController::run();
             if (nRet == RET_OK)
             {
                 sfx2::SafeMode::putFlag();
@@ -574,7 +574,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());
-            aDialog.execute();
+            aDialog.run();
             break;
         }
 
@@ -1035,7 +1035,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SAFE_MODE:
         {
             SafeModeQueryDialog aDialog(rReq.GetFrameWeld());
-            aDialog.execute();
+            aDialog.run();
             break;
         }
 

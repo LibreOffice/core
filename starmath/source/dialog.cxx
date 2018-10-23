@@ -1221,7 +1221,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, weld::Button&, void)
     sal_uInt16 nSymPos = m_xSymbolSetDisplay->GetSelectSymbol();
 
     // adapt dialog to data of the SymbolSet manager, which might have changed
-    if (aDialog.execute() == RET_OK && rSymbolMgr.IsModified())
+    if (aDialog.run() == RET_OK && rSymbolMgr.IsModified())
     {
         rSymbolMgr.Save();
         FillSymbolSets();
@@ -1759,9 +1759,9 @@ SmSymDefineDialog::~SmSymDefineDialog()
 {
 }
 
-short SmSymDefineDialog::execute()
+short SmSymDefineDialog::run()
 {
-    short nResult = m_xDialog->run();
+    short nResult = GenericDialogController::run();
 
     // apply changes if dialog was closed by clicking OK
     if (m_aSymbolMgrCopy.IsModified() && nResult == RET_OK)

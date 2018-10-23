@@ -37,7 +37,7 @@ private:
 
 public:
     SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc);
-    short execute();
+    virtual short run() override;
 };
 
 #endif

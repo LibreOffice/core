@@ -850,9 +850,9 @@ ScDPShowDetailDlg::~ScDPShowDetailDlg()
 {
 }
 
-short ScDPShowDetailDlg::execute()
+short ScDPShowDetailDlg::run()
 {
-    return mxLbDims->n_children() ? m_xDialog->run() : static_cast<short>(RET_CANCEL);
+    return mxLbDims->n_children() ? GenericDialogController::run() : static_cast<short>(RET_CANCEL);
 }
 
 OUString ScDPShowDetailDlg::GetDimensionName() const

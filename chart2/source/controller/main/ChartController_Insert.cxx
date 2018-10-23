@@ -398,7 +398,7 @@ void ChartController::executeDispatch_InsertTrendline()
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    if( aDialog.execute() == RET_OK || aDialog.DialogWasClosedWithOK())
+    if( aDialog.run() == RET_OK || aDialog.DialogWasClosedWithOK())
     {
         const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
         if( pOutItemSet )
@@ -459,7 +459,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        if (aDlg.execute() == RET_OK || aDlg.DialogWasClosedWithOK())
+        if (aDlg.run() == RET_OK || aDlg.DialogWasClosedWithOK())
         {
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if( pOutItemSet )

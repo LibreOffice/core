@@ -395,9 +395,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
     m_xBtnRename->set_sensitive(bBtnEnable);
 }
 
-short SwAutoFormatDlg::execute()
+short SwAutoFormatDlg::run()
 {
-    short nRet = m_xDialog->run();
+    short nRet = SfxDialogController::run();
     if (nRet == RET_OK && m_bSetAutoFormat)
         m_pShell->SetTableStyle((*m_xTableTable)[m_nIndex]);
     return nRet;

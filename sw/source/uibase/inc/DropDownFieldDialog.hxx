@@ -51,9 +51,9 @@ public:
     virtual ~DropDownFieldDialog() override;
     bool PrevButtonPressed() const;
     bool NextButtonPressed() const;
-    short execute()
+    virtual short run() override
     {
-        short nRet = run();
+        short nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;

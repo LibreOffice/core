@@ -23,9 +23,9 @@ SignatureLineDialogBase::SignatureLineDialogBase(weld::Widget* pParent, Referenc
 {
 }
 
-short SignatureLineDialogBase::execute()
+short SignatureLineDialogBase::run()
 {
-    short nRet = run();
+    short nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

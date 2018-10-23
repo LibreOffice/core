@@ -35,9 +35,9 @@
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 
-short SwBreakDlg::execute()
+short SwBreakDlg::run()
 {
-    short nRet = m_xDialog->run();
+    short nRet = GenericDialogController::run();
     if (nRet == RET_OK)
     {
         nKind = 0;

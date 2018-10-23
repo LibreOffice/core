@@ -77,9 +77,9 @@ public:
     void      SetCharacterStyle(const OUString& rStyle);
     OUString  GetCharacterStyle() const;
 
-    short execute()
+    virtual short run() override
     {
-        int nRet = run();
+        int nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;

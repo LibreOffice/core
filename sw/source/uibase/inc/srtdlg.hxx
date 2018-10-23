@@ -81,7 +81,7 @@ class SwSortDlg : public weld::GenericDialogController
 
 public:
     SwSortDlg(weld::Window * pParent, SwWrtShell &rSh);
-    short execute();
+    virtual short run() override;
 };
 
 #endif

@@ -810,11 +810,11 @@ void SvxJavaParameterDlg::EditParameter()
     }
 }
 
-short SvxJavaParameterDlg::execute()
+short SvxJavaParameterDlg::run()
 {
     m_xParameterEdit->grab_focus();
     m_xAssignedList->select(-1);
-    return m_xDialog->run();
+    return GenericDialogController::run();
 }
 
 std::vector< OUString > SvxJavaParameterDlg::GetParameters() const

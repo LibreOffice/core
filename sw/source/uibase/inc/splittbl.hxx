@@ -41,9 +41,9 @@ private:
 public:
     SwSplitTableDlg(weld::Window *pParent, SwWrtShell &rSh);
 
-    short execute()
+    virtual short run() override
     {
-        short nRet = m_xDialog->run();
+        short nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;
