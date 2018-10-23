@@ -44,11 +44,11 @@ struct SalPrinterQueueInfo;
 class SalPrinter;
 class VirtualDevice;
 enum class SalPrinterError;
-namespace vcl { class Window; }
 
 namespace vcl {
     class PrinterController;
     class PrintDialog;
+    class Window;
 }
 
 namespace weld { class Window; }

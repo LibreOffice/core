@@ -2831,7 +2831,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     {
         // #i75566# Do not use AutoColor when printing OR Pdf export
         const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
-        const bool bPDFExporting(nullptr != pOut->GetPDFWriter());
+        const bool bPDFExporting(OUTDEV_PDF == pOut->GetOutDevType());
 
         if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
         {

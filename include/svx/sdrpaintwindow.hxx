@@ -115,7 +115,7 @@ public:
     bool OutputToWindow() const { return (OUTDEV_WINDOW == mpOutputDevice->GetOutDevType()); }
 
     // Is OutDev a VirtualDevice?
-    bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mpOutputDevice->GetOutDevType()); }
+    bool OutputIsVirtualDevice() const { return mpOutputDevice->IsVirtual(); }
 
     // Is OutDev a recording MetaFile?
     bool OutputToRecordingMetaFile() const;
