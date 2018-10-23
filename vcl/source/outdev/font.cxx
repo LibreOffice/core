@@ -214,7 +214,7 @@ FontMetric OutputDevice::GetFontMetric() const
     // set aMetric with info from font
     aMetric.SetFamilyName( maFont.GetFamilyName() );
     aMetric.SetStyleName( xFontMetric->GetStyleName() );
-    aMetric.SetFontSize( PixelToLogic( Size( xFontMetric->GetWidth(), xFontMetric->GetAscent() + xFontMetric->GetDescent() - xFontMetric->GetInternalLeading() ) ) );
+    aMetric.SetFontSize( PixelToLogic( Size( xFontMetric->GetWidth(), long(xFontMetric->GetAscentf()) + long(xFontMetric->GetDescentf()) - xFontMetric->GetInternalLeading() ) ) );
     aMetric.SetCharSet( xFontMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
     aMetric.SetFamily( xFontMetric->GetFamilyType() );
     aMetric.SetPitch( xFontMetric->GetPitch() );
@@ -230,12 +230,12 @@ FontMetric OutputDevice::GetFontMetric() const
     // set remaining metric fields
     aMetric.SetFullstopCenteredFlag( xFontMetric->IsFullstopCentered() );
     aMetric.SetBulletOffset( xFontMetric->GetBulletOffset() );
-    aMetric.SetAscent( ImplDevicePixelToLogicHeight( xFontMetric->GetAscent() + mnEmphasisAscent ) );
-    aMetric.SetDescent( ImplDevicePixelToLogicHeight( xFontMetric->GetDescent() + mnEmphasisDescent ) );
+    aMetric.SetAscent( long(ImplFloatDevicePixelToLogicHeight( xFontMetric->GetAscentf() + mnEmphasisAscent ) ));
+    aMetric.SetDescent( long(ImplFloatDevicePixelToLogicHeight( xFontMetric->GetDescentf() + mnEmphasisDescent )) );
     aMetric.SetInternalLeading( ImplDevicePixelToLogicHeight( xFontMetric->GetInternalLeading() + mnEmphasisAscent ) );
     // OutputDevice has its own external leading function due to #i60945#
     aMetric.SetExternalLeading( ImplDevicePixelToLogicHeight( GetFontExtLeading() ) );
-    aMetric.SetLineHeight( ImplDevicePixelToLogicHeight( xFontMetric->GetAscent() + xFontMetric->GetDescent() + mnEmphasisAscent + mnEmphasisDescent ) );
+    aMetric.SetLineHeight( std::round(ImplFloatDevicePixelToLogicHeight( xFontMetric->GetAscentf() + xFontMetric->GetDescentf() + mnEmphasisAscent + mnEmphasisDescent )) );
     aMetric.SetSlant( ImplDevicePixelToLogicHeight( xFontMetric->GetSlant() ) );
 
     // get miscellaneous data
@@ -1095,7 +1095,8 @@ bool OutputDevice::ImplNewFont() const
             pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
             pFontInstance->mxFontMetric->ImplInitFlags( this );
 
-            pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
+            pFontInstance->mfLineHeight = pFontInstance->mxFontMetric->GetAscentf()
+                                          + pFontInstance->mxFontMetric->GetDescentf();
 
             SetFontOrientation( pFontInstance );
         }
@@ -1107,7 +1108,7 @@ bool OutputDevice::ImplNewFont() const
     if ( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
     {
         FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-        long                nEmphasisHeight = (pFontInstance->mnLineHeight*250)/1000;
+        long                nEmphasisHeight = (pFontInstance->mfLineHeight*250)/1000;
         if ( nEmphasisHeight < 1 )
             nEmphasisHeight = 1;
         if ( nEmphasisMark & FontEmphasisMark::PosBelow )
@@ -1126,7 +1127,7 @@ bool OutputDevice::ImplNewFont() const
     else if ( eAlign == ALIGN_TOP )
     {
         mnTextOffX = 0;
-        mnTextOffY = +pFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
+        mnTextOffY = +std::round(pFontInstance->mxFontMetric->GetAscentf()) + mnEmphasisAscent;
         if ( pFontInstance->mnOrientation )
         {
             Point aOriginPt(0, 0);
@@ -1136,7 +1137,7 @@ bool OutputDevice::ImplNewFont() const
     else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
-        mnTextOffY = -pFontInstance->mxFontMetric->GetDescent() + mnEmphasisDescent;
+        mnTextOffY = -std::round(pFontInstance->mxFontMetric->GetDescentf()) + mnEmphasisDescent;
         if ( pFontInstance->mnOrientation )
         {
             Point aOriginPt(0, 0);
@@ -1271,9 +1272,9 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Point aOffset = Point(0,0);
 
     if ( nEmphasisMark & FontEmphasisMark::PosBelow )
-        aOffset.AdjustY(mpFontInstance->mxFontMetric->GetDescent() + nEmphasisYOff );
+        aOffset.AdjustY(std::round(mpFontInstance->mxFontMetric->GetDescentf()) + nEmphasisYOff );
     else
-        aOffset.AdjustY( -(mpFontInstance->mxFontMetric->GetAscent() + nEmphasisYOff) );
+        aOffset.AdjustY( -(std::round(mpFontInstance->mxFontMetric->GetAscentf()) + nEmphasisYOff) );
 
     long nEmphasisWidth2  = nEmphasisWidth / 2;
     long nEmphasisHeight2 = nEmphasisHeight / 2;

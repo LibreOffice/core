@@ -1871,6 +1871,7 @@ private:
      @returns Height in logical units.
      */
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
+    SAL_DLLPRIVATE float ImplFloatDevicePixelToLogicHeight(float fHeight) const;
 
     /** Convert logical height to device pixels, with exact sub-pixel value.
 

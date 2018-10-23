@@ -6314,7 +6314,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
     setOverlineColor( rFont.GetColor() );
     updateGraphicsState();
 
-    long nOff = 1 + ((m_pReferenceDevice->mpFontInstance->mnLineHeight-24)/24);
+    long nOff = 1 + std::round((m_pReferenceDevice->mpFontInstance->mfLineHeight-24)/24);
     if( rFont.IsOutline() )
         nOff++;
     rLayout.DrawBase() += Point( nOff, nOff );
@@ -6926,18 +6926,18 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     Point aOffset = Point(0,0);
 
     if ( nEmphMark & FontEmphasisMark::PosBelow )
-        aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent() + nEmphYOff );
+        aOffset.AdjustY(std::round(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescentf()) + nEmphYOff );
     else
-        aOffset.AdjustY( -(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() + nEmphYOff) );
+        aOffset.AdjustY( -(std::round(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscentf()) + nEmphYOff) );
 
     long nEmphWidth2     = nEmphWidth / 2;
     long nEmphHeight2    = nEmphHeight / 2;
     aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
     if ( eAlign == ALIGN_BOTTOM )
-        aOffset.AdjustY( -(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent()) );
+        aOffset.AdjustY( -(std::round(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescentf())) );
     else if ( eAlign == ALIGN_TOP )
-        aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() );
+        aOffset.AdjustY(std::round(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscentf()) );
 
     nIndex = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
@@ -7649,9 +7649,9 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     Point aPos( rPos );
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
     if( eAlign == ALIGN_TOP )
-        aPos.AdjustY(HCONV( pFontInstance->mxFontMetric->GetAscent() ));
+        aPos.AdjustY(HCONV( std::round(pFontInstance->mxFontMetric->GetAscentf()) ));
     else if( eAlign == ALIGN_BOTTOM )
-        aPos.AdjustY( -HCONV( pFontInstance->mxFontMetric->GetDescent() ) );
+        aPos.AdjustY( -HCONV( std::round(pFontInstance->mxFontMetric->GetDescentf()) ) );
 
     OStringBuffer aLine( 512 );
     // save GS
