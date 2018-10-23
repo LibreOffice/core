@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    ,
+                            const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
                             const geometry::Matrix2D&                       rFontMatrix,
                             rendering::XGraphicDevice&                      rDevice,
                             const OutDevProviderSharedPtr&                  rOutDevProvider ) :
@@ -82,6 +82,13 @@ namespace vclcanvas
 
             rOutDev.EnableMapMode(bOldMapState);
         }
+
+        sal_uInt32 nEmphasisMark = 0;
+
+        ::canvas::tools::extractExtraFontProperties(rExtraFontProperties, nEmphasisMark);
+
+        if (nEmphasisMark)
+            maFont->SetEmphasisMark(FontEmphasisMark(nEmphasisMark));
     }
 
     void SAL_CALL CanvasFont::disposing()

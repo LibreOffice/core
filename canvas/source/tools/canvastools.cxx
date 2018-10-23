@@ -1309,6 +1309,17 @@ namespace canvas
                     p2ndOutDev->SetClipRegion( aClipRegion );
             }
         }
+
+        void extractExtraFontProperties(const uno::Sequence<beans::PropertyValue>& rExtraFontProperties,
+                        sal_uInt32 &rEmphasisMark)
+        {
+            for(sal_Int32 nIdx = 0; nIdx < rExtraFontProperties.getLength(); ++nIdx)
+            {
+                if (rExtraFontProperties[nIdx].Name == "EmphasisMark")
+                    rExtraFontProperties[0].Value >>= rEmphasisMark;
+            }
+        }
+
     } // namespace tools
 
 } // namespace canvas

@@ -71,6 +71,10 @@ namespace com { namespace sun { namespace star { namespace awt
     class  XWindow2;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace beans {
+    struct PropertyValue;
+} } } }
+
 class Color;
 class OutputDevice;
 
@@ -549,6 +553,9 @@ namespace canvas
                         const css::rendering::RenderState& renderState,
                         OutputDevice& rOutDev,
                         OutputDevice* p2ndOutDev=nullptr);
+
+        CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
+                        sal_uInt32& rEmphasisMark);
     }
 }
 
