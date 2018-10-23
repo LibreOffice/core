@@ -707,14 +707,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 rSet.Put( SfxInt16Item( nWhich, nTab+1 ) );
                 break;
 
-            case SID_RANGE_VALUE:
-                {
-                    double nValue;
-                    pDoc->GetValue( nPosX, nPosY, nTab, nValue );
-                    rSet.Put( ScDoubleItem( nWhich, nValue ) );
-                }
-                break;
-
             case SID_RANGE_FORMULA:
                 {
                     OUString aString;
