@@ -112,7 +112,7 @@ static void GetOldStyleDicsInDir(
                     continue;
 
                 // Thus we first get the language of the dictionary
-                OUString aLocaleName(aLangTag.getBcp47());
+                const OUString& aLocaleName(aLangTag.getBcp47());
 
                 if (aDicLangInUse.insert(aLocaleName).second)
                 {

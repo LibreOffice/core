@@ -404,7 +404,7 @@ void OObjectBase::SetPropsFromRect(const tools::Rectangle& _rRect)
     OReportPage* pPage = dynamic_cast<OReportPage*>(GetImplPage());
     if ( pPage && !_rRect.IsEmpty() )
     {
-        uno::Reference<report::XSection> xSection = pPage->getSection();
+        const uno::Reference<report::XSection>& xSection = pPage->getSection();
         assert(_rRect.getHeight() >= 0);
         const sal_uInt32 newHeight( ::std::max(0l, _rRect.getHeight()+_rRect.Top()) );
         if ( xSection.is() && ( newHeight > xSection->getHeight() ) )

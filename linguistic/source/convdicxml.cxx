@@ -329,9 +329,8 @@ void ConvDicXMLExport::ExportContent_()
     for (auto const& elem : rDic.aFromLeft)
         aKeySet.insert( elem.first );
 
-    for (auto const& elem : aKeySet)
+    for (const OUString& aLeftText : aKeySet)
     {
-        OUString aLeftText(elem);
         AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
         if (rDic.pConvPropType) // property-type list available?
         {
@@ -348,10 +347,10 @@ void ConvDicXMLExport::ExportContent_()
                 "entry" , true, true );
 
         pair< ConvMap::iterator, ConvMap::iterator > aRange =
-                rDic.aFromLeft.equal_range(elem);
+                rDic.aFromLeft.equal_range(aLeftText);
         for (auto aIt = aRange.first;  aIt != aRange.second;  ++aIt)
         {
-            DBG_ASSERT( elem == (*aIt).first, "key <-> entry mismatch" );
+            DBG_ASSERT( aLeftText == (*aIt).first, "key <-> entry mismatch" );
             OUString aRightText( (*aIt).second );
             SvXMLElementExport aEntryRightText( *this, XML_NAMESPACE_TCD,
                     "right-text" , true, false );

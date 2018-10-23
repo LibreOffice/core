@@ -716,7 +716,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
                 {
                     bOnlyOnce = true;
                     OReportSection* pReportSection = aRectIter->second.second->getReportSection();
-                    const uno::Reference< report::XSection> xSection = pReportSection->getSection();
+                    const uno::Reference< report::XSection>& xSection = pReportSection->getSection();
                     try
                     {
                         uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
