@@ -757,24 +757,21 @@ namespace dbaui
     }
 
     // OLDAPDetailsPage
-    OLDAPDetailsPage::OLDAPDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, "LDAP", "dbaccess/ui/ldappage.ui", _rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+    OLDAPDetailsPage::OLDAPDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/ldappage.ui", "LDAP",
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+        , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
+        , m_xCBUseSSL(m_xBuilder->weld_check_button("useSSLCheckbutton"))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumberSpinbutton"))
+        , m_xNFRowCount(m_xBuilder->weld_spin_button("LDAPRowCountspinbutton"))
     {
-        get(m_pETBaseDN, "baseDNEntry");
-        get(m_pCBUseSSL, "useSSLCheckbutton");
-        get(m_pNFPortNumber, "portNumberSpinbutton");
-        m_pNFPortNumber->SetUseThousandSep(false);
-        get(m_pNFRowCount, "LDAPRowCountspinbutton");
+        m_xETBaseDN->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+        m_xNFPortNumber->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));
+        m_xNFRowCount->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));
 
-        m_pETBaseDN->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
-        m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
-        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
-        m_pNFRowCount->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
-
-        m_pNFRowCount->SetUseThousandSep(false);
         m_iNormalPort = 389;
         m_iSSLPort    = 636;
-        m_pCBUseSSL->SetClickHdl(LINK(this, OLDAPDetailsPage,OnCheckBoxClick));
+        m_xCBUseSSL->connect_toggled(LINK(this, OLDAPDetailsPage, OnCheckBoxClick));
     }
 
     OLDAPDetailsPage::~OLDAPDetailsPage()
@@ -782,45 +779,35 @@ namespace dbaui
         disposeOnce();
     }
 
-    void OLDAPDetailsPage::dispose()
+    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        m_pETBaseDN.clear();
-        m_pCBUseSSL.clear();
-        m_pNFPortNumber.clear();
-        m_pNFRowCount.clear();
-        OCommonBehaviourTabPage::dispose();
-    }
-
-    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP( TabPageParent pParent, const SfxItemSet* _rAttrSet )
-    {
-        return VclPtr<OLDAPDetailsPage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<OLDAPDetailsPage>::Create(pParent, *_rAttrSet);
     }
 
     bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillString(*_rSet,m_pETBaseDN,DSID_CONN_LDAP_BASEDN,bChangedSomething);
-        fillInt32(*_rSet,m_pNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
-        fillInt32(*_rSet,m_pNFRowCount,DSID_CONN_LDAP_ROWCOUNT,bChangedSomething);
-        fillBool(*_rSet,m_pCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
+        fillString(*_rSet,m_xETBaseDN.get(),DSID_CONN_LDAP_BASEDN,bChangedSomething);
+        fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillInt32(*_rSet,m_xNFRowCount.get(),DSID_CONN_LDAP_ROWCOUNT,bChangedSomething);
+        fillBool(*_rSet,m_xCBUseSSL.get(),DSID_CONN_LDAP_USESSL,false,bChangedSomething);
         return bChangedSomething;
     }
-    IMPL_LINK( OLDAPDetailsPage, OnCheckBoxClick, Button*, pCheckBox, void )
+
+    IMPL_LINK(OLDAPDetailsPage, OnCheckBoxClick, weld::ToggleButton&, rCheckBox, void)
     {
+        OnControlModifiedButtonClick(rCheckBox);
         callModifiedHdl();
-        if ( pCheckBox == m_pCBUseSSL)
+        if (m_xCBUseSSL->get_active())
         {
-            if ( m_pCBUseSSL->IsChecked() )
-            {
-                m_iNormalPort = static_cast<sal_Int32>(m_pNFPortNumber->GetValue());
-                m_pNFPortNumber->SetValue(m_iSSLPort);
-            }
-            else
-            {
-                m_iSSLPort = static_cast<sal_Int32>(m_pNFPortNumber->GetValue());
-                m_pNFPortNumber->SetValue(m_iNormalPort);
-            }
+            m_iNormalPort = m_xNFPortNumber->get_value();
+            m_xNFPortNumber->set_value(m_iSSLPort);
+        }
+        else
+        {
+            m_iSSLPort = m_xNFPortNumber->get_value();
+            m_xNFPortNumber->set_value(m_iNormalPort);
         }
     }
 
@@ -837,13 +824,13 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_pETBaseDN->SetText(pBaseDN->GetValue());
-            m_pNFPortNumber->SetValue(pPortNumber->GetValue());
-            m_pNFRowCount->SetValue(pRowCount->GetValue());
-            m_pCBUseSSL->Check(pUseSSL->GetValue());
+            m_xETBaseDN->set_text(pBaseDN->GetValue());
+            m_xNFPortNumber->set_value(pPortNumber->GetValue());
+            m_xNFRowCount->set_value(pRowCount->GetValue());
+            m_xCBUseSSL->set_active(pUseSSL->GetValue());
         }
 
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     // OTextDetailsPage
