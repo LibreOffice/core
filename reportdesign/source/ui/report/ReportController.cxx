@@ -1555,7 +1555,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 if ( !aArgs.getLength() )
                 {
                     ODateTimeDialog aDlg(getFrameWeld(), getDesignView()->getCurrentSection(), this);
-                    aDlg.execute();
+                    aDlg.run();
                 }
                 else
                     createDateTime(aArgs);
@@ -1567,7 +1567,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 if ( !aArgs.getLength() )
                 {
                     OPageNumberDialog aDlg(getFrameWeld(), m_xReportDefinition, this);
-                    aDlg.execute();
+                    aDlg.run();
                 }
                 else
                     createPageNumber(aArgs);
@@ -2427,7 +2427,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 getFrameWeld(), pDescriptor.get(),_xSection.is()
                            ? OUString("BackgroundDialog")
                            : OUString("PageDialog"));
-            if (aDlg.execute() == RET_OK)
+            if (aDlg.run() == RET_OK)
             {
 
                 // ItemSet->UNO
