@@ -35,6 +35,9 @@ static bool g_bLocalRendering(false);
 
 static LanguageTag g_aLanguageTag("en-US", true);
 
+/// Scaling of the cairo canvas painting for hi-dpi or zooming in Calc.
+static double g_fDPIScale(1.0);
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -73,6 +76,16 @@ void setDialogPainting(bool bDialogPainting)
 bool isDialogPainting()
 {
     return g_bDialogPainting;
+}
+
+void setDPIScale(double fDPIScale)
+{
+    g_fDPIScale = fDPIScale;
+}
+
+double getDPIScale()
+{
+    return g_fDPIScale;
 }
 
 void setTiledAnnotations(bool bTiledAnnotations)
