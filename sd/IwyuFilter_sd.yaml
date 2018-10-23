@@ -1,15 +1,6 @@
 ---
 assumeFilename: sd/source/core/drawdoc.cxx
 blacklist:
-    sd/inc/createpresentation.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/Reference.hxx
-    sd/inc/createunopageimpl.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/Reference.hxx
-    sd/inc/createunocustomshow.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/Reference.hxx
     sd/inc/CustomAnimationCloner.hxx:
     # base class has to be a complete type
     - com/sun/star/animations/XAnimationNode.hpp
@@ -50,7 +41,6 @@ blacklist:
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XSingleServiceFactory.hpp
-    - com/sun/star/uno/Any.hxx
     sd/inc/stlpool.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

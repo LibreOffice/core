@@ -24,7 +24,6 @@
 #include <sfx2/objsh.hxx>
 #include "DrawDocShell.hxx"
 #include <glob.hxx>
-#include <pres.hxx>
 #include <sddllapi.h>
 
 namespace sd {

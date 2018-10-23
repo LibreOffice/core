@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 
 class SdDrawDocument;
-class SdrObject;
 
 namespace sd {
 

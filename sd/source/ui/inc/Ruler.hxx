@@ -26,7 +26,6 @@ namespace sd {
 
 class DrawViewShell;
 class RulerCtrlItem;
-class View;
 class Window;
 
 class Ruler final

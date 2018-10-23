@@ -30,11 +30,6 @@ class SdrObject;
 class SdrTextObj;
 class SdDrawDocument;
 
-namespace weld
-{
-class MessageDialog;
-}
-
 namespace sd {
 
 class View;

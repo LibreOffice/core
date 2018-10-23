@@ -30,7 +30,6 @@
 
 class SdDrawDocument;
 class SfxRequest;
-class SdrObject;
 class CommandEvent;
 class HelpEvent;
 class KeyEvent;

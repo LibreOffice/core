@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_COPYDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_COPYDLG_HXX
 
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <tools/fract.hxx>
 

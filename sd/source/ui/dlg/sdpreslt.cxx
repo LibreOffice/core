@@ -19,6 +19,7 @@
 
 #include <svl/itemset.hxx>
 #include <sfx2/new.hxx>
+#include <svtools/valueset.hxx>
 
 #include <strings.hrc>
 

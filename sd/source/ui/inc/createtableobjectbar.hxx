@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+class SfxShell;
+
 namespace sd {
     class View;
     class ViewShell;

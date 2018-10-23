@@ -22,9 +22,6 @@
 
 #include <osl/interlck.h>
 
-#include <cstddef>
-#include <new>
-
 #include <sddllapi.h>
 
 namespace sd {

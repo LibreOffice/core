@@ -24,8 +24,6 @@
 
 namespace sd {
 
-class DrawViewShell;
-
 /**
  * The SdClientView is used for DrawDocShell::Draw()
  */

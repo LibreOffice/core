@@ -22,11 +22,11 @@
 
 #include <vector>
 
-#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/valueset.hxx>
 
 class SfxItemSet;
+class SvtValueSet;
+namespace weld { class CustomWeld; }
 
 namespace sd {
 class DrawDocShell;
