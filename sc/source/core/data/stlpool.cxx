@@ -388,7 +388,7 @@ namespace {
 
 struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
 {
-    CaseInsensitiveNamePredicate(const rtl::OUString& rName, SfxStyleFamily eFam)
+    CaseInsensitiveNamePredicate(const OUString& rName, SfxStyleFamily eFam)
     : mFamily(eFam)
     {
         mUppercaseName = ScGlobal::pCharClass->uppercase(rName);
@@ -399,7 +399,7 @@ struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
     {
         if (rStyleSheet.GetFamily() == mFamily)
         {
-            rtl::OUString aUpName = ScGlobal::pCharClass->uppercase(rStyleSheet.GetName());
+            OUString aUpName = ScGlobal::pCharClass->uppercase(rStyleSheet.GetName());
             if (mUppercaseName == aUpName)
             {
                 return true;
@@ -408,7 +408,7 @@ struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
         return false;
     }
 
-    rtl::OUString mUppercaseName;
+    OUString mUppercaseName;
     SfxStyleFamily const mFamily;
 };
 

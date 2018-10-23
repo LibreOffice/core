@@ -48,8 +48,6 @@
 using namespace std;
 using namespace osl;
 using namespace com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace cppu
 {

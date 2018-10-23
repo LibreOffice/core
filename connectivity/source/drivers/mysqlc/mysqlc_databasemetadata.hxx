@@ -50,17 +50,17 @@ public:
     // XDatabaseMetaData
     sal_Bool SAL_CALL allProceduresAreCallable() override;
     sal_Bool SAL_CALL allTablesAreSelectable() override;
-    rtl::OUString SAL_CALL getURL() override;
-    rtl::OUString SAL_CALL getUserName() override;
+    OUString SAL_CALL getURL() override;
+    OUString SAL_CALL getUserName() override;
     sal_Bool SAL_CALL isReadOnly() override;
     sal_Bool SAL_CALL nullsAreSortedHigh() override;
     sal_Bool SAL_CALL nullsAreSortedLow() override;
     sal_Bool SAL_CALL nullsAreSortedAtStart() override;
     sal_Bool SAL_CALL nullsAreSortedAtEnd() override;
-    rtl::OUString SAL_CALL getDatabaseProductName() override;
-    rtl::OUString SAL_CALL getDatabaseProductVersion() override;
-    rtl::OUString SAL_CALL getDriverName() override;
-    rtl::OUString SAL_CALL getDriverVersion() override;
+    OUString SAL_CALL getDatabaseProductName() override;
+    OUString SAL_CALL getDatabaseProductVersion() override;
+    OUString SAL_CALL getDriverName() override;
+    OUString SAL_CALL getDriverVersion() override;
     sal_Int32 SAL_CALL getDriverMajorVersion() override;
     sal_Int32 SAL_CALL getDriverMinorVersion() override;
     sal_Bool SAL_CALL usesLocalFiles() override;
@@ -73,14 +73,14 @@ public:
     sal_Bool SAL_CALL storesUpperCaseQuotedIdentifiers() override;
     sal_Bool SAL_CALL storesLowerCaseQuotedIdentifiers() override;
     sal_Bool SAL_CALL storesMixedCaseQuotedIdentifiers() override;
-    rtl::OUString SAL_CALL getIdentifierQuoteString() override;
-    rtl::OUString SAL_CALL getSQLKeywords() override;
-    rtl::OUString SAL_CALL getNumericFunctions() override;
-    rtl::OUString SAL_CALL getStringFunctions() override;
-    rtl::OUString SAL_CALL getSystemFunctions() override;
-    rtl::OUString SAL_CALL getTimeDateFunctions() override;
-    rtl::OUString SAL_CALL getSearchStringEscape() override;
-    rtl::OUString SAL_CALL getExtraNameCharacters() override;
+    OUString SAL_CALL getIdentifierQuoteString() override;
+    OUString SAL_CALL getSQLKeywords() override;
+    OUString SAL_CALL getNumericFunctions() override;
+    OUString SAL_CALL getStringFunctions() override;
+    OUString SAL_CALL getSystemFunctions() override;
+    OUString SAL_CALL getTimeDateFunctions() override;
+    OUString SAL_CALL getSearchStringEscape() override;
+    OUString SAL_CALL getExtraNameCharacters() override;
     sal_Bool SAL_CALL supportsAlterTableWithAddColumn() override;
     sal_Bool SAL_CALL supportsAlterTableWithDropColumn() override;
     sal_Bool SAL_CALL supportsColumnAliasing() override;
@@ -108,11 +108,11 @@ public:
     sal_Bool SAL_CALL supportsOuterJoins() override;
     sal_Bool SAL_CALL supportsFullOuterJoins() override;
     sal_Bool SAL_CALL supportsLimitedOuterJoins() override;
-    rtl::OUString SAL_CALL getSchemaTerm() override;
-    rtl::OUString SAL_CALL getProcedureTerm() override;
-    rtl::OUString SAL_CALL getCatalogTerm() override;
+    OUString SAL_CALL getSchemaTerm() override;
+    OUString SAL_CALL getProcedureTerm() override;
+    OUString SAL_CALL getCatalogTerm() override;
     sal_Bool SAL_CALL isCatalogAtStart() override;
-    rtl::OUString SAL_CALL getCatalogSeparator() override;
+    OUString SAL_CALL getCatalogSeparator() override;
     sal_Bool SAL_CALL supportsSchemasInDataManipulation() override;
     sal_Bool SAL_CALL supportsSchemasInProcedureCalls() override;
     sal_Bool SAL_CALL supportsSchemasInTableDefinitions() override;
@@ -167,57 +167,51 @@ public:
     sal_Bool SAL_CALL dataDefinitionCausesTransactionCommit() override;
     sal_Bool SAL_CALL dataDefinitionIgnoredInTransactions() override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getProcedures(const Any& catalog, const rtl::OUString& schemaPattern,
-                               const rtl::OUString& procedureNamePattern) override;
+        SAL_CALL getProcedures(const Any& catalog, const OUString& schemaPattern,
+                               const OUString& procedureNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getProcedureColumns(const Any& catalog, const rtl::OUString& schemaPattern,
-                                     const rtl::OUString& procedureNamePattern,
-                                     const rtl::OUString& columnNamePattern) override;
+        SAL_CALL getProcedureColumns(const Any& catalog, const OUString& schemaPattern,
+                                     const OUString& procedureNamePattern,
+                                     const OUString& columnNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getTables(const Any& catalog, const rtl::OUString& schemaPattern,
-                           const rtl::OUString& tableNamePattern,
-                           const css::uno::Sequence<rtl::OUString>& types) override;
+        SAL_CALL getTables(const Any& catalog, const OUString& schemaPattern,
+                           const OUString& tableNamePattern,
+                           const css::uno::Sequence<OUString>& types) override;
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getSchemas() override;
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getCatalogs() override;
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTableTypes() override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getColumns(const Any& catalog, const rtl::OUString& schemaPattern,
-                            const rtl::OUString& tableNamePattern,
-                            const rtl::OUString& columnNamePattern) override;
+        SAL_CALL getColumns(const Any& catalog, const OUString& schemaPattern,
+                            const OUString& tableNamePattern,
+                            const OUString& columnNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getColumnPrivileges(const Any& catalog, const rtl::OUString& schema,
-                                     const rtl::OUString& table,
-                                     const rtl::OUString& columnNamePattern) override;
+        SAL_CALL getColumnPrivileges(const Any& catalog, const OUString& schema,
+                                     const OUString& table,
+                                     const OUString& columnNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getTablePrivileges(const Any& catalog, const rtl::OUString& schemaPattern,
-                                    const rtl::OUString& tableNamePattern) override;
+        SAL_CALL getTablePrivileges(const Any& catalog, const OUString& schemaPattern,
+                                    const OUString& tableNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getBestRowIdentifier(const Any& catalog, const rtl::OUString& schema,
-                                      const rtl::OUString& table, sal_Int32 scope,
+        SAL_CALL getBestRowIdentifier(const Any& catalog, const OUString& schema,
+                                      const OUString& table, sal_Int32 scope,
                                       sal_Bool nullable) override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL
+    getVersionColumns(const Any& catalog, const OUString& schema, const OUString& table) override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL
+    getPrimaryKeys(const Any& catalog, const OUString& schema, const OUString& table) override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL
+    getImportedKeys(const Any& catalog, const OUString& schema, const OUString& table) override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL
+    getExportedKeys(const Any& catalog, const OUString& schema, const OUString& table) override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getVersionColumns(const Any& catalog, const rtl::OUString& schema,
-                                   const rtl::OUString& table) override;
-    css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getPrimaryKeys(const Any& catalog, const rtl::OUString& schema,
-                                const rtl::OUString& table) override;
-    css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getImportedKeys(const Any& catalog, const rtl::OUString& schema,
-                                 const rtl::OUString& table) override;
-    css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getExportedKeys(const Any& catalog, const rtl::OUString& schema,
-                                 const rtl::OUString& table) override;
-    css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getCrossReference(const Any& primaryCatalog, const rtl::OUString& primarySchema,
-                                   const rtl::OUString& primaryTable, const Any& foreignCatalog,
-                                   const rtl::OUString& foreignSchema,
-                                   const rtl::OUString& foreignTable) override;
+        SAL_CALL getCrossReference(const Any& primaryCatalog, const OUString& primarySchema,
+                                   const OUString& primaryTable, const Any& foreignCatalog,
+                                   const OUString& foreignSchema,
+                                   const OUString& foreignTable) override;
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTypeInfo() override;
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getIndexInfo(const Any& catalog,
-                                                                     const rtl::OUString& schema,
-                                                                     const rtl::OUString& table,
-                                                                     sal_Bool unique,
-                                                                     sal_Bool approximate) override;
+    css::uno::Reference<css::sdbc::XResultSet>
+        SAL_CALL getIndexInfo(const Any& catalog, const OUString& schema, const OUString& table,
+                              sal_Bool unique, sal_Bool approximate) override;
     sal_Bool SAL_CALL supportsResultSetType(sal_Int32 setType) override;
     sal_Bool SAL_CALL supportsResultSetConcurrency(sal_Int32 setType,
                                                    sal_Int32 concurrency) override;
@@ -232,8 +226,8 @@ public:
     sal_Bool SAL_CALL insertsAreDetected(sal_Int32 setType) override;
     sal_Bool SAL_CALL supportsBatchUpdates() override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getUDTs(const Any& catalog, const rtl::OUString& schemaPattern,
-                         const rtl::OUString& typeNamePattern,
+        SAL_CALL getUDTs(const Any& catalog, const OUString& schemaPattern,
+                         const OUString& typeNamePattern,
                          const css::uno::Sequence<sal_Int32>& types) override;
     css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 };

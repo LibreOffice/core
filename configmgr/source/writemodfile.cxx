@@ -392,7 +392,7 @@ void writeNode(
 }
 
 // helpers to allow sorting of configmgr::Modifications::Node
-typedef std::pair< const rtl::OUString, configmgr::Modifications::Node > ModNodePairEntry;
+typedef std::pair< const OUString, configmgr::Modifications::Node > ModNodePairEntry;
 struct PairEntrySorter
 {
     bool operator() (const ModNodePairEntry* pValue1, const ModNodePairEntry* pValue2) const

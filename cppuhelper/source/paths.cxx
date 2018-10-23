@@ -37,10 +37,10 @@
 namespace {
 
 #ifndef ANDROID
-rtl::OUString get_this_libpath() {
-    static rtl::OUString s_uri;
+OUString get_this_libpath() {
+    static OUString s_uri;
     if (s_uri.isEmpty()) {
-        rtl::OUString uri;
+        OUString uri;
         osl::Module::getUrlFromAddress(
             reinterpret_cast< oslGenericFunction >(get_this_libpath), uri);
         sal_Int32 i = uri.lastIndexOf('/');
@@ -59,7 +59,7 @@ rtl::OUString get_this_libpath() {
 #endif
 }
 
-rtl::OUString cppu::getUnoIniUri() {
+OUString cppu::getUnoIniUri() {
 #if defined ANDROID
     // Wouldn't it be lovely to avoid this ugly hard-coding.
     // The problem is that the 'create_bootstrap_macro_expander_factory()'
@@ -68,9 +68,9 @@ rtl::OUString cppu::getUnoIniUri() {
     //     defaultBootstrap_InitialComponentContext
     // and since rtlBootstrapHandle is not ref-counted doing anything
     // clean here is hardish.
-    rtl::OUString uri("file:///assets/program");
+    OUString uri("file:///assets/program");
 #else
-    rtl::OUString uri(get_this_libpath());
+    OUString uri(get_this_libpath());
 #ifdef MACOSX
     // We keep both the LO and URE dylibs directly in "Frameworks"
     // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"
@@ -88,7 +88,7 @@ rtl::OUString cppu::getUnoIniUri() {
     return uri + "/" SAL_CONFIGFILE("uno");
 }
 
-bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
+bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
     assert(url != nullptr);
     for (;;) {
         osl::DirectoryItem i;
@@ -110,7 +110,7 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
             // Ignore backup files:
-            rtl::OUString name(stat.getFileName());
+            OUString name(stat.getFileName());
             if (!(name.match(".") || name.endsWith("~"))) {
                 *url = stat.getFileURL();
                 return true;
@@ -119,7 +119,7 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
     }
 }
 
-void cppu::decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory)
+void cppu::decodeRdbUri(OUString * uri, bool * optional, bool * directory)
 {
     assert(uri != nullptr && optional != nullptr && directory != nullptr);
     if(!(uri->isEmpty()))

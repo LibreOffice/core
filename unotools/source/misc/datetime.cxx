@@ -280,7 +280,7 @@ bool ISO8601parseDateTime(const OUString &rString, css::util::DateTime& rDateTim
 {
     bool bSuccess = true;
 
-    rtl::OUString aDateStr, aTimeStr;
+    OUString aDateStr, aTimeStr;
     css::util::Date aDate;
     css::util::Time aTime;
     sal_Int32 nPos = rString.indexOf( 'T' );

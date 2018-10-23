@@ -151,14 +151,14 @@ extern "C" { static void s_MediatorMapping_free(uno_Mapping * pMapping)
 }}
 
 
-static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const & str2)
+static OUString getPrefix(OUString const & str1, OUString const & str2)
 {
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
     sal_Int32 sim = 0;
 
-    rtl::OUString token1;
-    rtl::OUString token2;
+    OUString token1;
+    OUString token2;
 
     do
     {
@@ -170,7 +170,7 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
     }
     while(nIndex1 == nIndex2 && nIndex1 >= 0 && token1 == token2);
 
-    rtl::OUString result;
+    OUString result;
 
     if (sim)
         result = str1.copy(0, sim - 1);
@@ -178,12 +178,12 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
     return result;
 }
 
-//  rtl::OUString str1("abc:def:ghi");
-//  rtl::OUString str2("abc:def");
-//  rtl::OUString str3("abc");
-//  rtl::OUString str4("");
+//  OUString str1("abc:def:ghi");
+//  OUString str2("abc:def");
+//  OUString str3("abc");
+//  OUString str4("");
 
-//  rtl::OUString pref;
+//  OUString pref;
 
 //  pref = getPrefix(str1, str1);
 //  pref = getPrefix(str1, str2);
@@ -203,16 +203,16 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     if (pAddPurpose && pAddPurpose->length)
         return;
 
-    rtl::OUString uno_envType(UNO_LB_UNO);
+    OUString uno_envType(UNO_LB_UNO);
 
-    rtl::OUString from_envType    = cppu::EnvDcp::getTypeName(pFrom->pTypeName);
-    rtl::OUString to_envType      = cppu::EnvDcp::getTypeName(pTo->pTypeName);
-    rtl::OUString from_envPurpose = cppu::EnvDcp::getPurpose(pFrom->pTypeName);
-    rtl::OUString to_envPurpose   = cppu::EnvDcp::getPurpose(pTo->pTypeName);
+    OUString from_envType    = cppu::EnvDcp::getTypeName(pFrom->pTypeName);
+    OUString to_envType      = cppu::EnvDcp::getTypeName(pTo->pTypeName);
+    OUString from_envPurpose = cppu::EnvDcp::getPurpose(pFrom->pTypeName);
+    OUString to_envPurpose   = cppu::EnvDcp::getPurpose(pTo->pTypeName);
 
 #ifdef LOG_CALLING_named_purpose_getMapping
-    rtl::OString s_from_name = rtl::OUStringToOString(pFrom->pTypeName, RTL_TEXTENCODING_ASCII_US);
-    rtl::OString s_to_name   = rtl::OUStringToOString(pTo->pTypeName,   RTL_TEXTENCODING_ASCII_US);
+    OString s_from_name = OUStringToOString(pFrom->pTypeName, RTL_TEXTENCODING_ASCII_US);
+    OString s_to_name   = OUStringToOString(pTo->pTypeName,   RTL_TEXTENCODING_ASCII_US);
 
     std::cerr << __FUNCTION__ << " - creating mediation ";
     std::cerr << "pFrom: " << s_from_name.getStr();
@@ -229,16 +229,16 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     // chained uno -> uno
     if (from_envType == uno_envType && to_envType == uno_envType)
     {
-        rtl::OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
+        OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
 
-        rtl::OUString uno_envDcp = uno_envType;
+        OUString uno_envDcp = uno_envType;
         uno_envDcp += purpose;
 
         // direct mapping possible?
         // uno:bla-->uno:bla:blubb
         if (from_envPurpose == purpose)
         {
-            rtl::OUString rest = to_envPurpose.copy(purpose.getLength());
+            OUString rest = to_envPurpose.copy(purpose.getLength());
 
             sal_Int32 index = rest.indexOf(':', 1);
             if (index == -1)
@@ -251,7 +251,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         }
         else if (to_envPurpose == purpose)
         {
-            rtl::OUString rest = from_envPurpose.copy(purpose.getLength());
+            OUString rest = from_envPurpose.copy(purpose.getLength());
 
             sal_Int32 index = rest.indexOf(':', 1);
             if (index == -1)
@@ -268,7 +268,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     else if (from_envType != uno_envType && to_envType == uno_envType) // <ANY> -> UNO ?
         // mediate via uno:purpose(fromEnv)
     {
-        rtl::OUString     envDcp = uno_envType;
+        OUString     envDcp = uno_envType;
 
         envDcp += from_envPurpose;
          uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
@@ -276,7 +276,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     else if (from_envType == uno_envType && to_envType != uno_envType) // UNO -> <ANY>?
         // mediate via uno(context)
     {
-        rtl::OUString     envDcp = uno_envType;
+        OUString     envDcp = uno_envType;
 
          envDcp += to_envPurpose;
         uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
@@ -284,9 +284,9 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     else // everything else
         // mediate via uno:purpose
     {
-        rtl::OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
+        OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
 
-        rtl::OUString uno_envDcp = uno_envType;
+        OUString uno_envDcp = uno_envType;
         uno_envDcp += purpose;
 
         uno_getEnvironment(&pInterm, uno_envDcp.pData, nullptr);

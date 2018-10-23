@@ -51,8 +51,7 @@ namespace writerperfect
 {
 namespace
 {
-uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent,
-                                            const rtl::OUString& rName)
+uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, const OUString& rName)
 {
     uno::Reference<io::XInputStream> xInputStream;
 
@@ -68,7 +67,7 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent,
             const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
             do
             {
-                const rtl::OUString aTitle(xRow->getString(1));
+                const OUString aTitle(xRow->getString(1));
                 if (aTitle == rName)
                 {
                     const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
@@ -195,7 +194,7 @@ librevenge::RVNGInputStream* DirectoryStream::getSubStreamByName(const char* con
     ucbhelper::Content aContent(m_pImpl->xContent, uno::Reference<ucb::XCommandEnvironment>(),
                                 comphelper::getProcessComponentContext());
     const uno::Reference<io::XInputStream> xInputStream(
-        findStream(aContent, rtl::OUString::createFromAscii(pName)));
+        findStream(aContent, OUString::createFromAscii(pName)));
     if (xInputStream.is())
         return new WPXSvInputStream(xInputStream);
 

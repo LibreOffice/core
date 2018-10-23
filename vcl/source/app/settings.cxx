@@ -183,7 +183,7 @@ struct ImplStyleData
     std::shared_ptr<vcl::IconThemeSelector>
                                     mIconThemeSelector;
 
-    rtl::OUString                   mIconTheme;
+    OUString                   mIconTheme;
     bool                            mbSkipDisabledInMenus;
     bool                            mbHideDisabledMenuItems;
     bool                            mbPreferredContextMenuShortcuts;

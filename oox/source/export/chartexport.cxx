@@ -514,7 +514,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
             sRelativeStream,
             pFS->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
-            rtl::OUStringToOString(oox::getRelationship(Relationship::CHART), RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(oox::getRelationship(Relationship::CHART), RTL_TEXTENCODING_UTF8).getStr(),
             &sId );
 
     XmlFilterBase* pFB = GetFB();

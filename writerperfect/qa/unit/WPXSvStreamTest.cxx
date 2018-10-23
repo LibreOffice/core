@@ -83,7 +83,7 @@ shared_ptr<RVNGInputStream> lcl_createStream()
     return pInputStream;
 }
 
-const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const rtl::OUString& rURL)
+const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const OUString& rURL)
 {
     using uno::Reference;
     using uno::UNO_QUERY_THROW;

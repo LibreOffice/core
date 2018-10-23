@@ -99,8 +99,8 @@ OUString AnimationsImport_getImplementationName() throw()
     return OUString( "xmloff::AnimationsImport" );
 }
 
-static ::rtl::OUString
-lcl_GetMediaReference(SvXMLImport const& rImport, ::rtl::OUString const& rURL)
+static OUString
+lcl_GetMediaReference(SvXMLImport const& rImport, OUString const& rURL)
 {
     if (rImport.IsPackageURL(rURL))
         return "vnd.sun.star.Package:" + rURL;

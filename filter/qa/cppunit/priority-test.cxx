@@ -69,7 +69,7 @@ void PriorityFilterTest::testPriority()
             aMsg.append("' should be '");
             aMsg.append(aFormatCorrect);
             aMsg.append("'");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(rtl::OUStringToOString(aMsg.makeStringAndClear(),
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aMsg.makeStringAndClear(),
                                                           RTL_TEXTENCODING_UTF8).getStr(),
                                    aFormatCorrect, aTypeName);
         }
@@ -79,7 +79,7 @@ void PriorityFilterTest::testPriority()
             aMsg.append("'");
             aMsg.append(e.Message);
             aMsg.append("'");
-            CPPUNIT_FAIL(rtl::OUStringToOString(aMsg.makeStringAndClear(),
+            CPPUNIT_FAIL(OUStringToOString(aMsg.makeStringAndClear(),
                                                 RTL_TEXTENCODING_UTF8).getStr());
         }
     }

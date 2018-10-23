@@ -116,7 +116,7 @@ struct VolumeInfo
 class SvFileInformationManager
 {
 private:
-    static rtl::OUString    GetDescription_Impl( const INetURLObject& rObject, bool bDetectFolder );
+    static OUString    GetDescription_Impl( const INetURLObject& rObject, bool bDetectFolder );
 
 public:
     SVT_DLLPUBLIC static OUString GetImageId( const INetURLObject& rURL );
@@ -126,9 +126,9 @@ public:
     SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, bool bBig = false );
     SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo );
 
-    SVT_DLLPUBLIC static rtl::OUString GetDescription( const INetURLObject& rObject );
-    SVT_DLLPUBLIC static rtl::OUString GetFileDescription( const INetURLObject& rObject );
-    SVT_DLLPUBLIC static rtl::OUString GetFolderDescription( const svtools::VolumeInfo& rInfo );
+    SVT_DLLPUBLIC static OUString GetDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static OUString GetFileDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static OUString GetFolderDescription( const svtools::VolumeInfo& rInfo );
 };
 
 #endif

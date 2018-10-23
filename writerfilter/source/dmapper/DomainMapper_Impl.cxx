@@ -4493,8 +4493,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
 
-                        rtl::OUString sFormula = sSeqName + "+1";
-                        rtl::OUString sValue;
+                        OUString sFormula = sSeqName + "+1";
+                        OUString sValue;
                         if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
                         {
                             sFormula = sSeqName;
@@ -4890,7 +4890,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
                         bool bIsSetExpression = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression");
                         // If we already have content set, then use the current presentation
-                        rtl::OUString sValue;
+                        OUString sValue;
                         if (bIsSetExpression)
                         {   // this will throw for field types without Content
                             uno::Any aValue(xFieldProperties->getPropertyValue(

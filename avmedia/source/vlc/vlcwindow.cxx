@@ -29,8 +29,8 @@ namespace vlc {
 
 namespace
 {
-    const ::rtl::OUString AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Window_VLC";
-    const ::rtl::OUString AVMEDIA_VLC_WINDOW_SERVICENAME = "com.sun.star.media.Window_VLC";
+    const OUString AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Window_VLC";
+    const OUString AVMEDIA_VLC_WINDOW_SERVICENAME = "com.sun.star.media.Window_VLC";
 }
 
 VLCWindow::VLCWindow( VLCPlayer& player, const intptr_t prevWinID )
@@ -93,17 +93,17 @@ void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 )
 {
 }
 
-::rtl::OUString SAL_CALL VLCWindow::getImplementationName()
+OUString SAL_CALL VLCWindow::getImplementationName()
 {
     return AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME;
 }
 
-sal_Bool SAL_CALL VLCWindow::supportsService( const ::rtl::OUString& serviceName )
+sal_Bool SAL_CALL VLCWindow::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL VLCWindow::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL VLCWindow::getSupportedServiceNames()
 {
     return { AVMEDIA_VLC_WINDOW_SERVICENAME };
 }

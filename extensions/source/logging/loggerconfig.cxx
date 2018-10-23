@@ -99,27 +99,27 @@ namespace logging
                       static_cast<int>(aDateTime.Year),
                       static_cast<int>(aDateTime.Month),
                       static_cast<int>(aDateTime.Day) );
-            rtl::OUString sDate = rtl::OUString::createFromAscii( buffer );
+            OUString sDate = OUString::createFromAscii( buffer );
 
             snprintf( buffer, buffer_size, "%02i-%02i-%02i.%03i",
                 static_cast<int>(aDateTime.Hours),
                 static_cast<int>(aDateTime.Minutes),
                 static_cast<int>(aDateTime.Seconds),
                 ::sal::static_int_cast< sal_Int16 >( aDateTime.NanoSeconds / 10000000 ) );
-            rtl::OUString sTime = rtl::OUString::createFromAscii( buffer );
+            OUString sTime = OUString::createFromAscii( buffer );
 
-            rtl::OUStringBuffer aBuff;
+            OUStringBuffer aBuff;
             aBuff.append( sDate );
             aBuff.append( '.' );
             aBuff.append( sTime );
-            rtl::OUString sDateTime = aBuff.makeStringAndClear();
+            OUString sDateTime = aBuff.makeStringAndClear();
 
             oslProcessIdentifier aProcessId = 0;
             oslProcessInfo info;
             info.Size = sizeof (oslProcessInfo);
             if ( osl_getProcessInfo ( nullptr, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
                 aProcessId = info.Ident;
-            rtl::OUString aPID = OUString::number( aProcessId );
+            OUString aPID = OUString::number( aProcessId );
 
             Variable const aVariables[] =
             {

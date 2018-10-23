@@ -138,7 +138,7 @@ uno::Sequence<uno::Type> SAL_CALL
 uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
 {
     uno::Any strRet;
-    ::rtl::OUString style;
+    OUString style;
     if( m_pShape )
     {
         style = "style:" + static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString();

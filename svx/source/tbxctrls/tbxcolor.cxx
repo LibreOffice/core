@@ -35,7 +35,7 @@ namespace svx
     #define TOOLBAR_RESNAME         "private:resource/toolbar/"
     #define PROPNAME_LAYOUTMANAGER  "LayoutManager"
 
-    ToolboxAccess::ToolboxAccess( const ::rtl::OUString& rToolboxName ) :
+    ToolboxAccess::ToolboxAccess( const OUString& rToolboxName ) :
         m_sToolboxResName   ( TOOLBAR_RESNAME )
     {
         m_sToolboxResName += rToolboxName;

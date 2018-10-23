@@ -32,9 +32,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-
 namespace cppu
 {
 

@@ -34,8 +34,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-
 class OOXMLFormulaParserImpl : private FormulaFinalizer
 {
 public:

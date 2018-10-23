@@ -677,7 +677,7 @@ namespace sw
         static bool
         CanEncode(OUString const& rString, rtl_TextEncoding const eEncoding)
         {
-            rtl::OString tmp;
+            OString tmp;
             return rString.convertToString(&tmp, eEncoding,
                     RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
                     RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);

@@ -42,19 +42,19 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
 
-rtl::OUString OPreparedStatement::getImplementationName()
+OUString OPreparedStatement::getImplementationName()
 {
-    return rtl::OUString("com.sun.star.sdbcx.mysqlc.PreparedStatement");
+    return OUString("com.sun.star.sdbcx.mysqlc.PreparedStatement");
 }
 
-css::uno::Sequence<rtl::OUString> OPreparedStatement::getSupportedServiceNames()
+css::uno::Sequence<OUString> OPreparedStatement::getSupportedServiceNames()
 {
-    css::uno::Sequence<rtl::OUString> s(1);
+    css::uno::Sequence<OUString> s(1);
     s[0] = "com.sun.star.sdbc.PreparedStatement";
     return s;
 }
 
-sal_Bool OPreparedStatement::supportsService(rtl::OUString const& ServiceName)
+sal_Bool OPreparedStatement::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -176,13 +176,13 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     return affectedRows;
 }
 
-void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const rtl::OUString& x)
+void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString& x)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    rtl::OString stringie(rtl::OUStringToOString(x, m_xConnection->getConnectionEncoding()));
+    OString stringie(OUStringToOString(x, m_xConnection->getConnectionEncoding()));
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_STRING;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, stringie.getStr(), MYSQL_TYPE_STRING,
@@ -425,7 +425,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
         case DataType::NUMERIC:
         {
             double nValue(0.0);
-            rtl::OUString sValue;
+            OUString sValue;
             if (value >>= nValue)
             {
                 setDouble(parameterIndex, nValue);
@@ -433,8 +433,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
             }
             else if (value >>= sValue)
             {
-                rtl::OString sAscii
-                    = rtl::OUStringToOString(sValue, getOwnConnection()->getConnectionEncoding());
+                OString sAscii
+                    = OUStringToOString(sValue, getOwnConnection()->getConnectionEncoding());
                 std::stringstream sStream{ sAscii.getStr() };
                 sStream >> nValue;
                 m_binds[nIndex].buffer_type = MYSQL_TYPE_DOUBLE;
@@ -461,7 +461,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
 }
 
 void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /* sqlType */,
-                                                const rtl::OUString& /* typeName */)
+                                                const OUString& /* typeName */)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
@@ -580,7 +580,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {
     if (column < 1 || column > static_cast<sal_Int32>(m_paramCount))
     {
-        throw SQLException("Parameter index out of range", *this, rtl::OUString(), 1, Any());
+        throw SQLException("Parameter index out of range", *this, OUString(), 1, Any());
     }
 }
 

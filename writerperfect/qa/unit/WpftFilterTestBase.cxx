@@ -21,7 +21,7 @@ namespace writerperfect
 {
 namespace test
 {
-WpftFilterTestBase::WpftFilterTestBase(const rtl::OUString& rFactoryURL)
+WpftFilterTestBase::WpftFilterTestBase(const OUString& rFactoryURL)
     : ::test::FiltersTest()
     , WpftFilterFixture()
     , m_aFactoryURL(rFactoryURL)
@@ -45,13 +45,13 @@ bool WpftFilterTestBase::load(const OUString&, const OUString& rURL, const OUStr
     return aLoader.getDocument().is();
 }
 
-void WpftFilterTestBase::doTest(const rtl::OUString& rFilter, const rtl::OUString& rPath)
+void WpftFilterTestBase::doTest(const OUString& rFilter, const OUString& rPath)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     testDir(OUString(), m_directories.getURLFromSrc(rPath));
 }
 
-void WpftFilterTestBase::doTest(const rtl::OUString& rFilter, const rtl::OUString& rPath,
+void WpftFilterTestBase::doTest(const OUString& rFilter, const OUString& rPath,
                                 const WpftOptionalMap_t& rOptionalMap)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);

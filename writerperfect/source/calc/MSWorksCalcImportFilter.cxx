@@ -76,7 +76,7 @@ public:
     }
 
     //! add a file
-    void addFile(rtl::OUString const& path, std::string const& shortName)
+    void addFile(OUString const& path, std::string const& shortName)
     {
         m_nameToPathMap[shortName] = path;
     }
@@ -108,7 +108,7 @@ public:
         if (m_nameToPathMap.size() < id)
             return nullptr;
 
-        std::map<std::string, rtl::OUString>::const_iterator it = m_nameToPathMap.begin();
+        std::map<std::string, OUString>::const_iterator it = m_nameToPathMap.begin();
         std::advance(it, id);
         return it->first.c_str();
     }
@@ -134,7 +134,7 @@ public:
                 OUString lPath = m_nameToPathMap.find(name)->second;
                 do
                 {
-                    const rtl::OUString aTitle(xRow->getString(1));
+                    const OUString aTitle(xRow->getString(1));
                     if (aTitle != lPath)
                         continue;
 
@@ -169,7 +169,7 @@ private:
     /// the main container
     uno::Reference<ucb::XContent> m_xContent;
     /// the map short name to path
-    std::map<std::string, rtl::OUString> m_nameToPathMap;
+    std::map<std::string, OUString> m_nameToPathMap;
     FolderStream(const FolderStream&) = delete;
     FolderStream& operator=(const FolderStream&) = delete;
 };
@@ -336,8 +336,8 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
             const css::uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
             if (xChild.is())
             {
-                rtl::OUString sWM3Name;
-                rtl::OUString sFM3Name;
+                OUString sWM3Name;
+                OUString sFM3Name;
                 const css::uno::Reference<ucb::XContent> xPackageContent(xChild->getParent(),
                                                                          uno::UNO_QUERY);
                 uno::Reference<sdbc::XResultSet> xResultSet
@@ -351,12 +351,12 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
                     sWM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true,
                                                INetURLObject::DecodeMechanism::WithCharset);
                     aTmpUrl.setExtension("FM3");
-                    const rtl::OUString& sTestFM3Name
+                    const OUString& sTestFM3Name
                         = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true,
                                           INetURLObject::DecodeMechanism::WithCharset);
                     do
                     {
-                        const rtl::OUString& aTitle(xRow->getString(1));
+                        const OUString& aTitle(xRow->getString(1));
                         if (aTitle.equalsIgnoreAsciiCase(sTestFM3Name))
                             sFM3Name = aTitle;
                     } while (xResultSet->next() && sFM3Name.isEmpty());

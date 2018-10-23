@@ -910,7 +910,7 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
             Reference<XNode> objectNode = *aIter;      //get i'th object element
             Reference<XNamedNodeMap> objectattrlist = objectNode->getAttributes();
             Reference<XNode> objectattr = objectattrlist->getNamedItem("type");
-            rtl::OUString sObjType = objectattr->getNodeValue();
+            OUString sObjType = objectattr->getNodeValue();
 
             if (sObjType.equalsAscii(sObjKind))
             {
@@ -920,19 +920,19 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
                 for( int j=0; j< objSize; j++)
                 {
                     Reference<XNode> obj = objectChildren->item(j);
-                    rtl::OUString nodename = obj->getNodeName();
+                    OUString nodename = obj->getNodeName();
 
                     //check whether children is blank 'text-node' or 'object-prop' node
                     if(nodename == "object-prop")
                     {
                         Reference<XNamedNodeMap> ObjAttributes = obj->getAttributes();
                         Reference<XNode> ObjPageKind = ObjAttributes->getNamedItem("pagekind");
-                        rtl::OUString sObjPageKind = ObjPageKind->getNodeValue();
+                        OUString sObjPageKind = ObjPageKind->getNodeValue();
 
                         if (sObjPageKind.equalsAscii(sPageKind))
                         {
                             Reference<XNode> ObjSizeHeight = ObjAttributes->getNamedItem("relative-height");
-                            rtl::OUString sValue = ObjSizeHeight->getNodeValue();
+                            OUString sValue = ObjSizeHeight->getNodeValue();
                             presObjPropValue[0] = sValue.toDouble();
 
                             Reference<XNode> ObjSizeWidth = ObjAttributes->getNamedItem("relative-width");
@@ -1273,9 +1273,9 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
     return aLayouts[ eLayout - AUTOLAYOUT_START ];
 }
 
-static rtl::OUString enumtoString(AutoLayout aut)
+static OUString enumtoString(AutoLayout aut)
 {
-    rtl::OUString retstr;
+    OUString retstr;
     switch (aut)
     {
         case AUTOLAYOUT_TITLE_CONTENT:
@@ -1331,7 +1331,7 @@ static rtl::OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
-static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const rtl::OUString& sLayoutType )
+static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const OUString& sLayoutType )
 {
     ::tools::Rectangle aTitleRect;
     ::tools::Rectangle aLayoutRect;
@@ -1373,7 +1373,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
         Reference<XNamedNodeMap> layoutAttrList =layoutNode->getAttributes();
 
         // get the attribute value of layout (i.e it's type)
-        rtl::OUString sLayoutAttName =
+        OUString sLayoutAttName =
             layoutAttrList->getNamedItem("type")->getNodeValue();
         if(sLayoutAttName == sLayoutType)
         {
@@ -1382,7 +1382,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
             const int presobjsize = layoutChildren->getLength();
             for( int j=0; j< presobjsize ; j++)
             {
-                rtl::OUString nodename;
+                OUString nodename;
                 Reference<XNode> presobj = layoutChildren->item(j);
                 nodename=presobj->getNodeName();
 
@@ -1395,7 +1395,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
                     Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
                     Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("relative-height");
-                    rtl::OUString sValue = presObjSizeHeight->getNodeValue();
+                    OUString sValue = presObjSizeHeight->getNodeValue();
                     propvalue[0] = sValue.toDouble();
 
                     Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("relative-width");
@@ -1618,7 +1618,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
 
     ::tools::Rectangle aRectangle[MAX_PRESOBJS];
     const LayoutDescriptor& aDescriptor = GetLayoutDescriptor( meAutoLayout );
-    rtl::OUString sLayoutName( enumtoString(meAutoLayout) );
+    OUString sLayoutName( enumtoString(meAutoLayout) );
     CalcAutoLayoutRectangles( *this, aRectangle, sLayoutName);
 
     std::set< SdrObject* > aUsedPresentationObjects;

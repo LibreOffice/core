@@ -49,7 +49,7 @@ namespace detail {
  * If uriReference is a vnd.sun.star.expand URL reference that contains unknown
  * macros.
  */
-::rtl::OUString expandMacros(rtl::OUString const & text);
+OUString expandMacros(OUString const & text);
 
 css::uno::Reference< css::lang::XSingleComponentFactory >
 create_bootstrap_macro_expander_factory();

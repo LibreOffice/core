@@ -42,9 +42,9 @@ namespace writerperfect
 {
 namespace test
 {
-WpftLoader::WpftLoader(const rtl::OUString& rURL,
+WpftLoader::WpftLoader(const OUString& rURL,
                        const css::uno::Reference<css::document::XFilter>& rxFilter,
-                       const rtl::OUString& rFactoryURL,
+                       const OUString& rFactoryURL,
                        const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
                        const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
                        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
@@ -61,7 +61,7 @@ WpftLoader::WpftLoader(const rtl::OUString& rURL,
 
 WpftLoader::WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
                        const css::uno::Reference<css::document::XFilter>& rxFilter,
-                       const rtl::OUString& rFactoryURL,
+                       const OUString& rFactoryURL,
                        const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
                        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     : m_xInputStream(rxInputStream)
@@ -146,7 +146,7 @@ bool WpftLoader::impl_load()
         const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter,
                                                                            uno::UNO_QUERY_THROW);
 
-        const rtl::OUString aTypeName(xDetector->detect(aDescriptor));
+        const OUString aTypeName(xDetector->detect(aDescriptor));
         if (aTypeName.isEmpty())
             throw lang::IllegalArgumentException();
 
@@ -179,7 +179,7 @@ void WpftLoader::impl_dispose()
 }
 
 void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDescriptor,
-                                       const rtl::OUString& rTypeName)
+                                       const OUString& rTypeName)
 {
     const sal_Int32 nDescriptorLen = rDescriptor.getLength();
 
@@ -194,7 +194,7 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
     {
         for (sal_Int32 n = 0; aTypes.getLength() != n; ++n)
         {
-            rtl::OUString aFilterName;
+            OUString aFilterName;
             if (("PreferredFilter" == aTypes[n].Name) && (aTypes[n].Value >>= aFilterName))
             {
                 rDescriptor.realloc(nDescriptorLen + 1);

@@ -55,8 +55,6 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 
-using rtl::OUString;
-
 #include <unoidl/unoidl.hxx>
 
 #include "paths.hxx"
@@ -64,7 +62,7 @@ using rtl::OUString;
 
 namespace {
 
-rtl::OUString makePrefix(rtl::OUString const & name) {
+OUString makePrefix(OUString const & name) {
     return name.isEmpty() ? name : name + ".";
 }
 
@@ -84,7 +82,7 @@ class SimpleTypeDescription:
 {
 public:
     SimpleTypeDescription(
-        css::uno::TypeClass typeClass, rtl::OUString const & name):
+        css::uno::TypeClass typeClass, OUString const & name):
         typeClass_(typeClass), name_(name)
     {}
 
@@ -94,11 +92,11 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return typeClass_; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     css::uno::TypeClass typeClass_;
-    rtl::OUString name_;
+    OUString name_;
 };
 
 class SequenceTypeDescription:
@@ -107,7 +105,7 @@ class SequenceTypeDescription:
 public:
     SequenceTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name, rtl::OUString const & componentType):
+        OUString const & name, OUString const & componentType):
         manager_(manager), name_(name), componentType_(componentType)
     { assert(manager.is()); }
 
@@ -117,7 +115,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SEQUENCE; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -125,8 +123,8 @@ private:
     { return manager_->resolve(componentType_); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
-    rtl::OUString componentType_;
+    OUString name_;
+    OUString componentType_;
 };
 
 class PublishableDescription:
@@ -150,7 +148,7 @@ class ModuleDescription:
 public:
     ModuleDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::ModuleEntity > const & entity):
         manager_(manager), name_(name), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
@@ -161,7 +159,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_MODULE; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual
@@ -170,14 +168,14 @@ private:
     SAL_CALL getMembers() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::ModuleEntity > entity_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 ModuleDescription::getMembers() {
     try {
-        std::vector< rtl::OUString > names(entity_->getMemberNames());
+        std::vector< OUString > names(entity_->getMemberNames());
         assert(names.size() <= SAL_MAX_INT32);
         sal_Int32 n = static_cast< sal_Int32 >(names.size());
         css::uno::Sequence<
@@ -200,7 +198,7 @@ EnumTypeDescription_Base;
 class EnumTypeDescription: public EnumTypeDescription_Base {
 public:
     EnumTypeDescription(
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::EnumTypeEntity > const & entity):
         EnumTypeDescription_Base(entity->isPublished()), name_(name),
         entity_(entity)
@@ -212,25 +210,25 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_ENUM; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual sal_Int32 SAL_CALL getDefaultEnumValue() override
     { return entity_->getMembers()[0].value; }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getEnumNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getEnumNames() override;
 
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL getEnumValues() override;
 
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::EnumTypeEntity > entity_;
 };
 
-css::uno::Sequence< rtl::OUString > EnumTypeDescription::getEnumNames()
+css::uno::Sequence< OUString > EnumTypeDescription::getEnumNames()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< rtl::OUString > s(n);
+    css::uno::Sequence< OUString > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i] = entity_->getMembers()[i].name;
     }
@@ -256,7 +254,7 @@ class PlainStructTypeDescription: public PlainStructTypeDescription_Base {
 public:
     PlainStructTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::PlainStructTypeEntity > const & entity):
         PlainStructTypeDescription_Base(entity->isPublished()),
         manager_(manager), name_(name), entity_(entity)
@@ -268,7 +266,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_STRUCT; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -283,10 +281,10 @@ private:
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getTypeParameters() override
-    { return css::uno::Sequence< rtl::OUString >(); }
+    virtual css::uno::Sequence< OUString > SAL_CALL getTypeParameters() override
+    { return css::uno::Sequence< OUString >(); }
 
     virtual
     css::uno::Sequence<
@@ -297,7 +295,7 @@ private:
     }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::PlainStructTypeEntity > entity_;
 };
 
@@ -314,11 +312,11 @@ PlainStructTypeDescription::getMemberTypes()
     return s;
 }
 
-css::uno::Sequence< rtl::OUString > PlainStructTypeDescription::getMemberNames()
+css::uno::Sequence< OUString > PlainStructTypeDescription::getMemberNames()
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
-    css::uno::Sequence< rtl::OUString > s(n);
+    css::uno::Sequence< OUString > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i] = entity_->getDirectMembers()[i].name;
     }
@@ -330,7 +328,7 @@ class ParameterizedMemberTypeDescription:
 {
 public:
     explicit ParameterizedMemberTypeDescription(
-        rtl::OUString const & typeParameterName):
+        OUString const & typeParameterName):
         typeParameterName_(typeParameterName)
     {}
 
@@ -340,10 +338,10 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_UNKNOWN; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return typeParameterName_; }
 
-    rtl::OUString typeParameterName_;
+    OUString typeParameterName_;
 };
 
 typedef cppu::ImplInheritanceHelper<
@@ -356,7 +354,7 @@ class PolymorphicStructTypeTemplateDescription:
 public:
     PolymorphicStructTypeTemplateDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
             entity):
         PolymorphicStructTypeTemplateDescription_Base(entity->isPublished()),
@@ -369,7 +367,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_STRUCT; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -381,9 +379,9 @@ private:
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getTypeParameters() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getTypeParameters() override;
 
     virtual
     css::uno::Sequence<
@@ -394,7 +392,7 @@ private:
     }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > entity_;
 };
 
@@ -414,24 +412,24 @@ PolymorphicStructTypeTemplateDescription::getMemberTypes()
     return s;
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 PolymorphicStructTypeTemplateDescription::getMemberNames()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< rtl::OUString > s(n);
+    css::uno::Sequence< OUString > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i] = entity_->getMembers()[i].name;
     }
     return s;
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 PolymorphicStructTypeTemplateDescription::getTypeParameters()
 {
     assert(entity_->getTypeParameters().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getTypeParameters().size());
-    css::uno::Sequence< rtl::OUString > s(n);
+    css::uno::Sequence< OUString > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i] = entity_->getTypeParameters()[i];
     }
@@ -444,10 +442,10 @@ class InstantiatedPolymorphicStructTypeDescription:
 public:
     InstantiatedPolymorphicStructTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
             entity,
-        std::vector< rtl::OUString > const & arguments):
+        std::vector< OUString > const & arguments):
         manager_(manager), name_(name), entity_(entity), arguments_(arguments)
     {
         assert(manager.is());
@@ -461,7 +459,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_STRUCT; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -473,10 +471,10 @@ private:
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getTypeParameters() override
-    { return css::uno::Sequence< rtl::OUString >(); }
+    virtual css::uno::Sequence< OUString > SAL_CALL getTypeParameters() override
+    { return css::uno::Sequence< OUString >(); }
 
     virtual
     css::uno::Sequence<
@@ -484,9 +482,9 @@ private:
     SAL_CALL getTypeArguments() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > entity_;
-    std::vector< rtl::OUString > arguments_;
+    std::vector< OUString > arguments_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
@@ -497,9 +495,9 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
-        rtl::OUString type(entity_->getMembers()[i].type);
+        OUString type(entity_->getMembers()[i].type);
         if (entity_->getMembers()[i].parameterized) {
-            for (std::vector< rtl::OUString >::const_iterator j(
+            for (std::vector< OUString >::const_iterator j(
                      entity_->getTypeParameters().begin());
                  j != entity_->getTypeParameters().end(); ++j)
             {
@@ -516,12 +514,12 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
     return s;
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 InstantiatedPolymorphicStructTypeDescription::getMemberNames()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< rtl::OUString > s(n);
+    css::uno::Sequence< OUString > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i] = entity_->getMembers()[i].name;
     }
@@ -548,7 +546,7 @@ class ExceptionTypeDescription: public ExceptionTypeDescription_Base {
 public:
     ExceptionTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::ExceptionTypeEntity > const & entity):
         ExceptionTypeDescription_Base(entity->isPublished()), manager_(manager),
         name_(name), entity_(entity)
@@ -560,7 +558,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_EXCEPTION; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -575,10 +573,10 @@ private:
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::ExceptionTypeEntity > entity_;
 };
 
@@ -594,11 +592,11 @@ ExceptionTypeDescription::getMemberTypes() {
     return s;
 }
 
-css::uno::Sequence< rtl::OUString > ExceptionTypeDescription::getMemberNames()
+css::uno::Sequence< OUString > ExceptionTypeDescription::getMemberNames()
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
-    css::uno::Sequence< rtl::OUString > s(n);
+    css::uno::Sequence< OUString > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i] = entity_->getDirectMembers()[i].name;
     }
@@ -612,7 +610,7 @@ class AttributeDescription:
 public:
     AttributeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         unoidl::InterfaceTypeEntity::Attribute const & attribute,
         sal_Int32 position):
         manager_(manager), name_(name), attribute_(attribute),
@@ -625,10 +623,10 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_INTERFACE_ATTRIBUTE; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
-    virtual rtl::OUString SAL_CALL getMemberName() override
+    virtual OUString SAL_CALL getMemberName() override
     { return attribute_.name; }
 
     virtual sal_Int32 SAL_CALL getPosition() override
@@ -655,7 +653,7 @@ private:
     SAL_CALL getSetExceptions() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     unoidl::InterfaceTypeEntity::Attribute attribute_;
     sal_Int32 position_;
 };
@@ -704,7 +702,7 @@ public:
 private:
     virtual ~MethodParameter() override {}
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return parameter_.name; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -744,7 +742,7 @@ class MethodDescription:
 public:
     MethodDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         unoidl::InterfaceTypeEntity::Method const & method, sal_Int32 position):
         manager_(manager), name_(name), method_(method), position_(position)
     { assert(manager.is()); }
@@ -755,10 +753,10 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_INTERFACE_METHOD; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
-    virtual rtl::OUString SAL_CALL getMemberName() override
+    virtual OUString SAL_CALL getMemberName() override
     { return method_.name; }
 
     virtual sal_Int32 SAL_CALL getPosition() override
@@ -782,7 +780,7 @@ private:
     SAL_CALL getExceptions() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     unoidl::InterfaceTypeEntity::Method method_;
     sal_Int32 position_;
 };
@@ -831,7 +829,7 @@ private:
         css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >
             const & description);
 
-    std::set< rtl::OUString > set_;
+    std::set< OUString > set_;
     sal_Int32 offset_;
 };
 
@@ -876,7 +874,7 @@ class InterfaceTypeDescription: public InterfaceTypeDescription_Base {
 public:
     InterfaceTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::InterfaceTypeEntity > const & entity):
         InterfaceTypeDescription_Base(entity->isPublished()), manager_(manager),
         name_(name), entity_(entity)
@@ -888,7 +886,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_INTERFACE; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -918,7 +916,7 @@ private:
     SAL_CALL getOptionalBaseTypes() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::InterfaceTypeEntity > entity_;
 };
 
@@ -981,7 +979,7 @@ class ConstantDescription:
 {
 public:
     ConstantDescription(
-        rtl::OUString const & constantGroupName,
+        OUString const & constantGroupName,
         unoidl::ConstantGroupEntity::Member const & member);
 
 private:
@@ -990,18 +988,18 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_CONSTANT; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Any SAL_CALL getConstantValue() override
     { return value_; }
 
-    rtl::OUString name_;
+    OUString name_;
     css::uno::Any value_;
 };
 
 ConstantDescription::ConstantDescription(
-    rtl::OUString const & constantGroupName,
+    OUString const & constantGroupName,
     unoidl::ConstantGroupEntity::Member const & member):
     name_(makePrefix(constantGroupName) + member.name)
 {
@@ -1048,7 +1046,7 @@ ConstantGroupDescription_Base;
 class ConstantGroupDescription: public ConstantGroupDescription_Base {
 public:
     ConstantGroupDescription(
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity):
         ConstantGroupDescription_Base(entity->isPublished()), name_(name),
         entity_(entity)
@@ -1060,7 +1058,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_CONSTANTS; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual
@@ -1068,7 +1066,7 @@ private:
         css::uno::Reference< css::reflection::XConstantTypeDescription > >
     SAL_CALL getConstants() override;
 
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::ConstantGroupEntity > entity_;
 };
 
@@ -1093,7 +1091,7 @@ class TypedefDescription: public TypedefDescription_Base {
 public:
     TypedefDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::TypedefEntity > const & entity):
         TypedefDescription_Base(entity->isPublished()), manager_(manager),
         name_(name), entity_(entity)
@@ -1105,7 +1103,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_TYPEDEF; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -1113,7 +1111,7 @@ private:
     { return manager_->resolve(entity_->getType()); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::TypedefEntity > entity_;
 };
 
@@ -1132,7 +1130,7 @@ public:
 private:
     virtual ~ConstructorParameter() override {}
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return parameter_.name; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -1175,7 +1173,7 @@ private:
     virtual sal_Bool SAL_CALL isDefaultConstructor() override
     { return constructor_.defaultConstructor; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return constructor_.name; }
 
     virtual
@@ -1230,7 +1228,7 @@ class SingleInterfaceBasedServiceDescription:
 public:
     SingleInterfaceBasedServiceDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > const &
             entity):
         SingleInterfaceBasedServiceDescription_Base(entity->isPublished()),
@@ -1243,7 +1241,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SERVICE; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual
@@ -1307,7 +1305,7 @@ private:
     SAL_CALL getConstructors() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > entity_;
 };
 
@@ -1343,7 +1341,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_PROPERTY; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return property_.name; }
 
     virtual sal_Int16 SAL_CALL getPropertyFlags() override
@@ -1367,7 +1365,7 @@ class AccumulationBasedServiceDescription:
 public:
     AccumulationBasedServiceDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::AccumulationBasedServiceEntity > const &
             entity):
         AccumulationBasedServiceDescription_Base(entity->isPublished()),
@@ -1380,7 +1378,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SERVICE; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual
@@ -1426,7 +1424,7 @@ private:
     }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::AccumulationBasedServiceEntity > entity_;
 };
 
@@ -1531,7 +1529,7 @@ class InterfaceBasedSingletonDescription:
 public:
     InterfaceBasedSingletonDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::InterfaceBasedSingletonEntity > const & entity):
         InterfaceBasedSingletonDescription_Base(entity->isPublished()),
         manager_(manager), name_(name), entity_(entity)
@@ -1543,7 +1541,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SINGLETON; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XServiceTypeDescription >
@@ -1561,7 +1559,7 @@ private:
     { return manager_->resolve(entity_->getBase()); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::InterfaceBasedSingletonEntity > entity_;
 };
 
@@ -1575,7 +1573,7 @@ class ServiceBasedSingletonDescription:
 public:
     ServiceBasedSingletonDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & name,
+        OUString const & name,
         rtl::Reference< unoidl::ServiceBasedSingletonEntity > const & entity):
         ServiceBasedSingletonDescription_Base(entity_->isPublished()),
         manager_(manager), name_(name), entity_(entity)
@@ -1587,7 +1585,7 @@ private:
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override
     { return css::uno::TypeClass_SINGLETON; }
 
-    virtual rtl::OUString SAL_CALL getName() override
+    virtual OUString SAL_CALL getName() override
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XServiceTypeDescription >
@@ -1605,7 +1603,7 @@ private:
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    rtl::OUString name_;
+    OUString name_;
     rtl::Reference< unoidl::ServiceBasedSingletonEntity > entity_;
 };
 
@@ -1615,7 +1613,7 @@ class Enumeration:
 public:
     Enumeration(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        rtl::OUString const & prefix,
+        OUString const & prefix,
         rtl::Reference< unoidl::MapCursor > const & cursor,
         css::uno::Sequence< css::uno::TypeClass > const & types, bool deep):
         manager_(manager), types_(types), deep_(deep)
@@ -1643,13 +1641,13 @@ private:
 
     struct Position {
         Position(
-            rtl::OUString const & thePrefix,
+            OUString const & thePrefix,
             rtl::Reference< unoidl::MapCursor > const & theCursor):
             prefix(thePrefix), cursor(theCursor)
         { assert(theCursor.is()); }
 
         Position(
-            rtl::OUString const & thePrefix,
+            OUString const & thePrefix,
             rtl::Reference< unoidl::ConstantGroupEntity > const &
                 theConstantGroup):
             prefix(thePrefix), constantGroup(theConstantGroup),
@@ -1665,7 +1663,7 @@ private:
             }
         }
 
-        rtl::OUString prefix;
+        OUString prefix;
         rtl::Reference< unoidl::MapCursor > cursor;
         rtl::Reference< unoidl::ConstantGroupEntity > constantGroup;
         std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator
@@ -1678,13 +1676,13 @@ private:
 
     osl::Mutex mutex_;
     std::stack< Position > positions_;
-    rtl::OUString current_;
+    OUString current_;
 };
 
 css::uno::Reference< css::reflection::XTypeDescription >
 Enumeration::nextTypeDescription()
 {
-    rtl::OUString name;
+    OUString name;
     {
         osl::MutexGuard g(mutex_);
         if (positions_.empty()) {
@@ -1714,7 +1712,7 @@ void Enumeration::findNextMatch() {
     try {
         for (;;) {
             assert(!positions_.empty());
-            rtl::OUString name;
+            OUString name;
             if (positions_.top().cursor.is()) { // root or module
                 rtl::Reference< unoidl::Entity > ent(
                     positions_.top().cursor->getNext(&name));
@@ -1808,7 +1806,7 @@ cppuhelper::TypeManager::TypeManager():
     manager_(new unoidl::Manager)
 {}
 
-css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
+css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
     struct Simple {
         OUStringLiteral name;
@@ -1856,7 +1854,7 @@ css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
     }
     i = name.lastIndexOf('.');
     if (i != -1) {
-        rtl::OUString parent(name.copy(0, i));
+        OUString parent(name.copy(0, i));
         ent = findEntity(parent);
         if (ent.is()) {
             switch (ent->getSort()) {
@@ -1878,7 +1876,7 @@ css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
 }
 
 css::uno::Reference< css::reflection::XTypeDescription >
-cppuhelper::TypeManager::resolve(rtl::OUString const & name) {
+cppuhelper::TypeManager::resolve(OUString const & name) {
     css::uno::Reference< css::reflection::XTypeDescription > desc(
         find(name), css::uno::UNO_QUERY);
     if (!desc.is()) {
@@ -1893,19 +1891,19 @@ cppuhelper::TypeManager::~TypeManager() throw () {}
 
 void cppuhelper::TypeManager::disposing() {} //TODO
 
-rtl::OUString cppuhelper::TypeManager::getImplementationName()
+OUString cppuhelper::TypeManager::getImplementationName()
 {
-    return rtl::OUString(
+    return OUString(
         "com.sun.star.comp.cppuhelper.bootstrap.TypeManager");
 }
 
 sal_Bool cppuhelper::TypeManager::supportsService(
-    rtl::OUString const & ServiceName)
+    OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 cppuhelper::TypeManager::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> names { "com.sun.star.reflection.TypeDescriptionManager" }; //TODO
@@ -1913,7 +1911,7 @@ cppuhelper::TypeManager::getSupportedServiceNames()
 }
 
 css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
-    rtl::OUString const & aName)
+    OUString const & aName)
 {
     css::uno::Any desc(find(aName));
     if (!desc.hasValue()) {
@@ -1924,14 +1922,14 @@ css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
 }
 
 sal_Bool cppuhelper::TypeManager::hasByHierarchicalName(
-    rtl::OUString const & aName)
+    OUString const & aName)
 {
     return find(aName).hasValue();
 }
 
 css::uno::Type cppuhelper::TypeManager::getElementType()
 {
-    return cppu::UnoType< rtl::OUString >::get();
+    return cppu::UnoType< OUString >::get();
 }
 
 sal_Bool cppuhelper::TypeManager::hasElements()
@@ -1958,7 +1956,7 @@ sal_Bool cppuhelper::TypeManager::has(css::uno::Any const &)
 
 void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
 {
-    rtl::OUString uri;
+    OUString uri;
     if (!(aElement >>= uri)) {
         throw css::lang::IllegalArgumentException(
             ("css.uno.theTypeDescriptionManager.insert expects a string URI"
@@ -1972,7 +1970,7 @@ void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
 
 void cppuhelper::TypeManager::remove(css::uno::Any const & aElement)
 {
-    rtl::OUString uri;
+    OUString uri;
     if (!(aElement >>= uri)) {
         throw css::lang::IllegalArgumentException(
             ("css.uno.theTypeDescriptionManager.remove expects a string URI"
@@ -1984,7 +1982,7 @@ void cppuhelper::TypeManager::remove(css::uno::Any const & aElement)
 
 css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
 cppuhelper::TypeManager::createTypeDescriptionEnumeration(
-    rtl::OUString const & moduleName,
+    OUString const & moduleName,
     css::uno::Sequence< css::uno::TypeClass > const & types,
     css::reflection::TypeDescriptionSearchDepth depth)
 {
@@ -2008,9 +2006,9 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
         depth == css::reflection::TypeDescriptionSearchDepth_INFINITE);
 }
 
-void cppuhelper::TypeManager::init(rtl::OUString const & rdbUris) {
+void cppuhelper::TypeManager::init(OUString const & rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        rtl::OUString uri(rdbUris.getToken(0, ' ', i));
+        OUString uri(rdbUris.getToken(0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }
@@ -2026,7 +2024,7 @@ void cppuhelper::TypeManager::init(rtl::OUString const & rdbUris) {
 }
 
 void cppuhelper::TypeManager::readRdbDirectory(
-    rtl::OUString const & uri, bool optional)
+    OUString const & uri, bool optional)
 {
     osl::Directory dir(uri);
     switch (dir.open()) {
@@ -2044,7 +2042,7 @@ void cppuhelper::TypeManager::readRdbDirectory(
             static_cast< cppu::OWeakObject * >(this));
     }
     for (;;) {
-        rtl::OUString url;
+        OUString url;
         if (!cppu::nextDirectoryItem(dir, &url)) {
             break;
         }
@@ -2053,7 +2051,7 @@ void cppuhelper::TypeManager::readRdbDirectory(
 }
 
 void cppuhelper::TypeManager::readRdbFile(
-    rtl::OUString const & uri, bool optional)
+    OUString const & uri, bool optional)
 {
     try {
         manager_->addProvider(uri);
@@ -2073,7 +2071,7 @@ void cppuhelper::TypeManager::readRdbFile(
 }
 
 css::uno::Any cppuhelper::TypeManager::getSequenceType(
-    rtl::OUString const & name)
+    OUString const & name)
 {
     assert(name.startsWith("[]"));
     return css::uno::makeAny<
@@ -2083,7 +2081,7 @@ css::uno::Any cppuhelper::TypeManager::getSequenceType(
 }
 
 css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
-    rtl::OUString const & name, sal_Int32 separator)
+    OUString const & name, sal_Int32 separator)
 {
     assert(name.indexOf('<') == separator && separator != -1);
     rtl::Reference< unoidl::Entity > ent(findEntity(name.copy(0, separator)));
@@ -2096,7 +2094,7 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
         static_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
             ent.get()));
-    std::vector< rtl::OUString > args;
+    std::vector< OUString > args;
     sal_Int32 i = separator;
     do {
         ++i; // skip '<' or ','
@@ -2133,7 +2131,7 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
 }
 
 css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
-    rtl::OUString const & name, sal_Int32 separator)
+    OUString const & name, sal_Int32 separator)
 {
     assert(name.indexOf("::") == separator && separator != -1);
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
@@ -2141,7 +2139,7 @@ css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
     if (!ifc.is()) {
         return css::uno::Any();
     }
-    rtl::OUString member(name.copy(separator + std::strlen("::")));
+    OUString member(name.copy(separator + std::strlen("::")));
     css::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > mems(
@@ -2157,7 +2155,7 @@ css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
 }
 
 css::uno::Any cppuhelper::TypeManager::getNamed(
-    rtl::OUString const & name, rtl::Reference< unoidl::Entity > const & entity)
+    OUString const & name, rtl::Reference< unoidl::Entity > const & entity)
 {
     assert(entity.is());
     switch (entity->getSort()) {
@@ -2250,7 +2248,7 @@ css::uno::Any cppuhelper::TypeManager::getNamed(
 
 css::uno::Any cppuhelper::TypeManager::getEnumMember(
     rtl::Reference< unoidl::EnumTypeEntity > const & entity,
-    rtl::OUString const & member)
+    OUString const & member)
 {
     for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
              entity->getMembers().begin());
@@ -2264,9 +2262,9 @@ css::uno::Any cppuhelper::TypeManager::getEnumMember(
 }
 
 css::uno::Any cppuhelper::TypeManager::getConstant(
-    rtl::OUString const & constantGroupName,
+    OUString const & constantGroupName,
     rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
-    rtl::OUString const & member)
+    OUString const & member)
 {
     for (std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator i(
              entity->getMembers().begin());
@@ -2282,7 +2280,7 @@ css::uno::Any cppuhelper::TypeManager::getConstant(
 }
 
 rtl::Reference< unoidl::Entity > cppuhelper::TypeManager::findEntity(
-    rtl::OUString const & name)
+    OUString const & name)
 {
     try {
         return manager_->findEntity(name);

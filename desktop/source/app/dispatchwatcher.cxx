@@ -92,7 +92,7 @@ struct DispatchHolder
 namespace
 {
 
-std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory )
+std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const OUString& rUrl, const OUString& rFactory )
 {
     // create the list of filters
     OUStringBuffer sQuery(256);
@@ -116,7 +116,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const rtl::OUStr
     while ( xFilterEnum->hasMoreElements() )
     {
         comphelper::SequenceAsHashMap aFilterProps( xFilterEnum->nextElement() );
-        const rtl::OUString aName( aFilterProps.getUnpackedValueOrDefault( "Name", rtl::OUString() ) );
+        const OUString aName( aFilterProps.getUnpackedValueOrDefault( "Name", OUString() ) );
         if ( !aName.isEmpty() )
         {
             std::shared_ptr<const SfxFilter> pFilter( SfxFilter::GetFilterByName( aName ) );
@@ -132,7 +132,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const rtl::OUStr
 }
 
 std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
-        const rtl::OUString& rUrl, const rtl::OUString& rFactory)
+        const OUString& rUrl, const OUString& rFactory)
 {
     try
     {
@@ -140,7 +140,7 @@ std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
         const Reference< document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", xContext ),
             UNO_QUERY_THROW );
-        const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
+        const OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
         std::shared_ptr<const SfxFilter> pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SfxFilterFlags::EXPORT ) );
         if ( !pFilter )
@@ -217,9 +217,9 @@ void scriptCat(const Reference< XModel >& xDoc )
             std::cout << aObjectNames.getLength() << "\n\n";
             for ( sal_Int32 j = 0 ; j < aObjectNames.getLength() ; ++j )
             {
-                rtl::OUString &rObjectName = aObjectNames[j];
+                OUString &rObjectName = aObjectNames[j];
 
-                rtl::OUString aCodeString;
+                OUString aCodeString;
                 try
                 {
                     Any aCode = xContainer->getByName( rObjectName );

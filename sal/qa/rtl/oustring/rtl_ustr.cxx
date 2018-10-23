@@ -24,12 +24,12 @@
 /** print a UNI_CODE file name.
 */
 /*
-inline void printOUString( ::rtl::OUString const & _suStr )
+inline void printOUString( OUString const & _suStr )
 {
-    rtl::OString aString;
+    OString aString;
 
     printf( "OUString: " );
-    aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
+    aString = OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
     printf( "%s\n", aString.getStr( ) );
 }
 */
@@ -49,14 +49,14 @@ namespace rtl_ustr
 
         void compare_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_compare( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void compare_001()
             {
-                rtl::OUString aStr1;
-                rtl::OUString aStr2;
+                OUString aStr1;
+                OUString aStr2;
 
                 sal_Int32 nValue = rtl_ustr_compare( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -64,8 +64,8 @@ namespace rtl_ustr
 
         void compare_002()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OUString aStr2("Line must be equal.");
+                OUString aStr1("Line must be equal.");
+                OUString aStr2("Line must be equal.");
 
                 sal_Int32 nValue = rtl_ustr_compare( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -73,8 +73,8 @@ namespace rtl_ustr
 
         void compare_003()
             {
-                rtl::OUString aStr1("Line must differ.");
-                rtl::OUString aStr2("Line foo bar, ok, differ.");
+                OUString aStr1("Line must differ.");
+                OUString aStr2("Line foo bar, ok, differ.");
 
                 sal_Int32 nValue = rtl_ustr_compare( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -104,13 +104,13 @@ namespace rtl_ustr
 
         void compare_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
             }
         void compare_001()
             {
-                rtl::OUString aStr1;
-                rtl::OUString aStr2;
+                OUString aStr1;
+                OUString aStr2;
 
                 sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -118,8 +118,8 @@ namespace rtl_ustr
 
         void compare_002()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OUString aStr2("Line must be equal.");
+                OUString aStr1("Line must be equal.");
+                OUString aStr2("Line must be equal.");
 
                 sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -127,8 +127,8 @@ namespace rtl_ustr
 
         void compare_002_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OUString aStr2("LINE MUST BE EQUAL.");
+                OUString aStr1("Line must be equal.");
+                OUString aStr2("LINE MUST BE EQUAL.");
 
                 sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
@@ -136,8 +136,8 @@ namespace rtl_ustr
 
         void compare_003()
             {
-                rtl::OUString aStr1("Line must differ.");
-                rtl::OUString aStr2("Line foo bar, ok, differ.");
+                OUString aStr1("Line must differ.");
+                OUString aStr2("Line foo bar, ok, differ.");
 
                 sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -168,13 +168,13 @@ namespace rtl_ustr
 
         void compare_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0, 1);
             }
         void compare_001()
             {
-                rtl::OUString aStr1;
-                rtl::OUString aStr2;
+                OUString aStr1;
+                OUString aStr2;
 
                 sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), aStr2.getStr(), aStr2.getLength(), aStr1.getLength());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -182,8 +182,8 @@ namespace rtl_ustr
 
         void compare_002()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OUString aStr2("Line must be equal.");
+                OUString aStr1("Line must be equal.");
+                OUString aStr2("Line must be equal.");
 
                 sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
@@ -193,8 +193,8 @@ namespace rtl_ustr
 
         void compare_002_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OUString aStr2("LINE MUST BE EQUAL.");
+                OUString aStr1("Line must be equal.");
+                OUString aStr2("LINE MUST BE EQUAL.");
 
                 sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
@@ -204,8 +204,8 @@ namespace rtl_ustr
 
         void compare_003()
             {
-                rtl::OUString aStr1("Line must differ.");
-                rtl::OUString aStr2("Line foo bar, ok, differ.");
+                OUString aStr1("Line must differ.");
+                OUString aStr2("Line foo bar, ok, differ.");
 
                 sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
@@ -215,8 +215,8 @@ namespace rtl_ustr
 
         void compare_004()
             {
-                rtl::OUString aStr1("Line must differ.");
-                rtl::OUString aStr2("Line foo bar, ok, differ.");
+                OUString aStr1("Line must differ.");
+                OUString aStr2("Line foo bar, ok, differ.");
 
                 sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
@@ -253,7 +253,7 @@ namespace rtl_ustr
 //
 //         void hashCode_001()
 //             {
-//                 rtl::OString aStr1 = "Line for a hashCode.";
+//                 OString aStr1 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode = rtl_ustr_hashCode( aStr1.getStr() );
 //                 printf("hashcode: %d\n", nHashCode);
 //                 // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
@@ -261,10 +261,10 @@ namespace rtl_ustr
 //
 //         void hashCode_002()
 //             {
-//                 rtl::OString aStr1 = "Line for a hashCode.";
+//                 OString aStr1 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode1 = rtl_ustr_hashCode( aStr1.getStr() );
 //
-//                 rtl::OString aStr2 = "Line for a hashCode.";
+//                 OString aStr2 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode2 = rtl_ustr_hashCode( aStr2.getStr() );
 //
 //                 CPPUNIT_ASSERT_MESSAGE("hashcodes must be equal.", nHashCode1 == nHashCode2 );
@@ -272,10 +272,10 @@ namespace rtl_ustr
 //
 //         void hashCode_003()
 //             {
-//                 rtl::OString aStr1 = "Line for a hashCode.";
+//                 OString aStr1 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode1 = rtl_ustr_hashCode( aStr1.getStr() );
 //
-//                 rtl::OString aStr2 = "Line for another hashcode.";
+//                 OString aStr2 = "Line for another hashcode.";
 //                 sal_Int32 nHashCode2 = rtl_ustr_hashCode( aStr2.getStr() );
 //
 //                 CPPUNIT_ASSERT_MESSAGE("hashcodes must differ.", nHashCode1 != nHashCode2 );
@@ -304,7 +304,7 @@ namespace rtl_ustr
 
         void indexOfChar_001()
             {
-                rtl::OUString aStr1("Line for a indexOfChar.");
+                OUString aStr1("Line for a indexOfChar.");
 
                 sal_Int32 nIndex = rtl_ustr_indexOfChar( aStr1.getStr(), 'L' );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
@@ -321,7 +321,7 @@ namespace rtl_ustr
 
         void indexOfChar_002()
             {
-                rtl::OUString aStr1("Line for a indexOfChar.");
+                OUString aStr1("Line for a indexOfChar.");
                 sal_Int32 nIndex = rtl_ustr_indexOfChar( aStr1.getStr(), 'y' );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
@@ -349,7 +349,7 @@ namespace rtl_ustr
 
         void lastIndexOfChar_001()
             {
-                rtl::OUString aStr1("Line for a lastIndexOfChar.");
+                OUString aStr1("Line for a lastIndexOfChar.");
 
                 sal_Int32 nIndex = rtl_ustr_lastIndexOfChar( aStr1.getStr(), 'C' );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 22);
@@ -366,7 +366,7 @@ namespace rtl_ustr
 
         void lastIndexOfChar_002()
             {
-                rtl::OUString aStr1("Line for a lastIndexOfChar.");
+                OUString aStr1("Line for a lastIndexOfChar.");
                 sal_Int32 nIndex = rtl_ustr_lastIndexOfChar( aStr1.getStr(), 'y' );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
@@ -394,35 +394,35 @@ namespace rtl_ustr
 
         void indexOfStr_000_1()
             {
-                rtl::OUString aStr1("Line for a indexOfStr.");
+                OUString aStr1("Line for a indexOfStr.");
                 rtl_ustr_indexOfStr( aStr1.getStr(), 0 );
             }
 
         void indexOfStr_001()
             {
-                rtl::OUString aStr1("Line for a indexOfStr.");
+                OUString aStr1("Line for a indexOfStr.");
 
-                rtl::OUString suSearch("Line");
+                OUString suSearch("Line");
                 sal_Int32 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
 
-                /* rtl::OUString */ suSearch("for");
+                /* OUString */ suSearch("for");
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 5);
 
-                /* rtl::OUString */ suSearch("a");
+                /* OUString */ suSearch("a");
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 9);
 
-                /* rtl::OUString */ suSearch("a index");
+                /* OUString */ suSearch("a index");
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex ==9);
             }
 
         void indexOfStr_002()
             {
-                rtl::OUString aStr1("Line for a indexOfStr.");
-                rtl::OUString suSearch("not exist");
+                OUString aStr1("Line for a indexOfStr.");
+                OUString suSearch("not exist");
                 sal_Int32 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
@@ -450,31 +450,31 @@ namespace rtl_ustr
 
         void lastIndexOfStr_000_1()
             {
-                rtl::OUString aStr1("Line for a lastIndexOfStr.");
+                OUString aStr1("Line for a lastIndexOfStr.");
                 rtl_ustr_lastIndexOfStr( aStr1.getStr(), NULL );
             }
 
         void lastIndexOfStr_001()
             {
-                rtl::OUString aStr1("Line for a lastIndexOfStr.");
-                rtl::OUString aSearchStr("Index");
+                OUString aStr1("Line for a lastIndexOfStr.");
+                OUString aSearchStr("Index");
 
                 sal_Int32 nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 15);
 
-                /* rtl::OString */ aSearchStr = rtl::OUString("Line");
+                /* OString */ aSearchStr = OUString("Line");
                 /* sal_Int32 */ nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
 
-                /* rtl::OString */ aSearchStr = rtl::OUString();
+                /* OString */ aSearchStr = OUString();
                 /* sal_Int32 */ nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1);
             }
 
         void lastIndexOfStr_002()
             {
-                rtl::OUString aStr1("Line for a lastIndexOfStr.");
-                rtl::OUString aSearchStr("foo");
+                OUString aStr1("Line for a lastIndexOfStr.");
+                OUString aSearchStr("foo");
                 sal_Int32 nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
@@ -482,8 +482,8 @@ namespace rtl_ustr
 
         void lastIndexOfStr_003()
             {
-                rtl::OUString aStr1("Line for a lastIndexOfStr.");
-                rtl::OUString aSearchStr("O");
+                OUString aStr1("Line for a lastIndexOfStr.");
+                OUString aSearchStr("O");
                 sal_Int32 nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 20 );
@@ -512,8 +512,8 @@ namespace rtl_ustr
 
         void replaceChar_001()
             {
-                rtl::OUString aStr1("replace char.");
-                rtl::OUString aShouldStr1("ruplacu char.");
+                OUString aStr1("replace char.");
+                OUString aShouldStr1("ruplacu char.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc( nLength + sizeof(sal_Unicode)); // length + 1 (null terminator)
@@ -522,7 +522,7 @@ namespace rtl_ustr
                 pStr[aStr1.getLength()] = 0;
 
                 rtl_ustr_replaceChar( pStr, 'e', 'u' );
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
 
                 CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
@@ -553,8 +553,8 @@ namespace rtl_ustr
             }
         void replaceChar_WithLength_001()
             {
-                rtl::OUString aStr1("replace char.");
-                rtl::OUString aShouldStr1("ruplace char.");
+                OUString aStr1("replace char.");
+                OUString aShouldStr1("ruplace char.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength);
@@ -562,7 +562,7 @@ namespace rtl_ustr
                 memcpy(pStr, aStr1.getStr(), nLength);
 
                 rtl_ustr_replaceChar_WithLength( pStr, 6, 'e', 'u' );
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
 
                 CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
@@ -570,8 +570,8 @@ namespace rtl_ustr
 
         void replaceChar_WithLength_002()
             {
-                rtl::OUString aStr1      ("eeeeeeeeeeeee");
-                rtl::OUString aShouldStr1("uuuuuueeeeeee");
+                OUString aStr1      ("eeeeeeeeeeeee");
+                OUString aShouldStr1("uuuuuueeeeeee");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength);                 // no null terminator is need
@@ -579,7 +579,7 @@ namespace rtl_ustr
                 memcpy(pStr, aStr1.getStr(), nLength);
 
                 rtl_ustr_replaceChar_WithLength( pStr, 6, 'e', 'u' );
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
 
                 CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
@@ -608,8 +608,8 @@ namespace rtl_ustr
 
         void toAsciiLowerCase_001()
             {
-                rtl::OUString aStr1("CHANGE THIS TO ASCII LOWER CASE.");
-                rtl::OUString aShouldStr1("change this to ascii lower case.");
+                OUString aStr1("CHANGE THIS TO ASCII LOWER CASE.");
+                OUString aShouldStr1("change this to ascii lower case.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode) );  // we need to add '\0' so one more
@@ -618,7 +618,7 @@ namespace rtl_ustr
                 pStr[aStr1.getLength()] = 0;
 
                 rtl_ustr_toAsciiLowerCase( pStr );
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
 
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
@@ -645,8 +645,8 @@ namespace rtl_ustr
 
         void toAsciiLowerCase_WithLength_001()
             {
-                rtl::OUString aStr1("CHANGE THIS TO ASCII LOWER CASE.");
-                rtl::OUString aShouldStr1("change thiS TO ASCII LOWER CASE.");
+                OUString aStr1("CHANGE THIS TO ASCII LOWER CASE.");
+                OUString aShouldStr1("change thiS TO ASCII LOWER CASE.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength);
@@ -655,7 +655,7 @@ namespace rtl_ustr
 
                 rtl_ustr_toAsciiLowerCase_WithLength( pStr, 10 );
 
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
                 sal_Bool bResult = aShouldStr1.equals(suStr);
 
                 printOUString(suStr);
@@ -687,8 +687,8 @@ namespace rtl_ustr
 
         void toAsciiUpperCase_001()
             {
-                rtl::OUString aStr1("change this to ascii upper case.");
-                rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
+                OUString aStr1("change this to ascii upper case.");
+                OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
@@ -697,7 +697,7 @@ namespace rtl_ustr
                 pStr[aStr1.getLength()] = 0;
 
                 rtl_ustr_toAsciiUpperCase( pStr );
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
 
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
@@ -724,8 +724,8 @@ namespace rtl_ustr
 
         void toAsciiUpperCase_WithLength_001()
             {
-                rtl::OUString aStr1("change this to ascii lower case.");
-                rtl::OUString aShouldStr1("CHANGE THIs to ascii lower case.");
+                OUString aStr1("change this to ascii lower case.");
+                OUString aShouldStr1("CHANGE THIs to ascii lower case.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength);
@@ -733,7 +733,7 @@ namespace rtl_ustr
 
                 memcpy(pStr, aStr1.getStr(), nLength);
                 rtl_ustr_toAsciiUpperCase_WithLength( pStr, 10 );
-                rtl::OUString suStr(pStr, aStr1.getLength());
+                OUString suStr(pStr, aStr1.getLength());
 
                 // printf("Uppercase with length: '%s'\n", aStr1.getStr());
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
@@ -761,7 +761,7 @@ namespace rtl_ustr
 
         void trim_WithLength_000_1()
         {
-            rtl::OUString suStr("  trim this");
+            OUString suStr("  trim this");
 
             sal_uInt32 nLength = suStr.getLength() * sizeof(sal_Unicode);
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
@@ -773,20 +773,20 @@ namespace rtl_ustr
 
         void trim_WithLength_001()
         {
-            rtl::OUString suStr("  trim this");
+            OUString suStr("  trim this");
             sal_uInt32 nLength = suStr.getLength() * sizeof(sal_Unicode);
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
             rtl_ustr_trim_WithLength( pStr, 2 );
 
-            CPPUNIT_ASSERT_MESSAGE("string should be empty", rtl::OUString(pStr).getLength() == 0);
+            CPPUNIT_ASSERT_MESSAGE("string should be empty", OUString(pStr).getLength() == 0);
             free(pStr);
         }
 
         void trim_WithLength_002()
         {
-            rtl::OUString suStr("trim this");
+            OUString suStr("trim this");
 
             sal_uInt32 nLength = suStr.getLength() * sizeof(sal_Unicode);
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
@@ -794,13 +794,13 @@ namespace rtl_ustr
 
             rtl_ustr_trim_WithLength( pStr, 5 );
 
-            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
+            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", OUString(pStr).getLength() == 4);
             free(pStr);
         }
 
         void trim_WithLength_003()
         {
-            rtl::OUString suStr("     trim   this");
+            OUString suStr("     trim   this");
 
             sal_uInt32 nLength = suStr.getLength() * sizeof(sal_Unicode);
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
@@ -808,13 +808,13 @@ namespace rtl_ustr
 
             rtl_ustr_trim_WithLength( pStr, 11 );
 
-            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
+            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", OUString(pStr).getLength() == 4);
             free(pStr);
         }
 
         void trim_WithLength_004()
         {
-            rtl::OUString suStr("\r\n\t \n\r    trim  \n this");
+            OUString suStr("\r\n\t \n\r    trim  \n this");
 
             sal_uInt32 nLength = suStr.getLength() * sizeof(sal_Unicode);
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
@@ -822,13 +822,13 @@ namespace rtl_ustr
 
             rtl_ustr_trim_WithLength( pStr, 17 );
 
-            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
+            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", OUString(pStr).getLength() == 4);
             free(pStr);
         }
 
         void trim_WithLength_005()
         {
-            rtl::OUString suStr("\r\n\t \n\r    trim \t this \n\r\t\t     ");
+            OUString suStr("\r\n\t \n\r    trim \t this \n\r\t\t     ");
 
             sal_uInt32 nLength = suStr.getLength() * sizeof(sal_Unicode);
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
@@ -836,7 +836,7 @@ namespace rtl_ustr
 
             rtl_ustr_trim_WithLength( pStr, suStr.getLength() );
 
-            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim \\t this'", rtl::OUString(pStr).getLength() == 11);
+            CPPUNIT_ASSERT_MESSAGE("string should contain 'trim \\t this'", OUString(pStr).getLength() == 11);
             free(pStr);
         }
 
@@ -899,7 +899,7 @@ namespace rtl_ustr
 
         void equal_ascii_shorter()
         {
-            rtl::OUString refStr("referenceString");
+            OUString refStr("referenceString");
             char const * pAscii = "reference";
 
             sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
@@ -908,7 +908,7 @@ namespace rtl_ustr
 
         void equal_ascii_shorter_asciiLength()
         {
-            rtl::OUString refStr("referenceString");
+            OUString refStr("referenceString");
             char const * pAscii = "reference";
 
             sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, rtl_str_getLength(pAscii), pAscii);
@@ -917,7 +917,7 @@ namespace rtl_ustr
 
         void equal_ref_shorter()
         {
-            rtl::OUString refStr("reference");
+            OUString refStr("reference");
             char const * pAscii = "referenceString";
 
             sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
@@ -926,7 +926,7 @@ namespace rtl_ustr
 
         void equal()
         {
-            rtl::OUString refStr("reference");
+            OUString refStr("reference");
             char const * pAscii = "reference";
 
             sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
@@ -935,7 +935,7 @@ namespace rtl_ustr
 
         void unequal_reference_bigger()
        {
-            rtl::OUString refStr("defghi");
+            OUString refStr("defghi");
             char const * pAscii = "abc";
 
             sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
@@ -944,7 +944,7 @@ namespace rtl_ustr
 
         void unequal_ascii_bigger()
         {
-            rtl::OUString refStr("abc");
+            OUString refStr("abc");
             char const * pAscii = "defghi";
 
             sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
@@ -975,21 +975,21 @@ namespace rtl_ustr
 
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0);
                 // should not GPF
             }
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_2()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OString sStr2 =                                 "Line is shorter.";
+                OUString aStr1("Line must be equal.");
+                OString sStr2 =                                 "Line is shorter.";
                 rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr(), 0);
                 // should not GPF
             }
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_001()
             {
-                rtl::OUString suStr1;
-                rtl::OString sStr2;
+                OUString suStr1;
+                OString sStr2;
 
                 sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( suStr1, 0, sStr2.getStr(), 0);
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -997,8 +997,8 @@ namespace rtl_ustr
 
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_002()
             {
-                rtl::OUString suStr1("Line must be equal.");
-                rtl::OString sStr2 =                                  "Line must be equal.";
+                OUString suStr1("Line must be equal.");
+                OString sStr2 =                                  "Line must be equal.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr(), sStr2.getLength());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1006,8 +1006,8 @@ namespace rtl_ustr
 
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_003()
             {
-                rtl::OUString suStr1("Line must differ.");
-                rtl::OString sStr2 =                                  "Line must be differ and longer.";
+                OUString suStr1("Line must differ.");
+                OString sStr2 =                                  "Line must be differ and longer.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr(), sStr2.getLength());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -1039,21 +1039,21 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_WithLength_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), 0, NULL);
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_WithLength_000_2()
             {
-                rtl::OUString aStr1("Line must be equal.");
-                rtl::OString sStr2 =                                 "Line is shorter.";
+                OUString aStr1("Line must be equal.");
+                OString sStr2 =                                 "Line is shorter.";
                 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr());
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_WithLength_001()
             {
-                rtl::OUString suStr1;
-                rtl::OString sStr2;
+                OUString suStr1;
+                OString sStr2;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( suStr1, 0, sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compareIgnoreAsciiCase_WithLength failed, strings are equal.", nValue == 0);
@@ -1061,8 +1061,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_WithLength_002()
             {
-                rtl::OUString suStr1("Line must be equal.");
-                rtl::OString sStr2 =                                  "Line must be equal.";
+                OUString suStr1("Line must be equal.");
+                OString sStr2 =                                  "Line must be equal.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1070,8 +1070,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_WithLength_003()
             {
-                rtl::OUString suStr1("Line must differ.");
-                rtl::OString sStr2 =                                  "Line must be differ and longer.";
+                OUString suStr1("Line must differ.");
+                OString sStr2 =                                  "Line must be differ and longer.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -1103,14 +1103,14 @@ namespace rtl_ustr
 
         void ascii_compare_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compare( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void ascii_compare_001()
             {
-                rtl::OUString suStr1;
-                rtl::OString sStr2;
+                OUString suStr1;
+                OString sStr2;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compare( suStr1, sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1118,8 +1118,8 @@ namespace rtl_ustr
 
         void ascii_compare_002()
             {
-                rtl::OUString suStr1("Line must be equal.");
-                rtl::OString sStr2 =                                  "Line must be equal.";
+                OUString suStr1("Line must be equal.");
+                OString sStr2 =                                  "Line must be equal.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compare( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1127,8 +1127,8 @@ namespace rtl_ustr
 
         void ascii_compare_003()
             {
-                rtl::OUString suStr1("Line must differ.");
-                rtl::OString sStr2 = "Line foo bar, ok, differ.";
+                OUString suStr1("Line must differ.");
+                OString sStr2 = "Line foo bar, ok, differ.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compare( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -1159,14 +1159,14 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_001()
             {
-                rtl::OUString suStr1;
-                rtl::OString sStr2;
+                OUString suStr1;
+                OString sStr2;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1, sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1174,8 +1174,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_002()
             {
-                rtl::OUString suStr1("Line must be equal.");
-                rtl::OString sStr2 =                                  "Line must be equal.";
+                OUString suStr1("Line must be equal.");
+                OString sStr2 =                                  "Line must be equal.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1183,8 +1183,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_002_1()
             {
-                rtl::OUString suStr1("Line must be equal, when ignore case.");
-                rtl::OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
+                OUString suStr1("Line must be equal, when ignore case.");
+                OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
@@ -1192,8 +1192,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_003()
             {
-                rtl::OUString suStr1("Line must differ.");
-                rtl::OString sStr2 = "Line foo bar, ok, differ.";
+                OUString suStr1("Line must differ.");
+                OString sStr2 = "Line foo bar, ok, differ.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -1203,8 +1203,8 @@ namespace rtl_ustr
 
         // void ascii_compareIgnoreAsciiCase_001()
         //     {
-        //         rtl::OUString suStr1("change this to ascii upper case.");
-        //         rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
+        //         OUString suStr1("change this to ascii upper case.");
+        //         OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
         //
         //         sal_uInt32 nLength = suStr1.getLength() * sizeof(sal_Unicode);
         //         sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
@@ -1213,7 +1213,7 @@ namespace rtl_ustr
         //         memcpy(pStr, suStr1.getStr(), nLength);
         //
         //         rtl_ustr_ascii_compareIgnoreAsciiCase( pStr );
-        //         rtl::OUString suStr(pStr, suStr1.getLength());
+        //         OUString suStr(pStr, suStr1.getLength());
         //
         //         CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
         //         free(pStr);
@@ -1256,14 +1256,14 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_000_1()
             {
-                rtl::OUString aStr1("Line must be equal.");
+                OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_001()
             {
-                rtl::OUString suStr1;
-                rtl::OString sStr2;
+                OUString suStr1;
+                OString sStr2;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1, sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1271,8 +1271,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_002()
             {
-                rtl::OUString suStr1("Line must be equal.");
-                rtl::OString sStr2 =                                  "Line must be equal.";
+                OUString suStr1("Line must be equal.");
+                OString sStr2 =                                  "Line must be equal.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
@@ -1280,8 +1280,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_002_1()
             {
-                rtl::OUString suStr1("Line must be equal, when ignore case.");
-                rtl::OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
+                OUString suStr1("Line must be equal, when ignore case.");
+                OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
@@ -1289,8 +1289,8 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_003()
             {
-                rtl::OUString suStr1("Line must differ.");
-                rtl::OString sStr2 = "Line foo bar, ok, differ.";
+                OUString suStr1("Line must differ.");
+                OString sStr2 = "Line foo bar, ok, differ.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -1300,8 +1300,8 @@ namespace rtl_ustr
 
         // void ascii_compareIgnoreAsciiCase_001()
         //     {
-        //         rtl::OUString suStr1("change this to ascii upper case.");
-        //         rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
+        //         OUString suStr1("change this to ascii upper case.");
+        //         OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
         //
         //         sal_uInt32 nLength = suStr1.getLength() * sizeof(sal_Unicode);
         //         sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
@@ -1310,7 +1310,7 @@ namespace rtl_ustr
         //         memcpy(pStr, suStr1.getStr(), nLength);
         //
         //         rtl_ustr_ascii_compareIgnoreAsciiCase( pStr );
-        //         rtl::OUString suStr(pStr, suStr1.getLength());
+        //         OUString suStr(pStr, suStr1.getLength());
         //
         //         CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
         //         free(pStr);

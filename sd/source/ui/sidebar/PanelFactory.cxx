@@ -41,7 +41,6 @@
 using namespace css;
 using namespace css::uno;
 using namespace ::sd::framework;
-using ::rtl::OUString;
 
 namespace sd { namespace sidebar {
 
@@ -65,7 +64,7 @@ void SAL_CALL PanelFactory::disposing()
 // XUIElementFactory
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
-    const ::rtl::OUString& rsUIElementResourceURL,
+    const OUString& rsUIElementResourceURL,
     const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     // Process arguments.

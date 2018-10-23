@@ -198,7 +198,7 @@ private:
     OUString            maPrjName;          ///< Name of the VBA project.
     css::uno::Reference< css::container::XNameContainer >
                         mxOleOverridesSink;
-    typedef RefMap< rtl::OUString, VbaModule > VbaModuleMap;
+    typedef RefMap< OUString, VbaModule > VbaModuleMap;
     VbaModuleMap        maModules;
     VbaModuleMap        maModulesByStrm;
 };

@@ -223,7 +223,7 @@ def make_uno_type(val):
     elif type_class == TypeClass.DOUBLE:
         uno_type = PrimitiveType(type_class, name, 'double')
     elif type_class == TypeClass.STRING:
-        uno_type = PrimitiveType(type_class, name, 'rtl::OUString')
+        uno_type = PrimitiveType(type_class, name, 'OUString')
     elif type_class == TypeClass.TYPE:
         uno_type = PrimitiveType(type_class, name, 'com::sun::star::uno::Type')
     elif type_class == TypeClass.ANY:

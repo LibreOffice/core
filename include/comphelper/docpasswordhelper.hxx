@@ -219,11 +219,11 @@ public:
         @return the raw hash value as sal_Int8 sequence.
      */
     static css::uno::Sequence<sal_Int8> GetOoxHashAsSequence(
-            const rtl::OUString& rPassword,
-            const rtl::OUString& rSaltValue,
+            const OUString& rPassword,
+            const OUString& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
-            const rtl::OUString& rAlgorithmName);
+            const OUString& rAlgorithmName);
 
 
     /** Convenience function to calculate a salted hash with iterations as
@@ -264,12 +264,12 @@ public:
         @return the base64 encoded string of the hash value, that can be
                 compared against a stored base64 encoded hash value.
      */
-    static rtl::OUString GetOoxHashAsBase64(
-            const rtl::OUString& rPassword,
-            const rtl::OUString& rSaltValue,
+    static OUString GetOoxHashAsBase64(
+            const OUString& rPassword,
+            const OUString& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
-            const rtl::OUString& rAlgorithmName);
+            const OUString& rAlgorithmName);
 
 
     /** Convenience function to calculate a salted hash with iterations as
@@ -309,11 +309,11 @@ public:
         @return the raw the hash value.
      */
     static std::vector<unsigned char> GetOoxHashAsVector(
-            const rtl::OUString& rPassword,
+            const OUString& rPassword,
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
-            const rtl::OUString& rAlgorithmName);
+            const OUString& rAlgorithmName);
 
 
     /** This helper function generates a random sequence of bytes of

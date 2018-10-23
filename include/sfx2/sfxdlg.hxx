@@ -99,8 +99,8 @@ class SfxAbstractPasteDialog : virtual public VclAbstractDialog
 protected:
     virtual ~SfxAbstractPasteDialog() override = default;
 public:
-    virtual void Insert( SotClipboardFormatId nFormat, const rtl::OUString & rFormatName ) = 0;
-    virtual void SetObjName( const SvGlobalName & rClass, const rtl::OUString & rObjName ) = 0;
+    virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) = 0;
+    virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) = 0;
     virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper ) = 0;
 };
 
@@ -115,7 +115,7 @@ class AbstractScriptSelectorDialog : virtual public VclAbstractDialog
 protected:
     virtual ~AbstractScriptSelectorDialog() override = default;
 public:
-    virtual rtl::OUString       GetScriptURL() const = 0;
+    virtual OUString       GetScriptURL() const = 0;
     virtual void                SetRunLabel() = 0;
 };
 
@@ -126,7 +126,7 @@ class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialog
 public:
                                         virtual ~SfxAbstractDialogFactory() override;    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
-    virtual VclPtr<VclAbstractDialog>          CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
+    virtual VclPtr<VclAbstractDialog>          CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const OUString& rParameter ) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateAutoCorrTabDialog(vcl::Window* pParent, const SfxItemSet* pAttrSet) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateCustomizeTabDialog(
                                             const SfxItemSet* pAttrSet,
@@ -140,7 +140,7 @@ public:
             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
     virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog(weld::Window* pParent) = 0;
     virtual VclPtr<SfxAbstractLinksDialog>    CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=nullptr )=0;
-    virtual VclPtr<VclAbstractDialog>         CreateSvxScriptOrgDialog( vcl::Window* pParent,  const rtl::OUString& rLanguage ) = 0;
+    virtual VclPtr<VclAbstractDialog>         CreateSvxScriptOrgDialog( vcl::Window* pParent,  const OUString& rLanguage ) = 0;
 
     virtual VclPtr<AbstractScriptSelectorDialog>
         CreateScriptSelectorDialog(

@@ -38,13 +38,13 @@ class VLCFrameGrabber : public FrameGrabber_BASE
     wrapper::Player mPlayer;
     wrapper::EventHandler& mEventHandler;
 public:
-    VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString& url );
+    VLCFrameGrabber( wrapper::EventHandler& eh, const OUString& url );
 
     css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) override;
 
-    ::rtl::OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) override;
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& serviceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 }

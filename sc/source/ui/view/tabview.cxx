@@ -2473,7 +2473,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     bool bRangeHeaderSupport = comphelper::LibreOfficeKit::isRangeHeaders();
 
-    rtl::OUStringBuffer aBuffer(256);
+    OUStringBuffer aBuffer(256);
     aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
 
     SCTAB nTab = aViewData.GetTabNo();

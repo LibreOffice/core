@@ -39,7 +39,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::rtl::OUString;
 
 namespace sc { namespace sidebar {
 
@@ -53,7 +52,7 @@ ScPanelFactory::~ScPanelFactory()
 }
 
 Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
-    const ::rtl::OUString& rsResourceURL,
+    const OUString& rsResourceURL,
     const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     Reference<ui::XUIElement> xElement;

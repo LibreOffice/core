@@ -49,11 +49,11 @@ void testBoolean() {
 }
 
 void test::strings::valueX::testOBoolean() {
-    testBoolean<rtl::OString>();
+    testBoolean<OString>();
 }
 
 void test::strings::valueX::testOUBoolean() {
-    testBoolean<rtl::OUString>();
+    testBoolean<OUString>();
 }
 
 template< typename T >
@@ -91,11 +91,11 @@ static void testInt() {
 }
 
 void test::strings::valueX::testOUInt() {
-    testInt<rtl::OUString>();
+    testInt<OUString>();
 }
 
 void test::strings::valueX::testOInt() {
-    testInt<rtl::OString>();
+    testInt<OString>();
 }
 
 template< typename T >
@@ -106,10 +106,10 @@ static void testFloat() {
 }
 
 void test::strings::valueX::testOUFloat() {
-    testFloat<rtl::OUString>();
+    testFloat<OUString>();
 }
 
 void test::strings::valueX::testOFloat() {
-    testFloat<rtl::OString>();
+    testFloat<OString>();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

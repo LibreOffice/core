@@ -384,7 +384,7 @@ UDK_3.3 { # OOo 2.3
 
 UDK_3.4 { # OOo 2.4
     global:
-        _ZN4cppu19bootstrap_expandUriERKN3rtl8OUStringE; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
+        _ZN4cppu19bootstrap_expandUriERKN3rtl8OUStringE; # OUString cppu::bootstrap_expandUri(OUString const &)
 } UDK_3.3;
 
 UDK_3.5 { # OOo 3.0
@@ -427,7 +427,7 @@ global:
 
 LIBO_UDK_3.9 { # LibO 3.7
 global:
-    _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, rtl::OUString const&)
+    _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, OUString const&)
 } UDK_3.8;
 
 LIBO_UDK_5.3 { # LibO 5.3

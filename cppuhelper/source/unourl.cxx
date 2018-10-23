@@ -39,26 +39,26 @@ using cppu::UnoUrlDescriptor;
 class UnoUrlDescriptor::Impl
 {
 public:
-    typedef std::map< rtl::OUString, rtl::OUString > Parameters;
+    typedef std::map< OUString, OUString > Parameters;
 
-    rtl::OUString m_aDescriptor;
-    rtl::OUString m_aName;
+    OUString m_aDescriptor;
+    OUString m_aName;
     Parameters m_aParameters;
 
     /** @exception rtl::MalformedUriException
      */
-    explicit inline Impl(rtl::OUString const & m_aDescriptor);
+    explicit inline Impl(OUString const & m_aDescriptor);
 
     Impl * clone() const { return new Impl(*this); }
 };
 
-inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
+inline UnoUrlDescriptor::Impl::Impl(OUString const & rDescriptor)
 {
     m_aDescriptor = rDescriptor;
     enum State { STATE_NAME0, STATE_NAME, STATE_KEY0, STATE_KEY, STATE_VALUE };
     State eState = STATE_NAME0;
     sal_Int32 nStart = 0;
-    rtl::OUString aKey;
+    OUString aKey;
     for (sal_Int32 i = 0;; ++i)
     {
         bool bEnd = i == rDescriptor.getLength();
@@ -125,7 +125,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
     }
 }
 
-UnoUrlDescriptor::UnoUrlDescriptor(rtl::OUString const & rDescriptor):
+UnoUrlDescriptor::UnoUrlDescriptor(OUString const & rDescriptor):
     m_pImpl(new Impl(rDescriptor))
 {}
 
@@ -149,27 +149,27 @@ UnoUrlDescriptor & UnoUrlDescriptor::operator =(UnoUrlDescriptor const & rOther)
     return *this;
 }
 
-rtl::OUString const & UnoUrlDescriptor::getDescriptor() const
+OUString const & UnoUrlDescriptor::getDescriptor() const
 {
     return m_pImpl->m_aDescriptor;
 }
 
-rtl::OUString const & UnoUrlDescriptor::getName() const
+OUString const & UnoUrlDescriptor::getName() const
 {
     return m_pImpl->m_aName;
 }
 
-bool UnoUrlDescriptor::hasParameter(rtl::OUString const & rKey) const
+bool UnoUrlDescriptor::hasParameter(OUString const & rKey) const
 {
     return m_pImpl->m_aParameters.find(rKey.toAsciiLowerCase())
         != m_pImpl->m_aParameters.end();
 }
 
-rtl::OUString UnoUrlDescriptor::getParameter(rtl::OUString const & rKey) const
+OUString UnoUrlDescriptor::getParameter(OUString const & rKey) const
 {
     Impl::Parameters::const_iterator
         aIt(m_pImpl->m_aParameters.find(rKey.toAsciiLowerCase()));
-    return aIt == m_pImpl->m_aParameters.end() ? rtl::OUString() : aIt->second;
+    return aIt == m_pImpl->m_aParameters.end() ? OUString() : aIt->second;
 }
 
 class UnoUrl::Impl
@@ -177,25 +177,25 @@ class UnoUrl::Impl
 public:
     UnoUrlDescriptor m_aConnection;
     UnoUrlDescriptor m_aProtocol;
-    rtl::OUString m_aObjectName;
+    OUString m_aObjectName;
 
     Impl * clone() const { return new Impl(*this); }
 
     /** @exception rtl::MalformedUriException
      */
-    static inline Impl * create(rtl::OUString const & rUrl);
+    static inline Impl * create(OUString const & rUrl);
 
 private:
-    Impl(rtl::OUString const & rConnectionDescriptor,
-         rtl::OUString const & rProtocolDescriptor,
-         rtl::OUString const & rObjectName):
+    Impl(OUString const & rConnectionDescriptor,
+         OUString const & rProtocolDescriptor,
+         OUString const & rObjectName):
         m_aConnection(rConnectionDescriptor),
         m_aProtocol(rProtocolDescriptor),
         m_aObjectName(rObjectName)
     {}
 };
 
-inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
+inline UnoUrl::Impl * UnoUrl::Impl::create(OUString const & rUrl)
 {
     if (!rUrl.startsWithIgnoreAsciiCase("uno:"))
         throw rtl::MalformedUriException("UNO URL does not start with \"uno:\"");
@@ -203,12 +203,12 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     sal_Int32 j = rUrl.indexOf(';', i);
     if (j < 0)
         throw rtl::MalformedUriException("UNO URL has too few semicolons");
-    rtl::OUString aConnection(rUrl.copy(i, j - i));
+    OUString aConnection(rUrl.copy(i, j - i));
     i = j + 1;
     j = rUrl.indexOf(0x3B, i); // ';'
     if (j < 0)
         throw rtl::MalformedUriException("UNO URL has too few semicolons");
-    rtl::OUString aProtocol(rUrl.copy(i, j - i));
+    OUString aProtocol(rUrl.copy(i, j - i));
     i = j + 1;
     if (i == rUrl.getLength())
         throw rtl::MalformedUriException("UNO URL contains empty ObjectName");
@@ -227,7 +227,7 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     return new Impl(aConnection, aProtocol, rUrl.copy(i));
 }
 
-UnoUrl::UnoUrl(rtl::OUString const & rUrl): m_pImpl(Impl::create(rUrl))
+UnoUrl::UnoUrl(OUString const & rUrl): m_pImpl(Impl::create(rUrl))
 {}
 
 UnoUrl::UnoUrl(UnoUrl const & rOther): m_pImpl(rOther.m_pImpl->clone())
@@ -259,7 +259,7 @@ UnoUrlDescriptor const & UnoUrl::getProtocol() const
     return m_pImpl->m_aProtocol;
 }
 
-rtl::OUString const & UnoUrl::getObjectName() const
+OUString const & UnoUrl::getObjectName() const
 {
     return m_pImpl->m_aObjectName;
 }

@@ -120,7 +120,7 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
     if( !pRXEdtTxt.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr(o3tl::toU(*text));
+    OUString ouStr(o3tl::toU(*text));
 
     if( GetXInterface()->insertText( ouStr, offset ) )
         return S_OK;
@@ -197,7 +197,7 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
     if( !pRXEdtTxt.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr(o3tl::toU(*text));
+    OUString ouStr(o3tl::toU(*text));
 
     if( GetXInterface()->replaceText( startOffset,endOffset, ouStr) )
         return S_OK;
@@ -226,13 +226,13 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
     if( !pRXEdtTxt.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr(o3tl::toU(*attributes));
+    OUString ouStr(o3tl::toU(*attributes));
 
     sal_Int32 nIndex = 0;
-    vector< ::rtl::OUString > vecAttr;
+    vector< OUString > vecAttr;
     do
     {
-        ::rtl::OUString ouToken = ouStr.getToken(0, ';', nIndex);
+        OUString ouToken = ouStr.getToken(0, ';', nIndex);
         vecAttr.push_back(ouToken);
     }
     while(nIndex >= 0);
@@ -240,12 +240,12 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
     Sequence< PropertyValue > beanSeq(vecAttr.size());
     for(std::vector<OUString>::size_type i = 0; i < vecAttr.size(); i ++)
     {
-        ::rtl::OUString attr = vecAttr[i];
+        OUString attr = vecAttr[i];
         sal_Int32 nPos = attr.indexOf(':');
         if(nPos > -1)
         {
-            ::rtl::OUString attrName = attr.copy(0, nPos);
-            ::rtl::OUString attrValue = attr.copy(nPos + 1);
+            OUString attrName = attr.copy(0, nPos);
+            OUString attrValue = attr.copy(nPos + 1);
             beanSeq[i].Name = attrName;
             get_AnyFromOLECHAR(attrName, attrValue, beanSeq[i].Value);
         }
@@ -266,7 +266,7 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
  * @param   ouValue     the string of attribute value.
  * @param   rAny        the Any object to be returned.
  */
-void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, Any &rAny)
+void CAccEditableText::get_AnyFromOLECHAR(const OUString &ouName, const OUString &ouValue, Any &rAny)
 {
     if(ouName == "CharBackColor" ||
             ouName == "CharColor" ||
@@ -308,7 +308,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
     else if(ouName == "CharFontName" )
     {
         // Convert to string.
-        rAny.setValue(&ouValue, cppu::UnoType<rtl::OUString>::get());
+        rAny.setValue(&ouValue, cppu::UnoType<OUString>::get());
     }
     else if(ouName == "CharPosture" )
     {
@@ -322,7 +322,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         // Convert to the Sequence with TabStop element.
         vector< css::style::TabStop > vecTabStop;
         css::style::TabStop tabStop;
-        ::rtl::OUString ouSubValue;
+        OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
 
         do
@@ -429,7 +429,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
     {
         // Parse value string.
         css::style::LineSpacing lineSpacing;
-        ::rtl::OUString ouSubValue;
+        OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
 
         pos = ouValue.indexOf("Mode=", pos);

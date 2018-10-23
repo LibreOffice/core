@@ -179,7 +179,7 @@ namespace
         return has_parent;
     }
 
-    inline bool has_path_parent(const rtl::OUString& path)
+    inline bool has_path_parent(const OUString& path)
     { return has_path_parent(path.getStr()); }
 
 }
@@ -589,7 +589,7 @@ static DWORD create_dir_with_callback(
     {
         if (aDirectoryCreationCallbackFunc)
         {
-            rtl::OUString url;
+            OUString url;
             osl_getFileURLFromSystemPath(dir_path, &(url.pData));
             aDirectoryCreationCallbackFunc(pData, url.pData);
         }
@@ -654,7 +654,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     if (aDirectoryUrl == nullptr)
         return osl_File_E_INVAL;
 
-    rtl::OUString sys_path;
+    OUString sys_path;
     oslFileError osl_error =
         osl_getSystemPathFromFileURL_(aDirectoryUrl, &sys_path.pData, false);
 
@@ -1149,14 +1149,14 @@ static inline bool is_floppy_A_present()
 static inline bool is_floppy_B_present()
 { return (GetLogicalDrives() & 2); }
 
-static bool is_floppy_volume_mount_point(const rtl::OUString& path)
+static bool is_floppy_volume_mount_point(const OUString& path)
 {
     // determines if a volume mount point shows to a floppy
     // disk by comparing the unique volume names
     static const LPCWSTR FLOPPY_A = L"A:\\";
     static const LPCWSTR FLOPPY_B = L"B:\\";
 
-    rtl::OUString p(path);
+    OUString p(path);
     osl::systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
@@ -1176,7 +1176,7 @@ static bool is_floppy_volume_mount_point(const rtl::OUString& path)
     return false;
 }
 
-static bool is_floppy_drive(const rtl::OUString& path)
+static bool is_floppy_drive(const OUString& path)
 {
     static const LPCWSTR FLOPPY_DRV_LETTERS = L"AaBb";
 
@@ -1190,9 +1190,9 @@ static bool is_floppy_drive(const rtl::OUString& path)
     return ((wcschr(FLOPPY_DRV_LETTERS, pszPath[0]) && (L':' == pszPath[1])) || is_floppy_volume_mount_point(path));
 }
 
-static bool is_volume_mount_point(const rtl::OUString& path)
+static bool is_volume_mount_point(const OUString& path)
 {
-    rtl::OUString p(path);
+    OUString p(path);
     osl::systemPathRemoveSeparator(p);
 
     bool  is_volume_root = false;
@@ -1220,12 +1220,12 @@ static bool is_volume_mount_point(const rtl::OUString& path)
     return is_volume_root;
 }
 
-static UINT get_volume_mount_point_drive_type(const rtl::OUString& path)
+static UINT get_volume_mount_point_drive_type(const OUString& path)
 {
     if (0 == path.getLength())
         return GetDriveTypeW(nullptr);
 
-    rtl::OUString p(path);
+    OUString p(path);
     osl::systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
@@ -1241,7 +1241,7 @@ static inline bool is_drivetype_request(sal_uInt32 field_mask)
 }
 
 static oslFileError osl_get_drive_type(
-    const rtl::OUString& path, oslVolumeInfo* pInfo)
+    const OUString& path, oslVolumeInfo* pInfo)
 {
     // GetDriveType fails on empty volume mount points
     // see Knowledge Base Q244089
@@ -1295,7 +1295,7 @@ static inline bool is_volume_space_info_request(sal_uInt32 field_mask)
 }
 
 static void get_volume_space_information(
-    const rtl::OUString& path, oslVolumeInfo *pInfo)
+    const OUString& path, oslVolumeInfo *pInfo)
 {
     BOOL ret = GetDiskFreeSpaceExW(
         o3tl::toW(path.getStr()),
@@ -1322,7 +1322,7 @@ static inline bool is_filesystem_attributes_request(sal_uInt32 field_mask)
 }
 
 static oslFileError get_filesystem_attributes(
-    const rtl::OUString& path, sal_uInt32 field_mask, oslVolumeInfo* pInfo)
+    const OUString& path, sal_uInt32 field_mask, oslVolumeInfo* pInfo)
 {
     pInfo->uAttributes = 0;
 
@@ -1374,7 +1374,7 @@ static oslFileError get_filesystem_attributes(
     return osl_File_E_None;
 }
 
-static bool path_get_parent(rtl::OUString& path)
+static bool path_get_parent(OUString& path)
 {
     OSL_PRECOND(path.lastIndexOf(SLASH) == -1, "Path must not have slashes");
 
@@ -1383,16 +1383,16 @@ static bool path_get_parent(rtl::OUString& path)
         sal_Int32 i = path.lastIndexOf(BACKSLASH);
         if (-1 < i)
         {
-            path = rtl::OUString(path.getStr(), i);
+            path = OUString(path.getStr(), i);
             return true;
         }
     }
     return false;
 }
 
-static void path_travel_to_volume_root(const rtl::OUString& system_path, rtl::OUString& volume_root)
+static void path_travel_to_volume_root(const OUString& system_path, OUString& volume_root)
 {
-    rtl::OUString sys_path(system_path);
+    OUString sys_path(system_path);
 
     while(!is_volume_mount_point(sys_path) && path_get_parent(sys_path))
         /**/;
@@ -1407,13 +1407,13 @@ oslFileError SAL_CALL osl_getVolumeInformation(
     if (!pInfo)
         return osl_File_E_INVAL;
 
-    rtl::OUString system_path;
+    OUString system_path;
     oslFileError error = osl_getSystemPathFromFileURL_(ustrURL, &system_path.pData, false);
 
     if (osl_File_E_None != error)
         return error;
 
-    rtl::OUString volume_root;
+    OUString volume_root;
     path_travel_to_volume_root(system_path, volume_root);
 
     pInfo->uValidFields = 0;

@@ -467,7 +467,7 @@ void EscherPropertyContainer::CreateGradientProperties(
         pGradient = o3tl::doAccess<awt::Gradient>(aAny);
 
         uno::Any aAnyTemp;
-        const rtl::OUString aPropName( "FillStyle" );
+        const OUString aPropName( "FillStyle" );
         if ( EscherPropertyValueHelper::GetPropertyValue(
             aAnyTemp, rXPropSet, aPropName ) )
         {

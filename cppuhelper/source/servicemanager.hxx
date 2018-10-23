@@ -71,48 +71,48 @@ public:
 
         struct ImplementationInfo {
             ImplementationInfo(
-                rtl::OUString const & theName, rtl::OUString const & theLoader,
-                rtl::OUString const & theUri,
-                rtl::OUString const & theEnvironment,
-                rtl::OUString const & theConstructor,
-                rtl::OUString const & thePrefix,
+                OUString const & theName, OUString const & theLoader,
+                OUString const & theUri,
+                OUString const & theEnvironment,
+                OUString const & theConstructor,
+                OUString const & thePrefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     theAlienContext,
-                rtl::OUString const & theRdbFile):
+                OUString const & theRdbFile):
                 name(theName), loader(theLoader), uri(theUri),
                 environment(theEnvironment), constructor(theConstructor),
                 prefix(thePrefix), alienContext(theAlienContext),
                 rdbFile(theRdbFile)
             {}
 
-            explicit ImplementationInfo(rtl::OUString const & theName):
+            explicit ImplementationInfo(OUString const & theName):
                 name(theName) {}
 
             ImplementationInfo(const ImplementationInfo&) = delete;
             const ImplementationInfo& operator=(const ImplementationInfo&) = delete;
 
-            rtl::OUString const name;
-            rtl::OUString const loader;
-            rtl::OUString const uri;
-            rtl::OUString const environment;
-            rtl::OUString const constructor;
-            rtl::OUString const prefix;
+            OUString const name;
+            OUString const loader;
+            OUString const uri;
+            OUString const environment;
+            OUString const constructor;
+            OUString const prefix;
             css::uno::Reference< css::uno::XComponentContext > const
                 alienContext;
-            rtl::OUString const rdbFile;
-            std::vector< rtl::OUString > services;
-            std::vector< rtl::OUString > singletons;
+            OUString const rdbFile;
+            std::vector< OUString > services;
+            std::vector< OUString > singletons;
         };
 
         struct Implementation {
             Implementation(
-                rtl::OUString const & name, rtl::OUString const & loader,
-                rtl::OUString const & uri, rtl::OUString const & environment,
-                rtl::OUString const & constructorName,
-                rtl::OUString const & prefix,
+                OUString const & name, OUString const & loader,
+                OUString const & uri, OUString const & environment,
+                OUString const & constructorName,
+                OUString const & prefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     alienContext,
-                rtl::OUString const & rdbFile):
+                OUString const & rdbFile):
                 info(
                     new ImplementationInfo(
                         name, loader, uri, environment, constructorName, prefix,
@@ -121,7 +121,7 @@ public:
             {}
 
             Implementation(
-                rtl::OUString const & name,
+                OUString const & name,
                 css::uno::Reference< css::lang::XSingleComponentFactory >
                     const & theFactory1,
                 css::uno::Reference< css::lang::XSingleServiceFactory > const &
@@ -178,7 +178,7 @@ public:
                 css::uno::Reference<css::uno::XInterface> const & instance);
         };
 
-        typedef std::map< rtl::OUString, std::shared_ptr< Implementation > >
+        typedef std::map< OUString, std::shared_ptr< Implementation > >
             NamedImplementations;
 
         typedef
@@ -189,7 +189,7 @@ public:
 
         typedef
             std::map<
-                rtl::OUString,
+                OUString,
                 std::vector< std::shared_ptr< Implementation > > >
             ImplementationMap;
 
@@ -207,7 +207,7 @@ public:
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
 
-    void init(rtl::OUString const & rdbUris);
+    void init(OUString const & rdbUris);
 
     void setContext(
         css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -236,32 +236,32 @@ private:
 
     virtual void SAL_CALL disposing() override;
 
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
-        rtl::OUString const & aServiceSpecifier) override;
+        OUString const & aServiceSpecifier) override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
-        rtl::OUString const & ServiceSpecifier,
+        OUString const & ServiceSpecifier,
         css::uno::Sequence< css::uno::Any > const & Arguments) override;
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames() override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
-        rtl::OUString const & aServiceSpecifier,
+        OUString const & aServiceSpecifier,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
-        rtl::OUString const & ServiceSpecifier,
+        OUString const & ServiceSpecifier,
         css::uno::Sequence< css::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
@@ -279,43 +279,43 @@ private:
     virtual void SAL_CALL remove(css::uno::Any const & aElement) override;
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
-    createContentEnumeration(rtl::OUString const & aServiceName) override;
+    createContentEnumeration(OUString const & aServiceName) override;
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override;
 
     virtual void SAL_CALL setPropertyValue(
-        rtl::OUString const & aPropertyName, css::uno::Any const & aValue) override;
+        OUString const & aPropertyName, css::uno::Any const & aValue) override;
 
     virtual css::uno::Any SAL_CALL getPropertyValue(
-        rtl::OUString const & PropertyName) override;
+        OUString const & PropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
-        rtl::OUString const & aPropertyName,
+        OUString const & aPropertyName,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &
             xListener) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
-        rtl::OUString const & aPropertyName,
+        OUString const & aPropertyName,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &
             aListener) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
-        rtl::OUString const & PropertyName,
+        OUString const & PropertyName,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &
             aListener) override;
 
     virtual void SAL_CALL removeVetoableChangeListener(
-        rtl::OUString const & PropertyName,
+        OUString const & PropertyName,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &
             aListener) override;
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
-        rtl::OUString const & aName) override;
+        OUString const & aName) override;
 
-    virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & Name) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName(OUString const & Name) override;
 
     virtual void SAL_CALL disposing(css::lang::EventObject const & Source) override;
 
@@ -329,22 +329,22 @@ private:
     void removeEventListenerFromComponent(
         css::uno::Reference< css::lang::XComponent > const & component);
 
-    void readRdbDirectory(rtl::OUString const & uri, bool optional);
+    void readRdbDirectory(OUString const & uri, bool optional);
 
-    void readRdbFile(rtl::OUString const & uri, bool optional);
+    void readRdbFile(OUString const & uri, bool optional);
 
-    bool readLegacyRdbFile(rtl::OUString const & uri);
+    bool readLegacyRdbFile(OUString const & uri);
 
-    rtl::OUString readLegacyRdbString(
-        rtl::OUString const & uri, RegistryKey & key,
-        rtl::OUString const & path);
+    OUString readLegacyRdbString(
+        OUString const & uri, RegistryKey & key,
+        OUString const & path);
 
     void readLegacyRdbStrings(
-        rtl::OUString const & uri, RegistryKey & key,
-        rtl::OUString const & path, std::vector< rtl::OUString > * strings);
+        OUString const & uri, RegistryKey & key,
+        OUString const & path, std::vector< OUString > * strings);
 
     void insertRdbFiles(
-        std::vector< rtl::OUString > const & uris,
+        std::vector< OUString > const & uris,
         css::uno::Reference< css::uno::XComponentContext > const &
             alientContext);
 
@@ -353,17 +353,17 @@ private:
 
     bool insertExtraData(Data const & extra);
 
-    void removeRdbFiles(std::vector< rtl::OUString > const & uris);
+    void removeRdbFiles(std::vector< OUString > const & uris);
 
     bool removeLegacyFactory(
         css::uno::Reference< css::lang::XServiceInfo > const & factoryInfo,
         bool removeListener);
 
-    void removeImplementation(const rtl::OUString & name);
+    void removeImplementation(const OUString & name);
 
     std::shared_ptr< Data::Implementation > findServiceImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        rtl::OUString const & specifier);
+        OUString const & specifier);
 
     void preloadImplementations();
 

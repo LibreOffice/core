@@ -61,7 +61,7 @@ private:
     VclPtr<ValueSet>          mpStarSet;
     VclPtr<ValueSet>          mp3DObjectSet;
     Reference< XFrame >       mxFrame;
-    std::map<VclPtr<ValueSet>, std::map<sal_uInt16, rtl::OUString>> mpShapesSetMap;
+    std::map<VclPtr<ValueSet>, std::map<sal_uInt16, OUString>> mpShapesSetMap;
 
     void populateShapes();
     void Initialize();

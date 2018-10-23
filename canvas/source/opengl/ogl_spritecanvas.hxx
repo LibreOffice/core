@@ -96,7 +96,7 @@ namespace oglcanvas
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) override;
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) override;
+        virtual OUString SAL_CALL getServiceName(  ) override;
 
         void show( const ::rtl::Reference< CanvasCustomSprite >& );
         void hide( const ::rtl::Reference< CanvasCustomSprite >& );

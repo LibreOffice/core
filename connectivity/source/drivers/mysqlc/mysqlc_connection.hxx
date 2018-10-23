@@ -69,8 +69,8 @@ typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XConnection, css::sdbc::XWar
 struct ConnectionSettings
 {
     rtl_TextEncoding encoding;
-    rtl::OUString schema;
-    rtl::OUString connectionURL;
+    OUString schema;
+    OUString connectionURL;
     bool readOnly;
     ConnectionSettings()
         : encoding(RTL_TEXTENCODING_DONTKNOW)
@@ -110,8 +110,7 @@ public:
     sal_Int32 getMysqlVersion();
 
     /// @throws SQLException
-    void construct(const rtl::OUString& url,
-                   const css::uno::Sequence<css::beans::PropertyValue>& info);
+    void construct(const OUString& url, const css::uno::Sequence<css::beans::PropertyValue>& info);
 
     OConnection(MysqlCDriver& _rDriver);
     virtual ~OConnection() override;
@@ -122,22 +121,22 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XConnection
     css::uno::Reference<css::sdbc::XStatement> SAL_CALL createStatement() override;
 
     css::uno::Reference<css::sdbc::XPreparedStatement>
-        SAL_CALL prepareStatement(const rtl::OUString& sql) override;
+        SAL_CALL prepareStatement(const OUString& sql) override;
 
     css::uno::Reference<css::sdbc::XPreparedStatement>
-        SAL_CALL prepareCall(const rtl::OUString& sql) override;
+        SAL_CALL prepareCall(const OUString& sql) override;
 
-    rtl::OUString SAL_CALL nativeSQL(const rtl::OUString& sql) override;
+    OUString SAL_CALL nativeSQL(const OUString& sql) override;
 
     void SAL_CALL setAutoCommit(sal_Bool autoCommit) override;
 
@@ -155,9 +154,9 @@ public:
 
     sal_Bool SAL_CALL isReadOnly() override;
 
-    void SAL_CALL setCatalog(const rtl::OUString& catalog) override;
+    void SAL_CALL setCatalog(const OUString& catalog) override;
 
-    rtl::OUString SAL_CALL getCatalog() override;
+    OUString SAL_CALL getCatalog() override;
 
     void SAL_CALL setTransactionIsolation(sal_Int32 level) override;
 
@@ -173,15 +172,15 @@ public:
     void SAL_CALL clearWarnings() override;
 
     // TODO: Not used
-    //sal_Int32 sdbcColumnType(rtl::OUString typeName);
+    //sal_Int32 sdbcColumnType(OUString typeName);
     const ConnectionSettings& getConnectionSettings() const { return m_settings; }
-    rtl::OUString transFormPreparedStatement(const rtl::OUString& _sSQL);
+    OUString transFormPreparedStatement(const OUString& _sSQL);
 
     const MysqlCDriver& getDriver() const { return *m_xDriver.get(); }
 
 }; /* OConnection */
 // TODO: Not used.
-//inline rtl::OUString getPattern(rtl::OUString p) { return (p.getLength()) ? p : ASC2OU("%"); }
+//inline OUString getPattern(OUString p) { return (p.getLength()) ? p : ASC2OU("%"); }
 } /* mysqlc */
 } /* connectivity */
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
