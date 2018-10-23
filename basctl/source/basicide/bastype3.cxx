@@ -41,7 +41,7 @@ typedef std::deque< SvTreeListEntry* > EntryArray;
 void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 {
     EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
-    ScriptDocument aDocument = aDesc.GetDocument();
+    const ScriptDocument& aDocument = aDesc.GetDocument();
     OSL_ENSURE( aDocument.isAlive(), "basctl::TreeListBox::RequestingChildren: invalid document!" );
     if ( !aDocument.isAlive() )
         return;
@@ -55,7 +55,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
     }
     else if ( eType == OBJ_TYPE_LIBRARY )
     {
-        OUString aOULibName( aDesc.GetLibName() );
+        const OUString& aOULibName( aDesc.GetLibName() );
 
         // check password
         bool bOK = true;
@@ -120,7 +120,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
             || eType == OBJ_TYPE_NORMAL_MODULES
             || eType == OBJ_TYPE_CLASS_MODULES )
     {
-        OUString aLibName( aDesc.GetLibName() );
+        const OUString& aLibName( aDesc.GetLibName() );
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
@@ -369,11 +369,11 @@ bool TreeListBox::IsValidEntry( SvTreeListEntry* pEntry )
     bool bIsValid = false;
 
     EntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
-    ScriptDocument aDocument( aDesc.GetDocument() );
+    const ScriptDocument& aDocument( aDesc.GetDocument() );
     LibraryLocation eLocation( aDesc.GetLocation() );
-    OUString aLibName( aDesc.GetLibName() );
-    OUString aName( aDesc.GetName() );
-    OUString aMethodName( aDesc.GetMethodName() );
+    const OUString& aLibName( aDesc.GetLibName() );
+    const OUString& aName( aDesc.GetName() );
+    const OUString& aMethodName( aDesc.GetMethodName() );
     EntryType eType( aDesc.GetType() );
 
     switch ( eType )

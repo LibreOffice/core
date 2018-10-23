@@ -465,7 +465,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
                     SbxProperty* pTypeElem = static_cast< SbxProperty* > ( pTypeMembers->Get(j) );
 
-                    OUString aElemName = pTypeElem->GetName();
+                    const OUString& aElemName = pTypeElem->GetName();
                     r.WriteUniOrByteString( aElemName, eCharSet );
 
                     SbxDataType dataType =   pTypeElem->GetType();

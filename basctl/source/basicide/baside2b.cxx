@@ -2485,8 +2485,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
                             {
                                 SbxVariable* pVar_ = pProps->Get( i );
-                                OUString aName( pVar_->GetName() );
-                                if( pItem->maMemberList[i] != aName )
+                                if( pItem->maMemberList[i] != pVar_->GetName() )
                                 {
                                     bObjChanged = true;
                                     break;

@@ -110,8 +110,8 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 
     if (aDocument.isValid())
     {
-        OUString aLibName = pBasic->GetName();
-        OUString aModName = pModule->GetName();
+        const OUString& aLibName = pBasic->GetName();
+        const OUString& aModName = pModule->GetName();
         OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aOUSource ) );
     }
 
@@ -378,7 +378,7 @@ long HandleBasicError( StarBASIC const * pBasic )
             OSL_ENSURE( aDocument.isValid(), "basctl::HandleBasicError: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
             {
-                OUString aOULibName( pBasic->GetName() );
+                const OUString& aOULibName( pBasic->GetName() );
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {

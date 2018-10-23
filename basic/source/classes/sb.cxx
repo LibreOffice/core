@@ -730,7 +730,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                     SbxObject* pObj = dynamic_cast<SbxObject*>( pObjBase );
                     if( pObj != nullptr )
                     {
-                        OUString aObjClass = pObj->GetClassName();
+                        const OUString& aObjClass = pObj->GetClassName();
 
                         SbClassModuleObject* pClassModuleObj = dynamic_cast<SbClassModuleObject*>( pObjBase );
                         if( pClassModuleObj != nullptr )

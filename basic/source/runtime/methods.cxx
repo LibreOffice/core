@@ -460,7 +460,7 @@ void SbRtl_ChDrive(StarBASIC *, SbxArray & rPar, bool)
 // Implementation of StepRENAME with UCB
 void implStepRenameUCB( const OUString& aSource, const OUString& aDest )
 {
-    uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+    const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
     if( xSFI.is() )
     {
         try
@@ -508,7 +508,7 @@ void SbRtl_FileCopy(StarBASIC *, SbxArray & rPar, bool)
         OUString aDest = rPar.Get(2)->GetOUString();
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -543,7 +543,7 @@ void SbRtl_Kill(StarBASIC *, SbxArray & rPar, bool)
 
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 OUString aFullPath = getFullPath( aFileSpec );
@@ -604,7 +604,7 @@ void SbRtl_MkDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -700,7 +700,7 @@ void SbRtl_RmDir(StarBASIC *, SbxArray & rPar, bool)
         OUString aPath = rPar.Get(1)->GetOUString();
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -774,7 +774,7 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 nLen = 0;
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -2651,7 +2651,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
         }
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 if ( nParCount >= 2 )
@@ -2946,7 +2946,7 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -3025,7 +3025,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
         Date aDate( Date::EMPTY );
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4319,7 +4319,7 @@ void SbRtl_SavePicture(StarBASIC *, SbxArray & rPar, bool)
     if (SbStdPicture *pPicture = dynamic_cast<SbStdPicture*>(pObj))
     {
         SvFileStream aOStream( rPar.Get(2)->GetOUString(), StreamMode::WRITE | StreamMode::TRUNC );
-        Graphic aGraphic = pPicture->GetGraphic();
+        const Graphic& aGraphic = pPicture->GetGraphic();
         WriteGraphic( aOStream, aGraphic );
     }
 }
@@ -4467,7 +4467,7 @@ void SbRtl_SetAttr(StarBASIC *, SbxArray & rPar, bool)
 
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4538,7 +4538,7 @@ void SbRtl_FileExists(StarBASIC *, SbxArray & rPar, bool)
 
         if( hasUno() )
         {
-            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
+            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try

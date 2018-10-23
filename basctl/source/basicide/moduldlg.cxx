@@ -67,8 +67,8 @@ bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
         if ( nDepth >= 2 )
         {
             EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
-            ScriptDocument aDocument( aDesc.GetDocument() );
-            OUString aLibName( aDesc.GetLibName() );
+            const ScriptDocument& aDocument( aDesc.GetDocument() );
+            const OUString& aLibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
@@ -99,11 +99,11 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
         return true;
 
     EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
-    ScriptDocument aDocument( aDesc.GetDocument() );
+    const ScriptDocument& aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isValid(), "ExtTreeListBox::EditedEntry: no document!" );
     if ( !aDocument.isValid() )
         return false;
-    OUString aLibName( aDesc.GetLibName() );
+    const OUString& aLibName( aDesc.GetLibName() );
     EntryType eType = aDesc.GetType();
 
     bool bSuccess = eType == OBJ_TYPE_MODULE ?
@@ -144,8 +144,8 @@ DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeList
         {
             nMode_ = DragDropMode::CTRL_COPY;
             EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
-            ScriptDocument aDocument( aDesc.GetDocument() );
-            OUString aLibName( aDesc.GetLibName() );
+            const ScriptDocument& aDocument( aDesc.GetDocument() );
+            const OUString& aLibName( aDesc.GetLibName() );
             // allow MOVE mode only for libraries, which are not readonly
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
@@ -194,13 +194,13 @@ bool ExtTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry )
     {
         // get source module/dialog name
         EntryDescriptor aSourceDesc = GetEntryDescriptor(pSelected);
-        OUString aSourceName = aSourceDesc.GetName();
+        const OUString& aSourceName = aSourceDesc.GetName();
         EntryType eSourceType = aSourceDesc.GetType();
 
         // get target shell and target library name
         EntryDescriptor aDestDesc = GetEntryDescriptor(pEntry);
         ScriptDocument const& rDestDoc = aDestDesc.GetDocument();
-        OUString aDestLibName = aDestDesc.GetLibName();
+        const OUString& aDestLibName = aDestDesc.GetLibName();
 
         // check if module library is not loaded, readonly or password protected
         Reference< script::XLibraryContainer2 > xModLibContainer( rDestDoc.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -332,13 +332,13 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
     // get target shell and target library name
     EntryDescriptor aDestDesc = GetEntryDescriptor(rpNewParent);
     const ScriptDocument& rDestDoc( aDestDesc.GetDocument() );
-    OUString aDestLibName( aDestDesc.GetLibName() );
+    const OUString& aDestLibName( aDestDesc.GetLibName() );
 
     // get source shell, library name and module/dialog name
     EntryDescriptor aSourceDesc = GetEntryDescriptor(FirstSelected());
-    const ScriptDocument rSourceDoc( aSourceDesc.GetDocument() );
-    OUString aSourceLibName( aSourceDesc.GetLibName() );
-    OUString aSourceName( aSourceDesc.GetName() );
+    const ScriptDocument& rSourceDoc( aSourceDesc.GetDocument() );
+    const OUString& aSourceLibName( aSourceDesc.GetLibName() );
+    const OUString& aSourceName( aSourceDesc.GetName() );
     EntryType eType = aSourceDesc.GetType();
 
     // get dispatcher
@@ -626,9 +626,9 @@ void ObjectPage::CheckButtons()
     // enable/disable edit button
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
     EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
-    ScriptDocument aDocument( aDesc.GetDocument() );
-    OUString aLibName( aDesc.GetLibName() );
-    OUString aLibSubName( aDesc.GetLibSubName() );
+    const ScriptDocument& aDocument( aDesc.GetDocument() );
+    const OUString& aLibName( aDesc.GetLibName() );
+    const OUString& aLibSubName( aDesc.GetLibSubName() );
     bool bVBAEnabled = aDocument.isInVBAMode();
     BrowseMode nMode = m_pBasicBox->GetMode();
 
@@ -879,12 +879,12 @@ void ObjectPage::DeleteCurrent()
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
     DBG_ASSERT( pCurEntry, "No current entry!" );
     EntryDescriptor aDesc( m_pBasicBox->GetEntryDescriptor( pCurEntry ) );
-    ScriptDocument aDocument( aDesc.GetDocument() );
+    const ScriptDocument& aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
     if ( !aDocument.isAlive() )
         return;
-    OUString aLibName( aDesc.GetLibName() );
-    OUString aName( aDesc.GetName() );
+    const OUString& aLibName( aDesc.GetLibName() );
+    const OUString& aName( aDesc.GetName() );
     EntryType eType = aDesc.GetType();
 
     if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule(aName, GetFrameWeld()) ) ||

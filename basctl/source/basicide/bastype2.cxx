@@ -638,14 +638,14 @@ bool TreeListBox::ExpandingHdl()
     {
         SvTreeListEntry* pCurEntry = GetCurEntry();
         EntryDescriptor aDesc( GetEntryDescriptor( pCurEntry ) );
-        ScriptDocument aDocument( aDesc.GetDocument() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
         OSL_ENSURE( aDocument.isAlive(), "TreeListBox::ExpandingHdl: no document, or document is dead!" );
         if ( aDocument.isAlive() )
         {
-            OUString aLibName( aDesc.GetLibName() );
-            OUString aLibSubName( aDesc.GetLibSubName() );
-            OUString aName( aDesc.GetName() );
-            OUString aMethodName( aDesc.GetMethodName() );
+            const OUString& aLibName( aDesc.GetLibName() );
+            const OUString& aLibSubName( aDesc.GetLibSubName() );
+            const OUString& aName( aDesc.GetName() );
+            const OUString& aMethodName( aDesc.GetMethodName() );
 
             if ( !aLibName.isEmpty() && aLibSubName.isEmpty() && aName.isEmpty() && aMethodName.isEmpty() )
             {
@@ -672,11 +672,11 @@ bool TreeListBox::IsEntryProtected( SvTreeListEntry* pEntry )
     if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
     {
         EntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
-        ScriptDocument aDocument( aDesc.GetDocument() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
         OSL_ENSURE( aDocument.isAlive(), "TreeListBox::IsEntryProtected: no document, or document is dead!" );
         if ( aDocument.isAlive() )
         {
-            OUString aOULibName( aDesc.GetLibName() );
+            const OUString& aOULibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
@@ -799,7 +799,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
     if ( pRootEntry )
     {
         pCurEntry = pRootEntry;
-        OUString aLibName( aDesc.GetLibName() );
+        const OUString& aLibName( aDesc.GetLibName() );
         if ( !aLibName.isEmpty() )
         {
             Expand( pRootEntry );
@@ -807,7 +807,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
             if ( pLibEntry )
             {
                 pCurEntry = pLibEntry;
-                OUString aLibSubName( aDesc.GetLibSubName() );
+                const OUString& aLibSubName( aDesc.GetLibSubName() );
                 if( !aLibSubName.isEmpty() )
                 {
                     Expand( pLibEntry );
@@ -817,7 +817,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
                         pCurEntry = pLibSubEntry;
                     }
                 }
-                OUString aName( aDesc.GetName() );
+                const OUString& aName( aDesc.GetName() );
                 if ( !aName.isEmpty() )
                 {
                     Expand( pCurEntry );
@@ -828,7 +828,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
                     if ( pEntry )
                     {
                         pCurEntry = pEntry;
-                        OUString aMethodName( aDesc.GetMethodName() );
+                        const OUString& aMethodName( aDesc.GetMethodName() );
                         if ( !aMethodName.isEmpty() )
                         {
                             Expand( pEntry );

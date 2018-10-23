@@ -983,7 +983,7 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
                 bool bCopyResourcesForDialog = true;
                 if( bAddDialogLanguagesToLib )
                 {
-                    std::shared_ptr<LocalizationMgr> pCurMgr = pShell->GetCurLocalizationMgr();
+                    const std::shared_ptr<LocalizationMgr>& pCurMgr = pShell->GetCurLocalizationMgr();
 
                     lang::Locale aFirstLocale;
                     aFirstLocale = aOnlyInImportLanguages[0];

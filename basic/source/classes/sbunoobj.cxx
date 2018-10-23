@@ -327,7 +327,7 @@ static OUString implGetExceptionMsg( const Any& _rCaughtException )
 static Any convertAny( const Any& rVal, const Type& aDestType )
 {
     Any aConvertedVal;
-    Reference< XTypeConverter > xConverter = getTypeConverter_Impl();
+    const Reference< XTypeConverter >& xConverter = getTypeConverter_Impl();
     try
     {
         aConvertedVal = xConverter->convertTo( rVal, aDestType );
@@ -1146,7 +1146,7 @@ static bool implGetTypeByName( const OUString& rName, Type& rRetType )
 {
     bool bSuccess = false;
 
-    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    const Reference< XHierarchicalNameAccess >& xTypeAccess = getTypeProvider_Impl();
     if( xTypeAccess->hasByHierarchicalName( rName ) )
     {
         Any aRet = xTypeAccess->getByHierarchicalName( rName );
@@ -2835,7 +2835,7 @@ static SbUnoObject* Impl_CreateUnoStruct( const OUString& aClassName )
 
     // search for the class
     Reference< XIdlClass > xClass;
-    Reference< XHierarchicalNameAccess > xHarryName =
+    const Reference< XHierarchicalNameAccess >& xHarryName =
         getCoreReflection_HierarchicalNameAccess_Impl();
     if( xHarryName.is() && xHarryName->hasByHierarchicalName( aClassName ) )
         xClass = xCoreReflection->forName( aClassName );
@@ -3294,7 +3294,7 @@ SbUnoClass* findUnoClass( const OUString& rName )
     // #105550 Check if module exists
     SbUnoClass* pUnoClass = nullptr;
 
-    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    const Reference< XHierarchicalNameAccess >& xTypeAccess = getTypeProvider_Impl();
     if( xTypeAccess->hasByHierarchicalName( rName ) )
     {
         Any aRet = xTypeAccess->getByHierarchicalName( rName );
@@ -3444,7 +3444,7 @@ SbUnoService* findUnoService( const OUString& rName )
 {
     SbUnoService* pSbUnoService = nullptr;
 
-    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    const Reference< XHierarchicalNameAccess >& xTypeAccess = getTypeProvider_Impl();
     if( xTypeAccess->hasByHierarchicalName( rName ) )
     {
         Any aRet = xTypeAccess->getByHierarchicalName( rName );
@@ -3691,7 +3691,7 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName )
 {
     SbUnoSingleton* pSbUnoSingleton = nullptr;
 
-    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    const Reference< XHierarchicalNameAccess >& xTypeAccess = getTypeProvider_Impl();
     if( xTypeAccess->hasByHierarchicalName( rName ) )
     {
         Any aRet = xTypeAccess->getByHierarchicalName( rName );
@@ -4130,7 +4130,7 @@ void RTL_Impl_CreateUnoValue( SbxArray& rPar )
     }
 
     // Check the type
-    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    const Reference< XHierarchicalNameAccess >& xTypeAccess = getTypeProvider_Impl();
     Any aRet;
     try
     {
@@ -4507,7 +4507,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     for( sal_uInt16 i = 0 ; i < nCount ; ++i )
     {
         SbxVariable* pVar = pModIfaces->Get( i );
-        OUString aIfaceName = pVar->GetName();
+        const OUString& aIfaceName = pVar->GetName();
 
         if( !aIfaceName.isEmpty() )
         {
@@ -4778,7 +4778,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
 
-            OUString aName( pVar->GetName() );
+            const OUString& aName( pVar->GetName() );
             StructFieldInfo::iterator it = maFields.find( aName );
 
             if ( it != maFields.end() )

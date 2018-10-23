@@ -1671,7 +1671,7 @@ void SbRtl_MonthName(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    Reference< XCalendar4 > xCalendar = getLocaleCalendar();
+    const Reference< XCalendar4 >& xCalendar = getLocaleCalendar();
     if( !xCalendar.is() )
     {
         StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
@@ -1708,7 +1708,7 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    Reference< XCalendar4 > xCalendar = getLocaleCalendar();
+    const Reference< XCalendar4 >& xCalendar = getLocaleCalendar();
     if( !xCalendar.is() )
     {
         StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
@@ -2042,7 +2042,7 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
                     }
                     if( nFirstDay == 0 )
                     {
-                        Reference< XCalendar4 > xCalendar = getLocaleCalendar();
+                        const Reference< XCalendar4 >& xCalendar = getLocaleCalendar();
                         if( !xCalendar.is() )
                         {
                             StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
@@ -2292,7 +2292,7 @@ void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
         }
     }
 
-    Reference< XCalendar4 > xCalendar = getLocaleCalendar();
+    const Reference< XCalendar4 >& xCalendar = getLocaleCalendar();
     if( !xCalendar.is() )
     {
         StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
@@ -3053,7 +3053,7 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay
         }
         if( nFirstDay == 0 )
         {
-            Reference< XCalendar4 > xCalendar = getLocaleCalendar();
+            const Reference< XCalendar4 >& xCalendar = getLocaleCalendar();
             if( !xCalendar.is() )
             {
 #if HAVE_FEATURE_SCRIPTING

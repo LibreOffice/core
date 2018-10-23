@@ -416,7 +416,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     bool bRenameOk = false;
                     if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin.get()))
                     {
-                        OUString aLibName = pModWin->GetLibName();
+                        const OUString& aLibName = pModWin->GetLibName();
                         ScriptDocument aDocument( pWin->GetDocument() );
 
                         if (RenameModule(pModWin->GetFrameWeld(), aDocument, aLibName, aOldName, aNewName))
@@ -625,7 +625,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             const SfxStringItem* pDocumentItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_DOCUMENT);
             if ( pDocumentItem )
             {
-                OUString sDocumentCaption = pDocumentItem->GetValue();
+                const OUString& sDocumentCaption = pDocumentItem->GetValue();
                 if ( !sDocumentCaption.isEmpty() )
                     pDocument.reset( new ScriptDocument( ScriptDocument::getDocumentWithURLOrCaption( sDocumentCaption ) ) );
             }
@@ -651,7 +651,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_NAME);
             if ( pNameItem )
             {
-                OUString aName( pNameItem->GetValue() );
+                const OUString& aName( pNameItem->GetValue() );
                 OUString aModType( "Module" );
                 OUString aType( aModType );
                 const SfxStringItem* pTypeItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_TYPE);
@@ -1297,7 +1297,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC const * pBasic )
             if (BasicManager* pBasMgr = FindBasicManager(pLib))
             {
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-                OUString aLibName = pLib->GetName();
+                const OUString& aLibName = pLib->GetName();
                 pWin = FindBasWin( aDocument, aLibName, pActiveModule->GetName(), true );
                 DBG_ASSERT( pWin, "Error/Step-Hdl: Window was not created/found!" );
                 SetCurLib( aDocument, aLibName );

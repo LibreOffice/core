@@ -220,7 +220,7 @@ namespace basegfx
             {
                 for(sal_uInt32 a(0); a < rCandidate.count(); a++)
                 {
-                    const B2DPolygon aPolygonCandidate(rCandidate.getB2DPolygon(a));
+                    const B2DPolygon& aPolygonCandidate(rCandidate.getB2DPolygon(a));
                     const sal_uInt32 nCount(aPolygonCandidate.count());
 
                     if(nCount > 2)
@@ -419,7 +419,7 @@ namespace basegfx
             if(aCandidate.count() == 1)
             {
                 // single polygon -> single polygon triangulation
-                const B2DPolygon aSinglePolygon(aCandidate.getB2DPolygon(0));
+                const B2DPolygon& aSinglePolygon(aCandidate.getB2DPolygon(0));
 
                 aRetval = triangulate(aSinglePolygon);
             }
