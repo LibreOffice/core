@@ -26,6 +26,7 @@
 #include <svtools/wizardmachine.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <curledit.hxx>
 
 class NumericField;
 class Edit;
@@ -70,6 +71,17 @@ namespace dbaui
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
         virtual void SaveValue() override { m_pSaveValue->save_state(); }
+        virtual void Disable() override { m_pSaveValue->set_sensitive(false); }
+    };
+
+    template <> class OSaveValueWidgetWrapper<dbaui::DBOConnectionURLEdit> : public ISaveValueWrapper
+    {
+        dbaui::DBOConnectionURLEdit*  m_pSaveValue;
+    public:
+        explicit OSaveValueWidgetWrapper(dbaui::DBOConnectionURLEdit* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
+
+        virtual void SaveValue() override { m_pSaveValue->save_value(); }
         virtual void Disable() override { m_pSaveValue->set_sensitive(false); }
     };
 
@@ -238,6 +250,7 @@ namespace dbaui
         */
         static void fillString(SfxItemSet& _rSet,Edit const * _pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
         static void fillString(SfxItemSet& _rSet,const weld::Entry* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
+        static void fillString(SfxItemSet& _rSet,const dbaui::DBOConnectionURLEdit* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
 
     protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
@@ -251,6 +264,7 @@ namespace dbaui
         DECL_LINK(OnControlModifiedClick, Button*, void);
         DECL_LINK(ControlModifiedCheckBoxHdl, CheckBox&, void);
 
+        DECL_LINK(OnTestConnectionButtonClickHdl, weld::Button&, void);
         DECL_LINK(OnTestConnectionClickHdl, Button*, void);
     };
 

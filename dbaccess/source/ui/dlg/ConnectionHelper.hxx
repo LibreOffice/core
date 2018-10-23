@@ -98,6 +98,72 @@ namespace dbaui
         void        implUpdateURLDependentStates() const;
     };
 
+    class DBOConnectionHelper : public OGenericAdministrationPage
+    {
+        bool            m_bUserGrabFocus;
+
+    public:
+        DBOConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs);
+        virtual ~DBOConnectionHelper() override;
+        virtual void dispose() override;
+
+        OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
+        // setting/retrieving the current connection URL
+        // necessary because for some types, the URL must be decoded for display purposes
+        ::dbaccess::ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
+
+        std::unique_ptr<weld::Label> m_xFT_Connection;
+        std::unique_ptr<weld::Button> m_xPB_Connection;
+        std::unique_ptr<weld::Button> m_xPB_CreateDB;
+        std::unique_ptr<DBOConnectionURLEdit> m_xConnectionURL;
+
+    public:
+
+        // <method>OGenericAdministrationPage::fillControls</method>
+        virtual void    fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+        // <method>OGenericAdministrationPage::fillWindows</method>
+        virtual void    fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+        virtual void    implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+
+        // setting/retrieving the current connection URL
+        // necessary because for some types, the URL must be decoded for display purposes
+        //String        getURL( OConnectionURLEdit* _m_pConnection ) const;
+        //void      setURL( const OUString& _rURL, OConnectionURLEdit* _m_pConnection );
+
+        OUString    getURLNoPrefix( ) const;
+        void        setURLNoPrefix( const OUString& _rURL );
+
+        /** checks if the path is existence
+            @param  _rURL
+                The URL to check.
+        */
+        sal_Int32   checkPathExistence(const OUString& _rURL);
+
+        IS_PATH_EXIST   pathExists(const OUString& _rURL, bool bIsFile) const;
+        bool        createDirectoryDeep(const OUString& _rPathNormalized);
+        void        commitURL();
+
+        /** opens the FileOpen dialog and asks for a FileName
+            @param  _aFileOpen
+                Executes the file open dialog, which must be filled from caller.
+        */
+        void askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
+
+    protected:
+        void            setURL( const OUString& _rURL );
+        virtual bool    checkTestConnection();
+
+    private:
+        DECL_LINK(OnBrowseConnections, weld::Button&, void);
+        DECL_LINK(OnCreateDatabase, weld::Button&, void);
+        DECL_LINK(GetFocusHdl, weld::Widget&, void);
+        DECL_LINK(LoseFocusHdl, weld::Widget&, void);
+        OUString    impl_getURL() const;
+        void        impl_setURL( const OUString& _rURL, bool _bPrefix );
+        void        implUpdateURLDependentStates() const;
+    };
+
+
 }   // namespace dbaui
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_CONNECTIONHELPER_HXX
