@@ -88,7 +88,7 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
         if (!locked())
             m_pListener->_disposing(_rSource);
         // disconnect the listener
-        if (m_pListener)    // may have been reset whilest calling into _disposing
+        if (m_pListener)    // may have been reset whilst calling into _disposing
             m_pListener->setAdapter(nullptr);
     }
 
