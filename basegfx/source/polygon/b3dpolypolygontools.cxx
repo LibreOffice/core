@@ -46,7 +46,7 @@ namespace basegfx
 
             for(sal_uInt32 a(0); a < nPolygonCount; a++)
             {
-                B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
+                const B3DPolygon& aCandidate = rCandidate.getB3DPolygon(a);
                 aRetval.expand(getRange(aCandidate));
             }
 
@@ -470,7 +470,7 @@ namespace basegfx
 
                 for(sal_uInt32 a(0); a < nPolygonCount; a++)
                 {
-                    const B3DPolygon aPolygon(rCandidate.getB3DPolygon(a));
+                    const B3DPolygon& aPolygon(rCandidate.getB3DPolygon(a));
                     const bool bInside(isInside(aPolygon, rPoint, false/*bWithBorder*/));
 
                     if(bInside)
@@ -550,7 +550,7 @@ namespace basegfx
 
                 for(sal_uInt32 a(0); a < nPolygonCount; a++)
                 {
-                    const basegfx::B3DPolygon aPoly(rPolyPolygonSource.getB3DPolygon(a));
+                    const basegfx::B3DPolygon& aPoly(rPolyPolygonSource.getB3DPolygon(a));
                     const sal_uInt32 nPointCount(aPoly.count());
 
                     if(nPointCount)

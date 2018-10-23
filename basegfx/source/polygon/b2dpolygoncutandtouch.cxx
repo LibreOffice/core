@@ -991,7 +991,7 @@ namespace basegfx
 
                     for(sal_uInt32 m(0); m < nCountM; m++)
                     {
-                        const B2DPolygon aMask(rPolyMask.getB2DPolygon(m));
+                        const B2DPolygon& aMask(rPolyMask.getB2DPolygon(m));
                         const sal_uInt32 nCountB(aMask.count());
 
                         if(nCountB)

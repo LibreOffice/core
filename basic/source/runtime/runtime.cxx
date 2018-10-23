@@ -3155,7 +3155,7 @@ bool SbiRuntime::implIsClass( SbxObject const * pObj, const OUString& aClass )
             bRet = aClass.equalsIgnoreAsciiCase( "object" );
         if( !bRet )
         {
-            OUString aObjClass = pObj->GetClassName();
+            const OUString& aObjClass = pObj->GetClassName();
             SbModule* pClassMod = GetSbData()->pClassFac->FindClass( aObjClass );
             if( pClassMod && pClassMod->pClassData )
             {

@@ -300,9 +300,9 @@ void LibBox::NotifyIDE()
     sal_Int32 nSelPos = GetSelectedEntryPos();
     if (LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData(nSelPos)))
     {
-        ScriptDocument aDocument( pEntry->GetDocument() );
+        const ScriptDocument& aDocument( pEntry->GetDocument() );
         SfxUnoAnyItem aDocumentItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, uno::Any( aDocument.getDocumentOrNull() ) );
-        OUString aLibName = pEntry->GetLibName();
+        const OUString& aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->ExecuteList(

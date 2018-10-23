@@ -324,7 +324,7 @@ SbMethod* MacroChooser::CreateMacro()
     SbMethod* pMethod = nullptr;
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
     EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
-    ScriptDocument aDocument( aDesc.GetDocument() );
+    const ScriptDocument& aDocument( aDesc.GetDocument() );
     OSL_ENSURE( aDocument.isAlive(), "MacroChooser::CreateMacro: no document!" );
     if ( !aDocument.isAlive() )
         return nullptr;
@@ -403,8 +403,8 @@ void MacroChooser::CheckButtons()
     sal_uInt16 nDepth = pCurEntry ? m_pBasicBox->GetModel()->GetDepth( pCurEntry ) : 0;
     if ( nDepth == 1 || nDepth == 2 )
     {
-        ScriptDocument aDocument( aDesc.GetDocument() );
-        OUString aOULibName( aDesc.GetLibName() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
+        const OUString& aOULibName( aDesc.GetLibName() );
         Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
@@ -659,12 +659,12 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
     {
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
-        ScriptDocument aDocument( aDesc.GetDocument() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
             return;
         BasicManager* pBasMgr = aDocument.getBasicManager();
-        OUString aLib( aDesc.GetLibName() );
+        const OUString& aLib( aDesc.GetLibName() );
         OUString aMod( aDesc.GetName() );
         // extract the module name from the string like "Sheet1 (Example1)"
         if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
@@ -672,7 +672,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
             sal_Int32 nIndex = 0;
             aMod = aMod.getToken( 0, ' ', nIndex );
         }
-        OUString aSub( aDesc.GetMethodName() );
+        const OUString& aSub( aDesc.GetMethodName() );
         SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, OUString() );
         if (pButton == m_pEditButton)
         {
@@ -742,13 +742,13 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
     {
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
-        ScriptDocument aDocument( aDesc.GetDocument() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
             return;
         BasicManager* pBasMgr = aDocument.getBasicManager();
-        OUString aLib( aDesc.GetLibName() );
-        OUString aMod( aDesc.GetName() );
+        const OUString& aLib( aDesc.GetLibName() );
+        const OUString& aMod( aDesc.GetName() );
         OUString aSub( m_pMacroNameEdit->GetText() );
         SbMethod* pMethod = GetMacro();
         DBG_ASSERT( pBasMgr, "BasMgr?" );
@@ -769,15 +769,15 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
     {
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
-        ScriptDocument aDocument( aDesc.GetDocument() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
         createLibImpl(GetFrameWeld(), aDocument, nullptr, m_pBasicBox);
     }
     else if (pButton == m_pNewModButton)
     {
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
-        ScriptDocument aDocument( aDesc.GetDocument() );
-        OUString aLibName( aDesc.GetLibName() );
+        const ScriptDocument& aDocument( aDesc.GetDocument() );
+        const OUString& aLibName( aDesc.GetLibName() );
         createModImpl(GetFrameWeld(), aDocument, *m_pBasicBox, aLibName, OUString(), true);
     }
     else if (pButton == m_pOrganizeButton)

@@ -733,7 +733,7 @@ namespace basegfx
 
             for(sal_uInt32 i(0); i < nCount; i++)
             {
-                const B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(i));
+                const B2DPolygon& aPolygon(rPolyPolygon.getB2DPolygon(i));
                 const sal_uInt32 nPointCount(aPolygon.count());
 
                 if(nPointCount)

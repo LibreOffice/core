@@ -180,7 +180,7 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
             const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
             if ( pSdrLayer )
             {
-                OUString aLayerName = pSdrLayer->GetName();
+                const OUString& aLayerName = pSdrLayer->GetName();
                 SdrView& rView = m_pDialogWindow->GetView();
                 if (rView.IsLayerVisible(aLayerName))
                 {

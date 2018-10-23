@@ -91,7 +91,7 @@ void ManageLanguageDialog::Init()
 {
     // get current IDE
     Shell* pShell = GetShell();
-    OUString sLibName = pShell->GetCurLibName();
+    const OUString& sLibName = pShell->GetCurLibName();
     // set dialog title with library name
     OUString sText = GetText();
     sText = sText.replaceAll("$1", sLibName);

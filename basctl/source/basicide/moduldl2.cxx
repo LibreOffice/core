@@ -706,7 +706,7 @@ void LibPage::InsertLib()
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pTabDlg ? pTabDlg->GetFrameWeld() : nullptr);
-    Reference <XFilePicker3> xFP = aDlg.GetFilePicker();
+    const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
 
@@ -1163,7 +1163,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, pTabDlg ? pTabDlg->GetFrameWeld() : nullptr);
-    Reference <XFilePicker3> xFP = aDlg.GetFilePicker();
+    const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
@@ -1374,7 +1374,7 @@ void LibPage::SetCurLib()
     DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( nSelPos ));
     if ( pEntry )
     {
-        ScriptDocument aDocument( pEntry->GetDocument() );
+        const ScriptDocument& aDocument( pEntry->GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "LibPage::SetCurLib: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
             return;

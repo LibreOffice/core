@@ -535,7 +535,7 @@ namespace basegfx
                         // count points
                         for(a = 0; a < nOriginalCount; a++)
                         {
-                            const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
+                            const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
                             const sal_uInt32 nCandCount(aCandidate.count());
 
                             // If it's not a bezier curve, at least three points would be needed to have a
@@ -561,7 +561,7 @@ namespace basegfx
 
                             for(a = 0; a < nOriginalCount; a++)
                             {
-                                const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
+                                const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
                                 const sal_uInt32 nCandCount(aCandidate.count());
 
                                 // use same condition as above, the data vector is
@@ -710,7 +710,7 @@ namespace basegfx
 
             for(sal_uInt32 a(0); a < rCandidate.count(); a++)
             {
-                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                const B2DPolygon& aCandidate(rCandidate.getB2DPolygon(a));
 
                 if(utils::getOrientation(aCandidate) != B2VectorOrientation::Neutral)
                 {
@@ -749,7 +749,7 @@ namespace basegfx
 
                 for(a = 0; a < nCount; a++)
                 {
-                    const B2DPolygon aCand(aCandidate.getB2DPolygon(a));
+                    const B2DPolygon& aCand(aCandidate.getB2DPolygon(a));
                     StripHelper* pNewHelper = &(aHelpers[a]);
                     pNewHelper->maRange = utils::getRange(aCand);
                     pNewHelper->meOrinetation = utils::getOrientation(aCand);
@@ -760,12 +760,12 @@ namespace basegfx
 
                 for(a = 0; a < nCount - 1; a++)
                 {
-                    const B2DPolygon aCandA(aCandidate.getB2DPolygon(a));
+                    const B2DPolygon& aCandA(aCandidate.getB2DPolygon(a));
                     StripHelper& rHelperA = aHelpers[a];
 
                     for(b = a + 1; b < nCount; b++)
                     {
-                        const B2DPolygon aCandB(aCandidate.getB2DPolygon(b));
+                        const B2DPolygon& aCandB(aCandidate.getB2DPolygon(b));
                         StripHelper& rHelperB = aHelpers[b];
                         const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && utils::isInside(aCandB, aCandA, true));
 
@@ -829,7 +829,7 @@ namespace basegfx
 
                     for(a = 0; a < nCount; a++)
                     {
-                        const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                        const B2DPolygon& aCandidate(rCandidate.getB2DPolygon(a));
                         StripHelper* pNewHelper = &(aHelpers[a]);
                         pNewHelper->maRange = utils::getRange(aCandidate);
                         pNewHelper->meOrinetation = utils::getOrientation(aCandidate);
@@ -838,12 +838,12 @@ namespace basegfx
 
                     for(a = 0; a < nCount - 1; a++)
                     {
-                        const B2DPolygon aCandA(rCandidate.getB2DPolygon(a));
+                        const B2DPolygon& aCandA(rCandidate.getB2DPolygon(a));
                         StripHelper& rHelperA = aHelpers[a];
 
                         for(b = a + 1; b < nCount; b++)
                         {
-                            const B2DPolygon aCandB(rCandidate.getB2DPolygon(b));
+                            const B2DPolygon& aCandB(rCandidate.getB2DPolygon(b));
                             StripHelper& rHelperB = aHelpers[b];
                             const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && utils::isInside(aCandB, aCandA, true));
                             const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && utils::isInside(aCandA, aCandB, true));
