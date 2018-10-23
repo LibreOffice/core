@@ -180,6 +180,9 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
     VclPtr<SvxColorListBox> maLbColMin;
     VclPtr<SvxColorListBox> maLbColMax;
 
+    VclPtr<FixedText> maFtMin;
+    VclPtr<FixedText> maFtMax;
+
     ScFormatEntry* createColorscaleEntry() const;
 
     virtual OUString GetExpressionString() override;
@@ -215,6 +218,9 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
     VclPtr<SvxColorListBox> maLbColMiddle;
     VclPtr<SvxColorListBox> maLbColMax;
 
+    VclPtr<FixedText> maFtMin;
+    VclPtr<FixedText> maFtMax;
+
     ScFormatEntry* createColorscaleEntry() const;
 
     virtual OUString GetExpressionString() override;
@@ -244,6 +250,9 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
 
     VclPtr<PushButton> maBtOptions;
 
+    VclPtr<FixedText> maFtMin;
+    VclPtr<FixedText> maFtMax;
+    
     std::unique_ptr<ScDataBarFormatData> mpDataBarData;
 
     ScFormatEntry* createDatabarEntry() const;
