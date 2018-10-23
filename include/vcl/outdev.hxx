@@ -298,7 +298,7 @@ namespace o3tl
     template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0007> {};
 }
 
-enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
+enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
 enum class OutDevViewType { DontKnow, PrintPreview, SlideShow };
 
@@ -379,7 +379,7 @@ private:
     ComplexTextLayoutFlags           mnTextLayoutMode;
     ImplMapRes                      maMapRes;
     ImplThresholdRes                maThresRes;
-    OutDevType                      meOutDevType;
+    const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
@@ -421,7 +421,7 @@ private:
     ///@{
 
 protected:
-                                OutputDevice();
+                                OutputDevice(OutDevType eOutDevType);
     virtual                     ~OutputDevice() override;
     virtual void                dispose() override;
 

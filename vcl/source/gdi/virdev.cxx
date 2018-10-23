@@ -112,6 +112,9 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 {
     SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << "," << static_cast<int>(eFormat) << ")" );
 
+    meRefDevMode = RefDevMode::NONE;
+    mbForceZeroExtleadBug = false;
+
     bool bErase = nDX > 0 && nDY > 0;
 
     if ( nDX < 1 )
@@ -166,7 +169,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
         mbScreenComp = static_cast<const VirtualDevice*>(pOutDev)->mbScreenComp;
 
-    meOutDevType    = OUTDEV_VIRDEV;
     mbDevOutput     = true;
     mxFontCollection = pSVData->maGDIData.mxScreenFontList;
     mxFontCache     = pSVData->maGDIData.mxScreenFontCache;
@@ -199,8 +201,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 }
 
 VirtualDevice::VirtualDevice(DeviceFormat eFormat)
-:   meRefDevMode( RefDevMode::NONE ),
-    mbForceZeroExtleadBug( false )
+    : OutputDevice(OUTDEV_VIRDEV)
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
@@ -208,8 +209,7 @@ VirtualDevice::VirtualDevice(DeviceFormat eFormat)
 }
 
 VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
-    : meRefDevMode( RefDevMode::NONE ),
-    mbForceZeroExtleadBug( false )
+    : OutputDevice(OUTDEV_VIRDEV)
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
@@ -217,8 +217,7 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
 }
 
 VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
-    : meRefDevMode( RefDevMode::NONE )
-    , mbForceZeroExtleadBug( false )
+    : OutputDevice(OUTDEV_VIRDEV)
 {
     SAL_INFO( "vcl.virdev",
             "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << ", " << static_cast<int>(eAlphaFormat) << " )" );
@@ -231,8 +230,7 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat,
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                              DeviceFormat eFormat)
-:   meRefDevMode( RefDevMode::NONE ),
-    mbForceZeroExtleadBug( false )
+    : OutputDevice(OUTDEV_VIRDEV)
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 

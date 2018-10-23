@@ -461,7 +461,6 @@ OUString Printer::GetDefaultPrinterName()
 void Printer::ImplInitData()
 {
     mbDevOutput         = false;
-    meOutDevType        = OUTDEV_PRINTER;
     mbDefPrinter        = false;
     mnError             = ERRCODE_NONE;
     mnPageQueueSize     = 0;
@@ -854,6 +853,7 @@ long Printer::GetGradientStepCount( long nMinRect )
 }
 
 Printer::Printer()
+    : OutputDevice(OUTDEV_PRINTER)
 {
     ImplInitData();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( GetDefaultPrinterName(), nullptr );
@@ -867,8 +867,9 @@ Printer::Printer()
         ImplInitDisplay();
 }
 
-Printer::Printer( const JobSetup& rJobSetup ) :
-    maJobSetup( rJobSetup )
+Printer::Printer( const JobSetup& rJobSetup )
+    : OutputDevice(OUTDEV_PRINTER)
+    , maJobSetup(rJobSetup)
 {
     ImplInitData();
     const ImplJobSetup& rConstData = rJobSetup.ImplGetConstData();
@@ -888,6 +889,7 @@ Printer::Printer( const JobSetup& rJobSetup ) :
 }
 
 Printer::Printer( const QueueInfo& rQueueInfo )
+    : OutputDevice(OUTDEV_PRINTER)
 {
     ImplInitData();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rQueueInfo.GetPrinterName(),
@@ -899,6 +901,7 @@ Printer::Printer( const QueueInfo& rQueueInfo )
 }
 
 Printer::Printer( const OUString& rPrinterName )
+    : OutputDevice(OUTDEV_PRINTER)
 {
     ImplInitData();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rPrinterName, nullptr );
