@@ -108,9 +108,9 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    long nDX, long nDY, DeviceFormat eFormat, const SystemGraphicsData *pData )
+                                    long nDX, long nDY, const SystemGraphicsData *pData )
 {
-    SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << "," << static_cast<int>(eFormat) << ")" );
+    SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << ")" );
 
     meRefDevMode = RefDevMode::NONE;
     mbForceZeroExtleadBug = false;
@@ -135,7 +135,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(pGraphics, nDX, nDY, eFormat, pData);
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(pGraphics, nDX, nDY, meFormat, pData);
     else
         mpVirDev = nullptr;
     if ( !mpVirDev )
@@ -146,7 +146,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
             css::uno::Reference< css::uno::XInterface >() );
     }
 
-    meFormat        = eFormat;
     switch (meFormat)
     {
         case DeviceFormat::BITMASK:
@@ -159,7 +158,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
     mbScreenComp    = true;
-    meAlphaFormat   = DeviceFormat::NONE;
 
     if (meFormat == DeviceFormat::BITMASK)
         SetAntialiasing( AntialiasingFlags::DisableText );
@@ -200,42 +198,26 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
-VirtualDevice::VirtualDevice(DeviceFormat eFormat)
+VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
     : OutputDevice(OUTDEV_VIRDEV)
-{
-    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
-
-    ImplInitVirDev(Application::GetDefaultDevice(), 0, 0, eFormat);
-}
-
-VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
-    : OutputDevice(OUTDEV_VIRDEV)
-{
-    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
-
-    ImplInitVirDev(&rCompDev, 0, 0, eFormat);
-}
-
-VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
-    : OutputDevice(OUTDEV_VIRDEV)
+    , meFormat(eFormat)
+    , meAlphaFormat(eAlphaFormat)
 {
     SAL_INFO( "vcl.virdev",
             "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << ", " << static_cast<int>(eAlphaFormat) << " )" );
 
-    ImplInitVirDev(&rCompDev, 0, 0, eFormat);
-
-    // Enable alpha channel
-    meAlphaFormat = eAlphaFormat;
+    ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
 }
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                              DeviceFormat eFormat)
     : OutputDevice(OUTDEV_VIRDEV)
+    , meFormat(eFormat)
+    , meAlphaFormat(DeviceFormat::NONE)
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
-    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(),
-                   eFormat, pData);
+    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(), pData);
 }
 
 VirtualDevice::~VirtualDevice()
