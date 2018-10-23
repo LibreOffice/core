@@ -738,6 +738,11 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
     get(maEdMax, "edcolscalemax");
     get(maLbColMin, "lbcolmin");
     get(maLbColMax, "lbcolmax");
+    get(maFtMin, "Label_minimum");
+    get(maFtMax, "Label_maximum");
+
+    maFtMin->Show();
+    maFtMax->Show();
 
     // remove the automatic entry from color scales
     maLbEntryTypeMin->RemoveEntry(0);
@@ -779,6 +784,8 @@ void ScColorScale2FrmtEntry::dispose()
     maEdMax.clear();
     maLbColMin.clear();
     maLbColMax.clear();
+    maFtMin.clear();
+    maFtMax.clear();
     ScCondFrmtEntry::dispose();
 }
 
@@ -877,6 +884,11 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
     get(maLbColMin, "lbcolmin");
     get(maLbColMiddle, "lbcolmiddle");
     get(maLbColMax, "lbcolmax");
+    get(maFtMin, "Label_minimum");
+    get(maFtMax, "Label_maximum");
+
+    maFtMin->Show();
+    maFtMax->Show();
 
     // remove the automatic entry from color scales
     maLbEntryTypeMin->RemoveEntry(0);
@@ -928,6 +940,8 @@ void ScColorScale3FrmtEntry::dispose()
     maLbColMin.clear();
     maLbColMiddle.clear();
     maLbColMax.clear();
+    maFtMin.clear();
+    maFtMax.clear();
     ScCondFrmtEntry::dispose();
 }
 
@@ -1089,7 +1103,12 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
     get(maEdDataBarMin, "edcolscalemin");
     get(maEdDataBarMax, "edcolscalemax");
     get(maBtOptions, "options");
+    get(maFtMin, "Label_minimum");
+    get(maFtMax, "Label_maximum");
 
+    maFtMin->Show();
+    maFtMax->Show();
+  
     maLbColorFormat->SelectEntryPos(2);
     maLbType->SelectEntryPos(0);
     if(pFormat)
@@ -1123,6 +1142,8 @@ void ScDataBarFrmtEntry::dispose()
     maEdDataBarMin.clear();
     maEdDataBarMax.clear();
     maBtOptions.clear();
+    maFtMin.clear();
+    maFtMax.clear();
     ScCondFrmtEntry::dispose();
 }
 
