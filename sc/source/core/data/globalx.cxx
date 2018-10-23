@@ -47,7 +47,7 @@ void ScGlobal::InitAddIns()
 
     // multi paths separated by semicolons
     SvtPathOptions aPathOpt;
-    OUString aMultiPath = aPathOpt.GetAddinPath();
+    const OUString& aMultiPath = aPathOpt.GetAddinPath();
     if (aMultiPath.isEmpty())
         return;
 

@@ -927,7 +927,7 @@ static uno::Reference< util::XPathSettings > const & lcl_getPathSettingsService(
 OUString ScVbaApplication::getOfficePath( const OUString& _sPathType )
 {
     OUString sRetPath;
-    uno::Reference< util::XPathSettings > xProps = lcl_getPathSettingsService( mxContext );
+    const uno::Reference< util::XPathSettings >& xProps = lcl_getPathSettingsService( mxContext );
     try
     {
         OUString sUrl;
@@ -949,7 +949,7 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType )
 void SAL_CALL
 ScVbaApplication::setDefaultFilePath( const OUString& DefaultFilePath )
 {
-    uno::Reference< util::XPathSettings > xProps = lcl_getPathSettingsService( mxContext );
+    const uno::Reference< util::XPathSettings >& xProps = lcl_getPathSettingsService( mxContext );
     OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( DefaultFilePath, aURL );
     xProps->setWork( aURL );

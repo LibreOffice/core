@@ -4448,7 +4448,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         //  get selection from system
 
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( this ) );
-        uno::Reference<datatransfer::XTransferable> xTransferable = aDataHelper.GetTransferable();
+        const uno::Reference<datatransfer::XTransferable>& xTransferable = aDataHelper.GetTransferable();
         if ( xTransferable.is() )
         {
             SotClipboardFormatId nFormatId = lcl_GetDropFormatId( xTransferable, true );

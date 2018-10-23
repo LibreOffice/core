@@ -104,8 +104,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
                                             XML_CREATOR, true,
                                             false );
-        OUString sAuthor(pAction->GetUser());
-        rExport.Characters(sAuthor);
+        rExport.Characters(pAction->GetUser());
     }
 
     {
@@ -117,7 +116,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
         rExport.Characters(sDate.makeStringAndClear());
     }
 
-    OUString sComment(pAction->GetComment());
+    const OUString& sComment(pAction->GetComment());
     if (!sComment.isEmpty())
     {
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);

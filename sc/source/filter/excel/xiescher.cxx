@@ -453,7 +453,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
             SdrUnoObj* pSdrUnoObj = dynamic_cast< SdrUnoObj* >( xSdrObj.get() );
             if( pSdrUnoObj != nullptr )
             {
-                Reference< XControlModel > xCtrlModel = pSdrUnoObj->GetUnoControlModel();
+                const Reference< XControlModel >& xCtrlModel = pSdrUnoObj->GetUnoControlModel();
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
                 const static rtl::OUString sPropertyName("ControlTypeinMSO");
 
@@ -1760,7 +1760,7 @@ void XclImpChartObj::DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObjec
     const SdrOle2Obj* pSdrOleObj = dynamic_cast< const SdrOle2Obj* >( &rSdrObj );
     if( mxChart && pSdrOleObj )
     {
-        Reference< XEmbeddedObject > xEmbObj = pSdrOleObj->GetObjRef();
+        const Reference< XEmbeddedObject >& xEmbObj = pSdrOleObj->GetObjRef();
         if( xEmbObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) ) try
         {
             Reference< XEmbedPersist > xPersist( xEmbObj, UNO_QUERY_THROW );

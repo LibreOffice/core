@@ -342,7 +342,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
             mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
             mpImpl->mnMaxZoom > gnSliderCenter,
             "Looks like the zoom slider item is corrupted" );
-       const css::uno::Sequence < sal_Int32 > rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
+       const css::uno::Sequence < sal_Int32 >& rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
        mpImpl->maSnappingPointOffsets.clear();
        mpImpl->maSnappingPointZooms.clear();
 

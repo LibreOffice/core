@@ -292,7 +292,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
         SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
         if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
         {
-            uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = pSdrOle2Obj->GetObjRef();
+            const uno::Reference< embed::XEmbeddedObject >& xEmbeddedObj = pSdrOle2Obj->GetObjRef();
             if ( xEmbeddedObj.is() )
             {
                 bool bDisableDataTableDialog = false;
@@ -306,7 +306,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
                     if (pCollection)
                     {
-                        OUString aChartName = pSdrOle2Obj->GetPersistName();
+                        const OUString& aChartName = pSdrOle2Obj->GetPersistName();
                         const ScChartListener* pListener = pCollection->findByName(aChartName);
                         if (pListener)
                         {
@@ -378,12 +378,12 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, co
                 SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
                 if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
                 {
-                    OUString aChartName = pSdrOle2Obj->GetPersistName();
+                    const OUString& aChartName = pSdrOle2Obj->GetPersistName();
                     ::std::vector< OUString >::const_iterator aEnd = rExcludedChartNames.end();
                     ::std::vector< OUString >::const_iterator aFound = ::std::find( rExcludedChartNames.begin(), aEnd, aChartName );
                     if ( aFound == aEnd )
                     {
-                        uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = pSdrOle2Obj->GetObjRef();
+                        const uno::Reference< embed::XEmbeddedObject >& xEmbeddedObj = pSdrOle2Obj->GetObjRef();
                         if ( xEmbeddedObj.is() && ( nRangeList < nRangeListCount ) )
                         {
                             bool bDisableDataTableDialog = false;

@@ -461,7 +461,7 @@ void ScViewFunc::PasteDraw()
     const ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(rViewData.GetActiveWin()));
     if (pDrawClip)
     {
-        OUString aSrcShellID = pDrawClip->GetShellID();
+        const OUString& aSrcShellID = pDrawClip->GetShellID();
         OUString aDestShellID = SfxObjectShell::CreateShellID(rViewData.GetDocShell());
         PasteDraw(aPos, pDrawClip->GetModel(), false, aSrcShellID, aDestShellID);
     }

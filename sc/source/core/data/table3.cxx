@@ -122,7 +122,7 @@ static bool SplitString( const OUString &sWhole,
         return false;
 
     // Get numeral element
-    OUString sUser = ScGlobal::pLocaleData->getNumDecimalSep();
+    const OUString& sUser = ScGlobal::pLocaleData->getNumDecimalSep();
     ParseResult aPRNum = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::ANY_NUMBER, sWhole, nPos,
         KParseTokens::ANY_NUMBER, "", KParseTokens::ANY_NUMBER, sUser );

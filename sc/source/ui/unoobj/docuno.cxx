@@ -2591,8 +2591,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == SC_UNO_CODENAME )
         {
-            OUString sCodeName = rDoc.GetCodeName();
-            aRet <<= sCodeName;
+            aRet <<= rDoc.GetCodeName();
         }
 
         else if ( aPropertyName == SC_UNO_CJK_CLOCAL )

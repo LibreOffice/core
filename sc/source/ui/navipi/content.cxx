@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
                 const ScAreaLink* pLink = GetLink( nChild );
                 if( pLink )
                 {
-                    ScRange aRange = pLink->GetDestArea();
+                    const ScRange& aRange = pLink->GetDestArea();
                     ScDocument* pSrcDoc = GetSourceDocument();
                     OUString aRangeStr(aRange.Format(ScRefFlags::RANGE_ABS_3D, pSrcDoc, pSrcDoc->GetAddressConvention()));
                     pParentWindow->SetCurrentCellStr( aRangeStr );

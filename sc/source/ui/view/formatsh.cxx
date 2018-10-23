@@ -1965,7 +1965,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             // ATTR_BACKGROUND (=SID_ATTR_BRUSH) has to be set to two IDs:
             case SID_BACKGROUND_COLOR:
                 {
-                    const SvxColorItem  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
+                    const SvxColorItem&  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
 
                     SvxBrushItem        aBrushItem(
                                             pTabViewShell->GetSelectionPattern()->

@@ -1729,7 +1729,7 @@ public:
                     const ScFormulaCell* pCell = *it;
                     OUString aFormula;
                     pCell->GetFormula(aFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
-                    auto xCellGroup = pCell->GetCellGroup();
+                    const auto& xCellGroup = pCell->GetCellGroup();
                     sal_uInt64 nGroupLength = 0;
                     if (xCellGroup)
                     {

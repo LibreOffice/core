@@ -2095,7 +2095,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
     if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
     {
         // URLField
-        OUString aURL = pURLField->GetURL();
+        const OUString& aURL = pURLField->GetURL();
 
         switch ( pURLField->GetFormat() )
         {

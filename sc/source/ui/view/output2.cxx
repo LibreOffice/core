@@ -2007,7 +2007,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         // in Metafiles always use DrawTextArray to ensure that positions are
                         // recorded (for non-proportional resize):
 
-                        OUString aString = aVars.GetString();
+                        const OUString& aString = aVars.GetString();
                         if (!aString.isEmpty())
                         {
                             // If the string is clipped, make it shorter for

@@ -278,7 +278,7 @@ void ScVbaRange::fireChangeEvent()
     if( ScVbaApplication::getDocumentEventsEnabled() )
     {
         ScDocument& rDoc = getScDocument();
-        uno::Reference< script::vba::XVBAEventProcessor > xVBAEvents = rDoc.GetVbaEventProcessor();
+        const uno::Reference< script::vba::XVBAEventProcessor >& xVBAEvents = rDoc.GetVbaEventProcessor();
         if( xVBAEvents.is() ) try
         {
             uno::Sequence< uno::Any > aArgs( 1 );
@@ -1532,7 +1532,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
     uno::TypeClass aClass = aValue.getValueTypeClass();
     if ( aClass == uno::TypeClass_SEQUENCE )
     {
-        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+        const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
         uno::Any aConverted;
         try
         {
@@ -1957,7 +1957,7 @@ ScVbaRange::getFormulaArray()
         return uno::makeAny( xFormulaArray->getArrayFormula() );
 
     uno::Reference< sheet::XCellRangeFormula> xCellRangeFormula( mxRange, uno::UNO_QUERY_THROW );
-    uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+    const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
     uno::Any aSingleValueOrMatrix;
     // When dealing with a single element ( embedded in the sequence of sequence ) unwrap and return
     // that value
@@ -2167,7 +2167,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
     // conversion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, cppu::UnoType<sal_Int32>::get() )
     if ( nRowIndex.hasValue() && !( nRowIndex >>= nRow ) )
     {
-        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
+        const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( xContext );
         uno::Any aConverted;
         try
         {
@@ -2194,7 +2194,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             if ( !( nColumnIndex >>= nColumn ) )
             {
-                uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
+                const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( xContext );
                 uno::Any aConverted;
                 try
                 {
@@ -4463,7 +4463,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     uno::Any Field( aField );
     if ( !( Field >>= nField ) )
     {
-        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+        const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
         try
         {
             Field = xConverter->convertTo( aField, cppu::UnoType<sal_Int32>::get() );

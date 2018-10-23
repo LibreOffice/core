@@ -47,7 +47,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
 
                 if ( pCellPosItem )
                 {
-                    OUString  aAddress( pCellPosItem->GetValue() );
+                    const OUString&  aAddress( pCellPosItem->GetValue() );
                     ScAddress aScAddress;
                     aScAddress.Parse( aAddress );
 

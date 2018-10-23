@@ -596,7 +596,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_GET_COLORLIST:
             {
                 const SvxColorListItem* pColItem = GetItem(SID_COLOR_TABLE);
-                XColorListRef pList = pColItem->GetColorList();
+                const XColorListRef& pList = pColItem->GetColorList();
                 rReq.SetReturnValue(OfaRefItem<XColorList>(SID_GET_COLORLIST, pList));
             }
             break;
@@ -863,7 +863,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if (const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>(pItem))
                     {
-                        OUString aName = pStringItem->GetValue();
+                        const OUString& aName = pStringItem->GetValue();
                         SCTAB nTab;
                         if (m_aDocument.GetTable( aName, nTab ))
                         {
@@ -1445,7 +1445,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             ScDocShellModificator aModificator( *this );
 
-            OUString aNewName = pStyle->GetName();
+            const OUString& aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
             const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint); // name changed?
             if (pExtendedHint)
@@ -1483,7 +1483,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     {
         if ( nId == SfxHintId::StyleSheetModified)
         {
-            OUString aNewName = pStyle->GetName();
+            const OUString& aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
             const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
             if (pExtendedHint)
