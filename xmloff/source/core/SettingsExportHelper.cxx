@@ -129,7 +129,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         break;
         default:
         {
-            uno::Type aType = aAny.getValueType();
+            const uno::Type& aType = aAny.getValueType();
             if (aType.equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ) )
             {
                 uno::Sequence< beans::PropertyValue> aProps;

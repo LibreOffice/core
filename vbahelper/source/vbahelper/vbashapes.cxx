@@ -140,7 +140,7 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  )
     if ( Index.getValueTypeClass() != uno::TypeClass_SEQUENCE )
         throw uno::RuntimeException();
 
-    uno::Reference< script::XTypeConverter > xConverter = getTypeConverter(mxContext);
+    const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
     uno::Any aConverted;
     aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
 

@@ -507,7 +507,7 @@ bool LocaleDataWrapper::doesSecondaryCalendarUseEC( const OUString& rName ) cons
 
     // Check language tag first to avoid loading all calendars of this locale.
     LanguageTag aLoaded( getLoadedLanguageTag());
-    OUString aBcp47( aLoaded.getBcp47());
+    const OUString& aBcp47( aLoaded.getBcp47());
     // So far determine only by locale, we know for a few.
     /* TODO: check date format codes? or add to locale data? */
     if (    aBcp47 != "ja-JP" &&

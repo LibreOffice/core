@@ -1206,7 +1206,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case MetaActionType::EPS:
             {
                 const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
-                const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
+                const GDIMetaFile&      aSubstitute( pA->GetSubstitute() );
 
                 for( size_t i = 0, nCount = aSubstitute.GetActionSize(); i < nCount; i++ )
                 {
@@ -1328,7 +1328,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case MetaActionType::TEXTRECT:
             {
                 const MetaTextRectAction*   pA = static_cast<const MetaTextRectAction*>(pAction);
-                const OUString              aText( pA->GetText() );
+                const OUString&             aText( pA->GetText() );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetRect().TopLeft(), aText, nullptr, 0 );

@@ -100,7 +100,7 @@ void InterceptedInteraction::impl_handleDefault(const css::uno::Reference< css::
 InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_interceptRequest(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     css::uno::Any                                                                    aRequest       = xRequest->getRequest();
-    css::uno::Type                                                                   aRequestType   = aRequest.getValueType();
+    const css::uno::Type&                                                            aRequestType   = aRequest.getValueType();
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
 
     // check against the list of static requests

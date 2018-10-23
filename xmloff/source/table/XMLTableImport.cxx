@@ -596,10 +596,8 @@ void XMLTableImportContext::EndElement()
 {
     if( !maMergeInfos.empty() )
     {
-        for( const auto& rMergeInfo : maMergeInfos )
+        for( const std::shared_ptr< MergeInfo >& xInfo : maMergeInfos )
         {
-            std::shared_ptr< MergeInfo > xInfo( rMergeInfo );
-
             if( xInfo.get() ) try
             {
                 Reference< XCellRange > xRange( mxTable->getCellRangeByPosition( xInfo->mnStartColumn, xInfo->mnStartRow, xInfo->mnEndColumn, xInfo->mnEndRow ) );

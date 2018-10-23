@@ -70,7 +70,7 @@ GenericSalLayout::~GenericSalLayout()
 void GenericSalLayout::ParseFeatures(const OUString& aName)
 {
     vcl::font::FeatureParser aParser(aName);
-    OUString sLanguage = aParser.getLanguage();
+    const OUString& sLanguage = aParser.getLanguage();
     if (!sLanguage.isEmpty())
         msLanguage = OUStringToOString(sLanguage, RTL_TEXTENCODING_ASCII_US);
 

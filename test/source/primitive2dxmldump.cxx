@@ -127,7 +127,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.startElement("polypolygoncolor");
                 rWriter.attribute("color", convertColorToString(rPolyPolygonColorPrimitive2D.getBColor()));
-                const basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon());
+                const basegfx::B2DPolyPolygon& aB2DPolyPolygon(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon());
                 const basegfx::B2DRange aB2DRange(aB2DPolyPolygon.getB2DRange());
                 rWriter.attribute("height", aB2DRange.getHeight());
                 rWriter.attribute("width", aB2DRange.getWidth());
@@ -148,7 +148,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("polypolygonstroke");
 
                 rWriter.startElement("line");
-                drawinglayer::attribute::LineAttribute aLineAttribute = rPolyPolygonStrokePrimitive2D.getLineAttribute();
+                const drawinglayer::attribute::LineAttribute& aLineAttribute = rPolyPolygonStrokePrimitive2D.getLineAttribute();
                 rWriter.attribute("color", convertColorToString(aLineAttribute.getColor()));
                 rWriter.attribute("width", aLineAttribute.getWidth());
                 //rWriter.attribute("linejoin", aLineAttribute.getLineJoin());
@@ -197,7 +197,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("text", rTextSimplePortionPrimitive2D.getText());
                 rWriter.attribute("fontcolor", convertColorToString(rTextSimplePortionPrimitive2D.getFontColor()));
 
-                drawinglayer::attribute::FontAttribute aFontAttribute = rTextSimplePortionPrimitive2D.getFontAttribute();
+                const drawinglayer::attribute::FontAttribute& aFontAttribute = rTextSimplePortionPrimitive2D.getFontAttribute();
                 rWriter.attribute("familyname", aFontAttribute.getFamilyName());
                 rWriter.endElement();
             }

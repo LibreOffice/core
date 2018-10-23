@@ -106,7 +106,7 @@ namespace vcl
         ,m_aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() )
         ,m_bRTLEnabled( _rControl.IsRTLEnabled() )
     {
-        const Fraction aZoom( _rControl.GetZoom() );
+        const Fraction& aZoom( _rControl.GetZoom() );
         m_rTargetDevice.Push( PushFlags::MAPMODE | PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
 
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );

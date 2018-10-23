@@ -232,7 +232,7 @@ void ProgressBarElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFillColorStyle( xControlModel );
@@ -272,7 +272,7 @@ void ScrollBarElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
     }
@@ -321,7 +321,7 @@ void SpinButtonElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
     }
@@ -367,7 +367,7 @@ void FixedLineElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
@@ -406,7 +406,7 @@ void PatternFieldElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -453,7 +453,7 @@ void FormattedFieldElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -580,7 +580,7 @@ void TimeFieldElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -633,7 +633,7 @@ void NumericFieldElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -688,7 +688,7 @@ void DateFieldElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -742,7 +742,7 @@ void CurrencyFieldElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -797,7 +797,7 @@ void FileControlElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -840,7 +840,7 @@ void TreeControlElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
     }
@@ -885,7 +885,7 @@ void ImageControlElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
     }
@@ -925,7 +925,7 @@ void TextElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -970,7 +970,7 @@ void FixedHyperLinkElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
@@ -1543,7 +1543,7 @@ void ButtonElement::endElement()
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        const Reference< beans::XPropertySet >& xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );

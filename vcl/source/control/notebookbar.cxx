@@ -193,7 +193,7 @@ void NotebookBar::StateChanged(const  StateChangedType nStateChange )
 void NotebookBar::UpdateBackground()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+    const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
         Wallpaper aWallpaper(aPersona);
         aWallpaper.SetStyle(WallpaperStyle::TopRight);
     if (!aPersona.IsEmpty())

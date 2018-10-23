@@ -492,8 +492,7 @@ static void generateMethodBodies(std::ostream& o,
          const OString& indentation, bool usepropertymixin)
 {
     codemaker::GeneratedTypeSet generated;
-    for (const auto& rIface : interfaces) {
-        OUString type(rIface);
+    for (const OUString& type : interfaces) {
         if (type == "com.sun.star.lang.XServiceInfo") {
             generateXServiceInfoBodies(o);
             generated.add(u2b(type));

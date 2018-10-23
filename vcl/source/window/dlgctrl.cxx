@@ -396,7 +396,7 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
     sal_uInt16  i = rIndex;
     vcl::Window* pWindow;
 
-    uno::Reference<i18n::XCharacterClassification> const xCharClass(ImplGetCharClass());
+    uno::Reference<i18n::XCharacterClassification> const& xCharClass(ImplGetCharClass());
 
     const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     cCharCode = xCharClass->toUpper( OUString(cCharCode), 0, 1, rLocale )[0];

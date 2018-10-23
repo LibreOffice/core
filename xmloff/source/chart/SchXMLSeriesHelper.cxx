@@ -77,9 +77,8 @@ using ::com::sun::star::uno::Sequence;
     sal_Int32 nIndex=0;
 
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-    for( const auto& rSeries : aSeriesVector )
+    for( const Reference< chart2::XDataSeries >& xSeries : aSeriesVector )
     {
-        Reference< chart2::XDataSeries > xSeries( rSeries );
         if( xSeries.is() )
         {
             if( aRet.end() == aRet.find(xSeries) )

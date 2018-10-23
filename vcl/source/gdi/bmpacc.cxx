@@ -86,7 +86,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
     if (!mpBuffer)
         return;
 
-    std::shared_ptr<SalBitmap> xImpBmp = rBitmap.ImplGetSalBitmap();
+    const std::shared_ptr<SalBitmap>& xImpBmp = rBitmap.ImplGetSalBitmap();
     if (!xImpBmp)
         return;
 

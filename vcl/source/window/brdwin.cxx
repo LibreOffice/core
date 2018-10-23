@@ -1782,7 +1782,7 @@ void ImplBorderWindow::Resize()
             long nNotebookBarHeight = mpNotebookBar->GetSizePixel().Height();
 
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+            const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
             // since size of notebookbar changes, to make common persona for menubar
             // and notebookbar persona should be set again with changed coordinates
             if (!aPersona.IsEmpty())

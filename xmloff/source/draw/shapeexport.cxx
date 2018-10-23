@@ -2255,7 +2255,7 @@ void XMLShapeExport::ImpExportPolygonShape(
         if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
         {
             // simple polygon shape, can be written as svg:points sequence
-            const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+            const basegfx::B2DPolygon& aPolygon(aPolyPolygon.getB2DPolygon(0));
             const OUString aPointString(basegfx::utils::exportToSvgPoints(aPolygon));
 
             // write point array

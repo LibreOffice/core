@@ -376,8 +376,7 @@ namespace DOM
         }
 
         // notify listeners about start
-        for (const auto& rStreamListener : streamListeners) {
-            Reference< XStreamListener > aListener = rStreamListener;
+        for (const Reference< XStreamListener >& aListener : streamListeners) {
             aListener->started();
         }
 
@@ -395,8 +394,7 @@ namespace DOM
         }
 
         // call listeners
-        for (const auto& rStreamListener : streamListeners) {
-            Reference< XStreamListener > aListener = rStreamListener;
+        for (const Reference< XStreamListener >& aListener : streamListeners) {
             aListener->closed();
         }
     }
