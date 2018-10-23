@@ -25,7 +25,6 @@
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
-    namespace uno { class XComponentContext; }
 } } }
 
 css::uno::Reference< css::uno::XInterface > SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );

@@ -25,8 +25,6 @@
 class SdDrawDocument;
 class SfxRequest;
 
-namespace vcl { class Window; }
-
 namespace sd {
 
 class View;

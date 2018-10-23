@@ -21,6 +21,8 @@
 #define INCLUDED_SD_INC_ANNOTATION_HXX
 
 #include <sal/config.h>
+#include <sal/types.h>
+#include <memory>
 
 class SdPage;
 class SdrUndoAction;
@@ -28,6 +30,8 @@ class SdrUndoAction;
 namespace com { namespace sun { namespace star { namespace office {
     class XAnnotation;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 class SfxViewShell;
 

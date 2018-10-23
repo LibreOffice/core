@@ -20,9 +20,13 @@
 #ifndef INCLUDED_SD_INC_SDPDFIUMFILTER_HXX
 #define INCLUDED_SD_INC_SDPDFIUMFILTER_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
-
 #include "sdfilter.hxx"
+
+class SfxMedium;
+namespace sd
+{
+class DrawDocShell;
+}
 
 class SdPdfFilter : public SdFilter
 {

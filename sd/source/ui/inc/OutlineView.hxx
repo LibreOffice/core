@@ -42,7 +42,6 @@ namespace sd {
 class DrawDocShell;
 class OutlineViewShell;
 class OutlineViewModelChangeGuard;
-class DrawDocShell;
 
 static const int MAX_OUTLINERVIEWS = 4;
 

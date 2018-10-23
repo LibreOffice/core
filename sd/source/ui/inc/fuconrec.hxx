@@ -23,7 +23,6 @@
 #include "fuconstr.hxx"
 
 class SdDrawDocument;
-class SdrObject;
 class SfxItemSet;
 
 namespace sd {

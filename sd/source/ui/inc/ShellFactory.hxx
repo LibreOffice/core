@@ -22,11 +22,7 @@
 
 #include <sfx2/toolbarids.hxx>
 
-namespace vcl { class Window; }
-
 namespace sd {
-
-class FrameView;
 
 typedef ToolbarId ShellId;
 
