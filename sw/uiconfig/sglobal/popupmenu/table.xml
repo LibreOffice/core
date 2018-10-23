@@ -24,6 +24,7 @@
   <menu:menuitem menu:id=".uno:DecrementLevel"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:UnsetCellsReadOnly"/>
+  <menu:menuitem menu:id=".uno:MergeCells"/>
   <menu:menu menu:id=".uno:TableInsertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
@@ -42,7 +43,6 @@
       <menu:menuitem menu:id=".uno:DeleteTable"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:MergeCells"/>
   <menu:menu menu:id=".uno:TableAutoFitMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SetRowHeight"/>
@@ -56,10 +56,26 @@
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:TableNumberFormatDialog"/>
-  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
-  <menu:menuitem menu:id=".uno:TableDialog"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
+  <menu:menu menu:id=".uno:FormatStylesMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:EditStyle"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=CharacterStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" menu:style="radio"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering ABC&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:TableNumberFormatDialog"/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuitem menu:id=".uno:OutlineBullet"/>
@@ -74,12 +90,12 @@
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
   <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:EditStyle"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
   <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenSmartTagMenuOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
+  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
+  <menu:menuitem menu:id=".uno:TableDialog"/>
 </menu:menupopup>
