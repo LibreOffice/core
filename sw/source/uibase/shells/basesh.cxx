@@ -1917,7 +1917,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             bOpaque = !rSh.GetLayerId();
         else
         {
-            const SvxOpaqueItem aOpaque( aSet.Get(RES_OPAQUE) );
+            const SvxOpaqueItem& aOpaque( aSet.Get(RES_OPAQUE) );
             bOpaque = !aOpaque.GetValue();
         }
     }

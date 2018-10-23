@@ -69,7 +69,7 @@ void SwWatermarkDialog::InitFields()
     if( eState >= SfxItemState::DEFAULT && pItem && pItem->Which() == SID_WATERMARK)
     {
         const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
-        OUString sText = pWatermark->GetText();
+        const OUString& sText = pWatermark->GetText();
         m_xTextInput->set_text(sText);
         m_xFont->set_entry_text(pWatermark->GetFont());
         m_xAngle->set_value(pWatermark->GetAngle(), FUNIT_DEGREE);

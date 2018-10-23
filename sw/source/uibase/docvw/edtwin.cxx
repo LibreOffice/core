@@ -1056,7 +1056,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     // adjustment for allowing vertical position
     // aligned to page for fly frame anchored to paragraph or to character.
     {
-        SwFormatVertOrient aVert( aSet.Get(RES_VERT_ORIENT) );
+        const SwFormatVertOrient& aVert( aSet.Get(RES_VERT_ORIENT) );
         const bool bFollowTextFlow =
                 aSet.Get(RES_FOLLOW_TEXT_FLOW).GetValue();
         const SwPosition* pToCharContentPos = aSet.Get(RES_ANCHOR).GetContentAnchor();
@@ -4647,8 +4647,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     const SvxURLField *pField = aVEvt.pURLField;
                                     if (pField)
                                     {
-                                        OUString sURL(pField->GetURL());
-                                        OUString sTarget(pField->GetTargetFrame());
+                                        const OUString& sURL(pField->GetURL());
+                                        const OUString& sTarget(pField->GetTargetFrame());
                                         ::LoadURL(rSh, sURL, nFilter, sTarget);
                                     }
                                     bCallShadowCursor = false;
@@ -5508,7 +5508,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 if ( nSize == 0 )
                 {
                     // When the composition does not exist, use Caret rect instead.
-                    SwRect aCaretRect ( rSh.GetCharRect() );
+                    const SwRect& aCaretRect ( rSh.GetCharRect() );
                     tools::Rectangle aRect( aCaretRect.Left(), aCaretRect.Top(), aCaretRect.Right(), aCaretRect.Bottom() );
                     rWin.SetCompositionCharRect( &aRect, 1, bVertical );
                 }

@@ -640,7 +640,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         const SwSection& rSect = pSectNd->GetSection();
         if (rSect.GetType()==TOX_CONTENT_SECTION)
         {
-            const OUString rNm = rSect.GetSectionName();
+            const OUString& rNm = rSect.GetSectionName();
             if ( rNm.startsWith(aName) )
             {
                 // Calculate number and set the Flag
@@ -966,8 +966,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
         {
             const SwTOXMark& rMark = aSortArr[nCnt]->pTextMark->GetTOXMark();
-            const OUString sPrimKey = rMark.GetPrimaryKey();
-            const OUString sSecKey = rMark.GetSecondaryKey();
+            const OUString& sPrimKey = rMark.GetPrimaryKey();
+            const OUString& sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = nullptr;
             while(aSortArr.size() > (nCnt + nRange)&&
                     aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&
@@ -1544,8 +1544,8 @@ void SwTOXBaseSection::UpdatePageNum()
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
         {
             const SwTOXMark& rMark = aSortArr[nCnt]->pTextMark->GetTOXMark();
-            const OUString sPrimKey = rMark.GetPrimaryKey();
-            const OUString sSecKey = rMark.GetSecondaryKey();
+            const OUString& sPrimKey = rMark.GetPrimaryKey();
+            const OUString& sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = nullptr;
             while(aSortArr.size() > (nCnt + nRange)&&
                     aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&

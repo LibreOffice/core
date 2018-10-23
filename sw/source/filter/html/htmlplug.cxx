@@ -1063,7 +1063,7 @@ void SwHTMLParser::InsertFloatingFrame()
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                OUString aName = aFrameDesc.GetName();
+                const OUString& aName = aFrameDesc.GetName();
                 ScrollingMode eScroll = aFrameDesc.GetScrollingMode();
                 bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
@@ -1543,7 +1543,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         else
         {
             // Otherwise the native data is just a grab-bag: ODummyEmbeddedObject.
-            OUString aStreamName = rOLEObj.GetCurrentPersistName();
+            const OUString& aStreamName = rOLEObj.GetCurrentPersistName();
             uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
             uno::Reference<io::XStream> xInStream;
             try

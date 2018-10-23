@@ -150,7 +150,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
     for (sal_Int32 i = m_pBookmarksBox->GetSelectionCount(); i; i--)
     {
         sw::mark::IMark* pBookmark = static_cast<sw::mark::IMark*>(pSelected->GetUserData());
-        OUString sEntryName = pBookmark->GetName();
+        const OUString& sEntryName = pBookmark->GetName();
         sEditBoxText.append(sEntryName);
         if (i > 1)
             sEditBoxText.append(";");
@@ -412,7 +412,7 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
     OUString sHidden = "No";
     if (pBookmark->IsHidden())
         sHidden = "Yes";
-    OUString sHideCondition = pBookmark->GetHideCondition();
+    const OUString& sHideCondition = pBookmark->GetHideCondition();
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     OUString sColumnData = sPageNum + "\t" + pBookmark->GetName() + "\t" + sBookmarkNodeText + "\t" + sHidden + "\t" + sHideCondition;
     InsertEntryToColumn(sColumnData, TREELIST_APPEND, 0xffff, pMark);
@@ -459,7 +459,7 @@ OUString BookmarkTable::GetNameProposal()
     while (pEntry)
     {
         sw::mark::IMark* pBookmark = static_cast<sw::mark::IMark*>(pEntry->GetUserData());
-        OUString sName = pBookmark->GetName();
+        const OUString& sName = pBookmark->GetName();
         sal_Int32 nIndex = 0;
         if (sName.getToken(0, ' ', nIndex) == sDefaultBookmarkName)
         {

@@ -1000,7 +1000,7 @@ OUString SwPaM::GetText() const
 
         if (pTextNode != nullptr)
         {
-            const OUString aTmpStr = pTextNode->GetText();
+            const OUString& aTmpStr = pTextNode->GetText();
 
             if (bIsStartNode || bIsEndNode)
             {

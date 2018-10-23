@@ -1667,7 +1667,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     pDoc->Unchain(*pFormat);
                 else
                 {
-                    SwFormatChain aChain( pFormat->GetChain() );
+                    const SwFormatChain& aChain( pFormat->GetChain() );
                     SwFrameFormat *pPrev = aChain.GetPrev();
                     if(pPrev)
                         pDoc->Unchain(*pPrev);
@@ -2022,7 +2022,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
                 else
                 {
-                    SfxItemSet aSet(pNoText->GetSwAttrSet());
+                    const SfxItemSet& aSet(pNoText->GetSwAttrSet());
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aAny);
                 }
             }
@@ -2378,7 +2378,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                     {
                         SwNodeIndex aIdx(*pIdx, 1);
                         SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
-                        SfxItemSet aSet(pNoText->GetSwAttrSet());
+                        const SfxItemSet& aSet(pNoText->GetSwAttrSet());
                         aSet.GetItemState(pEntry->nWID);
                         if(SfxItemState::SET == aSet.GetItemState( pEntry->nWID, false ))
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
@@ -2483,7 +2483,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     pDoc->Unchain(*pFormat);
                 else
                 {
-                    SwFormatChain aChain( pFormat->GetChain() );
+                    const SwFormatChain& aChain( pFormat->GetChain() );
                     SwFrameFormat *pPrev = aChain.GetPrev();
                     if(pPrev)
                         pDoc->Unchain(*pPrev);

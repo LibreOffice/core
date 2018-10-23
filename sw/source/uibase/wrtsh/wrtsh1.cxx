@@ -1272,7 +1272,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     if (nLevel >= MAXLEVEL)
                         nLevel = MAXLEVEL - 1;
 
-                    const SwNumFormat aFormat( aNumRule.Get( nLevel ) );
+                    const SwNumFormat& aFormat( aNumRule.Get( nLevel ) );
                     if ( aFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                     {
                         nIndentChange -= aFormat.GetIndentAt() + aFormat.GetFirstLineIndent();

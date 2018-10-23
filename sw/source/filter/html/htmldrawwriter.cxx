@@ -73,7 +73,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                          const SdrObject *pObj )
 {
     // get the edit script::Engine attributes from object
-    SfxItemSet rObjItemSet = pObj->GetMergedItemSet();
+    const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
     // iterate over Edit script::Engine attributes and convert them
     // into SW-Attrs resp. set default

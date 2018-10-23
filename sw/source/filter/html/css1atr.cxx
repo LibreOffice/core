@@ -643,7 +643,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
         if( USER_FMT & nPoolId )
         {
             // user templates
-            const OUString aNm(pPFormat->GetName());
+            const OUString& aNm(pPFormat->GetName());
 
             if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
             {

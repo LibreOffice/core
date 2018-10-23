@@ -1281,7 +1281,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     const SwSection* CurrSect = rShell.GetCurrSection();
     if( CurrSect )
     {
-        OUString sCurrentSectionName = CurrSect->GetSectionName();
+        const OUString& sCurrentSectionName = CurrSect->GetSectionName();
         if(sCurrentSectionName != m_sOldSectionName)
         {
             SwCursorShell::FireSectionChangeEvent(2, 1);
