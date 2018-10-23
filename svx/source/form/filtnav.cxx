@@ -21,7 +21,6 @@
 #include <filtnav.hxx>
 #include <fmexch.hxx>
 #include <helpids.h>
-#include <fmitems.hxx>
 #include <fmprop.hxx>
 #include <svx/strings.hrc>
 

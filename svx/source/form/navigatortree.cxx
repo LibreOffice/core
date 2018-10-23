@@ -31,7 +31,6 @@
 #include <fmservs.hxx>
 #include <fmundo.hxx>
 #include <fmpgeimp.hxx>
-#include <fmitems.hxx>
 #include <fmobj.hxx>
 #include <fmprop.hxx>
 #include <sal/log.hxx>

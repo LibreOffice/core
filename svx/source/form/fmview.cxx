@@ -37,7 +37,6 @@
 #include <sfx2/dispatch.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
-#include <fmitems.hxx>
 #include <fmobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpagv.hxx>
