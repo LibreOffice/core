@@ -1261,7 +1261,7 @@ void PPTWriter::ImplWriteOLE( )
                 SdrObject* pSdrObj = GetSdrObjectFromXShape( pPtr->xShape );
                 if ( auto pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(pSdrObj) )
                 {
-                    ::uno::Reference < embed::XEmbeddedObject > xObj( pSdrOle2Obj->GetObjRef() );
+                    const ::uno::Reference < embed::XEmbeddedObject >& xObj( pSdrOle2Obj->GetObjRef() );
                     if( xObj.is() )
                     {
                         tools::SvRef<SotStorage> xTempStorage( new SotStorage( new SvMemoryStream(), true ) );

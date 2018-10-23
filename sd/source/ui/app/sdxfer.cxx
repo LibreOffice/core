@@ -179,7 +179,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
             if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
             {
-                Reference< css::awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
+                const Reference< css::awt::XControlModel >& xControlModel( pUnoCtrl->GetUnoControlModel() );
 
                 if( !xControlModel.is() )
                     return;

@@ -3309,9 +3309,8 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const cs
     EffectSequenceHelper* pNewSequence = nullptr;
     if( xTriggerShape.is() )
     {
-        for (auto const& iteractiveSequence : maInteractiveSequenceVector)
+        for (InteractiveSequencePtr const& pIS : maInteractiveSequenceVector)
         {
-            InteractiveSequencePtr pIS(iteractiveSequence);
             if( pIS->getTriggerShape() == xTriggerShape )
             {
                 pNewSequence = pIS.get();

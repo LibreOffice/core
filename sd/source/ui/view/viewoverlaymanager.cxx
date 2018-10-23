@@ -242,7 +242,7 @@ void ImageButtonHdl::CreateB2dIAObject()
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
                     SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
-                    rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                    const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
                     if(rPaintWindow.OutputToWindow() && xManager.is() )
                     {
                         std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(

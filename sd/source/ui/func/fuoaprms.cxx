@@ -660,7 +660,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 Point     aCurCenter(aCurRect.Center());
                 const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
                 sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
-                const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1));
+                const ::basegfx::B2DPolygon& aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1));
                 sal_uInt32 nPoints(aPolygon.count());
                 const ::basegfx::B2DPoint aNewB2DCenter(aPolygon.getB2DPoint(nPoints - 1));
                 const Point aNewCenter(FRound(aNewB2DCenter.getX()), FRound(aNewB2DCenter.getY()));

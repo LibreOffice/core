@@ -217,7 +217,7 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
         if( pSmartHdl )
         {
             const_cast< SdrHdlList& >( mrView.GetHdlList() ).ResetFocusHdl();
-            SmartTagReference xTag( pSmartHdl->getTag() );
+            const SmartTagReference& xTag( pSmartHdl->getTag() );
             select( xTag );
             return true;
         }
@@ -237,7 +237,7 @@ bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
         if(pSmartHdl && pSmartHdl->getTag().is() )
         {
-            SmartTagReference xTag( pSmartHdl->getTag() );
+            const SmartTagReference& xTag( pSmartHdl->getTag() );
             return xTag->RequestHelp( rHEvt );
         }
     }
@@ -259,7 +259,7 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
             SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
             if(pSmartHdl && pSmartHdl->getTag().is() )
             {
-                SmartTagReference xTag( pSmartHdl->getTag() );
+                const SmartTagReference& xTag( pSmartHdl->getTag() );
                 return xTag->Command( rCEvt );
             }
         }

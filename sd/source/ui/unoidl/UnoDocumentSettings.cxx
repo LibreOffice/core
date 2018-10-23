@@ -337,7 +337,7 @@ uno::Sequence<beans::PropertyValue>
     SdDrawDocument* pDoc = mxModel->GetDoc();
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
     {
-        XPropertyListRef pList = pDoc->GetPropertyList( static_cast<XPropertyListType>(i) );
+        const XPropertyListRef& pList = pDoc->GetPropertyList( static_cast<XPropertyListType>(i) );
         bHasEmbed = pList.is() && pList->IsEmbedInDocument();
         if( bHasEmbed )
             break;
@@ -359,7 +359,7 @@ uno::Sequence<beans::PropertyValue>
             XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
             aRet[i] = aConfigProps[i];
             if (t != XPropertyListType::Unknown) {
-                XPropertyListRef pList = pDoc->GetPropertyList( t );
+                const XPropertyListRef& pList = pDoc->GetPropertyList( t );
                 if( !pList.is() || !pList->IsEmbedInDocument() )
                     continue; // no change ...
                 else

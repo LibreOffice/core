@@ -349,7 +349,7 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
 
         if( pDrawViewShell )
         {
-            rtl::Reference<FuPoor> xFunction( pDrawViewShell->GetCurrentFunction() );
+            const rtl::Reference<FuPoor>& xFunction( pDrawViewShell->GetCurrentFunction() );
 
             if( xFunction.is() && nullptr != dynamic_cast< const FuDraw *>( xFunction.get() ) )
                 static_cast<FuDraw*>(xFunction.get())->ForcePointer();
@@ -804,7 +804,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
         if( pSdNavigatorDropEvent->mpTargetWindow )
             aPos = pSdNavigatorDropEvent->mpTargetWindow->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
 
-        const OUString aURL( aINetBookmark.GetURL() );
+        const OUString& aURL( aINetBookmark.GetURL() );
         sal_Int32 nIndex = aURL.indexOf( '#' );
         if( nIndex != -1 )
             aBookmark = aURL.copy( nIndex+1 );

@@ -213,7 +213,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
             {
                 if(nActNumLvl & nMask)
                 {
-                    SvxNumberFormat aFmt(aTmpRule.GetLevel(i));
+                    const SvxNumberFormat& aFmt(aTmpRule.GetLevel(i));
                     pNumRule->SetLevel(i, aFmt);
                 }
                 nMask <<= 1;

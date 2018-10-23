@@ -165,7 +165,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
         if ( pFontItem )
         {
-            OUString aFontName = pFontItem->GetValue();
+            const OUString& aFontName = pFontItem->GetValue();
             aFont = vcl::Font( aFontName, Size(1,1) );
         }
         else

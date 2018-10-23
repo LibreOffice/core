@@ -171,7 +171,7 @@ void TableDesignWidget::ApplyStyle()
                 SfxRequest aReq( SID_TABLE_STYLE, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
                 aReq.AppendItem( SfxStringItem( SID_TABLE_STYLE, sStyleName ) );
 
-                rtl::Reference< sdr::SelectionController > xController( pView->getSelectionController() );
+                const rtl::Reference< sdr::SelectionController >& xController( pView->getSelectionController() );
                 if( xController.is() )
                     xController->Execute( aReq );
 
@@ -223,7 +223,7 @@ void TableDesignWidget::ApplyOptions()
         SdrView* pView = mrBase.GetDrawView();
         if( pView )
         {
-            rtl::Reference< sdr::SelectionController > xController( pView->getSelectionController() );
+            const rtl::Reference< sdr::SelectionController >& xController( pView->getSelectionController() );
             if( xController.is() )
             {
                 xController->Execute( aReq );

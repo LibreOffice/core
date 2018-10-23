@@ -132,7 +132,7 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
 {
     SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
-    OUString aDocShName( pDocShell->GetName() );
+    const OUString& aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
     maTlbObjects->SetSaveTreeItemStateFlag(true); //Added by yanjun for sym2_6385
     maTlbObjects->Clear();

@@ -1085,7 +1085,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                             const SdrPageWindow& rPageWindow = *pPV->GetPageWindow(b);
                             if (!rPageWindow.GetPaintWindow().OutputToWindow())
                                 continue;
-                            rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                            const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
                             if (!xManager.is())
                                 continue;
                             xManager->flush();

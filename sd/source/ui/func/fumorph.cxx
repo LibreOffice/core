@@ -302,7 +302,7 @@ void FuMorph::ImpAddPolys(
 {
     while(rSmaller.count() < rBigger.count())
     {
-        const ::basegfx::B2DPolygon aToBeCopied(rBigger.getB2DPolygon(rSmaller.count()));
+        const ::basegfx::B2DPolygon& aToBeCopied(rBigger.getB2DPolygon(rSmaller.count()));
         const ::basegfx::B2DRange aToBeCopiedPolySize(::basegfx::utils::getRange(aToBeCopied));
         ::basegfx::B2DPoint aNewPoint(aToBeCopiedPolySize.getCenter());
         ::basegfx::B2DPolygon aNewPoly;
@@ -457,8 +457,8 @@ void FuMorph::ImpInsertPolygons(
 
     for(sal_uInt32 a(0); a < rPolyPolyStart.count(); a++)
     {
-        const ::basegfx::B2DPolygon aPolyStart(rPolyPolyStart.getB2DPolygon(a));
-        const ::basegfx::B2DPolygon aPolyEnd(rPolyPolyEnd.getB2DPolygon(a));
+        const ::basegfx::B2DPolygon& aPolyStart(rPolyPolyStart.getB2DPolygon(a));
+        const ::basegfx::B2DPolygon& aPolyEnd(rPolyPolyEnd.getB2DPolygon(a));
         const sal_uInt32 nCount(aPolyStart.count());
         ::basegfx::B2DPolygon aNewPolygon;
 
