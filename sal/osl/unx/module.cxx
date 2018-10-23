@@ -309,8 +309,6 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         osl_getProcessWorkingDir(&workDir);
         if (workDir)
         {
-            SAL_INFO(
-                "sal.osl", "osl_getModuleURLFromAddress: " << path->buffer);
             rtl_string2UString(ppLibraryUrl,
                                path->buffer,
                                path->length,
@@ -321,6 +319,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
                 *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
             osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
             osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
+            SAL_INFO("sal.osl", "osl_getModuleURLFromAddress(" << addr << ") => " << OUString(*ppLibraryUrl));
 
             rtl_uString_release(workDir);
             result = true;
