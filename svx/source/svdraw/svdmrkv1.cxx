@@ -156,7 +156,6 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
                 if (pPlusHdl->IsPlusHdl() && pPlusHdl->GetSourceHdlNum()==nHdlNum)
                 {
                     maHdlList.RemoveHdl(i);
-                    delete pPlusHdl;
                 }
             }
         }
