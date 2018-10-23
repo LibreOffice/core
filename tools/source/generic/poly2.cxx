@@ -480,7 +480,7 @@ ImplPolyPolygon::ImplPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
         for(sal_uInt16 a(0); a < nCount; a++)
         {
-            basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
+            const basegfx::B2DPolygon& aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
             mvPolyAry[a] = tools::Polygon( aCandidate );
         }
     }

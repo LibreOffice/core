@@ -292,7 +292,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     }
     else
     {
-        Locale aLocale( aLanguageTag.getLocale());
+        const Locale& aLocale( aLanguageTag.getLocale());
         if (MsLangId::isTraditionalChinese(aLocale))
             return OUString(FALLBACKFONT_UI_SANS_CHINTRD);
         else if (MsLangId::isSimplifiedChinese(aLocale))

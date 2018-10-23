@@ -1127,7 +1127,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                         RTL_TEXTENCODING_UTF8),
                     static_cast<cppu::OWeakObject*>(this),
                     m_pMyShell,nMyCommandIdentifier);
-            uno::Reference<task::XInteractionRequest> const xReq(aRequestImpl.getRequest());
+            uno::Reference<task::XInteractionRequest> const& xReq(aRequestImpl.getRequest());
 
             m_pMyShell->handleTask( nMyCommandIdentifier, xReq );
             if (aRequestImpl.aborted() || aRequestImpl.newName().isEmpty())

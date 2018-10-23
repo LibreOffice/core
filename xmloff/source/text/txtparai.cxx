@@ -2127,7 +2127,7 @@ void XMLParaContext::EndElement()
                     const XMLDrawHint_Impl *pDHint =
                         static_cast<const XMLDrawHint_Impl*>(pHint);
                     // Improvement: hint directly provides the shape. (#i33242#)
-                    Reference < XShape > xShape = pDHint->GetShape();
+                    const Reference < XShape >& xShape = pDHint->GetShape();
                     if ( xShape.is() )
                     {
                         // determine anchor type

@@ -294,7 +294,7 @@ int NeonSession::NeonAuth(const char* inAuthProtocol, const char* inRealm,
         try
         {
             NeonUri uri( getRequestEnvironment().m_aRequestURI );
-            OUString aUserInfo( uri.GetUserInfo() );
+            const OUString& aUserInfo( uri.GetUserInfo() );
             if ( !aUserInfo.isEmpty() )
             {
                 sal_Int32 nPos = aUserInfo.indexOf( '@' );

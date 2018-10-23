@@ -158,19 +158,12 @@ void ZipPackageHelper::addFolderWithContent( Reference< XInterface > const & xRo
 }
 
 void ZipPackageHelper::addFile( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
-                                const OUString& rSourceFile )
+                                const OUString& rSourceFileURL )
 {
-    OUString aFileURL( rSourceFile );
-
-    /*if( !aFileURL.matchIgnoreAsciiCase("file://") )
-    {
-        aFileURL = URIHelper::SmartRel2Abs( aFileURL, Link<OUString *, bool>(), false );
-    }*/
-
-    INetURLObject aURL( aFileURL );
+    INetURLObject aURL( rSourceFileURL );
     OUString aName( aURL.getName() );
 
-    SvFileStream* pStream = new SvFileStream(aFileURL, StreamMode::READ );
+    SvFileStream* pStream = new SvFileStream(rSourceFileURL, StreamMode::READ );
     Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( pStream, true ) );
     Reference< XActiveDataSink > xSink( mxFactory->createInstance(), UNO_QUERY );
     Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );

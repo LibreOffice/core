@@ -76,7 +76,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
     try
     {
         uno::Any any = xPropSet->getPropertyValue(rName);
-        uno::Type type = any.getValueType();
+        const uno::Type& type = any.getValueType();
         if (type == cppu::UnoType<bool>::get())
         {
             // boolean type
