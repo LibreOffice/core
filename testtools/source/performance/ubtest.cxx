@@ -1146,18 +1146,16 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 
         sal_Int32 nPos = 60;
         out( "[direct in process]", stream, nPos );
-        t_TimingSheetMap::const_iterator iSheets( aSheets.begin() );
-        for ( ; iSheets != aSheets.end(); ++iSheets )
+        for ( const auto& rSheet : aSheets )
         {
             nPos += 40;
             out( "[", stream, nPos );
-            out( (*iSheets).first.c_str(), stream );
+            out( rSheet.first.c_str(), stream );
             out( "]", stream );
         }
-        for ( t_TimeEntryMap::const_iterator iTopics( aDirect._entries.begin() );
-              iTopics != aDirect._entries.end(); ++iTopics )
+        for ( const auto& rTopics : aDirect._entries )
         {
-            const std::string & rTopic = (*iTopics).first;
+            const std::string & rTopic = rTopics.first;
 
             out( "\n", stream );
             out( rTopic.c_str(), stream );
@@ -1166,7 +1164,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 
             sal_Int32 nPos = 60;
 
-            double secs = (*iTopics).second.secPerCall();
+            double secs = rTopics.second.secPerCall();
             if (secs > 0.0)
             {
                 out( secs * 1000, stream, nPos );
@@ -1177,11 +1175,10 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                 out( "NA", stream, nPos );
             }
 
-            iSheets = aSheets.begin();
-            for ( ; iSheets != aSheets.end(); ++iSheets )
+            for ( const auto& rSheet : aSheets )
             {
-                const t_TimeEntryMap::const_iterator iFind( (*iSheets).second._entries.find( rTopic ) );
-                OSL_ENSURE( iFind != (*iSheets).second._entries.end(), "####" );
+                const t_TimeEntryMap::const_iterator iFind( rSheet.second._entries.find( rTopic ) );
+                OSL_ENSURE( iFind != rSheet.second._entries.end(), "####" );
 
                 nPos += 40;
 
@@ -1192,7 +1189,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                     out( "ms", stream );
 
                     out( " (", stream );
-                    double ratio = (*iFind).second.ratio( (*iTopics).second );
+                    double ratio = (*iFind).second.ratio( rTopics.second );
                     if (ratio != 0.0)
                     {
                         out( ratio, stream );

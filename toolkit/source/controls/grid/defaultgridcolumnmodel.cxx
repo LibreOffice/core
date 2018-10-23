@@ -287,32 +287,23 @@ private:
         }
 
         // fire removal notifications
-        for (   ::std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
-                event != aRemovedColumns.end();
-                ++event
-            )
+        for (const auto& rEvent : aRemovedColumns)
         {
-            m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, *event );
+            m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, rEvent );
         }
 
         // fire insertion notifications
-        for (   ::std::vector< ContainerEvent >::const_iterator event = aInsertedColumns.begin();
-                event != aInsertedColumns.end();
-                ++event
-            )
+        for (const auto& rEvent : aInsertedColumns)
         {
-            m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, *event );
+            m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, rEvent );
         }
 
         // dispose removed columns
-        for (   ::std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
-                event != aRemovedColumns.end();
-                ++event
-            )
+        for (const auto& rEvent : aRemovedColumns)
         {
             try
             {
-                const Reference< XComponent > xColComp( event->Element, UNO_QUERY_THROW );
+                const Reference< XComponent > xColComp( rEvent.Element, UNO_QUERY_THROW );
                 xColComp->dispose();
             }
             catch( const Exception& )

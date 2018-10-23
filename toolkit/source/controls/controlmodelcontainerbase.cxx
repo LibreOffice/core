@@ -707,10 +707,9 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
     ::std::vector< Reference< XControlModel > > aUnindexedModels;
         // will be the container of all models which do not have a tab index property
 
-    UnoControlModelHolderVector::const_iterator aLoop = maModels.begin();
-    for ( ; aLoop != maModels.end(); ++aLoop )
+    for ( const auto& rModel : maModels )
     {
-        Reference< XControlModel > xModel( aLoop->first );
+        Reference< XControlModel > xModel( rModel.first );
 
         // see if the model has a TabIndex property
         Reference< XPropertySet > xControlProps( xModel, UNO_QUERY );

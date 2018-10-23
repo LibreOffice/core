@@ -36,9 +36,8 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::vector< sal_uInt16 > &rIDs )
 {
-    std::vector< sal_uInt16 >::const_iterator iter;
-    for( iter = rIDs.begin(); iter != rIDs.end(); ++iter)
-      maIDs.insert( *iter );
+    for (const auto& rId : rIDs)
+      maIDs.insert( rId );
 }
 
 bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
@@ -69,9 +68,9 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
     // Sort by names ...
 
     std::map<sal_Int32, sal_uInt16> aSortedPropsIds;
-    for( std::set<sal_Int32>::const_iterator it =  maIDs.begin(); it != maIDs.end(); ++it)
+    for (const auto& rId : maIDs)
     {
-        sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(*it);
+        sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(rId);
         aSortedPropsIds[ 1+GetPropertyOrderNr( nId ) ] = nId;
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
@@ -86,14 +85,15 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
     css::uno::Sequence< css::beans::Property> aProps( nProps );
     css::beans::Property* pProps = aProps.getArray();
 
-    std::map<sal_Int32, sal_uInt16>::const_iterator it = aSortedPropsIds.begin();
-    for ( sal_uInt32 n = 0; n < nProps; n++, ++it )
+    sal_uInt32 n = 0;
+    for ( const auto& rPropIds : aSortedPropsIds )
     {
-        sal_uInt16 nId = it->second;
+        sal_uInt16 nId = rPropIds.second;
         pProps[n].Name = GetPropertyName( nId );
         pProps[n].Handle = nId;
         pProps[n].Type = *GetPropertyType( nId );
         pProps[n].Attributes = GetPropertyAttribs( nId );
+        ++n;
     }
 
     return aProps;

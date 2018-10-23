@@ -264,9 +264,8 @@ MutableTreeNode::MutableTreeNode( const MutableTreeDataModelRef& xModel, const A
 
 MutableTreeNode::~MutableTreeNode()
 {
-    TreeNodeVector::iterator aIter( maChildren.begin() );
-    while( aIter != maChildren.end() )
-        (*aIter++)->setParent(nullptr);
+    for( auto& rChild : maChildren )
+        rChild->setParent(nullptr);
 }
 
 void MutableTreeNode::setParent( MutableTreeNode* pParent )
@@ -336,8 +335,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     xImpl->mbIsInserted = true;
 
     TreeNodeVector::iterator aIter( maChildren.begin() );
-    while( (nChildIndex-- > 0) && (aIter != maChildren.end()) )
-        ++aIter;
+    std::advance(aIter, nChildIndex);
 
     maChildren.insert( aIter, xImpl );
     xImpl->setParent( this );

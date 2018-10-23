@@ -175,11 +175,11 @@ void UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XCon
 {
     _out_rControls.realloc( maControls.size() );
     uno::Reference< awt::XControl >* pControls = _out_rControls.getArray();
-    for (   ControlMap::const_iterator loop = maControls.begin();
-            loop != maControls.end();
-            ++loop, ++pControls
-        )
-        *pControls = loop->second->getControl();
+    for (const auto& rEntry : maControls)
+    {
+        *pControls = rEntry.second->getControl();
+        ++pControls;
+    }
 }
 
 
@@ -187,36 +187,30 @@ void UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIde
 {
     _out_rIdentifiers.realloc( maControls.size() );
     sal_Int32* pIndentifiers = _out_rIdentifiers.getArray();
-    for (   ControlMap::const_iterator loop = maControls.begin();
-            loop != maControls.end();
-            ++loop, ++pIndentifiers
-        )
-        *pIndentifiers = loop->first;
+    for (const auto& rEntry : maControls)
+    {
+        *pIndentifiers = rEntry.first;
+        ++pIndentifiers;
+    }
 }
 
 
 uno::Reference< awt::XControl > UnoControlHolderList::getControlForName( const OUString& _rName ) const
 {
-    for (   ControlMap::const_iterator loop = maControls.begin();
-            loop != maControls.end();
-            ++loop
-        )
-        if ( loop->second->getName() == _rName )
-            return loop->second->getControl();
+    auto loop = std::find_if(maControls.begin(), maControls.end(),
+        [&_rName](const ControlMap::value_type& rEntry) { return rEntry.second->getName() == _rName; });
+    if (loop != maControls.end())
+        return loop->second->getControl();
     return uno::Reference< awt::XControl >();
 }
 
 
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::getControlIdentifier( const uno::Reference< awt::XControl >& _rxControl )
 {
-    for (   ControlMap::iterator loop = maControls.begin();
-            loop != maControls.end();
-            ++loop
-        )
-    {
-        if ( loop->second->getControl().get() == _rxControl.get() )
-            return loop->first;
-    }
+    auto loop = std::find_if(maControls.begin(), maControls.end(),
+        [&_rxControl](const ControlMap::value_type& rEntry) { return rEntry.second->getControl().get() == _rxControl.get(); });
+    if (loop != maControls.end())
+        return loop->first;
     return -1;
 }
 
@@ -284,13 +278,8 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
     for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
     {
         OUString candidateName( "control_" + OUString::number( candidateId ) );
-        ControlMap::const_iterator loop = maControls.begin();
-        for ( ; loop != maControls.end(); ++loop )
-        {
-            if ( loop->second->getName() == candidateName )
-                break;
-        }
-        if ( loop == maControls.end() )
+        if ( std::none_of(maControls.begin(), maControls.end(),
+                [&candidateName](const ControlMap::value_type& rEntry) { return rEntry.second->getName() == candidateName; }) )
             return candidateName;
     }
     throw uno::RuntimeException("out of identifiers" );

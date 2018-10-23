@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -110,33 +111,25 @@ bool lockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream* pSt
 
     osl::MutexGuard aGuard( LockMutex::get() );
     std::vector<InternalStreamLock> &rLockList = LockList::get();
-    for( std::vector<InternalStreamLock>::const_iterator i = rLockList.begin();
-         i != rLockList.end(); )
+    for( const auto& rLock : rLockList )
     {
-        if( aItem.isIdenticalTo( i->m_aItem ) )
+        if( aItem.isIdenticalTo( rLock.m_aItem ) )
         {
-            bool bDenyByOptions = false;
-            StreamMode nLockMode = i->m_pStream->GetStreamMode();
+            StreamMode nLockMode = rLock.m_pStream->GetStreamMode();
             StreamMode nNewMode = pStream->GetStreamMode();
-
-            if( nLockMode & StreamMode::SHARE_DENYALL )
-                bDenyByOptions = true;
-            else if( ( nLockMode & StreamMode::SHARE_DENYWRITE ) &&
-                     ( nNewMode & StreamMode::WRITE ) )
-                bDenyByOptions = true;
-            else if( ( nLockMode &StreamMode::SHARE_DENYREAD ) &&
-                     ( nNewMode & StreamMode::READ ) )
-                bDenyByOptions = true;
+            bool bDenyByOptions = (nLockMode & StreamMode::SHARE_DENYALL) ||
+                ( (nLockMode & StreamMode::SHARE_DENYWRITE) && (nNewMode & StreamMode::WRITE) ) ||
+                ( (nLockMode & StreamMode::SHARE_DENYREAD) && (nNewMode & StreamMode::READ) );
 
             if( bDenyByOptions )
             {
-                if( i->m_nStartPos == 0 && i->m_nEndPos == 0 ) // whole file is already locked
+                if( rLock.m_nStartPos == 0 && rLock.m_nEndPos == 0 ) // whole file is already locked
                     return false;
                 if( nStart == 0 && nEnd == 0) // cannot lock whole file
                     return false;
 
-                if( ( nStart < i->m_nStartPos && nEnd > i->m_nStartPos ) ||
-                    ( nStart < i->m_nEndPos && nEnd > i->m_nEndPos ) )
+                if( ( nStart < rLock.m_nStartPos && nEnd > rLock.m_nStartPos ) ||
+                    ( nStart < rLock.m_nEndPos && nEnd > rLock.m_nEndPos ) )
                     return false;
             }
         }
@@ -149,20 +142,12 @@ void unlockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream co
 {
     osl::MutexGuard aGuard( LockMutex::get() );
     std::vector<InternalStreamLock> &rLockList = LockList::get();
-    for( std::vector<InternalStreamLock>::iterator i = rLockList.begin();
-         i != rLockList.end(); )
-    {
-        if ( i->m_pStream == pStream
-             && ( ( nStart == 0 && nEnd == 0 )
-                  || ( i->m_nStartPos == nStart && i->m_nEndPos == nEnd ) ) )
-        {
-            i = rLockList.erase(i);
-        }
-        else
-        {
-            ++i;
-        }
-    }
+    rLockList.erase(std::remove_if(rLockList.begin(), rLockList.end(),
+        [&pStream, &nStart, &nEnd](const InternalStreamLock& rLock) {
+            return rLock.m_pStream == pStream
+                && ((nStart == 0 && nEnd == 0)
+                    || (rLock.m_nStartPos == nStart && rLock.m_nEndPos == nEnd));
+        }), rLockList.end());
 }
 
 }

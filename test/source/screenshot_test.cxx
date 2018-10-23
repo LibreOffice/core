@@ -222,9 +222,9 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
 
 void ScreenshotTest::processAllKnownDialogs()
 {
-    for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); ++i)
+    for (const auto& rDialog : getKnownDialogs())
     {
-        ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
+        ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByID(rDialog.second));
 
         if (pDlg)
         {

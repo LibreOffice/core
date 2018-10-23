@@ -292,19 +292,17 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
 
 void ButtonDialog::RemoveButton( sal_uInt16 nId )
 {
-    for (std::vector<std::unique_ptr<ImplBtnDlgItem>>::iterator it
-            = m_ItemList.begin(); it != m_ItemList.end(); ++it)
+    auto it = std::find_if(m_ItemList.begin(), m_ItemList.end(),
+        [&nId](const std::unique_ptr<ImplBtnDlgItem>& rItem) { return rItem->mnId == nId; });
+    if (it != m_ItemList.end())
     {
-        if ((*it)->mnId == nId)
-        {
-            (*it)->mpPushButton->Hide();
-            if ((*it)->mbOwnButton)
-                (*it)->mpPushButton.disposeAndClear();
-            else
-                (*it)->mpPushButton.clear();
-            m_ItemList.erase(it);
-            return;
-        }
+        (*it)->mpPushButton->Hide();
+        if ((*it)->mbOwnButton)
+            (*it)->mpPushButton.disposeAndClear();
+        else
+            (*it)->mpPushButton.clear();
+        m_ItemList.erase(it);
+        return;
     }
 
     SAL_WARN( "vcl.window", "ButtonDialog::RemoveButton(): ButtonId invalid" );
