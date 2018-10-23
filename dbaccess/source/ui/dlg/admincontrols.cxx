@@ -272,7 +272,7 @@ namespace dbaui
         RadioButton& rSocketPipeRadio = *m_pNamedPipeRadio;
         const SfxStringItem* pSocketPipeItem = pNamedPipe;
 #endif
-        OUString sSocketPipe( pSocketPipeItem->GetValue() );
+        const OUString& sSocketPipe( pSocketPipeItem->GetValue() );
         if ( !sSocketPipe.isEmpty() )
             rSocketPipeRadio.Check();
         else

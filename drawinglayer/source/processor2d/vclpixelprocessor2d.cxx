@@ -156,7 +156,7 @@ namespace drawinglayer
             }
 
             // get geometry data, prepare hairline data
-            basegfx::B2DPolygon aLocalPolygon(rSource.getB2DPolygon());
+            const basegfx::B2DPolygon& aLocalPolygon(rSource.getB2DPolygon());
             basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
             // simplify curve segments
@@ -220,7 +220,7 @@ namespace drawinglayer
 
             for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
             {
-                const basegfx::B2DPolygon aSingle(aHairLinePolyPolygon.getB2DPolygon(a));
+                const basegfx::B2DPolygon& aSingle(aHairLinePolyPolygon.getB2DPolygon(a));
 
                 if(aSingle.count())
                 {

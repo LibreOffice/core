@@ -117,7 +117,7 @@ namespace drawinglayer
                     // create hair line data for all sub polygons
                     for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
                     {
-                        const basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
+                        const basegfx::B3DPolygon& aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
                         const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(aCandidate, getLineAttribute().getColor()));
                         aRetval[a] = xRef;
                     }

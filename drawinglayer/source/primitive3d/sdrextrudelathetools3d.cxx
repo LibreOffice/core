@@ -115,8 +115,8 @@ namespace
 
         for(sal_uInt32 a(0); a < nPolygonCount; a++)
         {
-            const basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
-            const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
+            const basegfx::B3DPolygon& aSubA(rPolA.getB3DPolygon(a));
+            const basegfx::B3DPolygon& aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
             const sal_uInt32 nPointCount(std::min(aSubA.count(), aSubB.count()));
 
@@ -290,7 +290,7 @@ namespace
         for(sal_uInt32 a(0); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
-            const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
+            const basegfx::B3DPolygon& aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
             const sal_uInt32 nPointCount(std::min(aSubA.count(), aSubB.count()));
 

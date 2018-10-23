@@ -1290,7 +1290,7 @@ bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
             // Memo and Image fields cannot be primary keys
             // or if the column cannot be dropped and the Required flag is not set
             // or if a css::sdbcx::View is available and the Required flag is not set
-            TOTypeInfoSP pTypeInfo = pFieldDescr->getTypeInfo();
+            const TOTypeInfoSP& pTypeInfo = pFieldDescr->getTypeInfo();
             if(     pTypeInfo->nSearchType == ColumnSearch::NONE
                 || (pFieldDescr->IsNullable() && pRow->IsReadOnly())
               )

@@ -950,7 +950,7 @@ bool OSelectionBrowseBox::SaveModified()
                             OUString sTableAlias = aFieldName.getToken(0,'.');
                             pEntry->SetAlias(sTableAlias);
                             OUString sColumnName = aFieldName.copy(sTableAlias.getLength()+1);
-                            Reference<XConnection> xConnection = rController.getConnection();
+                            const Reference<XConnection>& xConnection = rController.getConnection();
                             if ( !xConnection.is() )
                                 return false;
                             bError = fillColumnRef( sColumnName, sTableAlias, xConnection->getMetaData(), pEntry, bListAction );
@@ -1685,7 +1685,7 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
     const sal_uInt16 nNewLevel = nLevel +1;
     for (auto const& field : getFields())
     {
-        OTableFieldDescRef pEntry = field;
+        const OTableFieldDescRef& pEntry = field;
         OUString sValue = pEntry->GetCriteria(nLevel);
         if ( !sValue.isEmpty() )
         {
@@ -1715,7 +1715,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
     bool bAllFieldsSearched = true;
     for (auto const& field : getFields())
     {
-        OTableFieldDescRef pEntry = field;
+        const OTableFieldDescRef& pEntry = field;
         const OUString   aField = pEntry->GetField();
         const OUString   aAlias = pEntry->GetAlias();
 

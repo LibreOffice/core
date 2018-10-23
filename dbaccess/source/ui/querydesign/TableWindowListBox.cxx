@@ -94,7 +94,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
     try
     {
         bool bCase = false;
-        Reference<XConnection> xConnection = rController.getConnection();
+        const Reference<XConnection>& xConnection = rController.getConnection();
         if(xConnection.is())
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
