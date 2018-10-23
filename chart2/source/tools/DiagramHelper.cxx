@@ -854,9 +854,8 @@ void DiagramHelper::setCategoriesToDiagram(
     std::vector< Reference< chart2::XAxis > > aCatAxes(
         lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
 
-    for (auto const& elem : aCatAxes)
+    for (const Reference< chart2::XAxis >& xCatAxis : aCatAxes)
     {
-        Reference< chart2::XAxis > xCatAxis(elem);
         if( xCatAxis.is())
         {
             ScaleData aScaleData( xCatAxis->getScaleData());

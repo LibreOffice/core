@@ -215,8 +215,8 @@ bool OOp_ISNOTNULL::operate(const OOperand* pOperand, const OOperand*) const
 bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     bool bMatch;
-    ORowSetValue aLH(pLeft->getValue());
-    ORowSetValue aRH(pRight->getValue());
+    const ORowSetValue& aLH(pLeft->getValue());
+    const ORowSetValue& aRH(pRight->getValue());
 
     if (aLH.isNull() || aRH.isNull())
         bMatch = false;
@@ -236,8 +236,8 @@ bool OOp_NOTLIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 
 bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    ORowSetValue aLH(pLeft->getValue());
-    ORowSetValue aRH(pRight->getValue());
+    const ORowSetValue& aLH(pLeft->getValue());
+    const ORowSetValue& aRH(pRight->getValue());
 
     if (aLH.isNull() || aRH.isNull()) // if (!aLH.getValue() || !aRH.getValue())
         return false;

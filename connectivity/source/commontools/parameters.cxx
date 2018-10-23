@@ -674,7 +674,7 @@ namespace dbtools
         try
         {
             // transfer the values from the continuation object to the parameter columns
-            Sequence< PropertyValue > aFinalValues = pParams->getValues();
+            const Sequence< PropertyValue >& aFinalValues = pParams->getValues();
             const PropertyValue* pFinalValues = aFinalValues.getConstArray();
             for ( sal_Int32 i = 0; i < aFinalValues.getLength(); ++i, ++pFinalValues )
             {

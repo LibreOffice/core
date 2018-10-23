@@ -258,7 +258,7 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
             if (bRequiresValue)
             {
                 SAL_INFO("connectivity.mork", "Value = " << evStr->getValue() );
-                OUString searchedValue = evStr->getValue();
+                const OUString& searchedValue = evStr->getValue();
                 if (evStr->getCond() == MQueryOp::Is) {
                     SAL_INFO("connectivity.mork", "MQueryOp::Is; done");
                     resultVector.push_back(currentValue == searchedValue);

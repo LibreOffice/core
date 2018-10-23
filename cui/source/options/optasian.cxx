@@ -292,7 +292,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, ListBox&, void)
     //set current value
     LanguageType eSelectLanguage = m_pLanguageLB->GetSelectedLanguage();
     LanguageTag aLanguageTag( eSelectLanguage);
-    Locale aLocale( aLanguageTag.getLocale());
+    const Locale& aLocale( aLanguageTag.getLocale());
 
     OUString sStart, sEnd;
     bool bAvail;

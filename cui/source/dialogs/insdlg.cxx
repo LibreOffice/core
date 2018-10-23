@@ -95,7 +95,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
-    Reference< XFilePicker3 > xFilePicker = aHelper.GetFilePicker();
+    const Reference< XFilePicker3 >& xFilePicker = aHelper.GetFilePicker();
 
     // add filter
     try

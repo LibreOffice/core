@@ -3275,7 +3275,7 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, StandardHdl_Impl, weld::Button&, void)
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt( pActNum->GetLevel( i ) );
-            SvxNumberFormat aTempFmt(aTmpNumRule.GetLevel( i ));
+            const SvxNumberFormat& aTempFmt(aTmpNumRule.GetLevel( i ));
             aNumFmt.SetPositionAndSpaceMode( aTempFmt.GetPositionAndSpaceMode() );
             if ( aTempFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {

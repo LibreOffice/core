@@ -230,9 +230,8 @@ void SFTreeListBox::Init( const OUString& language  )
             }
         }
 
-        OUString lang( language );
         Reference< browse::XBrowseNode > langEntries =
-            getLangNodeFromRootNode( children[ n ], lang );
+            getLangNodeFromRootNode( children[ n ], language );
 
         insertEntry( uiName, app ? OUStringLiteral(RID_CUIBMP_HARDDISK) : OUStringLiteral(RID_CUIBMP_DOC),
             nullptr, true, o3tl::make_unique< SFEntry >( langEntries, xDocumentModel ), factoryURL );

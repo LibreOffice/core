@@ -745,7 +745,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
         if(pVCooSys)
         {
             AxesNumberFormats aAxesNumberFormats;
-            uno::Reference< XCoordinateSystem > xCooSys = pVCooSys->getModel();
+            const uno::Reference< XCoordinateSystem >& xCooSys = pVCooSys->getModel();
             sal_Int32 nDimensionCount = xCooSys->getDimension();
             for(sal_Int32 nDimensionIndex=0; nDimensionIndex<nDimensionCount; ++nDimensionIndex)
             {

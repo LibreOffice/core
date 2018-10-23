@@ -592,7 +592,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
             const ::basegfx::B2DPolyPolygon& rPolyPolygon = static_cast<SdrPathObj*>(m_pMarkObj)->GetPathPoly();
             for( sal_uInt32 nN = 0; nN < rPolyPolygon.count(); nN++)
             {
-                const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nN));
+                const ::basegfx::B2DPolygon& aPolygon(rPolyPolygon.getB2DPolygon(nN));
                 for( sal_uInt32 nM = 0; nM < aPolygon.count(); nM++)
                 {
                     const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
