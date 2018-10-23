@@ -1140,7 +1140,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         // get sequence from clone
         const sdr::contact::ViewContact& rVC(pClone->GetViewContact());
-        const drawinglayer::primitive2d::Primitive2DContainer xSequence(rVC.getViewIndependentPrimitive2DContainer());
+        const drawinglayer::primitive2d::Primitive2DContainer& xSequence(rVC.getViewIndependentPrimitive2DContainer());
 
         if(!xSequence.empty())
         {

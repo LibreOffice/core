@@ -378,7 +378,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
             // only deactivate ole objects which belongs to the same frame
             if ( xFrame == lcl_getFrame_throw(pObj) )
             {
-                uno::Reference< embed::XEmbeddedObject > xObject = pObj->GetObjRef();
+                const uno::Reference< embed::XEmbeddedObject >& xObject = pObj->GetObjRef();
                 try
                 {
                     if ( xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )

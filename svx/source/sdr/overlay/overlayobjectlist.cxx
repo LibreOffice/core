@@ -80,7 +80,7 @@ namespace sdr
                         fLogicTolerance = aSizeLogic.Width();
                     }
 
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(pManager->getCurrentViewInformation2D());
+                    const drawinglayer::geometry::ViewInformation2D& aViewInformation2D(pManager->getCurrentViewInformation2D());
                     drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
                         aViewInformation2D,
                         rLogicPosition,

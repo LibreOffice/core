@@ -279,7 +279,7 @@ namespace sdr
             GetObjectItemSet();
 
             E3dScene& rObj = static_cast<E3dScene&>(GetSdrObject());
-            Camera3D aSceneCam(rObj.GetCamera());
+            const Camera3D& aSceneCam(rObj.GetCamera());
 
             // ProjectionType
             mpItemSet->Put(Svx3DPerspectiveItem(aSceneCam.GetProjection()));

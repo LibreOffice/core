@@ -483,7 +483,7 @@ namespace svxform
                         DBG_ASSERT( IsFormEntry(pSelectedForm), "NavigatorTree::Command: This entry must be a FormEntry." );
 
                         FmFormData* pFormData = static_cast<FmFormData*>(pSelectedForm->GetUserData());
-                        Reference< XForm >  xForm(  pFormData->GetFormIface());
+                        const Reference< XForm >&  xForm(  pFormData->GetFormIface());
 
                         Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
                         if( !xTabController.is() )
@@ -1011,7 +1011,7 @@ namespace svxform
         DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
         // list of dragged entries
-        ListBoxEntrySet aDropped = _rData.selected();
+        const ListBoxEntrySet& aDropped = _rData.selected();
         DBG_ASSERT(!aDropped.empty(), "NavigatorTree::implExecuteDataTransfer: no entries!");
 
         // shell and model

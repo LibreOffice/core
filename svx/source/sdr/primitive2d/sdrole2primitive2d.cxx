@@ -77,7 +77,7 @@ namespace drawinglayer
             Primitive2DContainer  aRetval;
 
             // create unit outline polygon
-            const basegfx::B2DPolygon aUnitOutline(basegfx::utils::createUnitPolygon());
+            const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
 
             // add fill
             if(!bBehaveCompatibleToPaintVersion
