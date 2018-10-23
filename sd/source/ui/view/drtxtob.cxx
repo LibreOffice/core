@@ -474,7 +474,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
 
         // paragraph justification
-        SvxLRSpaceItem aLR = aAttrSet.Get( EE_PARA_LRSPACE );
+        const SvxLRSpaceItem& aLR = aAttrSet.Get( EE_PARA_LRSPACE );
         rSet.Put(aLR);
         SvxAdjust eAdj = aAttrSet.Get( EE_PARA_JUST ).GetAdjust();
         switch( eAdj )

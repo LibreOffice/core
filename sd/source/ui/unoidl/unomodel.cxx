@@ -1834,7 +1834,7 @@ bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
         const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
         if ( pSdrLayer )
         {
-            OUString aLayerName = pSdrLayer->GetName();
+            const OUString& aLayerName = pSdrLayer->GetName();
             bVisible = pSdrPageView->IsLayerVisible( aLayerName );
         }
     }
@@ -1849,7 +1849,7 @@ bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
         const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
         if ( pSdrLayer )
         {
-            OUString aLayerName = pSdrLayer->GetName();
+            const OUString& aLayerName = pSdrLayer->GetName();
             bPrintable = pSdrPageView->IsLayerPrintable( aLayerName );
         }
     }
@@ -2405,10 +2405,8 @@ OUString SdXImpressDocument::getPostIts()
         pPage = static_cast<SdPage*>(mpDoc->GetPage(nPage));
         const sd::AnnotationVector& aPageAnnotations = pPage->getAnnotations();
 
-        for (const auto& aPageAnnotation : aPageAnnotations)
+        for (const uno::Reference<office::XAnnotation>& xAnnotation : aPageAnnotations)
         {
-            uno::Reference<office::XAnnotation> xAnnotation(aPageAnnotation);
-
             boost::property_tree::ptree aAnnotation;
             aAnnotation.put("id", sd::getAnnotationId(xAnnotation));
             aAnnotation.put("author", xAnnotation->getAuthor());

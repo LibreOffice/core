@@ -211,7 +211,7 @@ void DrawViewShell::SelectionHasChanged()
             }
             else
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+                const uno::Reference < embed::XEmbeddedObject >& xObj = pOleObj->GetObjRef();
                 if ( xObj.is() )
                 {
                     rBase.SetVerbs( xObj->getSupportedVerbs() );
@@ -226,7 +226,7 @@ void DrawViewShell::SelectionHasChanged()
         {
             if ( pOleObj )
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+                const uno::Reference < embed::XEmbeddedObject >& xObj = pOleObj->GetObjRef();
                 if ( xObj.is() )
                 {
                     rBase.SetVerbs( xObj->getSupportedVerbs() );

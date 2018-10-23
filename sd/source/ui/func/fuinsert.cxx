@@ -461,7 +461,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
         if ( nSlotId == SID_INSERT_OBJECT && pNameItem )
         {
-            SvGlobalName aClassName = pNameItem->GetValue();
+            const SvGlobalName& aClassName = pNameItem->GetValue();
             xObj =  mpViewShell->GetViewFrame()->GetObjectShell()->
                     GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
         }

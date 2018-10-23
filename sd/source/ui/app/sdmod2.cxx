@@ -335,7 +335,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                 break;
         }
 
-        OUString aURL = pURLField->GetURL();
+        const OUString& aURL = pURLField->GetURL();
 
         svtools::ColorConfig aConfig;
         svtools::ColorConfigEntry eEntry =

@@ -1668,8 +1668,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
             SdStyleSheet* pStyleSheet = dynamic_cast< SdStyleSheet* >( mrOutliner.GetStyleSheet( nPara ) );
             if( pStyleSheet )
             {
-                const OUString aName( pStyleSheet->GetApiName() );
-                if ( aName == "title" )
+                if ( pStyleSheet->GetApiName() == "title" )
                     bPage = true;
             }
         }
