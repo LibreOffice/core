@@ -12,48 +12,42 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:SetDefault"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:TransformDialog"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:FontDialog"/>
-  <menu:menuitem menu:id=".uno:ParagraphDialog"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:TableDialog"/>
-  <menu:menu menu:id=".uno:CellMenu">
+  <menu:menuitem menu:id=".uno:MergeCells"/>
+  <menu:menu menu:id=".uno:TableInsertMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:MergeCells"/>
-      <menu:menuitem menu:id=".uno:SplitCell"/>
+      <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
+      <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
+      <menu:menuitem menu:id=".uno:InsertRowDialog"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CellVertTop"/>
-      <menu:menuitem menu:id=".uno:CellVertCenter"/>
-      <menu:menuitem menu:id=".uno:CellVertBottom"/>
+      <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
+      <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
+      <menu:menuitem menu:id=".uno:InsertColumnDialog"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:RowMenu">
+  <menu:menu menu:id=".uno:TableDeleteMenu">
     <menu:menupopup>
+      <menu:menuitem menu:id=".uno:DeleteRows"/>
+      <menu:menuitem menu:id=".uno:DeleteColumns"/>
+      <menu:menuitem menu:id=".uno:DeleteTable"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:TableAutoFitMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:SetRowHeight"/>
       <menu:menuitem menu:id=".uno:SetMinimalRowHeight"/>
       <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
       <menu:menuitem menu:id=".uno:DistributeRows"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:EntireRow"/>
-      <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
-      <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
-      <menu:menuitem menu:id=".uno:DeleteRows"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menu menu:id=".uno:ColumnMenu">
-    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:SetColumnWidth"/>
       <menu:menuitem menu:id=".uno:SetMinimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:EntireColumn"/>
-      <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
-      <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
-      <menu:menuitem menu:id=".uno:DeleteColumns"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:FontDialog"/>
+  <menu:menuitem menu:id=".uno:ParagraphDialog"/>
+  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
@@ -79,18 +73,6 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
-  <menu:menu menu:id=".uno:ConvertMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ChangeBezier"/>
-      <menu:menuitem menu:id=".uno:ChangePolygon"/>
-      <menu:menuitem menu:id=".uno:convert_to_contour"/>
-      <menu:menuitem menu:id=".uno:ConvertInto3D"/>
-      <menu:menuitem menu:id=".uno:ConvertInto3DLatheFast"/>
-      <menu:menuitem menu:id=".uno:ConvertIntoBitmap"/>
-      <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
-    </menu:menupopup>
-  </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:EditStyle"/>
+  <menu:menuitem menu:id=".uno:TableDialog"/>
 </menu:menupopup>
