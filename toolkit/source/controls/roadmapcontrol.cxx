@@ -232,9 +232,9 @@ static void lcl_throwIndexOutOfBoundsException( )
           while ( bIncrement )
           {
               bIncrement = false;
-              for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); ++i )
+              for ( const auto& rRoadmapItem : maRoadmapItems )
               {
-                CurRoadmapItem = *i;
+                CurRoadmapItem = rRoadmapItem;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
                 aAny = xPropertySet->getPropertyValue("ID");
                 aAny >>= n_CurItemID;

@@ -125,15 +125,13 @@ Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageBy
 {
     SolarMutexGuard aGuard;
     Reference< css::awt::tab::XTabPage > xTabPage;
-    ::std::vector< Reference< css::awt::tab::XTabPage > >::iterator aIter = m_aTabPages.begin();
-    ::std::vector< Reference< css::awt::tab::XTabPage > >::iterator aEnd = m_aTabPages.end();
-    for(;aIter != aEnd;++aIter)
+    for(const auto& rTabPage : m_aTabPages)
     {
-        Reference< awt::XControl > xControl(*aIter,UNO_QUERY );
+        Reference< awt::XControl > xControl(rTabPage,UNO_QUERY );
         Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
         if ( tabPageID == xP->getTabPageID() )
         {
-            xTabPage = *aIter;
+            xTabPage = rTabPage;
             break;
         }
     }

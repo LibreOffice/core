@@ -148,9 +148,9 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
     css::uno::Sequence< css::awt::Rectangle > aRects(aRectangles.size());
     sal_uInt32 a(0);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    for(const auto& rRect : aRectangles)
     {
-        aRects.getArray()[a++] = AWTRectangle(*aRectIter);
+        aRects.getArray()[a++] = AWTRectangle(rRect);
     }
 
     //Rectangle aRect;

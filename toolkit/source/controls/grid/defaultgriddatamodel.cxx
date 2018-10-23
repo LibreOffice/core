@@ -444,8 +444,8 @@ private:
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
-        for ( RowData::iterator cell = rRowData.begin(); cell != rRowData.end(); ++cell )
-            cell->second = i_value;
+        for ( auto& rCell : rRowData )
+            rCell.second = i_value;
     }
 
 

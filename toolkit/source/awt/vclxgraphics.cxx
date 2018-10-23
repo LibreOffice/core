@@ -69,13 +69,9 @@ VCLXGraphics::~VCLXGraphics()
     std::vector< VCLXGraphics* > *pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : nullptr;
     if ( pLst )
     {
-        for( std::vector< VCLXGraphics* >::iterator it = pLst->begin(); it != pLst->end(); ++it )
-        {
-            if( *it == this ) {
-                pLst->erase( it );
-                break;
-            }
-        }
+        auto it = std::find(pLst->begin(), pLst->end(), this);
+        if (it != pLst->end())
+            pLst->erase( it );
     }
 
     mpClipRegion.reset();

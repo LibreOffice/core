@@ -247,13 +247,10 @@ namespace toolkit
                     ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
                     aImages.resize( rImageSet.size() );
                     sal_Int32 imageIndex = 0;
-                    for (   ::std::vector< CachedImage >::const_iterator cachedImage = rImageSet.begin();
-                            cachedImage != rImageSet.end();
-                            ++cachedImage, ++imageIndex
-                        )
+                    for ( const auto& rCachedImage : rImageSet )
                     {
-                        lcl_ensureImage_throw( xGraphicProvider, isHighContrast, *cachedImage );
-                        aImages[ imageIndex ] = Image(cachedImage->xGraphic);
+                        lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rCachedImage );
+                        aImages[ imageIndex++ ] = Image(rCachedImage.xGraphic);
                     }
                 }
                 pThrobber->setImageList( aImages );

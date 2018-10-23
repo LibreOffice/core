@@ -291,12 +291,9 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
     {
         SAL_INFO("toolkit.controls", "OnProcessCallbacks relinquished solarmutex");
         SolarMutexReleaser aReleaseSolar;
-        for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
-                loop != aCallbacksCopy.end();
-                ++loop
-            )
+        for (const auto& rCallback : aCallbacksCopy)
         {
-            (*loop)();
+            rCallback();
         }
     }
 }
@@ -1330,20 +1327,16 @@ void VCLXWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds, bool bWith
 
     // lovely hack from:
     // void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
-    std::vector< sal_uInt16 >::const_iterator iter;
-    for( iter = rIds.begin(); iter != rIds.end(); ++iter) {
-        if( *iter == BASEPROPERTY_FONTDESCRIPTOR )
-        {
-            // some properties are not included in the FontDescriptor, but every time
-            // when we have a FontDescriptor we want to have these properties too.
-            // => Easier to register the here, instead everywhere where I register the FontDescriptor...
+    if( std::find(rIds.begin(), rIds.end(), BASEPROPERTY_FONTDESCRIPTOR) != rIds.end() )
+    {
+        // some properties are not included in the FontDescriptor, but every time
+        // when we have a FontDescriptor we want to have these properties too.
+        // => Easier to register the here, instead everywhere where I register the FontDescriptor...
 
-            rIds.push_back( BASEPROPERTY_TEXTCOLOR );
-            rIds.push_back( BASEPROPERTY_TEXTLINECOLOR );
-            rIds.push_back( BASEPROPERTY_FONTRELIEF );
-            rIds.push_back( BASEPROPERTY_FONTEMPHASISMARK );
-            break;
-        }
+        rIds.push_back( BASEPROPERTY_TEXTCOLOR );
+        rIds.push_back( BASEPROPERTY_TEXTLINECOLOR );
+        rIds.push_back( BASEPROPERTY_FONTRELIEF );
+        rIds.push_back( BASEPROPERTY_FONTEMPHASISMARK );
     }
 }
 
