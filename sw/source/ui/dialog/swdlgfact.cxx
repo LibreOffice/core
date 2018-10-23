@@ -105,27 +105,27 @@ IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 
 short AbstractSplitTableDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSwBreakDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSwTableWidthDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSwTableHeightDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSwMergeTableDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractGenericDialog_Impl::Execute()
@@ -140,17 +140,17 @@ bool AbstractGenericDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
 
 short AbstractSwSortDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractMultiTOXMarkDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractTabController_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
@@ -164,12 +164,12 @@ IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 
 short AbstractDropDownFieldDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSwLabDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractSwSelGlossaryDlg_Impl::Execute()
@@ -179,7 +179,7 @@ short AbstractSwSelGlossaryDlg_Impl::Execute()
 
 short AbstractSwAutoFormatDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
@@ -194,12 +194,12 @@ IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 
 short AbstractFieldInputDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractInsFootNoteDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 short AbstractInsTableDlg_Impl::Execute()

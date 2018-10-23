@@ -2787,7 +2787,7 @@ namespace pcr
             // destroyItemSet
             ControlCharacterDialog aDlg(impl_getDefaultDialogFrame_nothrow(), *pSet);
             _rClearBeforeDialog.clear();
-            if (RET_OK == aDlg.execute())
+            if (RET_OK == aDlg.run())
             {
                 const SfxItemSet* pOut = aDlg.GetOutputItemSet();
                 if ( pOut )

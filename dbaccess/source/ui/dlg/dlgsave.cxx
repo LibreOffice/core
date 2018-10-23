@@ -298,7 +298,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
         if ( m_pImpl->m_rObjectNameCheck.isNameValid( sNameToCheck, aNameError ) )
             EndDialog( RET_OK );
 
-        showError( aNameError, this, m_xContext );
+        showError( aNameError, VCLUnoHelper::GetInterface(this), m_xContext );
         m_pImpl->m_pTitle->GrabFocus();
     }
 }

@@ -66,7 +66,7 @@ short AbstractSdCustomShowDlg_Impl::Execute()
 
 short SdPresLayoutTemplateDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool SdPresLayoutTemplateDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
@@ -118,7 +118,7 @@ IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
 
 short AbstractBulletDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 bool AbstractBulletDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
@@ -133,7 +133,7 @@ AbstractBreakDlg_Impl::AbstractBreakDlg_Impl(std::unique_ptr<::sd::BreakDlg> pDl
 
 short AbstractBreakDlg_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 AbstractMasterLayoutDialog_Impl::AbstractMasterLayoutDialog_Impl(std::unique_ptr<::sd::MasterLayoutDialog> pDlg)
@@ -143,7 +143,7 @@ AbstractMasterLayoutDialog_Impl::AbstractMasterLayoutDialog_Impl(std::unique_ptr
 
 short AbstractMasterLayoutDialog_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -163,7 +163,7 @@ bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
 
 short SdAbstractTabController_Impl::Execute()
 {
-    return m_xDlg->execute();
+    return m_xDlg->run();
 }
 
 void SdAbstractTabController_Impl::SetCurPageId( const OString &rName )

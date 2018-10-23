@@ -289,14 +289,14 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const OUStrin
     }
     catch ( const SQLException& )
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
-            pParent, pParent->getController().getORB() );
+        ::dbtools::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
+            VCLUnoHelper::GetInterface(pParent), pParent->getController().getORB() );
     }
     catch( const WrappedTargetException& e )
     {
         SQLException aSql;
         if ( e.TargetException >>= aSql )
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController().getORB() );
+            ::dbtools::showError( ::dbtools::SQLExceptionInfo( aSql ), VCLUnoHelper::GetInterface(pParent), pParent->getController().getORB() );
     }
     catch( const Exception& )
     {
