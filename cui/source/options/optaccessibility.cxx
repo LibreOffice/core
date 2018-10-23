@@ -120,7 +120,7 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
         m_pAutoDetectHC->Disable();
 
     AllSettings aAllSettings = Application::GetSettings();
-    MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
+    const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();
     m_pAccessibilityTool->Check(aMiscSettings.GetEnableATToolSupport());
 }
 

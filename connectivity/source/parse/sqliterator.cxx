@@ -723,9 +723,8 @@ namespace
             // look up the column in the select column, to find an possible alias
             if ( _pSelectColumns )
             {
-                for (auto const& lookupColumn : _pSelectColumns->get())
+                for (const Reference< XPropertySet >& xColumn : _pSelectColumns->get())
                 {
-                    Reference< XPropertySet > xColumn( lookupColumn );
                     try
                     {
                         OUString sName, sTableName;

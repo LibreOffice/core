@@ -538,7 +538,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         OUString aRole;
                         if ( m_xChartTypeModel )
                             aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
-                        uno::Reference< XDataSeries > xSeries( rDataSeries.getModel() );
+                        const uno::Reference< XDataSeries >& xSeries( rDataSeries.getModel() );
                         aTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
                         break;
                     }

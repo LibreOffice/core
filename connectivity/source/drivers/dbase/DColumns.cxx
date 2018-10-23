@@ -35,7 +35,7 @@ sdbcx::ObjectType ODbaseColumns::createObject(const OUString& _rName)
 {
     ODbaseTable* pTable = static_cast<ODbaseTable*>(m_pTable);
 
-    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
+    const ::rtl::Reference<OSQLColumns>& aCols = pTable->getTableColumns();
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
 
     sdbcx::ObjectType xRet;

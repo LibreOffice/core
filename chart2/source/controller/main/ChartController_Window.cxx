@@ -1359,7 +1359,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = aObjNav.handleKeyEvent( aKeyEvent );
         if( bReturn )
         {
-            ObjectIdentifier aNewOID = aObjNav.getCurrentSelection();
+            const ObjectIdentifier& aNewOID = aObjNav.getCurrentSelection();
             uno::Any aNewSelection;
             if ( aNewOID.isValid() && !ObjectHierarchy::isRootNode( aNewOID ) )
             {

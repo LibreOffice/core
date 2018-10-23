@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBox&, void)
 
 IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
 {
-    OUString sTitle = rView->GetText();
+    const OUString& sTitle = rView->GetText();
     auto itChar = std::find(maRecentCharList.begin(), maRecentCharList.end(), sTitle);
 
     OUString sFont = rView->GetFont().GetFamilyName();

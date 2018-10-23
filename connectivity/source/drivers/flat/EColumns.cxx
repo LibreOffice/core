@@ -33,7 +33,7 @@ using namespace ::com::sun::star::container;
 sdbcx::ObjectType OFlatColumns::createObject(const OUString& _rName)
 {
     OFlatTable* pTable = static_cast<OFlatTable*>(m_pTable);
-    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
+    const ::rtl::Reference<OSQLColumns>& aCols = pTable->getTableColumns();
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
     sdbcx::ObjectType xRet;
     if(aIter != aCols->get().end())

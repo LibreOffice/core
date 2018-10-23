@@ -480,7 +480,7 @@ Reference< XNameAccess> getPrimaryKeyColumns_throw(const Reference< XPropertySet
         if ( xKeys.is() )
         {
             ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-            const OUString sPropName = rPropMap.getNameByIndex(PROPERTY_ID_TYPE);
+            const OUString& sPropName = rPropMap.getNameByIndex(PROPERTY_ID_TYPE);
             Reference<XPropertySet> xProp;
             const sal_Int32 nCount = xKeys->getCount();
             for(sal_Int32 i = 0;i< nCount;++i)

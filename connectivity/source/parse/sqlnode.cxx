@@ -1535,7 +1535,7 @@ bool OSQLParser::extractDate(OSQLParseNode const * pLiteral,double& _rfValue)
             m_nFormatKey = ::dbtools::getDefaultNumberFormat( m_xField, xFormatTypes, m_pData->aLocale );
     }
     catch( Exception& ) { }
-    OUString sValue = pLiteral->getTokenValue();
+    const OUString& sValue = pLiteral->getTokenValue();
     sal_Int32 nTryFormat = m_nFormatKey;
     bool bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
 

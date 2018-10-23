@@ -731,7 +731,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
         aMapDlg.SetChar( (*pUserData->pString)[0] );
         if (RET_OK == aMapDlg.execute())
         {
-            vcl::Font aFont(aMapDlg.GetCharFont());
+            const vcl::Font& aFont(aMapDlg.GetCharFont());
             *pUserData->pFont = aFont;
             sal_UCS4 aChar = aMapDlg.GetChar();
             // using the UCS4 constructor
@@ -2525,7 +2525,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
     for ( sal_uInt32 i = 0; i < nNumberOfRecognizers; ++i )
     {
-        uno::Reference< smarttags::XSmartTagRecognizer > xRec = rSmartTagMgr.GetRecognizer(i);
+        const uno::Reference< smarttags::XSmartTagRecognizer >& xRec = rSmartTagMgr.GetRecognizer(i);
 
         const OUString aName = xRec->getName( aLocale );
         const sal_Int32 nNumberOfSupportedSmartTags = xRec->getSmartTagCount();

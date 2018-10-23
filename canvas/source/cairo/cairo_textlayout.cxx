@@ -399,7 +399,7 @@ namespace cairocanvas
             if (cairo_glyphs.empty())
                 continue;
 
-            vcl::Font aFont = rOutDev.GetFont();
+            const vcl::Font& aFont = rOutDev.GetFont();
             long nWidth = aFont.GetAverageFontWidth();
             long nHeight = aFont.GetFontHeight();
             if (nWidth == 0)

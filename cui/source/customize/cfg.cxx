@@ -2483,7 +2483,7 @@ void ToolbarSaveInData::Reset()
     {
         try
         {
-            OUString url = entry->GetCommand();
+            const OUString& url = entry->GetCommand();
             GetConfigManager()->removeSettings( url );
         }
         catch ( uno::Exception& )
