@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_bf55f21f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-23T19:12:55Z",
+      "side": 1,
+      "message": "missing hash tag. Perhaps that\u0027s actually OK on this one, so then I won\u0027t spam the bug and make it seem like the bug is fixed...",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "3cf4e885a35875dfde37f5c15e17ef5baa4e6ea9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_52081527",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3844,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-23T19:12:55Z",
+      "side": 1,
+      "message": "@Caolan: This assert could become slightly more problematic if the tests go from importing docx to saving as .doc - so likely some \"false positives\".\n\nIf only importing from a .doc file, they ought to be obeying the rules, and those are the ones I would be most interested in seeing if the rules were not being followed.",
+      "range": {
+        "startLine": 3844,
+        "startChar": 8,
+        "endLine": 3844,
+        "endChar": 107
+      },
+      "revId": "3cf4e885a35875dfde37f5c15e17ef5baa4e6ea9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_5f3a5ee7",
+        "filename": "sw/source/filter/ww8/ww8par.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-23T19:12:55Z",
+      "side": 1,
+      "message": "Never actually used, but probably should be. If this is off, then the tooltip should not be used. This was already previously implemented, so I hadn\u0027t touched it, but maybe I should.  And yet there is some nagging documentation wording about automatic help information, even if disabled.",
+      "range": {
+        "startLine": 662,
+        "startChar": 14,
+        "endLine": 662,
+        "endChar": 23
+      },
+      "revId": "3cf4e885a35875dfde37f5c15e17ef5baa4e6ea9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
