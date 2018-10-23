@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_3f132210",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-23T10:53:53Z",
+      "side": 1,
+      "message": "Are these probably also related?",
+      "revId": "4f4c3e25bc3e42684a3bb8c1864cefd7ab0a5c6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
