@@ -306,7 +306,7 @@ namespace cppcanvas
                     aCalculatedNewState.textOverlineStyle       = rNewState.textOverlineStyle;
                     aCalculatedNewState.textUnderlineStyle      = rNewState.textUnderlineStyle;
                     aCalculatedNewState.textStrikeoutStyle      = rNewState.textStrikeoutStyle;
-                    aCalculatedNewState.textEmphasisMarkStyle   = rNewState.textEmphasisMarkStyle;
+                    aCalculatedNewState.textEmphasisMark        = rNewState.textEmphasisMark;
                     aCalculatedNewState.isTextEffectShadowSet   = rNewState.isTextEffectShadowSet;
                     aCalculatedNewState.isTextWordUnderlineSet  = rNewState.isTextWordUnderlineSet;
                     aCalculatedNewState.isTextOutlineModeSet    = rNewState.isTextOutlineModeSet;
@@ -839,6 +839,16 @@ namespace cppcanvas
                     aFontMatrix.m11 *= nScaleY / nScaleX;
             }
             aFontRequest.CellSize = (rState.mapModeTransform * vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getY();
+
+            if (rFont.GetEmphasisMark() != FontEmphasisMark::NONE)
+            {
+                uno::Sequence< beans::PropertyValue > aProperties(1);
+                aProperties[0].Name = "EmphasisMark";
+                aProperties[0].Value <<= sal_uInt32(rFont.GetEmphasisMark());
+                return rParms.mrCanvas->getUNOCanvas()->createFont(aFontRequest,
+                                                                aProperties,
+                                                                aFontMatrix);
+            }
 
             return rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
                                                                 uno::Sequence< beans::PropertyValue >(),
@@ -1488,7 +1498,7 @@ namespace cppcanvas
                             (*rParms.maFontUnderline ? sal_Int8(LINESTYLE_SINGLE) : sal_Int8(LINESTYLE_NONE)) :
                             static_cast<sal_Int8>(rFont.GetUnderline());
                         rState.textStrikeoutStyle       = static_cast<sal_Int8>(rFont.GetStrikeout());
-                        rState.textEmphasisMarkStyle    = rFont.GetEmphasisMark() & FontEmphasisMark::Style;
+                        rState.textEmphasisMark         = rFont.GetEmphasisMark();
                         rState.isTextEffectShadowSet    = rFont.IsShadow();
                         rState.isTextWordUnderlineSet   = rFont.IsWordLineMode();
                         rState.isTextOutlineModeSet     = rFont.IsOutline();
