@@ -53,7 +53,7 @@ struct expect_t
 /* The values here assume that our results are in UTC.  However,
    tdf#119675 "Firebird: Migration: User dialog to set treatment of
    datetime and time values during migration" is going to change the
-   finaly result of migration.  If that change is implemented below
+   final result of migration. If that change is implemented below
    the level we are testing, this test will have to allow for or set
    the destination timezone.
  */
@@ -73,7 +73,7 @@ void Tdf119625Test::testTime()
            caused by
            'isc_dsql_execute'
 
-           warn:dbaccess:22435:22435:dbaccess/source/filter/hsqldb/hsqlimport.cxx:373: Error during migratio
+           warn:dbaccess:22435:22435:dbaccess/source/filter/hsqldb/hsqlimport.cxx:373: Error during migration
 
        In this case, we do not expect anything good from the following
        code, but I (tje, 2018-09-04) do not know how to detect this
