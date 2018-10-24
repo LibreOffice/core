@@ -36,17 +36,16 @@ namespace dbaui
 {
 
     // OSpreadSheetConnectionPageSetup
-    class OSpreadSheetConnectionPageSetup final : public OConnectionTabPageSetup
+    class OSpreadSheetConnectionPageSetup final : public DBOConnectionTabPageSetup
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        OSpreadSheetConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup() override;
-        virtual void dispose() override;
 
     private:
-        VclPtr<CheckBox> m_pPasswordrequired;
+        std::unique_ptr<weld::CheckButton> m_xPasswordrequired;
 
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
