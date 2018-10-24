@@ -330,6 +330,11 @@ struct _LibreOfficeKitDocumentClass
                                 const unsigned char* pPrivateKeyBinary,
                                 const int nPrivateKeyBinarySize);
 
+    /// @see lok::Document::addCertificate().
+    bool (*addCertificate) (LibreOfficeKitDocument* pThis,
+                                const unsigned char* pCertificateBinary,
+                                const int nCertificateBinarySize);
+
     /// @see lok::Document::getSignatureState().
     int (*getSignatureState) (LibreOfficeKitDocument* pThis);
 
