@@ -22,43 +22,28 @@
 gb_GeneratedPackage__get_srcdir = $(lastword $(subst <>, ,$(1)))
 gb_GeneratedPackage__get_destdir = $(firstword $(subst <>, ,$(1)))
 
-define gb_GeneratedPackage__command_cp
-mkdir -p $(dir $(2)) && \
-cp -R $(PACKAGE_SOURCEDIR)/$(1) $(2)
-endef
-
-define gb_GeneratedPackage__command
-$(call gb_Output_announce,$(2),$(true),GPK,2)
-$(call gb_Helper_abbreviate_dirs,\
-	rm -rf $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) && \
-	$(foreach pair,$(PACKAGE_DIRS),\
-		$(call gb_GeneratedPackage__command_cp,$(call gb_GeneratedPackage__get_srcdir,$(pair)),$(call gb_GeneratedPackage__get_destdir,$(pair))) &&) \
-	$(FIND) \
-		$(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \
-		\( -type f -o -type l \) -print \
-		> $(1) \
-)
-endef
-
-define gb_GeneratedPackage__check_dirs
-$(if $(PACKAGE_DIRS),,$(call gb_Output_error,no dirs were added))
-$(foreach pair,$(PACKAGE_DIRS),\
-	$(if $(wildcard $(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair))),,\
-		$(call gb_Output_error,source dir $(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair)) does not exist) \
-	) \
-)
-
-endef
-
 $(dir $(call gb_GeneratedPackage_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(dir $(call gb_GeneratedPackage_get_target,%))%.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
+# require all added directories to exist
+$(call gb_GeneratedPackage_get_target,%) :| $(foreach pair,$(PACKAGE_DIRS),$(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair)))
+
+# split in two commands to avoid running into commandline/environment size limits
+# on windows with all languages the processing of help can truncate the find command otherwise
 $(call gb_GeneratedPackage_get_target,%) :
-	$(call gb_GeneratedPackage__check_dirs,$*)
-	$(call gb_GeneratedPackage__command,$@,$*)
+	$(call gb_Output_announce,$*,$(true),GPK,2)
+	$(if $(PACKAGE_DIRS),,$(call gb_Output_error,no dirs were added))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \
+		&& mkdir -p $(foreach pair,$(PACKAGE_DIRS),$(dir $(call gb_GeneratedPackage__get_destdir,$(pair)))) \
+		$(foreach pair,$(PACKAGE_DIRS),&& cp -R $(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair)) $(call gb_GeneratedPackage__get_destdir,$(pair))) \
+	)
+	$(call gb_Helper_abbreviate_dirs,\
+		$(FIND) $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \( -type f -o -type l \) -print > $@ \
+	)
 
 .PHONY : $(call gb_GeneratedPackage_get_clean_target,%)
 $(call gb_GeneratedPackage_get_clean_target,%) :
