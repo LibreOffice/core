@@ -28,46 +28,6 @@
 namespace dbaui
 {
 
-// OConnectionURLEdit
-/** an edit control which may be used to edit connection URLs like
-    "sdbc:odbc:" or "jdbc:". It prevents the user from editing this prefix,
-    though it is normally shown.
-*/
-class OConnectionURLEdit : public Edit
-{
-    ::dbaccess::ODsnTypeCollection*
-                        m_pTypeCollection;
-    VclPtr<FixedText>          m_pForcedPrefix;
-    OUString            m_sSaveValueNoPrefix;
-    bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
-
-public:
-    OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits, bool _bShowPrefix);
-    virtual ~OConnectionURLEdit() override;
-    virtual void dispose() override;
-
-public:
-    // Edit overridables
-    virtual void    SetText(const OUString& _rStr) override;
-    virtual void    SetText(const OUString& _rStr, const Selection& _rNewSelection) override;
-    virtual OUString  GetText() const override;
-    virtual void Resize() override;
-
-    /** Shows the Prefix
-        @param  _bShowPrefix
-            If <TRUE/> than the prefix will be visible, otherwise not.
-    */
-    void     ShowPrefix(bool _bShowPrefix);
-    /// get the currently set text, excluding the prefix indicating the type
-    OUString GetTextNoPrefix() const;
-    /// set a new text, leave the current prefix unchanged
-    void     SetTextNoPrefix(const OUString& _rText);
-
-    void      SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
-    const OUString&  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
-    void      SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
-};
-
 class DBOConnectionURLEdit
 {
     OUString m_sSavedValue;
