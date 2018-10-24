@@ -57,7 +57,7 @@ namespace dbaui
     {
     public:
         std::unique_ptr<weld::Widget> m_xSubContainer;
-        DBOTextConnectionHelper  m_aTextConnectionHelper;
+        OTextConnectionHelper  m_aTextConnectionHelper;
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
@@ -71,7 +71,7 @@ namespace dbaui
         bool    checkTestConnection() override;
 
     private:
-        DECL_LINK(ImplGetExtensionHdl, DBOTextConnectionHelper*, void);
+        DECL_LINK(ImplGetExtensionHdl, OTextConnectionHelper*, void);
     };
 
     // OLDAPConnectionPageSetup
