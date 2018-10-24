@@ -4215,6 +4215,7 @@ StackVar ScInterpreter::Interpret()
                 case ocMid              : ScMid();                      break;
                 case ocText             : ScText();                     break;
                 case ocSubstitute       : ScSubstitute();               break;
+                case ocRegex            : ScRegex();                    break;
                 case ocRept             : ScRept();                     break;
                 case ocConcat           : ScConcat();                   break;
                 case ocConcat_MS        : ScConcat_MS();                break;

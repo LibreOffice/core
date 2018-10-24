@@ -9222,6 +9222,61 @@ void ScInterpreter::ScSearch()
     }
 }
 
+void ScInterpreter::ScRegex()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (MustHaveParamCount( nParamCount, 2, 3))
+    {
+        bool bReplacement = false;
+        OUString aReplacement;
+        if (nParamCount == 3)
+        {
+            // A missing argument is not an empty string to replace the match.
+            if (IsMissing())
+                Pop();
+            else
+            {
+                aReplacement = GetString().getString();
+                bReplacement = true;
+            }
+        }
+
+        OUString aExpression = GetString().getString();
+        OUString aText = GetString().getString();
+
+        if (nGlobalError != FormulaError::NONE)
+        {
+            PushError( nGlobalError);
+            return;
+        }
+
+        sal_Int32 nPos = 0;
+        sal_Int32 nEndPos = aText.getLength();
+        utl::SearchParam aParam( aExpression, utl::SearchParam::SearchType::Regexp);
+        css::util::SearchResult aResult;
+        utl::TextSearch aSearch( aParam, *ScGlobal::pCharClass);
+        const bool bMatch = aSearch.SearchForward( aText, &nPos, &nEndPos, &aResult);
+        if (!bMatch)
+            PushNoValue();
+        else
+        {
+            assert(aResult.subRegExpressions >= 1);
+            if (!bReplacement)
+                PushString( aText.copy( aResult.startOffset[0], aResult.endOffset[0] - aResult.startOffset[0]));
+            else
+            {
+                /* TODO: global replacement of multiple occurrences, introduce
+                 * extra parameter with flag 'g'? Loop over positions after
+                 * nEndPos until none left? How to keep the offsets in sync
+                 * after replacement? That should be done by
+                 * ReplaceBackReferences(). */
+                aSearch.ReplaceBackReferences( aReplacement, aText, aResult);
+                PushString( aReplacement);
+            }
+        }
+    }
+}
+
 void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )

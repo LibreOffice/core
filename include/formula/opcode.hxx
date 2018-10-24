@@ -343,6 +343,7 @@ enum OpCode : sal_uInt16
         ocFindB             = SC_OPCODE_FINDB,
         ocSearchB           = SC_OPCODE_SEARCHB,
         ocNumberValue       = SC_OPCODE_NUMBERVALUE,
+        ocRegex             = SC_OPCODE_REGEX,
     // Matrix functions
         ocMatValue          = SC_OPCODE_MAT_VALUE,
         ocMatDet            = SC_OPCODE_MAT_DET,
@@ -808,6 +809,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocText: return "Text";
     case ocSubstitute: return "Substitute";
     case ocRept: return "Rept";
+    case ocRegex: return "Regex";
     case ocConcat: return "Concat";
     case ocConcat_MS: return "Concat_MS";
     case ocTextJoin_MS: return "TextJoin_MS";
