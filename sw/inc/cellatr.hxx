@@ -24,6 +24,7 @@
 #include <svl/zforlist.hxx>
 #include "swdllapi.h"
 #include "format.hxx"
+#include "hintids.hxx"
 #include "cellfml.hxx"
 
 /** The number formatter's default locale's @ Text format.

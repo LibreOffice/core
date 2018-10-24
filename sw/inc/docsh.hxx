@@ -22,8 +22,6 @@
 #include <memory>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <ooo/vba/XSinkCaller.hpp>
-#include <ooo/vba/word/XDocument.hpp>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include "swdllapi.h"
@@ -58,6 +56,8 @@ namespace svt
 class EmbeddedObjectRef;
 }
 namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace ooo { namespace vba { class XSinkCaller; } }
+namespace ooo { namespace vba { namespace word { class XDocument; } } }
 
 // initialize DrawModel (in form of a SwDrawModel) and DocShell (in form of a SwDocShell)
 // as needed, one or both parameters may be zero

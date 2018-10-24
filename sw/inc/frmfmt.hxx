@@ -24,6 +24,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>
 #include "format.hxx"
+#include "hintids.hxx"
 #include "swdllapi.h"
 #include <list>
 

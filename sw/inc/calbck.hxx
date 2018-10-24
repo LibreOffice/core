@@ -20,17 +20,18 @@
 #ifndef INCLUDED_SW_INC_CALBCK_HXX
 #define INCLUDED_SW_INC_CALBCK_HXX
 
+#include <cassert>
+
 #include <svl/hint.hxx>
 #include <svl/broadcast.hxx>
-#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "ring.hxx"
-#include "hintids.hxx"
 #include <type_traits>
 #include <vector>
 #include <memory>
 
 class SwModify;
+class SfxPoolItem;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -224,8 +225,6 @@ public:
     void CheckCaching( const sal_uInt16 nWhich );
     bool HasOnlyOneListener() { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
-
-template<typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator;
 
 namespace sw
 {

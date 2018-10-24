@@ -25,6 +25,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
 #include <vector>
+#include <climits>
 
 class SwDoc;
 class SvNumberFormatter;
