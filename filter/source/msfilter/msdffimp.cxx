@@ -4566,7 +4566,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 double fNumber;
                                 seqAdjustmentValues[ 0 ].Value >>= fNumber;
-                                nEndAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
+                                sal_Int32 nValue;
+                                bool bFail = o3tl::checked_multiply<sal_Int32>(fNumber, 100, nValue);
+                                if (!bFail)
+                                    SAL_WARN("filter.ms", "nEndAngle too large: " << fNumber);
+                                else
+                                    nEndAngle = NormAngle36000(-nValue);
                             }
                             else
                             {
