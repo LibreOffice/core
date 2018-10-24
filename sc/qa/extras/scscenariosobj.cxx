@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/xscenarios.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -32,7 +33,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScScenariosObj : public CalcUnoApiTest, public apitest::XScenarios
+class ScScenariosObj : public CalcUnoApiTest,
+                       public apitest::XElementAccess,
+                       public apitest::XScenarios
 {
 public:
     ScScenariosObj();
@@ -42,6 +45,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScScenariosObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XScenarios
     CPPUNIT_TEST(testAddNewByName);

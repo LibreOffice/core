@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/xfunctiondescriptions.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -22,7 +23,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScFunctionListObj : public CalcUnoApiTest, public apitest::XFunctionDescriptions
+class ScFunctionListObj : public CalcUnoApiTest,
+                          public apitest::XElementAccess,
+                          public apitest::XFunctionDescriptions
 {
 public:
     ScFunctionListObj();
@@ -32,6 +35,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScFunctionListObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XFunctionDescriptions
     CPPUNIT_TEST(testGetById);

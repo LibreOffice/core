@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/xarealinks.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -22,7 +23,8 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAreaLinksObj : public CalcUnoApiTest, public apitest::XAreaLinks
+class ScAreaLinksObj : public CalcUnoApiTest, public apitest::XAreaLinks,
+                                              public apitest::XElementAccess
 {
 public:
     ScAreaLinksObj();
@@ -36,6 +38,10 @@ public:
     // XAreaLinks
     CPPUNIT_TEST(testInsertAtPosition);
     CPPUNIT_TEST(testRemoveByIndex);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     CPPUNIT_TEST_SUITE_END();
 
