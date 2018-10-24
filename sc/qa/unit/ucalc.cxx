@@ -2654,6 +2654,7 @@ void Test::testFunctionLists()
         "MIDB",
         "NUMBERVALUE",
         "PROPER",
+        "REGEX",
         "REPLACE",
         "REPLACEB",
         "REPT",

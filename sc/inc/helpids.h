@@ -577,6 +577,7 @@
 #define HID_FUNC_REPLACEB                                       "SC_HID_FUNC_REPLACEB"
 #define HID_FUNC_FINDB                                          "SC_HID_FUNC_FINDB"
 #define HID_FUNC_SEARCHB                                        "SC_HID_FUNC_SEARCHB"
+#define HID_FUNC_REGEX                                          "SC_HID_FUNC_REGEX"
 
 #endif
 

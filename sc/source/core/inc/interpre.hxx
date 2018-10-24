@@ -665,6 +665,7 @@ private:
     void ScText();
     void ScSubstitute();
     void ScRept();
+    void ScRegex();
     void ScConcat();
     void ScConcat_MS();
     void ScTextJoin_MS();
