@@ -351,8 +351,8 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
-    PushButton& rOk = GetTabDialog()->GetOKButton();
-    rOk.GetClickHdl().Call(&rOk);
+    weld::Button& rOk = GetDialogController()->GetOKButton();
+    rOk.clicked();
 }
 
 SvxBulletPickTabPage::SvxBulletPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
@@ -498,8 +498,8 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
-    PushButton& rOk = GetTabDialog()->GetOKButton();
-    rOk.GetClickHdl().Call(&rOk);
+    weld::Button& rOk = GetDialogController()->GetOKButton();
+    rOk.clicked();
 }
 
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -741,8 +741,8 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
-    PushButton& rOk = GetTabDialog()->GetOKButton();
-    rOk.GetClickHdl().Call(&rOk);
+    weld::Button& rOk = GetDialogController()->GetOKButton();
+    rOk.clicked();
 }
 
 void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -944,8 +944,8 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
-    PushButton& rOk = GetTabDialog()->GetOKButton();
-    rOk.GetClickHdl().Call(&rOk);
+    weld::Button& rOk = GetDialogController()->GetOKButton();
+    rOk.clicked();
 }
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, void)
