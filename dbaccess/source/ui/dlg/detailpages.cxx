@@ -75,7 +75,7 @@ namespace dbaui
             m_xDataConvertLabel->show();
             m_xCharsetLabel = m_xBuilder->weld_label("charsetlabel");
             m_xCharsetLabel->show();
-            m_xCharset.reset(new DBCharSetListBox(m_xBuilder->weld_combo_box("charset")));
+            m_xCharset.reset(new CharSetListBox(m_xBuilder->weld_combo_box("charset")));
             m_xCharset->show();
             m_xCharset->connect_changed(LINK(this, OCommonBehaviourTabPage, CharsetSelectHdl));
         }
