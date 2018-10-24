@@ -20,29 +20,13 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETLISTBOX_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETLISTBOX_HXX
 
-#include "charsets.hxx"
-
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
+#include "charsets.hxx"
 
 class SfxItemSet;
 
 namespace dbaui
 {
-
-    // CharSetListBox
-    class CharSetListBox : public ListBox
-    {
-    public:
-        CharSetListBox( vcl::Window* _pParent );
-
-        void    SelectEntryByIanaName( const OUString& _rIanaName );
-        bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );
-
-    private:
-        OCharsetDisplay     m_aCharSets;
-    };
-
     // CharSetListBox
     class DBCharSetListBox
     {
@@ -60,7 +44,6 @@ namespace dbaui
         OCharsetDisplay     m_aCharSets;
         std::unique_ptr<weld::ComboBox> m_xControl;
     };
-
 } // namespace dbaui
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETLISTBOX_HXX
