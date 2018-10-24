@@ -3968,7 +3968,7 @@ void HwpReader::makePicture(Picture * hbox)
               if( hbox->picinfo.picdraw.zorder > 0 )
                  padd("draw:z-index", sXML_CDATA,
                       ascii(Int2Str( hbox->picinfo.picdraw.zorder + 10000, "%d", buf)));
-            makePictureDRAW( static_cast<HWPDrawingObject *>(hbox->picinfo.picdraw.hdo), hbox);
+            makePictureDRAW(hbox->picinfo.picdraw.hdo, hbox);
             break;
         case PICTYPE_UNKNOWN:
             break;

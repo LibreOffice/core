@@ -549,12 +549,14 @@ struct PicDefOle
     void  *hwpole;
 };
 
+struct HWPDrawingObject;
+
 /**
  * @short Drawing object of hwp
  */
 struct PicDefDraw
 {
-    void      *hdo;
+    HWPDrawingObject *hdo;
     uint      zorder;
     ZZRect    vrect;
     int       mbrcnt;
