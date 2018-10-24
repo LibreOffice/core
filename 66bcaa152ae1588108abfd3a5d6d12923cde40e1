@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_155f2742",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-10-24T18:34:03Z",
+      "side": 1,
+      "message": "I tried to approximate what Ctrl-X, Ctrl-V of a range with formula-based conditional formatting does when adjusting references in the formula, but I can\u0027t say I\u0027d know exactly what I\u0027m doing here :|\n\nSo ScConditionEntry::UpdateReference is the right approach, but there\u0027s an issue w/ that function itself in a way it passes new \u0026 old range?",
+      "parentUuid": "1f1a1f67_7fc2baeb",
+      "revId": "66bcaa152ae1588108abfd3a5d6d12923cde40e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f231b9d_164a9c7f",
         "filename": "sc/source/ui/condformat/condformatdlg.cxx",
         "patchSetId": 2
