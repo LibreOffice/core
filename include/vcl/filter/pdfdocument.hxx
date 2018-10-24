@@ -51,15 +51,11 @@ class PDFNumberElement;
 /// A byte range in a PDF file.
 class VCL_DLLPUBLIC PDFElement
 {
-    bool m_bVisiting;
-    bool m_bParsing;
+    bool m_bVisiting = false;
+    bool m_bParsing = false;
 
 public:
-    PDFElement()
-        : m_bVisiting(false)
-        , m_bParsing(false)
-    {
-    }
+    PDFElement() = default;
     virtual bool Read(SvStream& rStream) = 0;
     virtual ~PDFElement() = default;
     void setVisiting(bool bVisiting) { m_bVisiting = bVisiting; }
