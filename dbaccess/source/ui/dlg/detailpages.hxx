@@ -195,10 +195,10 @@ namespace dbaui
     };
 
     // OMySQLODBCDetailsPage
-    class OMySQLODBCDetailsPage : public OCommonBehaviourTabPage
+    class OMySQLODBCDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
-        OMySQLODBCDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
     };
 
     // OGeneralSpecialJDBCDetailsPage
