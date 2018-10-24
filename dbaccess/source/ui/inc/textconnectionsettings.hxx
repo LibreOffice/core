@@ -28,7 +28,7 @@ class SfxItemSet;
 namespace dbaui
 {
 
-    class DBOTextConnectionHelper;
+    class OTextConnectionHelper;
 
     // TextConnectionSettingsDialog
     class TextConnectionSettingsDialog : public weld::GenericDialogController
@@ -49,7 +49,7 @@ namespace dbaui
 
         std::unique_ptr<weld::Widget> m_xContainer;
         std::unique_ptr<weld::Button> m_xOK;
-        std::unique_ptr<DBOTextConnectionHelper> m_xTextConnectionHelper;
+        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
 
     private:
         DECL_LINK(OnOK, weld::Button&, void);

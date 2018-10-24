@@ -53,7 +53,7 @@
 
 namespace dbaui
 {
-    DBOTextConnectionHelper::DBOTextConnectionHelper(weld::Widget* pParent, const short _nAvailableSections)
+    OTextConnectionHelper::OTextConnectionHelper(weld::Widget* pParent, const short _nAvailableSections)
         : m_aFieldSeparatorList      (DBA_RES(STR_AUTOFIELDSEPARATORLIST))
         , m_aTextSeparatorList       (STR_AUTOTEXTSEPARATORLIST)
         , m_aTextNone                (DBA_RES(STR_AUTOTEXT_FIELD_SEP_NONE))
@@ -91,10 +91,10 @@ namespace dbaui
             m_xTextSeparator->append_text( m_aTextSeparatorList.getToken( i, '\t' ) );
         m_xTextSeparator->append_text(m_aTextNone);
 
-        m_xOwnExtension->connect_changed(LINK(this, DBOTextConnectionHelper, OnEditModified));
-        m_xAccessTextFiles->connect_toggled(LINK(this, DBOTextConnectionHelper, OnSetExtensionHdl));
-        m_xAccessCSVFiles->connect_toggled(LINK(this, DBOTextConnectionHelper, OnSetExtensionHdl));
-        m_xAccessOtherFiles->connect_toggled(LINK(this, DBOTextConnectionHelper, OnSetExtensionHdl));
+        m_xOwnExtension->connect_changed(LINK(this, OTextConnectionHelper, OnEditModified));
+        m_xAccessTextFiles->connect_toggled(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
+        m_xAccessCSVFiles->connect_toggled(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
+        m_xAccessOtherFiles->connect_toggled(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_xAccessCSVFiles->set_active(true);
 
         struct SectionDescriptor
@@ -124,12 +124,12 @@ namespace dbaui
         m_xContainer->show();
     }
 
-    IMPL_LINK_NOARG(DBOTextConnectionHelper, OnEditModified, weld::Entry&, void)
+    IMPL_LINK_NOARG(OTextConnectionHelper, OnEditModified, weld::Entry&, void)
     {
         m_aGetExtensionHandler.Call(this);
     }
 
-    IMPL_LINK_NOARG(DBOTextConnectionHelper, OnSetExtensionHdl, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(OTextConnectionHelper, OnSetExtensionHdl, weld::ToggleButton&, void)
     {
         bool bDoEnable = m_xAccessOtherFiles->get_active();
         m_xOwnExtension->set_sensitive(bDoEnable);
@@ -137,7 +137,7 @@ namespace dbaui
         m_aGetExtensionHandler.Call(this);
     }
 
-    void DBOTextConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OTextConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xFieldSeparator.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xTextSeparator.get()));
@@ -147,7 +147,7 @@ namespace dbaui
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xCharSet->get_widget()));
     }
 
-    void DBOTextConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OTextConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFieldSeparatorLabel.get()));
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xTextSeparatorLabel.get()));
@@ -158,7 +158,7 @@ namespace dbaui
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::ComboBox>(m_xCharSet->get_widget()));
     }
 
-    void DBOTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bValid)
+    void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bValid)
     {
         if ( !_bValid )
             return;
@@ -196,7 +196,7 @@ namespace dbaui
         }
     }
 
-    bool DBOTextConnectionHelper::prepareLeave()
+    bool OTextConnectionHelper::prepareLeave()
     {
         OUString sExtension = GetExtension();
         OUString aErrorText;
@@ -272,7 +272,7 @@ namespace dbaui
         return false;
     }
 
-    bool DBOTextConnectionHelper::FillItemSet( SfxItemSet& rSet, const bool _bChangedSomething )
+    bool OTextConnectionHelper::FillItemSet( SfxItemSet& rSet, const bool _bChangedSomething )
     {
         bool bChangedSomething = _bChangedSomething;
 
@@ -329,7 +329,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    void DBOTextConnectionHelper::SetExtension(const OUString& _rVal)
+    void OTextConnectionHelper::SetExtension(const OUString& _rVal)
     {
         if (_rVal == "txt")
             m_xAccessTextFiles->set_active(true);
@@ -342,7 +342,7 @@ namespace dbaui
         }
     }
 
-    OUString DBOTextConnectionHelper::GetExtension()
+    OUString OTextConnectionHelper::GetExtension()
     {
         OUString sExtension;
         if (m_xAccessTextFiles->get_active())
@@ -358,7 +358,7 @@ namespace dbaui
         return sExtension;
     }
 
-    OUString DBOTextConnectionHelper::GetSeparator(const weld::ComboBox& rBox, const OUString& rList)
+    OUString OTextConnectionHelper::GetSeparator(const weld::ComboBox& rBox, const OUString& rList)
     {
         sal_Unicode const nTok = '\t';
         int nPos(rBox.find_text(rBox.get_active_text()));
@@ -373,7 +373,7 @@ namespace dbaui
         return OUString();
     }
 
-    void DBOTextConnectionHelper::SetSeparator( weld::ComboBox& rBox, const OUString& rList, const OUString& rVal )
+    void OTextConnectionHelper::SetSeparator( weld::ComboBox& rBox, const OUString& rList, const OUString& rVal )
     {
         char    nTok = '\t';
         sal_Int32   nCnt = comphelper::string::getTokenCount(rList, nTok);

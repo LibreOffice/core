@@ -246,7 +246,7 @@ namespace dbaui
 
         OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 
-        DBOTextConnectionHelper m_aTextConnectionHelper;
+        OTextConnectionHelper m_aTextConnectionHelper;
 
     protected:
         virtual ~OTextDetailsPage() override;

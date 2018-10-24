@@ -30,7 +30,7 @@ namespace dbaui
         , m_rItems(rItems)
         , m_xContainer(m_xBuilder->weld_widget("TextPageContainer"))
         , m_xOK(m_xBuilder->weld_button("ok"))
-        , m_xTextConnectionHelper(new DBOTextConnectionHelper(m_xContainer.get(), TC_HEADER | TC_SEPARATORS | TC_CHARSET))
+        , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_HEADER | TC_SEPARATORS | TC_CHARSET))
     {
         m_xOK->connect_clicked(LINK(this, TextConnectionSettingsDialog, OnOK));
     }

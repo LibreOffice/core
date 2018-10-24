@@ -39,17 +39,17 @@ namespace dbaui
     #define TC_HEADER       (short(0x04))   // a section containing the "Text contains header" check box only
     #define TC_CHARSET      (short(0x08))   // not yet implemented
 
-    class DBOTextConnectionHelper final
+    class OTextConnectionHelper final
     {
     public:
-        DBOTextConnectionHelper(weld::Widget* pParent , const short _nAvailableSections);
+        OTextConnectionHelper(weld::Widget* pParent , const short _nAvailableSections);
 
     private:
         OUString    m_aFieldSeparatorList;
         OUString    m_aTextSeparatorList;
         OUString    m_aTextNone;
         OUString    m_aOldExtension;
-        Link<DBOTextConnectionHelper*, void> m_aGetExtensionHandler; /// to be called if a new type is selected
+        Link<OTextConnectionHelper*, void> m_aGetExtensionHandler; /// to be called if a new type is selected
 
         short       m_nAvailableSections;
 
@@ -86,7 +86,7 @@ namespace dbaui
         void        implInitControls(const SfxItemSet& _rSet, bool _bValid);
         void        fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
         void        fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
-        void        SetClickHandler(const Link<DBOTextConnectionHelper*, void>& _rHandler) { m_aGetExtensionHandler = _rHandler; }
+        void        SetClickHandler(const Link<OTextConnectionHelper*, void>& _rHandler) { m_aGetExtensionHandler = _rHandler; }
         OUString    GetExtension();
         bool        FillItemSet( SfxItemSet& rSet, const bool bChangedSomething );
         bool        prepareLeave();

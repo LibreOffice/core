@@ -79,7 +79,7 @@ using namespace ::com::sun::star;
         disposeOnce();
     }
 
-    IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, DBOTextConnectionHelper*, void)
+    IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
     {
         SetRoadmapStateValue(!m_aTextConnectionHelper.GetExtension().isEmpty() && DBOConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
