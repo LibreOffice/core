@@ -643,11 +643,6 @@ void SfxTabDialog::Start_Impl()
     ActivatePageHdl( m_pTabCtrl );
 }
 
-void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText )
-{
-    AddTabPage( nId, rRiderText, nullptr );
-}
-
 /*
     Adds a page to the dialog. The Name must correspond to a entry in the
     TabControl in the dialog .ui

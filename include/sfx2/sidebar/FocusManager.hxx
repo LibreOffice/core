@@ -64,7 +64,6 @@ public:
     */
     void GrabFocus();
     void GrabFocusPanel();
-    void GrabFocusButton(const sal_Int32 nIndex);
 
     void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);

@@ -138,10 +138,6 @@ namespace svt
         ControlDependencyManager();
         ~ControlDependencyManager();
 
-        /** clears all dialog controllers previously added to the manager
-        */
-        void    clear();
-
         /** ensures that a given window is enabled or disabled, according to the check state
             of a given radio button
             @param _rRadio
@@ -256,13 +252,6 @@ namespace svt
             :DialogController( _rButton,
                 PWindowEventFilter( new FilterForRadioOrCheckToggle( _rButton ) ),
                 PWindowOperator( new EnableOnCheck< RadioButton >( _rButton ) ) )
-        {
-        }
-
-        RadioDependentEnabler( CheckBox& _rBox )
-            :DialogController( _rBox,
-                PWindowEventFilter( new FilterForRadioOrCheckToggle( _rBox ) ),
-                PWindowOperator( new EnableOnCheck< CheckBox >( _rBox ) ) )
         {
         }
     };

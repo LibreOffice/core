@@ -140,9 +140,6 @@ public:
                                     CreateTabPage pCreateFunc,      // != 0
                                     sal_uInt16 nPos = TAB_APPEND);
 
-    void                AddTabPage( sal_uInt16 nId,
-                                    const OUString &rRiderText);
-
     void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
     void                RemoveTabPage( sal_uInt16 nId );
 
