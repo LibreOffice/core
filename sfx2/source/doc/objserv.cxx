@@ -1498,6 +1498,18 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
     return false;
 }
 
+void SfxObjectShell::RecheckSignature(bool bAlsoRecheckScriptingSignature)
+{
+    if (bAlsoRecheckScriptingSignature)
+        pImpl->nScriptingSignatureState = SignatureState::UNKNOWN; // Re-Check
+
+    pImpl->nDocumentSignatureState = SignatureState::UNKNOWN; // Re-Check
+
+    Invalidate(SID_SIGNATURE);
+    Invalidate(SID_MACRO_SIGNATURE);
+    Broadcast(SfxHint(SfxHintId::TitleChanged));
+}
+
 void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
 {
     pImpl->m_bSavingForSigning = true;
@@ -1505,16 +1517,7 @@ void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
     pImpl->m_bSavingForSigning = false;
 
     if ( bSignSuccess )
-    {
-        if ( bSignScriptingContent )
-            pImpl->nScriptingSignatureState = SignatureState::UNKNOWN; // Re-Check
-
-        pImpl->nDocumentSignatureState = SignatureState::UNKNOWN; // Re-Check
-
-        Invalidate( SID_SIGNATURE );
-        Invalidate( SID_MACRO_SIGNATURE );
-        Broadcast( SfxHint(SfxHintId::TitleChanged) );
-    }
+        RecheckSignature(bSignScriptingContent);
 
     if ( pImpl->m_bAllowModifiedBackAfterSigning )
         EnableSetModified();
