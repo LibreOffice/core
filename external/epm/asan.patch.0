@@ -1,0 +1,15 @@
+--- dist.c
++++ dist.c
+@@ -405,7 +405,11 @@
+   for (temp = platform->machine; *temp != '\0'; temp ++)
+     if (*temp == '-' || *temp == '_')
+     {
+-      strcpy(temp, temp + 1);
++      for (char * t2 = temp;; ++t2) {
++        char c = t2[1];
++        t2[0] = c;
++        if (c == '\0') break;
++      }
+       temp --;
+     }
+     else
