@@ -701,6 +701,10 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
                                   const unsigned char* pPrivateKeyBinary,
                                   const int nPrivateKeyBinarySize);
 
+static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
+                                 const unsigned char* pCertificateBinary,
+                                 const int nCertificateBinarySize);
+
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
@@ -762,6 +766,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartInfo = doc_getPartInfo;
 
         m_pDocumentClass->insertCertificate = doc_insertCertificate;
+        m_pDocumentClass->addCertificate = doc_addCertificate;
         m_pDocumentClass->getSignatureState = doc_getSignatureState;
 
         gDocumentClass = m_pDocumentClass;
@@ -3734,6 +3739,53 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
         return false;
 
     return pObjectShell->SignDocumentContentUsingCertificate(xCertificate);
+}
+
+static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
+                                  const unsigned char* pCertificateBinary, const int nCertificateBinarySize)
+{
+    if (!xContext.is())
+        return false;
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    if (!pDocument->mxComponent.is())
+        return false;
+
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return false;
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+
+    if (!pObjectShell)
+        return false;
+
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext;
+    xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    if (!xSecurityContext.is())
+        return false;
+
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
+    xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
+
+    if (!xCertificateCreator.is())
+        return false;
+
+    uno::Sequence<sal_Int8> aCertificateSequence(nCertificateBinarySize);
+    std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+
+    uno::Reference<security::XCertificate> xCertificate;
+    xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, "TCu,Cu,Tu");
+
+    if (!xCertificate.is())
+        return false;
+
+    SAL_INFO("lok", "Certificate Added = IssuerName: " << xCertificate->getIssuerName() << " SubjectName: " << xCertificate->getSubjectName());
+
+    return true;
 }
 
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis)

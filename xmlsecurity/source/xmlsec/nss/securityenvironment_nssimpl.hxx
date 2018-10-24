@@ -142,6 +142,10 @@ private:
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii( const OUString& asciiCertificate ) override ;
 
         // Methods of XCertificateCreator
+        css::uno::Reference<css::security::XCertificate> SAL_CALL addDERCertificateToTheDatabase(
+                css::uno::Sequence<sal_Int8> const & raDERCertificate,
+                OUString const & raTrustString) override;
+
         css::uno::Reference<css::security::XCertificate> SAL_CALL createDERCertificateWithPrivateKey(
                 css::uno::Sequence<sal_Int8> const & raDERCertificate,
                 css::uno::Sequence<sal_Int8> const & raPrivateKey) override;

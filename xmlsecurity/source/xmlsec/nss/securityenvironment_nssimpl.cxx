@@ -1038,4 +1038,11 @@ uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::createDERCer
     return pX509Certificate;
 }
 
+uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::addDERCertificateToTheDatabase(
+        uno::Sequence<sal_Int8> const & raDERCertificate, OUString const & raTrustString)
+{
+    X509Certificate_NssImpl* pX509Certificate = createAndAddCertificateFromPackage(raDERCertificate, raTrustString);
+    return pX509Certificate;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
