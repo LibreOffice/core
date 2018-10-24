@@ -359,6 +359,7 @@ public:
 
     /** Returns to if preparing was succesful, else false. */
     bool PrepareForSigning();
+    void RecheckSignature(bool bAlsoRecheckScriptingSignature);
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
