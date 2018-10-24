@@ -26,7 +26,7 @@
 
 namespace dbaui
 {
-    DBCharSetListBox::DBCharSetListBox(std::unique_ptr<weld::ComboBox> xControl)
+    CharSetListBox::CharSetListBox(std::unique_ptr<weld::ComboBox> xControl)
         : m_xControl(std::move(xControl))
     {
         for (auto const& charset : m_aCharSets)
@@ -35,7 +35,7 @@ namespace dbaui
         }
     }
 
-    void DBCharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
+    void CharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
     {
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
         if (aFind == m_aCharSets.end())
@@ -50,7 +50,7 @@ namespace dbaui
             m_xControl->set_active_text((*aFind).getDisplayName());
     }
 
-    bool DBCharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
+    bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
     {
         bool bChangedSomething = false;
         if (m_xControl->get_value_changed_from_saved())

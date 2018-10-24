@@ -73,7 +73,7 @@ namespace dbaui
         std::unique_ptr<weld::CheckButton> m_xRowHeader;
         std::unique_ptr<weld::Widget> m_xCharSetHeader;
         std::unique_ptr<weld::Label> m_xCharSetLabel;
-        std::unique_ptr<DBCharSetListBox> m_xCharSet;
+        std::unique_ptr<CharSetListBox> m_xCharSet;
 
         DECL_LINK(OnSetExtensionHdl, weld::ToggleButton&, void);
         DECL_LINK(OnEditModified, weld::Entry&, void);

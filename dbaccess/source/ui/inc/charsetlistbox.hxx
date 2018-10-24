@@ -28,10 +28,10 @@ class SfxItemSet;
 namespace dbaui
 {
     // CharSetListBox
-    class DBCharSetListBox
+    class CharSetListBox
     {
     public:
-        DBCharSetListBox(std::unique_ptr<weld::ComboBox> xControl);
+        CharSetListBox(std::unique_ptr<weld::ComboBox> xControl);
 
         void    SelectEntryByIanaName( const OUString& _rIanaName );
         bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );

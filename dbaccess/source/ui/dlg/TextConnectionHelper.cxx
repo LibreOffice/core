@@ -78,7 +78,7 @@ namespace dbaui
         , m_xRowHeader(m_xBuilder->weld_check_button("containsheaders"))
         , m_xCharSetHeader(m_xBuilder->weld_widget("charsetframe"))
         , m_xCharSetLabel(m_xBuilder->weld_label("charsetlabel"))
-        , m_xCharSet(new DBCharSetListBox(m_xBuilder->weld_combo_box("charset")))
+        , m_xCharSet(new CharSetListBox(m_xBuilder->weld_combo_box("charset")))
     {
         sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
         sal_Int32 i;
