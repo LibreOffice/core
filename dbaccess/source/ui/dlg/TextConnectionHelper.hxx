@@ -39,59 +39,6 @@ namespace dbaui
     #define TC_HEADER       (short(0x04))   // a section containing the "Text contains header" check box only
     #define TC_CHARSET      (short(0x08))   // not yet implemented
 
-    // OTextConnectionPage
-    class OTextConnectionHelper final : public TabPage
-    {
-    public:
-        OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
-        virtual ~OTextConnectionHelper() override;
-        virtual void dispose() override;
-
-    private:
-        VclPtr<FixedText>        m_pExtensionHeader;
-        VclPtr<RadioButton>      m_pAccessTextFiles;
-        VclPtr<RadioButton>      m_pAccessCSVFiles;
-        VclPtr<RadioButton>      m_pAccessOtherFiles;
-        VclPtr<Edit>             m_pOwnExtension;
-        VclPtr<FixedText>        m_pExtensionExample;
-        VclPtr<FixedText>        m_pFormatHeader;
-        VclPtr<FixedText>        m_pFieldSeparatorLabel;
-        VclPtr<ComboBox>         m_pFieldSeparator;
-        VclPtr<FixedText>        m_pTextSeparatorLabel;
-        VclPtr<ComboBox>         m_pTextSeparator;
-        VclPtr<FixedText>        m_pDecimalSeparatorLabel;
-        VclPtr<ComboBox>         m_pDecimalSeparator;
-        VclPtr<FixedText>        m_pThousandsSeparatorLabel;
-        VclPtr<ComboBox>         m_pThousandsSeparator;
-        VclPtr<CheckBox>         m_pRowHeader;
-        VclPtr<FixedText>        m_pCharSetHeader;
-        VclPtr<FixedText>        m_pCharSetLabel;
-        VclPtr<CharSetListBox>   m_pCharSet;
-        OUString    m_aFieldSeparatorList;
-        OUString    m_aTextSeparatorList;
-        OUString    m_aTextNone;
-        OUString    m_aOldExtension;
-        Link<OTextConnectionHelper*, void> m_aGetExtensionHandler; /// to be called if a new type is selected
-
-        short       m_nAvailableSections;
-
-        DECL_LINK(OnSetExtensionHdl,RadioButton&,void);
-        DECL_LINK(OnEditModified, Edit&, void);
-
-        OUString    GetSeparator( const ComboBox& rBox, const OUString& rList );
-        void        SetSeparator( ComboBox& rBox, const OUString& rList, const OUString& rVal );
-        void        SetExtension(const OUString& _rVal);
-
-    public:
-        void        implInitControls(const SfxItemSet& _rSet, bool _bValid);
-        void        fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
-        void        fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
-        void        SetClickHandler(const Link<OTextConnectionHelper*, void>& _rHandler) { m_aGetExtensionHandler = _rHandler; }
-        OUString    GetExtension();
-        bool        FillItemSet( SfxItemSet& rSet, const bool bChangedSomething );
-        bool        prepareLeave();
-    };
-
     class DBOTextConnectionHelper final
     {
     public:
