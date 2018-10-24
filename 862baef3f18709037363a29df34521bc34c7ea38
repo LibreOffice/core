@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_32d599ba",
+        "filename": "android/source/src/java/org/libreoffice/storage/local/LocalDocumentsDirectoryProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-10-24T09:40:40Z",
+      "side": 1,
+      "message": "also don\u0027t forget about this now false statement/observation",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 101
+      },
+      "revId": "862baef3f18709037363a29df34521bc34c7ea38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
