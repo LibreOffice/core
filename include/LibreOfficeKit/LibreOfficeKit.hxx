@@ -592,6 +592,14 @@ public:
     }
 
     /**
+     *  Add the certificate (in binary form) to the certificate store.
+     *
+     */
+    bool (*addCertificate) (LibreOfficeKitDocument* pThis,
+                                const unsigned char* pCertificateBinary,
+                                const int pCertificateBinarySize);
+
+    /**
      *  Verify signature of the document.
      *
      *  Check possible values in include/sfx2/signaturestate.hxx
