@@ -1069,7 +1069,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                     RES_CHRATR_CTL_FONT == nWhich)  &&
                    swhtml_css1atr_equalFontItems( *pItem, *pRefItem )) ) )
             {
-                // the Attribute is in both templates wit the same value
+                // the Attribute is in both templates with the same value
                 // and does not need to be exported
                 rItemSet.ClearItem( nWhich );
             }

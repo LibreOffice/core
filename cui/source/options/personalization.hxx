@@ -118,7 +118,7 @@ public:
     OUString GetSelectedPersona() const;
     void SetProgress( const OUString& );
     /**
-     * @brief Assings preview images to result buttons
+     * @brief Assigns preview images to result buttons
      * @param aPreviewImage Persona preview image
      * @param sName Name of the persona
      * @param nIndex Index number of the result button

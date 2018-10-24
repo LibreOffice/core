@@ -220,7 +220,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     if( pTextObj->IsAutoGrowWidth() )
         aTwipSz.setWidth( 0 );
     // The height is at MS a minimum height, therefore we output the minimum
-    // height, if they exists. Because a minimum height MINFLY is coming with
+    // height, if they exist. Because a minimum height MINFLY is coming with
     // high probability from import, we aren't outputting it. You can't
     // do anything wrong, because every font is higher.
     if( pTextObj->IsAutoGrowHeight() )

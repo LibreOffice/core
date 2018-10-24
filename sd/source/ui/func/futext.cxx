@@ -1288,7 +1288,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
             && static_cast<const SfxUInt16Item&>( pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
         {
-            // selection wit double click -> do not allow QuickDrag
+            // selection with double click -> do not allow QuickDrag
             bQuickDrag = false;
         }
 
