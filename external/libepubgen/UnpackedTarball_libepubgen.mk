@@ -8,6 +8,7 @@
 #
 
 epubgen_patches :=
+epubgen_patches += tdf-120491.patch
 
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
