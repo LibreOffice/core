@@ -280,17 +280,17 @@ namespace dbaui
     };
 
     // OTextDetailsPage
-    class OTextDetailsPage : public OCommonBehaviourTabPage
+    class OTextDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OTextDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-        VclPtr<OTextConnectionHelper>  m_pTextConnectionHelper;
+        OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+
+        DBOTextConnectionHelper m_aTextConnectionHelper;
 
     protected:
         virtual ~OTextDetailsPage() override;
-        virtual void dispose() override;
         virtual bool prepareLeave() override;
 
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

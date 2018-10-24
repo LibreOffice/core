@@ -443,6 +443,353 @@ namespace dbaui
                 rBox.SetText( rVal.copy(0, 1) );
         }
     }
+
+    DBOTextConnectionHelper::DBOTextConnectionHelper(weld::Container* pParent, const short _nAvailableSections)
+        : m_aFieldSeparatorList      (DBA_RES(STR_AUTOFIELDSEPARATORLIST))
+        , m_aTextSeparatorList       (STR_AUTOTEXTSEPARATORLIST)
+        , m_aTextNone                (DBA_RES(STR_AUTOTEXT_FIELD_SEP_NONE))
+        , m_nAvailableSections( _nAvailableSections )
+        , m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/textpage.ui"))
+        , m_xContainer(m_xBuilder->weld_widget("TextPage"))
+        , m_xExtensionHeader(m_xBuilder->weld_widget("extensionframe"))
+        , m_xAccessTextFiles(m_xBuilder->weld_radio_button("textfile"))
+        , m_xAccessCSVFiles(m_xBuilder->weld_radio_button("csvfile"))
+        , m_xAccessOtherFiles(m_xBuilder->weld_radio_button("custom"))
+        , m_xOwnExtension(m_xBuilder->weld_entry("extension"))
+        , m_xExtensionExample(m_xBuilder->weld_label("example"))
+        , m_xFormatHeader(m_xBuilder->weld_widget("formatframe"))
+        , m_xFieldSeparatorLabel(m_xBuilder->weld_label("fieldlabel"))
+        , m_xFieldSeparator(m_xBuilder->weld_combo_box("fieldseparator"))
+        , m_xTextSeparatorLabel(m_xBuilder->weld_label("textlabel"))
+        , m_xTextSeparator(m_xBuilder->weld_combo_box("textseparator"))
+        , m_xDecimalSeparatorLabel(m_xBuilder->weld_label("decimallabel"))
+        , m_xDecimalSeparator(m_xBuilder->weld_combo_box("decimalseparator"))
+        , m_xThousandsSeparatorLabel(m_xBuilder->weld_label("thousandslabel"))
+        , m_xThousandsSeparator(m_xBuilder->weld_combo_box("thousandsseparator"))
+        , m_xRowHeader(m_xBuilder->weld_check_button("containsheaders"))
+        , m_xCharSetHeader(m_xBuilder->weld_widget("charsetframe"))
+        , m_xCharSetLabel(m_xBuilder->weld_label("charsetlabel"))
+        , m_xCharSet(new DBCharSetListBox(m_xBuilder->weld_combo_box("charset")))
+    {
+        sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
+        sal_Int32 i;
+
+        for( i = 0 ; i < nCnt ; i += 2 )
+            m_xFieldSeparator->append_text( m_aFieldSeparatorList.getToken( i, '\t' ) );
+
+        nCnt = comphelper::string::getTokenCount(m_aTextSeparatorList, '\t');
+        for( i=0 ; i<nCnt ; i+=2 )
+            m_xTextSeparator->append_text( m_aTextSeparatorList.getToken( i, '\t' ) );
+        m_xTextSeparator->append_text(m_aTextNone);
+
+        m_xOwnExtension->connect_changed(LINK(this, DBOTextConnectionHelper, OnEditModified));
+        m_xAccessTextFiles->connect_toggled(LINK(this, DBOTextConnectionHelper, OnSetExtensionHdl));
+        m_xAccessCSVFiles->connect_toggled(LINK(this, DBOTextConnectionHelper, OnSetExtensionHdl));
+        m_xAccessOtherFiles->connect_toggled(LINK(this, DBOTextConnectionHelper, OnSetExtensionHdl));
+        m_xAccessCSVFiles->set_active(true);
+
+        struct SectionDescriptor
+        {
+            short   nFlag;
+            weld::Widget* pFrame;
+        } aSections[] = {
+            { TC_EXTENSION,     m_xExtensionHeader.get() },
+            { TC_SEPARATORS,    m_xFormatHeader.get() },
+            { TC_HEADER,        m_xRowHeader.get() },
+            { TC_CHARSET,       m_xCharSetHeader.get() },
+            { 0, nullptr }
+        };
+
+        for ( size_t section=0; section < SAL_N_ELEMENTS( aSections ) - 1; ++section )
+        {
+            if ( ( m_nAvailableSections & aSections[section].nFlag ) != 0 )
+            {
+                // the section is visible, no need to do anything here
+                continue;
+            }
+
+            // hide all elements from this section
+            aSections[section].pFrame->hide();
+        }
+
+        m_xContainer->show();
+    }
+
+    IMPL_LINK_NOARG(DBOTextConnectionHelper, OnEditModified, weld::Entry&, void)
+    {
+        m_aGetExtensionHandler.Call(this);
+    }
+
+    IMPL_LINK_NOARG(DBOTextConnectionHelper, OnSetExtensionHdl, weld::ToggleButton&, void)
+    {
+        bool bDoEnable = m_xAccessOtherFiles->get_active();
+        m_xOwnExtension->set_sensitive(bDoEnable);
+        m_xExtensionExample->set_sensitive(bDoEnable);
+        m_aGetExtensionHandler.Call(this);
+    }
+
+    void DBOTextConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xFieldSeparator.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xTextSeparator.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xDecimalSeparator.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xThousandsSeparator.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xRowHeader.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xCharSet->get_widget()));
+    }
+
+    void DBOTextConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFieldSeparatorLabel.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xTextSeparatorLabel.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xDecimalSeparatorLabel.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xThousandsSeparatorLabel.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Widget>(m_xCharSetHeader.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xCharSetLabel.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::ComboBox>(m_xCharSet->get_widget()));
+    }
+
+    void DBOTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bValid)
+    {
+        if ( !_bValid )
+            return;
+
+        const SfxStringItem* pDelItem = _rSet.GetItem<SfxStringItem>(DSID_FIELDDELIMITER);
+        const SfxStringItem* pStrItem = _rSet.GetItem<SfxStringItem>(DSID_TEXTDELIMITER);
+        const SfxStringItem* pDecdelItem = _rSet.GetItem<SfxStringItem>(DSID_DECIMALDELIMITER);
+        const SfxStringItem* pThodelItem = _rSet.GetItem<SfxStringItem>(DSID_THOUSANDSDELIMITER);
+        const SfxStringItem* pExtensionItem = _rSet.GetItem<SfxStringItem>(DSID_TEXTFILEEXTENSION);
+        const SfxStringItem* pCharsetItem = _rSet.GetItem<SfxStringItem>(DSID_CHARSET);
+
+        if ( ( m_nAvailableSections & TC_EXTENSION ) != 0 )
+        {
+            m_aOldExtension = pExtensionItem->GetValue();
+            SetExtension( m_aOldExtension );
+        }
+
+        if ( ( m_nAvailableSections & TC_HEADER ) != 0 )
+        {
+            const SfxBoolItem* pHdrItem = _rSet.GetItem<SfxBoolItem>(DSID_TEXTFILEHEADER);
+            m_xRowHeader->set_active(pHdrItem->GetValue());
+        }
+
+        if ( ( m_nAvailableSections & TC_SEPARATORS ) != 0 )
+        {
+            SetSeparator(*m_xFieldSeparator, m_aFieldSeparatorList, pDelItem->GetValue());
+            SetSeparator(*m_xTextSeparator, m_aTextSeparatorList, pStrItem->GetValue());
+            m_xDecimalSeparator->set_entry_text( pDecdelItem->GetValue() );
+            m_xThousandsSeparator->set_entry_text( pThodelItem->GetValue() );
+        }
+
+        if ( ( m_nAvailableSections & TC_CHARSET ) != 0 )
+        {
+            m_xCharSet->SelectEntryByIanaName( pCharsetItem->GetValue() );
+        }
+    }
+
+    bool DBOTextConnectionHelper::prepareLeave()
+    {
+        OUString sExtension = GetExtension();
+        OUString aErrorText;
+        weld::Widget* pErrorWin = nullptr;
+        OUString aDelText(m_xFieldSeparator->get_active_text());
+        if(aDelText.isEmpty())
+        {   // No FieldSeparator
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MISSING);
+            aErrorText = aErrorText.replaceFirst("#1",m_xFieldSeparatorLabel->get_label());
+            pErrorWin = m_xFieldSeparator.get();
+        }
+        else if (m_xDecimalSeparator->get_active_text().isEmpty())
+        {   // No DecimalSeparator
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MISSING);
+            aErrorText = aErrorText.replaceFirst("#1",m_xDecimalSeparatorLabel->get_label());
+            pErrorWin = m_xDecimalSeparator.get();
+        }
+        else if (m_xTextSeparator->get_active_text() == m_xFieldSeparator->get_active_text())
+        {   // Field and TextSeparator must not be the same
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = aErrorText.replaceFirst("#1",m_xTextSeparatorLabel->get_label());
+            aErrorText = aErrorText.replaceFirst("#2",m_xFieldSeparatorLabel->get_label());
+            pErrorWin = m_xTextSeparator.get();
+        }
+        else if (m_xDecimalSeparator->get_active_text() == m_xThousandsSeparator->get_active_text())
+        {   // Thousands and DecimalSeparator must not be the same
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = aErrorText.replaceFirst("#1",m_xDecimalSeparatorLabel->get_label());
+            aErrorText = aErrorText.replaceFirst("#2",m_xThousandsSeparatorLabel->get_label());
+            pErrorWin = m_xDecimalSeparator.get();
+        }
+        else if (m_xFieldSeparator->get_active_text() == m_xThousandsSeparator->get_active_text())
+        {   // Thousands and FieldSeparator must not be the same
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = aErrorText.replaceFirst("#1",m_xFieldSeparatorLabel->get_label());
+            aErrorText = aErrorText.replaceFirst("#2",m_xThousandsSeparatorLabel->get_label());
+            pErrorWin = m_xFieldSeparator.get();
+        }
+        else if (m_xFieldSeparator->get_active_text() == m_xDecimalSeparator->get_active_text())
+        {   // Tenner and FieldSeparator must not be the same
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = aErrorText.replaceFirst("#1",m_xFieldSeparatorLabel->get_label());
+            aErrorText = aErrorText.replaceFirst("#2",m_xDecimalSeparatorLabel->get_label());
+            pErrorWin = m_xFieldSeparator.get();
+        }
+        else if (m_xTextSeparator->get_active_text() == m_xThousandsSeparator->get_active_text())
+        {   // Thousands and TextSeparator must not be the same
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = aErrorText.replaceFirst("#1",m_xTextSeparatorLabel->get_label());
+            aErrorText = aErrorText.replaceFirst("#2",m_xThousandsSeparatorLabel->get_label());
+            pErrorWin = m_xTextSeparator.get();
+        }
+        else if (m_xTextSeparator->get_active_text() == m_xDecimalSeparator->get_active_text())
+        {   // Tenner and TextSeparator must not be the same
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = aErrorText.replaceFirst("#1",m_xTextSeparatorLabel->get_label());
+            aErrorText = aErrorText.replaceFirst("#2",m_xDecimalSeparatorLabel->get_label());
+            pErrorWin = m_xTextSeparator.get();
+        }
+        else if ((sExtension.indexOf('*') != -1) || (sExtension.indexOf('?') != -1))
+        {
+            aErrorText = DBA_RES(STR_AUTONO_WILDCARDS);
+            aErrorText = aErrorText.replaceFirst("#1",sExtension);
+            pErrorWin = m_xOwnExtension.get();
+        }
+        else
+            return true;
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  MnemonicGenerator::EraseAllMnemonicChars(aErrorText)));
+        xBox->run();
+        pErrorWin->grab_focus();
+        return false;
+    }
+
+    bool DBOTextConnectionHelper::FillItemSet( SfxItemSet& rSet, const bool _bChangedSomething )
+    {
+        bool bChangedSomething = _bChangedSomething;
+
+        if ( ( m_nAvailableSections & TC_EXTENSION ) != 0 )
+        {
+            OUString sExtension = GetExtension();
+            if( m_aOldExtension != sExtension )
+            {
+                rSet.Put( SfxStringItem( DSID_TEXTFILEEXTENSION, sExtension ) );
+                bChangedSomething = true;
+            }
+        }
+
+        if ( ( m_nAvailableSections & TC_HEADER ) != 0 )
+        {
+            if (m_xRowHeader->get_state_changed_from_saved())
+            {
+                rSet.Put(SfxBoolItem(DSID_TEXTFILEHEADER, m_xRowHeader->get_active()));
+                bChangedSomething = true;
+            }
+        }
+
+        if ( ( m_nAvailableSections & TC_SEPARATORS ) != 0 )
+        {
+            if (m_xFieldSeparator->get_value_changed_from_saved())
+            {
+                rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( *m_xFieldSeparator, m_aFieldSeparatorList) ) );
+                bChangedSomething = true;
+            }
+            if (m_xTextSeparator->get_value_changed_from_saved())
+            {
+                rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( *m_xTextSeparator, m_aTextSeparatorList) ) );
+                bChangedSomething = true;
+            }
+
+            if (m_xDecimalSeparator->get_value_changed_from_saved())
+            {
+                rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_xDecimalSeparator->get_active_text().copy(0, 1) ) );
+                bChangedSomething = true;
+            }
+            if (m_xThousandsSeparator->get_value_changed_from_saved())
+            {
+                rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_xThousandsSeparator->get_active_text().copy(0,1) ) );
+                bChangedSomething = true;
+            }
+        }
+
+        if ( ( m_nAvailableSections & TC_CHARSET ) != 0 )
+        {
+            if ( m_xCharSet->StoreSelectedCharSet( rSet, DSID_CHARSET ) )
+                bChangedSomething = true;
+        }
+
+        return bChangedSomething;
+    }
+
+    void DBOTextConnectionHelper::SetExtension(const OUString& _rVal)
+    {
+        if (_rVal == "txt")
+            m_xAccessTextFiles->set_active(true);
+        else if (_rVal == "csv")
+            m_xAccessCSVFiles->set_active(true);
+        else
+        {
+            m_xAccessOtherFiles->set_active(true);
+            m_xExtensionExample->set_label(_rVal);
+        }
+    }
+
+    OUString DBOTextConnectionHelper::GetExtension()
+    {
+        OUString sExtension;
+        if (m_xAccessTextFiles->get_active())
+            sExtension = "txt";
+        else if (m_xAccessCSVFiles->get_active())
+            sExtension = "csv";
+        else
+        {
+            sExtension = m_xOwnExtension->get_text();
+            if ( sExtension.getToken(0,'.') == "*" )
+                sExtension = sExtension.copy(2);
+        }
+        return sExtension;
+    }
+
+    OUString DBOTextConnectionHelper::GetSeparator(const weld::ComboBox& rBox, const OUString& rList)
+    {
+        sal_Unicode const nTok = '\t';
+        int nPos(rBox.find_text(rBox.get_active_text()));
+
+        if (nPos == -1)
+            return rBox.get_active_text().copy(0);
+
+        if ( !( m_xTextSeparator.get() == &rBox && nPos == (rBox.get_count()-1) ) )
+            return OUString(
+                static_cast< sal_Unicode >( rList.getToken((nPos*2)+1, nTok ).toInt32() ));
+        // somewhat strange ... translates for instance an "32" into " "
+        return OUString();
+    }
+
+    void DBOTextConnectionHelper::SetSeparator( weld::ComboBox& rBox, const OUString& rList, const OUString& rVal )
+    {
+        char    nTok = '\t';
+        sal_Int32   nCnt = comphelper::string::getTokenCount(rList, nTok);
+        sal_Int32 i;
+
+        for( i=0 ; i<nCnt ; i+=2 )
+        {
+            OUString  sTVal(
+                static_cast< sal_Unicode >( rList.getToken( (i+1), nTok ).toInt32() ));
+
+            if( sTVal == rVal )
+            {
+                rBox.set_entry_text(rList.getToken(i, nTok));
+                break;
+            }
+        }
+
+        if ( i >= nCnt )
+        {
+            if ( m_xTextSeparator.get() == &rBox && rVal.isEmpty() )
+                rBox.set_entry_text(m_aTextNone);
+            else
+                rBox.set_entry_text(rVal.copy(0, 1));
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
