@@ -414,17 +414,16 @@ namespace dbaui
         DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OOdbcDetailsPage
-    OUserDriverDetailsPage::OUserDriverDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        : OCommonBehaviourTabPage(pParent, "UserDetailsPage", "dbaccess/ui/userdetailspage.ui", _rCoreAttrs,
-            OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
+    OUserDriverDetailsPage::OUserDriverDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
+        , m_xFTHostname(m_xBuilder->weld_label("hostnameft"))
+        , m_xEDHostname(m_xBuilder->weld_entry("hostname"))
+        , m_xPortNumber(m_xBuilder->weld_label("portnumberft"))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portnumber"))
+        , m_xUseCatalog(m_xBuilder->weld_check_button("usecatalog"))
     {
-        get(m_pFTHostname, "hostnameft");
-        get(m_pEDHostname, "hostname");
-        get(m_pPortNumber, "portnumberft");
-        get(m_pNFPortNumber, "portnumber");
-        m_pNFPortNumber->SetUseThousandSep(false);
-        get(m_pUseCatalog, "usecatalog");
-        m_pUseCatalog->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
+        m_xUseCatalog->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
     }
 
     OUserDriverDetailsPage::~OUserDriverDetailsPage()
@@ -432,43 +431,33 @@ namespace dbaui
         disposeOnce();
     }
 
-    void OUserDriverDetailsPage::dispose()
+    VclPtr<SfxTabPage> ODriversSettings::CreateUser(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        m_pFTHostname.clear();
-        m_pEDHostname.clear();
-        m_pPortNumber.clear();
-        m_pNFPortNumber.clear();
-        m_pUseCatalog.clear();
-        OCommonBehaviourTabPage::dispose();
-    }
-
-    VclPtr<SfxTabPage> ODriversSettings::CreateUser( TabPageParent pParent, const SfxItemSet* _rAttrSet )
-    {
-        return VclPtr<OUserDriverDetailsPage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<OUserDriverDetailsPage>::Create(pParent, *pAttrSet);
     }
 
     bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillInt32(*_rSet,m_pNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
-        fillString(*_rSet,m_pEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillBool(*_rSet,m_pUseCatalog,DSID_USECATALOG,bChangedSomething);
+        fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,m_xEDHostname.get(),DSID_CONN_HOSTNAME,bChangedSomething);
+        fillBool(*_rSet,m_xUseCatalog.get(),DSID_USECATALOG,false,bChangedSomething);
 
         return bChangedSomething;
     }
     void OUserDriverDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pEDHostname));
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pUseCatalog));
-        _rControlList.emplace_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
+        DBOCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xEDHostname.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xUseCatalog.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
     }
     void OUserDriverDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillWindows(_rControlList);
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTHostname));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pPortNumber));
+        DBOCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHostname.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xPortNumber.get()));
     }
     void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
@@ -482,16 +471,16 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_pEDHostname->SetText(pHostName->GetValue());
-            m_pEDHostname->ClearModifyFlag();
+            m_xEDHostname->set_text(pHostName->GetValue());
+            m_xEDHostname->save_value();
 
-            m_pNFPortNumber->SetValue(pPortNumber->GetValue());
-            m_pNFPortNumber->ClearModifyFlag();
+            m_xNFPortNumber->set_value(pPortNumber->GetValue());
+            m_xNFPortNumber->save_value();
 
-            m_pUseCatalog->Check(pUseCatalogItem->GetValue());
+            m_xUseCatalog->set_active(pUseCatalogItem->GetValue());
         }
 
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OMySQLODBCDetailsPage
     OMySQLODBCDetailsPage::OMySQLODBCDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )

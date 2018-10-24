@@ -175,24 +175,23 @@ namespace dbaui
     };
 
     // OUserDriverDetailsPage
-    class OUserDriverDetailsPage : public OCommonBehaviourTabPage
+    class OUserDriverDetailsPage : public DBOCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OUserDriverDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OUserDriverDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OUserDriverDetailsPage() override;
-        virtual void dispose() override;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
     private:
-        VclPtr<FixedText>          m_pFTHostname;
-        VclPtr<Edit>               m_pEDHostname;
-        VclPtr<FixedText>          m_pPortNumber;
-        VclPtr<NumericField>       m_pNFPortNumber;
-        VclPtr<CheckBox>           m_pUseCatalog;
+        std::unique_ptr<weld::Label> m_xFTHostname;
+        std::unique_ptr<weld::Entry> m_xEDHostname;
+        std::unique_ptr<weld::Label> m_xPortNumber;
+        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
+        std::unique_ptr<weld::CheckButton> m_xUseCatalog;
     };
 
     // OMySQLODBCDetailsPage
