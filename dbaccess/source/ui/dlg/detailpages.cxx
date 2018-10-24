@@ -54,7 +54,7 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    DBOCommonBehaviourTabPage::DBOCommonBehaviourTabPage(TabPageParent pParent,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(TabPageParent pParent,
         const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rCoreAttrs,
         OCommonBehaviourTabPageFlags nControlFlags)
         : OGenericAdministrationPage(pParent, rUIXMLDescription, rId, rCoreAttrs)
@@ -77,27 +77,27 @@ namespace dbaui
             m_xCharsetLabel->show();
             m_xCharset.reset(new DBCharSetListBox(m_xBuilder->weld_combo_box("charset")));
             m_xCharset->show();
-            m_xCharset->connect_changed(LINK(this, DBOCommonBehaviourTabPage, CharsetSelectHdl));
+            m_xCharset->connect_changed(LINK(this, OCommonBehaviourTabPage, CharsetSelectHdl));
         }
     }
 
-    IMPL_LINK_NOARG(DBOCommonBehaviourTabPage, CharsetSelectHdl, weld::ComboBox&, void)
+    IMPL_LINK_NOARG(OCommonBehaviourTabPage, CharsetSelectHdl, weld::ComboBox&, void)
     {
         callModifiedHdl();
     }
 
-    DBOCommonBehaviourTabPage::~DBOCommonBehaviourTabPage()
+    OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
         disposeOnce();
     }
 
-    void DBOCommonBehaviourTabPage::dispose()
+    void OCommonBehaviourTabPage::dispose()
     {
         m_xCharset.reset();
         OGenericAdministrationPage::dispose();
     }
 
-    void DBOCommonBehaviourTabPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OCommonBehaviourTabPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
         {
@@ -110,7 +110,7 @@ namespace dbaui
         }
     }
 
-    void DBOCommonBehaviourTabPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OCommonBehaviourTabPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
             _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xOptions.get()));
@@ -119,7 +119,7 @@ namespace dbaui
             _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xCharset->get_widget()));
     }
 
-    void DBOCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
@@ -146,7 +146,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    bool DBOCommonBehaviourTabPage::FillItemSet(SfxItemSet* _rSet)
+    bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
 
@@ -166,7 +166,7 @@ namespace dbaui
 
     // ODbaseDetailsPage
     ODbaseDetailsPage::ODbaseDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/dbasepage.ui", "DbasePage",
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/dbasepage.ui", "DbasePage",
                                     _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xShowDeleted(m_xBuilder->weld_check_button("showDelRowsCheckbutton"))
         , m_xFT_Message(m_xBuilder->weld_label("specMessageLabel"))
@@ -208,12 +208,12 @@ namespace dbaui
             m_xFT_Message->show(m_xShowDeleted->get_active());
         }
 
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     bool ODbaseDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
         fillBool(*_rSet, m_xShowDeleted.get(), DSID_SHOWDELETEDROWS, false, bChangedSomething);
         return bChangedSomething;
@@ -236,7 +236,7 @@ namespace dbaui
 
     // OAdoDetailsPage
     OAdoDetailsPage::OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
 
@@ -249,7 +249,7 @@ namespace dbaui
 
     // OOdbcDetailsPage
     OOdbcDetailsPage::OOdbcDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/odbcpage.ui", "ODBC", rCoreAttrs,
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/odbcpage.ui", "ODBC", rCoreAttrs,
                                     OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
         , m_xUseCatalog(m_xBuilder->weld_check_button("useCatalogCheckbutton"))
     {
@@ -268,7 +268,7 @@ namespace dbaui
 
     bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         fillBool(*_rSet,m_xUseCatalog.get(),DSID_USECATALOG,false,bChangedSomething);
         return bChangedSomething;
     }
@@ -283,11 +283,11 @@ namespace dbaui
         if ( bValid )
             m_xUseCatalog->set_active(pUseCatalogItem->GetValue());
 
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OOdbcDetailsPage
     OUserDriverDetailsPage::OUserDriverDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
         , m_xFTHostname(m_xBuilder->weld_label("hostnameft"))
         , m_xEDHostname(m_xBuilder->weld_entry("hostname"))
@@ -310,7 +310,7 @@ namespace dbaui
 
     bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
         fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_PORTNUMBER,bChangedSomething);
         fillString(*_rSet,m_xEDHostname.get(),DSID_CONN_HOSTNAME,bChangedSomething);
@@ -320,14 +320,14 @@ namespace dbaui
     }
     void OUserDriverDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOCommonBehaviourTabPage::fillControls(_rControlList);
+        OCommonBehaviourTabPage::fillControls(_rControlList);
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xEDHostname.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xUseCatalog.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
     }
     void OUserDriverDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOCommonBehaviourTabPage::fillWindows(_rControlList);
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHostname.get()));
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xPortNumber.get()));
     }
@@ -352,11 +352,11 @@ namespace dbaui
             m_xUseCatalog->set_active(pUseCatalogItem->GetValue());
         }
 
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OMySQLODBCDetailsPage
     OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
     }
@@ -368,7 +368,7 @@ namespace dbaui
 
     // OMySQLJDBCDetailsPage
     OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/generalspecialjdbcdetailspage.ui", "GeneralSpecialJDBCDetails",
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/generalspecialjdbcdetailspage.ui", "GeneralSpecialJDBCDetails",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_nPortId(_nPortId)
         , m_bUseClass(true)
@@ -415,7 +415,7 @@ namespace dbaui
 
     bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         if ( m_bUseClass )
             fillString(*_rSet,m_xEDDriverClass.get(),DSID_JDBCDRIVERCLASS,bChangedSomething);
         fillString(*_rSet,m_xEDHostname.get(),DSID_CONN_HOSTNAME,bChangedSomething);
@@ -453,7 +453,7 @@ namespace dbaui
             m_xEDSocket->save_value();
         }
 
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
         if ( m_bUseClass && m_xEDDriverClass->get_text().trim().isEmpty() )
@@ -500,7 +500,7 @@ namespace dbaui
 
     // MySQLNativePage
     MySQLNativePage::MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xMySQLSettingsContainer(m_xBuilder->weld_widget("MySQLSettingsContainer"))
         , m_aMySQLSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified))
         , m_xSeparator1(m_xBuilder->weld_label("connectionheader"))
@@ -519,7 +519,7 @@ namespace dbaui
 
     void MySQLNativePage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOCommonBehaviourTabPage::fillControls( _rControlList );
+        OCommonBehaviourTabPage::fillControls( _rControlList );
         m_aMySQLSettings.fillControls( _rControlList );
 
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xUserName.get()));
@@ -528,7 +528,7 @@ namespace dbaui
 
     void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOCommonBehaviourTabPage::fillWindows( _rControlList );
+        OCommonBehaviourTabPage::fillWindows( _rControlList );
         m_aMySQLSettings.fillWindows( _rControlList);
 
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator1.get()));
@@ -538,7 +538,7 @@ namespace dbaui
 
     bool MySQLNativePage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet( _rSet );
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
         bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
@@ -570,7 +570,7 @@ namespace dbaui
             m_xPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
         }
 
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
@@ -590,7 +590,7 @@ namespace dbaui
 
     // OLDAPDetailsPage
     OLDAPDetailsPage::OLDAPDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/ldappage.ui", "LDAP",
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/ldappage.ui", "LDAP",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
         , m_xCBUseSSL(m_xBuilder->weld_check_button("useSSLCheckbutton"))
@@ -618,7 +618,7 @@ namespace dbaui
 
     bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
         fillString(*_rSet,m_xETBaseDN.get(),DSID_CONN_LDAP_BASEDN,bChangedSomething);
         fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
@@ -662,12 +662,12 @@ namespace dbaui
             m_xCBUseSSL->set_active(pUseSSL->GetValue());
         }
 
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     // OTextDetailsPage
     OTextDetailsPage::OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_aTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET)
     {
     }
@@ -684,13 +684,13 @@ namespace dbaui
 
     void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOCommonBehaviourTabPage::fillControls(_rControlList);
+        OCommonBehaviourTabPage::fillControls(_rControlList);
         m_aTextConnectionHelper.fillControls(_rControlList);
 
     }
     void OTextDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOCommonBehaviourTabPage::fillWindows(_rControlList);
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
         m_aTextConnectionHelper.fillWindows(_rControlList);
 
     }
@@ -701,12 +701,12 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         m_aTextConnectionHelper.implInitControls(_rSet, bValid);
-        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     bool OTextDetailsPage::FillItemSet( SfxItemSet* rSet )
     {
-        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
         bChangedSomething = m_aTextConnectionHelper.FillItemSet(*rSet, bChangedSomething);
         return bChangedSomething;
     }

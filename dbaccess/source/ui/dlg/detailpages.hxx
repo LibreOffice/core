@@ -51,7 +51,7 @@ namespace dbaui
         The controls to be used have to be defined within the resource, as usual, but
         this class does all the handling necessary.
     */
-    class DBOCommonBehaviourTabPage : public OGenericAdministrationPage
+    class OCommonBehaviourTabPage : public OGenericAdministrationPage
     {
     protected:
 
@@ -73,10 +73,10 @@ namespace dbaui
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        DBOCommonBehaviourTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
+        OCommonBehaviourTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
     protected:
 
-        virtual ~DBOCommonBehaviourTabPage() override;
+        virtual ~OCommonBehaviourTabPage() override;
         virtual void dispose() override;
 
         // subclasses must override this, but it isn't pure virtual
@@ -93,7 +93,7 @@ namespace dbaui
 
 
     // ODbaseDetailsPage
-    class ODbaseDetailsPage : public DBOCommonBehaviourTabPage
+    class ODbaseDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -115,14 +115,14 @@ namespace dbaui
     };
 
     // OAdoDetailsPage
-    class OAdoDetailsPage : public DBOCommonBehaviourTabPage
+    class OAdoDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
     };
 
     // OOdbcDetailsPage
-    class OOdbcDetailsPage : public DBOCommonBehaviourTabPage
+    class OOdbcDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -136,7 +136,7 @@ namespace dbaui
     };
 
     // OUserDriverDetailsPage
-    class OUserDriverDetailsPage : public DBOCommonBehaviourTabPage
+    class OUserDriverDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -156,14 +156,14 @@ namespace dbaui
     };
 
     // OMySQLODBCDetailsPage
-    class OMySQLODBCDetailsPage : public DBOCommonBehaviourTabPage
+    class OMySQLODBCDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
     };
 
     // OGeneralSpecialJDBCDetailsPage
-    class OGeneralSpecialJDBCDetailsPage final : public DBOCommonBehaviourTabPage
+    class OGeneralSpecialJDBCDetailsPage final : public OCommonBehaviourTabPage
     {
     public:
         OGeneralSpecialJDBCDetailsPage(TabPageParent pParent,
@@ -194,7 +194,7 @@ namespace dbaui
     };
 
     // MySQLNativePage
-    class MySQLNativePage : public DBOCommonBehaviourTabPage
+    class MySQLNativePage : public OCommonBehaviourTabPage
     {
     public:
         MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
@@ -217,7 +217,7 @@ namespace dbaui
     };
 
     // OOdbcDetailsPage
-    class OLDAPDetailsPage : public DBOCommonBehaviourTabPage
+    class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -239,7 +239,7 @@ namespace dbaui
     };
 
     // OTextDetailsPage
-    class OTextDetailsPage : public DBOCommonBehaviourTabPage
+    class OTextDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
