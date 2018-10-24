@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="MysqlNativePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -12,7 +11,7 @@
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkFrame" id="frame1">
+      <object class="GtkFrame" id="connectionframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
@@ -59,7 +58,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame2">
+      <object class="GtkFrame" id="userframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
@@ -86,10 +85,10 @@
                   <object class="GtkLabel" id="usernamelabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="mysqlnativepage|usernamelabel">_User name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">username</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -101,6 +100,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -147,7 +147,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame3">
+      <object class="GtkFrame" id="charsetframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
@@ -171,10 +171,10 @@
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="mysqlnativepage|charsetlabel">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -183,7 +183,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="dbulo-CharSetListBox" id="charset">
+                  <object class="GtkComboBoxText" id="charset">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>

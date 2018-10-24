@@ -233,22 +233,20 @@ namespace dbaui
     };
 
     // MySQLNativePage
-    class MySQLNativePage : public OCommonBehaviourTabPage
+    class MySQLNativePage : public DBOCommonBehaviourTabPage
     {
     public:
-        MySQLNativePage(    vcl::Window* pParent,
-                            const SfxItemSet& _rCoreAttrs );
+        MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
         virtual ~MySQLNativePage() override;
-        virtual void dispose() override;
 
     private:
-        VclPtr<FixedText>           m_pSeparator1;
-        VclPtr<MySQLNativeSettings> m_aMySQLSettings;
-
-        VclPtr<FixedText>           m_pSeparator2;
-        VclPtr<FixedText>           m_pUserNameLabel;
-        VclPtr<Edit>                m_pUserName;
-        VclPtr<CheckBox>            m_pPasswordRequired;
+        std::unique_ptr<weld::Widget> m_xMySQLSettingsContainer;
+        DBMySQLNativeSettings m_aMySQLSettings;
+        std::unique_ptr<weld::Label> m_xSeparator1;
+        std::unique_ptr<weld::Label> m_xSeparator2;
+        std::unique_ptr<weld::Label> m_xUserNameLabel;
+        std::unique_ptr<weld::Entry> m_xUserName;
+        std::unique_ptr<weld::CheckButton> m_xPasswordRequired;
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
