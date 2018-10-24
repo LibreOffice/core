@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/xsheetconditionalentries.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -34,7 +35,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScTableConditionalFormatObj : public CalcUnoApiTest, public apitest::XSheetConditionalEntries
+class ScTableConditionalFormatObj : public CalcUnoApiTest,
+                                    public apitest::XElementAccess,
+                                    public apitest::XSheetConditionalEntries
 {
 public:
     ScTableConditionalFormatObj();
@@ -45,6 +48,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableConditionalFormatObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XSheetConditionalEntries
     CPPUNIT_TEST(testAddNew);
