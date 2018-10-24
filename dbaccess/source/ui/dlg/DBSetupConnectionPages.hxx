@@ -53,16 +53,16 @@ namespace dbaui
     };
 
     // OTextConnectionPage
-    class OTextConnectionPageSetup : public OConnectionTabPageSetup
+    class OTextConnectionPageSetup : public DBOConnectionTabPageSetup
     {
     public:
-        VclPtr<OTextConnectionHelper>  m_pTextConnectionHelper;
+        std::unique_ptr<weld::Widget> m_xSubContainer;
+        DBOTextConnectionHelper  m_aTextConnectionHelper;
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        static VclPtr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
+        OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OTextConnectionPageSetup() override;
-        virtual void dispose() override;
     protected:
         virtual bool prepareLeave() override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -71,7 +71,7 @@ namespace dbaui
         bool    checkTestConnection() override;
 
     private:
-        DECL_LINK(ImplGetExtensionHdl, OTextConnectionHelper*, void);
+        DECL_LINK(ImplGetExtensionHdl, DBOTextConnectionHelper*, void);
     };
 
     // OLDAPConnectionPageSetup

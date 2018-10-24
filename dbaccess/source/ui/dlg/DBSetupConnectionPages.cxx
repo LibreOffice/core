@@ -59,18 +59,19 @@ namespace dbaui
 {
 using namespace ::com::sun::star;
 
-    VclPtr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OTextConnectionPageSetup>::Create( pParent, _rAttrSet );
+        return VclPtr<OTextConnectionPageSetup>::Create(pParent, _rAttrSet);
     }
 
     // OTextConnectionPageSetup
-    OTextConnectionPageSetup::OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OConnectionTabPageSetup(pParent, "DBWizTextPage", "dbaccess/ui/dbwiztextpage.ui", _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
+    OTextConnectionPageSetup::OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOConnectionTabPageSetup(pParent, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
+                                  rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
+        , m_xSubContainer(m_xBuilder->weld_widget("TextPageContainer"))
+        , m_aTextConnectionHelper(m_xSubContainer.get(), TC_EXTENSION | TC_SEPARATORS)
     {
-
-        m_pTextConnectionHelper = VclPtr<OTextConnectionHelper>::Create( get<VclVBox>("TextPageContainer"), TC_EXTENSION | TC_SEPARATORS );
-        m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
+        m_aTextConnectionHelper.SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
     }
 
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
@@ -78,53 +79,49 @@ using namespace ::com::sun::star;
         disposeOnce();
     }
 
-    void OTextConnectionPageSetup::dispose()
+    IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, DBOTextConnectionHelper*, void)
     {
-        m_pTextConnectionHelper.disposeAndClear();
-        OConnectionTabPageSetup::dispose();
-    }
-
-    IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
-    {
-        SetRoadmapStateValue(!m_pTextConnectionHelper->GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
+        SetRoadmapStateValue(!m_aTextConnectionHelper.GetExtension().isEmpty() && DBOConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
     }
 
     bool OTextConnectionPageSetup::checkTestConnection()
     {
-        bool bDoEnable = OConnectionTabPageSetup::checkTestConnection();
-        bDoEnable = !m_pTextConnectionHelper->GetExtension().isEmpty() && bDoEnable;
+        bool bDoEnable = DBOConnectionTabPageSetup::checkTestConnection();
+        bDoEnable = !m_aTextConnectionHelper.GetExtension().isEmpty() && bDoEnable;
         return bDoEnable;
     }
 
     void OTextConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OConnectionTabPageSetup::fillControls(_rControlList);
-        m_pTextConnectionHelper->fillControls(_rControlList);
+        DBOConnectionTabPageSetup::fillControls(_rControlList);
+        m_aTextConnectionHelper.fillControls(_rControlList);
     }
+
     void OTextConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OConnectionTabPageSetup::fillWindows(_rControlList);
-        m_pTextConnectionHelper->fillWindows(_rControlList);
+        DBOConnectionTabPageSetup::fillWindows(_rControlList);
+        m_aTextConnectionHelper.fillWindows(_rControlList);
     }
+
     void OTextConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
-        OConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
-        m_pTextConnectionHelper->implInitControls(_rSet, bValid);
+        DBOConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
+        m_aTextConnectionHelper.implInitControls(_rSet, bValid);
     }
 
     bool OTextConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        bChangedSomething = m_pTextConnectionHelper->FillItemSet(*_rSet, bChangedSomething);
+        bool bChangedSomething = DBOConnectionTabPageSetup::FillItemSet(_rSet);
+        bChangedSomething = m_aTextConnectionHelper.FillItemSet(*_rSet, bChangedSomething);
         return bChangedSomething;
     }
 
     bool OTextConnectionPageSetup::prepareLeave(){
-        return m_pTextConnectionHelper->prepareLeave();
+        return m_aTextConnectionHelper.prepareLeave();
     }
 
     VclPtr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )

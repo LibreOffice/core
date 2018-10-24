@@ -141,7 +141,7 @@ namespace dbaui
 
         IS_PATH_EXIST   pathExists(const OUString& _rURL, bool bIsFile) const;
         bool        createDirectoryDeep(const OUString& _rPathNormalized);
-        void        commitURL();
+        bool        commitURL();
 
         /** opens the FileOpen dialog and asks for a FileName
             @param  _aFileOpen
