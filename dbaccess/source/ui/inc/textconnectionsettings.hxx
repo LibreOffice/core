@@ -21,40 +21,38 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
 
 #include "propertystorage.hxx"
-
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-
+#include <vcl/weld.hxx>
 #include <memory>
 
 class SfxItemSet;
 namespace dbaui
 {
 
-    class OTextConnectionHelper;
+    class DBOTextConnectionHelper;
 
     // TextConnectionSettingsDialog
-    class TextConnectionSettingsDialog : public ModalDialog
+    class TextConnectionSettingsDialog : public weld::GenericDialogController
     {
     public:
-        TextConnectionSettingsDialog( vcl::Window* _pParent, SfxItemSet& _rItems );
+        TextConnectionSettingsDialog(weld::Window* _pParent, SfxItemSet& rItems);
         virtual ~TextConnectionSettingsDialog() override;
-        virtual void dispose() override;
 
         /** initializes a set of PropertyStorage instances, which are bound to
             the text-connection relevant items in our item sets
         */
         static void bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues );
 
-        virtual short   Execute() override;
+        virtual short run() override;
 
     private:
-        VclPtr<OTextConnectionHelper>               m_pTextConnectionHelper;
-        VclPtr<OKButton>                            m_pOK;
-        SfxItemSet&                                 m_rItems;
+        SfxItemSet& m_rItems;
+
+        std::unique_ptr<weld::Widget> m_xContainer;
+        std::unique_ptr<weld::Button> m_xOK;
+        std::unique_ptr<DBOTextConnectionHelper> m_xTextConnectionHelper;
 
     private:
-        DECL_LINK( OnOK, Button*, void );
+        DECL_LINK(OnOK, weld::Button&, void);
     };
 
 } // namespace dbaui

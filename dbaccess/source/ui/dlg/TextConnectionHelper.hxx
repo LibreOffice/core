@@ -95,7 +95,7 @@ namespace dbaui
     class DBOTextConnectionHelper final
     {
     public:
-        DBOTextConnectionHelper(weld::Container* pParent , const short _nAvailableSections);
+        DBOTextConnectionHelper(weld::Widget* pParent , const short _nAvailableSections);
 
     private:
         OUString    m_aFieldSeparatorList;

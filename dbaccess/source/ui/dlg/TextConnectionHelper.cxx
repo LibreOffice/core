@@ -444,7 +444,7 @@ namespace dbaui
         }
     }
 
-    DBOTextConnectionHelper::DBOTextConnectionHelper(weld::Container* pParent, const short _nAvailableSections)
+    DBOTextConnectionHelper::DBOTextConnectionHelper(weld::Widget* pParent, const short _nAvailableSections)
         : m_aFieldSeparatorList      (DBA_RES(STR_AUTOFIELDSEPARATORLIST))
         , m_aTextSeparatorList       (STR_AUTOTEXTSEPARATORLIST)
         , m_aTextNone                (DBA_RES(STR_AUTOTEXT_FIELD_SEP_NONE))
