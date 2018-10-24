@@ -18,17 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
@@ -39,8 +28,15 @@
  <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapContour" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
@@ -49,6 +45,17 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground"/>
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatGroup"/>
  <toolbar:toolbaritem xlink:href=".uno:EnterGroup"/>
