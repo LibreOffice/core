@@ -719,7 +719,7 @@ namespace drawinglayer
 
                             if(!bDidMerge)
                             {
-                                // no merge aftzer checking all existing data, append as new segment
+                                // no merge after checking all existing data, append as new segment
                                 aRetval.append(aCandidatePartial);
                             }
                         }
