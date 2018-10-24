@@ -106,6 +106,7 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
+    connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute);
 
     // XExecutableDialog
     connect(this, &KDE5FilePicker::setTitleSignal, this, &KDE5FilePicker::setTitleSlot,
@@ -183,6 +184,11 @@ void SAL_CALL KDE5FilePicker::setTitle(const OUString& title)
 
 sal_Int16 SAL_CALL KDE5FilePicker::execute()
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        return Q_EMIT executeSignal();
+    }
+
     if (!_filters.isEmpty())
         _dialog->setNameFilters(_filters);
     if (!_currentFilter.isEmpty())
