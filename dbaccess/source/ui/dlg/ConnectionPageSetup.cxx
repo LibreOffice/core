@@ -87,7 +87,7 @@ namespace dbaui
     }
 
     OConnectionTabPageSetup::OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
-        : DBOConnectionHelper(pParent, _rUIXMLDescription, _rId, _rCoreAttrs)
+        : OConnectionHelper(pParent, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_xHelpText(m_xBuilder->weld_label("helptext"))
         , m_xHeaderText(m_xBuilder->weld_label("header"))
     {
@@ -133,7 +133,7 @@ namespace dbaui
             SetRoadmapStateValue(true);
         }
 
-        DBOConnectionHelper::implInitControls(_rSet, _bSaveValue);
+        OConnectionHelper::implInitControls(_rSet, _bSaveValue);
 
         //! TODO
         //if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )

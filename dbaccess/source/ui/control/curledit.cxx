@@ -26,7 +26,7 @@
 namespace dbaui
 {
 
-DBOConnectionURLEdit::DBOConnectionURLEdit(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::Label> xForcedPrefix)
+OConnectionURLEdit::OConnectionURLEdit(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::Label> xForcedPrefix)
     : m_pTypeCollection(nullptr)
     , m_bShowPrefix(false)
     , m_xEntry(std::move(xEntry))
@@ -34,27 +34,27 @@ DBOConnectionURLEdit::DBOConnectionURLEdit(std::unique_ptr<weld::Entry> xEntry, 
 {
 }
 
-DBOConnectionURLEdit::~DBOConnectionURLEdit()
+OConnectionURLEdit::~OConnectionURLEdit()
 {
 }
 
-void DBOConnectionURLEdit::SetTextNoPrefix(const OUString& _rText)
+void OConnectionURLEdit::SetTextNoPrefix(const OUString& _rText)
 {
     m_xEntry->set_text(_rText);
 }
 
-OUString DBOConnectionURLEdit::GetTextNoPrefix() const
+OUString OConnectionURLEdit::GetTextNoPrefix() const
 {
     return m_xEntry->get_text();
 }
 
-void DBOConnectionURLEdit::SetText(const OUString& _rStr)
+void OConnectionURLEdit::SetText(const OUString& _rStr)
 {
     Selection aNoSelection(0,0);
     SetText(_rStr, aNoSelection);
 }
 
-void DBOConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
+void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
 {
     m_xForcedPrefix->show(m_bShowPrefix);
 
@@ -77,12 +77,12 @@ void DBOConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rN
     m_xEntry->set_text(sNewText);
 }
 
-OUString DBOConnectionURLEdit::GetText() const
+OUString OConnectionURLEdit::GetText() const
 {
     return m_xForcedPrefix->get_label() + m_xEntry->get_text();
 }
 
-void DBOConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
+void OConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
     m_xForcedPrefix->show(m_bShowPrefix);
