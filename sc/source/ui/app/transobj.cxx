@@ -693,6 +693,12 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             else
                 rDestDoc.SetColWidth( nCol, 0, m_pDoc->GetColWidth( nCol, nSrcTab ) );
 
+        if (nStartY > 0)
+        {
+            // Set manual height for all previous rows so we can ensure
+            // that visible area will not change due to autoheight
+            rDestDoc.SetManualHeight(0, nStartY - 1, 0, true);
+        }
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
             if ( m_pDoc->RowHidden(nRow, nSrcTab) )
