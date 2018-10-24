@@ -23,7 +23,6 @@
 #include "swdllapi.h"
 
 class SwView;
-namespace vcl { class Window; }
 class SwWrtShell;
 struct SwConversionArgs;
 class SwPaM;

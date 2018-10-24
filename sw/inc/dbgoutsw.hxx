@@ -41,7 +41,6 @@ class SwUndo;
 class SwRect;
 class SwFrameFormat;
 class SwFrameFormats;
-class SwNodes;
 class SwNumRuleTable;
 class SwNumRule;
 class SwOutlineNodes;

@@ -169,6 +169,9 @@ def processIWYUOutput(iwyuOutput, moduleRules):
             match = re.match("- (.*;(?: })*)*  // lines (.*)-.*", line)
             if match:
                 fwdDecl = match.group(1)
+                if fwdDecl.endswith(";"):
+                    # Remove trailing semicolon.
+                    fwdDecl = fwdDecl[:-1]
                 lineno = match.group(2)
                 if not ignoreRemoval(fwdDecl, toAdd, currentFileName, moduleRules):
                     toRemove.append("%s:%s: %s" % (currentFileName, lineno, fwdDecl))

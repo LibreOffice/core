@@ -38,7 +38,6 @@ class SwFlyDrawObj;
 class SwRect;
 class SwDrawContact;
 struct SwPosition;
-class SwIndex;
 class SdrTextObj;
 class SwContact;
 
