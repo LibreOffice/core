@@ -15,7 +15,7 @@
 
 namespace apitest {
 
-class XElementAccess
+class OOO_DLLPUBLIC_TEST XElementAccess
 {
 public:
     XElementAccess(css::uno::Type const & rType): maType(rType) {}

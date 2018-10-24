@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/sheetcellranges.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetcellrangecontainer.hxx>
@@ -32,6 +33,7 @@ namespace sc_apitest {
 
 class ScCellRangesObj : public CalcUnoApiTest,
                         public apitest::SheetCellRanges,
+                        public apitest::XElementAccess,
                         public apitest::XFormulaQuery,
                         public apitest::XIndent,
                         public apitest::XSheetCellRangeContainer,
@@ -51,6 +53,10 @@ public:
 
     // SheetCellRanges
     CPPUNIT_TEST(testSheetCellRangesProperties);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);

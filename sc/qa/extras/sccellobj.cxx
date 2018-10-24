@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/sheetcell.hxx>
 #include <test/table/xcell.hxx>
 #include <test/sheet/xcelladdressable.hxx>
@@ -35,6 +36,7 @@ class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
                                          public apitest::XCell,
                                          public apitest::XCellAddressable,
                                          public apitest::XColumnRowRange,
+                                         public apitest::XElementAccess,
                                          public apitest::XFormulaQuery,
                                          public apitest::XIndent,
                                          public apitest::XSheetAnnotationAnchor
@@ -64,6 +66,10 @@ public:
     // XColumnRowRange
     CPPUNIT_TEST(testGetColumns);
     CPPUNIT_TEST(testGetRows);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
