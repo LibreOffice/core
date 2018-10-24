@@ -66,6 +66,39 @@ namespace dbaui
         bool canAdvance() const;
     };
 
+    class DBMySQLNativeSettings
+    {
+    private:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Widget> m_xContainer;
+        std::unique_ptr<weld::Label> m_xDatabaseNameLabel;
+        std::unique_ptr<weld::Entry> m_xDatabaseName;
+        std::unique_ptr<weld::RadioButton> m_xHostPortRadio;
+        std::unique_ptr<weld::RadioButton> m_xSocketRadio;
+        std::unique_ptr<weld::RadioButton> m_xNamedPipeRadio;
+        std::unique_ptr<weld::Label> m_xHostNameLabel;
+        std::unique_ptr<weld::Entry> m_xHostName;
+        std::unique_ptr<weld::Label> m_xPortLabel;
+        std::unique_ptr<weld::SpinButton> m_xPort;
+        std::unique_ptr<weld::Label> m_xDefaultPort;
+        std::unique_ptr<weld::Entry> m_xSocket;
+        std::unique_ptr<weld::Entry> m_xNamedPipe;
+        Link<void*,void> m_aControlModificationLink;
+        DECL_LINK(RadioToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(SpinModifyHdl, weld::SpinButton&, void);
+        DECL_LINK(EditModifyHdl, weld::Entry&, void);
+
+    public:
+        DBMySQLNativeSettings(weld::Widget* pParent, const Link<void*,void>& rControlModificationLink);
+        void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
+        void fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
+
+        bool FillItemSet( SfxItemSet* rCoreAttrs );
+        void implInitControls( const SfxItemSet& _rSet );
+
+        bool canAdvance() const;
+    };
+
 } // namespace dbaui
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINCONTROLS_HXX

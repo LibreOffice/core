@@ -627,19 +627,17 @@ namespace dbaui
     }
 
     // MySQLNativePage
-    MySQLNativePage::MySQLNativePage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, "MysqlNativePage", "dbaccess/ui/mysqlnativepage.ui", _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
-        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), LINK(this,OGenericAdministrationPage,OnControlModified)) )
+    MySQLNativePage::MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        , m_xMySQLSettingsContainer(m_xBuilder->weld_widget("MySQLSettingsContainer"))
+        , m_aMySQLSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified))
+        , m_xSeparator1(m_xBuilder->weld_label("connectionheader"))
+        , m_xSeparator2(m_xBuilder->weld_label("userheader"))
+        , m_xUserNameLabel(m_xBuilder->weld_label("usernamelabel"))
+        , m_xUserName(m_xBuilder->weld_entry("username"))
+        , m_xPasswordRequired(m_xBuilder->weld_check_button("passwordrequired"))
     {
-        get(m_pSeparator1, "connectionheader");
-        get(m_pSeparator2, "userheader");
-        get(m_pUserNameLabel, "usernamelabel");
-        get(m_pUserName, "username");
-        get(m_pPasswordRequired, "passwordrequired");
-
-        m_pUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
-
-        m_aMySQLSettings->Show();
+        m_xUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
     }
 
     MySQLNativePage::~MySQLNativePage()
@@ -647,48 +645,38 @@ namespace dbaui
         disposeOnce();
     }
 
-    void MySQLNativePage::dispose()
-    {
-        m_aMySQLSettings.disposeAndClear();
-        m_pSeparator1.clear();
-        m_pSeparator2.clear();
-        m_pUserNameLabel.clear();
-        m_pUserName.clear();
-        m_pPasswordRequired.clear();
-        OCommonBehaviourTabPage::dispose();
-    }
-
     void MySQLNativePage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillControls( _rControlList );
-        m_aMySQLSettings->fillControls( _rControlList );
+        DBOCommonBehaviourTabPage::fillControls( _rControlList );
+        m_aMySQLSettings.fillControls( _rControlList );
 
-        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pUserName));
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pPasswordRequired));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xUserName.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xPasswordRequired.get()));
     }
+
     void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillWindows( _rControlList );
-        m_aMySQLSettings->fillWindows( _rControlList);
+        DBOCommonBehaviourTabPage::fillWindows( _rControlList );
+        m_aMySQLSettings.fillWindows( _rControlList);
 
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pSeparator1));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pSeparator2));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pUserNameLabel));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator1.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator2.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xUserNameLabel.get()));
     }
 
     bool MySQLNativePage::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
+        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet( _rSet );
 
-        bChangedSomething |= m_aMySQLSettings->FillItemSet( _rSet );
+        bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
-        if ( m_pUserName->IsValueChangedFromSaved() )
+        if (m_xUserName->get_value_changed_from_saved())
         {
-            _rSet->Put( SfxStringItem( DSID_USER, m_pUserName->GetText() ) );
+            _rSet->Put( SfxStringItem( DSID_USER, m_xUserName->get_text() ) );
             _rSet->Put( SfxStringItem( DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
-        fillBool(*_rSet,m_pPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,m_xPasswordRequired.get(),DSID_PASSWORDREQUIRED,false,bChangedSomething);
 
         return bChangedSomething;
     }
@@ -698,19 +686,19 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_aMySQLSettings->implInitControls( _rSet );
+        m_aMySQLSettings.implInitControls( _rSet );
 
         const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
         const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
 
         if ( bValid )
         {
-            m_pUserName->SetText(pUidItem->GetValue());
-            m_pUserName->ClearModifyFlag();
-            m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
+            m_xUserName->set_text(pUidItem->GetValue());
+            m_xUserName->save_value();
+            m_xPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
         }
 
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
@@ -718,9 +706,9 @@ namespace dbaui
         return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create(pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        return VclPtr<MySQLNativePage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<MySQLNativePage>::Create(pParent, *pAttrSet);
     }
 
     VclPtr<SfxTabPage> ODriversSettings::CreateOracleJDBC(TabPageParent pParent, const SfxItemSet* _rAttrSet)
