@@ -55,6 +55,6 @@ public class LocalDocumentsProvider implements IDocumentProvider {
 
     @Override
     public boolean checkProviderAvailability(Context context) {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 }
