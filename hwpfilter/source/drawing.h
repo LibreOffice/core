@@ -363,13 +363,13 @@ static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(void)
         }
         if (prev == nullptr)
         {
-            prev = hdo.get();
             head = std::move(hdo);
+            prev = head.get();
         }
         else
         {
-            prev = hdo.get();
-            prev->next = std::move( hdo );
+            prev->next = std::move(hdo);
+            prev = prev->next.get();
         }
     }
     while (link_info & HDOFILE_HAS_NEXT);
