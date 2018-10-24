@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_b0e88116",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-10-24T21:33:52Z",
+      "side": 1,
+      "message": "I’d kep the FIXME comment, we should really maintain the constness of the GlyphItem and eventually drop this hack.",
+      "revId": "e368d0a545f96f8eab6959e18d87e2a24a13b227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
