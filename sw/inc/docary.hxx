@@ -30,7 +30,6 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 
-#include "charfmt.hxx"
 #include "fmtcol.hxx"
 #include "frmfmt.hxx"
 #include "section.hxx"

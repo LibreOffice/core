@@ -17,6 +17,8 @@ blacklist:
     - numrule.hxx
     # tox.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
     - tox.hxx
+    # section.hxx brings in SwSectionFormat, which is needed by SwSectionFormats, as SwFormatsModifyBase's type param has to be complete
+    - section.hxx
     sw/inc/docfac.hxx:
     # Complete type is needed by rtl::Reference<SwDoc>.
     - doc.hxx
@@ -35,6 +37,8 @@ blacklist:
     sw/inc/swtypes.hxx:
     - o3tl/typed_flags_set.hxx
     sw/inc/doc.hxx:
+    - o3tl/deleter.hxx
+    sw/inc/docsh.hxx:
     - o3tl/deleter.hxx
     sw/inc/list.hxx:
     - o3tl/deleter.hxx
@@ -55,6 +59,8 @@ blacklist:
     sw/inc/tox.hxx:
     - o3tl/typed_flags_set.hxx
     sw/inc/undobj.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/itabenum.hxx:
     - o3tl/typed_flags_set.hxx
     sw/inc/unosett.hxx:
     # sw::UnoImplPtr typedef
@@ -240,6 +246,7 @@ blacklist:
     - class SwUpdateAttr
     - class SfxBoolItem
     - class SvxCharSetColorItem
+    - class SvxColorItem
     # used in extern declaration
     - struct SfxItemInfo
     sw/inc/textboxhelper.hxx:
@@ -252,3 +259,8 @@ blacklist:
     # complete type is wanted
     - com/sun/star/awt/XBitmap.hpp
     - com/sun/star/text/XTextColumns.hpp
+    sw/inc/pagepreviewlayout.hxx:
+    - vector
+    sw/inc/shellio.hxx:
+    - o3tl/deleter.hxx
+    - o3tl/typed_flags_set.hxx

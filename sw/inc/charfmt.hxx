@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_CHARFMT_HXX
 
 #include "format.hxx"
+#include "hintids.hxx"
 
 class SW_DLLPUBLIC SwCharFormat : public SwFormat
 {

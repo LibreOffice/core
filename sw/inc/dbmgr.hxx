@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_DBMGR_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/link.hxx>
 #include <tools/solar.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/util/Date.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/weld.hxx>
 
 #include <memory>
 #include <vector>
@@ -77,7 +75,6 @@ namespace weld {
 class SwView;
 class SwWrtShell;
 class ListBox;
-class Button;
 class SvNumberFormatter;
 class SwXMailMerge;
 class SwMailMergeConfigItem;

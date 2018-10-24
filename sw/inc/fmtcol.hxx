@@ -21,6 +21,7 @@
 
 #include "swdllapi.h"
 #include "format.hxx"
+#include "hintids.hxx"
 #include <rtl/ustring.hxx>
 
 #include <vector>

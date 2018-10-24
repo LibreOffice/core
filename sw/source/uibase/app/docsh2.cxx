@@ -21,7 +21,8 @@
 
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
-
+#include <ooo/vba/XSinkCaller.hpp>
+#include <ooo/vba/word/XDocument.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 

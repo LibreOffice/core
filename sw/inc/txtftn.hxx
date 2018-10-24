@@ -19,9 +19,8 @@
 #ifndef INCLUDED_SW_INC_TXTFTN_HXX
 #define INCLUDED_SW_INC_TXTFTN_HXX
 
+#include <rtl/ustring.hxx>
 #include "txatbase.hxx"
-
-namespace rtl { class OUString; }
 
 class SwNodeIndex;
 class SwTextNode;

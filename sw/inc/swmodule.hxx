@@ -31,7 +31,6 @@
 #include "swdllapi.h"
 #include "shellid.hxx"
 #include "fldupde.hxx"
-#include <ooo/vba/XSinkCaller.hpp>
 
 class Color;
 class SfxItemSet;
@@ -69,6 +68,7 @@ namespace com{ namespace sun{ namespace star{ namespace scanner{
 }}}}
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XLanguageGuessing; } } } }
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XLinguServiceEventListener; } } } }
+namespace ooo { namespace vba { class XSinkCaller; } }
 
 class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {

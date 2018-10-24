@@ -29,7 +29,6 @@ class SwAsyncRetrieveInputStreamThreadConsumer;
 
 class SwGrfFormatColl;
 class SwDoc;
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
 
 // SwGrfNode
 class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
