@@ -11,24 +11,28 @@
 #define INCLUDED_TEST_CONTAINER_XELEMENTACCESS_HXX
 
 #include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace apitest {
+#include <test/testdllapi.hxx>
 
-class XElementAccess
+namespace apitest
+{
+class OOO_DLLPUBLIC_TEST XElementAccess
 {
 public:
     XElementAccess(css::uno::Type const & rType): maType(rType) {}
 
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+
     void testGetElementType();
     void testHasElements();
 
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
-
-    virtual ~XElementAccess() {}
-
 private:
     css::uno::Type const maType;
+
+protected:
+    ~XElementAccess() {}
 };
 
 }
