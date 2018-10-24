@@ -87,22 +87,22 @@ class SwIndexMarkPane
     VclPtr<PushButton>     m_pPrevBT;
     VclPtr<PushButton>     m_pNextBT;
 
-    OUString        aOrgStr;
-    bool            bDel;
-    bool const      bNewMark;
-    bool            bSelected;
+    OUString        m_aOrgStr;
+    bool            m_bDel;
+    bool const      m_bNewMark;
+    bool            m_bSelected;
 
-    bool            bPhoneticED0_ChangedByUser;
-    bool            bPhoneticED1_ChangedByUser;
-    bool            bPhoneticED2_ChangedByUser;
-    LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
-    bool            bIsPhoneticReadingEnabled; //this value states whether phonetic reading is enabled in principle dependent of global cjk settings and language of current entry
+    bool            m_bPhoneticED0_ChangedByUser;
+    bool            m_bPhoneticED1_ChangedByUser;
+    bool            m_bPhoneticED2_ChangedByUser;
+    LanguageType    m_nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
+    bool            m_bIsPhoneticReadingEnabled; //this value states whether phonetic reading is enabled in principle dependent of global cjk settings and language of current entry
     css::uno::Reference< css::i18n::XExtendedIndexEntrySupplier >
-                    xExtendedIndexEntrySupplier;
+                    m_xExtendedIndexEntrySupplier;
 
     std::unique_ptr<SwTOXMgr>
-                    pTOXMgr;
-    SwWrtShell*     pSh;
+                    m_pTOXMgr;
+    SwWrtShell*     m_pSh;
 
     void            Apply();
     void            InitControls();

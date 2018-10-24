@@ -77,15 +77,15 @@ using namespace ::comphelper;
 SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     SwWrtShell& rWrtShell)
     : m_rDialog(rDialog)
-    , bDel(false)
-    , bNewMark(bNewDlg)
-    , bSelected(false)
-    , bPhoneticED0_ChangedByUser(false)
-    , bPhoneticED1_ChangedByUser(false)
-    , bPhoneticED2_ChangedByUser(false)
-    , nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
-    , bIsPhoneticReadingEnabled(false)
-    , pSh(&rWrtShell)
+    , m_bDel(false)
+    , m_bNewMark(bNewDlg)
+    , m_bSelected(false)
+    , m_bPhoneticED0_ChangedByUser(false)
+    , m_bPhoneticED1_ChangedByUser(false)
+    , m_bPhoneticED2_ChangedByUser(false)
+    , m_nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
+    , m_bIsPhoneticReadingEnabled(false)
+    , m_pSh(&rWrtShell)
 {
     rDialog.get(m_pFrame, "frame");
     rDialog.get(m_pTypeFT, "typeft");
@@ -121,7 +121,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     {
         uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
 
-        xExtendedIndexEntrySupplier = i18n::IndexEntrySupplier::create(xContext);
+        m_xExtendedIndexEntrySupplier = i18n::IndexEntrySupplier::create(xContext);
 
         m_pPhoneticFT0->Show();
         m_pPhoneticED0->Show();
@@ -131,7 +131,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
         m_pPhoneticED2->Show();
     }
 
-    rDialog.SetText( SwResId( bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
+    rDialog.SetText( SwResId( m_bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
 
     m_pDelBT->SetClickHdl(LINK(this,SwIndexMarkPane,        DelHdl));
     m_pPrevBT->SetClickHdl(LINK(this,SwIndexMarkPane,       PrevHdl));
@@ -150,7 +150,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     m_pPhoneticED2->SetModifyHdl(LINK(this,SwIndexMarkPane, PhoneticEDModifyHdl));
     m_pSyncED->SetClickHdl(LINK(this, SwIndexMarkPane, SyncSelectionHdl));
 
-    if(bNewMark)
+    if(m_bNewMark)
     {
         m_pDelBT->Hide();
         rDialog.get(m_pOKBT, "insert");
@@ -169,9 +169,9 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
 // Newly initialise controls with the new selection
 void SwIndexMarkPane::InitControls()
 {
-    OSL_ENSURE(pSh && pTOXMgr, "no shell?");
+    OSL_ENSURE(m_pSh && m_pTOXMgr, "no shell?");
     // contents index
-    const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT);
+    const SwTOXType* pType = m_pTOXMgr->GetTOXType(TOX_CONTENT);
     OSL_ENSURE(pType, "No directory type !!");
     OUString sTmpTypeSelection;
     if(m_pTypeDCB->GetSelectedEntryCount())
@@ -180,19 +180,19 @@ void SwIndexMarkPane::InitControls()
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
     // keyword index
-    pType = pTOXMgr->GetTOXType(TOX_INDEX);
+    pType = m_pTOXMgr->GetTOXType(TOX_INDEX);
     OSL_ENSURE(pType, "No directory type !!");
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
     // user index
-    sal_uInt16 nCount = pSh->GetTOXTypeCount(TOX_USER);
+    sal_uInt16 nCount = m_pSh->GetTOXTypeCount(TOX_USER);
     for( sal_uInt16 i = 0; i < nCount; ++i )
-        m_pTypeDCB->InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
+        m_pTypeDCB->InsertEntry( m_pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
     // read keywords primary
     {
         std::vector<OUString> aArr;
-        pSh->GetTOIKeys(TOI_PRIMARY, aArr);
+        m_pSh->GetTOIKeys(TOI_PRIMARY, aArr);
         std::sort(aArr.begin(), aArr.end());
         auto last = std::unique(aArr.begin(), aArr.end());
         for (auto it = aArr.begin(); it != last; ++it)
@@ -202,7 +202,7 @@ void SwIndexMarkPane::InitControls()
     // read keywords secondary
     {
         std::vector<OUString> aArr;
-        pSh->GetTOIKeys( TOI_SECONDARY, aArr );
+        m_pSh->GetTOIKeys( TOI_SECONDARY, aArr );
         std::sort(aArr.begin(), aArr.end());
         auto last = std::unique(aArr.begin(), aArr.end());
         for (auto it = aArr.begin(); it != last; ++it)
@@ -212,29 +212,29 @@ void SwIndexMarkPane::InitControls()
     UpdateLanguageDependenciesForPhoneticReading();
 
     // current entry
-    const SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
-    if( pMark && !bNewMark)
+    const SwTOXMark* pMark = m_pTOXMgr->GetCurTOXMark();
+    if( pMark && !m_bNewMark)
     {
         // Controls-Handling
 
         // only if there are more than one
         // if equal it lands at the same entry
-        pSh->SttCursorMove();
+        m_pSh->SttCursorMove();
 
         const SwTOXMark* pMoveMark;
         bool bShow = false;
 
-        pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_PRV );
+        pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_PRV );
         if( pMoveMark != pMark )
         {
-            pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
             bShow = true;
         }
         m_pPrevBT->Enable( pMoveMark != pMark );
-        pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_NXT );
+        pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_NXT );
         if( pMoveMark != pMark )
         {
-            pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
             bShow = true;
         }
         m_pNextBT->Enable( pMoveMark != pMark );
@@ -245,17 +245,17 @@ void SwIndexMarkPane::InitControls()
             bShow = false;
         }
 
-        pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
+        pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
         if( pMoveMark != pMark )
         {
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
             bShow = true;
         }
         m_pPrevSameBT->Enable( pMoveMark != pMark );
-        pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
+        pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
         if( pMoveMark != pMark )
         {
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
             bShow = true;
         }
         m_pNextSameBT->Enable( pMoveMark != pMark );
@@ -264,7 +264,7 @@ void SwIndexMarkPane::InitControls()
             m_pNextSameBT->Show();
             m_pPrevSameBT->Show();
         }
-        pSh->EndCursorMove();
+        m_pSh->EndCursorMove();
 
         m_pTypeFT->Show();
 
@@ -275,19 +275,19 @@ void SwIndexMarkPane::InitControls()
     }
     else
     {   // display current selection (first element) ????
-        if (pSh->GetCursorCnt() < 2)
+        if (m_pSh->GetCursorCnt() < 2)
         {
-            bSelected = !pSh->HasSelection();
-            aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
-            m_pEntryED->SetText(aOrgStr);
+            m_bSelected = !m_pSh->HasSelection();
+            m_aOrgStr = m_pSh->GetView().GetSelectionTextParam(true, false);
+            m_pEntryED->SetText(m_aOrgStr);
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const FrameTypeFlags nFrameType = pSh->GetFrameType(nullptr,true);
+            const FrameTypeFlags nFrameType = m_pSh->GetFrameType(nullptr,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
-            m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
+            m_pApplyToAllCB->Enable(!m_aOrgStr.isEmpty() &&
                 !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
@@ -305,20 +305,20 @@ void SwIndexMarkPane::InitControls()
 void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
 {
     //no phonetic reading if no global cjk support
-    if( !xExtendedIndexEntrySupplier.is() )
+    if( !m_xExtendedIndexEntrySupplier.is() )
     {
-        bIsPhoneticReadingEnabled = false;
+        m_bIsPhoneticReadingEnabled = false;
         return;
     }
-    bIsPhoneticReadingEnabled = true;
+    m_bIsPhoneticReadingEnabled = true;
 
     //get the current language
-    if(!bNewMark) //if dialog is opened to iterate existing marks
+    if(!m_bNewMark) //if dialog is opened to iterate existing marks
     {
-        OSL_ENSURE(pTOXMgr, "need TOXMgr");
-        if(!pTOXMgr)
+        OSL_ENSURE(m_pTOXMgr, "need TOXMgr");
+        if(!m_pTOXMgr)
             return;
-        SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
+        SwTOXMark* pMark = m_pTOXMgr->GetCurTOXMark();
         OSL_ENSURE(pMark, "need current SwTOXMark");
         if(!pMark)
             return;
@@ -331,54 +331,54 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
         if(!pTextNode)
             return;
         sal_Int32 nTextIndex = pTextTOXMark->GetStart();
-        nLangForPhoneticReading = pTextNode->GetLang( nTextIndex );
+        m_nLangForPhoneticReading = pTextNode->GetLang( nTextIndex );
     }
     else //if dialog is opened to create a new mark
     {
         sal_uInt16 nWhich;
-        switch(pSh->GetScriptType())
+        switch(m_pSh->GetScriptType())
         {
             case SvtScriptType::ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
             case SvtScriptType::COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
             default:nWhich = RES_CHRATR_LANGUAGE; break;
         }
-        SfxItemSet aLangSet(pSh->GetAttrPool(), {{nWhich, nWhich}});
-        pSh->GetCurAttr(aLangSet);
-        nLangForPhoneticReading = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
+        SfxItemSet aLangSet(m_pSh->GetAttrPool(), {{nWhich, nWhich}});
+        m_pSh->GetCurAttr(aLangSet);
+        m_nLangForPhoneticReading = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
     }
 
 }
 
 OUString SwIndexMarkPane::GetDefaultPhoneticReading( const OUString& rText )
 {
-    if( !bIsPhoneticReadingEnabled )
+    if( !m_bIsPhoneticReadingEnabled )
         return OUString();
 
-    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag::convertToLocale( nLangForPhoneticReading ));
+    return m_xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag::convertToLocale( m_nLangForPhoneticReading ));
 }
 
 void    SwIndexMarkPane::Activate()
 {
     // display current selection (first element) ????
-    if (bNewMark)
+    if (m_bNewMark)
     {
-        m_pSyncED->Enable(pSh->GetCursorCnt() < 2);
+        m_pSyncED->Enable(m_pSh->GetCursorCnt() < 2);
     }
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, SyncSelectionHdl, Button*, void)
 {
-    bSelected = !pSh->HasSelection();
-    aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
-    m_pEntryED->SetText(aOrgStr);
+    m_bSelected = !m_pSh->HasSelection();
+    m_aOrgStr = m_pSh->GetView().GetSelectionTextParam(true, false);
+    m_pEntryED->SetText(m_aOrgStr);
 
     //to include all equal entries may only be allowed in the body and even there
     //only when a simple selection exists
-    const FrameTypeFlags nFrameType = pSh->GetFrameType(nullptr,true);
+    const FrameTypeFlags nFrameType = m_pSh->GetFrameType(nullptr,true);
     m_pApplyToAllCB->Show();
     m_pSearchCaseSensitiveCB->Show();
     m_pSearchCaseWordOnlyCB->Show();
-    m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
+    m_pApplyToAllCB->Enable(!m_aOrgStr.isEmpty() &&
         !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
     SearchTypeHdl(m_pApplyToAllCB);
     ModifyHdl(m_pEntryED);
@@ -388,38 +388,38 @@ IMPL_LINK_NOARG(SwIndexMarkPane, SyncSelectionHdl, Button*, void)
 void SwIndexMarkPane::Apply()
 {
     InsertUpdate();
-    if(bSelected)
-        pSh->ResetSelect(nullptr, false);
+    if(m_bSelected)
+        m_pSh->ResetSelect(nullptr, false);
 }
 
 // apply changes
 void SwIndexMarkPane::InsertUpdate()
 {
-    pSh->StartUndo(bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
-    pSh->StartAllAction();
+    m_pSh->StartUndo(m_bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
+    m_pSh->StartAllAction();
     SwRewriter aRewriter;
 
-    if( bNewMark )
+    if( m_bNewMark )
     {
         InsertMark();
 
-        if ( pTOXMgr->GetCurTOXMark())
-            aRewriter.AddRule(UndoArg1, pTOXMgr->GetCurTOXMark()->GetText());
+        if ( m_pTOXMgr->GetCurTOXMark())
+            aRewriter.AddRule(UndoArg1, m_pTOXMgr->GetCurTOXMark()->GetText());
     }
-    else if( !pSh->HasReadonlySel() )
+    else if( !m_pSh->HasReadonlySel() )
     {
-        if ( pTOXMgr->GetCurTOXMark())
+        if ( m_pTOXMgr->GetCurTOXMark())
             aRewriter.AddRule(UndoArg1,
-                              pTOXMgr->GetCurTOXMark()->GetText());
+                              m_pTOXMgr->GetCurTOXMark()->GetText());
 
-        if( bDel )
-            pTOXMgr->DeleteTOXMark();
-        else if( pTOXMgr->GetCurTOXMark() )
+        if( m_bDel )
+            m_pTOXMgr->DeleteTOXMark();
+        else if( m_pTOXMgr->GetCurTOXMark() )
             UpdateMark();
     }
 
-    pSh->EndAllAction();
-    pSh->EndUndo(bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
+    m_pSh->EndAllAction();
+    m_pSh->EndUndo(m_bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
 
     if((nTypePos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectedEntry())) == LISTBOX_ENTRY_NOTFOUND)
         nTypePos = 0;
@@ -481,33 +481,33 @@ void SwIndexMarkPane::InsertMark()
             aDesc.SetTOUName(m_pTypeDCB->GetSelectedEntry());
         }
     }
-    if (aOrgStr != m_pEntryED->GetText())
+    if (m_aOrgStr != m_pEntryED->GetText())
         aDesc.SetAltStr(m_pEntryED->GetText());
     bool bApplyAll = m_pApplyToAllCB->IsChecked();
     bool bWordOnly = m_pSearchCaseWordOnlyCB->IsChecked();
     bool bCaseSensitive = m_pSearchCaseSensitiveCB->IsChecked();
 
-    pSh->StartAllAction();
+    m_pSh->StartAllAction();
     // all equal strings have to be selected here so that the
     // entry is applied to all equal strings
     if(bApplyAll)
     {
-        lcl_SelectSameStrings(*pSh, bWordOnly, bCaseSensitive);
+        lcl_SelectSameStrings(*m_pSh, bWordOnly, bCaseSensitive);
     }
     aDesc.SetLevel(nLevel);
-    SwTOXMgr aMgr(pSh);
+    SwTOXMgr aMgr(m_pSh);
     aMgr.InsertTOXMark(aDesc);
     if(bApplyAll)
-        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
-    pSh->EndAllAction();
+    m_pSh->EndAllAction();
 }
 
 // update mark
 void SwIndexMarkPane::UpdateMark()
 {
     OUString  aAltText(m_pEntryED->GetText());
-    OUString* pAltText = aOrgStr != m_pEntryED->GetText() ? &aAltText : nullptr;
+    OUString* pAltText = m_aOrgStr != m_pEntryED->GetText() ? &aAltText : nullptr;
     //empty alternative texts are not allowed
     if(pAltText && pAltText->isEmpty())
         return;
@@ -540,7 +540,7 @@ void SwIndexMarkPane::UpdateMark()
         aDesc.SetPhoneticReadingOfSecKey(m_pPhoneticED2->GetText());
     }
     aDesc.SetMainEntry(m_pMainEntryCB->IsVisible() && m_pMainEntryCB->IsChecked());
-    pTOXMgr->UpdateTOXMark(aDesc);
+    m_pTOXMgr->UpdateTOXMark(aDesc);
 }
 
 // insert new keys
@@ -612,13 +612,13 @@ IMPL_LINK( SwIndexMarkPane, InsertHdl, Button *, pButton, void )
 {
     Apply();
     //close the dialog if only one entry is available
-    if(!bNewMark && !m_pPrevBT->IsVisible() && !m_pNextBT->IsVisible())
+    if(!m_bNewMark && !m_pPrevBT->IsVisible() && !m_pNextBT->IsVisible())
         CloseHdl(pButton);
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl, Button*, void)
 {
-    if(bNewMark)
+    if(m_bNewMark)
     {
         SfxViewFrame::Current()->GetDispatcher()->Execute(FN_INSERT_IDX_ENTRY_DLG,
                     SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
@@ -689,12 +689,12 @@ void SwIndexMarkPane::ModifyHdl(Control const * pBox)
             m_pKey2DCB->Enable(bKey2Enable);
             m_pKey2FT->Enable(bKey2Enable);
         }
-        m_pPhoneticFT0->Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
-        m_pPhoneticED0->Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
-        m_pPhoneticFT1->Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
-        m_pPhoneticED1->Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
-        m_pPhoneticFT2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
-        m_pPhoneticED2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
+        m_pPhoneticFT0->Enable(bKeyEnable&&bEntryHasText&&m_bIsPhoneticReadingEnabled);
+        m_pPhoneticED0->Enable(bKeyEnable&&bEntryHasText&&m_bIsPhoneticReadingEnabled);
+        m_pPhoneticFT1->Enable(bKeyEnable&&bKey1HasText&&m_bIsPhoneticReadingEnabled);
+        m_pPhoneticED1->Enable(bKeyEnable&&bKey1HasText&&m_bIsPhoneticReadingEnabled);
+        m_pPhoneticFT2->Enable(bKeyEnable&&bKey2HasText&&m_bIsPhoneticReadingEnabled);
+        m_pPhoneticED2->Enable(bKeyEnable&&bKey2HasText&&m_bIsPhoneticReadingEnabled);
     }
     else //m_pEntryED  !!m_pEntryED is not a ListBox but a Edit
     {
@@ -702,53 +702,53 @@ void SwIndexMarkPane::ModifyHdl(Control const * pBox)
         if(!bHasText)
         {
             m_pPhoneticED0->SetText(OUString());
-            bPhoneticED0_ChangedByUser = false;
+            m_bPhoneticED0_ChangedByUser = false;
         }
-        else if(!bPhoneticED0_ChangedByUser)
+        else if(!m_bPhoneticED0_ChangedByUser)
             m_pPhoneticED0->SetText(GetDefaultPhoneticReading(m_pEntryED->GetText()));
 
-        m_pPhoneticFT0->Enable(bHasText&&bIsPhoneticReadingEnabled);
-        m_pPhoneticED0->Enable(bHasText&&bIsPhoneticReadingEnabled);
+        m_pPhoneticFT0->Enable(bHasText&&m_bIsPhoneticReadingEnabled);
+        m_pPhoneticED0->Enable(bHasText&&m_bIsPhoneticReadingEnabled);
     }
-    m_pOKBT->Enable(!pSh->HasReadonlySel() &&
-        (!m_pEntryED->GetText().isEmpty() || pSh->GetCursorCnt(false)));
+    m_pOKBT->Enable(!m_pSh->HasReadonlySel() &&
+        (!m_pEntryED->GetText().isEmpty() || m_pSh->GetCursorCnt(false)));
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NextHdl, Button*, void)
 {
     InsertUpdate();
-    pTOXMgr->NextTOXMark();
+    m_pTOXMgr->NextTOXMark();
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NextSameHdl, Button*, void)
 {
     InsertUpdate();
-    pTOXMgr->NextTOXMark(true);
+    m_pTOXMgr->NextTOXMark(true);
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, PrevHdl, Button*, void)
 {
     InsertUpdate();
-    pTOXMgr->PrevTOXMark();
+    m_pTOXMgr->PrevTOXMark();
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, PrevSameHdl, Button*, void)
 {
     InsertUpdate();
-    pTOXMgr->PrevTOXMark(true);
+    m_pTOXMgr->PrevTOXMark(true);
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl, Button*, void)
 {
-    bDel = true;
+    m_bDel = true;
     InsertUpdate();
-    bDel = false;
+    m_bDel = false;
 
-    if(pTOXMgr->GetCurTOXMark())
+    if(m_pTOXMgr->GetCurTOXMark())
         UpdateDialog();
     else
     {
@@ -760,16 +760,16 @@ IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl, Button*, void)
 // renew dialog view
 void SwIndexMarkPane::UpdateDialog()
 {
-    OSL_ENSURE(pSh && pTOXMgr, "no shell?");
-    SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
+    OSL_ENSURE(m_pSh && m_pTOXMgr, "no shell?");
+    SwTOXMark* pMark = m_pTOXMgr->GetCurTOXMark();
     OSL_ENSURE(pMark, "no current marker");
     if(!pMark)
         return;
 
     SwViewShell::SetCareWin(&m_rDialog);
 
-    aOrgStr = pMark->GetText();
-    m_pEntryED->SetText(aOrgStr);
+    m_aOrgStr = pMark->GetText();
+    m_pEntryED->SetText(m_aOrgStr);
 
     // set index type
     bool bLevelEnable = true,
@@ -808,43 +808,43 @@ void SwIndexMarkPane::UpdateDialog()
     m_pKey2DCB->Enable(bKey2Enable);
 
     UpdateLanguageDependenciesForPhoneticReading();
-    m_pPhoneticFT0->Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
-    m_pPhoneticED0->Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
-    m_pPhoneticFT1->Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
-    m_pPhoneticED1->Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
-    m_pPhoneticFT2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
-    m_pPhoneticED2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
+    m_pPhoneticFT0->Enable(bKeyEnable&&bEntryHasText&&m_bIsPhoneticReadingEnabled);
+    m_pPhoneticED0->Enable(bKeyEnable&&bEntryHasText&&m_bIsPhoneticReadingEnabled);
+    m_pPhoneticFT1->Enable(bKeyEnable&&bKey1HasText&&m_bIsPhoneticReadingEnabled);
+    m_pPhoneticED1->Enable(bKeyEnable&&bKey1HasText&&m_bIsPhoneticReadingEnabled);
+    m_pPhoneticFT2->Enable(bKeyEnable&&bKey2HasText&&m_bIsPhoneticReadingEnabled);
+    m_pPhoneticED2->Enable(bKeyEnable&&bKey2HasText&&m_bIsPhoneticReadingEnabled);
 
     // set index type
     m_pTypeDCB->SelectEntry(pMark->GetTOXType()->GetTypeName());
 
     // set Next - Prev - Buttons
-    pSh->SttCursorMove();
+    m_pSh->SttCursorMove();
     if( m_pPrevBT->IsVisible() )
     {
-        const SwTOXMark* pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_PRV );
+        const SwTOXMark* pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_PRV );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
         m_pPrevBT->Enable( pMoveMark != pMark );
-        pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_NXT );
+        pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_NXT );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
         m_pNextBT->Enable( pMoveMark != pMark );
     }
 
     if( m_pPrevSameBT->IsVisible() )
     {
-        const SwTOXMark* pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
+        const SwTOXMark* pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
         m_pPrevSameBT->Enable( pMoveMark != pMark );
-        pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
+        pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
+            m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
         m_pNextSameBT->Enable( pMoveMark != pMark );
     }
 
-    bool bEnable = !pSh->HasReadonlySel();
+    bool bEnable = !m_pSh->HasReadonlySel();
     m_pOKBT->Enable( bEnable );
     m_pDelBT->Enable( bEnable );
     m_pEntryED->SetReadOnly( !bEnable );
@@ -852,11 +852,11 @@ void SwIndexMarkPane::UpdateDialog()
     m_pKey1DCB->SetReadOnly( !bEnable );
     m_pKey2DCB->SetReadOnly( !bEnable );
 
-    pSh->SelectTextAttr( RES_TXTATR_TOXMARK, pMark->GetTextTOXMark() );
+    m_pSh->SelectTextAttr( RES_TXTATR_TOXMARK, pMark->GetTextTOXMark() );
     // we need the point at the start of the attribute
-    pSh->SwapPam();
+    m_pSh->SwapPam();
 
-    pSh->EndCursorMove();
+    m_pSh->EndCursorMove();
 }
 
 // Remind whether the edit boxes for Phonetic reading are changed manually
@@ -864,15 +864,15 @@ IMPL_LINK( SwIndexMarkPane, PhoneticEDModifyHdl, Edit&, rEdit, void )
 {
     if (m_pPhoneticED0 == &rEdit)
     {
-        bPhoneticED0_ChangedByUser = !rEdit.GetText().isEmpty();
+        m_bPhoneticED0_ChangedByUser = !rEdit.GetText().isEmpty();
     }
     else if (m_pPhoneticED1 == &rEdit)
     {
-        bPhoneticED1_ChangedByUser = !rEdit.GetText().isEmpty();
+        m_bPhoneticED1_ChangedByUser = !rEdit.GetText().isEmpty();
     }
     else if (m_pPhoneticED2 == &rEdit)
     {
-        bPhoneticED2_ChangedByUser = !rEdit.GetText().isEmpty();
+        m_bPhoneticED2_ChangedByUser = !rEdit.GetText().isEmpty();
     }
 }
 
@@ -888,17 +888,17 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
             m_pKey2DCB->SetText(OUString());
             m_pPhoneticED1->SetText(OUString());
             m_pPhoneticED2->SetText(OUString());
-            bPhoneticED1_ChangedByUser = false;
-            bPhoneticED2_ChangedByUser = false;
+            m_bPhoneticED1_ChangedByUser = false;
+            m_bPhoneticED2_ChangedByUser = false;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completely new string is selected
-                bPhoneticED1_ChangedByUser = false;
+                m_bPhoneticED1_ChangedByUser = false;
             }
-            if(!bPhoneticED1_ChangedByUser)
+            if(!m_bPhoneticED1_ChangedByUser)
                 m_pPhoneticED1->SetText(GetDefaultPhoneticReading(pBox->GetText()));
         }
         m_pKey2DCB->Enable(bEnable);
@@ -909,26 +909,26 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
         if(pBox->GetText().isEmpty())
         {
             m_pPhoneticED2->SetText(OUString());
-            bPhoneticED2_ChangedByUser = false;
+            m_bPhoneticED2_ChangedByUser = false;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completely new string is selected
-                bPhoneticED2_ChangedByUser = false;
+                m_bPhoneticED2_ChangedByUser = false;
             }
-            if(!bPhoneticED2_ChangedByUser)
+            if(!m_bPhoneticED2_ChangedByUser)
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(pBox->GetText()));
         }
     }
     bool    bKey1HasText    = !m_pKey1DCB->GetText().isEmpty();
     bool    bKey2HasText    = !m_pKey2DCB->GetText().isEmpty();
 
-    m_pPhoneticFT1->Enable(bKey1HasText && bIsPhoneticReadingEnabled);
-    m_pPhoneticED1->Enable(bKey1HasText && bIsPhoneticReadingEnabled);
-    m_pPhoneticFT2->Enable(bKey2HasText && bIsPhoneticReadingEnabled);
-    m_pPhoneticED2->Enable(bKey2HasText && bIsPhoneticReadingEnabled);
+    m_pPhoneticFT1->Enable(bKey1HasText && m_bIsPhoneticReadingEnabled);
+    m_pPhoneticED1->Enable(bKey1HasText && m_bIsPhoneticReadingEnabled);
+    m_pPhoneticFT2->Enable(bKey2HasText && m_bIsPhoneticReadingEnabled);
+    m_pPhoneticED2->Enable(bKey2HasText && m_bIsPhoneticReadingEnabled);
 }
 
 SwIndexMarkPane::~SwIndexMarkPane()
@@ -937,14 +937,14 @@ SwIndexMarkPane::~SwIndexMarkPane()
 
 void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOXMark)
 {
-    pSh = &rWrtShell;
-    pTOXMgr.reset( new SwTOXMgr(pSh) );
+    m_pSh = &rWrtShell;
+    m_pTOXMgr.reset( new SwTOXMgr(m_pSh) );
     if(pCurTOXMark)
     {
-        for(sal_uInt16 i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
-            if(pTOXMgr->GetTOXMark(i) == pCurTOXMark)
+        for(sal_uInt16 i = 0; i < m_pTOXMgr->GetTOXMarkCount(); i++)
+            if(m_pTOXMgr->GetTOXMark(i) == pCurTOXMark)
             {
-                pTOXMgr->SetCurTOXMark(i);
+                m_pTOXMgr->SetCurTOXMark(i);
                 break;
             }
     }
