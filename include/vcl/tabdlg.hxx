@@ -30,8 +30,6 @@ class VCL_DLLPUBLIC TabDialog : public Dialog
 {
 private:
     VclPtr<FixedLine>   mpFixedLine;
-    VclPtr<vcl::Window> mpViewWindow;
-    WindowAlign         meViewAlign;
     bool                mbPosControls;
 
     SAL_DLLPRIVATE void ImplInitTabDialogData();
@@ -45,10 +43,6 @@ public:
     virtual void        dispose() override;
 
     virtual void        StateChanged( StateChangedType nStateChange ) override;
-
-    void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
-    vcl::Window*        GetViewWindow() const { return mpViewWindow; }
-    void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
 
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
