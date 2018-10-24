@@ -3100,19 +3100,26 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 IMPL_LINK_NOARG(DbFilterField, OnClick, VclPtr<CheckBox>, void)
 {
     TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().GetState();
-    OUString aText;
+    OUStringBuffer aTextBuf;
+
+    Reference< XRowSet > xDataSourceRowSet(
+                    Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY);
+    Reference< XConnection >  xConnection(getConnection(xDataSourceRowSet));
+    const sal_Int32 nBooleanComparisonMode = ::dbtools::DatabaseMetaData( xConnection ).getBooleanComparisonMode();
 
     switch (eState)
     {
         case TRISTATE_TRUE:
-            aText = "1";
+            ::dbtools::getBooleanComparisonPredicate("", true, nBooleanComparisonMode, aTextBuf);
             break;
         case TRISTATE_FALSE:
-            aText = "0";
+            ::dbtools::getBooleanComparisonPredicate("", false, nBooleanComparisonMode, aTextBuf);
             break;
         case TRISTATE_INDET:
             break;
     }
+
+    const OUString aText(aTextBuf.makeStringAndClear());
 
     if (m_aText != aText)
     {
