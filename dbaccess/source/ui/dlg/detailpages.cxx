@@ -806,11 +806,10 @@ namespace dbaui
     }
 
     // OTextDetailsPage
-    OTextDetailsPage::OTextDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, "EmptyPage", "dbaccess/ui/emptypage.ui", _rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+    OTextDetailsPage::OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+        , m_aTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET)
     {
-
-        m_pTextConnectionHelper = VclPtr<OTextConnectionHelper>::Create( get<VclVBox>("EmptyPage"), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET );
     }
 
     OTextDetailsPage::~OTextDetailsPage()
@@ -818,27 +817,21 @@ namespace dbaui
         disposeOnce();
     }
 
-    void OTextDetailsPage::dispose()
+    VclPtr<SfxTabPage> ODriversSettings::CreateText(TabPageParent pParent,  const SfxItemSet* pAttrSet)
     {
-        m_pTextConnectionHelper.disposeAndClear();
-        OCommonBehaviourTabPage::dispose();
-    }
-
-    VclPtr<SfxTabPage> ODriversSettings::CreateText( TabPageParent pParent,  const SfxItemSet* _rAttrSet )
-    {
-        return VclPtr<OTextDetailsPage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<OTextDetailsPage>::Create(pParent, *pAttrSet);
     }
 
     void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillControls(_rControlList);
-        m_pTextConnectionHelper->fillControls(_rControlList);
+        DBOCommonBehaviourTabPage::fillControls(_rControlList);
+        m_aTextConnectionHelper.fillControls(_rControlList);
 
     }
     void OTextDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillWindows(_rControlList);
-        m_pTextConnectionHelper->fillWindows(_rControlList);
+        DBOCommonBehaviourTabPage::fillWindows(_rControlList);
+        m_aTextConnectionHelper.fillWindows(_rControlList);
 
     }
     void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -847,20 +840,20 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_pTextConnectionHelper->implInitControls(_rSet, bValid);
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+        m_aTextConnectionHelper.implInitControls(_rSet, bValid);
+        DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     bool OTextDetailsPage::FillItemSet( SfxItemSet* rSet )
     {
-        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
-        bChangedSomething = m_pTextConnectionHelper->FillItemSet(*rSet, bChangedSomething);
+        bool bChangedSomething = DBOCommonBehaviourTabPage::FillItemSet(rSet);
+        bChangedSomething = m_aTextConnectionHelper.FillItemSet(*rSet, bChangedSomething);
         return bChangedSomething;
     }
 
     bool OTextDetailsPage::prepareLeave()
     {
-        return m_pTextConnectionHelper->prepareLeave();
+        return m_aTextConnectionHelper.prepareLeave();
     }
 
     VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
