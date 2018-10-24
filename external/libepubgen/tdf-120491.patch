@@ -1,0 +1,33 @@
+From 92760e4b0b8da126029c5ff858ebec27df4acfa8 Mon Sep 17 00:00:00 2001
+Subject: [PATCH] tdf#120491 EPUBHTMLGenerator: remove not needed <meta
+ content="text/html...">
+
+IngramSpark flags this as an error, and not writing it still passes
+epubcheck.
+---
+ src/lib/EPUBHTMLGenerator.cpp | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index a950ea5..f6c2527 100644
+--- src/lib/EPUBHTMLGenerator.cpp
++++ src/lib/EPUBHTMLGenerator.cpp
+@@ -579,14 +579,9 @@ void EPUBHTMLGenerator::endDocument()
+     m_impl->m_document.openElement("title", RVNGPropertyList());
+     m_impl->m_document.closeElement("title");
+   }
+-  RVNGPropertyList metaAttrs;
+-  metaAttrs.insert("http-equiv", "content-type");
+-  metaAttrs.insert("content", "text/html; charset=UTF-8");
+-  m_impl->m_document.openElement("meta", metaAttrs);
+-  m_impl->m_document.closeElement("meta");
+   if (m_impl->m_version >= 30 && m_impl->m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
+   {
+-    metaAttrs.clear();
++    RVNGPropertyList metaAttrs;
+     metaAttrs.insert("name", "viewport");
+     std::stringstream content;
+     if (const librevenge::RVNGProperty *pageWidth = m_impl->m_actualPageProperties["fo:page-width"])
+-- 
+2.16.4
+
