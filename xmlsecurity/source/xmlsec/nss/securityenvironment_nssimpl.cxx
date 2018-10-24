@@ -909,6 +909,13 @@ uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::createDERCer
     return pX509Certificate;
 }
 
+uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::addDERCertificateToTheDatabase(
+        uno::Sequence<sal_Int8> const & raDERCertificate, OUString const & raTrustString)
+{
+    X509Certificate_NssImpl* pX509Certificate = createAndAddCertificateFromPackage(raDERCertificate, raTrustString);
+    return pX509Certificate;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SecurityEnvironment_get_implementation(
     uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
