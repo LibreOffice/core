@@ -99,7 +99,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private String displayLanguage;
 
     // dynamic permissions IDs
-    private static final int PERMISSION_READ_EXTERNAL_STORAGE = 0;
+    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0;
 
     FileFilter fileFilter;
     FilenameFilter filenameFilter;
@@ -949,11 +949,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     @Override
     protected void onStart() {
         super.onStart();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             Log.i(LOGTAG, "no permission to read external storage - asking for permission");
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERMISSION_READ_EXTERNAL_STORAGE);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSION_WRITE_EXTERNAL_STORAGE);
         } else {
             switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
             setEditFABVisibility(View.VISIBLE);
@@ -1207,7 +1207,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch(requestCode){
-            case PERMISSION_READ_EXTERNAL_STORAGE:
+            case PERMISSION_WRITE_EXTERNAL_STORAGE:
                 if(permissions.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
                     setEditFABVisibility(View.VISIBLE);
