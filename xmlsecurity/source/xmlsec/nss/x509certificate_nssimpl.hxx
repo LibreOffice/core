@@ -40,7 +40,8 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo > , public xmlsecurity::Certificate
 {
     private:
-        CERTCertificate* m_pCert ;
+        CERTCertificate* m_pCert;
+        SECKEYPrivateKey* m_pPrivateKey;
 
     public:
         X509Certificate_NssImpl() ;
@@ -93,8 +94,11 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
         //Helper methods
         void setCert( CERTCertificate* cert ) ;
         const CERTCertificate* getNssCert() const ;
+
         /// @throws css::uno::RuntimeException
         void setRawCert( const css::uno::Sequence< sal_Int8 >& rawCert ) ;
+        void setCustomPrivateKey(SECKEYPrivateKey* pPrivateKey);
+        SECKEYPrivateKey* getPrivateKey();
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
