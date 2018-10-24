@@ -20,9 +20,9 @@
 #pragma once
 
 #include <sal/config.h>
-
 #include <memory>
 
+#include <QtCore/QObject>
 #include <qt5/Qt5Instance.hxx>
 #include "KDE5SalFrame.hxx"
 
@@ -31,19 +31,25 @@ class SalFrame;
 
 class KDE5SalInstance : public Qt5Instance
 {
+    Q_OBJECT
 public:
     explicit KDE5SalInstance();
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
-    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
-    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
-
     virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
     createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
     virtual bool IsMainThread() const override;
+
+Q_SIGNALS:
+    css::uno::Reference<css::ui::dialogs::XFilePicker2>
+    createFilePickerSignal(const css::uno::Reference<css::uno::XComponentContext>&);
+
+private Q_SLOTS:
+    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
