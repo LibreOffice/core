@@ -51,45 +51,6 @@ namespace dbaui
         The controls to be used have to be defined within the resource, as usual, but
         this class does all the handling necessary.
     */
-    class OCommonBehaviourTabPage : public OGenericAdministrationPage
-    {
-    protected:
-
-        VclPtr<FixedText>          m_pOptionsLabel;
-        VclPtr<Edit>               m_pOptions;
-
-        VclPtr<FixedText>          m_pCharsetLabel;
-        VclPtr<CharSetListBox>     m_pCharset;
-
-        VclPtr<CheckBox>           m_pAutoRetrievingEnabled;
-        VclPtr<FixedText>          m_pAutoIncrementLabel;
-        VclPtr<Edit>               m_pAutoIncrement;
-        VclPtr<FixedText>          m_pAutoRetrievingLabel;
-        VclPtr<Edit>               m_pAutoRetrieving;
-
-        OCommonBehaviourTabPageFlags m_nControlFlags;
-
-    public:
-        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
-
-        OCommonBehaviourTabPage(vcl::Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
-    protected:
-
-        virtual ~OCommonBehaviourTabPage() override;
-        virtual void dispose() override;
-
-        // subclasses must override this, but it isn't pure virtual
-        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-
-        // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
-
-        // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
-    private:
-        DECL_LINK(CharsetSelectHdl, ListBox&, void);
-    };
-
     class DBOCommonBehaviourTabPage : public OGenericAdministrationPage
     {
     protected:
