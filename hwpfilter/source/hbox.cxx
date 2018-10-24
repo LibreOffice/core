@@ -359,8 +359,8 @@ Picture::Picture()
 
 Picture::~Picture()
 {
-    if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
-        delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
+    if (pictype == PICTYPE_DRAW)
+        delete picinfo.picdraw.hdo;
 }
 
 
