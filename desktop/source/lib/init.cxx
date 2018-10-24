@@ -3752,6 +3752,8 @@ static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
     if (!pObjectShell)
         return int(SignatureState::UNKNOWN);
 
+    pObjectShell->RecheckSignature(false);
+
     return int(pObjectShell->GetDocumentSignatureState());
 }
 
