@@ -2545,10 +2545,14 @@ void ScDocRowHeightUpdater::update()
         return;
     }
 
-    sal_uInt32 nCellCount = 0;
+    sal_uLong nCellCount = 0;
     vector<TabRanges>::const_iterator itr = mpTabRangesArray->begin(), itrEnd = mpTabRangesArray->end();
     for (; itr != itrEnd; ++itr)
     {
+        const SCTAB nTab = itr->mnTab;
+        if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
+            continue;
+
         ScFlatBoolRowSegments::RangeData aData;
         ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
@@ -2556,7 +2560,7 @@ void ScDocRowHeightUpdater::update()
             if (!aData.mbValue)
                 continue;
 
-            nCellCount += aData.mnRow2 - aData.mnRow1 + 1;
+            nCellCount += mrDoc.maTabs[nTab]->GetWeightedCount(aData.mnRow1, aData.mnRow2);
         }
     }
 
@@ -2564,10 +2568,10 @@ void ScDocRowHeightUpdater::update()
 
     Fraction aZoom(1, 1);
     itr = mpTabRangesArray->begin();
-    sal_uInt32 nProgressStart = 0;
+    sal_uLong nProgressStart = 0;
     for (; itr != itrEnd; ++itr)
     {
-        SCTAB nTab = itr->mnTab;
+        const SCTAB nTab = itr->mnTab;
         if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
             continue;
 
@@ -2582,7 +2586,7 @@ void ScDocRowHeightUpdater::update()
             mrDoc.maTabs[nTab]->SetOptimalHeight(
                 aCxt, aData.mnRow1, aData.mnRow2, &aProgress, nProgressStart);
 
-            nProgressStart += aData.mnRow2 - aData.mnRow1 + 1;
+            nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount(aData.mnRow1, aData.mnRow2);
         }
     }
 }
