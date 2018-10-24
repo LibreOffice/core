@@ -66,6 +66,11 @@
             <value>true</value>
           </prop>
         </node>
+        <node oor:name="BooleanComparisonMode" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:int">
+            <value>2</value>
+          </prop>
+        </node>
       </node><!--Properties-->
       <node oor:name="Features">
       </node><!--Features-->
