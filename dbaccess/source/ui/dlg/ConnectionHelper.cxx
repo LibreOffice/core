@@ -1315,7 +1315,7 @@ namespace dbaui
         _rControlList.emplace_back( new OSaveValueWidgetWrapper<DBOConnectionURLEdit>( m_xConnectionURL.get() ) );
     }
 
-    void DBOConnectionHelper::commitURL()
+    bool DBOConnectionHelper::commitURL()
     {
         OUString sURL;
         OUString sOldPath;
@@ -1344,7 +1344,7 @@ namespace dbaui
                         setURLNoPrefix(sOldPath);
                         SetRoadmapStateValue(false);
                         callModifiedHdl();
-                        return;
+                        return false;
                     }
                 }
                 else
@@ -1355,10 +1355,11 @@ namespace dbaui
                             m_bUserGrabFocus = false;
                             m_xConnectionURL->grab_focus();
                             m_bUserGrabFocus = true;
-                            return;
+                            return false;
+
                         case RET_CANCEL:
                             setURLNoPrefix(sOldPath);
-                            return;
+                            return false;
                     }
                 }
             }
@@ -1366,6 +1367,7 @@ namespace dbaui
 
         setURLNoPrefix(sURL);
         m_xConnectionURL->SaveValueNoPrefix();
+        return true;
     }
 
     void DBOConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)

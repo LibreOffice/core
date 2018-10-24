@@ -65,6 +65,37 @@ namespace dbaui
             // nControlFlags is a combination of the CBTP_xxx-constants
     };
 
+    class DBOConnectionTabPageSetup : public DBOConnectionHelper
+    {
+        friend class VclPtr<DBOConnectionTabPageSetup>;
+    protected:
+
+        std::unique_ptr<weld::Label> m_xHelpText;
+        std::unique_ptr<weld::Label> m_xHeaderText;
+
+        // called when the test connection button was clicked
+        DECL_LINK(OnEditModified, weld::Entry&, void);
+
+    public:
+        virtual ~DBOConnectionTabPageSetup() override;
+        static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+
+        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
+
+        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+
+    protected:
+        DBOConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
+        virtual bool checkTestConnection() override;
+            // nControlFlags is a combination of the CBTP_xxx-constants
+    };
+
+
 }   // namespace dbaui
 
 #endif
