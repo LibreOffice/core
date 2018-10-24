@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_f25ba151",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-24T10:46:10Z",
+      "side": 1,
+      "message": "note that this creates a section if necessary, which both is needed for MSO compatibility - the non-default protection \u003d off, and for internal LO working - a section needs to be created in order for the content to be protected since LO doesn\u0027t protect by default like Word does.",
+      "range": {
+        "startLine": 697,
+        "startChar": 12,
+        "endLine": 697,
+        "endChar": 33
+      },
+      "revId": "777210b236f6447d41cc0a9225f559a946370fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
