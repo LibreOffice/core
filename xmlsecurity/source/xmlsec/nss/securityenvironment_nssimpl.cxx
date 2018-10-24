@@ -527,6 +527,30 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     return Sequence< Reference < XCertificate > >();
 }
 
+X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createAndAddCertificateFromPackage(
+                                                        const css::uno::Sequence<sal_Int8>& raDERCertificate,
+                                                        OUString const & raString)
+{
+    auto pCertificateBytes = reinterpret_cast<char *>(const_cast<sal_Int8 *>(raDERCertificate.getConstArray()));
+    CERTCertificate* pCERTCertificate = CERT_DecodeCertFromPackage(pCertificateBytes, raDERCertificate.getLength());
+
+    if (!pCERTCertificate)
+        return nullptr;
+
+    OString aTrustString = OUStringToOString(raString, RTL_TEXTENCODING_ASCII_US);
+
+    CERTCertTrust aTrust;
+    if (CERT_DecodeTrustString(&aTrust, aTrustString.getStr()) != SECSuccess)
+        return nullptr;
+
+    if (CERT_ChangeCertTrust(CERT_GetDefaultCertDB(), pCERTCertificate, &aTrust) != SECSuccess)
+        return nullptr;
+
+    X509Certificate_NssImpl* pX509Certificate = new X509Certificate_NssImpl();
+    pX509Certificate->setCert(pCERTCertificate);
+    return pX509Certificate;
+}
+
 X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& aDerCertificate)
 {
     X509Certificate_NssImpl* pX509Certificate = nullptr;
@@ -945,68 +969,71 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     // Adopt the private key of the signing certificate, if it has any.
     if (auto pCertificate = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
     {
-        if (auto pCERTCertificate = const_cast<CERTCertificate*>(pCertificate->getNssCert()))
+        SECKEYPrivateKey* pPrivateKey = pCertificate->getPrivateKey();
+        if (pPrivateKey)
         {
-            if (pCERTCertificate && pCERTCertificate->slot)
-            {
-                SECKEYPrivateKey* pPrivateKey = PK11_FindPrivateKeyFromCert(pCERTCertificate->slot, pCERTCertificate, nullptr);
-                xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);
-                xmlSecKeyPtr pKey = xmlSecKeyCreate();
-                xmlSecKeySetValue(pKey, pKeyData);
-                xmlSecNssAppDefaultKeysMngrAdoptKey(pKeysMngr, pKey);
-            }
-            else
-            {
-                SAL_WARN("xmlsecurity.xmlsec", "Can't get the private key from the certificate.");
-            }
+            xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);
+            xmlSecKeyPtr pKey = xmlSecKeyCreate();
+            xmlSecKeySetValue(pKey, pKeyData);
+            xmlSecNssAppDefaultKeysMngrAdoptKey(pKeysMngr, pKey);
+        }
+        else
+        {
+            SAL_WARN("xmlsecurity.xmlsec", "Can't get the private key from the certificate.");
         }
     }
 
-    return pKeysMngr ;
+    return pKeysMngr;
 }
+
 void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) {
     if( pKeysMngr != nullptr ) {
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
 }
 
-uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::createDERCertificateWithPrivateKey(
-        Sequence<sal_Int8> const & raDERCertificate, Sequence<sal_Int8> const & raPrivateKey)
+SECKEYPrivateKey* SecurityEnvironment_NssImpl::insertPrivateKey(css::uno::Sequence<sal_Int8> const & raPrivateKey)
 {
-    SECStatus nStatus = SECSuccess;
-
     PK11SlotInfo* pSlot = PK11_GetInternalKeySlot();
+
     if (!pSlot)
-        return uno::Reference<security::XCertificate>();
+        return nullptr;
 
     SECItem pDerPrivateKeyInfo;
     pDerPrivateKeyInfo.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(raPrivateKey.getConstArray()));
     pDerPrivateKeyInfo.len = raPrivateKey.getLength();
 
-    const unsigned int keyUsage = KU_KEY_ENCIPHERMENT | KU_DATA_ENCIPHERMENT | KU_DIGITAL_SIGNATURE;
+    const unsigned int aKeyUsage = KU_KEY_ENCIPHERMENT | KU_DATA_ENCIPHERMENT | KU_DIGITAL_SIGNATURE;
     SECKEYPrivateKey* pPrivateKey = nullptr;
 
     bool bPermanent = false;
     bool bSensitive = false;
 
-    nStatus = PK11_ImportDERPrivateKeyInfoAndReturnKey(
+    SECStatus nStatus = PK11_ImportDERPrivateKeyInfoAndReturnKey(
           pSlot, &pDerPrivateKeyInfo, nullptr, nullptr, bPermanent, bSensitive,
-          keyUsage, &pPrivateKey, nullptr);
+          aKeyUsage, &pPrivateKey, nullptr);
 
     if (nStatus != SECSuccess)
-        return uno::Reference<security::XCertificate>();
+        return nullptr;
+
+    return pPrivateKey;
+}
+
+uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::createDERCertificateWithPrivateKey(
+        Sequence<sal_Int8> const & raDERCertificate, Sequence<sal_Int8> const & raPrivateKey)
+{
+
+    SECKEYPrivateKey* pPrivateKey = insertPrivateKey(raPrivateKey);
 
     if (!pPrivateKey)
         return uno::Reference<security::XCertificate>();
 
-    X509Certificate_NssImpl* pX509Certificate = createX509CertificateFromDER(raDERCertificate);
+    X509Certificate_NssImpl* pX509Certificate = createAndAddCertificateFromPackage(raDERCertificate, "TCu,Cu,Tu");
+
     if (!pX509Certificate)
         return uno::Reference<security::XCertificate>();
 
-    addCryptoSlot(pSlot);
-
-    CERTCertificate* pCERTCertificate = const_cast<CERTCertificate*>(pX509Certificate->getNssCert());
-    pCERTCertificate->slot = pSlot;
+    pX509Certificate->setCustomPrivateKey(pPrivateKey);
 
     return pX509Certificate;
 }
