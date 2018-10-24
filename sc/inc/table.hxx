@@ -290,6 +290,7 @@ public:
     }
     sal_uLong       GetCellCount() const;
     sal_uLong       GetWeightedCount() const;
+    sal_uLong       GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
     sal_uLong       GetCodeCount() const;       // RPN code in formula
 
     sal_uInt16 GetTextWidth(SCCOL nCol, SCROW nRow) const;

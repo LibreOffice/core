@@ -3540,8 +3540,17 @@ sal_uLong ScTable::GetWeightedCount() const
     sal_uLong nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
-        if ( aCol[nCol].GetCellCount() )
-            nCellCount += aCol[nCol].GetWeightedCount();
+        nCellCount += aCol[nCol].GetWeightedCount();
+
+    return nCellCount;
+}
+
+sal_uLong ScTable::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
+{
+    sal_uLong nCellCount = 0;
+
+    for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
+        nCellCount += aCol[nCol].GetWeightedCount(nStartRow, nEndRow);
 
     return nCellCount;
 }
