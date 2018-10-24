@@ -471,11 +471,11 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_DBASE:
-            pPage = OConnectionTabPageSetup::CreateDbaseTabPage(this,*m_pOutSet);
+            pPage = DBOConnectionTabPageSetup::CreateDbaseTabPage(this,*m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_ADO:
-            pPage = OConnectionTabPageSetup::CreateADOTabPage( this, *m_pOutSet);
+            pPage = DBOConnectionTabPageSetup::CreateADOTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_TEXT:
@@ -483,7 +483,7 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_ODBC:
-            pPage = OConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
+            pPage = DBOConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_JDBC:
@@ -492,7 +492,7 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
             m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:odbc:")));
-            pPage = OConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
+            pPage = DBOConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
@@ -517,7 +517,7 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_MSACCESS:
-            pPage  = OConnectionTabPageSetup::CreateMSAccessTabPage(this,*m_pOutSet);
+            pPage  = DBOConnectionTabPageSetup::CreateMSAccessTabPage(this,*m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_INTRO:
             m_pMySQLIntroPage = OMySQLIntroPageSetup::CreateMySQLIntroTabPage(this,*m_pOutSet);
@@ -530,7 +530,7 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_USERDEFINED:
-            pPage = OConnectionTabPageSetup::CreateUserDefinedTabPage(this,*m_pOutSet);
+            pPage = DBOConnectionTabPageSetup::CreateUserDefinedTabPage(this,*m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_FINAL:
