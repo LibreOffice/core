@@ -62,7 +62,7 @@ namespace dbaui
 
         std::unique_ptr<weld::Label> m_xDataConvertLabel;
         std::unique_ptr<weld::Label> m_xCharsetLabel;
-        std::unique_ptr<DBCharSetListBox> m_xCharset;
+        std::unique_ptr<CharSetListBox> m_xCharset;
 
         std::unique_ptr<weld::CheckButton> m_xAutoRetrievingEnabled;
         std::unique_ptr<weld::Label> m_xAutoIncrementLabel;
