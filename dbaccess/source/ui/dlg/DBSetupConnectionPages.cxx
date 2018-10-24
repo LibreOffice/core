@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 
     // OTextConnectionPageSetup
     OTextConnectionPageSetup::OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOConnectionTabPageSetup(pParent, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
+        : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
                                   rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
         , m_xSubContainer(m_xBuilder->weld_widget("TextPageContainer"))
         , m_aTextConnectionHelper(m_xSubContainer.get(), TC_EXTENSION | TC_SEPARATORS)
@@ -81,26 +81,26 @@ using namespace ::com::sun::star;
 
     IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
     {
-        SetRoadmapStateValue(!m_aTextConnectionHelper.GetExtension().isEmpty() && DBOConnectionTabPageSetup::checkTestConnection());
+        SetRoadmapStateValue(!m_aTextConnectionHelper.GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
     }
 
     bool OTextConnectionPageSetup::checkTestConnection()
     {
-        bool bDoEnable = DBOConnectionTabPageSetup::checkTestConnection();
+        bool bDoEnable = OConnectionTabPageSetup::checkTestConnection();
         bDoEnable = !m_aTextConnectionHelper.GetExtension().isEmpty() && bDoEnable;
         return bDoEnable;
     }
 
     void OTextConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOConnectionTabPageSetup::fillControls(_rControlList);
+        OConnectionTabPageSetup::fillControls(_rControlList);
         m_aTextConnectionHelper.fillControls(_rControlList);
     }
 
     void OTextConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOConnectionTabPageSetup::fillWindows(_rControlList);
+        OConnectionTabPageSetup::fillWindows(_rControlList);
         m_aTextConnectionHelper.fillWindows(_rControlList);
     }
 
@@ -109,13 +109,13 @@ using namespace ::com::sun::star;
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
-        DBOConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
+        OConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
         m_aTextConnectionHelper.implInitControls(_rSet, bValid);
     }
 
     bool OTextConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOConnectionTabPageSetup::FillItemSet(_rSet);
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         bChangedSomething = m_aTextConnectionHelper.FillItemSet(*_rSet, bChangedSomething);
         return bChangedSomething;
     }
@@ -570,7 +570,7 @@ using namespace ::com::sun::star;
 
     // OMySQLJDBCConnectionPageSetup
     OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOConnectionTabPageSetup(pParent, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,
+        : OConnectionTabPageSetup(pParent, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,
                                 STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
         , m_xFTDriverClass(m_xBuilder->weld_label("jdbcLabel"))
         , m_xETDriverClass(m_xBuilder->weld_entry("jdbcEntry"))
@@ -597,7 +597,7 @@ using namespace ::com::sun::star;
 
     bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOConnectionTabPageSetup::FillItemSet(_rSet);
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         fillString(*_rSet,m_xETDriverClass.get(),DSID_JDBCDRIVERCLASS,bChangedSomething);
         return bChangedSomething;
     }
@@ -629,7 +629,7 @@ using namespace ::com::sun::star;
         }
         bool bEnable = pDrvItem->GetValue().getLength() != 0;
         m_xPBTestJavaDriver->set_sensitive(bEnable);
-        DBOConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
+        OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
 
         SetRoadmapStateValue(checkTestConnection());
     }
@@ -683,7 +683,7 @@ using namespace ::com::sun::star;
 
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : DBOConnectionTabPageSetup(pParent, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
+        : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
                                  rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
         , m_xPasswordrequired(m_xBuilder->weld_check_button("passwordrequired"))
     {
@@ -701,14 +701,14 @@ using namespace ::com::sun::star;
 
     void OSpreadSheetConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        DBOConnectionTabPageSetup::fillControls(_rControlList);
+        OConnectionTabPageSetup::fillControls(_rControlList);
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xPasswordrequired.get()));
 
     }
 
     bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = DBOConnectionTabPageSetup::FillItemSet(_rSet);
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         fillBool(*_rSet,m_xPasswordrequired.get(),DSID_PASSWORDREQUIRED,false,bChangedSomething);
         return bChangedSomething;
     }

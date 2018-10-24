@@ -36,7 +36,7 @@ namespace dbaui
 {
 
     // OSpreadSheetConnectionPageSetup
-    class OSpreadSheetConnectionPageSetup final : public DBOConnectionTabPageSetup
+    class OSpreadSheetConnectionPageSetup final : public OConnectionTabPageSetup
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -52,7 +52,7 @@ namespace dbaui
     };
 
     // OTextConnectionPage
-    class OTextConnectionPageSetup : public DBOConnectionTabPageSetup
+    class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
         std::unique_ptr<weld::Widget> m_xSubContainer;
@@ -168,7 +168,7 @@ namespace dbaui
     };
 
     // OJDBCConnectionPageSetup
-    class OJDBCConnectionPageSetup final : public DBOConnectionTabPageSetup
+    class OJDBCConnectionPageSetup final : public OConnectionTabPageSetup
     {
     public:
         OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);

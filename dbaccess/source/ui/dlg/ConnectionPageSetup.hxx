@@ -34,9 +34,9 @@ namespace dbaui
 
     /** implements the connection page of the data source properties dialog.
     */
-    class DBOConnectionTabPageSetup : public DBOConnectionHelper
+    class OConnectionTabPageSetup : public DBOConnectionHelper
     {
-        friend class VclPtr<DBOConnectionTabPageSetup>;
+        friend class VclPtr<OConnectionTabPageSetup>;
     protected:
 
         std::unique_ptr<weld::Label> m_xHelpText;
@@ -46,7 +46,7 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
     public:
-        virtual ~DBOConnectionTabPageSetup() override;
+        virtual ~OConnectionTabPageSetup() override;
         static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
         static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
         static  VclPtr<OGenericAdministrationPage> CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
@@ -59,7 +59,7 @@ namespace dbaui
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
     protected:
-        DBOConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
+        OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
         virtual bool checkTestConnection() override;
             // nControlFlags is a combination of the CBTP_xxx-constants
     };
