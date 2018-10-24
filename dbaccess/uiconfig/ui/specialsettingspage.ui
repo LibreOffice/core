@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">1000000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="SpecialSettingsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -308,6 +313,7 @@
                 <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
                 <property name="activates_default">True</property>
+                <property name="adjustment">adjustment1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
