@@ -301,12 +301,6 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
 
     m_pShowExampleCB->Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
 
-    SetViewAlign( WindowAlign::Left );
-    // SetViewWindow does not work if the dialog is visible!
-
-    if(!m_pShowExampleCB->IsChecked())
-        SetViewWindow(m_pExampleContainerWIN);
-
     ShowPreviewHdl(nullptr);
 }
 
@@ -495,7 +489,6 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
         && m_pExampleFrame && m_pExampleFrame->IsServiceAvailable();
 
     m_pExampleContainerWIN->Show( bSetViewWindow );
-    SetViewWindow( bSetViewWindow ? m_pExampleContainerWIN.get() : nullptr );
 
     setOptimalLayoutSize();
 }
