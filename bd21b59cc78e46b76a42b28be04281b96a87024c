@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_103855d1",
+        "filename": "hwpfilter/source/drawing.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-10-24T20:11:07Z",
+      "side": 1,
+      "message": "Take the case of the 2nd loop, head is set and prev is pointing to head on entering. In this case, prev-\u003enext is first changed to point to the new entry (hdo), i.e. head-\u003enext now points to the new entry. Then afterwards prev is changed to prev-\u003enext to point to the next entry of the chain.",
+      "revId": "bd21b59cc78e46b76a42b28be04281b96a87024c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
