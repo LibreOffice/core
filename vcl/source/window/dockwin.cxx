@@ -532,6 +532,8 @@ bool DockingWindow::EventNotify( NotifyEvent& rNEvt )
                 if (!bDockingSupportCrippled && pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
                 {
                     SetFloatingMode( !IsFloatingMode() );
+                    if ( IsFloatingMode() )
+                        ToTop( ToTopFlags::GrabFocusOnly );
                     return true;
                 }
                 else if ( pMEvt->GetClicks() == 1 )
@@ -561,6 +563,8 @@ bool DockingWindow::EventNotify( NotifyEvent& rNEvt )
                 rKey.IsShift() && rKey.IsMod1() && !bDockingSupportCrippled )
             {
                 SetFloatingMode( !IsFloatingMode() );
+                if ( IsFloatingMode() )
+                    ToTop( ToTopFlags::GrabFocusOnly );
                 return true;
             }
         }
@@ -587,12 +591,11 @@ void DockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
 
     if ( !IsDockingCanceled() )
     {
-        bool bShow = false;
         if ( bFloatMode != IsFloatingMode() )
         {
-            Show( false, ShowFlags::NoFocusChange );
             SetFloatingMode( bFloatMode );
-            bShow = true;
+            if ( IsFloatingMode() )
+                ToTop( ToTopFlags::GrabFocusOnly );
             if ( bFloatMode && mpFloatWin )
                 mpFloatWin->SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
         }
@@ -602,9 +605,6 @@ void DockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
             aPos = GetParent()->ScreenToOutputPixel( aPos );
             Window::SetPosSizePixel( aPos, rRect.GetSize() );
         }
-
-        if ( bShow )
-            Show();
     }
     mbDocking = false;
     mbDockCanceled = bOrigDockCanceled;
