@@ -120,8 +120,6 @@
 "ScCellObj";"com::sun::star::sheet::XCellRangesQuery";"queryColumnDifferences()"
 "ScCellObj";"com::sun::star::sheet::XCellRangesQuery";"queryRowDifferences()"
 "ScCellObj";"com::sun::star::sheet::XCellRangesQuery";"queryIntersection()"
-"ScCellObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScCellObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScCellObj";"com::sun::star::text::XTextRange";"getText()"
 "ScCellObj";"com::sun::star::text::XTextRange";"getStart()"
 "ScCellObj";"com::sun::star::text::XTextRange";"getEnd()"
