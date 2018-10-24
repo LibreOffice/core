@@ -118,7 +118,8 @@ public:
     void testCommentsCallbacksWriter();
     void testRunMacro();
     void testExtractParameter();
-    void testGetSignatureState();
+    void testGetSignatureState_NonSigned();
+    void testGetSignatureState_Signed();
     void testInsertCertificate();
     void testABI();
 
@@ -163,7 +164,8 @@ public:
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
-    CPPUNIT_TEST(testGetSignatureState);
+    CPPUNIT_TEST(testGetSignatureState_Signed);
+    CPPUNIT_TEST(testGetSignatureState_NonSigned);
     CPPUNIT_TEST(testInsertCertificate);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
@@ -2246,7 +2248,49 @@ void DesktopLOKTest::testExtractParameter()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void DesktopLOKTest::testGetSignatureState()
+void DesktopLOKTest::testGetSignatureState_Signed()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("signed.odt");
+    Scheduler::ProcessEventsToIdle();
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    CPPUNIT_ASSERT_EQUAL(int(4), nState);
+
+    {
+        OUString aCertificateURL;
+        createFileURL("rootCA.der", aCertificateURL);
+        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
+        std::vector<unsigned char> aCertificate;
+        aCertificate.resize(aCertificateStream.remainingSize());
+        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    {
+        OUString aCertificateURL;
+        createFileURL("intermediateRootCA.der", aCertificateURL);
+        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
+        std::vector<unsigned char> aCertificate;
+        aCertificate.resize(aCertificateStream.remainingSize());
+        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    CPPUNIT_ASSERT_EQUAL(int(1), nState);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testGetSignatureState_NonSigned()
 {
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
