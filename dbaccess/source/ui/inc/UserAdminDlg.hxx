@@ -41,28 +41,27 @@ namespace dbaui
 
     /** implements the user admin dialog
     */
-    class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog
+    class OUserAdminDlg : public SfxTabDialogController, public IItemSetHelper, public IDatabaseSettingsDialog
     {
+        weld::Window* m_pParent;
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         SfxItemSet*   m_pItemSet;
         css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
         bool          m_bOwnConnection;
     protected:
-        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
+        virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
     public:
-        OUserAdminDlg( vcl::Window* _pParent
-                            ,SfxItemSet* _pItems
-                            ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
-                            ,const css::uno::Any& _aDataSourceName
-                            ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
+        OUserAdminDlg(weld::Window* pParent, SfxItemSet* pItems,
+                      const css::uno::Reference< css::uno::XComponentContext >& rxORB,
+                      const css::uno::Any& rDataSourceName,
+                      const css::uno::Reference< css::sdbc::XConnection>& rConnection);
 
         virtual ~OUserAdminDlg() override;
-        virtual void dispose() override;
 
         virtual const SfxItemSet* getOutputSet() const override;
         virtual SfxItemSet* getWriteOutputSet() override;
 
-        virtual short   Execute() override;
+        virtual short   run() override;
 
         // forwards to ODbDataSourceAdministrationHelper
         virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
