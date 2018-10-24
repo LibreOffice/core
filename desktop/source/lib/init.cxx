@@ -3687,11 +3687,25 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
 }
 
 // CERTIFICATE AND DOCUMENT SIGNING
-static bool doc_insertCertificate(LibreOfficeKitDocument* /*pThis*/,
+static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
                                   const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
                                   const unsigned char* pPrivateKeyBinary, const int nPrivateKeySize)
 {
     if (!xContext.is())
+        return false;
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    if (!pDocument->mxComponent.is())
+        return false;
+
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return false;
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+
+    if (!pObjectShell)
         return false;
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -3719,16 +3733,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* /*pThis*/,
     if (!xCertificate.is())
         return false;
 
-    printf("CERTIFICATE\n\tIssuerName: %s \n\tSubjectName: %s\n\tPK %s\n\n",
-            xCertificate->getIssuerName().toUtf8().getStr(),
-            xCertificate->getSubjectName().toUtf8().getStr(),
-            xCertificate->getSubjectPublicKeyAlgorithm().toUtf8().getStr());
-
-    SfxObjectShell* pDoc = SfxObjectShell::Current();
-    if (!pDoc)
-        return false;
-
-    return pDoc->SignDocumentContentUsingCertificate(xCertificate);
+    return pObjectShell->SignDocumentContentUsingCertificate(xCertificate);
 }
 
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
