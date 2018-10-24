@@ -202,16 +202,14 @@ namespace dbaui
     };
 
     // OGeneralSpecialJDBCDetailsPage
-    class OGeneralSpecialJDBCDetailsPage final : public OCommonBehaviourTabPage
+    class OGeneralSpecialJDBCDetailsPage final : public DBOCommonBehaviourTabPage
     {
     public:
-        OGeneralSpecialJDBCDetailsPage(   vcl::Window* pParent
-                                        , const SfxItemSet& _rCoreAttrs
-                                        , sal_uInt16 _nPortId
-                                        , bool bShowSocket = true
-                                        );
+        OGeneralSpecialJDBCDetailsPage(TabPageParent pParent,
+                                       const SfxItemSet& _rCoreAttrs,
+                                       sal_uInt16 _nPortId,
+                                       bool bShowSocket = true);
         virtual ~OGeneralSpecialJDBCDetailsPage() override;
-        virtual void dispose() override;
 
     private:
 
@@ -219,20 +217,19 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
-        DECL_LINK(OnTestJavaClickHdl, Button*, void);
-
-        VclPtr<Edit>               m_pEDHostname;
-        VclPtr<NumericField>       m_pNFPortNumber;
-        VclPtr<FixedText>          m_pFTSocket;
-        VclPtr<Edit>               m_pEDSocket;
-
-        VclPtr<FixedText>          m_pFTDriverClass;
-        VclPtr<Edit>               m_pEDDriverClass;
-        VclPtr<PushButton>         m_pTestJavaDriver;
+        DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
 
         OUString                   m_sDefaultJdbcDriverName;
         sal_uInt16                 m_nPortId;
         bool                       m_bUseClass;
+
+        std::unique_ptr<weld::Entry> m_xEDHostname;
+        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
+        std::unique_ptr<weld::Label> m_xFTSocket;
+        std::unique_ptr<weld::Entry> m_xEDSocket;
+        std::unique_ptr<weld::Label> m_xFTDriverClass;
+        std::unique_ptr<weld::Entry> m_xEDDriverClass;
+        std::unique_ptr<weld::Button> m_xTestJavaDriver;
     };
 
     // MySQLNativePage
