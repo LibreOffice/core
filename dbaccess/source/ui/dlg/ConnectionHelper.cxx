@@ -81,39 +81,39 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    DBOConnectionHelper::DBOConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs)
+    OConnectionHelper::OConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_bUserGrabFocus(false)
         , m_pCollection(nullptr)
         , m_xFT_Connection(m_xBuilder->weld_label("browseurllabel"))
         , m_xPB_Connection(m_xBuilder->weld_button("browse"))
         , m_xPB_CreateDB(m_xBuilder->weld_button("create"))
-        , m_xConnectionURL(new DBOConnectionURLEdit(m_xBuilder->weld_entry("browseurl"), m_xBuilder->weld_label("browselabel")))
+        , m_xConnectionURL(new OConnectionURLEdit(m_xBuilder->weld_entry("browseurl"), m_xBuilder->weld_label("browselabel")))
     {
         // extract the datasource type collection from the item set
         const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rCoreAttrs.GetItem(DSID_TYPECOLLECTION) );
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        m_xPB_Connection->connect_clicked(LINK(this, DBOConnectionHelper, OnBrowseConnections));
-        m_xPB_CreateDB->connect_clicked(LINK(this, DBOConnectionHelper, OnCreateDatabase));
+        m_xPB_Connection->connect_clicked(LINK(this, OConnectionHelper, OnBrowseConnections));
+        m_xPB_CreateDB->connect_clicked(LINK(this, OConnectionHelper, OnCreateDatabase));
         OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
         m_xConnectionURL->SetTypeCollection(m_pCollection);
 
-        m_xConnectionURL->connect_focus_in(LINK(this, DBOConnectionHelper, GetFocusHdl));
-        m_xConnectionURL->connect_focus_out(LINK(this, DBOConnectionHelper, LoseFocusHdl));
+        m_xConnectionURL->connect_focus_in(LINK(this, OConnectionHelper, GetFocusHdl));
+        m_xConnectionURL->connect_focus_out(LINK(this, OConnectionHelper, LoseFocusHdl));
     }
 
-    DBOConnectionHelper::~DBOConnectionHelper()
+    OConnectionHelper::~OConnectionHelper()
     {
     }
 
-    void DBOConnectionHelper::dispose()
+    void OConnectionHelper::dispose()
     {
         m_xConnectionURL.reset();
         OGenericAdministrationPage::dispose();
     }
 
-    void DBOConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
@@ -144,7 +144,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    void DBOConnectionHelper::implUpdateURLDependentStates() const
+    void OConnectionHelper::implUpdateURLDependentStates() const
     {
         OSL_PRECOND( m_pAdminDialog && m_pCollection, "OConnectionHelper::implUpdateURLDependentStates: no admin dialog!" );
         if ( !m_pAdminDialog || !m_pCollection )
@@ -154,7 +154,7 @@ namespace dbaui
             m_pAdminDialog->enableConfirmSettings( !getURLNoPrefix().isEmpty() );
     }
 
-    IMPL_LINK_NOARG(DBOConnectionHelper, OnBrowseConnections, weld::Button&, void)
+    IMPL_LINK_NOARG(OConnectionHelper, OnBrowseConnections, weld::Button&, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
@@ -341,7 +341,7 @@ namespace dbaui
         checkTestConnection();
     }
 
-    IMPL_LINK_NOARG(DBOConnectionHelper, OnCreateDatabase, weld::Button&, void)
+    IMPL_LINK_NOARG(OConnectionHelper, OnCreateDatabase, weld::Button&, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
@@ -366,12 +366,12 @@ namespace dbaui
         checkTestConnection();
     }
 
-    bool DBOConnectionHelper::checkTestConnection()
+    bool OConnectionHelper::checkTestConnection()
     {
         return true;
     }
 
-    void DBOConnectionHelper::impl_setURL( const OUString& _rURL, bool _bPrefix )
+    void OConnectionHelper::impl_setURL( const OUString& _rURL, bool _bPrefix )
     {
         OUString sURL( comphelper::string::stripEnd(_rURL, '*') );
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
@@ -414,7 +414,7 @@ namespace dbaui
         implUpdateURLDependentStates();
     }
 
-    OUString DBOConnectionHelper::impl_getURL() const
+    OUString OConnectionHelper::impl_getURL() const
     {
         // get the pure text
         OUString sURL = m_xConnectionURL->GetTextNoPrefix();
@@ -444,22 +444,22 @@ namespace dbaui
         return sURL;
     }
 
-    void DBOConnectionHelper::setURL( const OUString& _rURL )
+    void OConnectionHelper::setURL( const OUString& _rURL )
     {
         impl_setURL( _rURL, true );
     }
 
-    OUString DBOConnectionHelper::getURLNoPrefix( ) const
+    OUString OConnectionHelper::getURLNoPrefix( ) const
     {
         return impl_getURL();
     }
 
-    void DBOConnectionHelper::setURLNoPrefix( const OUString& _rURL )
+    void OConnectionHelper::setURLNoPrefix( const OUString& _rURL )
     {
         impl_setURL( _rURL, false );
     }
 
-    sal_Int32 DBOConnectionHelper::checkPathExistence(const OUString& _rURL)
+    sal_Int32 OConnectionHelper::checkPathExistence(const OUString& _rURL)
     {
         IS_PATH_EXIST e_exists = pathExists(_rURL, false);
         if (!m_pCollection->supportsDBCreation(m_eType) &&
@@ -536,7 +536,7 @@ namespace dbaui
         return RET_OK;
     }
 
-    IS_PATH_EXIST DBOConnectionHelper::pathExists(const OUString& _rURL, bool bIsFile) const
+    IS_PATH_EXIST OConnectionHelper::pathExists(const OUString& _rURL, bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
@@ -559,7 +559,7 @@ namespace dbaui
         return eExists;
     }
 
-    IMPL_LINK_NOARG(DBOConnectionHelper, GetFocusHdl, weld::Widget&, void)
+    IMPL_LINK_NOARG(OConnectionHelper, GetFocusHdl, weld::Widget&, void)
     {
         if (!m_pCollection->isFileSystemBased(m_eType))
             return;
@@ -569,7 +569,7 @@ namespace dbaui
         m_xConnectionURL->SaveValueNoPrefix();
     }
 
-    IMPL_LINK_NOARG(DBOConnectionHelper, LoseFocusHdl, weld::Widget&, void)
+    IMPL_LINK_NOARG(OConnectionHelper, LoseFocusHdl, weld::Widget&, void)
     {
         if (!m_pCollection->isFileSystemBased(m_eType))
             return;
@@ -579,7 +579,7 @@ namespace dbaui
         commitURL();
     }
 
-    bool DBOConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
+    bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
     {
         // get an URL object analyzing the URL for us ...
         INetURLObject aParser;
@@ -646,19 +646,19 @@ namespace dbaui
         return true;
     }
 
-    void DBOConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFT_Connection.get()));
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Button>(m_xPB_Connection.get()));
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Button>(m_xPB_CreateDB.get()));
     }
 
-    void DBOConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back( new OSaveValueWidgetWrapper<DBOConnectionURLEdit>( m_xConnectionURL.get() ) );
+        _rControlList.emplace_back( new OSaveValueWidgetWrapper<OConnectionURLEdit>( m_xConnectionURL.get() ) );
     }
 
-    bool DBOConnectionHelper::commitURL()
+    bool OConnectionHelper::commitURL()
     {
         OUString sURL;
         OUString sOldPath;
@@ -713,7 +713,7 @@ namespace dbaui
         return true;
     }
 
-    void DBOConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
+    void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
     {
         OUString sOldPath = getURLNoPrefix();
         if ( !sOldPath.isEmpty() )

@@ -35,13 +35,13 @@ namespace dbaui
         PATH_NOT_KNOWN
     };
 
-    class DBOConnectionHelper : public OGenericAdministrationPage
+    class OConnectionHelper : public OGenericAdministrationPage
     {
         bool            m_bUserGrabFocus;
 
     public:
-        DBOConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs);
-        virtual ~DBOConnectionHelper() override;
+        OConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs);
+        virtual ~OConnectionHelper() override;
         virtual void dispose() override;
 
         OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
@@ -52,7 +52,7 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xFT_Connection;
         std::unique_ptr<weld::Button> m_xPB_Connection;
         std::unique_ptr<weld::Button> m_xPB_CreateDB;
-        std::unique_ptr<DBOConnectionURLEdit> m_xConnectionURL;
+        std::unique_ptr<OConnectionURLEdit> m_xConnectionURL;
 
     public:
 

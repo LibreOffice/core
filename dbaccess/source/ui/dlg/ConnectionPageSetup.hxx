@@ -34,7 +34,7 @@ namespace dbaui
 
     /** implements the connection page of the data source properties dialog.
     */
-    class OConnectionTabPageSetup : public DBOConnectionHelper
+    class OConnectionTabPageSetup : public OConnectionHelper
     {
         friend class VclPtr<OConnectionTabPageSetup>;
     protected:

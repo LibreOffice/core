@@ -28,7 +28,7 @@
 namespace dbaui
 {
 
-class DBOConnectionURLEdit
+class OConnectionURLEdit
 {
     OUString m_sSavedValue;
 
@@ -40,8 +40,8 @@ class DBOConnectionURLEdit
     std::unique_ptr<weld::Label> m_xForcedPrefix;
 
 public:
-    DBOConnectionURLEdit(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::Label> xForcedPrefix);
-    ~DBOConnectionURLEdit();
+    OConnectionURLEdit(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::Label> xForcedPrefix);
+    ~OConnectionURLEdit();
 
 public:
     bool get_visible() const { return m_xEntry->get_visible(); }

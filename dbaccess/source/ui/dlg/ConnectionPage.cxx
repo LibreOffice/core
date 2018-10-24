@@ -83,7 +83,7 @@ namespace dbaui
 
     // OConnectionTabPage
     OConnectionTabPage::OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
-        : DBOConnectionHelper(pParent, "dbaccess/ui/connectionpage.ui", "ConnectionPage", _rCoreAttrs)
+        : OConnectionHelper(pParent, "dbaccess/ui/connectionpage.ui", "ConnectionPage", _rCoreAttrs)
         , m_xFL2(m_xBuilder->weld_label("userlabel"))
         , m_xUserNameLabel(m_xBuilder->weld_label("userNameLabel"))
         , m_xUserName(m_xBuilder->weld_entry("userNameEntry"))
@@ -115,7 +115,7 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
-        DBOConnectionHelper::implInitControls( _rSet, _bSaveValue);
+        OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
         ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
         switch( eType )
