@@ -690,22 +690,17 @@ using namespace ::com::sun::star;
     }
 
 
-    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OConnectionTabPageSetup(pParent, "DBWizSpreadsheetPage", "dbaccess/ui/dbwizspreadsheetpage.ui", _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
+    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOConnectionTabPageSetup(pParent, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
+                                 rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
+        , m_xPasswordrequired(m_xBuilder->weld_check_button("passwordrequired"))
     {
-        get(m_pPasswordrequired, "passwordrequired");
-        m_pPasswordrequired->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
+        m_xPasswordrequired->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
     }
 
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
     {
         disposeOnce();
-    }
-
-    void OSpreadSheetConnectionPageSetup::dispose()
-    {
-        m_pPasswordrequired.clear();
-        OConnectionTabPageSetup::dispose();
     }
 
     void OSpreadSheetConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
@@ -714,15 +709,15 @@ using namespace ::com::sun::star;
 
     void OSpreadSheetConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        OConnectionTabPageSetup::fillControls(_rControlList);
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pPasswordrequired));
+        DBOConnectionTabPageSetup::fillControls(_rControlList);
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xPasswordrequired.get()));
 
     }
 
     bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
-        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        fillBool(*_rSet,m_pPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        bool bChangedSomething = DBOConnectionTabPageSetup::FillItemSet(_rSet);
+        fillBool(*_rSet,m_xPasswordrequired.get(),DSID_PASSWORDREQUIRED,false,bChangedSomething);
         return bChangedSomething;
     }
 
