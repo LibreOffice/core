@@ -63,16 +63,6 @@ void FocusManager::GrabFocusPanel()
     FocusPanel(0, false);
 }
 
-void FocusManager::GrabFocusButton(const sal_Int32 nIndex)
-{
-    if (static_cast<size_t>(nIndex) >= maButtons.size())
-    {
-        SAL_WARN("sfx.sidebar", "invalid focus index, probably during teardown");
-        return;
-    }
-    FocusButton(nIndex);
-}
-
 void FocusManager::Clear()
 {
     SetDeckTitle(nullptr);

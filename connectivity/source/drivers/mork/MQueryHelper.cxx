@@ -124,13 +124,6 @@ sal_Int32 MQueryHelper::getResultCount() const
     return result;
 }
 
-
-bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
-{
-    return getResultCount() > nDBRow;
-}
-
-
 bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType )
 {
     MQueryHelperResultEntry* pResEntry = getByIndex( nDBRow );

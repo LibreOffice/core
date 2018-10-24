@@ -138,25 +138,6 @@ namespace svt
     }
 
 
-    namespace
-    {
-        struct ResetDialogController
-        {
-            void operator()( const std::shared_ptr<DialogController>& _pController )
-            {
-                _pController->reset();
-            }
-        };
-    }
-
-
-    void ControlDependencyManager::clear()
-    {
-        ::std::for_each( m_pImpl->aControllers.begin(), m_pImpl->aControllers.end(), ResetDialogController() );
-        m_pImpl->aControllers.clear();
-    }
-
-
     void ControlDependencyManager::addController( const std::shared_ptr<DialogController>& _pController )
     {
         OSL_ENSURE(_pController != nullptr, "ControlDependencyManager::addController: invalid "
