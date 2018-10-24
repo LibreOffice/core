@@ -179,6 +179,120 @@ namespace dbaui
         SetRoadmapStateValue(checkTestConnection());
         callModifiedHdl();
     }
+
+    VclPtr<OGenericAdministrationPage> DBOConnectionTabPageSetup::CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<OConnectionTabPageSetup>::Create ( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );
+    }
+
+    VclPtr<OGenericAdministrationPage> DBOConnectionTabPageSetup::CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE );
+    }
+
+    VclPtr<OGenericAdministrationPage> DBOConnectionTabPageSetup::CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL );
+    }
+
+    VclPtr<OGenericAdministrationPage> DBOConnectionTabPageSetup::CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE );
+    }
+
+    VclPtr<OGenericAdministrationPage> DBOConnectionTabPageSetup::CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<OConnectionTabPageSetup>::Create(pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
+    }
+
+    DBOConnectionTabPageSetup::DBOConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
+        : DBOConnectionHelper(pParent, _rUIXMLDescription, _rId, _rCoreAttrs)
+        , m_xHelpText(m_xBuilder->weld_label("helptext"))
+        , m_xHeaderText(m_xBuilder->weld_label("header"))
+    {
+
+        if (pHelpTextResId != nullptr)
+        {
+            OUString sHelpText = DBA_RES(pHelpTextResId);
+            m_xHelpText->set_label(sHelpText);
+        }
+        else
+            m_xHelpText->hide();
+
+        if (pHeaderResId != nullptr)
+            m_xHeaderText->set_label(DBA_RES(pHeaderResId));
+
+        if (pUrlResId != nullptr)
+        {
+            OUString sLabelText = DBA_RES(pUrlResId);
+            m_xFT_Connection->set_label(sLabelText);
+        }
+        else
+            m_xFT_Connection->hide();
+
+        m_xConnectionURL->connect_changed(LINK(this, DBOConnectionTabPageSetup, OnEditModified));
+
+        SetRoadmapStateValue(false);
+    }
+
+    DBOConnectionTabPageSetup::~DBOConnectionTabPageSetup()
+    {
+        disposeOnce();
+    }
+
+    void DBOConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        m_eType = m_pAdminDialog->getDatasourceType(_rSet);
+        // special handling for oracle, this can only happen
+        // if the user enters the same url as used for Oracle and we are on the JDBC path
+        //! TODO
+        //if (  ::dbaccess::DST_ORACLE_JDBC == m_eType )
+        //    m_eType =  ::dbaccess::DST_JDBC;
+        if(m_pCollection->determineType(m_eType) == ::dbaccess::DST_POSTGRES){
+            SetRoadmapStateValue(true);
+        }
+
+        DBOConnectionHelper::implInitControls(_rSet, _bSaveValue);
+
+        //! TODO
+        //if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
+        //{
+        //  OUString sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
+        //  FixedText* ppTextControls[] ={&m_aFT_Connection};
+        //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+        //  {
+        //      ppTextControls[i]->SetText(sDisplayName);
+        //  }
+        //}
+
+        callModifiedHdl();
+    }
+
+    bool DBOConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
+    {
+        return commitURL();
+    }
+
+    bool DBOConnectionTabPageSetup::FillItemSet(SfxItemSet* _rSet)
+    {
+        bool bChangedSomething = false;
+        fillString(*_rSet,m_xConnectionURL.get(), DSID_CONNECTURL, bChangedSomething);
+        return bChangedSomething;
+    }
+
+    bool DBOConnectionTabPageSetup::checkTestConnection()
+    {
+        if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_POSTGRES )
+            return true;
+        return !m_xConnectionURL->get_visible() || !m_xConnectionURL->GetTextNoPrefix().isEmpty();
+    }
+
+    IMPL_LINK_NOARG(DBOConnectionTabPageSetup, OnEditModified, weld::Entry&, void)
+    {
+        SetRoadmapStateValue(checkTestConnection());
+        callModifiedHdl();
+    }
+
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
