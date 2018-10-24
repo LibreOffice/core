@@ -168,13 +168,12 @@ namespace dbaui
     };
 
     // OJDBCConnectionPageSetup
-    class OJDBCConnectionPageSetup final : public OConnectionTabPageSetup
+    class OJDBCConnectionPageSetup final : public DBOConnectionTabPageSetup
     {
     public:
-                OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OJDBCConnectionPageSetup() override;
-        virtual void dispose() override;
-        static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
 
     private:
         virtual bool checkTestConnection() override;
@@ -184,14 +183,14 @@ namespace dbaui
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
-        DECL_LINK(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK(OnEditModified, Edit&, void);
-        VclPtr<FixedText>          m_pFTDriverClass;
-        VclPtr<Edit>               m_pETDriverClass;
-        VclPtr<PushButton>         m_pPBTestJavaDriver;
+        DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
+        DECL_LINK(OnEditModified, weld::Entry&, void);
+        std::unique_ptr<weld::Label> m_xFTDriverClass;
+        std::unique_ptr<weld::Entry> m_xETDriverClass;
+        std::unique_ptr<weld::Button> m_xPBTestJavaDriver;
     };
 
-    // OJDBCConnectionPageSetup
+    // OMySQLIntroPageSetup
     class OMySQLIntroPageSetup : public OGenericAdministrationPage
     {
     public:
