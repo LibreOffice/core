@@ -49,6 +49,7 @@
 #include "scmatrix.hxx"
 #include "refupdatecontext.hxx"
 #include <rowheightcontext.hxx>
+#include <vcl/svapp.hxx>
 
 #include <formula/vectortoken.hxx>
 
@@ -82,7 +83,7 @@ ScProgress* GetProgressBar(
 
 void GetOptimalHeightsInColumn(
     sc::RowHeightContext& rCxt, ScColContainer& rCol, SCROW nStartRow, SCROW nEndRow,
-    ScProgress* pProgress, sal_uInt32 nProgressStart )
+    ScProgress* pProgress, sal_uLong nProgressStart )
 {
     assert(nStartRow <= nEndRow);
 
@@ -102,20 +103,24 @@ void GetOptimalHeightsInColumn(
     SCSIZE nPos = nCount-1;
     while ( nPos && rHeights[nPos-1] >= nMinHeight )
         --nPos;
-    SCROW nMinStart = nStartRow + nPos;
 
-    sal_uLong nWeightedCount = 0;
+    const SCROW nMinStart = nStartRow + nPos;
+
+    sal_uLong nWeightedCount = nProgressStart + rCol[MAXCOL].GetWeightedCount(nStartRow, nEndRow);
+    const SCCOL progressUpdateStep = MAXCOL / 10;
     for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL already above
     {
         rCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, nMinHeight, nMinStart);
 
         if (pProgress)
         {
-            sal_uLong nWeight = rCol[nCol].GetWeightedCount();
-            if (nWeight)        // does not have to be the same Status
+            nWeightedCount += rCol[nCol].GetWeightedCount(nStartRow, nEndRow);
+            pProgress->SetState( nWeightedCount );
+
+            if ((nCol % progressUpdateStep) == 0)
             {
-                nWeightedCount += nWeight;
-                pProgress->SetState( nWeightedCount + nProgressStart );
+                // try to make sure the progress dialog is painted before continuing
+                Application::Reschedule(true);
             }
         }
     }

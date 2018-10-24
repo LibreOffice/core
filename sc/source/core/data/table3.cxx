@@ -3394,9 +3394,18 @@ sal_uLong ScTable::GetWeightedCount() const
 {
     sal_uLong nCellCount = 0;
 
-    for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
-            nCellCount += aCol[nCol].GetWeightedCount();
+    for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
+        nCellCount += aCol[nCol].GetWeightedCount();
+
+    return nCellCount;
+}
+
+sal_uLong ScTable::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
+{
+    sal_uLong nCellCount = 0;
+
+    for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
+        nCellCount += aCol[nCol].GetWeightedCount(nStartRow, nEndRow);
 
     return nCellCount;
 }
