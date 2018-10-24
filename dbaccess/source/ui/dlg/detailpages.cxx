@@ -483,14 +483,15 @@ namespace dbaui
         DBOCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OMySQLODBCDetailsPage
-    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, "AutoCharset", "dbaccess/ui/autocharsetpage.ui", _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
+    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+        : DBOCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        return VclPtr<OMySQLODBCDetailsPage>::Create( pParent.pParent, *_rAttrSet );
+        return VclPtr<OMySQLODBCDetailsPage>::Create(pParent, *pAttrSet);
     }
 
     // OMySQLJDBCDetailsPage
