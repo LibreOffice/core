@@ -35,6 +35,11 @@ class HTMLReader: public Reader
     virtual bool SetStrmStgPtr() override;
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
     virtual OUString GetTemplateName(SwDoc& rDoc) const override;
+
+    /// Parse FilterOptions passed to the importer.
+    void SetupFilterOptions();
+
+    OUString m_aNamespace;
 public:
     HTMLReader();
 };
