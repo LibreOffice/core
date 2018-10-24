@@ -1,7 +1,5 @@
 "ScAutoFormatObj";"com::sun::star::container::XIndexAccess";"getCount()"
 "ScAutoFormatObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScAutoFormatObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScAutoFormatObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScAutoFormatObj";"com::sun::star::container::XNamed";"getName()"
 "ScAutoFormatObj";"com::sun::star::container::XNamed";"setName()"
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"

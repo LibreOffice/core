@@ -120,8 +120,6 @@
 "ScCellRangesObj";"com::sun::star::sheet::XCellRangesQuery";"queryColumnDifferences()"
 "ScCellRangesObj";"com::sun::star::sheet::XCellRangesQuery";"queryRowDifferences()"
 "ScCellRangesObj";"com::sun::star::sheet::XCellRangesQuery";"queryIntersection()"
-"ScCellRangesObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScCellRangesObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharFontName"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharFontStyleName"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharFontFamily"

@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/sheet/subtotaldescriptor.hxx>
 #include <test/sheet/xsubtotaldescriptor.hxx>
 
@@ -33,6 +34,7 @@ namespace sc_apitest {
 
 class ScSubTotalDescriptorBaseObj : public CalcUnoApiTest,
                                     public apitest::SubTotalDescriptor,
+                                    public apitest::XElementAccess,
                                     public apitest::XSubTotalDescriptor
 {
 public:
@@ -46,6 +48,10 @@ public:
 
     // SubTotalDescriptor
     CPPUNIT_TEST(testSubTotalDescriptorProperties);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XSubTotalDescriptor
     CPPUNIT_TEST(testAddNew);
