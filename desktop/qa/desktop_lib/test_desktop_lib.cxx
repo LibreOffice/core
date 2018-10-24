@@ -2274,24 +2274,56 @@ void DesktopLOKTest::testInsertCertificate()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
 
-    OUString aCertificateURL;
-    createFileURL("certificate.der", aCertificateURL);
-    SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-    std::vector<unsigned char> aCertificate;
-    aCertificate.resize(aCertificateStream.remainingSize());
-    aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+    {
+        OUString aCertificateURL;
+        createFileURL("rootCA.der", aCertificateURL);
+        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
+        std::vector<unsigned char> aCertificate;
+        aCertificate.resize(aCertificateStream.remainingSize());
+        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
 
-    OUString aPrivateKeyURL;
-    createFileURL("pkey.der", aPrivateKeyURL);
-    SvFileStream aPrivateKeyStream(aPrivateKeyURL, StreamMode::READ);
-    std::vector<unsigned char> aPrivateKey;
-    aPrivateKey.resize(aPrivateKeyStream.remainingSize());
-    aPrivateKeyStream.ReadBytes(aPrivateKey.data(), aPrivateKeyStream.remainingSize());
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
 
-    pDocument->m_pDocumentClass->insertCertificate(pDocument,
-                        aCertificate.data(), int(aCertificate.size()),
-                        aPrivateKey.data(), int(aPrivateKey.size()));
+    {
+        OUString aCertificateURL;
+        createFileURL("intermediateRootCA.der", aCertificateURL);
+        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
+        std::vector<unsigned char> aCertificate;
+        aCertificate.resize(aCertificateStream.remainingSize());
+        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    {
+        OUString aCertificateURL;
+        createFileURL("certificate.der", aCertificateURL);
+        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
+        std::vector<unsigned char> aCertificate;
+        aCertificate.resize(aCertificateStream.remainingSize());
+        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+
+
+        OUString aPrivateKeyURL;
+        createFileURL("certificatePrivateKey.der", aPrivateKeyURL);
+        SvFileStream aPrivateKeyStream(aPrivateKeyURL, StreamMode::READ);
+        std::vector<unsigned char> aPrivateKey;
+        aPrivateKey.resize(aPrivateKeyStream.remainingSize());
+        aPrivateKeyStream.ReadBytes(aPrivateKey.data(), aPrivateKeyStream.remainingSize());
+
+        bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
+                            aCertificate.data(), int(aCertificate.size()),
+                            aPrivateKey.data(), int(aPrivateKey.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
 
     comphelper::LibreOfficeKit::setActive(false);
 }
