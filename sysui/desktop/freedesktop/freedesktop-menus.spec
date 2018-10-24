@@ -37,6 +37,9 @@ AutoReqProv: no
 %define gnome_dir /usr
 %define gnome_mime_theme hicolor
 
+# only symlinks in the package that at the time of building point to non-existing files
+%global dont_check_desktop_files 1
+
 %description
 %productname desktop integration for desktop-environments that implement
 the menu- and mime-related specifications from http://www.freedesktop.org
