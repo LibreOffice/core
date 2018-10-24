@@ -20,7 +20,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets, public ::apitest::XSpreadsheets2, public apitest::XNameContainer
+class ScTableSheetsObj : public CalcUnoApiTest, public apitest::XElementAccess, public ::apitest::XSpreadsheets, public ::apitest::XSpreadsheets2, public apitest::XNameContainer
 {
 public:
     ScTableSheetsObj();
@@ -29,6 +29,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XSpreadsheets
     CPPUNIT_TEST(testInsertNewByName);
