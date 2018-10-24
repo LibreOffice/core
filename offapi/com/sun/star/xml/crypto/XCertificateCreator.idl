@@ -27,12 +27,19 @@
 module com { module sun { module star { module xml { module crypto {
 
 /**
- * Interface for creating certificates
+ * Interface for creating and adding certificates
  *
  * @since LibreOffice 6.2
  */
 interface XCertificateCreator : com::sun::star::uno::XInterface
 {
+    /**
+     * Adds a certificate to the certificate database with the trust provided by the trust string.
+     */
+    com::sun::star::security::XCertificate addDERCertificateToTheDatabase(
+                [in] sequence<byte> aDerCertificate,
+                [in] string aTrustString);
+
     /**
      * Create certificate from raw DER encoded certificate and associate the private key with the certificate
      */
