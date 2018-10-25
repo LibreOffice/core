@@ -1735,6 +1735,9 @@ def __compil__(s):
             __loadlang__(_.lng, __l12n__(_.lng))
     except:
         __trace__()
+        # for testing compiling, we create a not document based namespace
+        if "_" not in locals():
+            _ = lambda: None
         _.lng = 'en_US'
         if not _.lng in __comp__:
             __loadlang__(_.lng, __l12n__(_.lng)) 
