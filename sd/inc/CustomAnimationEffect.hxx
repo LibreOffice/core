@@ -277,6 +277,7 @@ public:
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration );
     SAL_DLLPRIVATE void remove( const CustomAnimationEffectPtr& pEffect );
+    SAL_DLLPRIVATE void moveToBeforeEffect( const CustomAnimationEffectPtr& pEffect,  const CustomAnimationEffectPtr& pInsertBefore);
 
     SAL_DLLPRIVATE void create( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     SAL_DLLPRIVATE void createEffectsequence( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
