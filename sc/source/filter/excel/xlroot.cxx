@@ -392,9 +392,9 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         // FillToEditItemSet() adjusts font height to 1/100th mm, we need twips
         std::unique_ptr<SfxPoolItem> pNewItem( aItemSet.Get( ATTR_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT));
         pEditSet->Put( *pNewItem );
-        pNewItem.reset( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK));
+        pNewItem = aItemSet.Get( ATTR_CJK_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK);
         pEditSet->Put( *pNewItem );
-        pNewItem.reset( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL));
+        pNewItem = aItemSet.Get( ATTR_CTL_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL);
         pEditSet->Put( *pNewItem );
         rEE.SetDefaults( pEditSet );    // takes ownership
    }
