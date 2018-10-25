@@ -481,7 +481,9 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
     // Has a "valid" number?
-    if( pTextNd->IsNumbered() && pTextNd->IsCountedInList())
+    // sw_redlinehide: check that pParaPropsNode is the correct one
+    assert(pTextNd->IsNumbered(m_pFrame->getRootFrame()) == pTextNd->IsNumbered(nullptr));
+    if (pTextNd->IsNumbered(m_pFrame->getRootFrame()) && pTextNd->IsCountedInList())
     {
         int nLevel = pTextNd->GetActualListLevel();
 

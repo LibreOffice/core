@@ -529,7 +529,7 @@ public:
         @retval true      This node is numbered.
         @retval false     else
      */
-    bool IsNumbered() const;
+    bool IsNumbered(SwRootFrame const* pLayout = nullptr) const;
 
     /** Returns if this text node has a marked label.
 

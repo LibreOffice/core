@@ -1880,7 +1880,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 const SwNumRule* pOutlRule = pWrtShell->GetOutlineNumRule();
                 const SwTextNode* pTextNd =
                         pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(nPos);
-                if( pTextNd && pOutlRule && pTextNd->IsNumbered())
+                if (pTextNd && pOutlRule && pTextNd->IsNumbered(pWrtShell->GetLayout()))
                 {
                     SwNumberTree::tNumberVector aNumVector =
                         pTextNd->GetNumberVector(pWrtShell->GetLayout());

@@ -4355,7 +4355,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 pFrame->Broadcast(SfxHint()); // notify SwAccessibleParagraph
             }
             // all nodes, not just merged ones! it may be in the same list as
-            if (rTextNode.IsNumbered()) // a preceding merged one...
+            if (rTextNode.IsNumbered(nullptr)) // a preceding merged one...
             {   // notify frames so they reformat numbering portions
                 rTextNode.NumRuleChgd();
             }

@@ -397,7 +397,7 @@ void SwCursorShell::UpdateMarkedListLevel()
 
     if ( pTextNd )
     {
-        if ( !pTextNd->IsNumbered() )
+        if (!pTextNd->IsNumbered(GetLayout()))
         {
             m_pCurrentCursor->SetInFrontOfLabel_( false );
             MarkListLevel( OUString(), 0 );
