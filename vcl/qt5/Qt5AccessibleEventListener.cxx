@@ -63,15 +63,17 @@ void Qt5AccessibleEventListener::notifyEvent(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::ActiveDescendantChanged));
             return;
         case AccessibleEventId::CHILD:
-            QAccessible::Event event;
+        {
+            QAccessible::Event event = QAccessible::InvalidEvent;
             if (aEvent.OldValue >>= xChild)
                 event = QAccessible::ObjectDestroyed;
             if (aEvent.NewValue >>= xChild)
                 event = QAccessible::ObjectCreated;
-            if (event)
+            if (event != QAccessible::InvalidEvent)
                 QAccessible::updateAccessibility(
                     new QAccessibleEvent(pQAccessibleInterface, event));
             return;
+        }
         case AccessibleEventId::SELECTION_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::Selection));
