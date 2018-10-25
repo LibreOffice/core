@@ -395,7 +395,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
     /*
      * Implementation of interface XDispatchProvider
-     * These functions are called from our master if he willn't handle the outstanding request.
+     * These functions are called from our master if he will not handle the outstanding request.
      * Given parameter should be checked if they are right for us. If it's true, the returned
      * dispatcher should be this implementation himself; otherwise call should be forwarded
      * to the slave.

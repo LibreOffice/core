@@ -118,7 +118,7 @@ def check_rebuild(zip_file, imagelist_filenames, custom_paths, zip_list):
         list of files.
 
         :type filenames: dict
-        :param filesnames: List of filenames to check against.
+        :param filenames: List of filenames to check against.
 
         :rtype: bool
         :return: True if zip archive is older and False if not.

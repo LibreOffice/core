@@ -78,7 +78,7 @@ public class SwAccessibleHeaderView extends TestCase {
         XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
 
-        // obtains style 'Standatd' from style family 'PageStyles'
+        // obtains style 'Standard' from style family 'PageStyles'
         PageStyles = (XNameAccess) AnyConverter.toObject(
             new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
         StdStyle = (XStyle) AnyConverter.toObject(
