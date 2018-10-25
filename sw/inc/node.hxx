@@ -285,7 +285,7 @@ public:
 
     sal_uLong GetIndex() const { return GetPos(); }
 
-    const SwTextNode* FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const;
+    const SwTextNode* FindOutlineNodeOfLevel(sal_uInt8 nLvl, SwRootFrame const* pLayout = nullptr) const;
 
     sal_uInt8 HasPrevNextLayNode() const;
 
