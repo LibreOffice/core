@@ -440,11 +440,194 @@ CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
     , mpController(nullptr)
     , mnLastGroupId(0)
     , mpLastParentEntry(nullptr)
+    , mpDndEffectDragging(nullptr)
+    , mpDndEffectInsertBefore(nullptr)
 {
     EnableContextMenuHandling();
     SetSelectionMode( SelectionMode::Multiple );
     SetOptimalImageIndent();
     SetNodeDefaultImages();
+
+    SetDragDropMode(DragDropMode::CTRL_MOVE);
+}
+
+// D'n'D #1: Prepare selected element for moving.
+DragDropMode CustomAnimationList::NotifyStartDrag( TransferDataContainer& /*rData*/, SvTreeListEntry* pEntry )
+{
+    mpDndEffectDragging = pEntry;
+    mpDndEffectInsertBefore = pEntry;
+
+    /*
+        If dragged effect has visible children, SvTreeListBox won't register dragging it
+        into its children nodes. Therefore, start by re-parenting (only in the UI!)
+        dragged effect's first child to the root, and the remaining children to 1st child.
+    */
+    if( GetVisibleChildCount( pEntry ) > 0 )
+    {
+        SvTreeListEntry* pFirstChild = FirstChild( pEntry );
+        SvTreeListEntry* pEntryParent = GetParent( pEntry );
+        sal_uLong nInsertAfterPos = SvTreeList::GetRelPos( pEntry ) + 1;
+
+        // Re-parent 1st child to root, below all the other children.
+        pModel->Move( pFirstChild, pEntryParent, nInsertAfterPos );
+
+        // Re-parent children after 1st child to the first child
+        sal_uLong nInsertNextChildPos = 0;
+        while( FirstChild( pEntry ) )
+        {
+            SvTreeListEntry* pNextChild = FirstChild( pEntry );
+            ++nInsertNextChildPos;
+            pModel->Move( pNextChild, pFirstChild, nInsertNextChildPos );
+        }
+
+        // Restore selection and expand all children (there were previously visible)
+        Select( pEntry );
+        Expand( pFirstChild );
+    }
+
+    return DragDropMode::CTRL_MOVE;
+}
+
+// D'n'D #2: Called each time mouse moves during drag
+sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    sal_Int8 ret = DND_ACTION_NONE;
+    if( mpDndEffectDragging )
+    {
+        /*
+            Don't call SvTreeListBox::AcceptDrop because it puts an unnecessary
+            highlight via ImplShowTargetEmphasis()
+        */
+
+        const bool bIsMove = DND_ACTION_MOVE == rEvt.mnAction;
+        if( !rEvt.mbLeaving && bIsMove )
+        {
+            SvTreeListEntry* pEntry = GetDropTarget( rEvt.maPosPixel );
+            if( pEntry )
+            {
+                ReorderEffectsInUiDuringDragOver( pEntry );
+            }
+        }
+
+        // Return DND_ACTION_MOVE on internal drag'n'drops so that ExecuteDrop() is called.
+        ret = DND_ACTION_MOVE;
+    }
+
+    return ret;
+}
+
+// D'n'D: Update UI to show where dragged event will appear if dropped now.
+void CustomAnimationList::ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOverEntry )
+{
+    /*
+        Update the order of effects on *just the UI* as the user drags.
+        The model (MainSequence) will only be changed after the user drops
+        the effect because this triggers a rebuild of the list which removes
+        and recreates all effects (on a background timer). Hence, this would
+        invalidate the pointer for the entry currently being dragged.
+    */
+
+    // Guard: Do nothing if dragging onto self
+    // Happens often because we have reordered the dragged effect to be under mouse
+    if( pOverEntry == mpDndEffectDragging )
+        return;
+
+    // Compute new location in *UI*
+    SvTreeListEntry* pNewParent = nullptr;
+    sal_uLong nInsertAfterPos = 0;
+    bool draggingUp = true;
+    for (
+        SvTreeListEntry* pCheck = First();
+        pCheck != nullptr;
+        pCheck = Next( pCheck )
+    ) {
+        // We are dragging 'down' the list if effect-being-dragged (mpDndEffectDragging)
+        // is before pOverEntry.
+        if( pCheck == mpDndEffectDragging )
+            draggingUp = false;
+
+        if( pCheck == pOverEntry )
+        {
+            if( draggingUp )
+            {
+                // Drag up   --> place above the element we are over
+                pNewParent = GetParent( pOverEntry );
+                nInsertAfterPos = SvTreeList::GetRelPos( pOverEntry );
+                mpDndEffectInsertBefore = pOverEntry;
+
+            }
+            else
+            {
+                // Drag down -->  place below the element we are over
+                SvTreeListEntry* pNextVisBelowTarget = NextVisible( pOverEntry );
+                if( pNextVisBelowTarget )
+                {
+                    // Match parent of NEXT visible effect (works for sub-items too)
+                    pNewParent = GetParent( pNextVisBelowTarget );
+                    nInsertAfterPos = SvTreeList::GetRelPos( pNextVisBelowTarget );
+                    mpDndEffectInsertBefore = pNextVisBelowTarget;
+                }
+                else
+                {
+                    // Over the last element: no next to work with
+                    pNewParent = GetParent( pOverEntry );
+                    nInsertAfterPos = SvTreeList::GetRelPos( pOverEntry ) + 1;
+                    mpDndEffectInsertBefore = nullptr;
+                }
+            }
+            break;
+        }
+    }
+
+    // Update *just* the UI to show where dropped element would currently be if dropped.
+    pModel->Move( mpDndEffectDragging, pNewParent, nInsertAfterPos );
+
+    // Restore selection
+    Select( mpDndEffectDragging );
+}
+
+// D'n'D #4: Tell model to update effect order.
+sal_Int8 CustomAnimationList::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
+{
+    // NOTE: We cannot just override NotifyMoving() because it's not called
+    //       since we dynamically reorder effects during drag.
+
+    sal_Int8 ret = DND_ACTION_NONE;
+
+    const bool bMovingEffect = ( mpDndEffectDragging != nullptr );
+    const bool bMoveNotSelf  = ( mpDndEffectInsertBefore != mpDndEffectDragging );
+    const bool bHaveSequence = ( mpMainSequence.get() != nullptr );
+
+    if( bMovingEffect && bMoveNotSelf && bHaveSequence )
+    {
+        CustomAnimationListEntry*  pEntryMoved = static_cast< CustomAnimationListEntry* >( mpDndEffectDragging );
+        CustomAnimationListEntry*  pTarget = static_cast< CustomAnimationListEntry* >( mpDndEffectInsertBefore );
+
+        // Callback to observer to have it update the model.
+        // If pTarget is null, pass nullptr to indicate end of list.
+        mpController->onDragNDropComplete(
+            pEntryMoved->getEffect(),
+            pTarget ? pTarget->getEffect() : nullptr );
+
+        // Reset selection
+        Select( mpDndEffectDragging );
+
+        ret = DND_ACTION_MOVE;
+    }
+
+    return ret;
+}
+
+// D'n'D #5: Cleanup (regardless of if we were target of drop or not)
+void CustomAnimationList::DragFinished( sal_Int8 nDropAction )
+{
+    mpDndEffectDragging = nullptr;
+    mpDndEffectInsertBefore = nullptr;
+
+    // Rebuild because we may have re-parented the dragged effect's first child.
+    mpMainSequence->rebuild();
+
+    SvTreeListBox::DragFinished( nDropAction );
 }
 
 VCL_BUILDER_FACTORY(CustomAnimationList)
@@ -553,8 +736,9 @@ void CustomAnimationList::update()
 
     CustomAnimationListEntry* pEntry = nullptr;
 
-    std::vector< CustomAnimationEffectPtr > aExpanded;
+    std::vector< CustomAnimationEffectPtr > aVisible;
     std::vector< CustomAnimationEffectPtr > aSelected;
+    CustomAnimationEffectPtr aCurrent;
 
     CustomAnimationEffectPtr pFirstSelEffect;
     CustomAnimationEffectPtr pLastSelEffect;
@@ -588,7 +772,7 @@ void CustomAnimationList::update()
             nLastSelOld = GetAbsPos( pEntry );
         }
 
-        // save selection and expand states
+        // save selection, current, and expand (visible) states
         pEntry = static_cast<CustomAnimationListEntry*>(First());
 
         while( pEntry )
@@ -596,8 +780,8 @@ void CustomAnimationList::update()
             CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
             if( pEffect.get() )
             {
-                if( IsExpanded( pEntry ) )
-                    aExpanded.push_back( pEffect );
+                if( IsEntryVisible( pEntry ) )
+                    aVisible.push_back( pEffect );
 
                 if( IsSelected( pEntry ) )
                     aSelected.push_back( pEffect );
@@ -605,6 +789,10 @@ void CustomAnimationList::update()
 
             pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
         }
+
+        pEntry = static_cast<CustomAnimationListEntry*>(GetCurEntry());
+        if( pEntry )
+            aCurrent = pEntry->getEffect();
     }
 
     // rebuild list
@@ -639,7 +827,7 @@ void CustomAnimationList::update()
             }
         }
 
-        // restore selection and expand states
+        // restore selection state, expand state, and current-entry (under cursor)
         pEntry = static_cast<CustomAnimationListEntry*>(First());
 
         while( pEntry )
@@ -647,11 +835,20 @@ void CustomAnimationList::update()
             CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
             if( pEffect.get() )
             {
-                if( std::find( aExpanded.begin(), aExpanded.end(), pEffect ) != aExpanded.end() )
-                    Expand( pEntry );
+                // Any effects that were visible should still be visible, so expand their parents.
+                // (a previously expanded parent may have moved leaving a child to now be the new parent to expand)
+                if( std::find( aVisible.begin(), aVisible.end(), pEffect ) != aVisible.end() )
+                {
+                    if( GetParent(pEntry) )
+                        Expand( GetParent(pEntry) );
+                }
 
                 if( std::find( aSelected.begin(), aSelected.end(), pEffect ) != aSelected.end() )
                     Select( pEntry );
+
+                // Restore the cursor; don't use SetCurEntry() as it may deselect other effects
+                if( pEffect == aCurrent )
+                    SetCursor( pEntry );
 
                 if( pEffect == pFirstSelEffect )
                     nFirstSelNew = GetAbsPos( pEntry );
@@ -833,6 +1030,21 @@ bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) 
         pEntry = static_cast<CustomAnimationListEntry*>(GetParent( pEntry ));
 
     return (pEntry == nullptr) || IsExpanded( pEntry );
+}
+
+bool CustomAnimationList::isVisible( const CustomAnimationEffectPtr& pEffect ) const
+{
+    CustomAnimationListEntry* pEntry = static_cast<CustomAnimationListEntry*>(First());
+
+    while( pEntry )
+    {
+        if( pEntry->getEffect() == pEffect )
+            break;
+
+        pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
+    }
+
+    return (pEntry == nullptr) || IsEntryVisible( pEntry );
 }
 
 EffectSequence CustomAnimationList::getSelection() const
