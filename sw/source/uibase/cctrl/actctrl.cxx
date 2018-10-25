@@ -49,7 +49,7 @@ bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
         }
     }
     if(!bHandled)
-        NumericField::EventNotify(rNEvt);
+        bHandled = NumericField::EventNotify(rNEvt);
     return bHandled;
 }
 
