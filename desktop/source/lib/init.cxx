@@ -4125,14 +4125,14 @@ __attribute__ ((visibility("default")))
 #else
 SAL_DLLPUBLIC_EXPORT
 #endif
-LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path)
+LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_url)
 {
     if (!gImpl)
     {
         SAL_INFO("lok", "Create libreoffice object");
 
         gImpl = new LibLibreOffice_Impl();
-        if (!lo_initialize(gImpl, install_path, user_profile_path))
+        if (!lo_initialize(gImpl, install_path, user_profile_url))
         {
             lo_destroy(gImpl);
         }
@@ -4151,9 +4151,9 @@ LibreOfficeKit *libreofficekit_hook(const char* install_path)
 }
 
 SAL_JNI_EXPORT
-int lok_preinit(const char* install_path, const char* user_profile_path)
+int lok_preinit(const char* install_path, const char* user_profile_url)
 {
-    return lo_initialize(nullptr, install_path, user_profile_path);
+    return lo_initialize(nullptr, install_path, user_profile_url);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
