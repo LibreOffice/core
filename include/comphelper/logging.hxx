@@ -29,9 +29,10 @@
 #include <boost/optional.hpp>
 #include <memory>
 
+#include <com/sun/star/logging/XLogger.hpp>
+
 namespace comphelper
 {
-
 
     //= string conversions, employed by the templatized log* members of
     //= EventLogger
@@ -117,6 +118,15 @@ namespace comphelper
 
         //- XLogger::log equivalents/wrappers
         //- string messages
+
+        /// logs a given message, without any arguments, or source class/method names
+        void        log( const sal_Int32 _nLogLevel, const OUString& rMessage ) const
+        {
+            if ( isLoggable( _nLogLevel ) )
+                impl_log(_nLogLevel, nullptr, nullptr, rMessage);
+        }
+
+        const css::uno::Reference<css::logging::XLogger> getLogger();
 
         /** logs a given message, replacing a placeholder in the message with an argument
 
