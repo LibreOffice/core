@@ -29,6 +29,9 @@ public class SettingsActivity extends Activity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.libreoffice_preferences);
+            if(!BuildConfig.ALLOW_EDITING) {
+                getPreferenceScreen().removePreference(findPreference("PREF_CATEGORY_GENERAL"));
+            }
         }
 
         @Override

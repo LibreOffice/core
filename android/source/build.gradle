@@ -58,6 +58,7 @@ android {
         // the configuration data that might be stripped or not
         fullUI.assets.srcDirs 'assets_fullUI'
         strippedUI.assets.srcDirs 'assets_strippedUI'
+        strippedUIEditing.assets.srcDirs 'assets_strippedUI'
     }
     defaultConfig {
         minSdkVersion 14
@@ -80,7 +81,15 @@ android {
 
     flavorDimensions "default"
     productFlavors {
-        strippedUI.dimension "default"
+        strippedUI {
+            dimension "default"
+            buildConfigField 'boolean', 'ALLOW_EDITING', 'false'
+        }
+        strippedUIEditing {
+            dimension "default"
+            buildConfigField 'boolean', 'ALLOW_EDITING', 'true'
+            versionNameSuffix "-editing"
+        }
         fullUI.dimension "default"
     }
 }
