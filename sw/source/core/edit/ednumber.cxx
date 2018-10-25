@@ -527,7 +527,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
     bool bRet = true;
     SwPaM* pCursor = GetCursor();
     if( !pCursor->IsMultiSelection() )
-        bRet = GetDoc()->OutlineUpDown( *pCursor, nOffset );
+        bRet = GetDoc()->OutlineUpDown(*pCursor, nOffset, GetLayout());
     else
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
@@ -535,7 +535,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->OutlineUpDown(
-                                    aRangeArr.SetPam( n, aPam ), nOffset );
+                            aRangeArr.SetPam(n, aPam), nOffset, GetLayout());
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     GetDoc()->getIDocumentState().SetModified();

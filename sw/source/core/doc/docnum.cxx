@@ -171,7 +171,8 @@ void SwDoc::PropagateOutlineRule()
 }
 
 // Increase/Decrease
-bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
+bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
+        SwRootFrame const*const pLayout)
 {
     if( GetNodes().GetOutLineNds().empty() || !nOffset )
         return false;
@@ -334,6 +335,10 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     for (auto i = nSttPos; i < nEndPos; ++i)
     {
         SwTextNode* pTextNd = rOutlNds[ i ]->GetTextNode();
+        if (pLayout && !sw::IsParaPropsNode(*pLayout, *pTextNd))
+        {
+            continue;
+        }
         SwTextFormatColl* pColl = pTextNd->GetTextColl();
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
@@ -369,6 +374,10 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     for (auto i = nSttPos; i < nEndPos; ++i)
     {
         SwTextNode* pTextNd = rOutlNds[ i ]->GetTextNode();
+        if (pLayout && !sw::IsParaPropsNode(*pLayout, *pTextNd))
+        {
+            continue;
+        }
         SwTextFormatColl* pColl = pTextNd->GetTextColl();
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
