@@ -472,10 +472,11 @@ private:
      */
     static inline bool CheckStringPositionArgument( double & fVal );
 
-    /** Obtain a double suitable as string position or length argument.
+    /** Obtain a sal_Int32 suitable as string position or length argument.
         Returns -1 if the number is Inf or NaN or less than 0 or greater than some
-        implementation defined max string length. */
-    inline double GetStringPositionArgument();
+        implementation defined max string length. In these cases also sets
+        nGlobalError to FormulaError::IllegalArgument, if not already set. */
+    inline sal_Int32 GetStringPositionArgument();
 
     // Check for String overflow of rResult+rAdd and set error and erase rResult
     // if so. Return true if ok, false if overflow
@@ -1086,14 +1087,15 @@ inline bool ScInterpreter::CheckStringPositionArgument( double & fVal )
     return true;
 }
 
-inline double ScInterpreter::GetStringPositionArgument()
+inline sal_Int32 ScInterpreter::GetStringPositionArgument()
 {
     double fVal = rtl::math::approxFloor( GetDouble());
     if (!CheckStringPositionArgument( fVal))
     {
         fVal = -1.0;
+        SetError( FormulaError::IllegalArgument);
     }
-    return fVal;
+    return static_cast<sal_Int32>(fVal);
 }
 
 inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
