@@ -194,7 +194,7 @@ static ImplTextEncodingData const aImplMS1252TextEncodingData
 
 /* ISO-8859-1 */
 /* Unix Standard CharSet (Latin1) for Western Script */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Character wie in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-1.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
