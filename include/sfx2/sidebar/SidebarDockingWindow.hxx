@@ -63,6 +63,8 @@ private:
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;
 
     void DoDispose();
+
+    const bool mbSidebarVisibleInLOK;
 };
 
 } } // end of namespace sfx2::sidebar

@@ -39,6 +39,11 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID(SidebarChildWindow);
 
     static sal_Int32 GetDefaultWidth(vcl::Window const * pWindow);
+
+    bool IsSidebarVisibleInLOK() const { return mbSidebarVisibleInLOK; }
+
+private:
+    const bool mbSidebarVisibleInLOK;
 };
 
 
