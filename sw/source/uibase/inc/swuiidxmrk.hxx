@@ -229,6 +229,56 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
+class AuthorMarkPane
+{
+    weld::DialogController& m_rDialog;
+
+    static bool     bIsFromComponent;
+
+    friend class SwAuthMarkModalDlg;
+    friend class SwAuthMarkFloatDlg;
+
+    bool const      bNewEntry;
+    bool            bBibAccessInitialized;
+
+    SwWrtShell*     pSh;
+
+    OUString        m_sColumnTitles[AUTH_FIELD_END];
+    OUString        m_sFields[AUTH_FIELD_END];
+
+    OUString        m_sCreatedEntry[AUTH_FIELD_END];
+
+    css::uno::Reference< css::container::XNameAccess >    xBibAccess;
+
+    std::unique_ptr<weld::RadioButton> m_xFromComponentRB;
+    std::unique_ptr<weld::RadioButton> m_xFromDocContentRB;
+    std::unique_ptr<weld::Label> m_xAuthorFI;
+    std::unique_ptr<weld::Label> m_xTitleFI;
+    std::unique_ptr<weld::Entry> m_xEntryED;
+    std::unique_ptr<weld::ComboBox> m_xEntryLB;
+    std::unique_ptr<weld::Button> m_xActionBT;
+    std::unique_ptr<weld::Button> m_xCloseBT;
+    std::unique_ptr<weld::Button> m_xCreateEntryPB;
+    std::unique_ptr<weld::Button> m_xEditEntryPB;
+
+    DECL_LINK(InsertHdl, weld::Button&, void);
+    DECL_LINK(CloseHdl, weld::Button&, void);
+    DECL_LINK(CreateEntryHdl, weld::Button&, void);
+    DECL_LINK(CompEntryHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangeSourceHdl, weld::ToggleButton&, void);
+    DECL_LINK(IsEditAllowedHdl, weld::Entry&, bool);
+    DECL_LINK(IsEntryAllowedHdl, weld::Entry&, bool);
+    DECL_LINK(EditModifyHdl, weld::Entry&, void);
+
+    void InitControls();
+    void Activate();
+
+public:
+    AuthorMarkPane(weld::DialogController& rDialog, weld::Builder& rBuilder, bool bNew);
+
+    void    ReInitDlg(SwWrtShell& rWrtShell);
+};
+
 class SwAuthMarkFloatDlg : public SfxModelessDialog
 {
     SwAuthorMarkPane m_aContent;
@@ -242,13 +292,14 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-class SwAuthMarkModalDlg : public SvxStandardDialog
+class SwAuthMarkModalDlg : public SfxDialogController
 {
-    SwAuthorMarkPane m_aContent;
+    AuthorMarkPane m_aContent;
+    void Apply();
 public:
-    SwAuthMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh);
+    SwAuthMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh);
 
-    virtual void        Apply() override;
+    virtual short int run() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX

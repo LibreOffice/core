@@ -55,7 +55,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
         case FN_EDIT_AUTH_ENTRY_DLG :
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwAutoMarkDialog(pMDI, GetShell()));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwAutoMarkDialog(GetView().GetFrameWeld(), GetShell()));
             pDlg->Execute();
         }
         break;
