@@ -32,7 +32,8 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
 
 SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 nId,
                                         SfxBindings* pBindings, SfxChildWinInfo* pInfo)
-    : SfxChildWindow(pParentWindow, nId)
+    : SfxChildWindow(pParentWindow, nId),
+      mbSidebarVisibleInLOK(pInfo && pInfo->aModule == "simpress")
 {
     SetWindow(VclPtr<SidebarDockingWindow>::Create(pBindings, *this, pParentWindow,
                                                        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION |
