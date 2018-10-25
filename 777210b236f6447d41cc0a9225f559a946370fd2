@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f1a1f67_50afed93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-25T07:08:51Z",
+      "side": 1,
+      "message": "Could you please move this to the first line, so commit notification works for that tdf bug? Thanks.",
+      "revId": "777210b236f6447d41cc0a9225f559a946370fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_10917553",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2347,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-25T07:08:51Z",
+      "side": 1,
+      "message": "Avoid OSL_ENSURE() in new code. Use SAL_WARN() when dealing with user input, assert() otherwise.",
+      "revId": "777210b236f6447d41cc0a9225f559a946370fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_f25ba151",
         "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
         "patchSetId": 5
@@ -19,6 +53,23 @@
         "endLine": 697,
         "endChar": 33
       },
+      "revId": "777210b236f6447d41cc0a9225f559a946370fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_f09dd966",
+        "filename": "writerfilter/source/dmapper/PropertyMap.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-25T07:08:51Z",
+      "side": 1,
+      "message": "Maybe add a one-liner doxygen comment for this one? Just reading the interface, it\u0027s not clear how section and the domain mapper relates to the protection that is applied.",
       "revId": "777210b236f6447d41cc0a9225f559a946370fd2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
