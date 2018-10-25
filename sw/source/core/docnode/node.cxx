@@ -763,7 +763,8 @@ SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp )
     return eTyp == pTmp->GetStartNodeType() ? pTmp : nullptr;
 }
 
-const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
+const SwTextNode* SwNode::FindOutlineNodeOfLevel(sal_uInt8 const nLvl,
+        SwRootFrame const*const pLayout) const
 {
     const SwTextNode* pRet = nullptr;
     const SwOutlineNodes& rONds = GetNodes().GetOutLineNds();
@@ -774,17 +775,31 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
         bool bCheckFirst = false;
         if( !rONds.Seek_Entry( pNd, &nPos ))
         {
-            if( nPos )
-                nPos = nPos-1;
-            else
+            if (nPos == 0)
                 bCheckFirst = true;
+        }
+        else
+        {
+            ++nPos;
         }
 
         if( bCheckFirst )
         {
-            // The first OutlineNode comes after the one asking. Test if it points to the same node.
+            // The first OutlineNode comes after the one asking.
+            // Test if both are on the same page.
             // If not it's invalid.
-            pRet = rONds[0]->GetTextNode();
+            for (nPos = 0; nPos < rONds.size(); ++nPos)
+            {
+                pRet = rONds[nPos]->GetTextNode();
+                if (!pLayout || sw::IsParaPropsNode(*pLayout, *pRet))
+                {
+                    break;
+                }
+            }
+            if (nPos == rONds.size())
+            {
+                return nullptr;
+            }
 
             const SwContentNode* pCNd = GetContentNode();
 
@@ -802,14 +817,16 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
         }
         else
         {
-            // Or at the Field and get it from there!
-            while( nPos &&
-                   nLvl < ( pRet = rONds[nPos]->GetTextNode() )
-                    ->GetAttrOutlineLevel() - 1 )
-                --nPos;
-
-            if( !nPos )     // Get separately when 0
-                pRet = rONds[0]->GetTextNode();
+            for ( ; 0 < nPos; --nPos)
+            {
+                SwTextNode const*const pNode = rONds[nPos - 1]->GetTextNode();
+                if ((nPos == 1 /*as before*/ || pNode->GetAttrOutlineLevel() - 1 <= nLvl)
+                    && (!pLayout || sw::IsParaPropsNode(*pLayout, *pNode)))
+                {
+                    pRet = pNode;
+                    break;
+                }
+            }
         }
     }
     return pRet;

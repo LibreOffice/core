@@ -1285,7 +1285,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             && IsAttrAtPos::Outline & rContentAtPos.eContentAtPos
             && !rNds.GetOutLineNds().empty() )
         {
-            const SwTextNode* pONd = pTextNd->FindOutlineNodeOfLevel( MAXLEVEL-1);
+            const SwTextNode* pONd = pTextNd->FindOutlineNodeOfLevel(MAXLEVEL-1, GetLayout());
             if( pONd )
             {
                 rContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
