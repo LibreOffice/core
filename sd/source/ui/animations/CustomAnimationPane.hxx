@@ -88,6 +88,7 @@ public:
     virtual void onSelect() override;
     virtual void onDoubleClick() override;
     virtual void onContextMenu(const OString& rIdent) override;
+    virtual void onDragNDropComplete( CustomAnimationEffectPtr pEffectDragged, CustomAnimationEffectPtr pEffectInsertBefore ) override;
 
     // Window
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
