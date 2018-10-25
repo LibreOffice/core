@@ -2890,9 +2890,9 @@ void SwTextNode::NumRuleChgd()
 }
 
 // -> #i27615#
-bool SwTextNode::IsNumbered() const
+bool SwTextNode::IsNumbered(SwRootFrame const*const pLayout) const
 {
-    SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
+    SwNumRule* pRule = GetNum(pLayout) ? GetNum(pLayout)->GetNumRule() : nullptr;
     return pRule && IsCountedInList();
 }
 
