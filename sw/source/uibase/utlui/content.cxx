@@ -553,7 +553,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     pMember->insert(std::move(pCnt));
                     // with the same number and existing "pOldMember" the
                     // old one is compared with the new OutlinePos.
-                    // cast for Win16
                     if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos].get())->GetOutlineLevel() != nLevel)
                         *pbLevelOrVisibilityChanged = true;
 
@@ -2676,8 +2675,7 @@ TriState SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
                 nTargetPos = static_cast<SwOutlineContent*>(pNext->GetUserData())->GetOutlinePos() - 1;
             }
             else
-                nTargetPos = static_cast<sal_uInt16>(GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount())- 1;
-
+                nTargetPos = GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() - 1;
         }
 
         OSL_ENSURE( pEntry &&
@@ -2721,8 +2719,7 @@ TriState SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
                 nTargetPos = static_cast<SwOutlineContent*>(pNext->GetUserData())->GetOutlinePos() - 1;
             }
             else
-                nTargetPos = static_cast<sal_uInt16>(GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount()) - 1;
-
+                nTargetPos = GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() - 1;
         }
 
         OSL_ENSURE( pEntry &&
