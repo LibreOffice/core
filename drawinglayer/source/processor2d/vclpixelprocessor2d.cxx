@@ -886,16 +886,16 @@ namespace drawinglayer
             // using fine stroking. Correct, but 'ghosty'.
 
             // It has shown that there are quite some problems here:
-            // - vcl OutDev renderer methods stuill use fallbacks to paint
+            // - vcl OutDev renderer methods still use fallbacks to paint
             //   multiple single lines between discrete sizes of < 3.5 what
-            //   looks bad and does not matzch
+            //   looks bad and does not match
             // - mix of filled Polygons and Lines is bad when AA switched off
             // - Alignment of AA with non-AA may be bad in diverse different
             //   renderers
             //
             // Due to these reasons I change the strategy: Always draw AAed, but
             // allow fallback to test/check and if needed. The normal case
-            // where BorderLines will be system-depenently snapped to have at
+            // where BorderLines will be system-dependently snapped to have at
             // least a single discrete width per partial line (there may be up to
             // three) works well nowadays due to most renderers moving the AA stuff
             // by 0.5 pixels (discrete units) to match well with the non-AAed parts.

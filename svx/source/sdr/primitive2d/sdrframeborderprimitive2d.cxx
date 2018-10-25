@@ -80,7 +80,7 @@ namespace
                 const bool bSecnUsed(0.0 != rStyle.Secn());
 
                 // Get the single segment line widths. This is the point where the
-                // minimal discrete unit wil be used if given (fMinimalDiscreteUnit). If
+                // minimal discrete unit will be used if given (fMinimalDiscreteUnit). If
                 // not given it's 0.0 and thus will have no influence.
                 double fPrim(snapToDiscreteUnit(rStyle.Prim(), fMinimalDiscreteUnit));
                 const double fDist(snapToDiscreteUnit(rStyle.Dist(), fMinimalDiscreteUnit));
