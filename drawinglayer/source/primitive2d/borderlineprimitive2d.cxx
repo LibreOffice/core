@@ -76,18 +76,6 @@ namespace drawinglayer
                 && isGap() == rBorderLine.isGap();
         }
 
-        double BorderLine::getAdaptedWidth(double fMinWidth) const
-        {
-            if(isGap())
-            {
-                return std::max(getLineAttribute().getWidth(), fMinWidth);
-            }
-            else
-            {
-                return getLineAttribute().getWidth();
-            }
-        }
-
         // helper to add a centered, maybe stroked line primitive to rContainer
         static void addPolygonStrokePrimitive2D(
             Primitive2DContainer& rContainer,
@@ -124,7 +112,7 @@ namespace drawinglayer
 
             for(const auto& candidate : maBorderLines)
             {
-                fRetval += candidate.getAdaptedWidth(mfSmallestAllowedDiscreteGapDistance);
+                fRetval += candidate.getLineAttribute().getWidth();
             }
 
             return fRetval;
@@ -143,7 +131,7 @@ namespace drawinglayer
 
                 for(const auto& candidate : maBorderLines)
                 {
-                    const double fWidth(candidate.getAdaptedWidth(mfSmallestAllowedDiscreteGapDistance));
+                    const double fWidth(candidate.getLineAttribute().getWidth());
 
                     if(!candidate.isGap())
                     {
@@ -289,8 +277,7 @@ namespace drawinglayer
             maStart(rStart),
             maEnd(rEnd),
             maBorderLines(rBorderLines),
-            maStrokeAttribute(rStrokeAttribute),
-            mfSmallestAllowedDiscreteGapDistance(0.0)
+            maStrokeAttribute(rStrokeAttribute)
         {
         }
 
@@ -318,71 +305,6 @@ namespace drawinglayer
             }
 
             return false;
-        }
-
-        bool BorderLinePrimitive2D::getSmallestGap(double& rfSmallestGap) const
-        {
-            bool bGapFound(false);
-
-            for(const auto& candidate : maBorderLines)
-            {
-                if(candidate.isGap())
-                {
-                    if(bGapFound)
-                    {
-                        rfSmallestGap = std::min(rfSmallestGap, candidate.getLineAttribute().getWidth());
-                    }
-                    else
-                    {
-                        bGapFound = true;
-                        rfSmallestGap = candidate.getLineAttribute().getWidth();
-                    }
-                }
-            }
-
-            return bGapFound;
-        }
-
-        void BorderLinePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-
-            if (!getStart().equal(getEnd()) && getBorderLines().size() > 1)
-            {
-                // Line with potential gap. In this case, we want to be view-dependent.
-                // get the smallest gap
-                double fSmallestGap(0.0);
-
-                if(getSmallestGap(fSmallestGap))
-                {
-                    // Get the current DiscreteUnit, look at X and Y and use the maximum
-                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-                    const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
-
-                    // When discrete unit is bigger than distance (distance is less than one pixel),
-                    // force distance to one pixel. Or expressed different, do not let the distance
-                    // get smaller than one pixel. This is done for screen rendering and compatibility.
-                    // This can also be done using DiscreteMetricDependentPrimitive2D as base class
-                    // for this class, but specialization is better here for later buffering (only
-                    // do this when 'double line with gap')
-                    const double fNewDiscreteDistance(std::max(fDiscreteUnit, fSmallestGap));
-
-                    if (!rtl::math::approxEqual(fNewDiscreteDistance, mfSmallestAllowedDiscreteGapDistance))
-                    {
-                        if (!getBuffered2DDecomposition().empty())
-                        {
-                            // conditions of last local decomposition have changed, delete
-                            const_cast< BorderLinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
-                        }
-
-                        // remember value for usage in create2DDecomposition
-                        const_cast< BorderLinePrimitive2D* >(this)->mfSmallestAllowedDiscreteGapDistance = fNewDiscreteDistance;
-                    }
-                }
-            }
-
-            // call base implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
         // provide unique ID
