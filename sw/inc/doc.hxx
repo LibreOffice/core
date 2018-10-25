@@ -1007,7 +1007,7 @@ public:
     /// Outline - move up / move down.
     bool MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset);
 
-    bool GotoOutline( SwPosition& rPos, const OUString& rName ) const;
+    bool GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame const* = nullptr) const;
 
     /** Accept changes of outline styles for OutlineRule.
      @param bResetIndentAttrs Optional parameter - default value false:

@@ -947,7 +947,8 @@ bool SwCursorShell::GotoOutline( const OUString& rName )
     SwCursorSaveState aSaveState( *pCursor );
 
     bool bRet = false;
-    if( mxDoc->GotoOutline( *pCursor->GetPoint(), rName ) && !pCursor->IsSelOvr() )
+    if (mxDoc->GotoOutline(*pCursor->GetPoint(), rName, GetLayout())
+        && !pCursor->IsSelOvr())
     {
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         bRet = true;
@@ -969,18 +970,45 @@ bool SwCursorShell::GotoNextOutline()
     SwCursor* pCursor = getShellCursor( true );
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
-    if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
-        ++nPos;
+    bool bUseFirst = !rNds.GetOutLineNds().Seek_Entry( pNd, &nPos );
+    SwOutlineNodes::size_type const nStartPos(nPos);
 
-    if( nPos == rNds.GetOutLineNds().size() )
+    do
     {
-        nPos = 0;
+        if (nPos == rNds.GetOutLineNds().size())
+        {
+            nPos = 0;
+        }
+        else if (!bUseFirst)
+        {
+            ++nPos;
+        }
+
+        if (bUseFirst)
+        {
+            bUseFirst = false;
+        }
+        else
+        {
+            if (nPos == nStartPos)
+            {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                return false;
+            }
+        }
+
+        pNd = rNds.GetOutLineNds()[ nPos ];
+    }
+    while (!sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode()));
+
+    if (nPos < nStartPos)
+    {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
     }
     else
+    {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-
-    pNd = rNds.GetOutLineNds()[ nPos ];
+    }
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -1010,20 +1038,38 @@ bool SwCursorShell::GotoPrevOutline()
     SwOutlineNodes::size_type nPos;
     bool bRet = false;
     (void)rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
-    if ( nPos == 0 )
-    {
-        nPos = rNds.GetOutLineNds().size();
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
-    }
-    else
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+    SwOutlineNodes::size_type const nStartPos(nPos);
 
-    if (nPos)
+    do
     {
-        --nPos; // before
+        if (nPos == 0)
+        {
+            nPos = rNds.GetOutLineNds().size() - 1;
+        }
+        else
+        {
+            --nPos; // before
+        }
+        if (nPos == nStartPos)
+        {
+            pNd = nullptr;
+            break;
+        }
 
         pNd = rNds.GetOutLineNds()[ nPos ];
+    }
+    while (!sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode()));
 
+    if (pNd)
+    {
+        if (nStartPos < nPos)
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+        }
+        else
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+        }
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *pCursor );
@@ -1033,6 +1079,10 @@ bool SwCursorShell::GotoPrevOutline()
         bRet = !pCursor->IsSelOvr();
         if( bRet )
             UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+    }
+    else
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
     }
     return bRet;
 }

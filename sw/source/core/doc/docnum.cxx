@@ -586,7 +586,8 @@ static SwTextNode* lcl_FindOutlineName( const SwOutlineNodes& rOutlNds, const OU
     return pSavedNode;
 }
 
-static SwTextNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString& rName )
+static SwTextNode* lcl_FindOutlineNum(const SwOutlineNodes& rOutlNds,
+        OUString& rName, SwRootFrame const*const pLayout)
 {
     // Valid numbers are (always just offsets!):
     //  ([Number]+\.)+  (as a regular expression!)
@@ -647,9 +648,9 @@ static SwTextNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString&
             // #i51089#, #i68289#
             // Assure, that text node has the correct numbering level. Otherwise,
             // its number vector will not fit to the searched level.
-            if ( pNd->GetNum() && pNd->GetActualListLevel() == nLevel - 1 )
+            if (pNd->GetNum(pLayout) && pNd->GetActualListLevel() == nLevel - 1)
             {
-                const SwNodeNum & rNdNum = *(pNd->GetNum());
+                const SwNodeNum & rNdNum = *(pNd->GetNum(pLayout));
                 SwNumberTree::tNumberVector aLevelVal = rNdNum.GetNumberVector();
                 // now compare with the one searched for
                 bool bEqual = true;
@@ -680,17 +681,14 @@ static SwTextNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString&
     return nullptr;
 }
 
-// Add this bullet point:
-
-// A Name can contain a Number and/or the Text.
-
+// rName can contain a Number and/or the Text.
 // First, we try to find the correct Entry via the Number.
-// If it exists, we compare the Text, to see if it's the right one.
+// If it exists, we compare the Text to see if it's the right one.
 // If that's not the case, we search again via the Text. If it is
 // found, we got the right entry. Or else we use the one found by
 // searching for the Number.
 // If we don't have a Number, we search via the Text only.
-bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
+bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame const*const pLayout) const
 {
     if( !rName.isEmpty() )
     {
@@ -698,7 +696,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
 
         // 1. step: via the Number:
         OUString sName( rName );
-        SwTextNode* pNd = ::lcl_FindOutlineNum( rOutlNds, sName );
+        SwTextNode* pNd = ::lcl_FindOutlineNum(rOutlNds, sName, pLayout);
         if ( pNd )
         {
             OUString sExpandedText = pNd->GetExpandText();
