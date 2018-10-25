@@ -16,6 +16,24 @@
       "revId": "e368d0a545f96f8eab6959e18d87e2a24a13b227",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_30035145",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-25T08:42:47Z",
+      "side": 1,
+      "message": "I really don\u0027t care much about this comment, so it\u0027s kept in the next patchset.\n\nReplacing the mnFallbackLevel with the LogicalFontInstance* of the Layout should be fine. My original patch even used a rtl::Reference\u003cLogicalFontInstance*\u003e but now I think that is overkill, as it just contains unshareable position data, which completely depends on the Layout.",
+      "parentUuid": "1f1a1f67_b0e88116",
+      "revId": "e368d0a545f96f8eab6959e18d87e2a24a13b227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
