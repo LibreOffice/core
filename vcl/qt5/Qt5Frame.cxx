@@ -429,7 +429,10 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         maGeometry.nY = nY;
 
         m_bDefaultPos = false;
-        m_pQWidget->move(nX, nY);
+        if (m_pTopLevel)
+            m_pTopLevel->move(nX, nY);
+        else
+            m_pQWidget->move(nX, nY);
     }
     else if (m_bDefaultPos)
         Center();
@@ -530,7 +533,7 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     pState->mnMask = WindowStateMask::State;
     if (isMinimized() /*|| !windowHandle()*/)
         pState->mnState |= WindowStateState::Minimized;
-    else if (m_pQWidget->isMaximized())
+    else if (isMaximized())
     {
         pState->mnState |= WindowStateState::Maximized;
     }
