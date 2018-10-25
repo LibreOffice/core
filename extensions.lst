@@ -25,7 +25,7 @@
 # file:// URLs are interpreted relative to the solver/420/<platform>/bin/ directory to which
 # built extensions are delivered by default.
 
-# https:// URLs can be prefixed by an MD5 checksum.  If that is present then it is an error if
+# https:// URLs can be prefixed by an MD5 checksum. If that is present then it is an error if
 # the file pointed to by the URL has a different MD5 checksum.
 # When the downloaded file name is not the last part of the URL (everything after the final /) then
 # the name has to be specified after the URL enclosed in double quotes. In this case, use a
@@ -73,7 +73,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    415776b805d9828db0980397bca72b60 https://sourceforge.net/projects/aoo-extensions/files/17102/43/dict-en-20180901.oxt/download "dict-en.oxt"
+    89b86d3a0c237b9aec88a9c7f9e33fda https://sourceforge.net/projects/aoo-extensions/files/17102/44/dict-en-20181101.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
