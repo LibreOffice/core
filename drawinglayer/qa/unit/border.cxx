@@ -189,7 +189,7 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
         {
             auto pMPLAction = static_cast<MetaPolyLineAction*>(pAction);
 
-            if (0 == pMPLAction->GetLineInfo().GetWidth() && LineStyle::Solid == pMPLAction->GetLineInfo().GetStyle())
+            if (0 != pMPLAction->GetLineInfo().GetWidth() && LineStyle::Solid == pMPLAction->GetLineInfo().GetStyle())
             {
                 nPolyLineActionCount++;
             }
@@ -198,7 +198,16 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
 
     // Check if all eight (2x four) simple lines with width == 0 and
     // solid were created
-    const sal_uInt32 nExpectedNumPolyLineActions = 8;
+    //
+    // This has changed: Now, just the needed 'real' lines get created
+    // which have a width of 1. This are two lines. The former multiple
+    // lines were a combination of view-dependent force to a single-pixel
+    // line width (0 == lineWidth -> hairline) and vcl rendering this
+    // using a (insane) combination of single non-AAed lines. All the
+    // system-dependent part of the BorderLine stuff is now done in
+    // SdrFrameBorderPrimitive2D and svx.
+    // Adapted this test - still useful, breaking it may be a hint :-)
+    const sal_uInt32 nExpectedNumPolyLineActions = 2;
 
     CPPUNIT_ASSERT_EQUAL(nExpectedNumPolyLineActions, nPolyLineActionCount);
 }
