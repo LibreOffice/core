@@ -1993,11 +1993,12 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             SwPosition aInsPos( aIdx );
             aInsPos.nContent.Assign( aIdx.GetNode().GetContentNode(), 0 );
 
-            SwPaM aPam( pStt->nNode, aMvRg.aEnd );
+            SwPaM aPam( pStt->nNode, 0, aMvRg.aEnd, 0 );
 
             SwPaM& rOrigPam = const_cast<SwPaM&>(rPam);
             rOrigPam.DeleteMark();
             rOrigPam.GetPoint()->nNode = aIdx.GetIndex() - 1;
+            rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
 
             bool bDelLastPara = !aInsPos.nNode.GetNode().IsContentNode();
 
@@ -2058,6 +2059,14 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
             ++rOrigPam.GetPoint()->nNode;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
+            assert(*aPam.GetMark() < *aPam.GetPoint());
+            if (aPam.GetPoint()->nNode.GetNode().IsEndNode())
+            {   // ensure redline ends on content node
+                --aPam.GetPoint()->nNode;
+                assert(aPam.GetPoint()->nNode.GetNode().IsTextNode());
+                SwTextNode *const pNode(aPam.GetPoint()->nNode.GetNode().GetTextNode());
+                aPam.GetPoint()->nContent.Assign(pNode, pNode->Len());
+            }
 
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
             GetDocumentRedlineManager().checkRedlining(eOld);
