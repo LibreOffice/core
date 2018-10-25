@@ -163,9 +163,9 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     //  but for header/footer twips is needed, as in the PatternAttr:
     std::unique_ptr<SfxPoolItem> pNewItem(rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT));
     pSet->Put( *pNewItem );
-    pNewItem.reset(rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK));
+    pNewItem = rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK);
     pSet->Put( *pNewItem );
-    pNewItem.reset(rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL));
+    pNewItem = rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL);
     pSet->Put( *pNewItem );
     if (mbRTL)
         pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
