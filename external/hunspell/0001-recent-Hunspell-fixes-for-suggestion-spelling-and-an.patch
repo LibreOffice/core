@@ -574,33 +574,34 @@ index d6e871f..0dcd748 100644
    // output conversion
    RepList* rl = (pAMgr) ? pAMgr->get_oconvtable() : NULL;
    if (rl) {
-@@ -902,7 +979,8 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+@@ -902,7 +979,12 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
    return slst;
  }
  
 -std::vector<std::string> HunspellImpl::suggest_internal(const std::string& word) {
 +std::vector<std::string> HunspellImpl::suggest_internal(const std::string& word,
 +        bool& capwords, size_t& abbv, int& captype) {
++  captype = NOCAP;
++  abbv = 0;
++  capwords = false;
++
    std::vector<std::string> slst;
  
    int onlycmpdsug = 0;
-@@ -920,8 +998,8 @@ std::vector<std::string> HunspellImpl::suggest_internal(const std::string& word)
+@@ -920,8 +998,6 @@ std::vector<std::string> HunspellImpl::suggest_internal(const std::string& word)
      if (word.size() >= MAXWORDLEN)
        return slst;
    }
 -  int captype = NOCAP;
 -  size_t abbv = 0;
-+  captype = NOCAP;
-+  abbv = 0;
    size_t wl = 0;
  
    std::string scw;
-@@ -942,9 +1020,13 @@ std::vector<std::string> HunspellImpl::suggest_internal(const std::string& word)
+@@ -942,9 +1020,12 @@ std::vector<std::string> HunspellImpl::suggest_internal(const std::string& word)
        return slst;
    }
  
 -  int capwords = 0;
-+  capwords = false;
    bool good = false;
  
 +  HUNSPELL_THREAD_LOCAL clock_t timelimit;
