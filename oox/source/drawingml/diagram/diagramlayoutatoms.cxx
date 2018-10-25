@@ -227,6 +227,19 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const std::vector<Constraint>& rConstraints ) const
 {
+    // Algorithm result may depend on the parent constraints as well.
+    std::vector<Constraint> aParentConstraints;
+    const LayoutNode* pParent = getLayoutNode().getParentLayoutNode();
+    if (pParent)
+    {
+        for (const auto& pChild : pParent->getChildren())
+        {
+            auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
+            if (pConstraintAtom)
+                pConstraintAtom->parseConstraint(aParentConstraints);
+        }
+    }
+
     switch(mnType)
     {
         case XML_composite:
@@ -357,11 +370,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             double fSpace = 0.3;
 
             awt::Size aChildSize = rShape->getSize();
-
-            // Lineral vertically: no adjustment of width.
-            if (nDir != XML_fromT)
+            if (nDir == XML_fromL || nDir == XML_fromR)
                 aChildSize.Width /= (nCount + (nCount-1)*fSpace);
-            aChildSize.Height /= (nCount + (nCount-1)*fSpace);
+            else if (nDir == XML_fromT || nDir == XML_fromB)
+                aChildSize.Height /= (nCount + (nCount-1)*fSpace);
 
             awt::Point aCurrPos(0, 0);
             if (nIncX == -1)
@@ -754,6 +766,18 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
     // even if no data node found, successful anyway. it's
     // contained at the layoutnode
     return true;
+}
+
+const LayoutNode* LayoutNode::getParentLayoutNode() const
+{
+    for (LayoutAtomPtr pAtom = getParent(); pAtom; pAtom = pAtom->getParent())
+    {
+        auto pLayoutNode = dynamic_cast<LayoutNode*>(pAtom.get());
+        if (pLayoutNode)
+            return pLayoutNode;
+    }
+
+    return nullptr;
 }
 
 void ShapeAtom::accept( LayoutAtomVisitor& rVisitor )
