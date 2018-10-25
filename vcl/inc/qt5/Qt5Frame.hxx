@@ -79,10 +79,20 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 
     bool m_bDefaultSize;
     bool m_bDefaultPos;
+    QRect m_restoreScreenGeo;
 
     void Center();
     Size CalcDefaultSize();
     void SetDefaultSize();
+
+    enum class SetType
+    {
+        KeepSize,
+        Fullscreen,
+        UnFullscreen
+    };
+
+    void SetScreen(unsigned int nNewScreen, SetType eType);
 
     bool isChild(bool bPlug = true, bool bSysChild = true)
     {

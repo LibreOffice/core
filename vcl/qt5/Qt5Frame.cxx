@@ -551,19 +551,69 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     return true;
 }
 
-void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
+void Qt5Frame::SetScreen(unsigned int nNewScreen, SetType eType)
 {
-    assert(m_pTopLevel);
-
     if (isWindow())
     {
-        QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
-        pWidget->show();
+        QWindow* const pWindow = windowHandle();
+        if (pWindow)
+        {
+            QList<QScreen*> screens = QApplication::screens();
+            if (static_cast<int>(nNewScreen) < screens.size())
+            {
+                QRect screenGeo = QApplication::desktop()->screenGeometry(nNewScreen);
 
-        // do that before going fullscreen
-        SetScreenNumber(nScreen);
-        bFullScreen ? windowHandle()->showFullScreen() : windowHandle()->showNormal();
+                switch (eType)
+                {
+                    case SetType::Fullscreen:
+                    {
+                        m_restoreScreenGeo = screenGeo;
+                        pWindow->setGeometry(screenGeo);
+                    }
+                    break;
+                    case SetType::UnFullscreen:
+                    {
+                        pWindow->setGeometry(m_restoreScreenGeo);
+                        m_restoreScreenGeo = QRect();
+                    }
+                    break;
+                    case SetType::KeepSize:
+                    {
+                        QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+
+                        pWindow->setScreen(QApplication::screens()[nNewScreen]);
+                        // setScreen by itself has no effect, explicitly move the widget
+                        // to the new screen
+                        pWidget->move(screenGeo.topLeft());
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                // index outta bounds, use primary screen
+                QScreen* primaryScreen = QApplication::primaryScreen();
+                pWindow->setScreen(primaryScreen);
+            }
+        }
     }
+}
+
+void Qt5Frame::SetScreenNumber(unsigned int nScreen) { SetScreen(nScreen, SetType::KeepSize); }
+
+void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
+{
+    // only top-level windows can go fullscreen
+    assert(m_pTopLevel);
+
+    // show it if it isn't shown yet
+    if (!isWindow())
+        m_pTopLevel->show();
+
+    // do that before going fullscreen
+    SetScreen(nScreen, bFullScreen ? SetType::Fullscreen : SetType::UnFullscreen);
+
+    bFullScreen ? windowHandle()->showFullScreen() : windowHandle()->showNormal();
 }
 
 void Qt5Frame::StartPresentation(bool)
@@ -977,26 +1027,6 @@ void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
 }
 
 void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
-
-void Qt5Frame::SetScreenNumber(unsigned int nScreen)
-{
-    if (isWindow())
-    {
-        QWindow* const pWindow = windowHandle();
-        if (pWindow)
-        {
-            QList<QScreen*> screens = QApplication::screens();
-            if (static_cast<int>(nScreen) < screens.size())
-                pWindow->setScreen(QApplication::screens()[nScreen]);
-            else
-            {
-                // index outta bounds, use primary screen
-                QScreen* primaryScreen = QApplication::primaryScreen();
-                pWindow->setScreen(primaryScreen);
-            }
-        }
-    }
-}
 
 void Qt5Frame::SetApplicationID(const OUString&)
 {
