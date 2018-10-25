@@ -1081,9 +1081,9 @@ inline bool ScInterpreter::CheckStringPositionArgument( double & fVal )
         fVal = 0.0;
         return false;
     }
-    else if (fVal > kScInterpreterMaxStrLen)
+    else if (fVal > SAL_MAX_INT32)
     {
-        fVal = static_cast<double>(kScInterpreterMaxStrLen);
+        fVal = static_cast<double>(SAL_MAX_INT32);
         return false;
     }
     return true;
