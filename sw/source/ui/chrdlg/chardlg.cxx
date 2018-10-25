@@ -148,6 +148,11 @@ SwCharURLPage::SwCharURLPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
     , m_xNotVisitedLB(m_xBuilder->weld_combo_box("unvisitedlb"))
     , m_xCharStyleContainer(m_xBuilder->weld_widget("charstyle"))
 {
+    // tdf#120188 like SfxManageStyleSheetPage limit the width of the style combos
+    const int nMaxWidth(m_xVisitedLB->get_approximate_digit_width() * 50);
+    m_xVisitedLB->set_size_request(nMaxWidth , -1);
+    m_xNotVisitedLB->set_size_request(nMaxWidth , -1);
+
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
