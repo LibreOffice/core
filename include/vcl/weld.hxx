@@ -429,6 +429,7 @@ public:
     void unselect_all() { select(-1); }
 
     virtual int n_children() const = 0;
+    virtual void make_sorted() = 0;
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
 

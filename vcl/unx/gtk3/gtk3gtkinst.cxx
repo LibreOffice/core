@@ -3912,11 +3912,29 @@ namespace
     }
 }
 
+namespace
+{
+    gint sort_func(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b, gpointer data)
+    {
+        comphelper::string::NaturalStringSorter* pSorter = static_cast<comphelper::string::NaturalStringSorter*>(data);
+        gchar* pName1;
+        gchar* pName2;
+        gtk_tree_model_get(pModel, a, 0, &pName1, -1);
+        gtk_tree_model_get(pModel, b, 0, &pName2, -1);
+        gint ret = pSorter->compare(OUString(pName1, strlen(pName1), RTL_TEXTENCODING_UTF8),
+                                    OUString(pName2, strlen(pName2), RTL_TEXTENCODING_UTF8));
+        g_free(pName1);
+        g_free(pName2);
+        return ret;
+    }
+}
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
     GtkTreeView* m_pTreeView;
     GtkListStore* m_pListStore;
+    std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
 
@@ -4036,6 +4054,16 @@ public:
         enable_notify_events();
     }
 
+    virtual void make_sorted() override
+    {
+        m_xSorter.reset(new comphelper::string::NaturalStringSorter(
+                            ::comphelper::getProcessComponentContext(),
+                            Application::GetSettings().GetUILanguageTag().getLocale()));
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pListStore);
+        gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
+        gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+    }
+
     virtual int n_children() const override
     {
         return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pListStore), nullptr);
@@ -4122,12 +4150,22 @@ public:
         g_object_ref(m_pListStore);
         GtkInstanceContainer::freeze();
         gtk_tree_view_set_model(m_pTreeView, nullptr);
+        if (m_xSorter)
+        {
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pListStore);
+            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+        }
         enable_notify_events();
     }
 
     virtual void thaw() override
     {
         disable_notify_events();
+        if (m_xSorter)
+        {
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pListStore);
+            gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+        }
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pListStore));
         GtkInstanceContainer::thaw();
         g_object_unref(m_pListStore);
@@ -4852,23 +4890,6 @@ public:
         return *m_xDevice;
     }
 };
-
-namespace
-{
-    gint sort_func(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b, gpointer data)
-    {
-        comphelper::string::NaturalStringSorter* pSorter = static_cast<comphelper::string::NaturalStringSorter*>(data);
-        gchar* pName1;
-        gchar* pName2;
-        gtk_tree_model_get(pModel, a, 0, &pName1, -1);
-        gtk_tree_model_get(pModel, b, 0, &pName2, -1);
-        gint ret = pSorter->compare(OUString(pName1, strlen(pName1), RTL_TEXTENCODING_UTF8),
-                                    OUString(pName2, strlen(pName2), RTL_TEXTENCODING_UTF8));
-        g_free(pName1);
-        g_free(pName2);
-        return ret;
-    }
-}
 
 class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
