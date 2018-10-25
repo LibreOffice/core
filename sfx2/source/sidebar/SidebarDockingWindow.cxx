@@ -35,6 +35,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
                                            vcl::Window* pParentWindow, WinBits nBits)
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
     , mpSidebarController()
+    , mbSidebarVisibleInLOK(rChildWindow.IsSidebarVisibleInLOK())
 {
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
@@ -94,7 +95,7 @@ void SidebarDockingWindow::Resize()
 
 void SidebarDockingWindow::NotifyResize()
 {
-    if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+    if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && mbSidebarVisibleInLOK)
     {
         if (!GetLOKNotifier())
             SetLOKNotifier(SfxViewShell::Current());
