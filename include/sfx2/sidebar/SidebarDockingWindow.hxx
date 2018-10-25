@@ -54,6 +54,8 @@ private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
 
     void DoDispose();
+
+    const bool mbSidebarVisibleInLOK;
 };
 
 } } // end of namespace sfx2::sidebar
