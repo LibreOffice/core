@@ -70,6 +70,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
 {
     m_xNameRo->set_size_request(m_xNameRw->get_preferred_size().Width(), -1);
     m_xFollowLb->make_sorted();
+    // tdf#120188 like SwCharURLPage limit the width of the style combos
     const int nMaxWidth(m_xFollowLb->get_approximate_digit_width() * 50);
     m_xFollowLb->set_size_request(nMaxWidth , -1);
     m_xBaseLb->make_sorted();
