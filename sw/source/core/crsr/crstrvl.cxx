@@ -1102,9 +1102,11 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        if( pNd->GetTextNode()->GetAttrOutlineLevel()-1 <= nLevel )
+        if (sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode())
+            && pNd->GetTextNode()->GetAttrOutlineLevel()-1 <= nLevel)
+        {
             return nPos;
-
+        }
     }
     return SwOutlineNodes::npos; // no more left
 }
