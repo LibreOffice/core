@@ -40,6 +40,7 @@ public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
     virtual void onContextMenu(const OString &rIdent) = 0;
+    virtual void onDragNDropComplete( CustomAnimationEffectPtr pEffectDragged, CustomAnimationEffectPtr pEffectInsertBefore ) = 0;
     virtual ~ICustomAnimationListController() {}
 };
 
@@ -83,14 +84,24 @@ public:
     virtual void notify_change() override;
 
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
+    bool isVisible( const CustomAnimationEffectPtr& pEffect ) const;
 
-    /// clears all entries from the listbox
+    // clears all entries from the listbox
     void clear();
 
     void setController( ICustomAnimationListController* pController )
     {
         mpController = pController;
     };
+
+
+protected:
+    // drag & drop
+    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) override;
+    virtual sal_Int8     AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual void         ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOverEntry);
+    virtual sal_Int8     ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual void         DragFinished( sal_Int8 nDropAction ) override;
 
 private:
     std::unique_ptr<VclBuilder> mxBuilder;
@@ -109,6 +120,9 @@ private:
     sal_Int32 mnLastGroupId;
     SvTreeListEntry* mpLastParentEntry;
 
+    // drag & drop
+    SvTreeListEntry* mpDndEffectDragging;
+    SvTreeListEntry* mpDndEffectInsertBefore;
 };
 
 OUString getPropertyName( sal_Int32 nPropertyType );
