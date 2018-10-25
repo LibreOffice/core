@@ -39,10 +39,13 @@ public:
 
     int getOutlineLevel( const tSortedOutlineNodeList::size_type nIdx ) const override;
     OUString getOutlineText( const tSortedOutlineNodeList::size_type nIdx,
+                                  SwRootFrame const* pLayout,
                                   const bool bWithNumber = true,
                                   const bool bWithSpacesForLevel = false,
                                   const bool bWithFootnote = true ) const override;
     SwTextNode* getOutlineNode( const tSortedOutlineNodeList::size_type nIdx ) const override;
+    bool isOutlineInLayout(tSortedOutlineNodeList::size_type nIdx,
+            SwRootFrame const& rLayout) const override;
     void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const override;
 
     virtual ~DocumentOutlineNodesManager() override;
