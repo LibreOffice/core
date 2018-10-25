@@ -24,6 +24,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <ndtxt.hxx>
+#include <txtfrm.hxx>
 #include <paratr.hxx>
 #include <swundo.hxx>
 #include <numrule.hxx>
@@ -411,8 +412,8 @@ int SwEditShell::GetCurrentParaOutlineLevel( ) const
     int nLevel = 0;
 
     SwPaM* pCursor = GetCursor();
-    const SwTextNode* pTextNd = pCursor->GetNode().GetTextNode();
-    if( pTextNd )
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    if (pTextNd)
         nLevel = pTextNd->GetAttrOutlineLevel();
     return nLevel;
 }
@@ -570,6 +571,11 @@ bool SwEditShell::IsProtectedOutlinePara() const
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 
+            if (!sw::IsParaPropsNode(*GetLayout(), *pTmpNd->GetTextNode()))
+            {
+                continue;
+            }
+
             int nTmpLvl = pTmpNd->GetTextNode()->GetAttrOutlineLevel();
 
             OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,
@@ -606,23 +612,25 @@ bool SwEditShell::IsProtectedOutlinePara() const
  * 2) outline must not be within table
  * 3) if bCopy is set, outline must not be write protected
  */
-static bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, SwOutlineNodes::size_type nIdx, bool bCopy )
+static bool lcl_IsOutlineMoveAndCopyable(SwEditShell const& rShell,
+        SwOutlineNodes::size_type const nIdx, bool const bCopy)
 {
-    const SwNodes& rNds = pDoc->GetNodes();
+    const SwNodes& rNds = rShell.GetDoc()->GetNodes();
     const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
     return pNd->GetIndex() >= rNds.GetEndOfExtras().GetIndex() &&   // 1) body
             !pNd->FindTableNode() &&                                // 2) table
+            sw::IsParaPropsNode(*rShell.GetLayout(), *pNd->GetTextNode()) &&
             ( bCopy || !pNd->IsProtect() );                         // 3) write
 }
 
 bool SwEditShell::IsOutlineMovable( SwOutlineNodes::size_type nIdx ) const
 {
-    return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, false );
+    return lcl_IsOutlineMoveAndCopyable( *this, nIdx, false );
 }
 
 bool SwEditShell::IsOutlineCopyable( SwOutlineNodes::size_type nIdx ) const
 {
-    return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
+    return lcl_IsOutlineMoveAndCopyable( *this, nIdx, true );
 }
 
 bool SwEditShell::NumOrNoNum(
