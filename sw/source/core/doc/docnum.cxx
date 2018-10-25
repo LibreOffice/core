@@ -2089,6 +2089,10 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
             getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );
 
+            aPam.GetBound().nContent.Assign(aPam.GetBound().nNode.GetNode().GetContentNode(), 0);
+            aPam.GetBound(false).nContent.Assign(aPam.GetBound(false).nNode.GetNode().GetContentNode(), 0);
+            sw::UpdateFramesForAddDeleteRedline(*this, aPam);
+
             // Still NEEDS to be optimized!
             getIDocumentRedlineAccess().SetRedlineFlags( eOld );
             GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
