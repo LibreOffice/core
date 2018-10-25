@@ -91,6 +91,8 @@ class SharedStringPool;
 
 }
 
+constexpr sal_Int32 kScInterpreterMaxStrLen = SAL_MAX_UINT16;
+
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
 class ScTokenStack
@@ -1079,9 +1081,9 @@ inline bool ScInterpreter::CheckStringPositionArgument( double & fVal )
         fVal = 0.0;
         return false;
     }
-    else if (fVal > SAL_MAX_UINT16)
+    else if (fVal > kScInterpreterMaxStrLen)
     {
-        fVal = static_cast<double>(SAL_MAX_UINT16);
+        fVal = static_cast<double>(kScInterpreterMaxStrLen);
         return false;
     }
     return true;
@@ -1100,7 +1102,7 @@ inline sal_Int32 ScInterpreter::GetStringPositionArgument()
 
 inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
 {
-    if ( rResult.getLength() + rAdd.getLength() > SAL_MAX_UINT16 )
+    if ( rResult.getLength() + rAdd.getLength() > kScInterpreterMaxStrLen )
     {
         SetError( FormulaError::StringOverflow );
         rResult.clear();

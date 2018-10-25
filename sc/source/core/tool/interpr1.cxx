@@ -9430,7 +9430,7 @@ void ScInterpreter::ScRept()
         OUString aStr = GetString().getString();
         if (nCnt < 0)
             PushIllegalArgument();
-        else if (static_cast<double>(nCnt) * aStr.getLength() > SAL_MAX_UINT16)
+        else if (static_cast<double>(nCnt) * aStr.getLength() > kScInterpreterMaxStrLen)
         {
             PushError( FormulaError::StringOverflow );
         }
