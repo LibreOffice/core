@@ -18,6 +18,7 @@
 
 interface WebGraphic : BaseTextGraphic
 {
+        import WebFrame;
 }
 
 shell SwWebGrfShell : SwBaseShell

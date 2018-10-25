@@ -22,7 +22,7 @@
 #include <memory>
 #include "frmsh.hxx"
 
-class SwGrfShell: public SwBaseShell
+class SwGrfShell : public SwFrameShell
 {
     class SwExternalToolEdit;
     std::vector<std::unique_ptr<SwExternalToolEdit>> m_ExternalEdits;
@@ -35,7 +35,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    void Execute(SfxRequest& rRequest);
+    void ExecuteGraphic(SfxRequest& rRequest);
     void ExecAttr(SfxRequest const & rRequest);
     void GetAttrState(SfxItemSet& rRequest);
 

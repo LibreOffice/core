@@ -166,23 +166,16 @@ void SwWebView::SelectShell()
             SetShell( new SwWebOleShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
-        else if ( _nSelectionType & SelectionType::Frame
-            || _nSelectionType & SelectionType::Graphic)
-        {
-            eShellMode = ShellMode::Frame;
-            SetShell( new SwWebFrameShell( *this ));
-            rDispatcher.Push( *GetCurShell() );
-            if(_nSelectionType & SelectionType::Graphic )
-            {
-                eShellMode = ShellMode::Graphic;
-                SetShell( new SwWebGrfShell( *this ));
-                rDispatcher.Push( *GetCurShell() );
-            }
-        }
         else if ( _nSelectionType & SelectionType::Frame )
         {
             eShellMode = ShellMode::Frame;
             SetShell( new SwWebFrameShell( *this ));
+            rDispatcher.Push( *GetCurShell() );
+        }
+        else if ( _nSelectionType & SelectionType::Graphic )
+        {
+            eShellMode = ShellMode::Graphic;
+            SetShell( new SwWebGrfShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
         else if ( _nSelectionType & SelectionType::DrawObject )

@@ -105,7 +105,7 @@ public:
     }
 };
 
-SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell)
+SFX_IMPL_INTERFACE(SwGrfShell, SwFrameShell)
 
 void SwGrfShell::InitInterface_Impl()
 {
@@ -114,7 +114,7 @@ void SwGrfShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Grafik_Toolbox);
 }
 
-void SwGrfShell::Execute(SfxRequest &rReq)
+void SwGrfShell::ExecuteGraphic(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
 
@@ -1021,7 +1021,7 @@ SwGrfShell::~SwGrfShell()
 }
 
 SwGrfShell::SwGrfShell(SwView &_rView) :
-    SwBaseShell(_rView)
+    SwFrameShell(_rView)
 {
     SetName("Graphic");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));

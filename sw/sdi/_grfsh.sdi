@@ -34,41 +34,41 @@ interface BaseTextGraphic
 
     FN_FORMAT_GRAFIC_DLG // status(final|play)
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_DRAW_WRAP_DLG // status(final|play)
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_SAVE_GRAPHIC
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_COMPRESS_GRAPHIC
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_CHANGE_PICTURE
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_EXTERNAL_EDIT
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
@@ -110,28 +110,28 @@ interface BaseTextGraphic
 
     SID_OBJECT_CROP
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_INSERT_GRAPHIC // points to FN_FORMAT_GRAFIC_DLG
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_TWAIN_TRANSFER
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_GRAPHIC_MIRROR_ON_EVEN_PAGES // status(final|play|rec)
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 

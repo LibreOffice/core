@@ -18,9 +18,10 @@
 
 interface TextGraphic : BaseTextGraphic
 {
+    import TextFrame;
 }
 
-shell SwGrfShell : SwBaseShell
+shell SwGrfShell : SwFrameShell
 
 {
     import TextGraphic;
@@ -29,7 +30,7 @@ shell SwGrfShell : SwBaseShell
     SID_OBJECT_ROTATE
     [
         Export = FALSE;
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteGraphic ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]

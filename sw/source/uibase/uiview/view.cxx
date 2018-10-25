@@ -345,18 +345,17 @@ void SwView::SelectShell()
             m_pShell = new SwOleShell( *this );
             rDispatcher.Push( *m_pShell );
         }
-        else if ( m_nSelectionType & SelectionType::Frame
-            || m_nSelectionType & SelectionType::Graphic)
+        else if ( m_nSelectionType & SelectionType::Frame )
         {
             eShellMode = ShellMode::Frame;
             m_pShell = new SwFrameShell( *this );
             rDispatcher.Push( *m_pShell );
-            if(m_nSelectionType & SelectionType::Graphic )
-            {
-                eShellMode = ShellMode::Graphic;
-                m_pShell = new SwGrfShell( *this );
-                rDispatcher.Push( *m_pShell );
-            }
+        }
+        else if ( m_nSelectionType & SelectionType::Graphic )
+        {
+            eShellMode = ShellMode::Graphic;
+            m_pShell = new SwGrfShell( *this );
+            rDispatcher.Push( *m_pShell );
         }
         else if ( m_nSelectionType & SelectionType::DrawObject )
         {
