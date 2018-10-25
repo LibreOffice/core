@@ -30,6 +30,7 @@
 #include <section.hxx>
 #include <fmtftntx.hxx>
 #include <rootfrm.hxx>
+#include <txtfrm.hxx>
 
 static bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
         SwTextFootnote const& rTextFootnote)
@@ -69,9 +70,23 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
     // separately. For Endnotes we only have per-document numbering.
     if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )
     {
+        SwRootFrame const* pLayout(nullptr);
+        std::set<SwRootFrame*> layouts = pDoc->GetAllLayouts();
+        // sw_redlinehide: here we need to know if there's *any* layout with
+        // IsHideRedlines(), because then the hidden-numbers have to be updated
+        for (SwRootFrame const* pTmp : layouts)
+        {
+            if (pTmp->IsHideRedlines())
+            {
+                pLayout = pTmp;
+            }
+        }
+
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        const SwNode* pCapStt = &pDoc->GetNodes().GetEndOfExtras();
-        sal_uLong nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
+        const SwNode *pChapterStartHidden(&pDoc->GetNodes().GetEndOfExtras());
+        sal_uLong nChapterStart(pChapterStartHidden->GetIndex());
+        sal_uLong nChapterEnd(pDoc->GetNodes().GetEndOfContent().GetIndex());
+        sal_uLong nChapterEndHidden(nChapterEnd);
         if( !rOutlNds.empty() )
         {
             // Find the Chapter's start, which contains rStt
@@ -81,20 +96,37 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
                     break;      // found it!
                 else if ( rOutlNds[ n ]->GetTextNode()->GetAttrOutlineLevel() == 1 )
-                    pCapStt = rOutlNds[ n ];    // Beginning of a new Chapter
+                {
+                    nChapterStart = rOutlNds[ n ]->GetIndex();
+                    if (!pLayout || sw::IsParaPropsNode(*pLayout, *rOutlNds[n]->GetTextNode()))
+                    {
+                        pChapterStartHidden = rOutlNds[ n ];
+                    }
+                }
             // now find the end of the range
             for( ; n < rOutlNds.size(); ++n )
                 if ( rOutlNds[ n ]->GetTextNode()->GetAttrOutlineLevel() == 1 )
                 {
-                    nCapEnd = rOutlNds[ n ]->GetIndex();    // End of the found Chapter
+                    nChapterEnd = rOutlNds[ n ]->GetIndex();
                     break;
                 }
+
+            // continue to find end of hidden-chapter
+            for ( ; n < rOutlNds.size(); ++n)
+            {
+                if (rOutlNds[n]->GetTextNode()->GetAttrOutlineLevel() == 1
+                    && (!pLayout || sw::IsParaPropsNode(*pLayout, *rOutlNds[n]->GetTextNode())))
+                {
+                    nChapterEndHidden = rOutlNds[n]->GetIndex();
+                    break;
+                }
+            }
         }
 
         size_t nPos = 0;
         size_t nFootnoteNo = 1;
         size_t nFootnoteNoHidden = 1;
-        if( SeekEntry( *pCapStt, &nPos ) && nPos )
+        if (SeekEntry( *pChapterStartHidden, &nPos ) && nPos)
         {
             // Step forward until the Index is not the same anymore
             const SwNode* pCmpNd = &rStt.GetNode();
@@ -118,7 +150,8 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
         for( ; nPos < size(); ++nPos )
         {
             pTextFootnote = (*this)[ nPos ];
-            if( pTextFootnote->GetTextNode().GetIndex() >= nCapEnd )
+            sal_uLong const nNode(pTextFootnote->GetTextNode().GetIndex());
+            if (nChapterEndHidden <= nNode)
                 break;
 
             const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
@@ -126,10 +159,15 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
                 !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
             {
                 pTextFootnote->SetNumber(
-                    rFootnoteInfo.nFootnoteOffset + nFootnoteNo,
+                    (nChapterStart <= nNode && nNode < nChapterEnd)
+                        ? rFootnoteInfo.nFootnoteOffset + nFootnoteNo
+                        : rFootnote.GetNumber(),
                     rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden,
                     rFootnote.GetNumStr() );
-                ++nFootnoteNo;
+                if (nChapterStart <= nNode && nNode < nChapterEnd)
+                {
+                    ++nFootnoteNo;
+                }
                 if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
                 {
                     ++nFootnoteNoHidden;
@@ -234,12 +272,22 @@ void SwFootnoteIdxs::UpdateAllFootnote()
 
     SwUpdFootnoteEndNtAtEnd aNumArr;
 
-    SwRootFrame* pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame const* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
     if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )
     {
+        // sw_redlinehide: here we need to know if there's *any* layout with
+        // IsHideRedlines(), because then the hidden-numbers have to be updated
+        for (SwRootFrame const* pTmp : aAllLayouts)
+        {
+            if (pTmp->IsHideRedlines())
+            {
+                pLayout = pTmp;
+            }
+        }
+
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         sal_uInt16 nNo = 1;     // Number for the Footnotes
         sal_uInt16 nNoNo = 1;
@@ -274,7 +322,11 @@ void SwFootnoteIdxs::UpdateAllFootnote()
                 if( nFootnoteIdx >= size() )
                     break;          // ok, everything is updated
                 nNo = 1;
-                nNoNo = 1;
+                // sw_redlinehide: this means the numbers are layout dependent in chapter case
+                if (!pLayout || sw::IsParaPropsNode(*pLayout, *rOutlNds[ n ]->GetTextNode()))
+                {
+                    nNoNo = 1;
+                }
             }
         }
 
@@ -343,7 +395,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
         }
     }
 
-    if( pTmpRoot && FTNNUM_PAGE == rFootnoteInfo.eNum )
+    if (pLayout && FTNNUM_PAGE == rFootnoteInfo.eNum)
         for( auto aLayout : aAllLayouts )
             aLayout->UpdateFootnoteNums();
 }
