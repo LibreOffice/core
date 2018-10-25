@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_0bab88d6",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5569,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-25T12:22:54Z",
+      "side": 1,
+      "message": "This keeps state across multiple HTML imports, need to clear m_aNamespace explicitly.",
+      "revId": "d7bb0922662c2f8cae239a0fc9c2909e19c2070f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
