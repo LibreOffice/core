@@ -327,6 +327,20 @@ namespace sw {
         return true;
     }
 
+    SwTextNode *
+    GetParaPropsNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos)
+    {
+        SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
+        if (pTextNode && !sw::IsParaPropsNode(rLayout, *pTextNode))
+        {
+            return static_cast<SwTextFrame*>(pTextNode->getLayoutFrame(&rLayout))->GetMergedPara()->pParaPropsNode;
+        }
+        else
+        {
+            return pTextNode;
+        }
+    }
+
 } // namespace sw
 
 /// Switches width and height of the text frame

@@ -102,6 +102,7 @@ std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTe
 
 bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
 bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode);
+SwTextNode * GetParaPropsNode(SwRootFrame const& rLayout, SwNodeIndex const& rNode);
 
 TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool isRealDelete,
