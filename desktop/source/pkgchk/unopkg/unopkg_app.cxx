@@ -44,6 +44,7 @@
 #include <com/sun/star/logging/ConsoleHandler.hpp>
 #include <com/sun/star/logging/FileHandler.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
+#include <com/sun/star/logging/SimpleTextFormatter.hpp>
 #include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
@@ -300,16 +301,24 @@ extern "C" int unopkg_main()
         xComponentContext = getUNO(
         option_verbose, option_shared, subcmd_gui, xLocalComponentContext );
 
+        // Initialize logging. This will log errors to the console and
+        // also to file if the --log-file parameter was provided.
         logger.reset(new comphelper::EventLogger(xComponentContext, "unopkg"));
         const Reference<XLogger> xLogger(logger->getLogger());
         xLogger->setLevel(LogLevel::WARNING);
-        xConsoleHandler.set(css::logging::ConsoleHandler::create(xComponentContext));
+        Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xComponentContext));
+        Sequence < beans::NamedValue > aSeq { { "Formatter", Any(xLogFormatter) } };
+
+        xConsoleHandler.set(ConsoleHandler::createWithSettings(xComponentContext, aSeq));
         xLogger->addLogHandler(xConsoleHandler);
         xConsoleHandler->setLevel(LogLevel::WARNING);
         xLogger->setLevel(LogLevel::WARNING);
+
+
         if (!logFile.isEmpty())
         {
-            xFileHandler.set(css::logging::FileHandler::create(xComponentContext, logFile));
+            Sequence < beans::NamedValue > aSeq2 { { "Formatter", Any(xLogFormatter) }, {"FileURL", Any(logFile)} };
+            xFileHandler.set(css::logging::FileHandler::createWithSettings(xComponentContext, aSeq2));
             xFileHandler->setLevel(LogLevel::WARNING);
             xLogger->addLogHandler(xFileHandler);
         }

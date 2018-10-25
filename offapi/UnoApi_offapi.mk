@@ -250,6 +250,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/logging,\
 	FileHandler \
 	LoggerPool \
 	PlainTextFormatter \
+	SimpleTextFormatter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/mail,\
 	MailMessage \
