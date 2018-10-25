@@ -349,6 +349,14 @@ DECLARE_HTMLIMPORT_TEST(testImageSize, "image-size.html")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
 }
 
+DECLARE_HTMLIMPORT_TEST(testReqIfPageStyle, "reqif-page-style.xhtml")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: Standard, Actual  : HTML'.
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(1), "PageStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
