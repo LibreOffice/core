@@ -591,11 +591,15 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             bool bCertainTextNodeSelected( false );
             for ( size_t nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
             {
-                bool isSubstring = MatchSubstring(pIDoc->getOutlineText( nOutlIdx, true, true, false ), filterString);
+                if (!pIDoc->isOutlineInLayout(nOutlIdx, *pSh->GetLayout()))
+                {
+                    continue; // skip it
+                }
+                bool isSubstring = MatchSubstring(pIDoc->getOutlineText(nOutlIdx, pSh->GetLayout(), true, true, false), filterString);
                 if(isSubstring)
                 {
                     SvTreeListEntry* pEntry = m_pSelectionToolTipLB->InsertEntry(
-                    pIDoc->getOutlineText( nOutlIdx, true, true, false ) );
+                    pIDoc->getOutlineText(nOutlIdx, pSh->GetLayout(), true, true, false));
                     pEntry->SetUserData( reinterpret_cast<void*>(nOutlIdx) );
                     if ( ( IsFieldEdit() &&
                        pRefField->GetReferencedTextNode() == maOutlineNodes[nOutlIdx] ) ||

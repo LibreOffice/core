@@ -311,6 +311,22 @@ namespace sw {
         }
     }
 
+    bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode)
+    {
+        if (rLayout.IsHideRedlines())
+        {
+            if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(rNode.getLayoutFrame(&rLayout)))
+            {
+                sw::MergedPara const*const pMerged(pFrame->GetMergedPara());
+                if (pMerged && pMerged->pParaPropsNode != &rNode)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 } // namespace sw
 
 /// Switches width and height of the text frame

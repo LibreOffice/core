@@ -298,8 +298,11 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 const size_t nOutlineCount = nMemberCount;
                 for(size_t j = 0; j < nOutlineCount; ++j)
                 {
-                    if(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > nOutlineLevel )
+                    if (pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > nOutlineLevel
+                        || !pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(j, *pWrtShell->GetLayout()))
+                    {
                         nMemberCount --;
+                    }
                 }
             }
             bDelete = false;
@@ -550,8 +553,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     nMemberCount--;
                 else
                 {
+                    if (!pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(i, *pWrtShell->GetLayout()))
+                    {
+                        --nMemberCount;
+                        continue; // don't hide it, just skip it
+                    }
                     OUString aEntry(comphelper::string::stripStart(
-                        pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i), ' '));
+                        pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i, pWrtShell->GetLayout()), ' '));
                     aEntry = SwNavigationPI::CleanEntry(aEntry);
                     SwOutlineContent* pCnt = new SwOutlineContent(this, aEntry, i, nLevel,
                                                         pWrtShell->IsOutlineMovable( i ), nPos );
@@ -1885,8 +1893,8 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                         sEntry += ".";
                     }
                 }
-                sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, false);
-                sOutlineText = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos);
+                sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, pWrtShell->GetLayout(), false);
+                sOutlineText = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, pWrtShell->GetLayout());
                 m_bIsOutlineMoveable = static_cast<SwOutlineContent*>(pCnt)->IsMoveable();
                 bOutline = true;
             }
