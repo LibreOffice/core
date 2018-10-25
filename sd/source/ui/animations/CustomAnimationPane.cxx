@@ -2509,6 +2509,39 @@ void CustomAnimationPane::onSelect()
     }
 }
 
+// ICustomAnimationListController
+// pEffectInsertBefore may be null if moving to end of list.
+void CustomAnimationPane::onDragNDropComplete(CustomAnimationEffectPtr pEffectDragged, CustomAnimationEffectPtr pEffectInsertBefore)
+{
+    if ( mpMainSequence.get() )
+    {
+        addUndo();
+
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+        // Move the dragged effect and any hidden sub-effects
+        EffectSequence::iterator aIter = mpMainSequence->find( pEffectDragged );
+        const EffectSequence::iterator aEnd( mpMainSequence->getEnd() );
+
+        while( aIter != aEnd )
+        {
+            CustomAnimationEffectPtr pEffect = (*aIter++);
+
+            // Update model with new location (function triggers a rebuild)
+            // target may be null, which will insert at the end.
+            mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
+
+            // Done moving effect and its hidden sub-effects when *next* effect is visible.
+            if ( mpCustomAnimationList->isVisible( *aIter ) )
+                break;
+        }
+
+        updateControls();
+        mrBase.GetDocShell()->SetModified();
+    }
+}
+
+
 void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag )
 {
     MainSequenceRebuildGuard aGuard( mpMainSequence );

@@ -1790,6 +1790,20 @@ void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
     rebuild();
 }
 
+void EffectSequenceHelper::moveToBeforeEffect( const CustomAnimationEffectPtr& pEffect, const CustomAnimationEffectPtr& pInsertBefore)
+{
+    if ( pEffect.get() )
+    {
+        maEffects.remove( pEffect );
+        EffectSequence::iterator aInsertIter( find( pInsertBefore ) );
+
+        // aInsertIter being end() is OK: pInsertBefore could be null, so put at end.
+        maEffects.insert( aInsertIter, pEffect );
+
+        rebuild();
+    }
+}
+
 void EffectSequenceHelper::rebuild()
 {
     implRebuild();
