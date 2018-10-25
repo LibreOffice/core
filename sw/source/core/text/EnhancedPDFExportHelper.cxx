@@ -1102,7 +1102,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Heading: H1 - H6
 
-                if ( pTextNd->IsOutline() )
+                if (pTextNd->IsOutline()
+                    && sw::IsParaPropsNode(*pFrame->getRootFrame(), *pTextNd))
                 {
                     int nRealLevel = pTextNd->GetAttrOutlineLevel()-1;
                     nRealLevel = std::min(nRealLevel, 5);
@@ -2023,6 +2024,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
 
                 if ( pTNd->IsHidden() ||
+                     !sw::IsParaPropsNode(*mrSh.GetLayout(), *pTNd) ||
                      // #i40292# Skip empty outlines:
                      pTNd->GetText().isEmpty())
                     continue;
@@ -2056,7 +2058,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                     // Outline entry text
-                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i, true, false, false );
+                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
+                        i, mrSh.GetLayout(), true, false, false );
 
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =

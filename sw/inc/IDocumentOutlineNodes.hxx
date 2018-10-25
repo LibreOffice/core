@@ -24,6 +24,7 @@
 #include <vector>
 
 class SwTextNode;
+class SwRootFrame;
 
 /** Provides outline nodes of a document.
 */
@@ -36,10 +37,14 @@ public:
 
     virtual int getOutlineLevel( const tSortedOutlineNodeList::size_type nIdx ) const = 0;
     virtual OUString getOutlineText( const tSortedOutlineNodeList::size_type nIdx,
+                                   SwRootFrame const* pLayout,
                                    const bool bWithNumber = true,
                                    const bool bWithSpacesForLevel = false,
                                    const bool bWithFootnote = true ) const = 0;
     virtual SwTextNode* getOutlineNode( const tSortedOutlineNodeList::size_type nIdx ) const = 0;
+
+    virtual bool isOutlineInLayout(tSortedOutlineNodeList::size_type nIdx,
+            SwRootFrame const& rLayout) const = 0;
 
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const = 0;
 
