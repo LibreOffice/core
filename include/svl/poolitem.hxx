@@ -173,10 +173,10 @@ public:
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const = 0;
     // clone and call SetWhich
-    SfxPoolItem*             CloneSetWhich( sal_uInt16 nNewWhich ) const;
-    template<class T> T*     CloneSetWhich( TypedWhichId<T> nId ) const
+    std::unique_ptr<SfxPoolItem> CloneSetWhich( sal_uInt16 nNewWhich ) const;
+    template<class T> std::unique_ptr<T> CloneSetWhich( TypedWhichId<T> nId ) const
     {
-        return static_cast<T*>(CloneSetWhich(sal_uInt16(nId)));
+        return std::unique_ptr<T>(static_cast<T*>(CloneSetWhich(sal_uInt16(nId)).release()));
     }
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
