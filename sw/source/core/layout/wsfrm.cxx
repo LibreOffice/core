@@ -4498,8 +4498,13 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         }
     }
 
+    SwFootnoteIdxs & rFootnotes(rDoc.GetFootnoteIdxs());
+    if (rDoc.GetFootnoteInfo().eNum == FTNNUM_CHAPTER)
+    {
+        // sadly determining which node is outline node requires hidden layout
+        rFootnotes.UpdateAllFootnote();
+    }
     // invalidate all footnotes to reformat their numbers
-    SwFootnoteIdxs const& rFootnotes(rDoc.GetFootnoteIdxs());
     for (SwTextFootnote *const pFootnote : rFootnotes)
     {
         SwFormatFootnote const& rFootnote(pFootnote->GetFootnote());
