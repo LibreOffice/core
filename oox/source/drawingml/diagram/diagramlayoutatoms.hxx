@@ -106,10 +106,22 @@ public:
     const OUString& getName() const
         { return msName; }
 
+private:
     void addChild( const LayoutAtomPtr & pNode )
         { mpChildNodes.push_back( pNode ); }
+    void setParent(const LayoutAtomPtr& pParent) { mpParent = pParent; }
+
+public:
     virtual const std::vector<LayoutAtomPtr>& getChildren() const
         { return mpChildNodes; }
+
+    LayoutAtomPtr getParent() const { return mpParent.lock(); }
+
+    static void connect(const LayoutAtomPtr& pParent, const LayoutAtomPtr& pChild)
+    {
+        pParent->addChild(pChild);
+        pChild->setParent(pParent);
+    }
 
     // dump for debug
     void dump(int level = 0);
@@ -117,6 +129,7 @@ public:
 protected:
     const LayoutNode&            mrLayoutNode;
     std::vector< LayoutAtomPtr > mpChildNodes;
+    std::weak_ptr<LayoutAtom> mpParent;
     OUString                     msName;
 };
 
@@ -237,6 +250,8 @@ public:
 
     bool setupShape( const ShapePtr& rShape,
                      const dgm::Point* pPresNode ) const;
+
+    const LayoutNode* getParentLayoutNode() const;
 
 private:
     const Diagram&               mrDgm;

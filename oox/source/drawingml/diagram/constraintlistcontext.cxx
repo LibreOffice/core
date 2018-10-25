@@ -50,7 +50,7 @@ ConstraintListContext::onCreateContext( ::sal_Int32 aElement,
     case DGM_TOKEN( constr ):
     {
         std::shared_ptr< ConstraintAtom > pNode( new ConstraintAtom(mpNode->getLayoutNode()) );
-        mpNode->addChild( pNode );
+        LayoutAtom::connect(mpNode, pNode);
 
         Constraint& rConstraint = pNode->getConstraint();
         rConstraint.mnFor = rAttribs.getToken( XML_for, XML_none );
