@@ -19,12 +19,25 @@
 
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svtools/borderhelper.hxx>
 
 namespace
 {
+    double snapToDiscreteUnit(
+        double fValue,
+        double fMinimalDiscreteUnit)
+    {
+        if(0.0 != fValue)
+        {
+            fValue = std::max(fValue, fMinimalDiscreteUnit);
+        }
+
+        return fValue;
+    }
+
     class StyleVectorCombination
     {
     private:
@@ -52,7 +65,8 @@ namespace
             const basegfx::B2DVector& rB2DVector,
             double fAngle,
             bool bMirrored,
-            const Color* pForceColor)
+            const Color* pForceColor,
+            double fMinimalDiscreteUnit)
         :   mfRefModeOffset(0.0),
             maB2DVector(rB2DVector),
             mfAngle(fAngle),
@@ -63,9 +77,18 @@ namespace
                 svx::frame::RefMode aRefMode(rStyle.GetRefMode());
                 Color aPrim(rStyle.GetColorPrim());
                 Color aSecn(rStyle.GetColorSecn());
-                double fPrim(rStyle.Prim());
-                double fSecn(rStyle.Secn());
-                const bool bSecnUsed(0.0 != fSecn);
+                const bool bSecnUsed(0.0 != rStyle.Secn());
+
+                // Get the single segment line widths. This is the point where the
+                // minimal discrete unit wil be used if given (fMinimalDiscreteUnit). If
+                // not given it's 0.0 and thus will have no influence.
+                double fPrim(snapToDiscreteUnit(rStyle.Prim(), fMinimalDiscreteUnit));
+                const double fDist(snapToDiscreteUnit(rStyle.Dist(), fMinimalDiscreteUnit));
+                double fSecn(snapToDiscreteUnit(rStyle.Secn(), fMinimalDiscreteUnit));
+
+                // Of course also do not use svx::frame::Style::GetWidth() for obvious
+                // reasons.
+                const double fStyleWidth(fPrim + fDist + fSecn);
 
                 if(bMirrored)
                 {
@@ -85,7 +108,7 @@ namespace
 
                 if (svx::frame::RefMode::Centered != aRefMode)
                 {
-                    const double fHalfWidth(rStyle.GetWidth() * 0.5);
+                    const double fHalfWidth(fStyleWidth * 0.5);
 
                     if (svx::frame::RefMode::Begin == aRefMode)
                     {
@@ -108,9 +131,9 @@ namespace
 
                     if(!bPrimTransparent || !bDistTransparent || !bSecnTransparent)
                     {
-                        const double a(mfRefModeOffset - (rStyle.GetWidth() * 0.5));
+                        const double a(mfRefModeOffset - (fStyleWidth * 0.5));
                         const double b(a + fPrim);
-                        const double c(b + rStyle.Dist());
+                        const double c(b + fDist);
                         const double d(c + fSecn);
 
                         maOffsets.push_back(
@@ -122,7 +145,7 @@ namespace
                         maOffsets.push_back(
                             OffsetAndHalfWidthAndColor(
                                 (b + c) * 0.5,
-                                rStyle.Dist() * 0.5,
+                                fDist * 0.5,
                                 rStyle.UseGapColor()
                                     ? (nullptr != pForceColor ? *pForceColor : rStyle.GetColorGap())
                                     : COL_TRANSPARENT));
@@ -181,14 +204,21 @@ namespace
             const svx::frame::Style& rStyle,
             const basegfx::B2DVector& rMyVector,
             const basegfx::B2DVector& rOtherVector,
-            bool bMirrored)
+            bool bMirrored,
+            double fMinimalDiscreteUnit)
         {
             if(rStyle.IsUsed() && !basegfx::areParallel(rMyVector, rOtherVector))
             {
                 // create angle between both. angle() needs vectors pointing away from the same point,
                 // so take the mirrored one. Add F_PI to get from -pi..+pi to [0..F_PI2] for sorting
                 const double fAngle(basegfx::B2DVector(-rMyVector.getX(), -rMyVector.getY()).angle(rOtherVector) + F_PI);
-                maEntries.emplace_back(rStyle, rOtherVector, fAngle, bMirrored, nullptr);
+                maEntries.emplace_back(
+                    rStyle,
+                    rOtherVector,
+                    fAngle,
+                    bMirrored,
+                    nullptr,
+                    fMinimalDiscreteUnit);
             }
         }
 
@@ -491,10 +521,17 @@ namespace
         const svx::frame::Style& rBorder,                           /// Style of borderline
         const StyleVectorTable& rStartStyleVectorTable,             /// Styles and vectors (pointing away) at borderline start, ccw
         const StyleVectorTable& rEndStyleVectorTable,               /// Styles and vectors (pointing away) at borderline end, cw
-        const Color* pForceColor)                                   /// If specified, overrides frame border color.
+        const Color* pForceColor,                                   /// If specified, overrides frame border color.
+        double fMinimalDiscreteUnit)                                /// minimal discrete unit to use for svx::frame::Style width values
     {
         // get offset color pairs for  style, one per visible line
-        const StyleVectorCombination aCombination(rBorder, rX, 0.0, false, pForceColor);
+        const StyleVectorCombination aCombination(
+            rBorder,
+            rX,
+            0.0,
+            false,
+            pForceColor,
+            fMinimalDiscreteUnit);
 
         if(aCombination.empty())
             return;
@@ -515,7 +552,13 @@ namespace
         if(bHasEndStyles)
         {
             // Create extends for line ends, create inverse point/vector and inverse offsets.
-            const StyleVectorCombination aMirroredCombination(rBorder, -rX, 0.0, true, pForceColor);
+            const StyleVectorCombination aMirroredCombination(
+                rBorder,
+                -rX,
+                0.0,
+                true,
+                pForceColor,
+                fMinimalDiscreteUnit);
 
             getExtends(aExtendSetEnd, rOrigin + rX, aMirroredCombination, -aPerpendX, rEndStyleVectorTable.getEntries());
 
@@ -568,6 +611,35 @@ namespace
                     aBorderlines,
                     aStrokeAttribute)));
     }
+
+    double getMinimalNonZeroValue(double fCurrent, double fNew)
+    {
+        if(0.0 != fNew)
+        {
+            if(0.0 != fCurrent)
+            {
+                fCurrent = std::min(fNew, fCurrent);
+            }
+            else
+            {
+                fCurrent = fNew;
+            }
+        }
+
+        return fCurrent;
+    }
+
+    double getMinimalNonZeroBorderWidthFromStyle(double fCurrent, const svx::frame::Style& rStyle)
+    {
+        if(rStyle.IsUsed())
+        {
+            fCurrent = getMinimalNonZeroValue(fCurrent, rStyle.Prim());
+            fCurrent = getMinimalNonZeroValue(fCurrent, rStyle.Dist());
+            fCurrent = getMinimalNonZeroValue(fCurrent, rStyle.Secn());
+        }
+
+        return fCurrent;
+    }
 }
 
 namespace drawinglayer
@@ -618,7 +690,9 @@ namespace drawinglayer
             }
         }
 
-        void SdrFrameBorderData::create2DDecomposition(Primitive2DContainer& rContainer) const
+        void SdrFrameBorderData::create2DDecomposition(
+            Primitive2DContainer& rContainer,
+            double fMinimalDiscreteUnit) const
         {
             StyleVectorTable aStartVector;
             StyleVectorTable aEndVector;
@@ -630,7 +704,8 @@ namespace drawinglayer
                     rStart.getStyle(),
                     maX,
                     rStart.getNormalizedPerpendicular(),
-                    rStart.getStyleMirrored());
+                    rStart.getStyleMirrored(),
+                    fMinimalDiscreteUnit);
             }
 
             for(const auto& rEnd : maEnd)
@@ -639,7 +714,8 @@ namespace drawinglayer
                     rEnd.getStyle(),
                     aAxis,
                     rEnd.getNormalizedPerpendicular(),
-                    rEnd.getStyleMirrored());
+                    rEnd.getStyleMirrored(),
+                    fMinimalDiscreteUnit);
             }
 
             aStartVector.sort();
@@ -652,7 +728,25 @@ namespace drawinglayer
                 maStyle,
                 aStartVector,
                 aEndVector,
-                mbForceColor ? &maColor : nullptr);
+                mbForceColor ? &maColor : nullptr,
+                fMinimalDiscreteUnit);
+        }
+
+        double SdrFrameBorderData::getMinimalNonZeroBorderWidth() const
+        {
+            double fRetval(getMinimalNonZeroBorderWidthFromStyle(0.0, maStyle));
+
+            for(const auto& rStart : maStart)
+            {
+                fRetval = getMinimalNonZeroBorderWidthFromStyle(fRetval, rStart.getStyle());
+            }
+
+            for(const auto& rEnd : maEnd)
+            {
+                fRetval = getMinimalNonZeroBorderWidthFromStyle(fRetval, rEnd.getStyle());
+            }
+
+            return fRetval;
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -661,19 +755,34 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        void SdrFrameBorderPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        void SdrFrameBorderPrimitive2D::create2DDecomposition(
+            Primitive2DContainer& rContainer,
+            const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
+            if(!getFrameBorders())
+            {
+                return;
+            }
+
             Primitive2DContainer aRetval;
 
-            if(getMergeResult())
+            // Check and use the minimal non-zero BorderWidth for decompose
+            // if that is set and wanted
+            const double fMinimalDiscreteUnit(doForceToSingleDiscreteUnit()
+                ? mfMinimalNonZeroBorderWidthUsedForDecompose
+                : 0.0);
+
+            if(doMergeResult())
             {
                 // decompose all buffered SdrFrameBorderData entries and try to merge them
                 // to reduce existing number of BorderLinePrimitive2D(s)
-                for(const auto& rCandidate : getFrameBorders())
+                for(const auto& rCandidate : *getFrameBorders().get())
                 {
                     // get decomposition on one SdrFrameBorderData entry
                     Primitive2DContainer aPartial;
-                    rCandidate.create2DDecomposition(aPartial);
+                    rCandidate.create2DDecomposition(
+                        aPartial,
+                        fMinimalDiscreteUnit);
 
                     for(const auto& aCandidatePartial : aPartial)
                     {
@@ -729,9 +838,11 @@ namespace drawinglayer
             else
             {
                 // just decompose all buffered SdrFrameBorderData entries, do not try to merge
-                for(const auto& rCandidate : getFrameBorders())
+                for(const auto& rCandidate : *getFrameBorders().get())
                 {
-                    rCandidate.create2DDecomposition(aRetval);
+                    rCandidate.create2DDecomposition(
+                        aRetval,
+                        fMinimalDiscreteUnit);
                 }
             }
 
@@ -740,11 +851,25 @@ namespace drawinglayer
 
         SdrFrameBorderPrimitive2D::SdrFrameBorderPrimitive2D(
             std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
-            bool bMergeResult)
+            bool bMergeResult,
+            bool bForceToSingleDiscreteUnit)
         :   BufferedDecompositionPrimitive2D(),
             maFrameBorders(std::move(rFrameBorders)),
-            mbMergeResult(bMergeResult)
+            mfMinimalNonZeroBorderWidth(0.0),
+            mfMinimalNonZeroBorderWidthUsedForDecompose(0.0),
+            mbMergeResult(bMergeResult),
+            mbForceToSingleDiscreteUnit(bForceToSingleDiscreteUnit)
         {
+            if(getFrameBorders() && doForceToSingleDiscreteUnit())
+            {
+                // detect used minimal non-zero partial border width
+                for(const auto& rCandidate : *getFrameBorders().get())
+                {
+                    mfMinimalNonZeroBorderWidth = getMinimalNonZeroValue(
+                        mfMinimalNonZeroBorderWidth,
+                        rCandidate.getMinimalNonZeroBorderWidth());
+                }
+            }
         }
 
         bool SdrFrameBorderPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -753,10 +878,48 @@ namespace drawinglayer
             {
                 const SdrFrameBorderPrimitive2D& rCompare = static_cast<const SdrFrameBorderPrimitive2D&>(rPrimitive);
 
-                return maFrameBorders == rCompare.maFrameBorders;
+                return getFrameBorders() == rCompare.getFrameBorders()
+                    && doMergeResult() == rCompare.doMergeResult()
+                    && doForceToSingleDiscreteUnit() == rCompare.doForceToSingleDiscreteUnit();
             }
 
             return false;
+        }
+
+        void SdrFrameBorderPrimitive2D::get2DDecomposition(
+            Primitive2DDecompositionVisitor& rVisitor,
+            const geometry::ViewInformation2D& rViewInformation) const
+        {
+            if(doForceToSingleDiscreteUnit())
+            {
+                // Get the current DiscreteUnit, look at X and Y and use the maximum
+                const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
+
+                if(fDiscreteUnit <= mfMinimalNonZeroBorderWidth)
+                {
+                    // no need to use it, reset
+                    fDiscreteUnit = 0.0;
+                }
+
+                if(fDiscreteUnit != mfMinimalNonZeroBorderWidthUsedForDecompose)
+                {
+                    // conditions of last local decomposition have changed, delete
+                    // possible content
+                    if(!getBuffered2DDecomposition().empty())
+                    {
+                        const_cast< SdrFrameBorderPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                    }
+
+                    // remember new conditions
+                    const_cast< SdrFrameBorderPrimitive2D* >(this)->mfMinimalNonZeroBorderWidthUsedForDecompose = fDiscreteUnit;
+                }
+            }
+
+            // call parent. This will call back ::create2DDecomposition above
+            // where mfMinimalNonZeroBorderWidthUsedForDecompose will be used
+            // when doForceToSingleDiscreteUnit() is true
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
         // provide unique ID

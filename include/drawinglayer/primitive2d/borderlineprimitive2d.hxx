@@ -38,7 +38,9 @@ namespace drawinglayer
         /** BorderLine class
         Helper class holding the style definition for a single part of a full BorderLine definition.
         Line extends are for start/end and for Left/Right, seen in vector direction. If
-        Left != Right that means the line has a diagonal start/end
+        Left != Right that means the line has a diagonal start/end.
+        Think about it similar to a trapezoid, but not aligned to X-Axis and using the
+        perpendicular vector to the given one in a right-handed coordinate system.
         */
         class DRAWINGLAYER_DLLPUBLIC BorderLine
         {
@@ -76,9 +78,6 @@ namespace drawinglayer
             double getEndRight() const { return mfEndRight; }
             bool isGap() const { return mbIsGap; }
 
-            /// helper to get adapted width (maximum)
-            double getAdaptedWidth(double fMinWidth) const;
-
             /// compare operator
             bool operator==(const BorderLine& rBorderLine) const;
         };
@@ -111,18 +110,10 @@ namespace drawinglayer
             /// common style definitions
             const drawinglayer::attribute::StrokeAttribute  maStrokeAttribute;
 
-            // for view dependent decomposition in the case with existing gaps,
-            // remember the smallest allowed concrete gap distance, see get2DDecomposition
-            // implementation
-            double                                          mfSmallestAllowedDiscreteGapDistance;
-
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
-            /// helper to find smallest defined gap in maBorderLines
-            bool getSmallestGap(double& rfSmallestGap) const;
-
-            /// helper to get the full width taking mfSmallestAllowedDiscreteGapDistance into account
+            /// helper to get the full width from maBorderLines
             double getFullWidth() const;
 
         public:
@@ -144,9 +135,6 @@ namespace drawinglayer
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// Override standard getDecomposition to be view-dependent here
-            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

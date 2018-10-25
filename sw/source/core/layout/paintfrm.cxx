@@ -2567,7 +2567,8 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                     aData,
-                    true)));
+                    true,       // try to merge results to have less primitivbes
+                    true)));    // force visualization to minimal one discrete unit (pixel)
         // paint
         mrTabFrame.ProcessPrimitives(aSequence);
     }
@@ -4630,7 +4631,8 @@ namespace drawinglayer
                     drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                             aData,
-                            true)));
+                            true,       // try to merge results to have less primitivbes
+                            true)));    // force visualization to minimal one discrete unit (pixel)
             }
         }
 

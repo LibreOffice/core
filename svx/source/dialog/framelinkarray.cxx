@@ -1233,7 +1233,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
             drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                     aData,
-                    true)));
+                    true,       // try to merge results to have less primitivbes
+                    true)));    // force visualization to minimal one discrete unit (pixel)
     }
 
     return aSequence;
