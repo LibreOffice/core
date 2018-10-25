@@ -72,7 +72,11 @@ namespace drawinglayer
                 const basegfx::B2DVector& rNormalizedPerpendicular,
                 bool bStyleMirrored);
 
-            void create2DDecomposition(Primitive2DContainer& rContainer) const;
+            void create2DDecomposition(
+                Primitive2DContainer& rContainer,
+                double fMinDiscreteUnit) const;
+
+            double getMinimalNonZeroBorderWidth() const;
         };
 
         typedef std::vector<SdrFrameBorderData> SdrFrameBorderDataVector;
@@ -88,7 +92,10 @@ namespace drawinglayer
         {
         private:
             std::shared_ptr<SdrFrameBorderDataVector>   maFrameBorders;
+            double                                      mfMinimalNonZeroBorderWidth;
+            double                                      mfMinimalNonZeroBorderWidthUsedForDecompose;
             bool                                        mbMergeResult;
+            bool                                        mbForceToSingleDiscreteUnit;
 
         protected:
             // local decomposition.
@@ -99,14 +106,21 @@ namespace drawinglayer
         public:
             SdrFrameBorderPrimitive2D(
                 std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
-                bool bMergeResult);
+                bool bMergeResult,
+                bool bForceToSingleDiscreteUnit);
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
+            // override to get view-dependent
+            virtual void get2DDecomposition(
+                Primitive2DDecompositionVisitor& rVisitor,
+                const geometry::ViewInformation2D& rViewInformation) const override;
+
             // data access
-            const SdrFrameBorderDataVector& getFrameBorders() const { return *maFrameBorders.get(); }
-            bool getMergeResult() const { return mbMergeResult; }
+            const std::shared_ptr<SdrFrameBorderDataVector>& getFrameBorders() const { return maFrameBorders; }
+            bool doMergeResult() const { return mbMergeResult; }
+            bool doForceToSingleDiscreteUnit() const { return mbForceToSingleDiscreteUnit; }
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
