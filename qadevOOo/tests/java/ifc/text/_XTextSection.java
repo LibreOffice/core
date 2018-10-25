@@ -39,7 +39,7 @@ public class _XTextSection extends MultiMethodTest {
 
     /**
      * Test calls the method. <p>
-     * Has <b> OK </b> status if the method returns non zero legth array.
+     * Has <b> OK </b> status if the method returns non zero length array.
      */
     public void _getChildSections(){
         boolean bResult = false;

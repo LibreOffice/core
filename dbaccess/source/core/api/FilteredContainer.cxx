@@ -46,7 +46,7 @@ namespace dbaccess
     using namespace ::cppu;
     using namespace ::connectivity::sdbcx;
 
-/** creates a vector of WildCards and reduce the _rTableFilter of the length of WildsCards
+/** creates a vector of WildCards and reduce the _rTableFilter of the length of WildCards
 */
 static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector< WildCard >& _rOut)
 {
