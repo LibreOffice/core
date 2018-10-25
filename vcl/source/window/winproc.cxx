@@ -821,6 +821,13 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
             if (static_cast<FloatingWindow *>(pChild)->GrabsFocus())
                 break;
         }
+        else if (pChild->ImplGetWindowImpl()->mbDockWin)
+        {
+            vcl::Window* pParent = pChild->GetWindow(GetWindowType::RealParent);
+            if (pParent && pParent->ImplGetWindowImpl()->mbFloatWin &&
+                static_cast<FloatingWindow *>(pParent)->GrabsFocus())
+                break;
+        }
         pChild = pChild->GetParent();
     }
 
