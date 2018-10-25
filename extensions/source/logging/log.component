@@ -39,4 +39,8 @@
       constructor="com_sun_star_comp_extensions_PlainTextFormatter">
     <service name="com.sun.star.logging.PlainTextFormatter"/>
   </implementation>
+  <implementation name="com.sun.star.comp.extensions.SimpleTextFormatter"
+      constructor="com_sun_star_comp_extensions_SimpleTextFormatter">
+    <service name="com.sun.star.logging.SimpleTextFormatter"/>
+  </implementation>
 </component>
