@@ -29,6 +29,8 @@
 #include <boost/optional.hpp>
 #include <memory>
 
+#include <com/sun/star/logging/XLogger.hpp>
+
 namespace comphelper
 {
 
@@ -125,6 +127,8 @@ namespace comphelper
                 return impl_log(_nLogLevel, nullptr, nullptr, rMessage);
             return false;
         }
+
+        const css::uno::Reference<css::logging::XLogger> getLogger();
 
         /** logs a given message, replacing a placeholder in the message with an argument
 
