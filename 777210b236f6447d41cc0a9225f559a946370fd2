@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_6b831c06",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-25T15:34:36Z",
+      "side": 1,
+      "message": "The bug is about passwords needed to unprotect sections and this patch has nothing directly to do with fixing the bug. I really don\u0027t want commit notification spamming this bug, but this phrase lets me connect a number of patches I made while investigating it.",
+      "parentUuid": "1f1a1f67_50afed93",
+      "revId": "777210b236f6447d41cc0a9225f559a946370fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_10917553",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
         "patchSetId": 5
