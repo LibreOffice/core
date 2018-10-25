@@ -89,6 +89,11 @@ namespace comphelper
         return false;
     }
 
+    const css::uno::Reference<css::logging::XLogger> EventLogger::getLogger()
+    {
+        return m_pImpl->getLogger();
+    }
+
 
     namespace
     {
