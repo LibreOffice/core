@@ -91,7 +91,8 @@ class SharedStringPool;
 
 }
 
-constexpr sal_Int32 kScInterpreterMaxStrLen = SAL_MAX_UINT16;
+/// Arbitrary 256MB result string length limit.
+constexpr sal_Int32 kScInterpreterMaxStrLen = SAL_MAX_INT32 / 8;
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
@@ -1102,7 +1103,7 @@ inline sal_Int32 ScInterpreter::GetStringPositionArgument()
 
 inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
 {
-    if ( rResult.getLength() + rAdd.getLength() > kScInterpreterMaxStrLen )
+    if (rAdd.getLength() > kScInterpreterMaxStrLen - rResult.getLength())
     {
         SetError( FormulaError::StringOverflow );
         rResult.clear();
