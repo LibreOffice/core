@@ -176,7 +176,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected styles of bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
 
