@@ -447,34 +447,33 @@ public:
 
 class SwTOXStylesTabPage : public SfxTabPage
 {
-    VclPtr<ListBox>        m_pLevelLB;
-    VclPtr<PushButton>     m_pAssignBT;
-    VclPtr<ListBox>        m_pParaLayLB;
-    VclPtr<PushButton>     m_pStdBT;
-    VclPtr<PushButton>     m_pEditStyleBT;
-
     std::unique_ptr<SwForm> m_pCurrentForm;
 
-    DECL_LINK( EditStyleHdl, Button *, void );
-    DECL_LINK( StdHdl, Button*, void );
-    DECL_LINK(EnableSelectHdl, ListBox&, void);
-    DECL_LINK( DoubleClickHdl, ListBox&, void );
-    DECL_LINK( AssignHdl, Button*, void );
+    std::unique_ptr<weld::TreeView> m_xLevelLB;
+    std::unique_ptr<weld::Button> m_xAssignBT;
+    std::unique_ptr<weld::TreeView> m_xParaLayLB;
+    std::unique_ptr<weld::Button> m_xStdBT;
+    std::unique_ptr<weld::Button> m_xEditStyleBT;
+
+    DECL_LINK(EditStyleHdl, weld::Button&, void);
+    DECL_LINK(StdHdl, weld::Button&, void);
+    DECL_LINK(EnableSelectHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(AssignHdl, weld::Button&, void);
     void Modify();
 
     SwForm&     GetForm()
-        {
-            SwMultiTOXTabDialog* pDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
-            return *pDlg->GetForm(pDlg->GetCurrentTOXType());
-        }
+    {
+        SwMultiTOXTabDialog* pDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
+        return *pDlg->GetForm(pDlg->GetCurrentTOXType());
+    }
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
+    SwTOXStylesTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage() override;
-    virtual void        dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;

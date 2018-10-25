@@ -1860,6 +1860,11 @@ public:
         return m_xTreeView->CalcWindowSizePixel(nRows);
     }
 
+    virtual void make_sorted() override
+    {
+        m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
+    }
+
     ListBox& getTreeView()
     {
         return *m_xTreeView;
