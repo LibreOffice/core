@@ -8695,15 +8695,13 @@ void ScInterpreter::ScReplace()
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
         OUString aNewStr = GetString().getString();
-        double fCount = GetStringPositionArgument();
-        double fPos   = GetStringPositionArgument();
+        sal_Int32 nCount = GetStringPositionArgument();
+        sal_Int32 nPos   = GetStringPositionArgument();
         OUString aOldStr = GetString().getString();
-        if (fPos < 1.0 || fCount < 0.0)
+        if (nPos < 1 || nCount < 0)
             PushIllegalArgument();
         else
         {
-            sal_Int32 nCount = static_cast<sal_Int32>(fCount);
-            sal_Int32 nPos   = static_cast<sal_Int32>(fPos);
             sal_Int32 nLen   = aOldStr.getLength();
             if (nPos > nLen + 1)
                 nPos = nLen + 1;
@@ -8838,14 +8836,12 @@ void ScInterpreter::ScLeft()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = GetStringPositionArgument();
-            if (nVal < 0.0)
+            n = GetStringPositionArgument();
+            if (n < 0)
             {
                 PushIllegalArgument();
                 return ;
             }
-            else
-                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -8950,14 +8946,12 @@ void ScInterpreter::ScRightB()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = GetStringPositionArgument();
-            if ( nVal < 0.0 )
+            n = GetStringPositionArgument();
+            if (n < 0)
             {
                 PushIllegalArgument();
                 return ;
             }
-            else
-                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -9001,14 +8995,12 @@ void ScInterpreter::ScLeftB()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = GetStringPositionArgument();
-            if ( nVal < 0.0 )
+            n = GetStringPositionArgument();
+            if (n < 0)
             {
                 PushIllegalArgument();
                 return ;
             }
-            else
-                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -9020,16 +9012,16 @@ void ScInterpreter::ScMidB()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fCnt    = GetStringPositionArgument();
-        double fAnfang = GetStringPositionArgument();
+        const sal_Int32 nCount = GetStringPositionArgument();
+        const sal_Int32 nStart = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fCnt < 0.0)
+        if (nStart < 1 || nCount < 0)
             PushIllegalArgument();
         else
         {
 
-            aStr = lcl_LeftB(aStr, static_cast<sal_Int32>(fAnfang) + static_cast<sal_Int32>(fCnt) - 1);
-            sal_Int32 nCnt = getLengthB(aStr) - static_cast<sal_Int32>(fAnfang) + 1;
+            aStr = lcl_LeftB(aStr, nStart + nCount - 1);
+            sal_Int32 nCnt = getLengthB(aStr) - nStart + 1;
             aStr = lcl_RightB(aStr, std::max<sal_Int32>(nCnt,0));
             PushString(aStr);
         }
@@ -9040,19 +9032,19 @@ void ScInterpreter::ScReplaceB()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        OUString aNewStr = GetString().getString();
-        double fCount    = GetStringPositionArgument();
-        double fPos      = GetStringPositionArgument();
-        OUString aOldStr = GetString().getString();
-        int nLen         = getLengthB( aOldStr );
-        if ( fPos < 1.0 || fPos > nLen || fCount < 0.0 || fPos + fCount -1 > nLen )
+        OUString aNewStr       = GetString().getString();
+        const sal_Int32 nCount = GetStringPositionArgument();
+        const sal_Int32 nPos   = GetStringPositionArgument();
+        OUString aOldStr       = GetString().getString();
+        int nLen               = getLengthB( aOldStr );
+        if (nPos < 1.0 || nPos > nLen || nCount < 0.0 || nPos + nCount -1 > nLen)
             PushIllegalArgument();
         else
         {
-            // REPLACEB(aOldStr;fPos;fCount;aNewStr) is the same as
-            // LEFTB(aOldStr;fPos-1) & aNewStr & RIGHT(aOldStr;LENB(aOldStr)-(fPos - 1)-fCount)
-            OUString aStr1 = lcl_LeftB( aOldStr, fPos - 1 );
-            OUString aStr3 = lcl_RightB( aOldStr, nLen - fPos - fCount + 1);
+            // REPLACEB(aOldStr;nPos;nCount;aNewStr) is the same as
+            // LEFTB(aOldStr;nPos-1) & aNewStr & RIGHT(aOldStr;LENB(aOldStr)-(nPos - 1)-nCount)
+            OUString aStr1 = lcl_LeftB( aOldStr, nPos - 1 );
+            OUString aStr3 = lcl_RightB( aOldStr, nLen - nPos - nCount + 1);
 
             PushString( aStr1 + aNewStr + aStr3 );
         }
@@ -9146,14 +9138,12 @@ void ScInterpreter::ScRight()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = GetStringPositionArgument();
-            if (nVal < 0.0)
+            n = GetStringPositionArgument();
+            if (n < 0)
             {
                 PushIllegalArgument();
                 return ;
             }
-            else
-                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -9181,21 +9171,21 @@ void ScInterpreter::ScSearch()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        double fCnt;
+        sal_Int32 nStart;
         if (nParamCount == 3)
         {
-            fCnt = GetStringPositionArgument();
-            if( fCnt < 1 )
+            nStart = GetStringPositionArgument();
+            if( nStart < 1 )
             {
                 PushIllegalArgument();
                 return;
             }
         }
         else
-            fCnt = 1.0;
+            nStart = 1;
         OUString sStr = GetString().getString();
         OUString SearchStr = GetString().getString();
-        sal_Int32 nPos = fCnt - 1;
+        sal_Int32 nPos = nStart - 1;
         sal_Int32 nEndPos = sStr.getLength();
         if( nPos >= nEndPos )
             PushNoValue();
@@ -9281,8 +9271,8 @@ void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        sal_Int32 nSubLen = static_cast<sal_Int32>(GetStringPositionArgument());
-        sal_Int32 nStart  = static_cast<sal_Int32>(GetStringPositionArgument());
+        const sal_Int32 nSubLen = GetStringPositionArgument();
+        const sal_Int32 nStart  = GetStringPositionArgument();
         OUString aStr = GetString().getString();
         if ( nStart < 1 || nSubLen < 0 )
             PushIllegalArgument();
@@ -9389,14 +9379,12 @@ void ScInterpreter::ScSubstitute()
         sal_Int32 nCnt;
         if (nParamCount == 4)
         {
-            double fCnt = GetStringPositionArgument();
-            if( fCnt < 1 )
+            nCnt = GetStringPositionArgument();
+            if (nCnt < 1)
             {
                 PushIllegalArgument();
                 return;
             }
-            else
-                nCnt = static_cast<sal_Int32>(fCnt);
         }
         else
             nCnt = 0;
@@ -9438,22 +9426,21 @@ void ScInterpreter::ScRept()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fCnt = GetStringPositionArgument();
+        sal_Int32 nCnt = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if ( fCnt < 0.0 )
+        if (nCnt < 0)
             PushIllegalArgument();
-        else if ( fCnt * aStr.getLength() > SAL_MAX_UINT16 )
+        else if (static_cast<double>(nCnt) * aStr.getLength() > SAL_MAX_UINT16)
         {
             PushError( FormulaError::StringOverflow );
         }
-        else if ( fCnt == 0.0 )
+        else if (nCnt == 0)
             PushString( EMPTY_OUSTRING );
         else
         {
             const sal_Int32 nLen = aStr.getLength();
-            sal_Int32 n = static_cast<sal_Int32>(fCnt);
-            OUStringBuffer aRes(n*nLen);
-            while( n-- )
+            OUStringBuffer aRes(nCnt*nLen);
+            while( nCnt-- )
                 aRes.append(aStr);
             PushString( aRes.makeStringAndClear() );
         }
