@@ -104,10 +104,10 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
         "Update/Link",                          // 16
         "Update/Field",                         // 17
         "Update/Chart",                         // 18
-        "Display/ShowInlineTooltips"            //19
-
+        "Display/ShowInlineTooltips",           // 19
+        "Display/UseHeaderFooterMenu"           // 20
     };
-    const int nCount = bWeb ? 12 : 20;
+    const int nCount = bWeb ? 12 : 21;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -167,6 +167,7 @@ void SwContentViewConfig::ImplCommit()
             case 17: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
             case 18: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
             case 19: bVal = rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
+            case 20: bVal = rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
         }
         if(nProp != 16)
             pValues[nProp] <<= bVal;
@@ -215,6 +216,7 @@ void SwContentViewConfig::Load()
                     case 17: rParent.SetUpdateFields(bSet); break;// "Update/Field",
                     case 18: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
                     case 19: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
+                    case 20: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
                 }
             }
         }

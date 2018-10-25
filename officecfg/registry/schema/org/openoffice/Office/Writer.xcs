@@ -1064,7 +1064,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="UseHeaderFooterMenu" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
+          <!-- UIHints: Insert - Header and Footer - [x] Use... -->
           <info>
             <desc>Enables the writer to use the advanced menu on headers/footers.</desc>
             <label>Use advanced header/footer menu</label>
