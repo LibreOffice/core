@@ -880,7 +880,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             OSL_FAIL( "Outdev Check failed" );
         }
     }
-    else if ( OUTDEV_PDF == rInf.GetOut().GetOutDevType() && ! pWin )
+    else if ( rInf.GetOut().IsVirtual() && ! pWin )
     {
         // PDF export
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
@@ -897,7 +897,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
     }
     else if ( OUTDEV_WINDOW == rInf.GetOut().GetOutDevType() ||
-               ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && pWin ) )
+               ( rInf.GetOut().IsVirtual() && pWin ) )
     {
         // Window or virtual window
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
