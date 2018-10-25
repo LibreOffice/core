@@ -856,9 +856,6 @@ private:
 
     bool PendingObjectsInPaM(SwPaM& rPam) const;
 
-    /// Parse FilterOptions passed to the importer.
-    void SetupFilterOptions();
-
     class TableDepthGuard
     {
     private:
@@ -902,7 +899,8 @@ public:
                     const OUString& rBaseURL,
                     bool bReadNewDoc,
                     SfxMedium* pMed, bool bReadUTF8,
-                    bool bIgnoreHTMLComments );
+                    bool bIgnoreHTMLComments,
+                    const OUString& rNamespace);
 
     virtual SvParserState CallParser() override;
 
