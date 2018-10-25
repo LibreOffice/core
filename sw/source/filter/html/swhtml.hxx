@@ -865,9 +865,6 @@ private:
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
                              bool bSurroundOnly = false ) const;
 
-    /// Parse FilterOptions passed to the importer.
-    void SetupFilterOptions();
-
 public:         // used in tables
 
     // Create brush item (with new) or 0
@@ -894,7 +891,8 @@ public:
                     const OUString& rBaseURL,
                     bool bReadNewDoc,
                     SfxMedium* pMed = nullptr, bool bReadUTF8 = false,
-                    bool bIgnoreHTMLComments = false );
+                    bool bIgnoreHTMLComments = false,
+                    const OUString& rNamespace = OUString());
 
     virtual SvParserState CallParser() override;
 

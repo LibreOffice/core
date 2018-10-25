@@ -198,6 +198,8 @@ bool HTMLReader::SetStrmStgPtr()
     // Aufruf fuer die allg. Reader-Schnittstelle
 sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
 {
+    SetupFilterOptions();
+
     if( !pStrm )
     {
         OSL_ENSURE( pStrm, "HTML-Read without stream" );
@@ -210,7 +212,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
 
         // Set the HTML page style, when it isn't a HTML document,
         // otherwise it's already set.
-        if( !rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
+        if( !rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && m_aNamespace != "reqif-xhtml" )
         {
             rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFormatPageDesc(
                 rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )) );
@@ -223,7 +225,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
     tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, rBaseURL, !bInsertMode, pMedium,
                                             IsReadUTF8(),
-                                            bIgnoreHTMLComments );
+                                            bIgnoreHTMLComments, m_aNamespace );
 
     SvParserState eState = xParser->CallParser();
 
@@ -247,7 +249,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                             const OUString& rBaseURL,
                             bool bReadNewDoc,
                             SfxMedium* pMed, bool bReadUTF8,
-                            bool bNoHTMLComments )
+                            bool bNoHTMLComments,
+                            const OUString& rNamespace )
     : SfxHTMLParser( rIn, bReadNewDoc, pMed ),
     SwClient( nullptr ),
     m_aPathToFile( rPath ),
@@ -415,7 +418,13 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         }
     }
 
-    SetupFilterOptions();
+    if (!rNamespace.isEmpty())
+    {
+        SetNamespace(rNamespace);
+        m_bXHTML = true;
+        if (rNamespace == "reqif-xhtml")
+            m_bReqIF = true;
+    }
 }
 
 SwHTMLParser::~SwHTMLParser()
@@ -5564,12 +5573,15 @@ void SwHTMLParser::AddMetaUserDefined( OUString const & i_rMetaName )
     }
 }
 
-void SwHTMLParser::SetupFilterOptions()
+void HTMLReader::SetupFilterOptions()
 {
-    if (!GetMedium())
+    // Reset state from previous Read() invocation.
+    m_aNamespace.clear();
+
+    if (!pMedium)
         return;
 
-    const SfxItemSet* pItemSet = GetMedium()->GetItemSet();
+    const SfxItemSet* pItemSet = pMedium->GetItemSet();
     if (!pItemSet)
         return;
 
@@ -5582,10 +5594,7 @@ void SwHTMLParser::SetupFilterOptions()
     if (aFilterOptions.startsWith(aXhtmlNsKey))
     {
         OUString aNamespace = aFilterOptions.copy(aXhtmlNsKey.getLength());
-        SetNamespace(aNamespace);
-        m_bXHTML = true;
-        if (aNamespace == "reqif-xhtml")
-            m_bReqIF = true;
+        m_aNamespace = aNamespace;
     }
 }
 
