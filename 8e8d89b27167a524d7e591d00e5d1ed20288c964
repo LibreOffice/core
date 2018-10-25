@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_cbfeb0ad",
+        "filename": "sw/uiconfig/swriter/toolbar/frameobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-25T14:57:03Z",
+      "side": 0,
+      "message": "Sure to remove Properties?",
+      "range": {
+        "startLine": 56,
+        "startChar": 1,
+        "endLine": 56,
+        "endChar": 77
+      },
+      "revId": "8e8d89b27167a524d7e591d00e5d1ed20288c964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

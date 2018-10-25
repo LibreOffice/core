@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_6b59dcfc",
+        "filename": "sc/uiconfig/scalc/toolbar/graphicobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-25T14:57:03Z",
+      "side": 1,
+      "message": "Missing \u003ctoolbar:toolbaritem xlink:href\u003d\".uno:LineEndStyle\"/\u003e from Writer; but not working there anyway.",
+      "revId": "072185ea14094c668c89c7fcac0e1db0ca51782c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_2b73e482",
+        "filename": "sw/uiconfig/swriter/toolbar/drawingobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-25T14:57:03Z",
+      "side": 1,
+      "message": "Missing \u003ctoolbar:toolbaritem xlink:href\u003d\".uno:FillShadow\"/\u003e from Calc",
+      "revId": "072185ea14094c668c89c7fcac0e1db0ca51782c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_ab2db447",
+        "filename": "sw/uiconfig/swriter/toolbar/frameobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-25T14:57:03Z",
+      "side": 1,
+      "message": "The GraphicsDialog makes no sense on frames",
+      "range": {
+        "startLine": 57,
+        "startChar": 1,
+        "endLine": 57,
+        "endChar": 79
+      },
+      "revId": "072185ea14094c668c89c7fcac0e1db0ca51782c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
