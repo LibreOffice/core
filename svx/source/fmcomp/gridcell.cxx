@@ -4528,7 +4528,7 @@ FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, std::unique_ptr<DbFilterFiel
               :FmXGridCell( pColumn, std::move(pControl) )
               ,m_aTextListeners(m_aMutex)
 {
-    pControl->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
+    static_cast<DbFilterField*>(m_pCellControl.get())->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
 }
 
 
