@@ -39,6 +39,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/logging.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
@@ -47,6 +48,10 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/logging/LogLevel.hpp>
+#include <com/sun/star/logging/FileHandler.hpp>
+#include <com/sun/star/logging/SimpleTextFormatter.hpp>
+#include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -76,6 +81,7 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::logging;
 
 namespace dp_log {
 extern comphelper::service_decl::ServiceDecl const serviceDecl;
@@ -353,7 +359,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         that->m_activePackages = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages";
         that->m_registrationData = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE";
         that->m_registryCache = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/registry";
-        logFile = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/log.txt";
+        logFile = "$UNO_USER_PACKAGES_CACHE/log.txt";
         //We use the extension .sys for the file because on Windows Vista a sys
         //(as well as exe and dll) file
         //will not be written in the VirtualStore. For example if the process has no
@@ -371,7 +377,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         that->m_activePackages = "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages";
         that->m_registrationData = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER";
         that->m_registryCache = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry";
-        logFile = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt";
+        logFile = "$SHARED_EXTENSIONS_USER/log.txt";
 #if !HAVE_FEATURE_READONLY_INSTALLSET
         // The "shared" extensions are read-only when we have a
         // read-only installset.
@@ -382,7 +388,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         that->m_activePackages = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
         that->m_registrationData = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER";
         that->m_registryCache = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/registry";
-        logFile = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/log.txt";
+        logFile = "$BUNDLED_EXTENSIONS_USER/log.txt";
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
@@ -414,6 +420,16 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
 
         if (!that->m_readOnly && !logFile.isEmpty())
         {
+            // Initialize logger which will be used in ProgressLogImpl (created below)
+            rtl::Bootstrap::expandMacros(logFile);
+            comphelper::EventLogger logger(xComponentContext, "unopkg");
+            const Reference<XLogger> xLogger(logger.getLogger());
+            Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xComponentContext));
+            Sequence < beans::NamedValue > aSeq2 { { "Formatter", Any(xLogFormatter) }, {"FileURL", Any(logFile)} };
+            Reference<XLogHandler> xFileHandler(css::logging::FileHandler::createWithSettings(xComponentContext, aSeq2));
+            xFileHandler->setLevel(LogLevel::WARNING);
+            xLogger->addLogHandler(xFileHandler);
+
             const Any any_logFile(logFile);
             that->m_xLogFile.set(
                 that->m_xComponentContext->getServiceManager()
