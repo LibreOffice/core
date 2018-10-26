@@ -9247,7 +9247,7 @@ void ScInterpreter::ScRegex()
         utl::TextSearch aSearch( aParam, *ScGlobal::pCharClass);
         const bool bMatch = aSearch.SearchForward( aText, &nPos, &nEndPos, &aResult);
         if (!bMatch)
-            PushNoValue();
+            PushError( FormulaError::NotAvailable);
         else
         {
             assert(aResult.subRegExpressions >= 1);
