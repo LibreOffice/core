@@ -2,7 +2,7 @@ avmedia/res/av02048.png cmd/sc_open.png
 avmedia/res/av02049.png cmd/sc_datastreamsplay.png
 avmedia/res/av02050.png cmd/sc_mediapause.png
 avmedia/res/av02051.png cmd/sc_datastreamsstop.png
-avmedia/res/av02052.png cmd/sc_mediarepeat.png
+avmedia/res/av02052.png cmd/sc_mediarepeat.png 
 avmedia/res/av02053.png cmd/sc_ok.png
 avmedia/res/av02054.png cmd/sc_mediamute.png
 avmedia/res/avl02048.png cmd/lc_open.png
@@ -13,7 +13,7 @@ avmedia/res/avl02052.png cmd/lc_mediarepeat.png
 avmedia/res/avl02053.png cmd/lc_ok.png
 avmedia/res/avl02054.png cmd/lc_mediamute.png
 cmd/32/acceptchanges.png cmd/32/accepttrackedchange.png
-cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png
+cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
 cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
 cmd/32/advancedmode.png cmd/32/toggleobjectrotatemode.png
@@ -25,7 +25,6 @@ cmd/32/arrangemenu.png cmd/32/bringtofront.png
 cmd/32/arrowshapes.png cmd/32/arrowshapes.left-right-arrow.png
 cmd/32/arrowstoolbox.png cmd/32/linearrowend.png
 cmd/32/autofilter.png cmd/32/datafilterautofilter.png
-cmd/32/autopilotmenu.png cmd/32/autoformat.png
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
 cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
@@ -52,7 +51,7 @@ cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
 cmd/32/commonaligntop.png cmd/32/aligntop.png
 cmd/32/commonalignverticalcenter.png cmd/32/alignverticalcenter.png
-cmd/32/commontaskbarvisible.png cmd/32/autoformat.png
+cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
 cmd/32/config.png cmd/32/choosecontrols.png
 cmd/32/connect.png cmd/32/polygon.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
@@ -338,10 +337,11 @@ cmd/sl/sc_underlinesimple.png cmd/sl/sc_underline.png
 cmd/tr/lc_underlinesimple.png cmd/tr/lc_underline.png
 cmd/tr/sc_underlinesimple.png cmd/tr/sc_underline.png
 cmd/lc_acceptchanges.png cmd/lc_accepttrackedchange.png
-cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png
+cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
+cmd/lc_alignframemenu.png cmd/lc_objectalign.png
 cmd/lc_alignvcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/lc_arrangeframemenu.png cmd/lc_bringtofront.png
@@ -349,7 +349,6 @@ cmd/lc_arrangemenu.png cmd/lc_bringtofront.png
 cmd/lc_arrowshapes.png cmd/lc_arrowshapes.left-right-arrow.png
 cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/lc_autofilter.png cmd/lc_datafilterautofilter.png
-cmd/lc_autopilotmenu.png cmd/lc_autoformat.png
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
 cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
@@ -375,7 +374,7 @@ cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
-cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
+cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
 cmd/lc_config.png cmd/lc_choosecontrols.png
 cmd/lc_connect.png cmd/lc_polygon.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
@@ -610,10 +609,11 @@ cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
 cmd/nl/lc_underlinesimple.png cmd/nl/lc_underline.png
 cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchange.png
-cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png
+cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
 cmd/sc_adddatefield.png cmd/sc_datefield.png
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
+cmd/sc_alignframemenu.png cmd/sc_objectalign.png
 cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
@@ -621,7 +621,6 @@ cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrowshapes.png cmd/sc_arrowshapes.left-right-arrow.png
 cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
 cmd/sc_autofilter.png cmd/sc_datafilterautofilter.png
-cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
 cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
@@ -647,7 +646,7 @@ cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
 cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
-cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
+cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
 cmd/sc_config.png cmd/sc_choosecontrols.png
 cmd/sc_connect.png cmd/sc_polygon.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
@@ -941,7 +940,7 @@ res/lx03163.png res/ott_32_8.png
 res/lx03165.png cmd/32/save.png
 res/lx03189.png cmd/32/open.png
 res/lx03218.png res/lx03217.png
-res/lx03219.png res/lx03217.png
+res/lx03219.png res/lx03217.png 
 res/lx03220.png res/lx03217.png
 res/lx03221.png res/lx03217.png
 res/lx03222.png res/lx03217.png
@@ -1107,7 +1106,7 @@ sd/res/docopen.png cmd/lc_open.png
 sd/res/doctext.png res/sx03156.png
 sd/res/graphic.png cmd/sc_graphic.png
 sd/res/group.png cmd/sc_group.png
-sd/res/lc05928.png cmd/lc_autoformat.png
+sd/res/lc05928.png cmd/lc_autopilotmenu.png
 sd/res/lc27015.png cmd/lc_importdialog.png
 sd/res/lc27017.png cmd/lc_zoompanning.png
 sd/res/lc27058.png sd/res/lc27028.png
@@ -1126,7 +1125,7 @@ sd/res/ole.png cmd/sc_insertobject.png
 sd/res/page.png cmd/sc_adddirect.png
 sd/res/playblue_16.png cmd/sc_datastreamsplay.png
 sd/res/pipette.png cmd/sc_bmpmask.png
-sd/res/sc05928.png cmd/sc_autoformat.png
+sd/res/sc05928.png cmd/sc_autopilotmenu.png
 sd/res/sc27015.png cmd/sc_importdialog.png
 sd/res/sc27055.png sd/res/sc27054.png
 sd/res/sc27056.png sd/res/sc27054.png
@@ -1281,6 +1280,7 @@ sw/res/sc20249.png cmd/sc_navigator.png
 sw/res/sc20556.png cmd/sc_insertformula.png
 sw/res/sc20557.png cmd/sc_cancel.png
 sw/res/sc20558.png cmd/sc_ok.png
+sw/res/sf06.png cmd/sc_autoformat.png
 sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
 sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
 sw/res/sr20000.png cmd/sc_downsearch.png

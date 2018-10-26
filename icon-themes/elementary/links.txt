@@ -594,32 +594,29 @@ cmd/sc_open_h.png cmd/sc_open.png
 cmd/sc_newrecord.png cmd/sc_open.png
 
 # Wizard
-cmd/32/dbnewqueryautopilot.png cmd/32/autoformat.png
-cmd/32/usewizards.png cmd/32/autoformat.png
-cmd/32/dbnewtableautopilot.png cmd/32/autoformat.png
-cmd/32/dbnewreportautopilot.png cmd/32/autoformat.png
-cmd/32/dbnewformautopilot.png cmd/32/autoformat.png
-cmd/32/commontaskbarvisible.png cmd/32/autoformat.png
-cmd/32/autopilotmenu.png cmd/32/autoformat.png
-cmd/32/newarrangement.png cmd/32/autoformat.png
+cmd/32/dbnewqueryautopilot.png cmd/32/usewizards.png
+cmd/32/dbnewtableautopilot.png cmd/32/usewizards.png
+cmd/32/dbnewreportautopilot.png cmd/32/usewizards.png
+cmd/32/dbnewformautopilot.png cmd/32/usewizards.png
+cmd/32/commontaskbarvisible.png cmd/32/usewizards.png
+cmd/32/autopilotmenu.png cmd/32/usewizards.png
+cmd/32/newarrangement.png cmd/32/usewizards.png
 
-cmd/lc_dbnewqueryautopilot.png cmd/lc_autoformat.png
-cmd/lc_usewizards.png cmd/lc_autoformat.png
-cmd/lc_dbnewtableautopilot.png cmd/lc_autoformat.png
-cmd/lc_dbnewreportautopilot.png cmd/lc_autoformat.png
-cmd/lc_dbnewformautopilot.png cmd/lc_autoformat.png
-cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
-cmd/lc_autopilotmenu.png cmd/lc_autoformat.png
-cmd/lc_newarrangement.png cmd/lc_autoformat.png
+cmd/lc_dbnewqueryautopilot.png cmd/lc_usewizards.png
+cmd/lc_dbnewtableautopilot.png cmd/lc_usewizards.png
+cmd/lc_dbnewreportautopilot.png cmd/lc_usewizards.png
+cmd/lc_dbnewformautopilot.png cmd/lc_usewizards.png
+cmd/lc_commontaskbarvisible.png cmd/lc_usewizards.png
+cmd/lc_autopilotmenu.png cmd/lc_usewizards.png
+cmd/lc_newarrangement.png cmd/lc_usewizards.png
 
-cmd/sc_dbnewqueryautopilot.png cmd/sc_autoformat.png
-cmd/sc_usewizards.png cmd/sc_autoformat.png
-cmd/sc_dbnewtableautopilot.png cmd/sc_autoformat.png
-cmd/sc_dbnewreportautopilot.png cmd/sc_autoformat.png
-cmd/sc_dbnewformautopilot.png cmd/sc_autoformat.png
-cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
-cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
-cmd/sc_newarrangement.png cmd/sc_autoformat.png
+cmd/sc_dbnewqueryautopilot.png cmd/sc_usewizards.png
+cmd/sc_dbnewtableautopilot.png cmd/sc_usewizards.png
+cmd/sc_dbnewreportautopilot.png cmd/sc_usewizards.png
+cmd/sc_dbnewformautopilot.png cmd/sc_usewizards.png
+cmd/sc_commontaskbarvisible.png cmd/sc_usewizards.png
+cmd/sc_autopilotmenu.png cmd/sc_usewizards.png
+cmd/sc_newarrangement.png cmd/sc_usewizards.png
 
 # Filter
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
@@ -700,8 +697,11 @@ cmd/lc_addname.png cmd/lc_label.png
 cmd/sc_addname.png cmd/sc_label.png
 
 # Rotate
+cmd/32/advancedmode.png cmd/32/toggleobjectrotatemode.png
 cmd/32/clickchangerotation.png cmd/32/toggleobjectrotatemode.png
+cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 cmd/lc_clickchangerotation.png cmd/lc_toggleobjectrotatemode.png
+cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
 cmd/sc_clickchangerotation.png cmd/sc_toggleobjectrotatemode.png
 
 # AddField
@@ -1794,7 +1794,7 @@ svx/res/cd017.png cmd/sc_bezierinsert.png
 svx/res/cd018.png cmd/sc_bezierdelete.png
 svx/res/cd020.png cmd/sc_undo.png
 svx/res/cd021.png cmd/sc_redo.png
-svx/res/cd025.png cmd/sc_autoformat.png
+svx/res/cd025.png cmd/sc_usewizards.png
 svx/res/cd026.png cmd/sc_bmpmask.png
 
 svx/res/color.png cmd/sc_bmpmask.png
@@ -1907,6 +1907,7 @@ sw/res/sc20557.png cmd/sc_cancel.png
 sw/res/sc20558.png cmd/sc_ok.png
 
 sw/res/sf04.png sc/res/sf02.png
+sw/res/sf06.png cmd/sc_autoformat.png
 
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
