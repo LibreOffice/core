@@ -122,7 +122,6 @@ public:
 
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) = 0;
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
     virtual OUString        GetDefaultPrinter() = 0;
 
     // SalTimer
