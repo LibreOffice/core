@@ -667,7 +667,7 @@ bool SwEditShell::IsNoNum( bool bChkStart ) const
          && !HasSelection()
          && ( !bChkStart || IsSttPara() ) )
     {
-        const SwTextNode* pTextNd = GetCursor()->GetNode().GetTextNode();
+        const SwTextNode* pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
         if ( pTextNd != nullptr )
         {
             bResult =  !pTextNd->IsCountedInList();
@@ -683,7 +683,7 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     sal_uInt8 nLevel = MAXLEVEL;
 
     SwPaM* pCursor = GetCursor();
-    const SwTextNode* pTextNd = pCursor->GetNode().GetTextNode();
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
 
     OSL_ENSURE( pTextNd, "GetNumLevel() without text node" );
     if ( pTextNd == nullptr )
@@ -839,7 +839,7 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
 bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
-    const SwTextNode* pTextNd = pCursor->GetNode().GetTextNode();
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
     return pTextNd && pTextNd->IsListRestart();
 }
 
@@ -872,7 +872,7 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
 sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor();
-    const SwTextNode* pTextNd = pCursor->GetNode().GetTextNode();
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
     // correction: check, if list restart value is set at text node and
     // use new method <SwTextNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.
