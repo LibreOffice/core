@@ -380,12 +380,19 @@ void SdImportTestSmartArt::testVertialBoxList()
     // constraint wanted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11852), xParentText->getSize().Width);
 
-    uno::Reference<drawing::XShape> xSecondChild(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xSecondChild.is());
+    uno::Reference<drawing::XShape> xChildText(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChildText.is());
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 7361' (and with the fix: 'actual: 16932', i.e. the width of the
     // parent).
-    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(10000), xSecondChild->getSize().Width);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(10000), xChildText->getSize().Width);
+
+    // Assert that the right edge of the parent text is closer to the slide
+    // boundary than the right edge of the parent text.
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected greater than: 25656, Actual  : 21165'.
+    CPPUNIT_ASSERT_GREATER(xParentText->getPosition().X + xParentText->getSize().Width,
+                           xChildText->getPosition().X + xChildText->getSize().Width);
 
     xDocShRef->DoClose();
 }
