@@ -111,10 +111,9 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxUInt16Item* pOldOutlineLv = static_cast<const SfxUInt16Item*>(GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL));
         if (pOldOutlineLv)
         {
-            SfxUInt16Item* pOutlineLv = static_cast<SfxUInt16Item*>(pOldOutlineLv->Clone());
+            std::unique_ptr<SfxUInt16Item> pOutlineLv(static_cast<SfxUInt16Item*>(pOldOutlineLv->Clone()));
             pOutlineLv->SetValue( aOutlineLv );
             rSet->Put(*pOutlineLv);
-            delete pOutlineLv;
             bModified = true;
         }
     }
@@ -125,12 +124,11 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         if (m_xNumberStyleLB->get_active())
             aStyle = m_xNumberStyleLB->get_active_text();
         const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
-        SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : nullptr;
-        if (pRule)
+        if (pOldRule)
         {
+            std::unique_ptr<SfxStringItem> pRule(static_cast<SfxStringItem*>(pOldRule->Clone()));
             pRule->SetValue(aStyle);
             rSet->Put(*pRule);
-            delete pRule;
             bModified = true;
         }
     }

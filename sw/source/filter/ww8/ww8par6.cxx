@@ -3540,14 +3540,13 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         {
             if( SfxItemState::SET == m_pCurrentColl->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
-                const SwAttrSet& aSet = m_pCurrentColl->GetAttrSet();
-                SvxUnderlineItem *pUnderline
-                    = static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone());
-                if (pUnderline && nLen >= 4)
+                if (nLen >= 4)
                 {
+                    const SwAttrSet& aSet = m_pCurrentColl->GetAttrSet();
+                    std::unique_ptr<SvxUnderlineItem> pUnderline(
+                            static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone()));
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_pCurrentColl->SetFormatAttr( *pUnderline );
-                    delete pUnderline;
                 }
             }
         }
@@ -3555,13 +3554,11 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         {
             if ( SfxItemState::SET == m_xCurrentItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
-                SvxUnderlineItem *pUnderline
-                    = static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone());
-                if (pUnderline && nLen >= 4)
+                if (nLen >= 4)
                 {
+                    std::unique_ptr<SvxUnderlineItem> pUnderline(static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone()));
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_xCurrentItemSet->Put( *pUnderline );
-                    delete pUnderline;
                 }
             }
         }
@@ -4541,10 +4538,9 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     else
     {
-        SfxBoolItem* pI = static_cast<SfxBoolItem*>(GetDfltAttr( nId )->Clone());
+        std::unique_ptr<SfxBoolItem> pI(static_cast<SfxBoolItem*>(GetDfltAttr( nId )->Clone()));
         pI->SetValue( 0 != *pData );
         NewAttr( *pI );
-        delete pI;
     }
 }
 

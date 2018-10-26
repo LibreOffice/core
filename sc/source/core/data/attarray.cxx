@@ -746,9 +746,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 SCROW           nY1 = nStart;
                 SCROW           nY2 = mvData[nPos].nEndRow;
 
-                SvxBoxItem*     pNewBoxItem = pBoxItem ? static_cast<SvxBoxItem*>(pBoxItem->Clone()) : nullptr;
-                SvxLineItem*    pNewTLBRItem = pTLBRItem ? static_cast<SvxLineItem*>(pTLBRItem->Clone()) : nullptr;
-                SvxLineItem*    pNewBLTRItem = pBLTRItem ? static_cast<SvxLineItem*>(pBLTRItem->Clone()) : nullptr;
+                std::unique_ptr<SvxBoxItem>  pNewBoxItem( pBoxItem ? static_cast<SvxBoxItem*>(pBoxItem->Clone()) : nullptr);
+                std::unique_ptr<SvxLineItem> pNewTLBRItem( pTLBRItem ? static_cast<SvxLineItem*>(pTLBRItem->Clone()) : nullptr);
+                std::unique_ptr<SvxLineItem> pNewBLTRItem(pBLTRItem ? static_cast<SvxLineItem*>(pBLTRItem->Clone()) : nullptr);
 
                 // fetch line and update attributes with parameters
 
@@ -823,9 +823,6 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                     else
                         nPos++;
                 }
-                delete pNewBoxItem;
-                delete pNewTLBRItem;
-                delete pNewBLTRItem;
             }
             else
             {

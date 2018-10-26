@@ -83,7 +83,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 {
     sal_Int16 nAttr = xAttrList->getLength();
 
-    SvXMLAttrContainerItem *pUnknownItem = nullptr;
+    std::unique_ptr<SvXMLAttrContainerItem> pUnknownItem;
     for( sal_Int16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -117,7 +117,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 // do we have an item?
                 if(eState >= SfxItemState::DEFAULT && pItem)
                 {
-                    SfxPoolItem *pNewItem = pItem->Clone();
+                    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
                     bool bPut = false;
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
@@ -136,8 +136,6 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( bPut )
                         rSet.Put( *pNewItem );
-
-                    delete pNewItem;
                 }
                 else
                 {
@@ -158,16 +156,11 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 if( SfxItemState::SET == rSet.GetItemState( nUnknownWhich, true,
                                                        &pItem ) )
                 {
-                    SfxPoolItem *pNew = pItem->Clone();
-                    pUnknownItem = dynamic_cast<SvXMLAttrContainerItem*>( pNew  );
-                    OSL_ENSURE( pUnknownItem,
-                                "SvXMLAttrContainerItem expected" );
-                    if( !pUnknownItem )
-                        delete pNew;
+                    pUnknownItem.reset( static_cast<SvXMLAttrContainerItem*>( pItem->Clone() ) );
                 }
                 else
                 {
-                    pUnknownItem = new SvXMLAttrContainerItem( nUnknownWhich );
+                    pUnknownItem.reset( new SvXMLAttrContainerItem( nUnknownWhich ) );
                 }
             }
             if( pUnknownItem )
@@ -184,7 +177,6 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
     if( pUnknownItem )
     {
         rSet.Put( *pUnknownItem );
-        delete pUnknownItem;
     }
 
     finished(rSet, rUnitConverter);

@@ -865,10 +865,10 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     if (m_pTabStop)
     {
-        SvxTabStopItem* pOld = static_cast<SvxTabStopItem*>(
-                                   rDoc.GetDefault( RES_PARATR_TABSTOP ).Clone() );
+        std::unique_ptr<SvxTabStopItem> pOld(static_cast<SvxTabStopItem*>(
+                                   rDoc.GetDefault( RES_PARATR_TABSTOP ).Clone() ));
         rDoc.SetDefault( *m_pTabStop );
-        m_pTabStop.reset( pOld );
+        m_pTabStop = std::move( pOld );
     }
 }
 
