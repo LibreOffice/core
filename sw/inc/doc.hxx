@@ -1065,9 +1065,11 @@ public:
                         const OUString& rNewRule );
 
     // Goto next/previous on same level.
-    static bool GotoNextNum( SwPosition&, bool bOverUpper = true,
+    static bool GotoNextNum( SwPosition&, SwRootFrame const* pLayout,
+                        bool bOverUpper = true,
                         sal_uInt8* pUpper = nullptr, sal_uInt8* pLower = nullptr );
-    static bool GotoPrevNum( SwPosition&, bool bOverUpper = true );
+    static bool GotoPrevNum( SwPosition&, SwRootFrame const* pLayout,
+                        bool bOverUpper = true );
 
     /** Searches for a text node with a numbering rule.
 
