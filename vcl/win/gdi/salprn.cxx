@@ -211,11 +211,6 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
     }
 }
 
-void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
-{
-    delete pInfo;
-}
-
 OUString WinSalInstance::GetDefaultPrinter()
 {
     DWORD   nChars = 0;
