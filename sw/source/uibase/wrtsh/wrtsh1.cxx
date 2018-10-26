@@ -1122,7 +1122,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
     {
         pNumRule = GetDoc()->SearchNumRule( *GetCursor()->GetPoint(),
                                             false, bNum, false, 0,
-                                            sContinuedListId );
+                                            sContinuedListId, GetLayout() );
         bContinueFoundNumRule = pNumRule != nullptr;
     }
 

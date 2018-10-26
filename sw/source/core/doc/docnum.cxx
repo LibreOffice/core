@@ -1225,7 +1225,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                             const_cast<SwNumRule *>
                             (SearchNumRule( aPos, false, pCNd->HasNumber(),
                                             false, 0,
-                                            aListStyleData.sListId, true ));
+                                    aListStyleData.sListId, nullptr, true ));
                     }
 
                     if ( aListStyleData.pReplaceNumRule == nullptr )
@@ -1560,10 +1560,15 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         const bool bOutline,
                                         int nNonEmptyAllowed,
                                         OUString& sListId,
+                                        SwRootFrame const* pLayout,
                                         const bool bInvestigateStartNode)
 {
     const SwNumRule * pResult = nullptr;
     SwTextNode * pTextNd = rPos.nNode.GetNode().GetTextNode();
+    if (pLayout)
+    {
+        pTextNd = sw::GetParaPropsNode(*pLayout, rPos.nNode);
+    }
     SwNode * pStartFromNode = pTextNd;
 
     if (pTextNd)
@@ -1577,9 +1582,9 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
             if ( !bInvestigateStartNode )
             {
                 if (bForward)
-                    ++aIdx;
+                    lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
                 else
-                    --aIdx;
+                    lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
             }
 
             if (aIdx.GetNode().IsTextNode())
@@ -1615,9 +1620,9 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
             if ( bInvestigateStartNode )
             {
                 if (bForward)
-                    ++aIdx;
+                    lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
                 else
-                    --aIdx;
+                    lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
             }
 
             pNode = &aIdx.GetNode();

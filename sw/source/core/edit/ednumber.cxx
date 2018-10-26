@@ -874,7 +874,7 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bNum,
 {
     return GetDoc()->SearchNumRule( *(GetCursor()->Start()),
                                     false/*bForward*/, bNum, false/*bOutline*/, -1/*nNonEmptyAllowe*/,
-                                    sListId );
+                                    sListId, GetLayout() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
