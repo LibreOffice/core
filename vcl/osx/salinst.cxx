@@ -726,25 +726,20 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         NSString* pType = i < nTypeCount ? [pTypes objectAtIndex: i] : nil;
         if( pName )
         {
-            SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
+            std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
             pInfo->maPrinterName    = GetOUString( pName );
             if( pType )
                 pInfo->maDriver     = GetOUString( pType );
             pInfo->mnStatus         = PrintQueueFlags::NONE;
             pInfo->mnJobs           = 0;
 
-            pList->Add( pInfo );
+            pList->Add( std::move(pInfo) );
         }
     }
 }
 
 void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
-}
-
-void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
-{
-    delete pInfo;
 }
 
 OUString AquaSalInstance::GetDefaultPrinter()

@@ -114,8 +114,6 @@ void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
     }
 }
 
-void Qt5Instance::DeletePrinterQueueInfo(SalPrinterQueueInfo* pInfo) { delete pInfo; }
-
 void Qt5Instance::GetPrinterQueueState(SalPrinterQueueInfo*) {}
 
 OUString Qt5Instance::GetDefaultPrinter()
