@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_AREASAVE_HXX
 
 #include <address.hxx>
+#include <tools/solar.h>
 
 #include <vector>
 

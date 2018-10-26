@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SOT_FORMATS_HXX
 #define INCLUDED_SOT_FORMATS_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 // - predefined formats -
 // Do NOT change the order of these values as the implementation depends on them!
