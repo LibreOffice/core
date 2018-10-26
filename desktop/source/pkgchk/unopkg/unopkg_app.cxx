@@ -609,7 +609,8 @@ extern "C" int unopkg_main()
     }
     catch (const LockFileException & e)
     {
-        logger->log(LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
+        // No logger since it requires UNO which we don't have here
+        dp_misc::writeConsoleError(e.Message + "\n");
         bNoOtherErrorMsg = true;
     }
     catch (const css::uno::Exception & e ) {
