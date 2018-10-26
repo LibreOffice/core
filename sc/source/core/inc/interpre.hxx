@@ -484,6 +484,11 @@ private:
     // Check for String overflow of rResult+rAdd and set error and erase rResult
     // if so. Return true if ok, false if overflow
     inline bool CheckStringResultLen( OUString& rResult, const OUString& rAdd );
+
+    // Check for String overflow of rResult+rAdd and set error and erase rResult
+    // if so. Return true if ok, false if overflow
+    inline bool CheckStringResultLen( OUStringBuffer& rResult, const OUString& rAdd );
+
     // Set error according to rVal, and set rVal to 0.0 if there was an error.
     inline void TreatDoubleError( double& rVal );
     // Lookup using ScLookupCache, @returns true if found and result address
@@ -1107,6 +1112,17 @@ inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUStri
     {
         SetError( FormulaError::StringOverflow );
         rResult.clear();
+        return false;
+    }
+    return true;
+}
+
+inline bool ScInterpreter::CheckStringResultLen( OUStringBuffer& rResult, const OUString& rAdd )
+{
+    if (rAdd.getLength() > kScInterpreterMaxStrLen - rResult.getLength())
+    {
+        SetError( FormulaError::StringOverflow );
+        rResult = OUStringBuffer();
         return false;
     }
     return true;

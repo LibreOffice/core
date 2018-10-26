@@ -9454,7 +9454,10 @@ void ScInterpreter::ScConcat()
     while( nParamCount-- > 0)
     {
         OUString aStr = GetString().getString();
-        aRes = aStr + aRes;
+        if (CheckStringResultLen( aRes, aStr))
+            aRes = aStr + aRes;
+        else
+            break;
     }
     PushString( aRes );
 }
