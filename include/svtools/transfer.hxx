@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <cppuhelper/implbase.hxx>
