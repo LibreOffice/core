@@ -112,14 +112,14 @@ void SwCursorShell::MoveCursorToNum()
 /// go to next/previous point on the same level
 void SwCursorShell::GotoNextNum()
 {
-    if (!SwDoc::GotoNextNum( *m_pCurrentCursor->GetPoint() ))
+    if (!SwDoc::GotoNextNum(*m_pCurrentCursor->GetPoint(), GetLayout()))
         return;
     MoveCursorToNum();
 }
 
 void SwCursorShell::GotoPrevNum()
 {
-    if (!SwDoc::GotoPrevNum( *m_pCurrentCursor->GetPoint() ))
+    if (!SwDoc::GotoPrevNum(*m_pCurrentCursor->GetPoint(), GetLayout()))
         return;
     MoveCursorToNum();
 }
