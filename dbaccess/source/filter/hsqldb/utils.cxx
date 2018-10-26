@@ -22,6 +22,8 @@
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 
+#include <sal/log.hxx>
+
 #include "utils.hxx"
 
 using namespace dbahsql;
@@ -38,6 +40,22 @@ OUString utils::getTableNameFromStmt(const OUString& sSql)
         ++wordIter;
     if (*wordIter == "TABLE")
         ++wordIter;
+
+    // it may contain spaces if it's put into apostrophes.
+    if (wordIter->indexOf("\"") >= 0)
+    {
+        sal_Int32 nAposBegin = sSql.indexOf("\"");
+        sal_Int32 nAposEnd = nAposBegin;
+        bool bProperEndAposFound = false;
+        while (!bProperEndAposFound)
+        {
+            nAposEnd = sSql.indexOf("\"", nAposEnd + 1);
+            if (sSql[nAposEnd - 1] != u'\\')
+                bProperEndAposFound = true;
+        }
+        OUString result = sSql.copy(nAposBegin, nAposEnd - nAposBegin + 1);
+        return result;
+    }
 
     // next word is the table's name
     // it might stuck together with the column definitions.
