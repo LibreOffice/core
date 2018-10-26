@@ -345,33 +345,25 @@ SalPrinterQueueInfo::~SalPrinterQueueInfo()
 
 ImplPrnQueueList::~ImplPrnQueueList()
 {
-    ImplSVData*         pSVData = ImplGetSVData();
-    for(ImplPrnQueueData & rQueueInfo : m_aQueueInfos)
-    {
-        delete rQueueInfo.mpQueueInfo;
-        pSVData->mpDefInst->DeletePrinterQueueInfo( rQueueInfo.mpSalQueueInfo );
-    }
 }
 
-void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
+void ImplPrnQueueList::Add( std::unique_ptr<SalPrinterQueueInfo> pData )
 {
     std::unordered_map< OUString, sal_Int32 >::iterator it =
         m_aNameToIndex.find( pData->maPrinterName );
     if( it == m_aNameToIndex.end() )
     {
         m_aNameToIndex[ pData->maPrinterName ] = m_aQueueInfos.size();
-        m_aQueueInfos.emplace_back( );
-        m_aQueueInfos.back().mpQueueInfo = nullptr;
-        m_aQueueInfos.back().mpSalQueueInfo = pData;
         m_aPrinterList.push_back( pData->maPrinterName );
+        m_aQueueInfos.push_back( ImplPrnQueueData() );
+        m_aQueueInfos.back().mpQueueInfo = nullptr;
+        m_aQueueInfos.back().mpSalQueueInfo = std::move(pData);
     }
     else // this should not happen, but ...
     {
         ImplPrnQueueData& rData = m_aQueueInfos[ it->second ];
-        delete rData.mpQueueInfo;
-        rData.mpQueueInfo = nullptr;
-        ImplGetSVData()->mpDefInst->DeletePrinterQueueInfo( rData.mpSalQueueInfo );
-        rData.mpSalQueueInfo = pData;
+        rData.mpQueueInfo.reset();
+        rData.mpSalQueueInfo = std::move(pData);
     }
 }
 
@@ -430,10 +422,10 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
     if( pInfo )
     {
         if( !pInfo->mpQueueInfo || bStatusUpdate )
-            pSVData->mpDefInst->GetPrinterQueueState( pInfo->mpSalQueueInfo );
+            pSVData->mpDefInst->GetPrinterQueueState( pInfo->mpSalQueueInfo.get() );
 
         if ( !pInfo->mpQueueInfo )
-            pInfo->mpQueueInfo = new QueueInfo;
+            pInfo->mpQueueInfo.reset(new QueueInfo);
 
         pInfo->mpQueueInfo->maPrinterName   = pInfo->mpSalQueueInfo->maPrinterName;
         pInfo->mpQueueInfo->maDriver        = pInfo->mpSalQueueInfo->maDriver;
@@ -441,7 +433,7 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
         pInfo->mpQueueInfo->maComment       = pInfo->mpSalQueueInfo->maComment;
         pInfo->mpQueueInfo->mnStatus        = pInfo->mpSalQueueInfo->mnStatus;
         pInfo->mpQueueInfo->mnJobs          = pInfo->mpSalQueueInfo->mnJobs;
-        return pInfo->mpQueueInfo;
+        return pInfo->mpQueueInfo.get();
     }
     return nullptr;
 }
@@ -795,13 +787,13 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
         // first search for the printer name directly
         ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
         if( pInfo )
-            return pInfo->mpSalQueueInfo;
+            return pInfo->mpSalQueueInfo.get();
 
         // then search case insensitive
         for(ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
         {
             if( rQueueInfo.mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
-                return rQueueInfo.mpSalQueueInfo;
+                return rQueueInfo.mpSalQueueInfo.get();
         }
 
         // then search for driver name
@@ -810,17 +802,17 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
             for(ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
             {
                 if( rQueueInfo.mpSalQueueInfo->maDriver == *pDriver )
-                    return rQueueInfo.mpSalQueueInfo;
+                    return rQueueInfo.mpSalQueueInfo.get();
             }
         }
 
         // then the default printer
         pInfo = pPrnList->Get( GetDefaultPrinterName() );
         if( pInfo )
-            return pInfo->mpSalQueueInfo;
+            return pInfo->mpSalQueueInfo.get();
 
         // last chance: the first available printer
-        return pPrnList->m_aQueueInfos[0].mpSalQueueInfo;
+        return pPrnList->m_aQueueInfos[0].mpSalQueueInfo.get();
     }
 
     return nullptr;
