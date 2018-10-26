@@ -1547,7 +1547,7 @@ public:
      */
     static OUString GetPaMDescr(const SwPaM & rPaM);
 
-    static bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
+    static bool IsFirstOfNumRuleAtPos(const SwPosition & rPos, SwRootFrame const& rLayout);
 
     // access methods for XForms model(s)
 

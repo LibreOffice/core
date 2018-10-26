@@ -331,7 +331,7 @@ void SwEditShell::NumUpDown( bool bDown )
 
 bool SwEditShell::IsFirstOfNumRuleAtCursorPos() const
 {
-    return SwDoc::IsFirstOfNumRuleAtPos( *GetCursor()->GetPoint() );
+    return SwDoc::IsFirstOfNumRuleAtPos(*GetCursor()->GetPoint(), *GetLayout());
 }
 
 // -> #i23725#, #i90078#
