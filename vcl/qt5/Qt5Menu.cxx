@@ -250,7 +250,13 @@ void Qt5Menu::slotMenuTriggered(Qt5MenuItem* pQItem)
     }
 }
 
-void Qt5Menu::NativeItemText(OUString& rItemText) { rItemText = rItemText.replace('~', '&'); }
+void Qt5Menu::NativeItemText(OUString& rItemText)
+{
+    // preserve literal '&'s in menu texts
+    rItemText = rItemText.replaceAll("&", "&&");
+
+    rItemText = rItemText.replace('~', '&');
+}
 
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
     : mpParentMenu(nullptr)
