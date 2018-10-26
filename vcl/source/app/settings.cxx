@@ -2123,8 +2123,8 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     {
         sal_Int32 nIndex = 0;
 
-        // Skip the persona slug and name
-        aHeader = aPersonaSettings.getToken( 2, ';', nIndex );
+        // Skip the persona slug, name, and preview
+        aHeader = aPersonaSettings.getToken( 3, ';', nIndex );
 
         if ( nIndex > 0 )
             aFooter = aPersonaSettings.getToken( 0, ';', nIndex );

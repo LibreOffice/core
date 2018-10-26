@@ -593,8 +593,6 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         if (aPreviewFile.isEmpty())
             break;
 
-        // There is no room for the preview file in the PersonaSettings currently
-        aPersonaSetting = aPersonaSetting.replaceFirst( aPreviewFile + ";", "" );
         m_vDefaultPersonaSettings.push_back( aPersonaSetting );
 
         INetURLObject aURLObj( gallery + aPreviewFile );
@@ -897,6 +895,7 @@ void SearchAndParseThread::execute()
 
                 OUString aPersonaSetting = personaInfo.sSlug
                         + ";" + personaInfo.sName
+                        + ";" + personaInfo.sPreviewURL
                         + ";" + personaInfo.sHeaderURL
                         + ";" + personaInfo.sFooterURL
                         + ";" + personaInfo.sTextColor;
@@ -959,6 +958,7 @@ void SearchAndParseThread::execute()
 
             OUString aPersonaSetting = aPersonaInfo.sSlug
                     + ";" + aPersonaInfo.sName
+                    + ";" + aPersonaInfo.sPreviewURL
                     + ";" + aPersonaInfo.sHeaderURL
                     + ";" + aPersonaInfo.sFooterURL
                     + ";" + aPersonaInfo.sTextColor;
@@ -1008,7 +1008,7 @@ void GetPersonaThread::execute()
     if ( !xFileAccess.is() )
         return;
 
-    OUString aSlug, aName, aHeaderURL, aFooterURL, aTextColor;
+    OUString aSlug, aName, aPreviewURL, aHeaderURL, aFooterURL, aTextColor;
     OUString aPersonaSetting;
 
     // get the required fields from m_aSelectedPersona
@@ -1016,6 +1016,7 @@ void GetPersonaThread::execute()
 
     aSlug = m_aSelectedPersona.getToken(0, ';', nIndex);
     aName = m_aSelectedPersona.getToken(0, ';', nIndex);
+    aPreviewURL = m_aSelectedPersona.getToken(0, ';', nIndex);
     aHeaderURL = m_aSelectedPersona.getToken(0, ';', nIndex);
     aFooterURL = m_aSelectedPersona.getToken(0, ';', nIndex);
     aTextColor = m_aSelectedPersona.getToken(0, ';', nIndex);
@@ -1025,6 +1026,7 @@ void GetPersonaThread::execute()
     rtl::Bootstrap::expandMacros( gallery );
     gallery += "/user/gallery/personas/";
 
+    OUString aPreviewFile( aSlug + "/" + INetURLObject( aPreviewURL ).getName() );
     OUString aHeaderFile( aSlug + "/" + INetURLObject( aHeaderURL ).getName() );
     OUString aFooterFile( aSlug + "/" + INetURLObject( aFooterURL ).getName() );
 
@@ -1055,7 +1057,7 @@ void GetPersonaThread::execute()
 
     SolarMutexGuard aGuard;
 
-    aPersonaSetting = aSlug + ";" + aName + ";" + aHeaderFile + ";" + aFooterFile
+    aPersonaSetting = aSlug + ";" + aName + ";" + aPreviewFile + ";" + aHeaderFile + ";" + aFooterFile
             + ";" + aTextColor;
 
     m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
