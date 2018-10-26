@@ -686,6 +686,11 @@ static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
+static void doc_paintWindowDPI(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+                               const int nX, const int nY,
+                               const int nWidth, const int nHeight,
+                               const double fDPIScale);
+
 static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction);
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
@@ -756,6 +761,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
         m_pDocumentClass->paintWindow = doc_paintWindow;
+        m_pDocumentClass->paintWindowDPI = doc_paintWindowDPI;
         m_pDocumentClass->postWindow = doc_postWindow;
 
         m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
@@ -3587,10 +3593,19 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
     return nullptr;
 }
 
-static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
+static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
                             unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
+{
+    doc_paintWindowDPI(pThis, nLOKWindowId, pBuffer, nX, nY, nWidth, nHeight, 1.0);
+}
+
+static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
+                               unsigned char* pBuffer,
+                               const int nX, const int nY,
+                               const int nWidth, const int nHeight,
+                               const double fDPIScale)
 {
     SolarMutexGuard aGuard;
     if (gImpl)
@@ -3602,6 +3617,11 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
         return;
     }
+
+    // Setup cairo to draw with the changed DPI scale (and return back to 1.0
+    // when the painting finishes)
+    comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
+    comphelper::LibreOfficeKit::setDPIScale(fDPIScale);
 
 #if defined(IOS)
 
@@ -3636,7 +3656,7 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
 
     MapMode aMapMode(pDevice->GetMapMode());
-    aMapMode.SetOrigin(Point(-nX, -nY));
+    aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
     pDevice->SetMapMode(aMapMode);
 
     comphelper::LibreOfficeKit::setDialogPainting(true);
