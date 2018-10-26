@@ -94,6 +94,8 @@
 #include <undoconvert.hxx>
 #include <docfuncutil.hxx>
 #include <sheetevents.hxx>
+#include <conditio.hxx>
+#include <columnspanset.hxx>
 
 #include <memory>
 #include <utility>

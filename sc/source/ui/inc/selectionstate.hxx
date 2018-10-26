@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SELECTIONSTATE_HXX
 
 #include <editeng/editdata.hxx>
-#include <rangelst.hxx>
+#include <address.hxx>
 
 /** Enumerates all possible types of selections in a Calc document. */
 enum ScSelectionType

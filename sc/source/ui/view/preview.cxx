@@ -65,6 +65,7 @@
 #include <viewutil.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
+#include <columnspanset.hxx>
 
 #include <memory>
 

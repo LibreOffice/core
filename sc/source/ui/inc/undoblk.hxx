@@ -21,20 +21,16 @@
 
 #include "undobase.hxx"
 #include <markdata.hxx>
-#include "viewutil.hxx"
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
 #include <paramisc.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <memory>
 
 class ScDocShell;
-class ScDocument;
 class ScOutlineTable;
-class ScRangeList;
 class ScPatternAttr;
-class SvxBoxItem;
-class SvxBoxInfoItem;
 class SvxSearchItem;
 class SdrUndoAction;
 class ScEditDataArray;

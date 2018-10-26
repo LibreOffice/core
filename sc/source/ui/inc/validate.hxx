@@ -21,12 +21,10 @@
 #define INCLUDED_SC_SOURCE_UI_INC_VALIDATE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/vclmedit.hxx>
-#include <svtools/svmedit.hxx>
 
 #include "anyrefdg.hxx"
 #include <sc.hrc>

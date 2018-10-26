@@ -68,6 +68,7 @@
 #include <stringutil.hxx>
 #include <tabvwsh.hxx>
 #include <generalfunction.hxx>
+#include <sortparam.hxx>
 
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>

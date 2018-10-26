@@ -25,7 +25,6 @@
 #include "undobase.hxx"
 
 class ScDocShell;
-class SfxStyleSheetBase;
 
 class ScStyleSaveData
 {

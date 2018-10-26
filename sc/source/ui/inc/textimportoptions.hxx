@@ -22,7 +22,6 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <i18nlangtag/lang.h>
 #include <svx/langbox.hxx>
 

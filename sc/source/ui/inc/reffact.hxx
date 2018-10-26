@@ -23,8 +23,6 @@
 #include <sfx2/childwin.hxx>
 #include "ChildWindowWrapper.hxx"
 
-#include "dbfunc.hxx"
-
 #include <sc.hrc>
 
 #define DECL_WRAPPER_WITHID(Class) \

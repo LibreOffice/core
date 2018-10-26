@@ -31,8 +31,6 @@ class SfxViewFrame;
 class ScChangeAction;
 class ScChangeViewSettings;
 class ScDocument;
-class ScAddress;
-class ScRange;
 class ScMarkData;
 enum class SvtScriptType;
 enum class TransliterationFlags;

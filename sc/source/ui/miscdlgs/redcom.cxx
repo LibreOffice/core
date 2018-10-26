@@ -19,6 +19,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 
+#include <chgtrack.hxx>
 #include <redcom.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>

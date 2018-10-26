@@ -27,6 +27,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
+#include <imoptdlg.hxx>
 
 // ScDelimiterTable
 
