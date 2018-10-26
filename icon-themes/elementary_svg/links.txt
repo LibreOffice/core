@@ -594,32 +594,29 @@ cmd/sc_open_h.svg cmd/sc_open.svg
 cmd/sc_newrecord.svg cmd/sc_open.svg
 
 # Wizard
-cmd/32/dbnewqueryautopilot.svg cmd/32/autoformat.svg
-cmd/32/usewizards.svg cmd/32/autoformat.svg
-cmd/32/dbnewtableautopilot.svg cmd/32/autoformat.svg
-cmd/32/dbnewreportautopilot.svg cmd/32/autoformat.svg
-cmd/32/dbnewformautopilot.svg cmd/32/autoformat.svg
-cmd/32/commontaskbarvisible.svg cmd/32/autoformat.svg
-cmd/32/autopilotmenu.svg cmd/32/autoformat.svg
-cmd/32/newarrangement.svg cmd/32/autoformat.svg
+cmd/32/dbnewqueryautopilot.svg cmd/32/usewizards.svg
+cmd/32/dbnewtableautopilot.svg cmd/32/usewizards.svg
+cmd/32/dbnewreportautopilot.svg cmd/32/usewizards.svg
+cmd/32/dbnewformautopilot.svg cmd/32/usewizards.svg
+cmd/32/commontaskbarvisible.svg cmd/32/usewizards.svg
+cmd/32/autopilotmenu.svg cmd/32/usewizards.svg
+cmd/32/newarrangement.svg cmd/32/usewizards.svg
 
-cmd/lc_dbnewqueryautopilot.svg cmd/lc_autoformat.svg
-cmd/lc_usewizards.svg cmd/lc_autoformat.svg
-cmd/lc_dbnewtableautopilot.svg cmd/lc_autoformat.svg
-cmd/lc_dbnewreportautopilot.svg cmd/lc_autoformat.svg
-cmd/lc_dbnewformautopilot.svg cmd/lc_autoformat.svg
-cmd/lc_commontaskbarvisible.svg cmd/lc_autoformat.svg
-cmd/lc_autopilotmenu.svg cmd/lc_autoformat.svg
-cmd/lc_newarrangement.svg cmd/lc_autoformat.svg
+cmd/lc_dbnewqueryautopilot.svg cmd/lc_usewizards.svg
+cmd/lc_dbnewtableautopilot.svg cmd/lc_usewizards.svg
+cmd/lc_dbnewreportautopilot.svg cmd/lc_usewizards.svg
+cmd/lc_dbnewformautopilot.svg cmd/lc_usewizards.svg
+cmd/lc_commontaskbarvisible.svg cmd/lc_usewizards.svg
+cmd/lc_autopilotmenu.svg cmd/lc_usewizards.svg
+cmd/lc_newarrangement.svg cmd/lc_usewizards.svg
 
-cmd/sc_dbnewqueryautopilot.svg cmd/sc_autoformat.svg
-cmd/sc_usewizards.svg cmd/sc_autoformat.svg
-cmd/sc_dbnewtableautopilot.svg cmd/sc_autoformat.svg
-cmd/sc_dbnewreportautopilot.svg cmd/sc_autoformat.svg
-cmd/sc_dbnewformautopilot.svg cmd/sc_autoformat.svg
-cmd/sc_commontaskbarvisible.svg cmd/sc_autoformat.svg
-cmd/sc_autopilotmenu.svg cmd/sc_autoformat.svg
-cmd/sc_newarrangement.svg cmd/sc_autoformat.svg
+cmd/sc_dbnewqueryautopilot.svg cmd/sc_usewizards.svg
+cmd/sc_dbnewtableautopilot.svg cmd/sc_usewizards.svg
+cmd/sc_dbnewreportautopilot.svg cmd/sc_usewizards.svg
+cmd/sc_dbnewformautopilot.svg cmd/sc_usewizards.svg
+cmd/sc_commontaskbarvisible.svg cmd/sc_usewizards.svg
+cmd/sc_autopilotmenu.svg cmd/sc_usewizards.svg
+cmd/sc_newarrangement.svg cmd/sc_usewizards.svg
 
 # Filter
 cmd/32/datafilterhideautofilter.svg cmd/32/removefiltersort.svg
@@ -700,8 +697,11 @@ cmd/lc_addname.svg cmd/lc_label.svg
 cmd/sc_addname.svg cmd/sc_label.svg
 
 # Rotate
+cmd/32/advancedmode.svg cmd/32/toggleobjectrotatemode.svg
 cmd/32/clickchangerotation.svg cmd/32/toggleobjectrotatemode.svg
+cmd/lc_advancedmode.svg cmd/lc_toggleobjectrotatemode.svg
 cmd/lc_clickchangerotation.svg cmd/lc_toggleobjectrotatemode.svg
+cmd/sc_advancedmode.svg cmd/sc_toggleobjectrotatemode.svg
 cmd/sc_clickchangerotation.svg cmd/sc_toggleobjectrotatemode.svg
 
 # AddField
@@ -1794,7 +1794,7 @@ svx/res/cd017.svg cmd/sc_bezierinsert.svg
 svx/res/cd018.svg cmd/sc_bezierdelete.svg
 svx/res/cd020.svg cmd/sc_undo.svg
 svx/res/cd021.svg cmd/sc_redo.svg
-svx/res/cd025.svg cmd/sc_autoformat.svg
+svx/res/cd025.svg cmd/sc_usewizards.svg
 svx/res/cd026.svg cmd/sc_bmpmask.svg
 
 svx/res/color.svg cmd/sc_bmpmask.svg
@@ -1907,6 +1907,7 @@ sw/res/sc20557.svg cmd/sc_cancel.svg
 sw/res/sc20558.svg cmd/sc_ok.svg
 
 sw/res/sf04.svg sc/res/sf02.svg
+sw/res/sf06.svg cmd/sc_autoformat.svg
 
 sw/res/sr20000.svg cmd/sc_downsearch.svg
 sw/res/sr20001.svg cmd/sc_upsearch.svg
