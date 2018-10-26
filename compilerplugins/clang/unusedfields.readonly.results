@@ -158,12 +158,10 @@ cui/source/options/optcolor.cxx:255
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:79
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
-cui/source/options/personalization.hxx:45
-    SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [3]
-cui/source/options/personalization.hxx:109
+cui/source/options/personalization.hxx:38
+    SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [6]
+cui/source/options/personalization.hxx:102
     SelectPersonaDialog m_vResultList VclPtr<class PushButton> [9]
-cui/source/options/personalization.hxx:110
-    SelectPersonaDialog m_vSearchSuggestions VclPtr<class PushButton> [6]
 cui/source/options/treeopt.cxx:469
     OptionsGroupInfo m_bLoadError _Bool
 dbaccess/source/core/api/RowSetBase.hxx:85
@@ -178,6 +176,38 @@ dbaccess/source/filter/hsqldb/parseschema.hxx:36
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
 dbaccess/source/ui/control/tabletree.cxx:182
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
+dbaccess/source/ui/dlg/advancedsettings.hxx:42
+    dbaui::SpecialSettingsPage m_xIsSQL92Check std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:43
+    dbaui::SpecialSettingsPage m_xAppendTableAlias std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:44
+    dbaui::SpecialSettingsPage m_xAsBeforeCorrelationName std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:45
+    dbaui::SpecialSettingsPage m_xEnableOuterJoin std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:46
+    dbaui::SpecialSettingsPage m_xIgnoreDriverPrivileges std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:47
+    dbaui::SpecialSettingsPage m_xParameterSubstitution std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:48
+    dbaui::SpecialSettingsPage m_xSuppressVersionColumn std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:49
+    dbaui::SpecialSettingsPage m_xCatalog std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:50
+    dbaui::SpecialSettingsPage m_xSchema std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:51
+    dbaui::SpecialSettingsPage m_xIndexAppendix std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:52
+    dbaui::SpecialSettingsPage m_xDosLineEnds std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:53
+    dbaui::SpecialSettingsPage m_xCheckRequiredFields std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:54
+    dbaui::SpecialSettingsPage m_xIgnoreCurrency std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:55
+    dbaui::SpecialSettingsPage m_xEscapeDateTime std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:56
+    dbaui::SpecialSettingsPage m_xPrimaryKeySupport std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/advancedsettings.hxx:57
+    dbaui::SpecialSettingsPage m_xRespectDriverResultSetType std::unique_ptr<weld::CheckButton>
 dbaccess/source/ui/inc/charsetlistbox.hxx:42
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
 dbaccess/source/ui/inc/WCopyTable.hxx:269
@@ -320,6 +350,8 @@ include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
+include/svx/dialcontrol.hxx:111
+    svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer sal_Int32
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:73
@@ -341,7 +373,7 @@ include/test/sheet/xnamedranges.hxx:38
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:444
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:444:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo4/include/unoidl/unoidl.hxx:444:5)
 include/unoidl/unoidl.hxx:445
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:446
@@ -384,8 +416,6 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
-linguistic/source/dlistimp.cxx:73
-    DicEvtListenerHelper aCollectDicEvt std::vector<DictionaryEvent>
 linguistic/source/dlistimp.hxx:56
     DicList aOpt class LinguOptions
 oox/qa/token/tokenmap-test.cxx:34
@@ -404,13 +434,13 @@ registry/source/reflwrit.cxx:182
     CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig const svtools::ColorConfig
-sal/osl/unx/process.cxx:825
-    osl_procStat signal char [24]
 sal/osl/unx/process.cxx:826
-    osl_procStat blocked char [24]
+    osl_procStat signal char [24]
 sal/osl/unx/process.cxx:827
-    osl_procStat sigignore char [24]
+    osl_procStat blocked char [24]
 sal/osl/unx/process.cxx:828
+    osl_procStat sigignore char [24]
+sal/osl/unx/process.cxx:829
     osl_procStat sigcatch char [24]
 sal/rtl/alloc_arena.hxx:100
     rtl_arena_st m_hash_table_0 struct rtl_arena_segment_type *[64]
@@ -425,7 +455,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:127
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:128
-    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:125:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo4/sc/inc/compiler.hxx:125:9)
 sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
@@ -516,8 +546,6 @@ sdext/source/pdfimport/tree/style.hxx:42
     pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:95
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
-sfx2/source/inc/appdata.hxx:103
-    SfxAppData_Impl nInReschedule sal_uInt16
 slideshow/source/engine/slideshowimpl.cxx:153
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:403
@@ -622,8 +650,6 @@ sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:78
     SwInsertField_Data m_aDBDataSource const css::uno::Any
-sw/source/uibase/inc/labimg.hxx:50
-    SwLabItem m_aBin class rtl::OUString
 sw/source/uibase/inc/optload.hxx:106
     CaptionComboBox aDefault const class rtl::OUString
 toolkit/source/awt/vclxtoolkit.cxx:434

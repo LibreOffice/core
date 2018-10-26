@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dtrapezoid.cxx:202
@@ -158,6 +158,10 @@ dbaccess/source/core/dataaccess/connection.hxx:101
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/ui/dlg/admincontrols.hxx:52
     dbaui::MySQLNativeSettings m_aControlDependencies ::svt::ControlDependencyManager
+dbaccess/source/ui/dlg/advancedsettings.hxx:65
+    dbaui::SpecialSettingsPage m_aControlDependencies ::svt::ControlDependencyManager
+dbaccess/source/ui/dlg/advancedsettings.hxx:105
+    dbaui::GeneratedValuesPage m_aControlDependencies ::svt::ControlDependencyManager
 drawinglayer/source/tools/emfphelperdata.hxx:155
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:156
@@ -284,19 +288,19 @@ pyuno/source/module/pyuno_impl.hxx:324
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:241
     reportdesign::OStyle m_aSize awt::Size
-sal/osl/unx/thread.cxx:90
-    osl_thread_priority_st m_Highest const int
 sal/osl/unx/thread.cxx:91
-    osl_thread_priority_st m_Above_Normal const int
+    osl_thread_priority_st m_Highest const int
 sal/osl/unx/thread.cxx:92
-    osl_thread_priority_st m_Normal const int
+    osl_thread_priority_st m_Above_Normal const int
 sal/osl/unx/thread.cxx:93
-    osl_thread_priority_st m_Below_Normal const int
+    osl_thread_priority_st m_Normal const int
 sal/osl/unx/thread.cxx:94
+    osl_thread_priority_st m_Below_Normal const int
+sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Lowest const int
-sal/osl/unx/thread.cxx:112
+sal/osl/unx/thread.cxx:113
     osl_thread_global_st m_priority const struct osl_thread_priority_st
-sal/qa/osl/process/osl_process.cxx:157
+sal/qa/osl/process/osl_process.cxx:155
     Test_osl_executeProcess env_param_ const class rtl::OUString
 sal/textenc/textenc.cxx:406
     (anonymous namespace)::FullTextEncodingData module_ osl::Module
@@ -308,8 +312,6 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/formulalogger.hxx:42
-    sc::FormulaLogger maMessages const std::vector<OUString>
 sc/inc/interpretercontext.hxx:32
     ScInterpreterContext mrDoc const class ScDocument &
 sc/inc/token.hxx:406
@@ -388,8 +390,6 @@ sd/source/filter/eppt/epptbase.hxx:347
     PPTWriterBase maFraction const class Fraction
 sd/source/filter/ppt/pptin.hxx:82
     SdPPTImport maParam struct PowerPointImportParam
-sd/source/ui/animations/CustomAnimationDialog.hxx:149
-    sd::SdPropertySubControl mnType sal_Int32
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:262
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
 sd/source/ui/remotecontrol/Receiver.hxx:36
@@ -446,12 +446,6 @@ svl/source/crypto/cryptosign.cxx:282
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/inc/svimpbox.hxx:125
     SvImpLBox aFctSet class ImpLBSelEng
-svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /media/noel/disk2/libo6/svtools/source/svhtml/htmlkywd.cxx:558:5)
-svtools/source/svhtml/htmlkywd.cxx:560
-    HTML_OptionEntry::(anonymous) sToken const sal_Char *
-svtools/source/svhtml/htmlkywd.cxx:561
-    HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
 svx/inc/GalleryControl.hxx:47
     svx::sidebar::GalleryControl mpGallery class Gallery *
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1083
@@ -508,7 +502,7 @@ sw/source/core/text/inftxt.hxx:686
     SwTextSlot aText class rtl::OUString
 sw/source/core/text/porfld.cxx:141
     SwFieldSlot aText class rtl::OUString
-sw/source/ui/dbui/mmaddressblockpage.hxx:212
+sw/source/ui/dbui/mmaddressblockpage.hxx:209
     SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
 sw/source/uibase/docvw/romenu.hxx:35
     SwReadOnlyPopup m_aBuilder class VclBuilder
@@ -576,7 +570,7 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1552
+vcl/source/app/salvtables.cxx:1575
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
