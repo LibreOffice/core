@@ -21,13 +21,10 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <svtools/svmedit.hxx>
-#include <svtools/ctrlbox.hxx>
 
 enum class ScScenarioFlags;
+class Edit;
 
 class SvxColorListBox;
 

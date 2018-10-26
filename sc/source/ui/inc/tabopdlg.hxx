@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
 
 #include <vcl/fixed.hxx>
-#include <global.hxx>
 #include <address.hxx>
 #include "anyrefdg.hxx"
 

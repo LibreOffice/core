@@ -30,6 +30,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/lstbox.hxx>
 #include <sal/log.hxx>
 
 #include <unotools/useroptions.hxx>

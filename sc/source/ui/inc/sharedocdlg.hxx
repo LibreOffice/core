@@ -23,10 +23,11 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/simptabl.hxx>
+#include <scdllapi.h>
 
 class ScViewData;
 class ScDocShell;
+class SvSimpleTable;
 
 // class ScShareDocumentDlg
 

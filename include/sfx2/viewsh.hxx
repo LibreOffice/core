@@ -33,6 +33,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
+#include <sfx2/viewfac.hxx>
 #include <tools/gen.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>

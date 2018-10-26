@@ -23,7 +23,6 @@
 
 #include <tabbgcolor.hxx>
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vector>
 
@@ -43,7 +42,6 @@ class ScValidationData;
 class ScConversionParam;
 class SdrModel;
 class Graphic;
-class Exchange;
 class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
@@ -51,6 +49,7 @@ class ScTableProtection;
 enum class CreateNameFlags;
 
 namespace editeng { class SvxBorderLine; }
+namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
 
 namespace sc {
 

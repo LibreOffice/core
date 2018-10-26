@@ -34,6 +34,7 @@
 #include <rowheightcontext.hxx>
 #include <column.hxx>
 #include <sortparam.hxx>
+#include <columnspanset.hxx>
 
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :

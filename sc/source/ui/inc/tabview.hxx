@@ -26,9 +26,6 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 
-#include <sfx2/ipclient.hxx>
-
-#include "fupoor.hxx"
 #include "hiranges.hxx"
 #include "viewutil.hxx"
 #include "select.hxx"
@@ -40,14 +37,12 @@ namespace editeng {
 }
 
 class ScEditEngineDefaulter;
-class ScGridWindow;
 class ScOutlineWindow;
 class ScRowBar;
 class ScColBar;
 class ScTabControl;
 class ScTabViewShell;
 struct ScRangeFindData;
-class ScDrawView;
 class SvBorder;
 class FuPoor;
 class Splitter;

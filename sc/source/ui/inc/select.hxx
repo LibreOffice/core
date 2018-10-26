@@ -25,7 +25,6 @@
 #include "viewdata.hxx"
 
 class ScTabView;
-class ScViewData;
 
 class ScViewSelectionEngine : public SelectionEngine
 {

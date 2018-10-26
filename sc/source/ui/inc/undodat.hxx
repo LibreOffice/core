@@ -21,24 +21,18 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDODAT_HXX
 
 #include "undobase.hxx"
+#include "refundo.hxx"
+#include <dpobject.hxx>
+#include <olinetab.hxx>
 #include <rangeutl.hxx>
 #include <rangelst.hxx>
-#include <sortparam.hxx>
 #include <queryparam.hxx>
 #include <subtotalparam.hxx>
-#include <pivot.hxx>
 
 #include <memory>
 
 class ScDocShell;
-class ScDocument;
-class ScOutlineTable;
-class ScRangeName;
-class ScDBData;
-class ScDBCollection;
-class ScDPObject;
 class SdrUndoAction;
-class ScMarkData;
 
 class ScUndoDoOutline: public ScSimpleUndo
 {

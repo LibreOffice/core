@@ -22,8 +22,10 @@
 #include <vcl/window.hxx>
 #include <svl/poolitem.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <svx/zoomslideritem.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XDispatchProvider; } } } }
+
+class SvxZoomSliderItem;
 
 class ScZoomSliderControl : public SfxToolBoxControl
 {

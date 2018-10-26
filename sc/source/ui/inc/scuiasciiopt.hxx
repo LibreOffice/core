@@ -28,11 +28,8 @@
 
 class Button;
 class CheckBox;
-class ComboBox;
 class Edit;
 class FixedText;
-class ListBox;
-class NumericField;
 class RadioButton;
 
 class ScCsvTableBox;

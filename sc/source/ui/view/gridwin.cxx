@@ -35,6 +35,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/ipclient.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svl/urlbmk.hxx>

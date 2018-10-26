@@ -29,7 +29,6 @@ class ScSelectionState;
 class ScTabViewShell;
 class ScViewData;
 class ScRangeList;
-class ScDocument;
 
 /** Specialized spell check dialog child window for Calc.
 

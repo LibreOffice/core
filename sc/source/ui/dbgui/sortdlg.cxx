@@ -19,6 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <scui_def.hxx>
 #include <tpsort.hxx>
 #include <sortdlg.hxx>
 

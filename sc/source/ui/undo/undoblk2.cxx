@@ -28,6 +28,7 @@
 #include <scresid.hxx>
 #include <global.hxx>
 #include <target.hxx>
+#include <columnspanset.hxx>
 
 #include <undoolk.hxx>
 

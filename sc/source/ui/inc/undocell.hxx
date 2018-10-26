@@ -26,22 +26,13 @@
 #include <cellvalue.hxx>
 #include <cellvalues.hxx>
 #include <svx/svdundo.hxx>
+#include <editeng/editobj.hxx>
 
 #include <memory>
 
 class ScDocShell;
 class ScPatternAttr;
-class EditTextObject;
-class ScDetOpList;
-class ScDetOpData;
 class ScRangeName;
-class ScDocument;
-
-namespace sc {
-
-class CellValues;
-
-}
 
 class ScUndoSdrCaptionObj: public SdrUndoAction
 {

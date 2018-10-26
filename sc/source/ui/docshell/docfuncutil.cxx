@@ -23,6 +23,7 @@
 #include <undobase.hxx>
 #include <global.hxx>
 #include <undoblk.hxx>
+#include <columnspanset.hxx>
 
 #include <o3tl/make_unique.hxx>
 
