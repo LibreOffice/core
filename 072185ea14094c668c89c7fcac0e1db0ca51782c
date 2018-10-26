@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf3e73b7_f072807c",
+        "filename": "sc/uiconfig/scalc/toolbar/graphicobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-26T21:58:52Z",
+      "side": 1,
+      "message": "but not working there, anyway!",
+      "parentUuid": "1f1a1f67_6b59dcfc",
+      "revId": "072185ea14094c668c89c7fcac0e1db0ca51782c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_2b73e482",
         "filename": "sw/uiconfig/swriter/toolbar/drawingobjectbar.xml",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bf3e73b7_105e24e6",
+        "filename": "sw/uiconfig/swriter/toolbar/drawingobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-26T21:58:52Z",
+      "side": 1,
+      "message": "FillShadow didn\u0027t work in writer",
+      "parentUuid": "1f1a1f67_2b73e482",
+      "revId": "072185ea14094c668c89c7fcac0e1db0ca51782c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_ab2db447",
         "filename": "sw/uiconfig/swriter/toolbar/frameobjectbar.xml",
         "patchSetId": 1
@@ -47,6 +83,30 @@
       "writtenOn": "2018-10-25T14:57:03Z",
       "side": 1,
       "message": "The GraphicsDialog makes no sense on frames",
+      "range": {
+        "startLine": 57,
+        "startChar": 1,
+        "endLine": 57,
+        "endChar": 79
+      },
+      "revId": "072185ea14094c668c89c7fcac0e1db0ca51782c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_5064acb9",
+        "filename": "sw/uiconfig/swriter/toolbar/frameobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-26T21:58:52Z",
+      "side": 1,
+      "message": "as it was used for graphics it\u0027s usefull",
+      "parentUuid": "1f1a1f67_ab2db447",
       "range": {
         "startLine": 57,
         "startChar": 1,

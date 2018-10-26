@@ -22,6 +22,30 @@
       "revId": "8e8d89b27167a524d7e591d00e5d1ed20288c964",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_305928fe",
+        "filename": "sw/uiconfig/swriter/toolbar/frameobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-26T21:58:52Z",
+      "side": 0,
+      "message": "will add",
+      "parentUuid": "1f1a1f67_cbfeb0ad",
+      "range": {
+        "startLine": 56,
+        "startChar": 1,
+        "endLine": 56,
+        "endChar": 77
+      },
+      "revId": "8e8d89b27167a524d7e591d00e5d1ed20288c964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
