@@ -309,6 +309,15 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getPartInfo().
     char* (*getPartInfo) (LibreOfficeKitDocument* pThis, int nPart);
 
+    /// Paints window with given id to the buffer with the give DPI scale
+    /// (every pixel is dpiscale-times larger).
+    /// @see lok::Document::paintWindow().
+    void (*paintWindowDPI) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
+                            unsigned char* pBuffer,
+                            const int x, const int y,
+                            const int width, const int height,
+                            const double dpiscale);
+
 #ifdef IOS
     /// @see lok::Document::paintTileToCGContext().
     void (*paintTileToCGContext) (LibreOfficeKitDocument* pThis,
