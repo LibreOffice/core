@@ -150,8 +150,6 @@ cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:288
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-dbaccess/source/ui/inc/propertysetitem.hxx:34
-    dbaui::OPropertySetItem m_xSet css::uno::Reference<css::beans::XPropertySet>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
@@ -262,10 +260,6 @@ include/svtools/brwbox.hxx:253
     BrowseBox::CursorMoveAttempt m_nRow const long
 include/svtools/brwbox.hxx:254
     BrowseBox::CursorMoveAttempt m_bScrolledToReachCell const _Bool
-include/svtools/ctrlbox.hxx:448
-    FontSizeBox pFontList const class FontList *
-include/svtools/ctrlbox.hxx:450
-    FontSizeBox bPtRelative _Bool
 include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
@@ -273,7 +267,7 @@ include/svx/imapdlg.hxx:118
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
 include/svx/svdlayer.hxx:70
-    SdrLayer nType sal_uInt16
+    SdrLayer mbUserDefinedLayer _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
@@ -300,8 +294,6 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
-linguistic/source/dlistimp.cxx:73
-    DicEvtListenerHelper aCollectDicEvt std::vector<DictionaryEvent>
 registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflread.cxx:467
@@ -342,10 +334,10 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2528
+sc/inc/document.hxx:2526
     ScMutationDisable mpDocument class ScDocument *
-sc/inc/lookupcache.hxx:61
-    ScLookupCache::QueryCriteria  union ScLookupCache::QueryCriteria::(anonymous at /media/noel/disk2/libo6/sc/inc/lookupcache.hxx:61:9)
+sc/inc/lookupcache.hxx:62
+    ScLookupCache::QueryCriteria  union ScLookupCache::QueryCriteria::(anonymous at /media/noel/disk2/libo4/sc/inc/lookupcache.hxx:62:9)
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
@@ -442,8 +434,6 @@ sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:100
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
-sfx2/source/control/dispatch.cxx:100
-    SfxObjectBars_Impl pIFace class SfxInterface *
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -486,8 +476,6 @@ svx/source/form/dataaccessdescriptor.cxx:44
     svx::ODADescriptorImpl m_bSetOutOfDate _Bool
 svx/source/form/formcontroller.cxx:211
     svxform::ColumnInfo nNullable sal_Int32
-svx/source/inc/fmitems.hxx:28
-    FmInterfaceItem xInterface css::uno::Reference<css::uno::XInterface>
 svx/source/sdr/attribute/sdrformtextattribute.cxx:155
     drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp const sal_uInt16
 svx/source/sdr/attribute/sdrtextattribute.cxx:53
@@ -518,8 +506,6 @@ svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/cellatr.hxx:37
-    SwTableBoxNumFormat m_bAuto _Bool
 sw/inc/shellio.hxx:147
     SwReader aFileName const class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:186
@@ -541,9 +527,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo6/sw/source/filter/inc/rtf.hxx:27:9)
-sw/source/uibase/inc/labimg.hxx:50
-    SwLabItem m_aBin class rtl::OUString
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49

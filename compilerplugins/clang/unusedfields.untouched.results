@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -96,6 +96,14 @@ cui/source/inc/transfrm.hxx:193
     SvxAngleTabPage m_xCtlAngle std::unique_ptr<weld::CustomWeld>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
+dbaccess/source/ui/dlg/advancedsettings.hxx:65
+    dbaui::SpecialSettingsPage m_aControlDependencies ::svt::ControlDependencyManager
+dbaccess/source/ui/dlg/advancedsettings.hxx:100
+    dbaui::GeneratedValuesPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
+dbaccess/source/ui/dlg/advancedsettings.hxx:102
+    dbaui::GeneratedValuesPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
+dbaccess/source/ui/dlg/advancedsettings.hxx:105
+    dbaui::GeneratedValuesPage m_aControlDependencies ::svt::ControlDependencyManager
 emfio/source/emfuno/xemfparser.cxx:60
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
@@ -188,20 +196,18 @@ reportdesign/source/ui/inc/PageNumber.hxx:41
     rptui::OPageNumberDialog m_xBottomPage std::unique_ptr<weld::RadioButton>
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
-sal/osl/unx/thread.cxx:90
-    osl_thread_priority_st m_Highest const int
 sal/osl/unx/thread.cxx:91
-    osl_thread_priority_st m_Above_Normal const int
+    osl_thread_priority_st m_Highest const int
 sal/osl/unx/thread.cxx:92
-    osl_thread_priority_st m_Normal const int
+    osl_thread_priority_st m_Above_Normal const int
 sal/osl/unx/thread.cxx:93
-    osl_thread_priority_st m_Below_Normal const int
+    osl_thread_priority_st m_Normal const int
 sal/osl/unx/thread.cxx:94
+    osl_thread_priority_st m_Below_Normal const int
+sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Lowest const int
-sal/osl/unx/thread.cxx:112
+sal/osl/unx/thread.cxx:113
     osl_thread_global_st m_priority const struct osl_thread_priority_st
-sc/inc/formulalogger.hxx:42
-    sc::FormulaLogger maMessages const std::vector<OUString>
 sc/inc/interpretercontext.hxx:32
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:104
@@ -240,10 +246,8 @@ sd/source/ui/animations/CustomAnimationDialog.cxx:2642
     sd::CustomAnimationTextAnimTabPage mxContainer std::unique_ptr<weld::Container>
 sd/source/ui/animations/CustomAnimationDialog.cxx:2643
     sd::CustomAnimationTextAnimTabPage mxFTGroupText std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.hxx:148
+sd/source/ui/animations/CustomAnimationDialog.hxx:147
     sd::SdPropertySubControl mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.hxx:149
-    sd::SdPropertySubControl mnType sal_Int32
 sd/source/ui/dlg/PhotoAlbumDialog.hxx:60
     sd::SdPhotoAlbumDialog m_xImg std::unique_ptr<weld::CustomWeld>
 sd/source/ui/inc/custsdlg.hxx:43
@@ -310,12 +314,6 @@ svl/source/crypto/cryptosign.cxx:282
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/filter/exportdialog.hxx:124
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
-svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /media/noel/disk2/libo6/svtools/source/svhtml/htmlkywd.cxx:558:5)
-svtools/source/svhtml/htmlkywd.cxx:560
-    HTML_OptionEntry::(anonymous) sToken const sal_Char *
-svtools/source/svhtml/htmlkywd.cxx:561
-    HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
 svx/source/inc/datanavi.hxx:604
     svxform::AddInstanceDialog m_xURLFT std::unique_ptr<weld::Label>
 sw/source/core/crsr/crbm.cxx:64
@@ -328,10 +326,18 @@ sw/source/ui/config/mailconfigpage.cxx:56
     SwTestAccountSettingsDialog m_xEstablish std::unique_ptr<weld::Label>
 sw/source/ui/config/mailconfigpage.cxx:57
     SwTestAccountSettingsDialog m_xFind std::unique_ptr<weld::Label>
+sw/source/ui/dbui/mmgreetingspage.hxx:116
+    SwMailBodyDialog m_xBodyFT std::unique_ptr<weld::Label>
 sw/source/ui/envelp/labfmt.hxx:75
     SwLabFormatPage m_xPreview std::unique_ptr<weld::CustomWeld>
 sw/source/ui/inc/mmresultdialogs.hxx:72
     SwMMResultPrintDialog m_xPrinterFT std::unique_ptr<weld::Label>
+sw/source/ui/inc/mmresultdialogs.hxx:102
+    SwMMResultEmailDialog m_xMailToFT std::unique_ptr<weld::Label>
+sw/source/ui/inc/mmresultdialogs.hxx:105
+    SwMMResultEmailDialog m_xSubjectFT std::unique_ptr<weld::Label>
+sw/source/ui/inc/mmresultdialogs.hxx:107
+    SwMMResultEmailDialog m_xSendAsFT std::unique_ptr<weld::Label>
 sw/source/ui/misc/impfnote.hxx:44
     SwEndNoteOptionPage m_xPosFT std::unique_ptr<weld::Label>
 sw/source/uibase/inc/dbui.hxx:31

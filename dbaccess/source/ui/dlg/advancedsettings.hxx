@@ -62,8 +62,6 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xMaxRowScanLabel;
         std::unique_ptr<weld::SpinButton> m_xMaxRowScan;
 
-        ::svt::ControlDependencyManager m_aControlDependencies;
-
         BooleanSettingDescs m_aBooleanSettings;
 
         bool                m_bHasBooleanComparisonMode;
@@ -101,8 +99,6 @@ namespace dbaui
         std::unique_ptr<weld::Entry> m_xAutoIncrement;
         std::unique_ptr<weld::Label> m_xAutoRetrievingLabel;
         std::unique_ptr<weld::Entry> m_xAutoRetrieving;
-
-        ::svt::ControlDependencyManager m_aControlDependencies;
 
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
