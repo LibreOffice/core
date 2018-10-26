@@ -27,6 +27,7 @@
 #include <comphelper/fileformat.h>
 
 #include <tools/globname.hxx>
+#include <tools/stream.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

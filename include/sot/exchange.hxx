@@ -20,22 +20,18 @@
 #ifndef INCLUDED_SOT_EXCHANGE_HXX
 #define INCLUDED_SOT_EXCHANGE_HXX
 
-#include <list>
 #include <vector>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sot/sotdllapi.h>
 #include <sot/formats.hxx>
-#include <tools/solar.h>
 #include <o3tl/typed_flags_set.hxx>
-
-class SotDataObject;
 
 namespace com { namespace sun { namespace star { namespace datatransfer {
     class XTransferable;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 struct DataFlavorEx : public css::datatransfer::DataFlavor
 {

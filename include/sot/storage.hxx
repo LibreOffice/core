@@ -20,18 +20,19 @@
 #ifndef INCLUDED_SOT_STORAGE_HXX
 #define INCLUDED_SOT_STORAGE_HXX
 
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <sot/object.hxx>
 #include <tools/stream.hxx>
+#include <tools/globname.hxx>
 #include <vcl/errcode.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+
 enum class SotClipboardFormatId : sal_uInt32;
 
-class SotStorage;
 class BaseStorageStream;
 class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
 {

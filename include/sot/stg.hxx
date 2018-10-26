@@ -20,28 +20,18 @@
 #ifndef INCLUDED_SOT_STG_HXX
 #define INCLUDED_SOT_STG_HXX
 
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Reference.h>
-
-#include <com/sun/star/io/XInputStream.hpp>
-
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-
-#include <com/sun/star/embed/XStorage.hpp>
-
-
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
-class Storage;
-class StorageStream;
+namespace com { namespace sun { namespace star { namespace ucb { class XProgressHandler; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+
 class StgIo;
 class StgDirEntry;
-class StgStrm;
-class SvGlobalName;
 typedef struct SvGUID ClsId;
 
 class SOT_DLLPUBLIC StorageBase : public SvRefBase

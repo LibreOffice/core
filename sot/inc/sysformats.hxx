@@ -25,6 +25,8 @@
 #endif
 
 #include <sot/sotdllapi.h>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 
 struct SotAction_Impl
 {

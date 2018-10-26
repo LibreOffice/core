@@ -21,9 +21,10 @@
 #define INCLUDED_SOT_FILELIST_HXX
 
 #include <sot/sotdllapi.h>
-#include <tools/stream.hxx>
+#include <rtl/ustring.hxx>
 
 #include <vector>
+class SvStream;
 
 class SOT_DLLPUBLIC FileList
 {

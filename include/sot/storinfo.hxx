@@ -20,13 +20,15 @@
 #ifndef INCLUDED_SOT_STORINFO_HXX
 #define INCLUDED_SOT_STORINFO_HXX
 
-#include <tools/globname.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <vector>
 #include <sot/sotdllapi.h>
-#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 
 class StgDirEntry;
+class SvStream;
+
 class SvStorageInfo
 {
 friend class SotStorage;

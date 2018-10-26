@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/embed/XOLESimpleStorage.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
