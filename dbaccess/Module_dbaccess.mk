@@ -46,7 +46,6 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 endif
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_firebird_test \
-    CppunitTest_dbaccess_tdf119625 \
 ))
 endif
 
@@ -61,7 +60,8 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_hsqldb_test \
-	CppunitTest_dbaccess_RowSetClones \
+    CppunitTest_dbaccess_RowSetClones \
+    CppunitTest_dbaccess_tdf119625 \
 ))
 endif
 
