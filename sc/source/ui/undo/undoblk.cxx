@@ -57,6 +57,7 @@
 #include <validat.hxx>
 #include <gridwin.hxx>
 #include <svl/listener.hxx>
+#include <columnspanset.hxx>
 
 #include <memory>
 #include <set>

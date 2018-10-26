@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPTABLE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld.hxx>
 
 class ScTablePage : public SfxTabPage
 {

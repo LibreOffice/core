@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
 
-#include <global.hxx>
 #include <address.hxx>
 #include "anyrefdg.hxx"
 

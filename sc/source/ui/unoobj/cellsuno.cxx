@@ -135,6 +135,7 @@
 #include <TablePivotCharts.hxx>
 #include <table.hxx>
 #include <refundo.hxx>
+#include <columnspanset.hxx>
 
 #include <list>
 #include <memory>

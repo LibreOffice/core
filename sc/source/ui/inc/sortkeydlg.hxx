@@ -13,10 +13,7 @@
 #include <vector>
 #include <memory>
 
-#include "anyrefdg.hxx"
-
 #include <vcl/weld.hxx>
-#include <svx/langbox.hxx>
 
 struct ScSortKeyItem
 {

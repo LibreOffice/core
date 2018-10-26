@@ -83,6 +83,8 @@
 #include <docfuncutil.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
+#include <conditio.hxx>
+#include <columnspanset.hxx>
 
 #include <memory>
 

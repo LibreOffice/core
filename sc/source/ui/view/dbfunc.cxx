@@ -39,6 +39,7 @@
 #include <queryentry.hxx>
 #include <markdata.hxx>
 #include <tabvwsh.hxx>
+#include <sortparam.hxx>
 
 ScDBFunc::ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )

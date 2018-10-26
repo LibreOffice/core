@@ -126,6 +126,8 @@
 #include <dbdata.hxx>
 #include <docfunc.hxx>
 #include <docuno.hxx>
+#include <columnspanset.hxx>
+#include <sortparam.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
