@@ -99,7 +99,6 @@ namespace o3tl {
 }
 
 class ScDocFunc;
-class ScDocShell;
 class ScDocument;
 class ScDBFunc;
 class ScTabViewShell;

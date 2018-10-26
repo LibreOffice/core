@@ -28,7 +28,7 @@
 class ScUserList;
 class ScDocument;
 class ScViewData;
-class ScRangeUtil;
+class ScRefAddress;
 
 class ScTpUserLists : public SfxTabPage
 {

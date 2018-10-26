@@ -20,9 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_REDCOM_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_REDCOM_HXX
 
-#include <vcl/weld.hxx>
-#include <chgtrack.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
+namespace weld { class Window; }
+class ScChangeAction;
+class SfxItemSet;
 class ScDocShell;
 class AbstractSvxPostItDialog;
 

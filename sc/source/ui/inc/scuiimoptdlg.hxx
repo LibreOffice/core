@@ -22,9 +22,9 @@
 
 #include <vcl/layout.hxx>
 #include <svx/txencbox.hxx>
-#include "imoptdlg.hxx"
 
 class ScDelimiterTable;
+class ScImportOptions;
 
 class ScImportOptionsDlg : public ModalDialog
 {

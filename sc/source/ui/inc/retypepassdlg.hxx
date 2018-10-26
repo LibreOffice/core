@@ -22,20 +22,15 @@
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/weld.hxx>
-#include <svx/checklbx.hxx>
 
 #include <tabprotection.hxx>
 
 #include <memory>
 
 namespace vcl { class Window; }
-class ScDocProtection;
-class ScTableProtection;
 class ScDocument;
 
 class ScRetypePassDlg : public ModalDialog

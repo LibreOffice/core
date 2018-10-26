@@ -23,14 +23,12 @@
 #include <vector>
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <svx/langbox.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <svtools/collatorres.hxx>
 
 #include "sortkeydlg.hxx"
 
-#include <global.hxx>
 #include <address.hxx>
 #include <sortparam.hxx>
 
@@ -38,8 +36,6 @@
 #define SC_MAXFIELDS    MAXCOLCOUNT+1
 
 class ScViewData;
-class ScSortDlg;
-struct ScSortParam;
 
 // Sort Criteria
 
@@ -97,8 +93,6 @@ private:
 // Sort Options
 
 class ScDocument;
-class CollatorResource;
-class CollatorWrapper;
 
 class ScTabPageSortOptions : public SfxTabPage
 {

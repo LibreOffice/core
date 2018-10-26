@@ -20,18 +20,16 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX
 
-#include <sfx2/tabdlg.hxx>
-#include <svx/pageitem.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/virdev.hxx>
 #include <scdllapi.h>
-#include <scitems.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>
+#include <tools/wintypes.hxx>
+#include <editeng/svxenum.hxx>
+#include <vcl/ctrl.hxx>
+#include <vcl/menu.hxx>
 
 #include <functional>
+
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
 
 class ScHeaderEditEngine;
 class ScPatternAttr;
@@ -39,7 +37,7 @@ class EditView;
 class EditTextObject;
 class SvxFieldItem;
 class ScAccessibleEditObject;
-class ScEditWindow;
+namespace vcl { class Window; }
 
 enum ScEditWindowLocation
 {

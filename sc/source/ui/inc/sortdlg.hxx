@@ -22,7 +22,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld.hxx>
-#include "scui_def.hxx"
 
 class ScSortDlg : public SfxTabDialogController
 {

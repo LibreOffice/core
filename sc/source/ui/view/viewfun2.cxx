@@ -88,6 +88,7 @@
 #include <comphelper/lok.hxx>
 #include <mergecellsdialog.hxx>
 #include <sheetevents.hxx>
+#include <columnspanset.hxx>
 
 #include <vector>
 #include <memory>

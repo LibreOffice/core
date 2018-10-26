@@ -22,7 +22,6 @@
 
 #include <address.hxx>
 
-class ScRange;
 class ScDocShell;
 class ScDBData;
 class ScDocument;

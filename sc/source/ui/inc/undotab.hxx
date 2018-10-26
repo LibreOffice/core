@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOTAB_HXX
 
 #include "undobase.hxx"
-#include <formula/grammar.hxx>
 #include <tools/color.hxx>
 #include <tabbgcolor.hxx>
 
@@ -29,7 +28,6 @@
 #include <vector>
 
 class ScDocShell;
-class ScDocument;
 class SdrUndoAction;
 class ScPrintRangeSaver;
 class SdrObject;

@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <svx/SvxColorValueSet.hxx>
 
 class ScTabBgColorDlg : public weld::GenericDialogController

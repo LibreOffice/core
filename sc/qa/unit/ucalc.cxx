@@ -63,6 +63,7 @@
 #include <docpool.hxx>
 #include <globalnames.hxx>
 #include <inputopt.hxx>
+#include <columnspanset.hxx>
 
 #include <editable.hxx>
 #include <bcaslot.hxx>
