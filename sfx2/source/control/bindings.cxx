@@ -1018,20 +1018,18 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 {
                     // we can toggle Bools
                     bool bOldValue = pOldBoolItem->GetValue();
-                    SfxBoolItem *pNewItem = static_cast<SfxBoolItem*>(pOldItem->Clone());
+                    std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(pOldItem->Clone()));
                     pNewItem->SetValue( !bOldValue );
                     aReq.AppendItem( *pNewItem );
-                    delete pNewItem;
                 }
                 else if ( dynamic_cast< const SfxEnumItemInterface *>( pOldItem ) !=  nullptr &&
                         static_cast<const SfxEnumItemInterface *>(pOldItem)->HasBoolValue())
                 {
                     // and Enums with Bool-Interface
-                    SfxEnumItemInterface *pNewItem =
-                        static_cast<SfxEnumItemInterface*>(pOldItem->Clone());
+                    std::unique_ptr<SfxEnumItemInterface> pNewItem(
+                        static_cast<SfxEnumItemInterface*>(pOldItem->Clone()));
                     pNewItem->SetBoolValue(!static_cast<const SfxEnumItemInterface *>(pOldItem)->GetBoolValue());
                     aReq.AppendItem( *pNewItem );
-                    delete pNewItem;
                 }
                 else {
                     OSL_FAIL( "Toggle only for Enums and Bools allowed" );

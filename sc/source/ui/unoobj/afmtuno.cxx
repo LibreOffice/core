@@ -659,11 +659,10 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                     }
                     break;
                     default:
-                        SfxPoolItem* pNewItem = pItem->Clone();
+                        std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
                         bDone = pNewItem->PutValue( aValue, pEntry->nMemberId );
                         if (bDone)
                             pData->PutItem( nFieldIndex, *pNewItem );
-                        delete pNewItem;
                 }
 
                 if (bDone)

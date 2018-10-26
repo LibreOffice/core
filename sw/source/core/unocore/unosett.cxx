@@ -1613,7 +1613,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
        {
         SvxBrushItem* pSetBrush = nullptr;
         Size* pSetSize = nullptr;
-        SwFormatVertOrient* pSetVOrient = nullptr;
+        std::unique_ptr<SwFormatVertOrient> pSetVOrient;
         bool bCharStyleNameSet = false;
 
         for(size_t i = 0; i < SAL_N_ELEMENTS( aNumPropertyNames ) && !bExcept && !bWrongArg; ++i)
@@ -1983,9 +1983,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     if(!pSetVOrient)
                     {
                         if(aFormat.GetGraphicOrientation())
-                            pSetVOrient = static_cast<SwFormatVertOrient*>(aFormat.GetGraphicOrientation()->Clone());
+                            pSetVOrient.reset( static_cast<SwFormatVertOrient*>(aFormat.GetGraphicOrientation()->Clone()) );
                         else
-                            pSetVOrient = new SwFormatVertOrient;
+                            pSetVOrient.reset(new SwFormatVertOrient);
                     }
                     pSetVOrient->PutValue(pProp->Value, MID_VERTORIENT_ORIENT);
                 }
@@ -2041,7 +2041,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             if(pSetBrush)
             {
                 if(!pSetVOrient && aFormat.GetGraphicOrientation())
-                    pSetVOrient = new SwFormatVertOrient(*aFormat.GetGraphicOrientation());
+                    pSetVOrient.reset( new SwFormatVertOrient(*aFormat.GetGraphicOrientation()) );
 
                 if(!pSetSize)
                 {
@@ -2069,7 +2069,6 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         }
         delete pSetBrush;
         delete pSetSize;
-        delete pSetVOrient;
       }
 
     if(bWrongArg)

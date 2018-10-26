@@ -1126,7 +1126,7 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
             || aNewText == "DEFAULT" );
 
         if (!bDel) {
-            SfxPoolItem* pNewItem=aSet.Get(pEntry->nWhichId).Clone();
+            std::unique_ptr<SfxPoolItem> pNewItem(aSet.Get(pEntry->nWhichId).Clone());
             sal_Int32 nLongVal = aNewText.toInt32();
             if (pEntry->bCanNum) {
                 if (nLongVal>pEntry->nMax) nLongVal=pEntry->nMax;
@@ -1149,20 +1149,20 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                 nLongY = s.toInt32();
             }
             switch (pEntry->eItemType) {
-                case ItemType::BYTE  : static_cast<SfxByteItem  *>(pNewItem)->SetValue(static_cast<sal_uInt8>(nLongVal)); break;
-                case ItemType::INT16 : static_cast<SfxInt16Item *>(pNewItem)->SetValue(static_cast<sal_Int16>(nLongVal)); break;
-                case ItemType::UINT16: static_cast<SfxUInt16Item*>(pNewItem)->SetValue(static_cast<sal_uInt16>(nLongVal)); break;
+                case ItemType::BYTE  : static_cast<SfxByteItem  *>(pNewItem.get())->SetValue(static_cast<sal_uInt8>(nLongVal)); break;
+                case ItemType::INT16 : static_cast<SfxInt16Item *>(pNewItem.get())->SetValue(static_cast<sal_Int16>(nLongVal)); break;
+                case ItemType::UINT16: static_cast<SfxUInt16Item*>(pNewItem.get())->SetValue(static_cast<sal_uInt16>(nLongVal)); break;
                 case ItemType::INT32: {
-                    if(dynamic_cast<const SdrAngleItem *>(pNewItem) != nullptr)
+                    if(dynamic_cast<const SdrAngleItem *>(pNewItem.get()))
                     {
                         aNewText = aNewText.replace(',', '.');
                         double nVal = aNewText.toFloat();
                         nLongVal = static_cast<sal_Int32>(nVal * 100.0 + 0.5);
                     }
-                    static_cast<SfxInt32Item *>(pNewItem)->SetValue(nLongVal);
+                    static_cast<SfxInt32Item *>(pNewItem.get())->SetValue(nLongVal);
                 } break;
-                case ItemType::UINT32: static_cast<SfxUInt32Item*>(pNewItem)->SetValue(aNewText.toInt32()); break;
-                case ItemType::ENUM  : static_cast<SfxEnumItemInterface*>(pNewItem)->SetEnumValue(static_cast<sal_uInt16>(nLongVal)); break;
+                case ItemType::UINT32: static_cast<SfxUInt32Item*>(pNewItem.get())->SetValue(aNewText.toInt32()); break;
+                case ItemType::ENUM  : static_cast<SfxEnumItemInterface*>(pNewItem.get())->SetEnumValue(static_cast<sal_uInt16>(nLongVal)); break;
                 case ItemType::BOOL: {
                     aNewText = aNewText.toAsciiUpperCase();
                     if (aNewText == "TRUE") nLongVal=1;
@@ -1171,27 +1171,27 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                     if (aNewText == "EIN") nLongVal=1;
                     if (aNewText == "ON") nLongVal=1;
                     if (aNewText == "YES") nLongVal=1;
-                    static_cast<SfxBoolItem*>(pNewItem)->SetValue(nLongVal == 1);
+                    static_cast<SfxBoolItem*>(pNewItem.get())->SetValue(nLongVal == 1);
                 } break;
-                case ItemType::FLAG  : static_cast<SfxFlagItem  *>(pNewItem)->SetValue(static_cast<sal_uInt16>(nLongVal)); break;
-                case ItemType::STRING: static_cast<SfxStringItem*>(pNewItem)->SetValue(aNewText); break;
-                case ItemType::POINT : static_cast<SfxPointItem*>(pNewItem)->SetValue(Point(nLongX,nLongY)); break;
+                case ItemType::FLAG  : static_cast<SfxFlagItem  *>(pNewItem.get())->SetValue(static_cast<sal_uInt16>(nLongVal)); break;
+                case ItemType::STRING: static_cast<SfxStringItem*>(pNewItem.get())->SetValue(aNewText); break;
+                case ItemType::POINT : static_cast<SfxPointItem*>(pNewItem.get())->SetValue(Point(nLongX,nLongY)); break;
                 case ItemType::RECT  : break;
                 case ItemType::RANGE : {
-                    static_cast<SfxRangeItem*>(pNewItem)->From()=static_cast<sal_uInt16>(nLongX);
-                    static_cast<SfxRangeItem*>(pNewItem)->From()=static_cast<sal_uInt16>(nLongY);
+                    static_cast<SfxRangeItem*>(pNewItem.get())->From()=static_cast<sal_uInt16>(nLongX);
+                    static_cast<SfxRangeItem*>(pNewItem.get())->From()=static_cast<sal_uInt16>(nLongY);
                 } break;
                 case ItemType::FRACTION: {
                     if (!bPairX) nLongX=1;
                     if (!bPairY) nLongY=1;
-                    static_cast<SdrFractionItem*>(pNewItem)->SetValue(Fraction(nLongX,nLongY));
+                    static_cast<SdrFractionItem*>(pNewItem.get())->SetValue(Fraction(nLongX,nLongY));
                 } break;
                 case ItemType::XCOLOR: break;
                 case ItemType::COLOR: break;
                 case ItemType::FONT: {
-                    static_cast<SvxFontItem*>(pNewItem)->SetFamily( FAMILY_DONTKNOW );
-                    static_cast<SvxFontItem*>(pNewItem)->SetFamilyName(aNewText);
-                    static_cast<SvxFontItem*>(pNewItem)->SetStyleName(OUString());
+                    static_cast<SvxFontItem*>(pNewItem.get())->SetFamily( FAMILY_DONTKNOW );
+                    static_cast<SvxFontItem*>(pNewItem.get())->SetFamilyName(aNewText);
+                    static_cast<SvxFontItem*>(pNewItem.get())->SetStyleName(OUString());
                 } break;
                 case ItemType::FONTHEIGHT: {
                     sal_uInt32 nHgt=0;
@@ -1201,20 +1201,19 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                     } else {
                         nHgt=static_cast<sal_uInt32>(nLongVal);
                     }
-                    static_cast<SvxFontHeightItem*>(pNewItem)->SetHeight(nHgt,nProp);
+                    static_cast<SvxFontHeightItem*>(pNewItem.get())->SetHeight(nHgt,nProp);
                 } break;
                 case ItemType::FONTWIDTH: {
                     sal_uInt16 nProp=100;
                     if (aNewText.indexOf('%') != -1) {
                         nProp=static_cast<sal_uInt16>(nLongVal);
                     }
-                    static_cast<SvxCharScaleWidthItem*>(pNewItem)->SetValue(nProp);
+                    static_cast<SvxCharScaleWidthItem*>(pNewItem.get())->SetValue(nProp);
                 } break;
                 case ItemType::FIELD: break;
                 default: break;
             } // switch
             aNewSet.Put(*pNewItem);
-            delete pNewItem;
         }
         pView->SetAttributes(aNewSet,bDel);
     }

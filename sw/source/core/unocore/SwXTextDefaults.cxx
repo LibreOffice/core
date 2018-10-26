@@ -88,8 +88,8 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         SwStyleNameMapper::FillUIName(uStyle, sStyle, SwGetPoolIdFromName::ChrFmt );
         SwDocStyleSheet* pStyle =
             static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
-        SwFormatDrop* pDrop = nullptr;
-        SwFormatCharFormat *pCharFormat = nullptr;
+        std::unique_ptr<SwFormatDrop> pDrop;
+        std::unique_ptr<SwFormatCharFormat> pCharFormat;
         if(!pStyle)
             throw lang::IllegalArgumentException();
 
@@ -99,26 +99,22 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
 
         if (RES_PARATR_DROP == pMap->nWID)
         {
-            pDrop = static_cast<SwFormatDrop*>(rItem.Clone());   // because rItem is const...
+            pDrop.reset(static_cast<SwFormatDrop*>(rItem.Clone()));   // because rItem is const...
             pDrop->SetCharFormat(xStyle->GetCharFormat());
             m_pDoc->SetDefault(*pDrop);
         }
         else // RES_TXTATR_CHARFMT == pMap->nWID
         {
-            pCharFormat = static_cast<SwFormatCharFormat*>(rItem.Clone());   // because rItem is const...
+            pCharFormat.reset(static_cast<SwFormatCharFormat*>(rItem.Clone()));   // because rItem is const...
             pCharFormat->SetCharFormat(xStyle->GetCharFormat());
             m_pDoc->SetDefault(*pCharFormat);
         }
-
-        delete pDrop;
-        delete pCharFormat;
     }
     else
     {
-        SfxPoolItem * pNewItem = rItem.Clone();
+        std::unique_ptr<SfxPoolItem> pNewItem(rItem.Clone());
         pNewItem->PutValue( aValue, pMap->nMemberId);
         m_pDoc->SetDefault(*pNewItem);
-        delete pNewItem;
     }
 }
 
