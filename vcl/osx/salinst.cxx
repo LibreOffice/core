@@ -742,11 +742,6 @@ void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
 
-void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
-{
-    delete pInfo;
-}
-
 OUString AquaSalInstance::GetDefaultPrinter()
 {
     // #i113170# may not be the main thread if called from UNO API
