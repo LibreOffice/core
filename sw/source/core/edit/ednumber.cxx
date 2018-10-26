@@ -651,7 +651,8 @@ bool SwEditShell::NumOrNoNum(
          && ( !bChkStart || IsSttPara() ) )
     {
         StartAllAction();
-        bRet = GetDoc()->NumOrNoNum( GetCursor()->GetPoint()->nNode, !bNumOn );
+        SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));
+        bRet = GetDoc()->NumOrNoNum(pos.nNode, !bNumOn);
         EndAllAction();
     }
     return bRet;
@@ -805,7 +806,8 @@ void SwEditShell::ChgNumRuleFormats( const SwNumRule& rRule )
 void SwEditShell::ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule )
 {
     StartAllAction();
-    GetDoc()->ReplaceNumRule( *GetCursor()->GetPoint(), rOldRule, rNewRule );
+    SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));
+    GetDoc()->ReplaceNumRule( pos, rOldRule, rNewRule );
     EndAllAction();
 }
 
@@ -819,11 +821,17 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
         SwPamRanges aRangeArr( *pCursor );
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
-            GetDoc()->SetNumRuleStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), bFlag );
+        {
+            SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *aRangeArr.SetPam( n, aPam ).GetPoint()));
+            GetDoc()->SetNumRuleStart( pos, bFlag );
+        }
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     else
-        GetDoc()->SetNumRuleStart( *pCursor->GetPoint(), bFlag );
+    {
+        SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));
+        GetDoc()->SetNumRuleStart(pos, bFlag);
+    }
 
     EndAllAction();
 }
@@ -846,11 +854,17 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
         SwPamRanges aRangeArr( *pCursor );
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
-            GetDoc()->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), nStt );
+        {
+            SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *aRangeArr.SetPam( n, aPam ).GetPoint()));
+            GetDoc()->SetNodeNumStart( pos, nStt );
+        }
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     else
-        GetDoc()->SetNodeNumStart( *pCursor->GetPoint(), nStt );
+    {
+        SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *pCursor->GetPoint()));
+        GetDoc()->SetNodeNumStart( pos, nStt );
+    }
 
     EndAllAction();
 }
