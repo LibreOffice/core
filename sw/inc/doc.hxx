@@ -1100,6 +1100,7 @@ public:
                                     const bool bOutline,
                                     int nNonEmptyAllowed,
                                     OUString& sListId,
+                                    SwRootFrame const* pLayout,
                                     const bool bInvestigateStartNode = false );
 
     // Paragraphs without numbering but with indents.

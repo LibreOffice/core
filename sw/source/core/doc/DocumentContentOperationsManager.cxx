@@ -4327,11 +4327,11 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // Keep also the <ListId> value for possible propagation.
     OUString aListIdToPropagate;
     const SwNumRule* pNumRuleToPropagate =
-        pDoc->SearchNumRule( rPos, false, true, false, 0, aListIdToPropagate, true );
+        pDoc->SearchNumRule( rPos, false, true, false, 0, aListIdToPropagate, nullptr, true );
     if ( !pNumRuleToPropagate )
     {
         pNumRuleToPropagate =
-            pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
+            pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, nullptr, true );
     }
     // #i86492#
     // Do not propagate previous found list, if
