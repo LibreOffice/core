@@ -31,7 +31,6 @@ class EditRTFParser final : public SvxRTFParser
 private:
     EditSelection       aCurSel;
     EditEngine*         mpEditEngine;
-    MapMode             aRTFMapMode;
     MapMode             aEditMapMode;
 
     sal_uInt16          nDefFont;

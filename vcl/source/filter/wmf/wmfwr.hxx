@@ -91,7 +91,6 @@ private:
 
     sal_uInt16    eDstHorTextAlign;
 
-    bool      bDstIsClipping; // ???: not taken into account at the moment
     vcl::Region    aDstClipRegion; // ???: not taken into account at the moment
     bool bHandleAllocated[MAXOBJECTHANDLES];             // which handles have been assigned
     sal_uInt16 nDstPenHandle,nDstFontHandle,nDstBrushHandle; // which handles are owned by

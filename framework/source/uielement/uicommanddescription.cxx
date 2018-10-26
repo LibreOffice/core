@@ -132,21 +132,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 
         OUString                     m_aConfigCmdAccess;
         OUString                     m_aConfigPopupAccess;
-        OUString                     m_aPropUILabel;
-        OUString                     m_aPropUIContextLabel;
-        OUString                     m_aPropUIPopupLabel;
-        OUString                     m_aPropUITooltipLabel;
-        OUString                     m_aPropUITargetURL;
-        OUString                     m_aPropUIIsExperimental;
-        OUString                     m_aPropLabel;
-        OUString                     m_aPropName;
-        OUString                     m_aPropPopup;
-        OUString                     m_aPropPopupLabel;
-        OUString                     m_aPropTooltipLabel;
-        OUString                     m_aPropTargetURL;
-        OUString                     m_aPropIsExperimental;
         OUString                     m_aPropProperties;
-        OUString                     m_aPrivateResourceURL;
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
@@ -167,21 +153,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
-    m_aPropUILabel( "Label" ),
-    m_aPropUIContextLabel( "ContextLabel" ),
-    m_aPropUIPopupLabel( "PopupLabel" ),
-    m_aPropUITooltipLabel( "TooltipLabel" ),
-    m_aPropUITargetURL( "TargetURL" ),
-    m_aPropUIIsExperimental( "IsExperimental" ),
-    m_aPropLabel( "Label" ),
-    m_aPropName( "Name" ),
-    m_aPropPopup( "Popup" ),
-    m_aPropPopupLabel( "PopupLabel" ),
-    m_aPropTooltipLabel( "TooltipLabel" ),
-    m_aPropTargetURL( "TargetURL" ),
-    m_aPropIsExperimental( "IsExperimental" ),
     m_aPropProperties( "Properties" ),
-    m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xGenericUICommands( rGenericUICommands ),
     m_bConfigAccessInitialized( false ),
     m_bCacheFilled( false ),
@@ -220,7 +192,7 @@ Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
         fillCache();
     }
 
-    if ( rCommandURL.startsWith( m_aPrivateResourceURL ) )
+    if ( rCommandURL.startsWith( PRIVATE_RESOURCE_URL ) )
     {
         // special keys to retrieve information about a set of commands
         // SAFE
@@ -292,22 +264,22 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
             fillInfoFromResult( pIter->second, pIter->second.aLabel );
 
         Sequence< PropertyValue > aPropSeq( 8 );
-        aPropSeq[0].Name  = m_aPropLabel;
+        aPropSeq[0].Name  = "Label";
         aPropSeq[0].Value = !pIter->second.aContextLabel.isEmpty() ?
                 makeAny( pIter->second.aContextLabel ): makeAny( pIter->second.aLabel );
-        aPropSeq[1].Name  = m_aPropName;
+        aPropSeq[1].Name  = "Name";
         aPropSeq[1].Value <<= pIter->second.aCommandName;
-        aPropSeq[2].Name  = m_aPropPopup;
+        aPropSeq[2].Name  = "Popup";
         aPropSeq[2].Value <<= pIter->second.bPopup;
         aPropSeq[3].Name  = m_aPropProperties;
         aPropSeq[3].Value <<= pIter->second.nProperties;
-        aPropSeq[4].Name  = m_aPropPopupLabel;
+        aPropSeq[4].Name  = "PopupLabel";
         aPropSeq[4].Value <<= pIter->second.aPopupLabel;
-        aPropSeq[5].Name  = m_aPropTooltipLabel;
+        aPropSeq[5].Name  = "TooltipLabel";
         aPropSeq[5].Value <<= pIter->second.aTooltipLabel;
-        aPropSeq[6].Name  = m_aPropTargetURL;
+        aPropSeq[6].Name  = "TargetURL";
         aPropSeq[6].Value <<= pIter->second.aTargetURL;
-        aPropSeq[7].Name = m_aPropIsExperimental;
+        aPropSeq[7].Name = "IsExperimental";
         aPropSeq[7].Value <<= pIter->second.bIsExperimental;
         return makeAny( aPropSeq );
     }
@@ -333,13 +305,13 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
                     CmdToInfoMap aCmdToInfo;
 
                     aCmdToInfo.bPopup = _bPopup;
-                    xNameAccess->getByName( m_aPropUILabel )        >>= aCmdToInfo.aLabel;
-                    xNameAccess->getByName( m_aPropUIContextLabel ) >>= aCmdToInfo.aContextLabel;
-                    xNameAccess->getByName( m_aPropUIPopupLabel )   >>= aCmdToInfo.aPopupLabel;
-                    xNameAccess->getByName( m_aPropUITooltipLabel )   >>= aCmdToInfo.aTooltipLabel;
-                    xNameAccess->getByName( m_aPropUITargetURL )    >>= aCmdToInfo.aTargetURL;
-                    xNameAccess->getByName( m_aPropUIIsExperimental ) >>= aCmdToInfo.bIsExperimental;
-                    xNameAccess->getByName( m_aPropProperties )     >>= aCmdToInfo.nProperties;
+                    xNameAccess->getByName( "Label" )           >>= aCmdToInfo.aLabel;
+                    xNameAccess->getByName( "ContextLabel" )    >>= aCmdToInfo.aContextLabel;
+                    xNameAccess->getByName( "PopupLabel" )      >>= aCmdToInfo.aPopupLabel;
+                    xNameAccess->getByName( "TooltipLabel" )    >>= aCmdToInfo.aTooltipLabel;
+                    xNameAccess->getByName( "TargetURL" )       >>= aCmdToInfo.aTargetURL;
+                    xNameAccess->getByName( "IsExperimental" )  >>= aCmdToInfo.bIsExperimental;
+                    xNameAccess->getByName( m_aPropProperties ) >>= aCmdToInfo.nProperties;
 
                     m_aCmdInfoCache.emplace( aNameSeq[i], aCmdToInfo );
 

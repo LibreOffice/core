@@ -148,7 +148,7 @@ namespace vcl
             BitmapEx const                          maCollateBmp;
             BitmapEx const                          maNoCollateBmp;
 
-            long                                    mnCollateUIMode;
+            bool                                    mbCollateAlwaysOff;
 
             JobTabPage( VclBuilder* );
 

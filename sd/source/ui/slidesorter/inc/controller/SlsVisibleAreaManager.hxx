@@ -73,10 +73,6 @@ private:
     */
     ::std::vector<::tools::Rectangle> maVisibleRequests;
 
-    /** Animation id for a scroll animation that sets the top
-        and left of the visible area to maRequestedVisibleTopLeft.
-    */
-    Animator::AnimationId mnScrollAnimationId;
     Point maRequestedVisibleTopLeft;
     bool mbIsCurrentSlideTrackingActive;
     int  mnDisableCount;

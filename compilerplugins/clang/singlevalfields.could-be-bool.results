@@ -7,9 +7,6 @@ connectivity/source/inc/dbase/dindexnode.hxx:125
 filter/source/graphicfilter/eps/eps.cxx:139
     PSWriter nNextChrSetId
     sal_uInt8
-include/vcl/split.hxx:40
-    Splitter mbInKeyEvent
-    long
 sal/rtl/cipher.cxx:110
     Cipher_Impl m_algorithm
     rtlCipherAlgorithm
@@ -34,12 +31,6 @@ sc/source/ui/vba/vbahyperlink.hxx:82
 soltools/cpp/cpp.h:121
     includelist always
     char
-svl/source/numbers/zforfind.hxx:111
-    ImpSvNumberInputScan nNegCheck
-    short
-svl/source/numbers/zforfind.hxx:115
-    ImpSvNumberInputScan mnEra
-    sal_Int16
 svx/source/inc/cell.hxx:205
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
@@ -55,6 +46,9 @@ sw/source/filter/ww8/ww8scan.hxx:65
 vcl/inc/canvasbitmap.hxx:57
     vcl::unotools::VclCanvasBitmap m_nEndianness
     sal_Int8
+vcl/inc/printdlg.hxx:151
+    vcl::PrintDialog::JobTabPage mnCollateUIMode
+    long
 vcl/inc/unx/i18n_ic.hxx:33
     SalI18N_InputContext mbUseable
     int

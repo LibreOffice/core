@@ -35,7 +35,6 @@ struct SfxViewFrame_Impl
     OUString            aActualURL;
     SfxFrame&           rFrame;
     VclPtr<vcl::Window> pWindow;
-    VclPtr<vcl::Window> pFocusWin;
     sal_uInt16          nDocViewNo;
     SfxInterfaceId      nCurViewId;
     bool                bResizeInToOut:1;
@@ -50,7 +49,6 @@ struct SfxViewFrame_Impl
     explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
         : rFrame(i_rFrame)
         , pWindow(nullptr)
-        , pFocusWin(nullptr)
         , nDocViewNo(0)
         , nCurViewId(0)
         , bResizeInToOut(false)

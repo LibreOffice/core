@@ -52,7 +52,6 @@ namespace {
 VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maVisibleRequests(),
-      mnScrollAnimationId(Animator::NotAnAnimationId),
       maRequestedVisibleTopLeft(),
       mbIsCurrentSlideTrackingActive(true),
       mnDisableCount(0)
@@ -113,17 +112,6 @@ void VisibleAreaManager::MakeVisible()
     maVisibleRequests.clear();
     if ( ! aNewVisibleTopLeft)
         return;
-
-    // We now know what the visible area shall be.  Scroll accordingly
-    // unless that is not already the visible area or a running scroll
-    // animation has it as its target area.
-    if (mnScrollAnimationId!=Animator::NotAnAnimationId
-        && maRequestedVisibleTopLeft==aNewVisibleTopLeft)
-        return;
-
-    // Stop a running animation.
-    if (mnScrollAnimationId != Animator::NotAnAnimationId)
-        mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(mnScrollAnimationId);
 
     maRequestedVisibleTopLeft = aNewVisibleTopLeft.get();
     VisibleAreaScroller aAnimation(

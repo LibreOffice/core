@@ -186,9 +186,7 @@ private:
     bool                                                      m_bReadOnly;
     bool                                                      m_bModified;
     bool                                                      m_bDisposed;
-    OUString                                                  m_aXMLPostfix;
     OUString                                                  m_aPropUIName;
-    OUString                                                  m_aPropResourceURL;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     osl::Mutex                                                m_mutex;
     cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer;   /// container for ALL Listener
@@ -673,9 +671,7 @@ UIConfigurationManager::UIConfigurationManager( const css::uno::Reference< css::
       m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
-    , m_aXMLPostfix( ".xml" )
     , m_aPropUIName( "UIName" )
-    , m_aPropResourceURL( "ResourceURL" )
     , m_xContext( rxContext )
     , m_aListenerContainer( m_mutex )
 {
@@ -856,7 +852,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL UIConfigurationManager::getUIElem
         impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, ElementType );
 
     Sequence< PropertyValue > aUIElementInfo( 2 );
-    aUIElementInfo[0].Name = m_aPropResourceURL;
+    aUIElementInfo[0].Name = "ResourceURL";
     aUIElementInfo[1].Name = m_aPropUIName;
 
     aElementInfoSeq.resize( aUIElementInfoCollection.size() );
@@ -1084,7 +1080,7 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
 
             if ( bInsertData )
             {
-                pDataSettings->aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
+                pDataSettings->aName        = RetrieveNameFromResourceURL( NewResourceURL ) + ".xml";
                 pDataSettings->aResourceURL = NewResourceURL;
 
                 UIElementDataHashMap& rElements = rElementType.aElementsHashMap;

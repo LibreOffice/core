@@ -103,7 +103,6 @@ public:
 private:
     void niceName(const FieldDecl*, MyFieldInfo&);
     std::string getExprValue(const Expr*);
-    bool isInterestingType(const QualType&);
     const FunctionDecl* get_top_FunctionDecl_from_Stmt(const Stmt&);
     void checkCallExpr(const Stmt* child, const CallExpr* callExpr, std::string& assignValue, bool& bPotentiallyAssignedTo);
     void markAllFields(const RecordDecl* recordDecl);
@@ -127,8 +126,7 @@ bool SingleValFields::VisitFieldDecl( const FieldDecl* fieldDecl )
     const FieldDecl* canonicalDecl = fieldDecl;
 
     if( ignoreLocation( fieldDecl )
-        || isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation()))
-        || !isInterestingType(fieldDecl->getType()) )
+        || isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation())) )
         return true;
 
     MyFieldInfo aInfo;
@@ -150,11 +148,17 @@ bool SingleValFields::VisitCXXConstructorDecl( const CXXConstructorDecl* decl )
     {
         const CXXCtorInitializer* init = *it;
         const FieldDecl* fieldDecl = init->getMember();
-        if( !fieldDecl || !isInterestingType(fieldDecl->getType()) )
+        if( !fieldDecl )
             continue;
         MyFieldAssignmentInfo aInfo;
         niceName(fieldDecl, aInfo);
-        aInfo.value = getExprValue(init->getInit());
+        const Expr * expr = init->getInit();
+        // unwrap any single-arg constructors, this helps to find smart pointers
+        // that are only assigned nullptr
+        if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(expr))
+            if (cxxConstructExpr->getNumArgs() == 1)
+                expr = cxxConstructExpr->getArg(0);
+        aInfo.value = getExprValue(expr);
         assignedSet.insert(aInfo);
     }
     return true;
@@ -193,15 +197,10 @@ void SingleValFields::markAllFields(const RecordDecl* recordDecl)
     for(auto fieldDecl = recordDecl->field_begin();
         fieldDecl != recordDecl->field_end(); ++fieldDecl)
     {
-        if (isInterestingType(fieldDecl->getType())) {
-            MyFieldAssignmentInfo aInfo;
-            niceName(*fieldDecl, aInfo);
-            aInfo.value = "?";
-            assignedSet.insert(aInfo);
-        }
-        else if (fieldDecl->getType()->isRecordType()) {
-            markAllFields(fieldDecl->getType()->getAs<RecordType>()->getDecl());
-        }
+        MyFieldAssignmentInfo aInfo;
+        niceName(*fieldDecl, aInfo);
+        aInfo.value = "?";
+        assignedSet.insert(aInfo);
     }
     const CXXRecordDecl* cxxRecordDecl = dyn_cast<CXXRecordDecl>(recordDecl);
     if (!cxxRecordDecl || !cxxRecordDecl->hasDefinition()) {
@@ -244,7 +243,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         return true;
     }
 
-    if (ignoreLocation(memberExpr) || !isInterestingType(fieldDecl->getType()))
+    if (ignoreLocation(memberExpr))
         return true;
 
     const FunctionDecl* parentFunction = getParentFunctionDecl(memberExpr);
@@ -315,9 +314,9 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
             // cannot be assigned to anymore
             break;
         }
-        else if (isa<CallExpr>(parent))
+        else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
-            checkCallExpr(child, dyn_cast<CallExpr>(parent), assignValue, bPotentiallyAssignedTo);
+            checkCallExpr(child, callExpr, assignValue, bPotentiallyAssignedTo);
             break;
         }
         else if (isa<CXXConstructExpr>(parent))
@@ -413,22 +412,30 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     return true;
 }
 
-bool SingleValFields::isInterestingType(const QualType& qt) {
-   return qt.isCXX11PODType(compiler.getASTContext());
-}
-
 void SingleValFields::checkCallExpr(const Stmt* child, const CallExpr* callExpr, std::string& assignValue, bool& bPotentiallyAssignedTo)
 {
     if (callExpr->getCallee() == child) {
         return;
     }
     const FunctionDecl* functionDecl;
-    if (isa<CXXMemberCallExpr>(callExpr)) {
-        functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(callExpr)) {
+        functionDecl = memberCallExpr->getMethodDecl();
     } else {
         functionDecl = callExpr->getDirectCallee();
     }
     if (functionDecl) {
+        if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(callExpr)) {
+            if (operatorCallExpr->getArg(0) == child) {
+                const CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
+                if (calleeMethodDecl) {
+                    if (operatorCallExpr->getOperator() == OO_Equal) {
+                        assignValue = getExprValue(operatorCallExpr->getArg(1));
+                        bPotentiallyAssignedTo = true;
+                        return;
+                    }
+                }
+            }
+        }
         for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
             if (i >= functionDecl->getNumParams()) // can happen in template code
                 break;
@@ -484,6 +491,13 @@ std::string SingleValFields::getExprValue(const Expr* arg)
         return "?";
     if (arg->isValueDependent())
         return "?";
+    // ParenListExpr containing a CXXNullPtrLiteralExpr and has a NULL type pointer
+    if (auto parenListExpr = dyn_cast<ParenListExpr>(arg))
+    {
+        if (parenListExpr->getNumExprs() == 1)
+            return getExprValue(parenListExpr->getExpr(0));
+        return "?";
+    }
     if (auto constructExpr = dyn_cast<CXXConstructExpr>(arg))
     {
         if (constructExpr->getNumArgs() >= 1

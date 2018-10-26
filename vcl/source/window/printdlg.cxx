@@ -555,7 +555,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
 PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
     : maCollateBmp(SV_PRINT_COLLATE_BMP)
     , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
-    , mnCollateUIMode(0)
+    , mbCollateAlwaysOff(false)
 {
     pUIBuilder->get(mpPrinters, "printers");
     pUIBuilder->get(mpStatusTxt, "status");
@@ -580,13 +580,13 @@ void PrintDialog::JobTabPage::readFromSettings()
                               "CollateBox" );
     if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
     {
-        mnCollateUIMode = 1;
+        mbCollateAlwaysOff = true;
         mpCollateBox->Check( false );
         mpCollateBox->Enable( false );
     }
     else
     {
-        mnCollateUIMode = 0;
+        mbCollateAlwaysOff = false;
         aValue = pItem->getValue( "PrintDialog",
                                   "Collate" );
         mpCollateBox->Check( aValue.equalsIgnoreAsciiCase("true") );
@@ -1283,7 +1283,7 @@ void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
 void PrintDialog::checkControlDependencies()
 {
     if( maJobPage.mpCopyCountField->GetValue() > 1 )
-        maJobPage.mpCollateBox->Enable( maJobPage.mnCollateUIMode == 0 );
+        maJobPage.mpCollateBox->Enable( !maJobPage.mbCollateAlwaysOff );
     else
         maJobPage.mpCollateBox->Enable( false );
 

@@ -29,13 +29,11 @@ namespace sc { namespace sidebar {
 class CellLineStyleValueSet : public ValueSet
 {
 private:
-    VclPtr<VirtualDevice> pVDev;
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
 public:
     explicit CellLineStyleValueSet(vcl::Window* pParent);
     virtual ~CellLineStyleValueSet() override;
-    virtual void dispose() override;
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
