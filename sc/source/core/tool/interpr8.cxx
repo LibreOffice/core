@@ -1359,7 +1359,11 @@ void ScInterpreter::ScConcat_MS()
         {
             case svString:
             case svDouble:
-                aResBuf.append( GetString().getString() );
+                {
+                    const OUString& rStr = GetString().getString();
+                    if (CheckStringResultLen( aResBuf, rStr))
+                        aResBuf.append( rStr);
+                }
                 break;
             case svSingleRef :
             {
@@ -1374,7 +1378,9 @@ void ScInterpreter::ScConcat_MS()
                     {
                         svl::SharedString aSS;
                         GetCellString( aSS, aCell);
-                        aResBuf.append( aSS.getString());
+                        const OUString& rStr = aSS.getString();
+                        if (CheckStringResultLen( aResBuf, rStr))
+                            aResBuf.append( rStr);
                     }
                 }
             }
@@ -1415,7 +1421,9 @@ void ScInterpreter::ScConcat_MS()
                             {
                                 svl::SharedString aSS;
                                 GetCellString( aSS, aCell);
-                                aResBuf.append( aSS.getString());
+                                const OUString& rStr = aSS.getString();
+                                if (CheckStringResultLen( aResBuf, rStr))
+                                    aResBuf.append( rStr);
                             }
                         }
                     }
@@ -1440,11 +1448,19 @@ void ScInterpreter::ScConcat_MS()
                             for (SCSIZE k = 0; k < nR; k++ )
                             {
                                 if ( pMat->IsStringOrEmpty( j, k ) )
-                                    aResBuf.append(  pMat->GetString( j, k ).getString() );
+                                {
+                                    const OUString& rStr = pMat->GetString( j, k ).getString();
+                                    if (CheckStringResultLen( aResBuf, rStr))
+                                        aResBuf.append( rStr);
+                                }
                                 else
                                 {
                                     if ( pMat->IsValue( j, k ) )
-                                        aResBuf.append( pMat->GetString( *pFormatter, j, k ).getString() );
+                                    {
+                                        const OUString& rStr = pMat->GetString( *pFormatter, j, k ).getString();
+                                        if (CheckStringResultLen( aResBuf, rStr))
+                                            aResBuf.append( rStr);
+                                    }
                                 }
                             }
                         }
@@ -1617,7 +1633,8 @@ void ScInterpreter::ScTextJoin_MS()
                         }
                         else
                             bFirst = false;
-                        aResBuf.append( aStr );
+                        if (CheckStringResultLen( aResBuf, aStr))
+                            aResBuf.append( aStr );
                     }
                 }
                 break;
@@ -1653,7 +1670,8 @@ void ScInterpreter::ScTextJoin_MS()
                         }
                         else
                             bFirst = false;
-                        aResBuf.append( aStr );
+                        if (CheckStringResultLen( aResBuf, aStr))
+                            aResBuf.append( aStr );
                     }
                 }
                 break;
@@ -1712,7 +1730,8 @@ void ScInterpreter::ScTextJoin_MS()
                                 }
                                 else
                                     bFirst = false;
-                                aResBuf.append( aStr );
+                                if (CheckStringResultLen( aResBuf, aStr))
+                                    aResBuf.append( aStr );
                             }
                         }
                     }
@@ -1761,7 +1780,8 @@ void ScInterpreter::ScTextJoin_MS()
                                         }
                                         else
                                             bFirst = false;
-                                        aResBuf.append( aStr );
+                                        if (CheckStringResultLen( aResBuf, aStr))
+                                            aResBuf.append( aStr );
                                     }
                                 }
                             }
