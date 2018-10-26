@@ -225,7 +225,7 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rConstraints ) const
+                           const std::vector<Constraint>& rOwnConstraints ) const
 {
     // Algorithm result may depend on the parent constraints as well.
     std::vector<Constraint> aParentConstraints;
@@ -239,6 +239,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 pConstraintAtom->parseConstraint(aParentConstraints);
         }
     }
+    const std::vector<Constraint>& rConstraints = rOwnConstraints.empty() ? aParentConstraints : rOwnConstraints;
 
     switch(mnType)
     {
@@ -381,10 +382,38 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
 
+            // Find out which contraint is relevant for which (internal) name.
+            LayoutPropertyMap aProperties;
+            for (const auto& rConstraint : rConstraints)
+            {
+                if (rConstraint.msForName.isEmpty())
+                    continue;
+
+                LayoutProperty& rProperty = aProperties[rConstraint.msForName];
+                if (rConstraint.mnType == XML_w)
+                    rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
+            }
+
             for (auto & aCurrShape : rShape->getChildren())
             {
+                // Extract properties relevant for this shape from constraints.
+                oox::OptValue<sal_Int32> oWidth;
+                auto it = aProperties.find(aCurrShape->getInternalName());
+                if (it != aProperties.end())
+                {
+                    LayoutProperty& rProperty = it->second;
+                    auto itProperty = rProperty.find(XML_w);
+                    if (itProperty != rProperty.end())
+                        oWidth = itProperty->second;
+                }
+
                 aCurrShape->setPosition(aCurrPos);
-                aCurrShape->setSize(aChildSize);
+
+                awt::Size aSize = aChildSize;
+                if (oWidth.has())
+                    aSize.Width = oWidth.get();
+                aCurrShape->setSize(aSize);
+
                 aCurrShape->setChildSize(aChildSize);
                 aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
                 aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);

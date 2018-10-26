@@ -371,6 +371,15 @@ void SdImportTestSmartArt::testVertialBoxList()
     // 'actual: 0'.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xShapeGroup->getCount());
 
+    uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstChild.is());
+    uno::Reference<drawing::XShape> xParentText(xFirstChild->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParentText.is());
+    // Without the accompanying fix in place, this test would have failed with
+    // 'actual: 7361', i.e. the width was not the 70% of the parent as the
+    // constraint wanted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11852), xParentText->getSize().Width);
+
     uno::Reference<drawing::XShape> xSecondChild(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondChild.is());
     // Without the accompanying fix in place, this test would have failed with
