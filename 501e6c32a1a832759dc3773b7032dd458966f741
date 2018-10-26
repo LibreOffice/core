@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_86d66f4f",
+        "filename": "schema/mathml2/content/semantics.xsd",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-26T08:52:21Z",
+      "side": 1,
+      "message": "yes it\u0027s a typo but since it\u0027s an xsd, it shouldn\u0027t be fixed.",
+      "range": {
+        "startLine": 12,
+        "startChar": 40,
+        "endLine": 12,
+        "endChar": 49
+      },
+      "revId": "501e6c32a1a832759dc3773b7032dd458966f741",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_66cb53a5",
+        "filename": "sd/source/ui/slidesorter/inc/view/SlsLayouter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-26T08:52:21Z",
+      "side": 1,
+      "message": "\"these\" is ok too.",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "501e6c32a1a832759dc3773b7032dd458966f741",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_a6d16b5a",
+        "filename": "sw/source/filter/ww8/writerhelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-26T08:52:21Z",
+      "side": 1,
+      "message": "it should be \"top\" here.",
+      "range": {
+        "startLine": 642,
+        "startChar": 44,
+        "endLine": 642,
+        "endChar": 50
+      },
+      "revId": "501e6c32a1a832759dc3773b7032dd458966f741",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
