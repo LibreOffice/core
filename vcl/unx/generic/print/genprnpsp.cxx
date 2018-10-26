@@ -419,7 +419,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     {
         const PrinterInfo& rInfo( rManager.getPrinterInfo(printer) );
         // create new entry
-        SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
+        std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
         pInfo->maPrinterName    = printer;
         pInfo->maDriver         = rInfo.m_aDriverName;
         pInfo->maLocation       = rInfo.m_aLocation;
@@ -436,13 +436,8 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             }
         }
 
-        pList->Add( pInfo );
+        pList->Add( std::move(pInfo) );
     }
-}
-
-void SalGenericInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
-{
-    delete pInfo;
 }
 
 void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
