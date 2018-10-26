@@ -150,8 +150,7 @@ void SwEditShell::NoNum()
 bool SwEditShell::SelectionHasNumber() const
 {
     bool bResult = HasNumber();
-    const SwTextNode * pTextNd =
-        GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+    const SwTextNode * pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
     if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
         SwPamRanges aRangeArr( *GetCursor() );
         SwPaM aPam( *GetCursor()->GetPoint() );
@@ -168,6 +167,10 @@ bool SwEditShell::SelectionHasNumber() const
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
                     pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
+                    if (pTextNd)
+                    {
+                        pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
+                    }
                     if (pTextNd && pTextNd->Len()!=0)
                     {
                         bResult = pTextNd->HasNumber();
@@ -196,8 +199,7 @@ bool SwEditShell::SelectionHasNumber() const
 bool SwEditShell::SelectionHasBullet() const
 {
     bool bResult = HasBullet();
-    const SwTextNode * pTextNd =
-        GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+    const SwTextNode * pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
     if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
         SwPamRanges aRangeArr( *GetCursor() );
         SwPaM aPam( *GetCursor()->GetPoint() );
@@ -214,6 +216,10 @@ bool SwEditShell::SelectionHasBullet() const
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
                     pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
+                    if (pTextNd)
+                    {
+                        pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
+                    }
                     if (pTextNd && pTextNd->Len()!=0)
                     {
                         bResult = pTextNd->HasBullet();
@@ -235,8 +241,7 @@ bool SwEditShell::HasNumber() const
 {
     bool bResult = false;
 
-    const SwTextNode * pTextNd =
-        GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
 
     if (pTextNd)
     {
@@ -258,8 +263,7 @@ bool SwEditShell::HasBullet() const
 {
     bool bResult = false;
 
-    const SwTextNode * pTextNd =
-        GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
 
     if (pTextNd)
     {
