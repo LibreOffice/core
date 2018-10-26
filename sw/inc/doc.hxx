@@ -1032,7 +1032,8 @@ public:
     void SetNumRuleStart( const SwPosition& rPos, bool bFlag = true );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    static SwNumRule* GetNumRuleAtPos( const SwPosition& rPos );
+    // sw_redlinehide: may set rPos to different node (the one with the NumRule)
+    static SwNumRule* GetNumRuleAtPos(SwPosition& rPos, SwRootFrame const* pLayout = nullptr);
 
     const SwNumRuleTable& GetNumRuleTable() const { return *mpNumRuleTable; }
 

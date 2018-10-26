@@ -2094,13 +2094,20 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
     return bResult;
 }
 
-SwNumRule* SwDoc::GetNumRuleAtPos( const SwPosition& rPos )
+SwNumRule* SwDoc::GetNumRuleAtPos(SwPosition& rPos,
+        SwRootFrame const*const pLayout)
 {
     SwNumRule* pRet = nullptr;
     SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
 
     if ( pTNd != nullptr )
     {
+        if (pLayout && !sw::IsParaPropsNode(*pLayout, *pTNd))
+        {
+            pTNd = static_cast<SwTextFrame*>(pTNd->getLayoutFrame(pLayout))->GetMergedPara()->pParaPropsNode;
+            rPos.nNode = *pTNd;
+            rPos.nContent.Assign(pTNd, 0);
+        }
         pRet = pTNd->GetNumRule();
     }
 

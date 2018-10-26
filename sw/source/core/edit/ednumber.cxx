@@ -361,7 +361,8 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 {
     StartAllAction();
 
-    SwNumRule *pCurNumRule = SwDoc::GetNumRuleAtPos(rPos);
+    SwPosition pos(rPos);
+    SwNumRule *pCurNumRule = SwDoc::GetNumRuleAtPos(pos, GetLayout());
 
     if (pCurNumRule)
     {
@@ -372,7 +373,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         }
         else
         {
-            const SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
+            const SwTextNode* pTextNode = pos.nNode.GetNode().GetTextNode();
             if ( pTextNode != nullptr
                  && pTextNode->GetActualListLevel() >= 0 )
             {
@@ -381,7 +382,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         }
 
         // change numbering rule - changed numbering rule is not applied at <aPaM>
-        SwPaM aPaM(rPos);
+        SwPaM aPaM(pos);
         GetDoc()->SetNumRule( aPaM, aRule, false, OUString(), false );
     }
 
@@ -696,7 +697,8 @@ sal_uInt8 SwEditShell::GetNumLevel() const
 
 const SwNumRule* SwEditShell::GetNumRuleAtCurrCursorPos() const
 {
-    return SwDoc::GetNumRuleAtPos( *GetCursor()->GetPoint() );
+    SwPosition pos(*GetCursor()->GetPoint());
+    return SwDoc::GetNumRuleAtPos( pos, GetLayout() );
 }
 
 const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
@@ -710,7 +712,8 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
 
         for ( SwNodeIndex aNode = rCurrentCursor.Start()->nNode; aNode <= aEndNode; ++aNode )
         {
-            const SwNumRule* pNumRule = SwDoc::GetNumRuleAtPos( SwPosition( aNode ) );
+            SwPosition pos(aNode);
+            const SwNumRule* pNumRule = SwDoc::GetNumRuleAtPos(pos, GetLayout());
             if ( pNumRule == nullptr )
             {
                 continue;
