@@ -22,12 +22,12 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/print.hxx>
+#include "salprn.hxx"
 
 #include <vector>
 #include <unordered_map>
 
-struct SalPrinterQueueInfo;
-class QueueInfo;
 class JobSetup;
 
 namespace vcl
@@ -35,8 +35,13 @@ namespace vcl
 
 struct ImplPrnQueueData
 {
-    QueueInfo*              mpQueueInfo;
-    SalPrinterQueueInfo*    mpSalQueueInfo;
+    std::unique_ptr<QueueInfo>           mpQueueInfo;
+    std::unique_ptr<SalPrinterQueueInfo> mpSalQueueInfo;
+  
+    ImplPrnQueueData() {}
+  
+    ImplPrnQueueData& operator=( ImplPrnQueueData const & ) = delete; // MSVC2017 workaround
+    ImplPrnQueueData( ImplPrnQueueData const & ) = delete; // MSVC2017 workaround
 };
 
 class VCL_PLUGIN_PUBLIC ImplPrnQueueList
@@ -49,7 +54,7 @@ public:
     ImplPrnQueueList() {}
     ~ImplPrnQueueList();
 
-    void                    Add( SalPrinterQueueInfo* pData );
+    void                    Add( std::unique_ptr<SalPrinterQueueInfo> pData );
     ImplPrnQueueData*       Get( const OUString& rPrinter );
 };
 
