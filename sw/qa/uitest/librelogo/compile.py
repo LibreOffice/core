@@ -87,6 +87,10 @@ class LibreLogoCompileTest(UITestCase):
                 ("LABEL \"label", "label(u'label')"),
                 ("LABEL “label”", "label(u'label')"),
                 ("LABEL 'label'", "label(u'label')"),
+                ("LABEL ‘label’", "label(u'label')"),
+                ("LABEL “label\’s”", "label(u'label’s')"),
+                ("LABEL ““It\’s quote\’s...\””", "label(u'“It’s quote’s...”')"),
+                ("LABEL ““It\\'s quote\\'s...\””", "label(u'“It\\'s quote\\'s...”')"),
                 ):
             compiled = xCompile.invoke((test[0],), (), ())[0]
             self.assertEqual(test[1], re.sub(r'(\n| +\n)+', '\n', re.sub(r'\( ', '(', compiled)).strip())
