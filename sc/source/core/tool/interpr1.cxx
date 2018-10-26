@@ -60,6 +60,7 @@
 #include <tokenarray.hxx>
 #include <compare.hxx>
 
+#include <com/sun/star/util/SearchResult.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
