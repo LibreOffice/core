@@ -773,7 +773,7 @@ public:
     void RemoveFromListRLHidden();
     bool IsInList() const;
 
-    bool IsFirstOfNumRule() const;
+    bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
 
     sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
 

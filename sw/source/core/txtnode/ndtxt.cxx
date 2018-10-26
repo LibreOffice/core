@@ -4412,12 +4412,13 @@ bool SwTextNode::IsInList() const
     return GetNum() != nullptr && GetNum()->GetParent() != nullptr;
 }
 
-bool SwTextNode::IsFirstOfNumRule() const
+bool SwTextNode::IsFirstOfNumRule(SwRootFrame const& rLayout) const
 {
     bool bResult = false;
 
-    if ( GetNum() && GetNum()->GetNumRule())
-        bResult = GetNum()->IsFirst();
+    SwNodeNum const*const pNum(GetNum(&rLayout));
+    if (pNum && pNum->GetNumRule())
+        bResult = pNum->IsFirst();
 
     return bResult;
 }

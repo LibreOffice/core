@@ -2318,14 +2318,15 @@ void SwDoc::MarkListLevel( const OUString& sListId,
     }
 }
 
-bool SwDoc::IsFirstOfNumRuleAtPos( const SwPosition & rPos )
+bool SwDoc::IsFirstOfNumRuleAtPos(const SwPosition & rPos,
+        SwRootFrame const& rLayout)
 {
     bool bResult = false;
 
-    const SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
+    const SwTextNode *const pTextNode = sw::GetParaPropsNode(rLayout, rPos.nNode);
     if ( pTextNode != nullptr )
     {
-        bResult = pTextNode->IsFirstOfNumRule();
+        bResult = pTextNode->IsFirstOfNumRule(rLayout);
     }
 
     return bResult;
