@@ -42,6 +42,7 @@
 #include <docary.hxx>
 #include <mvsave.hxx>
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <pamtyp.hxx>
 #include <redline.hxx>
 #include <strings.hrc>
@@ -1408,10 +1409,47 @@ static bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
     return bRet;
 }
 
+static void
+lcl_GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
+{
+   if (pLayout && pLayout->IsHideRedlines()
+       && rIndex.GetNode().IsTextNode()
+       && rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+    {
+        rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pFirstNode;
+    }
+    --rIndex;
+    if (pLayout && rIndex.GetNode().IsTextNode())
+    {
+        rIndex = *sw::GetParaPropsNode(*pLayout, *rIndex.GetNode().GetTextNode());
+    }
+}
+
+static void
+lcl_GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
+{
+   if (pLayout && pLayout->IsHideRedlines()
+       && rIndex.GetNode().IsTextNode()
+       && rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+    {
+        rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pLastNode;
+    }
+    ++rIndex;
+    if (pLayout && rIndex.GetNode().IsTextNode())
+    {
+        rIndex = *sw::GetParaPropsNode(*pLayout, *rIndex.GetNode().GetTextNode());
+    }
+}
+
 static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
-                            bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
+        bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower,
+        SwRootFrame const*const pLayout)
 {
     const SwTextNode* pNd = rPos.nNode.GetNode().GetTextNode();
+    if (pNd && pLayout)
+    {
+        pNd = sw::GetParaPropsNode(*pLayout, *pNd);
+    }
     if( !pNd || nullptr == pNd->GetNumRule() )
         return false;
 
@@ -1423,7 +1461,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         // If NO_NUMLEVEL is switched on, we search the preceding Node with Numbering
         bool bError = false;
         do {
-            --aIdx;
+            lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
             if( aIdx.GetNode().IsTextNode() )
             {
                 pNd = aIdx.GetNode().GetTextNode();
@@ -1455,12 +1493,12 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     const SwTextNode* pLast;
     if( bNext )
     {
-        ++aIdx;
+        lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
         pLast = pNd;
     }
     else
     {
-        --aIdx;
+        lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
         pLast = nullptr;
     }
 
@@ -1491,9 +1529,9 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
             break;
 
         if( bNext )
-            ++aIdx;
+            lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
         else
-            --aIdx;
+            lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
     }
 
     if( !bRet && !bOverUpper && pLast )     // do not iterate over higher numbers, but still to the end
@@ -1522,10 +1560,10 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     return bRet;
 }
 
-bool SwDoc::GotoNextNum( SwPosition& rPos, bool bOverUpper,
-                            sal_uInt8* pUpper, sal_uInt8* pLower  )
+bool SwDoc::GotoNextNum(SwPosition& rPos, SwRootFrame const*const pLayout,
+        bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower)
 {
-    return ::lcl_GotoNextPrevNum( rPos, true, bOverUpper, pUpper, pLower );
+    return ::lcl_GotoNextPrevNum(rPos, true, bOverUpper, pUpper, pLower, pLayout);
 }
 
 const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
@@ -1603,9 +1641,10 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
     return pResult;
 }
 
-bool SwDoc::GotoPrevNum( SwPosition& rPos, bool bOverUpper  )
+bool SwDoc::GotoPrevNum(SwPosition& rPos, SwRootFrame const*const pLayout,
+        bool bOverUpper)
 {
-    return ::lcl_GotoNextPrevNum( rPos, false, bOverUpper, nullptr, nullptr );
+    return ::lcl_GotoNextPrevNum(rPos, false, bOverUpper, nullptr, nullptr, pLayout);
 }
 
 bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )

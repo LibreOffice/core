@@ -430,7 +430,7 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
     aCursor.SetMark();
     if( pCursor->HasMark() )
         *aCursor.GetPoint() = *pCursor->End();
-    SwDoc::GotoNextNum( *aCursor.GetPoint(), false, &rUpper, &rLower );
+    SwDoc::GotoNextNum(*aCursor.GetPoint(), GetLayout(), false, &rUpper, &rLower);
 }
 
 bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
@@ -447,7 +447,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
     bool bRet = false;
     sal_uInt8 nUpperLevel, nLowerLevel;
-    if( SwDoc::GotoNextNum( *aCursor.GetPoint(), false,
+    if (SwDoc::GotoNextNum( *aCursor.GetPoint(), GetLayout(), false,
                                 &nUpperLevel, &nLowerLevel ))
     {
         if( bUpperLower )
@@ -459,7 +459,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             if( bUpperLeft ) // move up
             {
                 SwPosition aPos( *aCursor.GetMark() );
-                if( SwDoc::GotoPrevNum( aPos, false ) )
+                if (SwDoc::GotoPrevNum( aPos, GetLayout(), false ))
                     nOffset = aPos.nNode.GetIndex() -
                             aCursor.GetMark()->nNode.GetIndex();
                 else
@@ -475,7 +475,9 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             }
             else             // move down
             {
-                const SwNumRule* pOrig = aCursor.GetNode(false).GetTextNode()->GetNumRule();
+                assert(!aCursor.GetNode().IsTextNode()
+                    || sw::IsParaPropsNode(*GetLayout(), *aCursor.GetNode().GetTextNode()));
+                const SwNumRule* pOrig = sw::GetParaPropsNode(*GetLayout(), *aCursor.GetNode(false).GetTextNode())->GetNumRule();
                 if( aCursor.GetNode().IsTextNode() &&
                     pOrig == aCursor.GetNode().GetTextNode()->GetNumRule() )
                 {
