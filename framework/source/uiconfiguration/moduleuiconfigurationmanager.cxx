@@ -210,7 +210,6 @@ private:
     bool                                                      m_bDisposed;
     OUString                                                  m_aXMLPostfix;
     OUString                                                  m_aPropUIName;
-    OUString                                                  m_aPropResourceURL;
     OUString                                                  m_aModuleIdentifier;
     css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
@@ -834,7 +833,6 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     , m_bDisposed( false )
     , m_aXMLPostfix( ".xml" )
     , m_aPropUIName( "UIName" )
-    , m_aPropResourceURL( "ResourceURL" )
     , m_xContext( xContext )
     , m_aListenerContainer( m_mutex )
 {
@@ -1078,7 +1076,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
         impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, ElementType );
 
     Sequence< PropertyValue > aUIElementInfo( 2 );
-    aUIElementInfo[0].Name = m_aPropResourceURL;
+    aUIElementInfo[0].Name = "ResourceURL";
     aUIElementInfo[1].Name = m_aPropUIName;
 
     aElementInfoSeq.resize( aUIElementInfoCollection.size() );

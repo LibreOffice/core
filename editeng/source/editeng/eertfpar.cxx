@@ -59,12 +59,13 @@ RtfImportInfo::~RtfImportInfo()
 {
 }
 
+static constexpr MapUnit gRTFMapUnit = MapUnit::MapTwip;
+
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
     SvxRTFParser(rAttrPool, rIn),
     aCurSel(std::move(aSel)),
     mpEditEngine(pEditEngine),
-    aRTFMapMode(MapUnit::MapTwip),
     nDefFont(0),
     bLastActionInsertParaBreak(false)
 {
@@ -311,8 +312,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     // #i66167# adapt font heights to destination MapUnit if necessary
     const MapUnit eDestUnit = mpEditEngine->GetEditDoc().GetItemPool().GetMetric(0);
-    const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
-    if (eDestUnit != eSrcUnit)
+    if (eDestUnit != gRTFMapUnit)
     {
         sal_uInt16 const aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
         for (unsigned short aFntHeightIem : aFntHeightIems)
@@ -321,7 +321,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             {
                 sal_uInt32 nHeight  = static_cast<const SvxFontHeightItem*>(pItem)->GetHeight();
                 long nNewHeight;
-                nNewHeight = OutputDevice::LogicToLogic( static_cast<long>(nHeight), eSrcUnit, eDestUnit );
+                nNewHeight = OutputDevice::LogicToLogic( static_cast<long>(nHeight), gRTFMapUnit, eDestUnit );
 
                 SvxFontHeightItem aFntHeightItem( nNewHeight, 100, aFntHeightIem );
                 aFntHeightItem.SetProp(
@@ -504,9 +504,8 @@ void EditRTFParser::CreateStyleSheets()
 void EditRTFParser::CalcValue()
 {
     const MapUnit eDestUnit = aEditMapMode.GetMapUnit();
-    const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
-    if (eDestUnit != eSrcUnit)
-        nTokenValue = OutputDevice::LogicToLogic( nTokenValue, eSrcUnit, eDestUnit );
+    if (eDestUnit != gRTFMapUnit)
+        nTokenValue = OutputDevice::LogicToLogic( nTokenValue, gRTFMapUnit, eDestUnit );
 }
 
 void EditRTFParser::ReadField()

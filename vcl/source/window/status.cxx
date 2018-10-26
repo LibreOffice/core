@@ -49,13 +49,11 @@ public:
     ImplData();
 
     VclPtr<VirtualDevice> mpVirDev;
-    long                mnItemBorderWidth;
 };
 
 StatusBar::ImplData::ImplData()
 {
     mpVirDev = nullptr;
-    mnItemBorderWidth = 0;
 }
 
 struct ImplStatusItem
@@ -380,7 +378,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 
     // compute output region
     ImplStatusItem* pItem = mvItemList[nPos].get();
-    long nW = mpImplData->mnItemBorderWidth + 1;
+    long nW = 1;
     tools::Rectangle aTextRect(aRect.Left() + nW, aRect.Top() + nW,
                         aRect.Right() - nW, aRect.Bottom() - nW);
 
@@ -1083,7 +1081,7 @@ tools::Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
         {
             // get rectangle and subtract frame
             aRect = ImplGetItemRectPos( nPos );
-            long nW = mpImplData->mnItemBorderWidth+1;
+            long nW = 1;
             aRect.AdjustTop(nW-1 );
             aRect.AdjustBottom( -(nW-1) );
             aRect.AdjustLeft(nW );
@@ -1105,7 +1103,7 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
             // get rectangle
             ImplStatusItem* pItem = mvItemList[ nPos ].get();
             tools::Rectangle aRect = ImplGetItemRectPos( nPos );
-            long nW = mpImplData->mnItemBorderWidth + 1;
+            long nW = 1;
             tools::Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
                                            aRect.Right()-nW, aRect.Bottom()-nW );
             Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
@@ -1463,7 +1461,7 @@ Size StatusBar::CalcWindowSizePixel() const
         }
     }
 
-    nCalcHeight = nMinHeight+nBarTextOffset + 2*mpImplData->mnItemBorderWidth;
+    nCalcHeight = nMinHeight+nBarTextOffset;
     if( nCalcHeight < nProgressHeight+2 )
         nCalcHeight = nProgressHeight+2;
 

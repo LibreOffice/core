@@ -25,7 +25,6 @@ namespace svx { namespace sidebar {
 
 LineWidthValueSet::LineWidthValueSet(vcl::Window* pParent)
     : ValueSet(pParent, WB_TABSTOP)
-    , pVDev(nullptr)
     , nSelItem(0)
     , bCusEnable(false)
 {
@@ -41,12 +40,6 @@ void LineWidthValueSet::Resize()
 LineWidthValueSet::~LineWidthValueSet()
 {
     disposeOnce();
-}
-
-void LineWidthValueSet::dispose()
-{
-    pVDev.disposeAndClear();
-    ValueSet::dispose();
 }
 
 void LineWidthValueSet::SetUnit(std::array<OUString,9> const & strUnits)

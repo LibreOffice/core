@@ -1262,7 +1262,6 @@ void FontSizeBox::ImplInit()
 {
     EnableAutocomplete( false );
 
-    bRelative       = false;
     bStdSize        = false;
 
     SetShowTrailingZeros( false );
@@ -1287,10 +1286,6 @@ void FontSizeBox::Reformat()
 
 void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 {
-    // no font sizes need to be set for relative mode
-    if ( bRelative )
-        return;
-
     // query font sizes
     const sal_IntPtr* pTempAry;
     const sal_IntPtr* pAry = nullptr;
@@ -1372,21 +1367,18 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 
 void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
-    if ( !bRelative )
+    sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
+    // conversion loses precision; however font sizes should
+    // never have a problem with that
+    OUString aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
+    if ( !aName.isEmpty() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
     {
-        sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
-        FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
-        // conversion loses precision; however font sizes should
-        // never have a problem with that
-        OUString aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
-        if ( !aName.isEmpty() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
-        {
-            mnLastValue = nTempValue;
-            SetText( aName );
-            mnFieldValue = mnLastValue;
-            SetEmptyFieldValueData( false );
-            return;
-        }
+        mnLastValue = nTempValue;
+        SetText( aName );
+        mnFieldValue = mnLastValue;
+        SetEmptyFieldValueData( false );
+        return;
     }
 
     MetricBox::SetValue( nNewValue, eInUnit );
@@ -1399,13 +1391,10 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue )
 
 sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const
 {
-    if ( !bRelative )
-    {
-        FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
-        sal_Int64 nValue = aFontSizeNames.Name2Size( rStr );
-        if ( nValue )
-            return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );
-    }
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
+    sal_Int64 nValue = aFontSizeNames.Name2Size( rStr );
+    if ( nValue )
+        return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );
 
     return MetricBox::GetValueFromStringUnit( rStr, eOutUnit );
 }

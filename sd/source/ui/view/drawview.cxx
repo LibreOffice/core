@@ -87,7 +87,6 @@ DrawView::DrawView(
 :   ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
     ,mpDocShell(pDocSh)
     ,mpDrawViewShell(pShell)
-    ,mpVDev(nullptr)
     ,mnPOCHSmph(0)
 {
     SetCurrentObj(OBJ_RECT);
@@ -95,7 +94,6 @@ DrawView::DrawView(
 
 DrawView::~DrawView()
 {
-    mpVDev.disposeAndClear();
 }
 
 /**
@@ -462,11 +460,6 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
 
 void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
-    if( mpVDev )
-    {
-        mpVDev.disposeAndClear();
-    }
-
     bool bStandardPaint = true;
 
     SdDrawDocument* pDoc = mpDocShell->GetDoc();

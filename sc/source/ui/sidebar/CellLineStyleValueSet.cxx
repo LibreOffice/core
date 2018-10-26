@@ -25,7 +25,6 @@ namespace sc { namespace sidebar {
 
 CellLineStyleValueSet::CellLineStyleValueSet(vcl::Window* pParent)
     : ValueSet(pParent, WB_TABSTOP)
-    , pVDev(nullptr)
     , nSelItem(0)
 {
     SetColCount();
@@ -35,12 +34,6 @@ CellLineStyleValueSet::CellLineStyleValueSet(vcl::Window* pParent)
 CellLineStyleValueSet::~CellLineStyleValueSet()
 {
     disposeOnce();
-}
-
-void CellLineStyleValueSet::dispose()
-{
-    pVDev.disposeAndClear();
-    ValueSet::dispose();
 }
 
 Size CellLineStyleValueSet::GetOptimalSize() const

@@ -32,7 +32,6 @@ namespace basic
 
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
-    OUString maScriptLanguage;
     css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
     // Methods to distinguish between different library types

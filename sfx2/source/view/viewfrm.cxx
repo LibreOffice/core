@@ -1400,7 +1400,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
     m_pImpl->bResizeInToOut = true;
     m_pImpl->bObjLocked = false;
-    m_pImpl->pFocusWin = nullptr;
     m_pImpl->nCurViewId = SFX_INTERFACE_NONE;
     m_pImpl->bReloading = false;
     m_pImpl->bIsDowning = false;
@@ -1484,7 +1483,6 @@ SfxViewFrame::~SfxViewFrame()
         KillDispatcher_Impl();
 
     m_pImpl->pWindow.disposeAndClear();
-    m_pImpl->pFocusWin.clear();
 
     if ( GetFrame().GetCurrentViewFrame() == this )
         GetFrame().SetCurrentViewFrame_Impl( nullptr );

@@ -105,14 +105,12 @@ void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName
 
 // Ctor for service
 SfxScriptLibraryContainer::SfxScriptLibraryContainer()
-    :maScriptLanguage( "StarBasic"  )
 {
     // all initialisation has to be done
     // by calling XInitialization::initialize
 }
 
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embed::XStorage >& xStorage )
-    :maScriptLanguage( "StarBasic"  )
 {
     init( OUString(), xStorage );
 }
@@ -163,7 +161,7 @@ void SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameCont
 
     xmlscript::ModuleDescriptor aMod;
     aMod.aName = aElementName;
-    aMod.aLanguage = maScriptLanguage;
+    aMod.aLanguage = "StarBasic";
     Any aElement = xLib->getByName( aElementName );
     aElement >>= aMod.aCode;
 

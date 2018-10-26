@@ -445,8 +445,7 @@ private:
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
     FontMetric       aFontMetric;
-    bool            bRelative:1,
-                    bStdSize:1;
+    bool             bStdSize:1;
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
