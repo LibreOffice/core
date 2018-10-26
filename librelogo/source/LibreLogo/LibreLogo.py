@@ -417,7 +417,7 @@ def __translate__(arg = None):
     __strings__ = []
 
     text = re.sub(r"^(([ \t]*[;#][^\n]*))", __encodecomment__, text)
-    text = re.sub("(?u)([%s])([^\n%s]*)(?<!\\\\)[%s]" % (lq, rq, rq), __encodestring__, selection.getString())
+    text = re.sub("(?u)([%s])((?:[^\n%s]|\\\\[%s])*)(?<!\\\\)[%s]" % (lq, rq, rq, rq), __encodestring__, selection.getString())
     text = re.sub('(?u)(?<![0-9])(")(~?\w*)', __encodestring__, text)
     text = re.sub(r";(([^\n]*))", __encodecomment__, text)
 
@@ -521,7 +521,8 @@ def __is_alive__():
     return __thread__ != None
 
 def __encodestring__(m):
-    __strings__.append(re.sub("\\[^\\]", "", m.group(2)))
+    __strings__.append(re.sub("(\\[^\\]|\\\\(?=[‘’“”»」』]))", "", m.group(2)))
+    # replace the string with the numbered identifier _s_0___, _s_1___, ...
     return __ENCODED_STRING__ % (len(__strings__) - 1)
 
 def __encodecomment__(m):
@@ -1767,7 +1768,7 @@ def __compil__(s):
     lq = '\'' + __l12n__(_.lng)['LEFTSTRING'].replace("|", "")
     rq = '\'' + __l12n__(_.lng)['RIGHTSTRING'].replace("|", "")
     __strings__ = []
-    s = re.sub("(?u)([%s])([^\n%s]*)(?<!\\\\)[%s]" % (lq, rq, rq), __encodestring__, s)
+    s = re.sub("(?u)([%s])((?:[^\n%s]|\\\\[%s])*)(?<!\\\\)[%s]" % (lq, rq, rq, rq), __encodestring__, s)
     s = re.sub('(?u)(?<![0-9])(")(~?\w*)', __encodestring__, s)
 
     # remove extra spaces
