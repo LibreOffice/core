@@ -28,7 +28,9 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
+#include <comphelper/logging.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/logging/LogLevel.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -38,6 +40,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::logging;
 
 namespace dp_log {
 
@@ -47,8 +50,7 @@ typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler> t_log_helper;
 class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
 {
     Reference<io::XOutputStream> m_xLogFile;
-    sal_Int32 m_log_level;
-    void log_write( OString const & text );
+    std::unique_ptr<comphelper::EventLogger> m_logger;
 
 protected:
     virtual void SAL_CALL disposing() override;
@@ -72,73 +74,16 @@ ProgressLogImpl::~ProgressLogImpl()
 
 void ProgressLogImpl::disposing()
 {
-    try {
-        if (m_xLogFile.is()) {
-            m_xLogFile->closeOutput();
-            m_xLogFile.clear();
-        }
-    }
-    catch (const Exception & exc) {
-        SAL_WARN( "desktop", exc );
-    }
 }
 
 
 ProgressLogImpl::ProgressLogImpl(
-    Sequence<Any> const & args,
+    Sequence<Any> const & /* args */,
     Reference<XComponentContext> const & xContext )
-    : t_log_helper( getMutex() ),
-      m_log_level( 0 )
+    : t_log_helper( getMutex() )
 {
-    OUString log_file;
-    boost::optional< Reference<task::XInteractionHandler> > interactionHandler;
-    comphelper::unwrapArgs( args, log_file, interactionHandler );
-
-    Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
-    // optional ia handler:
-    if (interactionHandler)
-        xSimpleFileAccess->setInteractionHandler( *interactionHandler );
-
-    m_xLogFile.set(
-        xSimpleFileAccess->openFileWrite( log_file ), UNO_QUERY_THROW );
-    Reference<io::XSeekable> xSeekable( m_xLogFile, UNO_QUERY_THROW );
-    xSeekable->seek( xSeekable->getLength() );
-
-    // write log stamp
-    OStringBuffer buf;
-    buf.append( "###### Progress log entry " );
-    TimeValue aStartTime, tLocal;
-    oslDateTime date_time;
-    if (osl_getSystemTime( &aStartTime ) &&
-        osl_getLocalTimeFromSystemTime( &aStartTime, &tLocal ) &&
-        osl_getDateTimeFromTimeValue( &tLocal, &date_time ))
-    {
-        char ar[ 128 ];
-        snprintf(
-            ar, sizeof (ar),
-            "%04d-%02d-%02d %02d:%02d:%02d ",
-            date_time.Year, date_time.Month, date_time.Day,
-            date_time.Hours, date_time.Minutes, date_time.Seconds );
-        buf.append( ar );
-    }
-    buf.append( "######\n" );
-    log_write( buf.makeStringAndClear() );
-}
-
-
-void ProgressLogImpl::log_write( OString const & text )
-{
-    try {
-        if (m_xLogFile.is()) {
-            m_xLogFile->writeBytes(
-                Sequence< sal_Int8 >(
-                    reinterpret_cast< sal_Int8 const * >(text.getStr()),
-                    text.getLength() ) );
-        }
-    }
-    catch (const io::IOException & exc) {
-        SAL_WARN( "desktop", exc );
-    }
+    // Use the logger created by unopkg app
+    m_logger.reset(new comphelper::EventLogger(xContext, "unopkg"));
 }
 
 // XProgressHandler
@@ -146,10 +91,7 @@ void ProgressLogImpl::log_write( OString const & text )
 void ProgressLogImpl::push( Any const & Status )
 {
     update( Status );
-    OSL_ASSERT( m_log_level >= 0 );
-    ++m_log_level;
 }
-
 
 void ProgressLogImpl::update( Any const & Status )
 {
@@ -157,28 +99,22 @@ void ProgressLogImpl::update( Any const & Status )
         return;
 
     OUStringBuffer buf;
-    OSL_ASSERT( m_log_level >= 0 );
-    for ( sal_Int32 n = 0; n < m_log_level; ++n )
-        buf.append( ' ' );
 
     OUString msg;
+    sal_Int32 logLevel = LogLevel::INFO;
     if (Status >>= msg) {
         buf.append( msg );
     }
     else {
-        buf.append( "ERROR: " );
+        logLevel = LogLevel::SEVERE;
         buf.append( ::comphelper::anyToString(Status) );
     }
-    buf.append( "\n" );
-    log_write( OUStringToOString(
-                   buf.makeStringAndClear(), osl_getThreadTextEncoding() ) );
+    m_logger->log(logLevel, buf.makeStringAndClear());
 }
 
 
 void ProgressLogImpl::pop()
 {
-    OSL_ASSERT( m_log_level > 0 );
-    --m_log_level;
 }
 
 namespace sdecl = comphelper::service_decl;
