@@ -166,8 +166,8 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 void SwFlyFrame::Chain( SwFrame* _pAnch )
 {
     // Connect to chain neighbours.
-    // No problem, if a neighboor doesn't exist - the construction of the
-    // neighboor will make the connection
+    // No problem, if a neighbor doesn't exist - the construction of the
+    // neighbor will make the connection
     const SwFormatChain& rChain = GetFormat()->GetChain();
     if ( rChain.GetPrev() || rChain.GetNext() )
     {
