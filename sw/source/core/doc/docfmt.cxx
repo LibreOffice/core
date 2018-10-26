@@ -601,10 +601,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
                 nSlotId != nEdtWhich )
             {
-                SfxPoolItem* pCpy = pItem->Clone();
+                std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());
                 pCpy->SetWhich( nEdtWhich );
                 pSdrPool->SetPoolDefaultItem( *pCpy );
-                delete pCpy;
             }
         }
 

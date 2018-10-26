@@ -281,7 +281,7 @@ namespace frm
 
         const SfxPoolItem* pItem = _rAttribs.GetItem( getWhich() );
         if ( pItem )
-            aState.setItem( pItem->Clone() );
+            aState.setItem( pItem );
 
         return aState;
     }
@@ -291,14 +291,13 @@ namespace frm
     {
         if ( _pAdditionalArg )
         {
-            SfxPoolItem* pCorrectWich = _pAdditionalArg->Clone();
+            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->Clone());
             pCorrectWich->SetWhich( getWhich() );
 
             if ( m_bScriptDependent )
                 putItemForScript( _rNewAttribs, *pCorrectWich, _nForScriptType );
             else
                 _rNewAttribs.Put( *pCorrectWich );
-            DELETEZ( pCorrectWich );
         }
         else
             OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
@@ -434,10 +433,9 @@ namespace frm
         OSL_ENSURE( dynamic_cast<const SfxBoolItem*>( _pAdditionalArg) !=  nullptr, "BooleanHandler::executeAttribute: invalid argument!" );
         if ( _pAdditionalArg )
         {
-            SfxPoolItem* pCorrectWich = _pAdditionalArg->Clone();
+            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->Clone());
             pCorrectWich->SetWhich( getWhich() );
             _rNewAttribs.Put( *pCorrectWich );
-            DELETEZ( pCorrectWich );
         }
     }
 

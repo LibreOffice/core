@@ -1104,10 +1104,9 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         sal_uInt8 nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
         if(GetProperty(nIDs[nIndex], nMId, pAny ))
         {
-            SfxPoolItem* pItem = ::GetDfltAttr( nIDs[nIndex] )->Clone();
+            std::unique_ptr<SfxPoolItem> pItem(::GetDfltAttr( nIDs[nIndex] )->Clone());
             bRet &= pItem->PutValue(*pAny, nMId );
             rGrSet.Put(*pItem);
-            delete pItem;
         }
     }
 
@@ -2705,12 +2704,12 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         UnoActionContext aCont(pDoc);
         if(m_pCopySource)
         {
-            SwFormatAnchor* pAnchorItem = nullptr;
+            std::unique_ptr<SwFormatAnchor> pAnchorItem;
             // the frame is inserted bound to page
             // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
             if (eAnchorId != RndStdIds::FLY_AT_PAGE)
             {
-                pAnchorItem = static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone());
+                pAnchorItem.reset(static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone()));
                 aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
             }
 
@@ -2726,7 +2725,6 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 SfxItemSet aAnchorSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
                 aAnchorSet.Put( *pAnchorItem );
                 pDoc->SetFlyFrameAttr( *pFormat, aAnchorSet );
-                delete pAnchorItem;
             }
             m_pCopySource.reset();
         }

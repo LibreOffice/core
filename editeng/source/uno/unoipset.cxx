@@ -171,7 +171,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
                 SvxUnoConvertFromMM( eMapUnit, aValue );
         }
 
-        SfxPoolItem *pNewItem = pItem->Clone();
+        std::unique_ptr<SfxPoolItem> pNewItem( pItem->Clone() );
 
         sal_uInt8 nMemberId = pMap->nMemberId;
         if( eMapUnit == MapUnit::Map100thMM )
@@ -183,7 +183,6 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
             pNewItem->SetWhich( pMap->nWID );
             rSet.Put( *pNewItem );
         }
-        delete pNewItem;
     }
 }
 

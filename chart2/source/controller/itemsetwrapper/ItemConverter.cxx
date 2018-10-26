@@ -97,28 +97,22 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
             if( GetItemProperty( nWhich, aProperty ))
             {
                 // put the Property into the itemset
-                SfxPoolItem * pItem = rPool.GetDefaultItem( nWhich ).Clone();
+                std::unique_ptr<SfxPoolItem> pItem(rPool.GetDefaultItem( nWhich ).Clone());
 
                 if( pItem )
                 {
                     try
                     {
-                        if( ! pItem->PutValue( m_xPropertySet->getPropertyValue( aProperty.first ),
+                        if( pItem->PutValue( m_xPropertySet->getPropertyValue( aProperty.first ),
                                                aProperty.second // nMemberId
                                 ))
                         {
-                            delete pItem;
-                        }
-                        else
-                        {
                             pItem->SetWhich(nWhich);
                             rOutItemSet.Put( *pItem );
-                            delete pItem;
                         }
                     }
                     catch( const beans::UnknownPropertyException &ex )
                     {
-                        delete pItem;
                         SAL_WARN( "chart2", ex << " - unknown Property: " << aProperty.first);
                     }
                     catch( const uno::Exception & )

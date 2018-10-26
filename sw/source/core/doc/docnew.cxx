@@ -1180,7 +1180,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             // we just need to set the new page description and reset numbering
             // this keeps all other settings as in the pasted document
             if ( nStartPageNumber || pTargetPageDesc ) {
-                SfxPoolItem *pNewItem;
+                std::unique_ptr<SfxPoolItem> pNewItem;
                 SwTextNode *aTextNd = nullptr;
                 SwFormat *pFormat = nullptr;
 
@@ -1192,12 +1192,12 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                     if ( node.IsTextNode() ) {
                         // every document contains at least one text node!
                         aTextNd = node.GetTextNode();
-                        pNewItem = aTextNd->GetAttr( RES_PAGEDESC ).Clone();
+                        pNewItem.reset(aTextNd->GetAttr( RES_PAGEDESC ).Clone());
                         break;
                     }
                     else if ( node.IsTableNode() ) {
                         pFormat = node.GetTableNode()->GetTable().GetFrameFormat();
-                        pNewItem = pFormat->GetFormatAttr( RES_PAGEDESC ).Clone();
+                        pNewItem.reset(pFormat->GetFormatAttr( RES_PAGEDESC ).Clone());
                         break;
                     }
                 }
@@ -1207,7 +1207,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     SAL_INFO( "sw.docappend", "Idx Fix " << CNTNT_IDX( aFixupIdx ) );
 #endif
                 // just update the original instead of overwriting
-                SwFormatPageDesc *aDesc = static_cast< SwFormatPageDesc* >( pNewItem );
+                SwFormatPageDesc *aDesc = static_cast< SwFormatPageDesc* >( pNewItem.get() );
 #ifdef DBG_UTIL
 if ( aDesc->GetPageDesc() )
     SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName() );
@@ -1222,7 +1222,6 @@ else
                     aTextNd->SetAttr( *aDesc );
                 else
                     pFormat->SetFormatAttr( *aDesc );
-                delete pNewItem;
 
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "Idx " << CNTNT_IDX( aDelIdx ) );

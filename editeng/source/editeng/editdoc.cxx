@@ -896,11 +896,10 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
             MapUnit eDestUnit = pDestUnit ? *pDestUnit : pDestPool->GetMetric( nWhich );
             if ( eSourceUnit != eDestUnit )
             {
-                SfxPoolItem* pItem = rSource.Get( nSourceWhich ).Clone();
+                std::unique_ptr<SfxPoolItem> pItem(rSource.Get( nSourceWhich ).Clone());
                 ConvertItem( *pItem, eSourceUnit, eDestUnit );
                 pItem->SetWhich(nWhich);
                 rDest.Put( *pItem );
-                delete pItem;
             }
             else
             {
