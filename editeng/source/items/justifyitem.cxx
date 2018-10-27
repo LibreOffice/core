@@ -23,6 +23,7 @@
 #include <editeng/eerdll.hxx>
 
 #include <tools/stream.hxx>
+#include <tools/debug.hxx>
 
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>

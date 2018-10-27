@@ -25,6 +25,7 @@
 #include <svx/svdtypes.hxx>
 #include <tools/ref.hxx>
 #include <sal/types.h>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 

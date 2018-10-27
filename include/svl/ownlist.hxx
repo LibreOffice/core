@@ -21,7 +21,7 @@
 #define INCLUDED_SVL_OWNLIST_HXX
 
 #include <svl/svldllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 #include <vector>
 
 namespace com { namespace sun { namespace star {
@@ -30,6 +30,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class SvCommand
 /*

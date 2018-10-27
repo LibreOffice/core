@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <boost/optional.hpp>
 #include <tools/color.hxx>
+#include <tools/debug.hxx>
 
 class SvxFont;
 class SvxFontItem;

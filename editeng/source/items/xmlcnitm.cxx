@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <climits>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <o3tl/any.hxx>
@@ -25,6 +26,8 @@
 #include <xmloff/xmlcnimp.hxx>
 #include <xmloff/unoatrcn.hxx>
 #include <editeng/xmlcnitm.hxx>
+#include <tools/debug.hxx>
+#include <tools/solar.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;

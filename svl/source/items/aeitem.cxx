@@ -20,6 +20,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
 
+#include <climits>
 #include <cstddef>
 #include <vector>
 

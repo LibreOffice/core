@@ -56,6 +56,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/rulritem.hxx>
+#include <unotools/collatorwrapper.hxx>
 #include <tabledlg.hxx>
 #include <fmtclds.hxx>
 #include <tabcol.hxx>

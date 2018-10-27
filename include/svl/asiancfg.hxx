@@ -24,7 +24,6 @@
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <sal/types.h>
 #include <svl/svldllapi.h>
 
 namespace com { namespace sun { namespace star { namespace lang {
