@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf3e73b7_d3f426d2",
+        "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-27T15:17:00Z",
+      "side": 1,
+      "message": "Numbering is important cause it\u0027s the same as in MS word.",
+      "parentUuid": "bf3e73b7_d0c77c45",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 48
+      },
+      "revId": "6bf9bdeb52d488d18dfb35331c25df285e0a0a7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf3e73b7_90c1f431",
         "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2018-10-27T10:16:53Z",
       "side": 1,
       "message": "Wouldn\u0027t make the protection setting easy accessible.",
+      "revId": "6bf9bdeb52d488d18dfb35331c25df285e0a0a7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_f3f72ad4",
+        "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-27T15:17:00Z",
+      "side": 1,
+      "message": "It come from calc or writer, I don\u0027t no, but it\u0027s an sync with other modules",
+      "parentUuid": "bf3e73b7_90c1f431",
       "revId": "6bf9bdeb52d488d18dfb35331c25df285e0a0a7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
