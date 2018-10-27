@@ -652,7 +652,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             pExistingSheet =
                 GetStyleSheetByPositionInIndex(aSheetsWithName.front()).get();
             if (!rRenameSuffix.isEmpty() &&
-                pExistingSheet->GetItemSet().Equals(xSheet->GetItemSet(), false))
+                !pExistingSheet->GetItemSet().Equals(xSheet->GetItemSet(), false))
             {
                 // we have found a sheet with the same name, but different contents. Try to find a new name.
                 // If we already have a sheet with the new name, and it is equal to the one in the source pool,
@@ -664,7 +664,8 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                     aTmpName = aName + rRenameSuffix + OUString::number(nSuffix);
                     pExistingSheet = Find(aTmpName, eFamily);
                     nSuffix++;
-                } while( pExistingSheet && pExistingSheet->GetItemSet().Equals(xSheet->GetItemSet(), false) );
+                } while (pExistingSheet &&
+                        !pExistingSheet->GetItemSet().Equals(xSheet->GetItemSet(), false));
                 aName = aTmpName;
                 bAddToList = true;
             }
