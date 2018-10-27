@@ -555,12 +555,6 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     }
 }
 
-void SfxTabDialog::RemoveResetButton()
-{
-    m_pResetBtn->Hide();
-    m_pImpl->bHideResetBtn = true;
-}
-
 void SfxTabDialog::RemoveStandardButton()
 {
     m_pBaseFmtBtn->Hide();

@@ -38,9 +38,8 @@ using namespace ::comphelper;
 
 OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
                                      const uno::Reference< report::XReportDefinition >& _xHoldAlive,
-                                     OReportController* _pController)
+                                     OReportController* )
     : GenericDialogController(pParent, "modules/dbreport/ui/pagenumberdialog.ui", "PageNumberDialog")
-    , m_pController(_pController)
     , m_xHoldAlive(_xHoldAlive)
     , m_xPageN(m_xBuilder->weld_radio_button("pagen"))
     , m_xPageNofM(m_xBuilder->weld_radio_button("pagenofm"))
@@ -54,53 +53,6 @@ OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
 
 OPageNumberDialog::~OPageNumberDialog()
 {
-}
-
-void OPageNumberDialog::execute()
-{
-    short nRet = m_xDialog->run();
-    if (nRet == RET_OK)
-    {
-        try
-        {
-            sal_Int32 nControlMaxSize = 3000;
-            sal_Int32 nPosX = 0;
-            sal_Int32 nPos2X = 0;
-            awt::Size aRptSize = getStyleProperty<awt::Size>(m_xHoldAlive,PROPERTY_PAPERSIZE);
-            switch (m_xAlignmentLst->get_active())
-            {
-                case 0: // left
-                    nPosX = getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_LEFTMARGIN);
-                    break;
-                case 1: // middle
-                    nPosX = getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_LEFTMARGIN) + (aRptSize.Width - getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_LEFTMARGIN) - getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_RIGHTMARGIN) - nControlMaxSize) / 2;
-                    break;
-                case 2: // right
-                    nPosX = (aRptSize.Width - getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_RIGHTMARGIN) - nControlMaxSize);
-                    break;
-                case 3: // inner
-                case 4: // outer
-                    nPosX = getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_LEFTMARGIN);
-                    nPos2X = (aRptSize.Width - getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_RIGHTMARGIN) - nControlMaxSize);
-                    break;
-                default:
-                    break;
-            }
-            if (m_xAlignmentLst->get_active() > 2)
-                nPosX = nPos2X;
-
-            uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
-                    { PROPERTY_POSITION, uno::Any(awt::Point(nPosX,0)) },
-                    { PROPERTY_PAGEHEADERON, uno::Any(m_xTopPage->get_active()) },
-                    { PROPERTY_STATE, uno::Any(m_xPageNofM->get_active()) }
-                }));
-
-            m_pController->executeChecked(SID_INSERT_FLD_PGNUMBER,aValues);
-        }
-        catch(uno::Exception&)
-        {
-        }
-    }
 }
 
 } // rptui

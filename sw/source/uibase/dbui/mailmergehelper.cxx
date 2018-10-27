@@ -259,31 +259,11 @@ void SwAddressPreview::Clear()
     UpdateScrollBar();
 }
 
-void SwAddressPreview::ReplaceSelectedAddress(const OUString& rNew)
-{
-    pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
-    Invalidate();
-}
-
-void SwAddressPreview::RemoveSelectedAddress()
-{
-    pImpl->aAddresses.erase(pImpl->aAddresses.begin() + pImpl->nSelectedAddress);
-    if(pImpl->nSelectedAddress)
-        --pImpl->nSelectedAddress;
-    UpdateScrollBar();
-    Invalidate();
-}
-
 void SwAddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
 {
     pImpl->nRows = nRows;
     pImpl->nColumns = nColumns;
     UpdateScrollBar();
-}
-
-void SwAddressPreview::EnableScrollBar()
-{
-    pImpl->bEnableScrollBar = true;
 }
 
 void SwAddressPreview::UpdateScrollBar()
@@ -592,13 +572,6 @@ void AddressPreview::SelectAddress(sal_uInt16 nSelect)
         m_xVScrollBar->vadjustment_set_value(nSelectRow);
 }
 
-void AddressPreview::Clear()
-{
-    pImpl->aAddresses.clear();
-    pImpl->nSelectedAddress = 0;
-    UpdateScrollBar();
-}
-
 void AddressPreview::ReplaceSelectedAddress(const OUString& rNew)
 {
     pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
@@ -777,102 +750,6 @@ void AddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUS
         aStart.AdjustY(nHeight );
     }
     while (nPos >= 0);
-}
-
-OUString AddressPreview::FillData(
-        const OUString& rAddress,
-        SwMailMergeConfigItem const & rConfigItem,
-        const Sequence< OUString>* pAssignments)
-{
-    //find the column names in the address string (with name assignment!) and
-    //exchange the placeholder (like <Firstname>) with the database content
-    //unassigned columns are expanded to <not assigned>
-    Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
-    Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
-    Sequence< OUString> aAssignment = pAssignments ?
-                    *pAssignments :
-                    rConfigItem.GetColumnAssignment(
-                                                rConfigItem.GetCurrentDBData() );
-    const OUString* pAssignment = aAssignment.getConstArray();
-    const std::vector<std::pair<OUString, int>>& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
-    OUString sNotAssigned = "<" + SwResId(STR_NOTASSIGNED) + ">";
-
-    bool bIncludeCountry = rConfigItem.IsIncludeCountry();
-    const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
-    bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
-    OUString sCountryColumn;
-    if( bSpecialReplacementForCountry )
-    {
-        sCountryColumn = rDefHeaders[MM_PART_COUNTRY].first;
-        Sequence< OUString> aSpecialAssignment =
-                        rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-        if(aSpecialAssignment.getLength() > MM_PART_COUNTRY && aSpecialAssignment[MM_PART_COUNTRY].getLength())
-            sCountryColumn = aSpecialAssignment[MM_PART_COUNTRY];
-    }
-
-    SwAddressIterator aIter(rAddress);
-    OUStringBuffer sAddress;
-    while(aIter.HasMore())
-    {
-        SwMergeAddressItem aItem = aIter.Next();
-        if(aItem.bIsColumn)
-        {
-            //get the default column name
-
-            //find the appropriate assignment
-            OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt32 nColumn = 0;
-                    nColumn < rDefHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
-                                                                                ++nColumn)
-            {
-                if (rDefHeaders[nColumn].first == aItem.sText &&
-                    !pAssignment[nColumn].isEmpty())
-                {
-                    sConvertedColumn = pAssignment[nColumn];
-                    break;
-                }
-            }
-            if(!sConvertedColumn.isEmpty() &&
-                    xColAccess.is() &&
-                    xColAccess->hasByName(sConvertedColumn))
-            {
-                //get the content and exchange it in the address string
-                Any aCol = xColAccess->getByName(sConvertedColumn);
-                Reference< XColumn > xColumn;
-                aCol >>= xColumn;
-                if(xColumn.is())
-                {
-                    try
-                    {
-                        OUString sReplace = xColumn->getString();
-
-                        if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
-                        {
-                            if( !rExcludeCountry.isEmpty() && sReplace != rExcludeCountry )
-                                aItem.sText = sReplace;
-                            else
-                                aItem.sText.clear();
-                        }
-                        else
-                        {
-                            aItem.sText = sReplace;
-                        }
-                    }
-                    catch (const sdbc::SQLException&)
-                    {
-                        OSL_FAIL("SQLException caught");
-                    }
-                }
-            }
-            else
-            {
-                aItem.sText = sNotAssigned;
-            }
-
-        }
-        sAddress.append(aItem.sText);
-    }
-    return sAddress.makeStringAndClear();
 }
 
 SwMergeAddressItem   SwAddressIterator::Next()

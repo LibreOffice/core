@@ -12,9 +12,9 @@ extensions/source/scanner/sane.hxx:147
     _Bool Sane::ActivateButtonOption(int)
 extensions/source/scanner/sane.hxx:153
     _Bool Sane::Open(int)
-extensions/source/scanner/sanedlg.hxx:90
+extensions/source/scanner/sanedlg.hxx:89
     _Bool SaneDlg::LoadState()
-extensions/source/scanner/sanedlg.hxx:104
+extensions/source/scanner/sanedlg.hxx:103
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
 filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
@@ -26,7 +26,7 @@ include/basegfx/range/b2dconnectedranges.hxx:217
     type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
 include/basegfx/vector/b2dvector.hxx:115
     class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
-include/basegfx/vector/b2ivector.hxx:101
+include/basegfx/vector/b2ivector.hxx:100
     class basegfx::B2IVector & basegfx::B2IVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:146
     class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
@@ -196,9 +196,9 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:344
+include/vcl/weld.hxx:348
     _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:1017
+include/vcl/weld.hxx:1022
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -206,8 +206,6 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-reportdesign/source/ui/inc/DateTime.hxx:76
-    short rptui::ODateTimeDialog::execute()
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
 sc/source/core/opencl/formulagroupcl.cxx:990
@@ -258,10 +256,6 @@ sd/source/ui/inc/OutlineViewShell.hxx:115
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sfx2/source/appl/appserv.cxx:322
-    short (anonymous namespace)::LicenseDialog::execute()
-sfx2/source/appl/appserv.cxx:339
-    short (anonymous namespace)::SafeModeQueryDialog::execute()
 sw/inc/calc.hxx:113
     class SwSbxValue & SwSbxValue::MakeDouble()
 sw/inc/doc.hxx:1063
@@ -284,8 +278,6 @@ sw/source/core/inc/scriptinfo.hxx:227
     _Bool SwScriptInfo::GetBoundsOfHiddenRange(int,int &,int &) const
 sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
-sw/source/ui/frmdlg/cption.cxx:80
-    short SwSequenceOptionDialog::execute()
 sw/source/uibase/inc/fldmgr.hxx:114
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:79
@@ -314,9 +306,9 @@ vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:316
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/source/gdi/pdfwriter_impl.hxx:1255
+vcl/source/gdi/pdfwriter_impl.hxx:1252
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1256
+vcl/source/gdi/pdfwriter_impl.hxx:1253
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1257
+vcl/source/gdi/pdfwriter_impl.hxx:1254
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

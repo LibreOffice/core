@@ -180,7 +180,6 @@ public:
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
 
-    void                RemoveResetButton();
     void                RemoveStandardButton();
 
     short               Execute() override;

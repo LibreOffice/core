@@ -271,7 +271,6 @@ class AuthorMarkPane
     DECL_LINK(EditModifyHdl, weld::Entry&, void);
 
     void InitControls();
-    void Activate();
 
 public:
     AuthorMarkPane(weld::DialogController& rDialog, weld::Builder& rBuilder, bool bNew);
