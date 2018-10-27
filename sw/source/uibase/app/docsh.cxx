@@ -222,8 +222,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
             pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             aOpt.ReadUserData( static_cast<const SfxStringItem*>(pItem)->GetValue() );
 
-        if( pRead )
-            pRead->GetReaderOpt().SetASCIIOpts( aOpt );
+        pRead->GetReaderOpt().SetASCIIOpts( aOpt );
     }
 
     return pRead;
@@ -239,17 +238,11 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     tools::SvRef<SotStorage> pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
     m_xDoc->setDocAccTitle(OUString());
-    SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
-    if (pFrame1)
+    if (const auto pFrame1 = SfxViewFrame::GetFirst(this))
     {
-        vcl::Window* pWindow = &pFrame1->GetWindow();
-        if ( pWindow )
+        if (auto pSysWin = pFrame1->GetWindow().GetSystemWindow())
         {
-            vcl::Window* pSysWin = pWindow->GetSystemWindow();
-            if ( pSysWin )
-            {
-                pSysWin->SetAccessibleName(OUString());
-            }
+            pSysWin->SetAccessibleName(OUString());
         }
     }
     SwWait aWait( *this, true );

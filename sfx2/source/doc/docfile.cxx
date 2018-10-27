@@ -1543,10 +1543,10 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
             // The versions are numbered starting with 1, versions with
             // negative versions numbers are counted backwards from the
             // current version
-            short nVersion = pVersion ? pVersion->GetValue() : 0;
+            short nVersion = pVersion->GetValue();
             if ( nVersion<0 )
                 nVersion = static_cast<short>(pImpl->aVersions.getLength()) + nVersion;
-            else if ( nVersion )
+            else // nVersion > 0; pVersion->GetValue() != 0 was the condition to this block
                 nVersion--;
 
             util::RevisionTag& rTag = pImpl->aVersions[nVersion];

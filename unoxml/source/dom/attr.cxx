@@ -156,11 +156,8 @@ namespace DOM
         if (nullptr == m_aAttrPtr->children) {
             return OUString();
         }
-        char const*const pContent((m_aAttrPtr->children)
-            ? reinterpret_cast<char const*>(m_aAttrPtr->children->content)
-            : "");
-        OUString const ret(pContent, strlen(pContent), RTL_TEXTENCODING_UTF8);
-        return ret;
+        char const*const pContent(reinterpret_cast<char const*>(m_aAttrPtr->children->content));
+        return OUString(pContent, strlen(pContent), RTL_TEXTENCODING_UTF8);
     }
 
     /**

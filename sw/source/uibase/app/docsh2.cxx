@@ -747,7 +747,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     GetDoc()->getIDocumentDeviceAccess().setPrinter( pSavePrinter, true, true);
                     //pSavePrinter must not be deleted again
                 }
-                pViewFrame->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
+                pViewFrame->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, false)); // not SID_VIEWSHELL2
                 pViewFrame->GetBindings().Invalidate( SID_NEWWINDOW );
                 pViewFrame->GetBindings().Invalidate( SID_BROWSER_MODE );
                 pViewFrame->GetBindings().Invalidate( FN_PRINT_LAYOUT );

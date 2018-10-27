@@ -1242,14 +1242,11 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         return CreatePivotTable(*pNewObj, bRecord, bApi);
     }
 
-    if (pOldObj)
-    {
-        if (!pNewObj)
-            return RemovePivotTable(*pOldObj, bRecord, bApi);
+    if (!pNewObj)
+        return RemovePivotTable(*pOldObj, bRecord, bApi);
 
-        if (pOldObj == pNewObj)
-            return UpdatePivotTable(*pOldObj, bRecord, bApi);
-    }
+    if (pOldObj == pNewObj)
+        return UpdatePivotTable(*pOldObj, bRecord, bApi);
 
     OSL_ASSERT(pOldObj && pNewObj && pOldObj != pNewObj);
 

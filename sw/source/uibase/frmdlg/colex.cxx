@@ -54,10 +54,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // alignment
-        const SvxPageItem* pPage = static_cast<const SvxPageItem*>(&rSet.Get( nWhich ));
-
-        if ( pPage )
-            SetUsage( pPage->GetPageUsage() );
+        const SvxPageItem& rPage = static_cast<const SvxPageItem&>(rSet.Get(nWhich));
+        SetUsage(rPage.GetPageUsage());
     }
 
     nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );

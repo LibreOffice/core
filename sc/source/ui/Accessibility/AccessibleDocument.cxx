@@ -1860,17 +1860,13 @@ void SAL_CALL
         if (xAccessible.is())
         {
             bool bWasTableSelected(IsTableSelected());
-
-            if (mpChildrenShapes)
-                mpChildrenShapes->Select(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
-
+            mpChildrenShapes->Select(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
             if (bWasTableSelected)
                 mpViewShell->SelectAll();
         }
         else
         {
-            if (mpViewShell)
-                mpViewShell->SelectAll();
+            mpViewShell->SelectAll();
         }
     }
 }
@@ -1998,9 +1994,7 @@ void SAL_CALL
         uno::Reference < XAccessible > xAccessible = mpChildrenShapes->Get(nChildIndex);
         if (xAccessible.is())
         {
-            if (mpChildrenShapes)
-                mpChildrenShapes->Deselect(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
-
+            mpChildrenShapes->Deselect(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
             if (bTabMarked)
                 mpViewShell->SelectAll(); // select the table again
         }
