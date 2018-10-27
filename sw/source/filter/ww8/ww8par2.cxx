@@ -1360,10 +1360,16 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
     }
 }
 
-void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC)
+void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC, sal_uInt16 nParamsLen)
 {
     if( !pParamsTSetBRC || !pTCs ) // set one or more cell border(s)
         return;
+
+    if (nParamsLen < 3)
+    {
+        SAL_WARN("sw.ww8", "table border property is too short");
+        return;
+    }
 
     sal_uInt8 nitcFirst= pParamsTSetBRC[0];// first col to be changed
     sal_uInt8 nitcLim  = pParamsTSetBRC[1];// (last col to be changed)+1
@@ -1383,11 +1389,33 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
     WW8_TCell* pAktTC  = pTCs + nitcFirst;
     WW8_BRCVer9 brcVer9;
     if( nBrcVer == 6 )
+    {
+        if (nParamsLen < sizeof(WW8_BRCVer6) + 3)
+        {
+            SAL_WARN("sw.ww8", "table border property is too short");
+            return;
+        }
         brcVer9 = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3)));
+    }
     else if( nBrcVer == 8 )
+    {
+        static_assert(sizeof (WW8_BRC) == 4, "this has to match the msword size");
+        if (nParamsLen < sizeof(WW8_BRC) + 3)
+        {
+            SAL_WARN("sw.ww8", "table border property is too short");
+            return;
+        }
         brcVer9 = WW8_BRCVer9(*reinterpret_cast<WW8_BRC const *>(pParamsTSetBRC+3));
+    }
     else
+    {
+        if (nParamsLen < sizeof(WW8_BRCVer9) + 3)
+        {
+            SAL_WARN("sw.ww8", "table border property is too short");
+            return;
+        }
         brcVer9 = *reinterpret_cast<WW8_BRCVer9 const *>(pParamsTSetBRC+3);
+    }
 
     for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
     {
@@ -1400,7 +1428,6 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
         if( bChangeRight )
             pAktTC->rgbrc[ WW8_RIGHT ] = brcVer9;
     }
-
 }
 
 void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams, sal_uInt16 nParamsLen)
@@ -1920,7 +1947,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         sal_uInt16 nTableBordersLen = 0;
         const sal_uInt8* pTableBorders90 = nullptr;
         sal_uInt16 nTableBorders90Len = 0;
-        std::vector<const sal_uInt8*> aTSetBrcs, aTSetBrc90s;
+        // params, len
+        std::vector<std::pair<const sal_uInt8*, sal_uInt16>> aTSetBrcs, aTSetBrc90s;
         WW8_TablePos *pTabPos  = nullptr;
 
         // search end of a tab row
@@ -2023,10 +2051,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         }
                         break;
                     case sprmTSetBrc:
-                        aTSetBrcs.push_back(pParams); // process at end
+                        aTSetBrcs.emplace_back(pParams, nLen); // process at end
                         break;
                     case sprmTSetBrc90:
-                        aTSetBrc90s.push_back(pParams); // process at end
+                        aTSetBrc90s.emplace_back(pParams, nLen); // process at end
                         break;
                     case sprmTDxaCol:
                         pNewBand->ProcessSprmTDxaCol(pParams);
@@ -2074,11 +2102,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             else if (pTableBorders)
                 pNewBand->ProcessSprmTTableBorders(bOldVer ? 6 : 8,
                     pTableBorders, nTableBordersLen);
-            std::vector<const sal_uInt8*>::const_iterator iter;
-            for (iter = aTSetBrcs.begin(); iter != aTSetBrcs.end(); ++iter)
-                pNewBand->ProcessSprmTSetBRC(bOldVer ? 6 : 8, *iter);
-            for (iter = aTSetBrc90s.begin(); iter != aTSetBrc90s.end(); ++iter)
-                pNewBand->ProcessSprmTSetBRC(9, *iter);
+            for (const auto& a : aTSetBrcs)
+                pNewBand->ProcessSprmTSetBRC(bOldVer ? 6 : 8, a.first, a.second);
+            for (const auto& a : aTSetBrc90s)
+                pNewBand->ProcessSprmTSetBRC(9, a.first, a.second);
         }
 
         if( nTabeDxaNew < SHRT_MAX )

@@ -1033,7 +1033,7 @@ struct WW8TabBandDesc
     static void setcelldefaults(WW8_TCell *pCells, short nCells);
     void ReadDef(bool bVer67, const sal_uInt8* pS, short nLen);
     void ProcessDirection(const sal_uInt8* pParams);
-    void ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC);
+    void ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC, sal_uInt16 nParamsLen);
     void ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams, sal_uInt16 nParamsLen);
     void ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol);
     void ProcessSprmTDelete(const sal_uInt8* pParamsTDelete);
