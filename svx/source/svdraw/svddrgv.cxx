@@ -207,7 +207,6 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         SetDragWithCopy(false);
         //TODO: aAni.Reset();
         mpCurrentSdrDragMethod=nullptr;
-        mbDragLimit=false;
         SdrDragMode eTmpMode=meDragMode;
         if (eTmpMode==SdrDragMode::Move && pHdl!=nullptr && pHdl->GetKind()!=SdrHdlKind::Move) {
             eTmpMode=SdrDragMode::Resize;

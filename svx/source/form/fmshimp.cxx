@@ -931,7 +931,6 @@ void FmXFormShell::disposing()
     m_xExternalViewController   = nullptr;
     m_xExtViewTriggerController = nullptr;
     m_xExternalDisplayedForm    = nullptr;
-    m_xLastGridFound            = nullptr;
 
     InterfaceBag aEmpty;
     m_aCurrentSelection.swap( aEmpty );

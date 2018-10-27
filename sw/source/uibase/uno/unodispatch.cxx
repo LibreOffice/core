@@ -245,7 +245,6 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     else if(aURL.Complete == cInternalDBChangeNotification)
     {
         frame::FeatureStateEvent aEvent;
-        aEvent.IsEnabled = true;
         aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
 
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();

@@ -626,7 +626,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
                 // mba: no relative URLs for clipboard!
                 SfxMedium aMedium( xWorkStore, OUString() );
-                bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
+                pEmbObj->DoSaveObjectAs( aMedium, false );
                 pEmbObj->DoSaveCompleted();
 
                 uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );

@@ -176,8 +176,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     //formatting for B5: # ??/100 gets lost during import
 
     //test Sheet2
-    const ScPatternAttr* pPattern = nullptr;
-    pPattern = pDoc->GetPattern(0,0,1);
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 1);
     vcl::Font aFont;
     pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200l, aFont.GetFontSize().getHeight());

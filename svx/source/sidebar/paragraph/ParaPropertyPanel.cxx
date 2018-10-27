@@ -146,7 +146,6 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpFLineIndent->SetModifyHdl( aLink );
 
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
-    m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
 
 void ParaPropertyPanel::InitToolBoxSpacing()

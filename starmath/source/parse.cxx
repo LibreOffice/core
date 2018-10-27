@@ -1736,8 +1736,6 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
 
         aNodeToken.cMathChar = MS_VERTLINE;
         std::unique_ptr<SmNode> xLeft(new SmMathSymbolNode(aNodeToken));
-
-        aNodeToken.cMathChar = MS_VERTLINE;
         std::unique_ptr<SmNode> xRight(new SmMathSymbolNode(aNodeToken));
 
         xSNode->SetSubNodes(xLeft.release(), xArg.release(), xRight.release());

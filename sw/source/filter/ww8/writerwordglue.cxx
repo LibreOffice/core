@@ -399,12 +399,11 @@ namespace sw
             else
             {
                 dyaHdrTop = dyaHdrBottom = 0;
-                dyaHdrBottom = 0;
             }
             const SvxULSpaceItem &rUL =
                 ItemGet<SvxULSpaceItem>(rPage, RES_UL_SPACE);
-            dyaHdrTop = dyaHdrTop + rUL.GetUpper();
-            dyaHdrBottom = dyaHdrBottom + rUL.GetLower();
+            dyaHdrTop += rUL.GetUpper();
+            dyaHdrBottom += rUL.GetLower();
 
             dyaTop = dyaHdrTop;
             dyaBottom = dyaHdrBottom;

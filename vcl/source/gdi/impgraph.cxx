@@ -551,7 +551,6 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated)
         maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
     }
     maSwapInfo.mnAnimationLoopCount = 0;
-    maSwapInfo.mbIsAnimated = false;
     maSwapInfo.mbIsEPS = false;
     maSwapInfo.mbIsTransparent = false;
     maSwapInfo.mbIsAlpha = false;

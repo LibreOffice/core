@@ -1198,9 +1198,10 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                     if ( xLayoutManager.is() )
                     {
-                        bool bState = true;
-                        bState = xLayoutManager->getElement( "private:resource/menubar/menubar" ).is()
-                            && xLayoutManager->isElementVisible( "private:resource/menubar/menubar" );
+                        const bool bState
+                            = xLayoutManager->getElement("private:resource/menubar/menubar").is()
+                              && xLayoutManager->isElementVisible(
+                                     "private:resource/menubar/menubar");
 
                         SfxBoolItem aItem( SID_MENUBAR, bState );
                         rSet.Put( aItem );

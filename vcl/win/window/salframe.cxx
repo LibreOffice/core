@@ -3481,8 +3481,6 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
             nLastModKeyCode = ModKeyFlags::NONE; // make sure no modkey messages are sent if they belong to a hotkey (see above)
             aKeyEvt.mnCharCode = 0;
-            aKeyEvt.mnCode = 0;
-
             aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
             if ( !bKeyUp )
             {
@@ -4486,8 +4484,6 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         // Set the appropriate foreground and background colors.
         RECT aRect = pDI->rcItem;
-
-        clrPrevBkgnd = SetBkColor( pDI->hDC, GetSysColor( COLOR_MENU ) );
 
         if ( fDisabled )
             clrPrevText = SetTextColor( pDI->hDC, GetSysColor( COLOR_GRAYTEXT ) );

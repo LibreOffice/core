@@ -2909,8 +2909,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             (*pStreamName) >>= sStreamName;
             pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
-            SwFlyFrameFormat* pFrameFormat = nullptr;
-            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, m_nDrawAspect, &aFrameSet, nullptr );
+            SwFlyFrameFormat* pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE(
+                aPam, sStreamName, m_nDrawAspect, &aFrameSet, nullptr);
 
             // store main document name to show in the title bar
             SwOLENode* pNd = nullptr;
@@ -2956,9 +2956,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             OUString rName;
             rPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
 
-            SwFlyFrameFormat* pFrameFormat = nullptr;
-            pFrameFormat = pDoc->getIDocumentContentOperations().InsertEmbObject(
-                    aPam, xObj, &aFrameSet);
+            SwFlyFrameFormat* pFrameFormat
+                = pDoc->getIDocumentContentOperations().InsertEmbObject(aPam, xObj, &aFrameSet);
             pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
             pFrameFormat->Add(this);
             if(!m_sName.isEmpty())

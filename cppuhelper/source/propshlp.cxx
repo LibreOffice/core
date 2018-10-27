@@ -756,11 +756,7 @@ void OPropertySetHelper::fire
 
         if( !bVetoable )
         {
-            OInterfaceContainerHelper * pCont = nullptr;
-            pCont = rBHelper.aLC.getContainer(
-                                getPropertiesTypeIdentifier(  )
-                                             );
-            if( pCont )
+            if (auto pCont = rBHelper.aLC.getContainer(getPropertiesTypeIdentifier()))
             {
                 // Here is a Bug, unbound properties are also fired
                 OInterfaceIteratorHelper aIt( *pCont );

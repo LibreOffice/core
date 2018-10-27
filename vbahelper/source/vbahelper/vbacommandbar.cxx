@@ -162,8 +162,8 @@ sal_Int32 SAL_CALL
 ScVbaCommandBar::Type()
 {
     // #FIXME support msoBarTypePopup
-    sal_Int32 nType = office::MsoBarType::msoBarTypePopup;
-    nType = m_bIsMenu? office::MsoBarType::msoBarTypeNormal : office::MsoBarType::msoBarTypeMenuBar;
+    sal_Int32 nType
+        = m_bIsMenu ? office::MsoBarType::msoBarTypeNormal : office::MsoBarType::msoBarTypeMenuBar;
     return nType;
 }
 

@@ -161,8 +161,8 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     sal_uInt32 nSubKeys = pKey->countSubKeys();
     *pnSubKeys = nSubKeys;
 
-    rtl_uString** pSubKeys = nullptr;
-    pSubKeys = static_cast<rtl_uString**>(rtl_allocateZeroMemory(nSubKeys * sizeof(rtl_uString*)));
+    rtl_uString** pSubKeys
+        = static_cast<rtl_uString**>(rtl_allocateZeroMemory(nSubKeys * sizeof(rtl_uString*)));
 
     OStoreDirectory::iterator   iter;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
