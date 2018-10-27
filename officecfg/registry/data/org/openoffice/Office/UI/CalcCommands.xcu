@@ -413,6 +413,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Consolidate...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:GoDownToEndOfDataSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -958,6 +961,9 @@
       <node oor:name=".uno:Validation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Validity...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:CurrentValidation" oor:op="replace">
@@ -1777,6 +1783,9 @@
       <node oor:name=".uno:DataSubTotals" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sub~totals...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:AutoOutline" oor:op="replace">
