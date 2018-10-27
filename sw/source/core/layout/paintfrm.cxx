@@ -5071,14 +5071,30 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         // if ContentFrame and joined Prev/Next, reset top/bottom as needed
         if(IsContentFrame())
         {
+            const SwFrame* pDirRefFrame(IsCellFrame() ? FindTabFrame() : this);
+            const SwRectFnSet aRectFnSet(pDirRefFrame);
+            const SwRectFn& _rRectFn(aRectFnSet.FnRect());
+
             if(rAttrs.JoinedWithPrev(*this))
             {
-                    pTopBorder = nullptr;
+                // tdf#115296 re-add adaption of vert distance to clos ethe evtl.
+                // existing gap to previous frame
+                const SwFrame* pPrevFrame(GetPrev());
+                (aRect.*_rRectFn->fnSetTop)( (pPrevFrame->*_rRectFn->fnGetPrtBottom)() );
+
+                // ...and disable top border paint/creation
+                pTopBorder = nullptr;
             }
 
             if(rAttrs.JoinedWithNext(*this))
             {
-                    pBottomBorder = nullptr;
+                // tdf#115296 re-add adaption of vert distance to clos ethe evtl.
+                // existing gap to next frame
+                const SwFrame* pNextFrame(GetNext());
+                (aRect.*_rRectFn->fnSetBottom)( (pNextFrame->*_rRectFn->fnGetPrtTop)() );
+
+                // ...and disable bottom border paint/creation
+                pBottomBorder = nullptr;
             }
         }
 
