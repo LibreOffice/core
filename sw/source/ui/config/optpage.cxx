@@ -808,14 +808,13 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         }
 
         // insert to listboxes
-        for( std::set< OUString >::const_iterator it = aFontNames.begin();
-             it != aFontNames.end(); ++it )
+        for( const auto& rFontName : aFontNames )
         {
-            m_pStandardBox->InsertEntry( *it );
-            m_pTitleBox->InsertEntry( *it );
-            m_pListBox->InsertEntry( *it );
-            m_pLabelBox->InsertEntry( *it );
-            m_pIdxBox->InsertEntry( *it );
+            m_pStandardBox->InsertEntry( rFontName );
+            m_pTitleBox->InsertEntry( rFontName );
+            m_pListBox->InsertEntry( rFontName );
+            m_pLabelBox->InsertEntry( rFontName );
+            m_pIdxBox->InsertEntry( rFontName );
         }
     }
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))

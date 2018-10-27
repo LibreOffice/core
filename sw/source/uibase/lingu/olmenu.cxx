@@ -185,10 +185,8 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
     sal_uInt16 nItemId = nLangItemIdStart;
-    std::set< OUString >::const_iterator it;
-    for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+    for (const OUString& aEntryText : aLangItems)
     {
-        OUString aEntryText( *it );
         if (aEntryText != SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) &&
             aEntryText != "*" && // multiple languages in current selection
             !aEntryText.isEmpty()) // 'no language found' from language guessing

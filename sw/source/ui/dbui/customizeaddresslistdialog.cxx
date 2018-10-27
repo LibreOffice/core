@@ -46,11 +46,8 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     m_xUpPB->connect_clicked(aUpDownLk);
     m_xDownPB->connect_clicked(aUpDownLk);
 
-    std::vector< OUString >::iterator aHeaderIter;
-
-    for(aHeaderIter = m_xNewData->aDBColumnHeaders.begin();
-                aHeaderIter != m_xNewData->aDBColumnHeaders.end(); ++aHeaderIter)
-        m_xFieldsLB->append_text(*aHeaderIter);
+    for (const auto& rHeader : m_xNewData->aDBColumnHeaders)
+        m_xFieldsLB->append_text(rHeader);
 
     m_xFieldsLB->select(0);
     UpdateButtons();
@@ -97,9 +94,8 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, weld::Button&, rButto
             //add the new column
             m_xNewData->aDBColumnHeaders.insert(m_xNewData->aDBColumnHeaders.begin() + nPos, sNew);
             //add a new entry into all data arrays
-            std::vector< std::vector< OUString > >::iterator aDataIter;
-            for( aDataIter = m_xNewData->aDBData.begin(); aDataIter != m_xNewData->aDBData.end(); ++aDataIter)
-                aDataIter->insert(aDataIter->begin() + nPos, OUString());
+            for (auto& rData : m_xNewData->aDBData)
+                rData.insert(rData.begin() + nPos, OUString());
 
         }
 
@@ -118,9 +114,8 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl, weld::Button&, voi
     //remove the column
     m_xNewData->aDBColumnHeaders.erase(m_xNewData->aDBColumnHeaders.begin() + nPos);
     //remove the data
-    std::vector< std::vector< OUString > >::iterator aDataIter;
-    for( aDataIter = m_xNewData->aDBData.begin(); aDataIter != m_xNewData->aDBData.end(); ++aDataIter)
-        aDataIter->erase(aDataIter->begin() + nPos);
+    for (auto& rData : m_xNewData->aDBData)
+        rData.erase(rData.begin() + nPos);
 
     UpdateButtons();
 }
@@ -141,12 +136,11 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, weld::Button&, rButton, 
     OUString sHeader = m_xNewData->aDBColumnHeaders[nOldPos];
     m_xNewData->aDBColumnHeaders.erase(m_xNewData->aDBColumnHeaders.begin() + nOldPos);
     m_xNewData->aDBColumnHeaders.insert(m_xNewData->aDBColumnHeaders.begin() + nPos, sHeader);
-    std::vector< std::vector< OUString > >::iterator aDataIter;
-    for( aDataIter = m_xNewData->aDBData.begin(); aDataIter != m_xNewData->aDBData.end(); ++aDataIter)
+    for (auto& rData : m_xNewData->aDBData)
     {
-        OUString sData = (*aDataIter)[nOldPos];
-        aDataIter->erase(aDataIter->begin() + nOldPos);
-        aDataIter->insert(aDataIter->begin() + nPos, sData);
+        OUString sData = rData[nOldPos];
+        rData.erase(rData.begin() + nOldPos);
+        rData.insert(rData.begin() + nPos, sData);
     }
 
     UpdateButtons();
@@ -181,15 +175,8 @@ IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, weld::Entry&, rEdit, void)
 
     if(!bFound)
     {
-        std::vector< OUString >::const_iterator aHeaderIter;
-        for(aHeaderIter = m_rCSVHeader.begin();
-                    aHeaderIter != m_rCSVHeader.end();
-                    ++aHeaderIter)
-            if(*aHeaderIter == sEntry)
-            {
-                bFound = true;
-                break;
-            }
+        bFound = std::any_of(m_rCSVHeader.begin(), m_rCSVHeader.end(),
+            [&sEntry](const OUString& rHeader) { return rHeader == sEntry; });
     }
     m_xOK->set_sensitive(!bFound);
 }

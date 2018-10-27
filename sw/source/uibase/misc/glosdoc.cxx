@@ -161,13 +161,8 @@ std::unique_ptr<SwTextBlocks> SwGlossaries::GetGroupDoc(const OUString &rName,
     // insert to the list of text blocks if applicable
     if(bCreate && !m_GlosArr.empty())
     {
-        std::vector<OUString>::const_iterator it(m_GlosArr.begin());
-        for (; it != m_GlosArr.end(); ++it)
-        {
-            if (*it == rName)
-                break;
-        }
-        if (it == m_GlosArr.end())
+        if (std::none_of(m_GlosArr.begin(), m_GlosArr.end(),
+                [&rName](const OUString& rEntry) { return rEntry == rName; }))
         {   // block not in the list
             m_GlosArr.push_back(rName);
         }
@@ -314,10 +309,8 @@ std::vector<OUString> & SwGlossaries::GetNameList()
             std::vector<OUString> aFiles;
 
             SWUnoHelper::UCB_GetFileListOfFolder(m_PathArr[i], aFiles, &sExt);
-            for( std::vector<OUString>::const_iterator filesIt(aFiles.begin());
-                 filesIt != aFiles.end(); ++filesIt)
+            for (const OUString& aTitle : aFiles)
             {
-                const OUString aTitle = *filesIt;
                 const OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() )
                     + OUStringLiteral1(GLOS_DELIM) + OUString::number( static_cast<sal_Int16>(i) ));
                 m_GlosArr.push_back(sName);
@@ -432,60 +425,56 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
 {
     if (!m_GlosArr.empty())
     {
-        for (std::vector<OUString>::iterator it(m_GlosArr.begin());
-                it != m_GlosArr.end(); ++it)
+        auto it = std::find(m_GlosArr.begin(), m_GlosArr.end(), rGroup);
+        if (it != m_GlosArr.end())
         {
-            if (*it == rGroup)
             {
+                // tell the UNO AutoTextGroup object that it's not valid anymore
+                for (   UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
+                        aLoop != m_aGlossaryGroups.end();
+                    )
                 {
-                    // tell the UNO AutoTextGroup object that it's not valid anymore
-                    for (   UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
-                            aLoop != m_aGlossaryGroups.end();
-                        )
+                    Reference< container::XNamed > xNamed( aLoop->get(), UNO_QUERY );
+                    if ( !xNamed.is() )
                     {
-                        Reference< container::XNamed > xNamed( aLoop->get(), UNO_QUERY );
-                        if ( !xNamed.is() )
-                        {
-                            aLoop = m_aGlossaryGroups.erase(aLoop);
-                        }
-                        else if ( xNamed->getName() == rGroup )
-                        {
-                            static_cast< SwXAutoTextGroup* >( xNamed.get() )->Invalidate();
-                                // note that this static_cast works because we know that the array only
-                                // contains SwXAutoTextGroup implementation
-                            m_aGlossaryGroups.erase( aLoop );
-                            break;
-                        } else
-                            ++aLoop;
+                        aLoop = m_aGlossaryGroups.erase(aLoop);
                     }
-                }
-
-                {
-                    // tell all our UNO AutoTextEntry objects that they're not valid anymore
-                    for (   UnoAutoTextEntries::iterator aLoop = m_aGlossaryEntries.begin();
-                            aLoop != m_aGlossaryEntries.end();
-                        )
+                    else if ( xNamed->getName() == rGroup )
                     {
-                        Reference< lang::XUnoTunnel > xEntryTunnel( aLoop->get(), UNO_QUERY );
-
-                        SwXAutoTextEntry* pEntry = nullptr;
-                        if ( xEntryTunnel.is() )
-                            pEntry = reinterpret_cast< SwXAutoTextEntry* >(
-                                xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
-
-                        if ( pEntry && ( pEntry->GetGroupName() == rGroup ) )
-                        {
-                            pEntry->Invalidate();
-                            aLoop = m_aGlossaryEntries.erase( aLoop );
-                        }
-                        else
-                            ++aLoop;
-                    }
+                        static_cast< SwXAutoTextGroup* >( xNamed.get() )->Invalidate();
+                            // note that this static_cast works because we know that the array only
+                            // contains SwXAutoTextGroup implementation
+                        m_aGlossaryGroups.erase( aLoop );
+                        break;
+                    } else
+                        ++aLoop;
                 }
-
-                m_GlosArr.erase(it);
-                break;
             }
+
+            {
+                // tell all our UNO AutoTextEntry objects that they're not valid anymore
+                for (   UnoAutoTextEntries::iterator aLoop = m_aGlossaryEntries.begin();
+                        aLoop != m_aGlossaryEntries.end();
+                    )
+                {
+                    Reference< lang::XUnoTunnel > xEntryTunnel( aLoop->get(), UNO_QUERY );
+
+                    SwXAutoTextEntry* pEntry = nullptr;
+                    if ( xEntryTunnel.is() )
+                        pEntry = reinterpret_cast< SwXAutoTextEntry* >(
+                            xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
+
+                    if ( pEntry && ( pEntry->GetGroupName() == rGroup ) )
+                    {
+                        pEntry->Invalidate();
+                        aLoop = m_aGlossaryEntries.erase( aLoop );
+                    }
+                    else
+                        ++aLoop;
+                }
+            }
+
+            m_GlosArr.erase(it);
         }
     }
 }
@@ -517,12 +506,9 @@ OUString SwGlossaries::GetCompleteGroupName( const OUString& rGroupName )
 void SwGlossaries::InvalidateUNOOjects()
 {
     // invalidate all the AutoTextGroup-objects
-    for (   UnoAutoTextGroups::iterator aGroupLoop = m_aGlossaryGroups.begin();
-            aGroupLoop != m_aGlossaryGroups.end();
-            ++aGroupLoop
-        )
+    for (const auto& rGroup : m_aGlossaryGroups)
     {
-        Reference< text::XAutoTextGroup > xGroup( aGroupLoop->get(), UNO_QUERY );
+        Reference< text::XAutoTextGroup > xGroup( rGroup.get(), UNO_QUERY );
         if ( xGroup.is() )
             static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
     }
@@ -530,12 +516,9 @@ void SwGlossaries::InvalidateUNOOjects()
     m_aGlossaryGroups.swap( aTmpg );
 
     // invalidate all the AutoTextEntry-objects
-    for (   UnoAutoTextEntries::const_iterator aEntryLoop = m_aGlossaryEntries.begin();
-            aEntryLoop != m_aGlossaryEntries.end();
-            ++aEntryLoop
-        )
+    for (const auto& rEntry : m_aGlossaryEntries)
     {
-        Reference< lang::XUnoTunnel > xEntryTunnel( aEntryLoop->get(), UNO_QUERY );
+        Reference< lang::XUnoTunnel > xEntryTunnel( rEntry.get(), UNO_QUERY );
         SwXAutoTextEntry* pEntry = nullptr;
         if ( xEntryTunnel.is() )
             pEntry = reinterpret_cast< SwXAutoTextEntry* >(

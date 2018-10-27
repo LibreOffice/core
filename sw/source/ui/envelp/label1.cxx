@@ -513,10 +513,10 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
     m_xAddrBox->set_active( aItem.m_bAddr );
     m_xWritingEdit->set_text( aWriting );
 
-    for(std::vector<OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
+    for(const auto& rMake : GetParentSwLabDlg()->Makes())
     {
-        if (m_xMakeBox->find_text(*i) == -1)
-            m_xMakeBox->append_text(*i);
+        if (m_xMakeBox->find_text(rMake) == -1)
+            m_xMakeBox->append_text(rMake);
     }
 
     m_xMakeBox->set_active_text(aItem.m_aMake);

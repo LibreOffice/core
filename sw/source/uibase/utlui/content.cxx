@@ -701,10 +701,10 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             std::vector<OUString> aRefMarks;
             nMemberCount = pWrtShell->GetRefMarks( &aRefMarks );
 
-            for(std::vector<OUString>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
+            for (const auto& rRefMark : aRefMarks)
             {
                 // References sorted alphabetically
-                pMember->insert(o3tl::make_unique<SwContent>(this, *i, 0));
+                pMember->insert(o3tl::make_unique<SwContent>(this, rRefMark, 0));
             }
         }
         break;
