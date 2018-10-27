@@ -93,6 +93,7 @@
 #include <fmtfsize.hxx>
 #include "sprmids.hxx"
 
+#include <comphelper/sequenceashashmap.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8attributeoutput.hxx"
@@ -514,16 +515,8 @@ static void WriteDop( WW8Export& rWrt )
         // so round-trip it since protection is still enabled.
         if ( rDop.lKeyProtDoc == 0 && xProps.is() )
         {
-            uno::Sequence< beans::PropertyValue > aGrabBag;
-            xProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-            for ( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
-            {
-                if ( aGrabBag[i].Name == "FormPasswordHash" )
-                {
-                    aGrabBag[i].Value >>= rDop.lKeyProtDoc;
-                    break;
-                }
-            }
+            comphelper::SequenceAsHashMap aPropMap( xProps->getPropertyValue("InteropGrabBag"));
+            aPropMap.getValue("FormPasswordHash") >>= rDop.lKeyProtDoc;
         }
     }
     else
