@@ -485,11 +485,6 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         rMyProp.Type = cppu::UnoType<sal_Bool>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
-        if( nFetchDirection != -1 )
-            m_nFetchDirectionPropertyHandle = (*pOrigProps)[nFetchDirection].Handle;
-        else
-            m_nFetchDirectionPropertyHandle = impl_getRemainedHandle();
-
         m_nFetchDirectionPropertyHandle = rMyProp.Handle;
     }
 }
