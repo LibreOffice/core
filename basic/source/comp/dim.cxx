@@ -1215,17 +1215,13 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
 
         pDef->Match( std::unique_ptr<SbiProcDef>(pProc) );
-        pProc = pDef;
     }
     else
     {
         aPublics.Add( pDef );
-        pProc = pDef;
     }
-    if( !pProc )
-    {
-        return;
-    }
+    assert(pDef);
+    pProc = pDef;
     pProc->SetPublic( !bPrivate );
 
     // Now we set the search hierarchy for symbols as well as the
