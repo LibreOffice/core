@@ -43,6 +43,7 @@
 #include <svdata.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
+#include <impglyphitem.hxx>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 

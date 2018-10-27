@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/glyphitem.hxx>
 
 class ImplLayoutArgs;
 class PhysicalFontFace;
@@ -35,9 +36,6 @@ namespace vcl
 {
     class TextLayoutCache;
 }
-
-struct GlyphItem;
-typedef std::vector<GlyphItem> SalLayoutGlyphs;
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
