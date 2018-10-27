@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_d3ff8632",
+        "filename": "sw/uiconfig/swriter/popupmenu/table.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-27T19:36:12Z",
+      "side": 1,
+      "message": "Please don\u0027t misuse real commands as labels for sub menus.",
+      "revId": "567f6a0f0d24411969641e2e7bb87187854688a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
