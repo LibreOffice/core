@@ -26,7 +26,7 @@ namespace chart
 
 SchTitleDlg::SchTitleDlg(weld::Window* pWindow, const TitleDialogData& rInput)
     : GenericDialogController(pWindow, "modules/schart/ui/inserttitledlg.ui", "InsertTitleDialog")
-    , m_xTitleResources(new SchTitleResources(*m_xBuilder, true))
+    , m_xTitleResources(new TitleResources(*m_xBuilder, true))
 {
     m_xDialog->set_title(ObjectNameProvider::getName(OBJECTTYPE_TITLE, true));
     m_xTitleResources->writeToResources( rInput );
