@@ -382,7 +382,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
 
-            // Find out which contraint is relevant for which (internal) name.
+            // Find out which constraint is relevant for which (internal) name.
             LayoutPropertyMap aProperties;
             for (const auto& rConstraint : rConstraints)
             {
