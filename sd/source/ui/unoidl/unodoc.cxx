@@ -66,11 +66,10 @@ OUString SdPresentationDocument_getImplementationName()
 
 uno::Sequence< OUString > SdPresentationDocument_getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.drawing.DrawingDocumentFactory";
-    aSeq[1] = "com.sun.star.presentation.PresentationDocument";
-
-    return aSeq;
+    return  uno::Sequence<OUString>{
+       "com.sun.star.drawing.DrawingDocumentFactory",
+       "com.sun.star.presentation.PresentationDocument"
+    };
 }
 
 uno::Reference< uno::XInterface > SdPresentationDocument_createInstance(
