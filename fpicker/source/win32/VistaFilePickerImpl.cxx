@@ -1091,11 +1091,9 @@ TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 static void lcl_removeControlItemsWorkaround(const TFileDialogCustomize& iCustom   ,
                                             ::sal_Int16           nControlId)
 {
-    ::sal_Int32 i       = 0;
-    HRESULT   hResult;
-
-    hResult = iCustom->SetSelectedControlItem(nControlId, 1000);
-    hResult = S_OK;
+    (void)iCustom->SetSelectedControlItem(nControlId, 1000); // Don't care if this fails (useless?)
+    DWORD i = 0;
+    HRESULT hResult = S_OK;
     while ( SUCCEEDED(hResult) )
         hResult = iCustom->RemoveControlItem(nControlId, i++);
 }
