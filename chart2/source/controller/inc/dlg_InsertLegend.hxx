@@ -34,7 +34,7 @@ namespace chart
 class SchLegendDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<SchLegendPositionResources> m_xLegendPositionResources;
+    std::unique_ptr<LegendPositionResources> m_xLegendPositionResources;
 
 public:
     SchLegendDlg(weld::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC);
