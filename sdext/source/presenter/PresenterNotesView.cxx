@@ -406,7 +406,6 @@ void PresenterNotesView::Layout()
             mxToolBarWindow->setPosSize(0, aWindowBox.Height - nToolBarHeight,
                                         sal_Int32(aToolBarSize.Width + 0.5), nToolBarHeight,
                                         awt::PosSize::POSSIZE);
-            aNewTextBoundingBox.Y2 -= nToolBarHeight;
             mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
             aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
             // Place the close button.
