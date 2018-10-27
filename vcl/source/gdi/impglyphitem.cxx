@@ -17,32 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GLYPHITEM_HXX
-#define INCLUDED_VCL_GLYPHITEM_HXX
+#include <impglyphitem.hxx>
 
-typedef sal_uInt16 sal_GlyphId;
-
-struct GlyphItem;
-class SalLayoutGlyphsImpl;
-
-class VCL_DLLPUBLIC SalLayoutGlyphs final
+SalLayoutGlyphs::SalLayoutGlyphs()
+    : m_pImpl(nullptr)
 {
-    friend class SalLayoutGlyphsImpl;
-    SalLayoutGlyphsImpl* m_pImpl;
+}
 
-public:
-    SalLayoutGlyphs();
-    SalLayoutGlyphs(const SalLayoutGlyphs&);
-    ~SalLayoutGlyphs();
+SalLayoutGlyphs::~SalLayoutGlyphs() { delete m_pImpl; }
 
-    SalLayoutGlyphs& operator=(const SalLayoutGlyphs&);
+SalLayoutGlyphs::SalLayoutGlyphs(const SalLayoutGlyphs& rOther) { *m_pImpl = *rOther.m_pImpl; }
 
-    SalLayoutGlyphsImpl* Impl() const { return m_pImpl; }
+SalLayoutGlyphs& SalLayoutGlyphs::operator=(const SalLayoutGlyphs& rOther)
+{
+    if (!m_pImpl)
+        m_pImpl = new SalLayoutGlyphsImpl(*this);
+    *m_pImpl = *rOther.m_pImpl;
+    return *this;
+}
 
-    bool empty() const;
-    void clear();
-};
+bool SalLayoutGlyphs::empty() const { return !m_pImpl || m_pImpl->empty(); }
 
-#endif // INCLUDED_VCL_GLYPHITEM_HXX
+void SalLayoutGlyphs::clear()
+{
+    if (m_pImpl)
+        m_pImpl->clear();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
