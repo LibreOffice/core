@@ -4,5 +4,4 @@
  <manifest:file-entry manifest:full-path="SentenceExceptList.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="WordExceptList.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DocumentList.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type=""/>
 </manifest:manifest>
