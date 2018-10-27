@@ -1328,7 +1328,7 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    if (::GetCachedGlyphBoundRect(rGlyph, rRect))
+    if (rGlyph.GetCachedGlyphBoundRect(rRect))
         return true;
 
     WinFontInstance* pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
@@ -1364,7 +1364,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
     rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
 
-    ::CacheGlyphBoundRect(rGlyph, rRect);
+    rGlyph.CacheGlyphBoundRect(rRect);
     return true;
 }
 

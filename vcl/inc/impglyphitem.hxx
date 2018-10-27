@@ -20,20 +20,84 @@
 #ifndef INCLUDED_VCL_IMPGLYPHITEM_HXX
 #define INCLUDED_VCL_IMPGLYPHITEM_HXX
 
+#include <tools/gen.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
+#include <vector>
 
-// for whatever reason MSVC tries to export these when declared class inline even
-// when annotated with VCL_DLLPRIVATE, so keep them as seperate static inline.
+#include "fontinstance.hxx"
 
-static inline bool GetCachedGlyphBoundRect(const GlyphItem& rItem, tools::Rectangle& rRect)
+struct VCL_DLLPUBLIC GlyphItem
 {
-    return rItem.m_pFontInstance->GetCachedGlyphBoundRect(rItem.m_aGlyphId, rRect);
+    sal_GlyphId m_aGlyphId;
+    int m_nCharCount; // number of characters making up this glyph
+    int m_nOrigWidth; // original glyph width
+    LogicalFontInstance* m_pFontInstance;
+
+    int m_nCharPos; // index in string
+    int m_nFlags;
+    int m_nNewWidth; // width after adjustments
+    int m_nXOffset;
+    Point m_aLinearPos; // absolute position of non rotated string
+
+    GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
+              long nFlags, int nOrigWidth, int nXOffset, LogicalFontInstance* pFontInstance)
+        : m_aGlyphId(aGlyphId)
+        , m_nCharCount(nCharCount)
+        , m_nOrigWidth(nOrigWidth)
+        , m_pFontInstance(pFontInstance)
+        , m_nCharPos(nCharPos)
+        , m_nFlags(nFlags)
+        , m_nNewWidth(nOrigWidth)
+        , m_nXOffset(nXOffset)
+        , m_aLinearPos(rLinearPos)
+    {
+        assert(m_pFontInstance);
+    }
+
+    enum
+    {
+        IS_IN_CLUSTER = 0x001,
+        IS_RTL_GLYPH = 0x002,
+        IS_DIACRITIC = 0x004,
+        IS_VERTICAL = 0x008,
+        IS_SPACING = 0x010,
+        ALLOW_KASHIDA = 0x020,
+        IS_DROPPED = 0x040,
+        IS_CLUSTER_START = 0x080
+    };
+
+    bool IsInCluster() const { return ((m_nFlags & IS_IN_CLUSTER) != 0); }
+    bool IsRTLGlyph() const { return ((m_nFlags & IS_RTL_GLYPH) != 0); }
+    bool IsDiacritic() const { return ((m_nFlags & IS_DIACRITIC) != 0); }
+    bool IsVertical() const { return ((m_nFlags & IS_VERTICAL) != 0); }
+    bool IsSpacing() const { return ((m_nFlags & IS_SPACING) != 0); }
+    bool AllowKashida() const { return ((m_nFlags & ALLOW_KASHIDA) != 0); }
+    bool IsDropped() const { return ((m_nFlags & IS_DROPPED) != 0); }
+    bool IsClusterStart() const { return ((m_nFlags & IS_CLUSTER_START) != 0); }
+
+    inline bool GetCachedGlyphBoundRect(tools::Rectangle& rRect) const;
+    inline void CacheGlyphBoundRect(tools::Rectangle& rRect) const;
+};
+
+VCL_DLLPUBLIC bool GlyphItem::GetCachedGlyphBoundRect(tools::Rectangle& rRect) const
+{
+    return m_pFontInstance->GetCachedGlyphBoundRect(m_aGlyphId, rRect);
 }
 
-static inline void CacheGlyphBoundRect(const GlyphItem& rItem, tools::Rectangle& rRect)
+VCL_DLLPUBLIC void GlyphItem::CacheGlyphBoundRect(tools::Rectangle& rRect) const
 {
-    rItem.m_pFontInstance->CacheGlyphBoundRect(rItem.m_aGlyphId, rRect);
+    m_pFontInstance->CacheGlyphBoundRect(m_aGlyphId, rRect);
 }
+
+class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
+{
+    friend class GenericSalLayout;
+    friend class SalLayoutGlyphs;
+    void SetPImpl(SalLayoutGlyphs* pFacade) { pFacade->m_pImpl = this; }
+
+    SalLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs) { SetPImpl(&rGlyphs); }
+};
 
 #endif // INCLUDED_VCL_IMPGLYPHITEM_HXX
 

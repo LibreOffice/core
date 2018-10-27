@@ -45,6 +45,8 @@
 #include <algorithm>
 #include <memory>
 
+#include <impglyphitem.hxx>
+
 // Glyph Flags
 #define GF_FONTMASK  0xF0000000
 #define GF_FONTSHIFT 28
@@ -710,7 +712,7 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     DeviceCoordinate nMinPos = 0;
     DeviceCoordinate nMaxPos = 0;
 
-    for (auto const& aGlyphItem : m_GlyphItems)
+    for (auto const& aGlyphItem : *m_GlyphItems.Impl())
     {
         // update the text extent with the glyph extent
         DeviceCoordinate nXPos = aGlyphItem.m_aLinearPos.X();
@@ -737,13 +739,13 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         return;
     }
     // find rightmost glyph, it won't get stretched
-    std::vector<GlyphItem>::iterator pGlyphIterRight = m_GlyphItems.begin();
-    pGlyphIterRight += m_GlyphItems.size() - 1;
+    std::vector<GlyphItem>::iterator pGlyphIterRight = m_GlyphItems.Impl()->begin();
+    pGlyphIterRight += m_GlyphItems.Impl()->size() - 1;
     std::vector<GlyphItem>::iterator pGlyphIter;
     // count stretchable glyphs
     int nStretchable = 0;
     int nMaxGlyphWidth = 0;
-    for(pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
+    for(pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
     {
         if( !pGlyphIter->IsDiacritic() )
             ++nStretchable;
@@ -766,7 +768,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     {
         // expand width by distributing space between glyphs evenly
         int nDeltaSum = 0;
-        for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
+        for( pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
             pGlyphIter->m_aLinearPos.AdjustX(nDeltaSum );
@@ -786,9 +788,9 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     {
         // squeeze width by moving glyphs proportionally
         double fSqueeze = static_cast<double>(nNewWidth) / nOldWidth;
-        if(m_GlyphItems.size() > 1)
+        if(m_GlyphItems.Impl()->size() > 1)
         {
-            for( pGlyphIter = m_GlyphItems.begin(); ++pGlyphIter != pGlyphIterRight;)
+            for( pGlyphIter = m_GlyphItems.Impl()->begin(); ++pGlyphIter != pGlyphIterRight;)
             {
                 int nX = pGlyphIter->m_aLinearPos.X();
                 nX = static_cast<int>(nX * fSqueeze);
@@ -796,7 +798,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
             }
         }
         // adjust glyph widths to new positions
-        for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
+        for( pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
             pGlyphIter->m_nNewWidth = pGlyphIter[1].m_aLinearPos.X() - pGlyphIter[0].m_aLinearPos.X();
     }
 }
@@ -806,7 +808,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
     const int nLength = rStr.getLength();
     long nOffset = 0;
 
-    for( std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin(), pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
+    for( std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin(), pGlyphIterEnd = m_GlyphItems.Impl()->end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
     {
         const int n = pGlyphIter->m_nCharPos;
         if( n < nLength - 1)
@@ -849,7 +851,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
         pCaretXArray[i] = -1;
 
     // calculate caret positions using glyph array
-    for (auto const& aGlyphItem : m_GlyphItems)
+    for (auto const& aGlyphItem : *m_GlyphItems.Impl())
     {
         long nXPos = aGlyphItem.m_aLinearPos.X();
         long nXRight = nXPos + aGlyphItem.m_nOrigWidth;
@@ -895,8 +897,8 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
                                     const PhysicalFontFace**, int* const) const
 {
-    std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
-    std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.end();
+    std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.Impl()->begin();
+    std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.Impl()->end();
     pGlyphIter += nStart;
 
     // find next glyph in substring
@@ -908,7 +910,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     }
 
     // return zero if no more glyph found
-    if( nStart >= static_cast<int>(m_GlyphItems.size()) )
+    if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()) )
         return false;
 
     if( pGlyphIter == pGlyphIterEnd )
@@ -930,10 +932,10 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
 
 void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
 {
-    if( nStart >= static_cast<int>(m_GlyphItems.size()) )
+    if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()) )
         return;
 
-    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
+    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin();
     pGlyphIter += nStart;
 
     // the nNewXPos argument determines the new cell position
@@ -946,7 +948,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
-        for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
+        for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.Impl()->end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
         {
             pGlyphIter->m_aLinearPos.AdjustX(nXDelta );
         }
@@ -955,10 +957,10 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
 
 void GenericSalLayout::DropGlyph( int nStart )
 {
-    if( nStart >= static_cast<int>(m_GlyphItems.size()))
+    if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()))
         return;
 
-    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
+    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin();
     pGlyphIter += nStart;
     pGlyphIter->m_nCharPos = -1;
     pGlyphIter->m_nFlags |= GlyphItem::IS_DROPPED;
@@ -968,20 +970,20 @@ void GenericSalLayout::Simplify( bool bIsBase )
 {
     // remove dropped glyphs inplace
     size_t j = 0;
-    for(size_t i = 0; i < m_GlyphItems.size(); i++ )
+    for(size_t i = 0; i < m_GlyphItems.Impl()->size(); i++ )
     {
-        if (bIsBase && m_GlyphItems[i].IsDropped())
+        if (bIsBase && (*m_GlyphItems.Impl())[i].IsDropped())
             continue;
-        if (!bIsBase && m_GlyphItems[i].m_aGlyphId == 0)
+        if (!bIsBase && (*m_GlyphItems.Impl())[i].m_aGlyphId == 0)
             continue;
 
         if( i != j )
         {
-            m_GlyphItems[j] = m_GlyphItems[i];
+            (*m_GlyphItems.Impl())[j] = (*m_GlyphItems.Impl())[i];
         }
         j += 1;
     }
-    m_GlyphItems.erase(m_GlyphItems.begin() + j, m_GlyphItems.end());
+    m_GlyphItems.Impl()->erase(m_GlyphItems.Impl()->begin() + j, m_GlyphItems.Impl()->end());
 }
 
 MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )

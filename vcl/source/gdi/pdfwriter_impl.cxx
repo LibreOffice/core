@@ -84,6 +84,7 @@
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <impglyphitem.hxx>
 
 #include "pdfwriter_impl.hxx"
 

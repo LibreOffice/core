@@ -591,7 +591,7 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 
 bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    if (::GetCachedGlyphBoundRect(rGlyph, rRect))
+    if (rGlyph.GetCachedGlyphBoundRect(rRect))
         return true;
 
     FT_Activate_Size( maSizeFT );
@@ -616,7 +616,7 @@ bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& 
     FT_Done_Glyph( pGlyphFT );
     rRect = tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
 
-    ::CacheGlyphBoundRect(rGlyph, rRect);
+    rGlyph.CacheGlyphBoundRect(rRect);
     return true;
 }
 

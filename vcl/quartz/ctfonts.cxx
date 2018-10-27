@@ -141,7 +141,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect )
 {
     assert(this == rGlyph.m_pFontInstance);
-    if (::GetCachedGlyphBoundRect(rGlyph, rRect))
+    if (rGlyph.GetCachedGlyphBoundRect(rRect))
         return true;
 
     CGGlyph nCGGlyph = rGlyph.m_aGlyphId;
@@ -162,7 +162,7 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle&
     long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
     rRect = tools::Rectangle(xMin, -yMax, xMax, -yMin);
 
-    ::CacheGlyphBoundRect(rGlyph, rRect);
+    rGlyph.CacheGlyphBoundRect(rRect);
     return true;
 }
 
