@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
 
 #include <sfx2/dllapi.h>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/notebookbar.hxx>
 
 class SfxBindings;
@@ -43,7 +44,10 @@ public:
 
     static void RemoveListeners(SystemWindow const * pSysWindow);
 
+    /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
+    /** Show menu bar only in current frame */
+    static void ShowMenubar(SfxViewFrame* pViewFrame, bool bShow);
     static void ToggleMenubar();
 
 private:

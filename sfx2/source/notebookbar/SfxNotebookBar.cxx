@@ -179,7 +179,8 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
         RemoveListeners(pSysWindow);
         if(pSysWindow->GetNotebookBar())
             pSysWindow->CloseNotebookBar();
-        SfxNotebookBar::ShowMenubar(true);
+        if (SfxViewFrame::Current())
+            SfxNotebookBar::ShowMenubar(SfxViewFrame::Current(), true);
     }
 }
 
@@ -421,6 +422,38 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
         }
         m_bLock = false;
     }
+}
+
+void SfxNotebookBar::ShowMenubar(SfxViewFrame* pViewFrame, bool bShow)
+{
+    if (m_bLock)
+        return;
+
+    m_bLock = true;
+
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create(xContext);
+
+    Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+    if (xFrame.is())
+    {
+        const Reference<frame::XLayoutManager>& xLayoutManager = lcl_getLayoutManager(xFrame);
+        if (xLayoutManager.is())
+        {
+            xLayoutManager->lock();
+
+            if (xLayoutManager->getElement(MENUBAR_STR).is())
+            {
+                if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
+                    xLayoutManager->hideElement(MENUBAR_STR);
+                else if (!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
+                    xLayoutManager->showElement(MENUBAR_STR);
+            }
+
+            xLayoutManager->unlock();
+        }
+    }
+    m_bLock = false;
 }
 
 void SfxNotebookBar::ToggleMenubar()
