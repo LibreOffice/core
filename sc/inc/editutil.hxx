@@ -171,32 +171,6 @@ public:
     void            RepeatDefaults();
 };
 
-// 1/100 mm
-class SC_DLLPUBLIC ScTabEditEngine : public ScEditEngineDefaulter
-{
-private:
-    void    Init(const ScPatternAttr& rPattern);
-public:
-    ScTabEditEngine( ScDocument* pDoc );            // Default
-    ScTabEditEngine( const ScPatternAttr& rPattern,
-                    SfxItemPool* pEnginePool,
-                    SfxItemPool* pTextObjectPool = nullptr );
-};
-
-struct ScHeaderFieldData
-{
-    OUString    aTitle;             // title or file name (if no title)
-    OUString    aLongDocName;       // path and file name
-    OUString    aShortDocName;      // pure file name
-    OUString    aTabName;
-    DateTime    aDateTime;
-    long        nPageNo;
-    long        nTotalPages;
-    SvxNumType  eNumType;
-
-    ScHeaderFieldData();
-};
-
 // for field commands (or just fields?) in a table
 class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
 {
@@ -213,6 +187,32 @@ public:
 
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_Int32 ) override;
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor ) override;
+};
+
+// 1/100 mm
+class SC_DLLPUBLIC ScTabEditEngine : public ScFieldEditEngine
+{
+private:
+    void    Init(const ScPatternAttr& rPattern);
+public:
+    ScTabEditEngine( ScDocument* pDoc );            // Default
+    ScTabEditEngine(const ScPatternAttr& rPattern,
+                    SfxItemPool *pEngineItemPool, ScDocument *pDoc,
+                    SfxItemPool* pTextObjectPool = nullptr );
+};
+
+struct ScHeaderFieldData
+{
+    OUString    aTitle;             // title or file name (if no title)
+    OUString    aLongDocName;       // path and file name
+    OUString    aShortDocName;      // pure file name
+    OUString    aTabName;
+    DateTime    aDateTime;
+    long        nPageNo;
+    long        nTotalPages;
+    SvxNumType  eNumType;
+
+    ScHeaderFieldData();
 };
 
 // for headers/footers with fields
