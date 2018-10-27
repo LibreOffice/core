@@ -21,6 +21,7 @@
 #include "menuitemlist.hxx"
 #include "menubarwindow.hxx"
 
+#include <salframe.hxx>
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
@@ -135,8 +136,22 @@ void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     FloatingWindow::ApplySettings(rRenderContext);
 
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    if (IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItem) &&
+        IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
+    {
+        AllSettings aSettings(GetSettings());
+        ImplGetFrame()->UpdateSettings(aSettings); // Update theme colors.
+        StyleSettings aStyle(aSettings.GetStyleSettings());
+        Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
+        if (aHighlightTextColor != Color(COL_TRANSPARENT))
+        {
+            aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
+        }
+        aSettings.SetStyleSettings(aStyle);
+        OutputDevice::SetSettings(aSettings);
+    }
 
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
 
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
