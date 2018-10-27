@@ -560,15 +560,13 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
     //load the existing node names to find new names
     Sequence<OUString> aAssignments = GetNodeNames(cAddressDataAssignments);
 
-    std::vector<DBAddressDataAssignment>::iterator aAssignIter;
-    for(aAssignIter = m_aAddressDataAssignments.begin();
-                aAssignIter != m_aAddressDataAssignments.end(); ++aAssignIter)
+    for(const auto& rAssignment : m_aAddressDataAssignments)
     {
-        if(aAssignIter->bColumnAssignmentsChanged)
+        if(rAssignment.bColumnAssignmentsChanged)
         {
             //create a new node name
-            OUString sNewNode = !aAssignIter->sConfigNodeName.isEmpty() ?
-                        aAssignIter->sConfigNodeName :
+            OUString sNewNode = !rAssignment.sConfigNodeName.isEmpty() ?
+                        rAssignment.sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
             OUString sSlash = "/";
             OUString sNodePath = cAddressDataAssignments;
@@ -580,16 +578,16 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             PropertyValue* pNewValues = aNewValues.getArray();
             pNewValues[0].Name = sNodePath;
             pNewValues[0].Name += cDataSourceName;
-            pNewValues[0].Value <<= aAssignIter->aDBData.sDataSource;
+            pNewValues[0].Value <<= rAssignment.aDBData.sDataSource;
             pNewValues[1].Name = sNodePath;
             pNewValues[1].Name += cDataTableName;
-            pNewValues[1].Value <<= aAssignIter->aDBData.sCommand;
+            pNewValues[1].Value <<= rAssignment.aDBData.sCommand;
             pNewValues[2].Name = sNodePath;
             pNewValues[2].Name += cDataCommandType;
-            pNewValues[2].Value <<= aAssignIter->aDBData.nCommandType;
+            pNewValues[2].Value <<= rAssignment.aDBData.nCommandType;
             pNewValues[3].Name = sNodePath;
             pNewValues[3].Name += cDBColumnAssignments;
-            pNewValues[3].Value <<= aAssignIter->aDBColumnAssignments;
+            pNewValues[3].Value <<= rAssignment.aDBColumnAssignments;
 
             SetSetProperties(cAddressDataAssignments, aNewValues);
         }
@@ -1144,15 +1142,11 @@ Sequence< OUString> SwMailMergeConfigItem::GetColumnAssignment(
                 const SwDBData& rDBData ) const
 {
     Sequence< OUString> aRet;
-    std::vector<DBAddressDataAssignment>::iterator aAssignIter;
-    for(aAssignIter = m_pImpl->m_aAddressDataAssignments.begin();
-                aAssignIter != m_pImpl->m_aAddressDataAssignments.end(); ++aAssignIter)
+    auto aAssignIter = std::find_if(m_pImpl->m_aAddressDataAssignments.begin(), m_pImpl->m_aAddressDataAssignments.end(),
+        [&rDBData](const DBAddressDataAssignment& rAssignment) { return rAssignment.aDBData == rDBData; });
+    if (aAssignIter != m_pImpl->m_aAddressDataAssignments.end())
     {
-        if(aAssignIter->aDBData == rDBData)
-        {
-            aRet = aAssignIter->aDBColumnAssignments;
-            break;
-        }
+        aRet = aAssignIter->aDBColumnAssignments;
     }
     return aRet;
 }
@@ -1172,23 +1166,17 @@ OUString     SwMailMergeConfigItem::GetAssignedColumn(sal_uInt32 nColumn) const
 void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
                             const Sequence< OUString>& rList)
 {
-    std::vector<DBAddressDataAssignment>::iterator aAssignIter;
-    bool bFound = false;
-    for(aAssignIter = m_pImpl->m_aAddressDataAssignments.begin();
-                aAssignIter != m_pImpl->m_aAddressDataAssignments.end(); ++aAssignIter)
+    auto aAssignIter = std::find_if(m_pImpl->m_aAddressDataAssignments.begin(), m_pImpl->m_aAddressDataAssignments.end(),
+        [&rDBData](const DBAddressDataAssignment& rAssignment) { return rAssignment.aDBData == rDBData; });
+    if (aAssignIter != m_pImpl->m_aAddressDataAssignments.end())
     {
-        if(aAssignIter->aDBData == rDBData)
+        if(aAssignIter->aDBColumnAssignments != rList)
         {
-            if(aAssignIter->aDBColumnAssignments != rList)
-            {
-                aAssignIter->aDBColumnAssignments = rList;
-                aAssignIter->bColumnAssignmentsChanged = true;
-            }
-            bFound = true;
-            break;
+            aAssignIter->aDBColumnAssignments = rList;
+            aAssignIter->bColumnAssignmentsChanged = true;
         }
     }
-    if(!bFound)
+    else
     {
         DBAddressDataAssignment aAssignment;
         aAssignment.aDBData = rDBData;

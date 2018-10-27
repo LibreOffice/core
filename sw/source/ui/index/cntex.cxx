@@ -284,14 +284,12 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
                     // #i24377#
                     SwFormTokens aPattern = pForm->GetPattern(nCurrLevel);
-                    SwFormTokens::iterator aIt = aPattern.begin();
 
-                    while(aIt != aPattern.end())
+                    for(const auto& aToken : aPattern)
                     {
                         if( aSequPropVals.getLength() <= nTokenIndex)
                             aSequPropVals.realloc(nTokenIndex + 10);
 
-                        SwFormToken aToken = *aIt; // #i24377#
                         switch(aToken.eTokenType)
                         {
                             case TOKEN_ENTRY_NO     :
@@ -355,8 +353,6 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         beans::PropertyValues* pValues = aSequPropVals.getArray();
                         pValues[nTokenIndex] = aPropVals;
                         nTokenIndex++;
-
-                        ++aIt; // #i24377#
                     }
                     aSequPropVals.realloc(nTokenIndex);
 

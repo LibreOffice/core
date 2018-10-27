@@ -222,8 +222,8 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
             aNames.insert(pBase->GetName());
             pBase = pPool->Next();
         }
-        for(std::set<OUString>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
-            rBox.append_text(*it);
+        for(const auto& rName : aNames)
+            rBox.append_text(rName);
     }
     // inits for Area and Transparency TabPages
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for

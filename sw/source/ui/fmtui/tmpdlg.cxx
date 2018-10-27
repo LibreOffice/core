@@ -417,8 +417,8 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             aNames.insert(pBase->GetName());
             pBase = pPool->Next();
         }
-        for(std::set<OUString>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
-            rBox.append_text(*it);
+        for(const auto& rName : aNames)
+            rBox.append_text(rName);
     }
     else if (nId == m_nAlignId)
     {

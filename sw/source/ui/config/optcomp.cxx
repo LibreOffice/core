@@ -269,20 +269,17 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
     std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDefaultCompatDialog"));
     if (xQueryBox->run() == RET_YES)
     {
-        for ( vector< SvtCompatibilityEntry >::iterator pItem = m_pImpl->m_aList.begin();
-              pItem != m_pImpl->m_aList.end(); ++pItem )
+        auto pItem = std::find_if(m_pImpl->m_aList.begin(), m_pImpl->m_aList.end(),
+            [](const SvtCompatibilityEntry& rItem) { return rItem.isDefaultEntry(); });
+        if (pItem != m_pImpl->m_aList.end())
         {
-            if ( pItem->isDefaultEntry() )
+            const sal_Int32 nCount = m_pOptionsLB->GetEntryCount();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                const sal_Int32 nCount = m_pOptionsLB->GetEntryCount();
-                for ( sal_Int32 i = 0; i < nCount; ++i )
-                {
-                    bool bChecked = m_pOptionsLB->IsChecked(static_cast< sal_uLong >( i ));
+                bool bChecked = m_pOptionsLB->IsChecked(static_cast< sal_uLong >( i ));
 
-                    int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
-                    pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
-                }
-                break;
+                int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
+                pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
             }
         }
 
@@ -331,9 +328,8 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
 void SwCompatibilityOptPage::WriteOptions()
 {
     m_aConfigItem.Clear();
-    for ( vector< SvtCompatibilityEntry >::const_iterator pItem = m_pImpl->m_aList.begin();
-          pItem != m_pImpl->m_aList.end(); ++pItem )
-        m_aConfigItem.AppendItem(*pItem);
+    for ( const auto& rItem : m_pImpl->m_aList )
+        m_aConfigItem.AppendItem(rItem);
 }
 
 VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )

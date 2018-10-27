@@ -705,9 +705,11 @@ protected:
     {
         uno::Sequence< OUString > aNames( getCount() );
         OUString* pName = aNames.getArray();
-        DocPropsByName::iterator it_end = mNamedDocProps.end();
-        for(  DocPropsByName::iterator it = mNamedDocProps.begin(); it != it_end; ++it, ++pName )
-           *pName = it->first;
+        for (const auto& rEntry : mNamedDocProps)
+        {
+           *pName = rEntry.first;
+           ++pName;
+        }
         return aNames;
     }
 

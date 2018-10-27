@@ -254,9 +254,8 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
 {
     if (m_aLabels.find(rManufacturer) == m_aLabels.end())
         return;
-    for (std::map<OUString, SwLabelMeasure>::iterator it = m_aLabels[rManufacturer].begin();
-            it != m_aLabels[rManufacturer].end(); ++it)
-        rLabArr.push_back( lcl_CreateSwLabRec(it->first, it->second.m_aMeasure, rManufacturer) );
+    for (const auto& rEntry : m_aLabels[rManufacturer])
+        rLabArr.push_back( lcl_CreateSwLabRec(rEntry.first, rEntry.second.m_aMeasure, rManufacturer) );
 }
 
 bool    SwLabelConfig::HasLabel(const OUString& rManufacturer, const OUString& rType)

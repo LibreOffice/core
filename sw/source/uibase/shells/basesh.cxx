@@ -1283,13 +1283,11 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
     {
         bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
-        sal_uInt16 nSlot;
-        std::set<sal_uInt16>::iterator it;
-        for( it = aGrfUpdateSlots.begin(); it != aGrfUpdateSlots.end(); ++it )
+        for( const auto nSlot : aGrfUpdateSlots )
         {
             bool bSetState = false;
             bool bState = false;
-            switch( nSlot = *it )
+            switch( nSlot )
             {
             case SID_IMAP:
             case SID_IMAP_EXEC:
