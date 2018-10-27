@@ -231,15 +231,15 @@ public:
                     XML_NAMESPACE_OFFICE, XML_STYLES, true, true);
 
             // horrible hack for char styles to get display-name mapping
-            for (auto it = rCharStyles.begin(); it != rCharStyles.end(); ++it)
+            for (const auto& rCharStyle : rCharStyles)
             {
                 AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, XML_TEXT );
                 bool bEncoded(false);
                 AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
-                              EncodeStyleName(*it, &bEncoded) );
+                              EncodeStyleName(rCharStyle, &bEncoded) );
                 if (bEncoded)
                 {
-                    AddAttribute(XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, *it);
+                    AddAttribute(XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rCharStyle);
                 }
 
                 SvXMLElementExport style(*this,
@@ -248,9 +248,9 @@ public:
 
             SvxXMLNumRuleExport numRuleExport(*this);
 
-            for (auto it = rRules.begin(); it != rRules.end(); ++it)
+            for (const auto& rRule : rRules)
             {
-                ExportRule(numRuleExport, *it);
+                ExportRule(numRuleExport, rRule);
             }
         }
 

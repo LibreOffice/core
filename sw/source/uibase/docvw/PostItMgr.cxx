@@ -299,21 +299,19 @@ SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExisten
 void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 {
     EndListening(*pBroadcast);
-    for(auto i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
+    auto i = std::find_if(mvPostItFields.begin(), mvPostItFields.end(),
+        [&pBroadcast](const SwSidebarItem* pField) { return pField->GetBroadCaster() == pBroadcast; });
+    if (i != mvPostItFields.end())
     {
-        if ( (*i)->GetBroadCaster() == pBroadcast )
-        {
-            SwSidebarItem* p = (*i);
-            if (GetActiveSidebarWin() == p->pPostIt)
-                SetActiveSidebarWin(nullptr);
-            // tdf#120487 remove from list before dispose, so comment window
-            // won't be recreated due to the entry still in the list if focus
-            // transferring from the pPostIt triggers relayout of postits
-            mvPostItFields.erase(i);
-            p->pPostIt.disposeAndClear();
-            delete p;
-            break;
-        }
+        SwSidebarItem* p = (*i);
+        if (GetActiveSidebarWin() == p->pPostIt)
+            SetActiveSidebarWin(nullptr);
+        // tdf#120487 remove from list before dispose, so comment window
+        // won't be recreated due to the entry still in the list if focus
+        // transferring from the pPostIt triggers relayout of postits
+        mvPostItFields.erase(i);
+        p->pPostIt.disposeAndClear();
+        delete p;
     }
     mbLayout = true;
     PrepareView();
@@ -1690,34 +1688,32 @@ SwAnnotationWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
 {
     if (mvPostItFields.size()>1)
     {
-        for(auto i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
+        auto i = std::find_if(mvPostItFields.begin(), mvPostItFields.end(),
+            [&aPostIt](const SwSidebarItem* pField) { return pField->pPostIt == aPostIt; });
+        if (i == mvPostItFields.end())
+            return nullptr;
+
+        auto iNextPostIt = i;
+        if (aDirection == KEY_PAGEUP)
         {
-            if ( (*i)->pPostIt == aPostIt)
+            if ( iNextPostIt == mvPostItFields.begin() )
             {
-                auto iNextPostIt  = i;
-                if (aDirection == KEY_PAGEUP)
-                {
-                    if ( iNextPostIt == mvPostItFields.begin() )
-                    {
-                        return nullptr;
-                    }
-                    --iNextPostIt;
-                }
-                else
-                {
-                    ++iNextPostIt;
-                    if ( iNextPostIt == mvPostItFields.end() )
-                    {
-                        return nullptr;
-                    }
-                }
-                // lets quit, we are back at the beginning
-                if ( (*iNextPostIt)->pPostIt == aPostIt)
-                    return nullptr;
-                return (*iNextPostIt)->pPostIt;
+                return nullptr;
+            }
+            --iNextPostIt;
+        }
+        else
+        {
+            ++iNextPostIt;
+            if ( iNextPostIt == mvPostItFields.end() )
+            {
+                return nullptr;
             }
         }
-        return nullptr;
+        // lets quit, we are back at the beginning
+        if ( (*iNextPostIt)->pPostIt == aPostIt)
+            return nullptr;
+        return (*iNextPostIt)->pPostIt;
     }
     else
         return nullptr;

@@ -226,14 +226,11 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     rTransferable.m_refCount++;
     {
         // Remove previously added, but no longer existing weak references.
-        for (auto it = mxTransferables.begin(); it != mxTransferables.end();)
-        {
-            uno::Reference<lang::XUnoTunnel> xTunnel(it->get(), uno::UNO_QUERY);
-            if (!xTunnel.is())
-                it = mxTransferables.erase(it);
-            else
-                ++it;
-        }
+        mxTransferables.erase(std::remove_if(mxTransferables.begin(), mxTransferables.end(),
+            [](const css::uno::WeakReference<css::lang::XUnoTunnel>& rTunnel) {
+                uno::Reference<lang::XUnoTunnel> xTunnel(rTunnel.get(), uno::UNO_QUERY);
+                return !xTunnel.is();
+            }), mxTransferables.end());
 
         mxTransferables.emplace_back(uno::Reference<lang::XUnoTunnel>(&rTransferable));
     }

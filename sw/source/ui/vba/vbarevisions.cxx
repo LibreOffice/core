@@ -146,12 +146,8 @@ void SAL_CALL SwVbaRevisions::AcceptAll(  )
         aRevisions.push_back( xRevision );
     }
 
-    std::vector< uno::Reference< word::XRevision > >::iterator it = aRevisions.begin();
-    for( ; it != aRevisions.end(); ++it )
-    {
-        uno::Reference< word::XRevision > xRevision( *it );
+    for( const auto& xRevision : aRevisions )
         xRevision->Accept();
-    }
 }
 
 void SAL_CALL SwVbaRevisions::RejectAll(  )

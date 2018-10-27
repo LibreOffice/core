@@ -835,10 +835,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             if ( aD.GetTransferable().is() )
             {
                 DataFlavorExVector              aVector( aD.GetDataFlavorExVector() );
-                DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
 
-                while( aIter != aEnd )
-                    AddFormat( *aIter++ );
+                for( const auto& rItem : aVector )
+                    AddFormat( rItem );
             }
         }
         m_eBufferType = TransferBufferType::Ole;
@@ -877,10 +876,8 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                     vDdeMarks.push_back(ppMark->get());
             }
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
-            for(std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
-                ppMark != vDdeMarks.end();
-                ++ppMark)
-                pMarkAccess->deleteMark(*ppMark);
+            for(const auto& rpMark : vDdeMarks)
+                pMarkAccess->deleteMark(rpMark);
         }
 
         // a new one was created in CORE (OLE objects copied!)
