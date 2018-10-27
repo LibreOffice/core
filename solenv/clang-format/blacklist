@@ -7524,7 +7524,6 @@ include/svx/xcolit.hxx
 include/svx/xdash.hxx
 include/svx/xdef.hxx
 include/svx/xenum.hxx
-include/svx/xexch.hxx
 include/svx/xfillit.hxx
 include/svx/xfillit0.hxx
 include/svx/xflasit.hxx
@@ -14795,7 +14794,6 @@ svx/source/xoutdev/_xpoly.cxx
 svx/source/xoutdev/xattr.cxx
 svx/source/xoutdev/xattr2.cxx
 svx/source/xoutdev/xattrbmp.cxx
-svx/source/xoutdev/xexch.cxx
 svx/source/xoutdev/xpool.cxx
 svx/source/xoutdev/xtabbtmp.cxx
 svx/source/xoutdev/xtabcolr.cxx

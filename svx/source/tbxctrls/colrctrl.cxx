@@ -37,7 +37,6 @@
 #include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/xexch.hxx>
 #include <helpids.h>
 #include <vcl/svapp.hxx>
 
