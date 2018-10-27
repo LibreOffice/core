@@ -70,6 +70,12 @@ void SidebarDockingWindow::dispose()
 
 void SidebarDockingWindow::DoDispose()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+    }
+
     Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpSidebarController.get()), UNO_QUERY);
     mpSidebarController.clear();
     if (xComponent.is())
@@ -104,10 +110,8 @@ void SidebarDockingWindow::Resize()
 
 void SidebarDockingWindow::NotifyResize()
 {
-    SAL_WARN("sw", "SfxDockingWindow::Resize: " << reinterpret_cast<sal_IntPtr>(SfxViewShell::Current()));
     if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
     {
-        SAL_WARN("sw", "SfxDockingWindow::Resize: Creating!");
         if (!GetLOKNotifier())
             SetLOKNotifier(SfxViewShell::Current());
 
@@ -118,7 +122,6 @@ void SidebarDockingWindow::NotifyResize()
             aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
             aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
             pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-            SAL_WARN("sw", "SfxDockingWindow::Resize: Created!");
         }
     }
 }

@@ -1118,11 +1118,6 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 
 void SidebarController::RequestCloseDeck()
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        mpCurrentDeck->GetLOKNotifier()->notifyWindow(mpCurrentDeck->GetLOKWindowId(), "close");
-    }
-
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
