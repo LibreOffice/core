@@ -32,7 +32,9 @@ private:
     std::vector<OString>    m_sReferences;
     OString    m_sMsgCtxt;
     OString    m_sMsgId;
+    OString    m_sMsgIdPlural;
     OString    m_sMsgStr;
+    std::vector<OString>    m_sMsgStrPlural;
     bool       m_bFuzzy;
     bool       m_bCFormat;
     bool       m_bNull;
@@ -117,7 +119,9 @@ GenPoEntry::GenPoEntry()
     , m_sReferences( std::vector<OString>() )
     , m_sMsgCtxt( OString() )
     , m_sMsgId( OString() )
+    , m_sMsgIdPlural( OString() )
     , m_sMsgStr( OString() )
+    , m_sMsgStrPlural( std::vector<OString>() )
     , m_bFuzzy( false )
     , m_bCFormat( false )
     , m_bNull( false )
@@ -147,8 +151,16 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
                   << std::endl;
     rOFStream << "msgid "
               << lcl_GenMsgString(m_sMsgId) << std::endl;
-    rOFStream << "msgstr "
-              << lcl_GenMsgString(m_sMsgStr) << std::endl;
+    if ( !m_sMsgIdPlural.isEmpty() )
+        rOFStream << "msgid_plural "
+                  << lcl_GenMsgString(m_sMsgIdPlural)
+                  << std::endl;
+    if ( !m_sMsgStrPlural.empty() )
+        for(auto & line : m_sMsgStrPlural)
+            rOFStream << line.copy(0,10) << lcl_GenMsgString(line.copy(10)) << std::endl;
+    else
+        rOFStream << "msgstr "
+                  << lcl_GenMsgString(m_sMsgStr) << std::endl;
 }
 
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)
@@ -195,10 +207,21 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
             m_sMsgId = lcl_GenNormString(sLine.copy(6));
             pLastMsg = &m_sMsgId;
         }
+        else if (sLine.startsWith("msgid_plural "))
+        {
+            m_sMsgIdPlural = lcl_GenNormString(sLine.copy(13));
+            pLastMsg = &m_sMsgIdPlural;
+        }
         else if (sLine.startsWith("msgstr "))
         {
             m_sMsgStr = lcl_GenNormString(sLine.copy(7));
             pLastMsg = &m_sMsgStr;
+        }
+        else if (sLine.startsWith("msgstr["))
+        {
+            // assume there are no more than 10 plural forms...
+            // and that plural strings are never split to multi-line in po
+            m_sMsgStrPlural.push_back(sLine.copy(0,10) + lcl_GenNormString(sLine.copy(10)));
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
