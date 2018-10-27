@@ -41,7 +41,7 @@ class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
 typedef struct fpdf_document_t__* FPDF_DOCUMENT;
-typedef struct fpdf_pageobject_t__* FPDF_PAGEOBJECT;  // (text, path, etc.)
+typedef struct fpdf_pageobject_t__* FPDF_PAGEOBJECT; // (text, path, etc.)
 typedef struct fpdf_textpage_t__* FPDF_TEXTPAGE;
 
 // Helper Class to import PDF
@@ -60,13 +60,13 @@ class ImpSdrPdfImport final
         {
         }
 
-        Matrix(double a, double b, double c, double d, double e, double f)
-            : ma(a)
-            , mb(b)
-            , mc(c)
-            , md(d)
-            , me(e)
-            , mf(f)
+        Matrix(double da, double db, double dc, double dd, double de, double df)
+            : ma(da)
+            , mb(db)
+            , mc(dc)
+            , md(dd)
+            , me(de)
+            , mf(df)
         {
         }
 
@@ -87,7 +87,6 @@ class ImpSdrPdfImport final
         double d() const { return md; }
         double e() const { return me; }
         double f() const { return mf; }
-
         /// Mutliply this * other.
         void Concatinate(const Matrix& other)
         {
