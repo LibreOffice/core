@@ -441,7 +441,7 @@ void SbiProcDef::Match( std::unique_ptr<SbiProcDef> pOld )
         pIn  = pOld->pIn;
         std::unique_ptr<SbiSymDef> tmp(this);
         std::swap(pIn->m_Data[nPos], tmp);
-        tmp.release();
+        (void)tmp.release();
     }
 }
 

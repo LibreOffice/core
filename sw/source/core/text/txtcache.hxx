@@ -37,7 +37,12 @@ public:
     SwParaPortion *GetPara()       { return pLine.get(); }
     const SwParaPortion *GetPara() const { return pLine.get(); }
 
-    void SetPara( SwParaPortion *pNew, bool bDelete ) { if (!bDelete) pLine.release(); pLine.reset( pNew ); }
+    void SetPara(SwParaPortion* pNew, bool bDelete)
+    {
+        if (!bDelete)
+            (void)pLine.release();
+        pLine.reset(pNew);
+    }
 };
 
 class SwTextLineAccess : public SwCacheAccess

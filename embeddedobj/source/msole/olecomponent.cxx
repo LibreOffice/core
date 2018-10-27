@@ -913,8 +913,8 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent const * pOleLinkComponen
         if ( SUCCEEDED( hr ) && aMonType == MKSYS_FILEMONIKER )
         {
             ComSmart< IMalloc > pMalloc;
-            CoGetMalloc( 1, &pMalloc ); // if fails there will be a memory leak
-            OSL_ENSURE( pMalloc, "CoGetMalloc() failed!" );
+            hr = CoGetMalloc( 1, &pMalloc ); // if fails there will be a memory leak
+            OSL_ENSURE(SUCCEEDED(hr) && pMalloc, "CoGetMalloc() failed!");
 
             LPOLESTR pOleStr = nullptr;
             hr = pOleLink->GetSourceDisplayName( &pOleStr );

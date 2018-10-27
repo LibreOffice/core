@@ -220,9 +220,9 @@ namespace desktop
                         }
                     }
 
-                    freopen("CON", "r", stdin);
-                    freopen("CON", "w", stdout);
-                    freopen("CON", "w", stderr);
+                    (void)freopen("CON", "r", stdin);
+                    (void)freopen("CON", "w", stdout);
+                    (void)freopen("CON", "w", stderr);
 
                     std::ios::sync_with_stdio(true);
 

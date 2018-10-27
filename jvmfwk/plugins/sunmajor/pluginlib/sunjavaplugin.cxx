@@ -490,7 +490,7 @@ static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
     if (slash == -1)
         return;
 
-    LoadLibraryW(
+    (void)LoadLibraryW(
         o3tl::toW(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
 }
 

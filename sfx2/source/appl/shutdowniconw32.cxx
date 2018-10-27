@@ -621,8 +621,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
         hModule = GetModuleHandleW( pModuleName );
         if ( hModule == nullptr )
         {
-            LoadLibraryW( pModuleName );
-            hModule = GetModuleHandleW( pModuleName );
+            hModule = LoadLibraryW(pModuleName);
         }
     }
 
