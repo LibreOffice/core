@@ -127,7 +127,7 @@ void SbxBase::RemoveFactory( SbxFactory const * pFac )
         {
             std::unique_ptr<SbxFactory> tmp(std::move(*it));
             r.m_Factories.erase( it );
-            tmp.release();
+            (void)tmp.release();
             break;
         }
     }

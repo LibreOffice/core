@@ -399,7 +399,7 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
         CheckWin32Error("MsiSetPropertyW", MsiSetPropertyW(hInstall, L"inst_msu", sBinary.c_str()));
 
         // Don't delete the file: it will be done by following actions (inst_msu or cleanup_msu)
-        aDeleteFileGuard.release();
+        (void)aDeleteFileGuard.release();
         return ERROR_SUCCESS;
     }
     catch (std::exception& e)

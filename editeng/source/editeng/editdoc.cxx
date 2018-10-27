@@ -2100,7 +2100,7 @@ void EditDoc::Release(sal_Int32 nPos)
         SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
         return;
     }
-    maContents[nPos].release();
+    (void)maContents[nPos].release();
     maContents.erase(maContents.begin() + nPos);
 }
 
