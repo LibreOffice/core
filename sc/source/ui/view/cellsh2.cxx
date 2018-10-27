@@ -713,18 +713,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxStringItem* pItem =
-                        static_cast<const SfxStringItem*>(&pReqArgs->Get( SID_SELECT_DB ));
-
-                    if( pItem )
-                    {
-                        pTabViewShell->GotoDBArea( pItem->GetValue() );
-                        rReq.Done();
-                    }
-                    else
-                    {
-                        OSL_FAIL("NULL");
-                    }
+                    const SfxStringItem& rItem
+                        = static_cast<const SfxStringItem&>(pReqArgs->Get(SID_SELECT_DB));
+                    pTabViewShell->GotoDBArea(rItem.GetValue());
+                    rReq.Done();
                 }
                 else
                 {

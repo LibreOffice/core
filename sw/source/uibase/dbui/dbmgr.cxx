@@ -2357,12 +2357,9 @@ bool SwDBManager::ToRecordId(sal_Int32 nSet)
         return false;
     bool bRet = false;
     sal_Int32 nAbsPos = nSet;
-
-    if(nAbsPos >= 0)
-    {
-        bRet = lcl_MoveAbsolute(pImpl->pMergeData, nAbsPos);
-        pImpl->pMergeData->bEndOfDB = !bRet;
-    }
+    assert(nAbsPos >= 0);
+    bRet = lcl_MoveAbsolute(pImpl->pMergeData, nAbsPos);
+    pImpl->pMergeData->bEndOfDB = !bRet;
     return bRet;
 }
 

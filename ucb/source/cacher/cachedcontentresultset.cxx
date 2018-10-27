@@ -1679,7 +1679,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( m_nRow )
         return false;
     if( m_nKnownCount )
-        return !m_nRow;
+        return true;
     if( m_bFinalCount )
         return false;
 
@@ -1717,7 +1717,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( m_nRow != 1 )
             return false;
         if( m_nKnownCount )
-            return m_nRow == 1;
+            return true;
         if( m_bFinalCount )
             return false;
 

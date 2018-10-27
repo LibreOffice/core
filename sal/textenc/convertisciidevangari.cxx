@@ -194,11 +194,9 @@ sal_Size IsciiDevanagariToUnicode::convert(
                 continue;
             if (eAction == BAD_INPUT_STOP)
                 break;
-            if (eAction == BAD_INPUT_NO_OUTPUT)
-            {
-                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
-                break;
-            }
+            assert(eAction == BAD_INPUT_NO_OUTPUT);
+            nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
+            break;
         }
         ++nConverted;
         if (bDouble)

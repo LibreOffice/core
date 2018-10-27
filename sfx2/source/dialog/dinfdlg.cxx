@@ -2132,7 +2132,6 @@ IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, Button*, void)
 
 bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
 {
-    bool bModified = false;
     const SfxPoolItem* pItem = nullptr;
     SfxDocumentInfoItem* pInfo = nullptr;
     bool bMustDelete = false;
@@ -2168,16 +2167,13 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    bModified = true; //!!!
-
     if (pInfo)
     {
-        if ( bModified )
-            rSet->Put( *pInfo );
+        rSet->Put(*pInfo);
         if ( bMustDelete )
             delete pInfo;
     }
-    return bModified;
+    return true;
 }
 
 void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )

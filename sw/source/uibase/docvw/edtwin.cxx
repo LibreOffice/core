@@ -1458,7 +1458,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 if( KEY_UP == nKey ) nKey = KEY_LEFT;
                 else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
                 else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
-                else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
+                else /* KEY_RIGHT == nKey */ nKey = KEY_UP;
             }
 
             if ( rSh.IsInRightToLeftText() )

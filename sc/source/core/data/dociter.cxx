@@ -1739,14 +1739,6 @@ bool ScQueryCellIterator::BinarySearch()
     {
         size_t nMid = (nLo+nHi)/2;
         size_t i = nMid;
-        if (i > nHi)
-        {
-            if (nMid > 0)
-                nHi = nMid - 1;
-            else
-                bDone = true;
-            continue; // while
-        }
 
         aCellData = aIndexer.getCell(i);
         aCell = aCellData.first;

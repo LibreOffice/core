@@ -445,24 +445,21 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     uno::Reference < XAccessibleTable > xTable ( getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY );
     if (xTable.is())
     {
-        sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
+        const sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
                     rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
                     rRange.aStart.Row() + 1));
         uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
         uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
-        if (pTargetSet)
+        sal_uInt32 nPos(0);
+        for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
         {
-            sal_uInt32 nPos(0);
-            for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
+            for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Col()); ++nCol)
             {
-                for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Col()); ++nCol)
-                {
-                    pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
-                    ++nPos;
-                }
+                pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
+                ++nPos;
             }
-            OSL_ENSURE(nCount == nPos, "something wents wrong");
         }
+        OSL_ENSURE(nCount == nPos, "something wents wrong");
         AccessibleRelation aRelation;
         aRelation.RelationType = aRelationType;
         aRelation.TargetSet = aTargetSet;

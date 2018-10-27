@@ -779,7 +779,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             bool bChecked = aWarningBox.get_active();
                             if (bChecked)
                             {
-                                aAppOptions.SetShowSharedDocumentWarning( !bChecked );
+                                aAppOptions.SetShowSharedDocumentWarning(false);
                                 SC_MOD()->SetAppOptions( aAppOptions );
                             }
                         }
@@ -1772,17 +1772,11 @@ bool ScDocShell::Save()
 
     PrepareSaveGuard aPrepareGuard( *this);
 
-    SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
-    if (pFrame1)
+    if (const auto pFrame1 = SfxViewFrame::GetFirst(this))
     {
-        vcl::Window* pWindow = &pFrame1->GetWindow();
-        if ( pWindow )
+        if (auto pSysWin = pFrame1->GetWindow().GetSystemWindow())
         {
-            vcl::Window* pSysWin = pWindow->GetSystemWindow();
-            if ( pSysWin )
-            {
-                pSysWin->SetAccessibleName(OUString());
-            }
+            pSysWin->SetAccessibleName(OUString());
         }
     }
     //  wait cursor is handled with progress bar
