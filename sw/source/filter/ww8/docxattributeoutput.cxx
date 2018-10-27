@@ -5894,7 +5894,8 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                     // footer, otherwise we go with the properties of the
                     // section (and not the page style), which never has
                     // headers/footers.
-                    if (const SwPageDesc* pPageDesc = pSectionInfo->pPageDesc)
+                    const SwPageDesc* pPageDesc = pSectionInfo->pPageDesc;
+                    if ( pPageDesc && pPageDesc != m_rExport.m_pCurrentPageDesc )
                     {
                         const auto& rMaster = pPageDesc->GetMaster();
                         bEmit = rMaster.GetHeader().IsActive() || rMaster.GetFooter().IsActive();
