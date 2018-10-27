@@ -50,7 +50,6 @@
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xexch.hxx>
 #include <svx/xmlexchg.hxx>
 #include <svx/dbaexchange.hxx>
 #include <svx/clipfmtitem.hxx>

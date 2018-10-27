@@ -26,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svx/xexch.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
