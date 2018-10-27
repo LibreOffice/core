@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_f6115855",
+        "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-27T20:58:49Z",
+      "side": 1,
+      "message": "Is it really useful in this context? Because when a table is selected (not in a cell edit mode), this will paste into a separate textbox.",
+      "revId": "1d4e8eaf78fc79818e849cc87ec19d59de0350e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
