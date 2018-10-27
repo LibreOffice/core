@@ -5,5 +5,4 @@
  <file-entry media-type="text/xml" full-path="DocumentList.xml"/>
  <file-entry media-type="text/xml" full-path="WordExceptList.xml"/>
  <file-entry media-type="text/xml" full-path="SentenceExceptList.xml"/>
- <file-entry media-type="text/xml" full-path="BlockList.xml"/>
 </manifest>

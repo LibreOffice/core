@@ -65,20 +65,16 @@ extras_AUTOCORR_XMLFILES := \
 	bg/META-INF/manifest.xml \
 	bg/SentenceExceptList.xml \
 	bg/WordExceptList.xml \
-	ca/BlockList.xml \
 	ca/DocumentList.xml \
 	ca/META-INF/manifest.xml \
 	ca/SentenceExceptList.xml \
 	ca/WordExceptList.xml \
-	cs/BlockList.xml \
 	cs/DocumentList.xml \
 	cs/META-INF/manifest.xml \
-	da/BlockList.xml \
 	da/DocumentList.xml \
 	da/META-INF/manifest.xml \
 	da/SentenceExceptList.xml \
 	da/WordExceptList.xml \
-	de/BlockList.xml \
 	de/DocumentList.xml \
 	de/META-INF/manifest.xml \
 	de/SentenceExceptList.xml \
@@ -87,17 +83,14 @@ extras_AUTOCORR_XMLFILES := \
 	el/META-INF/manifest.xml \
 	el/SentenceExceptList.xml \
 	el/WordExceptList.xml \
-	en-AU/BlockList.xml \
 	en-AU/DocumentList.xml \
 	en-AU/META-INF/manifest.xml \
 	en-AU/SentenceExceptList.xml \
 	en-AU/WordExceptList.xml \
-	en-GB/BlockList.xml \
 	en-GB/DocumentList.xml \
 	en-GB/META-INF/manifest.xml \
 	en-GB/SentenceExceptList.xml \
 	en-GB/WordExceptList.xml \
-	en-US/BlockList.xml \
 	en-US/DocumentList.xml \
 	en-US/META-INF/manifest.xml \
 	en-US/SentenceExceptList.xml \
@@ -106,14 +99,12 @@ extras_AUTOCORR_XMLFILES := \
 	en-ZA/META-INF/manifest.xml \
 	en-ZA/SentenceExceptList.xml \
 	en-ZA/WordExceptList.xml \
-	es/BlockList.xml \
 	es/DocumentList.xml \
 	es/META-INF/manifest.xml \
 	es/SentenceExceptList.xml \
 	es/WordExceptList.xml \
 	fa/DocumentList.xml \
 	fa/META-INF/manifest.xml \
-	fi/BlockList.xml \
 	fi/DocumentList.xml \
 	fi/META-INF/manifest.xml \
 	fi/SentenceExceptList.xml \
@@ -130,14 +121,12 @@ extras_AUTOCORR_XMLFILES := \
 	hr/META-INF/manifest.xml \
 	hr/SentenceExceptList.xml \
 	hr/WordExceptList.xml \
-	hu/BlockList.xml \
 	hu/DocumentList.xml \
 	hu/META-INF/manifest.xml \
 	hu/SentenceExceptList.xml \
 	hu/WordExceptList.xml \
 	is/META-INF/manifest.xml \
 	is/SentenceExceptList.xml \
-	it/BlockList.xml \
 	it/DocumentList.xml \
 	it/META-INF/manifest.xml \
 	it/SentenceExceptList.xml \
@@ -150,7 +139,6 @@ extras_AUTOCORR_XMLFILES := \
 	ko/SentenceExceptList.xml \
 	lb-LU/DocumentList.xml \
 	lb-LU/META-INF/manifest.xml \
-	lt/BlockList.xml \
 	lt/DocumentList.xml \
 	lt/META-INF/manifest.xml \
 	lt/SentenceExceptList.xml \
@@ -159,12 +147,10 @@ extras_AUTOCORR_XMLFILES := \
 	mn/META-INF/manifest.xml \
 	mn/SentenceExceptList.xml \
 	mn/WordExceptList.xml \
-	nl-BE/BlockList.xml \
 	nl-BE/DocumentList.xml \
 	nl-BE/META-INF/manifest.xml \
 	nl-BE/SentenceExceptList.xml \
 	nl-BE/WordExceptList.xml \
-	nl/BlockList.xml \
 	nl/DocumentList.xml \
 	nl/META-INF/manifest.xml \
 	nl/SentenceExceptList.xml \
@@ -173,22 +159,18 @@ extras_AUTOCORR_XMLFILES := \
 	pl/META-INF/manifest.xml \
 	pl/SentenceExceptList.xml \
 	pl/WordExceptList.xml \
-	pt-BR/BlockList.xml \
 	pt-BR/DocumentList.xml \
 	pt-BR/META-INF/manifest.xml \
 	pt-BR/SentenceExceptList.xml \
 	pt-BR/WordExceptList.xml \
-	pt/BlockList.xml \
 	pt/DocumentList.xml \
 	pt/META-INF/manifest.xml \
 	pt/SentenceExceptList.xml \
 	pt/WordExceptList.xml \
-	ro/BlockList.xml \
 	ro/DocumentList.xml \
 	ro/META-INF/manifest.xml \
 	ro/SentenceExceptList.xml \
 	ro/WordExceptList.xml \
-	ru/BlockList.xml \
 	ru/DocumentList.xml \
 	ru/META-INF/manifest.xml \
 	ru/SentenceExceptList.xml \
@@ -225,7 +207,6 @@ extras_AUTOCORR_XMLFILES := \
 	sr-RS/META-INF/manifest.xml \
 	sr-RS/SentenceExceptList.xml \
 	sr-RS/WordExceptList.xml \
-	sv/BlockList.xml \
 	sv/DocumentList.xml \
 	sv/META-INF/manifest.xml \
 	sv/SentenceExceptList.xml \
