@@ -24,6 +24,7 @@
 
 #include <vcl/svapp.hxx>
 #include <fontinstance.hxx>
+#include <impglyphitem.hxx>
 #include <impfont.hxx>
 #include <fontattributes.hxx>
 
@@ -590,8 +591,7 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 
 bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    assert(mpFontInstance.is());
-    if (mpFontInstance.is() && mpFontInstance->GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
+    if (::GetCachedGlyphBoundRect(rGlyph, rRect))
         return true;
 
     FT_Activate_Size( maSizeFT );
@@ -613,13 +613,10 @@ bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& 
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
-
-    rRect = tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
-    if (mpFontInstance.is())
-        mpFontInstance->CacheGlyphBoundRect(rGlyph.m_aGlyphId, rRect);
-
     FT_Done_Glyph( pGlyphFT );
+    rRect = tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
 
+    ::CacheGlyphBoundRect(rGlyph, rRect);
     return true;
 }
 

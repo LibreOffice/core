@@ -34,6 +34,7 @@
 #endif
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
+#include <impglyphitem.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
@@ -139,7 +140,8 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 
 bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect )
 {
-    if (GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
+    assert(this == rGlyph.m_pFontInstance);
+    if (::GetCachedGlyphBoundRect(rGlyph, rRect))
         return true;
 
     CGGlyph nCGGlyph = rGlyph.m_aGlyphId;
@@ -159,7 +161,8 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle&
     long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
     long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
     rRect = tools::Rectangle(xMin, -yMax, xMax, -yMin);
-    CacheGlyphBoundRect(rGlyph.m_aGlyphId, rRect);
+
+    ::CacheGlyphBoundRect(rGlyph, rRect);
     return true;
 }
 

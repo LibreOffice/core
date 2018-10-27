@@ -57,6 +57,7 @@
 #include <win/winlayout.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
+#include <impglyphitem.hxx>
 
 using namespace vcl;
 
@@ -1327,21 +1328,17 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    rtl::Reference<WinFontInstance> pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
-    assert(pFont.is());
-
-    if (pFont.is() && pFont->GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
+    if (::GetCachedGlyphBoundRect(rGlyph, rRect))
         return true;
+
+    WinFontInstance* pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
 
     HDC hDC = getHDC();
     HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
     float fFontScale = 1.0;
-    if (pFont.is())
-    {
-        if (hFont != pFont->GetHFONT())
-            SelectObject(hDC, pFont->GetHFONT());
-        fFontScale = pFont->GetScale();
-    }
+    if (hFont != pFont->GetHFONT())
+        SelectObject(hDC, pFont->GetHFONT());
+    fFontScale = pFont->GetScale();
 
     // use unity matrix
     MAT2 aMat;
@@ -1355,9 +1352,9 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
     DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
-    if (pFont.is() && hFont != pFont->GetHFONT())
+    if (hFont != pFont->GetHFONT())
         SelectObject(hDC, hFont);
-    if( nSize == GDI_ERROR )
+    if (nSize == GDI_ERROR)
         return false;
 
     rRect = tools::Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
@@ -1367,8 +1364,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
     rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
 
-    pFont->CacheGlyphBoundRect(rGlyph.m_aGlyphId, rRect);
-
+    ::CacheGlyphBoundRect(rGlyph, rRect);
     return true;
 }
 
