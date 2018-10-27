@@ -71,6 +71,7 @@
 #include <ViewClipboard.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
@@ -1329,14 +1330,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && pPickObj && CHECK_FORMAT_TRANS( SotClipboardFormatId::XFA ) )
     {
-        ::tools::SvRef<SotStorageStream> xStm;
-
-        if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::XFA, xStm ) )
+        uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, ""));
+        uno::Sequence<beans::NamedValue> props;
+        if (data >>= props)
         {
-            XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
-
-            ReadXFillExchangeData( *xStm, aFillData );
-
             if( IsUndoEnabled() )
             {
                 BegUndo( SdResId(STR_UNDO_DRAGDROP) );
@@ -1344,15 +1341,27 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 EndUndo();
             }
 
-            XFillAttrSetItem*   pSetItem = aFillData.GetXFillAttrSetItem();
-            SfxItemSet          rSet = pSetItem->GetItemSet();
-            drawing::FillStyle eFill = rSet.Get( XATTR_FILLSTYLE ).GetValue();
+            ::comphelper::SequenceAsHashMap const map(props);
+            drawing::FillStyle eFill(drawing::FillStyle_BITMAP); // default to something that's ignored
+            Color aColor(COL_BLACK);
+            auto it = map.find("FillStyle");
+            if (it != map.end())
+            {
+                XFillStyleItem style;
+                style.PutValue(it->second, 0);
+                eFill = style.GetValue();
+            }
+            it = map.find("FillColor");
+            if (it != map.end())
+            {
+                XFillColorItem color;
+                color.PutValue(it->second, 0);
+                aColor = color.GetColorValue();
+            }
 
             if( eFill == drawing::FillStyle_SOLID || eFill == drawing::FillStyle_NONE )
             {
-                const XFillColorItem&   rColItem = rSet.Get( XATTR_FILLCOLOR );
-                Color                   aColor( rColItem.GetColorValue() );
-                OUString                aName( rColItem.GetName() );
+                OUString                aName;
                 SfxItemSet              aSet( mrDoc.GetPool() );
                 bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();

@@ -136,7 +136,7 @@ static const std::vector< FormatEntry > g_TranslTable {
     // SotClipboardFormatId::SVIM
         FormatEntry("application/x-openoffice-svim;windows_formatname=\"SVIM (StarView ImageMap)\"", "SVIM (StarView ImageMap)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::XFA
-        FormatEntry("application/x-openoffice-xfa;windows_formatname=\"XFA (XOutDev FillAttr)\"", "XFA (XOutDev FillAttr)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-libreoffice-xfa;windows_formatname=\"XFA (XOutDev FillAttr Any)\"", "XFA (XOutDev FillAttr Any)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT
         FormatEntry("application/vnd.oasis.opendocument.text-flat-xml", "EditEngine ODF", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::INTERNALLINK_STATE
