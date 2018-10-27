@@ -1927,6 +1927,8 @@ sw/res/sr20015.svg cmd/sc_showannotations.svg
 sw/res/sr20016.svg cmd/sc_recsearch.svg
 sw/res/sr20017.svg cmd/sc_insertindexesentry.svg
 
+sw/res/sx01.svg cmd/sc_dbqueryedit.svg
+sw/res/sx02.svg res/sx03187.svg
 sw/res/sx03.svg cmd/sc_dbqueryedit.svg
 
 sw/res/wr01.svg cmd/32/wrapoff.svg

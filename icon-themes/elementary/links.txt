@@ -1927,6 +1927,8 @@ sw/res/sr20015.png cmd/sc_showannotations.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 
+sw/res/sx01.png cmd/sc_dbqueryedit.png
+sw/res/sx02.png res/sx03187.png
 sw/res/sx03.png cmd/sc_dbqueryedit.png
 
 sw/res/wr01.png cmd/32/wrapoff.png
