@@ -70,8 +70,8 @@ public: // TODO: make data members private
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
-    bool GetCachedGlyphBoundRect(sal_GlyphId, tools::Rectangle &);
-    void CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &);
+    bool GetCachedGlyphBoundRect(sal_GlyphId, tools::Rectangle &) const;
+    void CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &) const;
 
     int GetKashidaWidth();
 
@@ -92,7 +92,7 @@ private:
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
-    ImplFontCache * mpFontCache;
+    mutable ImplFontCache * mpFontCache;
     const FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
