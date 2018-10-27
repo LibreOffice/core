@@ -1300,6 +1300,8 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     Size aBorder;
     aBorder = CalcWindowSize(aBorder);
     mnBorderHeight = aBorder.Height();
+
+    set_id("sc_input_window");
 }
 
 ScTextWnd::~ScTextWnd()
