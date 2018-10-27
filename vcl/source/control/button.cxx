@@ -3808,8 +3808,8 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     if (!rCtrlData.mpDisclosureMinus)
         rCtrlData.mpDisclosureMinus.reset(new Image(BitmapEx(SV_DISCLOSURE_MINUS)));
 
-    Image* pImg = nullptr;
-    pImg = IsChecked() ? rCtrlData.mpDisclosureMinus.get() : rCtrlData.mpDisclosurePlus.get();
+    Image* pImg
+        = IsChecked() ? rCtrlData.mpDisclosureMinus.get() : rCtrlData.mpDisclosurePlus.get();
 
     SAL_WARN_IF(!pImg, "vcl", "no disclosure image");
     if (!pImg)

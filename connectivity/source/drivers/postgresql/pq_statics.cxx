@@ -124,7 +124,6 @@ Statics & getStatics()
             statics.NO_NULLS = "NO_NULLS";
             statics.NULABLE = "NULABLE";
             statics.NULLABLE_UNKNOWN = "NULLABLE_UNKNOWN";
-            statics.cPERCENT = "%";
 
             statics.TYPE = "Type";
             statics.TYPE_NAME = "TypeName";

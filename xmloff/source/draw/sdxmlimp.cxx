@@ -666,8 +666,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 /*nElement*/,
 SvXMLImportContext *SdXMLImport::CreateBodyContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>&)
 {
-    SvXMLImportContext *pContext = nullptr;
-    pContext = new SdXMLBodyContext(*this, rLocalName);
+    SvXMLImportContext* pContext = new SdXMLBodyContext(*this, rLocalName);
     return pContext;
 }
 

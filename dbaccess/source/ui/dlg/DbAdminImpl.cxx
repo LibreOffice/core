@@ -258,7 +258,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             AuthenticationRequest aRequest;
             aRequest.ServerName = sName;
             aRequest.Diagnostic = sLoginRequest;
-            aRequest.HasRealm   = aRequest.HasAccount = false;
+            aRequest.HasRealm   = false;
             // aRequest.Realm
             aRequest.HasUserName = pUser != nullptr;
             aRequest.UserName    = pUser ? pUser->GetValue() : OUString();

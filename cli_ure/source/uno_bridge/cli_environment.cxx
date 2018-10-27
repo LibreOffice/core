@@ -117,8 +117,7 @@ System::Object^ Cli_environment::getRegisteredInterface(System::String^ oid,
                                                         System::Type^ type)
 {
     //try if it is a UNO interface
-    System::Object^ ret = nullptr;
-    ret = m_objects[oid];
+    System::Object^ ret = m_objects[oid];
     if (! ret)
     {
         //try if it is a proxy for a cli object

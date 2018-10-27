@@ -1733,10 +1733,8 @@ void ScInterpreter::ScSumXMY2()
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
-    ScMatrixRef pMat1 = nullptr;
-    ScMatrixRef pMat2 = nullptr;
-    pMat2 = GetMatrix();
-    pMat1 = GetMatrix();
+    ScMatrixRef pMat2 = GetMatrix();
+    ScMatrixRef pMat1 = GetMatrix();
     if (!pMat2 || !pMat1)
     {
         PushIllegalParameter();

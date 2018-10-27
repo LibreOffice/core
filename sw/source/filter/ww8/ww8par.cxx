@@ -1382,8 +1382,8 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                         SwTextNode *pTextNode = static_cast<SwTextNode*>(pNode);
 
-                        const SwNumFormat *pNum = nullptr;
-                        pNum = GetNumFormatFromStack( *aRegion.GetPoint(), *pTextNode );
+                        const SwNumFormat* pNum
+                            = GetNumFormatFromStack(*aRegion.GetPoint(), *pTextNode);
                         if (!pNum)
                         {
                             pNum = GetNumFormatFromTextNode(*pTextNode);
