@@ -74,12 +74,6 @@ endif
 
 $(eval $(call gb_Module_add_targets,extras,\
 	Personas \
-	Persona_dark \
-	Persona_gray \
-	Persona_green \
-	Persona_pink \
-	Persona_sand \
-	Persona_white \
 ))
 
 $(eval $(call gb_Module_add_targets,extras,\
