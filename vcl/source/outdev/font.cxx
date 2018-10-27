@@ -31,6 +31,7 @@
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
+#include <impglyphitem.hxx>
 
 #include <outdev.h>
 #include <window.h>

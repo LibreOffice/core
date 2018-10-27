@@ -17,30 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GLYPHITEM_HXX
-#define INCLUDED_VCL_GLYPHITEM_HXX
+#include <impglyphitem.hxx>
 
-typedef sal_uInt16 sal_GlyphId;
-
-class GenericSalLayout;
-struct GlyphItem;
-class SalLayoutGlyphsImpl;
-
-class VCL_DLLPUBLIC SalLayoutGlyphs final
+#if 0
+GlyphItem& GlyphItem::operator=(const GlyphItem& rOther)
 {
-    friend class GenericSalLayout;
-    SalLayoutGlyphsImpl* m_pImpl;
+     memcpy(rOther, this, sizeof(GlyphItem));
+     return *this;
+}
+#endif
 
-public:
-    SalLayoutGlyphs();
-    ~SalLayoutGlyphs();
-    SalLayoutGlyphs(const SalLayoutGlyphs&);
-    SalLayoutGlyphs& operator=(const SalLayoutGlyphs&);
+SalLayoutGlyphs::SalLayoutGlyphs()
+    : m_pImpl(new SalLayoutGlyphsImpl)
+{
+}
 
-    inline bool empty() const;
-    inline void clear();
-};
+SalLayoutGlyphs::~SalLayoutGlyphs()
+{
+    delete m_pImpl;
+}
 
-#endif // INCLUDED_VCL_GLYPHITEM_HXX
+SalLayoutGlyphs::SalLayoutGlyphs(const SalLayoutGlyphs& rOther)
+{
+    *m_pImpl = *rOther.m_pImpl;
+}
+
+SalLayoutGlyphs& SalLayoutGlyphs::operator=(const SalLayoutGlyphs& rOther)
+{
+    *m_pImpl = *rOther.m_pImpl;
+    return *this;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
