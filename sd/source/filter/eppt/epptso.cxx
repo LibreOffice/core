@@ -1720,17 +1720,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     aXIndexAccess( mXShape, css::uno::UNO_QUERY );
                 if ( EnterGroup( aXIndexAccess ) )
                 {
-                    SvMemoryStream* pTmp = nullptr;
-
+                    std::unique_ptr<SvMemoryStream> pTmp;
                     if ( eCa != css::presentation::ClickAction_NONE )
                     {
-                        if ( !pTmp )
-                            pTmp = new SvMemoryStream( 0x200, 0x200 );
+                        pTmp.reset(new SvMemoryStream(0x200, 0x200));
                         ImplWriteClickAction( *pTmp, eCa, bMediaClickAction );
                     }
-                    sal_uInt32 nShapeId = mpPptEscherEx->EnterGroup( &maRect, pTmp );
+                    sal_uInt32 nShapeId = mpPptEscherEx->EnterGroup(&maRect, pTmp.get());
                     aSolverContainer.AddShape( mXShape, nShapeId );
-                    delete pTmp;
                 }
             }
             else
@@ -2697,12 +2694,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( (mType == "drawing.Table") || (mType == "presentation.Table") )
             {
-                SvMemoryStream* pTmp = nullptr;
                 if ( eCa != css::presentation::ClickAction_NONE )
                 {
-                    if ( !pTmp )
-                        pTmp = new SvMemoryStream( 0x200, 0x200 );
-                    ImplWriteClickAction( *pTmp, eCa, bMediaClickAction );
+                    SvMemoryStream aTmp(0x200, 0x200);
+                    ImplWriteClickAction( aTmp, eCa, bMediaClickAction );
                 }
                 ImplCreateTable( mXShape, aSolverContainer, aPropOpt );
                 continue;
