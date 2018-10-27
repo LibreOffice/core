@@ -2589,7 +2589,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     aBuffer.append("\"rows\": [\n");
 
-    long nTotalPixels = aViewData.GetLOKHeightHelper().getPosition(nStartRow);
+    long nTotalPixels = nStartHeightPx;
     SAL_INFO("sc.lok.header", "Row Header: [create string data for rows]: start row: "
             << nStartRow << " start height: " << nTotalPixels);
 
@@ -2728,7 +2728,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     aBuffer.append("\"columns\": [\n");
 
-    nTotalPixels = aViewData.GetLOKWidthHelper().getPosition(nStartCol);
+    nTotalPixels = nStartWidthPx;
     SAL_INFO("sc.lok.header", "Col Header: [create string data for cols]: start col: "
             << nStartRow << " start width: " << nTotalPixels);
 
