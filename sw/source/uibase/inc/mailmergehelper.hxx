@@ -99,12 +99,9 @@ public:
     // returns the selected address
     sal_uInt16 GetSelectedAddress() const;
     void SelectAddress(sal_uInt16 nSelect);
-    void ReplaceSelectedAddress(const OUString&);
-    void RemoveSelectedAddress();
 
     // set the number of rows and columns of addresses
     void SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns);
-    void EnableScrollBar();
 
     // fill the actual data into a string (address block or greeting)
     static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem const & rConfigItem,
@@ -143,8 +140,6 @@ public:
     void AddAddress(const OUString& rAddress);
     //  for preview mode - replaces the currently used address by the given one
     void SetAddress(const OUString& rAddress);
-    // removes all addresses
-    void Clear();
 
     // returns the selected address
     sal_uInt16 GetSelectedAddress() const;
@@ -155,12 +150,6 @@ public:
     // set the number of rows and columns of addresses
     void SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns);
     void EnableScrollBar();
-
-    // fill the actual data into a string (address block or greeting)
-    static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem const & rConfigItem,
-                             const css::uno::Sequence<OUString>* pAssignments = nullptr);
-
-    void SetSelectHdl (const Link<LinkParamNone*,void>& rLink) { m_aSelectHdl = rLink; }
 };
 
 

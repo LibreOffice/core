@@ -32,7 +32,6 @@ class OReportController;
 \************************************************************************/
 class OPageNumberDialog : public weld::GenericDialogController
 {
-    ::rptui::OReportController*                    m_pController;
     css::uno::Reference< css::report::XReportDefinition>
                                                    m_xHoldAlive;
     std::unique_ptr<weld::RadioButton> m_xPageN;
@@ -49,7 +48,6 @@ public:
                       const css::uno::Reference< css::report::XReportDefinition>& _xHoldAlive,
                       ::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog() override;
-    void execute();
 };
 
 } // namespace rptui

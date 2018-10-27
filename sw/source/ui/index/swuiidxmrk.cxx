@@ -1793,11 +1793,6 @@ void AuthorMarkPane::InitControls()
     m_xTitleFI->set_label(pEntry->GetAuthorField(AUTH_FIELD_TITLE));
 }
 
-void AuthorMarkPane::Activate()
-{
-    m_xActionBT->set_sensitive(!pSh->HasReadonlySel());
-}
-
 namespace
 {
     const char* STR_AUTH_FIELD_ARY[] =
