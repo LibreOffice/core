@@ -728,13 +728,17 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
                 }
             }
 
+            // Avoid infinite recursion when calling XVclWindowPeer::setDesignMode below
             mbDesignMode = bOn;
 
             Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
             if (xVclWindowPeer.is())
                 xVclWindowPeer->setDesignMode(bOn);
         }
-        mbDesignMode = bOn;
+        else
+        {
+            mbDesignMode = bOn;
+        }
 
         // dispose our current AccessibleContext, if we have one
         // (changing the design mode implies having a new implementation for this context,
