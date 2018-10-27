@@ -243,7 +243,7 @@ void ImplFontCache::Invalidate()
     m_aBoundRectCache.clear();
 }
 
-bool ImplFontCache::GetCachedGlyphBoundRect(LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
+bool ImplFontCache::GetCachedGlyphBoundRect(const LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
 {
     if (!pFont->GetFontCache())
         return false;
@@ -260,7 +260,7 @@ bool ImplFontCache::GetCachedGlyphBoundRect(LogicalFontInstance *pFont, sal_Glyp
     return false;
 }
 
-void ImplFontCache::CacheGlyphBoundRect(LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
+void ImplFontCache::CacheGlyphBoundRect(const LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
 {
     if (!pFont->GetFontCache())
         return;

@@ -55,6 +55,7 @@ struct VCL_DLLPUBLIC GlyphItem
         , m_aLinearPos(rLinearPos)
         , m_pFontInstance(pFontInstance)
     {
+        assert(pFontInstance);
     }
 
     enum
@@ -77,6 +78,9 @@ struct VCL_DLLPUBLIC GlyphItem
     bool AllowKashida() const { return ((m_nFlags & ALLOW_KASHIDA) != 0); }
     bool IsDropped() const { return ((m_nFlags & IS_DROPPED) != 0); }
     bool IsClusterStart() const { return ((m_nFlags & IS_CLUSTER_START) != 0); }
+
+    inline bool GetCachedGlyphBoundRect(tools::Rectangle& rRect) const;
+    inline void CacheGlyphBoundRect(tools::Rectangle& rRect) const;
 };
 
 #endif // INCLUDED_VCL_GLYPHITEM_HXX
