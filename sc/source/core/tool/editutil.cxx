@@ -695,15 +695,15 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 }
 
 ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
-        : ScEditEngineDefaulter( pDoc->GetEnginePool() )
+        : ScFieldEditEngine( pDoc, pDoc->GetEnginePool() )
 {
     SetEditTextObjectPool( pDoc->GetEditPool() );
     Init(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
-            SfxItemPool* pEnginePoolP, SfxItemPool* pTextObjectPool )
-        : ScEditEngineDefaulter( pEnginePoolP )
+            SfxItemPool* pEngineItemPool, ScDocument* pDoc, SfxItemPool* pTextObjectPool )
+        : ScFieldEditEngine( pDoc, pEngineItemPool, pTextObjectPool )
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
