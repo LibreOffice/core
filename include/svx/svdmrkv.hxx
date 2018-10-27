@@ -425,7 +425,7 @@ public:
     void SetRef1(const Point& rPt);
 
     // End point of the axis of reflextion
-    const Point& GetRef2() const { return maRef1; }
+    const Point& GetRef2() const { return maRef2; }
     void SetRef2(const Point& rPt);
     /// Get access to the view shell owning this draw view, if any.
     virtual SfxViewShell* GetSfxViewShell() const;
