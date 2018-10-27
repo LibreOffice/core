@@ -2479,8 +2479,10 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     SCTAB nTab = aViewData.GetTabNo();
     SCROW nStartRow = -1;
     SCROW nEndRow = -1;
+    long nStartHeightPx = 0;
     SCCOL nStartCol = -1;
     SCCOL nEndCol = -1;
+    long nStartWidthPx = 0;
 
     tools::Rectangle aOldVisArea(
             mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
@@ -2493,7 +2495,6 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (rRectangle.Top() < rRectangle.Bottom())
     {
         SAL_INFO("sc.lok.header", "Row Header: compute start/end rows.");
-        long nStartHeightPx = 0;
         long nEndHeightPx = 0;
         long nRectTopPx = rRectangle.Top() / TWIPS_PER_PIXEL;
         long nRectBottomPx = rRectangle.Bottom() / TWIPS_PER_PIXEL;
@@ -2582,7 +2583,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     aBuffer.append("\"rows\": [\n");
 
-    long nTotalPixels = aViewData.GetLOKHeightHelper().getPosition(nStartRow);
+    long nTotalPixels = nStartHeightPx;
     SAL_INFO("sc.lok.header", "Row Header: [create string data for rows]: start row: "
             << nStartRow << " start height: " << nTotalPixels);
 
@@ -2637,7 +2638,6 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (rRectangle.Left() < rRectangle.Right())
     {
         SAL_INFO("sc.lok.header", "Column Header: compute start/end columns.");
-        long nStartWidthPx = 0;
         long nEndWidthPx = 0;
         long nRectLeftPx = rRectangle.Left() / TWIPS_PER_PIXEL;
         long nRectRightPx = rRectangle.Right() / TWIPS_PER_PIXEL;
@@ -2723,7 +2723,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     aBuffer.append("\"columns\": [\n");
 
-    nTotalPixels = aViewData.GetLOKWidthHelper().getPosition(nStartCol);
+    nTotalPixels = nStartWidthPx;
     SAL_INFO("sc.lok.header", "Col Header: [create string data for cols]: start col: "
             << nStartRow << " start width: " << nTotalPixels);
 
