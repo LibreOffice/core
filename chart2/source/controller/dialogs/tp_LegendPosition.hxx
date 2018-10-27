@@ -31,7 +31,7 @@ class SchLegendPosTabPage : public SfxTabPage
 {
 private:
 
-    SchLegendPositionResources  m_aLegendPositionResources;
+    LegendPositionResources  m_aLegendPositionResources;
     std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
 
 public:
