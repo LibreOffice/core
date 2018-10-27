@@ -24,11 +24,8 @@
 #include <tools/datetime.hxx>
 #include <o3tl/strong_int.hxx>
 
-#include <limits>
 #include <memory>
 #include <vector>
-
-struct MarkedUndoAction;
 
 typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;
 

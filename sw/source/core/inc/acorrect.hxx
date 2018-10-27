@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ACORRECT_HXX
 
 #include <memory>
+#include <tools/solar.h>
 #include <editeng/svxacorr.hxx>
 #include <swundo.hxx>
 

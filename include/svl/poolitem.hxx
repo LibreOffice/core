@@ -22,16 +22,13 @@
 
 #include <sal/config.h>
 
-#include <climits>
 #include <memory>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/solar.h>
 
 class IntlWrapper;
 class SvStream;
@@ -112,7 +109,6 @@ enum class SfxItemState {
 
 #define INVALID_POOL_ITEM reinterpret_cast<SfxPoolItem*>(-1)
 
-class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;
 

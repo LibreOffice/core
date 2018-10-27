@@ -20,21 +20,20 @@
 #define INCLUDED_SVL_ZFORMAT_HXX
 
 #include <svl/svldllapi.h>
-#include <i18nlangtag/mslangid.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
 #include <vector>
-#include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
 namespace utl {
     class DigitGroupingIterator;
 }
 
+namespace com { namespace sun { namespace star { namespace i18n { struct NativeNumberXmlAttributes2; } } } }
+
 class Color;
 
 class ImpSvNumberformatScan;            // format code string scanner
 class ImpSvNumberInputScan;             // input string scanner
-class SvNumberFormatter;
 
 enum SvNumberformatLimitOps
 {

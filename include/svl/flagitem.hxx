@@ -21,6 +21,7 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
+#include <tools/debug.hxx>
 
 class SvStream;
 

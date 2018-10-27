@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 
+#include <tools/solar.h>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>

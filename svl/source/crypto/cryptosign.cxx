@@ -8,6 +8,8 @@
  */
 
 #include <svl/cryptosign.hxx>
+#include <svl/sigstruct.hxx>
+#include <config_features.h>
 
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>

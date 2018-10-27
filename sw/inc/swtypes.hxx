@@ -22,6 +22,7 @@
 
 #include <limits.h>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>

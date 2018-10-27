@@ -21,6 +21,7 @@
 #include <svl/eitem.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/helpers.hxx>
+#include <tools/debug.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editeng.hxx>

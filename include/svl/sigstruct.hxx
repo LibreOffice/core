@@ -22,13 +22,14 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <set>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
 
 /*
  * type of reference

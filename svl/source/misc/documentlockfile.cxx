@@ -24,6 +24,11 @@
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 
 #include <osl/time.h>
 #include <osl/security.hxx>

@@ -33,8 +33,6 @@
 #include <svl/typedwhich.hxx>
 
 class SfxItemPool;
-class SfxPoolItem;
-class SvStream;
 
 namespace svl {
 

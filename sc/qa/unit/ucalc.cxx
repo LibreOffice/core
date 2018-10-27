@@ -87,6 +87,7 @@
 #include <svx/svdocapt.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
