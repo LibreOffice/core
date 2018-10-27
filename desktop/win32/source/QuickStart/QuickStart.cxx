@@ -76,14 +76,14 @@ static bool launchSoffice( )
 
 int APIENTRY wWinMain(HINSTANCE /*hInstance*/,
                       HINSTANCE /*hPrevInstance*/,
-                      LPWSTR    /*lpCmdLine*/,
-                      int       /*nCmdShow*/)
+                      PWSTR /*lpCmdLine*/,
+                      int /*nCmdShow*/)
 {
     // Look for --killtray argument
 
     for ( int i = 1; i < __argc; i++ )
     {
-        if ( 0 == strcmp( __argv[i], "--killtray" ) )
+        if ( 0 == wcscmp( __wargv[i], L"--killtray" ) )
         {
             HWND hwndTray = FindWindowW( QUICKSTART_CLASSNAME, nullptr );
 
