@@ -31,6 +31,7 @@
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
@@ -150,8 +151,6 @@ namespace o3tl
 }
 
 typedef std::vector< tools::Rectangle > MetricVector;
-struct GlyphItem;
-typedef std::vector<GlyphItem> SalLayoutGlyphs;
 
 // OutputDevice-Types
 

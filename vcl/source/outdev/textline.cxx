@@ -32,6 +32,7 @@
 #include <salgdi.hxx>
 #include <impfont.hxx>
 #include <outdata.hxx>
+#include <impglyphitem.hxx>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
