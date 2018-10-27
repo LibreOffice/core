@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_53edd623",
+        "filename": "sw/uiconfig/swform/popupmenu/text.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T14:15:51Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 24,
+        "endChar": 1
+      },
+      "revId": "4cda95dd891d30a81446cedf0533352aa0a82c19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_938d7e7d",
+        "filename": "sw/uiconfig/swreport/popupmenu/text.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T14:15:51Z",
+      "side": 1,
+      "message": "Please review",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 48
+      },
+      "revId": "4cda95dd891d30a81446cedf0533352aa0a82c19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_b3908297",
+        "filename": "sw/uiconfig/swreport/popupmenu/text.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T14:15:51Z",
+      "side": 1,
+      "message": "Please review these",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 55
+      },
+      "revId": "4cda95dd891d30a81446cedf0533352aa0a82c19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_73e8da15",
+        "filename": "sw/uiconfig/swreport/popupmenu/text.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T14:15:51Z",
+      "side": 1,
+      "message": "too",
+      "range": {
+        "startLine": 40,
+        "startChar": 1,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "4cda95dd891d30a81446cedf0533352aa0a82c19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
