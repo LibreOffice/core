@@ -439,13 +439,14 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
             }
             bFreeGraphics = true;
         }
+        rSettings.SetStyleSettings(aStyleSettings);
         pGraphics->updateSettings(rSettings);
 
         if (bFreeGraphics)
             ReleaseGraphics(pGraphics);
     }
-
-    rSettings.SetStyleSettings( aStyleSettings );
+    else
+        rSettings.SetStyleSettings(aStyleSettings);
 }
 
 void SvpSalFrame::Beep()
