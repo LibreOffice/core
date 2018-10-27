@@ -120,11 +120,11 @@ SwAddressControl_Impl::~SwAddressControl_Impl()
 
 void SwAddressControl_Impl::dispose()
 {
-    for(auto aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
-        aTextIter->disposeAndClear();
+    for(auto& rText : m_aFixedTexts)
+        rText.disposeAndClear();
     m_aFixedTexts.clear();
-    for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
-        aEditIter->disposeAndClear();
+    for(auto& rEdit : m_aEdits)
+        rEdit.disposeAndClear();
     m_aEdits.clear();
     m_pScrollBar.disposeAndClear();
     m_pWindow.disposeAndClear();
@@ -137,28 +137,24 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     //when the address data is updated then remove the controls an build again
     if(!m_aFixedTexts.empty())
     {
-        for(auto aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
-            aTextIter->disposeAndClear();
+        for(auto& rText : m_aFixedTexts)
+            rText.disposeAndClear();
         m_aFixedTexts.clear();
-        for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
-            aEditIter->disposeAndClear();
+        for(auto& rEdit : m_aEdits)
+            rEdit.disposeAndClear();
         m_aEdits.clear();
         m_bNoDataSet = true;
     }
     //now create appropriate controls
-
-    std::vector< OUString >::iterator    aHeaderIter;
 
     long nFTXPos = m_pWindow->LogicToPixel(Point(RSC_SP_CTRL_X, RSC_SP_CTRL_X), MapMode(MapUnit::MapAppFont)).X();
     long nFTHeight = m_pWindow->LogicToPixel(Size(RSC_BS_CHARHEIGHT, RSC_BS_CHARHEIGHT), MapMode(MapUnit::MapAppFont)).Height();
     long nFTWidth = 0;
 
     //determine the width of the FixedTexts
-    for(aHeaderIter = m_pData->aDBColumnHeaders.begin();
-                aHeaderIter != m_pData->aDBColumnHeaders.end();
-                ++aHeaderIter)
+    for(const auto& rHeader : m_pData->aDBColumnHeaders)
     {
-        sal_Int32 nTemp = m_pWindow->GetTextWidth(*aHeaderIter);
+        sal_Int32 nTemp = m_pWindow->GetTextWidth(rHeader);
         if(nTemp > nFTWidth)
           nFTWidth = nTemp;
     }
@@ -178,9 +174,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     Edit* pLastEdit = nullptr;
     sal_Int32 nVisibleLines = 0;
     sal_Int32 nLines = 0;
-    for(aHeaderIter = m_pData->aDBColumnHeaders.begin();
-                aHeaderIter != m_pData->aDBColumnHeaders.end();
-                ++aHeaderIter, nEDYPos += m_nLineHeight, nFTYPos += m_nLineHeight, nLines++)
+    for(const auto& rHeader : m_pData->aDBColumnHeaders)
     {
         VclPtr<FixedText> pNewFT = VclPtr<FixedText>::Create(m_pWindow, WB_RIGHT);
         VclPtr<Edit> pNewED = VclPtr<Edit>::Create(m_pWindow, WB_BORDER);
@@ -194,13 +188,16 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
         if(nEDYPos + nEDHeight < m_aWinOutputSize.Height())
             ++nVisibleLines;
 
-        pNewFT->SetText(*aHeaderIter);
+        pNewFT->SetText(rHeader);
 
         pNewFT->Show();
         pNewED->Show();
         m_aFixedTexts.push_back(pNewFT);
         m_aEdits.push_back(pNewED);
         pLastEdit = pNewED;
+        nEDYPos += m_nLineHeight;
+        nFTYPos += m_nLineHeight;
+        nLines++;
     }
     //scrollbar adjustment
     if(pLastEdit)
@@ -251,11 +248,12 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
         if(m_pData->aDBData.size() > m_nCurrentDataSet)
         {
             sal_uInt32 nIndex = 0;
-            for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
+            for(auto& rEdit : m_aEdits)
             {
                 OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
                             "number of columns doesn't match number of Edits");
-                (*aEditIter)->SetText(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
+                rEdit->SetText(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
+                ++nIndex;
             }
         }
     }
@@ -381,9 +379,9 @@ void SwAddressControl_Impl::Resize()
     {
         long nNewEditSize = aSize.Width() - (*m_aEdits.begin())->GetPosPixel().X() - nScrollBarWidth - 6;
 
-        for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
+        for(auto& rEdit : m_aEdits)
         {
-            (*aEditIter)->SetSizePixel(Size(nNewEditSize, (*aEditIter)->GetSizePixel().Height()));
+            rEdit->SetSizePixel(Size(nNewEditSize, rEdit->GetSizePixel().Height()));
         }
     }
 
@@ -552,11 +550,8 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
     {
         m_xFindDlg.reset(new SwFindEntryDialog(this));
         weld::ComboBox& rColumnBox = m_xFindDlg->GetFieldsListBox();
-        std::vector< OUString >::iterator    aHeaderIter;
-        for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
-                    aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
-                    ++aHeaderIter)
-            rColumnBox.append_text(*aHeaderIter);
+        for(const auto& rHeader : m_pCSVData->aDBColumnHeaders)
+            rColumnBox.append_text(rHeader);
         rColumnBox.set_active(0);
         m_xFindDlg->show();
     }
@@ -579,11 +574,8 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, void)
     {
         weld::ComboBox& rColumnBox = m_xFindDlg->GetFieldsListBox();
         rColumnBox.clear();
-        std::vector< OUString >::iterator    aHeaderIter;
-        for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
-                    aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
-                    ++aHeaderIter)
-            rColumnBox.append_text(*aHeaderIter);
+        for(const auto& rHeader : m_pCSVData->aDBColumnHeaders)
+            rColumnBox.append_text(rHeader);
     }
 }
 
@@ -643,9 +635,9 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
         lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
 
         std::vector< std::vector< OUString > >::iterator aDataIter;
-        for( aDataIter = m_pCSVData->aDBData.begin(); aDataIter != m_pCSVData->aDBData.end(); ++aDataIter)
+        for(const auto& rData : m_pCSVData->aDBData)
         {
-            lcl_WriteValues(&(*aDataIter), pStream);
+            lcl_WriteValues(&rData, pStream);
         }
         aMedium.Commit();
         EndDialog(RET_OK);

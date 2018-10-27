@@ -3902,14 +3902,14 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     if (nMaxCount > 0)
     {
         sal_Int32 nCount = 0;
-        for (std::set< LanguageType >::const_iterator it = aAllLangs.begin(); it != aAllLangs.end(); ++it)
+        for (const auto& rLang : aAllLangs)
         {
             if (nCount >= nMaxCount)
                 break;
-            if (LANGUAGE_NONE != *it)
+            if (LANGUAGE_NONE != rLang)
             {
-                pLanguage[nCount] = LanguageTag::convertToLocale( *it );
-                pLanguage[nCount].Language = SvtLanguageTable::GetLanguageString( *it );
+                pLanguage[nCount] = LanguageTag::convertToLocale( rLang );
+                pLanguage[nCount].Language = SvtLanguageTable::GetLanguageString( rLang );
                 nCount += 1;
             }
         }

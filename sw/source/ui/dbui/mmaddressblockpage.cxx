@@ -696,9 +696,8 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
         }
         m_pFieldCB->Clear();
         if(pVector) {
-            std::vector<OUString>::iterator    aIterator;
-            for( aIterator = pVector->begin(); aIterator != pVector->end(); ++aIterator)
-                m_pFieldCB->InsertEntry(*aIterator);
+            for (const auto& rItem : *pVector)
+                m_pFieldCB->InsertEntry(rItem);
         }
         m_pFieldCB->SetText(sSelect);
         m_pFieldCB->Enable();
@@ -970,12 +969,12 @@ SwAssignFieldsControl::~SwAssignFieldsControl()
 
 void SwAssignFieldsControl::dispose()
 {
-    for(auto aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
-        aFIIter->disposeAndClear();
-    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
-        aLBIter->disposeAndClear();
-    for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
-        aFIIter->disposeAndClear();
+    for(auto& rFIItem : m_aFieldNames)
+        rFIItem.disposeAndClear();
+    for(auto& rLBItem : m_aMatches)
+        rLBItem.disposeAndClear();
+    for(auto& rFIItem : m_aPreviews)
+        rFIItem.disposeAndClear();
 
     m_aFieldNames.clear();
     m_aMatches.clear();
@@ -1015,17 +1014,17 @@ void SwAssignFieldsControl::Resize()
     long nControlHeight = std::max(m_aFieldNames[0]->get_preferred_size().Height(),
                                    m_aMatches[0]->get_preferred_size().Height());
 
-    for(auto aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
-        (*aFIIter)->SetSizePixel(Size(nColWidth - 6, nControlHeight));
-    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
+    for(auto& rFIItem : m_aFieldNames)
+        rFIItem->SetSizePixel(Size(nColWidth - 6, nControlHeight));
+    for(auto& rLBItem : m_aMatches)
     {
-        long nPosY = (*aLBIter)->GetPosPixel().Y();
-        (*aLBIter)->SetPosSizePixel(Point(nColWidth, nPosY), Size(nColWidth - 6, nControlHeight));
+        long nPosY = rLBItem->GetPosPixel().Y();
+        rLBItem->SetPosSizePixel(Point(nColWidth, nPosY), Size(nColWidth - 6, nControlHeight));
     }
-    for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
+    for(auto& rFIItem : m_aPreviews)
     {
-        long nPosY = (*aFIIter)->GetPosPixel().Y();
-        (*aFIIter)->SetPosSizePixel(Point(2 * nColWidth + 6, nPosY), Size(nColWidth, nControlHeight));
+        long nPosY = rFIItem->GetPosPixel().Y();
+        rFIItem->SetPosSizePixel(Point(2 * nColWidth + 6, nPosY), Size(nColWidth, nControlHeight));
     }
 }
 
@@ -1086,12 +1085,12 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
     long nMove = m_nFirstYPos - (*m_aMatches.begin())->GetPosPixel().Y() - (nThumb * m_nYOffset);
 
     SetUpdateMode(false);
-    for(auto aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
-        lcl_Move(*aFIIter, nMove);
-    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
-        lcl_Move(*aLBIter, nMove);
-    for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
-        lcl_Move(*aFIIter, nMove);
+    for(auto& rFIItem : m_aFieldNames)
+        lcl_Move(rFIItem, nMove);
+    for(auto& rLBItem : m_aMatches)
+        lcl_Move(rLBItem, nMove);
+    for(auto& rFIItem : m_aPreviews)
+        lcl_Move(rFIItem, nMove);
     SetUpdateMode(true);
 }
 
@@ -1117,14 +1116,11 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
             }
         }
     }
-    sal_Int32 nIndex = 0;
-    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
+    auto aLBIter = std::find(m_aMatches.begin(), m_aMatches.end(), &rBox);
+    if(aLBIter != m_aMatches.end())
     {
-        if(*aLBIter == &rBox)
-        {
-            m_aPreviews[nIndex]->SetText(sPreview);
-            break;
-        }
+        auto nIndex = static_cast<sal_Int32>(std::distance(m_aMatches.begin(), aLBIter));
+        m_aPreviews[nIndex]->SetText(sPreview);
     }
     m_aModifyHdl.Call(nullptr);
 }
@@ -1134,14 +1130,11 @@ IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)
     ListBox* pBox = static_cast<ListBox*>(&rControl);
     if(GetFocusFlags::Tab & pBox->GetGetFocusFlags())
     {
-        sal_Int32 nIndex = 0;
-        for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
+        auto aLBIter = std::find(m_aMatches.begin(), m_aMatches.end(), pBox);
+        if(aLBIter != m_aMatches.end())
         {
-            if(*aLBIter == pBox)
-            {
-                MakeVisible(nIndex);
-                break;
-            }
+            auto nIndex = static_cast<sal_Int32>(std::distance(m_aMatches.begin(), aLBIter));
+            MakeVisible(nIndex);
         }
     }
 }
@@ -1212,12 +1205,11 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
             m_rConfigItem.GetDefaultAddressHeaders().size());
     OUString* pAssignments = aAssignments.getArray();
     sal_Int32 nIndex = 0;
-    for(auto aLBIter = m_pFieldsControl->m_aMatches.begin();
-                aLBIter != m_pFieldsControl->m_aMatches.end();
-                    ++aLBIter, ++nIndex)
+    for(const auto& rLBItem : m_pFieldsControl->m_aMatches)
     {
-        const OUString sSelect = (*aLBIter)->GetSelectedEntry();
+        const OUString sSelect = rLBItem->GetSelectedEntry();
         pAssignments[nIndex] = (m_sNone != sSelect) ? sSelect : OUString();
+        ++nIndex;
     }
     return aAssignments;
 }

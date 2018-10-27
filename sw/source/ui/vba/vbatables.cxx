@@ -107,12 +107,11 @@ public:
     {
         uno::Sequence< OUString > sNames( mxTables.size() );
         OUString* pString = sNames.getArray();
-        XTextTableVec::iterator it = mxTables.begin();
-        XTextTableVec::iterator it_end = mxTables.end();
-        for ( ; it != it_end; ++it, ++pString )
+        for ( const auto& rxTable : mxTables )
         {
-            uno::Reference< container::XNamed > xName( *it, uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNamed > xName( rxTable, uno::UNO_QUERY_THROW );
             *pString = xName->getName();
+            ++pString;
         }
         return sNames;
     }

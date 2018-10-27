@@ -104,16 +104,12 @@ bool SwFrameSidebarWinContainer::remove( const SwFrame& rFrame,
     if ( aFrameIter != mpFrameSidebarWinContainer->end() )
     {
         SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
-        for ( SidebarWinContainer::iterator aIter = rSidebarWinContainer.begin();
-              aIter != rSidebarWinContainer.end();
-              ++aIter )
+        auto aIter = std::find_if(rSidebarWinContainer.begin(), rSidebarWinContainer.end(),
+            [&rSidebarWin](const SidebarWinContainer::value_type& rEntry) { return rEntry.second == &rSidebarWin; });
+        if ( aIter != rSidebarWinContainer.end() )
         {
-            if ( (*aIter).second == &rSidebarWin )
-            {
-                rSidebarWinContainer.erase( aIter );
-                bRemoved = true;
-                break;
-            }
+            rSidebarWinContainer.erase( aIter );
+            bRemoved = true;
         }
     }
 
@@ -141,22 +137,12 @@ sw::annotation::SwAnnotationWin* SwFrameSidebarWinContainer::get( const SwFrame&
 
     FrameKey aFrameKey( &rFrame );
     FrameSidebarWinContainer::iterator aFrameIter = mpFrameSidebarWinContainer->find( aFrameKey );
-    if ( aFrameIter != mpFrameSidebarWinContainer->end() )
+    if ( aFrameIter != mpFrameSidebarWinContainer->end() && nIndex >= 0 )
     {
         SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
-        sal_Int32 nCounter( nIndex );
-        for ( SidebarWinContainer::iterator aIter = rSidebarWinContainer.begin();
-              nCounter >= 0 && aIter != rSidebarWinContainer.end();
-              ++aIter )
-        {
-            if ( nCounter == 0 )
-            {
-                pRet = (*aIter).second;
-                break;
-            }
-
-            --nCounter;
-        }
+        auto aIter = rSidebarWinContainer.begin();
+        std::advance(aIter, nIndex);
+        pRet = (*aIter).second;
     }
 
     return pRet;
@@ -172,11 +158,9 @@ void SwFrameSidebarWinContainer::getAll( const SwFrame& rFrame,
     if ( aFrameIter != mpFrameSidebarWinContainer->end() )
     {
         SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
-        for ( SidebarWinContainer::iterator aIter = rSidebarWinContainer.begin();
-              aIter != rSidebarWinContainer.end();
-              ++aIter )
+        for ( const auto& rEntry : rSidebarWinContainer )
         {
-            pSidebarWins->push_back( (*aIter).second );
+            pSidebarWins->push_back( rEntry.second );
         }
     }
 }

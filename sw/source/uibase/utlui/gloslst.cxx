@@ -146,8 +146,8 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
         aDlg.set_title(sTitle);
 
         weld::TreeView& rLB = aDlg.GetTreeView();
-        for(std::vector<TripleString>::const_iterator i = aTripleStrings.begin(); i != aTripleStrings.end(); ++i)
-            rLB.append_text(i->sGroup.getToken(0, GLOS_DELIM));
+        for (const auto& rTriple : aTripleStrings)
+            rLB.append_text(rTriple.sGroup.getToken(0, GLOS_DELIM));
 
         rLB.select(0);
         if (aDlg.run() == RET_OK && rLB.get_selected_index() != -1)
@@ -317,10 +317,9 @@ void SwGlossaryList::Update()
                 // for the current subpath.
                 if( nGroupPath == nPath )
                 {
-                    bool bFound = false;
                     OUString sCompareGroup = pGroup->sName.getToken(0, GLOS_DELIM);
-                    for(std::vector<OUString>::const_iterator j = aFoundGroupNames.begin(); j != aFoundGroupNames.end() && !bFound; ++j)
-                        bFound = (sCompareGroup == *j);
+                    bool bFound = std::any_of(aFoundGroupNames.begin(), aFoundGroupNames.end(),
+                        [&sCompareGroup](const OUString& rGroupName) { return sCompareGroup == rGroupName; });
 
                     if(!bFound)
                     {

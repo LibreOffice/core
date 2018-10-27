@@ -2407,11 +2407,9 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
 
         // #i21237#
         SwFormTokens aPattern = m_pCurrentForm->GetPattern(nLevel + 1);
-        SwFormTokens::iterator aIt = aPattern.begin();
 
-        while(aIt != aPattern.end())
+        for(const auto& aToken : aPattern)
         {
-            SwFormToken aToken = *aIt; // #i21237#
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
@@ -2419,8 +2417,6 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
                 OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 m_pAuthFieldsLB->RemoveEntry(nLstBoxPos);
             }
-
-            ++aIt; // #i21237#
         }
         m_pAuthFieldsLB->SelectEntryPos(0);
     }
@@ -2822,14 +2818,11 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     {
         // #i21237#
         SwFormTokens aPattern = m_pForm->GetPattern(m_nLevel + 1);
-        SwFormTokens::iterator aIt = aPattern.begin();
         bool bLastWasText = false; //assure alternating text - code - text
 
         Control* pSetActiveControl = nullptr;
-        while(aIt != aPattern.end()) // #i21237#
+        for (const auto& aToken : aPattern) // #i21237#
         {
-            SwFormToken aToken(*aIt); // #i21237#
-
             if(TOKEN_TEXT == aToken.eTokenType)
             {
                 SAL_WARN_IF(bLastWasText, "sw", "text following text is invalid");
@@ -2866,8 +2859,6 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 InsertItem( sForm, aToken );
                 bLastWasText = false;
             }
-
-            ++aIt; // #i21237#
         }
         if(!bLastWasText)
         {
@@ -3317,56 +3308,48 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
     if(pBtn == m_pLeftScrollWin)
     {
         //find the first completely visible control (left edge visible)
-        for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+        auto it = std::find_if(m_aControlList.begin(), m_aControlList.end(),
+            [](const VclPtr<Control>& rControl) {
+                Control *pCtrl = rControl.get();
+                return pCtrl->GetPosPixel().X() >= 0;
+            });
+        if (it != m_aControlList.end())
         {
-            Control *pCtrl = it->get();
-
-            long nXPos = pCtrl->GetPosPixel().X();
-
-            if (nXPos >= 0)
+            if (it == m_aControlList.begin())
             {
-                if (it == m_aControlList.begin())
-                {
-                    //move the current control to the left edge
-                    nMove = -nXPos;
-                }
-                else
-                {
-                    //move the left neighbor to the start position
-                    auto itLeft = it;
-                    --itLeft;
-                    Control *pLeft = itLeft->get();
+                //move the current control to the left edge
+                Control *pCtrl = it->get();
 
-                    nMove = -pLeft->GetPosPixel().X();
-                }
+                nMove = -pCtrl->GetPosPixel().X();
+            }
+            else
+            {
+                //move the left neighbor to the start position
+                auto itLeft = it;
+                --itLeft;
+                Control *pLeft = itLeft->get();
 
-                break;
+                nMove = -pLeft->GetPosPixel().X();
             }
         }
     }
     else
     {
         //find the first completely visible control (right edge visible)
-        for (auto it = m_aControlList.rbegin(); it != m_aControlList.rend(); ++it)
+        auto it = std::find_if(m_aControlList.rbegin(), m_aControlList.rend(),
+            [&nSpace](const VclPtr<Control>& rControl) {
+                Control *pCtrl = rControl.get();
+                long nCtrlWidth = pCtrl->GetSizePixel().Width();
+                long nXPos = pCtrl->GetPosPixel().X() + nCtrlWidth;
+                return nXPos <= nSpace;
+            });
+        if (it != m_aControlList.rend() && it != m_aControlList.rbegin())
         {
-            Control *pCtrl = it->get();
-
-            long nCtrlWidth = pCtrl->GetSizePixel().Width();
-            long nXPos = pCtrl->GetPosPixel().X() + nCtrlWidth;
-
-            if (nXPos <= nSpace)
-            {
-                if (it != m_aControlList.rbegin())
-                {
-                    //move the right neighbor  to the right edge right aligned
-                    auto itRight = it;
-                    --itRight;
-                    Control *pRight = itRight->get();
-                    nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
-                }
-
-                break;
-            }
+            //move the right neighbor  to the right edge right aligned
+            auto itRight = it;
+            --itRight;
+            Control *pRight = itRight->get();
+            nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
         }
 
         //move it left until it's completely visible

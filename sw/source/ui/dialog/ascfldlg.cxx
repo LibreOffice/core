@@ -204,10 +204,9 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             }
 
             // insert into listbox
-            for( std::set< OUString >::const_iterator it = aFontNames.begin();
-                 it != aFontNames.end(); ++it )
+            for( const auto& rFontName : aFontNames )
             {
-                m_xFontLB->append_text(*it);
+                m_xFontLB->append_text(rFontName);
             }
 
             if( aOpt.GetFontName().isEmpty() )

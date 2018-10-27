@@ -47,13 +47,10 @@ SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, co
 
 void SwFrameControlsManager::RemoveControls( const SwFrame* pFrame )
 {
-    map< FrameControlType, SwFrameControlPtrMap >::iterator pIt = m_aControls.begin();
-
-    while ( pIt != m_aControls.end() )
+    for ( auto& rEntry : m_aControls )
     {
-        SwFrameControlPtrMap& rMap = pIt->second;
+        SwFrameControlPtrMap& rMap = rEntry.second;
         rMap.erase(pFrame);
-        ++pIt;
     }
 }
 
@@ -65,28 +62,15 @@ void SwFrameControlsManager::RemoveControlsByType( FrameControlType eType, const
 
 void SwFrameControlsManager::HideControls( FrameControlType eType )
 {
-    SwFrameControlPtrMap::iterator pIt = m_aControls[eType].begin();
-    while ( pIt != m_aControls[eType].end() )
-    {
-        pIt->second->ShowAll( false );
-        ++pIt;
-    }
+    for ( const auto& rCtrl : m_aControls[eType] )
+        rCtrl.second->ShowAll( false );
 }
 
 void SwFrameControlsManager::SetReadonlyControls( bool bReadonly )
 {
-    map< FrameControlType, SwFrameControlPtrMap >::iterator pIt = m_aControls.begin();
-
-    while ( pIt != m_aControls.end() )
-    {
-        SwFrameControlPtrMap::iterator aCtrlIt = pIt->second.begin();
-        while ( aCtrlIt != pIt->second.end() )
-        {
-            aCtrlIt->second->SetReadonly( bReadonly );
-            ++aCtrlIt;
-        }
-        ++pIt;
-    }
+    for ( auto& rEntry : m_aControls )
+        for ( auto& rCtrl : rEntry.second )
+            rCtrl.second->SetReadonly( bReadonly );
 }
 
 void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset )

@@ -441,17 +441,14 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
 // remove all items that are inherited from the styles
 static void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, const ItemVector& rItemVector )
 {
-    ItemVector::const_iterator aEnd = rItemVector.end();
-    ItemVector::const_iterator aIter = rItemVector.begin();
-    while( aIter != aEnd )
+    for( const auto& rItem : rItemVector )
     {
         const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rTemplateItemSet.GetItemState( (*aIter)->Which(), true, &pItem ) &&
-            *pItem == *(*aIter) )
+        if( SfxItemState::SET == rTemplateItemSet.GetItemState( rItem->Which(), true, &pItem ) &&
+            *pItem == *rItem )
         {
-            rTemplateItemSet.ClearItem( (*aIter)->Which() );
+            rTemplateItemSet.ClearItem( rItem->Which() );
         }
-        ++aIter;
     }
 }
 

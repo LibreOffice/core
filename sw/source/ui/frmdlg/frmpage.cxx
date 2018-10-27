@@ -441,25 +441,24 @@ static void lcl_InsertVectors(weld::ComboBox& rBox,
     const std::vector< OUString >& rPrev, const std::vector< OUString >& rThis,
     const std::vector< OUString >& rNext, const std::vector< OUString >& rRemain)
 {
-    std::vector< OUString >::const_iterator aIt;
-    for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
-        rBox.append_text(*aIt);
-    for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
-        rBox.append_text(*aIt);
-    for(aIt = rNext.begin(); aIt != rNext.end(); ++aIt)
-        rBox.append_text(*aIt);
+    for(const auto& rItem : rPrev)
+        rBox.append_text(rItem);
+    for(const auto& rItem : rThis)
+        rBox.append_text(rItem);
+    for(const auto& rItem : rNext)
+        rBox.append_text(rItem);
     rBox.append_separator();
     //now insert all strings sorted
     const auto nStartPos = rBox.get_count();
 
-    for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
-        ::InsertStringSorted("", *aIt, rBox, nStartPos );
-    for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
-        ::InsertStringSorted("", *aIt, rBox, nStartPos );
-    for(aIt = rNext.begin(); aIt != rNext.end(); ++aIt)
-        ::InsertStringSorted("", *aIt, rBox, nStartPos );
-    for(aIt = rRemain.begin(); aIt != rRemain.end(); ++aIt)
-        ::InsertStringSorted("", *aIt, rBox, nStartPos );
+    for(const auto& rItem : rPrev)
+        ::InsertStringSorted("", rItem, rBox, nStartPos );
+    for(const auto& rItem : rThis)
+        ::InsertStringSorted("", rItem, rBox, nStartPos );
+    for(const auto& rItem : rNext)
+        ::InsertStringSorted("", rItem, rBox, nStartPos );
+    for(const auto& rItem : rRemain)
+        ::InsertStringSorted("", rItem, rBox, nStartPos );
 }
 
 // --> OD 2009-08-31 #mongolianlayout#
@@ -812,10 +811,9 @@ void SwFramePage::setOptimalFrameWidth()
     std::sort(aFrames.begin(), aFrames.end());
     aFrames.erase(std::unique(aFrames.begin(), aFrames.end()), aFrames.end());
 
-    for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aFrames.begin(), aEnd = aFrames.end();
-        aI != aEnd; ++aI)
+    for (const auto& rFrame : aFrames)
     {
-        m_pHorizontalDLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
+        m_pHorizontalDLB->InsertEntry(SvxSwFramePosString::GetString(rFrame));
     }
 
     Size aBiggest(m_pHorizontalDLB->GetOptimalSize());
@@ -853,10 +851,9 @@ void SwFramePage::setOptimalRelWidth()
     std::sort(aRels.begin(), aRels.end());
     aRels.erase(std::unique(aRels.begin(), aRels.end()), aRels.end());
 
-    for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aRels.begin(), aEnd = aRels.end();
-        aI != aEnd; ++aI)
+    for (const auto& rRel : aRels)
     {
-        m_pHoriRelationLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
+        m_pHoriRelationLB->InsertEntry(SvxSwFramePosString::GetString(rRel));
     }
 
     Size aBiggest(m_pHoriRelationLB->GetOptimalSize());
