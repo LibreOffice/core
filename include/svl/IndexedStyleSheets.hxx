@@ -10,8 +10,6 @@
 #ifndef INCLUDED_SVL_INDEXEDSTYLESHEETS_HXX
 #define INCLUDED_SVL_INDEXEDSTYLESHEETS_HXX
 
-#include <sal/types.h>
-
 #include <svl/style.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -20,8 +18,6 @@
 
 #include <unordered_map>
 #include <vector>
-
-class SfxStyleSheetBase;
 
 namespace svl {
 

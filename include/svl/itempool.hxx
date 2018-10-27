@@ -20,15 +20,12 @@
 #ifndef INCLUDED_SVL_ITEMPOOL_HXX
 #define INCLUDED_SVL_ITEMPOOL_HXX
 
-#include <rtl/string.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <tools/solar.h>
 #include <memory>
 #include <vector>
 
-class SvStream;
 class SfxBroadcaster;
 struct SfxItemPool_Impl;
 
@@ -38,8 +35,6 @@ struct SfxItemInfo
     bool            _bPoolable;
 };
 
-class SfxStyleSheetIterator;
-struct SfxPoolItemArray_Impl;
 class SfxItemPool;
 
 class SVL_DLLPUBLIC SfxItemPoolUser

@@ -23,6 +23,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/poolcach.hxx>
+#include <tools/debug.hxx>
 
 SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):

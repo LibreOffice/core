@@ -23,6 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
+#include <tools/debug.hxx>
 #if defined( DBG_UTIL )
 #include <sfx2/msg.hxx>
 #endif

@@ -22,8 +22,9 @@
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
 {

@@ -26,6 +26,7 @@
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 
 #include <float.h>
+#include <climits>
 
 #include <svx/chrtitem.hxx>
 

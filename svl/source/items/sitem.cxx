@@ -25,6 +25,7 @@
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
+#include <tools/debug.hxx>
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),

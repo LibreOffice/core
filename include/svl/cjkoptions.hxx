@@ -20,7 +20,6 @@
 #define INCLUDED_SVL_CJKOPTIONS_HXX
 
 #include <svl/svldllapi.h>
-#include <sal/types.h>
 #include <unotools/options.hxx>
 #include <memory>
 

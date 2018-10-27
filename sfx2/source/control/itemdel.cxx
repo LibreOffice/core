@@ -23,6 +23,7 @@
 #include <vcl/idle.hxx>
 
 #include <svl/itempool.hxx>
+#include <tools/debug.hxx>
 
 class SfxItemDisruptor_Impl
 {

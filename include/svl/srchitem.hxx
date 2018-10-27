@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 #include <svl/svldllapi.h>
-#include <com/sun/star/util/XSearchDescriptor.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nutil/transliteration.hxx>
@@ -29,7 +28,6 @@
 #include <unotools/configitem.hxx>
 #include <svl/style.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/srchdefs.hxx>
 
 // defines ---------------------------------------------------------------
 

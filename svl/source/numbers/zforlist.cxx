@@ -35,6 +35,9 @@
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/FormatElement.hpp>
 #include <com/sun/star/i18n/Currency2.hpp>
+#include <com/sun/star/i18n/NumberFormatCode.hpp>
+#include <com/sun/star/i18n/XNumberFormatCode.hpp>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 

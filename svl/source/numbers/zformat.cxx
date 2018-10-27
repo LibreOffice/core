@@ -34,6 +34,7 @@
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/AmPmValue.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
 #include <svl/zformat.hxx>
 #include "zforscan.hxx"

@@ -284,3 +284,13 @@ blacklist:
     include/i18nutil/transliteration.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    include/svl/numuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    include/svl/srchdefs.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/svl/urihelper.hxx:
+    # base class has to be a complete type
+    - tools/link.hxx

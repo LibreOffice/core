@@ -7,10 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
 #include <sal/types.h>
 
-#include <memory>
 #include <vector>
 
 #include <rtl/strbuf.hxx>
@@ -19,7 +17,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <svl/svldllapi.h>
-#include <svl/sigstruct.hxx>
 
 namespace com {
 namespace sun {
@@ -29,6 +26,7 @@ namespace security {
 }}}
 
 class SvStream;
+struct SignatureInformation;
 
 namespace svl {
 

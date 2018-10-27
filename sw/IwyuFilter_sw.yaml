@@ -36,6 +36,8 @@ blacklist:
     - o3tl/typed_flags_set.hxx
     sw/inc/swtypes.hxx:
     - o3tl/typed_flags_set.hxx
+    # Needed for macro #define
+    - com/sun/star/i18n/CollatorOptions.hpp
     sw/inc/doc.hxx:
     - o3tl/deleter.hxx
     sw/inc/docsh.hxx:

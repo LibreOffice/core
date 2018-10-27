@@ -12,7 +12,6 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
-#include <locale>
 
 SVL_DLLPUBLIC OUString SvlResId(const char* pId);
 

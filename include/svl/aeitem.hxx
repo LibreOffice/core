@@ -20,12 +20,10 @@
 #define INCLUDED_SVL_AEITEM_HXX
 
 #include <svl/svldllapi.h>
-#include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 
 #include <cstddef>
 #include <memory>
-#include <vector>
 
 class SfxAllEnumValueArr;
 

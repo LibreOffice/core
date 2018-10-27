@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_DOCUFLD_HXX
 #define INCLUDED_SW_INC_DOCUFLD_HXX
 
+#include <tools/solar.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/ref.hxx>

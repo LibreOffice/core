@@ -22,6 +22,7 @@
 #include <document.hxx>
 #include <docoptio.hxx>
 
+#include <unotools/collatorwrapper.hxx>
 #include <unotools/textsearch.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>

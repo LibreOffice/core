@@ -22,6 +22,7 @@
 
 #include <svl/itempool.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <tools/debug.hxx>
 #include <deque>
 #include <memory>
 #include <unordered_map>

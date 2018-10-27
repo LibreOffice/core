@@ -42,6 +42,7 @@
 #include <tools/fract.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/sharedstring.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include <vector>
 

@@ -56,6 +56,7 @@
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationCommon.hxx>
 #include <svl/cryptosign.hxx>
+#include <svl/sigstruct.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

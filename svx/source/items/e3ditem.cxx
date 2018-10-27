@@ -24,6 +24,8 @@
 
 #include <svx/e3ditem.hxx>
 
+#include <climits>
+
 using namespace ::com::sun::star;
 
 

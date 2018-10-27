@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>

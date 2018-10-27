@@ -35,6 +35,7 @@
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>

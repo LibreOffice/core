@@ -26,6 +26,8 @@
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
+#include <com/sun/star/i18n/XNumberFormatCode.hpp>
 
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

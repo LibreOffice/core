@@ -38,6 +38,7 @@
 #include <sal/log.hxx>
 #include <unicode/uchar.h>
 #include <unicode/regex.h>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <patattr.hxx>
 #include <global.hxx>

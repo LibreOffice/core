@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_URIHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/textenc.h>
 #include <svl/svldllapi.h>
 #include <tools/link.hxx>

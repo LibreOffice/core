@@ -33,6 +33,7 @@
 #include <svl/ilstitem.hxx>
 #include <svl/int64item.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/srchdefs.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zformat.hxx>

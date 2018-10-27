@@ -41,6 +41,8 @@
 #include <editeng/eerdll.hxx>
 #include <svx/unomid.hxx>
 
+#include <climits>
+
 using namespace ::com::sun::star;
 
 

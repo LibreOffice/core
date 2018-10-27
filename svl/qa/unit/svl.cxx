@@ -25,6 +25,8 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 #include <i18nlangtag/lang.h>
 

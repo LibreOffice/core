@@ -21,6 +21,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
 #include <o3tl/make_unique.hxx>
+#include <tools/debug.hxx>
 #include <algorithm>
 #include <map>
 #include <memory>

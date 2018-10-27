@@ -23,8 +23,9 @@
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
 {

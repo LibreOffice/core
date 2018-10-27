@@ -32,6 +32,7 @@
 #include <editeng/langitem.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileformat.h>
+#include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
 #include <o3tl/make_unique.hxx>

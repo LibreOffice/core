@@ -20,6 +20,8 @@
 #define INCLUDED_EDITENG_FHGTITEM_HXX
 
 #include <svl/poolitem.hxx>
+#include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;

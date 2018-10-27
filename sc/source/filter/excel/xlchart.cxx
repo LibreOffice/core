@@ -35,6 +35,7 @@
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <sal/macros.h>
 #include <rtl/math.hxx>

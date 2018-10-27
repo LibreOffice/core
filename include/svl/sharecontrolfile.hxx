@@ -22,15 +22,14 @@
 
 #include <svl/svldllapi.h>
 
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
-
 #include <svl/lockfilecommon.hxx>
-#include <o3tl/enumarray.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XSeekable; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XTruncate; } } } }
 
 namespace svt {
 

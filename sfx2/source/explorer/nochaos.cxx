@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <tools/solar.h>
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>

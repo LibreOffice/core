@@ -23,22 +23,15 @@
 #include <sal/config.h>
 
 #include <svl/svldllapi.h>
-#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <memory>
 #include <vector>
 
 class DdeString;
-class DdeData;
 class DdeConnection;
-class DdeTransaction;
-class DdeLink;
-class DdeRequest;
-class DdeHotLink;
-class DdePoke;
-class DdeExecute;
-class DdeItem;
 class DdeTopic;
 class DdeService;
 struct DdeDataImp;

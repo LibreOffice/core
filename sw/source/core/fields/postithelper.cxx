@@ -35,6 +35,7 @@
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <calbck.hxx>
+#include <tools/solar.h>
 
 class Point;
 

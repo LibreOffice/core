@@ -107,6 +107,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 

@@ -23,8 +23,6 @@
 #include <svl/itemset.hxx>
 
 class SfxPoolItem;
-class SfxItemSet;
-class SfxItemPool;
 
 class SVL_DLLPUBLIC SfxItemIter
 {

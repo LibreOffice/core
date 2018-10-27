@@ -23,21 +23,20 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/i18n/NumberFormatCode.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/i18n/NumberFormatMapper.hpp>
-#include <com/sun/star/i18n/Currency.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/link.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/nfkeytab.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
 #include <map>
 #include <memory>
 #include <set>
+
+namespace com { namespace sun { namespace star { namespace i18n { class XNumberFormatCode; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct Currency; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct NumberFormatCode; } } } }
+namespace o3tl { template <typename T> struct typed_flags; }
 
 class Date;
 class Color;

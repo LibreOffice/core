@@ -19,6 +19,7 @@
 
 #include <svx/svxids.hrc>
 #include <svx/rulritem.hxx>
+#include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

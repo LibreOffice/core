@@ -23,6 +23,7 @@
 #include "fmtfld.hxx"
 #include <cstddef>
 #include <vcl/vclptr.hxx>
+#include <tools/solar.h>
 #include "SidebarWindowsTypes.hxx"
 
 class SfxBroadcaster;

@@ -28,6 +28,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <osl/thread.h>
+#include <sot/exchange.hxx>
 
 DdeData::DdeData()
 {

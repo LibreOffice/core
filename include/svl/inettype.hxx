@@ -22,7 +22,6 @@
 
 #include <svl/svldllapi.h>
 #include <tools/inetmime.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 
 /** Definitions for frequently used media type names.

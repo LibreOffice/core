@@ -57,6 +57,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <tools/debug.hxx>
 
 #include <deque>
 #include <map>

@@ -25,12 +25,9 @@
 #include <i18nlangtag/lang.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
-#include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <i18nutil/transliteration.hxx>
 
 /*
