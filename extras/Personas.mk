@@ -24,7 +24,7 @@ $(eval $(call gb_Package_Package,extras_personas,$(SRCDIR)/extras/source/gallery
 $(call gb_Package_get_clean_target,extras_personas):
 	rm -rf $(INSTROOT)/$(LIBO_SHARE_FOLDER)/gallery/personas
 
-# TODO: generate this, and potentiallly make labels translatable
+# TODO: generate this, and potentially make labels translatable
 $(eval $(call gb_Package_add_files,extras_personas,$(LIBO_SHARE_FOLDER)/gallery/personas,\
 	personas_list.txt \
 ))	
