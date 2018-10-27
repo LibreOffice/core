@@ -24,6 +24,7 @@
 
 #include <vcl/svapp.hxx>
 #include <fontinstance.hxx>
+#include <impglyphitem.hxx>
 #include <impfont.hxx>
 #include <fontattributes.hxx>
 
@@ -590,8 +591,7 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 
 bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    assert(mpFontInstance.is());
-    if (mpFontInstance.is() && mpFontInstance->GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
+    if (rGlyph.GetCachedGlyphBoundRect(rRect))
         return true;
 
     FT_Activate_Size( maSizeFT );
