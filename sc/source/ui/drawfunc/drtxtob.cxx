@@ -436,18 +436,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
         SdrView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-        bool bEnable = false;
-        if ( pOutView )
-        {
-            const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
-            if ( pFieldItem )
-            {
-                const SvxFieldData* pField = pFieldItem->GetField();
-                bEnable = dynamic_cast<const SvxURLField*>( pField) !=  nullptr;
-            }
-        }
-        if( !bEnable )
+        if( !URLFieldHelper::IsCursorAtURLField(pView->GetTextEditOutlinerView()) )
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
