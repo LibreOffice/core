@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_13baaedd",
+        "filename": "desktop/win32/source/QuickStart/QuickStart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-27T15:59:29Z",
+      "side": 1,
+      "message": "Please revert the unrelated changes to these lines: only line 86 needs a change here.",
+      "range": {
+        "startLine": 79,
+        "startChar": 22,
+        "endLine": 80,
+        "endChar": 39
+      },
+      "revId": "5e0b49fe21a63b444e442261532a221032418b59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
