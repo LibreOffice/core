@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdetc.hxx>
@@ -670,14 +671,19 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                     {
                         if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                         {
-                            ::tools::SvRef<SotStorageStream> xStm;
-
-                            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::XFA, xStm ) && xStm.is() )
+                            uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, ""));
+                            uno::Sequence<beans::NamedValue> props;
+                            if (data >>= props)
                             {
-                                XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
-
-                                ReadXFillExchangeData( *xStm, aFillData );
-                                const Color aColor( aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ).GetColorValue() );
+                                ::comphelper::SequenceAsHashMap const map(props);
+                                Color aColor(COL_BLACK);
+                                auto const it = map.find("FillColor");
+                                if (it != map.end())
+                                {
+                                    XFillColorItem color;
+                                    color.PutValue(it->second, 0);
+                                    aColor = color.GetColorValue();
+                                }
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, true );
                                 nRet = nDropAction;
                             }
