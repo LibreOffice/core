@@ -1658,8 +1658,6 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     if( aRawCffData.get() )
     {
         pWinFontData->UpdateFromHDC( getHDC() );
-        FontCharMapRef xFontCharMap = pWinFontData->GetFontCharMap();
-        xFontCharMap = nullptr;
 
         // provide a font subset from the CFF-table
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
