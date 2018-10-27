@@ -533,7 +533,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     uno::Reference< chart2::data::XDataSource > xRes;
 
     if (!pDoc)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Not connected to a document.");
 
     // get arguments
     OUString aRangeRepresentation;
@@ -1690,7 +1690,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             throw lang::IllegalArgumentException();
         SwTable* pTable = SwTable::FindTable( pTableFormat );
         if  (pTable->IsTableComplex())
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("Table too complex.");
 
         // check that there is only one table used in all ranges
         if (!pFirstFoundTable)
@@ -1707,7 +1707,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         sal_Int32 nCol, nRow;
         SwXTextTable::GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("Cell not found.");
 
         //!! following objects/functions are implemented in XMLRangeHelper.?xx
         //!! which is a copy of the respective file from chart2 !!
@@ -1720,7 +1720,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         {
             SwXTextTable::GetCellPosition( aEndCell, nCol, nRow );
             if (nCol < 0 || nRow < 0)
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("Cell not found.");
 
             aCellRange.aLowerRight.nColumn   = nCol;
             aCellRange.aLowerRight.nRow      = nRow;
@@ -1965,9 +1965,13 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         SwRangeDescriptor aDesc;
         bool bOk = false;
         SwFrameFormat* pTableFormat = GetFrameFormat();
-        SwTable* pTable = pTableFormat ? SwTable::FindTable( pTableFormat ) : nullptr;
-        if (!pTableFormat || !pTable || pTable->IsTableComplex())
-            throw uno::RuntimeException();
+        if (!pTableFormat)
+            throw uno::RuntimeException("No table format found.");
+        SwTable* pTable = SwTable::FindTable( pTableFormat );
+        if (!pTable)
+            throw uno::RuntimeException("No table found.");
+        if (pTable->IsTableComplex())
+            throw uno::RuntimeException("Table too complex.");
 
         const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCursor ) );
         OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
