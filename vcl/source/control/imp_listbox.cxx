@@ -32,6 +32,7 @@
 #include <controldata.hxx>
 #include <svdata.hxx>
 #include <window.h>
+#include <impglyphitem.hxx>
 
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
