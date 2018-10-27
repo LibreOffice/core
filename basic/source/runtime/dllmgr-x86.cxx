@@ -542,8 +542,7 @@ ErrCode call(
         break;
     case SbxBOOL:
         result.PutBool(
-            static_cast< sal_Bool >(
-                DllMgr_call32(proc.proc, address(stack), stack.size())));
+            bool(DllMgr_call32(proc.proc, address(stack), stack.size())));
         break;
     case SbxBYTE:
         result.PutByte(
