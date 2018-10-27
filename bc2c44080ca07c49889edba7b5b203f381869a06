@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_33081227",
+        "filename": "sw/uiconfig/sweb/popupmenu/table.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T13:09:54Z",
+      "side": 1,
+      "message": "Don\u0027t see much need for numbering in tables. At least it should occupy space on root and should go into a submenu together with the dialog that comes below.",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 24,
+        "endChar": 48
+      },
+      "revId": "bc2c44080ca07c49889edba7b5b203f381869a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_130d0e37",
+        "filename": "sw/uiconfig/sweb/popupmenu/table.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T13:09:54Z",
+      "side": 1,
+      "message": "Would expect a SplitCells command here too.",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 44
+      },
+      "revId": "bc2c44080ca07c49889edba7b5b203f381869a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_f3116a55",
+        "filename": "sw/uiconfig/sweb/popupmenu/table.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T13:09:54Z",
+      "side": 1,
+      "message": "What\u0027s this? If needed it better goes into the proposed numbering submenu.",
+      "range": {
+        "startLine": 79,
+        "startChar": 2,
+        "endLine": 79,
+        "endChar": 47
+      },
+      "revId": "bc2c44080ca07c49889edba7b5b203f381869a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_b31be271",
+        "filename": "sw/uiconfig/sweb/popupmenu/table.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T13:09:54Z",
+      "side": 1,
+      "message": "Woot? Are we still in tables?",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 84,
+        "endChar": 56
+      },
+      "revId": "bc2c44080ca07c49889edba7b5b203f381869a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
