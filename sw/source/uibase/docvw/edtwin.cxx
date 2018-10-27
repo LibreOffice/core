@@ -1454,6 +1454,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if( ( bVertText && ( !bTableCursor || bVertTable ) ) ||
                 ( bTableCursor && bVertTable ) )
             {
+<<<<<<< HEAD   (6476f8 Revert "LOK: allow slide switching in mobile even if it is s)
                 SvxFrameDirection eDirection = rSh.GetTextDirection();
                 if (eDirection == SvxFrameDirection::Vertical_LR_BT)
                 {
@@ -1476,6 +1477,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
                     else /* KEY_RIGHT == nKey */ nKey = KEY_UP;
                 }
+=======
+                // Attempt to integrate cursor travelling for mongolian layout does not work.
+                // Thus, back to previous mapping of cursor keys to direction keys.
+                if( KEY_UP == nKey ) nKey = KEY_LEFT;
+                else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
+                else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
+                else /* KEY_RIGHT == nKey */ nKey = KEY_UP;
+>>>>>>> CHANGE (5f0ddb tdf#120703 PVS: V547 Expression is always true/false)
             }
 
             if ( rSh.IsInRightToLeftText() )

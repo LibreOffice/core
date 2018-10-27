@@ -320,7 +320,11 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SvxFieldData* pField = pFieldItem->GetField();
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
+<<<<<<< HEAD   (6476f8 Revert "LOK: allow slide switching in mobile even if it is s)
                     ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), /*BypassCtrlClickSecurity:*/ true);
+=======
+                    ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame());
+>>>>>>> CHANGE (5f0ddb tdf#120703 PVS: V547 Expression is always true/false)
                 }
             }
             break;

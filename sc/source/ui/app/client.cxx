@@ -172,7 +172,10 @@ void ScClient::ObjectAreaChanged()
 
         //  set document modified (SdrModel::SetChanged is not used)
         pViewSh->GetViewData().GetDocShell()->SetDrawModified();
+<<<<<<< HEAD   (6476f8 Revert "LOK: allow slide switching in mobile even if it is s)
         pViewSh->ScrollToObject(pDrawObj);
+=======
+>>>>>>> CHANGE (5f0ddb tdf#120703 PVS: V547 Expression is always true/false)
     }
 }
 
