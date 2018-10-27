@@ -587,6 +587,8 @@ DECLARE_OOXMLEXPORT_TEST(testN780843b, "n780843b.docx")
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
     CPPUNIT_ASSERT_EQUAL( OUString("hidden footer"), xFooterText->getString() );
+
+    CPPUNIT_ASSERT_EQUAL( 7, getParagraphs() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testShadow, "imgshadow.docx")
