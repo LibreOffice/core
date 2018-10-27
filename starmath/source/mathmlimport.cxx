@@ -1161,7 +1161,6 @@ void SmXMLFencedContext_Impl::EndElement()
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
     aToken.cMathChar = '\0';
-    aToken.aText = ",";
     aToken.eType = TIDENT;
 
     auto i = rNodeStack.size() - nElementCount;
