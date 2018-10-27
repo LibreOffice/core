@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_d0c77c45",
+        "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T10:16:53Z",
+      "side": 1,
+      "message": "Doubt the numbering is so important in tables that it is worth to occupy the root. Same is true in Writer and Calc.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 48
+      },
+      "revId": "6bf9bdeb52d488d18dfb35331c25df285e0a0a7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_90c1f431",
+        "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T10:16:53Z",
+      "side": 1,
+      "message": "Wouldn\u0027t make the protection setting easy accessible.",
+      "revId": "6bf9bdeb52d488d18dfb35331c25df285e0a0a7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

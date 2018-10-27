@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_10b624db",
+        "filename": "sd/uiconfig/simpress/popupmenu/table.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-27T10:16:53Z",
+      "side": 0,
+      "message": "Missing the split cell command",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 47
+      },
+      "revId": "25af42bc70e1a0a61d2ea90d7b0ef1ed6000ed69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
