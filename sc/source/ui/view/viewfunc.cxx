@@ -652,7 +652,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         OUString aString;
 
         const ScPatternAttr* pOldPattern = rDoc.GetPattern( nCol, nRow, nTab );
-        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEnginePool() );
+        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEnginePool(), &rDoc );
         aEngine.SetText(rData);
 
         if (bTestSimple)                    // test, if simple string without attribute
