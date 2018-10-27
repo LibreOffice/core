@@ -55,6 +55,7 @@ struct VCL_DLLPUBLIC GlyphItem
         , m_aLinearPos(rLinearPos)
         , m_pFontInstance(pFontInstance)
     {
+        assert(pFontInstance);
     }
 
     enum
