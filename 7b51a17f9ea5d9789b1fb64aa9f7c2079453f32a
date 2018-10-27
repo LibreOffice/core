@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_90efb4af",
+        "filename": "sc/Module_sc.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-10-27T11:08:51Z",
+      "side": 1,
+      "message": "Can this be put in a group with other UI tests?",
+      "revId": "7b51a17f9ea5d9789b1fb64aa9f7c2079453f32a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
