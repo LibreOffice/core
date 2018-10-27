@@ -142,14 +142,14 @@ void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight e
         mpUnicodeFallbackList->erase( it );
 }
 
-bool LogicalFontInstance::GetCachedGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect)
+bool LogicalFontInstance::GetCachedGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect) const
 {
     if (!mpFontCache)
         return false;
     return mpFontCache->GetCachedGlyphBoundRect(this, nID, rRect);
 }
 
-void LogicalFontInstance::CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect)
+void LogicalFontInstance::CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect) const
 {
     if (!mpFontCache)
         return;

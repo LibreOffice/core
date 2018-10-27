@@ -88,8 +88,8 @@ public:
                             LogicalFontInstance* pLogicalFont,
                             int nFallbackLevel, OUString& rMissingCodes );
 
-    bool GetCachedGlyphBoundRect(LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
-    void CacheGlyphBoundRect(LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
+    bool GetCachedGlyphBoundRect(const LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
+    void CacheGlyphBoundRect(const LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
 
     void                Invalidate();
 };
