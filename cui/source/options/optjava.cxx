@@ -228,6 +228,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
     OUString* pLocation = static_cast< OUString* >( pEntry->GetUserData() );
     DBG_ASSERT( pLocation, "invalid location string" );
     OUString sInfo = m_sInstallText;
+    // tdf#80646 insert LTR mark after label
+    sInfo += OUStringLiteral1(0x200E);
     if ( pLocation )
         sInfo += *pLocation;
     m_pJavaPathText->SetText(sInfo);
