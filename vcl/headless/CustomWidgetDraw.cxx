@@ -334,7 +334,7 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
         aStyleSet.SetDialogTextColor(aStyle.maDialogTextColor);
         aStyleSet.SetWorkspaceColor(Color(0xDF, 0xDF, 0xDE));
         aStyleSet.SetMonoColor(Color(COL_BLACK));
-        aStyleSet.SetFieldColor(Color(COL_WHITE));
+        aStyleSet.SetFieldColor(Color(aStyle.maFaceColor));
         aStyleSet.SetFieldTextColor(Color(COL_BLACK));
         aStyleSet.SetFieldRolloverTextColor(Color(COL_BLACK));
         aStyleSet.SetActiveColor(Color(COL_BLUE));
@@ -349,10 +349,10 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
         aStyleSet.SetMenuBorderColor(Color(COL_LIGHTGRAY));
         aStyleSet.SetMenuTextColor(Color(COL_BLACK));
         aStyleSet.SetMenuBarTextColor(Color(COL_BLACK));
-        aStyleSet.SetMenuBarRolloverTextColor(Color(COL_WHITE));
-        aStyleSet.SetMenuBarHighlightTextColor(Color(COL_WHITE));
+        aStyleSet.SetMenuBarRolloverTextColor(Color(COL_BLACK));
+        aStyleSet.SetMenuBarHighlightTextColor(Color(COL_BLACK));
         aStyleSet.SetMenuHighlightColor(aStyle.maHighlightColor);
-        aStyleSet.SetMenuHighlightTextColor(Color(COL_WHITE));
+        aStyleSet.SetMenuHighlightTextColor(Color(COL_BLACK));
         aStyleSet.SetHighlightColor(aStyle.maHighlightColor);
         aStyleSet.SetHighlightTextColor(aStyle.maHighlightTextColor);
         aStyleSet.SetActiveTabColor(aStyle.maActiveTabColor);
