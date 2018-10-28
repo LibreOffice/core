@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_562f04f6",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-28T09:45:47Z",
+      "side": 1,
+      "message": "How about having merge and split on top and those two on bottom?",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 1
+      },
+      "revId": "15cd3bd1c076e29defa4fabac89f76c57267a0dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
