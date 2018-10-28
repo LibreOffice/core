@@ -243,6 +243,34 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
     CoInitialize( nullptr );
 }
 
+namespace
+{
+// This callback checks if the found window is the specified process's top-level window,
+// and activates the first found such window.
+BOOL CALLBACK FindAndActivateProcWnd(HWND hwnd, LPARAM lParam)
+{
+    if (!IsWindowVisible(hwnd))
+        return TRUE; // continue enumeration
+    if (GetWindow(hwnd, GW_OWNER)) // not a top-level window
+        return TRUE; // continue enumeration
+    const DWORD nParamProcId = static_cast<DWORD>(lParam);
+    assert(nParamProcId != 0);
+    DWORD nWndProcId = 0;
+    (void)GetWindowThreadProcessId(hwnd, &nWndProcId);
+    if (nWndProcId != nParamProcId)
+        return TRUE; // continue enumeration
+
+    // Found it! Bring it to front
+    if (IsIconic(hwnd))
+    {
+        ShowWindow(hwnd, SW_RESTORE);
+    }
+    SetForegroundWindow(hwnd);
+    SetActiveWindow(hwnd);
+    return FALSE; // stop enumeration
+}
+}
+
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
@@ -300,9 +328,10 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     sei.lpFile       = reinterpret_cast<LPCWSTR>(preprocessed_command.getStr());
     sei.lpParameters = reinterpret_cast<LPCWSTR>(aParameter.getStr());
     sei.nShow        = SW_SHOWNORMAL;
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS; // we need sei.hProcess
 
     if (NO_SYSTEM_ERROR_MESSAGE & nFlags)
-        sei.fMask = SEE_MASK_FLAG_NO_UI;
+        sei.fMask |= SEE_MASK_FLAG_NO_UI;
 
     SetLastError( 0 );
 
@@ -326,20 +355,12 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     else
     {
         // Get Permission make changes to the Window of the created Process
-        HWND procHandle = 0;
-        DWORD procId = GetProcessId(sei.hProcess);
-        AllowSetForegroundWindow(procId);
-
-        // Get the handle of the created Window
-        DWORD check = 0;
-        GetWindowThreadProcessId(procHandle, &check);
-        SAL_WARN_IF(check != procId, "shell", "Could not get handle of process called by shell.");
-
-        // Move created Window into the foreground
-        if(procHandle != 0)
+        const DWORD procId = GetProcessId(sei.hProcess);
+        if (procId != 0)
         {
-            SetForegroundWindow(procHandle);
-            SetActiveWindow(procHandle);
+            AllowSetForegroundWindow(procId);
+            WaitForInputIdle(sei.hProcess, 1000); // so that main window is created; imperfect
+            EnumWindows(FindAndActivateProcWnd, static_cast<LPARAM>(procId));
         }
     }
 
