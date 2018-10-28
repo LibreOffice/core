@@ -99,6 +99,11 @@ class findReplace(UITestCase):
         self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ()),
                 dialog_handler=handle_format_dlg)
 
+        # Verify these didn't get set again through SvxSearchController::StateChanged, timer-
+        # triggered from SfxBindings::NextJob while executing the Format dialog above:
+        self.assertEqual(get_state_as_dict(searchterm)["Text"], "")
+        self.assertEqual(get_state_as_dict(replaceterm)["Text"], "")
+
         xsearch = xDialog.getChild("search")
         xsearch.executeAction("CLICK", tuple())
         #verify
