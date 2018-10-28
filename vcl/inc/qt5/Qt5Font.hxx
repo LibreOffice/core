@@ -30,6 +30,9 @@ class Qt5Font final : public QFont, public LogicalFontInstance
     friend rtl::Reference<LogicalFontInstance>
     Qt5FontFace::CreateFontInstance(const FontSelectPattern&) const;
 
+    bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
+    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
+
     virtual hb_font_t* ImplInitHbFont() override;
 
     explicit Qt5Font(const PhysicalFontFace&, const FontSelectPattern&);
