@@ -7859,7 +7859,6 @@ include/unotools/searchopt.hxx
 include/unotools/securityoptions.hxx
 include/unotools/sharedunocomponent.hxx
 include/unotools/streamhelper.hxx
-include/unotools/streamsection.hxx
 include/unotools/streamwrap.hxx
 include/unotools/syslocale.hxx
 include/unotools/syslocaleoptions.hxx
