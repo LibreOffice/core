@@ -38,10 +38,10 @@ class SvxSearchItem;
 class SfxStyleSheetBasePool;
 class SvxJSearchOptionsPage;
 class SvxSearchController;
+class VclAbstractDialog;
 struct SearchDlg_Impl;
 enum class ModifyFlags;
 enum class TransliterationFlags;
-
 
 struct SearchAttrItem
 {
@@ -230,6 +230,8 @@ private:
     mutable TransliterationFlags
                             nTransliterationFlags;
 
+    bool m_executingSubDialog = false;
+
     DECL_LINK( ModifyHdl_Impl, Edit&, void );
     DECL_LINK( FlagHdl_Impl, Button*, void );
     DECL_LINK( CommandHdl_Impl, Button*, void );
@@ -263,6 +265,8 @@ private:
 
     void            ApplyTransliterationFlags_Impl( TransliterationFlags nSettings );
     bool            IsOtherOptionsExpanded();
+
+    short executeSubDialog(VclAbstractDialog * dialog);
 };
 
 #endif
