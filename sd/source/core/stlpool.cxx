@@ -898,13 +898,10 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
         {
             pSheet = &Make(aLevelName, SfxStyleFamily::Pseudo, nUsedMask);
 
-            if (pSheet)
-            {
-                if (pParent)
-                    pSheet->SetParent(pParent->GetName());
-                pParent = pSheet;
-                static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
-            }
+            if (pParent)
+                pSheet->SetParent(pParent->GetName());
+            pParent = pSheet;
+            static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
         }
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
     }

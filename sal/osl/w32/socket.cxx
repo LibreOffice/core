@@ -469,12 +469,6 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 
     rtl_uString_newFromString( &cn, strHostname);
 
-    if ( ! pSocketAddr )
-    {
-        rtl_uString_release(cn);
-        return nullptr;
-    }
-
     pAddr= static_cast<oslHostAddr>(malloc (sizeof (struct oslHostAddrImpl)));
 
     if (pAddr == nullptr)

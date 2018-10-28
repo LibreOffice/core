@@ -585,8 +585,8 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
 
     }
 
-    if( cryptSerialNumber.pbData ) free( cryptSerialNumber.pbData ) ;
-    if( certInfo.Issuer.pbData ) free( certInfo.Issuer.pbData ) ;
+    free(cryptSerialNumber.pbData);
+    free(certInfo.Issuer.pbData);
 
     if( pCertContext != nullptr ) {
         xcert = MswcryCertContextToXCert(pCertContext);

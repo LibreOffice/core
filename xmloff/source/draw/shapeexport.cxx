@@ -2055,30 +2055,18 @@ void XMLShapeExport::ImpExportLineShape(
     if (auto pSourcePolyPolygon
             = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
     {
-        drawing::PointSequence* pOuterSequence = const_cast<css::drawing::PointSequenceSequence *>(pSourcePolyPolygon)->getArray();
-        if(pOuterSequence)
+        if (pSourcePolyPolygon->getLength() > 1)
         {
-            drawing::PointSequence* pInnerSequence = pOuterSequence++;
-            if(pInnerSequence)
+            const drawing::PointSequence& rInnerSequence = (*pSourcePolyPolygon)[1];
+            if (rInnerSequence.getLength() > 0)
             {
-                awt::Point* pArray = pInnerSequence->getArray();
-                if(pArray)
-                {
-                    if(pInnerSequence->getLength() > 0)
-                    {
-                        aStart = awt::Point(
-                            pArray->X + aBasePosition.X,
-                            pArray->Y + aBasePosition.Y);
-                        pArray++;
-                    }
-
-                    if(pInnerSequence->getLength() > 1)
-                    {
-                        aEnd = awt::Point(
-                            pArray->X + aBasePosition.X,
-                            pArray->Y + aBasePosition.Y);
-                    }
-                }
+                const awt::Point& rPoint = rInnerSequence[0];
+                aStart = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
+            }
+            if (rInnerSequence.getLength() > 1)
+            {
+                const awt::Point& rPoint = rInnerSequence[1];
+                aEnd = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
             }
         }
     }
