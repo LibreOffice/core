@@ -419,7 +419,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     HDC hDC = getHDC();
 
     tools::Rectangle aRect;
-    rLayout.GetBoundRect(*this, aRect);
+    rLayout.GetBoundRect(aRect);
 
     COLORREF color = GetTextColor(hDC);
     Color salColor = Color(GetRValue(color), GetGValue(color), GetBValue(color));
@@ -511,7 +511,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         // switch to that if it performs well.
 
         tools::Rectangle aRect;
-        rLayout.GetBoundRect(*this, aRect);
+        rLayout.GetBoundRect(aRect);
 
         WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
 

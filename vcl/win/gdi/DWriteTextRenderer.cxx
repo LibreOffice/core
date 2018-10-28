@@ -272,7 +272,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         return false;
 
     tools::Rectangle bounds;
-    bool succeeded = rLayout.GetBoundRect(rGraphics, bounds);
+    bool succeeded = rLayout.GetBoundRect(bounds);
     if (succeeded)
     {
         hr = BindDC(hDC, bounds);   // Update the bounding rect.

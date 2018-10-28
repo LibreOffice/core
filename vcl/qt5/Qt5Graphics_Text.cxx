@@ -152,19 +152,6 @@ void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVerti
 {
 }
 
-bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
-{
-    Qt5Font* pFont = static_cast<Qt5Font*>(rGlyph.m_pFontInstance);
-    if (!pFont)
-        return false;
-
-    QRawFont aRawFont(QRawFont::fromFont(*pFont));
-    rRect = toRectangle(aRawFont.boundingRect(rGlyph.m_aGlyphId).toAlignedRect());
-    return true;
-}
-
-bool Qt5Graphics::GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) { return false; }
-
 class Qt5CommonSalLayout : public GenericSalLayout
 {
 public:
