@@ -101,4 +101,13 @@ hb_font_t* Qt5Font::ImplInitHbFont()
     return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
 }
 
+bool Qt5Font::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const { return false; }
+
+bool Qt5Font::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
+{
+    QRawFont aRawFont(QRawFont::fromFont(*this));
+    rRect = toRectangle(aRawFont.boundingRect(nId).toAlignedRect());
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
