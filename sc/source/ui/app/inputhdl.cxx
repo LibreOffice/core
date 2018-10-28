@@ -3633,131 +3633,127 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     {
         ScModule* pScMod = SC_MOD();
 
-        if ( pState )
+        // Also take foreign reference input into account here (e.g. FunctionsAutoPilot),
+        // FormEditData, if we're switching from Help to Calc:
+        if ( !bFormulaMode && !pScMod->IsFormulaMode() && !pScMod->GetFormEditData() )
         {
-
-            // Also take foreign reference input into account here (e.g. FunctionsAutoPilot),
-            // FormEditData, if we're switching from Help to Calc:
-            if ( !bFormulaMode && !pScMod->IsFormulaMode() && !pScMod->GetFormEditData() )
+            bool bIgnore = false;
+            if ( bModified )
             {
-                bool bIgnore = false;
-                if ( bModified )
+                if (pState->GetPos() != aCursorPos)
                 {
-                    if (pState->GetPos() != aCursorPos)
+                    if (!bProtected)
+                        EnterHandler();
+                }
+                else
+                    bIgnore = true;
+            }
+
+            if ( !bIgnore )
+            {
+                const ScAddress&        rSPos   = pState->GetStartPos();
+                const ScAddress&        rEPos   = pState->GetEndPos();
+                const EditTextObject*   pData   = pState->GetEditData();
+                OUString aString = pState->GetString();
+                bool bTxtMod = false;
+                ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
+                ScDocument& rDoc = pDocSh->GetDocument();
+
+                aCursorPos  = pState->GetPos();
+
+                if ( pData )
+                    bTxtMod = true;
+                else if ( bHadObject )
+                    bTxtMod = true;
+                else if ( bTextValid )
+                    bTxtMod = ( aString != aCurrentText );
+                else
+                    bTxtMod = ( aString != GetEditText(mpEditEngine.get()) );
+
+                if ( bTxtMod || bForce )
+                {
+                    if (pData)
                     {
-                        if (!bProtected)
-                            EnterHandler();
+                        mpEditEngine->SetText( *pData );
+                        if (pInputWin)
+                            aString = ScEditUtil::GetMultilineString(*mpEditEngine);
+                        else
+                            aString = GetEditText(mpEditEngine.get());
+                        lcl_RemoveTabs(aString);
+                        bTextValid = false;
+                        aCurrentText.clear();
                     }
                     else
-                        bIgnore = true;
+                    {
+                        aCurrentText = aString;
+                        bTextValid = true;              //! To begin with remember as a string
+                    }
+
+                    if ( pInputWin )
+                        pInputWin->SetTextString(aString);
+                    else if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        if (pActiveViewSh)
+                            pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                    }
                 }
 
-                if ( !bIgnore )
+                if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
                 {
-                    const ScAddress&        rSPos   = pState->GetStartPos();
-                    const ScAddress&        rEPos   = pState->GetEndPos();
-                    const EditTextObject*   pData   = pState->GetEditData();
-                    OUString aString = pState->GetString();
-                    bool bTxtMod = false;
-                    ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
-                    ScDocument& rDoc = pDocSh->GetDocument();
+                    OUString aPosStr;
+                    const ScAddress::Details aAddrDetails( &rDoc, aCursorPos );
 
-                    aCursorPos  = pState->GetPos();
+                    // Is the range a name?
+                    //! Find by Timer?
+                    if ( pActiveViewSh )
+                        pActiveViewSh->GetViewData().GetDocument()->
+                            GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
 
-                    if ( pData )
-                        bTxtMod = true;
-                    else if ( bHadObject )
-                        bTxtMod = true;
-                    else if ( bTextValid )
-                        bTxtMod = ( aString != aCurrentText );
-                    else
-                        bTxtMod = ( aString != GetEditText(mpEditEngine.get()) );
-
-                    if ( bTxtMod || bForce )
+                    if ( aPosStr.isEmpty() )           // Not a name -> format
                     {
-                        if (pData)
+                        ScRefFlags nFlags = ScRefFlags::ZERO;
+                        if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )
+                            nFlags |= ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS;
+                        if ( rSPos != rEPos )
                         {
-                            mpEditEngine->SetText( *pData );
-                            if (pInputWin)
-                                aString = ScEditUtil::GetMultilineString(*mpEditEngine);
-                            else
-                                aString = GetEditText(mpEditEngine.get());
-                            lcl_RemoveTabs(aString);
-                            bTextValid = false;
-                            aCurrentText.clear();
+                            ScRange r(rSPos, rEPos);
+                            applyStartToEndFlags(nFlags);
+                            aPosStr = r.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
                         }
                         else
-                        {
-                            aCurrentText = aString;
-                            bTextValid = true;              //! To begin with remember as a string
-                        }
-
-                        if ( pInputWin )
-                            pInputWin->SetTextString(aString);
-                        else if (comphelper::LibreOfficeKit::isActive())
-                        {
-                            if (pActiveViewSh)
-                                pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
-                        }
+                            aPosStr = aCursorPos.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
                     }
 
-                    if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
+                    if (pInputWin)
                     {
-                        OUString aPosStr;
-                        const ScAddress::Details aAddrDetails( &rDoc, aCursorPos );
-
-                        // Is the range a name?
-                        //! Find by Timer?
-                        if ( pActiveViewSh )
-                            pActiveViewSh->GetViewData().GetDocument()->
-                                GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
-
-                        if ( aPosStr.isEmpty() )           // Not a name -> format
-                        {
-                            ScRefFlags nFlags = ScRefFlags::ZERO;
-                            if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )
-                                nFlags |= ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS;
-                            if ( rSPos != rEPos )
-                            {
-                                ScRange r(rSPos, rEPos);
-                                applyStartToEndFlags(nFlags);
-                                aPosStr = r.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
-                            }
-                            else
-                                aPosStr = aCursorPos.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
-                        }
-
-                        if (pInputWin)
-                        {
-                            // Disable the accessible VALUE_CHANGE event
-                            bool bIsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(false);
-                            pInputWin->SetAccessibilityEventsSuppressed(true);
-                            pInputWin->SetPosString(aPosStr);
-                            pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
-                            pInputWin->SetSumAssignMode();
-                        }
-                        else if (pActiveViewSh)
-                        {
-                            pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8().getStr());
-                        }
+                        // Disable the accessible VALUE_CHANGE event
+                        bool bIsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(false);
+                        pInputWin->SetAccessibilityEventsSuppressed(true);
+                        pInputWin->SetPosString(aPosStr);
+                        pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
+                        pInputWin->SetSumAssignMode();
                     }
-
-                    if (bStopEditing)
-                        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
-
-                    //  As long as the content is not edited, turn off online spelling.
-                    //  Online spelling is turned back on in StartTable, after setting
-                    //  the right language from cell attributes.
-
-                    EEControlBits nCntrl = mpEditEngine->GetControlWord();
-                    if ( nCntrl & EEControlBits::ONLINESPELLING )
-                        mpEditEngine->SetControlWord( nCntrl & ~EEControlBits::ONLINESPELLING );
-
-                    bModified = false;
-                    bSelIsRef = false;
-                    bProtected = false;
-                    bCommandErrorShown = false;
+                    else if (pActiveViewSh)
+                    {
+                        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8().getStr());
+                    }
                 }
+
+                if (bStopEditing)
+                    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
+
+                //  As long as the content is not edited, turn off online spelling.
+                //  Online spelling is turned back on in StartTable, after setting
+                //  the right language from cell attributes.
+
+                EEControlBits nCntrl = mpEditEngine->GetControlWord();
+                if ( nCntrl & EEControlBits::ONLINESPELLING )
+                    mpEditEngine->SetControlWord( nCntrl & ~EEControlBits::ONLINESPELLING );
+
+                bModified = false;
+                bSelIsRef = false;
+                bProtected = false;
+                bCommandErrorShown = false;
             }
         }
 

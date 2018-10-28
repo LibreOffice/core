@@ -450,10 +450,9 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                     else if(xOutputStream.is()) {
                         Reference<XInputStream> xStream(
                             new ucbhelper::FdInputStream(m_aFTPURL.open()));
-                        Sequence<sal_Int8> byte_seq(4096);
-                        sal_Int32 n = 1000; // value does not matter here
                         for (;;) {
-                            n = xStream->readBytes(byte_seq,4096);
+                            Sequence<sal_Int8> byte_seq(4096);
+                            sal_Int32 n = xStream->readBytes(byte_seq, 4096);
                             if (n == 0) {
                                 break;
                             }
@@ -468,19 +467,6 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                             } catch(const IOException&) {
 
                             }
-                        }
-                        if(n) {
-                            Sequence<Any> seq(1);
-                            PropertyValue value;
-                            value.Name = "Uri";
-                            value.Handle = -1;
-                            value.Value <<= m_aFTPURL.ident(false,false);
-                            value.State = PropertyState_DIRECT_VALUE;
-                            seq[0] <<= value;
-                            ucbhelper::cancelCommandExecution(
-                                IOErrorCode_UNKNOWN,
-                                seq,
-                                Environment);
                         }
                     }
                     else {
