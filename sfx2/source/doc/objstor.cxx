@@ -1512,14 +1512,12 @@ bool SfxObjectShell::SaveTo_Impl
                 aInfo.TimeStamp.Minutes = aTime.GetMin();
                 aInfo.TimeStamp.Seconds = aTime.GetSec();
 
-                if ( bOk )
-                {
-                    // add new version information into the versionlist and save the versionlist
-                    // the version list must have been transferred from the "old" medium before
-                    rMedium.AddVersion_Impl( aInfo );
-                    rMedium.SaveVersionList_Impl();
-                    bOk = PutURLContentsToVersionStream_Impl( aTmpVersionURL, xMedStorage, aInfo.Identifier );
-                }
+                // add new version information into the versionlist and save the versionlist
+                // the version list must have been transferred from the "old" medium before
+                rMedium.AddVersion_Impl(aInfo);
+                rMedium.SaveVersionList_Impl();
+                bOk = PutURLContentsToVersionStream_Impl(aTmpVersionURL, xMedStorage,
+                                                         aInfo.Identifier);
             }
             else if ( bOk && ( pImpl->bIsSaving || pImpl->bPreserveVersions ) )
             {

@@ -398,8 +398,6 @@ MasterScriptProvider::getName()
 Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
 {
-    if ( !providerCache() )
-        throw RuntimeException( "MasterScriptProvider::getAllProviders, cache not initialised" );
     Sequence< Reference< provider::XScriptProvider > > providers = providerCache()->getAllProviders();
 
     sal_Int32 size = providers.getLength();
@@ -525,12 +523,6 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
         // TODO for library package parse the language, for the moment will try
         // to get each provider to process the new Package, the first one the succeeds
         // will terminate processing
-        if ( !providerCache() )
-        {
-            throw RuntimeException(
-                "insertByName cannot instantiate "
-                "child script providers." );
-        }
         const bool bSuccess = FindProviderAndApply(
             *providerCache(), [&aName, &aElement](Reference<container::XNameContainer>& xCont) {
                 xCont->insertByName(aName, aElement);
@@ -570,13 +562,6 @@ MasterScriptProvider::removeByName( const OUString& Name )
         // TODO for Script library package url parse the language,
         // for the moment will just try to get each provider to process remove/revoke
         // request, the first one the succeeds will terminate processing
-
-        if ( !providerCache() )
-        {
-            throw RuntimeException(
-                "removeByName() cannot instantiate "
-                "child script providers." );
-        }
         const bool bSuccess = FindProviderAndApply(
             *providerCache(), [&Name](Reference<container::XNameContainer>& xCont) {
                 xCont->removeByName(Name);
@@ -637,13 +622,6 @@ MasterScriptProvider::hasByName( const OUString& aName )
         // for the moment will just try to get each provider to see if the
         // package exists in any provider, first one that succeed will
         // terminate the loop
-
-        if ( !providerCache() )
-        {
-            throw RuntimeException(
-                "removeByName() cannot instantiate "
-                "child script providers." );
-        }
         result = FindProviderAndApply(
             *providerCache(), [&aName](Reference<container::XNameContainer>& xCont) {
                 return xCont->hasByName(aName);

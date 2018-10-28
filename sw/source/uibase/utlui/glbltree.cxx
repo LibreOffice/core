@@ -1085,8 +1085,7 @@ void    SwGlobalTree::ExecCommand(const OUString &rCmd)
             }
             else if (rCmd == "up")
             {
-                if(nSource)
-                    bMove = 0 != nSource;
+                bMove = 0 != nSource;
                 nDest--;
             }
             if( bMove && m_pActiveShell->MoveGlobalDocContent(
