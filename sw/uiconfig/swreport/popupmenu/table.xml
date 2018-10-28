@@ -70,11 +70,18 @@
   <menu:menuitem menu:id=".uno:EditFootnote"/>
   <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
   <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
-  <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
-  <menu:menuitem menu:id=".uno:NextTrackedChange"/>
-  <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
+  <menu:menu menu:id=".uno:InsertAnnotation">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:InsertAnnotation"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
+      <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
+      <menu:menuitem menu:id=".uno:NextTrackedChange"/>
+      <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TrackChanges"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
@@ -82,6 +89,7 @@
   <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenSmartTagMenuOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
   <menu:menuitem menu:id=".uno:TableDialog"/>
 </menu:menupopup>
