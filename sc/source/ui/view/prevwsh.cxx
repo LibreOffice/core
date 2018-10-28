@@ -908,16 +908,13 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
 {
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();
-    if(pSeq)
-    {
-        sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
-        pSeq[0].Name = SC_VIEWID;
-        pSeq[0].Value <<= SC_VIEW + OUString::number(nViewID);
-        pSeq[1].Name = SC_ZOOMVALUE;
-        pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
-        pSeq[2].Name = "PageNumber";
-        pSeq[2].Value <<= pPreview->GetPageNo();
-    }
+    sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
+    pSeq[0].Name = SC_VIEWID;
+    pSeq[0].Value <<= SC_VIEW + OUString::number(nViewID);
+    pSeq[1].Name = SC_ZOOMVALUE;
+    pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
+    pSeq[2].Name = "PageNumber";
+    pSeq[2].Value <<= pPreview->GetPageNo();
 
     // Common SdrModel processing
     if (ScDrawLayer* pDrawLayer = GetDocument().GetDrawLayer())
@@ -926,31 +923,23 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
 
 void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq)
 {
-    sal_Int32 nCount(rSeq.getLength());
-    if (nCount)
+    for (const auto& propval : rSeq)
     {
-        const beans::PropertyValue* pSeq = rSeq.getConstArray();
-        if(pSeq)
+        if (propval.Name == SC_ZOOMVALUE)
         {
-            for(sal_Int32 i = 0; i < nCount; i++, pSeq++)
-            {
-                OUString sName(pSeq->Name);
-                if(sName == SC_ZOOMVALUE)
-                {
-                    sal_Int32 nTemp = 0;
-                    if (pSeq->Value >>= nTemp)
-                        pPreview->SetZoom(sal_uInt16(nTemp));
-                }
-                else if (sName == "PageNumber")
-                {
-                    sal_Int32 nTemp = 0;
-                    if (pSeq->Value >>= nTemp)
-                        pPreview->SetPageNo(nTemp);
-                }
-                // Fallback to common SdrModel processing
-                else pDocShell->MakeDrawLayer()->ReadUserDataSequenceValue(pSeq);
-            }
+            sal_Int32 nTemp = 0;
+            if (propval.Value >>= nTemp)
+                pPreview->SetZoom(sal_uInt16(nTemp));
         }
+        else if (propval.Name == "PageNumber")
+        {
+            sal_Int32 nTemp = 0;
+            if (propval.Value >>= nTemp)
+                pPreview->SetPageNo(nTemp);
+        }
+        // Fallback to common SdrModel processing
+        else
+            pDocShell->MakeDrawLayer()->ReadUserDataSequenceValue(&propval);
     }
 }
 

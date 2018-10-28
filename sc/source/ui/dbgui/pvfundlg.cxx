@@ -58,18 +58,14 @@ template< typename ListBoxType >
 bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, sal_Int32 nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
-    const OUString* pStr = rStrings.getConstArray();
-    if( pStr )
+    for (const OUString& str : rStrings)
     {
-        for( const OUString* pEnd = pStr + rStrings.getLength(); pStr != pEnd; ++pStr )
+        if (!str.isEmpty())
+            rLBox.InsertEntry(str);
+        else
         {
-            if( !pStr->isEmpty() )
-                rLBox.InsertEntry( *pStr );
-            else
-            {
-                rLBox.InsertEntry( ScResId( STR_EMPTYDATA ), nEmptyPos );
-                bEmpty = true;
-            }
+            rLBox.InsertEntry(ScResId(STR_EMPTYDATA), nEmptyPos);
+            bEmpty = true;
         }
     }
     return bEmpty;

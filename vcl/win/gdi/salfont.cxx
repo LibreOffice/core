@@ -765,8 +765,8 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         aName = rFont.GetFamilyName().getToken( 0, ';' );
 
     UINT nNameLen = aName.getLength();
-    if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-        nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+    if (nNameLen >= LF_FACESIZE)
+        nNameLen = LF_FACESIZE - 1;
     memcpy( rLogFont.lfFaceName, aName.getStr(), nNameLen*sizeof( wchar_t ) );
     rLogFont.lfFaceName[nNameLen] = 0;
 
@@ -827,8 +827,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         {
             // restore non-vertical name if not vertical mode isn't available
             memcpy( &rLogFont.lfFaceName[0], aName.getStr(), nNameLen*sizeof(wchar_t) );
-            if( nNameLen < LF_FACESIZE )
-                rLogFont.lfFaceName[nNameLen] = '\0';
+            rLogFont.lfFaceName[nNameLen] = '\0';
             // keep it upright and create the font for sideway glyphs later.
             rLogFont.lfEscapement = rLogFont.lfEscapement - 2700;
             rLogFont.lfOrientation = rLogFont.lfEscapement;
