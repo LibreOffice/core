@@ -579,14 +579,10 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
 
     pImpl->aVerbList = aVerbs;
 
-    if (pViewSh)
-    {
-        // The status of SID_OBJECT is collected in the controller directly on
-        // the Shell, it is thus enough to encourage a new status update
-        SfxBindings *pBindings = pViewSh->GetViewFrame()->GetDispatcher()->
-                GetBindings();
-        pBindings->Invalidate( SID_OBJECT, true, true );
-    }
+    // The status of SID_OBJECT is collected in the controller directly on
+    // the Shell, it is thus enough to encourage a new status update
+    SfxBindings* pBindings = pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
+    pBindings->Invalidate(SID_OBJECT, true, true);
 }
 
 const css::uno::Sequence < css::embed::VerbDescriptor >& SfxShell::GetVerbs() const

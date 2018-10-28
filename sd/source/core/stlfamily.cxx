@@ -249,10 +249,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
         {
             // we assume that we have only SdStyleSheets
             SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
-            if( pSdStyle )
-            {
-                aNames.push_back( pSdStyle->GetApiName() );
-            }
+            aNames.push_back(pSdStyle->GetApiName());
         }
         return Sequence< OUString >( &(*aNames.begin()), aNames.size() );
     }
@@ -279,12 +276,9 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
-                if( pSdStyle )
+                if (pSdStyle->GetApiName() == aName)
                 {
-                    if (pSdStyle->GetApiName() == aName)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }

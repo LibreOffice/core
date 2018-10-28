@@ -2426,11 +2426,6 @@ void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
 
 void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
-    rProps.realloc(4);
-    beans::PropertyValue* pProps = rProps.getArray();
-    if(!pProps)
-        return;
-
     Reference< beans::XPropertySet > xPropSet( GetModel(), UNO_QUERY );
     if( !xPropSet.is() )
         return;
@@ -2438,15 +2433,17 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     awt::Rectangle aVisArea;
     xPropSet->getPropertyValue("VisibleArea") >>= aVisArea;
 
-    sal_uInt16 i = 0;
-    pProps[i].Name = "VisibleAreaTop";
-    pProps[i++].Value <<= aVisArea.Y;
-    pProps[i].Name = "VisibleAreaLeft";
-    pProps[i++].Value <<= aVisArea.X;
-    pProps[i].Name = "VisibleAreaWidth";
-    pProps[i++].Value <<= aVisArea.Width;
-    pProps[i].Name = "VisibleAreaHeight";
-    pProps[i++].Value <<= aVisArea.Height;
+    rProps.realloc(4);
+    beans::PropertyValue* pProps = rProps.getArray();
+
+    pProps[0].Name = "VisibleAreaTop";
+    pProps[0].Value <<= aVisArea.Y;
+    pProps[1].Name = "VisibleAreaLeft";
+    pProps[1].Value <<= aVisArea.X;
+    pProps[2].Name = "VisibleAreaWidth";
+    pProps[2].Value <<= aVisArea.Width;
+    pProps[3].Name = "VisibleAreaHeight";
+    pProps[3].Value <<= aVisArea.Height;
 
 }
 

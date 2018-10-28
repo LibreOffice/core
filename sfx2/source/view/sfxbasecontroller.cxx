@@ -1107,10 +1107,8 @@ uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups
     SolarMutexGuard aGuard;
 
     std::vector< sal_Int16 > aGroupList;
-    SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
-    SfxSlotPool*  pPool = &SfxSlotPool::GetSlotPool( pViewFrame );
-
-    SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell ? m_pData->m_pViewShell->GetFrame() : nullptr;
+    SfxSlotPool* pSlotPool = pViewFrame ? &SfxSlotPool::GetSlotPool(pViewFrame) : &SFX_SLOTPOOL();
     const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
     // Select Group ( Group 0 is internal )
@@ -1143,9 +1141,8 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfi
         const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
-        SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
-
-        SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
+        SfxSlotPool* pSlotPool
+            = pViewFrame ? &SfxSlotPool::GetSlotPool(pViewFrame) : &SFX_SLOTPOOL();
         for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
         {
             pSlotPool->SeekGroup( i );
