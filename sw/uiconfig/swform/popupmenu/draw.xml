@@ -14,8 +14,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
   <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
-  <menu:menuitem menu:id=".uno:FlipVertical"/>
-  <menu:menuitem menu:id=".uno:FlipHorizontal"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
@@ -60,6 +58,12 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
       <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:FlipMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:FlipVertical"/>
+      <menu:menuitem menu:id=".uno:FlipHorizontal"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuitem menu:id=".uno:FormatGroup"/>

@@ -40,7 +40,6 @@
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuitem menu:id=".uno:OutlineBullet"/>
-  <menu:menuitem menu:id=".uno:PageDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
@@ -54,4 +53,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:CurrentFootnoteDialog"/>
   <menu:menuitem menu:id=".uno:EditCurrentRegion"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:PageDialog"/>
 </menu:menupopup>

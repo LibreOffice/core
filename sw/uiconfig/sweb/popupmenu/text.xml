@@ -88,8 +88,6 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:PageDialog"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
@@ -99,4 +97,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:CurrentFootnoteDialog"/>
   <menu:menuitem menu:id=".uno:EditCurrentRegion"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:PageDialog"/>
 </menu:menupopup>
