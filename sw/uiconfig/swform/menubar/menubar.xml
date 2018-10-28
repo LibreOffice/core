@@ -327,18 +327,16 @@
           <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:FlipMenu">
+      <menu:menu menu:id=".uno:RotateFlipMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:FlipVertical"/>
-          <menu:menuitem menu:id=".uno:FlipHorizontal"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menu menu:id=".uno:RotateMenu">
-        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
           <menu:menuitem menu:id=".uno:RotateLeft"/>
           <menu:menuitem menu:id=".uno:RotateRight"/>
           <menu:menuitem menu:id=".uno:Rotate180"/>
           <menu:menuitem menu:id=".uno:RotateReset"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:FlipVertical"/>
+          <menu:menuitem menu:id=".uno:FlipHorizontal"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:GroupMenu">
