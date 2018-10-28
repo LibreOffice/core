@@ -5088,7 +5088,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
 
             if(rAttrs.JoinedWithNext(*this))
             {
-                // tdf#115296 re-add adaption of vert distance to clos ethe evtl.
+                // tdf#115296 re-add adaption of vert distance to close the evtl.
                 // existing gap to next frame
                 const SwFrame* pNextFrame(GetNext());
                 (aRect.*_rRectFn->fnSetBottom)( (pNextFrame->*_rRectFn->fnGetPrtTop)() );
