@@ -733,25 +733,6 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
         m_pFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
-{
-    FreetypeFont* pSF = getFreetypeFontFromGlyph(rGlyph);
-    if( !pSF )
-        return false;
-
-    return pSF->GetGlyphBoundRect(rGlyph, rRect);
-}
-
-bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
-    basegfx::B2DPolyPolygon& rB2DPolyPoly )
-{
-    FreetypeFont* pSF = getFreetypeFontFromGlyph(rGlyph);
-    if( !pSF )
-        return false;
-
-    return pSF->GetGlyphOutline(rGlyph, rB2DPolyPoly);
-}
-
 std::unique_ptr<SalLayout> GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (!m_pFreetypeFont[nFallbackLevel])

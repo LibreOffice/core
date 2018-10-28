@@ -46,6 +46,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <fontsubset.hxx>
 #include <outdev.h>
@@ -1326,19 +1327,18 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
-bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
+bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
 {
-    if (rGlyph.GetCachedGlyphBoundRect(rRect))
-        return true;
+    assert(m_pGraphics);
+    HDC hDC = m_pGraphics->getHDC();
+    const HFONT hOrigFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
+    const HFONT hFont = GetHFONT();
+    if (hFont != hOrigFont)
+        SelectObject(hDC, hFont);
 
-    WinFontInstance* pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
-
-    HDC hDC = getHDC();
-    HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
-    float fFontScale = 1.0;
-    if (hFont != pFont->GetHFONT())
-        SelectObject(hDC, pFont->GetHFONT());
-    fFontScale = pFont->GetScale();
+    const ::comphelper::ScopeGuard aFontRestoreScopeGuard([hFont, hOrigFont, hDC]()
+        { if (hFont != hOrigFont) SelectObject(hDC, hOrigFont); });
+    const float fFontScale = GetScale();
 
     // use unity matrix
     MAT2 aMat;
@@ -1351,9 +1351,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
-    if (hFont != pFont->GetHFONT())
-        SelectObject(hDC, hFont);
+    DWORD nSize = ::GetGlyphOutlineW(hDC, nId, nGGOFlags, &aGM, 0, nullptr, &aMat);
     if (nSize == GDI_ERROR)
         return false;
 
@@ -1363,17 +1361,22 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.SetRight(static_cast<int>( fFontScale * rRect.Right() ) + 1);
     rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
     rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
-
-    rGlyph.CacheGlyphBoundRect(rRect);
     return true;
 }
 
-bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
-    basegfx::B2DPolyPolygon& rB2DPolyPoly )
+bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool)
 {
     rB2DPolyPoly.clear();
 
-    HDC  hDC = getHDC();
+    assert(m_pGraphics);
+    HDC hDC = m_pGraphics->getHDC();
+    const HFONT hOrigFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
+    const HFONT hFont = GetHFONT();
+    if (hFont != hOrigFont)
+        SelectObject(hDC, hFont);
+
+    const ::comphelper::ScopeGuard aFontRestoreScopeGuard([hFont, hOrigFont, hDC]()
+        { if (hFont != hOrigFont) SelectObject(hDC, hOrigFont); });
 
     // use unity matrix
     MAT2 aMat;
@@ -1384,14 +1387,14 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     nGGOFlags |= GGO_GLYPH_INDEX;
 
     GLYPHMETRICS aGlyphMetrics;
-    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
+    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, nId, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
     if( !nSize1 )       // blank glyphs are ok
         return true;
     else if( nSize1 == GDI_ERROR )
         return false;
 
     BYTE* pData = new BYTE[ nSize1 ];
-    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags,
+    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, nId, nGGOFlags,
               &aGlyphMetrics, nSize1, pData, &aMat );
 
     if( nSize1 != nSize2 )
@@ -1541,10 +1544,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        rtl::Reference<WinFontInstance> pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
-        assert(pFont.is());
-        float fFontScale = pFont.is() ? pFont->GetScale() : 1.0;
-        const double fFactor(fFontScale/256);
+        const double fFactor(GetScale()/256);
         rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 

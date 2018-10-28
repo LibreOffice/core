@@ -105,17 +105,6 @@ X11SalGraphics::GetFontMetric( ImplFontMetricDataRef &rxFontMetric, int nFallbac
     mxTextRenderImpl->GetFontMetric(rxFontMetric, nFallbackLevel);
 }
 
-bool X11SalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
-{
-    return mxTextRenderImpl->GetGlyphBoundRect(rGlyph, rRect);
-}
-
-bool X11SalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
-    basegfx::B2DPolyPolygon& rPolyPoly )
-{
-    return mxTextRenderImpl->GetGlyphOutline(rGlyph, rPolyPoly);
-}
-
 std::unique_ptr<SalLayout> X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     return mxTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);

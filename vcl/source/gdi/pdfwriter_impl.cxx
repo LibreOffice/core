@@ -2186,10 +2186,29 @@ static FontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rB
     return aDFA;
 }
 
-PdfBuiltinFontFace::PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& rBuiltin )
-:   PhysicalFontFace( GetDevFontAttributes(rBuiltin) ),
-    mrBuiltin( rBuiltin )
+PdfBuiltinFontInstance::PdfBuiltinFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPattern& rFSP)
+    : LogicalFontInstance(rFontFace, rFSP)
 {}
+
+bool PdfBuiltinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const
+{
+    return false;
+}
+
+bool PdfBuiltinFontInstance::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const
+{
+    return false;
+}
+
+PdfBuiltinFontFace::PdfBuiltinFontFace(const PDFWriterImpl::BuiltinFont& rBuiltin)
+    : PhysicalFontFace(GetDevFontAttributes(rBuiltin))
+    , mrBuiltin(rBuiltin)
+{}
+
+rtl::Reference<LogicalFontInstance> PdfBuiltinFontFace::CreateFontInstance(const FontSelectPattern& rFSP) const
+{
+    return new PdfBuiltinFontInstance(*this, rFSP);
+}
 
 void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
 {

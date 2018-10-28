@@ -1270,10 +1270,21 @@ public:
     void MARK( const char* pString );
 };
 
-class PdfBuiltinFontFace : public PhysicalFontFace
+class PdfBuiltinFontInstance final : public LogicalFontInstance
 {
-private:
+    bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool) const override;
+
+public:
+    PdfBuiltinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+
+    bool GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool) const override;
+};
+
+class PdfBuiltinFontFace final : public PhysicalFontFace
+{
     const PDFWriterImpl::BuiltinFont& mrBuiltin;
+
+    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
 public:
     explicit                            PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& );
@@ -1281,7 +1292,6 @@ public:
 
     virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
-
 
 }
 

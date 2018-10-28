@@ -92,16 +92,6 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     m_aTextRenderImpl.GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
-bool SvpSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
-{
-    return m_aTextRenderImpl.GetGlyphBoundRect(rGlyph, rRect);
-}
-
-bool SvpSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
-{
-    return m_aTextRenderImpl.GetGlyphOutline(rGlyph, rPolyPoly);
-}
-
 std::unique_ptr<SalLayout> SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     if (utl::ConfigManager::IsFuzzing())

@@ -1251,7 +1251,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     int nStart = 0;
     while (rSalLayout.GetNextGlyph(&pGlyph, aOutPoint, nStart))
     {
-        if (!mpGraphics->GetGlyphBoundRect(*pGlyph, aRectangle ) )
+        if (!pGlyph->GetGlyphBoundRect(aRectangle))
             continue;
 
         if (!pGlyph->IsSpacing())
