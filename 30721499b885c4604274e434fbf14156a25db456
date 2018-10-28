@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_6e758f98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001644
+      },
+      "writtenOn": "2018-10-28T17:50:40Z",
+      "side": 1,
+      "message": "Right. Fixed now.",
+      "revId": "30721499b885c4604274e434fbf14156a25db456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
