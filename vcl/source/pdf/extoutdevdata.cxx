@@ -34,6 +34,7 @@
 
 namespace vcl
 {
+
 struct PDFExtOutDevDataSync
 {
     enum Action{    CreateNamedDest,
@@ -876,6 +877,6 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
     return ((nCurrentRatio > nTargetRatio) && bIsTargetRatioReached);
 }
 
-}
+} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

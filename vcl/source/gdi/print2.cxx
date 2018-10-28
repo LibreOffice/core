@@ -37,7 +37,7 @@
 
 #include <print.h>
 
-#include "pdfwriter_impl.hxx"
+#include "../pdf/writer_impl.hxx"
 
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024

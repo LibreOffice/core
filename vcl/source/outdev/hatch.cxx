@@ -29,7 +29,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include "../gdi/pdfwriter_impl.hxx"
+#include "../pdf/writer_impl.hxx"
 
 #include <memory>
 
