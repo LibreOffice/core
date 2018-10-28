@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3e73b7_b67510fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-10-28T11:06:17Z",
+      "side": 1,
+      "message": "i think you mean \u0027override\u0027, not \u0027overload\u0027",
+      "revId": "1ed08229089b9a9321b47be07109ac2802815bb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
