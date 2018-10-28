@@ -726,40 +726,42 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools
                 if ( getSdrModelFromSdrPage().isLocked())
                     break;
 
-                SdrObject* pObj = const_cast<SdrObject*>(&rObj);
-
-                if (pObj)
+                if (!mbMaster)
                 {
-                    if (!mbMaster)
+                    if (rObj.GetUserCall())
                     {
-                        if( pObj->GetUserCall() )
-                        {
-                            SfxUndoManager* pUndoManager = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager();
-                            const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
+                        SdrObject& _rObj = const_cast<SdrObject&>(rObj);
+                        SfxUndoManager* pUndoManager
+                            = static_cast<SdDrawDocument&>(getSdrModelFromSdrPage())
+                                  .GetUndoManager();
+                        const bool bUndo
+                            = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
-                            if( bUndo )
-                                pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>(*pObj) );
+                        if (bUndo)
+                            pUndoManager->AddUndoAction(
+                                o3tl::make_unique<UndoObjectUserCall>(_rObj));
 
-                            // Object was resized by user and does not listen to its slide anymore
-                            pObj->SetUserCall(nullptr);
-                        }
+                        // Object was resized by user and does not listen to its slide anymore
+                        _rObj.SetUserCall(nullptr);
                     }
-                    else
+                }
+                else
+                {
+                    // Object of the master page changed, therefore adjust
+                    // object on all pages
+                    sal_uInt16 nPageCount = static_cast<SdDrawDocument&>(getSdrModelFromSdrPage())
+                                                .GetSdPageCount(mePageKind);
+
+                    for (sal_uInt16 i = 0; i < nPageCount; i++)
                     {
-                        // Object of the master page changed, therefore adjust
-                        // object on all pages
-                        sal_uInt16 nPageCount = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetSdPageCount(mePageKind);
+                        SdPage* pLoopPage = static_cast<SdDrawDocument&>(getSdrModelFromSdrPage())
+                                                .GetSdPage(i, mePageKind);
 
-                        for (sal_uInt16 i = 0; i < nPageCount; i++)
+                        if (pLoopPage && this == &(pLoopPage->TRG_GetMasterPage()))
                         {
-                            SdPage* pLoopPage = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetSdPage(i, mePageKind);
-
-                            if (pLoopPage && this == &(pLoopPage->TRG_GetMasterPage()))
-                            {
-                                // Page listens to this master page, therefore
-                                // adjust AutoLayout
-                                pLoopPage->SetAutoLayout(pLoopPage->GetAutoLayout());
-                            }
+                            // Page listens to this master page, therefore
+                            // adjust AutoLayout
+                            pLoopPage->SetAutoLayout(pLoopPage->GetAutoLayout());
                         }
                     }
                 }

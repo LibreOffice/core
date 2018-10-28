@@ -662,9 +662,8 @@ void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
 // Then all for the SwPagePreview
 void  SwPagePreview::Execute( SfxRequest &rReq )
 {
-    int eMvMode;
+    int eMvMode = SwPagePreviewWin::MV_DOC_END;
     sal_uInt8 nRow = 1;
-    bool bRetVal = false;
     bool bRefresh = true;
 
     switch(rReq.GetSlot())
@@ -867,18 +866,15 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         break;
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
-            m_pViewWin->SetSelectedPage( 1 );
-            eMvMode = SwPagePreviewWin::MV_DOC_STT; bRetVal = true; goto MOVEPAGE;
+            eMvMode = SwPagePreviewWin::MV_DOC_STT;
+            SAL_FALLTHROUGH;
         case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
-            m_pViewWin->SetSelectedPage( mnPageCount );
-            eMvMode = SwPagePreviewWin::MV_DOC_END; bRetVal = true; goto MOVEPAGE;
-MOVEPAGE:
+            m_pViewWin->SetSelectedPage(eMvMode == SwPagePreviewWin::MV_DOC_STT ? 1 : mnPageCount);
             {
                 bool bRet = ChgPage( eMvMode );
                 // return value for Basic
-                if(bRetVal)
-                    rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !bRet));
+                rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !bRet));
 
                 bRefresh = bRet;
                 rReq.Done();
