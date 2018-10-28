@@ -498,8 +498,8 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             }
             else
             {
-                if( rFootnoteInfo.GetCharFormatDep()->GetRegisteredIn() )
-                    pCharFormat = rFootnoteInfo.GetCharFormat(*pDoc);
+                if( SwCharFormat* pFormat = rFootnoteInfo.GetCharFormat(*pDoc) )
+                    pCharFormat = pFormat;
             }
             if( pCharFormat )
             {
@@ -721,8 +721,8 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 }
                 else
                 {
-                    if( rEndInfo.GetCharFormatDep()->GetRegisteredIn() )
-                        pCharFormat = rEndInfo.GetCharFormat(*pDoc);
+                    if( auto pFormat = rEndInfo.GetCharFormat(*pDoc) )
+                        pCharFormat = pFormat;
                 }
                 if( pCharFormat )
                 {
