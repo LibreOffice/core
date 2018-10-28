@@ -40,7 +40,6 @@
 #include <vector>
 #include <set>
 
-namespace vcl { class Font; }
 class Point;
 class OutputDevice;
 class GDIMetaFile;
@@ -59,7 +58,7 @@ class Wallpaper;
 
 namespace vcl
 {
-
+class Font;
 class PDFExtOutDevData;
 class PDFWriterImpl;
 
@@ -327,7 +326,7 @@ public:
         bool                SubmitGet;
 
         PushButtonWidget()
-                : AnyWidget( vcl::PDFWriter::PushButton ),
+                : AnyWidget( PDFWriter::PushButton ),
                   Dest( -1 ), Submit( false ), SubmitGet( false )
         {}
 
@@ -342,7 +341,7 @@ public:
         bool                Checked;
 
         CheckBoxWidget()
-                : AnyWidget( vcl::PDFWriter::CheckBox ),
+                : AnyWidget( PDFWriter::CheckBox ),
                   Checked( false )
         {}
 
@@ -359,7 +358,7 @@ public:
         OUString       OnValue; // the value of the radio button if it is selected
 
         RadioButtonWidget()
-                : AnyWidget( vcl::PDFWriter::RadioButton ),
+                : AnyWidget( PDFWriter::RadioButton ),
                   Selected( false ),
                   RadioGroup( 0 )
         {}
@@ -386,7 +385,7 @@ public:
         sal_Int32           MaxLen;     // maximum field length in characters, 0 means unlimited
 
         EditWidget()
-                : AnyWidget( vcl::PDFWriter::Edit ),
+                : AnyWidget( PDFWriter::Edit ),
                   MultiLine( false ),
                   Password( false ),
                   FileSelect( false ),
@@ -410,7 +409,7 @@ public:
          // since multiselect is a 1.4+ feature
 
         ListBoxWidget()
-                : AnyWidget( vcl::PDFWriter::ListBox ),
+                : AnyWidget( PDFWriter::ListBox ),
                   DropDown( false ),
                   MultiSelect( false )
         {}
@@ -428,7 +427,7 @@ public:
         // set the current value in AnyWidget::Text
 
         ComboBoxWidget()
-                : AnyWidget( vcl::PDFWriter::ComboBox )
+                : AnyWidget( PDFWriter::ComboBox )
         {}
 
         virtual std::unique_ptr<AnyWidget> Clone() const override
@@ -440,7 +439,7 @@ public:
     struct SignatureWidget: public AnyWidget
     {
         SignatureWidget()
-                : AnyWidget( vcl::PDFWriter::Signature )
+                : AnyWidget( PDFWriter::Signature )
         {}
 
         virtual std::unique_ptr<AnyWidget> Clone() const override
@@ -685,7 +684,7 @@ The following structure describes the permissions used in PDF security
         {}
 
     };
-    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = nullptr );
+    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, PDFExtOutDevData* pDevDat = nullptr );
 
     /* sets the document locale originally passed with the context to a new value
      * only affects the output if used before calling Emit.

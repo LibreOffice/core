@@ -26,7 +26,7 @@
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 
-#include "pdffontcache.hxx"
+#include "fontcache.hxx"
 
 using namespace vcl;
 
