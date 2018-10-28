@@ -17,13 +17,11 @@ avmedia/res/avl02054.svg cmd/lc_mediamute.svg
 
 # chart2
 # ==============================================
+chart2/res/nserr.svg cmd/sc_insertrowsafter.svg
 chart2/res/dataeditor_icon01.svg cmd/sc_insertrowsafter.svg
 chart2/res/dataeditor_icon02.svg cmd/sc_insertcolumnsafter.svg
 chart2/res/dataeditor_icon03.svg cmd/sc_deleterows.svg
 chart2/res/dataeditor_icon04.svg cmd/sc_deletecolumns.svg
-chart2/res/dataeditor_icon05.svg cmd/sc_insertcellsright.svg
-chart2/res/dataeditor_icon06.svg cmd/sc_insertcellsdown.svg
-chart2/res/dataeditor_icon07.svg cmd/sc_insertcolumnsafter.svg
 chart2/res/selectrange.svg formula/res/refinp1.svg
 
 # cmd
@@ -282,15 +280,12 @@ cmd/sc_objectcatalog.svg cmd/sc_dbnewform.svg
 # 3d
 cmd/32/view3d.svg cmd/32/cube.svg
 cmd/32/objects3dtoolbox.svg cmd/32/cube.svg
-cmd/32/convertinto3dlathefast.svg cmd/32/convertinto3dlathe.svg
 
 cmd/lc_view3d.svg cmd/lc_cube.svg
 cmd/lc_objects3dtoolbox.svg cmd/lc_cube.svg
-cmd/lc_convertinto3dlathefast.svg cmd/lc_convertinto3dlathe.svg
 
 cmd/sc_view3d.svg cmd/sc_cube.svg
 cmd/sc_objects3dtoolbox.svg cmd/sc_cube.svg
-cmd/sc_convertinto3dlathefast.svg cmd/sc_convertinto3dlathe.svg
 
 # Control
 cmd/32/optionstreedialog.svg cmd/32/controlproperties.svg
@@ -355,11 +350,6 @@ cmd/sc_vscrollbar.svg cmd/sc_scrollbar.svg
 cmd/32/templatemenu.svg cmd/32/templatemanager.svg
 cmd/lc_templatemenu.svg cmd/lc_templatemanager.svg
 cmd/sc_templatemenu.svg cmd/sc_templatemanager.svg
-
-# Animation
-cmd/32/customanimation.svg cmd/32/animationobjects.svg
-cmd/lc_customanimation.svg cmd/lc_animationobjects.svg
-cmd/sc_customanimation.svg cmd/sc_animationobjects.svg
 
 # Media
 cmd/32/datastreamsplay.svg cmd/32/runbasic.svg
@@ -673,16 +663,11 @@ cmd/sc_formatbulletsmenu.svg cmd/sc_defaultbullet.svg
 cmd/sc_formatframemenu.svg cmd/sc_chainframes.svg
 
 # Group
-cmd/32/formatgroup.svg cmd/32/group.svg
-cmd/32/formatungroup.svg cmd/32/ungroup.svg
+
 cmd/32/leaveallgroups.svg cmd/32/leavegroup.svg
 
-cmd/lc_formatgroup.svg cmd/lc_group.svg
-cmd/lc_formatungroup.svg cmd/lc_ungroup.svg
 cmd/lc_leaveallgroups.svg cmd/lc_leavegroup.svg
 
-cmd/sc_formatgroup.svg cmd/sc_group.svg
-cmd/sc_formatungroup.svg cmd/sc_ungroup.svg
 cmd/sc_leaveallgroups.svg cmd/sc_leavegroup.svg
 
 
@@ -1152,12 +1137,10 @@ cmd/lc_grafattrcrop.svg cmd/lc_crop.svg
 cmd/sc_grafattrcrop.svg cmd/sc_crop.svg
 
 # Group
-cmd/32/formatgroup.svg cmd/32/group.svg
-cmd/32/groupmenu.svg cmd/32/group.svg
-cmd/lc_formatgroup.svg cmd/lc_group.svg
-cmd/lc_groupmenu.svg cmd/lc_group.svg
-cmd/sc_groupmenu.svg cmd/sc_group.svg
-cmd/sc_formatgroup.svg cmd/sc_group.svg
+cmd/32/groupmenu.svg cmd/32/formatgroup.svg
+cmd/lc_groupmenu.svg cmd/lc_formatgroup.svg
+cmd/sc_groupmenu.svg cmd/sc_formatgroup.svg
+
 
 # Extrusion Rotate
 cmd/32/rulerrows.svg cmd/32/extrusiontiltleft.svg
@@ -1168,12 +1151,6 @@ cmd/lc_rulerrowsvertical.svg cmd/lc_extrusiontiltright.svg
 
 cmd/sc_rulerrows.svg cmd/sc_extrusiontiltleft.svg
 cmd/sc_rulerrowsvertical.svg cmd/sc_extrusiontiltright.svg
-
-
-# Presentation
-cmd/32/diaauto.svg cmd/32/dia.svg
-cmd/lc_diaauto.svg cmd/lc_dia.svg
-cmd/sc_diaauto.svg cmd/sc_dia.svg
 
 # Style
 
@@ -1211,11 +1188,14 @@ cmd/sc_outlineright.svg cmd/sc_decrementlevel.svg
 cmd/sc_outlineleft.svg cmd/sc_decrementindent.svg
 
 # Mirror
-cmd/32/mirrorhorz.svg cmd/32/mirror.svg
+cmd/32/mirrorhorz.svg cmd/32/fliphorizontal.svg
+cmd/32/mirrorvert.svg cmd/32/flipvertical.svg
 
-cmd/lc_mirrorhorz.svg cmd/lc_mirror.svg
+cmd/lc_mirrorhorz.svg cmd/lc_fliphorizontal.svg
+cmd/lc_mirrorvert.svg cmd/lc_flipvertical.svg
 
-cmd/sc_mirrorhorz.svg cmd/sc_mirror.svg
+cmd/sc_mirrorhorz.svg cmd/sc_fliphorizontal.svg
+cmd/sc_mirrorvert.svg cmd/sc_flipvertical.svg
 
 # Connector
 cmd/32/connectorcircles.svg cmd/32/connector.svg
@@ -1237,13 +1217,10 @@ cmd/sc_connectorlinescircles.svg cmd/sc_connector.svg
 cmd/sc_connectortoolbox.svg cmd/sc_connector.svg
 
 # Time
-cmd/32/rehearsetimings.svg cmd/32/timefield.svg
 cmd/32/numberformattime.svg cmd/32/timefield.svg
 
-cmd/lc_rehearsetimings.svg cmd/lc_timefield.svg
 cmd/lc_numberformattime.svg cmd/lc_timefield.svg
 
-cmd/sc_rehearsetimings.svg cmd/sc_timefield.svg
 cmd/sc_numberformattime.svg cmd/sc_timefield.svg
 
 # Arrange
@@ -1403,8 +1380,8 @@ cmd/sc_charbackcolor.svg cmd/sc_backcolor.svg
 cmd/sc_setdefault.svg cmd/sc_resetattributes.svg
 
 # Impress
-cmd/sc_slidechangewindow.svg sfx2/res/symphony/sidebar-transition-small.svg
-cmd/lc_slidechangewindow.svg sfx2/res/symphony/sidebar-transition-large.svg
+cmd/lc_slidechangewindow.svg cmd/lc_dia.svg
+cmd/sc_slidechangewindow.svg cmd/sc_dia.svg
 
 # Toggle graphics visibility in Writer
 cmd/32/showgraphics.svg cmd/32/graphic.svg
@@ -1607,7 +1584,8 @@ res/sc05961.svg cmd/sc_recsearch.svg
 res/sc06300.svg cmd/sc_nextrecord.svg
 res/sc06301.svg cmd/sc_prevrecord.svg
 res/sc06303.svg cmd/sc_firstrecord.svg
-
+res/sc10223.svg cmd/sc_position.svg
+res/sc10224.svg cmd/sc_size.svg
 res/sc10350.svg cmd/sc_bmpmask.svg
 res/sc10711.svg cmd/sc_removefiltersort.svg
 res/sc10712.svg cmd/sc_sortascending.svg
@@ -1701,7 +1679,7 @@ sd/res/comments_indicator.svg cmd/sc_showannotations.svg
 sd/res/get1obj.svg cmd/sc_selectobject.svg
 sd/res/getallob.svg cmd/sc_selectall.svg
 sd/res/graphic.svg cmd/sc_graphic.svg
-sd/res/group.svg cmd/sc_group.svg
+sd/res/group.svg cmd/sc_formatgroup.svg
 sd/res/objects.svg cmd/sc_choosepolygon.svg
 sd/res/ole.svg sc/res/nc05.svg
 sd/res/page.svg cmd/sc_adddirect.svg
@@ -1743,8 +1721,8 @@ sfx2/res/plus.svg res/plus.svg
 sfx2/res/symphony/open_more.svg cmd/lc_controlproperties.svg
 sfx2/res/symphony/sidebar-3d-large.svg cmd/lc_cube.svg
 sfx2/res/symphony/sidebar-3d-small.svg cmd/sc_cube.svg
-sfx2/res/symphony/sidebar-animation-large.svg cmd/lc_animationobjects.svg
-sfx2/res/symphony/sidebar-animation-small.svg cmd/sc_animationobjects.svg
+sfx2/res/symphony/sidebar-animation-large.svg cmd/lc_customanimation.svg
+sfx2/res/symphony/sidebar-animation-small.svg cmd/sc_customanimation.svg
 sfx2/res/symphony/sidebar-colors-large.svg cmd/lc_bmpmask.svg
 sfx2/res/symphony/sidebar-colors-small.svg cmd/sc_bmpmask.svg
 sfx2/res/symphony/sidebar-functions-large.svg cmd/lc_dbviewfunctions.svg
@@ -1759,6 +1737,8 @@ sfx2/res/symphony/sidebar-style-large.svg cmd/lc_designerdialog.svg
 sfx2/res/symphony/sidebar-style-small.svg cmd/sc_designerdialog.svg
 sfx2/res/symphony/sidebar-template-large.svg cmd/lc_slidemasterpage.svg
 sfx2/res/symphony/sidebar-template-small.svg cmd/sc_slidemasterpage.svg
+sfx2/res/symphony/sidebar-transition-large.svg cmd/lc_dia.svg
+sfx2/res/symphony/sidebar-transition-small.svg cmd/sc_dia.svg
 
 # startmath
 # ==============================================
@@ -1880,7 +1860,6 @@ sw/res/nc20009.svg cmd/sc_insertindexesentry.svg
 sw/res/nc20010.svg cmd/sc_showannotations.svg
 sw/res/nc20011.svg cmd/sc_insertdraw.svg
 
-
 sw/res/re01.svg cmd/lc_unsetcellsreadonly.svg
 sw/res/re02.svg cmd/lc_unsetcellsreadonly.svg
 sw/res/re03.svg cmd/sc_protect.svg
@@ -1927,7 +1906,7 @@ sw/res/sr20015.svg cmd/sc_showannotations.svg
 sw/res/sr20016.svg cmd/sc_recsearch.svg
 sw/res/sr20017.svg cmd/sc_insertindexesentry.svg
 
-sw/res/sx01.svg cmd/sc_dbqueryedit.svg
+sw/res/sx01.svg cmd/sc_viewdatasourcebrowser.svg
 sw/res/sx02.svg res/sx03187.svg
 sw/res/sx03.svg cmd/sc_dbqueryedit.svg
 

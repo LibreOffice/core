@@ -17,13 +17,11 @@ avmedia/res/avl02054.png cmd/lc_mediamute.png
 
 # chart2
 # ==============================================
+chart2/res/nserr.png cmd/sc_insertrowsafter.png
 chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
 chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
 chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
-chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
-chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
-chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 # cmd
@@ -282,15 +280,12 @@ cmd/sc_objectcatalog.png cmd/sc_dbnewform.png
 # 3d
 cmd/32/view3d.png cmd/32/cube.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
-cmd/32/convertinto3dlathefast.png cmd/32/convertinto3dlathe.png
 
 cmd/lc_view3d.png cmd/lc_cube.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
-cmd/lc_convertinto3dlathefast.png cmd/lc_convertinto3dlathe.png
 
 cmd/sc_view3d.png cmd/sc_cube.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
-cmd/sc_convertinto3dlathefast.png cmd/sc_convertinto3dlathe.png
 
 # Control
 cmd/32/optionstreedialog.png cmd/32/controlproperties.png
@@ -355,11 +350,6 @@ cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 cmd/32/templatemenu.png cmd/32/templatemanager.png
 cmd/lc_templatemenu.png cmd/lc_templatemanager.png
 cmd/sc_templatemenu.png cmd/sc_templatemanager.png
-
-# Animation
-cmd/32/customanimation.png cmd/32/animationobjects.png
-cmd/lc_customanimation.png cmd/lc_animationobjects.png
-cmd/sc_customanimation.png cmd/sc_animationobjects.png
 
 # Media
 cmd/32/datastreamsplay.png cmd/32/runbasic.png
@@ -673,16 +663,11 @@ cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_chainframes.png
 
 # Group
-cmd/32/formatgroup.png cmd/32/group.png
-cmd/32/formatungroup.png cmd/32/ungroup.png
+
 cmd/32/leaveallgroups.png cmd/32/leavegroup.png
 
-cmd/lc_formatgroup.png cmd/lc_group.png
-cmd/lc_formatungroup.png cmd/lc_ungroup.png
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 
-cmd/sc_formatgroup.png cmd/sc_group.png
-cmd/sc_formatungroup.png cmd/sc_ungroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
 
 
@@ -1152,12 +1137,10 @@ cmd/lc_grafattrcrop.png cmd/lc_crop.png
 cmd/sc_grafattrcrop.png cmd/sc_crop.png
 
 # Group
-cmd/32/formatgroup.png cmd/32/group.png
-cmd/32/groupmenu.png cmd/32/group.png
-cmd/lc_formatgroup.png cmd/lc_group.png
-cmd/lc_groupmenu.png cmd/lc_group.png
-cmd/sc_groupmenu.png cmd/sc_group.png
-cmd/sc_formatgroup.png cmd/sc_group.png
+cmd/32/groupmenu.png cmd/32/formatgroup.png
+cmd/lc_groupmenu.png cmd/lc_formatgroup.png
+cmd/sc_groupmenu.png cmd/sc_formatgroup.png
+
 
 # Extrusion Rotate
 cmd/32/rulerrows.png cmd/32/extrusiontiltleft.png
@@ -1168,12 +1151,6 @@ cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 
 cmd/sc_rulerrows.png cmd/sc_extrusiontiltleft.png
 cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
-
-
-# Presentation
-cmd/32/diaauto.png cmd/32/dia.png
-cmd/lc_diaauto.png cmd/lc_dia.png
-cmd/sc_diaauto.png cmd/sc_dia.png
 
 # Style
 
@@ -1211,11 +1188,14 @@ cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineleft.png cmd/sc_decrementindent.png
 
 # Mirror
-cmd/32/mirrorhorz.png cmd/32/mirror.png
+cmd/32/mirrorhorz.png cmd/32/fliphorizontal.png
+cmd/32/mirrorvert.png cmd/32/flipvertical.png
 
-cmd/lc_mirrorhorz.png cmd/lc_mirror.png
+cmd/lc_mirrorhorz.png cmd/lc_fliphorizontal.png
+cmd/lc_mirrorvert.png cmd/lc_flipvertical.png
 
-cmd/sc_mirrorhorz.png cmd/sc_mirror.png
+cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
+cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 
 # Connector
 cmd/32/connectorcircles.png cmd/32/connector.png
@@ -1237,13 +1217,10 @@ cmd/sc_connectorlinescircles.png cmd/sc_connector.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
 
 # Time
-cmd/32/rehearsetimings.png cmd/32/timefield.png
 cmd/32/numberformattime.png cmd/32/timefield.png
 
-cmd/lc_rehearsetimings.png cmd/lc_timefield.png
 cmd/lc_numberformattime.png cmd/lc_timefield.png
 
-cmd/sc_rehearsetimings.png cmd/sc_timefield.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
 
 # Arrange
@@ -1403,8 +1380,8 @@ cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_setdefault.png cmd/sc_resetattributes.png
 
 # Impress
-cmd/sc_slidechangewindow.png sfx2/res/symphony/sidebar-transition-small.png
-cmd/lc_slidechangewindow.png sfx2/res/symphony/sidebar-transition-large.png
+cmd/lc_slidechangewindow.png cmd/lc_dia.png
+cmd/sc_slidechangewindow.png cmd/sc_dia.png
 
 # Toggle graphics visibility in Writer
 cmd/32/showgraphics.png cmd/32/graphic.png
@@ -1607,7 +1584,8 @@ res/sc05961.png cmd/sc_recsearch.png
 res/sc06300.png cmd/sc_nextrecord.png
 res/sc06301.png cmd/sc_prevrecord.png
 res/sc06303.png cmd/sc_firstrecord.png
-
+res/sc10223.png cmd/sc_position.png
+res/sc10224.png cmd/sc_size.png
 res/sc10350.png cmd/sc_bmpmask.png
 res/sc10711.png cmd/sc_removefiltersort.png
 res/sc10712.png cmd/sc_sortascending.png
@@ -1701,7 +1679,7 @@ sd/res/comments_indicator.png cmd/sc_showannotations.png
 sd/res/get1obj.png cmd/sc_selectobject.png
 sd/res/getallob.png cmd/sc_selectall.png
 sd/res/graphic.png cmd/sc_graphic.png
-sd/res/group.png cmd/sc_group.png
+sd/res/group.png cmd/sc_formatgroup.png
 sd/res/objects.png cmd/sc_choosepolygon.png
 sd/res/ole.png sc/res/nc05.png
 sd/res/page.png cmd/sc_adddirect.png
@@ -1743,8 +1721,8 @@ sfx2/res/plus.png res/plus.png
 sfx2/res/symphony/open_more.png cmd/lc_controlproperties.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
-sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationobjects.png
-sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationobjects.png
+sfx2/res/symphony/sidebar-animation-large.png cmd/lc_customanimation.png
+sfx2/res/symphony/sidebar-animation-small.png cmd/sc_customanimation.png
 sfx2/res/symphony/sidebar-colors-large.png cmd/lc_bmpmask.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
@@ -1759,6 +1737,8 @@ sfx2/res/symphony/sidebar-style-large.png cmd/lc_designerdialog.png
 sfx2/res/symphony/sidebar-style-small.png cmd/sc_designerdialog.png
 sfx2/res/symphony/sidebar-template-large.png cmd/lc_slidemasterpage.png
 sfx2/res/symphony/sidebar-template-small.png cmd/sc_slidemasterpage.png
+sfx2/res/symphony/sidebar-transition-large.png cmd/lc_dia.png
+sfx2/res/symphony/sidebar-transition-small.png cmd/sc_dia.png
 
 # startmath
 # ==============================================
@@ -1880,7 +1860,6 @@ sw/res/nc20009.png cmd/sc_insertindexesentry.png
 sw/res/nc20010.png cmd/sc_showannotations.png
 sw/res/nc20011.png cmd/sc_insertdraw.png
 
-
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
 sw/res/re02.png cmd/lc_unsetcellsreadonly.png
 sw/res/re03.png cmd/sc_protect.png
@@ -1927,7 +1906,7 @@ sw/res/sr20015.png cmd/sc_showannotations.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 
-sw/res/sx01.png cmd/sc_dbqueryedit.png
+sw/res/sx01.png cmd/sc_viewdatasourcebrowser.png
 sw/res/sx02.png res/sx03187.png
 sw/res/sx03.png cmd/sc_dbqueryedit.png
 
