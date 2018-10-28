@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_eedbbf7a",
+        "filename": "sw/uiconfig/sweb/popupmenu/draw.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-28T20:28:26Z",
+      "side": 1,
+      "message": "This won\u0027t work unless you add it to the makefile (UIConfig_sweb.mk). Also it won\u0027t show in the customization dialog unless you add it to WriterWebWindowState.xcu.\n\nNote that there are also other missing popup menus like drawtext and media.",
+      "revId": "938d4ca14458bcc7bac45c7b4b6aa16be270d49c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
