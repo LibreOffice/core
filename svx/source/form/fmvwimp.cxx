@@ -1526,8 +1526,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         _rFieldPostfix,
         SdrInventor::FmForm,
         OBJ_FM_FIXEDTEXT,
-        nullptr,
-        nullptr,
+        getView()->GetSdrPageView()->GetPage(),
+        getView()->GetSdrPageView()->GetPage(),
 
         // tdf#118963 Hand over a SdrModel to SdrObject-creation. It uses the local m_pView
         // and already returning false when nullptr == getView() could be done, but m_pView
