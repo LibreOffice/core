@@ -43,8 +43,8 @@
  <toolbar:toolbaritem xlink:href=".uno:ObjectBackOne"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
