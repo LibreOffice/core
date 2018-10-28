@@ -231,7 +231,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/map \
     vcl/source/gdi/alpha \
     vcl/source/gdi/animate \
-    vcl/source/gdi/base14 \
     vcl/source/gdi/bitmap3 \
     vcl/source/gdi/bitmapex \
     vcl/source/gdi/bmpacc2 \
@@ -261,11 +260,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/metaact \
     vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
-    vcl/source/gdi/pdfextoutdevdata \
-    vcl/source/gdi/pdffontcache \
-    vcl/source/gdi/pdfwriter \
-    vcl/source/gdi/pdfwriter_impl2 \
-    vcl/source/gdi/pdfwriter_impl \
     vcl/source/gdi/pngread \
     vcl/source/gdi/pngwrite \
     vcl/source/gdi/print2 \
@@ -316,7 +310,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapMedianFilter \
     vcl/source/bitmap/BitmapInterpolateScaleFilter \
     vcl/source/bitmap/BitmapSeparableUnsharpenFilter \
-	vcl/source/bitmap/BitmapFastScaleFilter \
+    vcl/source/bitmap/BitmapFastScaleFilter \
     vcl/source/bitmap/BitmapScaleSuperFilter \
     vcl/source/bitmap/BitmapScaleConvolutionFilter \
     vcl/source/bitmap/BitmapSymmetryCheck \
@@ -408,6 +402,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
+    vcl/source/pdf/buildin_fonts \
+    vcl/source/pdf/extoutdevdata \
+    vcl/source/pdf/fontcache \
+    vcl/source/pdf/writer \
+    vcl/source/pdf/writer_impl \
+    vcl/source/pdf/writer_impl2 \
     vcl/source/uitest/logger \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
