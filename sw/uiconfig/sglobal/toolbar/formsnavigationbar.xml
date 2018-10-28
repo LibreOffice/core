@@ -35,6 +35,7 @@
  <toolbar:toolbaritem xlink:href=".uno:DeleteRecord"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Refresh"/>
+ <toolbar:toolbaritem xlink:href=".uno:RefreshFormControl"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:OrderCrit"/>
  <toolbar:toolbaritem xlink:href=".uno:Sortup"/>

@@ -21,6 +21,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SaveAs"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ReadOnlyDoc" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
