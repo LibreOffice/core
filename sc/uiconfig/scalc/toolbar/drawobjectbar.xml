@@ -38,13 +38,13 @@
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground"/>
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode"/>

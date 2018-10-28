@@ -14,8 +14,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OriginalSize"/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
-  <menu:menuitem menu:id=".uno:FormatLine"/>
-  <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menu menu:id=".uno:ObjectAlign">
@@ -38,14 +36,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
       <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menu menu:id=".uno:RotateFlipMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ObjectMirrorVertical"/>
-      <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>

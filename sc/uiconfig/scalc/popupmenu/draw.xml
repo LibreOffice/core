@@ -14,8 +14,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
   <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
-  <menu:menuitem menu:id=".uno:ObjectMirrorVertical"/>
-  <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FitCellSize"/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
@@ -43,6 +41,12 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
       <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:FlipMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:ObjectMirrorVertical"/>
+      <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuitem menu:id=".uno:FormatGroup"/>

@@ -16,6 +16,7 @@
   <menu:menuitem menu:id=".uno:FillModeRemovePredescessor"/>
   <menu:menuitem menu:id=".uno:FillModeTraceSuccessor"/>
   <menu:menuitem menu:id=".uno:FillModeRemoveSuccessor"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ClearArrows"/>
   <menu:menuitem menu:id=".uno:FillModeEnd"/>
 </menu:menupopup>
