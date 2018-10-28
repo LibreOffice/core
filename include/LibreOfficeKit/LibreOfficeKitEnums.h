@@ -594,6 +594,11 @@ typedef enum
      * convenience.
      */
     LOK_CALLBACK_CLIPBOARD_CHANGED = 38,
+
+    /**
+     * On-load notification of the document signature status.
+     */
+    LOK_CALLBACK_SIGNATURE_STATUS = 39,
 }
 LibreOfficeKitCallbackType;
 
