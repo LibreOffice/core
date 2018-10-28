@@ -70,8 +70,8 @@ public: // TODO: make data members private
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
-    bool GetCachedGlyphBoundRect(sal_GlyphId, tools::Rectangle &) const;
-    void CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &) const;
+    bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
+    virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
 
     int GetKashidaWidth();
 
@@ -80,6 +80,8 @@ public: // TODO: make data members private
 
 protected:
     explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+
+    virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
     // Takes ownership of pHbFace.
     hb_font_t* InitHbFont(hb_face_t* pHbFace) const;

@@ -133,7 +133,7 @@ public:
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const PhysicalFontFace** pFallbackFont = nullptr,
                                  int* const pFallbackLevel = nullptr) const override;
-    bool            GetOutline(SalGraphics&, basegfx::B2DPolyPolygonVector&) const override;
+    bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
     bool            IsKashidaPosValid(int nCharPos) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
