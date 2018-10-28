@@ -589,14 +589,11 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
     }
 }
 
-bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
+bool FreetypeFont::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool bVertical) const
 {
-    if (rGlyph.GetCachedGlyphBoundRect(rRect))
-        return true;
-
     FT_Activate_Size( maSizeFT );
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.m_aGlyphId, mnLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, nID, mnLoadFlags);
 
     if (rc != FT_Err_Ok)
         return false;
@@ -609,14 +606,24 @@ bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& 
     if (rc != FT_Err_Ok)
         return false;
 
-    ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
+    ApplyGlyphTransform(bVertical, pGlyphFT);
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
     FT_Done_Glyph( pGlyphFT );
-    rRect = tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
 
-    rGlyph.CacheGlyphBoundRect(rRect);
+    tools::Rectangle aRect(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
+    if (mnCos != 0x10000 && mnSin != 0)
+    {
+        const double nCos = mnCos / 65536.0;
+        const double nSin = mnSin / 65536.0;
+        rRect.SetLeft(  nCos*aRect.Left() + nSin*aRect.Top() );
+        rRect.SetTop( -nSin*aRect.Left() - nCos*aRect.Top() );
+        rRect.SetRight(  nCos*aRect.Right() + nSin*aRect.Bottom() );
+        rRect.SetBottom( -nSin*aRect.Right() - nCos*aRect.Bottom() );
+    }
+    else
+        rRect = aRect;
     return true;
 }
 
@@ -876,8 +883,7 @@ static int FT_cubic_to( const FT_Vector* p1, const FT_Vector* p2, const FT_Vecto
 
 } // extern "C"
 
-bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
-    basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
+bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool bIsVertical) const
 {
     if( maSizeFT )
         FT_Activate_Size( maSizeFT );
@@ -891,7 +897,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.m_aGlyphId, nLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, nId, nLoadFlags);
     if( rc != FT_Err_Ok )
         return false;
 
@@ -929,7 +935,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     tools::PolyPolygon aToolPolyPolygon;
     PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 
-    ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
+    ApplyGlyphTransform(bIsVertical, pGlyphFT);
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;

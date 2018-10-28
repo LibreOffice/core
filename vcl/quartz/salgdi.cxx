@@ -370,16 +370,6 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
     return ::AddTempDevFont(rFontFileURL);
 }
 
-bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
-{
-    return static_cast<CoreTextStyle*>(rGlyph.m_pFontInstance)->GetGlyphOutline(rGlyph, rPolyPoly);
-}
-
-bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect )
-{
-    return static_cast<CoreTextStyle*>(rGlyph.m_pFontInstance)->GetGlyphBoundRect(rGlyph, rRect);
-}
-
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
 #ifdef IOS

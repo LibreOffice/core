@@ -107,6 +107,7 @@ class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
     FreetypeFont* mpFreetypeFont;
 
     virtual hb_font_t* ImplInitHbFont() override;
+    virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
 protected:
     explicit FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP);
@@ -116,15 +117,9 @@ public:
 
     void SetFreetypeFont(FreetypeFont* p);
     FreetypeFont* GetFreetypeFont() const { return mpFreetypeFont; }
-};
 
-inline FreetypeFont* getFreetypeFontFromGlyph(const GlyphItem& rGlyph)
-{
-    assert(rGlyph.m_pFontInstance);
-    if (!rGlyph.m_pFontInstance)
-        return nullptr;
-    return static_cast<FreetypeFontInstance*>(rGlyph.m_pFontInstance)->GetFreetypeFont();
-}
+    virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
+};
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 

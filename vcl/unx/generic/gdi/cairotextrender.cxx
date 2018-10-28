@@ -442,42 +442,6 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
         mpFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
-{
-    FreetypeFont* pSF = getFreetypeFontFromGlyph(rGlyph);
-    if( !pSF )
-        return false;
-
-    tools::Rectangle aRect;
-    if (!pSF->GetGlyphBoundRect(rGlyph, aRect))
-        return false;
-
-    if ( pSF->mnCos != 0x10000 && pSF->mnSin != 0 )
-    {
-        double nCos = pSF->mnCos / 65536.0;
-        double nSin = pSF->mnSin / 65536.0;
-        rRect.SetLeft(  nCos*aRect.Left() + nSin*aRect.Top() );
-        rRect.SetTop( -nSin*aRect.Left() - nCos*aRect.Top() );
-
-        rRect.SetRight(  nCos*aRect.Right() + nSin*aRect.Bottom() );
-        rRect.SetBottom( -nSin*aRect.Right() - nCos*aRect.Bottom() );
-    }
-    else
-        rRect = aRect;
-
-    return true;
-}
-
-bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
-    basegfx::B2DPolyPolygon& rPolyPoly )
-{
-    const FreetypeFont* pSF = getFreetypeFontFromGlyph(rGlyph);
-    if( !pSF )
-        return false;
-
-    return pSF->GetGlyphOutline(rGlyph, rPolyPoly);
-}
-
 std::unique_ptr<SalLayout> CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (!mpFreetypeFont[nFallbackLevel])
