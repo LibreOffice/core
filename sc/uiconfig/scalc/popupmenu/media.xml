@@ -12,8 +12,8 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FitCellSize"/>
+  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menu menu:id=".uno:ObjectAlign">
@@ -42,6 +42,9 @@
   <menu:menuitem menu:id=".uno:RenameObject"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
+  <menu:menuitem menu:id=".uno:EditShapeHyperlink"/>
+  <menu:menuitem menu:id=".uno:DeleteShapeHyperlink"/>
+  <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
+  <menu:menuitem menu:id=".uno:AssignMacro"/>
 </menu:menupopup>
 

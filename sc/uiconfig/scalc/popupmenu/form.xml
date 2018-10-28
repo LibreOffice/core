@@ -12,8 +12,8 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FitCellSize"/>
+  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ControlProperties"/>
   <menu:menuitem menu:id=".uno:FormProperties"/>

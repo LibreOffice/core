@@ -21,7 +21,6 @@
   <menu:menuitem menu:id=".uno:OriginalSize"/>
   <menu:menuitem menu:id=".uno:FitCellSize"/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
-  <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menu menu:id=".uno:ObjectAlign">
