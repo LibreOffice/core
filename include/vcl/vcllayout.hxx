@@ -97,8 +97,8 @@ public:
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const PhysicalFontFace** pFallbackFont = nullptr,
                                  int* const pFallbackLevel = nullptr) const = 0;
-    virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
+    virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
+    bool GetBoundRect(tools::Rectangle&) const;
 
     virtual std::shared_ptr<vcl::TextLayoutCache>
         CreateTextLayoutCache(OUString const&) const;

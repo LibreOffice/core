@@ -633,8 +633,7 @@ static int lcl_CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical
     return nResult;
 }
 
-bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
-    basegfx::B2DPolyPolygonVector& rVector ) const
+bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
 {
     bool bAllOk = true;
     bool bOneOk = false;
@@ -647,7 +646,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     while (GetNextGlyph(&pGlyph, aPos, nStart))
     {
         // get outline of individual glyph, ignoring "empty" glyphs
-        bool bSuccess = rSalGraphics.GetGlyphOutline(*pGlyph, aGlyphOutline);
+        bool bSuccess = pGlyph->GetGlyphOutline(aGlyphOutline);
         bAllOk &= bSuccess;
         bOneOk |= bSuccess;
         // only add non-empty outlines
@@ -666,7 +665,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     return (bAllOk && bOneOk);
 }
 
-bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect ) const
+bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
 {
     bool bRet = false;
     rRect.SetEmpty();
@@ -679,7 +678,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect
     while (GetNextGlyph(&pGlyph, aPos, nStart))
     {
         // get bounding rectangle of individual glyph
-        if (rSalGraphics.GetGlyphBoundRect(*pGlyph, aRectangle))
+        if (pGlyph->GetGlyphBoundRect(aRectangle))
         {
             // merge rectangle
             aRectangle += aPos;
@@ -1535,8 +1534,7 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     return false;
 }
 
-bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
-                                 basegfx::B2DPolyPolygonVector& rPPV ) const
+bool MultiSalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rPPV) const
 {
     bool bRet = false;
 
@@ -1546,7 +1544,7 @@ bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
         rLayout.DrawBase() = maDrawBase;
         rLayout.DrawOffset() += maDrawOffset;
         rLayout.InitFont();
-        bRet |= rLayout.GetOutline( rGraphics, rPPV );
+        bRet |= rLayout.GetOutline(rPPV);
         rLayout.DrawOffset() -= maDrawOffset;
     }
 

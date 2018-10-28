@@ -76,18 +76,18 @@ struct GlyphItem
     bool IsDropped() const { return ((m_nFlags & IS_DROPPED) != 0); }
     bool IsClusterStart() const { return ((m_nFlags & IS_CLUSTER_START) != 0); }
 
-    inline bool GetCachedGlyphBoundRect(tools::Rectangle& rRect) const;
-    inline void CacheGlyphBoundRect(tools::Rectangle& rRect) const;
+    inline bool GetGlyphBoundRect(tools::Rectangle&) const;
+    inline bool GetGlyphOutline(basegfx::B2DPolyPolygon&) const;
 };
 
-inline bool GlyphItem::GetCachedGlyphBoundRect(tools::Rectangle& rRect) const
+inline bool GlyphItem::GetGlyphBoundRect(tools::Rectangle& rRect) const
 {
-    return m_pFontInstance->GetCachedGlyphBoundRect(m_aGlyphId, rRect);
+    return m_pFontInstance->GetGlyphBoundRect(m_aGlyphId, rRect, IsVertical());
 }
 
-inline void GlyphItem::CacheGlyphBoundRect(tools::Rectangle& rRect) const
+inline bool GlyphItem::GetGlyphOutline(basegfx::B2DPolyPolygon& rPoly) const
 {
-    m_pFontInstance->CacheGlyphBoundRect(m_aGlyphId, rRect);
+    return m_pFontInstance->GetGlyphOutline(m_aGlyphId, rPoly, IsVertical());
 }
 
 class VCL_DLLPUBLIC SalLayoutGlyphsImpl : public std::vector<GlyphItem>

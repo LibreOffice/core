@@ -111,8 +111,8 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    bool                    GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&);
-    bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
+    bool                    GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
+    bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 
     FreetypeFontInstance*   GetFontInstance() const { return mpFontInstance.get(); }

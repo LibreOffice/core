@@ -75,8 +75,6 @@ public:
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) override;
 
-    virtual bool                GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) override;
-    virtual bool                GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
     virtual std::unique_ptr<SalLayout>
                                 GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void                DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;

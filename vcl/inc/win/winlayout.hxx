@@ -148,7 +148,7 @@ class WinFontInstance : public LogicalFontInstance
     friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
 public:
-    virtual ~WinFontInstance() override;
+    ~WinFontInstance() override;
 
     bool hasHScale() const;
 
@@ -167,10 +167,13 @@ public:
     bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
     OpenGLGlyphCache& GetOpenGLGlyphCache() { return maOpenGLGlyphCache; }
 
+    bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
+
 private:
     explicit WinFontInstance(const WinFontFace&, const FontSelectPattern&);
 
-    virtual hb_font_t* ImplInitHbFont() override;
+    hb_font_t* ImplInitHbFont() override;
+    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
