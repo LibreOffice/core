@@ -267,6 +267,7 @@
         <menu:menupopup>
           <menu:menu menu:id=".uno:ShapesLineMenu">
             <menu:menupopup>
+              <menu:menuitem menu:id=".uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles"/>
               <menu:menuitem menu:id=".uno:Line"/>
               <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
               <menu:menuitem menu:id=".uno:Freeline"/>
@@ -317,7 +318,6 @@
           <menu:menuitem menu:id=".uno:InsertRLM"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:InsertFootnotesMenu">
         <menu:menupopup>
