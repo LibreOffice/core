@@ -44,16 +44,16 @@
 
 #include <sallayout.hxx>
 #include <outdata.hxx>
-#include "pdffontcache.hxx"
-#include <PhysicalFontFace.hxx>
+#include "fontcache.hxx"
+#include "buildin_fonts.hxx"
 
+class PhysicalFontFace;
 class StyleSettings;
 class FontSelectPattern;
 class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
 struct BitStreamState;
-class PhysicalFontFace;
 class SvStream;
 class SvMemoryStream;
 
@@ -89,7 +89,6 @@ namespace vcl
 
 class PDFStreamIf;
 class Matrix3;
-class PdfBuiltinFontFace;
 
 namespace filter
 {
@@ -101,25 +100,6 @@ class PDFWriterImpl : public VirtualDevice
     friend class PDFStreamIf;
 
 public:
-    // definition of structs
-    struct BuiltinFont
-    {
-        const char *                m_pName;                     // Name
-        const char *                m_pStyleName;                // StyleName
-        const char *                m_pPSName;                   // PSName
-        int const                   m_nAscent;
-        int const                   m_nDescent;
-        FontFamily const            m_eFamily;                   // Family
-        rtl_TextEncoding const      m_eCharSet;                  // CharSet
-        FontPitch const             m_ePitch;                    // Pitch
-        FontWidth const             m_eWidthType;                // WidthType
-        FontWeight const            m_eWeight;                   // Weight
-        FontItalic const            m_eItalic;                   // Italic
-        int const                   m_aWidths[256];              // character metrics
-
-        OString getNameObject() const;
-    };
-
     enum ResourceKind { ResXObject, ResExtGState, ResShading, ResPattern };
     typedef std::map< OString, sal_Int32 > ResourceMap;
     struct ResourceDict
@@ -614,8 +594,6 @@ public:
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
 
 private:
-    static const BuiltinFont m_aBuiltinFonts[14];
-
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;
     /* maps object numbers to file offsets (needed for xref) */
@@ -705,7 +683,7 @@ private:
     sal_Int32                           m_nResourceDict;
     ResourceDict                        m_aGlobalResourceDict;
     sal_Int32                           m_nFontDictObject;
-    std::map< sal_Int32, sal_Int32 >    m_aBuiltinFontToObjectMap;
+    std::map< sal_Int32, sal_Int32 >    m_aBuildinFontToObjectMap;
 
     PDFWriter::PDFWriterContext         m_aContext;
     osl::File                           m_aFile;
@@ -855,7 +833,7 @@ i12626
     /* writes all gradient patterns */
     bool emitGradients();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
-    sal_Int32 emitBuiltinFont( const PdfBuiltinFontFace*, sal_Int32 nObject );
+    sal_Int32 emitBuildinFont( const pdf::BuildinFontFace*, sal_Int32 nObject );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont const & );
     /* writes a font descriptor and returns its object id (or 0) */
@@ -881,7 +859,7 @@ i12626
     /* push resource into current (redirected) resource dict */
     void pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject );
 
-    void appendBuiltinFontsToDict( OStringBuffer& rDict ) const;
+    void appendBuildinFontsToDict( OStringBuffer& rDict ) const;
     /* writes a the font dictionary and emits all font objects
      * returns object id of font directory (or 0 on error)
      */
@@ -951,7 +929,7 @@ i12626
     // default appearances for widgets
     sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
-    sal_Int32 getBestBuiltinFont( const Font& rFont );
+    sal_Int32 getBestBuildinFont( const Font& rFont );
     sal_Int32 getSystemFont( const Font& i_rFont );
 
     // used for edit and listbox
@@ -1270,30 +1248,7 @@ public:
     void MARK( const char* pString );
 };
 
-class PdfBuiltinFontInstance final : public LogicalFontInstance
-{
-    bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool) const override;
-
-public:
-    PdfBuiltinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
-
-    bool GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool) const override;
-};
-
-class PdfBuiltinFontFace final : public PhysicalFontFace
-{
-    const PDFWriterImpl::BuiltinFont& mrBuiltin;
-
-    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern& rFSD) const override;
-
-public:
-    explicit                            PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& );
-    const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
-
-    virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
-};
-
-}
+} // namespace vcl
 
 #endif //_VCL_PDFEXPORT_HXX
 

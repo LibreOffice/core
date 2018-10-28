@@ -31,10 +31,11 @@
 
 class Graphic;
 
-namespace vcl { class PDFWriter; }
-
 namespace vcl
 {
+class PDFWriter;
+struct PageSyncData;
+struct GlobalSyncData;
 
 /*
     A PDFExtOutDevBookmarkEntry is being created by the EditEngine if
@@ -67,8 +68,6 @@ struct PDFExtOutDevBookmarkEntry
  Class that is being set at the OutputDevice allowing the
  application to send enhanced PDF commands like CreateLink
 */
-struct PageSyncData;
-struct GlobalSyncData;
 class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 {
 
@@ -479,7 +478,7 @@ public:
     void    CreateControl( const PDFWriter::AnyWidget& rControlType );
 };
 
-}
+} // namespace vcl
 
 #endif
 

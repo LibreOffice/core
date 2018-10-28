@@ -86,7 +86,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <impglyphitem.hxx>
 
-#include "pdfwriter_impl.hxx"
+#include "writer_impl.hxx"
 
 #ifdef _WIN32
 // WinCrypt headers for PDF signing
@@ -2170,46 +2170,6 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     return nWritten == nBytes;
 }
 
-static FontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
-{
-    FontAttributes aDFA;
-    aDFA.SetFamilyName( OUString::createFromAscii( rBuiltin.m_pName ) );
-    aDFA.SetStyleName( OUString::createFromAscii( rBuiltin.m_pStyleName ) );
-    aDFA.SetFamilyType( rBuiltin.m_eFamily );
-    aDFA.SetSymbolFlag( rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
-    aDFA.SetPitch( rBuiltin.m_ePitch );
-    aDFA.SetWeight( rBuiltin.m_eWeight );
-    aDFA.SetItalic( rBuiltin.m_eItalic );
-    aDFA.SetWidthType( rBuiltin.m_eWidthType );
-
-    aDFA.SetQuality( 50000 );
-    return aDFA;
-}
-
-PdfBuiltinFontInstance::PdfBuiltinFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPattern& rFSP)
-    : LogicalFontInstance(rFontFace, rFSP)
-{}
-
-bool PdfBuiltinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const
-{
-    return false;
-}
-
-bool PdfBuiltinFontInstance::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const
-{
-    return false;
-}
-
-PdfBuiltinFontFace::PdfBuiltinFontFace(const PDFWriterImpl::BuiltinFont& rBuiltin)
-    : PhysicalFontFace(GetDevFontAttributes(rBuiltin))
-    , mrBuiltin(rBuiltin)
-{}
-
-rtl::Reference<LogicalFontInstance> PdfBuiltinFontFace::CreateFontInstance(const FontSelectPattern& rFSP) const
-{
-    return new PdfBuiltinFontInstance(*this, rFSP);
-}
-
 void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
 {
     endPage();
@@ -2834,11 +2794,11 @@ bool PDFWriterImpl::emitTilings()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitBuiltinFont( const PdfBuiltinFontFace* pFD, sal_Int32 nFontObject )
+sal_Int32 PDFWriterImpl::emitBuildinFont(const pdf::BuildinFontFace* pFD, sal_Int32 nFontObject)
 {
     if( !pFD )
         return 0;
-    const BuiltinFont& rBuiltinFont = pFD->GetBuiltinFont();
+    const pdf::BuildinFont& rBuildinFont = pFD->GetBuildinFont();
 
     OStringBuffer aLine( 1024 );
 
@@ -2848,9 +2808,9 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const PdfBuiltinFontFace* pFD, sal_Int
     aLine.append( nFontObject );
     aLine.append( " 0 obj\n"
                   "<</Type/Font/Subtype/Type1/BaseFont/" );
-    appendName( rBuiltinFont.m_pPSName, aLine );
+    appendName( rBuildinFont.m_pPSName, aLine );
     aLine.append( "\n" );
-    if( rBuiltinFont.m_eCharSet == RTL_TEXTENCODING_MS_1252 )
+    if( rBuildinFont.m_eCharSet == RTL_TEXTENCODING_MS_1252 )
          aLine.append( "/Encoding/WinAnsiEncoding\n" );
     aLine.append( ">>\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -3182,11 +3142,11 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     return nFontDescriptor;
 }
 
-void PDFWriterImpl::appendBuiltinFontsToDict( OStringBuffer& rDict ) const
+void PDFWriterImpl::appendBuildinFontsToDict( OStringBuffer& rDict ) const
 {
-    for (auto const& item : m_aBuiltinFontToObjectMap)
+    for (auto const& item : m_aBuildinFontToObjectMap)
     {
-        rDict.append( m_aBuiltinFonts[item.first].getNameObject() );
+        rDict.append( pdf::BuildinFontFace::Get(item.first).getNameObject() );
         rDict.append( ' ' );
         rDict.append( item.second );
         rDict.append( " 0 R" );
@@ -3454,12 +3414,13 @@ bool PDFWriterImpl::emitFonts()
             aFontDict.append( '\n' );
     }
     // emit builtin font for widget appearances / variable text
-    for (auto & item : m_aBuiltinFontToObjectMap)
+    for (auto & item : m_aBuildinFontToObjectMap)
     {
-        rtl::Reference<PdfBuiltinFontFace> aData(new PdfBuiltinFontFace(m_aBuiltinFonts[item.first]));
-        item.second = emitBuiltinFont( aData.get(), item.second );
+        rtl::Reference<pdf::BuildinFontFace> aData(new pdf::BuildinFontFace(item.first));
+        item.second = emitBuildinFont( aData.get(), item.second );
     }
-    appendBuiltinFontsToDict( aFontDict );
+
+    appendBuildinFontsToDict(aFontDict);
     aFontDict.append( "\n>>\nendobj\n\n" );
 
     if ( !updateObject( getFontDictObject() ) ) return false;
@@ -4071,7 +4032,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
     return aFont;
 }
 
-sal_Int32 PDFWriterImpl::getBestBuiltinFont( const vcl::Font& rFont )
+sal_Int32 PDFWriterImpl::getBestBuildinFont( const vcl::Font& rFont )
 {
     sal_Int32 nBest = 4; // default to Helvetica
     OUString aFontName( rFont.GetFamilyName() );
@@ -4093,8 +4054,8 @@ sal_Int32 PDFWriterImpl::getBestBuiltinFont( const vcl::Font& rFont )
             nBest += 2;
     }
 
-    if( m_aBuiltinFontToObjectMap.find( nBest ) == m_aBuiltinFontToObjectMap.end() )
-        m_aBuiltinFontToObjectMap[ nBest ] = createObject();
+    if( m_aBuildinFontToObjectMap.find( nBest ) == m_aBuildinFontToObjectMap.end() )
+        m_aBuildinFontToObjectMap[ nBest ] = createObject();
 
     return nBest;
 }
@@ -4133,9 +4094,9 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
     Font aDummyFont( "Helvetica", aFont.GetFontSize() );
-    sal_Int32 nDummyBuiltin = getBestBuiltinFont( aDummyFont );
+    sal_Int32 nDummyBuildin = getBestBuildinFont( aDummyFont );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nDummyBuiltin].getNameObject() );
+    aDA.append(pdf::BuildinFontFace::Get(nDummyBuildin).getNameObject());
     aDA.append( ' ' );
     m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
@@ -4362,10 +4323,11 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     pop();
 
     OStringBuffer aDA( 256 );
+    const pdf::BuildinFont& rBestFont = pdf::BuildinFontFace::Get(
+        getBestBuildinFont(Font("ZapfDingbats", aFont.GetFontSize())));
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( "ZapfDingbats", aFont.GetFontSize() ) );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append(rBestFont.getNameObject());
     aDA.append( " 0 Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
     rBox.m_aMKDict = "/CA";
@@ -4374,11 +4336,11 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     // create appearance streams
     sal_Char cMark = '8';
-    sal_Int32 nCharXOffset = 1000-m_aBuiltinFonts[13].m_aWidths[sal_Int32(cMark)];
+    const pdf::BuildinFont& rFont = pdf::BuildinFontFace::Get(13);
+    sal_Int32 nCharXOffset = 1000-rFont.m_aWidths[sal_Int32(cMark)];
     nCharXOffset *= aCheckRect.GetHeight();
     nCharXOffset /= 2000;
-    sal_Int32 nCharYOffset = 1000-
-        (m_aBuiltinFonts[13].m_nAscent+m_aBuiltinFonts[13].m_nDescent); // descent is negative
+    sal_Int32 nCharYOffset = 1000-(rFont.m_nAscent+rFont.m_nDescent); // descent is negative
     nCharYOffset *= aCheckRect.GetHeight();
     nCharYOffset /= 2000;
 
@@ -4387,7 +4349,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append(rBestFont.getNameObject());
     aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
     aDA.append( " Tf\n" );
@@ -4466,10 +4428,11 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     pop();
 
     OStringBuffer aDA( 256 );
+    const pdf::BuildinFont& rBestFont = pdf::BuildinFontFace::Get(
+        getBestBuildinFont(Font("ZapfDingbats", aFont.GetFontSize())));
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( "ZapfDingbats", aFont.GetFontSize() ) );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append(rBestFont.getNameObject());
     aDA.append( " 0 Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
     //to encrypt this (el)
@@ -4487,7 +4450,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append(rBestFont.getNameObject());
     aDA.append( ' ' );
     m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
     aDA.append( " Tf\n0 0 Td\nET\nQ\n" );
@@ -4860,7 +4823,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             else
             {
                 aLine.append( "/DR<</Font<<" );
-                appendBuiltinFontsToDict( aLine );
+                appendBuildinFontsToDict( aLine );
                 aLine.append( ">>>>\n" );
             }
             aLine.append( "/DA" );
