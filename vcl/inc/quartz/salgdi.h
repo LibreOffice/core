@@ -77,7 +77,7 @@ private:
     mutable bool                    mbFontCapabilitiesRead;
 };
 
-class CoreTextStyle : public LogicalFontInstance
+class CoreTextStyle final : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
@@ -85,8 +85,7 @@ public:
     ~CoreTextStyle() override;
 
     void       GetFontMetric( ImplFontMetricDataRef const & );
-    bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&);
-    bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
+    bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 
@@ -98,7 +97,8 @@ public:
 private:
     explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
 
-    virtual hb_font_t* ImplInitHbFont() override;
+    hb_font_t* ImplInitHbFont() override;
+    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
@@ -372,9 +372,6 @@ public:
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
-
-    virtual bool            GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) override;
-    virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
 
     virtual std::unique_ptr<SalLayout>
                             GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
