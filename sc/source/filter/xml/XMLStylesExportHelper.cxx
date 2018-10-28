@@ -550,19 +550,15 @@ void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 
     bool bInserted(false);
     if (!aRowFormatRanges.empty())
     {
-        ScMyRowFormatRange* pRange(&aRowFormatRanges.back());
-        if (pRange)
+        ScMyRowFormatRange& rRange(aRowFormatRanges.back());
+        if ((nPrevStartCol == (rRange.nStartColumn + rRange.nRepeatColumns))
+            && (rRange.bIsAutoStyle == rFormatRange.bIsAutoStyle) && (rRange.nIndex == nIndex)
+            && (rRange.nValidationIndex == rFormatRange.nValidationIndex))
         {
-            if ((nPrevStartCol == (pRange->nStartColumn + pRange->nRepeatColumns)) &&
-                (pRange->bIsAutoStyle == rFormatRange.bIsAutoStyle) &&
-                (pRange->nIndex == nIndex) &&
-                (pRange->nValidationIndex == rFormatRange.nValidationIndex))
-            {
-                if (rFormatRange.nRepeatRows < pRange->nRepeatRows)
-                    pRange->nRepeatRows = rFormatRange.nRepeatRows;
-                pRange->nRepeatColumns += nRepeat;
-                bInserted = true;
-            }
+            if (rFormatRange.nRepeatRows < rRange.nRepeatRows)
+                rRange.nRepeatRows = rFormatRange.nRepeatRows;
+            rRange.nRepeatColumns += nRepeat;
+            bInserted = true;
         }
     }
     if (!bInserted)

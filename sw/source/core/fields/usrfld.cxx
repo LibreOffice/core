@@ -186,8 +186,7 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
     bValidValue = bDeleted = false;
     aName = aNam;
 
-    if (nType & nsSwGetSetExpType::GSE_STRING)
-        EnableFormat(false);    // Do not use a Numberformatter
+    EnableFormat(false); // Do not use a Numberformatter for nsSwGetSetExpType::GSE_STRING
 }
 
 OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng)

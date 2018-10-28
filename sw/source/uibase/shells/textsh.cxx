@@ -277,8 +277,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     if ( pMarginItem )
                         aMargin = pMarginItem->GetSize();
 
-                    if ( pURLItem )
-                        xSet->setPropertyValue("FrameURL", uno::makeAny( pURLItem->GetValue() ) );
+                    xSet->setPropertyValue("FrameURL", uno::makeAny( pURLItem->GetValue() ) );
                     if ( pNameItem )
                         xSet->setPropertyValue("FrameName", uno::makeAny( pNameItem->GetValue() ) );
 

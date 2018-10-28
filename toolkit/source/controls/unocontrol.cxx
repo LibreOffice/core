@@ -412,8 +412,7 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
             for ( ; pEvents < pEventsEnd; )
                 if ( mpData->aSuspendedPropertyNotifications.find( pEvents->PropertyName ) != mpData->aSuspendedPropertyNotifications.end() )
                 {
-                    if ( pEvents != pEventsEnd )
-                        ::std::copy( pEvents + 1, pEventsEnd, pEvents );
+                    std::copy(pEvents + 1, pEventsEnd, pEvents);
                     --pEventsEnd;
                 }
                 else

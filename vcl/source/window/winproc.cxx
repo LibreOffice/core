@@ -1773,19 +1773,15 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
                     pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 
                 // call the Deactivate
-                vcl::Window* pOldFocusWindow = pFocusWin;
-                if ( pOldFocusWindow )
-                {
-                    vcl::Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
-                    vcl::Window* pOldRealWindow = pOldOverlapWindow->ImplGetWindow();
+                vcl::Window* pOldOverlapWindow = pFocusWin->ImplGetFirstOverlapWindow();
+                vcl::Window* pOldRealWindow = pOldOverlapWindow->ImplGetWindow();
 
-                    pOldOverlapWindow->ImplGetWindowImpl()->mbActive = false;
-                    pOldOverlapWindow->Deactivate();
-                    if ( pOldRealWindow != pOldOverlapWindow )
-                    {
-                        pOldRealWindow->ImplGetWindowImpl()->mbActive = false;
-                        pOldRealWindow->Deactivate();
-                    }
+                pOldOverlapWindow->ImplGetWindowImpl()->mbActive = false;
+                pOldOverlapWindow->Deactivate();
+                if ( pOldRealWindow != pOldOverlapWindow )
+                {
+                    pOldRealWindow->ImplGetWindowImpl()->mbActive = false;
+                    pOldRealWindow->Deactivate();
                 }
 
                 // TrackingMode is ended in ImplHandleLoseFocus

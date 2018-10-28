@@ -4945,69 +4945,69 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         }
     }
 
-    if( pToolItem )
+    assert(pToolItem);
+
+    ImplToolItems::size_type pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
+    ImplToolItems::size_type nCount = mpData->m_aItems.size();
+
+    ImplToolItems::size_type i=0;
+    do
     {
-        ImplToolItems::size_type pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
-        ImplToolItems::size_type nCount = mpData->m_aItems.size();
-
-        ImplToolItems::size_type i=0;
-        do
+        if( bUp )
         {
-            if( bUp )
+            if( !pos-- )
             {
-                if( !pos-- )
+                if( bNoCycle )
+                    return false;
+
+                // highlight the menu button if it is the last item
+                if( IsMenuEnabled() && !ImplIsFloatingMode() )
                 {
-                    if( bNoCycle )
-                        return false;
-
-                    // highlight the menu button if it is the last item
-                    if( IsMenuEnabled() && !ImplIsFloatingMode() )
-                    {
-                        ImplChangeHighlight( nullptr );
-                        InvalidateMenuButton();
-                        return true;
-                    }
-                    else
-                        pos = nCount-1;
+                    ImplChangeHighlight( nullptr );
+                    InvalidateMenuButton();
+                    return true;
                 }
+                else
+                    pos = nCount-1;
             }
-            else
-            {
-                if( ++pos >= nCount )
-                {
-                    if( bNoCycle )
-                        return false;
-
-                    // highlight the menu button if it is the last item
-                    if( IsMenuEnabled() && !ImplIsFloatingMode() )
-                    {
-                        ImplChangeHighlight( nullptr );
-                        InvalidateMenuButton();
-                        return true;
-                    }
-                    else
-                        pos = 0;
-                }
-            }
-
-            pToolItem = &mpData->m_aItems[pos];
-
-            if ( ImplIsValidItem( pToolItem, false ) )
-                break;
-
-        } while( ++i < nCount);
-
-        if( pToolItem->IsClipped() && IsMenuEnabled() )
-        {
-            // select the menu button if a clipped item would be selected
-            ImplChangeHighlight( nullptr );
-            InvalidateMenuButton();
         }
-        else if( i != nCount )
-            ImplChangeHighlight( pToolItem );
         else
-            return false;
+        {
+            if( ++pos >= nCount )
+            {
+                if( bNoCycle )
+                    return false;
+
+                // highlight the menu button if it is the last item
+                if( IsMenuEnabled() && !ImplIsFloatingMode() )
+                {
+                    ImplChangeHighlight( nullptr );
+                    InvalidateMenuButton();
+                    return true;
+                }
+                else
+                    pos = 0;
+            }
+        }
+
+        pToolItem = &mpData->m_aItems[pos];
+
+        if ( ImplIsValidItem( pToolItem, false ) )
+            break;
+
+    } while( ++i < nCount);
+
+    if( pToolItem->IsClipped() && IsMenuEnabled() )
+    {
+        // select the menu button if a clipped item would be selected
+        ImplChangeHighlight( nullptr );
+        InvalidateMenuButton();
     }
+    else if( i != nCount )
+        ImplChangeHighlight( pToolItem );
+    else
+        return false;
+
     return true;
 }
 

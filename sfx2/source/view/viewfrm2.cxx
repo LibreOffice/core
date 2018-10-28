@@ -164,16 +164,16 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             if ( bShow )
             {
                 // First, make the floats viewable
-                pWorkWin->MakeChildrenVisible_Impl( bShow );
+                pWorkWin->MakeChildrenVisible_Impl(true);
                 GetDispatcher()->Update_Impl( true );
 
                 // Then view it
-                GetBindings().HidePopups( !bShow );
+                GetBindings().HidePopups(false);
             }
             else
             {
-                pWorkWin->HidePopups_Impl( !bShow );
-                pWorkWin->MakeChildrenVisible_Impl( bShow );
+                pWorkWin->HidePopups_Impl(true);
+                pWorkWin->MakeChildrenVisible_Impl(false);
             }
 
             Invalidate( rReq.GetSlot() );

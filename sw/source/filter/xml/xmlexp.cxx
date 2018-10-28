@@ -340,17 +340,15 @@ void SwXMLExport::ExportFontDecls_()
     SvXMLExport::ExportFontDecls_();
 }
 
-#define NUM_EXPORTED_VIEW_SETTINGS 11
 void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
-    aProps.realloc( NUM_EXPORTED_VIEW_SETTINGS );
+    aProps.realloc(7);
      // Currently exporting 9 properties
     PropertyValue *pValue = aProps.getArray();
-    sal_Int32 nIndex = 0;
 
     Reference < XIndexContainer > xBox = IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
-    pValue[nIndex].Name = "Views";
-    pValue[nIndex++].Value <<= xBox;
+    pValue[0].Name = "Views";
+    pValue[0].Value <<= xBox;
 
     SwDoc *pDoc = getDoc();
     const tools::Rectangle rRect =
@@ -359,17 +357,17 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
-    pValue[nIndex].Name = "ViewAreaTop";
-    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.Top() ) : rRect.Top();
+    pValue[1].Name = "ViewAreaTop";
+    pValue[1].Value <<= bTwip ? convertTwipToMm100 ( rRect.Top() ) : rRect.Top();
 
-    pValue[nIndex].Name = "ViewAreaLeft";
-    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.Left() ) : rRect.Left();
+    pValue[2].Name = "ViewAreaLeft";
+    pValue[2].Value <<= bTwip ? convertTwipToMm100 ( rRect.Left() ) : rRect.Left();
 
-    pValue[nIndex].Name = "ViewAreaWidth";
-    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetWidth() ) : rRect.GetWidth();
+    pValue[3].Name = "ViewAreaWidth";
+    pValue[3].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetWidth() ) : rRect.GetWidth();
 
-    pValue[nIndex].Name = "ViewAreaHeight";
-    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetHeight() ) : rRect.GetHeight();
+    pValue[4].Name = "ViewAreaHeight";
+    pValue[4].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
     // "show redline mode" cannot simply be read from the document
     // since it gets changed during execution. If it's in the info
@@ -386,16 +384,12 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         }
     }
 
-    pValue[nIndex].Name = "ShowRedlineChanges";
-    pValue[nIndex++].Value <<= bShowRedlineChanges;
+    pValue[5].Name = "ShowRedlineChanges";
+    pValue[5].Value <<= bShowRedlineChanges;
 
-    pValue[nIndex].Name = "InBrowseMode";
-    pValue[nIndex++].Value <<= pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
-
-    if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )
-        aProps.realloc(nIndex);
+    pValue[6].Name = "InBrowseMode";
+    pValue[6].Value <<= pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
 }
-#undef NUM_EXPORTED_VIEW_SETTINGS
 
 void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
 {

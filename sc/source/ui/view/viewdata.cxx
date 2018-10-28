@@ -500,56 +500,54 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
-    if (pSettings)
-    {
-        pSettings[SC_CURSOR_X].Name = SC_CURSORPOSITIONX;
-        pSettings[SC_CURSOR_X].Value <<= sal_Int32(nCurX);
-        pSettings[SC_CURSOR_Y].Name = SC_CURSORPOSITIONY;
-        pSettings[SC_CURSOR_Y].Value <<= sal_Int32(nCurY);
-        pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = SC_HORIZONTALSPLITMODE;
-        pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eHSplitMode);
-        pSettings[SC_VERTICAL_SPLIT_MODE].Name = SC_VERTICALSPLITMODE;
-        pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eVSplitMode);
-        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = SC_HORIZONTALSPLITPOSITION;
-        if (eHSplitMode == SC_SPLIT_FIX)
-            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
-        else
-            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nHSplitPos);
-        pSettings[SC_VERTICAL_SPLIT_POSITION].Name = SC_VERTICALSPLITPOSITION;
-        if (eVSplitMode == SC_SPLIT_FIX)
-            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
-        else
-            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nVSplitPos);
-        // Prevent writing odd settings that would make crash versions that
-        // don't apply SanitizeWhichActive() when reading the settings.
-        // See tdf#117093
-        const ScSplitPos eActiveSplitRange = SanitizeWhichActive();
-        // And point out to give us a chance to inspect weird things (if anyone
-        // remembers what s/he did).
-        assert(eWhichActive == eActiveSplitRange);
-        pSettings[SC_ACTIVE_SPLIT_RANGE].Name = SC_ACTIVESPLITRANGE;
-        pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eActiveSplitRange);
-        pSettings[SC_POSITION_LEFT].Name = SC_POSITIONLEFT;
-        pSettings[SC_POSITION_LEFT].Value <<= sal_Int32(nPosX[SC_SPLIT_LEFT]);
-        pSettings[SC_POSITION_RIGHT].Name = SC_POSITIONRIGHT;
-        pSettings[SC_POSITION_RIGHT].Value <<= sal_Int32(nPosX[SC_SPLIT_RIGHT]);
-        pSettings[SC_POSITION_TOP].Name = SC_POSITIONTOP;
-        pSettings[SC_POSITION_TOP].Value <<= sal_Int32(nPosY[SC_SPLIT_TOP]);
-        pSettings[SC_POSITION_BOTTOM].Name = SC_POSITIONBOTTOM;
-        pSettings[SC_POSITION_BOTTOM].Value <<= sal_Int32(nPosY[SC_SPLIT_BOTTOM]);
 
-        sal_Int32 nZoomValue = long(aZoomY * 100);
-        sal_Int32 nPageZoomValue = long(aPageZoomY * 100);
-        pSettings[SC_TABLE_ZOOM_TYPE].Name = SC_ZOOMTYPE;
-        pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
-        pSettings[SC_TABLE_ZOOM_VALUE].Name = SC_ZOOMVALUE;
-        pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
-        pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;
-        pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
+    pSettings[SC_CURSOR_X].Name = SC_CURSORPOSITIONX;
+    pSettings[SC_CURSOR_X].Value <<= sal_Int32(nCurX);
+    pSettings[SC_CURSOR_Y].Name = SC_CURSORPOSITIONY;
+    pSettings[SC_CURSOR_Y].Value <<= sal_Int32(nCurY);
+    pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = SC_HORIZONTALSPLITMODE;
+    pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eHSplitMode);
+    pSettings[SC_VERTICAL_SPLIT_MODE].Name = SC_VERTICALSPLITMODE;
+    pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eVSplitMode);
+    pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = SC_HORIZONTALSPLITPOSITION;
+    if (eHSplitMode == SC_SPLIT_FIX)
+        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
+    else
+        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nHSplitPos);
+    pSettings[SC_VERTICAL_SPLIT_POSITION].Name = SC_VERTICALSPLITPOSITION;
+    if (eVSplitMode == SC_SPLIT_FIX)
+        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
+    else
+        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nVSplitPos);
+    // Prevent writing odd settings that would make crash versions that
+    // don't apply SanitizeWhichActive() when reading the settings.
+    // See tdf#117093
+    const ScSplitPos eActiveSplitRange = SanitizeWhichActive();
+    // And point out to give us a chance to inspect weird things (if anyone
+    // remembers what s/he did).
+    assert(eWhichActive == eActiveSplitRange);
+    pSettings[SC_ACTIVE_SPLIT_RANGE].Name = SC_ACTIVESPLITRANGE;
+    pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eActiveSplitRange);
+    pSettings[SC_POSITION_LEFT].Name = SC_POSITIONLEFT;
+    pSettings[SC_POSITION_LEFT].Value <<= sal_Int32(nPosX[SC_SPLIT_LEFT]);
+    pSettings[SC_POSITION_RIGHT].Name = SC_POSITIONRIGHT;
+    pSettings[SC_POSITION_RIGHT].Value <<= sal_Int32(nPosX[SC_SPLIT_RIGHT]);
+    pSettings[SC_POSITION_TOP].Name = SC_POSITIONTOP;
+    pSettings[SC_POSITION_TOP].Value <<= sal_Int32(nPosY[SC_SPLIT_TOP]);
+    pSettings[SC_POSITION_BOTTOM].Name = SC_POSITIONBOTTOM;
+    pSettings[SC_POSITION_BOTTOM].Value <<= sal_Int32(nPosY[SC_SPLIT_BOTTOM]);
 
-        pSettings[SC_TABLE_SHOWGRID].Name = SC_UNO_SHOWGRID;
-        pSettings[SC_TABLE_SHOWGRID].Value <<= bShowGrid;
-    }
+    sal_Int32 nZoomValue = long(aZoomY * 100);
+    sal_Int32 nPageZoomValue = long(aPageZoomY * 100);
+    pSettings[SC_TABLE_ZOOM_TYPE].Name = SC_ZOOMTYPE;
+    pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
+    pSettings[SC_TABLE_ZOOM_VALUE].Name = SC_ZOOMVALUE;
+    pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
+    pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;
+    pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
+
+    pSettings[SC_TABLE_SHOWGRID].Name = SC_UNO_SHOWGRID;
+    pSettings[SC_TABLE_SHOWGRID].Value <<= bShowGrid;
 
     // Common SdrModel processing
     rViewData.GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
@@ -3215,96 +3213,94 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     rSettings.realloc(SC_VIEWSETTINGS_COUNT);
     // + 1, because we have to put the view id in the sequence
     beans::PropertyValue* pSettings = rSettings.getArray();
-    if (pSettings)
-    {
-        sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
-        pSettings[SC_VIEW_ID].Name = SC_VIEWID;
-        pSettings[SC_VIEW_ID].Value <<= SC_VIEW + OUString::number(nViewID);
 
-        uno::Reference<container::XNameContainer> xNameContainer =
-             document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
-        for (SCTAB nTab=0; nTab<static_cast<SCTAB>(maTabData.size()); nTab++)
+    sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
+    pSettings[SC_VIEW_ID].Name = SC_VIEWID;
+    pSettings[SC_VIEW_ID].Value <<= SC_VIEW + OUString::number(nViewID);
+
+    uno::Reference<container::XNameContainer> xNameContainer =
+         document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
+    for (SCTAB nTab=0; nTab<static_cast<SCTAB>(maTabData.size()); nTab++)
+    {
+        if (maTabData[nTab])
         {
-            if (maTabData[nTab])
+            uno::Sequence <beans::PropertyValue> aTableViewSettings;
+            maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this);
+            OUString sTabName;
+            GetDocument()->GetName( nTab, sTabName );
+            try
             {
-                uno::Sequence <beans::PropertyValue> aTableViewSettings;
-                maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this);
-                OUString sTabName;
-                GetDocument()->GetName( nTab, sTabName );
-                try
-                {
-                    xNameContainer->insertByName(sTabName, uno::Any(aTableViewSettings));
-                }
-                //#101739#; two tables with the same name are possible
-                catch ( container::ElementExistException& )
-                {
-                    OSL_FAIL("seems there are two tables with the same name");
-                }
-                catch ( uno::RuntimeException& )
-                {
-                    OSL_FAIL("something went wrong");
-                }
+                xNameContainer->insertByName(sTabName, uno::Any(aTableViewSettings));
+            }
+            //#101739#; two tables with the same name are possible
+            catch ( container::ElementExistException& )
+            {
+                OSL_FAIL("seems there are two tables with the same name");
+            }
+            catch ( uno::RuntimeException& )
+            {
+                OSL_FAIL("something went wrong");
             }
         }
-        pSettings[SC_TABLE_VIEWSETTINGS].Name = SC_TABLES;
-        pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
+    }
+    pSettings[SC_TABLE_VIEWSETTINGS].Name = SC_TABLES;
+    pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
 
-        OUString sName;
-        GetDocument()->GetName( nTabNo, sName );
-        pSettings[SC_ACTIVE_TABLE].Name = SC_ACTIVETABLE;
-        pSettings[SC_ACTIVE_TABLE].Value <<= sName;
-        pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;
-        pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
-        sal_Int32 nZoomValue = long(pThisTab->aZoomY * 100);
-        sal_Int32 nPageZoomValue = long(pThisTab->aPageZoomY * 100);
-        pSettings[SC_ZOOM_TYPE].Name = SC_ZOOMTYPE;
-        pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
-        pSettings[SC_ZOOM_VALUE].Name = SC_ZOOMVALUE;
-        pSettings[SC_ZOOM_VALUE].Value <<= nZoomValue;
-        pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;
-        pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
-        pSettings[SC_PAGE_BREAK_PREVIEW].Name = SC_SHOWPAGEBREAKPREVIEW;
-        pSettings[SC_PAGE_BREAK_PREVIEW].Value <<= bPagebreak;
+    OUString sName;
+    GetDocument()->GetName( nTabNo, sName );
+    pSettings[SC_ACTIVE_TABLE].Name = SC_ACTIVETABLE;
+    pSettings[SC_ACTIVE_TABLE].Value <<= sName;
+    pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;
+    pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
+    sal_Int32 nZoomValue = long(pThisTab->aZoomY * 100);
+    sal_Int32 nPageZoomValue = long(pThisTab->aPageZoomY * 100);
+    pSettings[SC_ZOOM_TYPE].Name = SC_ZOOMTYPE;
+    pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
+    pSettings[SC_ZOOM_VALUE].Name = SC_ZOOMVALUE;
+    pSettings[SC_ZOOM_VALUE].Value <<= nZoomValue;
+    pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;
+    pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
+    pSettings[SC_PAGE_BREAK_PREVIEW].Name = SC_SHOWPAGEBREAKPREVIEW;
+    pSettings[SC_PAGE_BREAK_PREVIEW].Value <<= bPagebreak;
 
-        if (pOptions)
-        {
-            pSettings[SC_SHOWZERO].Name = SC_UNO_SHOWZERO;
-            pSettings[SC_SHOWZERO].Value <<= pOptions->GetOption( VOPT_NULLVALS );
-            pSettings[SC_SHOWNOTES].Name = SC_UNO_SHOWNOTES;
-            pSettings[SC_SHOWNOTES].Value <<= pOptions->GetOption( VOPT_NOTES );
-            pSettings[SC_SHOWGRID].Name = SC_UNO_SHOWGRID;
-            pSettings[SC_SHOWGRID].Value <<= pOptions->GetOption( VOPT_GRID );
-            pSettings[SC_GRIDCOLOR].Name = SC_UNO_GRIDCOLOR;
-            OUString aColorName;
-            Color aColor = pOptions->GetGridColor(&aColorName);
-            pSettings[SC_GRIDCOLOR].Value <<= aColor;
-            pSettings[SC_SHOWPAGEBR].Name = SC_UNO_SHOWPAGEBR;
-            pSettings[SC_SHOWPAGEBR].Value <<= pOptions->GetOption( VOPT_PAGEBREAKS );
-            pSettings[SC_COLROWHDR].Name = SC_UNO_COLROWHDR;
-            pSettings[SC_COLROWHDR].Value <<= pOptions->GetOption( VOPT_HEADER );
-            pSettings[SC_SHEETTABS].Name = SC_UNO_SHEETTABS;
-            pSettings[SC_SHEETTABS].Value <<= pOptions->GetOption( VOPT_TABCONTROLS );
-            pSettings[SC_OUTLSYMB].Name = SC_UNO_OUTLSYMB;
-            pSettings[SC_OUTLSYMB].Value <<= pOptions->GetOption( VOPT_OUTLINER );
-            pSettings[SC_VALUE_HIGHLIGHTING].Name = SC_UNO_VALUEHIGH;
-            pSettings[SC_VALUE_HIGHLIGHTING].Value <<= pOptions->GetOption( VOPT_SYNTAX );
+    if (pOptions)
+    {
+        pSettings[SC_SHOWZERO].Name = SC_UNO_SHOWZERO;
+        pSettings[SC_SHOWZERO].Value <<= pOptions->GetOption( VOPT_NULLVALS );
+        pSettings[SC_SHOWNOTES].Name = SC_UNO_SHOWNOTES;
+        pSettings[SC_SHOWNOTES].Value <<= pOptions->GetOption( VOPT_NOTES );
+        pSettings[SC_SHOWGRID].Name = SC_UNO_SHOWGRID;
+        pSettings[SC_SHOWGRID].Value <<= pOptions->GetOption( VOPT_GRID );
+        pSettings[SC_GRIDCOLOR].Name = SC_UNO_GRIDCOLOR;
+        OUString aColorName;
+        Color aColor = pOptions->GetGridColor(&aColorName);
+        pSettings[SC_GRIDCOLOR].Value <<= aColor;
+        pSettings[SC_SHOWPAGEBR].Name = SC_UNO_SHOWPAGEBR;
+        pSettings[SC_SHOWPAGEBR].Value <<= pOptions->GetOption( VOPT_PAGEBREAKS );
+        pSettings[SC_COLROWHDR].Name = SC_UNO_COLROWHDR;
+        pSettings[SC_COLROWHDR].Value <<= pOptions->GetOption( VOPT_HEADER );
+        pSettings[SC_SHEETTABS].Name = SC_UNO_SHEETTABS;
+        pSettings[SC_SHEETTABS].Value <<= pOptions->GetOption( VOPT_TABCONTROLS );
+        pSettings[SC_OUTLSYMB].Name = SC_UNO_OUTLSYMB;
+        pSettings[SC_OUTLSYMB].Value <<= pOptions->GetOption( VOPT_OUTLINER );
+        pSettings[SC_VALUE_HIGHLIGHTING].Name = SC_UNO_VALUEHIGH;
+        pSettings[SC_VALUE_HIGHLIGHTING].Value <<= pOptions->GetOption( VOPT_SYNTAX );
 
-            const ScGridOptions& aGridOpt = pOptions->GetGridOptions();
-            pSettings[SC_SNAPTORASTER].Name = SC_UNO_SNAPTORASTER;
-            pSettings[SC_SNAPTORASTER].Value <<= aGridOpt.GetUseGridSnap();
-            pSettings[SC_RASTERVIS].Name = SC_UNO_RASTERVIS;
-            pSettings[SC_RASTERVIS].Value <<= aGridOpt.GetGridVisible();
-            pSettings[SC_RASTERRESX].Name = SC_UNO_RASTERRESX;
-            pSettings[SC_RASTERRESX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawX() );
-            pSettings[SC_RASTERRESY].Name = SC_UNO_RASTERRESY;
-            pSettings[SC_RASTERRESY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawY() );
-            pSettings[SC_RASTERSUBX].Name = SC_UNO_RASTERSUBX;
-            pSettings[SC_RASTERSUBX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionX() );
-            pSettings[SC_RASTERSUBY].Name = SC_UNO_RASTERSUBY;
-            pSettings[SC_RASTERSUBY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionY() );
-            pSettings[SC_RASTERSYNC].Name = SC_UNO_RASTERSYNC;
-            pSettings[SC_RASTERSYNC].Value <<= aGridOpt.GetSynchronize();
-        }
+        const ScGridOptions& aGridOpt = pOptions->GetGridOptions();
+        pSettings[SC_SNAPTORASTER].Name = SC_UNO_SNAPTORASTER;
+        pSettings[SC_SNAPTORASTER].Value <<= aGridOpt.GetUseGridSnap();
+        pSettings[SC_RASTERVIS].Name = SC_UNO_RASTERVIS;
+        pSettings[SC_RASTERVIS].Value <<= aGridOpt.GetGridVisible();
+        pSettings[SC_RASTERRESX].Name = SC_UNO_RASTERRESX;
+        pSettings[SC_RASTERRESX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawX() );
+        pSettings[SC_RASTERRESY].Name = SC_UNO_RASTERRESY;
+        pSettings[SC_RASTERRESY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawY() );
+        pSettings[SC_RASTERSUBX].Name = SC_UNO_RASTERSUBX;
+        pSettings[SC_RASTERSUBX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionX() );
+        pSettings[SC_RASTERSUBY].Name = SC_UNO_RASTERSUBY;
+        pSettings[SC_RASTERSUBY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionY() );
+        pSettings[SC_RASTERSYNC].Name = SC_UNO_RASTERSYNC;
+        pSettings[SC_RASTERSYNC].Value <<= aGridOpt.GetSynchronize();
     }
 
     // Common SdrModel processing

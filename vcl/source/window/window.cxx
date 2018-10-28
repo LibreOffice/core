@@ -2611,9 +2611,7 @@ void Window::AlwaysEnableInput( bool bAlways, bool bChild )
     if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled )
     {
         mpWindowImpl->meAlwaysInputMode = AlwaysInputEnabled;
-
-        if ( bAlways )
-            EnableInput( true, false );
+        EnableInput(true, false);
     }
     else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled )
     {
@@ -2640,9 +2638,7 @@ void Window::AlwaysDisableInput( bool bAlways, bool bChild )
     if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled )
     {
         mpWindowImpl->meAlwaysInputMode = AlwaysInputDisabled;
-
-        if ( bAlways )
-            EnableInput( false, false );
+        EnableInput(false, false);
     }
     else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled )
     {

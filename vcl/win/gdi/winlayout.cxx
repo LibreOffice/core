@@ -135,21 +135,10 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     UINT nPos = 0;
 
-    // FIXME: really I don't get why 'vertical' makes any difference [!] what does it mean !?
-    if (aElement.mbVertical)
-    {
-        aElement.maLocation.SetLeft(0);
-        aElement.maLocation.SetRight(nBitmapWidth);
-        aElement.maLocation.SetTop(nPos);
-        aElement.maLocation.SetBottom( nPos + aGlyphAdv[0] + aElement.maLeftOverhangs );
-    }
-    else
-    {
-        aElement.maLocation.SetLeft(nPos);
-        aElement.maLocation.SetRight(aEnds[0]);
-        aElement.maLocation.SetTop(0);
-        aElement.maLocation.SetBottom( bounds.getHeight() + aElement.getExtraSpace() );
-    }
+    aElement.maLocation.SetLeft(nPos);
+    aElement.maLocation.SetRight(aEnds[0]);
+    aElement.maLocation.SetTop(0);
+    aElement.maLocation.SetBottom(bounds.getHeight() + aElement.getExtraSpace());
     nPos = aEnds[0];
 
     OpenGLCompatibleDC aDC(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight);

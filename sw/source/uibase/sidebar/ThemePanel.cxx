@@ -194,8 +194,6 @@ StyleSet setupThemes()
 
 void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const & rFontSet)
 {
-    bool bChanged = false;
-
     if (pStyle->GetName() != "Default Style" && pFormat->GetAttrSet().GetItem(RES_CHRATR_FONT, false) == nullptr)
     {
         return;
@@ -208,26 +206,20 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
     if (ePitch == PITCH_FIXED)
     {
         aFontItem.SetFamilyName(rFontSet.msMonoFont);
-        bChanged = true;
     }
     else
     {
         if (pStyle->GetName() == "Heading")
         {
             aFontItem.SetFamilyName(rFontSet.msHeadingFont);
-            bChanged = true;
         }
         else
         {
             aFontItem.SetFamilyName(rFontSet.msBaseFont);
-            bChanged = true;
         }
     }
 
-    if (bChanged)
-    {
-        pFormat->SetFormatAttr(aFontItem);
-    }
+    pFormat->SetFormatAttr(aFontItem);
 }
 
 /*void changeBorder(SwTextFormatColl* pCollection, SwDocStyleSheet* pStyle, StyleSet& rStyleSet)
