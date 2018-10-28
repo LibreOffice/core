@@ -201,7 +201,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     tools::Rectangle aBoundRect;
     rSalLayout.DrawBase() = Point( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
-    if( !rSalLayout.GetBoundRect( *mpGraphics, aBoundRect ) )
+    if (!rSalLayout.GetBoundRect(aBoundRect))
     {
         // guess vertical text extents if GetBoundRect failed
         long nRight = rSalLayout.GetTextWidth();
@@ -2360,7 +2360,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
     tools::Rectangle aPixelRect;
     if( pSalLayout )
     {
-        bRet = pSalLayout->GetBoundRect( *mpGraphics, aPixelRect );
+        bRet = pSalLayout->GetBoundRect(aPixelRect);
 
         if( bRet )
         {
@@ -2438,7 +2438,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
     if( pSalLayout )
     {
-        bRet = pSalLayout->GetOutline( *mpGraphics, rVector );
+        bRet = pSalLayout->GetOutline(rVector);
         if( bRet )
         {
             // transform polygon to pixel units
