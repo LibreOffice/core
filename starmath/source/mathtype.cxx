@@ -745,9 +745,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" \\ldline ");
                             break;
                         case tmFLOOR:
-                            if (nVariation == 0 || nVariation == 1)
+                            if (nVariation == 0 || nVariation & 0x01) // tvFENCE_L
                                 rRet.append(" left lfloor ");
-                            else if (nVariation==1)
+                            else
                                 rRet.append(" left none ");
                             break;
                         case tmCEILING:
@@ -1286,9 +1286,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" \\rdline ");
                             break;
                         case tmFLOOR:
-                            if (nVariation == 0 || nVariation == 2)
+                            if (nVariation == 0 || nVariation & 0x02) // tvFENCE_R
                                 rRet.append(" right rfloor ");
-                            else if (nVariation==2)
+                            else
                                 rRet.append(" right none ");
                             break;
                         case tmCEILING:

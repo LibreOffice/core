@@ -545,40 +545,28 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
         if (xPropertySetInfo.is())
         {
             Sequence< Property > aProps = xPropertySetInfo->getProperties();
-            sal_Int32 nCount(aProps.getLength());
-            if (nCount > 0)
+            if (const sal_Int32 nCount = aProps.getLength())
             {
                 rProps.realloc(nCount);
-                PropertyValue* pProps = rProps.getArray();
-                if (pProps)
-                {
-                    SmMathConfig *pConfig = SM_MOD()->GetConfig();
-                    const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
+                SmMathConfig* pConfig = SM_MOD()->GetConfig();
+                const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
 
-                    const OUString sFormula ( "Formula" );
-                    const OUString sBasicLibraries ( "BasicLibraries" );
-                    const OUString sDialogLibraries ( "DialogLibraries" );
-                    const OUString sRuntimeUID ( "RuntimeUID" );
-                    for (sal_Int32 i = 0; i < nCount; i++, pProps++)
-                    {
-                        const OUString &rPropName = aProps[i].Name;
-                        if (rPropName != sFormula &&
-                            rPropName != sBasicLibraries &&
-                            rPropName != sDialogLibraries &&
-                            rPropName != sRuntimeUID)
-                        {
-                            pProps->Name = rPropName;
-
-                            OUString aActualName( rPropName );
-
-                            // handle 'save used symbols only'
-                            if (bUsedSymbolsOnly && rPropName == "Symbols" )
-                                aActualName = "UserDefinedSymbolsInUse";
-
-                            pProps->Value = xProps->getPropertyValue( aActualName );
-                        }
-                    }
-                }
+                std::transform(aProps.begin(), aProps.end(), rProps.begin(),
+                               [bUsedSymbolsOnly, &xProps](Property& prop) {
+                                   PropertyValue aRet;
+                                   if (prop.Name != "Formula" && prop.Name != "BasicLibraries"
+                                       && prop.Name != "DialogLibraries"
+                                       && prop.Name != "RuntimeUID")
+                                   {
+                                       aRet.Name = prop.Name;
+                                       OUString aActualName(prop.Name);
+                                       // handle 'save used symbols only'
+                                       if (bUsedSymbolsOnly && prop.Name == "Symbols")
+                                           aActualName = "UserDefinedSymbolsInUse";
+                                       aRet.Value = xProps->getPropertyValue(aActualName);
+                                   }
+                                   return aRet;
+                               });
             }
         }
     }
