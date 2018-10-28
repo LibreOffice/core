@@ -217,18 +217,18 @@ namespace weld
     {
         OUString aStr;
 
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
+
         unsigned int nDecimalDigits = m_xSpinButton->get_digits();
         //pawn percent off to icu to decide whether percent is separated from its number for this locale
         if (m_eSrcUnit == FUNIT_PERCENT)
         {
             double fValue = nValue;
             fValue /= SpinButton::Power10(nDecimalDigits);
-            aStr = unicode::formatPercent(fValue, Application::GetSettings().GetUILanguageTag());
+            aStr = unicode::formatPercent(fValue, rLocaleData.getLanguageTag());
         }
         else
         {
-            const SvtSysLocale aSysLocale;
-            const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
             aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
             if (m_eSrcUnit != FUNIT_NONE && m_eSrcUnit != FUNIT_DEGREE)
                 aStr += " ";
@@ -246,8 +246,7 @@ namespace weld
 
     IMPL_LINK(MetricSpinButton, spin_button_input, int*, result, bool)
     {
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
         double fResult(0.0);
         bool bRet = MetricFormatter::TextToValue(get_text(), fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
         if (bRet)
@@ -260,8 +259,7 @@ namespace weld
         int nStartPos, nEndPos;
         m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
 
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
         const int nTimeArea = TimeFormatter::GetTimeArea(m_eFormat, m_xSpinButton->get_text(), nEndPos,
                                                          rLocaleData);
 
@@ -295,8 +293,7 @@ namespace weld
         int nStartPos, nEndPos;
         m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
 
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
         tools::Time aResult(0);
         bool bRet = TimeFormatter::TextToTime(m_xSpinButton->get_text(), aResult, m_eFormat, true, rLocaleData);
         if (bRet)
@@ -328,8 +325,7 @@ namespace weld
 
     OUString TimeSpinButton::format_number(int nValue) const
     {
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
         return TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, TimeFormat::Hour24, true, rLocaleData);
     }
 
