@@ -470,13 +470,9 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
     {
         bRet = true;
         // At first run the possibly set ObjectSelect Macro
-        const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SvMacroItemId::OnClick );
-        if( pMac )
-        {
-            SwCallMouseEvent aCallEvent;
-            aCallEvent.Set( EVENT_OBJECT_URLITEM, pFnd );
-            GetDoc()->CallEvent( SvMacroItemId::OnClick, aCallEvent );
-        }
+        SwCallMouseEvent aCallEvent;
+        aCallEvent.Set(EVENT_OBJECT_URLITEM, pFnd);
+        GetDoc()->CallEvent(SvMacroItemId::OnClick, aCallEvent);
 
         ::LoadURL(*this, sURL, nFilter, sTargetFrameName);
     }

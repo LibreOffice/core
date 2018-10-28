@@ -68,9 +68,7 @@ SmSym& SmSym::operator = (const SmSym& rSymbol)
     m_aSetName      = rSymbol.m_aSetName;
     m_bPredefined   = rSymbol.m_bPredefined;
 
-    SmSymbolManager * pSymSetManager = &SM_MOD()->GetSymbolManager();
-    if (pSymSetManager)
-        pSymSetManager->SetModified(true);
+    SM_MOD()->GetSymbolManager().SetModified(true);
 
     return *this;
 }

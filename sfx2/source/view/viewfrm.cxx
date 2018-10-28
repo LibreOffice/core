@@ -1727,38 +1727,35 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
     {
         if ( IsVisible() )
         {
-            if ( GetViewShell() )
+            bool bPreview = false;
+            if (GetObjectShell()->IsPreview())
             {
-                bool bPreview = false;
-                if ( GetObjectShell()->IsPreview() )
-                {
-                    bPreview = true;
-                }
+                bPreview = true;
+            }
 
-                css::uno::Reference< css::frame::XFrame > xFrame = GetFrame().GetFrameInterface();
-                if ( !bPreview )
-                {
-                    SetViewFrame( this );
-                    GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame >() );
-                    uno::Reference< frame::XFramesSupplier > xSupp( xFrame, uno::UNO_QUERY );
-                    if ( xSupp.is() )
-                        xSupp->setActiveFrame( uno::Reference < frame::XFrame >() );
+            css::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
+            if (!bPreview)
+            {
+                SetViewFrame(this);
+                GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
+                uno::Reference<frame::XFramesSupplier> xSupp(xFrame, uno::UNO_QUERY);
+                if (xSupp.is())
+                    xSupp->setActiveFrame(uno::Reference<frame::XFrame>());
 
-                    css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
-                    if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
-                    {
-                        SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
-                        if ( !pCli || !pCli->IsObjectUIActive() )
-                                GetFrame().GrabFocusOnComponent_Impl();
-                    }
-                }
-                else
+                css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+                if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
                 {
-                    GetBindings().SetDispatcher( GetDispatcher() );
-                    GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame > () );
-                    GetDispatcher()->Update_Impl();
+                    SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
+                    if (!pCli || !pCli->IsObjectUIActive())
+                        GetFrame().GrabFocusOnComponent_Impl();
                 }
+            }
+            else
+            {
+                GetBindings().SetDispatcher(GetDispatcher());
+                GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
+                GetDispatcher()->Update_Impl();
             }
         }
     }

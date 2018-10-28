@@ -866,9 +866,6 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "meta export end" );
         }
 
-        uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-        rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
-
         uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
         rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
@@ -878,11 +875,9 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             xGraphicStorageHandler = xGraphicHelper.get();
         }
 
-        if( pObjSh )
-        {
-            xObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pObjSh, SvXMLEmbeddedObjectHelperMode::Write );
-            xObjectResolver = xObjectHelper.get();
-        }
+        auto xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+            xStorage, *pObjSh, SvXMLEmbeddedObjectHelperMode::Write);
+        uno::Reference<document::XEmbeddedObjectResolver> xObjectResolver(xObjectHelper.get());
 
         // styles export
 
