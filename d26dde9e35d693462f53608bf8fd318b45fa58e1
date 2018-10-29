@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_8e1d5bbf",
+        "filename": "sw/source/ui/index/cnttab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-29T07:26:37Z",
+      "side": 1,
+      "message": "hmmm, previously this would exit the loop early once nXPos \u003e nSpace.\nNow we loop over all the items. That could be a problem.",
+      "revId": "d26dde9e35d693462f53608bf8fd318b45fa58e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f287b81_6e78eff7",
+        "filename": "sw/source/ui/vba/vbarevisions.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-29T07:26:37Z",
+      "side": 1,
+      "message": "this local var is an unnecessary copy, can be folded into the loop index variable",
+      "revId": "d26dde9e35d693462f53608bf8fd318b45fa58e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
