@@ -87,7 +87,7 @@ struct hashPtr
 typedef std::unordered_map
 <
     XPropertiesChangeListenerPtr,
-    PropertyEventSequence*,
+    PropertyEventSequence,
     hashPtr,
     equalPtr
 >
@@ -696,11 +696,10 @@ void ContentImplHelper::notifyPropertiesChange(
                     if ( it == aListeners.end() )
                     {
                         // Not in map - create and insert new entry.
-                        p = new PropertyEventSequence( nCount );
-                        aListeners[ pListener ] = p;
+                        p = &aListeners.emplace( pListener, PropertyEventSequence(nCount)).first->second;
                     }
                     else
-                        p = (*it).second;
+                        p = &it->second;
 
                     if ( p )
                         p->append( rEvent );
@@ -714,15 +713,13 @@ void ContentImplHelper::notifyPropertiesChange(
         {
             beans::XPropertiesChangeListener* pListener =
                 static_cast< beans::XPropertiesChangeListener * >( (*it).first );
-            PropertyEventSequence* pSeq = (*it).second;
+            PropertyEventSequence pSeq = std::move(it->second);
 
             // Remove current element.
             aListeners.erase( it );
 
             // Propagate event.
-            pListener->propertiesChange( pSeq->getEvents() );
-
-            delete pSeq;
+            pListener->propertiesChange( pSeq.getEvents() );
 
             it = aListeners.begin();
         }
