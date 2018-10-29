@@ -12,6 +12,31 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ShowRuler"/>
+  <menu:menu menu:id=".uno:GridMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:GridVisible"/>
+      <menu:menuitem menu:id=".uno:GridFront"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:HelplinesMove"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:SnapLinesMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:HelplinesVisible"/>
+      <menu:menuitem menu:id=".uno:HelplinesFront"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:GridUse"/>
+      <menu:menuitem menu:id=".uno:HelplinesUse"/>
+      <menu:menuitem menu:id=".uno:SnapFrame"/>
+      <menu:menuitem menu:id=".uno:SnapPoints"/>
+      <menu:menuitem menu:id=".uno:SnapBorder"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuitem menu:id=".uno:CapturePoint"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:LeaveGroup"/>
+  <menu:menuseparator/>
   <menu:menu menu:id=".uno:SlideLayoutMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=20"/>
@@ -35,28 +60,6 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuitem menu:id=".uno:SaveBackground"/>
-  <menu:menuitem menu:id=".uno:SlideSetup"/>
   <menu:menuitem menu:id=".uno:PresentationLayout"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ShowRuler"/>
-  <menu:menu menu:id=".uno:GridMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:GridVisible"/>
-      <menu:menuitem menu:id=".uno:GridUse"/>
-      <menu:menuitem menu:id=".uno:GridFront"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:HelplinesMove"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menu menu:id=".uno:SnapLinesMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:CapturePoint"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:HelplinesVisible"/>
-      <menu:menuitem menu:id=".uno:HelplinesUse"/>
-      <menu:menuitem menu:id=".uno:HelplinesFront"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:LeaveGroup"/>
+  <menu:menuitem menu:id=".uno:SlideSetup"/>
 </menu:menupopup>
