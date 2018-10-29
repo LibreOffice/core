@@ -46,6 +46,30 @@
       "revId": "15cd3bd1c076e29defa4fabac89f76c57267a0dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f287b81_6e30ef08",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-29T11:01:33Z",
+      "side": 1,
+      "message": "OK - I see that lots of submenus have properties as the last submenu item.  And it looks like then it should have a submenu label of \"Properties...\".  And probably the same with \"Select...\".  I\u0027d probably still leave the cells as second-last section though.",
+      "parentUuid": "7f287b81_eeca9f4d",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 1
+      },
+      "revId": "15cd3bd1c076e29defa4fabac89f76c57267a0dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
