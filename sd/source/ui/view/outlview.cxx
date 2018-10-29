@@ -1522,10 +1522,9 @@ void OutlineView::TryToMergeUndoActions()
                     // the top EditUndo of the previous undo list
 
                     // first remove the merged undo action
-                    DBG_ASSERT( pListAction->GetUndoAction(nEditPos) == pEditUndo,
+                    assert( pListAction->GetUndoAction(nEditPos) == pEditUndo &&
                         "sd::OutlineView::TryToMergeUndoActions(), wrong edit pos!" );
-                    pListAction->Remove(nEditPos);
-                    delete pEditUndo;
+                    pListAction->RemoveX(nEditPos);
 
                     if ( !pListAction->maUndoActions.empty() )
                     {
@@ -1536,10 +1535,8 @@ void OutlineView::TryToMergeUndoActions()
                         size_t nDestAction = pPrevListAction->maUndoActions.size();
                         while( nCount-- )
                         {
-                            SfxUndoAction* pTemp = pListAction->GetUndoAction(0);
-                            pListAction->Remove(0);
-                            if( pTemp )
-                                pPrevListAction->Insert( pTemp, nDestAction++ );
+                            std::unique_ptr<SfxUndoAction> pTemp = pListAction->RemoveX(0);
+                            pPrevListAction->Insert( std::move(pTemp), nDestAction++ );
                         }
                         pPrevListAction->nCurUndoAction = pPrevListAction->maUndoActions.size();
                     }
