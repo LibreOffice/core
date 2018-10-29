@@ -490,8 +490,8 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     OSL_ENSURE( !bTopRule, "DrawTextOpaque: Wrong TopRule" );
 
     // #i68520#
-    SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
-    if ( bOn && nCount > 0 )
+    const SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
+    if (nCount > 0)
     {
         const SdrLayerID nHellId = pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
@@ -576,8 +576,8 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
     SwRegionRects aRegion( rRect );
     OSL_ENSURE( !bTopRule, "DrawFlyRect: Wrong TopRule" );
     // #i68520#
-    SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
-    if ( bOn && nCount > 0 )
+    const SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
+    if (nCount > 0)
     {
         const SdrLayerID nHellId = pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
@@ -1001,8 +1001,8 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 
     bool bRet = false;
     // #i68520#
-    SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
-    if ( bOn && nCount > 0 )
+    const SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
+    if (nCount > 0)
     {
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
