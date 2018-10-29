@@ -478,7 +478,12 @@ private:
     OUString                        m_sDefaultParaStyleName; //caches the ConvertedStyleName of the default paragraph style
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
-    bool                            m_bInHeaderFooterImport;
+    enum class HeaderFooterImportState
+    {
+        none,
+        header,
+        footer,
+    }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
     bool                            m_bInFootOrEndnote;
     /// Did we get a <w:separator/> for this footnote already?
@@ -718,7 +723,8 @@ public:
     void PushPageFooter(SectionPropertyMap::PageType eType);
 
     void PopPageHeaderFooter();
-    bool IsInHeaderFooter() const { return m_bInHeaderFooterImport; }
+    bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
+    bool IsInFooter() const { return m_eInHeaderFooterImport == HeaderFooterImportState::footer; }
 
     bool IsInTOC() const { return m_bStartTOC; }
 
