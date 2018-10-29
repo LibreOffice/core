@@ -1238,10 +1238,9 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
     if ( nSize < nNewSize )
     {
         std::size_t nDiff = nNewSize-nSize, nCount=0;
-        sal_uInt8* pBuffer = new sal_uInt8[ nDiff ];
-        memset(pBuffer, 0, nDiff); // initialize for enhanced security
-        WriteAt( nSize, pBuffer, nDiff, &nCount );
-        delete[] pBuffer;
+        std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[ nDiff ]);
+        memset(pBuffer.get(), 0, nDiff); // initialize for enhanced security
+        WriteAt( nSize, pBuffer.get(), nDiff, &nCount );
         if ( nCount != nDiff )
             return ERRCODE_IO_CANTWRITE;
     }
