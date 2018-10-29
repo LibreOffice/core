@@ -23,10 +23,20 @@ using namespace oox;
 /// Methods in this class handle values in a table style.
 struct DocxTableStyleExport::Impl
 {
+private:
     SwDoc* m_pDoc;
     sax_fastparser::FSHelperPtr m_pSerializer;
 
+public:
     void TableStyle(uno::Sequence<beans::PropertyValue>& rStyle);
+
+    void setSerializer(sax_fastparser::FSHelperPtr pSerializer) { m_pSerializer = pSerializer; }
+
+    sax_fastparser::FSHelperPtr getSerializer() const { return m_pSerializer; }
+
+    void setDoc(SwDoc* pDoc) { m_pDoc = pDoc; }
+
+    SwDoc* getDoc() const { return m_pDoc; }
 
     /// Handles a boolean value.
     void handleBoolean(const OUString& aValue, sal_Int32 nToken);
@@ -101,13 +111,13 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
     }
 
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pImpl->m_pSerializer->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
+    m_pImpl->getSerializer()->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
 }
 
 void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?
-    uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->getDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;
@@ -681,14 +691,14 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
 
 void DocxTableStyleExport::SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer)
 {
-    m_pImpl->m_pSerializer = pSerializer;
+    m_pImpl->setSerializer(pSerializer);
 }
 
 DocxTableStyleExport::DocxTableStyleExport(SwDoc* pDoc, const sax_fastparser::FSHelperPtr& pSerializer)
     : m_pImpl(o3tl::make_unique<Impl>())
 {
-    m_pImpl->m_pDoc = pDoc;
-    m_pImpl->m_pSerializer = pSerializer;
+    m_pImpl->setDoc(pDoc);
+    m_pImpl->setSerializer(pSerializer);
 }
 
 DocxTableStyleExport::~DocxTableStyleExport() = default;
