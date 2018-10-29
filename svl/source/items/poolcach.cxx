@@ -78,7 +78,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     }
 
     // Insert the new attributes in a new Set
-    SfxSetItem *pNewItem = static_cast<SfxSetItem *>(rOrigItem.Clone());
+    std::unique_ptr<SfxSetItem> pNewItem(static_cast<SfxSetItem *>(rOrigItem.Clone()));
     if ( pItemToPut )
     {
         pNewItem->GetItemSet().PutDirect( *pItemToPut );
@@ -88,8 +88,8 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     else
         pNewItem->GetItemSet().Put( *pSetToPut );
     const SfxSetItem* pNewPoolItem = static_cast<const SfxSetItem*>(&pPool->Put( *pNewItem ));
-    DBG_ASSERT( pNewPoolItem != pNewItem, "Pool: same in and out?" );
-    delete pNewItem;
+    DBG_ASSERT( pNewPoolItem != pNewItem.get(), "Pool: same in and out?" );
+    pNewItem.reset();
 
     // Adapt refcount; one each for the cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
