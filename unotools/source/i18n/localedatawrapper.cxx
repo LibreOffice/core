@@ -1119,7 +1119,7 @@ const css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() cons
 // The ImplAdd... methods are taken from class International and modified to
 // suit the needs.
 
-static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber )
+static void ImplAddUNum( OUStringBuffer& rBuf, sal_uInt64 nNumber )
 {
     // fill temp buffer with digits
     sal_Unicode aTempBuf[64];
@@ -1136,15 +1136,12 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber )
     do
     {
         pTempBuf--;
-        *pBuf = *pTempBuf;
-        pBuf++;
+        rBuf.append(*pTempBuf);
     }
     while ( pTempBuf != aTempBuf );
-
-    return pBuf;
 }
 
-static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMinLen )
+static void ImplAddUNum( OUStringBuffer& rBuf, sal_uInt64 nNumber, int nMinLen )
 {
     // fill temp buffer with digits
     sal_Unicode aTempBuf[64];
@@ -1161,8 +1158,7 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
     // fill with zeros up to the minimal length
     while ( nMinLen > 0 )
     {
-        *pBuf = '0';
-        pBuf++;
+        rBuf.append('0');
         nMinLen--;
     }
 
@@ -1170,25 +1166,22 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
     do
     {
         pTempBuf--;
-        *pBuf = *pTempBuf;
-        pBuf++;
+        rBuf.append(*pTempBuf);
     }
     while ( pTempBuf != aTempBuf );
-
-    return pBuf;
 }
 
-static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_Int64 nNumber, int nMinLen )
+static void ImplAddNum( OUStringBuffer& rBuf, sal_Int64 nNumber, int nMinLen )
 {
     if (nNumber < 0)
     {
-        *pBuf++ = '-';
+        rBuf.append('-');
         nNumber = -nNumber;
     }
-    return ImplAddUNum( pBuf, nNumber, nMinLen);
+    return ImplAddUNum( rBuf, nNumber, nMinLen);
 }
 
-static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bLeading )
+static void ImplAdd2UNum( OUStringBuffer& rBuf, sal_uInt16 nNumber, bool bLeading )
 {
     DBG_ASSERT( nNumber < 100, "ImplAdd2UNum() - Number >= 100" );
 
@@ -1196,25 +1189,20 @@ static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bL
     {
         if ( bLeading )
         {
-            *pBuf = '0';
-            pBuf++;
+            rBuf.append('0');
         }
-        *pBuf = nNumber + '0';
+        rBuf.append(static_cast<char>(nNumber + '0'));
     }
     else
     {
         sal_uInt16 nTemp = nNumber % 10;
         nNumber /= 10;
-        *pBuf = nNumber + '0';
-        pBuf++;
-        *pBuf = nTemp + '0';
+        rBuf.append(static_cast<char>(nNumber + '0'));
+        rBuf.append(static_cast<char>(nTemp + '0'));
     }
-
-    pBuf++;
-    return pBuf;
 }
 
-static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber )
+static void ImplAdd9UNum( OUStringBuffer& rBuf, sal_uInt32 nNumber )
 {
     DBG_ASSERT( nNumber < 1000000000, "ImplAdd9UNum() - Number >= 1000000000" );
 
@@ -1223,99 +1211,55 @@ static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber )
     ostr.width(9);
     ostr << nNumber;
     std::string aStr = ostr.str();
-    for(const char *pAB= aStr.c_str(); *pAB != '\0'; ++pAB, ++pBuf)
-    {
-        *pBuf = *pAB;
-    }
-
-    return pBuf;
+    rBuf.appendAscii(aStr.c_str(), aStr.size());
 }
 
-static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
-{
-    if ( rStr.getLength() == 1 )
-        *pBuf++ = rStr[0];
-    else if (rStr.isEmpty())
-;
-    else
-    {
-        memcpy( pBuf, rStr.getStr(), rStr.getLength() * sizeof(sal_Unicode) );
-        pBuf += rStr.getLength();
-    }
-    return pBuf;
-}
-
-static sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
-{
-    *pBuf = c;
-    pBuf++;
-    return pBuf;
-}
-
-static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, sal_Int32 nLen )
-{
-    memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
-    return pBuf + nLen;
-}
-
-sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
+void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
         sal_Int64 nNumber, sal_uInt16 nDecimals, bool bUseThousandSep,
         bool bTrailingZeros ) const
 {
-    sal_Unicode aNumBuf[64];
-    sal_Unicode* pNumBuf;
+    OUStringBuffer aNumBuf(64);
     sal_uInt16  nNumLen;
-    sal_uInt16  i = 0;
 
     // negative number
     if ( nNumber < 0 )
     {
         nNumber *= -1;
-        *pBuf = '-';
-        pBuf++;
+        rBuf.append('-');
     }
 
     // convert number
-    pNumBuf = ImplAddUNum( aNumBuf, static_cast<sal_uInt64>(nNumber) );
-    nNumLen = static_cast<sal_uInt16>(static_cast<sal_uLong>(pNumBuf-aNumBuf));
-    pNumBuf = aNumBuf;
+    ImplAddUNum( aNumBuf, static_cast<sal_uInt64>(nNumber) );
+    nNumLen = static_cast<sal_uInt16>(aNumBuf.getLength());
 
     if ( nNumLen <= nDecimals )
     {
         // strip .0 in decimals?
         if ( !nNumber && !bTrailingZeros )
         {
-            *pBuf = '0';
-            pBuf++;
+            rBuf.append('0');
         }
         else
         {
             // LeadingZero, insert 0
             if ( isNumLeadingZero() )
             {
-                *pBuf = '0';
-                pBuf++;
+                rBuf.append('0');
             }
 
             // append decimal separator
-            pBuf = ImplAddString( pBuf, getNumDecimalSep() );
+            rBuf.append( getNumDecimalSep() );
 
             // fill with zeros
+            sal_uInt16 i = 0;
             while ( i < (nDecimals-nNumLen) )
             {
-                *pBuf = '0';
-                pBuf++;
+                rBuf.append('0');
                 i++;
             }
 
             // append decimals
-            while ( nNumLen )
-            {
-                *pBuf = *pNumBuf;
-                pBuf++;
-                pNumBuf++;
-                nNumLen--;
-            }
+            rBuf.append(aNumBuf);
         }
     }
     else
@@ -1328,41 +1272,36 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         if (bUseThousandSep)
             aGroupPos = utl::DigitGroupingIterator::createForwardSequence(
                     nNumLen2, getDigitGrouping());
+        sal_uInt16 i = 0;
         for (; i < nNumLen2; ++i )
         {
-            *pBuf = *pNumBuf;
-            pBuf++;
-            pNumBuf++;
+            rBuf.append(aNumBuf[i]);
 
             // add thousand separator?
             if ( bUseThousandSep && aGroupPos[i] )
-                pBuf = ImplAddString( pBuf, rThoSep );
+                rBuf.append( rThoSep );
         }
 
         // append decimals
         if ( nDecimals )
         {
-            pBuf = ImplAddString( pBuf, getNumDecimalSep() );
+            rBuf.append( getNumDecimalSep() );
 
             bool bNullEnd = true;
             while ( i < nNumLen )
             {
-                if ( *pNumBuf != '0' )
+                if ( aNumBuf[i] != '0' )
                     bNullEnd = false;
 
-                *pBuf = *pNumBuf;
-                pBuf++;
-                pNumBuf++;
+                rBuf.append(aNumBuf[i]);
                 i++;
             }
 
             // strip .0 in decimals?
             if ( bNullEnd && !bTrailingZeros )
-                pBuf -= nDecimals+1;
+                rBuf.setLength( rBuf.getLength() - nDecimals + 1 );
         }
     }
-
-    return pBuf;
 }
 
 // --- simple date and time formatting --------------------------------
@@ -1371,8 +1310,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
 //!TODO: leading zeros et al
-    sal_Unicode aBuf[128];
-    sal_Unicode* pBuf = aBuf;
+    OUStringBuffer aBuf(128);
     sal_uInt16  nDay    = rDate.GetDay();
     sal_uInt16  nMonth  = rDate.GetMonth();
     sal_Int16   nYear   = rDate.GetYear();
@@ -1389,128 +1327,125 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     switch ( getDateOrder() )
     {
         case DateOrder::DMY :
-            pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
-            pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
-            pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+            ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
+            aBuf.append( getDateSep() );
+            ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
+            aBuf.append( getDateSep() );
+            ImplAddNum( aBuf, nYear, nYearLen );
         break;
         case DateOrder::MDY :
-            pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
-            pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
-            pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+            ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
+            aBuf.append( getDateSep() );
+            ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
+            aBuf.append( getDateSep() );
+            ImplAddNum( aBuf, nYear, nYearLen );
         break;
         default:
-            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
-            pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
-            pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
+            ImplAddNum( aBuf, nYear, nYearLen );
+            aBuf.append( getDateSep() );
+            ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
+            aBuf.append( getDateSep() );
+            ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
     }
 
-    return OUString(aBuf, pBuf-aBuf);
+    return aBuf.makeStringAndClear();
 }
 
 OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
 //!TODO: leading zeros et al
-    sal_Unicode aBuf[128];
-    sal_Unicode* pBuf = aBuf;
+    OUStringBuffer aBuf(128);
     sal_uInt16  nHour = rTime.GetHour();
 
     nHour %= 24;
 
-    pBuf = ImplAdd2UNum( pBuf, nHour, true /* IsTimeLeadingZero() */ );
-    pBuf = ImplAddString( pBuf, getTimeSep() );
-    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), true );
+    ImplAdd2UNum( aBuf, nHour, true /* IsTimeLeadingZero() */ );
+    aBuf.append( getTimeSep() );
+    ImplAdd2UNum( aBuf, rTime.GetMin(), true );
     if ( bSec )
     {
-        pBuf = ImplAddString( pBuf, getTimeSep() );
-        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), true );
+        aBuf.append( getTimeSep() );
+        ImplAdd2UNum( aBuf, rTime.GetSec(), true );
 
         if ( b100Sec )
         {
-            pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec() );
+            aBuf.append( getTime100SecSep() );
+            ImplAdd9UNum( aBuf, rTime.GetNanoSec() );
         }
     }
 
-    return OUString(aBuf, pBuf - aBuf);
+    return aBuf.makeStringAndClear();
 }
 
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         bool bTwoDigitYear ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    sal_Unicode     aBuf[20];
-    sal_Unicode*    pBuf;
-    OUString aStr;
+    OUStringBuffer aBuf(20);
+    OUStringBuffer aStr(120); // complete guess
     sal_Int16 nVal;
     rCal.setGregorianDateTime( rDate );
     // day of week
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-    aStr += rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, 1 );
-    aStr += getLongDateDayOfWeekSep();
+    aStr.append(rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, 1 ));
+    aStr.append(getLongDateDayOfWeekSep());
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-    pBuf = ImplAdd2UNum( aBuf, nVal, false/*bDayOfMonthWithLeadingZero*/ );
-    OUString aDay(aBuf, pBuf-aBuf);
+    ImplAdd2UNum( aBuf, nVal, false/*bDayOfMonthWithLeadingZero*/ );
+    OUString aDay = aBuf.makeStringAndClear();
     // month of year
     nVal = rCal.getValue( CalendarFieldIndex::MONTH );
     OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, 1 ) );
     // year
     nVal = rCal.getValue( CalendarFieldIndex::YEAR );
     if ( bTwoDigitYear )
-        pBuf = ImplAddUNum( aBuf, nVal % 100, 2 );
+        ImplAddUNum( aBuf, nVal % 100, 2 );
     else
-        pBuf = ImplAddUNum( aBuf, nVal );
-    OUString aYear(aBuf, pBuf-aBuf);
+        ImplAddUNum( aBuf, nVal );
+    OUString aYear = aBuf.makeStringAndClear();
     // concatenate
     switch ( getLongDateOrder() )
     {
         case DateOrder::DMY :
-            aStr += aDay + getLongDateDaySep() + aMonth + getLongDateMonthSep() + aYear;
+            aStr.append(aDay).append(getLongDateDaySep()).append(aMonth).append(getLongDateMonthSep()).append(aYear);
         break;
         case DateOrder::MDY :
-            aStr += aMonth + getLongDateMonthSep() + aDay + getLongDateDaySep() + aYear;
+            aStr.append(aMonth).append(getLongDateMonthSep()).append(aDay).append(getLongDateDaySep()).append(aYear);
         break;
         default:    // YMD
-            aStr += aYear + getLongDateYearSep() +  aMonth +  getLongDateMonthSep() + aDay;
+            aStr.append(aYear).append(getLongDateYearSep()).append(aMonth).append(getLongDateMonthSep()).append(aDay);
     }
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    sal_Unicode aBuf[128];
-    sal_Unicode* pBuf = aBuf;
+    OUStringBuffer aBuf(128);
 
     if ( rTime < tools::Time( 0 ) )
-        pBuf = ImplAddString( pBuf, ' ' );
+        aBuf.append(' ' );
 
     if ( (true) /* IsTimeLeadingZero() */ )
-        pBuf = ImplAddUNum( pBuf, rTime.GetHour(), 2 );
+        ImplAddUNum( aBuf, rTime.GetHour(), 2 );
     else
-        pBuf = ImplAddUNum( pBuf, rTime.GetHour() );
-    pBuf = ImplAddString( pBuf, getTimeSep() );
-    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), true );
+        ImplAddUNum( aBuf, rTime.GetHour() );
+    aBuf.append( getTimeSep() );
+    ImplAdd2UNum( aBuf, rTime.GetMin(), true );
     if ( bSec )
     {
-        pBuf = ImplAddString( pBuf, getTimeSep() );
-        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), true );
+        aBuf.append( getTimeSep() );
+        ImplAdd2UNum( aBuf, rTime.GetSec(), true );
 
         if ( b100Sec )
         {
-            pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec() );
+            aBuf.append( getTime100SecSep() );
+            ImplAdd9UNum( aBuf, rTime.GetNanoSec() );
         }
     }
 
-    return OUString(aBuf, pBuf-aBuf);
+    return aBuf.makeStringAndClear();
 }
 
 // --- simple number formatting ---------------------------------------
@@ -1530,38 +1465,26 @@ OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
         bool bUseThousandSep, bool bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    sal_Unicode aBuf[128];      // big enough for 64-bit long and crazy grouping
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
-    sal_Unicode* const pBuffer = (nGuess < 118 ? aBuf :
-        new sal_Unicode[nGuess + 16]);
+    OUStringBuffer aBuf(int(nGuess + 16));
 
-    sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
+    ImplAddFormatNum( aBuf, nNumber, nDecimals,
         bUseThousandSep, bTrailingZeros );
-    OUString aStr(pBuffer, pBuf-pBuffer);
 
-    if ( pBuffer != aBuf )
-        delete [] pBuffer;
-    return aStr;
+    return aBuf.makeStringAndClear();
 }
 
 OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         const OUString& rCurrencySymbol, bool bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    sal_Unicode aBuf[192];
-    sal_Unicode aNumBuf[128];    // big enough for 64-bit long and crazy grouping
     sal_Unicode cZeroChar = getCurrZeroChar();
 
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
-    sal_Unicode* const pNumBuffer = (nGuess < 118 ? aNumBuf :
-        new sal_Unicode[nGuess + 16]);
-
-    sal_Unicode* const pBuffer =
-        ((size_t(rCurrencySymbol.getLength()) + nGuess + 20) < SAL_N_ELEMENTS(aBuf) ? aBuf :
-        new sal_Unicode[ rCurrencySymbol.getLength() + nGuess + 20 ]);
-    sal_Unicode* pBuf = pBuffer;
+    OUStringBuffer aNumBuf(int(nGuess + 16));
+    OUStringBuffer aBuf(int(rCurrencySymbol.getLength() + nGuess + 20 ));
 
     bool bNeg;
     if ( nNumber < 0 )
@@ -1573,40 +1496,39 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         bNeg = false;
 
     // convert number
-    sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
+    ImplAddFormatNum( aNumBuf, nNumber, nDecimals,
         bUseThousandSep, true );
-    sal_Int32 nNumLen = static_cast<sal_Int32>(static_cast<sal_uLong>(pEndNumBuf-pNumBuffer));
+    const sal_Int32 nNumLen = aNumBuf.getLength();
 
     // replace zeros with zero character
     if ( (cZeroChar != '0') && nDecimals /* && IsNumTrailingZeros() */ )
     {
-        sal_Unicode* pTempBuf;
         sal_uInt16  i;
         bool    bZero = true;
 
-        pTempBuf = pNumBuffer+nNumLen-nDecimals;
+        sal_uInt16 nNumBufIndex = nNumLen-nDecimals;
         i = 0;
         do
         {
-            if ( *pTempBuf != '0' )
+            if ( aNumBuf[nNumBufIndex] != '0' )
             {
                 bZero = false;
                 break;
             }
 
-            pTempBuf++;
+            nNumBufIndex++;
             i++;
         }
         while ( i < nDecimals );
 
         if ( bZero )
         {
-            pTempBuf = pNumBuffer+nNumLen-nDecimals;
+            nNumBufIndex = nNumLen-nDecimals;
             i = 0;
             do
             {
-                *pTempBuf = cZeroChar;
-                pTempBuf++;
+                aNumBuf[nNumBufIndex] = cZeroChar;
+                nNumBufIndex++;
                 i++;
             }
             while ( i < nDecimals );
@@ -1618,22 +1540,22 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         switch( getCurrPositiveFormat() )
         {
             case 0:
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                aBuf.append( rCurrencySymbol );
+                aBuf.append( aNumBuf );
                 break;
             case 1:
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                aBuf.append( aNumBuf );
+                aBuf.append( rCurrencySymbol );
                 break;
             case 2:
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                aBuf.append( rCurrencySymbol );
+                aBuf.append( ' ' );
+                aBuf.append( aNumBuf );
                 break;
             case 3:
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                aBuf.append( aNumBuf );
+                aBuf.append( ' ' );
+                aBuf.append( rCurrencySymbol );
                 break;
         }
     }
@@ -1642,108 +1564,101 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         switch( getCurrNegativeFormat() )
         {
             case 0:
-                pBuf = ImplAddString( pBuf, '(' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, ')' );
+                 aBuf.append( '(' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( ')' );
                 break;
             case 1:
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                 aBuf.append( '-' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( aNumBuf );
                 break;
             case 2:
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( '-' );
+                 aBuf.append( aNumBuf );
                 break;
             case 3:
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, '-' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( '-' );
                 break;
             case 4:
-                pBuf = ImplAddString( pBuf, '(' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ')' );
+                 aBuf.append( '(' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( ')' );
                 break;
             case 5:
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                 aBuf.append( '-' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( rCurrencySymbol );
                 break;
             case 6:
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( '-' );
+                 aBuf.append( rCurrencySymbol );
                 break;
             case 7:
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, '-' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( '-' );
                 break;
             case 8:
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                 aBuf.append( '-' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( ' ' );
+                 aBuf.append( rCurrencySymbol );
                 break;
             case 9:
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                 aBuf.append( '-' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( ' ' );
+                 aBuf.append( aNumBuf );
                 break;
             case 10:
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, '-' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( ' ' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( '-' );
                 break;
             case 11:
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( ' ' );
+                 aBuf.append( '-' );
+                 aBuf.append( aNumBuf );
                 break;
             case 12:
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, '-' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( ' ' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( '-' );
                 break;
             case 13:
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, '-' );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( '-' );
+                 aBuf.append( ' ' );
+                 aBuf.append( rCurrencySymbol );
                 break;
             case 14:
-                pBuf = ImplAddString( pBuf, '(' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, ')' );
+                 aBuf.append( '(' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( ' ' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( ')' );
                 break;
             case 15:
-                pBuf = ImplAddString( pBuf, '(' );
-                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
-                pBuf = ImplAddString( pBuf, ' ' );
-                pBuf = ImplAddString( pBuf, rCurrencySymbol );
-                pBuf = ImplAddString( pBuf, ')' );
+                 aBuf.append( '(' );
+                 aBuf.append( aNumBuf );
+                 aBuf.append( ' ' );
+                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( ')' );
                 break;
         }
     }
 
-    OUString aNumber(pBuffer, pBuf-pBuffer);
-
-    if ( pBuffer != aBuf )
-        delete [] pBuffer;
-    if ( pNumBuffer != aNumBuf )
-        delete [] pNumBuffer;
-
-    return aNumber;
+    return aBuf.makeStringAndClear();
 }
 
 // --- number parsing -------------------------------------------------
