@@ -16,6 +16,7 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:DistributeSelection"/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
@@ -40,7 +41,6 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
   <menu:menu menu:id=".uno:MirrorMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:MirrorVert"/>
@@ -58,7 +58,6 @@
       <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatUngroup"/>
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuseparator/>

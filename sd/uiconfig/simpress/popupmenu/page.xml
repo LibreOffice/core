@@ -35,8 +35,6 @@
   </menu:menu>
   <menu:menuitem menu:id=".uno:CapturePoint"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:LeaveGroup"/>
-  <menu:menuseparator/>
   <menu:menu menu:id=".uno:SlideLayoutMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=20"/>
