@@ -198,6 +198,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_key_f4 \
 	UITest_textCase \
 	UITest_signatureLine \
+	UITest_inputLine \
 ))
 endif
 
