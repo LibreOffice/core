@@ -135,7 +135,6 @@ namespace sax_fastparser {
             return;
         }
 
-        bool bGood = true;
         const sal_Int32 kXescapeLen = 7;
         char bufXescape[kXescapeLen+1];
         sal_Int32 nNextXescape = 0;
@@ -244,7 +243,6 @@ namespace sax_fastparser {
                 break;
             }
         }
-        SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
     }
 
     void FastSaxSerializer::endDocument()

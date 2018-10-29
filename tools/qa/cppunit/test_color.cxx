@@ -62,10 +62,9 @@ void Test::test_asRGBColor()
 void Test::test_readAndWriteStream()
 {
     SvMemoryStream aStream;
-    Color aWriteColor(0x12, 0x34, 0x56);
     Color aReadColor;
 
-    WriteColor(aStream, aWriteColor);
+    WriteColor(aStream, Color(0x12, 0x34, 0x56));
 
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 

@@ -268,9 +268,8 @@ OUString SAL_CALL OConnection::nativeSQL(const OUString& /*_sSql*/)
     MutexGuard aGuard(m_aMutex);
 
     // const OUString sSqlStatement = transFormPreparedStatement( _sSql );
-    OUString sNativeSQL;
     // TODO
-    return sNativeSQL;
+    return OUString();
 }
 
 void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
@@ -291,8 +290,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    bool autoCommit = false;
-    return autoCommit;
+    return false;
 }
 
 void SAL_CALL OConnection::commit()

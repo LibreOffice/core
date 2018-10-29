@@ -48,7 +48,7 @@ void FontFeatureTest::testGetFontFeatures()
         return; // Can't test this because the font is not available, so exit
 
     vcl::Font aFont = aVDev->GetFont();
-    aFont.SetFamilyName("Linux Libertine G");
+    aFont.SetFamilyName(aFontName);
     aFont.SetWeight(FontWeight::WEIGHT_NORMAL);
     aFont.SetItalic(FontItalic::ITALIC_NORMAL);
     aFont.SetWidthType(FontWidth::WIDTH_NORMAL);
