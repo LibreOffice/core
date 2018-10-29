@@ -57,11 +57,10 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 #endif
 
 GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
-    : mpFont(&rFont)
-    , mpVertGlyphs(nullptr)
+    : mpVertGlyphs(nullptr)
     , mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
-    new SalLayoutGlyphsImpl(m_GlyphItems);
+    new SalGenericLayoutGlyphsImpl(m_GlyphItems, rFont);
 }
 
 GenericSalLayout::~GenericSalLayout()
@@ -230,7 +229,7 @@ void GenericSalLayout::DrawText(SalGraphics& rSalGraphics) const
 bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSelector)
 {
     hb_codepoint_t nGlyphIndex = 0;
-    hb_font_t *pHbFont = mpFont->GetHbFont();
+    hb_font_t *pHbFont = GetFont().GetHbFont();
     if (!hb_font_get_glyph(pHbFont, aChar, aVariationSelector, &nGlyphIndex))
         return false;
 
@@ -277,7 +276,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
         return true;
     }
 
-    hb_font_t *pHbFont = mpFont->GetHbFont();
+    hb_font_t *pHbFont = GetFont().GetHbFont();
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     m_GlyphItems.Impl()->reserve(nGlyphCapacity);
@@ -304,7 +303,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
     hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
 
-    const FontSelectPattern& rFontSelData = mpFont->GetFontSelectPattern();
+    const FontSelectPattern& rFontSelData = GetFont().GetFontSelectPattern();
     if (rArgs.mnFlags & SalLayoutFlags::DisableKerning)
     {
         SAL_INFO("vcl.harfbuzz", "Disabling kerning for font: " << rFontSelData.maTargetName);
@@ -315,7 +314,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
 
     double nXScale = 0;
     double nYScale = 0;
-    mpFont->GetScale(&nXScale, &nYScale);
+    GetFont().GetScale(&nXScale, &nYScale);
 
     Point aCurrPos(0, 0);
     while (true)
@@ -571,7 +570,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
 
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset, mpFont.get());
+                                    nAdvance, nXOffset, &GetFont());
                 m_GlyphItems.Impl()->push_back(aGI);
 
                 aCurrPos.AdjustX(nAdvance );
@@ -644,10 +643,10 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
     hb_codepoint_t nKashidaIndex = 0;
     if (rArgs.mnFlags & SalLayoutFlags::KashidaJustification)
     {
-        hb_font_t *pHbFont = mpFont->GetHbFont();
+        hb_font_t *pHbFont = GetFont().GetHbFont();
         // Find Kashida glyph width and index.
         if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nKashidaIndex))
-            nKashidaWidth = mpFont->GetKashidaWidth();
+            nKashidaWidth = GetFont().GetKashidaWidth();
         bKashidaJustify = nKashidaWidth != 0;
     }
 
@@ -768,7 +767,7 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
             while (nCopies--)
             {
-                GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, mpFont.get());
+                GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, &GetFont());
                 pGlyphIter = m_GlyphItems.Impl()->insert(pGlyphIter, aKashida);
                 aPos.AdjustX(nKashidaWidth );
                 aPos.AdjustX( -nOverlap );

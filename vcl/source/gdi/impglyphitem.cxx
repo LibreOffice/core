@@ -30,9 +30,10 @@ SalLayoutGlyphs::SalLayoutGlyphs(const SalLayoutGlyphs& rOther) { *m_pImpl = *rO
 
 SalLayoutGlyphs& SalLayoutGlyphs::operator=(const SalLayoutGlyphs& rOther)
 {
-    if (!m_pImpl)
-        m_pImpl = new SalLayoutGlyphsImpl(*this);
-    *m_pImpl = *rOther.m_pImpl;
+    if (m_pImpl)
+        *m_pImpl = *rOther.m_pImpl;
+    else
+        m_pImpl = rOther.m_pImpl->clone(*this);
     return *this;
 }
 
@@ -42,6 +43,15 @@ void SalLayoutGlyphs::clear()
 {
     if (m_pImpl)
         m_pImpl->clear();
+}
+
+SalLayoutGlyphsImpl::~SalLayoutGlyphsImpl() {}
+
+SalLayoutGlyphsImpl* SalGenericLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs) const
+{
+    SalLayoutGlyphsImpl* pNew = new SalGenericLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
+    *pNew = *this;
+    return pNew;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
