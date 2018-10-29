@@ -24,6 +24,7 @@
 #include <sal/types.h>
 
 #include <map>
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -107,7 +108,7 @@ public:
 
         void instrTableswitch(
             Code const * defaultBlock, sal_Int32 low,
-            std::vector< Code * > const & blocks);
+            std::vector< std::unique_ptr<Code> > const & blocks);
 
         void loadIntegerConstant(sal_Int32 value);
         void loadStringConstant(rtl::OString const & value);
