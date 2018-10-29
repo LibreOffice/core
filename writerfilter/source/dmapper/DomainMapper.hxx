@@ -110,6 +110,9 @@ public:
     bool IsInHeaderFooter() const;
     bool IsInTable() const;
     bool IsStyleSheetImport() const;
+
+    void hasControls( const bool bSet ) { mbHasControls = bSet; }
+
     /**
      @see DomainMapper_Impl::processDeferredCharacterProperties()
     */
@@ -164,6 +167,7 @@ private:
     static css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbIsSplitPara;
+    bool mbHasControls;
     std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
     std::unique_ptr<GraphicNamingHelper> m_pGraphicNamingHelper;
     OUString m_sGlossaryEntryName;

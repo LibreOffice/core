@@ -26,6 +26,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -976,6 +977,11 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )
 
     // Check textfield is single-line
     CPPUNIT_ASSERT_EQUAL( false, getProperty<bool>(xPropertySet2, "MultiLine") );
+
+    // Don't open in design mode when form controls exist
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XFormLayerAccess> xFormLayerAccess(xModel->getCurrentController(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( !xFormLayerAccess->isFormDesignMode() );
 }
 
 DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
