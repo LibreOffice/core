@@ -160,10 +160,9 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     delete pSvpGraphics;
 }
 
-bool SvpSalFrame::PostEvent(ImplSVEvent* pData)
+void SvpSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    m_pInstance->PostEvent( this, pData, SalEvent::UserEvent );
-    return true;
+    m_pInstance->PostEvent( this, pData.release(), SalEvent::UserEvent );
 }
 
 void SvpSalFrame::PostPaint() const
