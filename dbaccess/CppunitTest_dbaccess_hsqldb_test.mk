@@ -32,6 +32,10 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsqldb_test, \
     xo \
 ))
 
+$(eval $(call gb_CppunitTest_use_jars,dbaccess_hsqldb_test, \
+    sdbc_hsqldb \
+))
+
 $(eval $(call gb_CppunitTest_use_api,dbaccess_hsqldb_test,\
     offapi \
     oovbaapi \
