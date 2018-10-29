@@ -1209,8 +1209,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 
             if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
             {
-                GraphicObject aTempGraphicObject(*pGraphic);
-                GraphicAttr aGrfAttr;
+                const GraphicObject aTempGraphicObject(*pGraphic);
                 const basegfx::B2DHomMatrix aGraphicTransform(
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         aAlignedGrfArea.Width(), aAlignedGrfArea.Height(),
@@ -1219,7 +1218,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                 paintGraphicUsingPrimitivesHelper(
                     *pOut,
                     aTempGraphicObject,
-                    aGrfAttr,
+                    aTempGraphicObject.GetAttr(),
                     aGraphicTransform);
 
                 // shade the representation if the object is activated outplace
