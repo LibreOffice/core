@@ -263,8 +263,6 @@ private:
 
         // tdf#118963 Need a SdrModel for SdrObject creation. To make the
         // demand clear, hand over a SdrMldel&
-        SdrPage* _pLabelPage,
-        SdrPage* _pControlPage,
         SdrModel& _rModel,
 
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,

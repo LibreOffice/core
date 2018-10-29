@@ -95,8 +95,6 @@ public:
         sal_uInt16 _nControlObjectID,
         SdrInventor _nInventor,
         sal_uInt16 _nLabelObjectID,
-        SdrPage* _pLabelPage,
-        SdrPage* _pControlPage,
 
         // tdf#118963 Need a SdrModel for SdrObject creation. To make the
         // demand clear, hand over a SdrMldel&
