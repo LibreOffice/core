@@ -56,6 +56,7 @@
 #include <fmtftn.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
+#include <txtfrm.hxx>
 #include <wdocsh.hxx>
 #include <basesh.hxx>
 #include <swmodule.hxx>
@@ -1028,8 +1029,8 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 // check, if text node at current cursor positioned is counted.
                 // If not, let it been counted. Then it has to be checked,
                 // of the outline numbering has to be activated or continued.
-                SwTextNode* pTextNode =
-                            GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+                SwTextNode const*const pTextNode = sw::GetParaPropsNode(
+                        *GetLayout(), GetCursor()->GetPoint()->nNode);
                 if ( pTextNode && !pTextNode->IsCountedInList() )
                 {
                     // check, if numbering of the outline level of the paragraph
@@ -1135,7 +1136,8 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         // do not change found numbering/bullet rule, if it should only be continued.
         if ( !bContinueFoundNumRule )
         {
-            SwTextNode * pTextNode = GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+            SwTextNode const*const pTextNode = sw::GetParaPropsNode(
+                    *GetLayout(), GetCursor()->GetPoint()->nNode);
 
             if (pTextNode)
             {
@@ -1199,7 +1201,8 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             pChrFormat = GetCharFormatFromPool( RES_POOLCHR_BUL_LEVEL );
         }
 
-        const SwTextNode* pTextNode = GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+        const SwTextNode *const pTextNode = sw::GetParaPropsNode(*GetLayout(),
+                GetCursor()->GetPoint()->nNode);
         const SwTwips nWidthOfTabs = pTextNode
                                      ? pTextNode->GetWidthOfLeadingTabs()
                                      : 0;
@@ -1308,7 +1311,7 @@ void SwWrtShell::NumOrBulletOff()
             SwNumRule aNumRule(*pCurNumRule);
 
             SwTextNode * pTextNode =
-                GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+                sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
 
             if (pTextNode)
             {
@@ -1415,7 +1418,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( pNumRule )
     {
         const SwTextNode* pTextNd =
-            GetCursor()->GetPoint()->nNode.GetNode().GetTextNode();
+            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
 
         if ( pTextNd && pTextNd->IsInList() )
         {
