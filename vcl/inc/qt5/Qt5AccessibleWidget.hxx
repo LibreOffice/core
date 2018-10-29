@@ -32,7 +32,8 @@ class Qt5Widget;
 class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject,
                                                public QAccessibleInterface,
                                                public QAccessibleActionInterface,
-                                               public QAccessibleTextInterface
+                                               public QAccessibleTextInterface,
+                                               public QAccessibleValueInterface
 {
     Q_OBJECT
 
@@ -92,6 +93,13 @@ public:
                          int* endOffset) const override;
     QString textBeforeOffset(int offset, QAccessible::TextBoundaryType boundaryType,
                              int* startOffset, int* endOffset) const override;
+
+    // QAccessibleValueInterface
+    QVariant currentValue() const override;
+    QVariant maximumValue() const override;
+    QVariant minimumStepSize() const override;
+    QVariant minimumValue() const override;
+    void setCurrentValue(const QVariant& value) override;
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
