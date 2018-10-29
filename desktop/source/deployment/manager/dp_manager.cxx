@@ -430,12 +430,11 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             xFileHandler->setLevel(LogLevel::WARNING);
             xLogger->addLogHandler(xFileHandler);
 
-            const Any any_logFile(logFile);
             that->m_xLogFile.set(
                 that->m_xComponentContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
                     dp_log::serviceDecl.getSupportedServiceNames()[0],
-                    Sequence<Any>( &any_logFile, 1 ),
+                    Sequence<Any>(),
                     that->m_xComponentContext ),
                 UNO_QUERY_THROW );
             xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv, that->m_xLogFile ) );

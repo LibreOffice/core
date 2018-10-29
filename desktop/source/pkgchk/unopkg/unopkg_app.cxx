@@ -386,9 +386,8 @@ extern "C" int unopkg_main()
         Reference<deployment::XExtensionManager> xExtensionManager(
             deployment::ExtensionManager::get( xComponentContext ) );
 
-        Reference< css::ucb::XCommandEnvironment > xCmdEnv(
-            createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose, option_suppressLicense) );
+        Reference<css::ucb::XCommandEnvironment> xCmdEnv(
+            createCmdEnv(xComponentContext, option_force, option_verbose, option_suppressLicense));
 
         //synchronize bundled/shared extensions
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and
