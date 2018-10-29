@@ -73,7 +73,6 @@ public:
     virtual ~CommandEnvironmentImpl() override;
     CommandEnvironmentImpl(
         Reference<XComponentContext> const & xComponentContext,
-        OUString const & log_file,
         bool option_force_overwrite,
         bool option_verbose,
         bool option_suppress_license);
@@ -96,7 +95,6 @@ public:
 
 CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
-    OUString const & log_file,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppressLicense)
@@ -106,15 +104,12 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
       m_option_suppress_license( option_suppressLicense ),
       m_xComponentContext(xComponentContext)
 {
-    if (!log_file.isEmpty()) {
-        const Any logfile(log_file);
-        m_xLogFile.set(
-            xComponentContext->getServiceManager()
-            ->createInstanceWithArgumentsAndContext(
-                "com.sun.star.comp.deployment.ProgressLog",
-                Sequence<Any>( &logfile, 1 ), xComponentContext ),
-            UNO_QUERY_THROW );
-    }
+    m_xLogFile.set(
+        xComponentContext->getServiceManager()
+        ->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.deployment.ProgressLog",
+            Sequence<Any>(), xComponentContext ),
+        UNO_QUERY_THROW );
 }
 
 
@@ -381,13 +376,12 @@ namespace unopkg {
 
 Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
-    OUString const & logFile,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppress_license)
 {
     return new CommandEnvironmentImpl(
-        xContext, logFile, option_force_overwrite, option_verbose, option_suppress_license);
+        xContext, option_force_overwrite, option_verbose, option_suppress_license);
 }
 } // unopkg
 

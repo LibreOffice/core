@@ -49,7 +49,6 @@ typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler> t_log_helper;
 
 class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
 {
-    Reference<io::XOutputStream> m_xLogFile;
     std::unique_ptr<comphelper::EventLogger> m_logger;
 
 protected:
