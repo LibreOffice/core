@@ -37,6 +37,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <unicode/uchar.h>
+#include <unicode/regex.h>
 
 #include <patattr.hxx>
 #include <global.hxx>
@@ -9242,30 +9243,56 @@ void ScInterpreter::ScRegex()
             return;
         }
 
-        sal_Int32 nPos = 0;
-        sal_Int32 nEndPos = aText.getLength();
-        utl::SearchParam aParam( aExpression, utl::SearchParam::SearchType::Regexp);
-        css::util::SearchResult aResult;
-        utl::TextSearch aSearch( aParam, *ScGlobal::pCharClass);
-        const bool bMatch = aSearch.SearchForward( aText, &nPos, &nEndPos, &aResult);
-        if (!bMatch)
-            PushError( FormulaError::NotAvailable);
-        else
+        const icu::UnicodeString aIcuExpression(
+                reinterpret_cast<const UChar*>(aExpression.getStr()), aExpression.getLength());
+        UErrorCode status = U_ZERO_ERROR;
+        icu::RegexMatcher aRegexMatcher( aIcuExpression, 0, status);
+        if (U_FAILURE(status))
         {
-            assert(aResult.subRegExpressions >= 1);
-            if (!bReplacement)
-                PushString( aText.copy( aResult.startOffset[0], aResult.endOffset[0] - aResult.startOffset[0]));
-            else
-            {
-                /* TODO: global replacement of multiple occurrences, introduce
-                 * extra parameter with flag 'g'? Loop over positions after
-                 * nEndPos until none left? How to keep the offsets in sync
-                 * after replacement? That should be done by
-                 * ReplaceBackReferences(). */
-                aSearch.ReplaceBackReferences( aReplacement, aText, aResult);
-                PushString( aReplacement);
-            }
+            // Invalid regex.
+            PushIllegalArgument();
+            return;
         }
+        // Guard against pathological patterns, limit steps of engine, see
+        // https://ssl.icu-project.org/apiref/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
+        aRegexMatcher.setTimeLimit ( 23*1000, status);
+
+        const icu::UnicodeString aIcuText( reinterpret_cast<const UChar*>(aText.getStr()), aText.getLength());
+        aRegexMatcher.reset( aIcuText);
+
+        if (!bReplacement)
+        {
+            // Find first occurrence.
+            if (!aRegexMatcher.find())
+            {
+                PushError( FormulaError::NotAvailable);
+                return;
+            }
+            // Extract matched text.
+            icu::UnicodeString aMatch( aRegexMatcher.group( status));
+            if (U_FAILURE(status))
+            {
+                // Some error.
+                PushIllegalArgument();
+                return;
+            }
+            OUString aResult( reinterpret_cast<const sal_Unicode*>(aMatch.getBuffer()), aMatch.length());
+            PushString( aResult);
+            return;
+        }
+
+        // Replace first occurrence of match with replacement.
+        const icu::UnicodeString aIcuReplacement(
+                reinterpret_cast<const UChar*>(aReplacement.getStr()), aReplacement.getLength());
+        icu::UnicodeString aReplaced( aRegexMatcher.replaceFirst( aIcuReplacement, status));
+        if (U_FAILURE(status))
+        {
+            // Some error, e.g. extraneous $1 without group.
+            PushIllegalArgument();
+            return;
+        }
+        OUString aResult( reinterpret_cast<const sal_Unicode*>(aReplaced.getBuffer()), aReplaced.length());
+        PushString( aResult);
     }
 }
 
