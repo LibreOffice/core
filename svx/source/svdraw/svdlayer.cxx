@@ -68,7 +68,7 @@ void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
 }
 
 SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
-    maName(rNewName), pModel(nullptr), mbUserDefinedLayer(true), nID(nNewID)
+    maName(rNewName), pModel(nullptr), nID(nNewID)
 {
     // ODF default values
     mbVisibleODF = true;
@@ -82,7 +82,6 @@ void SdrLayer::SetName(const OUString& rNewName)
         return;
 
     maName = rNewName;
-    mbUserDefinedLayer = true;
 
     if (pModel)
     {
@@ -95,7 +94,6 @@ void SdrLayer::SetName(const OUString& rNewName)
 bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 {
     return (nID == rCmpLayer.nID
-        && mbUserDefinedLayer == rCmpLayer.mbUserDefinedLayer
         && maName == rCmpLayer.maName);
 }
 
