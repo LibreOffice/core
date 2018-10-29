@@ -728,7 +728,7 @@ void TypeWriter::createBlop()
 
     CPInfo  root(CP_TAG_INVALID, nullptr);
     sal_uInt16  cpIndexThisName = 0;
-    sal_uInt16* cpIndexSuperNames = nullptr;
+    std::unique_ptr<sal_uInt16[]> cpIndexSuperNames;
     sal_uInt16  cpIndexDoku = 0;
     sal_uInt16  cpIndexFileName = 0;
     CPInfo* pInfo = nullptr;
@@ -755,7 +755,7 @@ void TypeWriter::createBlop()
     {
         blopSize += m_nSuperTypes * entrySize;
 
-        cpIndexSuperNames = new sal_uInt16[m_nSuperTypes];
+        cpIndexSuperNames.reset(new sal_uInt16[m_nSuperTypes]);
 
         for (sal_uInt32 i=0; i < m_nSuperTypes; i++)
         {
@@ -1059,7 +1059,7 @@ void TypeWriter::createBlop()
         {
             pBuffer += writeUINT16(pBuffer, cpIndexSuperNames[i]);
         }
-        delete[] cpIndexSuperNames;
+        cpIndexSuperNames.reset();
     }
 
     pBuffer += writeUINT16(pBuffer, cpCount);
