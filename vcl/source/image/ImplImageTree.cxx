@@ -182,6 +182,8 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     {
         rParameters.mbWriteImageToCache = true; // Cache the scaled variant
         double aScaleFactor(aScalePercentage / 100.0);
+        // when scaling use the full 24bit RGB values
+        rParameters.mrBitmap.Convert(BmpConversion::N24Bit);
         rParameters.mrBitmap.Scale(aScaleFactor, aScaleFactor, BmpScaleFlag::Fast);
     }
 }
