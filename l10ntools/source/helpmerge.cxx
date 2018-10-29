@@ -81,13 +81,11 @@ HelpParser::HelpParser( const OString &rHelpFile )
 bool HelpParser::CreatePO(
 /*****************************************************************************/
     const OString &rPOFile_in, const OString &sHelpFile,
-    XMLFile *pXmlFile, const OString &rGsi1){
+    XMLFile* pXmlFile, const OString &rGsi1){
     SimpleXMLParser aParser;
     //TODO: explicit BOM handling?
 
-    std::unique_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
-
-    if (file == nullptr)
+    if (!aParser.Execute( sHelpFile, pXmlFile ))
     {
         printf(
             "%s: %s\n",
@@ -95,8 +93,8 @@ bool HelpParser::CreatePO(
             aParser.GetError().m_sMessage.getStr());
         exit(-1);
     }
-    file->Extract();
-    if( !file->CheckExportStatus() ){
+    pXmlFile->Extract();
+    if( !pXmlFile->CheckExportStatus() ){
         return true;
     }
 
@@ -107,9 +105,9 @@ bool HelpParser::CreatePO(
         return false;
     }
 
-    XMLHashMap* aXMLStrHM = file->GetStrings();
+    XMLHashMap* aXMLStrHM = pXmlFile->GetStrings();
 
-    std::vector<OString> order = file->getOrder();
+    std::vector<OString> order = pXmlFile->getOrder();
 
     for (auto const& pos : order)
     {
@@ -150,8 +148,8 @@ bool HelpParser::Merge( const OString &rDestinationFile,
 
     //TODO: explicit BOM handling?
 
-    std::unique_ptr<XMLFile> xmlfile(aParser.Execute( sHelpFile, new XMLFile( OString('0') ) ));
-    if (!xmlfile)
+    std::unique_ptr<XMLFile> xmlfile(new XMLFile( OString('0') ));
+    if (!aParser.Execute( sHelpFile, xmlfile.get()))
     {
         SAL_WARN("l10ntools", "could not parse " << sHelpFile);
         return false;
