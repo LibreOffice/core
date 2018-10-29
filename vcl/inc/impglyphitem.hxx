@@ -92,11 +92,29 @@ VCL_DLLPUBLIC void GlyphItem::CacheGlyphBoundRect(tools::Rectangle& rRect) const
 
 class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
 {
-    friend class GenericSalLayout;
-    friend class SalLayoutGlyphs;
+protected:
     void SetPImpl(SalLayoutGlyphs* pFacade) { pFacade->m_pImpl = this; }
 
-    SalLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs) { SetPImpl(&rGlyphs); }
+public:
+    virtual ~SalLayoutGlyphsImpl();
+    virtual SalLayoutGlyphsImpl* clone(SalLayoutGlyphs&) const = 0;
+};
+
+class SalGenericLayoutGlyphsImpl : public SalLayoutGlyphsImpl
+{
+    friend class GenericSalLayout;
+
+    const rtl::Reference<LogicalFontInstance> m_rFontInstance;
+
+    SalGenericLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs, LogicalFontInstance& rFontInstance)
+        : m_rFontInstance(&rFontInstance)
+    {
+        SetPImpl(&rGlyphs);
+    }
+
+public:
+    SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const override;
+    LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
 };
 
 #endif // INCLUDED_VCL_IMPGLYPHITEM_HXX
