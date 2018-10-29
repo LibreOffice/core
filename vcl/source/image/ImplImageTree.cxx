@@ -182,6 +182,22 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     {
         rParameters.mbWriteImageToCache = true; // Cache the scaled variant
         double aScaleFactor(aScalePercentage / 100.0);
+
+        // don't try write scaled 8bit color palette icons
+        // while we could do palette dithering, we really don't care, so
+        // convert it to 24bit before we scale it.
+        const Bitmap &rBitmap = rParameters.mrBitmap.GetBitmapRef();
+        if (rBitmap.GetBitCount() == 8 && !rBitmap.HasGreyPalette())
+        {
+            Bitmap aBitmap(rParameters.mrBitmap.GetBitmap());
+            aBitmap.Convert(BmpConversion::N24Bit);
+            BitmapEx aBitmapEx;
+            if (rParameters.mrBitmap.IsAlpha())
+                aBitmapEx = BitmapEx(aBitmap, rParameters.mrBitmap.GetAlpha());
+            else
+                aBitmapEx = BitmapEx(aBitmap);
+            rParameters.mrBitmap = aBitmapEx;
+        }
         rParameters.mrBitmap.Scale(aScaleFactor, aScaleFactor, BmpScaleFlag::Fast);
     }
 }
