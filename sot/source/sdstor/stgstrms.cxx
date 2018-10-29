@@ -1228,7 +1228,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
         if( n > THRESHOLD )
         {
             m_aName = utl::TempFile(nullptr, false).GetURL();
-            SvFileStream* s = new SvFileStream( m_aName, StreamMode::READWRITE );
+            std::unique_ptr<SvFileStream> s(new SvFileStream( m_aName, StreamMode::READWRITE ));
             const sal_uInt64 nCur = Tell();
             sal_uInt64 i = nEndOfData;
             std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
@@ -1270,10 +1270,9 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             if( i )
             {
                 SetError( s->GetError() );
-                delete s;
                 return;
             }
-            m_pStrm = s;
+            m_pStrm = s.release();
             // Shrink the memory to 16 bytes, which seems to be the minimum
             ReAllocateMemory( - ( static_cast<long>(nEndOfData) - 16 ) );
         }
