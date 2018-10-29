@@ -73,7 +73,6 @@ public:
     virtual ~CommandEnvironmentImpl() override;
     CommandEnvironmentImpl(
         Reference<XComponentContext> const & xComponentContext,
-        OUString const & log_file,
         bool option_force_overwrite,
         bool option_verbose,
         bool option_suppress_license);
@@ -96,7 +95,6 @@ public:
 
 CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
-    OUString const & log_file,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppressLicense)
@@ -107,12 +105,11 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
       m_xComponentContext(xComponentContext)
 {
     if (!log_file.isEmpty()) {
-        const Any logfile(log_file);
         m_xLogFile.set(
             xComponentContext->getServiceManager()
             ->createInstanceWithArgumentsAndContext(
                 "com.sun.star.comp.deployment.ProgressLog",
-                Sequence<Any>( &logfile, 1 ), xComponentContext ),
+                Sequence<Any>(), xComponentContext ),
             UNO_QUERY_THROW );
     }
 }
