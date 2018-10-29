@@ -398,12 +398,6 @@ bool SwEditShell::MoveParagraph( long nOffset )
     StartAllAction();
 
     SwPaM *pCursor = GetCursor();
-    if( !pCursor->HasMark() )
-    {
-        // Ensures that Bound1 and Bound2 are in the same Node
-        pCursor->SetMark();
-        pCursor->DeleteMark();
-    }
 
     bool bRet = GetDoc()->MoveParagraph( *pCursor, nOffset );
 
