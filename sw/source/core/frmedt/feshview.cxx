@@ -695,7 +695,7 @@ void SwFEShell::StartCropImage()
     SetDragMode( SdrDragMode::Crop );
 }
 
-long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
+void SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
 {
     SdrView *pView = Imp()->GetDrawView();
     if ( pView && pView->AreObjectsMarked() )
@@ -706,9 +706,7 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
         if (pView->BegDragObj( *pPt, nullptr, pHdl ))
             pView->GetDragMethod()->SetShiftPressed( bIsShift );
         ::FrameNotify( this );
-        return 1;
     }
-    return 0;
 }
 
 void SwFEShell::Drag( const Point *pPt, bool )

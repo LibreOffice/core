@@ -337,7 +337,7 @@ public:
     /// Set size of draw objects.
     void SetObjRect( const SwRect& rRect );
 
-    long BeginDrag( const Point *pPt, bool bProp );
+    void BeginDrag( const Point *pPt, bool bProp );
     void Drag     ( const Point *pPt, bool bProp );
     void EndDrag  ();
     void BreakDrag();
