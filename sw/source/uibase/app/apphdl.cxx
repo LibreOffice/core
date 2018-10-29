@@ -66,6 +66,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <swabstdlg.hxx>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
@@ -814,7 +815,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bUpdateFields = false;
                     if(bUpdateFields)
                     {
-                        pWrtSh->UpdateInputFields();
+                        comphelper::dispatchCommand(".uno:UpdateInputFields", {});
 
                         // Are database fields contained?
                         // Get all used databases for the first time
