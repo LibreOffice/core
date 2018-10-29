@@ -353,21 +353,17 @@ const OUString StatusIndicator::impl_getStaticImplementationName()
 
 //  protected method
 
-WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
+WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
 {
-    // - used from "createPeer()" to set the values of an css::awt::WindowDescriptor !!!
-    // - if you will change the descriptor-values, you must override this virtual function
-    // - the caller must release the memory for this dynamical descriptor!!!
+    WindowDescriptor aDescriptor;
 
-    WindowDescriptor* pDescriptor = new WindowDescriptor;
+    aDescriptor.Type               =   WindowClass_SIMPLE;
+    aDescriptor.WindowServiceName  =   "floatingwindow";
+    aDescriptor.ParentIndex        =   -1;
+    aDescriptor.Parent             =   xParentPeer;
+    aDescriptor.Bounds             =   getPosSize ();
 
-    pDescriptor->Type               =   WindowClass_SIMPLE;
-    pDescriptor->WindowServiceName  =   "floatingwindow";
-    pDescriptor->ParentIndex        =   -1;
-    pDescriptor->Parent             =   xParentPeer;
-    pDescriptor->Bounds             =   getPosSize ();
-
-    return pDescriptor;
+    return aDescriptor;
 }
 
 //  protected method
