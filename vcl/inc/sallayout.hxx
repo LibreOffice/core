@@ -181,7 +181,8 @@ public:
     void            GetCaretPositions(int nArraySize, long* pCaretXArray) const final override;
 
     // used by display layers
-    LogicalFontInstance& GetFont() const { return *mpFont; }
+    LogicalFontInstance& GetFont() const
+        { return static_cast<SalGenericLayoutGlyphsImpl*>(m_GlyphItems.Impl())->GetFont(); }
 
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const PhysicalFontFace** pFallbackFont = nullptr,
@@ -208,7 +209,6 @@ private:
 
     void            ParseFeatures(const OUString& name);
 
-    rtl::Reference<LogicalFontInstance> const mpFont;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
     SalLayoutGlyphs m_GlyphItems;
