@@ -419,8 +419,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
                     uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
                     {
-                        ScShapeDataLess aLess;
-                        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), aLess); // sort, because the z index or layer could be changed
+                        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess()); // sort, because the z index or layer could be changed
                         CheckWhetherAnchorChanged(xShape);
                     }
                 }
@@ -958,8 +957,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     {
         pFocusedObj = GetSdrObjectFromXShape(aShapesList[0]->xShape);
     }
-    ScShapeDataLess aLess;
-    std::sort(aShapesList.begin(), aShapesList.end(), aLess);
+    std::sort(aShapesList.begin(), aShapesList.end(), ScShapeDataLess());
     SortedShapes vecSelectedShapeAdd;
     SortedShapes vecSelectedShapeRemove;
     bool bHasSelect=false;
@@ -1312,8 +1310,7 @@ bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, 
     bool bResult(false);
     ScAccessibleShapeData aShape;
     aShape.xShape = xShape;
-    ScShapeDataLess aLess;
-    rItr = std::lower_bound(maZOrderedShapes.begin(), maZOrderedShapes.end(), &aShape, aLess);
+    rItr = std::lower_bound(maZOrderedShapes.begin(), maZOrderedShapes.end(), &aShape, ScShapeDataLess());
     if ((rItr != maZOrderedShapes.end()) && (*rItr != nullptr) && ((*rItr)->xShape.get() == xShape.get()))
         bResult = true; // if the shape is found
 

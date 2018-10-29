@@ -76,7 +76,7 @@ void SwarmSolverTest::testUnconstrained()
     uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
-    OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
+    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
                 uno::UNO_QUERY_THROW);
@@ -128,7 +128,7 @@ void SwarmSolverTest::testVariableBounded()
     uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
-    OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
+    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
                 uno::UNO_QUERY_THROW);
@@ -182,7 +182,7 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
-    OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
+    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
                 uno::UNO_QUERY_THROW);
@@ -240,7 +240,7 @@ void SwarmSolverTest::testTwoVariables()
     uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
-    OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
+    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
                 uno::UNO_QUERY_THROW);
@@ -305,7 +305,7 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
-    OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
+    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
                 uno::UNO_QUERY_THROW);

@@ -1840,8 +1840,7 @@ void Test::testTransliterate()
     OUString sText("one (two) three");
     aEditEngine.SetText(sText);
     aEditEngine.TransliterateText(ESelection(0, 0, 0, sText.getLength()), TransliterationFlags::TITLE_CASE);
-    OUString aExpected("One (Two) Three");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aEditEngine.GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"), aEditEngine.GetText());
 }
 
 void Test::testHoriAlignIgnoreTrailingWhitespace()
