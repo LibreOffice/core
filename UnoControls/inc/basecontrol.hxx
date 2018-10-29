@@ -349,7 +349,7 @@ protected:
 
     sal_Int32 impl_getHeight() const { return m_nHeight;}
 
-    virtual css::awt::WindowDescriptor* impl_getWindowDescriptor(
+    virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     );
 

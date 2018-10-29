@@ -369,17 +369,17 @@ Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo()
 
 //  BaseControl
 
-WindowDescriptor* FrameControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
+WindowDescriptor FrameControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
-    WindowDescriptor* pDescriptor   = new WindowDescriptor;
+    WindowDescriptor aDescriptor;
 
-    pDescriptor->Type               = WindowClass_CONTAINER;
-    pDescriptor->ParentIndex        = -1;
-    pDescriptor->Parent             = xParentPeer;
-    pDescriptor->Bounds             = getPosSize ();
-    pDescriptor->WindowAttributes   = 0;
+    aDescriptor.Type               = WindowClass_CONTAINER;
+    aDescriptor.ParentIndex        = -1;
+    aDescriptor.Parent             = xParentPeer;
+    aDescriptor.Bounds             = getPosSize ();
+    aDescriptor.WindowAttributes   = 0;
 
-    return pDescriptor;
+    return aDescriptor;
 }
 
 //  private method
