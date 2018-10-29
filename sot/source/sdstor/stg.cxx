@@ -673,8 +673,8 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
         if( pElem->m_aEntry.GetType() == STG_STORAGE )
         {
             // copy the entire storage
-            BaseStorage* p1 = OpenStorage( rElem, INTERNAL_MODE );
-            BaseStorage* p2 = pDest->OpenOLEStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pEntry->m_bDirect );
+            tools::SvRef<BaseStorage> p1 = OpenStorage( rElem, INTERNAL_MODE );
+            tools::SvRef<BaseStorage> p2 = pDest->OpenOLEStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pEntry->m_bDirect );
 
             if ( p2 )
             {
@@ -682,7 +682,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
                 if( !nTmpErr )
                 {
                     p2->SetClassId( p1->GetClassId() );
-                    p1->CopyTo( p2 );
+                    p1->CopyTo( p2.get() );
                     SetError( p1->GetError() );
 
                     nTmpErr = p2->GetError();
@@ -695,22 +695,20 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
                     pDest->SetError( nTmpErr );
             }
 
-            delete p1;
-            delete p2;
             return Good() && pDest->Good();
         }
         else
         {
             // stream copy
-            BaseStorageStream* p1 = OpenStream( rElem, INTERNAL_MODE );
-            BaseStorageStream* p2 = pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pEntry->m_bDirect );
+            tools::SvRef<BaseStorageStream> p1 = OpenStream( rElem, INTERNAL_MODE );
+            tools::SvRef<BaseStorageStream> p2 = pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pEntry->m_bDirect );
 
             if ( p2 )
             {
                 ErrCode nTmpErr = p2->GetError();
                 if( !nTmpErr )
                 {
-                    p1->CopyTo( p2 );
+                    p1->CopyTo( p2.get() );
                     SetError( p1->GetError() );
 
                     nTmpErr = p2->GetError();
@@ -723,8 +721,6 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
                     pDest->SetError( nTmpErr );
             }
 
-            delete p1;
-            delete p2;
             return Good() && pDest->Good();
         }
     }

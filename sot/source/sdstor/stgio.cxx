@@ -371,9 +371,9 @@ FatError StgIo::ValidateFATs()
 {
     if( m_bFile )
     {
-        Validator *pV = new Validator( *this );
+        std::unique_ptr<Validator> pV(new Validator( *this ));
         bool bRet1 = !pV->IsError(), bRet2 = true ;
-        delete pV;
+        pV.reset();
 
         SvFileStream *pFileStrm = static_cast<SvFileStream *>( GetStrm() );
         if ( !pFileStrm )
@@ -384,9 +384,9 @@ FatError StgIo::ValidateFATs()
                       StreamMode::READ | StreamMode::SHARE_DENYNONE) &&
             aIo.Load() )
         {
-            pV = new Validator( aIo );
+            pV.reset(new Validator( aIo ));
             bRet2 = !pV->IsError();
-            delete pV;
+            pV.reset();
         }
 
         FatError nErr;
