@@ -423,7 +423,6 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     {
         if( pRange->Max() < aTotRange.Min() )
         {
-            delete pRange;
             aSels.erase( aSels.begin() );
         }
         else if( pRange->Min() < aTotRange.Min() )
