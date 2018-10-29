@@ -354,10 +354,10 @@ public:
     SimpleXMLParser();
     ~SimpleXMLParser();
 
-    /// parse a file, returns NULL on critical errors
-    XMLFile *Execute(
+    /// parse a file, return false on critical errors
+    bool Execute(
         const OString &rFileName,    // the file name
-        XMLFile *pXMLFileIn         // the XMLFile
+        XMLFile* pXMLFile  // the XMLFile
     );
 
     /// returns an error struct

@@ -869,7 +869,7 @@ void SimpleXMLParser::Default( const XML_Char *s, int len )
     new XMLDefault(OString( s, len ), m_pCurNode );
 }
 
-XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn )
+bool SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFile )
 {
     m_aErrorInformation.m_eCode = XML_ERROR_NONE;
     m_aErrorInformation.m_nLine = 0;
@@ -883,7 +883,7 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     if (osl_openFile(aFileURL.pData, &h, osl_File_OpenFlag_Read)
         != osl_File_E_None)
     {
-        return nullptr;
+        return false;
     }
 
     sal_uInt64 s;
@@ -896,10 +896,9 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     if (e != osl_File_E_None)
     {
         osl_closeFile(h);
-        return nullptr;
+        return false;
     }
 
-    XMLFile* pXMLFile = pXMLFileIn;
     pXMLFile->SetName( rFileName );
 
     m_pCurNode = pXMLFile;
@@ -915,7 +914,8 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     else
         m_aErrorInformation.m_sMessage = "XML-File parsed successfully";
 
-    if (!XML_Parse(m_aParser, static_cast< char * >(p), s, true))
+    bool result = XML_Parse(m_aParser, static_cast< char * >(p), s, true);
+    if (!result)
     {
         m_aErrorInformation.m_eCode = XML_GetErrorCode( m_aParser );
         m_aErrorInformation.m_nLine = XML_GetErrorLineNumber( m_aParser );
@@ -1004,14 +1004,12 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
         default:
             break;
         }
-        delete pXMLFile;
-        pXMLFile = nullptr;
     }
 
     osl_unmapMappedFile(h, p, s);
     osl_closeFile(h);
 
-    return pXMLFile;
+    return result;
 }
 
 namespace
