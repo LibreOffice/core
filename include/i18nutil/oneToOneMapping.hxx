@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <i18nutil/i18nutildllapi.h>
+#include <memory>
 
 namespace i18nutil {
 
@@ -80,7 +81,7 @@ public:
 private:
     UnicodePairWithFlag const *mpTableWF;
     UnicodePairFlag       mnFlag;
-    UnicodePairWithFlag const **mpIndex[256];
+    std::unique_ptr<UnicodePairWithFlag const *[]> mpIndex[256];
     bool                  mbHasIndex;
 };
 
