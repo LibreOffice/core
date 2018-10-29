@@ -913,7 +913,7 @@ void RecoveryDialog::dispose()
     Dialog::dispose();
 }
 
-short RecoveryDialog::Execute()
+short RecoveryDialog::execute()
 {
     ::SolarMutexGuard aSolarLock;
 
@@ -938,7 +938,7 @@ short RecoveryDialog::Execute()
 
                 m_pCore->setUpdateListener(nullptr);
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CORE_DONE;
-                return Execute();
+                return execute();
              }
 
         case RecoveryDialog::E_RECOVERY_CORE_DONE :
@@ -1017,7 +1017,7 @@ short RecoveryDialog::Execute()
                      m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED_AFTERWARDS;
                  else
                      m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED_BEFORE;
-                 return Execute();
+                 return execute();
              }
 
         case RecoveryDialog::E_RECOVERY_CANCELED_BEFORE :
@@ -1141,11 +1141,11 @@ IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, Button*, void)
     {
         case RecoveryDialog::E_RECOVERY_PREPARED:
             m_eRecoveryState = RecoveryDialog::E_RECOVERY_IN_PROGRESS;
-            Execute();
+            execute();
         break;
         case RecoveryDialog::E_RECOVERY_CORE_DONE:
             m_eRecoveryState = RecoveryDialog::E_RECOVERY_DONE;
-            Execute();
+            execute();
         break;
     }
 
@@ -1163,12 +1163,12 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, Button*, void)
             if (impl_askUserForWizardCancel(GetFrameWeld(), RID_SVXSTR_QUERY_EXIT_RECOVERY) != DLG_RET_CANCEL)
             {
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
-                Execute();
+                execute();
             }
             break;
         case RecoveryDialog::E_RECOVERY_CORE_DONE:
             m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
-            Execute();
+            execute();
             break;
     }
 
