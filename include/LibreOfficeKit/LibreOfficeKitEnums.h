@@ -603,6 +603,11 @@ typedef enum
      * Eg. com.sun.star.presentation.PresentationDocument TextObject
      */
     LOK_CALLBACK_CONTEXT_CHANGED = 39,
+
+    /**
+     * On-load notification of the document signature status.
+     */
+    LOK_CALLBACK_SIGNATURE_STATUS = 40,
 }
 LibreOfficeKitCallbackType;
 
