@@ -12,15 +12,27 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
   <menu:menuitem menu:id=".uno:MeasureAttributes"/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
-  <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:DistributeSelection"/>
+  <menu:menu menu:id=".uno:ObjectAlign">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+      <menu:menuitem menu:id=".uno:AlignCenter"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AlignUp"/>
+      <menu:menuitem menu:id=".uno:AlignMiddle"/>
+      <menu:menuitem menu:id=".uno:AlignDown"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menu menu:id=".uno:ArrangeMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:BringToFront"/>
@@ -34,18 +46,6 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:ObjectAlign">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-      <menu:menuitem menu:id=".uno:AlignCenter"/>
-      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AlignUp"/>
-      <menu:menuitem menu:id=".uno:AlignMiddle"/>
-      <menu:menuitem menu:id=".uno:AlignDown"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
   <menu:menu menu:id=".uno:MirrorMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:MirrorVert"/>
@@ -63,7 +63,6 @@
       <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuitem menu:id=".uno:Dismantle"/>
   <menu:menuseparator/>

@@ -47,6 +47,6 @@
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuitem menu:id=".uno:RenameObject"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
 </menu:menupopup>
