@@ -136,19 +136,21 @@ void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-void SfxUndoArray::Remove(int idx)
+std::unique_ptr<SfxUndoAction> SfxUndoArray::RemoveX(int idx)
 {
+    auto ret = std::move(maUndoActions[idx].pAction);
     maUndoActions.erase(maUndoActions.begin() + idx);
+    return ret;
 }
 
-void SfxUndoArray::Remove( size_t i_pos, size_t i_count )
+void SfxUndoArray::RemoveX( size_t i_pos, size_t i_count )
 {
     maUndoActions.erase(maUndoActions.begin() + i_pos, maUndoActions.begin() + i_pos + i_count);
 }
 
-void SfxUndoArray::Insert( SfxUndoAction* i_action, size_t i_pos )
+void SfxUndoArray::Insert( std::unique_ptr<SfxUndoAction> i_action, size_t i_pos )
 {
-    maUndoActions.insert( maUndoActions.begin() + i_pos, MarkedUndoAction(i_action) );
+    maUndoActions.insert( maUndoActions.begin() + i_pos, MarkedUndoAction(std::move(i_action)) );
 }
 
 typedef ::std::vector< SfxUndoListener* >   UndoListeners;
@@ -398,17 +400,15 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
         size_t nPos = m_xData->pActUndoArray->maUndoActions.size();
         if ( nPos > m_xData->pActUndoArray->nCurUndoAction )
         {
-            SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[nPos-1].pAction;
+            SfxUndoAction* pAction = m_xData->pActUndoArray->RemoveX( nPos-1 ).release();
             aGuard.markForDeletion( pAction );
-            m_xData->pActUndoArray->Remove( nPos-1 );
             --nNumToDelete;
         }
 
         if ( nNumToDelete > 0 && m_xData->pActUndoArray->nCurUndoAction > 0 )
         {
-            SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[0].pAction;
+            SfxUndoAction* pAction = m_xData->pActUndoArray->RemoveX(0).release();
             aGuard.markForDeletion( pAction );
-            m_xData->pActUndoArray->Remove(0);
             --m_xData->pActUndoArray->nCurUndoAction;
             --nNumToDelete;
         }
@@ -428,9 +428,8 @@ void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
     while ( !m_xData->pActUndoArray->maUndoActions.empty() )
     {
         size_t deletePos = m_xData->pActUndoArray->maUndoActions.size() - 1;
-        SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ deletePos ].pAction;
+        SfxUndoAction* pAction = m_xData->pActUndoArray->RemoveX( deletePos ).release();
         i_guard.markForDeletion( pAction );
-        m_xData->pActUndoArray->Remove( deletePos );
     }
 
     m_xData->pActUndoArray->nCurUndoAction = 0;
@@ -513,8 +512,7 @@ void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
 {
     while ( m_xData->pActUndoArray->nCurUndoAction > 0 )
     {
-        SfxUndoAction* pUndoAction = m_xData->pActUndoArray->maUndoActions[0].pAction;
-        m_xData->pActUndoArray->Remove( 0 );
+        SfxUndoAction* pUndoAction = m_xData->pActUndoArray->RemoveX( 0 ).release();
         i_guard.markForDeletion( pUndoAction );
         --m_xData->pActUndoArray->nCurUndoAction;
     }
@@ -531,8 +529,7 @@ void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_curr
     while ( pUndoArray->maUndoActions.size() > pUndoArray->nCurUndoAction )
     {
         size_t deletePos = pUndoArray->maUndoActions.size() - 1;
-        SfxUndoAction* pAction = pUndoArray->maUndoActions[ deletePos ].pAction;
-        pUndoArray->Remove( deletePos );
+        SfxUndoAction* pAction = pUndoArray->RemoveX( deletePos ).release();
         i_guard.markForDeletion( pAction );
     }
 
@@ -553,7 +550,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
 
     // merge, if required
     SfxUndoAction* pMergeWithAction = m_xData->pActUndoArray->nCurUndoAction ?
-        m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction-1].pAction : nullptr;
+        m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction-1].pAction.get() : nullptr;
     if ( bTryMerge && pMergeWithAction )
     {
         bool bMerged = pMergeWithAction->Merge( pAction );
@@ -573,8 +570,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
     {
         while(m_xData->pActUndoArray->maUndoActions.size() >= m_xData->pActUndoArray->nMaxUndoActions)
         {
-            i_guard.markForDeletion( m_xData->pActUndoArray->maUndoActions[0].pAction );
-            m_xData->pActUndoArray->Remove(0);
+            i_guard.markForDeletion( m_xData->pActUndoArray->RemoveX(0).release() );
             if (m_xData->pActUndoArray->nCurUndoAction > 0)
             {
                 --m_xData->pActUndoArray->nCurUndoAction;
@@ -589,7 +585,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
     }
 
     // append new action
-    m_xData->pActUndoArray->Insert( pAction, m_xData->pActUndoArray->nCurUndoAction++ );
+    m_xData->pActUndoArray->Insert( std::unique_ptr<SfxUndoAction>(pAction), m_xData->pActUndoArray->nCurUndoAction++ );
     ImplCheckEmptyActions();
     return true;
 }
@@ -637,7 +633,7 @@ SfxUndoAction* SfxUndoManager::GetUndoAction( size_t nNo ) const
     assert(nNo < m_xData->pActUndoArray->nCurUndoAction);
     if( nNo >= m_xData->pActUndoArray->nCurUndoAction )
         return nullptr;
-    return m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction-1-nNo].pAction;
+    return m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction-1-nNo].pAction.get();
 }
 
 
@@ -653,10 +649,10 @@ void SfxUndoManager::RemoveLastUndoAction()
     // delete redo-actions and top action
     for ( size_t nPos = m_xData->pActUndoArray->maUndoActions.size(); nPos > m_xData->pActUndoArray->nCurUndoAction; --nPos )
     {
-        aGuard.markForDeletion( m_xData->pActUndoArray->maUndoActions[nPos-1].pAction );
+        aGuard.markForDeletion( m_xData->pActUndoArray->maUndoActions[nPos-1].pAction.release() );
     }
 
-    m_xData->pActUndoArray->Remove(
+    m_xData->pActUndoArray->RemoveX(
         m_xData->pActUndoArray->nCurUndoAction,
         m_xData->pActUndoArray->maUndoActions.size() - m_xData->pActUndoArray->nCurUndoAction );
     ImplCheckEmptyActions();
@@ -702,7 +698,7 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
         return false;
     }
 
-    SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ --m_xData->pActUndoArray->nCurUndoAction ].pAction;
+    SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ --m_xData->pActUndoArray->nCurUndoAction ].pAction.get();
     const OUString sActionComment = pAction->GetComment();
     try
     {
@@ -724,7 +720,7 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
         size_t nCurAction = 0;
         while ( nCurAction < m_xData->pActUndoArray->maUndoActions.size() )
         {
-            if ( m_xData->pActUndoArray->maUndoActions[ nCurAction++ ].pAction == pAction )
+            if ( m_xData->pActUndoArray->maUndoActions[ nCurAction++ ].pAction.get() == pAction )
             {
                 // the Undo action is still there ...
                 // assume the error is a permanent failure, and clear the Undo stack
@@ -765,7 +761,7 @@ SfxUndoAction* SfxUndoManager::GetRedoAction() const
     {
         return nullptr;
     }
-    return pUndoArray->maUndoActions[ pUndoArray->nCurUndoAction ].pAction;
+    return pUndoArray->maUndoActions[ pUndoArray->nCurUndoAction ].pAction.get();
 }
 
 
@@ -814,7 +810,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
         return false;
     }
 
-    SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->nCurUndoAction++ ].pAction;
+    SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->nCurUndoAction++ ].pAction.get();
     const OUString sActionComment = pAction->GetComment();
     try
     {
@@ -836,7 +832,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
         size_t nCurAction = 0;
         while ( nCurAction < m_xData->pActUndoArray->maUndoActions.size() )
         {
-            if ( m_xData->pActUndoArray->maUndoActions[ nCurAction ].pAction == pAction )
+            if ( m_xData->pActUndoArray->maUndoActions[ nCurAction ].pAction.get() == pAction )
             {
                 // the Undo action is still there ...
                 // assume the error is a permanent failure, and clear the Undo stack
@@ -876,7 +872,7 @@ bool SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
     UndoManagerGuard aGuard( *m_xData );
     if ( !m_xData->pActUndoArray->maUndoActions.empty() )
     {
-        SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->maUndoActions.size() - 1 ].pAction;
+        SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions.back().pAction.get();
         aGuard.clear();
         if ( pAction->CanRepeat( rTarget ) )
             pAction->Repeat( rTarget );
@@ -1028,8 +1024,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
     const size_t nListActionElements = pArrayToLeave->nCurUndoAction;
     if ( nListActionElements == 0 )
     {
-        SfxUndoAction* pCurrentAction= m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->nCurUndoAction-1 ].pAction;
-        m_xData->pActUndoArray->Remove( --m_xData->pActUndoArray->nCurUndoAction );
+        SfxUndoAction* pCurrentAction = m_xData->pActUndoArray->RemoveX( --m_xData->pActUndoArray->nCurUndoAction ).release();
         i_guard.markForDeletion( pCurrentAction );
 
         i_guard.scheduleNotification( &SfxUndoListener::listActionCancelled );
@@ -1040,7 +1035,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
     // the redo stack
     ImplClearRedo( i_guard, SfxUndoManager::CurrentLevel );
 
-    SfxUndoAction* pCurrentAction= m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->nCurUndoAction-1 ].pAction;
+    SfxUndoAction* pCurrentAction= m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->nCurUndoAction-1 ].pAction.get();
     SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction * >( pCurrentAction );
     ENSURE_OR_RETURN( pListAction, "SfxUndoManager::ImplLeaveListAction: list action expected at this position!", nListActionElements );
 
@@ -1051,13 +1046,11 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
             "SfxUndoManager::ImplLeaveListAction: cannot merge the list action if there's no other action on the same level - check this beforehand!" );
         if ( m_xData->pActUndoArray->nCurUndoAction > 1 )
         {
-            SfxUndoAction* pPreviousAction = m_xData->pActUndoArray->maUndoActions[ m_xData->pActUndoArray->nCurUndoAction - 2 ].pAction;
-            m_xData->pActUndoArray->Remove( m_xData->pActUndoArray->nCurUndoAction - 2 );
+            std::unique_ptr<SfxUndoAction> pPreviousAction = m_xData->pActUndoArray->RemoveX( m_xData->pActUndoArray->nCurUndoAction - 2 );
             --m_xData->pActUndoArray->nCurUndoAction;
-            pListAction->Insert( pPreviousAction, 0 );
-            ++pListAction->nCurUndoAction;
-
             pListAction->SetComment( pPreviousAction->GetComment() );
+            pListAction->Insert( std::move(pPreviousAction), 0 );
+            ++pListAction->nCurUndoAction;
         }
     }
 
@@ -1167,7 +1160,7 @@ void SfxUndoManager::RemoveOldestUndoAction()
 {
     UndoManagerGuard aGuard( *m_xData );
 
-    SfxUndoAction* pActionToRemove = m_xData->pUndoArray->maUndoActions[0].pAction;
+    SfxUndoAction* pActionToRemove = m_xData->pUndoArray->maUndoActions[0].pAction.get();
 
     if ( IsInListAction() && ( m_xData->pUndoArray->nCurUndoAction == 1 ) )
     {
@@ -1175,8 +1168,8 @@ void SfxUndoManager::RemoveOldestUndoAction()
         return;
     }
 
+    m_xData->pUndoArray->RemoveX( 0 ).release();
     aGuard.markForDeletion( pActionToRemove );
-    m_xData->pUndoArray->Remove( 0 );
     --m_xData->pUndoArray->nCurUndoAction;
     ImplCheckEmptyActions();
 }
@@ -1240,7 +1233,7 @@ OUString SfxUndoManager::GetUndoActionsInfo() const
     const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
     for (size_t i = 0; i < GetUndoActionCount(); ++i)
     {
-        boost::property_tree::ptree aAction = lcl_ActionToJson(i, pUndoArray->maUndoActions[pUndoArray->nCurUndoAction - 1 - i].pAction);
+        boost::property_tree::ptree aAction = lcl_ActionToJson(i, pUndoArray->maUndoActions[pUndoArray->nCurUndoAction - 1 - i].pAction.get());
         aActions.push_back(std::make_pair("", aAction));
     }
 
@@ -1259,7 +1252,7 @@ OUString SfxUndoManager::GetRedoActionsInfo() const
     for (size_t i = 0; i < nCount; ++i)
     {
         size_t nIndex = nCount - i - 1;
-        boost::property_tree::ptree aAction = lcl_ActionToJson(nIndex, pUndoArray->maUndoActions[pUndoArray->nCurUndoAction + nIndex].pAction);
+        boost::property_tree::ptree aAction = lcl_ActionToJson(nIndex, pUndoArray->maUndoActions[pUndoArray->nCurUndoAction + nIndex].pAction.get());
         aActions.push_back(std::make_pair("", aAction));
     }
 
@@ -1419,12 +1412,6 @@ void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SfxUndoArray::~SfxUndoArray()
 {
-    while ( !maUndoActions.empty() )
-    {
-        SfxUndoAction *pAction = maUndoActions.back().pAction;
-        delete pAction;
-        maUndoActions.pop_back();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
