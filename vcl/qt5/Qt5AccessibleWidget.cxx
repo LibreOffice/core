@@ -23,7 +23,6 @@
 #include <QtGui/QAccessibleInterface>
 
 #include <Qt5AccessibleEventListener.hxx>
-#include <Qt5AccessibleValue.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
 #include <Qt5Widget.hxx>
@@ -41,6 +40,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -619,6 +619,8 @@ void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
         return static_cast<QAccessibleActionInterface*>(this);
     if (t == QAccessible::TextInterface)
         return static_cast<QAccessibleTextInterface*>(this);
+    if (t == QAccessible::ValueInterface)
+        return static_cast<QAccessibleValueInterface*>(this);
     return nullptr;
 }
 
@@ -714,10 +716,7 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
     return keyBindings;
 }
 
-QAccessibleValueInterface* Qt5AccessibleWidget::valueInterface()
-{
-    return new Qt5AccessibleValue(m_xAccessible);
-}
+QAccessibleValueInterface* Qt5AccessibleWidget::valueInterface() { return nullptr; }
 
 QAccessibleTextInterface* Qt5AccessibleWidget::textInterface() { return nullptr; }
 
@@ -820,6 +819,43 @@ QString Qt5AccessibleWidget::textBeforeOffset(int /* offset */,
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textBeforeOffset");
     return QString();
+}
+
+// QAccessibleValueInterface
+QVariant Qt5AccessibleWidget::currentValue() const
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double aDouble = 0;
+    xValue->getCurrentValue() >>= aDouble;
+    return QVariant(aDouble);
+}
+QVariant Qt5AccessibleWidget::maximumValue() const
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double aDouble = 0;
+    xValue->getMaximumValue() >>= aDouble;
+    return QVariant(aDouble);
+}
+QVariant Qt5AccessibleWidget::minimumStepSize() const { return QVariant(); }
+QVariant Qt5AccessibleWidget::minimumValue() const
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double aDouble = 0;
+    xValue->getMinimumValue() >>= aDouble;
+    return QVariant(aDouble);
+}
+void Qt5AccessibleWidget::setCurrentValue(const QVariant& value)
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return;
+    xValue->setCurrentValue(Any(value.toDouble()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
