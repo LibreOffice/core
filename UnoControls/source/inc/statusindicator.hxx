@@ -161,7 +161,7 @@ public:
     static const OUString impl_getStaticImplementationName();
 
 protected:
-    virtual css::awt::WindowDescriptor* impl_getWindowDescriptor(
+    virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
