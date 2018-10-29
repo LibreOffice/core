@@ -57,6 +57,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	echo '[Bootstrap]'                                      >  $(IOSRES)/fundamentalrc
 	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/'            >> $(IOSRES)/fundamentalrc
 	echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR'             >> $(IOSRES)/fundamentalrc
+	echo 'BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)'          >> $(IOSRES)/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/registry ' \
 	     'res:$${BRAND_BASE_DIR}/registry' >> $(IOSRES)/fundamentalrc
 	echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb ' \
