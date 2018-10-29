@@ -749,7 +749,7 @@ void handleEnumType(
         std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
-        std::vector< ClassFile::Code * > blocks;
+        std::vector< std::unique_ptr<ClassFile::Code> > blocks;
             //FIXME: pointers contained in blocks may leak
         sal_Int32 last = SAL_MAX_INT32;
         for (const auto& pair : map)
@@ -764,14 +764,9 @@ void handleEnumType(
             std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, pair.second, classDescriptor);
             blockCode->instrAreturn();
-            blocks.push_back(blockCode.get());
-            blockCode.release();
+            blocks.push_back(std::move(blockCode));
         }
         code->instrTableswitch(defCode.get(), min, blocks);
-        for (ClassFile::Code *p : blocks)
-        {
-            delete p;
-        }
     } else{
         std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();

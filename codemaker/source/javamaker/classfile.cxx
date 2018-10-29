@@ -312,7 +312,7 @@ void ClassFile::Code::instrSwap() {
 
 void ClassFile::Code::instrTableswitch(
     Code const * defaultBlock, sal_Int32 low,
-    std::vector< Code * > const & blocks)
+    std::vector< std::unique_ptr<Code> > const & blocks)
 {
     // tableswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
     // <defaultbyte4> <lowbyte1> <lowbyte2> <lowbyte3> <lowbyte4> <highbyte1>
@@ -331,7 +331,7 @@ void ClassFile::Code::instrTableswitch(
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(low));
     appendU4(m_code, static_cast< sal_uInt32 >(low + (size - 1)));
-    for (Code *pCode : blocks)
+    for (std::unique_ptr<Code> const & pCode : blocks)
     {
         if (pCode == nullptr) {
             appendU4(m_code, defaultOffset);
@@ -342,7 +342,7 @@ void ClassFile::Code::instrTableswitch(
         }
     }
     appendStream(m_code, defaultBlock->m_code);
-    for (Code *pCode : blocks)
+    for (std::unique_ptr<Code> const & pCode : blocks)
     {
         if (pCode != nullptr) {
             appendStream(m_code, pCode->m_code);
