@@ -58,6 +58,7 @@
 #include <acmplwrd.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
+#include <fntcache.hxx>
 #include <vector>
 
 // Save some typing work to avoid accessing destroyed pages.
@@ -2271,6 +2272,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             pRoot->ResetIdleFormat();
             SfxObjectShell* pDocShell = pImp->GetShell()->GetDoc()->GetDocShell();
             pDocShell->Broadcast( SfxEventHint( SfxEventHintId::SwEventLayoutFinished, SwDocShell::GetEventName(STR_SW_EVENT_LAYOUT_FINISHED), pDocShell ) );
+            // Limit lifetime of the text glyphs cache to a single run of the
+            // layout.
+            SwClearFntCacheTextGlyphs();
         }
     }
 
