@@ -83,10 +83,10 @@ typedef sal_Int32 UndoStackMark;
 
 struct MarkedUndoAction
 {
-    SfxUndoAction*                  pAction;
+    std::unique_ptr<SfxUndoAction>  pAction;
     ::std::vector< UndoStackMark >  aMarks;
 
-    MarkedUndoAction(SfxUndoAction* p) : pAction(p) {}
+    MarkedUndoAction(std::unique_ptr<SfxUndoAction> p) : pAction(std::move(p)) {}
 };
 
 /** do not make use of these implementation details, unless you
@@ -102,10 +102,13 @@ struct SVL_DLLPUBLIC SfxUndoArray
         nMaxUndoActions(nMax), nCurUndoAction(0), pFatherUndoArray(nullptr) {}
     virtual ~SfxUndoArray();
 
-    SfxUndoAction* GetUndoAction(size_t idx) { return maUndoActions[idx].pAction; }
-    void Remove(int idx);
-    void Remove( size_t i_pos, size_t i_count );
-    void Insert( SfxUndoAction* i_action, size_t i_pos );
+    SfxUndoArray& operator=( SfxUndoArray const & ) = delete; // MSVC2017 workaround
+    SfxUndoArray( SfxUndoArray const & ) = delete; // MSVC2017 workaround
+
+    SfxUndoAction* GetUndoAction(size_t idx) { return maUndoActions[idx].pAction.get(); }
+    std::unique_ptr<SfxUndoAction> RemoveX(int idx);
+    void RemoveX( size_t i_pos, size_t i_count );
+    void Insert( std::unique_ptr<SfxUndoAction> i_action, size_t i_pos );
 };
 
 
