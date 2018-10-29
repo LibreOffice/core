@@ -119,7 +119,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     void                getDefaultCalendarImpl();
     void                getSecondaryCalendarImpl();
 
-    sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
+    void                ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
                             bool bUseThousandSep, bool bTrailingZeros ) const;
 
