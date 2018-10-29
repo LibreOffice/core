@@ -192,7 +192,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
     return rOutStream.good();
 }
 #else
-size_t generatePreview(SvStream&, std::vector<Bitmap>&, sal_uInt64, sal_uInt64, size_t, int)
+size_t generatePreview(SvStream&, std::vector<Bitmap>&, sal_uInt64, sal_uInt64, size_t, int, double)
 {
     return 0;
 }
