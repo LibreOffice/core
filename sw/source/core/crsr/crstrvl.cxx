@@ -1250,7 +1250,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                  && IsAttrAtPos::NumLabel & rContentAtPos.eContentAtPos)
         {
             bRet = aTmpState.m_bInNumPortion;
-            rContentAtPos.aFnd.pNode = pTextNd;
+            rContentAtPos.aFnd.pNode = sw::GetParaPropsNode(*GetLayout(), aPos.nNode);
 
             Size aSizeLogic(aTmpState.m_nInNumPortionOffset, 0);
             Size aSizePixel = GetWin()->LogicToPixel(aSizeLogic);
