@@ -1465,16 +1465,10 @@ void VclBuilder::preload()
     };
     for (auto & lib : aWidgetLibs)
     {
-        OUStringBuffer sModuleBuf;
-        sModuleBuf.append(SAL_DLLPREFIX);
-        sModuleBuf.append(OUString::createFromAscii(lib));
-        sModuleBuf.append(SAL_DLLEXTENSION);
-        NoAutoUnloadModule* pModule = new NoAutoUnloadModule;
-        OUString sModule = sModuleBuf.makeStringAndClear();
+        std::unique_ptr<NoAutoUnloadModule> pModule(new NoAutoUnloadModule);
+        OUString sModule = SAL_DLLPREFIX + OUString::createFromAscii(lib) + SAL_DLLEXTENSION;
         if (pModule->loadRelative(&thisModule, sModule))
-            g_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<NoAutoUnloadModule>(pModule)));
-        else
-            delete pModule;
+            g_aModuleMap.insert(std::make_pair(sModule, std::move(pModule)));
     }
 #endif // ENABLE_MERGELIBS
 #endif // DISABLE_DYNLOADING
