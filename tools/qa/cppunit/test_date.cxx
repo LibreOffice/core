@@ -192,32 +192,27 @@ void DateTest::testGetDaysInYear()
 {
     {
         Date aDate(1, 1, 2000);
-        sal_uInt16 nExpectedDays = 366;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(366), aDate.GetDaysInYear());
     }
 
     {
         Date aDate(1, 1, 1900);
-        sal_uInt16 nExpectedDays = 365;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(365), aDate.GetDaysInYear());
     }
 
     {
         Date aDate(1, 1, 1999);
-        sal_uInt16 nExpectedDays = 365;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(365), aDate.GetDaysInYear());
     }
 
     {
         Date aDate(1, 1, 2004);
-        sal_uInt16 nExpectedDays = 366;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(366), aDate.GetDaysInYear());
     }
 
     {
         Date aDate(1, 1, 400);
-        sal_uInt16 nExpectedDays = 366;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(366), aDate.GetDaysInYear());
     }
 }
 
@@ -469,80 +464,67 @@ void DateTest::testGetDaysInMonth()
 {
     {
         Date aDate(1, 1, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 2, 2000);
-        sal_uInt16 nExpectedDays = 29;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(29), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 2, 1999);
-        sal_uInt16 nExpectedDays = 28;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(28), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 3, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 4, 2000);
-        sal_uInt16 nExpectedDays = 30;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 5, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 6, 2000);
-        sal_uInt16 nExpectedDays = 30;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 7, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 8, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 9, 2000);
-        sal_uInt16 nExpectedDays = 30;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 10, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 11, 2000);
-        sal_uInt16 nExpectedDays = 30;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), aDate.GetDaysInMonth());
     }
 
     {
         Date aDate(1, 12, 2000);
-        sal_uInt16 nExpectedDays = 31;
-        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(31), aDate.GetDaysInMonth());
     }
 }
 

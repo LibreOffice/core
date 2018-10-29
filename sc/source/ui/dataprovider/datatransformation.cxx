@@ -235,7 +235,6 @@ void TextTransformation::Transform(ScDocument& rDoc) const
             break;
             case TEXT_TRANSFORM_TYPE::CAPITALIZE:
             {
-                sal_Unicode separator = sal_Unicode(U' ');
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -250,7 +249,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
                             aStr = aStr.replaceAt(0, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[0])));
 
                         for (sal_Int32 i = 1; i < length; i++){
-                            if (aStr[i-1] == separator)
+                            if (aStr[i-1] == sal_Unicode(U' '))
                             {
                                 aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[i])));
                             }
@@ -736,9 +735,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::DATE_STRING:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType        eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -770,9 +768,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType        eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -794,9 +791,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType        eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
 
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
@@ -854,9 +850,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -877,9 +872,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -980,9 +974,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -1036,9 +1029,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::DATE;
                 LanguageType        eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     ScAddress aAddress(rCol, nRow, 0);
@@ -1095,9 +1087,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             case DATETIME_TRANSFORMATION_TYPE::TIME:
             {
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                SvNumFormatType nFormatType = SvNumFormatType::TIME;
                 LanguageType eLanguage = ScGlobal::eLnge;
-                sal_uInt32 nFormat = pFormatter->GetStandardFormat(nFormatType, eLanguage);
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TIME, eLanguage);
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     ScAddress aAddress(rCol, nRow, 0);
