@@ -22,6 +22,30 @@
       "revId": "15cd3bd1c076e29defa4fabac89f76c57267a0dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f287b81_eeca9f4d",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-29T03:26:30Z",
+      "side": 1,
+      "message": "I\u0027m puzzled why you would suggest this.  The table menu is closely physically located to character and paragraph formatting, both of which open up with comprehensive, tabbed properties. I would think that the main item a user would be looking for in format tables would be the similar, comprehensive table properties - thus it has the most prominent position.\n\nAren\u0027t the most popular items put on the top of the menu? Cell functions would seldom be used. They were only included for completeness.",
+      "parentUuid": "bf3e73b7_562f04f6",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 1
+      },
+      "revId": "15cd3bd1c076e29defa4fabac89f76c57267a0dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
