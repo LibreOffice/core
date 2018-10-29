@@ -242,6 +242,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo83428, "fdo83428.docx")
      CPPUNIT_ASSERT_EQUAL(OUString("Document"), getProperty<OUString>(xUDProps, "Testing"));
 }
 
+#if 0
 DECLARE_OOXMLEXPORT_TEST(testShapeInFloattable, "shape-in-floattable.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
@@ -253,6 +254,7 @@ DECLARE_OOXMLEXPORT_TEST(testShapeInFloattable, "shape-in-floattable.docx")
         assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wpg']", 1);
     }
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testEmptyAnnotationMark, "empty-annotation-mark.docx")
 {
