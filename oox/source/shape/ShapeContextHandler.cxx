@@ -343,6 +343,7 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
             mxWpsContext.clear();
         mxSavedShape.clear();
     }
+#if 0
     // In case a textbox is sent in writerfilter, we add the shape
     // (and any parent group shape) early. go through all un-processed
     // children & add them now, too
@@ -362,6 +363,7 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
             mxSavedShape.clear();
         }
     }
+#endif
 }
 
 void SAL_CALL ShapeContextHandler::endUnknownElement
