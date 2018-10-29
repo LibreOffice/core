@@ -127,6 +127,7 @@
 #include <table.hxx>
 #include <appoptio.hxx>
 #include <formulaopt.hxx>
+#include <externaltransformationuno.hxx>
 
 #include <strings.hrc>
 
@@ -186,6 +187,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString("BuildId"),                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNO_CODENAME),                0, cppu::UnoType<OUString>::get(),                  0, 0},
         {OUString(SC_UNO_INTEROPGRABBAG),          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
+        {OUString(SC_UNO_DATATRANSFORMATION),      0, cppu::UnoType<sheet::XDataTransformation>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDocOptPropertyMap_Impl;
@@ -2553,6 +2555,10 @@ void SAL_CALL ScModelObj::setPropertyValue(
         else if ( aPropertyName == SC_UNO_INTEROPGRABBAG )
         {
             setGrabBagItem(aValue);
+        }
+        else if ( aPropertyName == SC_UNO_DATATRANSFORMATION )
+        {
+            throw lang::IllegalArgumentException();
         }
 
         if ( aNewOpt != rOldOpt )

@@ -370,6 +370,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/setup,\
 	UpdateCheckConfig \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/sheet,\
+	DataTransformation \
 	ExternalDocLink \
 	ExternalDocLinks \
 	ExternalSheetCache \
@@ -3486,6 +3487,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XDataPilotTablesSupplier \
 	XDatabaseRange \
 	XDatabaseRanges \
+	XDataTransformation \
 	XDimensionsSupplier \
 	XDocumentAuditing \
 	XDrillDownDataSupplier \
