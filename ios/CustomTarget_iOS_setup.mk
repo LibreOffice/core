@@ -23,8 +23,8 @@ $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
-	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
-	         $(IOSGEN) $(WORKDIR)/ios;
+	         $(IOSRES)/share/config $(IOSRES)/filter $(IOSRES)/program \
+	         $(IOSRES)/config
 
 	# generate file with call declarations
 	$(SRCDIR)/solenv/bin/native-code.py \
@@ -41,10 +41,11 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	mkdir -p $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
 	cp $(WORKDIR)/CustomTarget/i18npool/breakiterator/dict_*.data $(IOSRES)/share
-	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/share/filter
-	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/share/filter
-	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
-	cp -R $(INSTDIR)/share/registry $(IOSRES)/share
+	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/filter
+	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/filter
+	cp -R $(INSTDIR)/share/registry $(IOSRES)
+	cp $(INSTDIR)/share/config/*zip $(IOSRES)/config
 
 	# Set up rc, the "inifile". See getIniFileName_Impl().
 	echo '[Bootstrap]' > $(IOSRES)/rc
@@ -56,7 +57,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	echo '[Bootstrap]'                                      >  $(IOSRES)/fundamentalrc
 	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/'            >> $(IOSRES)/fundamentalrc
 	echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR'             >> $(IOSRES)/fundamentalrc
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry ' \
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/registry ' \
 	     'res:$${BRAND_BASE_DIR}/registry' >> $(IOSRES)/fundamentalrc
 	echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb ' \
 	     'file://$$APP_DATA_DIR/offapi.rdb' >> $(IOSRES)/fundamentalrc
