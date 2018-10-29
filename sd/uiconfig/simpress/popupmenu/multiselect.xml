@@ -16,6 +16,18 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:DistributeSelection"/>
+  <menu:menu menu:id=".uno:ObjectAlign">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+      <menu:menuitem menu:id=".uno:AlignCenter"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AlignUp"/>
+      <menu:menuitem menu:id=".uno:AlignMiddle"/>
+      <menu:menuitem menu:id=".uno:AlignDown"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menu menu:id=".uno:ArrangeMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:BringToFront"/>
@@ -29,18 +41,6 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:ObjectAlign">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-      <menu:menuitem menu:id=".uno:AlignCenter"/>
-      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AlignUp"/>
-      <menu:menuitem menu:id=".uno:AlignMiddle"/>
-      <menu:menuitem menu:id=".uno:AlignDown"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
   <menu:menu menu:id=".uno:MirrorMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:MirrorVert"/>
@@ -58,10 +58,6 @@
       <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:FormatGroup"/>
-  <menu:menuitem menu:id=".uno:FormatUngroup"/>
-  <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menu menu:id=".uno:PolyFormen">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:Combine"/>
@@ -77,6 +73,9 @@
       <menu:menuitem menu:id=".uno:EqualizeHeight"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuitem menu:id=".uno:FormatGroup"/>
+  <menu:menuitem menu:id=".uno:FormatUngroup"/>
+  <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
 </menu:menupopup>

@@ -13,10 +13,13 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
-  <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
-  <menu:menuitem menu:id=".uno:MirrorVert"/>
-  <menu:menuitem menu:id=".uno:MirrorHorz"/>
   <menu:menuitem menu:id=".uno:AdvancedMode"/>
+  <menu:menu menu:id=".uno:MirrorMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:MirrorVert"/>
+      <menu:menuitem menu:id=".uno:MirrorHorz"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
