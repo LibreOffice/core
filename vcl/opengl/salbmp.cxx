@@ -582,7 +582,7 @@ bool OpenGLSalBitmap::ReadTexture()
     xContext->state().scissor().disable();
     xContext->state().stencil().disable();
 
-    if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
+    if ((mnBits == 8 && maPalette.IsGreyPalette()) || mnBits == 16 || mnBits == 24 || mnBits == 32)
     {
         determineTextureFormat(mnBits, nFormat, nType);
 
