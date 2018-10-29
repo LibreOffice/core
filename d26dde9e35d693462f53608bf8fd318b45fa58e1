@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5f2577a7_0d74d198",
+        "filename": "sw/source/ui/index/cnttab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-29T14:07:50Z",
+      "side": 1,
+      "message": "ah, my mistake, this is fine",
+      "parentUuid": "5f2577a7_8d46814f",
+      "revId": "d26dde9e35d693462f53608bf8fd318b45fa58e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f287b81_6e78eff7",
         "filename": "sw/source/ui/vba/vbarevisions.cxx",
         "patchSetId": 1
