@@ -26,7 +26,6 @@
 #include <fpdf_edit.h>
 #include <fpdf_save.h>
 #include <fpdf_text.h>
-#endif
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
@@ -1256,5 +1255,7 @@ tools::Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, doubl
     tools::Rectangle aRect(aPos, aSize);
     return aRect;
 }
+
+#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
