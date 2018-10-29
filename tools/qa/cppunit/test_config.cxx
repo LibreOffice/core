@@ -76,9 +76,8 @@ public:
             CPPUNIT_ASSERT(!aConfig.HasGroup("TestGroup"));
             CPPUNIT_ASSERT_EQUAL(OString("TestGroup2"), aConfig.GetGroupName(0));
 
-            sal_uInt16 nExpected = 1;
             sal_uInt16 nActual = aConfig.GetGroupCount();
-            CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nActual);
         }
 
         osl::File::copy(maOriginalConfigFile, maConfigFile);
@@ -90,9 +89,8 @@ public:
             aConfig.DeleteGroup(OString("NonExistentTestGroup"));
             CPPUNIT_ASSERT_EQUAL(OString("TestGroup"), aConfig.GetGroupName(0));
 
-            sal_uInt16 nExpected = 2;
             sal_uInt16 nActual = aConfig.GetGroupCount();
-            CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nActual);
         }
 
         osl::File::copy(maOriginalConfigFile, maConfigFile);
@@ -101,9 +99,8 @@ public:
     void testGetGroupCount()
     {
         Config aConfig(maConfigFile);
-        sal_uInt16 nExpected = 2;
         sal_uInt16 nActual = aConfig.GetGroupCount();
-        CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nActual);
     }
 
     void testReadKey()

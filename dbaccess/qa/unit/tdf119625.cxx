@@ -84,9 +84,9 @@ void Tdf119625Test::testTime()
 
     // select basically everything from the .odb
     uno::Reference<XStatement> statement = xConnection->createStatement();
-    OUString sql{ "  SELECT id, tst_dt, tst_d, tst_t "
-                  "    FROM tst_data "
-                  "ORDER BY id" };
+    const OUString sql{ "  SELECT id, tst_dt, tst_d, tst_t "
+                        "    FROM tst_data "
+                        "ORDER BY id" };
 
     uno::Reference<XResultSet> xRes = statement->executeQuery(sql);
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);

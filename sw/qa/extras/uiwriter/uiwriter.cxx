@@ -3561,8 +3561,7 @@ void SwUiWriterTest::testTableBackgroundColor()
     pWrtShell->SelTableRow(); //Selecting First Row
     pWrtShell->ClearMark();
     //Modifying the color of Table Box
-    Color colour = sal_Int32(0xFF00FF);
-    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->SetBoxBackground(SvxBrushItem(Color(sal_Int32(0xFF00FF)), sal_Int16(RES_BACKGROUND)));
     //Checking cells for background color only A1 should be modified
     uno::Reference<table::XCell> xCell;
     xCell = xTable->getCellByName("A1");

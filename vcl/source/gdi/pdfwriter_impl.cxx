@@ -7373,8 +7373,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
     {
         appendStrokingColor(aColor, aLine); // stroke with text color
         aLine.append( " " );
-        Color aNonStrokeColor(COL_WHITE);   // fill with white
-        appendNonStrokingColor(aNonStrokeColor, aLine);
+        appendNonStrokingColor(COL_WHITE, aLine); // fill with white
         aLine.append( "\n" );
         aLine.append( "0.25 w \n" ); // same line thickness as in drawLayout
 

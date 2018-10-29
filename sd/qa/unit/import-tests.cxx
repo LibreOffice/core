@@ -1837,8 +1837,8 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
 {
     bool bResult = true;
 
-    Color aFGColor(0xFF0000);
-    Color aBGColor(0xFFFFFF);
+    const Color aFGColor(0xFF0000);
+    const Color aBGColor(0xFFFFFF);
 
     Bitmap::ScopedReadAccess pAccess(rBitmap);
     for (long y = 0; y < pAccess->Height(); ++y)
