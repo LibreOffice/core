@@ -31,7 +31,8 @@ class Qt5Widget;
 
 class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject,
                                                public QAccessibleInterface,
-                                               public QAccessibleActionInterface
+                                               public QAccessibleActionInterface,
+                                               public QAccessibleTextInterface
 {
     Q_OBJECT
 
@@ -70,6 +71,27 @@ public:
 
     QAccessibleValueInterface* valueInterface();
     QAccessibleTextInterface* textInterface();
+
+    // QAccessibleTextInterface
+    void addSelection(int startOffset, int endOffset) override;
+    QString attributes(int offset, int* startOffset, int* endOffset) const override;
+    int characterCount() const override;
+    QRect characterRect(int offset) const override;
+    int cursorPosition() const override;
+    int offsetAtPoint(const QPoint& point) const override;
+    void removeSelection(int selectionIndex) override;
+    void scrollToSubstring(int startIndex, int endIndex) override;
+    void selection(int selectionIndex, int* startOffset, int* endOffset) const override;
+    int selectionCount() const override;
+    void setCursorPosition(int position) override;
+    void setSelection(int selectionIndex, int startOffset, int endOffset) override;
+    QString text(int startOffset, int endOffset) const override;
+    QString textAfterOffset(int offset, QAccessible::TextBoundaryType boundaryType,
+                            int* startOffset, int* endOffset) const override;
+    QString textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
+                         int* endOffset) const override;
+    QString textBeforeOffset(int offset, QAccessible::TextBoundaryType boundaryType,
+                             int* startOffset, int* endOffset) const override;
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);

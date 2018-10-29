@@ -22,13 +22,12 @@
 
 #include <QtGui/QAccessibleInterface>
 
+#include <Qt5AccessibleEventListener.hxx>
+#include <Qt5AccessibleValue.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
 #include <Qt5Widget.hxx>
 #include <Qt5XAccessible.hxx>
-#include <Qt5AccessibleText.hxx>
-#include <Qt5AccessibleValue.hxx>
-#include <Qt5AccessibleEventListener.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -36,11 +35,12 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -617,6 +617,8 @@ void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
 {
     if (t == QAccessible::ActionInterface)
         return static_cast<QAccessibleActionInterface*>(this);
+    if (t == QAccessible::TextInterface)
+        return static_cast<QAccessibleTextInterface*>(this);
     return nullptr;
 }
 
@@ -717,9 +719,107 @@ QAccessibleValueInterface* Qt5AccessibleWidget::valueInterface()
     return new Qt5AccessibleValue(m_xAccessible);
 }
 
-QAccessibleTextInterface* Qt5AccessibleWidget::textInterface()
+QAccessibleTextInterface* Qt5AccessibleWidget::textInterface() { return nullptr; }
+
+// QAccessibleTextInterface
+void Qt5AccessibleWidget::addSelection(int /* startOffset */, int /* endOffset */)
 {
-    return new Qt5AccessibleText(m_xAccessible);
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::addSelection");
+}
+QString Qt5AccessibleWidget::attributes(int /* offset */, int* /* startOffset */,
+                                        int* /* endOffset */) const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::attributes");
+    return QString();
+}
+int Qt5AccessibleWidget::characterCount() const
+{
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is())
+        return xText->getCharacterCount();
+    return 0;
+}
+QRect Qt5AccessibleWidget::characterRect(int /* offset */) const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::characterRect");
+    return QRect();
+}
+int Qt5AccessibleWidget::cursorPosition() const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::cursorPosition");
+    return 0;
+}
+int Qt5AccessibleWidget::offsetAtPoint(const QPoint& /* point */) const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::offsetAtPoint");
+    return 0;
+}
+void Qt5AccessibleWidget::removeSelection(int /* selectionIndex */)
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::removeSelection");
+}
+void Qt5AccessibleWidget::scrollToSubstring(int /* startIndex */, int /* endIndex */)
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::scrollToSubstring");
+}
+void Qt5AccessibleWidget::selection(int /* selectionIndex */, int* startOffset,
+                                    int* endOffset) const
+{
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (!xText.is())
+        return;
+
+    sal_Int32 nStart = xText->getSelectionStart();
+    startOffset = &nStart;
+    sal_Int32 nEnd = xText->getSelectionEnd();
+    endOffset = &nEnd;
+}
+int Qt5AccessibleWidget::selectionCount() const
+{
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is() && !xText->getSelectedText().isEmpty())
+        return 1; // Only 1 selection supported atm
+    return 0;
+}
+void Qt5AccessibleWidget::setCursorPosition(int position)
+{
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is())
+        xText->setCaretPosition(position);
+}
+void Qt5AccessibleWidget::setSelection(int /* selectionIndex */, int startOffset, int endOffset)
+{
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is())
+        xText->setSelection(startOffset, endOffset);
+}
+QString Qt5AccessibleWidget::text(int startOffset, int endOffset) const
+{
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is())
+        return toQString(xText->getTextRange(startOffset, endOffset));
+    return QString();
+}
+QString Qt5AccessibleWidget::textAfterOffset(int /* offset */,
+                                             QAccessible::TextBoundaryType /* boundaryType */,
+                                             int* /* startOffset */, int* /* endOffset */) const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textAfterOffset");
+    return QString();
+}
+QString Qt5AccessibleWidget::textAtOffset(int /* offset */,
+                                          QAccessible::TextBoundaryType /* boundaryType */,
+                                          int* /* startOffset */, int* /* endOffset */) const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textAtOffset");
+    return QString();
+}
+QString Qt5AccessibleWidget::textBeforeOffset(int /* offset */,
+                                              QAccessible::TextBoundaryType /* boundaryType */,
+                                              int* /* startOffset */, int* /* endOffset */) const
+{
+    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textBeforeOffset");
+    return QString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
