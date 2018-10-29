@@ -303,10 +303,13 @@ def Input(s):
         if inputtext:
             inputtext = e.Text
         else:
+            # Cancel button
             __halt__ = True
 
         # dispose the dialog
         controlContainer.dispose()
+        # stop program at pressing Cancel
+        __checkhalt__()
         return inputtext
     except Exception:
         __trace__()
@@ -333,7 +336,9 @@ def Print(s):
     global __halt__
     s = __string__(s, _.decimal)
     if not MessageBox(_.doc.CurrentController.Frame.ContainerWindow, s[:500] + s[500:5000].replace('\n', ' '), "", "messbox", __OK_CANCEL__):
+        # stop program at pressing Cancel
         __halt__ = True
+        __checkhalt__()
 
 def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
     msgtypes = ("messbox", "infobox", "errorbox", "warningbox", "querybox")
