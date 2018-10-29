@@ -1515,8 +1515,10 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             return nullptr;
         }
 
-        return new LibLODocument_Impl(xComponent);
-
+        LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent);
+        int nState = doc_getSignatureState(pDocument);
+        pLib->mpCallback(LOK_CALLBACK_SIGNATURE_STATUS, OString::number(nState).getStr(), pLib->mpCallbackData);
+        return pDocument;
     }
     catch (const uno::Exception& exception)
     {
