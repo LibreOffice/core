@@ -1335,10 +1335,9 @@ void GtkSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     m_bGraphics = false;
 }
 
-bool GtkSalFrame::PostEvent(ImplSVEvent* pData)
+void GtkSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    getDisplay()->SendInternalEvent( this, pData );
-    return true;
+    getDisplay()->SendInternalEvent( this, pData.release() );
 }
 
 void GtkSalFrame::SetTitle( const OUString& rTitle )

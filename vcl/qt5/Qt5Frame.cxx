@@ -229,11 +229,10 @@ void Qt5Frame::ReleaseGraphics(SalGraphics* pSalGraph)
     m_bGraphicsInUse = false;
 }
 
-bool Qt5Frame::PostEvent(ImplSVEvent* pData)
+void Qt5Frame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
-    pInst->PostEvent(this, pData, SalEvent::UserEvent);
-    return true;
+    pInst->PostEvent(this, pData.release(), SalEvent::UserEvent);
 }
 
 bool Qt5Frame::isWindow()
