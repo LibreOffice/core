@@ -35,7 +35,8 @@ $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
 ifneq ($(OS),IOS)
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
-    $(if,$(ENABLE_JAVA),CppunitTest_dbaccess_hsqlbinary_import) \
+    $(if $(ENABLE_JAVA),CppunitTest_dbaccess_hsqlbinary_import) \
+    $(if $(ENABLE_JAVA),CppunitTest_dbaccess_tdf119625) \
 ))
 
 # remove if we have a be file for this
@@ -61,7 +62,6 @@ ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_hsqldb_test \
     CppunitTest_dbaccess_RowSetClones \
-    CppunitTest_dbaccess_tdf119625 \
 ))
 endif
 
