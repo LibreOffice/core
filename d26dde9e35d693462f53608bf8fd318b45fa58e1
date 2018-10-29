@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5f2577a7_8d46814f",
+        "filename": "sw/source/ui/index/cnttab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-10-29T14:03:43Z",
+      "side": 1,
+      "message": "I don\u0027t get it.\nIn original code for loop breaks on (nXPos \u003c\u003d nSpace).\nIn patched code find_if stops on (nXPos \u003c\u003d nSpace).\nWhat\u0027s the difference?",
+      "parentUuid": "7f287b81_8e1d5bbf",
+      "revId": "d26dde9e35d693462f53608bf8fd318b45fa58e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f287b81_6e78eff7",
         "filename": "sw/source/ui/vba/vbarevisions.cxx",
         "patchSetId": 1
