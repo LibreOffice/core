@@ -106,7 +106,10 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
             // Control shape is handled on a different code path
             uno::Reference< lang::XServiceInfo > xSInfo( xTempShape, uno::UNO_QUERY_THROW );
             if(xSInfo->supportsService("com.sun.star.drawing.ControlShape"))
+            {
+                m_rDomainMapper.hasControls(true);
                 break;
+            }
 
             if( xTempShape.is() )
             {

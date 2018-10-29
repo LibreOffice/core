@@ -106,6 +106,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     LoggedStream("DomainMapper"),
     m_pImpl(new DomainMapper_Impl(*this, xContext, xModel, eDocumentType, rMediaDesc)),
     mbIsSplitPara(false)
+    ,mbHasControls(false)
 {
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
@@ -193,12 +194,14 @@ DomainMapper::~DomainMapper()
                 xEnumeration->nextElement();
             }
         }
-        if( nIndexes || m_pImpl->m_pSdtHelper->hasElements())
+
+        mbHasControls |= m_pImpl->m_pSdtHelper->hasElements();
+        if ( nIndexes || mbHasControls )
         {
             //index update has to wait until first view is created
             uno::Reference< document::XEventBroadcaster > xBroadcaster(xIndexesSupplier, uno::UNO_QUERY);
             if (xBroadcaster.is())
-                xBroadcaster->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener(nIndexes, m_pImpl->m_pSdtHelper->hasElements())));
+                xBroadcaster->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener(nIndexes, mbHasControls)));
         }
 
 
