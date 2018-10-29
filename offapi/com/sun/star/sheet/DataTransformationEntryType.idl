@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_DataTransformationEntryType_idl__
+#define __com_sun_star_sheet_DataTransformationEntryType_idl__
+
+module com {  module sun {  module star {  module sheet {
+
+constants DataTransformationEntryType
+{
+    const long MERGE_TRANSFORMATION = 0;
+
+    const long SPLIT_TRANSFORMATION = 1;
+
+    const long DELETE_TRANSFORMATION = 2;
+
+    const long SORT_TRANSFORMATION = 3;
+
+    const long TEXT_TRANSFORMATION = 4;
+
+    const long AGGREGATE_FUNCTION = 5;
+
+    const long NUMBER_TRANSFORMATION = 6;
+
+    const long REMOVE_NULL_TRANSFORMATION = 7;
+
+    const long DATETIME_TRANSFORMATION = 8;
+};
+
+
+}; }; }; };
+
+#endif
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

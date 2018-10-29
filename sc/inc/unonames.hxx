@@ -525,7 +525,7 @@
 #define SC_UNO_RECORDCHANGES            "RecordChanges"
 #define SC_UNO_ISRECORDCHANGESPROTECTED "IsRecordChangesProtected"
 #define SC_UNO_SYNTAXSTRINGREF          "SyntaxStringRef"
-
+#define SC_UNO_DATATRANSFORMATION       "DataTransformation"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"

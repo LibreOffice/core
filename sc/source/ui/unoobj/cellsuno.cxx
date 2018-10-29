@@ -63,6 +63,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
+#include <com/sun/star/sheet/XDataTransformation.hpp>
 
 #include <autoform.hxx>
 #include <cellvalue.hxx>
@@ -136,6 +137,7 @@
 #include <table.hxx>
 #include <refundo.hxx>
 #include <columnspanset.hxx>
+#include <externaltransformationuno.hxx>
 
 #include <list>
 #include <memory>
@@ -843,6 +845,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNO_NAMEDRANGES), SC_WID_UNO_NAMES, cppu::UnoType<sheet::XNamedRanges>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDFORMAT), SC_WID_UNO_DATATRANSFORMATION, cppu::UnoType<sheet::XDataTransformation>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
@@ -8424,6 +8427,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if (pEntry->nWID == SC_WID_UNO_CONDFORMAT)
         {
             rAny <<= uno::Reference<sheet::XConditionalFormats>(new ScCondFormatsObj(pDocSh, nTab));
+        }
+        else if (pEntry->nWID == SC_WID_UNO_DATATRANSFORMATION)
+        {
+            rAny <<= uno::Reference<sheet::XDataTransformation>(new ScExternalTransformationObj(pDocSh, nTab));
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
