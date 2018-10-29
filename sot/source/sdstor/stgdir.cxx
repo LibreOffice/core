@@ -626,13 +626,13 @@ bool StgDirEntry::Tmp2Strm()
         if ( !m_pStgStrm )
             return false;
         sal_uInt64 n = m_pTmpStrm->GetSize();
-        StgStrm* pNewStrm;
+        std::unique_ptr<StgStrm> pNewStrm;
         StgIo& rIo = m_pStgStrm->GetIo();
         sal_uLong nThreshold = static_cast<sal_uLong>(rIo.m_aHdr.GetThreshold());
         if( n < nThreshold )
-            pNewStrm = new StgSmallStrm( rIo, STG_EOF );
+            pNewStrm.reset(new StgSmallStrm( rIo, STG_EOF ));
         else
-            pNewStrm = new StgDataStrm( rIo, STG_EOF );
+            pNewStrm.reset(new StgDataStrm( rIo, STG_EOF ));
         if( pNewStrm->SetSize( n ) )
         {
             sal_uInt8 p[ 4096 ];
@@ -652,14 +652,13 @@ bool StgDirEntry::Tmp2Strm()
             {
                 m_pTmpStrm->Seek( m_nPos );
                 m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
-                delete pNewStrm;
                 return false;
             }
             else
             {
                 m_pStgStrm->SetSize( 0 );
                 delete m_pStgStrm;
-                m_pStgStrm = pNewStrm;
+                m_pStgStrm = pNewStrm.release();
                 pNewStrm->SetEntry( *this );
                 pNewStrm->Pos2Page( m_nPos );
                 delete m_pTmpStrm;
@@ -741,11 +740,10 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
         sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->TellEnd();
 
         bool bOk(false);
-        StgDirEntry* pCur = new StgDirEntry( p, STGENTRY_SIZE, nUnderlyingStreamSize, &bOk );
+        std::unique_ptr<StgDirEntry> pCur(new StgDirEntry( p, STGENTRY_SIZE, nUnderlyingStreamSize, &bOk ));
 
         if( !bOk )
         {
-            delete pCur;
             m_rIo.SetError( SVSTREAM_GENERALERROR );
             // an error occurred
             return;
@@ -764,7 +762,6 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             nLeaf = pCur->m_aEntry.GetLeaf( STG_CHILD );
             if (nLeaf != STG_FREE && nLeaf == n)
             {
-                delete pCur;
                 m_rIo.SetError( SVSTREAM_GENERALERROR );
                 return;
             }
@@ -779,14 +776,13 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
                 if (pUp->m_aEntry.GetLeaf(STG_CHILD) == nLeaf)
                 {
                     SAL_WARN("sot", "Leaf node of upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
-                    delete pCur;
                     return;
                 }
                 pUp = pUp->m_pUp;
             }
 
             if( StgAvlNode::Insert
-                ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &m_pRoot ), pCur ) )
+                ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &m_pRoot ), pCur.get() ) )
             {
                 pCur->m_pUp    = pUpper;
             }
@@ -796,16 +792,11 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
                 // that contain duplicate entries in 'Directory' section
                 // so don't set the error flag here and just skip those
                 // (was: rIo.SetError( SVSTREAM_CANNOT_MAKE );)
-                delete pCur;
                 return;
             }
             SetupEntry( nLeft, pUpper );
             SetupEntry( nRight, pUpper );
-            SetupEntry( nLeaf, pCur );
-        }
-        else
-        {
-            delete pCur;
+            SetupEntry( nLeaf, pCur.release() );
         }
     }
 }
@@ -928,22 +919,23 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         pRes->m_bRemoved =
         pRes->m_bTemp    = false;
         pRes->m_bDirty   = true;
+        return pRes;
     }
     else
     {
-        pRes = new StgDirEntry( aEntry );
-        if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.m_pDown), pRes ) )
+        std::unique_ptr<StgDirEntry> pNewRes(new StgDirEntry( aEntry ));
+        if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.m_pDown), pNewRes.get() ) )
         {
-            pRes->m_pUp    = &rStg;
-            pRes->m_bDirty = true;
+            pNewRes->m_pUp    = &rStg;
+            pNewRes->m_bDirty = true;
         }
         else
         {
             m_rIo.SetError( SVSTREAM_CANNOT_MAKE );
-            delete pRes; pRes = nullptr;
+            pNewRes.reset();
         }
+        return pNewRes.release();
     }
-    return pRes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
