@@ -465,6 +465,18 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:AdvancedMode"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:DistributeSelection"/>
+      <menu:menu menu:id=".uno:ObjectAlign">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+          <menu:menuitem menu:id=".uno:AlignCenter"/>
+          <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:AlignUp"/>
+          <menu:menuitem menu:id=".uno:AlignMiddle"/>
+          <menu:menuitem menu:id=".uno:AlignDown"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:ArrangeMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:BringToFront"/>
@@ -478,24 +490,6 @@
           <menu:menuitem menu:id=".uno:ReverseOrder"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:ObjectAlign">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-          <menu:menuitem menu:id=".uno:AlignCenter"/>
-          <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:AlignUp"/>
-          <menu:menuitem menu:id=".uno:AlignMiddle"/>
-          <menu:menuitem menu:id=".uno:AlignDown"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menuitem menu:id=".uno:DistributeSelection"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FormatGroup"/>
-      <menu:menuitem menu:id=".uno:FormatUngroup"/>
-      <menu:menuitem menu:id=".uno:EnterGroup"/>
-      <menu:menuitem menu:id=".uno:LeaveGroup"/>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:ConvertMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ChangeBezier"/>
@@ -505,6 +499,14 @@
           <menu:menuitem menu:id=".uno:ConvertInto3DLatheFast"/>
           <menu:menuitem menu:id=".uno:ConvertIntoBitmap"/>
           <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menu menu:id=".uno:GroupMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:FormatGroup"/>
+          <menu:menuitem menu:id=".uno:FormatUngroup"/>
+          <menu:menuitem menu:id=".uno:EnterGroup"/>
+          <menu:menuitem menu:id=".uno:LeaveGroup"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
