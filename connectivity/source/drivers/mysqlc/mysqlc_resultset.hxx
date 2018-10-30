@@ -63,16 +63,29 @@ class OResultSet final : public OBase_Mutex,
                          public OPropertyArrayUsageHelper<OResultSet>
 {
     OConnection& m_rConnection;
-    MYSQL_ROW m_aRow;
-    unsigned long* m_aLengths = nullptr;
+
+    using DataFields = std::vector<OString>;
+    std::vector<DataFields> m_aRows;
+    std::vector<MYSQL_FIELD> m_aFields;
     MYSQL* m_pMysql = nullptr;
     css::uno::WeakReferenceHelper m_aStatement;
     css::uno::Reference<css::sdbc::XResultSetMetaData> m_xMetaData;
     MYSQL_RES* m_pResult;
-    unsigned int fieldCount;
+    unsigned int m_nFieldCount = 0;
     rtl_TextEncoding m_encoding;
     bool m_bWasNull = false; // did the last getXXX result null?
-    sal_Int32 m_nRowPosition = 0;
+    bool m_bResultFetched = false;
+
+    sal_Int32 getDataLength(sal_Int32 column)
+    {
+        return m_aRows[m_nRowCount][column - 1].getLength();
+    }
+    bool checkNull(sal_Int32 column);
+
+    /**
+     * Position of cursor indexed from 0
+     */
+    sal_Int32 m_nRowPosition = -1;
     sal_Int32 m_nRowCount = 0;
 
     // OPropertyArrayUsageHelper
@@ -87,8 +100,10 @@ class OResultSet final : public OBase_Mutex,
 
     void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const override;
 
-    // you can't delete objects of this type
     virtual ~OResultSet() override = default;
+
+    void ensureResultFetched();
+    void fetchResult();
 
 public:
     virtual OUString SAL_CALL getImplementationName() override;
