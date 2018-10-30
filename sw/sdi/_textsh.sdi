@@ -987,8 +987,8 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
-     // Slots mit Export = FALSE
-     //Slots ohne Export
+     // slots with Export = FALSE
+     //Slots without export
     FN_CHAR_LEFT_SEL
     [
         ExecMethod = ExecBasicMove ;

@@ -197,7 +197,7 @@ static_assert(sizeof (WW8_STD) == 10, "this has to match the msword size");
 /** base for reading AND working on (will have different subclasses */
 struct WW8_FFN_BASE     // Font Descriptor
 {
-    // ab Ver6
+    // from Ver6 on
     sal_uInt8    cbFfnM1;        //  0x0     total length of FFN - 1.
 
     sal_uInt8    prg: 2;         //  0x1:03  pitch request

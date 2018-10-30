@@ -233,7 +233,7 @@ void ZipOutputEntry::doDeflate()
         {
             m_xOutStream->writeBytes( aEncryptionBuffer );
 
-            // the sizes as well as checksum for encrypted streams is calculated hier
+            // the sizes as well as checksum for encrypted streams are calculated here
             m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
             m_pCurrentEntry->nSize = m_pCurrentEntry->nCompressedSize;
             m_aCRC.update( aEncryptionBuffer );

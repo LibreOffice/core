@@ -135,7 +135,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
 
     pOutlineListBuffer.reset(new XclImpOutlineListBuffer);
 
-    // ab Biff8
+    // from Biff8 on
     pFormConv.reset(new ExcelToSc( GetRoot() ));
     pExcRoot->pFmlaConverter = pFormConv.get();
 

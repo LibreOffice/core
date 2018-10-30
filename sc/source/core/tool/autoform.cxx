@@ -422,7 +422,7 @@ bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
     aOrientation.Store  ( rStream, aOrientation.GetVersion( fileVersion ) );
     aMargin.Store       ( rStream, aMargin.GetVersion( fileVersion ) );
     aLinebreak.Store    ( rStream, aLinebreak.GetVersion( fileVersion ) );
-    // Rotation ab SO5
+    // rotation from SO5 on
     aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( fileVersion ) );
     aRotateMode.Store   ( rStream, aRotateMode.GetVersion( fileVersion ) );
 
@@ -1058,7 +1058,7 @@ void ScAutoFormat::Load()
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                m_aVersions.Load( rStream, nVal );        // Item-Versionen
+                m_aVersions.Load( rStream, nVal );        // item versions
 
                 ScAutoFormatData* pData;
                 sal_uInt16 nCnt = 0;

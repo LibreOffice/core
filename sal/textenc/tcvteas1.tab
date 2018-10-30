@@ -30,7 +30,7 @@
 
 /* MS-874 */
 /* Windows/Dos Standard CharSet for Thai */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-Byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp874.txt from 04/15/98 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -191,7 +191,7 @@ static ImplTextEncodingData const aImplTis620TextEncodingData
 
 /* MS-1258 */
 /* Windows Standard CharSet for Vietnamease */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-Byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1258.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 

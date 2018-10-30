@@ -468,7 +468,7 @@ interface _Annotation
         ExecMethod = ExecSearch ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-      // ab hier Export = FALSE;
+      // from here on Export = FALSE;
     FID_SEARCH_ON // status()
     [
         ExecMethod = ExecSearch ;

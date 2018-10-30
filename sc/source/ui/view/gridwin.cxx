@@ -5539,7 +5539,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
                 pEngine->SetControlWord(
                     pEngine->GetControlWord() | (EEControlBits::ONLINESPELLING | EEControlBits::ALLOWBIGOBJS));
                 pEngine->SetStatusEventHdl(LINK(&aStatus, SpellCheckStatus, EventHdl));
-                //  Delimiters hier wie in inputhdl.cxx !!!
+                //  Delimiters here like in inputhdl.cxx !!!
                 pEngine->SetWordDelimiters(
                             ScEditUtil::ModifyDelimiters(pEngine->GetWordDelimiters()));
 
