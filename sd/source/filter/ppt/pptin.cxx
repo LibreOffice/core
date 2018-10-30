@@ -137,11 +137,11 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     pSummaryInformation.reset();
 #endif
 
-    SvStream* pCurrentUserStream = rStorage.OpenSotStream( "Current User", StreamMode::STD_READ );
+    std::unique_ptr<SvStream> pCurrentUserStream(rStorage.OpenSotStream( "Current User", StreamMode::STD_READ ));
     if( pCurrentUserStream )
     {
         ReadPptCurrentUserAtom(*pCurrentUserStream, maParam.aCurrentUserAtom);
-        delete pCurrentUserStream;
+        pCurrentUserStream.reset();
     }
 
     if( pDocument )
