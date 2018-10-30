@@ -1304,7 +1304,7 @@ bool ImplSdPPTImport::Import()
                                 SdCustomShowList* pList = mpDoc->GetCustomShowList( true );
                                 if ( pList )
                                 {
-                                    SdCustomShow* pSdCustomShow = new SdCustomShow;
+                                    std::unique_ptr<SdCustomShow> pSdCustomShow(new SdCustomShow);
                                     pSdCustomShow->SetName( aCuShow );
                                     sal_uInt32 nFound = 0;
                                     for ( sal_uInt32 nS = 0; nS < nSCount; nS++ )
@@ -1323,9 +1323,7 @@ bool ImplSdPPTImport::Import()
                                         }
                                     }
                                     if ( nFound )
-                                        pList->push_back( pSdCustomShow );
-                                    else
-                                        delete pSdCustomShow;
+                                        pList->push_back( std::move(pSdCustomShow) );
                                 }
                             }
                         }

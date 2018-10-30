@@ -350,7 +350,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
             throw container::ElementExistException();
     }
 
-    pList->push_back(pShow);
+    pList->push_back(std::unique_ptr<SdCustomShow>(pShow));
 
     mrModel.SetModified();
 }
@@ -365,7 +365,7 @@ void SAL_CALL SdXCustomPresentationAccess::removeByName( const OUString& Name )
     if(!pList || !pShow)
         throw container::NoSuchElementException();
 
-    delete pList->Remove( pShow );
+    pList->erase( pShow );
 
     mrModel.SetModified();
 }
@@ -405,7 +405,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
     sal_uInt32 nIdx = 0;
     while( nIdx < nCount )
     {
-        const SdCustomShow* pShow = (*pList)[nIdx];
+        const SdCustomShow* pShow = (*pList)[nIdx].get();
         pStringList[nIdx] = pShow->GetName();
         nIdx++;
     }
@@ -442,7 +442,7 @@ SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& rNa
 
     while( nIdx < nCount )
     {
-        SdCustomShow* pShow = (*pList)[nIdx];
+        SdCustomShow* pShow = (*pList)[nIdx].get();
         if( pShow->GetName() == rName )
             return pShow;
         nIdx++;
