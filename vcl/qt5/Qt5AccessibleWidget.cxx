@@ -40,6 +40,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
+#include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -986,16 +987,22 @@ QString Qt5AccessibleWidget::rowDescription(int row) const
     return toQString(xTable->getAccessibleRowDescription(row));
 }
 
-bool Qt5AccessibleWidget::selectColumn(int /* column */)
+bool Qt5AccessibleWidget::selectColumn(int column)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTableInterface::selectColumn");
-    return false;
+    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    if (!xTableSelection.is())
+        return nullptr;
+    return xTableSelection->selectColumn(column);
 }
 
-bool Qt5AccessibleWidget::selectRow(int /* row */)
+bool Qt5AccessibleWidget::selectRow(int row)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTableInterface::selectRow");
-    return false;
+    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    if (!xTableSelection.is())
+        return nullptr;
+    return xTableSelection->selectRow(row);
 }
 
 int Qt5AccessibleWidget::selectedCellCount() const
@@ -1053,14 +1060,20 @@ QAccessibleInterface* Qt5AccessibleWidget::summary() const
 
 bool Qt5AccessibleWidget::unselectColumn(int column)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTableInterface::unselectColumn");
-    return false;
+    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    if (!xTableSelection.is())
+        return nullptr;
+    return xTableSelection->unselectColumn(column);
 }
 
 bool Qt5AccessibleWidget::unselectRow(int row)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTableInterface::unselectRow");
-    return false;
+    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    if (!xTableSelection.is())
+        return nullptr;
+    return xTableSelection->unselectRow(row);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
