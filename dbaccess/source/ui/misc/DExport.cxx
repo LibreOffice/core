@@ -670,10 +670,9 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
     m_vDestVector.emplace_back(m_aDestColumns.emplace(aAlias,pField).first);
 }
 
-bool ODatabaseExport::createRowSet()
+void ODatabaseExport::createRowSet()
 {
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions)));
-    return true;
 }
 
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)
@@ -725,7 +724,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
             bError = true;
 
         if(!bError)
-            bError = !createRowSet();
+            createRowSet();
     }
     catch( const SQLException&)
     {

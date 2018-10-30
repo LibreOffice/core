@@ -1242,11 +1242,10 @@ VclPtr<BaseWindow> Shell::FindWindow(
 
 bool Shell::CallBasicErrorHdl( StarBASIC const * pBasic )
 {
-    bool bRet = false;
     VclPtr<ModulWindow> pModWin = ShowActiveModuleWindow( pBasic );
     if ( pModWin )
-        bRet = pModWin->BasicErrorHdl( pBasic );
-    return bRet;
+        pModWin->BasicErrorHdl( pBasic );
+    return false;
 }
 
 BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC const * pBasic )

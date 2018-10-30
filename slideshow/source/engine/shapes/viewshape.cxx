@@ -817,12 +817,10 @@ namespace slideshow
                                        nYBorder );
         }
 
-        bool ViewShape::enterAnimationMode()
+        void ViewShape::enterAnimationMode()
         {
             mbForceUpdate   = true;
             mbAnimationMode = true;
-
-            return true;
         }
 
         void ViewShape::leaveAnimationMode()

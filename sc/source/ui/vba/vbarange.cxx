@@ -559,7 +559,7 @@ public:
         return nType;
     }
 
-    bool setNumberFormat( const OUString& rFormat )
+    void setNumberFormat( const OUString& rFormat )
     {
         // #163288# treat "General" as "Standard" format
         sal_Int32 nNewIndex = 0;
@@ -573,7 +573,6 @@ public:
                 nNewIndex = mxFormats->addNew( rFormat, aLocale );
         }
         mxRangeProps->setPropertyValue( "NumberFormat", uno::makeAny( nNewIndex ) );
-        return true;
     }
 
     void setNumberFormat( sal_Int16 nType )

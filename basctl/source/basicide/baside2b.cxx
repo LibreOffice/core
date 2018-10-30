@@ -2278,11 +2278,9 @@ bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNe
     if( cFirst == '\"' && cLast == '\"' )
         aResult = aResult.copy( 1, nResultLen - 2 );
 
-    return aResult != aEditingRes && ImplBasicEntryEdited(pEntry, aResult);
-}
+    if (aResult == aEditingRes)
+        return false;
 
-bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUString& rResult )
-{
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
 
@@ -2294,7 +2292,7 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUSt
         {
             // If the type is variable, the conversion of the SBX does not matter,
             // else the string is converted.
-            pVar->PutStringExt( rResult );
+            pVar->PutStringExt( aResult );
         }
     }
 

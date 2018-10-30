@@ -117,7 +117,8 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             pCursor->GetPoint()->nContent.Assign( pContentNd, pContentNd->Len() );
 
         OUString sBuf;
-        if( GetSelectedText( sBuf, ParaBreakType::ToOnlyCR ) && !sBuf.isEmpty() )
+        GetSelectedText( sBuf, ParaBreakType::ToOnlyCR );
+        if( !sBuf.isEmpty() )
             nRet = rBlock.PutText( rShortName, rName, sBuf );
     }
     else
@@ -248,10 +249,8 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
 }
 
 /** Get text in a Selection
- *
- * @return false if the selected area is too big for being copied into the string buffer
  */
-bool SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
+void SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
 {
     GetCursor();  // creates all cursors if needed
     if( IsSelOnePara() )
@@ -328,8 +327,6 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
             }
         }
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

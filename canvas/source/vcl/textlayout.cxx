@@ -321,7 +321,7 @@ namespace vclcanvas
         return maText;
     }
 
-    bool TextLayout::draw( OutputDevice&                 rOutDev,
+    void TextLayout::draw( OutputDevice&                 rOutDev,
                            const Point&                  rOutpos,
                            const rendering::ViewState&   viewState,
                            const rendering::RenderState& renderState ) const
@@ -352,8 +352,6 @@ namespace vclcanvas
                               ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                               ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }
-
-        return true;
     }
 
     namespace

@@ -1652,10 +1652,11 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelButtonHdl, Button*, pBtn, void)
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
 {
-    return NewDelHdl(&rEdit);
+    NewDelHdl(&rEdit);
+    return false;
 }
 
-bool OfaAutocorrExceptPage::NewDelHdl(void const * pBtn)
+void OfaAutocorrExceptPage::NewDelHdl(void const * pBtn)
 {
     if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED.get() )
         && !m_pAbbrevED->GetText().isEmpty())
@@ -1679,7 +1680,6 @@ bool OfaAutocorrExceptPage::NewDelHdl(void const * pBtn)
         m_pDoubleCapsLB->RemoveEntry(m_pDoubleCapsED->GetText());
         ModifyHdl(*m_pDoubleCapsED);
     }
-    return false;
 }
 
 IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)

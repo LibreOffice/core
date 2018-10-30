@@ -112,8 +112,6 @@ namespace oglcanvas
         /// Get instance of internal texture cache
         TextureCache& getTextureCache() const;
 
-        bool activateWindowContext();
-
     private:
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
         SpriteCanvas*                                      mpSpriteCanvas;
