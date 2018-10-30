@@ -20,11 +20,12 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABI_HXX
 
 #include <externalrefmgr.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
 #include <xmloff/xmlictxt.hxx>
 #include <memory>
+
+namespace sax_fastparser { class FastAttributeList; }
 
 
 struct ScXMLExternalTabData

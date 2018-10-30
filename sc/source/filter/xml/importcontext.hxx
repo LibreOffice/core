@@ -11,7 +11,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_IMPORTCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
 
 class ScXMLImport;
 

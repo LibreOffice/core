@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXTERNALTABI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXTERNALTABI_HXX
 
-#include <xmloff/xmlictxt.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "importcontext.hxx"
+
+namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLImport;
 struct ScXMLExternalTabData;

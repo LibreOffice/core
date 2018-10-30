@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "xmlimprt.hxx"
 #include "xmltransformationi.hxx"
 
 #include <xmloff/xmltkmap.hxx>

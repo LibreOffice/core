@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCELLRANGESOURCECONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCELLRANGESOURCECONTEXT_HXX
 
-#include <xmloff/xmlimp.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
+
+namespace sax_fastparser { class FastAttributeList; }
 
 
 struct ScMyImpCellRangeSource

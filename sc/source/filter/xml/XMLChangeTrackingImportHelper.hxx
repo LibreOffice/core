@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <chgtrack.hxx>
-#include <list>
 #include <com/sun/star/util/DateTime.hpp>
 
 class ScDocument;

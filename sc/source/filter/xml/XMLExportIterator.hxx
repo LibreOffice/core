@@ -22,21 +22,19 @@
 
 #include <vector>
 #include <list>
-#include <set>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/sheet/XSheetAnnotation.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <global.hxx>
+#include <com/sun/star/table/CellContentType.hpp>
 #include <detfunc.hxx>
 #include <detdata.hxx>
-#include <postit.hxx>
 #include <cellvalue.hxx>
 
 #include <memory>
 
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
+
+class   ScPostIt;
 class   ScHorizontalCellIterator;
 struct  ScMyCell;
 class   ScXMLExport;

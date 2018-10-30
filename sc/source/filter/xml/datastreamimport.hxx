@@ -15,6 +15,8 @@
 #include <importfilterdata.hxx>
 #include <address.hxx>
 
+namespace sax_fastparser { class FastAttributeList; }
+
 class ScXMLDataStreamContext : public ScXMLImportContext
 {
     OUString maURL;

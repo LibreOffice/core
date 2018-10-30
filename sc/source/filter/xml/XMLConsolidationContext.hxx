@@ -22,10 +22,10 @@
 
 #include <global.hxx>
 #include <address.hxx>
-#include <xmloff/xmlimp.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
+
+namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLConsolidationContext : public ScXMLImportContext
 {

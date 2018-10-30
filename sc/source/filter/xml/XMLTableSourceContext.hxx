@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESOURCECONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESOURCECONTEXT_HXX
 
-#include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/sheet/SheetLinkMode.hpp>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
+
+namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLTableSourceContext : public ScXMLImportContext
 {

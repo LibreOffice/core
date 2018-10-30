@@ -30,6 +30,7 @@
 #include <root.hxx>
 #include <lotrange.hxx>
 #include <optab.h>
+#include <op.h>
 #include <scmem.h>
 #include <decl.h>
 #include <tool.h>

@@ -19,16 +19,15 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSUBTI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLSUBTI_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-
 #include "XMLTableShapeResizer.hxx"
 #include <formula/grammar.hxx>
 #include <tabprotection.hxx>
 #include <rangelst.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
 
 class ScXMLImport;
 

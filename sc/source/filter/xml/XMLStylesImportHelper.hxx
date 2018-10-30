@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESIMPORTHELPER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESIMPORTHELPER_HXX
 
-#include <rangelst.hxx>
 #include <simplerangelist.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/ref.hxx>
 
 #include <list>
 #include <memory>

@@ -20,8 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPERESIZER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPERESIZER_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 class ScXMLImport;
 class ScChartListenerCollection;

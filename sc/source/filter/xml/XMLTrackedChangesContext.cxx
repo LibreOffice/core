@@ -19,6 +19,7 @@
 
 #include <memory>
 #include "XMLTrackedChangesContext.hxx"
+#include "XMLChangeTrackingImportHelper.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
 #include "XMLConverter.hxx"

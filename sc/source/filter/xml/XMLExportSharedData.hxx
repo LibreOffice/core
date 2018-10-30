@@ -20,12 +20,15 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTSHAREDDATA_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTSHAREDDATA_HXX
 
-#include <global.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <address.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
 #include <list>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 struct ScMyDrawPage
 {

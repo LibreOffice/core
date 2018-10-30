@@ -20,7 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDDELINKS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDDELINKS_HXX
 
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
 
 class ScXMLExport;
 struct ScMatrixValue;

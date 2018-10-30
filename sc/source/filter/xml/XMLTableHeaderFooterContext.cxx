@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>

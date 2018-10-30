@@ -19,10 +19,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCOLI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCOLI_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
+
+namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLTableColContext : public ScXMLImportContext
 {

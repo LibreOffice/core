@@ -20,34 +20,30 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLIMPRT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLIMPRT_HXX
 
-#include <svl/style.hxx>
-#include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlaustp.hxx>
-#include <xmloff/xmlstyle.hxx>
-#include <com/sun/star/util/DateTime.hpp>
 #include "xmlsubti.hxx"
-#include <vcl/errcode.hxx>
 #include <global.hxx>
 #include <formula/grammar.hxx>
-#include <compiler.hxx>
 #include <dociter.hxx>
 
-#include "xmlstyle.hxx"
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include <memory>
-#include <unordered_map>
 #include <map>
 #include <vector>
 #include <list>
 
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSheetCellRangeContainer; } } } }
+namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatTypes; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace sax_fastparser { class FastAttributeList; }
+
+class ScCompiler;
+class ErrCode;
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;

@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLDETECTIVECONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLDETECTIVECONTEXT_HXX
 
-#include <xmloff/xmlimp.hxx>
 #include <detfunc.hxx>
 #include <detdata.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
 #include <list>
+
+namespace sax_fastparser { class FastAttributeList; }
 
 struct ScMyImpDetectiveObj
 {

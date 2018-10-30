@@ -20,16 +20,16 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLEMASTERPAGEEXPORT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLEMASTERPAGEEXPORT_HXX
 
-#include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageExport.hxx>
-#include <com/sun/star/sheet/XHeaderFooterContent.hpp>
-
-#include "xmlexprt.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace sheet { class XHeaderFooterContent; } } } }
+
+class ScXMLExport;
 
 class XMLTableMasterPageExport : public XMLTextMasterPageExport
 {

@@ -38,6 +38,7 @@
 #include "xmlannoi.hxx"
 #include <textuno.hxx>
 #include <cellsuno.hxx>
+#include "xmlstyle.hxx"
 
 #include <docuno.hxx>
 #include <unonames.hxx>

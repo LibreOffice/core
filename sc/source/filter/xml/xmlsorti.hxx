@@ -19,16 +19,16 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSORTI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLSORTI_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
 #include <xmloff/languagetagodf.hxx>
-#include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include "xmldrani.hxx"
 #include "importcontext.hxx"
 
+namespace com { namespace sun { namespace star { namespace util { struct SortField; } } } }
+namespace sax_fastparser { class FastAttributeList; }
+
 class ScXMLImport;
+class ScXMLDatabaseRangeContext;
 
 class ScXMLSortContext : public ScXMLImportContext
 {

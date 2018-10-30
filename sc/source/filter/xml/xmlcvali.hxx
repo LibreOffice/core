@@ -19,13 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCVALI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCVALI_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
-#include <com/sun/star/sheet/ValidationType.hpp>
-#include <com/sun/star/sheet/ConditionOperator.hpp>
-#include <rtl/ustrbuf.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
 class ScXMLContentValidationsContext : public ScXMLImportContext

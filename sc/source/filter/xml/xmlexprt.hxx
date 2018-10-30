@@ -20,22 +20,23 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPRT_HXX
 
 #include <xmloff/xmlexp.hxx>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 
 #include <address.hxx>
 
 #include <memory>
 #include <unordered_map>
 
-#include <datatransformation.hxx>
-
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
+
+namespace sc { class DataTransformation; }
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -55,9 +56,7 @@ class ScDocument;
 class ScMySharedData;
 class ScMyDefaultStyles;
 class XMLNumberFormatAttributesExportHelper;
-class ScChartListener;
 class SfxItemPool;
-class ScAddress;
 class ScXMLCachedRowAttrAccess;
 class ScRangeName;
 class ScXMLEditAttributeMap;

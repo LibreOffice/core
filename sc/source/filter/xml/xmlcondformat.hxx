@@ -13,14 +13,13 @@
 #include <array>
 #include <memory>
 #include <tools/link.hxx>
-#include <xmloff/xmlictxt.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
-#include <rangelst.hxx>
+#include <tokenarray.hxx>
+
+namespace sax_fastparser { class FastAttributeList; }
 
 class ScColorScaleFormat;
 class ScColorScaleEntry;
-class ScDataBarFormat;
 struct ScDataBarFormatData;
 class ScConditionalFormat;
 struct ScIconSetFormatData;

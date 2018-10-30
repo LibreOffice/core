@@ -22,15 +22,11 @@
 
 #include <rtl/ustring.hxx>
 #include <vector>
-#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/maptype.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#include <xmloff/XMLTextMasterStylesContext.hxx>
 #include <xmloff/txtstyli.hxx>
-#include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "xmlimprt.hxx"
 
 class ScConditionalFormat;
@@ -195,10 +191,6 @@ public:
     virtual ~ScXMLMasterStylesContext() override;
     virtual void EndElement() override;
 };
-
-namespace com { namespace sun { namespace star {
-    namespace style { class XStyle; }
-} } }
 
 class ScMasterPageContext : public XMLTextMasterPageContext
 {

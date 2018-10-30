@@ -23,7 +23,6 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltypes.hxx>
-#include <xmloff/xmlprmap.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmlexppr.hxx>

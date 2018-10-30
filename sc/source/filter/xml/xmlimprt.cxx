@@ -58,6 +58,7 @@
 #include "xmlstyli.hxx"
 #include <ViewSettingsSequenceDefines.hxx>
 
+#include <compiler.hxx>
 #include <patattr.hxx>
 
 #include "XMLConverter.hxx"
@@ -79,6 +80,7 @@
 #include <numformat.hxx>
 #include <sizedev.hxx>
 #include <scdll.hxx>
+#include "xmlstyle.hxx"
 
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
@@ -97,6 +99,7 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include <memory>
 #include <utility>

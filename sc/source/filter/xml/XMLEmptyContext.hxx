@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEMPTYCONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEMPTYCONTEXT_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
 

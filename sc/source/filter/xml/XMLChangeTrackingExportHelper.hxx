@@ -21,12 +21,11 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
 #include <xmloff/xmltoken.hxx>
-#include <list>
 #include <map>
 #include <memory>
 #include <tools/solar.h>
-#include <com/sun/star/text/XText.hpp>
-#include <rtl/ustrbuf.hxx>
+
+namespace com { namespace sun { namespace star { namespace text { class XText; } } } }
 
 class ScChangeAction;
 class ScChangeTrack;

@@ -70,6 +70,7 @@
 #include <tokenstringcontext.hxx>
 #include <cellform.hxx>
 #include <datamapper.hxx>
+#include <datatransformation.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>

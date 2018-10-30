@@ -20,12 +20,10 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCELLI_HXX
 
 #include "XMLDetectiveContext.hxx"
-#include "XMLCellRangeSourceContext.hxx"
 #include "importcontext.hxx"
 #include <formula/grammar.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
-#include <editeng/flditem.hxx>
 
 #include <boost/optional.hpp>
 #include <memory>
@@ -34,7 +32,9 @@
 class ScXMLImport;
 class ScFormulaCell;
 class ScEditEngineDefaulter;
+class SvxFieldData;
 struct ScXMLAnnotationData;
+struct ScMyImpCellRangeSource;
 
 class ScXMLTableRowCellContext : public ScXMLImportContext
 {

@@ -44,6 +44,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
+#include <com/sun/star/table/TableOrientation.hpp>
 
 #include <memory>
 
