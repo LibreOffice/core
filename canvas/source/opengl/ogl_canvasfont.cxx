@@ -11,22 +11,24 @@
 
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <canvas/canvastools.hxx>
 
 #include "ogl_canvasfont.hxx"
 #include "ogl_textlayout.hxx"
-
 
 using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    /*extraFontProperties*/,
+                            const uno::Sequence< beans::PropertyValue >&    extraFontProperties,
                             const geometry::Matrix2D&                       fontMatrix ) :
         CanvasFontBaseT( m_aMutex ),
         maFontRequest( rFontRequest ),
+        mnEmphasisMark(0),
         maFontMatrix( fontMatrix )
     {
+        ::canvas::tools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }
 
     uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText,
