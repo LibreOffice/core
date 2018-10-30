@@ -6730,7 +6730,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             // now will search for possible textextensions such as date/time fields
                             // or ParaTabStops and append them on this textobj
                             rIn.Seek( nFilePos );
-                            ::std::vector< PPTFieldEntry* > FieldList;
+                            ::std::vector< std::unique_ptr<PPTFieldEntry> > FieldList;
                             auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, aClientTextBoxHd.GetRecEndFilePos());
                             while (rIn.Tell() < nEndRecPos)
                             {
@@ -6906,22 +6906,22 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 if (xEntry)
                                 {
                                     // sorting fields ( hi >> lo )
-                                    ::std::vector< PPTFieldEntry* >::iterator it = FieldList.begin();
+                                    auto it = FieldList.begin();
                                     for( ; it != FieldList.end(); ++it ) {
                                         if ( (*it)->nPos < xEntry->nPos ) {
                                             break;
                                         }
                                     }
                                     if ( it != FieldList.end() ) {
-                                        FieldList.insert(it, xEntry.release());
+                                        FieldList.insert(it, std::move(xEntry));
                                     } else {
-                                        FieldList.push_back(xEntry.release());
+                                        FieldList.push_back( std::move(xEntry));
                                     }
                                 }
                             }
                             if ( !FieldList.empty() )
                             {
-                                ::std::vector< PPTFieldEntry* >::iterator FE = FieldList.begin();
+                                auto FE = FieldList.begin();
                                 auto& aCharPropList = aStyleTextPropReader.aCharPropList;
 
                                 sal_Int32   i = nParagraphs - 1;
@@ -7067,9 +7067,6 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         }
                                     }
                                     n--;
-                                }
-                                for(PPTFieldEntry* j : FieldList) {
-                                    delete j;
                                 }
                             }
                             mxImplTextObj->maParagraphList.resize( nParagraphs );
