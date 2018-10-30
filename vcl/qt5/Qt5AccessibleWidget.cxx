@@ -41,6 +41,8 @@
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -49,6 +51,7 @@
 
 using namespace css;
 using namespace css::accessibility;
+using namespace css::beans;
 using namespace css::uno;
 
 Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessible)
@@ -725,11 +728,70 @@ void Qt5AccessibleWidget::addSelection(int /* startOffset */, int /* endOffset *
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::addSelection");
 }
-QString Qt5AccessibleWidget::attributes(int /* offset */, int* /* startOffset */,
-                                        int* /* endOffset */) const
+
+namespace
+{
+OUString lcl_convertFontWeight(double fontWeight)
+{
+    if (fontWeight == awt::FontWeight::THIN || fontWeight == awt::FontWeight::ULTRALIGHT)
+        return "100";
+    if (fontWeight == awt::FontWeight::LIGHT)
+        return "200";
+    if (fontWeight == awt::FontWeight::SEMILIGHT)
+        return "300";
+    if (fontWeight == awt::FontWeight::NORMAL)
+        return "normal";
+    if (fontWeight == awt::FontWeight::SEMIBOLD)
+        return "500";
+    if (fontWeight == awt::FontWeight::BOLD)
+        return "bold";
+    if (fontWeight == awt::FontWeight::ULTRABOLD)
+        return "800";
+    if (fontWeight == awt::FontWeight::BLACK)
+        return "900";
+
+    // awt::FontWeight::DONTKNOW || fontWeight == awt::FontWeight::NORMAL
+    return "normal";
+}
+}
+
+QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOffset) const
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::attributes");
-    return QString();
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (!xText.is())
+        return QString();
+
+    Sequence<PropertyValue> attribs = xText->getCharacterAttributes(offset, Sequence<OUString>());
+    const PropertyValue* pValues = attribs.getConstArray();
+    OUString aRet;
+    for (sal_Int32 i = 0; i < attribs.getLength(); i++)
+    {
+        if (pValues[i].Name == "CharFontName")
+        {
+            OUString aStr;
+            pValues[i].Value >>= aStr;
+            aRet += "font-family:" + aStr + ";";
+            continue;
+        }
+        if (pValues[i].Name == "CharHeight")
+        {
+            double fHeight;
+            pValues[i].Value >>= fHeight;
+            aRet += "font-size:" + OUString::number(fHeight) + "pt;";
+            continue;
+        }
+        if (pValues[i].Name == "CharWeight")
+        {
+            double fWeight;
+            pValues[i].Value >>= fWeight;
+            aRet += "font-weight:" + lcl_convertFontWeight(fWeight) + ";";
+            continue;
+        }
+    }
+    *startOffset = offset;
+    *endOffset = offset + 1;
+    return toQString(aRet);
 }
 int Qt5AccessibleWidget::characterCount() const
 {
