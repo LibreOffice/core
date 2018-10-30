@@ -26,14 +26,12 @@ SalLayoutGlyphs::SalLayoutGlyphs()
 
 SalLayoutGlyphs::~SalLayoutGlyphs() { delete m_pImpl; }
 
-SalLayoutGlyphs::SalLayoutGlyphs(const SalLayoutGlyphs& rOther) { *m_pImpl = *rOther.m_pImpl; }
+SalLayoutGlyphs::SalLayoutGlyphs(const SalLayoutGlyphs& rOther) { operator=(rOther); }
 
 SalLayoutGlyphs& SalLayoutGlyphs::operator=(const SalLayoutGlyphs& rOther)
 {
-    if (m_pImpl)
-        *m_pImpl = *rOther.m_pImpl;
-    else
-        m_pImpl = rOther.m_pImpl->clone(*this);
+    delete m_pImpl;
+    m_pImpl = rOther.m_pImpl ? rOther.m_pImpl->clone(*this) : nullptr;
     return *this;
 }
 
