@@ -112,7 +112,7 @@ public:
     css::uno::Reference< css::frame::XDispatchProvider >  xProv;
     SfxWorkWindow*          pWorkWin;
     SfxBindings*            pSubBindings;
-    std::vector<SfxStateCache *> pCaches;   // One cache for each binding
+    std::vector<std::unique_ptr<SfxStateCache>> pCaches; // One cache for each binding
     std::size_t             nCachedFunc1;   // index for the last one called
     std::size_t             nCachedFunc2;   // index for the second last called
     std::size_t             nMsgPos;        // Message-Position relative the one to be updated
@@ -181,8 +181,7 @@ SfxBindings::~SfxBindings()
     DeleteControllers_Impl();
 
     // Delete Caches
-    for (auto const& cache : pImpl->pCaches)
-        delete cache;
+    pImpl->pCaches.clear();
 
     DELETEZ( pImpl->pWorkWin );
 }
@@ -196,7 +195,7 @@ void SfxBindings::DeleteControllers_Impl()
     for ( nCache = 0; nCache < nCount; ++nCache )
     {
         // Remember were you are
-        SfxStateCache *pCache = pImpl->pCaches[nCache];
+        SfxStateCache *pCache = pImpl->pCaches[nCache].get();
         sal_uInt16 nSlotId = pCache->GetId();
 
         // Re-align, because the cache may have been reduced
@@ -215,7 +214,7 @@ void SfxBindings::DeleteControllers_Impl()
     for ( nCache = pImpl->pCaches.size(); nCache > 0; --nCache )
     {
         // Get Cache via css::sdbcx::Index
-        SfxStateCache *pCache = pImpl->pCaches[ nCache-1 ];
+        SfxStateCache *pCache = pImpl->pCaches[ nCache-1 ].get();
 
         // unbind all controllers in the cache
         SfxControllerItem *pNext;
@@ -230,9 +229,7 @@ void SfxBindings::DeleteControllers_Impl()
             pCache->GetInternalController()->UnBind();
 
         // Delete Cache
-        if( nCache-1 < pImpl->pCaches.size() )
-            delete pImpl->pCaches[nCache-1];
-        pImpl->pCaches.erase(pImpl->pCaches.begin()+ nCache - 1);
+        pImpl->pCaches.erase(pImpl->pCaches.begin() + nCache - 1);
     }
 }
 
@@ -498,7 +495,7 @@ SfxStateCache* SfxBindings::GetStateCache
     {
         if ( pPos )
             *pPos = nPos;
-        return pImpl->pCaches[nPos];
+        return pImpl->pCaches[nPos].get();
     }
     return nullptr;
 }
@@ -527,7 +524,7 @@ void SfxBindings::InvalidateAll
     pImpl->bMsgDirty = pImpl->bMsgDirty || pImpl->bAllMsgDirty || bWithMsg;
     pImpl->bAllDirty = true;
 
-    for (SfxStateCache* pCache : pImpl->pCaches)
+    for (std::unique_ptr<SfxStateCache>& pCache : pImpl->pCaches)
         pCache->Invalidate(bWithMsg);
 
     pImpl->nMsgPos = 0;
@@ -570,7 +567,7 @@ void SfxBindings::Invalidate
           n = GetSlotPos(*pIds, n) )
     {
         // If SID is ever bound, then invalidate the cache
-        SfxStateCache *pCache = pImpl->pCaches[n];
+        SfxStateCache *pCache = pImpl->pCaches[n].get();
         if ( pCache->GetId() == *pIds )
             pCache->Invalidate(false);
 
@@ -626,7 +623,7 @@ void SfxBindings::InvalidateShell
     sal_uInt16 nLevel = pDispatcher->GetShellLevel(rSh);
     if ( nLevel != USHRT_MAX )
     {
-        for (SfxStateCache* pCache : pImpl->pCaches)
+        for (std::unique_ptr<SfxStateCache>& pCache : pImpl->pCaches)
         {
             const SfxSlotServer *pMsgServer =
                 pCache->GetSlotServer(*pDispatcher, pImpl->xProv);
@@ -798,8 +795,7 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, bool bInternal )
     if ( nPos >= pImpl->pCaches.size() ||
          pImpl->pCaches[nPos]->GetId() != nId )
     {
-        SfxStateCache* pCache = new SfxStateCache(nId);
-        pImpl->pCaches.insert( pImpl->pCaches.begin() + nPos, pCache );
+        pImpl->pCaches.insert( pImpl->pCaches.begin() + nPos, o3tl::make_unique<SfxStateCache>(nId) );
         DBG_ASSERT( nPos == 0 ||
                     pImpl->pCaches[nPos]->GetId() >
                         pImpl->pCaches[nPos-1]->GetId(), "" );
@@ -830,7 +826,7 @@ void SfxBindings::Release( SfxControllerItem& rItem )
     // find the bound function
     sal_uInt16 nId = rItem.GetId();
     std::size_t nPos = GetSlotPos(nId);
-    SfxStateCache* pCache = (nPos < pImpl->pCaches.size()) ? pImpl->pCaches[nPos] : nullptr;
+    SfxStateCache* pCache = (nPos < pImpl->pCaches.size()) ? pImpl->pCaches[nPos].get() : nullptr;
     if ( pCache && pCache->GetId() == nId )
     {
         if ( pCache->GetInternalController() == &rItem )
@@ -1086,7 +1082,7 @@ void SfxBindings::UpdateSlotServer_Impl()
             pImpl->bContextChanged = true;
     }
 
-    for (SfxStateCache* pCache : pImpl->pCaches)
+    for (std::unique_ptr<SfxStateCache>& pCache : pImpl->pCaches)
     {
         //GetSlotServer can modify pImpl->pCaches
         pCache->GetSlotServer(*pDispatcher, pImpl->xProv);
@@ -1277,7 +1273,7 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
         bool bJobDone = false;
         while ( !bJobDone )
         {
-            SfxStateCache* pCache = pImpl->pCaches[pImpl->nMsgPos];
+            SfxStateCache* pCache = pImpl->pCaches[pImpl->nMsgPos].get();
             DBG_ASSERT( pCache, "invalid SfxStateCache-position in job queue" );
             bool bWasDirty = pCache->IsControllerDirty();
             if ( bWasDirty )
@@ -1395,14 +1391,13 @@ void SfxBindings::LeaveRegistrations( const char *pFile, int nLine )
             for ( sal_uInt16 nCache = pImpl->pCaches.size(); nCache > 0; --nCache )
             {
                 // Get Cache via css::sdbcx::Index
-                SfxStateCache *pCache = pImpl->pCaches[nCache-1];
+                SfxStateCache *pCache = pImpl->pCaches[nCache-1].get();
 
                 // No interested Controller present
                 if ( pCache->GetItemLink() == nullptr && !pCache->GetInternalController() )
                 {
                     // Remove Cache. Safety: first remove and then delete
                     pImpl->pCaches.erase(pImpl->pCaches.begin() + nCache - 1);
-                    delete pCache;
                 }
             }
         }
