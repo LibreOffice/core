@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_b3908097",
+        "filename": "sw/source/core/doc/notxtfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-10-30T12:21:21Z",
+      "side": 0,
+      "message": "Hello @Armin.\nIt seems that this change does not fix the root cause of problem.\nDo you have idea how to investigate it further to fix that completely?\n\nI tried to compare how:\n  pGraphic-\u003eDraw( pOut, aPosition, aSize );\nand\n  paintGraphicUsingPrimitivesHelper(... )\n\nis working, unfortunately without big success.\nWhat is benefits of drawing by using Primitives over pGraphic-\u003eDraw(.. )",
+      "revId": "629f9ff63bf3a1e16ed38a737a7fdd074b9c0ca7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
