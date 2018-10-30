@@ -19,6 +19,7 @@
 #include <QtGui/QAccessible>
 #include <QtGui/QAccessibleActionInterface>
 #include <QtGui/QAccessibleInterface>
+#include <QtGui/QAccessibleTableInterface>
 #include <QtGui/QAccessibleTextInterface>
 #include <QtGui/QAccessibleValueInterface>
 #include <QtGui/QColor>
@@ -33,6 +34,7 @@ class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject,
                                                public QAccessibleInterface,
                                                public QAccessibleActionInterface,
                                                public QAccessibleTextInterface,
+                                               public QAccessibleTableInterface,
                                                public QAccessibleValueInterface
 {
     Q_OBJECT
@@ -100,6 +102,28 @@ public:
     QVariant minimumStepSize() const override;
     QVariant minimumValue() const override;
     void setCurrentValue(const QVariant& value) override;
+
+    // QAccessibleTableInterface
+    virtual QAccessibleInterface* caption() const override;
+    virtual QAccessibleInterface* cellAt(int row, int column) const override;
+    virtual int columnCount() const override;
+    virtual QString columnDescription(int column) const override;
+    virtual bool isColumnSelected(int column) const override;
+    virtual bool isRowSelected(int row) const override;
+    virtual void modelChange(QAccessibleTableModelChangeEvent* event) override;
+    virtual int rowCount() const override;
+    virtual QString rowDescription(int row) const override;
+    virtual bool selectColumn(int column) override;
+    virtual bool selectRow(int row) override;
+    virtual int selectedCellCount() const override;
+    virtual QList<QAccessibleInterface*> selectedCells() const override;
+    virtual int selectedColumnCount() const override;
+    virtual QList<int> selectedColumns() const override;
+    virtual int selectedRowCount() const override;
+    virtual QList<int> selectedRows() const override;
+    virtual QAccessibleInterface* summary() const override;
+    virtual bool unselectColumn(int column) override;
+    virtual bool unselectRow(int row) override;
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
