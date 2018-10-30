@@ -24,6 +24,7 @@
 #include <cusshow.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
+#include <customshowlist.hxx>
 
 #include <tools/tenccvt.hxx>
 
@@ -97,6 +98,11 @@ void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
 void SdCustomShow::SetName(const OUString& rName)
 {
     aName = rName;
+}
+
+void SdCustomShowList::erase(std::vector<std::unique_ptr<SdCustomShow>>::iterator it)
+{
+    mShows.erase(it);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

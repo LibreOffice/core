@@ -31,7 +31,6 @@ class SdCustomShowDlg : public weld::GenericDialogController
 private:
     SdDrawDocument& rDoc;
     SdCustomShowList* pCustomShowList;
-    SdCustomShow*   pCustomShow;
     bool            bModified;
 
     std::unique_ptr<weld::TreeView> m_xLbCustomShows;
@@ -62,7 +61,7 @@ class SdDefineCustomShowDlg : public weld::GenericDialogController
 {
 private:
     SdDrawDocument& rDoc;
-    SdCustomShow*&  rpCustomShow;
+    std::unique_ptr<SdCustomShow>& rpCustomShow;
     bool            bModified;
     OUString        aOldName;
 
@@ -87,7 +86,7 @@ private:
 
 public:
 
-    SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS);
+    SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc, std::unique_ptr<SdCustomShow>& rpCS);
     virtual ~SdDefineCustomShowDlg() override;
 
     bool            IsModified() const { return bModified; }
