@@ -16,6 +16,24 @@
       "revId": "8780fa41dcd164af244742461f4e57a4bcf4c7a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_16f742f8",
+        "filename": "svtools/source/misc/embedhlp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-30T17:48:19Z",
+      "side": 1,
+      "message": "Excellent catch, thanks. I wrote the fix on Windows where I had a symbols-enabled build around and later I just compile-tested this on a linux dbgutil build -\u003e I didn\u0027t notice it. I\u0027ll fix.",
+      "parentUuid": "5f2577a7_76832658",
+      "revId": "8780fa41dcd164af244742461f4e57a4bcf4c7a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
