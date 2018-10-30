@@ -19,15 +19,17 @@
 
 #pragma once
 
-#include <QtCore/QString>
 #include <QtCore/QRect>
 #include <QtCore/QSize>
+#include <QtCore/QString>
 #include <QtGui/QImage>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <memory>
 
@@ -60,6 +62,16 @@ inline QColor toQColor(const Color& rColor)
 {
     return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(),
                   255 - rColor.GetTransparency());
+}
+
+inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
+{
+    QList<int> aList;
+    for (sal_Int32 i = 0; i < aSequence.getLength(); i++)
+    {
+        aList.append(aSequence[i]);
+    }
+    return aList;
 }
 
 static constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
