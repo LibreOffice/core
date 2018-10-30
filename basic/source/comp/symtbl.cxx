@@ -441,6 +441,8 @@ void SbiProcDef::Match( std::unique_ptr<SbiProcDef> pOld )
         pIn  = pOld->pIn;
         std::unique_ptr<SbiSymDef> tmp(this);
         std::swap(pIn->m_Data[nPos], tmp);
+        // don't delete pointer twice via std::unique_ptr
+        assert(pOld.get() == tmp.get());
         (void)tmp.release();
     }
 }
