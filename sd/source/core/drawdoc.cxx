@@ -380,19 +380,7 @@ SdDrawDocument::~SdDrawDocument()
     }
 
     maFrameViewList.clear();
-
-    if (mpCustomShowList)
-    {
-        for (sal_uLong j = 0; j < mpCustomShowList->size(); j++)
-        {
-            // If necessary, delete CustomShows
-            SdCustomShow* pCustomShow = (*mpCustomShowList)[j];
-            delete pCustomShow;
-        }
-
-        mpCustomShowList.reset();
-    }
-
+    mpCustomShowList.reset();
     mpOutliner.reset();
     mpInternalOutliner.reset();
     mpCharClass.reset();
