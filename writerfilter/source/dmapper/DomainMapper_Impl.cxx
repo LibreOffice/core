@@ -210,7 +210,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_sCurrentParaStyleName(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
-        m_bInHeaderFooterImport( false ),
+        m_eInHeaderFooterImport( HeaderFooterImportState::none ),
         m_bDiscardHeaderFooter( false ),
         m_bInFootOrEndnote(false),
         m_bSeenFootOrEndnoteSeparator(false),
@@ -420,7 +420,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         // (but only for paste/insert, not load; otherwise it can happen that
         // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
         bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
-        if ((m_bInHeaderFooterImport || (bEndOfDocument && !m_bIsNewDoc))
+        if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
             && xEnumerationAccess.is())
         {
             uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
@@ -1468,7 +1468,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
             {
                 if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
                 {
-                    if(m_bInHeaderFooterImport && !m_bStartTOCHeaderFooter)
+                    if (IsInHeaderFooter() && !m_bStartTOCHeaderFooter)
                     {
                         xTextRange = xTextAppend->appendTextPortion(rString, aValues);
                     }
@@ -1732,7 +1732,8 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
     const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
     const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
-    m_bInHeaderFooterImport = true;
+    m_eInHeaderFooterImport
+        = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
 
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
@@ -1809,7 +1810,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
         }
         m_bDiscardHeaderFooter = false;
     }
-    m_bInHeaderFooterImport = false;
+    m_eInHeaderFooterImport = HeaderFooterImportState::none;
 
     if (!m_aHeaderFooterStack.empty())
     {
@@ -2218,7 +2219,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     }
                 }
             }
-            if (!m_bInHeaderFooterImport && !checkZOrderStatus)
+            if (!IsInHeaderFooter() && !checkZOrderStatus)
                 xProps->setPropertyValue(
                         getPropertyName( PROP_OPAQUE ),
                         uno::makeAny( true ) );
@@ -3483,7 +3484,7 @@ void DomainMapper_Impl::handleToc
 {
     OUString sValue;
     m_bStartTOC = true;
-    if(m_bInHeaderFooterImport)
+    if (IsInHeaderFooter())
         m_bStartTOCHeaderFooter = true;
     bool bTableOfFigures = false;
     bool bHyperlinks = false;
@@ -4817,7 +4818,7 @@ void DomainMapper_Impl::PopFieldContext()
                     m_bStartTOC = false;
                     m_bStartIndex = false;
                     m_bStartBibliography = false;
-                    if(m_bInHeaderFooterImport && m_bStartTOCHeaderFooter)
+                    if (IsInHeaderFooter() && m_bStartTOCHeaderFooter)
                         m_bStartTOCHeaderFooter = false;
                 }
                 else

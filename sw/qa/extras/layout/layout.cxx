@@ -30,6 +30,7 @@ public:
     void testTdf118058();
     void testTdf117188();
     void testTdf119875();
+    void testTdf116989();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
+    CPPUNIT_TEST(testTdf116989);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -273,6 +275,28 @@ void SwLayoutWriter::testTdf119875()
     // The first section had the same top value as the second one, so they
     // overlapped.
     CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
+}
+
+void SwLayoutWriter::testTdf116989()
+{
+    createDoc("tdf116989.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // FIXME: the XPath should be adjusted when the proper floating table would be imported
+    const sal_Int32 nTblTop
+        = getXPath(pXmlDoc, "/root/page[1]/footer/tab/infos/bounds", "top").toInt32();
+    const sal_Int32 nFirstPageParaCount
+        = getXPathContent(pXmlDoc, "count(/root/page[1]/body/txt)").toInt32();
+    // FIXME: should be exactly 30, when proper floating tables in footers are supported
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(30), nFirstPageParaCount);
+    for (sal_Int32 i = 1; i <= nFirstPageParaCount; ++i)
+    {
+        const OString xPath = "/root/page[1]/body/txt[" + OString::number(i) + "]/infos/bounds";
+        const sal_Int32 nTxtBottom = getXPath(pXmlDoc, xPath.getStr(), "top").toInt32()
+                                     + getXPath(pXmlDoc, xPath.getStr(), "height").toInt32();
+        // No body paragraphs should overlap the table in the footer
+        CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
+                               nTxtBottom <= nTblTop);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
