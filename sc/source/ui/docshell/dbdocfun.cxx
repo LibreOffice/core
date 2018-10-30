@@ -1445,9 +1445,8 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
     // Synchronize groups between linked tables
     {
-        bool bRefFound = false;
         const ScDPDimensionSaveData* pGroups = nullptr;
-        bRefFound = rDoc.GetDPCollection()->GetReferenceGroups(rDestObj, &pGroups);
+        bool bRefFound = rDoc.GetDPCollection()->GetReferenceGroups(rDestObj, &pGroups);
         if (bRefFound)
         {
             ScDPSaveData* pSaveData = rDestObj.GetSaveData();
