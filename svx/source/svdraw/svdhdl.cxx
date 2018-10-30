@@ -1955,7 +1955,9 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
 
     // take care of old handle
     const size_t nOldHdlNum(mnFocusIndex);
-    SdrHdl* pOld = GetHdl(nOldHdlNum);
+    SdrHdl* pOld = nullptr;
+    if (nOldHdlNum < GetHdlCount())
+        pOld = GetHdl(nOldHdlNum);
 
     if(pOld)
     {
