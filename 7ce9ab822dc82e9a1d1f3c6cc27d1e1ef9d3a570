@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_167182e1",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-30T20:47:22Z",
+      "side": 1,
+      "message": "if you have byte data, and the first byte is zero, then this will return true here",
+      "revId": "7ce9ab822dc82e9a1d1f3c6cc27d1e1ef9d3a570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_d65bfa51",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-30T20:47:22Z",
+      "side": 1,
+      "message": "OString internally stores a length as well as a char[], so this should rather be\n   std::vector\u003cstd::vector\u003cOString\u003e\u003e\nor\n  std::vector\u003cstd::vector\u003cstd::pair\u003cchar*,unsigned long\u003e\u003e\u003e\n\nAlso, as I have noted in the getBytes() method, OString and data that contains zero values are not going to play well together - it can be done, but then you need to construct the OString by using the constructor that takes two parameters i.e. using an explicit length parameter.",
+      "revId": "7ce9ab822dc82e9a1d1f3c6cc27d1e1ef9d3a570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
