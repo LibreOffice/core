@@ -326,7 +326,7 @@ private:
     DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
     DECL_LINK(SelectHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, Edit&, void);
-    bool NewDelHdl(void const *);
+    void            NewDelHdl(void const *);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,

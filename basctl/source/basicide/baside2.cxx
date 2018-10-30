@@ -593,7 +593,7 @@ void ModulWindow::ManageBreakPoints()
     rBrkWin.Invalidate();
 }
 
-bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
+void ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 {
     GetShell()->GetViewFrame()->ToTop();
 
@@ -630,11 +630,11 @@ bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
     // #i47002#
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( !pWindow )
-        return false;
+        return;
 
     if ( bMarkError )
         m_aXEditorWindow->GetBrkWindow().SetNoMarker();
-    return false;
+    return;
 }
 
 BasicDebugFlags ModulWindow::BasicBreakHdl()

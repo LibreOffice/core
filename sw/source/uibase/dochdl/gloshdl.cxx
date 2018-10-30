@@ -306,12 +306,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
     OUString* pOnlyText = nullptr;
     if( bNoAttr )
     {
-        if( !pWrtShell->GetSelectedText( sOnlyText, ParaBreakType::ToOnlyCR ))
-        {
-            if (!pCurGrp)
-                delete pTmp;
-            return false;
-        }
+        pWrtShell->GetSelectedText( sOnlyText, ParaBreakType::ToOnlyCR );
         pOnlyText = &sOnlyText;
     }
 

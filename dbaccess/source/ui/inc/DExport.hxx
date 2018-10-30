@@ -114,7 +114,7 @@ namespace dbaui
         void                adjustFormat();
         void                eraseTokens();
         void                insertValueIntoColumn();
-        bool                createRowSet();
+        void                createRowSet();
         void                showErrorDialog(const css::sdbc::SQLException& e);
         void                ensureFormatter();
 

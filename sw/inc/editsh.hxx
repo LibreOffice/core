@@ -621,10 +621,8 @@ public:
     /// Apply ViewOptions with Start-/EndAction.
     virtual void ApplyViewOptions( const SwViewOption &rOpt ) override;
 
-    /** Query text within selection.
-     @returns FALSE, if selected range is too large to be copied
-     into string buffer or if other errors occur. */
-    bool GetSelectedText( OUString &rBuf,
+    /** Query text within selection. */
+    void GetSelectedText( OUString &rBuf,
                         ParaBreakType nHndlParaBreak = ParaBreakType::ToBlank );
 
     /** @return graphic, if CurrentCursor->Point() points to a SwGrfNode

@@ -199,7 +199,6 @@ class WatchTreeListBox final : public SvHeaderTabListBox
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) override;
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
-    bool            ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUString& rResult );
     SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );
 
 public:
@@ -352,7 +351,7 @@ public:
     void            UpdateBreakPoint( const BreakPoint& rBrk );
     void            BasicAddWatch();
 
-    bool            BasicErrorHdl( StarBASIC const * pBasic );
+    void            BasicErrorHdl( StarBASIC const * pBasic );
     BasicDebugFlags BasicBreakHdl();
     void            AssertValidEditEngine();
 
