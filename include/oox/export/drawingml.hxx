@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 
 #include <map>
+#include <vector>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/uno/Any.hxx>
