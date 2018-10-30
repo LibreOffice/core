@@ -724,11 +724,9 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const 
                     css::uno::Any aAny( aXTextPortionE->nextElement() );
                     if ( aAny >>= aXCursorText )
                     {
-                        PortionObj* pPortionObj = new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection );
+                        std::unique_ptr<PortionObj> pPortionObj(new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection ));
                         if ( pPortionObj->Count() )
-                            mvPortions.push_back( std::unique_ptr<PortionObj>(pPortionObj) );
-                        else
-                            delete pPortionObj;
+                            mvPortions.push_back( std::move(pPortionObj) );
                     }
                 }
             }
