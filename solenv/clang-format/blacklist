@@ -15809,8 +15809,6 @@ sw/source/filter/ww8/docxexportfilter.hxx
 sw/source/filter/ww8/docxfootnotes.hxx
 sw/source/filter/ww8/docxhelper.hxx
 sw/source/filter/ww8/docxsdrexport.hxx
-sw/source/filter/ww8/docxtablestyleexport.cxx
-sw/source/filter/ww8/docxtablestyleexport.hxx
 sw/source/filter/ww8/escher.hxx
 sw/source/filter/ww8/fields.cxx
 sw/source/filter/ww8/fields.hxx

@@ -34,6 +34,7 @@ class DocxTableStyleExport
 {
     struct Impl;
     std::unique_ptr<Impl> m_pImpl;
+
 public:
     void TableStyles(sal_Int32 nCountStylesToWrite);
 
