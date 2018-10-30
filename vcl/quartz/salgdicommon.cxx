@@ -1401,7 +1401,7 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = mnRealDPIX;
     rDPIY = mnRealDPIY;
 #else
-    // This *must* be 96 or else the iOS app will behave very nadly (tiles are scaled wrongly and
+    // This *must* be 96 or else the iOS app will behave very badly (tiles are scaled wrongly and
     // don't match each others at their boundaries, and other issues). But *why* it must be 96 I
     // have no idea. The commit that changed it to 96 from (the arbitrary) 200 did not say. If you
     // know where else 96 is explicitly or implicitly hard-coded, please modify this comment.
