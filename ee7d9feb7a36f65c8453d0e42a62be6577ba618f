@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f2577a7_33d010ca",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-10-30T15:13:06Z",
+      "side": 1,
+      "message": "kind of smallish nit-picking - sadly LibreOffice has no overall, common code style, so the advise is to blend in with the local habits.\nIn this case: no space between if and opening brace, opening curly brace into next line",
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f287b81_ceaa43d1",
         "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
         "patchSetId": 4
@@ -19,6 +36,40 @@
         "endLine": 503,
         "endChar": 42
       },
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_13d514ba",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-10-30T15:13:06Z",
+      "side": 1,
+      "message": "make those const maybe?",
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_f3d968f4",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-10-30T15:13:06Z",
+      "side": 1,
+      "message": "gratuitous whitespace :)",
       "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
