@@ -806,10 +806,11 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 
 void Cell::SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject )
 {
+    bool bNullTextObject = pTextObject == nullptr;
     SdrText::SetOutlinerParaObject( std::move(pTextObject) );
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
-    if( pTextObject == nullptr )
+    if( bNullTextObject )
         ForceOutlinerParaObject( OutlinerMode::TextObject );
 }
 
