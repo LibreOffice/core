@@ -33,7 +33,9 @@ private:
     std::vector<OString>    m_sReferences;
     OString    m_sMsgCtxt;
     OString    m_sMsgId;
+    OString    m_sMsgId_plural;
     OString    m_sMsgStr;
+    std::vector<OString> m_aMsgStrs;
     bool       m_bFuzzy;
     bool       m_bCFormat;
     bool       m_bNull;
@@ -118,6 +120,7 @@ GenPoEntry::GenPoEntry()
     , m_sReferences( std::vector<OString>() )
     , m_sMsgCtxt( OString() )
     , m_sMsgId( OString() )
+    , m_sMsgId_plural( OString() )
     , m_sMsgStr( OString() )
     , m_bFuzzy( false )
     , m_bCFormat( false )
@@ -148,8 +151,20 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
                   << std::endl;
     rOFStream << "msgid "
               << lcl_GenMsgString(m_sMsgId) << std::endl;
-    rOFStream << "msgstr "
-              << lcl_GenMsgString(m_sMsgStr) << std::endl;
+    if (!m_sMsgId_plural.isEmpty())
+    {
+        rOFStream << "msgid_plural "
+                  << lcl_GenMsgString(m_sMsgId_plural) << std::endl;
+        int nIndex = 0;
+        for (const auto &rMsgStr : m_aMsgStrs)
+        {
+            rOFStream << "msgstr[" << nIndex++ << "] "
+                      << lcl_GenMsgString(rMsgStr) << std::endl;
+        }
+    }
+    else
+        rOFStream << "msgstr "
+                  << lcl_GenMsgString(m_sMsgStr) << std::endl;
 }
 
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)
@@ -196,10 +211,20 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
             m_sMsgId = lcl_GenNormString(sLine.copy(6));
             pLastMsg = &m_sMsgId;
         }
+        else if (sLine.startsWith("msgid_plural "))
+        {
+            m_sMsgId_plural = lcl_GenNormString(sLine.copy(13));
+            pLastMsg = &m_sMsgId_plural;
+        }
         else if (sLine.startsWith("msgstr "))
         {
             m_sMsgStr = lcl_GenNormString(sLine.copy(7));
             pLastMsg = &m_sMsgStr;
+        }
+        else if (sLine.startsWith("msgstr["))
+        {
+            m_aMsgStrs.push_back(lcl_GenNormString(sLine.copy(sLine.indexOf(']', 7) + 2)));
+            pLastMsg = &m_aMsgStrs.back();
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
