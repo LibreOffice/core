@@ -31,7 +31,9 @@
 #include <scmatrix.hxx>
 
 #include <math.h>
+#include <cassert>
 #include <memory>
+#include <set>
 #include <vector>
 #include <algorithm>
 #include <comphelper/random.hxx>
@@ -3635,28 +3637,72 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
 {
     if ( !MustHaveParamCount( GetByte(), 2 )  )
         return;
-    double f = ::rtl::math::approxFloor(GetDouble());
-    if (f < 1.0)
+
+    std::vector<double> aArray;
+    GetNumberSequenceArray(1, aArray, false);
+    auto aArraySize = aArray.size();
+    if (aArraySize == 0 || nGlobalError != FormulaError::NONE)
     {
-        PushIllegalArgument();
+        PushNoValue();
         return;
     }
-    SCSIZE k = static_cast<SCSIZE>(f);
+    for (double fArg : aArray)
+    {
+        double f = ::rtl::math::approxFloor(fArg);
+        if (f < 1.0)
+        {
+            PushIllegalArgument();
+            return;
+        }
+    }
+
+    std::vector<SCSIZE> aRankArray;
+    aRankArray.reserve(aArraySize);
+    std::transform(aArray.begin(), aArray.end(), std::back_inserter(aRankArray),
+                   [](double f) { return static_cast<SCSIZE>(f); });
+
+    auto itMaxRank = std::max_element(aRankArray.begin(), aRankArray.end());
+    assert(itMaxRank != aRankArray.end());
+    SCSIZE k = *itMaxRank;
+
     vector<double> aSortArray;
-    /* TODO: using nth_element() is best for one single value, but LARGE/SMALL
-     * actually are defined to return an array of values if an array of
-     * positions was passed, in which case, depending on the number of values,
-     * we may or will need a real sorted array again, see #i32345. */
     GetNumberSequenceArray(1, aSortArray, false );
     SCSIZE nSize = aSortArray.size();
     if (nSize == 0 || nGlobalError != FormulaError::NONE || nSize < k)
         PushNoValue();
-    else
+    else if (aArraySize == 1)
     {
-        // TODO: the sorted case for array: PushDouble( aSortArray[ bSmall ? k-1 : nSize-k ] );
         vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
         ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
         PushDouble( *iPos);
+    }
+    else
+    {
+        std::set<SCSIZE> aIndices;
+        for (SCSIZE n : aRankArray)
+            aIndices.insert(bSmall ? n-1 : nSize-n);
+        // We can spare sorting when the total number of ranks is small enough.
+        // Find only the elements at given indices if, arbitrarily, the index size is
+        // smaller than 1/3 of the haystack array's size; just sort it squarely, otherwise.
+        if (aIndices.size() < nSize/3)
+        {
+            auto itBegin = aSortArray.begin();
+            for (SCSIZE i : aIndices)
+            {
+                auto it = aSortArray.begin() + i;
+                std::nth_element(itBegin, it, aSortArray.end());
+                itBegin = ++it;
+            }
+        }
+        else
+            std::sort(aSortArray.begin(), aSortArray.end());
+
+        aArray.clear();
+        for (SCSIZE n : aRankArray)
+            aArray.push_back(aSortArray[bSmall ? n-1 : nSize-n]);
+        ScMatrixRef pResult = GetNewMat(1, aArraySize, true);
+        pResult->PutDoubleVector(aArray, 0, 0);
+        PushMatrix(pResult);
     }
 }
 
