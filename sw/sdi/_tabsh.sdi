@@ -410,7 +410,7 @@ interface BaseTextTable
         StateMethod = NoState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-// Slots ohne Export
+// Slots without export
 
     FN_INSERT_TABLE
     [

@@ -30,7 +30,7 @@
 
 /* IBM-862 */
 /* Dos Standard CharSet for Hebrew */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-Byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp862.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -225,7 +225,7 @@ static ImplTextEncodingData const aImplIBM862TextEncodingData
 
 /* IBM-864 */
 /* Dos Standard CharSet for Arabic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-Byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp864.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -383,7 +383,7 @@ static ImplTextEncodingData const aImplIBM864TextEncodingData
 
 /* MS-1255 */
 /* Windows Standard CharSet for Hebrew */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-Byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1255.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 
@@ -536,7 +536,7 @@ static ImplTextEncodingData const aImplMS1255TextEncodingData
 
 /* MS-1256 */
 /* Windows Standard CharSet for Arabic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-Byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1256.txt from 01/5/99 Version 2.01 */
 
 /* ----------------------------------------------------------------------- */
@@ -714,7 +714,7 @@ static ImplTextEncodingData const aImplMS1256TextEncodingData
 
 /* ISO-8859-6 */
 /* Unix Standard for Arabic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-Byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-6.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 /* !!! 0x30-0x39 are Arabic numbers and should normally be mapped to 0x0660-0x0669 !!! */
@@ -815,7 +815,7 @@ static ImplTextEncodingData const aImplISO88596TextEncodingData
 
 /* ISO-8859-8 */
 /* Unix Standard for Hebrew */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-Byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-8.txt from 2000-Jan-03 Version 1.1 (based on Unicode 3.0) */
 
 #define ISO88598UNI_START               0xA0
