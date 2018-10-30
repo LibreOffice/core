@@ -403,8 +403,13 @@ bool EmbeddedObjectRef::IsLocked() const
 
 void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 {
+    Graphic aOldGraphic;
+
     if ( bUpdate )
     {
+        if (mpImpl->pGraphic)
+            aOldGraphic = Graphic(*mpImpl->pGraphic);
+
         mpImpl->pGraphic.reset();
         (mpImpl->aMediaType).clear();
         mpImpl->pGraphic.reset( new Graphic );
@@ -429,6 +434,13 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
             rGF.ImportGraphic( *mpImpl->pGraphic, OUString(), *pGraphicStream );
         mpImpl->mnGraphicVersion++;
     }
+
+    if (bUpdate && mpImpl->pGraphic->GetType() == GraphicType::NONE && aOldGraphic.GetType() != GraphicType::NONE)
+        // We used to have an old graphic, tried to update and the update
+        // failed. Go back to the old graphic instead of having no graphic at
+        // all.
+        (*mpImpl->pGraphic) = aOldGraphic;
+        SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: update failed");
 }
 
 const Graphic* EmbeddedObjectRef::GetGraphic() const
