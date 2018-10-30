@@ -4752,13 +4752,15 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:style-name="ce11" table:formula="of:=AVERAGE(LARGE([.I29:.I38];{1;2;3}))" office:value-type="float" office:value="10" calcext:value-type="float">
-      <text:p>10</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=AVERAGE(LARGE([.I29:.I38];{1;2;3}))" office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
       <text:p>9</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16"/>
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A29];12)=ROUND([.B29];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=AVERAGE(LARGE(I29:I38,{1,2,3}))" calcext:value-type="string">
       <text:p>=AVERAGE(LARGE(I29:I38,{1,2,3}))</text:p>
      </table:table-cell>
