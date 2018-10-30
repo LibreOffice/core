@@ -3819,13 +3819,15 @@ const char* SC_OPCODE_SUBSTITUTE_ARY[] =
 // -=*# Resource for function REGEX #*=-
 const char* SC_OPCODE_REGEX_ARY[] =
 {
-    NC_("SC_OPCODE_REGEX", "Matches and optionally replaces text using regular expressions."),
+    NC_("SC_OPCODE_REGEX", "Matches and extracts or optionally replaces text using regular expressions."),
     NC_("SC_OPCODE_REGEX", "Text"),
     NC_("SC_OPCODE_REGEX", "The text to be operated on."),
     NC_("SC_OPCODE_REGEX", "Expression"),
-    NC_("SC_OPCODE_REGEX", "The regular expression to be matched."),
+    NC_("SC_OPCODE_REGEX", "The regular expression pattern to be matched."),
     NC_("SC_OPCODE_REGEX", "Replacement"),
-    NC_("SC_OPCODE_REGEX", "The replacement text and expression.")
+    NC_("SC_OPCODE_REGEX", "The replacement text and references to capture groups."),
+    NC_("SC_OPCODE_REGEX", "Flags"),
+    NC_("SC_OPCODE_REGEX", "Text specifying option flags, \"g\" for global replacement.")
 };
 
 // -=*# Resource for function BASE #*=-
