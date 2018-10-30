@@ -948,7 +948,11 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
 ImplSVEvent * Application::PostUserEvent( const Link<void*,void>& rLink, void* pCaller,
                                           bool bReferenceLink )
 {
-    ImplSVEvent* pSVEvent = new ImplSVEvent;
+    vcl::Window* pDefWindow = ImplGetDefaultWindow();
+    if ( pDefWindow == nullptr )
+        return nullptr;
+
+    std::unique_ptr<ImplSVEvent> pSVEvent(new ImplSVEvent);
     pSVEvent->mpData    = pCaller;
     pSVEvent->maLink    = rLink;
     pSVEvent->mpWindow  = nullptr;
@@ -963,13 +967,10 @@ ImplSVEvent * Application::PostUserEvent( const Link<void*,void>& rLink, void* p
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
-    vcl::Window* pDefWindow = ImplGetDefaultWindow();
-    if ( pDefWindow == nullptr || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
-    {
-        delete pSVEvent;
-        pSVEvent = nullptr;
-    }
-    return pSVEvent;
+    auto pTmpEvent = pSVEvent.get();
+    if (!pDefWindow->ImplGetFrame()->PostEvent( std::move(pSVEvent) ))
+        return nullptr;
+    return pTmpEvent;
 }
 
 void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
