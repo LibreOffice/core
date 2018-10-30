@@ -761,18 +761,22 @@ void Qt5AccessibleWidget::scrollToSubstring(int /* startIndex */, int /* endInde
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::scrollToSubstring");
 }
-void Qt5AccessibleWidget::selection(int /* selectionIndex */, int* startOffset,
-                                    int* endOffset) const
+
+void Qt5AccessibleWidget::selection(int selectionIndex, int* startOffset, int* endOffset) const
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
-    if (!xText.is())
+    if (!startOffset && !endOffset)
         return;
 
-    sal_Int32 nStart = xText->getSelectionStart();
-    startOffset = &nStart;
-    sal_Int32 nEnd = xText->getSelectionEnd();
-    endOffset = &nEnd;
+    Reference<XAccessibleText> xText;
+    if (selectionIndex == 0)
+        xText = Reference<XAccessibleText>(m_xAccessible, UNO_QUERY);
+
+    if (startOffset)
+        *startOffset = xText.is() ? xText->getSelectionStart() : 0;
+    if (endOffset)
+        *endOffset = xText.is() ? xText->getSelectionEnd() : 0;
 }
+
 int Qt5AccessibleWidget::selectionCount() const
 {
     Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
