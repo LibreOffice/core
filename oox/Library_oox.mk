@@ -256,7 +256,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ppt/commontimenodecontext \
     oox/source/ppt/conditioncontext \
     oox/source/ppt/customshowlistcontext \
-    oox/source/ppt/dgmlayout \
     oox/source/ppt/headerfootercontext \
     oox/source/ppt/layoutfragmenthandler \
     oox/source/ppt/pptfilterhelpers \
