@@ -1022,6 +1022,7 @@ public:
     OUString SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      bool bCreateNewList,
+                     SwRootFrame const* pLayout = nullptr,
                      const OUString& sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
@@ -1107,12 +1108,12 @@ public:
     bool NoNum( const SwPaM& );
 
     // Delete, splitting of numbering list.
-    void DelNumRules( const SwPaM& );
+    void DelNumRules(const SwPaM&, SwRootFrame const* pLayout = nullptr);
 
     // Invalidates all numrules
     void InvalidateNumRules();
 
-    bool NumUpDown( const SwPaM&, bool bDown );
+    bool NumUpDown(const SwPaM&, bool bDown, SwRootFrame const* pLayout = nullptr);
 
     /** Move selected paragraphes (not only numberings)
      according to offsets. (if negative: go to doc start). */
