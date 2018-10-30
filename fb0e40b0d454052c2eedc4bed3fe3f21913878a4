@@ -16,6 +16,24 @@
       "revId": "fb0e40b0d454052c2eedc4bed3fe3f21913878a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_30b7e689",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-30T10:06:17Z",
+      "side": 1,
+      "message": "No, in this case, it\u0027s not OK to use this - not technically, but ideologically: the proper value is 30, and I would like to use CPPUNIT_ASSERT_EQUAL; but given the imperfect hack, I want to keep the 30 here, so don\u0027t want to use 29 in the *_GREATER.",
+      "parentUuid": "5f2577a7_908e9ace",
+      "revId": "fb0e40b0d454052c2eedc4bed3fe3f21913878a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
