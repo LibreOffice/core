@@ -466,11 +466,10 @@ void removeFromDrawPageAndFree( const std::shared_ptr< SdrCaptionObj >& pCaption
     if (pDrawPage)
     {
         pDrawPage->RecalcObjOrdNums();
-        bool bRecording = false;
         ScDrawLayer* pDrawLayer(dynamic_cast< ScDrawLayer* >(&pCaption->getSdrModelFromSdrObject()));
         SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
         // create drawing undo action (before removing the object to have valid draw page in undo action)
-        bRecording = (pDrawLayer && pDrawLayer->IsRecording());
+        bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
         if (bRecording)
             pDrawLayer->AddCalcUndo( o3tl::make_unique<ScUndoDelSdrCaptionObj>( pCaption ));
         // remove the object from the drawing page, delete if undo is disabled
