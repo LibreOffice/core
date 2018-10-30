@@ -1117,7 +1117,8 @@ public:
 
     /** Move selected paragraphes (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    bool MoveParagraph( const SwPaM&, long nOffset, bool bIsOutlMv = false );
+    bool MoveParagraph(SwPaM&, long nOffset, bool bIsOutlMv = false);
+    bool MoveParagraphImpl(SwPaM&, long nOffset, bool bIsOutlMv, SwRootFrame const*);
 
     bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
