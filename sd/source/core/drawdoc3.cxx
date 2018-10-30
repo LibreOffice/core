@@ -49,6 +49,7 @@
 #include <strmname.h>
 #include <anminfo.hxx>
 #include <customshowlist.hxx>
+#include <cusshow.hxx>
 #include <sdxfer.hxx>
 
 #include <unmovss.hxx>
