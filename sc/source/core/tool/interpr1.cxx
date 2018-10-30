@@ -9218,11 +9218,38 @@ void ScInterpreter::ScSearch()
 void ScInterpreter::ScRegex()
 {
     sal_uInt8 nParamCount = GetByte();
-    if (MustHaveParamCount( nParamCount, 2, 3))
+    if (MustHaveParamCount( nParamCount, 2, 4))
     {
+        // Flags are supported only for replacement, search match flags can be
+        // individually and much more flexible set in the regular expression
+        // pattern using (?ismwx-ismwx)
+        bool bGlobalReplacement = false;
+        if (nParamCount == 4)
+        {
+            // Empty flags string is valid => no flag set.
+            OUString aFlags( GetString().getString());
+            if (aFlags.getLength() > 1)
+            {
+                // Only one flag supported.
+                PushIllegalArgument();
+                return;
+            }
+            if (aFlags.getLength() == 1)
+            {
+                if (aFlags.indexOf('g') >= 0)
+                    bGlobalReplacement = true;
+                else
+                {
+                    // Unsupported flag.
+                    PushIllegalArgument();
+                    return;
+                }
+            }
+        }
+
         bool bReplacement = false;
         OUString aReplacement;
-        if (nParamCount == 3)
+        if (nParamCount >= 3)
         {
             // A missing argument is not an empty string to replace the match.
             if (IsMissing())
@@ -9233,6 +9260,8 @@ void ScInterpreter::ScRegex()
                 bReplacement = true;
             }
         }
+        // If bGlobalReplacement==true and bReplacement==false then
+        // bGlobalReplacement is silently ignored.
 
         OUString aExpression = GetString().getString();
         OUString aText = GetString().getString();
@@ -9284,7 +9313,11 @@ void ScInterpreter::ScRegex()
         // Replace first occurrence of match with replacement.
         const icu::UnicodeString aIcuReplacement(
                 reinterpret_cast<const UChar*>(aReplacement.getStr()), aReplacement.getLength());
-        icu::UnicodeString aReplaced( aRegexMatcher.replaceFirst( aIcuReplacement, status));
+        icu::UnicodeString aReplaced;
+        if (bGlobalReplacement)
+            aReplaced = aRegexMatcher.replaceAll( aIcuReplacement, status);
+        else
+            aReplaced = aRegexMatcher.replaceFirst( aIcuReplacement, status);
         if (U_FAILURE(status))
         {
             // Some error, e.g. extraneous $1 without group.
