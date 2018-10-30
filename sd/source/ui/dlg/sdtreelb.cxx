@@ -1237,7 +1237,7 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
         if (pShowList != nullptr)
         {
             sal_uLong nCurrentShowIndex = pShowList->GetCurPos();
-            pCustomShow = (*pShowList)[nCurrentShowIndex];
+            pCustomShow = (*pShowList)[nCurrentShowIndex].get();
         }
 
         // Check whether the given page is part of that custom show.
