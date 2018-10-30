@@ -142,6 +142,7 @@ void SwEditShell::NoNum()
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     else
+        // sw_redlinehide: leave cursor as is, will be split at Point & apply to new node
         bRet = GetDoc()->NoNum( *pCursor );
 
     EndAllAction();
@@ -287,12 +288,12 @@ void SwEditShell::DelNumRules()
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
         {
-            GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
+            GetDoc()->DelNumRules(aRangeArr.SetPam( n, aPam ), GetLayout());
         }
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     else
-        GetDoc()->DelNumRules( *pCursor );
+        GetDoc()->DelNumRules(*pCursor, GetLayout());
 
     // Call AttrChangeNotify on the UI-side. Should actually be redundant but there was a bug once.
     CallChgLnk();
@@ -312,14 +313,14 @@ void SwEditShell::NumUpDown( bool bDown )
     bool bRet = true;
     SwPaM* pCursor = GetCursor();
     if( !pCursor->IsMultiSelection() )
-        bRet = GetDoc()->NumUpDown( *pCursor, bDown );
+        bRet = GetDoc()->NumUpDown(*pCursor, bDown, GetLayout());
     else
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
         SwPamRanges aRangeArr( *pCursor );
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
-            bRet = bRet && GetDoc()->NumUpDown( aRangeArr.SetPam( n, aPam ), bDown );
+            bRet = bRet && GetDoc()->NumUpDown(aRangeArr.SetPam( n, aPam ), bDown, GetLayout());
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     GetDoc()->getIDocumentState().SetModified();
@@ -387,7 +388,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 
         // change numbering rule - changed numbering rule is not applied at <aPaM>
         SwPaM aPaM(pos);
-        GetDoc()->SetNumRule( aPaM, aRule, false, OUString(), false );
+        GetDoc()->SetNumRule(aPaM, aRule, false, GetLayout(), OUString(), false);
     }
 
     EndAllAction();
@@ -519,7 +520,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
         else if( (bUpperLeft ? nUpperLevel : nLowerLevel+1) < MAXLEVEL )
         {
             aCursor.Move( fnMoveBackward, GoInNode );
-            bRet = GetDoc()->NumUpDown( aCursor, !bUpperLeft );
+            bRet = GetDoc()->NumUpDown(aCursor, !bUpperLeft, GetLayout());
         }
     }
 
@@ -765,7 +766,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         {
             aRangeArr.SetPam( n, aPam );
             OUString sListId = GetDoc()->SetNumRule( aPam, rRule,
-                                  bCreateNewList, sContinuedListId,
+                                  bCreateNewList, GetLayout(), sContinuedListId,
                                   true, bResetIndentAttrs );
 
             //tdf#87548 On creating a new list for a multi-selection only
@@ -782,7 +783,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     else
     {
         GetDoc()->SetNumRule( *pCursor, rRule,
-                              bCreateNewList, rContinuedListId,
+                              bCreateNewList, GetLayout(), rContinuedListId,
                               true, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCursor, true );
     }

@@ -4652,7 +4652,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
         // Don't reset indent attributes, that would mean loss of direct
         // formatting.
-        pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
+        pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false, nullptr,
                           aListIdToPropagate, true, /*bResetIndentAttrs=*/false );
     }
 
