@@ -243,7 +243,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
             sal_uInt16 nCount = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                SfxDock_Impl *pDock = new SfxDock_Impl;
+                std::unique_ptr<SfxDock_Impl> pDock(new SfxDock_Impl);
                 pDock->pWin = nullptr;
                 pDock->bNewLine = false;
                 pDock->bHide = true;
@@ -255,14 +255,13 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
                     if ( !pDock->nType )
                     {
                         // Read error
-                        delete pDock;
                         break;
                     }
                     else
                         pDock->bNewLine = true;
                 }
 
-                maDockArr.insert(maDockArr.begin() + n, std::unique_ptr<SfxDock_Impl>(pDock));
+                maDockArr.insert(maDockArr.begin() + n, std::move(pDock));
             }
         }
     }
