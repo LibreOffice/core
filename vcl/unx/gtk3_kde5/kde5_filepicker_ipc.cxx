@@ -195,8 +195,8 @@ void readCommands(FilePickerIpc* ipc)
     }
 }
 
-FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
-    : QObject(parent)
+FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* _parent)
+    : QObject(_parent)
     , m_filePicker(filePicker)
 {
     // required to be able to pass those via signal/slot
