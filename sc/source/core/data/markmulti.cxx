@@ -81,9 +81,9 @@ bool ScMultiSel::HasMarks( SCCOL nCol ) const
 
 bool ScMultiSel::HasOneMark( SCCOL nCol, SCROW& rStartRow, SCROW& rEndRow ) const
 {
-    bool aResult1 = false, aResult2 = false;
+    bool aResult2 = false;
     SCROW nRow1 = -1, nRow2 = -1, nRow3 = -1, nRow4 = -1;
-    aResult1 = aRowSel.HasOneMark( nRow1, nRow2 );
+    bool aResult1 = aRowSel.HasOneMark( nRow1, nRow2 );
     MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
     if ( aIter != aMultiSelContainer.end() )
         aResult2 = aIter->second.HasOneMark( nRow3, nRow4 );
