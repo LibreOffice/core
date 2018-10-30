@@ -57,6 +57,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -1000,7 +1001,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     }
 }
 
-void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXStart, long nXEnd)
+void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd)
 {
     // this is not needed when double-buffering
     if (SupportsDoubleBuffering())
@@ -1062,7 +1063,17 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXSta
             }
             else
             {
-                pBorder->Paint(*pBorder, tools::Rectangle());
+                // For some mysterious reaon, in headless/svp rendering,
+                // pBorder has bad clipping region (shows as 1x1@0,0),
+                // and therefore doesn't render anything at all.
+                // In the case that we know we're in headless/svp, we
+                // render directly on the current context (the edit control).
+                // But if we (the editbox) are part of a more complex control
+                // (e.g. spinbox), we render not (i.e. we let pBorder pretend).
+                if (!mbIsSubEdit && comphelper::LibreOfficeKit::isActive())
+                    pBorder->Paint(rRenderContext, tools::Rectangle());
+                else
+                    pBorder->Paint(*pBorder, tools::Rectangle());
             }
         }
     }
