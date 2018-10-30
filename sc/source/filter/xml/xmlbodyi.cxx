@@ -37,6 +37,7 @@
 #include "XMLDDELinksContext.hxx"
 #include "XMLCalculationSettingsContext.hxx"
 #include "XMLTrackedChangesContext.hxx"
+#include "XMLChangeTrackingImportHelper.hxx"
 #include "XMLEmptyContext.hxx"
 #include "XMLDetectiveContext.hxx"
 #include <scerrors.hxx>

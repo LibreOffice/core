@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSCENI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLSCENI_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
 #include <tools/color.hxx>
 #include <rangelst.hxx>
 #include "importcontext.hxx"
+
+namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLImport;
 

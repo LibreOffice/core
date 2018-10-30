@@ -20,24 +20,23 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLDPIMP_HXX
 
 #include <memory>
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
-#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
+#include <xmloff/xmltoken.hxx>
 
-#include <global.hxx>
-#include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <queryparam.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
 #include <unordered_map>
 
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldAutoShowInfo; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldLayoutInfo; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldReference; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldSortInfo; } } } }
+namespace sax_fastparser { class FastAttributeList; }
+
 class ScDPSaveNumGroupDimension;
 class ScDPSaveGroupDimension;
+class ScDPObject;
 
 enum ScMySourceType
 {

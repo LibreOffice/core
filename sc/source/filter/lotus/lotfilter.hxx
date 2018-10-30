@@ -22,15 +22,12 @@
 
 #include <map>
 #include <decl.h>
-#include <op.h>
 #include <optab.h>
-#include <root.hxx>
 #include <patattr.hxx>
 
 class SvxHorJustifyItem;
-class ScProtectionAttr;
-class SfxUInt32Item;
 class FormCache;
+struct LOTUS_ROOT;
 
 struct LotusContext
 {

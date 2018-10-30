@@ -19,16 +19,14 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLNEXPI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLNEXPI_HXX
 
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <address.hxx>
-#include "xmlimprt.hxx"
+#include <types.hxx>
 #include "importcontext.hxx"
 
 #include <memory>
 
+namespace sax_fastparser { class FastAttributeList; }
+
 struct ScMyNamedExpression;
-class ScRangeName;
 
 class ScXMLNamedExpressionsContext : public ScXMLImportContext
 {

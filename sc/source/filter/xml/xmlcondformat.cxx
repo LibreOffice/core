@@ -9,10 +9,13 @@
 
 #include <memory>
 #include "xmlcondformat.hxx"
+#include "xmlimprt.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlictxt.hxx>
 #include <sal/log.hxx>
 
+#include <compiler.hxx>
 #include <colorscale.hxx>
 #include <conditio.hxx>
 #include <document.hxx>

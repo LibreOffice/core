@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATABASERANGES_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATABASERANGES_HXX
 
-#include <sortparam.hxx>
 #include <address.hxx>
 
+struct ScSortParam;
 class ScXMLExport;
 class ScDocument;
 class ScMyEmptyDatabaseRangesContainer;

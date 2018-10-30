@@ -19,9 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONTI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONTI_HXX
 
-#include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
 class ScXMLContentContext : public ScXMLImportContext

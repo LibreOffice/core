@@ -24,12 +24,12 @@
 #include <detfunc.hxx>
 #include <detdata.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class ScDocument;
 class DateTime;

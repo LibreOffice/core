@@ -20,15 +20,15 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLANNOI_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editdata.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
-class ScXMLTableRowCellContext;
+#include <vector>
+
+class ScXMLImport;
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
 
 struct ScXMLAnnotationStyleEntry
 {

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "xmldrani.hxx"
 #include "xmlsorti.hxx"
 #include "xmlimprt.hxx"
 #include <docuno.hxx>
@@ -29,6 +30,8 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
+
+#include <com/sun/star/util/SortField.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

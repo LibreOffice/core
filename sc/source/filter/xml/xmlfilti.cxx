@@ -19,6 +19,8 @@
 
 #include "xmlfilti.hxx"
 #include "xmlimprt.hxx"
+#include "xmldrani.hxx"
+#include "xmldpimp.hxx"
 #include <docuno.hxx>
 #include <convuno.hxx>
 #include "XMLConverter.hxx"

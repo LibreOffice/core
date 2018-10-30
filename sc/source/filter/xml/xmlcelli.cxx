@@ -41,6 +41,7 @@
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLStylesImportHelper.hxx"
 #include "celltextparacontext.hxx"
+#include "XMLCellRangeSourceContext.hxx"
 
 #include <arealink.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -57,6 +58,8 @@
 #include <datastream.hxx>
 #include <rangeutl.hxx>
 
+#include <xmloff/maptype.hxx>
+#include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -73,6 +76,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wrlmitem.hxx>
