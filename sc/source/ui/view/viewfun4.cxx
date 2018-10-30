@@ -367,10 +367,9 @@ void ScViewFunc::DoThesaurus()
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin());
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine.get(), nCol, nRow );
-    const ScPatternAttr* pPattern = nullptr;
     std::unique_ptr<SfxItemSet> pEditDefaults(
         new SfxItemSet(pThesaurusEngine->GetEmptyItemSet()));
-    pPattern = rDoc.GetPattern(nCol, nRow, nTab);
+    const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, nTab);
     if (pPattern)
     {
         pPattern->FillEditItemSet( pEditDefaults.get() );
