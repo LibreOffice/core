@@ -409,7 +409,7 @@ void SbiProcDef::SetType( SbxDataType t )
 // if the match is OK, pOld is replaced by this in the pool
 // pOld is deleted in any case!
 
-void SbiProcDef::Match( std::unique_ptr<SbiProcDef> pOld )
+void SbiProcDef::Match( SbiProcDef* pOld )
 {
     SbiSymDef *pn=nullptr;
     // parameter 0 is the function name
@@ -433,16 +433,19 @@ void SbiProcDef::Match( std::unique_ptr<SbiProcDef> pOld )
         pOld->pIn->GetParser()->SetCol1( 0 );
         pOld->pIn->GetParser()->Error( ERRCODE_BASIC_BAD_DECLARATION, aName );
     }
+
     if( !pIn && pOld->pIn )
     {
-        // Replace old entry with the new one
         nPos = pOld->nPos;
         nId  = pOld->nId;
         pIn  = pOld->pIn;
-        std::unique_ptr<SbiSymDef> tmp(this);
-        std::swap(pIn->m_Data[nPos], tmp);
-        (void)tmp.release();
+
+        // Replace pOld entry in the std::unique_ptr array with "this" new one
+        assert(!pIn->m_Data[nPos] || (pOld == pIn->m_Data[nPos].get()));
+        pIn->m_Data[nPos].reset(this);
     }
+    else
+        delete pOld;
 }
 
 void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
