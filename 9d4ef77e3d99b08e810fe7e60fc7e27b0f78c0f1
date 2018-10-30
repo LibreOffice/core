@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_9318e475",
+        "filename": "offapi/com/sun/star/sheet/DataTransformation.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-30T12:10:25Z",
+      "side": 1,
+      "message": "Please add the documentation tag\n\n @since LibreOffice 6.2",
+      "revId": "9d4ef77e3d99b08e810fe7e60fc7e27b0f78c0f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_532cbc98",
+        "filename": "offapi/com/sun/star/sheet/XDataTransformation.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-30T12:10:25Z",
+      "side": 1,
+      "message": "Please document also the interface (i.e. add a description here what the interface\u0027s purpose is), not only its attributes and methods. Also add the documentation tag\n\n @since LibreOffice 6.2",
+      "revId": "9d4ef77e3d99b08e810fe7e60fc7e27b0f78c0f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_f33a88cb",
+        "filename": "sc/source/ui/inc/externaltransformationuno.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-30T12:10:25Z",
+      "side": 1,
+      "message": "override keyword missing here",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 43
+      },
+      "revId": "9d4ef77e3d99b08e810fe7e60fc7e27b0f78c0f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_d3378ce3",
+        "filename": "sc/source/ui/unoobj/externaltransformationuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-30T12:10:25Z",
+      "side": 1,
+      "message": "This assignment is superfluous as mpDoc is already initialized with pDoc in the initializer list.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "9d4ef77e3d99b08e810fe7e60fc7e27b0f78c0f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
