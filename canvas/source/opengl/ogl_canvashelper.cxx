@@ -701,6 +701,9 @@ namespace oglcanvas
                 aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
                 aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 
+                if (pFont->getEmphasisMark())
+                    aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
+
                 // adjust to stretched font
                 if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
                 {
