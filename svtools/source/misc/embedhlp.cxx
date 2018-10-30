@@ -432,11 +432,13 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     }
 
     if (bUpdate && !*mpImpl->pGraphic && aOldGraphic)
+    {
         // We used to have an old graphic, tried to update and the update
         // failed. Go back to the old graphic instead of having no graphic at
         // all.
         (*mpImpl->pGraphic) = aOldGraphic;
         SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: update failed");
+    }
 }
 
 const Graphic* EmbeddedObjectRef::GetGraphic() const
