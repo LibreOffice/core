@@ -29,6 +29,7 @@
 #include <IDocumentState.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
+#include <unocrsr.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
@@ -1793,7 +1794,120 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
     return bRet;
 }
 
-bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
+// this function doesn't contain any numbering-related code, but it is
+// primarily called to move numbering-relevant paragraphs around, hence
+// it will expand its selection to include full SwTextFrames.
+bool SwDoc::MoveParagraph(SwPaM& rPam, long nOffset, bool const bIsOutlMv)
+{
+    // sw_redlinehide: as long as a layout with Hide mode exists, only
+    // move nodes that have merged frames *completely*
+    SwRootFrame const* pLayout(nullptr);
+    for (SwRootFrame const*const pLay : GetAllLayouts())
+    {
+        if (pLay->IsHideRedlines())
+        {
+            pLayout = pLay;
+        }
+    }
+    if (pLayout)
+    {
+        std::pair<SwTextNode *, SwTextNode *> nodes(
+            sw::GetFirstAndLastNode(*pLayout, rPam.Start()->nNode));
+        if (nodes.first && nodes.first != &rPam.Start()->nNode.GetNode())
+        {
+            assert(nodes.second);
+            if (nOffset < 0)
+            {
+                nOffset += rPam.Start()->nNode.GetIndex() - nodes.first->GetIndex();
+                if (0 <= nOffset)   // hack: there are callers that know what
+                {                   // node they want; those should never need
+                    nOffset = -1;   // this; other callers just pass in -1
+                }                   // and those should still move
+            }
+            if (!rPam.HasMark())
+            {
+                rPam.SetMark();
+            }
+            assert(nodes.first->GetIndex() < rPam.Start()->nNode.GetIndex());
+            rPam.Start()->nNode = *nodes.first;
+            rPam.Start()->nContent.Assign(nodes.first, 0);
+        }
+        nodes = sw::GetFirstAndLastNode(*pLayout, rPam.End()->nNode);
+        if (nodes.second && nodes.second != &rPam.End()->nNode.GetNode())
+        {
+            assert(nodes.first);
+            if (0 < nOffset)
+            {
+                nOffset -= nodes.second->GetIndex() - rPam.End()->nNode.GetIndex();
+                if (nOffset <= 0)   // hack: there are callers that know what
+                {                   // node they want; those should never need
+                    nOffset = +1;   // this; other callers just pass in +1
+                }                   // and those should still move
+            }
+            if (!rPam.HasMark())
+            {
+                rPam.SetMark();
+            }
+            assert(rPam.End()->nNode.GetIndex() < nodes.second->GetIndex());
+            rPam.End()->nNode = *nodes.second;
+            // until end, otherwise Impl will detect overlapping redline
+            rPam.End()->nContent.Assign(nodes.second, nodes.second->GetTextNode()->Len());
+        }
+
+        if (nOffset > 0)
+        {   // sw_redlinehide: avoid moving into delete redline, skip forward
+            if (GetNodes().GetEndOfContent().GetIndex() <= rPam.End()->nNode.GetIndex() + nOffset)
+            {
+                return false; // can't move
+            }
+            SwNode const* pNode(GetNodes()[rPam.End()->nNode.GetIndex() + nOffset + 1]);
+            if (   pNode->GetRedlineMergeFlag() != SwNode::Merge::None
+                && pNode->GetRedlineMergeFlag() != SwNode::Merge::First)
+            {
+                for ( ; ; ++nOffset)
+                {
+                    pNode = GetNodes()[rPam.End()->nNode.GetIndex() + nOffset];
+                    if (pNode->IsTextNode())
+                    {
+                        nodes = GetFirstAndLastNode(*pLayout, *pNode->GetTextNode());
+                        assert(nodes.first && nodes.second);
+                        nOffset += nodes.second->GetIndex() - pNode->GetIndex();
+                        // on last; will be incremented below to behind-last
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {   // sw_redlinehide: avoid moving into delete redline, skip backward
+            if (rPam.Start()->nNode.GetIndex() + nOffset < 1)
+            {
+                return false; // can't move
+            }
+            SwNode const* pNode(GetNodes()[rPam.Start()->nNode.GetIndex() + nOffset]);
+            if (   pNode->GetRedlineMergeFlag() != SwNode::Merge::None
+                && pNode->GetRedlineMergeFlag() != SwNode::Merge::First)
+            {
+                for ( ; ; --nOffset)
+                {
+                    pNode = GetNodes()[rPam.Start()->nNode.GetIndex() + nOffset];
+                    if (pNode->IsTextNode())
+                    {
+                        nodes = GetFirstAndLastNode(*pLayout, *pNode->GetTextNode());
+                        assert(nodes.first && nodes.second);
+                        nOffset -= pNode->GetIndex() - nodes.first->GetIndex();
+                        // on first
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return MoveParagraphImpl(rPam, nOffset, bIsOutlMv, pLayout);
+}
+
+bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
+        bool const bIsOutlMv, SwRootFrame const*const pLayout)
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -1995,7 +2109,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
             SwPaM aPam( pStt->nNode, 0, aMvRg.aEnd, 0 );
 
-            SwPaM& rOrigPam = const_cast<SwPaM&>(rPam);
+            SwPaM& rOrigPam(rPam);
             rOrigPam.DeleteMark();
             rOrigPam.GetPoint()->nNode = aIdx.GetIndex() - 1;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
@@ -2124,6 +2238,10 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
     }
 
+    (void) pLayout; // note: move will insert between aIdx-1 and aIdx
+    assert(!pLayout // check not moving *into* delete redline (caller's fault)
+        || aIdx.GetNode().GetRedlineMergeFlag() == SwNode::Merge::None
+        || aIdx.GetNode().GetRedlineMergeFlag() == SwNode::Merge::First);
     getIDocumentContentOperations().MoveNodeRange( aMvRg, aIdx, SwMoveFlags::REDLINES );
 
     if( pUndo )

@@ -354,6 +354,23 @@ namespace sw {
         return pos;
     }
 
+    std::pair<SwTextNode *, SwTextNode *>
+    GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos)
+    {
+        SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
+        if (pTextNode && rLayout.IsHideRedlines())
+        {
+            if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pTextNode->getLayoutFrame(&rLayout)))
+            {
+                if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+                {
+                    return std::make_pair(pMerged->pFirstNode, const_cast<SwTextNode*>(pMerged->pLastNode));
+                }
+            }
+        }
+        return std::make_pair(pTextNode, pTextNode);
+    }
+
 } // namespace sw
 
 /// Switches width and height of the text frame

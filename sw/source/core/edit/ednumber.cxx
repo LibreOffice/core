@@ -466,6 +466,13 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                 else
                 {
                     sal_uLong nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
+
+                    if (SwTextNode const*const pStt = aPos.nNode.GetNode().GetTextNode())
+                    {
+                        std::pair<SwTextNode *, SwTextNode *> nodes(
+                            sw::GetFirstAndLastNode(*GetLayout(), *pStt));
+                        nIdx = nodes.first->GetIndex() - 1;
+                    }
                     while( nIdx && (
                         ( pNd = GetDoc()->GetNodes()[ nIdx ])->IsSectionNode() ||
                         ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode())))
@@ -483,17 +490,37 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                     pOrig == aCursor.GetNode().GetTextNode()->GetNumRule() )
                 {
                     sal_uLong nStt = aCursor.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
+                    if (SwTextNode const*const pStt = aCursor.GetPoint()->nNode.GetNode().GetTextNode())
+                    {
+                        std::pair<SwTextNode *, SwTextNode *> nodes(
+                            sw::GetFirstAndLastNode(*GetLayout(), *pStt));
+                        nIdx = nodes.second->GetIndex() + 1;
+                    }
 
                     while (nIdx < GetDoc()->GetNodes().Count()-1)
                     {
                         pNd = GetDoc()->GetNodes()[ nIdx ];
 
                         if (pNd->IsSectionNode() ||
-                            ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()) ||
-                            ( pNd->IsTextNode() && pOrig == static_cast<const SwTextNode*>(pNd)->GetNumRule() &&
-                              static_cast<const SwTextNode*>(pNd)->GetActualListLevel() > nUpperLevel ))
+                            (pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()))
                         {
                             ++nIdx;
+                        }
+                        else if (pNd->IsTextNode())
+                        {
+                            SwTextNode const*const pTextNode =
+                                sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pNd));
+                            if (pOrig == pTextNode->GetNumRule()
+                                && pTextNode->GetActualListLevel() > nUpperLevel)
+                            {
+                                std::pair<SwTextNode *, SwTextNode *> nodes(
+                                    sw::GetFirstAndLastNode(*GetLayout(), *pTextNode));
+                                nIdx = nodes.second->GetIndex() + 1;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                         // #i57856#
                         else
