@@ -300,9 +300,9 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     mbGraphics = FALSE;
 }
 
-bool AquaSalFrame::PostEvent(ImplSVEvent* pData)
+bool AquaSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    GetSalData()->mpInstance->PostEvent( this, pData, SalEvent::UserEvent );
+    GetSalData()->mpInstance->PostEvent( this, pData.release(), SalEvent::UserEvent );
     return TRUE;
 }
 

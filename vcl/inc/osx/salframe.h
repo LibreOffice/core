@@ -114,7 +114,7 @@ public:
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                PostEvent(ImplSVEvent* pData) override;
+    virtual bool                PostEvent(std::unique_ptr<ImplSVEvent> pData) override;
     virtual void                SetTitle( const OUString& rTitle ) override;
     virtual void                SetIcon( sal_uInt16 nIcon ) override;
     virtual void                SetRepresentedURL( const OUString& ) override;
