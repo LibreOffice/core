@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_33a49008",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-30T12:15:26Z",
+      "side": 1,
+      "message": "Check pDoc-\u003eIsTabProtected(nTab) first and only if true ask pDoc-\u003eHasAttrib(...) because asking for an attribute is more expensive.",
+      "revId": "c798cf58fbcb8640b18cb8d7f279377c7d1b81d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
