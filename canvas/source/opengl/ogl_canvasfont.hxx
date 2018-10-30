@@ -50,8 +50,11 @@ namespace oglcanvas
 
         const css::geometry::Matrix2D& getFontMatrix() const { return maFontMatrix; }
 
+        sal_uInt32 getEmphasisMark() const { return mnEmphasisMark; }
+
     private:
         css::rendering::FontRequest    maFontRequest;
+        sal_uInt32                     mnEmphasisMark;
         css::geometry::Matrix2D        maFontMatrix;
     };
 }
