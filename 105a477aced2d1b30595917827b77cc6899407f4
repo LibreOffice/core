@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_10ee2a88",
+        "filename": "vcl/opengl/salbmp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-30T09:49:58Z",
+      "side": 1,
+      "message": "so a 16-bit pallete image is OK?",
+      "revId": "105a477aced2d1b30595917827b77cc6899407f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
