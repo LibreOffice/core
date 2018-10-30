@@ -18,26 +18,55 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
+ <toolbar:toolbaritem xlink:href=".uno:Forward"/>
+ <toolbar:toolbaritem xlink:href=".uno:Backward"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BeforeObject"/>
+ <toolbar:toolbaritem xlink:href=".uno:BehindObject"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ReverseOrder"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
+ <toolbar:toolbaritem xlink:href=".uno:Crop"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MirrorVert"/>
+ <toolbar:toolbaritem xlink:href=".uno:MirrorHorz"/>
+ <toolbar:toolbaritem xlink:href=".uno:AdvancedMode"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
- <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Crop"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
- <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
- <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnimationEffects"/>
 </toolbar:toolbar>
+

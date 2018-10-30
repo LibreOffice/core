@@ -18,28 +18,53 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
+ <toolbar:toolbaritem xlink:href=".uno:Forward"/>
+ <toolbar:toolbaritem xlink:href=".uno:Backward"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BeforeObject"/>
+ <toolbar:toolbaritem xlink:href=".uno:BehindObject"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ReverseOrder"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
- <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
- <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MirrorVert"/>
+ <toolbar:toolbaritem xlink:href=".uno:MirrorHorz"/>
  <toolbar:toolbaritem xlink:href=".uno:AdvancedMode"/>
- <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DistributeSelection"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DesignerDialog"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
 </toolbar:toolbar>
 
