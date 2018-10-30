@@ -1513,10 +1513,12 @@ void SAL_CALL ModuleUIConfigurationManager::reload()
             try
             {
                 UIElementType& rUserElementType    = m_aUIElements[LAYER_USERDEFINED][i];
-                UIElementType& rDefaultElementType = m_aUIElements[LAYER_DEFAULT][i];
 
                 if ( rUserElementType.bModified )
+                {
+                    UIElementType& rDefaultElementType = m_aUIElements[LAYER_DEFAULT][i];
                     impl_reloadElementTypeData( rUserElementType, rDefaultElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
+                }
             }
             catch ( const Exception& )
             {
