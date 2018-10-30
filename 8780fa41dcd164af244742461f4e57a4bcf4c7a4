@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_76832658",
+        "filename": "svtools/source/misc/embedhlp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-30T17:34:54Z",
+      "side": 1,
+      "message": "I think you need to have { } around these 2 lines?\njudging by the indentation",
+      "revId": "8780fa41dcd164af244742461f4e57a4bcf4c7a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
