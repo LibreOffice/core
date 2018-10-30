@@ -79,7 +79,8 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
         // the attributes to get are those from the numbering format.
         if (rCurrentPaM.IsInFrontOfLabel())
         {
-            SwTextNode * pTextNd = rCurrentPaM.GetPoint()->nNode.GetNode().GetTextNode();
+            SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(),
+                    rCurrentPaM.GetPoint()->nNode);
 
             if (pTextNd)
             {
@@ -268,8 +269,9 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 
             if( pNd->IsTextNode() )
             {
+                SwTextNode *const pTextNode(sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pNd)));
                 // if it's a text node get its named paragraph format
-                SwTextFormatColl* pFormat = pNd->GetTextNode()->GetTextColl();
+                SwTextFormatColl *const pFormat = pTextNode->GetTextColl();
 
                 // if the paragraph format exist stop here and return it
                 if( pFormat != nullptr )
