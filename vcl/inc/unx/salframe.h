@@ -209,7 +209,7 @@ public:
     // call with false to setup graphics with window (GetWindow())
     virtual void                updateGraphics( bool bClear );
 
-    virtual bool                PostEvent(ImplSVEvent* pData) override;
+    virtual bool                PostEvent(std::unique_ptr<ImplSVEvent> pData) override;
 
     virtual void                SetTitle( const OUString& rTitle ) override;
     virtual void                SetIcon( sal_uInt16 nIcon ) override;

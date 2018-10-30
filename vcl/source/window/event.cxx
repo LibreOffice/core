@@ -321,7 +321,7 @@ void Window::RemoveChildEventListener( const Link<VclWindowEvent&,void>& rEventL
 
 ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCaller, bool bReferenceLink )
 {
-    ImplSVEvent* pSVEvent = new ImplSVEvent;
+    std::unique_ptr<ImplSVEvent> pSVEvent(new ImplSVEvent);
     pSVEvent->mpData    = pCaller;
     pSVEvent->maLink    = rLink;
     pSVEvent->mpWindow  = this;
@@ -335,12 +335,10 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
-    if ( !mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
-    {
-        delete pSVEvent;
-        pSVEvent = nullptr;
-    }
-    return pSVEvent;
+    auto pTmpEvent = pSVEvent.get();
+    if (!mpWindowImpl->mpFrame->PostEvent( std::move(pSVEvent) ))
+        return nullptr;
+    return pTmpEvent;
 }
 
 void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
