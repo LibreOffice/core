@@ -194,7 +194,7 @@ public:
 
     // Match with a forward-declaration. The parameter names are
     // compared and the forward declaration is replaced by this
-    void Match( std::unique_ptr<SbiProcDef> pForward );
+    void Match( SbiProcDef* pForward );
 
 private:
     SbiProcDef( const SbiProcDef& ) = delete;
