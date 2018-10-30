@@ -84,6 +84,24 @@ namespace {
             pDoc->ResetAttrs( rPam, false, aResetAttrsArray );
         }
     }
+
+    void ExpandPamForParaPropsNodes(SwPaM& rPam, SwRootFrame const*const pLayout)
+    {
+        if (pLayout)
+        {   // ensure that selection from the Shell includes the para-props node
+            // to which the attributes should be applied
+            if (rPam.GetPoint()->nNode.GetNode().IsTextNode())
+            {
+                rPam.GetPoint()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetPoint()->nNode);
+                rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->nNode.GetNode().GetContentNode(), 0);
+            }
+            if (rPam.GetMark()->nNode.GetNode().IsTextNode())
+            {
+                rPam.GetMark()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetMark()->nNode);
+                rPam.GetMark()->nContent.Assign(rPam.GetMark()->nNode.GetNode().GetContentNode(), 0);
+            }
+        }
+    }
 }
 
 static sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
@@ -179,9 +197,11 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
         return false;
 
     // calculate the range
+    SwPaM aPam(rPam, nullptr);
+    ExpandPamForParaPropsNodes(aPam, pLayout);
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-    const SwNodePtr pSttNd = &rPam.Start()->nNode.GetNode();
-    const SwNodePtr pEndNd = &rPam.End()->nNode.GetNode();
+    const SwNodePtr pSttNd = &aPam.Start()->nNode.GetNode();
+    const SwNodePtr pEndNd = &aPam.End()->nNode.GetNode();
     SwOutlineNodes::size_type nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
@@ -368,7 +388,7 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
     {
         GetIDocumentUndoRedo().StartUndo(SwUndoId::OUTLINE_LR, nullptr);
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoOutlineLeftRight>( rPam, nOffset ) );
+            o3tl::make_unique<SwUndoOutlineLeftRight>(aPam, nOffset) );
     }
 
     // 2. Apply the new style to all Nodes
@@ -826,18 +846,22 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 OUString SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
+                        SwRootFrame const*const pLayout,
                         const OUString& sContinuedListId,
                         bool bSetItem,
                         const bool bResetIndentAttrs )
 {
     OUString sListId;
 
+    SwPaM aPam(rPam, nullptr);
+    ExpandPamForParaPropsNodes(aPam, pLayout);
+
     SwUndoInsNum * pUndo = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         // Start/End for attributes!
         GetIDocumentUndoRedo().StartUndo( SwUndoId::INSNUM, nullptr );
-        pUndo = new SwUndoInsNum( rPam, rRule );
+        pUndo = new SwUndoInsNum( aPam, rRule );
         GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
     }
 
@@ -888,16 +912,17 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
         }
         if (!sListId.isEmpty())
         {
-            getIDocumentContentOperations().InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ) );
+            getIDocumentContentOperations().InsertPoolItem(aPam, SfxStringItem(RES_PARATR_LIST_ID, sListId));
         }
     }
 
-    if ( !rPam.HasMark() )
+    if (!aPam.HasMark())
     {
-        SwTextNode * pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+        SwTextNode * pTextNd = aPam.GetPoint()->nNode.GetNode().GetTextNode();
         // robust code: consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
         if ( pTextNd != nullptr )
         {
+            assert(!pLayout || sw::IsParaPropsNode(*pLayout, *pTextNd));
             SwNumRule * pRule = pTextNd->GetNumRule();
 
             if (pRule && pRule->GetName() == pNewOrChangedNumRule->GetName())
@@ -928,13 +953,13 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 
     if ( bSetItem )
     {
-        getIDocumentContentOperations().InsertPoolItem( rPam, SwNumRuleItem( pNewOrChangedNumRule->GetName() ) );
+        getIDocumentContentOperations().InsertPoolItem(aPam, SwNumRuleItem(pNewOrChangedNumRule->GetName()));
     }
 
     if ( bResetIndentAttrs
          && pNewOrChangedNumRule->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        ::lcl_ResetIndentAttrs(this, rPam, RES_LR_SPACE);
+        ::lcl_ResetIndentAttrs(this, aPam, RES_LR_SPACE);
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1243,6 +1268,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                 SetNumRule( aPam,
                             *aListStyleData.pReplaceNumRule,
                             aListStyleData.bCreateNewList,
+                            nullptr,
                             aListStyleData.sListId );
                 if ( aListStyleData.bCreateNewList )
                 {
@@ -1280,19 +1306,17 @@ bool SwDoc::NoNum( const SwPaM& rPam )
     return bRet;
 }
 
-void SwDoc::DelNumRules( const SwPaM& rPam )
+void SwDoc::DelNumRules(const SwPaM& rPam, SwRootFrame const*const pLayout)
 {
-    sal_uLong nStt = rPam.GetPoint()->nNode.GetIndex(),
-            nEnd = rPam.GetMark()->nNode.GetIndex();
-    if( nStt > nEnd )
-    {
-        sal_uLong nTmp = nStt; nStt = nEnd; nEnd = nTmp;
-    }
+    SwPaM aPam(rPam, nullptr);
+    ExpandPamForParaPropsNodes(aPam, pLayout);
+    sal_uLong nStt = aPam.Start()->nNode.GetIndex();
+    sal_uLong const nEnd = aPam.End()->nNode.GetIndex();
 
     SwUndoDelNum* pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoDelNum( rPam );
+        pUndo = new SwUndoDelNum( aPam );
         GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
     }
     else
@@ -1305,6 +1329,10 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
     for( ; nStt <= nEnd; ++nStt )
     {
         SwTextNode* pTNd = GetNodes()[ nStt ]->GetTextNode();
+        if (pLayout && pTNd)
+        {
+            pTNd = sw::GetParaPropsNode(*pLayout, *pTNd);
+        }
         SwNumRule* pNumRuleOfTextNode = pTNd ? pTNd->GetNumRule() : nullptr;
         if ( pTNd && pNumRuleOfTextNode )
         {
@@ -1640,14 +1668,12 @@ bool SwDoc::GotoPrevNum(SwPosition& rPos, SwRootFrame const*const pLayout,
     return ::lcl_GotoNextPrevNum(rPos, false, bOverUpper, nullptr, nullptr, pLayout);
 }
 
-bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
+bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLayout)
 {
-    sal_uLong nStt = rPam.GetPoint()->nNode.GetIndex(),
-            nEnd = rPam.GetMark()->nNode.GetIndex();
-    if( nStt > nEnd )
-    {
-        sal_uLong nTmp = nStt; nStt = nEnd; nEnd = nTmp;
-    }
+    SwPaM aPam(rPam, nullptr);
+    ExpandPamForParaPropsNodes(aPam, pLayout);
+    sal_uLong nStt = aPam.Start()->nNode.GetIndex();
+    sal_uLong const nEnd = aPam.End()->nNode.GetIndex();
 
     // -> outline nodes are promoted or demoted differently
     bool bOnlyOutline = true;
@@ -1658,6 +1684,10 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
 
         if (pTextNd)
         {
+            if (pLayout)
+            {
+                pTextNd = sw::GetParaPropsNode(*pLayout, *pTextNd);
+            }
             SwNumRule * pRule = pTextNd->GetNumRule();
 
             if (pRule)
@@ -1674,7 +1704,7 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
     sal_Int8 nDiff = bDown ? 1 : -1;
 
     if (bOnlyOutline)
-        bRet = OutlineUpDown(rPam, nDiff);
+        bRet = OutlineUpDown(rPam, nDiff, pLayout);
     else if (bOnlyNonOutline)
     {
         /* #i24560#
@@ -1689,6 +1719,11 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
             // text node.
             if ( pTNd )
             {
+                if (pLayout)
+                {
+                    pTNd = sw::GetParaPropsNode(*pLayout, *pTNd);
+                }
+
                 SwNumRule * pRule = pTNd->GetNumRule();
 
                 if (pRule)
@@ -1706,15 +1741,26 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoNumUpDown>(rPam, nDiff) );
+                    o3tl::make_unique<SwUndoNumUpDown>(aPam, nDiff) );
             }
 
+            SwTextNode* pPrev = nullptr;
             for(sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp )
             {
                 SwTextNode* pTNd = GetNodes()[ nTmp ]->GetTextNode();
 
                 if( pTNd)
                 {
+                    if (pLayout)
+                    {
+                        pTNd = sw::GetParaPropsNode(*pLayout, *pTNd);
+                        if (pTNd == pPrev)
+                        {
+                            continue;
+                        }
+                        pPrev = pTNd;
+                    }
+
                     SwNumRule * pRule = pTNd->GetNumRule();
 
                     if (pRule)
