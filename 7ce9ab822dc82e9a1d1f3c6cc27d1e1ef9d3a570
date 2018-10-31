@@ -33,6 +33,24 @@
       "revId": "7ce9ab822dc82e9a1d1f3c6cc27d1e1ef9d3a570",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_1c82c150",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2018-10-31T14:45:45Z",
+      "side": 1,
+      "message": "The two sizes are different. In practice, the length of the OString shouldn\u0027t be used here, because tha data is not actually a string, and it may contain \u0027\\0\u0027.\n\nI don\u0027t want to use char* either, because I need memory management here. I could use unique_ptr as well, but I think it wouldn\u0027t be that nice. With OString, I can easily transform the data to the types I need here.\n\nI could also handle it as a sequence\u003csal_Int8\u003e. Than it would be more clearer that it is raw data, but than I would lose the feature rich OString methods.\n\nI could explain it with a comment above the declaration.",
+      "parentUuid": "5f2577a7_d65bfa51",
+      "revId": "7ce9ab822dc82e9a1d1f3c6cc27d1e1ef9d3a570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
