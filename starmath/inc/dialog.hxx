@@ -201,7 +201,7 @@ class SmDistanceDialog : public weld::GenericDialogController
 
     weld::Widget* m_pCurrentImage;
 
-    SmCategoryDesc *Categories[NOCATEGORIES];
+    std::unique_ptr<SmCategoryDesc> m_xCategories[NOCATEGORIES];
     sal_uInt16          nActiveCategory;
     bool            bScaleAllBrackets;
 
