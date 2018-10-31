@@ -696,12 +696,12 @@ Reference<XResultSet>
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalog*/,
-                                                             const OUString& /*schemaPattern*/,
+                                                             const OUString& schemaPattern,
                                                              const OUString& tableNamePattern,
                                                              const OUString& columnNamePattern)
 {
-    OUStringBuffer queryBuf("SELECT TABLE_CATALOG AS TABLE_CAT, " // 1
-                            "TABLE_SCHEMA AS TABLE_SCHEM, " // 2
+    OUStringBuffer queryBuf("SELECT TABLE_CATALOG, " // 1
+                            "TABLE_SCHEMA, " // 2
                             "TABLE_NAME, " // 3
                             "COLUMN_NAME, " // 4
                             "DATA_TYPE, " // 5
@@ -720,7 +720,6 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
                             "COLUMN_TYPE " // 14
                             "FROM INFORMATION_SCHEMA.COLUMNS "
                             "WHERE (1 = 1) ");
-
     if (!tableNamePattern.isEmpty())
     {
         OUString sAppend;
@@ -729,6 +728,15 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         else
             sAppend = "AND TABLE_NAME = '%' ";
         queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
+    }
+    if (!schemaPattern.isEmpty())
+    {
+        OUString sAppend;
+        if (tableNamePattern.match("%"))
+            sAppend = "AND TABLE_SCHEMA LIKE '%' ";
+        else
+            sAppend = "AND TABLE_SCHEMA = '%' ";
+        queryBuf.append(sAppend.replaceAll("%", schemaPattern));
     }
     if (!columnNamePattern.isEmpty())
     {
