@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f2577a7_dccb1970",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-10-31T18:43:55Z",
+      "side": 1,
+      "message": "better to indent all the new code to the same level as the other members.",
+      "revId": "b26108324c01150b0318711af231ea0e54698108",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_bcc84d74",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-10-31T18:43:55Z",
+      "side": 1,
+      "message": "please use the m_ prefix for member variables -\u003e m_StringCache",
+      "revId": "b26108324c01150b0318711af231ea0e54698108",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_9cc5915e",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-10-31T18:43:55Z",
+      "side": 1,
+      "message": "nobody is calling this so the strings are leaked.\n\nyou could just use std::unique_ptr\u003cOUString\u003e instead of OUString * and get rid of this function, that will fix the leak",
+      "revId": "b26108324c01150b0318711af231ea0e54698108",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f2577a7_2104367b",
         "filename": "sw/source/uibase/utlui/initui.cxx",
         "patchSetId": 4
