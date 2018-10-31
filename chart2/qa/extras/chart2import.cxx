@@ -71,6 +71,7 @@ public:
     void testTdf106217();
     void testAutoBackgroundXLSX();
     void testChartAreaStyleBackgroundXLSX();
+    void testChartHatchFillXLSX();
     void testAxisTextRotationXLSX();
     // void testTextCanOverlapXLSX(); // TODO : temporarily disabled.
     void testNumberFormatsXLSX();
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testTdf106217);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
+    CPPUNIT_TEST(testChartHatchFillXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
     // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
     CPPUNIT_TEST(testNumberFormatsXLSX);
@@ -894,6 +896,28 @@ void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
         sal_Int32(0), nColor);
+}
+
+void Chart2ImportTest::testChartHatchFillXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-hatch-fill.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Chart background fill in this xlsx should be loaded as hatch fill.",
+        drawing::FillStyle_HATCH, eStyle);
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    OUString sHatchName;
+    xPropertySet->getPropertyValue("HatchName") >>= sHatchName;
+    CPPUNIT_ASSERT(!sHatchName.isEmpty());
 }
 
 void Chart2ImportTest::testAxisTextRotationXLSX()
