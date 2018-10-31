@@ -58,15 +58,12 @@ SwTableHeightDlg::SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS)
     ::SetFieldUnit(*m_xHeightEdit, eFieldUnit);
 
     m_xHeightEdit->set_min(MINLAY, FieldUnit::TWIP);
-    SwFormatFrameSize *pSz;
-    m_rSh.GetRowHeight(pSz);
+    std::unique_ptr<SwFormatFrameSize> pSz = m_rSh.GetRowHeight();
     if (pSz)
     {
         auto nHeight = pSz->GetHeight();
         m_xAutoHeightCB->set_active(pSz->GetHeightSizeType() != ATT_FIX_SIZE);
         m_xHeightEdit->set_value(m_xHeightEdit->normalize(nHeight), FieldUnit::TWIP);
-
-        delete pSz;
     }
 }
 

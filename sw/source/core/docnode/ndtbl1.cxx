@@ -336,35 +336,28 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew )
     }
 }
 
-void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFormatRowSplit *& rpSz )
+std::unique_ptr<SwFormatRowSplit> SwDoc::GetRowSplit( const SwCursor& rCursor )
 {
-    rpSz = nullptr;
-
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
-    if( pTableNd )
+    if( !pTableNd )
+        return nullptr;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, false );
+
+    if( aRowArr.empty() )
+        return nullptr;
+
+    SwFormatRowSplit* pSz = &const_cast<SwFormatRowSplit&>(aRowArr[0]->GetFrameFormat()->GetRowSplit());
+
+    for ( auto pLn : aRowArr )
     {
-        std::vector<SwTableLine*> aRowArr; // For Lines collecting
-        ::lcl_CollectLines( aRowArr, rCursor, false );
-
-        if( !aRowArr.empty() )
+        if ( pSz->GetValue() != pLn->GetFrameFormat()->GetRowSplit().GetValue() )
         {
-            rpSz = &const_cast<SwFormatRowSplit&>(aRowArr[0]->GetFrameFormat()->GetRowSplit());
-
-            if (rpSz)
-            {
-                for ( auto pLn : aRowArr )
-                {
-                    if ( (*rpSz).GetValue() != pLn->GetFrameFormat()->GetRowSplit().GetValue() )
-                    {
-                        rpSz = nullptr;
-                        break;
-                    }
-                }
-            }
-            if ( rpSz )
-                rpSz = new SwFormatRowSplit( *rpSz );
+            return nullptr;
         }
     }
+    return o3tl::make_unique<SwFormatRowSplit>( *pSz );
 }
 
 /* Class:  SwDoc
@@ -407,35 +400,26 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew
     }
 }
 
-void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz )
+std::unique_ptr<SwFormatFrameSize> SwDoc::GetRowHeight( const SwCursor& rCursor )
 {
-    rpSz = nullptr;
-
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
-    if( pTableNd )
+    if( !pTableNd )
+        return nullptr;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, true );
+
+    if( aRowArr.empty() )
+        return nullptr;
+
+    SwFormatFrameSize* pSz = &const_cast<SwFormatFrameSize&>(aRowArr[0]->GetFrameFormat()->GetFrameSize());
+
+    for ( auto pLn : aRowArr )
     {
-        std::vector<SwTableLine*> aRowArr; // For Lines collecting
-        ::lcl_CollectLines( aRowArr, rCursor, true );
-
-        if( !aRowArr.empty() )
-        {
-            rpSz = &const_cast<SwFormatFrameSize&>(aRowArr[0]->GetFrameFormat()->GetFrameSize());
-
-            if (rpSz)
-            {
-                for ( auto pLn : aRowArr )
-                {
-                    if ( *rpSz != pLn->GetFrameFormat()->GetFrameSize() )
-                    {
-                        rpSz = nullptr;
-                        break;
-                    }
-                }
-            }
-            if ( rpSz )
-                rpSz = new SwFormatFrameSize( *rpSz );
-        }
+        if ( *pSz != pLn->GetFrameFormat()->GetFrameSize() )
+            return nullptr;
     }
+    return o3tl::make_unique<SwFormatFrameSize>( *pSz );
 }
 
 bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool bOptimize )

@@ -203,12 +203,11 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetTabBorders( rSet );
 
     //row split
-    SwFormatRowSplit* pSplit = nullptr;
-    rSh.GetRowSplit(pSplit);
+    std::unique_ptr<SwFormatRowSplit> pSplit = rSh.GetRowSplit();
     if(pSplit)
     {
         rSet.Put(*pSplit);
-        delete pSplit;
+        pSplit.reset();
     }
 
     if(!bTableSel)
@@ -1184,21 +1183,20 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_ROW_SPLIT :
         {
             const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(pItem);
-            SwFormatRowSplit* pSplit = nullptr;
+            std::unique_ptr<SwFormatRowSplit> pSplit;
             if(!pBool)
             {
-                rSh.GetRowSplit(pSplit);
+                pSplit = rSh.GetRowSplit();
                 if(pSplit)
                     pSplit->SetValue(!pSplit->GetValue());
                 else
-                   pSplit = new SwFormatRowSplit(true);
+                   pSplit.reset(new SwFormatRowSplit(true));
             }
             else
             {
-                pSplit = new SwFormatRowSplit(pBool->GetValue());
+                pSplit.reset(new SwFormatRowSplit(pBool->GetValue()));
             }
             rSh.SetRowSplit( *pSplit );
-            delete pSplit;
             break;
         }
 
@@ -1268,13 +1266,11 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case SID_TABLE_MINIMAL_ROW_HEIGHT:
             {
                 // Disable if auto height already is enabled.
-                SwFormatFrameSize *pSz;
-                rSh.GetRowHeight( pSz );
+                std::unique_ptr<SwFormatFrameSize> pSz = rSh.GetRowHeight();
                 if ( pSz )
                 {
                     if ( ATT_VAR_SIZE == pSz->GetHeightSizeType() )
                         rSet.DisableItem( nSlot );
-                    delete pSz;
                 }
                 break;
             }
@@ -1365,13 +1361,11 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 }
                 else
                 {
-                    SwFormatRowSplit* pSplit = nullptr;
-                    rSh.GetRowSplit(pSplit);
+                    std::unique_ptr<SwFormatRowSplit> pSplit = rSh.GetRowSplit();
                     if(pSplit)
                         rSet.Put(*pSplit);
                     else
                         rSet.InvalidateItem( nSlot );
-                    delete pSplit;
                 }
                 break;
             }

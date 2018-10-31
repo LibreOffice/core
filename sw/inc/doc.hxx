@@ -1431,9 +1431,9 @@ public:
                         const bool _bPosCorr );
 
     void SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew );
-    static void GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz );
+    static std::unique_ptr<SwFormatFrameSize> GetRowHeight( const SwCursor& rCursor );
     void SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew );
-    static void GetRowSplit( const SwCursor& rCursor, SwFormatRowSplit *& rpSz );
+    static std::unique_ptr<SwFormatRowSplit> GetRowSplit( const SwCursor& rCursor );
 
     /// Adjustment of Rowheights. Determine via bTstOnly if more than one row is selected.
     /// bOptimize: distribute current table height, instead of using the largest row.
