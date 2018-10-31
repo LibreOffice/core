@@ -95,6 +95,19 @@ ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
     return FOUND;
 }
 
+SCROW ScLookupCache::lookup( const QueryCriteria & rCriteria ) const
+{
+    // try to find the row index for which we have already performed lookup
+    for (auto it = maQueryMap.begin(); it != maQueryMap.end(); ++it)
+    {
+        if (it->second.maCriteria == rCriteria)
+            return it->first.mnRow;
+    }
+
+    // not found
+    return -1;
+}
+
 bool ScLookupCache::insert( const ScAddress & rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress,
         const bool bAvailable )

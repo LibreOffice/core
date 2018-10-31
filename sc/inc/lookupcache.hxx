@@ -104,6 +104,10 @@ public:
                 (mbString ? (*mpStr == *r.mpStr) : (mfVal == r.mfVal));
         }
 
+        bool isEmptyStringQuery() const
+        {
+            return (getQueryOp() == QueryOp::EQUAL) && mbString && mpStr && mpStr->isEmpty();
+        }
     };
 
     /// MUST be new'd because Notify() deletes.
@@ -112,10 +116,12 @@ public:
     /// Remove from document structure and delete (!) cache on modify hint.
     virtual void Notify( const SfxHint& rHint ) override;
 
-    /// @returns document address in o_rAddress if Result==FOUND
+    /// @returns document address in o_rResultAddress if Result==FOUND
             Result          lookup( ScAddress & o_rResultAddress,
                                     const QueryCriteria & rCriteria,
                                     const ScAddress & rQueryAddress ) const;
+
+            SCROW           lookup( const QueryCriteria & rCriteria ) const;
 
     /** Insert query and result.
         @param bAvailable
