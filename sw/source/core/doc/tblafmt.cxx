@@ -930,11 +930,9 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
         return;
 
     SwEditShell *pShell = pDoc->GetEditShell();
-    SwFormatRowSplit *pRowSplit = nullptr;
-    SwDoc::GetRowSplit(*pShell->getShellCursor(false), pRowSplit);
+    std::unique_ptr<SwFormatRowSplit> pRowSplit = SwDoc::GetRowSplit(*pShell->getShellCursor(false));
     m_bRowSplit = pRowSplit && pRowSplit->GetValue();
-    delete pRowSplit;
-    pRowSplit = nullptr;
+    pRowSplit.reset();
 
     const SfxItemSet &rSet = pFormat->GetAttrSet();
 

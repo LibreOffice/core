@@ -139,8 +139,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
         rSet.Put( pFrameFormat->GetFrameDir() );
     }
 
-    SwFormatRowSplit* pSplit = nullptr;
-    rSh.GetRowSplit(pSplit);
+    std::unique_ptr<SwFormatRowSplit> pSplit = rSh.GetRowSplit();
     if(pSplit)
         rSet.Put(*pSplit);
 }
