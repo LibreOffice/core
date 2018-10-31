@@ -32,17 +32,17 @@ ModalDialog RID_DEFAULTABOUT
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 150 ) ;
+    Size = MAP_APPFONT ( 200, 150 ) ;
     Text [ en-US ] = "About %FULLPRODUCTNAME" ;
     OKButton RID_CUI_ABOUT_BTN_OK
     {
         DefButton = TRUE ;
-        Size = MAP_APPFONT ( BTN_WIDTH , BTN_HEIGHT ) ;
+        Size = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
     };
     PushButton RID_CUI_ABOUT_BTN_README
     {
         DefButton = FALSE ;
-        Size = MAP_APPFONT ( BTN_WIDTH , BTN_HEIGHT ) ;
+        Size = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
         Text [ en-US ] = "License..." ;
     };
     FixedText RID_CUI_ABOUT_FTXT_VERSION
@@ -51,7 +51,7 @@ ModalDialog RID_DEFAULTABOUT
         Text = "%FULLPRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
     };
     MultiLineEdit RID_CUI_ABOUT_FTXT_BUILDDATA
-   {
+    {
         //HelpID = "cui:MultiLineEdit:RID_DEFAULTABOUT:ABOUT_FTXT_BUILDDATA";
         Border = FALSE ;
         IgnoreTab = TRUE ;
@@ -73,19 +73,19 @@ ModalDialog RID_DEFAULTABOUT
     };
     String RID_CUI_ABOUT_STR_COPYRIGHT_VENDOR
     {
-        Text[ en-US ] = "%OOOVENDOR";
+        Text [ en-US ] = "%OOOVENDOR" ;
     };
     String RID_CUI_ABOUT_STR_CREATED
     {
-        Text[ en-US ] = "This product was created by the OpenOffice community.";
+        Text [ en-US ] = "This product was created by the OpenOffice community." ;
     };
     String RID_CUI_ABOUT_STR_CREATED_VENDOR
     {
-        Text[ en-US ] = "This product was created by %OOOVENDOR, based on Apache OpenOffice.";
+        Text [ en-US ] = "This product was created by %OOOVENDOR, based on Apache OpenOffice." ;
     };
     String RID_CUI_ABOUT_STR_ACKNOWLEDGE
     {
-        Text[ en-US ] = "The OpenOffice community acknowledges all contributing members, especially those mentioned at";
+        Text [ en-US ] = "The OpenOffice community acknowledges all contributing members, especially those mentioned at" ;
     };
 };
 
@@ -103,14 +103,14 @@ ModalDialog RID_CUI_README_DLG
     SvLook = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE;
-    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    Size = MAP_APPFONT ( DLG_WIDTH, DLG_HEIGHT ) ;
     Text [ en-US ] = "Readme, License and Notice" ;
 
     TabControl RID_CUI_README_TBCTL
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( CTRL_MARGIN , CTRL_MARGIN );
-        Size = MAP_APPFONT( TAB_WIDTH , TAB_HEIGHT );
+        Pos = MAP_APPFONT( CTRL_MARGIN, CTRL_MARGIN );
+        Size = MAP_APPFONT( TAB_WIDTH, TAB_HEIGHT );
         PageList =
         {
             PageItem
@@ -138,7 +138,7 @@ ModalDialog RID_CUI_README_DLG
     {
         DefButton = TRUE ;
         Pos = MAP_APPFONT( 0, CTRL_MARGIN + TAB_HEIGHT + CTRL_MARGIN );
-        Size = MAP_APPFONT ( BTN_WIDTH , BTN_HEIGHT ) ;
+        Size = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
     };
 };
 
@@ -147,15 +147,15 @@ TabPage RID_CUI_README_TBPAGE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( TAB_WIDTH , TAB_HEIGHT ) ;
+    Size = MAP_APPFONT ( TAB_WIDTH, TAB_HEIGHT ) ;
 
     MultiLineEdit RID_CUI_README_TBPAGE_EDIT
-   {
+    {
         Border = TRUE ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
-        Pos = MAP_APPFONT( CTRL_MARGIN , CTRL_MARGIN );
+        Pos = MAP_APPFONT( CTRL_MARGIN, CTRL_MARGIN );
         Size = MAP_APPFONT( TAB_WIDTH - CTRL_MARGIN - CTRL_MARGIN, TAB_HEIGHT - CTRL_MARGIN - CTRL_MARGIN );
     };
 };
