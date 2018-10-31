@@ -128,7 +128,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
         try
         {
-            vector< vector<HitItem>* > aQueryListResultVectorVector;
+            vector< vector<HitItem> > aQueryListResultVectorVector;
             set< OUString > aSet,aCurrent,aResultSet;
 
             int nQueryListSize = queryList.size();
@@ -140,8 +140,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 vector<HitItem>* pQueryResultVector;
                 if( nQueryListSize > 1 )
                 {
-                    pQueryResultVector = new vector<HitItem>;
-                    aQueryListResultVectorVector.push_back( pQueryResultVector );
+                    aQueryListResultVectorVector.emplace_back();
+                    pQueryResultVector = &aQueryListResultVectorVector.back();
                 }
                 else
                 {
@@ -197,8 +197,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
             {
                 for( int n = 0 ; n < nQueryListSize ; ++n )
                 {
-                    vector<HitItem>* pQueryResultVector = aQueryListResultVectorVector[n];
-                    vector<HitItem>& rQueryResultVector = *pQueryResultVector;
+                    vector<HitItem>& rQueryResultVector = aQueryListResultVectorVector[n];
 
                     int nItemCount = rQueryResultVector.size();
                     for( int i = 0 ; i < nItemCount ; ++i )
@@ -229,8 +228,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                             }
                         }
                     }
-
-                    delete pQueryResultVector;
                 }
 
                 sort( aIndexFolderResultVector.begin(), aIndexFolderResultVector.end() );
