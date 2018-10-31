@@ -1001,7 +1001,7 @@ bool Qt5AccessibleWidget::isColumnSelected(int /* column */) const { return true
 
 bool Qt5AccessibleWidget::isRowSelected(int /* row */) const { return true; }
 
-void Qt5AccessibleWidget::modelChange(QAccessibleTableModelChangeEvent* event) {}
+void Qt5AccessibleWidget::modelChange(QAccessibleTableModelChangeEvent* /* event */) {}
 
 int Qt5AccessibleWidget::rowCount() const
 {
@@ -1024,7 +1024,7 @@ bool Qt5AccessibleWidget::selectColumn(int column)
     Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
                                                          UNO_QUERY);
     if (!xTableSelection.is())
-        return nullptr;
+        return false;
     return xTableSelection->selectColumn(column);
 }
 
@@ -1033,7 +1033,7 @@ bool Qt5AccessibleWidget::selectRow(int row)
     Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
                                                          UNO_QUERY);
     if (!xTableSelection.is())
-        return nullptr;
+        return false;
     return xTableSelection->selectRow(row);
 }
 
@@ -1095,7 +1095,7 @@ bool Qt5AccessibleWidget::unselectColumn(int column)
     Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
                                                          UNO_QUERY);
     if (!xTableSelection.is())
-        return nullptr;
+        return false;
     return xTableSelection->unselectColumn(column);
 }
 
@@ -1104,7 +1104,7 @@ bool Qt5AccessibleWidget::unselectRow(int row)
     Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
                                                          UNO_QUERY);
     if (!xTableSelection.is())
-        return nullptr;
+        return false;
     return xTableSelection->unselectRow(row);
 }
 
