@@ -34,6 +34,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
@@ -624,6 +625,8 @@ void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
         return static_cast<QAccessibleActionInterface*>(this);
     if (t == QAccessible::TextInterface)
         return static_cast<QAccessibleTextInterface*>(this);
+    if (t == QAccessible::EditableTextInterface)
+        return static_cast<QAccessibleEditableTextInterface*>(this);
     if (t == QAccessible::ValueInterface)
         return static_cast<QAccessibleValueInterface*>(this);
     if (t == QAccessible::TableInterface)
@@ -891,6 +894,35 @@ QString Qt5AccessibleWidget::textBeforeOffset(int /* offset */,
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textBeforeOffset");
     return QString();
+}
+
+// QAccessibleEditableTextInterface
+
+void Qt5AccessibleWidget::deleteText(int startOffset, int endOffset)
+{
+    Reference<XAccessibleEditableText> xEditableText(m_xAccessible->getAccessibleContext(),
+                                                     UNO_QUERY);
+    if (!xEditableText.is())
+        return;
+    xEditableText->deleteText(startOffset, endOffset);
+}
+
+void Qt5AccessibleWidget::insertText(int offset, const QString& text)
+{
+    Reference<XAccessibleEditableText> xEditableText(m_xAccessible->getAccessibleContext(),
+                                                     UNO_QUERY);
+    if (!xEditableText.is())
+        return;
+    xEditableText->insertText(toOUString(text), offset);
+}
+
+void Qt5AccessibleWidget::replaceText(int startOffset, int endOffset, const QString& text)
+{
+    Reference<XAccessibleEditableText> xEditableText(m_xAccessible->getAccessibleContext(),
+                                                     UNO_QUERY);
+    if (!xEditableText.is())
+        return;
+    xEditableText->replaceText(startOffset, endOffset, toOUString(text));
 }
 
 // QAccessibleValueInterface
