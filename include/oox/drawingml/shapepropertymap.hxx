@@ -71,7 +71,7 @@ enum class ShapeProperty
     FillBitmapOffsetX,
     FillBitmapOffsetY,
     FillBitmapRectanglePoint,
-    FillHatch,
+    FillHatch,                    /// Explicit fill hatch or name of a fill hatch stored in a global container.
     ShadowXDistance,
     FillBitmapName,
     FillBackground,
@@ -87,12 +87,13 @@ struct OOX_DLLPUBLIC ShapePropertyInfo
     bool mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
     bool mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
     bool mbNamedFillBitmap;      /// True = use named fill bitmap instead of explicit fill bitmap.
+    bool mbNamedFillHatch;       /// True = use named fill hatch instead of explicit fill hatch.
 
     static ShapePropertyInfo DEFAULT;           /// Default property info (used as default parameter of other methods).
 
     explicit ShapePropertyInfo(const ShapePropertyIds& rnPropertyIds,
                                bool bNamedLineMarker, bool bNamedLineDash,
-                               bool bNamedFillGradient, bool bNamedFillBitmap);
+                               bool bNamedFillGradient, bool bNamedFillBitmap, bool bNamedFillHatch);
 
     bool has(ShapeProperty ePropId) const
     {
@@ -147,6 +148,8 @@ private:
     bool setFillBitmap( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill bitmap and pushes the name to FillBitmapName */
     bool setFillBitmapName( const css::uno::Any& rValue );
+    /** Sets an explicit fill hatch, or creates a named fill hatch. */
+    bool setFillHatch( sal_Int32 nPropId, const css::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
     css::uno::Any& operator[]( ShapeProperty ePropId ) = delete;
