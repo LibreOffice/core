@@ -2143,8 +2143,6 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
                         if (pSubtitleSheet)
                             pOutlParaObj->ChangeStyleSheetName(SD_STYLE_FAMILY_MASTERPAGE, pSubtitleSheet->GetName(), pSheet->GetName());
                     }
-
-                    pNewObj->StartListening(*pSheet);
                 }
             }
 
