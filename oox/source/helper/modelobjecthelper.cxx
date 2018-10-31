@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -92,12 +93,14 @@ ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& r
     maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),
     maDashContainer(      rxModelFactory, "com.sun.star.drawing.DashTable" ),
     maGradientContainer(  rxModelFactory, "com.sun.star.drawing.GradientTable" ),
-    maTransGradContainer(  rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
+    maTransGradContainer( rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
     maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" ),
+    maHatchContainer(     rxModelFactory, "com.sun.star.drawing.HatchTable" ),
     maDashNameBase(      "msLineDash " ),
     maGradientNameBase(  "msFillGradient " ),
     maTransGradNameBase( "msTransGradient " ),
-    maBitmapUrlNameBase( "msFillBitmap " )
+    maBitmapUrlNameBase( "msFillBitmap " ),
+    maHatchNameBase( "msFillHatch " )
 {
 }
 
@@ -135,6 +138,11 @@ OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGr
     if (xBitmap.is())
         return maBitmapUrlContainer.insertObject(maBitmapUrlNameBase, Any(xBitmap), true);
     return OUString();
+}
+
+OUString ModelObjectHelper::insertFillHatch( const Hatch& rHatch )
+{
+    return maHatchContainer.insertObject( maHatchNameBase, Any( rHatch ), true );
 }
 
 uno::Reference<awt::XBitmap> ModelObjectHelper::getFillBitmap(OUString const & rGraphicName)
