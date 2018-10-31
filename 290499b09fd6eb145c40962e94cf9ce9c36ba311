@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_1ce1a1ff",
+        "filename": "sw/source/ui/dialog/swdlgfact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-31T18:08:35Z",
+      "side": 1,
+      "message": "we don\u0027t need the EndDialogHdl method after this anymore, do we? We can just capture rEndDialogHdl and then call it from the lambda?",
+      "revId": "290499b09fd6eb145c40962e94cf9ce9c36ba311",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
