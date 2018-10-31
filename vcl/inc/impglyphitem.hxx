@@ -98,6 +98,7 @@ protected:
 public:
     virtual ~SalLayoutGlyphsImpl();
     virtual SalLayoutGlyphsImpl* clone(SalLayoutGlyphs&) const = 0;
+    virtual bool empty() const { return std::vector<GlyphItem>::empty(); }
 };
 
 class SalGenericLayoutGlyphsImpl : public SalLayoutGlyphsImpl
@@ -115,6 +116,7 @@ class SalGenericLayoutGlyphsImpl : public SalLayoutGlyphsImpl
 public:
     SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const override;
     LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
+    bool empty() const override;
 };
 
 #endif // INCLUDED_VCL_IMPGLYPHITEM_HXX
