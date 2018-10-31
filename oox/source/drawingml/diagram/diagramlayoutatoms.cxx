@@ -146,6 +146,36 @@ const dgm::Point* ConditionAtom::getPresNode() const
     return nullptr;
 }
 
+namespace
+{
+/**
+ * Takes the connection list from rLayoutNode, navigates from rFrom on an edge
+ * of type nType, using a direction determined by bSourceToDestination.
+ */
+OUString navigate(const LayoutNode& rLayoutNode, sal_Int32 nType, const OUString& rFrom,
+                  bool bSourceToDestination)
+{
+    for (const auto& rConnection : rLayoutNode.getDiagram().getData()->getConnections())
+    {
+        if (rConnection.mnType != nType)
+            continue;
+
+        if (bSourceToDestination)
+        {
+            if (rConnection.msSourceId == rFrom)
+                return rConnection.msDestId;
+        }
+        else
+        {
+            if (rConnection.msDestId == rFrom)
+                return rConnection.msSourceId;
+        }
+    }
+
+    return OUString();
+}
+}
+
 sal_Int32 ConditionAtom::getNodeCount() const
 {
     sal_Int32 nCount = 0;
@@ -154,9 +184,21 @@ sal_Int32 ConditionAtom::getNodeCount() const
     {
         OUString sNodeId = "";
 
-        for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
-            if (aCxn.mnType == XML_presOf && aCxn.msDestId == pPoint->msModelId)
-                sNodeId = aCxn.msSourceId;
+        sNodeId
+            = navigate(mrLayoutNode, XML_presOf, pPoint->msModelId, /*bSourceToDestination*/ false);
+
+        if (sNodeId.isEmpty())
+        {
+            // The current layout node is not a presentation of anything. Look
+            // up the first presentation child of the layout node.
+            OUString sFirstPresChildId = navigate(mrLayoutNode, XML_presParOf, pPoint->msModelId,
+                                                  /*bSourceToDestination*/ true);
+            if (!sFirstPresChildId.isEmpty())
+                // It has a presentation child: is that a presentation of a
+                // model node?
+                sNodeId = navigate(mrLayoutNode, XML_presOf, sFirstPresChildId,
+                                   /*bSourceToDestination*/ false);
+        }
 
         if (!sNodeId.isEmpty())
         {

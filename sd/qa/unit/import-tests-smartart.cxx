@@ -41,6 +41,7 @@ public:
     void testSegmentedCycle();
     void testBaseRtoL();
     void testVertialBoxList();
+    void testVertialBracketList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(testSegmentedCycle);
     CPPUNIT_TEST(testBaseRtoL);
     CPPUNIT_TEST(testVertialBoxList);
+    CPPUNIT_TEST(testVertialBracketList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -393,6 +395,23 @@ void SdImportTestSmartArt::testVertialBoxList()
     // 'Expected greater than: 25656, Actual  : 21165'.
     CPPUNIT_ASSERT_GREATER(xParentText->getPosition().X + xParentText->getSize().Width,
                            xChildText->getPosition().X + xChildText->getSize().Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testVertialBracketList()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/vertical-bracket-list.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef),
+                                                 uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xShapeGroup->getCount());
+
+    uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstChild.is());
+    // Without the accompanying fix in place, this test would have failed with
+    // 'actual: 2', i.e. one child shape (with its "A" text) was missing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstChild->getCount());
 
     xDocShRef->DoClose();
 }
