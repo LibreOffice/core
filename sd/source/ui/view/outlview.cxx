@@ -1524,7 +1524,7 @@ void OutlineView::TryToMergeUndoActions()
                     // first remove the merged undo action
                     assert( pListAction->GetUndoAction(nEditPos) == pEditUndo &&
                         "sd::OutlineView::TryToMergeUndoActions(), wrong edit pos!" );
-                    pListAction->RemoveX(nEditPos);
+                    pListAction->Remove(nEditPos);
 
                     if ( !pListAction->maUndoActions.empty() )
                     {
@@ -1535,7 +1535,7 @@ void OutlineView::TryToMergeUndoActions()
                         size_t nDestAction = pPrevListAction->maUndoActions.size();
                         while( nCount-- )
                         {
-                            std::unique_ptr<SfxUndoAction> pTemp = pListAction->RemoveX(0);
+                            std::unique_ptr<SfxUndoAction> pTemp = pListAction->Remove(0);
                             pPrevListAction->Insert( std::move(pTemp), nDestAction++ );
                         }
                         pPrevListAction->nCurUndoAction = pPrevListAction->maUndoActions.size();
