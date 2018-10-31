@@ -2063,10 +2063,9 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
     if(nOldHdlNum != nNewHdlNum)
     {
         mnFocusIndex = nNewHdlNum;
-        SdrHdl* pNew = GetHdl(mnFocusIndex);
-
-        if(pNew)
+        if (mnFocusIndex < GetHdlCount())
         {
+            SdrHdl* pNew = GetHdl(mnFocusIndex);
             pNew->Touch();
         }
     }
