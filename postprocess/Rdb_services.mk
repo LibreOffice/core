@@ -275,7 +275,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	reportdesign/util/rptui \
 	reportdesign/util/rptxml \
 	shell/source/backends/localebe/localebe1 \
-	$(if $(filter-out ANDROID IOS,$(OS)),\
+	$(if $(filter-out ANDROID iOS,$(OS)),\
 		connectivity/source/drivers/odbc/odbc \
 	) \
 ))

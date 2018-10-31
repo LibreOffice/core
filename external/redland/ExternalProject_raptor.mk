@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,raptor,\
 
 $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter IOS,$(OS)),LIBS="-liconv") \
+		$(if $(filter iOS,$(OS)),LIBS="-liconv") \
 		CFLAGS="$(CFLAGS) $(if $(debug),-g,-O) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
 			$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
 		LDFLAGS=" \

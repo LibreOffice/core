@@ -8,7 +8,7 @@
 
 $(eval $(call gb_Module_Module,ios))
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 
 $(eval $(call gb_Module_add_targets,ios,\
 	StaticLibrary_ios \

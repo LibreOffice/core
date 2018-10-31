@@ -4039,7 +4039,7 @@ darwin*)
         AC_MSG_ERROR([Can't build 32-bit code for iOS])
         ;;
     arm64)
-        OS=IOS
+        OS=iOS
         if test "$enable_ios_simulator" = "yes"; then
             AC_MSG_ERROR([iOS simulator is only available in OSX not iOS])
         else
@@ -4053,7 +4053,7 @@ darwin*)
         ;;
     x86_64)
         if test "$enable_ios_simulator" = "yes"; then
-            OS=IOS
+            OS=iOS
         fi
         CPUNAME=X86_64
         RTL_ARCH=X86_64

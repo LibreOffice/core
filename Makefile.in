@@ -178,7 +178,7 @@ clean-host:
 	rm -fr $(TESTINSTALLDIR)
 	rm -fr $(INSTDIR)
 	rm -fr $(WORKDIR)
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 	rm -fr $(SRCDIR)/ios/generated
 endif
 
@@ -284,7 +284,7 @@ build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset) \
         $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check))) \
         install-gdb-printers
 	$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
@@ -295,13 +295,13 @@ help showmodules gbuildtojson:
 
 cross-toolset: bootstrap fetch
 	# fetch again in case there are externals only needed on build platform
-ifneq ($(OS),IOS)
+ifneq ($(OS),iOS)
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(BUILDDIR)/Makefile fetch
 endif
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
 
 install-gdb-printers:
-ifneq ($(filter-out WNT MACOSX IOS,$(OS)),)
+ifneq ($(filter-out WNT MACOSX iOS,$(OS)),)
 	mkdir -p $(INSTDIR)
 	$(SRCDIR)/solenv/bin/install-gdb-printers -a $(INSTDIR) -c
 endif

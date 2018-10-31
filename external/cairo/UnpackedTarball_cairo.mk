@@ -15,7 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.patch \
 ))
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.no-atsui.patch \
 	external/cairo/cairo/cairo-1.10.2.ios.patch \
@@ -28,7 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 ))
 endif
 
-ifneq (,$(filter ANDROID IOS,$(OS)))
+ifneq (,$(filter ANDROID iOS,$(OS)))
 $(eval $(call gb_UnpackedTarball_add_file,cairo,.,external/cairo/cairo/dummy_pkg_config))
 endif
 

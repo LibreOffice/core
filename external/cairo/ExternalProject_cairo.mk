@@ -43,9 +43,9 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_ExternalProject_run,build,\
 	./configure \
 		$(if $(debug),STRIP=" ") \
-		$(if $(filter ANDROID IOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS) $(gb_VISIBILITY_FLAGS)") \
-		$(if $(filter-out ANDROID IOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS)" ) \
-		$(if $(filter ANDROID IOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
+		$(if $(filter ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS) $(gb_VISIBILITY_FLAGS)") \
+		$(if $(filter-out ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS)" ) \
+		$(if $(filter ANDROID iOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
 		LIBS="$(ZLIB_LIBS)" \
 		pixman_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman" \
 		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1" \
@@ -54,10 +54,10 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include") \
 		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)") \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static)) \
-		$(if $(filter ANDROID IOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
-		$(if $(filter IOS,$(OS)),--enable-quartz --enable-quartz-font) \
+		$(if $(filter ANDROID iOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
+		$(if $(filter iOS,$(OS)),--enable-quartz --enable-quartz-font) \
 		--disable-valgrind \
-		$(if $(filter IOS,$(OS)),--disable-ft,--enable-ft --enable-fc) \
+		$(if $(filter iOS,$(OS)),--disable-ft,--enable-ft --enable-fc) \
 		--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no ax_cv_c_float_words_bigendian=no)) \

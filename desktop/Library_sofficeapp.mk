@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
     icu_headers \
     icui18n \
     icuuc \
-    $(if $(filter-out IOS,$(OS)), \
+    $(if $(filter-out iOS,$(OS)), \
     curl \
     )\
     $(if $(ENABLE_ONLINE_UPDATE_MAR),\
@@ -101,7 +101,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,sofficeapp,\
 
 endif
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \
@@ -154,7 +154,7 @@ endif
 endif
 
 # LibreOfficeKit bits
-ifneq ($(filter $(OS),ANDROID IOS MACOSX WNT),)
+ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/lokinteractionhandler \

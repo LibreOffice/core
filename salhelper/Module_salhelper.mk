@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,salhelper,\
 	Library_salhelper \
 ))
 
-ifneq ($(OS),IOS)
+ifneq ($(OS),iOS)
 $(eval $(call gb_Module_add_check_targets,salhelper,\
 	CppunitTest_salhelper_testapi \
 ))

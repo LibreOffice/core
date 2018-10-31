@@ -164,7 +164,7 @@ bridges_SELECTED_BRIDGE := gcc3_linux_x86-64
 bridge_asm_objects := call
 bridge_noncallexception_noopt_objects := callvirtualmethod
 bridge_exception_objects := abi cpp2uno except rtti uno2cpp
-else ifneq ($(filter MACOSX IOS,$(OS)),)
+else ifneq ($(filter MACOSX iOS,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_macosx_x86-64
 bridge_exception_objects := abi call cpp2uno except uno2cpp
 bridge_noncallexception_noopt_objects := callvirtualmethod
@@ -206,7 +206,7 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx) \
 ))
 
-ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX IOS HAIKU,$(OS)),)
+ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX iOS HAIKU,$(OS)),)
 $(eval $(call gb_Library_add_libs,gcc3_uno,\
 	-ldl \
 ))

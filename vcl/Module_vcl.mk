@@ -42,7 +42,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
 
 $(eval $(call gb_Module_add_targets,vcl,\
-    $(if $(filter-out ANDROID IOS WNT,$(OS)), \
+    $(if $(filter-out ANDROID iOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_fftester \
         Executable_svptest \

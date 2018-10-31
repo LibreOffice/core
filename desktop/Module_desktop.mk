@@ -100,7 +100,7 @@ else ifeq ($(OS),MACOSX)
 
 else ifeq ($(OS),ANDROID)
 
-else ifeq ($(OS),IOS)
+else ifeq ($(OS),iOS)
 
 else ifeq ($(OS),HAIKU)
 

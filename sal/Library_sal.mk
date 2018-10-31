@@ -23,7 +23,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 	$(if $(filter FUZZERS,$(BUILD_TYPE)), \
 		-DFORCE_DEFAULT_SIGNAL \
 	) \
-	$(if $(filter IOS,$(OS)), \
+	$(if $(filter iOS,$(OS)), \
 		-DNO_CHILD_PROCESSES \
 	) \
 	-DSAL_DLLIMPLEMENTATION \
@@ -120,7 +120,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/unichars \
 ))
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,sal,\
     $(gb_OBJCXXFLAGS) \
 ))
@@ -179,7 +179,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
-	$(if $(filter-out ANDROID IOS,$(OS)), sal/osl/unx/salinit) \
+	$(if $(filter-out ANDROID iOS,$(OS)), sal/osl/unx/salinit) \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one. Ditto for system.mm
@@ -195,7 +195,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 endif
 
-ifneq ($(filter MACOSX IOS,$(OS)),)
+ifneq ($(filter MACOSX iOS,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/osxlocale \
 ))

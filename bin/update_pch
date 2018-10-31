@@ -572,7 +572,7 @@ def process_makefile(root, module, makefile):
     if not os.path.isfile(filename):
         sys.stderr.write('Error: Module {} has no makefile at {}.'.format(module, filename))
 
-    groups = {'':[], 'ANDROID':[], 'IOS':[], 'WNT':[], 'LINUX':[], 'MACOSX':[]}
+    groups = {'':[], 'ANDROID':[], 'iOS':[], 'WNT':[], 'LINUX':[], 'MACOSX':[]}
 
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -1055,7 +1055,7 @@ class TestMakefileParser(unittest.TestCase):
 
     def test_parse_multiline_eval_with_if(self):
         source = """$(eval $(call gb_Library_add_defs,sal,\\
-	$(if $(filter $(OS),IOS), \\
+	$(if $(filter $(OS),iOS), \\
 		-DNO_CHILD_PROCESSES \\
 	) \\
 ))
@@ -1156,7 +1156,7 @@ endif
         self.assertEqual(len(groups['']), 0)
 
     def test_parse_filter(self):
-        source = """ifneq ($(filter $(OS),MACOSX IOS),)
+        source = """ifneq ($(filter $(OS),MACOSX iOS),)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
 	sal/osl/unx/osxlocale \\
 ))

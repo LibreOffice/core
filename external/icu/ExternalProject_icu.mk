@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 else # $(OS)
 
 icu_CFLAGS:=" \
-	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
+	$(if $(filter iOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 	$(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 	$(if $(debug),$(gb_DEBUG_CFLAGS)) \
@@ -42,7 +42,7 @@ icu_CFLAGS:=" \
 	$(if $(filter FUZZERS,$(BUILD_TYPE)),-DU_USE_STRTOD_L=0) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
-	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
+	$(if $(filter iOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 	$(if $(debug),$(gb_DEBUG_CFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
@@ -68,7 +68,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
 			$(if $(CROSS_COMPILING),--disable-tools --disable-extras) \
-			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
+			$(if $(filter iOS ANDROID,$(OS)),--disable-dyload) \
 			$(if $(filter ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
