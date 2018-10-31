@@ -140,7 +140,6 @@ public:
 
     // Dialog::Execute replacement API
 public:
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl );
     long            GetResult() const;
 private:
     bool            ImplStartExecuteModal();
@@ -148,7 +147,6 @@ private:
     void            ImplSetModalInputMode(bool bModal);
 public:
 
-    // FIXME: Need to remove old StartExecuteModal in favour of this one.
     /// Returns true if the dialog successfully starts
     bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
     {

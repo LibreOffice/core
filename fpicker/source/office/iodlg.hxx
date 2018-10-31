@@ -173,7 +173,7 @@ public:
     virtual void                dispose() override;
 
     virtual short               Execute() override;
-    virtual void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    virtual bool                StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
 
             void                FileSelect();
             void                FilterSelect() override;

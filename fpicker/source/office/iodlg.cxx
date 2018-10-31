@@ -1685,16 +1685,14 @@ short SvtFileDialog::Execute()
     return nResult;
 }
 
-
-void SvtFileDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+bool SvtFileDialog::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
 {
     if (!PrepareExecute())
-        return;
+        return false;
 
     // start of the dialog
-    ModalDialog::StartExecuteModal( rEndDialogHdl );
+    return ModalDialog::StartExecuteAsync(rCtx);
 }
-
 
 void SvtFileDialog::onAsyncOperationStarted()
 {
@@ -1703,7 +1701,6 @@ void SvtFileDialog::onAsyncOperationStarted()
     pImpl->_pBtnCancel->Enable();
     pImpl->_pBtnCancel->GrabFocus();
 }
-
 
 void SvtFileDialog::onAsyncOperationFinished()
 {

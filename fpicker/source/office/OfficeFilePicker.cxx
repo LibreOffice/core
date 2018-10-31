@@ -212,22 +212,18 @@ void SvtFilePicker::prepareExecute()
 
 }
 
-
-IMPL_LINK( SvtFilePicker, DialogClosedHdl, Dialog&, rDlg, void )
+void SvtFilePicker::DialogClosedHdl(sal_Int32 nResult)
 {
     if ( m_xDlgClosedListener.is() )
     {
-        sal_Int16 nRet = static_cast< sal_Int16 >( rDlg.GetResult() );
+        sal_Int16 nRet = static_cast< sal_Int16 >(nResult);
         css::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
         m_xDlgClosedListener->dialogClosed( aEvent );
         m_xDlgClosedListener.clear();
     }
 }
 
-
 // SvtFilePicker
-
-
 PickerFlags SvtFilePicker::getPickerFlags()
 {
     // set the winbits for creating the filedialog
@@ -505,8 +501,11 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< css::ui::dialog
     m_xDlgClosedListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion();
-    getDialog()->StartExecuteModal( LINK( this, SvtFilePicker, DialogClosedHdl ) );
+    SvtFileDialog_Base* pDialog = getDialog();
+    pDialog->EnableAutocompletion();
+    pDialog->StartExecuteAsync([=](sal_Int32 nResult){
+        DialogClosedHdl(nResult);
+    });
 }
 
 

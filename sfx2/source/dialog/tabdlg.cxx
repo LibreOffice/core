@@ -580,15 +580,6 @@ bool SfxTabDialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
     return TabDialog::StartExecuteAsync( rCtx );
 }
 
-void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
-{
-    if ( !m_pTabCtrl->GetPageCount() )
-        return;
-    Start_Impl();
-    TabDialog::StartExecuteModal( rEndDialogHdl );
-}
-
-
 void SfxTabDialog::Start()
 {
     m_pImpl->bModal = false;

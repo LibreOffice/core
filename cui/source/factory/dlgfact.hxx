@@ -91,7 +91,7 @@ public:
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     virtual sal_Int32 GetResult() override;
 private:
-    DECL_LINK( EndDialogHdl, Dialog&, void );
+    void EndDialogHdl(sal_Int32 nResult);
 };
 
 class CuiVclAbstractDialog_Impl : public VclAbstractDialog

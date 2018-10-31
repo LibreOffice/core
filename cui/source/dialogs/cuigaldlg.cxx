@@ -236,7 +236,6 @@ IMPL_LINK_NOARG(SearchProgress, CleanUpHdl, void*, void)
     disposeOnce();
 }
 
-
 short SearchProgress::Execute()
 {
     OSL_FAIL( "SearchProgress cannot be executed via Dialog::Execute!\n"
@@ -245,16 +244,14 @@ short SearchProgress::Execute()
     return RET_CANCEL;
 }
 
-
-void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+bool SearchProgress::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
 {
     assert(!maSearchThread.is());
     maSearchThread = new SearchThread(
         this, static_cast< TPGalleryThemeProperties * >(parent_.get()), startUrl_);
     maSearchThread->launch();
-    ModalDialog::StartExecuteModal( rEndDialogHdl );
+    return ModalDialog::StartExecuteAsync(rCtx);
 }
-
 
 TakeThread::TakeThread(
     TakeProgress* pProgress,
@@ -400,7 +397,6 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
     disposeOnce();
 }
 
-
 short TakeProgress::Execute()
 {
     OSL_FAIL( "TakeProgress cannot be executed via Dialog::Execute!\n"
@@ -409,16 +405,14 @@ short TakeProgress::Execute()
     return RET_CANCEL;
 }
 
-
-void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+bool TakeProgress::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
 {
     assert(!maTakeThread.is());
     maTakeThread = new TakeThread(
         this, static_cast< TPGalleryThemeProperties * >(window_.get()), maTakenList);
     maTakeThread->launch();
-    ModalDialog::StartExecuteModal( rEndDialogHdl );
+    return ModalDialog::StartExecuteAsync(rCtx);
 }
-
 
 ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     : ModalDialog(pWindow, "GalleryUpdateProgress",
@@ -923,7 +917,9 @@ void TPGalleryThemeProperties::SearchFiles()
     pProgress->SetDirectory( INetURLObject() );
     pProgress->Update();
 
-    pProgress->StartExecuteModal( LINK( this, TPGalleryThemeProperties, EndSearchProgressHdl ) );
+    pProgress->StartExecuteAsync([=](sal_Int32 nResult){
+        EndSearchProgressHdl(nResult);
+    });
 }
 
 
@@ -962,7 +958,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
     }
 }
 
-
 void TPGalleryThemeProperties::TakeFiles()
 {
     if( m_pLbxFound->GetSelectedEntryCount() || ( bTakeAll && bEntriesFound ) )
@@ -970,9 +965,10 @@ void TPGalleryThemeProperties::TakeFiles()
         VclPtrInstance<TakeProgress> pTakeProgress( this );
         pTakeProgress->Update();
 
-        pTakeProgress->StartExecuteModal(
-            Link<Dialog&,void>() /* no postprocessing needed, pTakeProgress
-                      will be disposed in TakeProgress::CleanupHdl */ );
+        pTakeProgress->StartExecuteAsync([=](sal_Int32 /*nResult*/){
+            /* no postprocessing needed, pTakeProgress
+               will be disposed in TakeProgress::CleanupHdl */
+        });
     }
 }
 
@@ -1107,8 +1103,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
     DoPreview();
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
+void TPGalleryThemeProperties::EndSearchProgressHdl(sal_Int32 /*nResult*/)
 {
   if( !aFoundList.empty() )
   {
@@ -1125,7 +1120,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
       bEntriesFound = false;
   }
 }
-
 
 IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )
 {
