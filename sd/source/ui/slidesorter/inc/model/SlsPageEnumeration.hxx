@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEENUMERATION_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEENUMERATION_HXX
 
-#include <sal/types.h>
-
-#include <pres.hxx>
-
 #include <model/SlsEnumeration.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
 

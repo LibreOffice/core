@@ -28,8 +28,8 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-class SdDrawDocument;
 class SdrPage;
+class SdPage;
 
 namespace sd { namespace slidesorter { namespace controller {
 

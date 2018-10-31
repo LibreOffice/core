@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <view/SlsPageObjectLayouter.hxx>
+#include <view/SlsTheme.hxx>
 #include <view/SlsLayouter.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>

@@ -20,13 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONMANAGER_HXX
 
-#include <model/SlsSharedPageDescriptor.hxx>
-#include <controller/SlsAnimator.hxx>
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <basegfx/range/b2irectangle.hxx>
 #include <vector>
+#include <memory>
 
 class SdPage;
 

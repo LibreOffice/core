@@ -20,15 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTPAINTER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTPAINTER_HXX
 
-#include <SlideSorter.hxx>
-#include <model/SlsPageDescriptor.hxx>
-#include <view/SlsLayouter.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
 #include <view/SlsTheme.hxx>
 #include <memory>
 
 namespace sd { namespace slidesorter { namespace cache {
 class PageCache;
 } } }
+
+namespace sd { namespace slidesorter { class SlideSorter; } }
 
 namespace sd { namespace slidesorter { namespace view {
 

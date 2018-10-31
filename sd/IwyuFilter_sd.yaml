@@ -186,3 +186,6 @@ blacklist:
     sd/source/ui/inc/tools/SlotStateListener.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
+    sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:
+    # Needed for template
+    - o3tl/deleter.hxx

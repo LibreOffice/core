@@ -20,16 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSCROLLBARMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSCROLLBARMANAGER_HXX
 
-#include <SlideSorter.hxx>
-
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <functional>
 
-class ScrollBar;
-class ScrollBarBox;
+namespace sd { class Window; }
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
 

@@ -22,6 +22,7 @@
 
 #include <utility>
 
+#include <model/SlsPageEnumeration.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
 
