@@ -71,7 +71,7 @@ namespace
 SalLayoutGlyphs* lcl_GetRulerTextGlyphs(vcl::RenderContext& rRenderContext, const OUString& rText,
                                         SalLayoutGlyphs& rTextGlyphs)
 {
-    if (!rTextGlyphs.empty())
+    if (rTextGlyphs.IsValid())
         // Use pre-calculated result.
         return &rTextGlyphs;
 

@@ -39,8 +39,8 @@ public:
 
     SalLayoutGlyphsImpl* Impl() const { return m_pImpl; }
 
-    bool empty() const;
-    void clear();
+    bool IsValid() const;
+    void Invalidate();
 };
 
 #endif // INCLUDED_VCL_GLYPHITEM_HXX

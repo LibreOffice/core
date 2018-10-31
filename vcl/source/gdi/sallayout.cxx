@@ -704,7 +704,7 @@ DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) 
 // the text width is the maximum logical extent of all glyphs
 DeviceCoordinate GenericSalLayout::GetTextWidth() const
 {
-    if( m_GlyphItems.empty() )
+    if (!m_GlyphItems.IsValid())
         return 0;
 
     // initialize the extent
@@ -733,7 +733,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     if( !nOldWidth || nNewWidth==nOldWidth )
         return;
 
-    if(m_GlyphItems.empty())
+    if (!m_GlyphItems.IsValid())
     {
         return;
     }
