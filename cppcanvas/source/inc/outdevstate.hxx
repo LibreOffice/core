@@ -50,6 +50,7 @@ namespace cppcanvas
                 fillColor(),
                 textColor(),
                 textFillColor(),
+                textOverlineColor(),
                 textLineColor(),
 
                 xFont(),
@@ -75,6 +76,7 @@ namespace cppcanvas
                 isLineColorSet( false ),
                 isFillColorSet( false ),
                 isTextFillColorSet( false ),
+                isTextOverlineColorSet( false ),
                 isTextLineColorSet( false )
             {
             }
@@ -87,6 +89,7 @@ namespace cppcanvas
             css::uno::Sequence< double >                                             fillColor;
             css::uno::Sequence< double >                                             textColor;
             css::uno::Sequence< double >                                             textFillColor;
+            css::uno::Sequence< double >                                             textOverlineColor;
             css::uno::Sequence< double >                                             textLineColor;
 
             /** Current font.
@@ -116,6 +119,7 @@ namespace cppcanvas
             bool                                                                     isLineColorSet;
             bool                                                                     isFillColorSet;
             bool                                                                     isTextFillColorSet;
+            bool                                                                     isTextOverlineColorSet;
             bool                                                                     isTextLineColorSet;
         };
     }
