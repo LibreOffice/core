@@ -79,7 +79,7 @@ namespace PictReaderShape {
       long origPt[4][2] = { { orig.X(), orig.Y() }, { orig.X()+pSize.Width(), orig.Y() },
                { orig.X()+pSize.Width(), orig.Y()+pSize.Height() },
                { orig.X(), orig.Y()+pSize.Height() }};
-      long origAvoid = dir[0] > 0 ? (dir[1] > 0 ? 2 : 1) : (dir[1] > 0 ? 3 : 0);
+      int origAvoid = dir[0] > 0 ? (dir[1] > 0 ? 2 : 1) : (dir[1] > 0 ? 3 : 0);
       long destPt[4][2] = { { dest.X(), dest.Y() }, { dest.X()+pSize.Width(), dest.Y() },
                { dest.X()+pSize.Width(), dest.Y()+pSize.Height() },
                { dest.X(), dest.Y()+pSize.Height() }};

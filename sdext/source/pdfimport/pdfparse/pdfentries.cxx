@@ -1189,7 +1189,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
         for( int i = 1; i <= 19; i++ ) // do it 19 times, start with 1
         {
             sal_uInt8 aTempKey[ENCRYPTION_KEY_LEN];
-            for( sal_uInt32 j = 0; j < sizeof(aTempKey); j++ )
+            for( size_t j = 0; j < sizeof(aTempKey); j++ )
                 aTempKey[j] = static_cast<sal_uInt8>( aKey[j] ^ i );
 
             if (rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
@@ -1257,7 +1257,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
             for( int i = 19; i >= 0; i-- )
             {
                 sal_uInt8 nTempKey[ENCRYPTION_KEY_LEN];
-                for( unsigned int j = 0; j < sizeof(nTempKey); j++ )
+                for( size_t j = 0; j < sizeof(nTempKey); j++ )
                     nTempKey[j] = sal_uInt8(aKey[j] ^ i);
                 if (rtl_cipher_initARCFOUR( m_pData->m_aCipher, rtl_Cipher_DirectionDecode,
                                             nTempKey, nKeyLen, nullptr, 0 )

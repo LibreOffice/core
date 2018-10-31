@@ -170,7 +170,7 @@ BibConfig::BibConfig()
             OUString sTempReal;
             sal_Int16 nSetMapping = 0;
             nFieldIdx = 0;
-            for(sal_Int16 nFieldVal = 0; nFieldVal < aAssignmentValues.getLength() / 2; nFieldVal++)
+            for(sal_Int32 nFieldVal = 0; nFieldVal < aAssignmentValues.getLength() / 2; nFieldVal++)
             {
                 pAssignmentValues[nFieldIdx++] >>= sTempLogical;
                 pAssignmentValues[nFieldIdx++] >>= sTempReal;

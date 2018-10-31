@@ -178,9 +178,9 @@ static void testTile( Document *pDocument, int max_parts,
             // Estimate the maximum tiles based on the number of parts requested, if Writer.
             int nMaxTiles = max_tiles;
             int nTiles = 0;
-            for (int nY = 0; nY < nHeight - 1; nY += nTilePixelHeight)
+            for (long nY = 0; nY < nHeight - 1; nY += nTilePixelHeight)
             {
-                for (int nX = 0; nX < nWidth - 1; nX += nTilePixelWidth)
+                for (long nX = 0; nX < nWidth - 1; nX += nTilePixelWidth)
                 {
                     if (nMaxTiles >= 0 && nTiles >= nMaxTiles)
                     {
@@ -190,7 +190,7 @@ static void testTile( Document *pDocument, int max_parts,
                     pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                          nX, nY, nTilePixelWidth, nTilePixelHeight);
                     nTiles++;
-                    fprintf (stderr, "   rendered 1:1 tile %d at %d, %d\n",
+                    fprintf (stderr, "   rendered 1:1 tile %d at %ld, %ld\n",
                              nTiles, nX, nY);
                 }
             }
@@ -203,9 +203,9 @@ static void testTile( Document *pDocument, int max_parts,
             if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
                 nMaxTiles = static_cast<int>(ceil(max_parts * 16128. / nTileTwipHeight) * ceil(static_cast<double>(nWidth) / nTileTwipWidth));
             int nTiles = 0;
-            for (int nY = 0; nY < nHeight - 1; nY += nTileTwipHeight)
+            for (long nY = 0; nY < nHeight - 1; nY += nTileTwipHeight)
             {
-                for (int nX = 0; nX < nWidth - 1; nX += nTileTwipWidth)
+                for (long nX = 0; nX < nWidth - 1; nX += nTileTwipWidth)
                 {
                     if (nMaxTiles >= 0 && nTiles >= nMaxTiles)
                     {
@@ -215,7 +215,7 @@ static void testTile( Document *pDocument, int max_parts,
                     pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                          nX, nY, nTileTwipWidth, nTileTwipHeight);
                     nTiles++;
-                    fprintf (stderr, "   rendered scaled tile %d at %d, %d\n",
+                    fprintf (stderr, "   rendered scaled tile %d at %ld, %ld\n",
                              nTiles, nX, nY);
                 }
             }
