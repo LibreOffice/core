@@ -80,20 +80,6 @@ bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
     return pDlg->StartExecuteAsync(rCtx);           \
 }
 
-class VclAbstractDialog2_Impl : public VclAbstractDialog2
-{
-    ScopedVclPtr<Dialog> m_pDlg;
-    Link<Dialog&,void>   m_aEndDlgHdl;
-public:
-    explicit        VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
-    virtual         ~VclAbstractDialog2_Impl() override;
-    virtual void    dispose() override;
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
-    virtual sal_Int32 GetResult() override;
-private:
-    void EndDialogHdl(sal_Int32 nResult);
-};
-
 class CuiVclAbstractDialog_Impl : public VclAbstractDialog
 {
     DECL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl,Dialog)
@@ -756,7 +742,7 @@ public:
     virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Window* pParent, const OUString& rOldText) override;
     virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Window* pParent,
                                             GalleryTheme* pThm) override;
-    virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
+    virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet) override;
     virtual VclPtr<AbstractURLDlg> CreateURLDialog( vcl::Window* pParent,

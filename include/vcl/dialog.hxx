@@ -138,9 +138,6 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    // Dialog::Execute replacement API
-public:
-    long            GetResult() const;
 private:
     bool            ImplStartExecuteModal();
     static void     ImplEndExecuteModal();

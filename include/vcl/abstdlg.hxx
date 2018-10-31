@@ -79,15 +79,6 @@ public:
     virtual OString GetScreenshotId() const { return OString(); };
 };
 
-class VCL_DLLPUBLIC VclAbstractDialog2 : public virtual VclReferenceBase
-{
-protected:
-    virtual             ~VclAbstractDialog2() override;
-public:
-    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) = 0;
-    virtual sal_Int32   GetResult() = 0;
-};
-
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 {
 protected:

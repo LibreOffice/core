@@ -570,17 +570,15 @@ class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
     VclPtr<SwMailMergeWizard> pDlg;
-    Link<Dialog&,void>        aEndDlgHdl;
 
-    void EndDialogHdl(sal_Int32 nResult);
 public:
     explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
      : pDlg(p)
      {}
     virtual         ~AbstractMailMergeWizard_Impl() override;
     virtual void    dispose() override;
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
-    virtual sal_Int32 GetResult() override;
+    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
+    virtual short   Execute() override;
 
     virtual OUString            GetReloadDocument() const override;
     virtual void                ShowPage( sal_uInt16 nLevel ) override;

@@ -82,11 +82,6 @@ BitmapEx VclAbstractDialog::createScreenshot() const
     return BitmapEx();
 }
 
-// virtual
-VclAbstractDialog2::~VclAbstractDialog2()
-{
-}
-
 VclAbstractDialogFactory::~VclAbstractDialogFactory()
 {
 }

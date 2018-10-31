@@ -245,7 +245,7 @@ short SwMailMergeWizard::Execute()
     OSL_FAIL("SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
                "It creates a thread (MailDispatcher instance) that will call"
                "back to VCL apartment => deadlock!\n"
-               "Use Dialog::StartExecuteModal to execute the dialog!" );
+               "Use Dialog::StartExecuteAsync to execute the dialog!" );
     return RET_CANCEL;
 }
 

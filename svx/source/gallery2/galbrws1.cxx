@@ -268,20 +268,20 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
 
     if ( bCreateNew )
     {
-        mpThemePropertiesDialog->StartExecuteModal(
-            LINK( this, GalleryBrowser1, EndNewThemePropertiesDlgHdl ) );
+        mpThemePropertiesDialog->StartExecuteAsync([=](sal_Int32 nResult){
+            EndNewThemePropertiesDlgHdl(nResult);
+        });
     }
     else
     {
-        mpThemePropertiesDialog->StartExecuteModal(
-            LINK( this, GalleryBrowser1, EndThemePropertiesDlgHdl ) );
+        mpThemePropertiesDialog->StartExecuteAsync([=](sal_Int32 nResult){
+            EndThemePropertiesDlgHdl(nResult);
+        });
     }
 }
 
-void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew)
+void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 nRet)
 {
-    long nRet = mpThemePropertiesDialog->GetResult();
-
     if( nRet == RET_OK )
     {
         OUString aName( mpExchangeData->pTheme->GetName() );
@@ -318,14 +318,14 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew)
     Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), nullptr, true );
 }
 
-IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, /*rDialog*/, void )
+void GalleryBrowser1::EndNewThemePropertiesDlgHdl(sal_Int32 nResult)
 {
-    ImplEndGalleryThemeProperties(true);
+    ImplEndGalleryThemeProperties(true, nResult);
 }
 
-IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, /*rDialog*/, void )
+void GalleryBrowser1::EndThemePropertiesDlgHdl(sal_Int32 nResult)
 {
-    ImplEndGalleryThemeProperties(false);
+    ImplEndGalleryThemeProperties(false, nResult);
 }
 
 IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, /*p*/, void )
