@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
@@ -53,15 +54,16 @@ static const ShapePropertyIds spnDefaultShapeIds =
 
 } // namespace
 
-ShapePropertyInfo ShapePropertyInfo::DEFAULT( spnDefaultShapeIds, true, false, false, false );
+ShapePropertyInfo ShapePropertyInfo::DEFAULT( spnDefaultShapeIds, true, false, false, false, false );
 
 ShapePropertyInfo::ShapePropertyInfo( const ShapePropertyIds& rnPropertyIds,
-        bool bNamedLineMarker, bool bNamedLineDash, bool bNamedFillGradient, bool bNamedFillBitmap ) :
+        bool bNamedLineMarker, bool bNamedLineDash, bool bNamedFillGradient, bool bNamedFillBitmap, bool bNamedFillHatch ) :
     mrPropertyIds(rnPropertyIds),
     mbNamedLineMarker( bNamedLineMarker ),
     mbNamedLineDash( bNamedLineDash ),
     mbNamedFillGradient( bNamedFillGradient ),
-    mbNamedFillBitmap( bNamedFillBitmap )
+    mbNamedFillBitmap( bNamedFillBitmap ),
+    mbNamedFillHatch( bNamedFillHatch )
 {
 }
 
@@ -108,6 +110,9 @@ bool ShapePropertyMap::setAnyProperty( ShapeProperty ePropId, const Any& rValue 
 
         case ShapeProperty::FillBitmapName:
             return setFillBitmapName(rValue);
+
+        case ShapeProperty::FillHatch:
+            return setFillHatch( nPropId, rValue );
 
         default:;   // suppress compiler warnings
     }
@@ -163,6 +168,22 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
     {
         OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< awt::Gradient >() );
         return !aGradientName.isEmpty() && setProperty( nPropId, aGradientName );
+    }
+
+    return false;
+}
+
+bool ShapePropertyMap::setFillHatch( sal_Int32 nPropId, const Any& rValue )
+{
+    // push hatch explicitly
+    if( !maShapePropInfo.mbNamedFillHatch )
+        return setAnyProperty( nPropId, rValue );
+
+    // create named hatch and push its name
+    if( rValue.has< Hatch >() )
+    {
+        OUString aHatchName = mrModelObjHelper.insertFillHatch( rValue.get< Hatch >() );
+        return !aHatchName.isEmpty() && setProperty( nPropId, aHatchName );
     }
 
     return false;
