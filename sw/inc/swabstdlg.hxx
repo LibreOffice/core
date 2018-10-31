@@ -344,7 +344,7 @@ public:
 
 class SwMailMergeConfigItem;
 
-class AbstractMailMergeWizard : public VclAbstractDialog2
+class AbstractMailMergeWizard : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractMailMergeWizard() override = default;

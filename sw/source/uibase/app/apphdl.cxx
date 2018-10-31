@@ -331,7 +331,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     VclPtr<AbstractMailMergeWizard> m_pWizard;     // always owner
     VclPtr<AbstractMailMergeWizard> m_pWizardToDestroyInCallback;
 
-    DECL_LINK( EndDialogHdl, Dialog&, void );
+    void EndDialogHdl(sal_Int32 nResponse);
     DECL_LINK( DestroyDialogHdl, void*, void );
     DECL_LINK( DestroyWizardHdl, void*, void );
     DECL_LINK( CancelHdl, void*, void );
@@ -455,13 +455,13 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
 
 void SwMailMergeWizardExecutor::ExecuteWizard()
 {
-    m_pWizard->StartExecuteModal(
-        LINK( this, SwMailMergeWizardExecutor, EndDialogHdl ) );
+    m_pWizard->StartExecuteAsync([=](sal_Int32 nResult){
+        EndDialogHdl(nResult);
+    });
 }
 
-IMPL_LINK_NOARG( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
+void SwMailMergeWizardExecutor::EndDialogHdl(sal_Int32 nRet)
 {
-    long nRet = m_pWizard->GetResult();
     sal_uInt16 nRestartPage = m_pWizard->GetRestartPage();
 
     switch ( nRet )

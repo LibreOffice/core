@@ -721,23 +721,17 @@ void AbstractMailMergeWizard_Impl::dispose()
     AbstractMailMergeWizard::dispose();
 }
 
-void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+bool AbstractMailMergeWizard_Impl::StartExecuteAsync(AsyncContext &rCtx)
 {
-    aEndDlgHdl = rEndDialogHdl;
-    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
-        EndDialogHdl(nResult);
-    });
+    // SwMailMergeWizardExecutor wants to run the lifecycle of this dialog
+    // so clear mxOwner here and leave it up to SwMailMergeWizardExecutor
+    rCtx.mxOwner.clear();
+    return pDlg->StartExecuteAsync(rCtx);
 }
 
-sal_Int32 AbstractMailMergeWizard_Impl::GetResult()
+short AbstractMailMergeWizard_Impl::Execute()
 {
-    return pDlg->GetResult();
-}
-
-void AbstractMailMergeWizard_Impl::EndDialogHdl(sal_Int32 /*nResult*/)
-{
-    aEndDlgHdl.Call( *pDlg );
-    aEndDlgHdl = Link<Dialog&,void>();
+    return pDlg->Execute();
 }
 
 OUString AbstractMailMergeWizard_Impl::GetReloadDocument() const

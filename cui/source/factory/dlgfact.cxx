@@ -278,42 +278,6 @@ short AbstractSignSignatureLineDialog_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
 
 
-// VclAbstractDialog2_Impl
-
-
-// virtual
-VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
-{
-    disposeOnce();
-}
-
-void VclAbstractDialog2_Impl::dispose()
-{
-    m_pDlg.disposeAndClear();
-    VclAbstractDialog2::dispose();
-}
-
-// virtual
-void  VclAbstractDialog2_Impl::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
-{
-    m_aEndDlgHdl = rEndDialogHdl;
-    m_pDlg->StartExecuteAsync([=](sal_Int32 nResult){
-        EndDialogHdl(nResult);
-    });
-}
-
-// virtual
-sal_Int32 VclAbstractDialog2_Impl::GetResult()
-{
-    return m_pDlg->GetResult();
-}
-
-void VclAbstractDialog2_Impl::EndDialogHdl(sal_Int32 /*nResult*/)
-{
-    m_aEndDlgHdl.Call( *m_pDlg );
-    m_aEndDlgHdl = Link<Dialog&,void>();
-}
-
 void CuiAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );
@@ -1154,12 +1118,12 @@ VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialo
    return VclPtr<AbstractGalleryIdDialog_Impl>::Create(o3tl::make_unique<GalleryIdDialog>(pParent, pThm));
 }
 
-VclPtr<VclAbstractDialog2> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
     VclPtrInstance<GalleryThemeProperties> pDlg(pParent, pData, pItemSet);
-    return VclPtr<VclAbstractDialog2_Impl>::Create( pDlg );
+    return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
 }
 
 VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog( vcl::Window* pParent,

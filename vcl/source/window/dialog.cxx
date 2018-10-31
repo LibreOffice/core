@@ -1130,11 +1130,6 @@ void Dialog::EndDialog( long nResult )
     xOwnerDialog.reset();
 }
 
-long Dialog::GetResult() const
-{
-    return mpDialogImpl->mnResult;
-}
-
 void Dialog::EndAllDialogs( vcl::Window const * pParent )
 {
     ImplSVData* pSVData = ImplGetSVData();

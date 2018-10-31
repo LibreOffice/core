@@ -59,7 +59,7 @@ public:
 class Gallery;
 class GalleryThemeEntry;
 class GalleryTheme;
-class VclAbstractDialog2;
+class VclAbstractDialog;
 struct ExchangeData;
 class SfxItemSet;
 
@@ -76,7 +76,7 @@ private:
 
     VclPtr<GalleryButton>        maNewTheme;
     VclPtr<GalleryThemeListBox>  mpThemes;
-    VclPtr<VclAbstractDialog2>   mpThemePropertiesDialog; // to keep it alive during execution
+    VclPtr<VclAbstractDialog>   mpThemePropertiesDialog; // to keep it alive during execution
     Gallery*                mpGallery;
     std::unique_ptr<ExchangeData> mpExchangeData;
     std::unique_ptr<SfxItemSet>   mpThemePropsDlgItemSet;
@@ -94,7 +94,9 @@ private:
     void                    ImplGetExecuteVector(std::vector<OString>& o_aExec);
     void                    ImplExecute(const OString &rIdent);
     void                    ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew );
-    void                    ImplEndGalleryThemeProperties(bool bCreateNew);
+    void                    EndNewThemePropertiesDlgHdl(sal_Int32 nResult);
+    void                    EndThemePropertiesDlgHdl(sal_Int32 nResult);
+    void                    ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 nResult);
 
     // Control
     virtual void            Resize() override;
@@ -107,8 +109,6 @@ private:
                             DECL_LINK( SelectThemeHdl, ListBox&, void );
                             DECL_LINK( ShowContextMenuHdl, void*, void );
                             DECL_LINK( PopupMenuHdl, Menu*, bool );
-                            DECL_LINK( EndNewThemePropertiesDlgHdl, Dialog&, void );
-                            DECL_LINK( EndThemePropertiesDlgHdl, Dialog&, void );
                             DECL_LINK( DestroyThemePropertiesDlgHdl, void*, void );
 
 public:
