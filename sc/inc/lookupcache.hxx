@@ -104,6 +104,10 @@ public:
                 (mbString ? (*mpStr == *r.mpStr) : (mfVal == r.mfVal));
         }
 
+        bool isEmptyStringQuery() const
+        {
+            return (getQueryOp() == QueryOp::EQUAL) && mbString && mpStr && mpStr->isEmpty();
+        }
     };
 
     /// MUST be new'd because Notify() deletes.
