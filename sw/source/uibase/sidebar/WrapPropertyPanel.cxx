@@ -22,6 +22,8 @@
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <svx/svxids.hrc>
+#include <svx/dlgutil.hxx>
+#include <svx/svdtrans.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
@@ -96,6 +98,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     get(mpEnableContour, "enablecontour");
     get(mpEditContour, "editcontour");
     get(mpSpacingLB, "spacingLB");
+    mpSpacingLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();
