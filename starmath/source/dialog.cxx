@@ -594,7 +594,7 @@ SmCategoryDesc::~SmCategoryDesc()
 
 IMPL_LINK( SmDistanceDialog, GetFocusHdl, weld::Widget&, rControl, void )
 {
-    if (Categories[nActiveCategory])
+    if (m_xCategories[nActiveCategory])
     {
         sal_uInt16  i;
 
@@ -610,7 +610,7 @@ IMPL_LINK( SmDistanceDialog, GetFocusHdl, weld::Widget&, rControl, void )
             return;
         if (m_pCurrentImage)
             m_pCurrentImage->hide();
-        m_pCurrentImage = Categories[nActiveCategory]->GetGraphic(i);
+        m_pCurrentImage = m_xCategories[nActiveCategory]->GetGraphic(i);
         m_pCurrentImage->show();
     }
 }
@@ -679,7 +679,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     // before switching to the new one
     if (nActiveCategory != CATEGORY_NONE)
     {
-        pCat = Categories[nActiveCategory];
+        pCat = m_xCategories[nActiveCategory].get();
         pCat->SetValue(0, sal::static_int_cast<sal_uInt16>(m_xMetricField1->get_value(FieldUnit::NONE)));
         pCat->SetValue(1, sal::static_int_cast<sal_uInt16>(m_xMetricField2->get_value(FieldUnit::NONE)));
         pCat->SetValue(2, sal::static_int_cast<sal_uInt16>(m_xMetricField3->get_value(FieldUnit::NONE)));
@@ -725,7 +725,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 
         if (bActive)
         {
-            pCat = Categories[nCategory];
+            pCat = m_xCategories[nCategory].get();
             pFT->set_label(pCat->GetString(i));
 
             pMF->set_range(pCat->GetMinimum(i), pCat->GetMaximum(i), FieldUnit::NONE);
@@ -748,7 +748,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     }
 
     m_xMenuButton->set_item_active("menuitem" + OString::number(nCategory + 1), true);
-    m_xFrame->set_label(Categories[nCategory]->GetName());
+    m_xFrame->set_label(m_xCategories[nCategory]->GetName());
 
     nActiveCategory = nCategory;
 
@@ -773,7 +773,7 @@ SmDistanceDialog::SmDistanceDialog(weld::Window *pParent)
     , m_pCurrentImage(m_xBitmap.get())
 {
     for (sal_uInt16 i = 0; i < NOCATEGORIES; ++i)
-        Categories[i] = new SmCategoryDesc(*m_xBuilder, i);
+        m_xCategories[i].reset( new SmCategoryDesc(*m_xBuilder, i) );
     nActiveCategory   = CATEGORY_NONE;
     bScaleAllBrackets = false;
 
@@ -791,36 +791,34 @@ SmDistanceDialog::SmDistanceDialog(weld::Window *pParent)
 
 SmDistanceDialog::~SmDistanceDialog()
 {
-    for (SmCategoryDesc* & rpDesc : Categories)
-        DELETEZ(rpDesc);
 }
 
 void SmDistanceDialog::ReadFrom(const SmFormat &rFormat)
 {
-    Categories[0]->SetValue(0, rFormat.GetDistance(DIS_HORIZONTAL));
-    Categories[0]->SetValue(1, rFormat.GetDistance(DIS_VERTICAL));
-    Categories[0]->SetValue(2, rFormat.GetDistance(DIS_ROOT));
-    Categories[1]->SetValue(0, rFormat.GetDistance(DIS_SUPERSCRIPT));
-    Categories[1]->SetValue(1, rFormat.GetDistance(DIS_SUBSCRIPT));
-    Categories[2]->SetValue(0, rFormat.GetDistance(DIS_NUMERATOR));
-    Categories[2]->SetValue(1, rFormat.GetDistance(DIS_DENOMINATOR));
-    Categories[3]->SetValue(0, rFormat.GetDistance(DIS_FRACTION));
-    Categories[3]->SetValue(1, rFormat.GetDistance(DIS_STROKEWIDTH));
-    Categories[4]->SetValue(0, rFormat.GetDistance(DIS_UPPERLIMIT));
-    Categories[4]->SetValue(1, rFormat.GetDistance(DIS_LOWERLIMIT));
-    Categories[5]->SetValue(0, rFormat.GetDistance(DIS_BRACKETSIZE));
-    Categories[5]->SetValue(1, rFormat.GetDistance(DIS_BRACKETSPACE));
-    Categories[5]->SetValue(3, rFormat.GetDistance(DIS_NORMALBRACKETSIZE));
-    Categories[6]->SetValue(0, rFormat.GetDistance(DIS_MATRIXROW));
-    Categories[6]->SetValue(1, rFormat.GetDistance(DIS_MATRIXCOL));
-    Categories[7]->SetValue(0, rFormat.GetDistance(DIS_ORNAMENTSIZE));
-    Categories[7]->SetValue(1, rFormat.GetDistance(DIS_ORNAMENTSPACE));
-    Categories[8]->SetValue(0, rFormat.GetDistance(DIS_OPERATORSIZE));
-    Categories[8]->SetValue(1, rFormat.GetDistance(DIS_OPERATORSPACE));
-    Categories[9]->SetValue(0, rFormat.GetDistance(DIS_LEFTSPACE));
-    Categories[9]->SetValue(1, rFormat.GetDistance(DIS_RIGHTSPACE));
-    Categories[9]->SetValue(2, rFormat.GetDistance(DIS_TOPSPACE));
-    Categories[9]->SetValue(3, rFormat.GetDistance(DIS_BOTTOMSPACE));
+    m_xCategories[0]->SetValue(0, rFormat.GetDistance(DIS_HORIZONTAL));
+    m_xCategories[0]->SetValue(1, rFormat.GetDistance(DIS_VERTICAL));
+    m_xCategories[0]->SetValue(2, rFormat.GetDistance(DIS_ROOT));
+    m_xCategories[1]->SetValue(0, rFormat.GetDistance(DIS_SUPERSCRIPT));
+    m_xCategories[1]->SetValue(1, rFormat.GetDistance(DIS_SUBSCRIPT));
+    m_xCategories[2]->SetValue(0, rFormat.GetDistance(DIS_NUMERATOR));
+    m_xCategories[2]->SetValue(1, rFormat.GetDistance(DIS_DENOMINATOR));
+    m_xCategories[3]->SetValue(0, rFormat.GetDistance(DIS_FRACTION));
+    m_xCategories[3]->SetValue(1, rFormat.GetDistance(DIS_STROKEWIDTH));
+    m_xCategories[4]->SetValue(0, rFormat.GetDistance(DIS_UPPERLIMIT));
+    m_xCategories[4]->SetValue(1, rFormat.GetDistance(DIS_LOWERLIMIT));
+    m_xCategories[5]->SetValue(0, rFormat.GetDistance(DIS_BRACKETSIZE));
+    m_xCategories[5]->SetValue(1, rFormat.GetDistance(DIS_BRACKETSPACE));
+    m_xCategories[5]->SetValue(3, rFormat.GetDistance(DIS_NORMALBRACKETSIZE));
+    m_xCategories[6]->SetValue(0, rFormat.GetDistance(DIS_MATRIXROW));
+    m_xCategories[6]->SetValue(1, rFormat.GetDistance(DIS_MATRIXCOL));
+    m_xCategories[7]->SetValue(0, rFormat.GetDistance(DIS_ORNAMENTSIZE));
+    m_xCategories[7]->SetValue(1, rFormat.GetDistance(DIS_ORNAMENTSPACE));
+    m_xCategories[8]->SetValue(0, rFormat.GetDistance(DIS_OPERATORSIZE));
+    m_xCategories[8]->SetValue(1, rFormat.GetDistance(DIS_OPERATORSPACE));
+    m_xCategories[9]->SetValue(0, rFormat.GetDistance(DIS_LEFTSPACE));
+    m_xCategories[9]->SetValue(1, rFormat.GetDistance(DIS_RIGHTSPACE));
+    m_xCategories[9]->SetValue(2, rFormat.GetDistance(DIS_TOPSPACE));
+    m_xCategories[9]->SetValue(3, rFormat.GetDistance(DIS_BOTTOMSPACE));
 
     bScaleAllBrackets = rFormat.IsScaleNormalBrackets();
 
@@ -837,30 +835,30 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
     // if that's not the case 'const' could be used above!
     SetCategory(nActiveCategory);
 
-    rFormat.SetDistance( DIS_HORIZONTAL,        Categories[0]->GetValue(0) );
-    rFormat.SetDistance( DIS_VERTICAL,          Categories[0]->GetValue(1) );
-    rFormat.SetDistance( DIS_ROOT,              Categories[0]->GetValue(2) );
-    rFormat.SetDistance( DIS_SUPERSCRIPT,       Categories[1]->GetValue(0) );
-    rFormat.SetDistance( DIS_SUBSCRIPT,         Categories[1]->GetValue(1) );
-    rFormat.SetDistance( DIS_NUMERATOR,         Categories[2]->GetValue(0) );
-    rFormat.SetDistance( DIS_DENOMINATOR,       Categories[2]->GetValue(1) );
-    rFormat.SetDistance( DIS_FRACTION,          Categories[3]->GetValue(0) );
-    rFormat.SetDistance( DIS_STROKEWIDTH,       Categories[3]->GetValue(1) );
-    rFormat.SetDistance( DIS_UPPERLIMIT,        Categories[4]->GetValue(0) );
-    rFormat.SetDistance( DIS_LOWERLIMIT,        Categories[4]->GetValue(1) );
-    rFormat.SetDistance( DIS_BRACKETSIZE,       Categories[5]->GetValue(0) );
-    rFormat.SetDistance( DIS_BRACKETSPACE,      Categories[5]->GetValue(1) );
-    rFormat.SetDistance( DIS_MATRIXROW,         Categories[6]->GetValue(0) );
-    rFormat.SetDistance( DIS_MATRIXCOL,         Categories[6]->GetValue(1) );
-    rFormat.SetDistance( DIS_ORNAMENTSIZE,      Categories[7]->GetValue(0) );
-    rFormat.SetDistance( DIS_ORNAMENTSPACE,     Categories[7]->GetValue(1) );
-    rFormat.SetDistance( DIS_OPERATORSIZE,      Categories[8]->GetValue(0) );
-    rFormat.SetDistance( DIS_OPERATORSPACE,     Categories[8]->GetValue(1) );
-    rFormat.SetDistance( DIS_LEFTSPACE,         Categories[9]->GetValue(0) );
-    rFormat.SetDistance( DIS_RIGHTSPACE,        Categories[9]->GetValue(1) );
-    rFormat.SetDistance( DIS_TOPSPACE,          Categories[9]->GetValue(2) );
-    rFormat.SetDistance( DIS_BOTTOMSPACE,       Categories[9]->GetValue(3) );
-    rFormat.SetDistance( DIS_NORMALBRACKETSIZE, Categories[5]->GetValue(3) );
+    rFormat.SetDistance( DIS_HORIZONTAL,        m_xCategories[0]->GetValue(0) );
+    rFormat.SetDistance( DIS_VERTICAL,          m_xCategories[0]->GetValue(1) );
+    rFormat.SetDistance( DIS_ROOT,              m_xCategories[0]->GetValue(2) );
+    rFormat.SetDistance( DIS_SUPERSCRIPT,       m_xCategories[1]->GetValue(0) );
+    rFormat.SetDistance( DIS_SUBSCRIPT,         m_xCategories[1]->GetValue(1) );
+    rFormat.SetDistance( DIS_NUMERATOR,         m_xCategories[2]->GetValue(0) );
+    rFormat.SetDistance( DIS_DENOMINATOR,       m_xCategories[2]->GetValue(1) );
+    rFormat.SetDistance( DIS_FRACTION,          m_xCategories[3]->GetValue(0) );
+    rFormat.SetDistance( DIS_STROKEWIDTH,       m_xCategories[3]->GetValue(1) );
+    rFormat.SetDistance( DIS_UPPERLIMIT,        m_xCategories[4]->GetValue(0) );
+    rFormat.SetDistance( DIS_LOWERLIMIT,        m_xCategories[4]->GetValue(1) );
+    rFormat.SetDistance( DIS_BRACKETSIZE,       m_xCategories[5]->GetValue(0) );
+    rFormat.SetDistance( DIS_BRACKETSPACE,      m_xCategories[5]->GetValue(1) );
+    rFormat.SetDistance( DIS_MATRIXROW,         m_xCategories[6]->GetValue(0) );
+    rFormat.SetDistance( DIS_MATRIXCOL,         m_xCategories[6]->GetValue(1) );
+    rFormat.SetDistance( DIS_ORNAMENTSIZE,      m_xCategories[7]->GetValue(0) );
+    rFormat.SetDistance( DIS_ORNAMENTSPACE,     m_xCategories[7]->GetValue(1) );
+    rFormat.SetDistance( DIS_OPERATORSIZE,      m_xCategories[8]->GetValue(0) );
+    rFormat.SetDistance( DIS_OPERATORSPACE,     m_xCategories[8]->GetValue(1) );
+    rFormat.SetDistance( DIS_LEFTSPACE,         m_xCategories[9]->GetValue(0) );
+    rFormat.SetDistance( DIS_RIGHTSPACE,        m_xCategories[9]->GetValue(1) );
+    rFormat.SetDistance( DIS_TOPSPACE,          m_xCategories[9]->GetValue(2) );
+    rFormat.SetDistance( DIS_BOTTOMSPACE,       m_xCategories[9]->GetValue(3) );
+    rFormat.SetDistance( DIS_NORMALBRACKETSIZE, m_xCategories[5]->GetValue(3) );
 
     rFormat.SetScaleNormalBrackets( bScaleAllBrackets );
 
