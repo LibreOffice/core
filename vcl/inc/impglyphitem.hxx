@@ -98,13 +98,15 @@ protected:
 public:
     virtual ~SalLayoutGlyphsImpl();
     virtual SalLayoutGlyphsImpl* clone(SalLayoutGlyphs&) const = 0;
+    virtual bool IsValid() const = 0;
+    virtual void Invalidate() = 0;
 };
 
 class SalGenericLayoutGlyphsImpl : public SalLayoutGlyphsImpl
 {
     friend class GenericSalLayout;
 
-    const rtl::Reference<LogicalFontInstance> m_rFontInstance;
+    mutable rtl::Reference<LogicalFontInstance> m_rFontInstance;
 
     SalGenericLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs, LogicalFontInstance& rFontInstance)
         : m_rFontInstance(&rFontInstance)
@@ -115,6 +117,8 @@ class SalGenericLayoutGlyphsImpl : public SalLayoutGlyphsImpl
 public:
     SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const override;
     LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
+    bool IsValid() const override;
+    void Invalidate() override;
 };
 
 #endif // INCLUDED_VCL_IMPGLYPHITEM_HXX
