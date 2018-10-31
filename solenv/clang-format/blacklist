@@ -18074,7 +18074,6 @@ vcl/source/gdi/CommonSalLayout.cxx
 vcl/source/gdi/VerticalOrientationData.cxx
 vcl/source/gdi/alpha.cxx
 vcl/source/gdi/animate.cxx
-vcl/source/gdi/base14.cxx
 vcl/source/gdi/bitmap3.cxx
 vcl/source/gdi/bitmap4.cxx
 vcl/source/gdi/bitmapex.cxx
