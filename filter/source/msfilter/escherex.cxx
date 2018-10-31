@@ -4577,7 +4577,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                     if(0 != aPolyPoly.Count())
                     {
-                        sal_Int16 a, b, nIndex = 0;
+                        sal_Int16 nIndex = 0;
+                        sal_uInt16 a, b;
                         sal_uInt32 nDistance = 0xffffffff;
 
                         for ( a = 0; a < aPolyPoly.Count(); a++ )

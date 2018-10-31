@@ -1454,7 +1454,7 @@ public:
 
         ss << "\tint i;\n\t";
         ss << "int currentCount0;\n";
-        for (unsigned i = 0; i < vSubArguments.size() - 1; i++)
+        for (size_t i = 0; i < vSubArguments.size() - 1; i++)
             ss << "int currentCount" << i + 1 << ";\n";
         std::stringstream temp3, temp4;
         int outLoopSize = UNROLLING_FACTOR;

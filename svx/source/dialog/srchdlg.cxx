@@ -244,7 +244,7 @@ void SearchAttrItemList::Remove(size_t nPos)
     if ( nPos + nLen > size() )
         nLen = size() - nPos;
 
-    for ( sal_uInt16 i = nPos; i < nPos + nLen; ++i )
+    for ( size_t i = nPos; i < nPos + nLen; ++i )
         if ( !IsInvalidItem( (*this)[i].pItem ) )
             delete (*this)[i].pItem;
 

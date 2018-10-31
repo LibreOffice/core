@@ -506,7 +506,7 @@ void ClassificationDialog::toggleWidgetsDependingOnCategory()
     for (sal_Int32 nParagraph = 0; nParagraph < rEditEngine.GetParagraphCount(); ++nParagraph)
     {
         sal_uInt16 nFieldCount = rEditEngine.GetFieldCount(nParagraph);
-        for (sal_Int16 nField = 0; nField < nFieldCount; ++nField)
+        for (sal_uInt16 nField = 0; nField < nFieldCount; ++nField)
         {
             EFieldInfo aFieldInfo = rEditEngine.GetFieldInfo(nParagraph, nField);
             if (aFieldInfo.pFieldItem)

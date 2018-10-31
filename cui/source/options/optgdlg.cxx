@@ -1320,7 +1320,7 @@ static void lcl_Update(std::unique_ptr<SfxVoidItem> pInvalidItems[], std::unique
     while(pViewFrm)
     {
         SfxBindings& rBind = pViewFrm->GetBindings();
-        for(sal_Int16 i = 0; i < nCount; i++)
+        for(sal_uInt16 i = 0; i < nCount; i++)
         {
             if(pCurrentFrm == pViewFrm)
                 rBind.InvalidateAll(false);

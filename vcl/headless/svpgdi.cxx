@@ -1657,11 +1657,11 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     }
     sal_Int32 nStride;
     unsigned char *mask_data = aSurface.getBits(nStride);
-    for (sal_Int32 y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
+    for (long y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
     {
         unsigned char *row = mask_data + (nStride*y);
         unsigned char *data = row + (rTR.mnSrcX * 4);
-        for (sal_Int32 x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
+        for (long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
         {
             sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], data[SVP_CAIRO_ALPHA]);
             sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], data[SVP_CAIRO_ALPHA]);

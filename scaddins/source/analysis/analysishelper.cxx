@@ -538,7 +538,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
                 {
                     // return average of days in year between nDate1 and nDate2, inclusive
                     sal_Int32 nDayCount = 0;
-                    for ( sal_Int16 i = nYear1; i <= nYear2; i++ )
+                    for ( sal_uInt16 i = nYear1; i <= nYear2; i++ )
                         nDayCount += ( IsLeapYear( i ) ? 366 : 365 );
 
                     nDaysInYear = static_cast<double>(nDayCount) / static_cast<double>( nYear2 - nYear1 + 1 );

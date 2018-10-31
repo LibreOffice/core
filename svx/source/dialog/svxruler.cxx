@@ -3518,7 +3518,7 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
                 lFences = mpBorders[nCol].nWidth;
             }
 
-            for(sal_uInt16 i = nStart; i < mpBorders.size() - 1; ++i)
+            for(size_t i = nStart; i < mpBorders.size() - 1; ++i)
             {
                 long lWidth = mpBorders[i].nPos - lOldPos;
                 lColumns += lWidth;
@@ -3599,7 +3599,7 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
         else
         {
             long lWidth = 0;
-            for(sal_uInt16 i = nCol; i < mpBorders.size() - 1; i++)
+            for(size_t i = nCol; i < mpBorders.size() - 1; i++)
             {
                 lWidth += glMinFrame + mpBorders[i].nWidth;
             }

@@ -417,7 +417,7 @@ void RegionBand::CreateBandRange(long nYTop, long nYBottom)
     mpLastCheckedBand = mpFirstBand;
     ImplRegionBand* pBand = mpFirstBand;
 
-    for ( int i = nYTop; i <= nYBottom+1; i++ )
+    for ( long i = nYTop; i <= nYBottom+1; i++ )
     {
         // create new band
         ImplRegionBand* pNewBand = new ImplRegionBand( i, i );

@@ -1862,8 +1862,8 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
     }
     Reference<XAccessibleContext> pRContext = pXAcc->getAccessibleContext();
     Reference<XAccessibleRelationSet> pRrelationSet = pRContext->getAccessibleRelationSet();
-    long nRelations = pRrelationSet->getRelationCount();
-    for(int i=0 ; i<nRelations ; i++)
+    sal_Int32 nRelations = pRrelationSet->getRelationCount();
+    for(sal_Int32 i=0 ; i<nRelations ; i++)
     {
         AccessibleRelation accRelation = pRrelationSet->getRelation(i);
         if(accRelation.RelationType == 7)

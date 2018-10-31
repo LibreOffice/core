@@ -1401,7 +1401,8 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
             //Step 7, only if 128 bit
             if( i_nKeyLength == SECUR_128BIT_KEY )
             {
-                sal_uInt32 i, y;
+                sal_uInt32 i;
+                size_t y;
                 sal_uInt8 nLocalKey[ SECUR_128BIT_KEY ]; // 16 = 128 bit key
 
                 for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
@@ -1475,7 +1476,8 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum.data(), nMD5Sum.size(), // the data to be encrypted
                                       &io_rProperties.UValue[0], SECUR_128BIT_KEY ); //encrypted data, stored in class data member
             //step 5
-            sal_uInt32 i, y;
+            sal_uInt32 i;
+            size_t y;
             sal_uInt8 nLocalKey[SECUR_128BIT_KEY];
 
             for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1

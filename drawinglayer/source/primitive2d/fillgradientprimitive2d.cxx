@@ -209,7 +209,7 @@ namespace drawinglayer
                 // reuse first polygon, it's the second one
                 aCombinedPolyPoly.remove(0);
 
-                for(sal_uInt32 a(0); a < rEntries.size() - 1; a++)
+                for(size_t a(0); a < rEntries.size() - 1; a++)
                 {
                     // create next inner polygon, combined with last one
                     basegfx::B2DPolygon aNextPoly(rUnitPolygon);

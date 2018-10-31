@@ -2215,7 +2215,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
 
 OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
-    sal_uInt16 i;
+    sal_Int32 i;
     OUStringBuffer aDenominatorString;
     for( i = 0; i < nCnt; i++ )
     {
@@ -2237,7 +2237,7 @@ OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16
 
 OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
-    sal_Int16 i;
+    sal_Int32 i;
     OUStringBuffer aNumeratorString;
     for( i = 0; i < nCnt; i++ )
     {
@@ -2255,7 +2255,7 @@ OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 n
 
 OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
-    sal_Int16 i;
+    sal_Int32 i;
     OUStringBuffer aIntegerString;
     for( i = 0; i < nCnt; i++ )
     {
@@ -2274,7 +2274,7 @@ OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uI
 
 OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
-    sal_Int16 i;
+    sal_uInt16 i;
     for( i = 0; i < nCnt; i++ )
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRACBLANK )

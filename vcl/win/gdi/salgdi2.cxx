@@ -100,7 +100,7 @@ public:
 
     void convertScanline(sal_uInt8* pSource, sal_uInt8* pDestination)
     {
-        for (int x = 0; x < mnScanlineSize; x += mnComponentSize)
+        for (long x = 0; x < mnScanlineSize; x += mnComponentSize)
         {
             for (int i = 0; i < mnComponentSize; ++i)
             {
