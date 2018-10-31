@@ -23,11 +23,14 @@
 #include <svx/svxdllapi.h>
 #include <vcl/lstbox.hxx>
 
+enum class SpacingType { SPACING_INCH, MARGINS_INCH, SPACING_CM, MARGINS_CM };
+
 /// Custom Widget ListBox to hold entries for Spacing & Margin settings of Header/Footer
 class SVX_DLLPUBLIC SpacingListBox : public ListBox
 {
 public:
     SpacingListBox( vcl::Window* pParent );
+    void Init(SpacingType eType);
     Size GetOptimalSize() const override;
 };
 

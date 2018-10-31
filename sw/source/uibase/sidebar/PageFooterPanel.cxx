@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/svdtrans.hxx>
 #include "PageFooterPanel.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
@@ -66,8 +67,10 @@ PageFooterPanel::PageFooterPanel(
 {
     get(mpFooterToggle, "footertoggle");
     get(mpFooterSpacingLB, "spacingpreset");
+    mpFooterSpacingLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpFooterLayoutLB, "samecontentLB");
     get(mpFooterMarginPresetLB, "footermarginpreset");
+    mpFooterMarginPresetLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();

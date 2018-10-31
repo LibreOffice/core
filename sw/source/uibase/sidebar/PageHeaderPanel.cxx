@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/svdtrans.hxx>
 #include "PageHeaderPanel.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
@@ -69,8 +70,10 @@ PageHeaderPanel::PageHeaderPanel(
 {
     get(mpHeaderToggle, "headertoggle");
     get(mpHeaderSpacingLB, "spacingpreset");
+    mpHeaderSpacingLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpHeaderLayoutLB, "samecontentLB");
     get(mpHeaderMarginPresetLB, "headermarginpreset");
+    mpHeaderMarginPresetLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();
