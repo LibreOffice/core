@@ -1318,7 +1318,7 @@ bool FmXFormShell::canConvertCurrentSelectionToControl_Lock(const OString& rIden
 
 void FmXFormShell::checkControlConversionSlotsForCurrentSelection_Lock(Menu& rMenu)
 {
-    for (sal_Int16 i = 0; i < rMenu.GetItemCount(); ++i)
+    for (sal_uInt16 i = 0; i < rMenu.GetItemCount(); ++i)
     {
         // the context is already of a type that corresponds to the entry -> disable
         const sal_uInt16 nId = rMenu.GetItemId(i);

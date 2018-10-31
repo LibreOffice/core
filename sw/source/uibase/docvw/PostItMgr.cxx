@@ -600,7 +600,7 @@ bool SwPostItMgr::CalcRects()
             {
                 const unsigned long nNumberOfPages = mPages.size();
                 mPages.reserve(aPageNum);
-                for (unsigned int j=0; j<aPageNum - nNumberOfPages; ++j)
+                for (unsigned long j=0; j<aPageNum - nNumberOfPages; ++j)
                     mPages.emplace_back( new SwPostItPageItem());
             }
             mPages[aPageNum-1]->mvSidebarItems.push_back(pItem);
@@ -651,7 +651,7 @@ void SwPostItMgr::PreparePageContainer()
     if (lContainerSize < lPageSize)
     {
         mPages.reserve(lPageSize);
-        for (int i=0; i<lPageSize - lContainerSize;i++)
+        for (long i=0; i<lPageSize - lContainerSize;i++)
             mPages.emplace_back( new SwPostItPageItem());
     }
     else if (lContainerSize > lPageSize)

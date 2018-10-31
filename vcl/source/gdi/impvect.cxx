@@ -330,7 +330,8 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
             nFirstY = nLastY = maStartPt.Y();
             aArr.ImplSetSize( mnCount << 1 );
 
-            sal_uInt16 i, nPolyPos;
+            sal_uInt16 nPolyPos;
+            sal_uLong i;
             for( i = 0, nPolyPos = 0; i < ( mnCount - 1 ); i++ )
             {
                 const sal_uInt8             cMove = mpCodes[ i ];
@@ -437,7 +438,8 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
             nFirstY = nLastY = maStartPt.Y();
             aArr.ImplSetSize( mnCount << 1 );
 
-            sal_uInt16 i, nPolyPos;
+            sal_uInt16 nPolyPos;
+            sal_uLong i;
             for( i = 0, nPolyPos = 0; i < ( mnCount - 1 ); i++ )
             {
                 const sal_uInt8             cMove = mpCodes[ i ];

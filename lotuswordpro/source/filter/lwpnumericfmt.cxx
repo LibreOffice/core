@@ -371,7 +371,7 @@ OUString    LwpNumericFormat::reencode(const OUString& sCode)
     const sal_Unicode * pString = sCode.getStr();
     sal_uInt16 nLen = sCode.getLength();
     bool bFound = false;
-    sal_uInt16 i;
+    sal_Int32 i;
     std::unique_ptr<sal_Unicode[]> pBuff( new sal_Unicode[sCode.getLength()] );
 
     for (i=0; i< sCode.getLength() - 1; i++)

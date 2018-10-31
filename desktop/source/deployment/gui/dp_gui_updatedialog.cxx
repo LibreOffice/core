@@ -849,7 +849,7 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
     if ( ! bRecheckOnly )
     {
         sal_Int32 nCount = 0;
-        for ( sal_Int16 i = 0; i < m_pUpdates->getItemCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_pUpdates->getItemCount(); ++i )
         {
             uno::Sequence< OUString > aItem(2);
 

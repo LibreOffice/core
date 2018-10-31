@@ -410,7 +410,7 @@ ds_status pickBestDevice(std::unique_ptr<ds_profile> const & profile, int& rBest
 int matchDevice(std::unique_ptr<ds_profile> const & profile, char* deviceName)
 {
     int deviceMatch = -1;
-    for (unsigned int d = 0; d < profile->devices.size() - 1; d++)
+    for (size_t d = 0; d < profile->devices.size() - 1; d++)
     {
         if (profile->devices[d].sDeviceName.indexOf(deviceName) != -1)
             deviceMatch = d;

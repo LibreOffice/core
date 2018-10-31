@@ -111,7 +111,7 @@ TestResult checkHorizontalVerticalDiagonalLines(Bitmap& rBitmap, Color aExpected
         checkValue(pAccess, startX, y, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, true, nColorThresh);
         checkValue(pAccess, endX,   y, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, true, nColorThresh);
 
-        for (int x = startX + 1; x <= endX - 1; x++)
+        for (long x = startX + 1; x <= endX - 1; x++)
         {
             checkValue(pAccess, x, y, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, false, nColorThresh);
         }
@@ -127,7 +127,7 @@ TestResult checkHorizontalVerticalDiagonalLines(Bitmap& rBitmap, Color aExpected
         checkValue(pAccess, x, startY, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, true, nColorThresh);
         checkValue(pAccess, x, endY,   aExpectedColor, nNumberOfQuirks, nNumberOfErrors, true, nColorThresh);
 
-        for (int y = startY + 1; y <= endY - 1; y++)
+        for (long y = startY + 1; y <= endY - 1; y++)
         {
             checkValue(pAccess, x, y, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, false, nColorThresh);
         }
