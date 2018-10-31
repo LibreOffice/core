@@ -45,8 +45,8 @@ private:
     css::uno::Reference< css::ui::dialogs::XDialogClosedListener >
                             m_xListener;
 
-    void                            prepareExecute( );
-    DECL_LINK(                DialogClosedHdl, Dialog&, void );
+    void                            prepareExecute();
+    void                            DialogClosedHdl(sal_Int32 nResult);
 
 public:
                                     SvtFolderPicker();

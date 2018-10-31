@@ -222,7 +222,7 @@ protected:
 
     void                prepareExecute( );
 
-    DECL_LINK(    DialogClosedHdl, Dialog&, void );
+    void                DialogClosedHdl(sal_Int32 nResult);
 };
 
 // SvtRemoteFilePicker

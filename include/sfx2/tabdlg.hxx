@@ -183,7 +183,6 @@ public:
     void                RemoveStandardButton();
 
     short               Execute() override;
-    void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     bool                StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx ) override;
     void                Start();
 

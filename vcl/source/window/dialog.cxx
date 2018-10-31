@@ -1052,15 +1052,6 @@ short Dialog::Execute()
 }
 
 // virtual
-void Dialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
-{
-    VclAbstractDialog::AsyncContext aCtx;
-    VclPtr<Dialog> ref(this);
-    aCtx.maEndDialogFn = [ref,rEndDialogHdl](sal_Int32){ rEndDialogHdl.Call(*ref.get()); };
-    StartExecuteAsync(aCtx);
-}
-
-// virtual
 bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
 {
     if ( !ImplStartExecuteModal() )

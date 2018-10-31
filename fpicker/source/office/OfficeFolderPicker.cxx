@@ -63,8 +63,11 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dial
     m_xListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion();
-    getDialog()->StartExecuteModal( LINK( this, SvtFolderPicker, DialogClosedHdl ) );
+    SvtFileDialog_Base* pDialog = getDialog();
+    pDialog->EnableAutocompletion();
+    pDialog->StartExecuteAsync([=](sal_Int32 nResult){
+        DialogClosedHdl(nResult);
+    });
 }
 
 VclPtr<SvtFileDialog_Base> SvtFolderPicker::implCreateDialog( vcl::Window* _pParent )
@@ -96,11 +99,11 @@ void SvtFolderPicker::prepareExecute()
     }
 }
 
-IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog&, rDlg, void )
+void SvtFolderPicker::DialogClosedHdl(sal_Int32 nResult)
 {
     if ( m_xListener.is() )
     {
-        sal_Int16 nRet = static_cast< sal_Int16 >( rDlg.GetResult() );
+        sal_Int16 nRet = static_cast<sal_Int16>(nResult);
         css::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
         m_xListener->dialogClosed( aEvent );
         m_xListener.clear();

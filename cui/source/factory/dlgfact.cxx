@@ -297,8 +297,9 @@ void VclAbstractDialog2_Impl::dispose()
 void  VclAbstractDialog2_Impl::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     m_aEndDlgHdl = rEndDialogHdl;
-    m_pDlg->StartExecuteModal(
-        LINK( this, VclAbstractDialog2_Impl, EndDialogHdl ) );
+    m_pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        EndDialogHdl(nResult);
+    });
 }
 
 // virtual
@@ -307,13 +308,8 @@ sal_Int32 VclAbstractDialog2_Impl::GetResult()
     return m_pDlg->GetResult();
 }
 
-IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog&, rDlg, void )
+void VclAbstractDialog2_Impl::EndDialogHdl(sal_Int32 /*nResult*/)
 {
-    if ( &rDlg != m_pDlg )
-    {
-        SAL_WARN( "cui.factory", "VclAbstractDialog2_Impl::EndDialogHdl(): wrong dialog" );
-    }
-
     m_aEndDlgHdl.Call( *m_pDlg );
     m_aEndDlgHdl = Link<Dialog&,void>();
 }

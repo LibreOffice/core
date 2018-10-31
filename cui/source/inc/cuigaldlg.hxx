@@ -97,7 +97,8 @@ public:
                         DECL_LINK( CleanUpHdl, void*, void );
 
     virtual short       Execute() override;
-    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    using ModalDialog::StartExecuteAsync;
+    virtual bool        StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
 };
@@ -143,7 +144,8 @@ public:
 
     void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
     virtual short       Execute() override;
-    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    using ModalDialog::StartExecuteAsync;
+    virtual bool        StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
 };
 
 class ActualizeProgress : public ModalDialog
@@ -264,6 +266,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     void                SearchFiles();
     void                TakeFiles();
     void                DoPreview();
+    void                EndSearchProgressHdl(sal_Int32 nResult);
 
                         DECL_LINK( ClickPreviewHdl, Button*, void );
                         DECL_LINK( ClickSearchHdl, Button*, void );
@@ -273,7 +276,6 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( SelectFileTypeHdl, ComboBox&, void );
                         DECL_LINK( DClickFoundHdl, ListBox&, void );
                         DECL_LINK( PreviewTimerHdl, Timer*, void );
-                        DECL_LINK( EndSearchProgressHdl, Dialog&, void );
                         DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
 public:

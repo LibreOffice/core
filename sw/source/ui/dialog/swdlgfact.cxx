@@ -724,8 +724,9 @@ void AbstractMailMergeWizard_Impl::dispose()
 void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     aEndDlgHdl = rEndDialogHdl;
-    pDlg->StartExecuteModal(
-        LINK( this, AbstractMailMergeWizard_Impl, EndDialogHdl ) );
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        EndDialogHdl(nResult);
+    });
 }
 
 sal_Int32 AbstractMailMergeWizard_Impl::GetResult()
@@ -733,11 +734,8 @@ sal_Int32 AbstractMailMergeWizard_Impl::GetResult()
     return pDlg->GetResult();
 }
 
-IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, Dialog&, rDialog, void )
+void AbstractMailMergeWizard_Impl::EndDialogHdl(sal_Int32 /*nResult*/)
 {
-    OSL_ENSURE( &rDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
-    (void) rDialog; // unused in non-debug
-
     aEndDlgHdl.Call( *pDlg );
     aEndDlgHdl = Link<Dialog&,void>();
 }

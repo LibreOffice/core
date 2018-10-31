@@ -572,7 +572,7 @@ class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
     VclPtr<SwMailMergeWizard> pDlg;
     Link<Dialog&,void>        aEndDlgHdl;
 
-    DECL_LINK( EndDialogHdl, Dialog&, void );
+    void EndDialogHdl(sal_Int32 nResult);
 public:
     explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
      : pDlg(p)
