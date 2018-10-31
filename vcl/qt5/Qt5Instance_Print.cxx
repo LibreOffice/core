@@ -93,7 +93,7 @@ void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
     {
         const PrinterInfo& rInfo(rManager.getPrinterInfo(*it));
         // create new entry
-        SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
+        std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
         pInfo->maPrinterName = *it;
         pInfo->maDriver = rInfo.m_aDriverName;
         pInfo->maLocation = rInfo.m_aLocation;
@@ -110,7 +110,7 @@ void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
             }
         }
 
-        pList->Add(pInfo);
+        pList->Add(std::move(pInfo));
     }
 }
 
