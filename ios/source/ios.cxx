@@ -8,9 +8,11 @@
  */
 
 #include <cassert>
+#include <iostream>
 
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
+#include "com/sun/star/ucb/NameClashException.hpp"
 #include "ios/ios.hxx"
 
 namespace
@@ -28,7 +30,11 @@ void lo_ios_throwException(css::uno::Any const& aException)
     assert(aException.getValueTypeClass() == css::uno::TypeClass_EXCEPTION);
 
     tryThrow<css::ucb::InteractiveAugmentedIOException>(aException);
+    tryThrow<css::ucb::NameClashException>(aException);
     tryThrow<css::uno::RuntimeException>(aException);
+
+    std::cerr << "lo_ios_throwException: Unhandled exception type " << aException.getValueTypeName()
+              << std::endl;
 
     assert(false);
 }
