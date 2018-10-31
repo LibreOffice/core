@@ -21,7 +21,7 @@
 
 #include <model/SlsSharedPageDescriptor.hxx>
 #include <tools/link.hxx>
-#include <queue>
+#include <rtl/ustring.hxx>
 
 class AbstractSvxNameDialog;
 class SfxItemSet;
@@ -32,8 +32,6 @@ class SlideSorter;
 } }
 
 namespace sd { namespace slidesorter { namespace controller {
-
-class Command;
 
 /** This manager takes over the work of handling slot calls from the
     controller of the slide sorter.

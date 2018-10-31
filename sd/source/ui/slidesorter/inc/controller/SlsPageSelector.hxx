@@ -22,7 +22,6 @@
 
 #include <model/SlsSharedPageDescriptor.hxx>
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vector>
 #include <memory>
 

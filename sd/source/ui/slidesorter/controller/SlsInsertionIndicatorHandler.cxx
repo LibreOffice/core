@@ -21,6 +21,7 @@
 #include <controller/SlsProperties.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
+#include <view/SlsInsertAnimator.hxx>
 #include <view/SlsInsertionIndicatorOverlay.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>

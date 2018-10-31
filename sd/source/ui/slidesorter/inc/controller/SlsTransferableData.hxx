@@ -23,7 +23,6 @@
 #include <sdxfer.hxx>
 
 #include <vector>
-#include <functional>
 
 class SdDrawDocument;
 namespace sd { namespace slidesorter {

@@ -22,16 +22,14 @@
 
 class SdDrawDocument;
 
-#include <model/SlsPageEnumeration.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
 
 #include <pres.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/region.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
-#include <functional>
 
 class SdrPage;
 class SdPage;
@@ -39,6 +37,9 @@ class SdPage;
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
+
+namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 
 namespace sd { namespace slidesorter { namespace model {
 

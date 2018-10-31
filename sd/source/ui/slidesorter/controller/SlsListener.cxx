@@ -21,6 +21,7 @@
 
 #include <SlideSorter.hxx>
 #include <SlideSorterViewShell.hxx>
+#include <ViewShell.hxx>
 #include <ViewShellHint.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
@@ -35,6 +36,7 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <DrawDocShell.hxx>
+#include <svx/svdpage.hxx>
 
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
