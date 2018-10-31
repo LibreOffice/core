@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_7c2d4545",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultset.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-31T17:50:26Z",
+      "side": 1,
+      "message": "you can use OString, but then this line right here, will not copy all the data we want, it will only copy up till the first null byte, which is wrong if the data is raw bytes, you need to do:\n\n   rDataStrings.push_back(OString(data[col], lengths[col]))\n\nat which point you might as well use the length value that is stored in the OString, and not bother with the separate data length",
+      "revId": "c737782ab68f2b75e13f8e5d5dffaf05438e8aa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
