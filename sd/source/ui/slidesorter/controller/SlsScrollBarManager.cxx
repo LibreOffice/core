@@ -20,6 +20,7 @@
 #include <controller/SlsScrollBarManager.hxx>
 
 #include <SlideSorter.hxx>
+#include <ViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsVisibleAreaManager.hxx>
 #include <model/SlideSorterModel.hxx>

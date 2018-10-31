@@ -28,6 +28,8 @@
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
 #include <Window.hxx>
+#include <SlideSorter.hxx>
+#include <view/SlideSorterView.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

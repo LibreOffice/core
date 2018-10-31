@@ -34,6 +34,8 @@
 #include <tools/link.hxx>
 #include <memory>
 
+class SdrPage;
+
 namespace sd {
 class ViewShellBase;
 }

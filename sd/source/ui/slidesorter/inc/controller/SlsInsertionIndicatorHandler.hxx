@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSINSERTIONINDICATORHANDLER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSINSERTIONINDICATORHANDLER_HXX
 
-#include <view/SlsInsertAnimator.hxx>
+#include <controller/SlsAnimator.hxx>
 
 #include <view/SlsLayouter.hxx>
-#include <sdxfer.hxx>
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
 namespace sd { namespace slidesorter { namespace view {
@@ -31,9 +30,9 @@ class InsertAnimator;
 class InsertionIndicatorOverlay;
 } } }
 
-namespace sd { namespace slidesorter { namespace controller {
+class SdTransferable;
 
-class Transferable;
+namespace sd { namespace slidesorter { namespace controller {
 
 /** Manage the visibility and location of the insertion indicator.  Its
     actual display is controlled by the InsertionIndicatorOverlay.

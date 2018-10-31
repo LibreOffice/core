@@ -23,7 +23,6 @@
 #include <model/SlsSharedPageDescriptor.hxx>
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 
 class SdPage;
 

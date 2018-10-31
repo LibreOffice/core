@@ -20,16 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONFUNCTION_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONFUNCTION_HXX
 
-#include <model/SlsSharedPageDescriptor.hxx>
 #include <controller/SlsFocusManager.hxx>
-#include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <fupoor.hxx>
-#include <vcl/transfer.hxx>
 #include <memory>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
+
+struct AcceptDropEvent;
 
 namespace sd { namespace slidesorter { namespace controller {
 

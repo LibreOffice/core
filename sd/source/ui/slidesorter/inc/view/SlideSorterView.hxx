@@ -20,28 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLIDESORTERVIEW_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLIDESORTERVIEW_HXX
 
-#include <SlideSorter.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsILayerPainter.hxx>
 
 #include <View.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <pres.hxx>
-#include <o3tl/deleter.hxx>
 #include <tools/gen.hxx>
-#include <svx/svdmodel.hxx>
 #include <vcl/region.hxx>
-#include <vcl/outdev.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <memory>
-
-class Point;
-
-namespace sd { namespace slidesorter { namespace controller {
-class Properties;
-} } }
 
 namespace sd { namespace slidesorter { namespace cache {
 class PageCache;
@@ -51,10 +38,13 @@ namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
+namespace o3tl { template <typename T> struct default_delete; }
+namespace sd { class Window; }
+namespace sd { namespace slidesorter { class SlideSorter; } }
+
 namespace sd { namespace slidesorter { namespace view {
 
 class LayeredDevice;
-class Layouter;
 class PageObjectPainter;
 class ToolTip;
 

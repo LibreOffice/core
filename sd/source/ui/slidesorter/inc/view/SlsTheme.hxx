@@ -20,14 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTHEME_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTHEME_HXX
 
-#include <model/SlsVisualState.hxx>
-
 #include <vcl/bitmapex.hxx>
-#include <vcl/font.hxx>
-#include <vcl/gradient.hxx>
 #include <tools/color.hxx>
 
 #include <memory>
+
+namespace vcl { class Font; }
 
 namespace sd { namespace slidesorter { namespace controller {
 class Properties;
