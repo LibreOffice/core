@@ -25,12 +25,14 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/svdtrans.hxx>
 #include "PageFooterPanel.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <uitool.hxx>
 #include <cmdid.h>
 
 namespace sw { namespace sidebar{
@@ -66,8 +68,11 @@ PageFooterPanel::PageFooterPanel(
 {
     get(mpFooterToggle, "footertoggle");
     get(mpFooterSpacingLB, "spacingpreset");
+    FieldUnit eMetric = ::GetDfltMetric(false);
+    mpFooterSpacingLB->Init(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpFooterLayoutLB, "samecontentLB");
     get(mpFooterMarginPresetLB, "footermarginpreset");
+    mpFooterMarginPresetLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();
