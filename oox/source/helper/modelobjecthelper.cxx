@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -92,13 +93,15 @@ static const OUStringLiteral gaDashNameBase(      "msLineDash " );      ///< Bas
 static const OUStringLiteral gaGradientNameBase(  "msFillGradient " );  ///< Base name for all named fill gradients.
 static const OUStringLiteral gaTransGradNameBase( "msTransGradient " ); ///< Base name for all named fill gradients.
 static const OUStringLiteral gaBitmapUrlNameBase( "msFillBitmap " );    ///< Base name for all named fill bitmap URLs.
+static const OUStringLiteral gaHatchNameBase(     "msFillHatch " );     ///< Base name for all named fill hatches.
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),
     maDashContainer(      rxModelFactory, "com.sun.star.drawing.DashTable" ),
     maGradientContainer(  rxModelFactory, "com.sun.star.drawing.GradientTable" ),
-    maTransGradContainer(  rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
-    maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" )
+    maTransGradContainer( rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
+    maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" ),
+    maHatchContainer(     rxModelFactory, "com.sun.star.drawing.HatchTable" )
 {
 }
 
@@ -136,6 +139,11 @@ OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGr
     if (xBitmap.is())
         return maBitmapUrlContainer.insertObject(gaBitmapUrlNameBase, Any(xBitmap), true);
     return OUString();
+}
+
+OUString ModelObjectHelper::insertFillHatch( const Hatch& rHatch )
+{
+    return maHatchContainer.insertObject( gaHatchNameBase, Any( rHatch ), true );
 }
 
 uno::Reference<awt::XBitmap> ModelObjectHelper::getFillBitmap(OUString const & rGraphicName)
