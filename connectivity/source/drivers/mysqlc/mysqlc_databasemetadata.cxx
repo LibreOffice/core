@@ -696,31 +696,30 @@ Reference<XResultSet>
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalog*/,
-                                                             const OUString& /*schemaPattern*/,
-                                                             const OUString& tableNamePattern,
-                                                             const OUString& columnNamePattern)
+                                                             const rtl::OUString& schemaPattern,
+                                                             const rtl::OUString& tableNamePattern,
+                                                             const rtl::OUString& columnNamePattern)
 {
-    OUStringBuffer queryBuf("SELECT TABLE_CATALOG AS TABLE_CAT, " // 1
-                            "TABLE_SCHEMA AS TABLE_SCHEM, " // 2
-                            "TABLE_NAME, " // 3
-                            "COLUMN_NAME, " // 4
-                            "DATA_TYPE, " // 5
-                            // TYPE_NAME missing
-                            "CHARACTER_MAXIMUM_LENGTH, " // 6
-                            "NUMERIC_PRECISION, " // 7
-                            // buffer length missing
-                            "NUMERIC_SCALE AS DECIMAL_DIGITS, " // 8
-                            // NUM_PREC_RADIX missing
-                            // NULLABLE missing
-                            "COLUMN_COMMENT AS REMARKS, " // 9
-                            "COLUMN_DEFAULT AS COLUMN_DEF," // 10
-                            "CHARACTER_OCTET_LENGTH, " // 11
-                            "ORDINAL_POSITION, " // 12
-                            "IS_NULLABLE, " // 13
-                            "COLUMN_TYPE " // 14
-                            "FROM INFORMATION_SCHEMA.COLUMNS "
-                            "WHERE (1 = 1) ");
-
+    rtl::OUStringBuffer queryBuf("SELECT TABLE_CATALOG, " // 1
+                                 "TABLE_SCHEMA, " // 2
+                                 "TABLE_NAME, " // 3
+                                 "COLUMN_NAME, " // 4
+                                 "DATA_TYPE, " // 5
+                                 // TYPE_NAME missing
+                                 "CHARACTER_MAXIMUM_LENGTH, " // 6
+                                 "NUMERIC_PRECISION, " // 7
+                                 // buffer length missing
+                                 "NUMERIC_SCALE AS DECIMAL_DIGITS, " // 8
+                                 // NUM_PREC_RADIX missing
+                                 // NULLABLE missing
+                                 "COLUMN_COMMENT AS REMARKS, " // 9
+                                 "COLUMN_DEFAULT AS COLUMN_DEF," // 10
+                                 "CHARACTER_OCTET_LENGTH, " // 11
+                                 "ORDINAL_POSITION, " // 12
+                                 "IS_NULLABLE, " // 13
+                                 "COLUMN_TYPE " // 14
+                                 "FROM INFORMATION_SCHEMA.COLUMNS "
+                                 "WHERE (1 = 1) ");
     if (!tableNamePattern.isEmpty())
     {
         OUString sAppend;
@@ -729,6 +728,15 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         else
             sAppend = "AND TABLE_NAME = '%' ";
         queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
+    }
+    if (!schemaPattern.isEmpty())
+    {
+        OUString sAppend;
+        if (tableNamePattern.match("%"))
+            sAppend = "AND TABLE_SCHEMA LIKE '%' ";
+        else
+            sAppend = "AND TABLE_SCHEMA = '%' ";
+        queryBuf.append(sAppend.replaceAll("%", schemaPattern));
     }
     if (!columnNamePattern.isEmpty())
     {
