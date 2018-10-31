@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/svdtrans.hxx>
 #include "PageFormatPanel.hxx"
 #include "PageMarginUtils.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
@@ -32,7 +33,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <pageformatpanel.hrc>
 #include <cmdid.h>
+#include <uitool.hxx>
 #include <svtools/unitconv.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
@@ -75,6 +78,17 @@ PageFormatPanel::PageFormatPanel(
     get(mpPaperHeight, "paperheight");
     get(mpPaperOrientation, "paperorientation");
     get(mpMarginSelectBox, "marginLB");
+    FieldUnit eMetric = ::GetDfltMetric(false);
+    if (IsInch(eMetric))
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+    }
+    else
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
+    }
     get(mpCustomEntry, "customlabel");
     Initialize();
 }
