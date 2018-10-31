@@ -9754,6 +9754,83 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc, const 
     return bFound;
 }
 
+// tdf#121052:
+// =VLOOKUP(SearchCriterion; RangeArray; Index; Sorted)
+//  SearchCriterion is the value searched for in the first column of the array.
+//  RangeArray is the reference, which is to comprise at least two columns.
+//  Index is the number of the column in the array that contains the value to be returned. The first column has the number 1.
+//
+// lcl_getPrevRowWithEmptyValueLookup() performs following checks:
+// - if value referenced by [SearchCriterion] is empty
+// - and if we run query with "exact match" mode (i.e. VLOOKUP)
+// - and if we already have the same lookup done before but for another row
+//   which is also had empty [SearchCriterion]
+//
+// then
+//   we could say, that for current row we could reuse results of the cached call which was done for the row2
+//   In this case we return row index, which is > 0.
+//
+// Elsewhere
+//   0 is returned, which will lead to default behavior =>
+//   complete lookup will be done in RangeArray inside lcl_LookupQuery() method.
+//
+// This method was added only for speed up to avoid several useless complete
+// lookups inside [RangeArray] for searching empty strings.
+//
+static SCROW lcl_getPrevRowWithEmptyValueLookup(ScLookupCache& rCache,
+    ScAddress & o_rResultPos, ScLookupCache::QueryCriteria& aCriteria,
+    const ScAddress& aPos, const ScQueryParam & rParam)
+{
+    // try to find the row index for which we have already performed lookup
+    // and have result of it inside cache
+    SCROW nPrevRowWithEmptyValueLookup = 0; // none
+    {
+        ScAddress aPosPrev(aPos);
+        for (SCROW row = aPos.Row() - 1; row >= 2; --row)
+        {
+            aPosPrev.SetRow(row);
+            ScLookupCache::Result eCacheResult = rCache.lookup( o_rResultPos, aCriteria, aPosPrev);
+            switch (eCacheResult)
+            {
+            case ScLookupCache::NOT_CACHED:
+                continue;
+            case ScLookupCache::NOT_AVAILABLE:
+            {
+                nPrevRowWithEmptyValueLookup = row;
+                break;
+            }
+            case ScLookupCache::FOUND:
+            case ScLookupCache::CRITERIA_DIFFERENT:
+                return 0; // not found
+            }
+
+            if (nPrevRowWithEmptyValueLookup != 0)
+                break;
+        }
+    }
+
+    const ScQueryEntry& rEntry = rParam.GetEntry(0);
+    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+
+    // prepare different flags
+    const bool isLookupValueIsEmpty = rItem.maString.getString().isEmpty();
+    const bool isSearchWithEqualMatch = aCriteria.isEmptyStringQuery();
+    const bool isFirstLookupWithEmptyValue = (nPrevRowWithEmptyValueLookup > 1);
+
+    // analysis of the situation
+    if (isFirstLookupWithEmptyValue &&
+        isLookupValueIsEmpty &&
+        isSearchWithEqualMatch)
+    {
+        // make the same lookup using cache with different row index
+        // (this lookup was already cached)
+        return nPrevRowWithEmptyValueLookup;
+    }
+
+    // not found
+    return 0;
+}
+
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const
 {
@@ -9777,6 +9854,24 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         ScLookupCache::QueryCriteria aCriteria( rEntry);
         ScLookupCache::Result eCacheResult = rCache.lookup( o_rResultPos,
                 aCriteria, aPos);
+
+        // tdf#121052: Slow load of cells with VLOOKUP with references to empty cells
+        // This check was added only for speed up to avoid several useless complete
+        // lookups inside [RangeArray] for searching empty strings.
+        if (eCacheResult == ScLookupCache::NOT_CACHED)
+        {
+            const SCROW nPrevRowWithEmptyValueLookup = lcl_getPrevRowWithEmptyValueLookup(rCache, o_rResultPos, aCriteria, aPos, rParam);
+            if (nPrevRowWithEmptyValueLookup > 0)
+            {
+                // make the same lookup using cache with different row index
+                // (this lookup was already cached)
+                ScAddress aPosPrev(aPos);
+                aPosPrev.SetRow(nPrevRowWithEmptyValueLookup);
+
+                eCacheResult = rCache.lookup(o_rResultPos, aCriteria, aPosPrev);
+            }
+        }
+
         switch (eCacheResult)
         {
             case ScLookupCache::NOT_CACHED :
