@@ -25,12 +25,14 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/svdtrans.hxx>
 #include "PageHeaderPanel.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <uitool.hxx>
 #include <cmdid.h>
 
 namespace sw { namespace sidebar{
@@ -69,8 +71,11 @@ PageHeaderPanel::PageHeaderPanel(
 {
     get(mpHeaderToggle, "headertoggle");
     get(mpHeaderSpacingLB, "spacingpreset");
+    FieldUnit eMetric = ::GetDfltMetric(false);
+    mpHeaderSpacingLB->Init(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpHeaderLayoutLB, "samecontentLB");
     get(mpHeaderMarginPresetLB, "headermarginpreset");
+    mpHeaderMarginPresetLB->Init(IsInch(eMetric) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();

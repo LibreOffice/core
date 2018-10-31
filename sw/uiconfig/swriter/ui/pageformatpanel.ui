@@ -139,16 +139,6 @@
           <object class="GtkComboBoxText" id="marginLB">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <items>
-              <item translatable="yes" context="pageformatpanel|marginLB">None</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Narrow</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Moderate</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Normal 0.75"</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Normal 1"</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Normal 1.25"</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Wide</item>
-              <item translatable="yes" context="pageformatpanel|marginLB">Mirrored</item>
-            </items>
           </object>
           <packing>
             <property name="left_attach">1</property>
