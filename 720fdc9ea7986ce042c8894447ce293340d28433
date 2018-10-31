@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_a14b86ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-31T08:04:16Z",
+      "side": 1,
+      "message": "This is some local commit only you have, I fear.",
+      "range": {
+        "startLine": 58,
+        "startChar": 19,
+        "endLine": 58,
+        "endChar": 59
+      },
+      "revId": "720fdc9ea7986ce042c8894447ce293340d28433",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
