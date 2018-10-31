@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSINSERTIONINDICATOROVERLAY_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSINSERTIONINDICATOROVERLAY_HXX
 
-#include <model/SlsSharedPageDescriptor.hxx>
 #include <view/SlsILayerPainter.hxx>
 #include <controller/SlsTransferableData.hxx>
-#include <sdxfer.hxx>
 
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
@@ -31,14 +29,11 @@
 #include <vector>
 
 class OutputDevice;
+class SdTransferable;
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
-
-namespace sd { namespace slidesorter { namespace controller {
-class Transferable;
-} } }
 
 namespace sd { namespace slidesorter { namespace view {
 

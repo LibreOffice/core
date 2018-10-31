@@ -20,17 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSLAYOUTER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSLAYOUTER_HXX
 
-#include <SlideSorter.hxx>
-#include <view/SlsPageObjectLayouter.hxx>
-#include <view/SlsTheme.hxx>
+#include <vcl/vclptr.hxx>
+#include <tools/gen.hxx>
 #include <sal/types.h>
-#include <tools/fract.hxx>
-#include <vcl/mapmod.hxx>
 #include <memory>
-#include <vector>
-#include <utility>
 
-class Size;
+namespace sd { class Window; }
+namespace sd { namespace slidesorter { namespace model { class SlideSorterModel; } } }
+namespace sd { namespace slidesorter { namespace view { class PageObjectLayouter; } } }
+namespace sd { namespace slidesorter { namespace view { class Theme; } } }
 
 namespace sd { namespace slidesorter { namespace view {
 

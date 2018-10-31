@@ -21,18 +21,23 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLIDESORTERCONTROLLER_HXX
 
 #include <model/SlsSharedPageDescriptor.hxx>
-#include <ViewShell.hxx>
+#include <pres.hxx>
 
-#include <com/sun/star/drawing/XDrawPages.hpp>
-
-#include <sfx2/shell.hxx>
-#include <sfx2/viewfac.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include <sddllapi.h>
 
 #include <memory>
+#include <vector>
+
+namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace sd { class FuPoor; }
+namespace sd { class Window; }
+namespace vcl { class Window; }
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -45,6 +50,13 @@ class SlideSorterView;
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
+
+class CommandEvent;
+class SdPage;
+class SfxItemSet;
+class SfxRequest;
+class VclSimpleEvent;
+class VclWindowEvent;
 
 namespace sd { namespace slidesorter { namespace controller {
 

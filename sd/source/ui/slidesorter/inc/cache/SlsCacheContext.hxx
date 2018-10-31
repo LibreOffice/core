@@ -21,12 +21,13 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSCACHECONTEXT_HXX
 
 #include <sal/types.h>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 #include <vector>
 
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+
 class SdrPage;
-class BitmapEx;
 
 namespace sd { namespace slidesorter { namespace cache {
 

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTLAYOUTER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTLAYOUTER_HXX
 
-#include <SlideSorter.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
 #include <tools/gen.hxx>
 #include <vcl/image.hxx>
 
 namespace vcl { class Font; }
+namespace sd { class Window; }
 
 namespace sd { namespace slidesorter { namespace view {
 

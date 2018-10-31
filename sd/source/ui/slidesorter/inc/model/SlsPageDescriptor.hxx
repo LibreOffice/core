@@ -21,12 +21,12 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEDESCRIPTOR_HXX
 
 #include <model/SlsVisualState.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <tools/gen.hxx>
-#include <vcl/bitmap.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 
 class SdPage;
 class SdrPage;
