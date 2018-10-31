@@ -2675,7 +2675,11 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
                 if( bNativeOK && (nState & ControlState::ROLLOVER) )
                     aColor = rStyleSettings.GetFieldRolloverTextColor();
                 else
+                {
                     aColor = rStyleSettings.GetHighlightTextColor();
+                    rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+                }
+
                 rRenderContext.SetTextColor( aColor );
                 rRenderContext.DrawRect( maFocusRect );
             }
