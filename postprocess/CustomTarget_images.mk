@@ -14,6 +14,7 @@ packimages_DIR := $(call gb_CustomTarget_get_workdir,postprocess/images)
 
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \
+	$(foreach theme,$(WITH_THEMES),$(theme)_links.txt) \
 	commandimagelist.ilst \
 	sourceimagelist.ilst \
 	sorted.lst \
@@ -21,14 +22,28 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 
 $(packimages_DIR)/images.zip : DEFAULT_THEME := $(true)
 $(packimages_DIR)/images_%.zip : DEFAULT_THEME :=
-$(packimages_DIR)/images_tango.zip : INDUSTRIAL_FALLBACK := -c $(SRCDIR)/icon-themes/industrial
-$(packimages_DIR)/images%.zip : INDUSTRIAL_FALLBACK :=
 
-$(packimages_DIR)/%.zip : \
+$(packimages_DIR)/%_links.txt :
+	@if test -f "$(SRCDIR)/icon-themes/$*/links.txt"; then \
+		cp "$(SRCDIR)/icon-themes/$*/links.txt" $@.tmp ; \
+	else \
+		THEME_FILE="$(SRCDIR)/icon-themes/$(subst _svg,,$*)/links.txt" ; \
+		if test -f "$${THEME_FILE}"; then \
+			sed 's/\.png/\.svg/g' "$${THEME_FILE}" > $@.tmp ; \
+		fi ; \
+		THEME_FILE="$(SRCDIR)/icon-themes/$(subst _dark,,$*)/links.txt" ; \
+		if test -f "$${THEME_FILE}"; then \
+			cp "$${THEME_FILE}" $@.tmp ; \
+		fi ; \
+	fi
+	$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@)
+
+$(packimages_DIR)/images_%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(packimages_DIR)/sourceimagelist.ilst \
 		$(SRCDIR)/wizards/source/imagelists/imagelists.ilst \
+		$(packimages_DIR)/%_links.txt \
 		$(call gb_Helper_get_imagelists) \
 		| $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
@@ -37,10 +52,10 @@ $(packimages_DIR)/%.zip : \
 		$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/pack_images.py \
 			$(if $(DEFAULT_THEME),\
 				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
-				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
+				-g $(SRCDIR)/icon-themes/$* -m $(SRCDIR)/icon-themes/$* -c $(SRCDIR)/icon-themes/$* \
 			) \
-			$(INDUSTRIAL_FALLBACK) \
 			-l $${ILSTFILE} \
+			-L $(packimages_DIR)/$*_links.txt \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null) && \
 		rm -rf $${ILSTFILE})
@@ -68,7 +83,9 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 		$(SRCDIR)/sw/inc/bitmaps.hlst \
 		$(SRCDIR)/vcl/inc/bitmaps.hlst \
 		$(SRCDIR)/xmlsecurity/inc/bitmaps.hlst
-	grep res $^ | cut -d'"' -f2 | sed "s/^/%MODULE%\//" | sed "s/%MODULE%.res/%GLOBALRES%/g" > $@
+	grep res $^ | cut -d'"' -f2 | sed "s/^/%MODULE%\//" | sed "s/%MODULE%.res/%GLOBALRES%/g" > $@.png
+	sed 's/\.png/\.svg/g' $@.png > $@.svg
+	cat $@.png $@.svg > $@
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
 .PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst
