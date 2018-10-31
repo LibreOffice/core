@@ -987,7 +987,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
     {
         pData->aText = rStr;
         // Clear layout for aText.
-        pData->aTextGlyphs.clear();
+        pData->aTextGlyphs.Invalidate();
         ImplSetMenuItemData( pData );
         // update native menu
         if( ImplGetSalMenu() && pData->pSalMenuItem )

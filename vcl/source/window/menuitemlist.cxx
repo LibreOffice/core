@@ -41,7 +41,7 @@ MenuItemData::~MenuItemData()
 
 SalLayoutGlyphs* MenuItemData::GetTextGlyphs(OutputDevice* pOutputDevice)
 {
-    if (!aTextGlyphs.empty())
+    if (aTextGlyphs.IsValid())
         // Use pre-calculated result.
         return &aTextGlyphs;
 
