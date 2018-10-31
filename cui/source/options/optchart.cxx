@@ -51,19 +51,16 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
 
     nPos = m_pLbChartColors->InsertEntry(rStr, Image(aBitmap), nPos);
 
-    if (nPos != LISTBOX_ERROR)
+    if ( static_cast<size_t>(nPos) < aColorList.size() )
     {
-        if ( static_cast<size_t>(nPos) < aColorList.size() )
-        {
-            ImpColorList::iterator it = aColorList.begin();
-            std::advance( it, nPos );
-            aColorList.insert( it, rColor );
-        }
-        else
-        {
-            aColorList.push_back( rColor );
-            nPos = aColorList.size() - 1;
-        }
+        ImpColorList::iterator it = aColorList.begin();
+        std::advance( it, nPos );
+        aColorList.insert( it, rColor );
+    }
+    else
+    {
+        aColorList.push_back( rColor );
+        nPos = aColorList.size() - 1;
     }
 }
 
