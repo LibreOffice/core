@@ -30,6 +30,7 @@
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 // include search util
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -215,13 +216,19 @@ void CommandCategoryListBox::FillFunctionsList(
 
     for (const auto & rInfo : xCommands)
     {
-        OUString sUIName    = MapCommand2UIName(rInfo.Command);
-        sal_Int32 aStartPos = 0;
-        sal_Int32 aEndPos   = sUIName.getLength();
+        OUString sUIName    = getCommandName(rInfo.Command);
+        OUString sLabel     = vcl::CommandInfoProvider::GetLabelForCommand(rInfo.Command, m_sModuleLongName);
+        OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand( rInfo.Command, m_xFrame);
+        OUString sPopupLabel =
+                (vcl::CommandInfoProvider::GetPopupLabelForCommand(rInfo.Command, m_sModuleLongName))
+                .replaceFirst("~", "");
 
         // Apply the search filter
         if (!filterTerm.isEmpty()
-            && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+            && !textSearch.searchForward( sUIName )
+            && !textSearch.searchForward( sLabel )
+            && !textSearch.searchForward( sTooltipLabel )
+            && !textSearch.searchForward( sPopupLabel ) )
         {
             continue;
         }
@@ -240,7 +247,7 @@ void CommandCategoryListBox::FillFunctionsList(
     }
 }
 
-OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
+OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
 {
     OUString sUIName;
     try
