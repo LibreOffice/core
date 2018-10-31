@@ -119,11 +119,12 @@ public:
         double fMiterMinimumAngle,
         bool bPixelSnapHairline);
 
-private:
-    void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
                           cairo_operator_t eOp = CAIRO_OPERATOR_SOURCE);
+
+private:
+    void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void applyColor(cairo_t *cr, Color rColor);
 
 protected:
