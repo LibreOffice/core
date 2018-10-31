@@ -356,6 +356,12 @@ namespace cppcanvas
                     aCalculatedNewState.isTextLineColorSet = rNewState.isTextLineColorSet;
                 }
 
+                if( aCalculatedNewState.pushFlags & PushFlags::OVERLINECOLOR )
+                {
+                    aCalculatedNewState.textOverlineColor = rNewState.textOverlineColor;
+                    aCalculatedNewState.isTextOverlineColorSet = rNewState.isTextOverlineColorSet;
+                }
+
                 if( aCalculatedNewState.pushFlags & PushFlags::TEXTLAYOUTMODE )
                 {
                     aCalculatedNewState.textAlignment = rNewState.textAlignment;
@@ -1470,6 +1476,22 @@ namespace cppcanvas
                             bool bSetting(static_cast<MetaTextLineColorAction*>(pCurrAct)->IsSetting());
 
                             rStates.getState().isTextLineColorSet = bSetting;
+                        }
+                        break;
+
+                    case MetaActionType::OVERLINECOLOR:
+                        if( !rParms.maTextColor.is_initialized() )
+                        {
+                            setStateColor( static_cast<MetaOverlineColorAction*>(pCurrAct),
+                                           rStates.getState().isTextOverlineColorSet,
+                                           rStates.getState().textOverlineColor,
+                                           rCanvas );
+                        }
+                        else
+                        {
+                            bool bSetting(static_cast<MetaOverlineColorAction*>(pCurrAct)->IsSetting());
+
+                            rStates.getState().isTextOverlineColorSet = bSetting;
                         }
                         break;
 
@@ -2921,6 +2943,7 @@ namespace cppcanvas
                 // setup default text color to black
                 rState.textColor =
                     rState.textFillColor =
+                    rState.textOverlineColor =
                     rState.textLineColor = tools::intSRGBAToDoubleSequence( 0x000000FF );
             }
 
@@ -2941,9 +2964,11 @@ namespace cppcanvas
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 rState.isTextFillColorSet = true;
+                rState.isTextOverlineColorSet = true;
                 rState.isTextLineColorSet = true;
                 rState.textColor =
                     rState.textFillColor =
+                    rState.textOverlineColor =
                     rState.textLineColor = tools::intSRGBAToDoubleSequence( *rParams.maTextColor );
             }
             if( rParams.maFontName.is_initialized() ||
