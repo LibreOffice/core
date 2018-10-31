@@ -187,7 +187,7 @@ sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType)
     // TODO other types.
     if (sType.equalsIgnoreAsciiCase("tiny") || sType.equalsIgnoreAsciiCase("tinyint"))
         return css::sdbc::DataType::TINYINT;
-    if (sType.equalsIgnoreAsciiCase("smallint"))
+    if (sType.equalsIgnoreAsciiCase("smallint") || sType.equalsIgnoreAsciiCase("mediumint"))
         return css::sdbc::DataType::SMALLINT;
     if (sType.equalsIgnoreAsciiCase("longtext"))
         return css::sdbc::DataType::LONGVARCHAR;
@@ -202,7 +202,7 @@ sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType)
         return css::sdbc::DataType::BLOB;
     if (sType.equalsIgnoreAsciiCase("varbinary"))
         return css::sdbc::DataType::VARBINARY;
-    if (sType.equalsIgnoreAsciiCase("text"))
+    if (sType.equalsIgnoreAsciiCase("text") || sType.equalsIgnoreAsciiCase("char"))
         return css::sdbc::DataType::CHAR;
     if (sType.equalsIgnoreAsciiCase("binary"))
         return css::sdbc::DataType::BINARY;
