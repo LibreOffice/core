@@ -22,6 +22,30 @@
       "revId": "720fdc9ea7986ce042c8894447ce293340d28433",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_21d556ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-31T08:06:04Z",
+      "side": 1,
+      "message": "This is a commit in xmlsec (I wrote \"there\"): https://github.com/lsh123/xmlsec/commit/1cf0cd6f0f19c34a23228f7de691187887081dff :-)",
+      "parentUuid": "5f2577a7_a14b86ae",
+      "range": {
+        "startLine": 58,
+        "startChar": 19,
+        "endLine": 58,
+        "endChar": 59
+      },
+      "revId": "720fdc9ea7986ce042c8894447ce293340d28433",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
