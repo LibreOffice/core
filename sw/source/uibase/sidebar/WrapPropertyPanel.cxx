@@ -96,6 +96,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     get(mpEnableContour, "enablecontour");
     get(mpEditContour, "editcontour");
     get(mpSpacingLB, "spacingLB");
+    mpSpacingLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();

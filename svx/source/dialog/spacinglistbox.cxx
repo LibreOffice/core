@@ -25,13 +25,37 @@
 SpacingListBox::SpacingListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_SPACING); ++i)
+}
+
+void SpacingListBox::Init(SpacingType eType)
+{
+    const std::pair<const char*, int>* pResources;
+    switch (eType)
     {
-        OUString aStr = SvxResId(RID_SVXSTRARY_SPACING[i].first);
-        sal_uInt16 nData = RID_SVXSTRARY_SPACING[i].second;
+        case SpacingType::SPACING_INCH:
+            pResources = RID_SVXSTRARY_SPACING_INCH;
+            break;
+        case SpacingType::MARGINS_INCH:
+            pResources = RID_SVXSTRARY_MARGINS_INCH;
+            break;
+        case SpacingType::SPACING_CM:
+            pResources = RID_SVXSTRARY_SPACING_CM;
+            break;
+        default:
+        case SpacingType::MARGINS_CM:
+            pResources = RID_SVXSTRARY_MARGINS_CM;
+            break;
+    }
+
+    while (pResources->first)
+    {
+        OUString aStr = SvxResId(pResources->first);
+        sal_uInt16 nData = pResources->second;
         sal_Int32 nPos = InsertEntry( aStr );
         SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nData)) );
+        ++pResources;
     }
+
     SetDropDownLineCount(8);
     SelectEntryPos(0);
 }

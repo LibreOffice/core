@@ -69,8 +69,10 @@ PageHeaderPanel::PageHeaderPanel(
 {
     get(mpHeaderToggle, "headertoggle");
     get(mpHeaderSpacingLB, "spacingpreset");
+    mpHeaderSpacingLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpHeaderLayoutLB, "samecontentLB");
     get(mpHeaderMarginPresetLB, "headermarginpreset");
+    mpHeaderMarginPresetLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();
