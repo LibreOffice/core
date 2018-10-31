@@ -19,6 +19,10 @@
 
 #include <impglyphitem.hxx>
 
+#if (defined UNX && !defined MACOSX)
+#include <unx/freetype_glyphcache.hxx>
+#endif
+
 SalLayoutGlyphs::SalLayoutGlyphs()
     : m_pImpl(nullptr)
 {
@@ -50,6 +54,16 @@ SalLayoutGlyphsImpl* SalGenericLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs)
     SalLayoutGlyphsImpl* pNew = new SalGenericLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
     *pNew = *this;
     return pNew;
+}
+
+bool SalGenericLayoutGlyphsImpl::empty() const
+{
+#if (defined UNX && !defined MACOSX)
+    const FreetypeFontInstance* pFFI = dynamic_cast<FreetypeFontInstance*>(m_rFontInstance.get());
+    if (pFFI && !pFFI->GetFreetypeFont())
+        return true;
+#endif
+    return SalLayoutGlyphsImpl::empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
