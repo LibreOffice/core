@@ -2722,8 +2722,8 @@ class FormulaToValueHandler
 {
     struct Entry
     {
-        SCROW const mnRow;
-        ScCellValue const maValue;
+        SCROW mnRow;
+        ScCellValue maValue;
 
         Entry(SCROW nRow, double f) : mnRow(nRow), maValue(f) {}
         Entry(SCROW nRow, const svl::SharedString& rStr) : mnRow(nRow), maValue(rStr) {}

@@ -856,14 +856,9 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
 
 struct SmViewShell_Impl
 {
-private:
-    SmViewShell_Impl& operator=(const SmViewShell_Impl&) = delete;
-    SmViewShell_Impl(const SmViewShell_Impl&) = delete;
-public:
-    SmViewShell_Impl() = default;
     std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
     std::unique_ptr<SfxRequest> pRequest;
-    SvtMiscOptions const        aOpts;
+    SvtMiscOptions          aOpts;
 };
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
