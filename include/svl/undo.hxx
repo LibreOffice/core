@@ -106,8 +106,8 @@ struct SVL_DLLPUBLIC SfxUndoArray
     SfxUndoArray( SfxUndoArray const & ) = delete; // MSVC2017 workaround
 
     SfxUndoAction* GetUndoAction(size_t idx) { return maUndoActions[idx].pAction.get(); }
-    std::unique_ptr<SfxUndoAction> RemoveX(int idx);
-    void RemoveX( size_t i_pos, size_t i_count );
+    std::unique_ptr<SfxUndoAction> Remove(int idx);
+    void Remove( size_t i_pos, size_t i_count );
     void Insert( std::unique_ptr<SfxUndoAction> i_action, size_t i_pos );
 };
 
