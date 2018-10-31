@@ -969,7 +969,7 @@ bool Qt5AccessibleWidget::isColumnSelected(int /* column */) const { return true
 
 bool Qt5AccessibleWidget::isRowSelected(int /* row */) const { return true; }
 
-void Qt5AccessibleWidget::modelChange(QAccessibleTableModelChangeEvent* event) {}
+void Qt5AccessibleWidget::modelChange(QAccessibleTableModelChangeEvent*) {}
 
 int Qt5AccessibleWidget::rowCount() const
 {
