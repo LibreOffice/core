@@ -748,15 +748,12 @@ void FontNameBox::Fill( const FontList* pList )
     {
         const FontMetric& rFontMetric = pList->GetFontName( i );
         sal_Int32 nIndex = InsertEntry( rFontMetric.GetFamilyName() );
-        if ( nIndex != LISTBOX_ERROR )
-        {
-            if ( nIndex < static_cast<sal_Int32>(mpFontList->size()) ) {
-                ImplFontList::iterator it = mpFontList->begin();
-                ::std::advance( it, nIndex );
-                mpFontList->insert( it, rFontMetric );
-            } else {
-                mpFontList->push_back( rFontMetric );
-            }
+        if ( nIndex < static_cast<sal_Int32>(mpFontList->size()) ) {
+            ImplFontList::iterator it = mpFontList->begin();
+            ::std::advance( it, nIndex );
+            mpFontList->insert( it, rFontMetric );
+        } else {
+            mpFontList->push_back( rFontMetric );
         }
     }
 

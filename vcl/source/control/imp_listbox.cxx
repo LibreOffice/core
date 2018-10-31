@@ -121,8 +121,8 @@ sal_Int32 ListBox::NaturalSortCompare(const OUString &rA, const OUString &rB)
 
 sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort )
 {
-    if (nPos < 0 || LISTBOX_MAX_ENTRIES <= maEntries.size())
-        return LISTBOX_ERROR;
+    assert(nPos >= 0);
+    assert(maEntries.size() < LISTBOX_MAX_ENTRIES);
 
     if ( !!pNewEntry->maImage )
         mnImages++;
@@ -764,8 +764,8 @@ void ImplListBoxWindow::ImplCallSelect()
 
 sal_Int32 ImplListBoxWindow::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry )
 {
-    if (nPos < 0 || LISTBOX_MAX_ENTRIES <= mpEntryList->GetEntryCount())
-        return LISTBOX_ERROR;
+    assert(nPos >= 0);
+    assert(mpEntryList->GetEntryCount() < LISTBOX_MAX_ENTRIES);
 
     ImplClearLayoutData();
     sal_Int32 nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, mbSort );
@@ -2220,11 +2220,6 @@ sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr )
 {
     ImplEntryType* pNewEntry = new ImplEntryType( rStr );
     sal_Int32 nNewPos = maLBWindow->InsertEntry( nPos, pNewEntry );
-    if (nNewPos == LISTBOX_ERROR)
-    {
-        delete pNewEntry;
-        return nNewPos;
-    }
     CompatStateChanged( StateChangedType::Data );
     return nNewPos;
 }
@@ -2233,11 +2228,6 @@ sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr, const 
 {
     ImplEntryType* pNewEntry = new ImplEntryType( rStr, rImage );
     sal_Int32 nNewPos = maLBWindow->InsertEntry( nPos, pNewEntry );
-    if (nNewPos == LISTBOX_ERROR)
-    {
-        delete pNewEntry;
-        return nNewPos;
-    }
     CompatStateChanged( StateChangedType::Data );
     return nNewPos;
 }
