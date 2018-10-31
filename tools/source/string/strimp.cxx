@@ -1148,7 +1148,10 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
         // Bei \r oder \n gibt es neuen Zeilenumbruch
         if ( (pStr[i] == _CR) || (pStr[i] == _LF) )
         {
-            nLen = nLen + nLineEndLen;
+            if( nLen <= STRING_MAXLEN - nLineEndLen )
+                nLen = nLen + nLineEndLen;
+            else
+                nLen = STRING_MAXLEN;
 
             // Wenn schon gesetzt, dann brauchen wir keine aufwendige Abfrage
             if ( !bConvert )
@@ -1169,7 +1172,10 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
                 ++i;
         }
         else
-            ++nLen;
+        {
+            if( nLen < STRING_MAXLEN )
+                ++nLen;
+        }
         ++i;
 
         // Wenn String zu lang, dann konvertieren wir nicht
