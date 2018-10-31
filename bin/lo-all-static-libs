@@ -13,7 +13,7 @@ if test -z "$INSTDIR" ; then
     exit 1
 fi
 
-if test "$OS" != ANDROID -a "$OS" != IOS; then
+if test "$OS" != ANDROID -a "$OS" != iOS; then
     echo This script makes sense only in Android or iOS builds.
 fi
 
@@ -56,7 +56,7 @@ ANDROID)
     oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinUtils/src/.libs/*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Osi/src/Osi/.libs/*.a"
     ;;
-IOS)
+iOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/cppunit/src/cppunit/.libs/*.a"
     ;;

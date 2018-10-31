@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,nss,nss))
 
 $(eval $(call gb_ExternalPackage_use_external_project,nss,nss))
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 # nothing...
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\

@@ -35,7 +35,7 @@ gb_DEBUGINFO_FLAGS=-g
 gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
 gb_OSDEFS := \
-	-D$(OS) \
+	-DIOS \
 	-D_PTHREADS \
 	-DUNIX \
 	-DUNX \

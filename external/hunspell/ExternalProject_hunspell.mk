@@ -15,7 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 
 hunspell_CPPCLAGS=$(CPPFLAGS)
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
 hunspell_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
@@ -23,7 +23,7 @@ endif
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter IOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
+		$(if $(filter iOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		autoreconf && \
 		$(SHELL) ./configure --disable-shared --disable-nls --with-pic \

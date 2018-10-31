@@ -19,7 +19,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 $(eval $(call gb_StaticLibrary_add_cxxflags,vclmain,\
     $(gb_OBJCXXFLAGS) \
 ))

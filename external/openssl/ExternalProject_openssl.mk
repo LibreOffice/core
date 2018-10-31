@@ -38,7 +38,7 @@ OPENSSL_PLATFORM := \
         $(if $(filter X86_64,$(CPUNAME)),solaris64-x86_64-cc,solaris-sparcv9-cc)\
       )\
     ,\
-      $(if $(filter IOS,$(OS)),\
+      $(if $(filter iOS,$(OS)),\
         ios-armv7\
       ,\
         $(if $(filter WNT,$(OS)),\
@@ -70,14 +70,14 @@ else
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS && \
-		$(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS IOS,$(OS)), \
+		$(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS iOS,$(OS)), \
 			./Configure, \
 		$(if $(filter WNT,$(OS)), \
 			$(PERL) Configure, \
 			./config)) \
 			$(OPENSSL_PLATFORM) no-dso no-shared \
 			$(if $(filter-out WNT,$(OS)),no-idea) \
-			$(if $(filter-out ANDROID IOS WNT,$(OS)), \
+			$(if $(filter-out ANDROID iOS WNT,$(OS)), \
 				$(if $(SYSBASE),-I$(SYSBASE)/usr/include -L$(SYSBASE)/usr/lib)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) build_libs \

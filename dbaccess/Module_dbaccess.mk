@@ -32,7 +32,7 @@ $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
 	AllLangMoTarget_dba \
 ))
 
-ifneq ($(OS),IOS)
+ifneq ($(OS),iOS)
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     $(if $(ENABLE_JAVA),CppunitTest_dbaccess_hsqlbinary_import) \

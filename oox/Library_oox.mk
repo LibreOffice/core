@@ -299,7 +299,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/vml/vmltextbox \
 ))
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 # Either a compiler bug in Xcode 5.1.1 or some hard-to-spot undefined
 # behaviour in the source code... Compiling this source file with
 # optimization causes some Smart Art images to end up with completely

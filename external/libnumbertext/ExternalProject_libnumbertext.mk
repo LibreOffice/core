@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libnumbertext,\
 
 libnumbertext_CXXFLAGS=$(CXXFLAGS) $(CXXFLAGS_CXX11)
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
 libnumbertext_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
@@ -29,7 +29,7 @@ libnumbertext_LIBS+=-L$(gb_StaticLibrary_WORKDIR)
 $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 	$(call gb_ExternalProject_run,build,\
 		$(if $(libnumbertext_LIBS),LIBS='$(libnumbertext_LIBS)') \
-		$(if $(filter IOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
+		$(if $(filter iOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
 		autoreconf && \
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		$(SHELL) ./configure --disable-shared --with-pic \

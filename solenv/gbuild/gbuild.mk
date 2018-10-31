@@ -167,18 +167,7 @@ gb_Library_DLLPOSTFIX := lo
 
 # Include platform/cpu/compiler specific config/definitions
 
-# Work around inconsistency in case of $(OS) being "IOS" (all
-# upper-case) vs. the file being included here having the name
-# iOS_*_*.mk (lower-case 'i'). This went unnoticed until now when I
-# happen to build for iOS on a case-sensitive file system.
-
-ifeq ($(OS),IOS)
-gbuildplatformosname=iOS
-else
-gbuildplatformosname=$(OS)
-endif
-
-include $(GBUILDDIR)/platform/$(gbuildplatformosname)_$(CPUNAME)_$(COM).mk
+include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 
 # this is optional
 include $(SRCDIR)/RepositoryFixes.mk

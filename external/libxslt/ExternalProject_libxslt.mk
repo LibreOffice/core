@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 			$(if $(SYSBASE),$(if $(filter SOLARIS LINUX,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 			$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
-			$(if $(filter IOS,$(OS)),LIBS="-liconv") \
+			$(if $(filter iOS,$(OS)),LIBS="-liconv") \
 			--disable-shared,--disable-static) \
 			$(if $(SYSTEM_LIBXML),,--with-libxml-src=$(call gb_UnpackedTarball_get_dir,libxml2)) \
 		&& chmod 777 xslt-config \

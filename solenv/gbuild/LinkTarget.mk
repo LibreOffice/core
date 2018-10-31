@@ -1330,7 +1330,7 @@ endef
 # call gb_LinkTarget__use_linktarget_objects,linktarget,linktargets
 define gb_LinkTarget__use_linktarget_objects
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach linktarget,$(2),$(call gb_LinkTarget_get_target,$(linktarget)))
-ifneq ($(OS),IOS)
+ifneq ($(OS),iOS)
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS += $(foreach linktarget,$(2),$(call gb_LinkTarget_get_objects_list,$(linktarget)))
 endif
 

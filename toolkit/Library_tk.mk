@@ -130,7 +130,7 @@ $(eval $(call gb_Library_add_libs,tk,\
 ))
 endif
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif

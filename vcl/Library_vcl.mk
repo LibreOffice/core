@@ -27,7 +27,7 @@ else ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
 else ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
-else ifeq ($(OS),IOS)
+else ifeq ($(OS),iOS)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
 else ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
@@ -441,7 +441,7 @@ vcl_coretext_code= \
 
 vcl_headless_code= \
     vcl/headless/svpframe \
-    $(if $(filter-out IOS,$(OS)), \
+    $(if $(filter-out iOS,$(OS)), \
         vcl/headless/svpbmp \
         vcl/headless/svpgdi \
         vcl/headless/svpdata) \
@@ -604,7 +604,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif
 
 
-ifeq ($(OS),IOS)
+ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))

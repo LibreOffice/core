@@ -34,7 +34,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 endif
 
-ifneq ($(OS),IOS)
+ifneq ($(OS),iOS)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	Library_scqahelper \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
@@ -111,7 +111,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_annotationobj \
 	CppunitTest_sc_annotationsobj \
 	CppunitTest_sc_cellrangeobj \
-	$(if $(filter-out $(OS),IOS), \
+	$(if $(filter-out $(OS),iOS), \
 		CppunitTest_sc_databaserangeobj) \
 	CppunitTest_sc_datapilottableobj \
 	CppunitTest_sc_datapilotfieldobj \
