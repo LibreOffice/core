@@ -19,6 +19,10 @@
 
 #include <impglyphitem.hxx>
 
+#if (defined UNX && !defined MACOSX)
+#include <unx/freetype_glyphcache.hxx>
+#endif
+
 SalLayoutGlyphs::SalLayoutGlyphs()
     : m_pImpl(nullptr)
 {
@@ -35,12 +39,12 @@ SalLayoutGlyphs& SalLayoutGlyphs::operator=(const SalLayoutGlyphs& rOther)
     return *this;
 }
 
-bool SalLayoutGlyphs::empty() const { return !m_pImpl || m_pImpl->empty(); }
+bool SalLayoutGlyphs::IsValid() const { return !m_pImpl || m_pImpl->IsValid(); }
 
-void SalLayoutGlyphs::clear()
+void SalLayoutGlyphs::Invalidate()
 {
     if (m_pImpl)
-        m_pImpl->clear();
+        m_pImpl->Invalidate();
 }
 
 SalLayoutGlyphsImpl::~SalLayoutGlyphsImpl() {}
@@ -50,6 +54,29 @@ SalLayoutGlyphsImpl* SalGenericLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs)
     SalLayoutGlyphsImpl* pNew = new SalGenericLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
     *pNew = *this;
     return pNew;
+}
+
+bool SalGenericLayoutGlyphsImpl::IsValid() const
+{
+    if (!m_rFontInstance.is())
+        return false;
+    if (empty())
+        return false;
+#if (defined UNX && !defined MACOSX)
+    const FreetypeFontInstance* pFFI = dynamic_cast<FreetypeFontInstance*>(m_rFontInstance.get());
+    if (pFFI && !pFFI->GetFreetypeFont())
+    {
+        m_rFontInstance.clear();
+        return false;
+    }
+#endif
+    return true;
+}
+
+void SalGenericLayoutGlyphsImpl::Invalidate()
+{
+    m_rFontInstance.clear();
+    clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -618,7 +618,7 @@ struct ImplEntryMetrics
 
 SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(OutputDevice* pOutputDevice)
 {
-    if (!maStrGlyphs.empty())
+    if (maStrGlyphs.IsValid())
         // Use pre-calculated result.
         return &maStrGlyphs;
 

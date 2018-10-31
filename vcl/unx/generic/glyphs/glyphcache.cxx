@@ -46,6 +46,8 @@ GlyphCache::~GlyphCache()
 
 void GlyphCache::ClearFontCache()
 {
+    for (auto &aFontPair : maFontList)
+        static_cast<FreetypeFontInstance*>(aFontPair.first.get())->SetFreetypeFont(nullptr);
     maFontList.clear();
     mpCurrentGCFont = nullptr;
     m_aFontInfoList.clear();

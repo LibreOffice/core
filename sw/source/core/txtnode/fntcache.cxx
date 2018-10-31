@@ -105,7 +105,7 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
 SalLayoutGlyphs* lcl_CreateLayout(SwTextGlyphsKey& rKey, SalLayoutGlyphs& rTextGlyphs)
 {
     // Use pre-calculated result.
-    if (!rTextGlyphs.empty())
+    if (rTextGlyphs.IsValid())
         return &rTextGlyphs;
 
     if (rKey.m_nIndex >= rKey.m_aText.getLength())
