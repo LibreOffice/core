@@ -1,4 +1,3 @@
-
 Apache OpenOffice (https://www.openoffice.org)
 Copyright 2011, 2018 The Apache Software Foundation
 
@@ -8,16 +7,16 @@ The Apache Software Foundation (https://www.apache.org/).
 ____
 
 
-Portions of this software copyright (c) 2000-2011, Oracle and/or its affiliates  <https://www.oracle.com/>.
+Portions of this software copyright (c) 2000-2011, Oracle and/or its affiliates <https://www.oracle.com/>.
 
-Portions of this software (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
+Portions of this software (C) Copyright IBM Corporation 2003, 2012. All Rights Reserved.
 
 ____
 
 As part of the base system this product also includes code from the following
 Apache projects:
 - Apache Lucene
-- Apache Portable Runtime 
+- Apache Portable Runtime
 - Apache Portable Runtime Utility Library
 - Apache Commons - used by MediaWiki Publisher extension
 - Apache Jakarta HttpClient - used by MediaWiki Publisher extension
@@ -32,10 +31,10 @@ This product includes software developed by
 The Apache Software Foundation (https://www.apache.org/).
 
 The snowball stemmers in
-  contrib/snowball/src/java/net/sf/snowball
+ contrib/snowball/src/java/net/sf/snowball
 were developed by Martin Porter and Richard Boulton.
 The full snowball package is available from
-  http://snowball.tartarus.org/
+ http://snowball.tartarus.org/
 
 
 Apache Portable Runtime
@@ -114,18 +113,18 @@ This product includes software developed by
 The Apache Software Foundation (https://www.apache.org/).
 
 Java Management Extensions (JMX) support is provided by
-the MX4J package, which is open source software.  The
+the MX4J package, which is open source software. The
 original software and related information is available
 at http://mx4j.sourceforge.net/.
 
 The Windows Installer is built with the Nullsoft
 Scriptable Install System (NSIS), which is
-open source software.  The original software and
+open source software. The original software and
 related information is available at
 http://nsis.sourceforge.net/.
 
-Java compilation software for JSP pages is provided by Eclipse, 
-which is open source software.  The original software and 
+Java compilation software for JSP pages is provided by Eclipse,
+which is open source software. The original software and
 related information is available at
 https://www.eclipse.org/.
 
