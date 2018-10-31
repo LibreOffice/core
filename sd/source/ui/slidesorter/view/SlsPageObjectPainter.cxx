@@ -24,6 +24,7 @@
 #include <view/SlsPageObjectLayouter.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsTheme.hxx>
+#include <SlideSorter.hxx>
 #include "SlsFramePainter.hxx"
 #include <cache/SlsPageCache.hxx>
 #include <controller/SlsProperties.hxx>

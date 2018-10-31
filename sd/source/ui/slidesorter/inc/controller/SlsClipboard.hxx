@@ -27,12 +27,9 @@
 
 #include <sal/types.h>
 #include <o3tl/deleter.hxx>
-#include <tools/solar.h>
-#include <svx/svdpage.hxx>
+#include <svx/svdtypes.hxx>
 
 #include <sddllapi.h>
-
-#include <set>
 
 class SfxRequest;
 struct AcceptDropEvent;
@@ -50,10 +47,6 @@ class Window;
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
-
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
 
 namespace sd { namespace slidesorter { namespace controller {
 

@@ -25,8 +25,6 @@
 
 namespace sd { namespace slidesorter { namespace model {
 
-class PageDescriptor;
-
 /** This class gives access to values related to the visualization of page
     objects.  This includes animation state when blending from one state to
     another.

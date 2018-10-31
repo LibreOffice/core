@@ -23,7 +23,6 @@
 #include <tools/SdGlobalResourceContainer.hxx>
 
 #include <memory>
-#include <vcl/mapmod.hxx>
 
 namespace vcl { class Font; }
 

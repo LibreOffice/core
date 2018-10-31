@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <view/SlsPageObjectLayouter.hxx>
 #include <view/SlsToolTip.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsTheme.hxx>
+#include <SlideSorter.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
