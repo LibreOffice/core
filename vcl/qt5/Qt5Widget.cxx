@@ -24,12 +24,14 @@
 #include <Qt5Graphics.hxx>
 #include <Qt5Tools.hxx>
 
+#include <QtCore/QtGlobal>
 #include <QtGui/QFocusEvent>
 #include <QtGui/QImage>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QtWidgets>
@@ -57,7 +59,7 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
         p.drawImage(pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect());
 }
 
-void Qt5Widget::resizeEvent(QResizeEvent* /*event*/)
+void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
     if (m_pFrame->m_bUseCairo)
     {
@@ -71,7 +73,15 @@ void Qt5Widget::resizeEvent(QResizeEvent* /*event*/)
             cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
                                         &m_pFrame->m_aDamageHandler, nullptr);
             m_pFrame->m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
+            UniqueCairoSurface old_surface(m_pFrame->m_pSurface.release());
             m_pFrame->m_pSurface.reset(pSurface);
+
+            int min_width = qMin(pEvent->oldSize().width(), pEvent->size().width());
+            int min_height = qMin(pEvent->oldSize().height(), pEvent->size().height());
+
+            SalTwoRect rect(0, 0, min_width, min_height, 0, 0, min_width, min_height);
+
+            m_pFrame->m_pSvpGraphics->copySource(rect, old_surface.get());
         }
     }
     else
