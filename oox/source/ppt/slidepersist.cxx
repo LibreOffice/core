@@ -172,7 +172,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
 
         oox::drawingml::ShapePropertyIds aPropertyIds = oox::drawingml::ShapePropertyInfo::DEFAULT.mrPropertyIds;
         aPropertyIds[oox::drawingml::ShapeProperty::FillGradient] = PROP_FillGradientName;
-        oox::drawingml::ShapePropertyInfo aPropInfo( aPropertyIds, true, false, true, false );
+        oox::drawingml::ShapePropertyInfo aPropInfo( aPropertyIds, true, false, true, false, false );
         oox::drawingml::ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper(), aPropInfo );
         mpBackgroundPropertiesPtr->pushToPropMap( aPropMap, rFilterBase.getGraphicHelper(), 0, nPhClr );
         PropertySet( mxPage ).setProperty( PROP_Background, aPropMap.makePropertySet() );

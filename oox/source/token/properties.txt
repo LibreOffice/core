@@ -171,6 +171,7 @@ FillColor
 FillGradient
 FillGradientName
 FillHatch
+FillHatchName
 FillStyle
 FillTransparence
 FillTransparenceGradient
@@ -202,6 +203,7 @@ GapwidthSequence
 GenerateVbaEvents
 Geometry3D
 GradientName
+HatchName
 Graphic
 GraphicBitmap
 GraphicColorMode

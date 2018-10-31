@@ -449,7 +449,8 @@ static const ShapePropertyIds spnCommonPropIds =
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_INVALID, PROP_FillGradientName,
     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
-    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
+    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
+    PROP_FillHatchName
 };
 
 static const ShapePropertyIds spnLinearPropIds =
@@ -458,7 +459,8 @@ static const ShapePropertyIds spnLinearPropIds =
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_INVALID, PROP_INVALID, PROP_INVALID
+    PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_INVALID
 };
 
 static const ShapePropertyIds spnFilledPropIds =
@@ -487,15 +489,15 @@ static const ShapePropertyIds spnFilledPropIds =
     PROP_FillBitmapPositionOffsetX,
     PROP_FillBitmapPositionOffsetY,
     PROP_FillBitmapRectanglePoint,
-    PROP_FillHatch
+    PROP_HatchName
 };
 
 /** Property info for common chart objects, to be used in ShapePropertyMap. */
-static const ShapePropertyInfo saCommonPropInfo( spnCommonPropIds, false, true, true, true );
+static const ShapePropertyInfo saCommonPropInfo( spnCommonPropIds, false, true, true, true, true );
 /** Property info for linear data series, to be used in ShapePropertyMap. */
-static const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, true, true );
+static const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, true, true, true );
 /** Property info for filled data series, to be used in ShapePropertyMap. */
-static const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true );
+static const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true, true );
 
 /** Contains information about formatting of a specific chart object type. */
 struct ObjectTypeFormatEntry
