@@ -122,6 +122,8 @@
 #include <calbck.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xbtmpit.hxx>
@@ -1651,6 +1653,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         {
             bool bURL = FN_UNO_REPLACEMENT_GRAPHIC_URL == pEntry->nWID;
             bool bApply = false;
+            // If this is a package URL.
+            bool bPackage = false;
             Graphic aGraphic;
             if( bURL )
             {
@@ -1670,6 +1674,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     aGraphic = pGrfObj->GetGraphic();
                     bApply = true;
                 }
+                else if (aGrfUrl.startsWith(sPackageProtocol))
+                    bPackage = true;
             }
             else
             {
@@ -1682,7 +1688,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
             }
 
-            if ( bApply )
+            if ( bApply || bPackage )
             {
                 const ::SwFormatContent* pCnt = &pFormat->GetContent();
                 if ( pCnt->GetContentIdx() && pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ] )
@@ -1692,6 +1698,26 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     if ( pOleNode )
                     {
                         svt::EmbeddedObjectRef &rObj = pOleNode->GetOLEObj().GetObject();
+
+                        if (bPackage)
+                        {
+                            // Package URL case: look up the stream of the
+                            // graphic in the object container and initialize
+                            // aGraphic from that stream.
+                            comphelper::EmbeddedObjectContainer* pContainer = rObj.GetContainer();
+                            uno::Reference<embed::XEmbeddedObject> xObj = rObj.GetObject();
+                            if (pContainer)
+                            {
+                                OUString aMediaType;
+                                uno::Reference <io::XInputStream> xStream = pContainer->GetGraphicStream(xObj, &aMediaType);
+                                if (xStream.is())
+                                {
+                                    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
+                                    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                                    rGF.ImportGraphic(aGraphic, OUString(), *pStream);
+                                }
+                            }
+                        }
 
                         OUString aMediaType;
                         rObj.SetGraphic( aGraphic, aMediaType );
