@@ -54,7 +54,7 @@ public:
                     const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
                     const OUString& filterTerm,
                     SaveInData *pCurrentSaveInData );
-    OUString    MapCommand2UIName(const OUString& sCommand);
+    OUString    getCommandName(const OUString& sCommand);
 
     /**
         Signals that a command category has been selected.
