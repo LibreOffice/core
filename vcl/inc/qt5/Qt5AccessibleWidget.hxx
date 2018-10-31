@@ -34,6 +34,7 @@ class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject,
                                                public QAccessibleInterface,
                                                public QAccessibleActionInterface,
                                                public QAccessibleTextInterface,
+                                               public QAccessibleEditableTextInterface,
                                                public QAccessibleTableInterface,
                                                public QAccessibleValueInterface
 {
@@ -95,6 +96,11 @@ public:
                          int* endOffset) const override;
     QString textBeforeOffset(int offset, QAccessible::TextBoundaryType boundaryType,
                              int* startOffset, int* endOffset) const override;
+
+    // QAccessibleEditableTextInterface
+    virtual void deleteText(int startOffset, int endOffset) override;
+    virtual void insertText(int offset, const QString& text) override;
+    virtual void replaceText(int startOffset, int endOffset, const QString& text) override;
 
     // QAccessibleValueInterface
     QVariant currentValue() const override;
