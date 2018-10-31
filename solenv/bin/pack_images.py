@@ -37,6 +37,10 @@ def main(args):
         LOGGER.error("imagelist_file '%s' doesn't exists", args.imagelist_file)
         sys.exit(2)
 
+    if args.links_file is not None and not os.path.exists(args.links_file):
+        LOGGER.error("link_file '%s' doesn't exists", args.links_file)
+        sys.exit(2)
+
     out_path = os.path.dirname(args.output_file)
     for path in (out_path, args.global_path, args.module_path):
         if not os.path.exists(path):
@@ -57,7 +61,6 @@ def main(args):
         elif not os.access(path, os.X_OK):
             LOGGER.error("Unable to search path %s", path)
             sys.exit(2)
-            continue
 
         custom_paths.append(path)
 
@@ -66,16 +69,19 @@ def main(args):
     custom_image_list = find_custom(custom_paths)
 
     links = {}
-    read_links(links, ARGS.global_path)
-    for path in custom_paths:
-        read_links(links, path)
+    if args.links_file is not None:
+        read_links(links, args.links_file)
+    else:
+        read_links(links, os.path.join(ARGS.global_path, "links.txt"))
+        for path in custom_paths:
+            read_links(links, os.path.join(path, "links.txt"))
     check_links(links)
 
     zip_list = create_zip_list(global_image_list, module_image_list, custom_image_list,
                                args.global_path, args.module_path)
     remove_links_from_zip_list(zip_list, links)
 
-    if check_rebuild(args.output_file, imagelist_filenames, custom_paths, zip_list):
+    if check_rebuild(args.output_file, imagelist_filenames, custom_paths, zip_list, args.links_file):
         tmp_dir = copy_images(zip_list)
         create_zip_archive(zip_list, links, tmp_dir, tmp_output_file, args.sort_file)
 
@@ -90,7 +96,7 @@ def main(args):
         LOGGER.info("No rebuild needed. %s is up to date.", args.output_file)
 
 
-def check_rebuild(zip_file, imagelist_filenames, custom_paths, zip_list):
+def check_rebuild(zip_file, imagelist_filenames, custom_paths, zip_list, links_file):
     """ Check if a rebuild is needed.
 
     :type zip_file: str
@@ -104,6 +110,9 @@ def check_rebuild(zip_file, imagelist_filenames, custom_paths, zip_list):
 
     :type zip_list: dict
     :param zip_list: List of filenames to create the zip archive.
+
+    :type links_file: str
+    :param links_file: filename to read the links from
 
     :rtype: bool
     :return: True if rebuild is needed and False if not.
@@ -134,11 +143,15 @@ def check_rebuild(zip_file, imagelist_filenames, custom_paths, zip_list):
         return True
     if compare_modtime(zip_list):
         return True
-    for path in custom_paths:
-        link_file = os.path.join(path, 'links.txt')
-        if os.path.exists(link_file):
-            if zip_file_stat.st_mtime < os.stat(link_file).st_mtime:
-                return True
+    if links_file is not None:
+        if zip_file_stat.st_mtime < os.stat(links_file).st_mtime:
+            return True
+    else:
+        for path in custom_paths:
+            link_file = os.path.join(path, 'links.txt')
+            if os.path.exists(link_file):
+                if zip_file_stat.st_mtime < os.stat(link_file).st_mtime:
+                    return True
 
     return False
 
@@ -166,7 +179,7 @@ def replace_zip_file(src, dst):
 
     try:
         LOGGER.info("Copy archive '%s' to '%s'", src, dst)
-        shutil.copyfile(src, dst)
+        shutil.move(src, dst)
     except (shutil.SameFileError, OSError) as e:
         os.unlink(src)
         LOGGER.error("Cannot copy file '%s' to %s: %s", src, dst, str(e))
@@ -247,12 +260,15 @@ def create_zip_archive(zip_list, links, tmp_dir, tmp_zip_file, sort_file=None):
         if links.keys():
             LOGGER.info("Add file 'links.txt' to zip archive")
             create_links_file(tmp_dir, links)
-            tmp_zip.write('links.txt')
+            tmp_zip.write('links.txt', compress_type=zipfile.ZIP_DEFLATED)
 
         for link in ordered_zip_list:
             LOGGER.info("Add file '%s' from path '%s' to zip archive", link, tmp_dir)
             try:
-                tmp_zip.write(link)
+                if (link.endswith(".svg")):
+                    tmp_zip.write(link, compress_type=zipfile.ZIP_DEFLATED)
+                else:
+                    tmp_zip.write(link)
             except OSError:
                 LOGGER.warning("Unable to add file '%s' to zip archive", link)
 
@@ -403,17 +419,16 @@ def check_links(links):
         sys.exit(1)
 
 
-def read_links(links, path):
+def read_links(links, filename):
     """ Read links from file.
 
     :type links: dict
     :param links: Hash to store all links
 
-    :type path: str
-    :param path: Path to use
+    :type filename: str
+    :param filename: filename to read the links from
     """
 
-    filename = os.path.join(path, "links.txt")
     LOGGER.info("Read links from file '%s'", filename)
     if not os.path.isfile(filename):
         LOGGER.info("No file to read")
@@ -566,6 +581,9 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--imagelist-file', dest='imagelist_file',
                         action='store', required=True,
                         help='file containing list of image list file')
+    parser.add_argument('-L', '--links-file', dest='links_file',
+                        action='store', required=False,
+                        help='file containing linked images')
     parser.add_argument('-s', '--sort-file', dest='sort_file',
                         action='store', required=True, default=None,
                         help='image sort order file')
