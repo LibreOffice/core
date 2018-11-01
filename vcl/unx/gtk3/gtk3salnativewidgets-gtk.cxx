@@ -266,10 +266,14 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
     gint nFirst = 0;
     gint nSecond = 0;
 
-    if ( has_forward )   nSecond += 1;
-    if ( has_forward2 )  nFirst  += 1;
-    if ( has_backward )  nFirst  += 1;
-    if ( has_backward2 ) nSecond += 1;
+    if ( has_forward )
+        nSecond += 1;
+    if ( has_forward2 )
+        nFirst  += 1;
+    if ( has_backward )
+        nFirst  += 1;
+    if ( has_backward2 )
+        nSecond += 1;
 
     if (gtk_check_version(3, 20, 0) == nullptr)
     {

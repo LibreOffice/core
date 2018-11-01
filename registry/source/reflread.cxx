@@ -1325,7 +1325,8 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getFieldCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return 0;
+    if (pEntry == nullptr)
+        return 0;
 
     return pEntry->m_pFields->m_numOfEntries;
 }
@@ -1370,7 +1371,8 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void * hEntry, sal_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return RTFieldAccess::INVALID;
+    if (pEntry == nullptr)
+        return RTFieldAccess::INVALID;
 
     return pEntry->m_pFields->getFieldAccess(index);
 }
@@ -1438,7 +1440,8 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return 0;
+    if (pEntry == nullptr)
+        return 0;
 
     return pEntry->m_pMethods->m_numOfEntries;
 }
@@ -1464,7 +1467,8 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodParameterCount(
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return 0;
+    if (pEntry == nullptr)
+        return 0;
 
     return pEntry->m_pMethods->getMethodParamCount(index);
 }
@@ -1505,7 +1509,8 @@ RTParamMode TYPEREG_CALLTYPE typereg_reader_getMethodParameterFlags(void * hEntr
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return RT_PARAM_INVALID;
+    if (pEntry == nullptr)
+        return RT_PARAM_INVALID;
 
     return pEntry->m_pMethods->getMethodParamMode(index, paramIndex);
 }
@@ -1515,7 +1520,8 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodExceptionCount(
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return 0;
+    if (pEntry == nullptr)
+        return 0;
 
     return pEntry->m_pMethods->getMethodExcCount(index);
 }
@@ -1556,7 +1562,8 @@ RTMethodMode TYPEREG_CALLTYPE typereg_reader_getMethodFlags(void * hEntry, sal_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return RTMethodMode::INVALID;
+    if (pEntry == nullptr)
+        return RTMethodMode::INVALID;
 
     return pEntry->m_pMethods->getMethodMode(index);
 }
@@ -1581,7 +1588,8 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getReferenceCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return 0;
+    if (pEntry == nullptr)
+        return 0;
 
     return pEntry->m_pReferences->m_numOfEntries;
 }
@@ -1606,7 +1614,8 @@ RTReferenceType TYPEREG_CALLTYPE typereg_reader_getReferenceSort(void * hEntry, 
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return RTReferenceType::INVALID;
+    if (pEntry == nullptr)
+        return RTReferenceType::INVALID;
 
     return pEntry->m_pReferences->getReferenceType(index);
 }
@@ -1631,7 +1640,8 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getReferenceFlags(void * hEntry, s
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return RTFieldAccess::INVALID;
+    if (pEntry == nullptr)
+        return RTFieldAccess::INVALID;
 
     return pEntry->m_pReferences->getReferenceAccess(index);
 }
@@ -1640,7 +1650,8 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getSuperTypeCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == nullptr) return 0;
+    if (pEntry == nullptr)
+        return 0;
 
     return pEntry->m_nSuperTypes;
 }

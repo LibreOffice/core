@@ -43,17 +43,20 @@ public:
 
     SvRef(SvRef const & rObj): pObj(rObj.pObj)
     {
-        if (pObj != nullptr) pObj->AddNextRef();
+        if (pObj != nullptr)
+            pObj->AddNextRef();
     }
 
     SvRef(T * pObjP): pObj(pObjP)
     {
-        if (pObj != nullptr) pObj->AddFirstRef();
+        if (pObj != nullptr)
+            pObj->AddFirstRef();
     }
 
     ~SvRef()
     {
-        if (pObj != nullptr) pObj->ReleaseRef();
+        if (pObj != nullptr)
+            pObj->ReleaseRef();
     }
 
     void clear()
@@ -214,7 +217,10 @@ class SAL_WARN_UNUSED SvCompatWeakRef
 public:
     SvCompatWeakRef( ) {}
     SvCompatWeakRef( T* pObj )
-                         {  if( pObj ) _xHdl = pObj->GetHdl(); }
+    {
+        if( pObj )
+            _xHdl = pObj->GetHdl();
+    }
 #if defined(__COVERITY__)
     ~SvCompatWeakRef() COVERITY_NOEXCEPT_FALSE {}
 #endif

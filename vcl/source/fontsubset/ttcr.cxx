@@ -199,7 +199,8 @@ SFErrCodes StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *l
     sal_uInt32 *p;
     sal_uInt8 *head = nullptr;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
-    if (listIsEmpty(_this->tables)) return SFErrCodes::TtFormat;
+    if (listIsEmpty(_this->tables))
+        return SFErrCodes::TtFormat;
 
     ProcessTables(_this);
 
@@ -278,7 +279,8 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
     SFErrCodes r;
     FILE* fd;
 
-    if ((r = StreamToMemory(_this, &ptr, &length)) != SFErrCodes::Ok) return r;
+    if ((r = StreamToMemory(_this, &ptr, &length)) != SFErrCodes::Ok)
+        return r;
     if (fname && (fd = fopen(fname, "wb")) != nullptr)
     {
         if (fwrite(ptr, 1, length, fd) != length) {
@@ -371,7 +373,8 @@ static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)
 static void FreeGlyphData(void *ptr)
 {
     GlyphData *p = static_cast<GlyphData *>(ptr);
-    if (p->ptr) free(p->ptr);
+    if (p->ptr)
+        free(p->ptr);
     free(p);
 }
 
@@ -380,7 +383,8 @@ static void TrueTypeTableDispose_generic(TrueTypeTable *_this)
     if (_this) {
         if (_this->data) {
             tdata_generic *pdata = static_cast<tdata_generic *>(_this->data);
-            if (pdata->nbytes) free(pdata->ptr);
+            if (pdata->nbytes)
+                free(pdata->ptr);
             free(_this->data);
         }
         free(_this);
@@ -390,7 +394,8 @@ static void TrueTypeTableDispose_generic(TrueTypeTable *_this)
 static void TrueTypeTableDispose_head(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) free(_this->data);
+        if (_this->data)
+            free(_this->data);
         free(_this);
     }
 }
@@ -398,7 +403,8 @@ static void TrueTypeTableDispose_head(TrueTypeTable *_this)
 static void TrueTypeTableDispose_hhea(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) free(_this->data);
+        if (_this->data)
+            free(_this->data);
         free(_this);
     }
 }
@@ -408,7 +414,8 @@ static void TrueTypeTableDispose_loca(TrueTypeTable *_this)
     if (_this) {
         if (_this->data) {
             tdata_loca *p = static_cast<tdata_loca *>(_this->data);
-            if (p->ptr) free(p->ptr);
+            if (p->ptr)
+                free(p->ptr);
             free(_this->data);
         }
         free(_this);
@@ -418,7 +425,8 @@ static void TrueTypeTableDispose_loca(TrueTypeTable *_this)
 static void TrueTypeTableDispose_maxp(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) free(_this->data);
+        if (_this->data)
+            free(_this->data);
         free(_this);
     }
 }
@@ -426,7 +434,8 @@ static void TrueTypeTableDispose_maxp(TrueTypeTable *_this)
 static void TrueTypeTableDispose_glyf(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) listDispose(static_cast<list>(_this->data));
+        if (_this->data)
+            listDispose(static_cast<list>(_this->data));
         free(_this);
     }
 }
@@ -439,8 +448,10 @@ static void TrueTypeTableDispose_cmap(TrueTypeTable *_this)
             CmapSubTable *s = t->s;
             if (s) {
                 for (sal_uInt32 i = 0; i < t->m; i++) {
-                    if (s[i].xc) free(s[i].xc);
-                    if (s[i].xg) free(s[i].xg);
+                    if (s[i].xc)
+                        free(s[i].xc);
+                    if (s[i].xg)
+                        free(s[i].xg);
                 }
                 free(s);
             }
@@ -453,7 +464,8 @@ static void TrueTypeTableDispose_cmap(TrueTypeTable *_this)
 static void TrueTypeTableDispose_name(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) listDispose(static_cast<list>(_this->data));
+        if (_this->data)
+            listDispose(static_cast<list>(_this->data));
         free(_this);
     }
 }
@@ -531,7 +543,8 @@ static int GetRawData_loca(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
     p = static_cast<tdata_loca *>(_this->data);
 
-    if (p->nbytes == 0) return TTCR_ZEROGLYPHS;
+    if (p->nbytes == 0)
+        return TTCR_ZEROGLYPHS;
 
     *ptr = p->ptr;
     *len = p->nbytes;
@@ -560,7 +573,8 @@ static int GetRawData_glyf(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     *len = 0;
     *tag = 0;
 
-    if (listCount(l) == 0) return TTCR_ZEROGLYPHS;
+    if (listCount(l) == 0)
+        return TTCR_ZEROGLYPHS;
 
     listToFirst(l);
     do {
@@ -711,7 +725,8 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     l = static_cast<list>(_this->data);
     assert(l != nullptr);
 
-    if ((n = static_cast<sal_Int16>(listCount(l))) == 0) return TTCR_NONAMES;
+    if ((n = static_cast<sal_Int16>(listCount(l))) == 0)
+        return TTCR_NONAMES;
 
     NameRecord* nr = static_cast<NameRecord*>(scalloc(n, sizeof(NameRecord)));
 
@@ -774,7 +789,8 @@ static int GetRawData_post(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     sal_uInt32 postLen = 0;
     int ret;
 
-    if (_this->rawdata) free(_this->rawdata);
+    if (_this->rawdata)
+        free(_this->rawdata);
 
     if (p->format == 0x00030000) {
         postLen = 32;
@@ -978,7 +994,8 @@ static void DisposeNameRecord(void *ptr)
 {
     if (ptr != nullptr) {
         NameRecord *nr = static_cast<NameRecord *>(ptr);
-        if (nr->sptr) free(nr->sptr);
+        if (nr->sptr)
+            free(nr->sptr);
         free(ptr);
     }
 }
@@ -1102,7 +1119,8 @@ void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
         }
 
         for (i = 0; i < t->n; i++) {
-            if (s[i].id > id) break;
+            if (s[i].id > id)
+                break;
         }
 
         if (i < t->n) {
@@ -1146,7 +1164,8 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
     assert(table != nullptr);
     assert(table->tag == T_glyf);
 
-    if (!glyphdata) return sal_uInt32(~0);
+    if (!glyphdata)
+        return sal_uInt32(~0);
 
     std::vector< sal_uInt32 > glyphlist;
 
@@ -1200,7 +1219,8 @@ sal_uInt32 glyfCount(const TrueTypeTable *table)
 
 static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
 {
-    if (listIsEmpty(tt->tables)) return nullptr;
+    if (listIsEmpty(tt->tables))
+        return nullptr;
 
     listToFirst(tt->tables);
 
@@ -1269,24 +1289,32 @@ static void ProcessTables(TrueTypeCreator *tt)
 
         if (gd->nbytes != 0) {
             z = GetInt16(gd->ptr, 2);
-            if (z < xMin) xMin = z;
+            if (z < xMin)
+                xMin = z;
 
             z = GetInt16(gd->ptr, 4);
-            if (z < yMin) yMin = z;
+            if (z < yMin)
+                yMin = z;
 
             z = GetInt16(gd->ptr, 6);
-            if (z > xMax) xMax = z;
+            if (z > xMax)
+                xMax = z;
 
             z = GetInt16(gd->ptr, 8);
-            if (z > yMax) yMax = z;
+            if (z > yMax)
+                yMax = z;
         }
 
         if (!gd->compflag) {                                /* non-composite glyph */
-            if (gd->npoints > maxPoints) maxPoints = gd->npoints;
-            if (gd->ncontours > maxContours) maxContours = gd->ncontours;
+            if (gd->npoints > maxPoints)
+                maxPoints = gd->npoints;
+            if (gd->ncontours > maxContours)
+                maxContours = gd->ncontours;
         } else {                                            /* composite glyph */
-            if (gd->npoints > maxCompositePoints) maxCompositePoints = gd->npoints;
-            if (gd->ncontours > maxCompositeContours) maxCompositeContours = gd->ncontours;
+            if (gd->npoints > maxCompositePoints)
+                maxCompositePoints = gd->npoints;
+            if (gd->ncontours > maxCompositeContours)
+                maxCompositeContours = gd->ncontours;
         }
 
     } while (listNext(glyphlist));
@@ -1398,7 +1426,8 @@ static void ProcessTables(TrueTypeCreator *tt)
     hheaPtr = static_cast<sal_uInt8 *>(hhea->data);
     if (nGlyphs > 2) {
         for (i = nGlyphs - 1; i > 0; i--) {
-            if (met[i].adv != met[i-1].adv) break;
+            if (met[i].adv != met[i-1].adv)
+                break;
         }
         nlsb = nGlyphs - 1 - i;
     }
@@ -1447,7 +1476,8 @@ extern "C"
 
         assert(_this != nullptr);
 
-        if (_this->rawdata) free(_this->rawdata);
+        if (_this->rawdata)
+            free(_this->rawdata);
 
         for(i=0; i < SAL_N_ELEMENTS(vcl::vtable1); i++) {
             if (_this->tag == vcl::vtable1[i].tag) {

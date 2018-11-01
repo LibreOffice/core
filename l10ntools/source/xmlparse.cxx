@@ -498,7 +498,8 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                     {
                         XMLParentNode* pElement = static_cast<XMLParentNode*>((*GetChildList())[ i ]);
-                        if( pElement->GetNodeType() ==  XMLNodeType::ELEMENT ) CheckExportStatus( pElement );//, i);
+                        if( pElement->GetNodeType() ==  XMLNodeType::ELEMENT )
+                            CheckExportStatus( pElement );//, i);
                     }
                 }
             }

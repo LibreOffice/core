@@ -62,29 +62,30 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         SvStream&      rStm = *pFileStm;
         SvStreamEndian nOldFormat = rStm.GetEndian();
 
-        if      ( ImpDetectGIF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectJPG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectBMP( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPNG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectTIF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCX( rStm ) ) bRet = true;
-        else if ( ImpDetectDXF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectMET( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSVM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectWMF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectEMF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSVG( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCT( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectXBM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectXPM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPBM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPGM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPPM( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectRAS( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectTGA( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPSD( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectEPS( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCD( rStm, bExtendedInfo ) ) bRet = true;
+        if( ImpDetectGIF( rStm, bExtendedInfo )
+            || ImpDetectJPG( rStm, bExtendedInfo )
+            || ImpDetectBMP( rStm, bExtendedInfo )
+            || ImpDetectPNG( rStm, bExtendedInfo )
+            || ImpDetectTIF( rStm, bExtendedInfo )
+            || ImpDetectPCX( rStm )
+            || ImpDetectDXF( rStm, bExtendedInfo )
+            || ImpDetectMET( rStm, bExtendedInfo )
+            || ImpDetectSVM( rStm, bExtendedInfo )
+            || ImpDetectWMF( rStm, bExtendedInfo )
+            || ImpDetectEMF( rStm, bExtendedInfo )
+            || ImpDetectSVG( rStm, bExtendedInfo )
+            || ImpDetectPCT( rStm, bExtendedInfo )
+            || ImpDetectXBM( rStm, bExtendedInfo )
+            || ImpDetectXPM( rStm, bExtendedInfo )
+            || ImpDetectPBM( rStm, bExtendedInfo )
+            || ImpDetectPGM( rStm, bExtendedInfo )
+            || ImpDetectPPM( rStm, bExtendedInfo )
+            || ImpDetectRAS( rStm, bExtendedInfo )
+            || ImpDetectTGA( rStm, bExtendedInfo )
+            || ImpDetectPSD( rStm, bExtendedInfo )
+            || ImpDetectEPS( rStm, bExtendedInfo )
+            || ImpDetectPCD( rStm, bExtendedInfo ) )
+            bRet = true;
 
         rStm.SetEndian( nOldFormat );
     }

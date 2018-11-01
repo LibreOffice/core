@@ -1019,7 +1019,8 @@ storeError OStoreDirectoryPageObject::truncate (
         {
             // Obtain data page location.
             sal_uInt32 nAddr = directLink (i - 1);
-            if (nAddr == STORE_PAGE_NULL) continue;
+            if (nAddr == STORE_PAGE_NULL)
+                continue;
 
             // Free data page.
             eErrCode = rBIOS.free (nAddr);

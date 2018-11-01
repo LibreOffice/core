@@ -54,10 +54,14 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 
     long i = 1;
 
-    if ( nN1 < 0 ) { i = -i; nN1 = -nN1; }
-    if ( nN2 < 0 ) { i = -i; nN2 = -nN2; }
-    if ( nD1 < 0 ) { i = -i; nD1 = -nD1; }
-    if ( nD2 < 0 ) { i = -i; nD2 = -nD2; }
+    if ( nN1 < 0 )
+        { i = -i; nN1 = -nN1; }
+    if ( nN2 < 0 )
+        { i = -i; nN2 = -nN2; }
+    if ( nD1 < 0 )
+        { i = -i; nD1 = -nD1; }
+    if ( nD2 < 0 )
+        { i = -i; nD2 = -nD2; }
     // all positive; i sign
 
     Fraction aF = Fraction( i*nN1, nD1 ) * Fraction( nN2, nD2 );
@@ -371,7 +375,10 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
         else
         {
             n = static_cast<long>(2 * n64 / nMapDenom);
-            if( n < 0 ) --n; else ++n;
+            if( n < 0 )
+                --n;
+            else
+                ++n;
             n /= 2;
         }
     }
@@ -400,7 +407,10 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
         n64 *= nMapDenom;
         n = static_cast<long>(2 * n64 / nDenom);
     }
-    if( n < 0 ) --n; else ++n;
+    if( n < 0 )
+        --n;
+    else
+        ++n;
     return (n / 2);
 }
 

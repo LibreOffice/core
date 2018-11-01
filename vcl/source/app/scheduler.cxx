@@ -127,7 +127,8 @@ void Scheduler::ImplDeInitScheduler()
     assert( nullptr == rSchedCtx.mpSchedulerStack );
     assert( 1 == rSchedCtx.maMutex.lockDepth() );
 
-    if (rSchedCtx.mpSalTimer) rSchedCtx.mpSalTimer->Stop();
+    if (rSchedCtx.mpSalTimer)
+        rSchedCtx.mpSalTimer->Stop();
     DELETEZ( rSchedCtx.mpSalTimer );
 
 #if OSL_DEBUG_LEVEL > 0

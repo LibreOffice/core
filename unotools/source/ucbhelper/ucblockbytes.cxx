@@ -850,10 +850,12 @@ static bool UCBOpenContentSync(
 
         bResultAchieved |= bException;
         bResultAchieved |= bAborted;
-        if(nTimeout == 5000) nTimeout *= 2;
+        if(nTimeout == 5000)
+            nTimeout *= 2;
     }
 
-    if(pMod) pMod->setReply(Moderator::EXIT);
+    if(pMod)
+        pMod->setReply(Moderator::EXIT);
 
     if ( bAborted || bException )
     {

@@ -830,7 +830,8 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         }
         else if ( nCode == KEY_RETURN )
         {
-            if( pActivePopup ) KillActivePopup();
+            if( pActivePopup )
+                KillActivePopup();
             else
                 if ( !mbAutoPopup )
                 {

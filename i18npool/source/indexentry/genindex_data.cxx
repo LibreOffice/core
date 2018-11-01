@@ -36,7 +36,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     FILE *fp;
 
-    if (argc < 4) exit(-1);
+    if (argc < 4)
+        exit(-1);
 
     fp = fopen(argv[1], "rb");  // open the source file for read;
     if (fp == nullptr) {
@@ -74,7 +75,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         OUString key=Ostr.copy(nPos)+sep;
         sal_Int32 idx = result.indexOf(key);
-        if (key.getLength() > max) max=key.getLength();
+        if (key.getLength() > max)
+            max=key.getLength();
         if (idx >= 0) {
             address[nChar]=idx;
         } else {
@@ -113,7 +115,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     fprintf(fp, "\nstatic const sal_uInt16 idx1[] = {");
     for (i = k = 0; i <= max_index;  i++) {
-        if (k++ % 16 == 0) fprintf(fp, "\n\t");
+        if (k++ % 16 == 0)
+            fprintf(fp, "\n\t");
         fprintf(
             fp, "0x%04lx, ", sal::static_int_cast< unsigned long >(index[i]));
     }
@@ -124,7 +127,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     for (i = k = 0; i <= max_index; i++) {
         if (index[i] != 0xFFFF) {
             for (j = 0; j<0x100; j++) {
-                if (k++ % 16 == 0) fprintf(fp, "\n\t");
+                if (k++ % 16 == 0)
+                    fprintf(fp, "\n\t");
                 sal_Int32 ad=address[i*0x100+j];
                 fprintf(
                     fp, "0x%04lx, ",
@@ -141,7 +145,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     } else {
         fprintf(fp, "\nstatic const sal_uInt16 idx3[] = {");
         for (i = k = 0; i < len;  i++) {
-            if (k++ % 16 == 0) fprintf(fp, "\n\t");
+            if (k++ % 16 == 0)
+                fprintf(fp, "\n\t");
             fprintf(fp, "0x%04x, ", (sep.toChar() == result[i]) ? 0 : result[i]);
         }
         fprintf(fp, "\n};\n\n");

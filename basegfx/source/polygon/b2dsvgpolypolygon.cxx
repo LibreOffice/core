@@ -159,8 +159,10 @@ namespace basegfx
                         {
                             double nX, nY;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -192,7 +194,8 @@ namespace basegfx
                         {
                             double nX, nY(nLastY);
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -222,7 +225,8 @@ namespace basegfx
                         {
                             double nX(nLastX), nY;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -253,10 +257,14 @@ namespace basegfx
                             double nX, nY;
                             double nX2, nY2;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -313,12 +321,18 @@ namespace basegfx
                             double nX1, nY1;
                             double nX2, nY2;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -362,10 +376,14 @@ namespace basegfx
                             double nX, nY;
                             double nX1, nY1;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -412,8 +430,10 @@ namespace basegfx
                         {
                             double nX, nY;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -488,13 +508,20 @@ namespace basegfx
                             double fRX, fRY, fPhi;
                             sal_Int32 bLargeArcFlag, bSweepFlag;
 
-                            if(!basegfx::internal::importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen))
+                                return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen))
+                                return false;
 
                             if(bRelative)
                             {
@@ -684,8 +711,10 @@ namespace basegfx
 
             while(nPos < nLen)
             {
-                if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen)) return false;
-                if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen)) return false;
+                if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen))
+                    return false;
+                if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen))
+                    return false;
 
                 // add point
                 o_rPoly.append(B2DPoint(nX, nY));

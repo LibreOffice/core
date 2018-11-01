@@ -310,11 +310,20 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             bool bOK=true;
             rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
             for (int i=0; i<3; i++) {
-                if (nFieldSize<6) { bOK=false; break; }
-                if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=false; break; }
+                if (nFieldSize<6) {
+                    bOK=false;
+                    break;
+                }
+                if (nStreamLen < rStream.Tell() + nFieldSize ) {
+                    bOK=false;
+                    break;
+                }
                 rStream.SeekRel(nFieldSize-3);
                 rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
-                if (nMagic!=0xd3) { bOK=false; break; }
+                if (nMagic!=0xd3) {
+                    bOK=false;
+                    break;
+                }
             }
             rStream.SetEndian( SvStreamEndian::LITTLE );
             if (bOK && !rStream.GetError()) {

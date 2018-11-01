@@ -557,8 +557,10 @@ void StringRangeEnumerator::insertJoinedRanges(
         sal_Int32 nLast  = rNumbers[i + 1];
         if( i > 0 )
         {
-            if     ( nFirst > nLast ) nFirst--;
-            else if( nFirst < nLast ) nFirst++;
+            if     ( nFirst > nLast )
+                nFirst--;
+            else if( nFirst < nLast )
+                nFirst++;
         }
 
         insertRange( nFirst, nLast, nFirst != nLast );

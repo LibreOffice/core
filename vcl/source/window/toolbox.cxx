@@ -2438,8 +2438,10 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
             rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
             x -= space;
             y++;
-            if( height <= heightOrig / 2 + 1) x--;
-            else            x++;
+            if( height <= heightOrig / 2 + 1)
+                x--;
+            else
+                x++;
             height--;
         }
     }
@@ -2463,8 +2465,10 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
             rRenderContext.DrawRect( tools::Rectangle( x, y, x, y + linewidth ) );
             y -= space;
             x++;
-            if( width <= widthOrig / 2 + 1) y--;
-            else           y++;
+            if( width <= widthOrig / 2 + 1)
+                y--;
+            else
+                y++;
             width--;
         }
     }
@@ -2640,9 +2644,12 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Re
         ImplControlValue    aControlValue;
         ControlState        nState = ControlState::NONE;
 
-        if ( highlight == 1 )   nState |= ControlState::PRESSED;
-        if ( highlight == 2 )     nState |= ControlState::ROLLOVER;
-        if ( bEnabled )         nState |= ControlState::ENABLED;
+        if ( highlight == 1 )
+            nState |= ControlState::PRESSED;
+        if ( highlight == 2 )
+            nState |= ControlState::ROLLOVER;
+        if ( bEnabled )
+            nState |= ControlState::ENABLED;
 
         aControlValue.setTristateVal( bChecked ? ButtonValue::On : ButtonValue::Off );
 

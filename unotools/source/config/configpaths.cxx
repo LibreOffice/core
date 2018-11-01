@@ -29,7 +29,8 @@ static
 void lcl_resolveCharEntities(OUString & aLocalString)
 {
     sal_Int32 nEscapePos=aLocalString.indexOf('&');
-    if (nEscapePos < 0) return;
+    if (nEscapePos < 0)
+        return;
 
     OUStringBuffer aResult;
     sal_Int32 nStart = 0;

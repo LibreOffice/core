@@ -250,8 +250,10 @@ void FreetypeFont::ReleaseFromGarbageCollect()
     // remove from GC list
     FreetypeFont* pPrev = mpPrevGCFont;
     FreetypeFont* pNext = mpNextGCFont;
-    if( pPrev ) pPrev->mpNextGCFont = pNext;
-    if( pNext ) pNext->mpPrevGCFont = pPrev;
+    if( pPrev )
+        pPrev->mpNextGCFont = pNext;
+    if( pNext )
+        pNext->mpPrevGCFont = pPrev;
     mpPrevGCFont = nullptr;
     mpNextGCFont = nullptr;
 }

@@ -2734,7 +2734,8 @@ bool PDFWriterImpl::emitGradients()
 {
     for (auto const& gradient : m_aGradients)
     {
-        if ( !writeGradientFunction( gradient ) ) return false;
+        if ( !writeGradientFunction( gradient ) )
+            return false;
     }
     return true;
 }
@@ -2819,8 +2820,10 @@ bool PDFWriterImpl::emitTilings()
         aTilingObj.append( "/Length " );
         aTilingObj.append( static_cast<sal_Int32>(nTilingStreamSize) );
         aTilingObj.append( ">>\nstream\n" );
-        if ( !updateObject( tiling.m_nObject ) ) return false;
-        if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
+        if ( !updateObject( tiling.m_nObject ) )
+            return false;
+        if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) )
+            return false;
         checkAndEnableStreamEncryption( tiling.m_nObject );
         bool written = writeBuffer( tiling.m_pTilingStream->GetData(), nTilingStreamSize );
         tiling.m_pTilingStream.reset();
@@ -2829,7 +2832,8 @@ bool PDFWriterImpl::emitTilings()
         disableStreamEncryption();
         aTilingObj.setLength( 0 );
         aTilingObj.append( "\nendstream\nendobj\n\n" );
-        if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
+        if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) )
+            return false;
     }
     return true;
 }
@@ -3252,12 +3256,16 @@ bool PDFWriterImpl::emitFonts()
             {
                 // create font stream
                 osl::File aFontFile(aTmpName);
-                if (osl::File::E_None != aFontFile.open(osl_File_OpenFlag_Read)) return false;
+                if (osl::File::E_None != aFontFile.open(osl_File_OpenFlag_Read))
+                    return false;
                 // get file size
                 sal_uInt64 nLength1;
-                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_End, 0) ) return false;
-                if ( osl::File::E_None != aFontFile.getPos(nLength1) ) return false;
-                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
+                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_End, 0) )
+                    return false;
+                if ( osl::File::E_None != aFontFile.getPos(nLength1) )
+                    return false;
+                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) )
+                    return false;
 
                 if (g_bDebugDisableCompression)
                 {
@@ -3265,7 +3273,8 @@ bool PDFWriterImpl::emitFonts()
                 }
                 sal_Int32 nFontStream = createObject();
                 sal_Int32 nStreamLengthObject = createObject();
-                if ( !updateObject( nFontStream ) ) return false;
+                if ( !updateObject( nFontStream ) )
+                    return false;
                 aLine.setLength( 0 );
                 aLine.append( nFontStream );
                 aLine.append( " 0 obj\n"
@@ -3286,8 +3295,10 @@ bool PDFWriterImpl::emitFonts()
 
                     aLine.append( ">>\n"
                                  "stream\n" );
-                    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
-                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
+                    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                        return false;
+                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) )
+                        return false;
 
                     // copy font file
                     beginCompression();
@@ -3297,9 +3308,12 @@ bool PDFWriterImpl::emitFonts()
                     {
                         char buf[8192];
                         sal_uInt64 nRead;
-                        if ( osl::File::E_None != aFontFile.read(buf, sizeof(buf), nRead) ) return false;
-                        if ( !writeBuffer( buf, nRead ) ) return false;
-                        if ( osl::File::E_None != aFontFile.isEndOfFile(&bEOF) ) return false;
+                        if ( osl::File::E_None != aFontFile.read(buf, sizeof(buf), nRead) )
+                            return false;
+                        if ( !writeBuffer( buf, nRead ) )
+                            return false;
+                        if ( osl::File::E_None != aFontFile.isEndOfFile(&bEOF) )
+                            return false;
                     } while( ! bEOF );
                 }
                 else if( aSubsetInfo.m_nFontType & FontType::CFF_FONT)
@@ -3312,9 +3326,11 @@ bool PDFWriterImpl::emitFonts()
                     std::unique_ptr<unsigned char[]> xBuffer(new unsigned char[nLength1]);
 
                     sal_uInt64 nBytesRead = 0;
-                    if ( osl::File::E_None != aFontFile.read(xBuffer.get(), nLength1, nBytesRead) ) return false;
+                    if ( osl::File::E_None != aFontFile.read(xBuffer.get(), nLength1, nBytesRead) )
+                        return false;
                     SAL_WARN_IF( nBytesRead!=nLength1, "vcl.pdfwriter", "PDF-FontSubset read incomplete!" );
-                    if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
+                    if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) )
+                        return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
                     getPfbSegmentLengths(xBuffer.get(), static_cast<int>(nBytesRead), aSegmentLengths);
@@ -3328,15 +3344,20 @@ bool PDFWriterImpl::emitFonts()
 
                     aLine.append( ">>\n"
                                  "stream\n" );
-                    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
-                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
+                    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                        return false;
+                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) )
+                        return false;
 
                     // emit PFB-sections without section headers
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    if ( !writeBuffer( &xBuffer[6], aSegmentLengths[0] ) ) return false;
-                    if ( !writeBuffer( &xBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
-                    if ( !writeBuffer( &xBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
+                    if ( !writeBuffer( &xBuffer[6], aSegmentLengths[0] ) )
+                        return false;
+                    if ( !writeBuffer( &xBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) )
+                        return false;
+                    if ( !writeBuffer( &xBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) )
+                        return false;
                 }
                 else
                 {
@@ -3350,20 +3371,24 @@ bool PDFWriterImpl::emitFonts()
                 aFontFile.close();
 
                 sal_uInt64 nEndPos = 0;
-                if ( osl::File::E_None != m_aFile.getPos(nEndPos) ) return false;
+                if ( osl::File::E_None != m_aFile.getPos(nEndPos) )
+                    return false;
                 // end the stream
                 aLine.setLength( 0 );
                 aLine.append( "\nendstream\nendobj\n\n" );
-                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
+                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                    return false;
 
                 // emit stream length object
-                if ( !updateObject( nStreamLengthObject ) ) return false;
+                if ( !updateObject( nStreamLengthObject ) )
+                    return false;
                 aLine.setLength( 0 );
                 aLine.append( nStreamLengthObject );
                 aLine.append( " 0 obj\n" );
                 aLine.append( static_cast<sal_Int64>(nEndPos-nStartPos) );
                 aLine.append( "\nendobj\n\n" );
-                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
+                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                    return false;
 
                 // write font descriptor
                 sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first, aSubsetInfo, s_subset.m_nFontID, nFontStream );
@@ -3372,7 +3397,8 @@ bool PDFWriterImpl::emitFonts()
                     nToUnicodeStream = createToUnicodeCMap( pEncoding, &aCodeUnits[0], pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
                 sal_Int32 nFontObject = createObject();
-                if ( !updateObject( nFontObject ) ) return false;
+                if ( !updateObject( nFontObject ) )
+                    return false;
                 aLine.setLength( 0 );
                 aLine.append( nFontObject );
 
@@ -3404,7 +3430,8 @@ bool PDFWriterImpl::emitFonts()
                 }
                 aLine.append( ">>\n"
                              "endobj\n\n" );
-                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
+                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                    return false;
 
                 aFontIDToObject[ s_subset.m_nFontID ] = nFontObject;
             }
@@ -3433,7 +3460,8 @@ bool PDFWriterImpl::emitFonts()
         std::map< sal_Int32, sal_Int32 > aObjects = emitSystemFont( systemFont.first, systemFont.second );
         for (auto const& item : aObjects)
         {
-            if ( !item.second ) return false;
+            if ( !item.second )
+                return false;
             aFontIDToObject[ item.first ] = item.second;
         }
     }
@@ -3462,8 +3490,10 @@ bool PDFWriterImpl::emitFonts()
     appendBuiltinFontsToDict( aFontDict );
     aFontDict.append( "\n>>\nendobj\n\n" );
 
-    if ( !updateObject( getFontDictObject() ) ) return false;
-    if ( !writeBuffer( aFontDict.getStr(), aFontDict.getLength() ) ) return false;
+    if ( !updateObject( getFontDictObject() ) )
+        return false;
+    if ( !writeBuffer( aFontDict.getStr(), aFontDict.getLength() ) )
+        return false;
     return true;
 }
 
@@ -5556,8 +5586,10 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     if (!g_bDebugDisableCompression)
         aLine.append( "/Filter/FlateDecode" );
     aLine.append( ">>\nstream\n" );
-    if ( !updateObject( nICCObject ) ) return 0;
-    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
+    if ( !updateObject( nICCObject ) )
+        return 0;
+    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+        return 0;
     //get file position
     sal_uInt64 nBeginStreamPos = 0;
     m_aFile.getPos(nBeginStreamPos);
@@ -5586,18 +5618,21 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.setLength( 0 );
 
     //emit the stream length   object
-    if ( !updateObject( nStreamLengthObject ) ) return 0;
+    if ( !updateObject( nStreamLengthObject ) )
+        return 0;
     aLine.setLength( 0 );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 obj\n" );
     aLine.append( static_cast<sal_Int64>(nEndStreamPos-nBeginStreamPos) );
     aLine.append( "\nendobj\n\n" );
-    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
+    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+        return 0;
     aLine.setLength( 0 );
 
     //emit the OutputIntent dictionary
     sal_Int32 nOIObject = createObject();
-    if ( !updateObject( nOIObject ) ) return 0;
+    if ( !updateObject( nOIObject ) )
+        return 0;
     aLine.append( nOIObject );
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
@@ -5607,7 +5642,8 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
     aLine.append( " 0 R>>\nendobj\n\n" );
-    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
+    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+        return 0;
 
     return nOIObject;
 }

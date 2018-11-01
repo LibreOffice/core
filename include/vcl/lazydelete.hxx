@@ -113,13 +113,14 @@ namespace vcl
         {
             css::uno::Reference< css::lang::XComponent> xComponent (m_xI, css::uno::UNO_QUERY);
             m_xI = r_xNew;
-            if (xComponent.is()) try
-            {
-                xComponent->dispose();
-            }
-            catch( css::uno::Exception& )
-            {
-            }
+            if (xComponent.is())
+                try
+                {
+                    xComponent->dispose();
+                }
+                catch( css::uno::Exception& )
+                {
+                }
         }
     };
 }

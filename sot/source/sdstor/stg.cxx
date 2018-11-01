@@ -595,7 +595,8 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     }
     Storage* pStg = new Storage( pIo, p, m );
     pIo->MoveError( *pStg );
-    if( m & StreamMode::WRITE ) pStg->m_bAutoCommit = true;
+    if( m & StreamMode::WRITE )
+        pStg->m_bAutoCommit = true;
     return pStg;
 }
 

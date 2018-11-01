@@ -160,8 +160,10 @@ void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Recta
         rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
         x -= space;
         y++;
-        if( height <= heightOrig / 2 + 1) x--;
-        else            x++;
+        if( height <= heightOrig / 2 + 1)
+            x--;
+        else
+            x++;
         height--;
     }
     rRenderContext.Pop();

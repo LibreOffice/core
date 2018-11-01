@@ -168,7 +168,8 @@ static void ChildStatusProc(void *pData)
         int chstatus = 0;
         int errno_copy;
 
-        if (channel[0] != -1) close(channel[0]);
+        if (channel[0] != -1)
+            close(channel[0]);
 
         if ((data.m_uid != uid_t(-1)) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
         {
@@ -202,32 +203,38 @@ static void ChildStatusProc(void *pData)
             /* Connect std IO to pipe ends */
 
             /* Write end of stdInput not used in child process */
-            if (stdInput[1] != -1) close( stdInput[1] );
+            if (stdInput[1] != -1)
+                close( stdInput[1] );
 
             /* Read end of stdOutput not used in child process */
-            if (stdOutput[0] != -1) close( stdOutput[0] );
+            if (stdOutput[0] != -1)
+                close( stdOutput[0] );
 
             /* Read end of stdError not used in child process */
-            if (stdError[0] != -1) close( stdError[0] );
+            if (stdError[0] != -1)
+                close( stdError[0] );
 
             /* Redirect pipe ends to std IO */
 
             if ( stdInput[0] != STDIN_FILENO )
             {
                 dup2( stdInput[0], STDIN_FILENO );
-                if (stdInput[0] != -1) close( stdInput[0] );
+                if (stdInput[0] != -1)
+                    close( stdInput[0] );
             }
 
             if ( stdOutput[1] != STDOUT_FILENO )
             {
                 dup2( stdOutput[1], STDOUT_FILENO );
-                if (stdOutput[1] != -1) close( stdOutput[1] );
+                if (stdOutput[1] != -1)
+                    close( stdOutput[1] );
             }
 
             if ( stdError[1] != STDERR_FILENO )
             {
                 dup2( stdError[1], STDERR_FILENO );
-                if (stdError[1] != -1) close( stdError[1] );
+                if (stdError[1] != -1)
+                    close( stdError[1] );
             }
 
             // No need to check the return value of execv. If we return from
@@ -252,12 +259,16 @@ static void ChildStatusProc(void *pData)
     else
     {   /* Parent  */
         int i = -1;
-        if (channel[1] != -1) close(channel[1]);
+        if (channel[1] != -1)
+            close(channel[1]);
 
         /* Close unused pipe ends */
-        if (stdInput[0] != -1) close( stdInput[0] );
-        if (stdOutput[1] != -1) close( stdOutput[1] );
-        if (stdError[1] != -1) close( stdError[1] );
+        if (stdInput[0] != -1)
+            close( stdInput[0] );
+        if (stdOutput[1] != -1)
+            close( stdOutput[1] );
+        if (stdError[1] != -1)
+            close( stdError[1] );
 
         if (pid > 0)
         {
@@ -268,7 +279,8 @@ static void ChildStatusProc(void *pData)
             }
         }
 
-        if (channel[0] != -1) close(channel[0]);
+        if (channel[0] != -1)
+            close(channel[0]);
 
         if ((pid > 0) && (i == 0))
         {
@@ -354,9 +366,12 @@ static void ChildStatusProc(void *pData)
             if ( pdata->m_pErrorRead )
                 *pdata->m_pErrorRead = nullptr;
 
-            if (stdInput[1] != -1) close( stdInput[1] );
-            if (stdOutput[0] != -1) close( stdOutput[0] );
-            if (stdError[0] != -1) close( stdError[0] );
+            if (stdInput[1] != -1)
+                close( stdInput[1] );
+            if (stdOutput[0] != -1)
+                close( stdOutput[0] );
+            if (stdError[0] != -1)
+                close( stdError[0] );
 
             /* if pid > 0 then a process was created, even if it later failed
                e.g. bash searching for a command to execute, and we still

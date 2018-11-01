@@ -70,7 +70,10 @@ public:
     static rtl::Reference<OpenGLContext> Create();
     virtual ~OpenGLContext();
     void acquire() { mnRefCount++; }
-    void release() { if ( --mnRefCount == 0 ) delete this; }
+    void release() {
+        if ( --mnRefCount == 0 )
+            delete this;
+    }
     void dispose();
 
     void requestLegacyContext();

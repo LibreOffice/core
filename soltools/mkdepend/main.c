@@ -226,8 +226,9 @@ int main(int argc, char    **argv)
         nargv[0] = argv[0];
         argc = 1;
         for (p = args; argc < nargc; p += strlen(p) + 1)
-            if (*p) nargv[argc++] = p;
-                argv = nargv;
+            if (*p)
+                nargv[argc++] = p;
+        argv = nargv;
     }
     for(argc--, argv++; argc; argc--, argv++) {
             /* if looking for endmarker then check before parsing */
@@ -245,7 +246,8 @@ int main(int argc, char    **argv)
         switch(argv[0][1]) {
         case '-':
             endmarker = &argv[0][2];
-            if (endmarker[0] == '\0') endmarker = "--";
+            if (endmarker[0] == '\0')
+                endmarker = "--";
             break;
         case 'D':
             if (argv[0][2] == '\0') {
@@ -273,11 +275,13 @@ int main(int argc, char    **argv)
             break;
         /* do not use if endmarker processing */
         case 'a':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             append = TRUE;
             break;
         case 'w':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             if (argv[0][2] == '\0') {
                 argv++;
                 argc--;
@@ -290,7 +294,8 @@ int main(int argc, char    **argv)
             native_win_slashes = TRUE;
             break;
         case 'o':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             if (argv[0][2] == '\0') {
                 argv++;
                 argc--;
@@ -299,7 +304,8 @@ int main(int argc, char    **argv)
                 objsuffix = argv[0]+2;
             break;
         case 'p':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             if (argv[0][2] == '\0') {
                 argv++;
                 argc--;
@@ -308,7 +314,8 @@ int main(int argc, char    **argv)
                 objprefix = argv[0]+2;
             break;
         case 'v':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             verbose = TRUE;
 #ifdef DEBUG
             if (argv[0][2])
@@ -316,7 +323,8 @@ int main(int argc, char    **argv)
 #endif
             break;
         case 's':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             startat = argv[0]+2;
             if (*startat == '\0') {
                 startat = *(++argv);
@@ -327,7 +335,8 @@ int main(int argc, char    **argv)
                     "with '#'.");
             break;
         case 'f':
-            if (endmarker) break;
+            if (endmarker)
+                break;
             makefile = argv[0]+2;
             if (*makefile == '\0') {
                 makefile = *(++argv);
@@ -346,7 +355,8 @@ int main(int argc, char    **argv)
         case 'g':
             break;
         default:
-            if (endmarker) break;
+            if (endmarker)
+                break;
             warning("ignoring option %s\n", argv[0]);
         }
     }
@@ -601,7 +611,8 @@ char *get_line(struct filepointer *filep)
                 /* punt lines with just # (yacc generated) */
                 for (cp = bol+1;
                      *cp && (*cp == ' ' || *cp == '\t'); cp++);
-                if (*cp) goto done;
+                if (*cp)
+                    goto done;
             }
             bol = p+1;
         }

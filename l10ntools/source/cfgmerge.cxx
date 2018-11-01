@@ -386,7 +386,8 @@ void CfgExport::WorkOnText(
     const OString &rIsoLang
 )
 {
-    if( !rIsoLang.isEmpty() ) rText = helper::UnQuotHTML( rText );
+    if( !rIsoLang.isEmpty() )
+        rText = helper::UnQuotHTML( rText );
 }
 
 

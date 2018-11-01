@@ -466,7 +466,8 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     }
 
     // request a password (skip, if result is OK or ABORT)
-    if( (eResult == DocPasswordVerifierResult::WrongPassword) && rxInteractHandler.is() ) try
+    if( (eResult == DocPasswordVerifierResult::WrongPassword) && rxInteractHandler.is() )
+    try
     {
         PasswordRequestMode eRequestMode = PasswordRequestMode_PASSWORD_ENTER;
         while( eResult == DocPasswordVerifierResult::WrongPassword )

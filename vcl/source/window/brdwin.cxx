@@ -489,8 +489,10 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             {
                 ImplControlValue aControlValue;
                 Size aMinSize( mnWidth - mnLeftBorder - mnRightBorder, mnHeight - mnTopBorder - mnBottomBorder );
-                if( aMinSize.Width() < 10 ) aMinSize.setWidth( 10 );
-                if( aMinSize.Height() < 10 ) aMinSize.setHeight( 10 );
+                if( aMinSize.Width() < 10 )
+                    aMinSize.setWidth( 10 );
+                if( aMinSize.Height() < 10 )
+                    aMinSize.setHeight( 10 );
                 tools::Rectangle aCtrlRegion( Point(mnLeftBorder, mnTopBorder), aMinSize );
                 tools::Rectangle aBounds, aContent;
                 if( pWin->GetNativeControlRegion( aCtrlType, ControlPart::Entire, aCtrlRegion,

@@ -290,7 +290,8 @@ GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
 
 inline GC X11SalGraphicsImpl::GetCopyGC()
 {
-    if( mbXORMode ) return GetInvertGC();
+    if( mbXORMode )
+        return GetInvertGC();
 
     if( !mpCopyGC )
         mpCopyGC = CreateGC( mrParent.GetDrawable() );
@@ -482,7 +483,8 @@ void X11SalGraphicsImpl::DrawLines(sal_uInt32              nPoints,
     // calculate how many lines XWindow can draw in one go
     sal_uLong nMaxLines = (mrParent.GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
                       / sizeof(xPoint);
-    if( nMaxLines > nPoints ) nMaxLines = nPoints;
+    if( nMaxLines > nPoints )
+        nMaxLines = nPoints;
 
     // print all lines that XWindows can draw
     sal_uLong n;

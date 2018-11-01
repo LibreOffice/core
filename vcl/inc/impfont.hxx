@@ -37,13 +37,13 @@ public:
 
     // device independent font functions
     const OUString&     GetFamilyName() const                           { return maFamilyName; }
-    FontFamily          GetFamilyType()                                 { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
+    FontFamily          GetFamilyType()                                 { AskConfigIf(meFamily==FAMILY_DONTKNOW); return meFamily; }
     const OUString&     GetStyleName() const                            { return maStyleName; }
 
-    FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
-    FontItalic          GetItalic()                                     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
-    FontPitch           GetPitch()                                      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
-    FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW) AskConfig(); return meWidthType; }
+    FontWeight          GetWeight()                                     { AskConfigIf(meWeight==WEIGHT_DONTKNOW); return meWeight; }
+    FontItalic          GetItalic()                                     { AskConfigIf(meItalic==ITALIC_DONTKNOW); return meItalic; }
+    FontPitch           GetPitch()                                      { AskConfigIf(mePitch==PITCH_DONTKNOW); return mePitch; }
+    FontWidth           GetWidthType()                                  { AskConfigIf(meWidthType==WIDTH_DONTKNOW); return meWidthType; }
     TextAlign           GetAlignment() const                            { return meAlign; }
     rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
     const Size&         GetFontSize() const                      { return maAverageFontSize; }
@@ -82,6 +82,11 @@ public:
     bool                operator==( const ImplFont& ) const;
 
 private:
+    void AskConfigIf(bool b)
+    {
+        if (b)
+            AskConfig();
+    }
     friend class vcl::Font;
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
     friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );

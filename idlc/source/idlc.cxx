@@ -42,7 +42,8 @@
 
 AstDeclaration* scopeAsDecl(AstScope* pScope)
 {
-    if (pScope == nullptr) return nullptr;
+    if (pScope == nullptr)
+        return nullptr;
 
     switch( pScope->getScopeNodeType() )
     {
@@ -71,7 +72,8 @@ AstDeclaration* scopeAsDecl(AstScope* pScope)
 
 AstScope* declAsScope(AstDeclaration* pDecl)
 {
-    if (pDecl == nullptr) return nullptr;
+    if (pDecl == nullptr)
+        return nullptr;
 
     switch(pDecl->getNodeType())
     {

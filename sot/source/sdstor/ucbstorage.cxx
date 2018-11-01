@@ -979,7 +979,8 @@ void UCBStorageStream_Impl::SetError( ErrCode nErr )
     {
         m_nError = nErr;
         SvStream::SetError( nErr );
-        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nErr );
+        if ( m_pAntiImpl )
+            m_pAntiImpl->SetError( nErr );
     }
 }
 
@@ -1802,7 +1803,8 @@ void UCBStorage_Impl::SetError( ErrCode nError )
     if ( !m_nError )
     {
         m_nError = nError;
-        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nError );
+        if ( m_pAntiImpl )
+            m_pAntiImpl->SetError( nError );
     }
 }
 

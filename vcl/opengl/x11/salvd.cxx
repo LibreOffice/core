@@ -76,8 +76,10 @@ void X11OpenGLSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 bool X11OpenGLSalVirtualDevice::SetSize( long nDX, long nDY )
 {
-    if( !nDX ) nDX = 1;
-    if( !nDY ) nDY = 1;
+    if( !nDX )
+        nDX = 1;
+    if( !nDY )
+        nDY = 1;
 
     mnWidth = nDX;
     mnHeight = nDY;

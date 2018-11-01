@@ -138,10 +138,12 @@ int    listSkipForward(list pThis, int n)
     int m = 0;
     assert(pThis != nullptr);
 
-    if (pThis->cptr == nullptr) return 0;
+    if (pThis->cptr == nullptr)
+        return 0;
 
     while (n != 0) {
-        if (pThis->cptr->next == nullptr) break;
+        if (pThis->cptr->next == nullptr)
+            break;
         pThis->cptr = pThis->cptr->next;
         n--;
         m++;
@@ -182,7 +184,8 @@ list   listAppend(list pThis, void *el)
 list   listRemove(list pThis)
 {
     lnode *ptr = nullptr;
-    if (pThis->cptr == nullptr) return pThis;
+    if (pThis->cptr == nullptr)
+        return pThis;
 
     if (pThis->cptr->next != nullptr) {
         ptr  = pThis->cptr->next;
@@ -192,13 +195,15 @@ list   listRemove(list pThis)
     }
 
     if (pThis->cptr->prev != nullptr) {
-        if (ptr == nullptr) ptr = pThis->cptr->prev;
+        if (ptr == nullptr)
+            ptr = pThis->cptr->prev;
         pThis->cptr->prev->next = pThis->cptr->next;
     } else {
         pThis->head = pThis->cptr->next;
     }
 
-    if (pThis->eDtor) pThis->eDtor(pThis->cptr->value);        /* call the dtor callback */
+    if (pThis->eDtor)
+        pThis->eDtor(pThis->cptr->value);        /* call the dtor callback */
 
     std::free(pThis->cptr);
     pThis->aCount--;
@@ -212,7 +217,8 @@ list   listClear(list pThis)
 
     while (node) {
         ptr = node->next;
-        if (pThis->eDtor) pThis->eDtor(node->value);           /* call the dtor callback */
+        if (pThis->eDtor)
+            pThis->eDtor(node->value);           /* call the dtor callback */
         std::free(node);
         pThis->aCount--;
         node = ptr;

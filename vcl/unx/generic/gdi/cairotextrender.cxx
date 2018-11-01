@@ -454,8 +454,10 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 {
     SystemFontData aSysFontData;
 
-    if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
-    if (nFallbackLevel < 0 ) nFallbackLevel = 0;
+    if (nFallbackLevel >= MAX_FALLBACK)
+        nFallbackLevel = MAX_FALLBACK - 1;
+    if (nFallbackLevel < 0 )
+        nFallbackLevel = 0;
 
     if (mpFreetypeFont[nFallbackLevel] != nullptr)
     {

@@ -58,7 +58,8 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uInt32 nSize)
     if (n > 0)
     {
         // Move to caller.
-        if (nSize < n) n = nSize;
+        if (nSize < n)
+            n = nSize;
         for (i = 0; i < n; i++) *pWBuf++ = *pMsgWrite++;
     }
     else
@@ -260,7 +261,8 @@ int INetMIMEMessageStream::Read(sal_Char* pData, sal_uInt32 nSize)
         {
             // Bytes still in buffer.
             sal_uInt32 m = pWEnd - pWBuf;
-            if (m < n) n = m;
+            if (m < n)
+                n = m;
             for (sal_uInt32 i = 0; i < n; i++) *pWBuf++ = *pWrite++;
         }
         else

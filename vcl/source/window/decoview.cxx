@@ -57,7 +57,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
 {
     const long nSide = AdjustRectToSquare( nRect );
 
-    if ( !nSide ) return;
+    if ( !nSide )
+        return;
     if ( nSide==1 )
     {
         pDev->DrawPixel( Point( nRect.Left(), nRect.Top() ) );

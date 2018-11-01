@@ -2302,11 +2302,13 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
             mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
     }
 
-    if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
+    if ( !IsDeviceOutputNecessary() )
+        return aSysLayoutData;
 
     std::unique_ptr<SalLayout> pLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
 
-    if ( !pLayout ) return aSysLayoutData;
+    if ( !pLayout )
+        return aSysLayoutData;
 
     // setup glyphs
     Point aPos;

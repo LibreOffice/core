@@ -479,11 +479,13 @@ sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
         sal_uLong nRetValue = 0;
         sal_uInt8* pPtr = mpPara;
 
-        if ( ( mnParaSize > 6 ) || ( mnParaSize == 0 ) ) return 0;
+        if ( ( mnParaSize > 6 ) || ( mnParaSize == 0 ) )
+            return 0;
         for ( sal_uLong i = 0; i < mnParaSize; i++ )
         {
             sal_uInt8 j = (*pPtr++) - 48;
-            if ( j > 9 ) return 0;              // ascii is invalid
+            if ( j > 9 )
+                return 0;              // ascii is invalid
             nRetValue*=10;
             nRetValue+=j;
         }

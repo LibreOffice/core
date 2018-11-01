@@ -4588,12 +4588,18 @@ namespace osl_Directory
                 bool b6 = _aVolumeInfo.getRAMDiskFlag();
 
                 OString sAttr;
-                if (b1) sAttr =  "Remote";
-                if (b2) sAttr += " Removeable";
-                if (b3) sAttr += " CDROM";
-                if (b4) sAttr += " Floppy";
-                if (b5) sAttr += " FixedDisk";
-                if (b6) sAttr += " RAMDisk";
+                if (b1)
+                    sAttr =  "Remote";
+                if (b2)
+                    sAttr += " Removeable";
+                if (b3)
+                    sAttr += " CDROM";
+                if (b4)
+                    sAttr += " Floppy";
+                if (b5)
+                    sAttr += " FixedDisk";
+                if (b6)
+                    sAttr += " RAMDisk";
 
                 printf("Attributes: %s\n", sAttr.getStr());
             }

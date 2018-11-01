@@ -75,7 +75,8 @@ struct OStoreDataPageData : public store::PageData
     {
         base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);
         base::m_aDescr.m_nUsed  = store::htons(self::thePageSize);
-        if (capacity()) memset (m_pData, 0, capacity());
+        if (capacity())
+            memset (m_pData, 0, capacity());
     }
 
     /** guard (external representation).

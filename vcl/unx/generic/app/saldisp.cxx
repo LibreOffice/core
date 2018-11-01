@@ -107,11 +107,21 @@ static int ColorDiff( Color c1, int r, int g, int b )
 static int sal_Shift( Pixel nMask )
 {
     int i = 24;
-    if( nMask < 0x00010000 ) { nMask <<= 16; i -= 16; }
-    if( nMask < 0x01000000 ) { nMask <<=  8; i -=  8; }
-    if( nMask < 0x10000000 ) { nMask <<=  4; i -=  4; }
-    if( nMask < 0x40000000 ) { nMask <<=  2; i -=  2; }
-    if( nMask < 0x80000000 ) {               i -=  1; }
+    if( nMask < 0x00010000 ) {
+        nMask <<= 16; i -= 16;
+    }
+    if( nMask < 0x01000000 ) {
+        nMask <<=  8; i -=  8;
+    }
+    if( nMask < 0x10000000 ) {
+        nMask <<=  4; i -=  4;
+    }
+    if( nMask < 0x40000000 ) {
+        nMask <<=  2; i -=  2;
+    }
+    if( nMask < 0x80000000 ) {
+        i -=  1;
+    }
     return i;
 }
 
@@ -807,15 +817,16 @@ void SalDisplay::ModifierMapping()
     {
         KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
 
-        if( aNumLock ) for( int i = ShiftMapIndex; i <= Mod5MapIndex; i++ )
-        {
-            if( pXModMap->modifiermap[i*pXModMap->max_keypermod] == aNumLock )
+        if( aNumLock )
+            for( int i = ShiftMapIndex; i <= Mod5MapIndex; i++ )
             {
-                bNumLockFromXS_ = False;
-                nNumLockIndex_  = i;
-                break;
+                if( pXModMap->modifiermap[i*pXModMap->max_keypermod] == aNumLock )
+                {
+                    bNumLockFromXS_ = False;
+                    nNumLockIndex_  = i;
+                    break;
+                }
             }
-        }
     }
 
     XFreeModifiermap( pXModMap );
@@ -2484,9 +2495,18 @@ Color SalVisual::GetTCColor( Pixel nPixel ) const
                               g >> nGreenShift_,
                               b >> nBlueShift_ );
 
-    if( nRedShift_ > 0 )   r >>= nRedShift_;   else r <<= -nRedShift_;
-    if( nGreenShift_ > 0 ) g >>= nGreenShift_; else g <<= -nGreenShift_;
-    if( nBlueShift_ > 0 )  b >>= nBlueShift_;  else b <<= -nBlueShift_;
+    if( nRedShift_ > 0 )
+        r >>= nRedShift_;
+    else
+        r <<= -nRedShift_;
+    if( nGreenShift_ > 0 )
+        g >>= nGreenShift_;
+    else
+        g <<= -nGreenShift_;
+    if( nBlueShift_ > 0 )
+        b >>= nBlueShift_;
+    else
+        b <<= -nBlueShift_;
 
     if( nRedBits_ != 8 )
         r |= (r & 0xff) >> (8-nRedBits_);
@@ -2513,9 +2533,18 @@ Pixel SalVisual::GetTCPixel( Color nColor ) const
     if( otherSalRGB != eRGBMode_ ) // 8+8+8=24
         return (r << nRedShift_) | (g << nGreenShift_) | (b << nBlueShift_);
 
-    if( nRedShift_ > 0 )   r <<= nRedShift_;   else r >>= -nRedShift_;
-    if( nGreenShift_ > 0 ) g <<= nGreenShift_; else g >>= -nGreenShift_;
-    if( nBlueShift_ > 0 )  b <<= nBlueShift_;  else b >>= -nBlueShift_;
+    if( nRedShift_ > 0 )
+        r <<= nRedShift_;
+    else
+        r >>= -nRedShift_;
+    if( nGreenShift_ > 0 )
+        g <<= nGreenShift_;
+    else
+        g >>= -nGreenShift_;
+    if( nBlueShift_ > 0 )
+        b <<= nBlueShift_;
+    else
+        b >>= -nBlueShift_;
 
     return (r&red_mask) | (g&green_mask) | (b&blue_mask);
 }
@@ -2752,8 +2781,10 @@ void SalColormap::GetLookupTable()
 
 Color SalColormap::GetColor( Pixel nPixel ) const
 {
-    if( m_nBlackPixel == nPixel ) return COL_BLACK;
-    if( m_nWhitePixel == nPixel ) return COL_WHITE;
+    if( m_nBlackPixel == nPixel )
+        return COL_BLACK;
+    if( m_nWhitePixel == nPixel )
+        return COL_WHITE;
 
     if( m_aVisual.GetVisual() )
     {
@@ -2811,9 +2842,12 @@ bool SalColormap::GetXPixels( XColor &rColor,
 
 Pixel SalColormap::GetPixel( Color nColor ) const
 {
-    if( SALCOLOR_NONE == nColor )  return 0;
-    if( COL_BLACK == nColor ) return m_nBlackPixel;
-    if( COL_WHITE == nColor ) return m_nWhitePixel;
+    if( SALCOLOR_NONE == nColor )
+        return 0;
+    if( COL_BLACK == nColor )
+        return m_nBlackPixel;
+    if( COL_WHITE == nColor )
+        return m_nWhitePixel;
 
     if( m_aVisual.GetClass() == TrueColor )
         return m_aVisual.GetTCPixel( nColor );

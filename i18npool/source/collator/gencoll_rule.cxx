@@ -80,7 +80,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     FILE *fp;
 
-    if (argc < 4) exit(-1);
+    if (argc < 4)
+        exit(-1);
 
     fp = fopen(argv[1], "rb");  // open the source file for read;
     if (fp == nullptr){

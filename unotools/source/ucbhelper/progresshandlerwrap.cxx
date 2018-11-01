@@ -70,7 +70,8 @@ void SAL_CALL ProgressHandlerWrap::update( const Any& Status )
 
     if( getStatusFromAny_Impl( Status, aText, nValue ) )
     {
-        if( !aText.isEmpty() ) m_xStatusIndicator->setText( aText );
+        if( !aText.isEmpty() )
+            m_xStatusIndicator->setText( aText );
         m_xStatusIndicator->setValue( nValue );
     }
 }

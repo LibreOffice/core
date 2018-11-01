@@ -195,8 +195,10 @@ bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     if( bExternPixmap_ )
         return false;
 
-    if( !nDX ) nDX = 1;
-    if( !nDY ) nDY = 1;
+    if( !nDX )
+        nDX = 1;
+    if( !nDY )
+        nDY = 1;
 
     Pixmap h = limitXCreatePixmap( GetXDisplay(),
                               pDisplay_->GetDrawable( m_nXScreen ),

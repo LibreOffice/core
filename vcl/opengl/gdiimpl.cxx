@@ -1635,7 +1635,8 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
     basegfx::B2DPolygon aPolyLine(rPolygon);
     aPolyLine.transform(rObjectToDevice);
-    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    if(bPixelSnapHairline)
+        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
     const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
 
     // addDrawPolyLine() assumes that there are no duplicate points in the

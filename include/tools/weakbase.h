@@ -65,7 +65,11 @@ struct WeakConnection
     WeakConnection() : mnRefCount( 0 ), mpReference( nullptr ) {};
     WeakConnection( WeakBase* pReference ) : mnRefCount( 0 ), mpReference( pReference ) {};
     void acquire() { mnRefCount++; }
-    void release() { mnRefCount--; if( mnRefCount == 0 ) delete this; }
+    void release() {
+        mnRefCount--;
+        if( mnRefCount == 0 )
+            delete this;
+    }
 };
 
 /** template implementation to hold a weak reference to an instance of type reference_type */

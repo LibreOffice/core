@@ -839,10 +839,10 @@ bool ProgressMonitor::impl_debug_checkParameter (
     const OUString& rTopic,
     const OUString& rText
 ) {
-    if ( rTopic.isEmpty()       ) return false;    // ""
-
-    if ( rText.isEmpty()       ) return false;    // ""
-
+    if ( rTopic.isEmpty() )
+        return false;
+    if ( rText.isEmpty() )
+        return false;
     // Parameter OK ... return true.
     return true;
 }
@@ -850,8 +850,8 @@ bool ProgressMonitor::impl_debug_checkParameter (
 // removeText
 bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic )
 {
-    if ( rTopic.isEmpty()      ) return false;    // ""
-
+    if ( rTopic.isEmpty() )
+        return false;
     // Parameter OK ... return true.
     return true;
 }

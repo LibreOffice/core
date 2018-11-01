@@ -447,8 +447,10 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     }
 
     // the top left corner should always be visible, so we don't allow negative offsets
-    if (nXOffset < 0) nXOffset = 0;
-    if (nYOffset < 0) nYOffset = 0;
+    if (nXOffset < 0)
+        nXOffset = 0;
+    if (nYOffset < 0)
+        nYOffset = 0;
 
     aImagePos.AdjustX(nXOffset );
     aImagePos.AdjustY(nYOffset );

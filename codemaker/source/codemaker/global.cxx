@@ -182,8 +182,10 @@ static bool checkFileContent(const OString& targetFileName, const OString& tmpFi
         }
     }
 
-    if (target) fclose(target);
-    if (tmp) fclose(tmp);
+    if (target)
+        fclose(target);
+    if (tmp)
+        fclose(tmp);
 
     return bFindChanges;
 }

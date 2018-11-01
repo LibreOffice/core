@@ -164,7 +164,8 @@ void PaperInfo::doSloppyFit()
 
     for ( size_t i = 0; i < nTabSize; ++i )
     {
-        if (i == PAPER_USER) continue;
+        if (i == PAPER_USER)
+            continue;
 
         long lDiffW = labs(aDinTab[i].m_nWidth - m_nPaperWidth);
         long lDiffH = labs(aDinTab[i].m_nHeight - m_nPaperHeight);
@@ -192,7 +193,8 @@ long PaperInfo::sloppyFitPageDimension(long nDimension)
 {
     for ( size_t i = 0; i < nTabSize; ++i )
     {
-        if (i == PAPER_USER) continue;
+        if (i == PAPER_USER)
+            continue;
         long lDiff;
 
         lDiff = labs(aDinTab[i].m_nWidth - nDimension);
@@ -307,7 +309,8 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
             for ( size_t i = 0; i < nTabSize; ++i )
             {
-                if (i == PAPER_USER) continue;
+                if (i == PAPER_USER)
+                    continue;
 
                 //glibc stores sizes as integer mm units, and so is inaccurate.
                 //To find a standard paper size we calculate the standard paper
@@ -341,7 +344,8 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     // convert locale string to locale struct
     css::lang::Locale aSysLocale;
     sal_Int32 nDashPos = aLocaleStr.indexOf( '-' );
-    if( nDashPos < 0 ) nDashPos = aLocaleStr.getLength();
+    if( nDashPos < 0 )
+        nDashPos = aLocaleStr.getLength();
     aSysLocale.Language = aLocaleStr.copy( 0, nDashPos );
     if( nDashPos + 1 < aLocaleStr.getLength() )
         aSysLocale.Country = aLocaleStr.copy( nDashPos + 1 );

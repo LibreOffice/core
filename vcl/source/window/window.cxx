@@ -1779,8 +1779,10 @@ void Window::KeyInput( const KeyEvent& rKEvt )
     // do not respond to accelerators unless Alt is held */
     if (cod.GetCode () >= 0x200 && cod.GetCode () <= 0x219)
     {
-        if (!accel) return;
-        if (autoacc && cod.GetModifier () != KEY_MOD2) return;
+        if (!accel)
+            return;
+        if (autoacc && cod.GetModifier () != KEY_MOD2)
+            return;
     }
 
     NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );
@@ -3385,8 +3387,10 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
         // contrast too low
         sal_uInt16 h,s,b;
         aSelectionFillCol.RGBtoHSB( h, s, b );
-        if( b > 50 )    b -= 40;
-        else            b += 40;
+        if( b > 50 )
+            b -= 40;
+        else
+            b += 40;
         aSelectionFillCol = Color::HSBtoRGB( h, s, b );
         aSelectionBorderCol = aSelectionFillCol;
     }

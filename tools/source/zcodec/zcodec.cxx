@@ -147,7 +147,8 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
     do
     {
-        if ( PZSTREAM->avail_out == 0 ) ImplWriteBack();
+        if ( PZSTREAM->avail_out == 0 )
+            ImplWriteBack();
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
             nInToRead = std::min( mnInBufSize, mnInToRead );

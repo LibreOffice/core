@@ -1418,7 +1418,8 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
     if( target == XA_COLORMAP || target == XA_PIXMAP || target == XA_BITMAP || target == XA_VISUALID )
     {
         PixmapHolder* pPixmap = getPixmapHolder( selection );
-        if( ! pPixmap ) return false;
+        if( ! pPixmap )
+            return false;
         XID nValue = None;
 
         // handle colormap request

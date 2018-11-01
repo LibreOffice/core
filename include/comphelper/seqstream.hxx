@@ -85,7 +85,11 @@ private:
 
     ::osl::Mutex                                    m_aMutex;
 
-    virtual ~OSequenceOutputStream() override { if (m_bConnected) finalizeOutput(); }
+    virtual ~OSequenceOutputStream() override
+    {
+        if (m_bConnected)
+            finalizeOutput();
+    }
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded

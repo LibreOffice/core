@@ -255,7 +255,8 @@ void WMFWriter::WriteColor(const Color & rColor)
 void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
 {
     nActRecordPos=pWMF->Tell();
-    if (nSizeWords>nMaxRecordSize) nMaxRecordSize=nSizeWords;
+    if (nSizeWords>nMaxRecordSize)
+        nMaxRecordSize=nSizeWords;
     pWMF->WriteUInt32( nSizeWords ).WriteUInt16( nType );
 }
 
@@ -270,7 +271,8 @@ void WMFWriter::UpdateRecordHeader()
         nPos++; nSize++;
     }
     nSize/=2;
-    if (nSize>nMaxRecordSize) nMaxRecordSize=nSize;
+    if (nSize>nMaxRecordSize)
+        nMaxRecordSize=nSize;
     pWMF->Seek(nActRecordPos);
     pWMF->WriteUInt32( nSize );
     pWMF->Seek(nPos);
@@ -329,9 +331,18 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
     }
     pWMF->WriteUInt16( nWeight );
 
-    if (rFont.GetItalic()==ITALIC_NONE)       pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
-    if (rFont.GetUnderline()==LINESTYLE_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
-    if (rFont.GetStrikeout()==STRIKEOUT_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
+    if (rFont.GetItalic()==ITALIC_NONE)
+        pWMF->WriteUChar( 0 );
+    else
+        pWMF->WriteUChar( 1 );
+    if (rFont.GetUnderline()==LINESTYLE_NONE)
+        pWMF->WriteUChar( 0 );
+    else
+        pWMF->WriteUChar( 1 );
+    if (rFont.GetStrikeout()==STRIKEOUT_NONE)
+        pWMF->WriteUChar( 0 );
+    else
+        pWMF->WriteUChar( 1 );
 
     rtl_TextEncoding  eFontNameEncoding = rFont.GetCharSet();
     sal_uInt8         nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
@@ -704,8 +715,10 @@ void WMFWriter::WMFRecord_SelectObject(sal_uInt16 nObjectHandle)
 void WMFWriter::WMFRecord_SetBkMode(bool bTransparent)
 {
     WriteRecordHeader(0x00000004,W_META_SETBKMODE);
-    if (bTransparent) pWMF->WriteUInt16( W_TRANSPARENT );
-    else                    pWMF->WriteUInt16( W_OPAQUE );
+    if (bTransparent)
+        pWMF->WriteUInt16( W_TRANSPARENT );
+    else
+        pWMF->WriteUInt16( W_OPAQUE );
 }
 
 void WMFWriter::WMFRecord_SetStretchBltMode()
@@ -836,7 +849,8 @@ void WMFWriter::TrueTextOut(const Point & rPoint, const OString& rString)
 
     write_uInt16_lenPrefixed_uInt8s_FromOString(*pWMF, rString);
     sal_Int32 nLen = rString.getLength();
-    if ((nLen&1)!=0) pWMF->WriteUChar( 0 );
+    if ((nLen&1)!=0)
+        pWMF->WriteUChar( 0 );
     WritePointYX(rPoint);
     UpdateRecordHeader();
 }
@@ -863,7 +877,8 @@ sal_uInt16 WMFWriter::AllocHandle()
 
 void WMFWriter::FreeHandle(sal_uInt16 nObjectHandle)
 {
-    if (nObjectHandle<MAXOBJECTHANDLES) bHandleAllocated[nObjectHandle]=false;
+    if (nObjectHandle<MAXOBJECTHANDLES)
+        bHandleAllocated[nObjectHandle]=false;
 }
 
 void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLineInfo )

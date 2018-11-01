@@ -336,8 +336,10 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
         // contrast too low
         sal_uInt16 h, s, b;
         aSelectionFillColor.RGBtoHSB( h, s, b );
-        if( b > 50 )    b -= 40;
-        else            b += 40;
+        if( b > 50 )
+            b -= 40;
+        else
+            b += 40;
         aSelectionFillColor = Color::HSBtoRGB( h, s, b );
         aSelectionBorderColor = aSelectionFillColor;
     }

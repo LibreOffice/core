@@ -9,7 +9,8 @@ PathFilePair IncludesCollection::split_path(const string& filePath) {
     string sepW = "\\";
     string::size_type pos = filePath.rfind (sepU);
     string::size_type posW = filePath.rfind (sepW);
-    if ((posW != string::npos) && ((posW > pos) || (pos == string::npos))) pos = posW;
+    if ((posW != string::npos) && ((posW > pos) || (pos == string::npos)))
+        pos = posW;
     if (pos != string::npos) {
         string dirName = filePath.substr(0, pos);
         return PathFilePair(dirName, filePath.substr(pos + 1, filePath.length()));

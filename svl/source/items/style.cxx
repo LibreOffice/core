@@ -795,13 +795,14 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
     {
         cppu::OWeakObject* weakObject = static_cast< ::cppu::OWeakObject* >(styleSheet.get());
         css::uno::Reference< css::lang::XComponent > xComp( weakObject, css::uno::UNO_QUERY );
-        if( xComp.is() ) try
-        {
-            xComp->dispose();
-        }
-        catch( css::uno::Exception& )
-        {
-        }
+        if( xComp.is() )
+            try
+            {
+                xComp->dispose();
+            }
+            catch( css::uno::Exception& )
+            {
+            }
         mPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetErased, *styleSheet));
     }
 

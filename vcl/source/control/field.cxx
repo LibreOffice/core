@@ -233,7 +233,8 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         sal_Int64 nWholeNum = aStr1.makeStringAndClear().toInt64();
         sal_Int64 nNum = aStrNum.makeStringAndClear().toInt64();
         sal_Int64 nDenom = aStrDenom.makeStringAndClear().toInt64();
-        if (nDenom == 0) return false; // Division by zero
+        if (nDenom == 0)
+            return false; // Division by zero
         double nFrac2Dec = nWholeNum + static_cast<double>(nNum)/nDenom; // Convert to double for floating point precision
         aStrFrac.append(nFrac2Dec);
         // Reconvert division result to string and parse

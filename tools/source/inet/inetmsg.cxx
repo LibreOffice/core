@@ -79,7 +79,8 @@ static sal_uInt16 ParseMonth(const OString& rStr, sal_Int32& nIndex)
 
     sal_uInt16 i;
     for (i = 0; i < 12; i++)
-        if (aMonth.equalsIgnoreAsciiCase(months[i])) break;
+        if (aMonth.equalsIgnoreAsciiCase(months[i]))
+            break;
     return (i + 1);
 }
 
@@ -89,7 +90,8 @@ bool INetMIMEMessage::ParseDateField (
     OString aDateField(OUStringToOString(rDateFieldW,
         RTL_TEXTENCODING_ASCII_US));
 
-    if (aDateField.isEmpty()) return false;
+    if (aDateField.isEmpty())
+        return false;
 
     if (aDateField.indexOf(':') != -1)
     {
@@ -114,7 +116,8 @@ bool INetMIMEMessage::ParseDateField (
         if (rtl::isAsciiAlpha (static_cast<unsigned char>(aDateField[nIndex])))
         {
             // Format: ctime().
-            if ((aDateField.getLength() - nIndex) < 20) return false;
+            if ((aDateField.getLength() - nIndex) < 20)
+                return false;
 
             rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
             rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
@@ -125,19 +128,22 @@ bool INetMIMEMessage::ParseDateField (
             rDateTime.SetNanoSec (0);
 
             sal_uInt16 nYear = ParseNumber (aDateField, nIndex);
-            if (nYear < 100) nYear += 1900;
+            if (nYear < 100)
+                nYear += 1900;
             rDateTime.SetYear   (nYear);
         }
         else
         {
             // Format: RFC1036 or RFC1123.
-            if ((aDateField.getLength() - nIndex) < 17) return false;
+            if ((aDateField.getLength() - nIndex) < 17)
+                return false;
 
             rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
 
             sal_uInt16 nYear  = ParseNumber (aDateField, nIndex);  nIndex++;
-            if (nYear < 100) nYear += 1900;
+            if (nYear < 100)
+                nYear += 1900;
             rDateTime.SetYear   (nYear);
 
             rDateTime.SetHour   (ParseNumber (aDateField, nIndex)); nIndex++;

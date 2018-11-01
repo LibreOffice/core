@@ -70,8 +70,10 @@ unicode::getUnicodeType( const sal_Unicode ch ) {
     static sal_Unicode c = 0x00;
     static sal_Int16 r = 0x00;
 
-    if (ch == c) return r;
-    else c = ch;
+    if (ch == c)
+        return r;
+    else
+        c = ch;
 
     sal_Int16 address = UnicodeTypeIndex[ch >> 8];
     return r = static_cast<sal_Int16>((address < UnicodeTypeNumberBlock) ? UnicodeTypeBlockValue[address] :
@@ -83,8 +85,10 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
     static sal_Unicode c = 0x00;
     static sal_uInt8 r = 0x00;
 
-    if (ch == c) return r;
-    else c = ch;
+    if (ch == c)
+        return r;
+    else
+        c = ch;
 
     sal_Int16 address = UnicodeDirectionIndex[ch >> 8];
     return r = ((address < UnicodeDirectionNumberBlock) ? UnicodeDirectionBlockValue[address] :

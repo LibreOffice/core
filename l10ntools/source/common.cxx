@@ -129,7 +129,8 @@ void writePoEntry(
             {
                 std::cerr << "No string specified!\n";
                 std::cerr << "GroupID: " << rGroupId << "\n";
-                if( !rLocalId.isEmpty() ) std::cerr << "LocalID: " << rLocalId << "\n";
+                if( !rLocalId.isEmpty() )
+                    std::cerr << "LocalID: " << rLocalId << "\n";
             }
             else
             {
@@ -143,7 +144,8 @@ void writePoEntry(
                 }
 
                 std::cerr << "GroupID: " << rGroupId << "\n";
-                if( !rLocalId.isEmpty() ) std::cerr << "LocalID: " << rLocalId << "\n";
+                if( !rLocalId.isEmpty() )
+                    std::cerr << "LocalID: " << rLocalId << "\n";
                 std::cerr << "String: " << rText << "\n";
             }
         }

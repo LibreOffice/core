@@ -538,11 +538,15 @@ void GtkSalData::initNWF()
     GtkSettings *gtks = gtk_settings_get_default ();
     gint val;
     g_object_get (gtks, "gtk-auto-mnemonics", &val, nullptr);
-    if (val) pSVData->maNWFData.mbAutoAccel = true;
-    else pSVData->maNWFData.mbAutoAccel = false;
+    if (val)
+        pSVData->maNWFData.mbAutoAccel = true;
+    else
+        pSVData->maNWFData.mbAutoAccel = false;
     g_object_get (gtks, "gtk-enable-mnemonics", &val, nullptr);
-    if (val) pSVData->maNWFData.mbEnableAccel = true;
-    else pSVData->maNWFData.mbEnableAccel = false;
+    if (val)
+        pSVData->maNWFData.mbEnableAccel = true;
+    else
+        pSVData->maNWFData.mbEnableAccel = false;
 }
 
 /*********************************************************
@@ -2196,10 +2200,14 @@ static tools::Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlP
     gint nFirst = 0;
     gint nSecond = 0;
 
-    if ( has_forward )   nSecond += 1;
-    if ( has_forward2 )  nFirst  += 1;
-    if ( has_backward )  nFirst  += 1;
-    if ( has_backward2 ) nSecond += 1;
+    if ( has_forward )
+        nSecond += 1;
+    if ( has_forward2 )
+        nFirst  += 1;
+    if ( has_backward )
+        nFirst  += 1;
+    if ( has_backward2 )
+        nSecond += 1;
 
     if ( ( nPart == ControlPart::ButtonUp ) || ( nPart == ControlPart::ButtonDown ) )
     {

@@ -931,8 +931,10 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
             sTargetPath = sSourcePath;
     }
 
-    if (sTargetPath.getLength() > 1) sTargetPath += ROOT;
-    if (sSourcePath.getLength() > 1) sSourcePath += ROOT;
+    if (sTargetPath.getLength() > 1)
+        sTargetPath += ROOT;
+    if (sSourcePath.getLength() > 1)
+        sSourcePath += ROOT;
 
     if (rValue.create(pSourceKey->getStoreFile(), sSourcePath, valueName, sourceAccess))
     {

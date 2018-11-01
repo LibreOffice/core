@@ -38,7 +38,10 @@ struct myLtError
 {
     lt_error_t* p;
     myLtError() : p(nullptr) {}
-    ~myLtError() { if (p) lt_error_unref( p); }
+    ~myLtError() {
+        if (p)
+            lt_error_unref( p);
+    }
 };
 
 // "statics" to be returned as const reference to an empty locale and string.

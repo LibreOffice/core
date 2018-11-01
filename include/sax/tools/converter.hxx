@@ -99,7 +99,8 @@ public:
     {
         sal_Int32 n(rColor);
         bool b = convertColor( n, rValue );
-        if (b) rColor = n;
+        if (b)
+            rColor = n;
         return b;
     }
 

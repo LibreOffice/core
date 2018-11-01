@@ -234,7 +234,8 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
         );
         for ( Link<VclWindowEvent&,void>& rLink : aCopy )
         {
-            if (xWindow->IsDisposed()) break;
+            if (xWindow->IsDisposed())
+                break;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( rWindowImpl.maEventListenersDeleted.find(rLink) == rWindowImpl.maEventListenersDeleted.end() )
                 rLink.Call( aEvent );

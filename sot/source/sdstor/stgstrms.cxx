@@ -602,7 +602,8 @@ bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
 sal_Int32 StgFATStrm::GetPage(sal_Int32 nOff, bool bMake, sal_uInt16 *pnMasterAlloc)
 {
     OSL_ENSURE( nOff >= 0, "The offset may not be negative!" );
-    if( pnMasterAlloc ) *pnMasterAlloc = 0;
+    if( pnMasterAlloc )
+        *pnMasterAlloc = 0;
     if( nOff < StgHeader::GetFAT1Size() )
         return m_rIo.m_aHdr.GetFATPage( nOff );
     sal_Int32 nMaxPage = m_nSize >> 2;
@@ -809,7 +810,8 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
                         m_rIo.SetToPage( piPg, m_nOffset >> 2, STG_MASTER );
                     }
                     rtl::Reference< StgPage > pPage = m_rIo.Get( nFAT, true );
-                    if( !pPage.is() ) return false;
+                    if( !pPage.is() )
+                        return false;
                     nFAT = StgCache::GetFromPage( pPage, (m_nPageSize >> 2 ) - 1 );
                 }
 

@@ -400,7 +400,8 @@ storeError OStoreLockBytes::setSize (sal_uInt32 nSize)
                 nSize - m_xNode->capacity(), OStoreDataPageData::capacity(m_xNode->m_aDescr)); // @@@
 
             sal_uInt32 nPage = aDescr.m_nPage;
-            if (aDescr.m_nOffset) nPage += 1;
+            if (aDescr.m_nOffset)
+                nPage += 1;
 
             eErrCode = aPage.truncate (nPage, *m_xManager);
             if (eErrCode != store_E_None)

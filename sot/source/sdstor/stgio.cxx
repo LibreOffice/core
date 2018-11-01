@@ -146,7 +146,8 @@ bool StgIo::CommitAll()
                 const ErrCode n = GetStrm()->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
-                if( n==ERRCODE_NONE ) ValidateFATs();
+                if( n==ERRCODE_NONE )
+                    ValidateFATs();
 #endif
                 return n == ERRCODE_NONE;
             }

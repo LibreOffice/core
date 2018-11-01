@@ -64,7 +64,8 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 
 sal_uInt32 UINT16StringLen(const sal_uInt8* wstring)
 {
-    if (!wstring) return 0;
+    if (!wstring)
+        return 0;
 
     const sal_uInt8* b = wstring;
 

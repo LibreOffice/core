@@ -306,17 +306,20 @@ void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<X
 
 void SalGtkFilePicker::impl_fileSelectionChanged( const FilePickerEvent& aEvent )
 {
-    if (m_xListener.is()) m_xListener->fileSelectionChanged( aEvent );
+    if (m_xListener.is())
+        m_xListener->fileSelectionChanged( aEvent );
 }
 
 void SalGtkFilePicker::impl_directoryChanged( const FilePickerEvent& aEvent )
 {
-    if (m_xListener.is()) m_xListener->directoryChanged( aEvent );
+    if (m_xListener.is())
+        m_xListener->directoryChanged( aEvent );
 }
 
 void SalGtkFilePicker::impl_controlStateChanged( const FilePickerEvent& aEvent )
 {
-    if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
+    if (m_xListener.is())
+        m_xListener->controlStateChanged( aEvent );
 }
 
 struct FilterEntry

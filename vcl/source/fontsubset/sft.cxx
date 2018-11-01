@@ -203,8 +203,10 @@ static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
     int sign;
 
     sign = (a & 0x80000000) ^ (b & 0x80000000);
-    if (a < 0) a = -a;
-    if (b < 0) b = -b;
+    if (a < 0)
+        a = -a;
+    if (b < 0)
+        b = -b;
 
     a1 = a >> 16;
     b1 = a & 0xFFFF;
@@ -228,8 +230,10 @@ static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
     int sign;
 
     sign = (a & 0x80000000) ^ (b & 0x80000000);
-    if (a < 0) a = -a;
-    if (b < 0) b = -b;
+    if (a < 0)
+        a = -a;
+    if (b < 0)
+        b = -b;
 
     f = a / b;
     r = a % b;
@@ -343,7 +347,8 @@ static void GetMetrics(TrueTypeFont const *ttf, sal_uInt32 glyphID, TTGlyphMetri
     const sal_uInt8* table = getTable( ttf, O_hmtx );
 
     metrics->aw = metrics->lsb = metrics->ah = 0;
-    if (!table || !ttf->numberOfHMetrics) return;
+    if (!table || !ttf->numberOfHMetrics)
+        return;
 
     if (glyphID < ttf->numberOfHMetrics) {
         metrics->aw  = GetUInt16(table, 4 * glyphID);
@@ -552,7 +557,8 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             glyphlist.pop_back();
 
         if (flags & USE_MY_METRICS) {
-            if (metrics) GetMetrics(ttf, index, metrics);
+            if (metrics)
+                GetMetrics(ttf, index, metrics);
         }
 
         if (flags & ARG_1_AND_2_ARE_WORDS) {
@@ -596,15 +602,19 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         abs2 = (b < 0) ? -b : b;
         m    = std::max(abs1, abs2);
         abs3 = abs1 - abs2;
-        if (abs3 < 0) abs3 = -abs3;
-        if (abs3 <= 33) m *= 2;
+        if (abs3 < 0)
+            abs3 = -abs3;
+        if (abs3 <= 33)
+            m *= 2;
 
         abs1 = (c < 0) ? -c : c;
         abs2 = (d < 0) ? -d : d;
         n    = std::max(abs1, abs2);
         abs3 = abs1 - abs2;
-        if (abs3 < 0) abs3 = -abs3;
-        if (abs3 <= 33) n *= 2;
+        if (abs3 < 0)
+            abs3 = -abs3;
+        if (abs3 <= 33)
+            n *= 2;
 
         SAL_WARN_IF(np && !m, "vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fname) <<
                      ": divide by zero");
@@ -664,13 +674,15 @@ static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint
         memset(metrics, 0, sizeof(TTGlyphMetrics));         /*- metrics is initialized to all zeroes */
     }
 
-    if (glyphID >= ttf->nglyphs) return -1;                 /**/
+    if (glyphID >= ttf->nglyphs)
+        return -1;                 /**/
 
     const sal_uInt8* ptr = table + ttf->goffsets[glyphID];
     int length = ttf->goffsets[glyphID+1] - ttf->goffsets[glyphID];
 
     if (length == 0) {                                      /*- empty glyphs still have hmtx and vmtx metrics values */
-        if (metrics) GetMetrics(ttf, glyphID, metrics);
+        if (metrics)
+            GetMetrics(ttf, glyphID, metrics);
         return 0;
     }
 
@@ -796,7 +808,8 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
             scflag = 1;
             ecflag = false;
             cp = EndContour + 1;
-            if (cp >= srcCount) break;
+            if (cp >= srcCount)
+                break;
             continue;
         }
 
@@ -864,7 +877,8 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
 static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
     sal_uInt16 encodingID, sal_uInt16 languageID, sal_uInt16 nameID )
 {
-    if (n == 0) return -1;
+    if (n == 0)
+        return -1;
 
     int l = 0, r = n-1;
     sal_uInt32 t1, t2;
@@ -878,8 +892,10 @@ static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
         t1 = GetUInt32(name + 6, i * 12 + 0);
         t2 = GetUInt32(name + 6, i * 12 + 4);
 
-        if (! ((m1 < t1) || ((m1 == t1) && (m2 < t2)))) l = i + 1;
-        if (! ((m1 > t1) || ((m1 == t1) && (m2 > t2)))) r = i - 1;
+        if (! ((m1 < t1) || ((m1 == t1) && (m2 < t2))))
+            l = i + 1;
+        if (! ((m1 > t1) || ((m1 == t1) && (m2 > t2))))
+            r = i - 1;
     } while (l <= r);
 
     if (l - r == 2) {
@@ -950,7 +966,8 @@ static void GetNames(TrueTypeFont *t)
             char* pReverse = t->fname + strlen(t->fname);
             /* take only last token of filename */
             while(pReverse != t->fname && *pReverse != '/') pReverse--;
-            if(*pReverse == '/') pReverse++;
+            if(*pReverse == '/')
+                pReverse++;
             t->psname = strdup(pReverse);
             assert(t->psname != nullptr);
             for (i=strlen(t->psname) - 1; i > 0; i--)
@@ -1378,7 +1395,8 @@ SFErrCodes OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont**
     int fd = -1;
     struct stat st;
 
-    if (!fname || !*fname) return SFErrCodes::BadFile;
+    if (!fname || !*fname)
+        return SFErrCodes::BadFile;
 
     allocTrueTypeFont( ttf );
     if( ! *ttf )
@@ -1423,7 +1441,8 @@ SFErrCodes OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont**
     return doOpenTTFont( facenum, *ttf );
 
 cleanup:
-    if (fd != -1) close(fd);
+    if (fd != -1)
+        close(fd);
     /*- t and t->fname have been allocated! */
     free((*ttf)->fname);
     free(*ttf);
@@ -1808,9 +1827,12 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 
     const char * const h41 = "(%s) cvn exch definefont pop\n";
 
-    if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SFErrCodes::GlyphNum;
-    if (!glyphArray) return SFErrCodes::BadArg;
-    if (!fname) fname = ttf->psname;
+    if (!((nGlyphs > 0) && (nGlyphs <= 256)))
+        return SFErrCodes::GlyphNum;
+    if (!glyphArray)
+        return SFErrCodes::BadArg;
+    if (!fname)
+        fname = ttf->psname;
 
     fprintf(outf, h01, GetInt16(table, 0), GetUInt16(table, 2), GetInt16(table, 4), GetUInt16(table, 6));
     fprintf(outf, h02, modname, modver, modextra);
@@ -1887,7 +1909,8 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
                     break;
             }
         }
-        if (n > 0) fprintf(outf, "\tfill\n");     /* if glyph is not a whitespace character */
+        if (n > 0)
+            fprintf(outf, "\tfill\n");     /* if glyph is not a whitespace character */
 
         fprintf(outf, "%s", h34);
 
@@ -2168,7 +2191,8 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     sal_uInt32 sfntLen;
     int UPEm = ttf->unitsPerEm;
 
-    if (nGlyphs >= 256) return SFErrCodes::GlyphNum;
+    if (nGlyphs >= 256)
+        return SFErrCodes::GlyphNum;
 
     assert(psname != nullptr);
 
@@ -2321,8 +2345,10 @@ std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, c
         nTableSize = getTableSize( ttf, O_vmtx );
     }
 
-    if (!nGlyphs || !glyphArray) return nullptr;        /* invalid parameters */
-    if (!n || !pTable) return nullptr;                  /* the font does not contain the requested metrics */
+    if (!nGlyphs || !glyphArray)
+        return nullptr;        /* invalid parameters */
+    if (!n || !pTable)
+        return nullptr;                  /* the font does not contain the requested metrics */
 
     std::unique_ptr<sal_uInt16[]> res(new sal_uInt16[nGlyphs]);
 
@@ -2523,7 +2549,8 @@ int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr)
     int i;
 
     *nr = nullptr;
-    if (n == 0) return 0;
+    if (n == 0)
+        return 0;
 
     const sal_uInt32 remaining_table_size = nTableSize-6;
     const sal_uInt32 nMinRecordSize = 12;
@@ -2592,7 +2619,8 @@ void DisposeNameRecords(NameRecord* nr, int n)
 {
     int i;
     for (i = 0; i < n; i++) {
-        if (nr[i].sptr) free(nr[i].sptr);
+        if (nr[i].sptr)
+            free(nr[i].sptr);
     }
     free(nr);
 }

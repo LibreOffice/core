@@ -711,11 +711,13 @@ inline OUString RegistryKey::getName()
 inline RegError RegistryKey::createKey(const OUString& keyName,
                                           RegistryKey& rNewKey)
     {
-        if (rNewKey.isValid()) rNewKey.closeKey();
+        if (rNewKey.isValid())
+            rNewKey.closeKey();
         if (m_registry.isValid())
         {
             RegError ret = m_registry.m_pApi->createKey(m_hImpl, keyName.pData, &rNewKey.m_hImpl);
-            if (ret == RegError::NO_ERROR) rNewKey.setRegistry(m_registry);
+            if (ret == RegError::NO_ERROR)
+                rNewKey.setRegistry(m_registry);
             return ret;
         } else
             return RegError::INVALID_KEY;
@@ -724,12 +726,14 @@ inline RegError RegistryKey::createKey(const OUString& keyName,
 inline RegError RegistryKey::openKey(const OUString& keyName,
                                      RegistryKey& rOpenKey)
     {
-        if (rOpenKey.isValid()) rOpenKey.closeKey();
+        if (rOpenKey.isValid())
+            rOpenKey.closeKey();
         if (m_registry.isValid())
         {
             RegError ret = m_registry.m_pApi->openKey(m_hImpl, keyName.pData,
                                                     &rOpenKey.m_hImpl);
-            if (ret == RegError::NO_ERROR) rOpenKey.setRegistry(m_registry);
+            if (ret == RegError::NO_ERROR)
+                rOpenKey.setRegistry(m_registry);
             return ret;
         } else
             return RegError::INVALID_KEY;

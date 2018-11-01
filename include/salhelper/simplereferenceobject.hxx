@@ -69,7 +69,10 @@ public:
     { osl_atomic_increment(&m_nCount); }
 
     void release()
-    { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
+    {
+        if (osl_atomic_decrement(&m_nCount) == 0)
+            delete this;
+    }
 
     /** see general class documentation
      */

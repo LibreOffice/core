@@ -2206,8 +2206,10 @@ Color StyleSettings::GetFaceGradientColor() const
 
     sal_uInt16 h, s, b;
     GetFaceColor().RGBtoHSB( h, s, b );
-    if( s > 1) s=1;
-    if( b < 98) b=98;
+    if( s > 1)
+        s=1;
+    if( b < 98)
+        b=98;
     return Color::HSBtoRGB( h, s, b );
 }
 

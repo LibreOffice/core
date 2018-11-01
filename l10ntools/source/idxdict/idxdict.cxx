@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
                 // Extract the next word, but not the entry count
                 cin.getline(inputBuffer, MAXLINE, '|');
 
-                if (cin.eof()) break;
+                if (cin.eof())
+                    break;
 
                 string word(inputBuffer);
                 ret = entries.insert(ret, pair<string, size_t>(word, currentOffset));

@@ -405,7 +405,8 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
     // copy the remaining values to the hint arrays
     // assert( (mnStackIdx & 1) == 0); // depends on called subrs
-    if( mnStackIdx & 1) --mnStackIdx;//#######
+    if( mnStackIdx & 1)
+        --mnStackIdx;//#######
     // TODO: if( !bSubr) assert( mnStackIdx >= 2);
 
     assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
@@ -825,14 +826,18 @@ void CffSubsetterContext::convertOneTypeOp()
             nInt = static_cast<int>(mnValStack[ --mnStackIdx ]);
         while( (i += 4) <= mnStackIdx) {
             // TODO: use writeCurveTo()
-            if( bVert ) writeType1Val( 0 );
+            if( bVert )
+                writeType1Val( 0 );
             writeType1Val( mnValStack[i-4] );
-            if( !bVert ) writeType1Val( 0);
+            if( !bVert )
+                writeType1Val( 0);
             writeType1Val( mnValStack[i-3] );
             writeType1Val( mnValStack[i-2] );
-            if( !bVert ) writeType1Val( static_cast<ValType>((i==mnStackIdx) ? nInt : 0) );
+            if( !bVert )
+                writeType1Val( static_cast<ValType>((i==mnStackIdx) ? nInt : 0) );
             writeType1Val( mnValStack[i-1] );
-            if( bVert ) writeType1Val( static_cast<ValType>((i==mnStackIdx) ? nInt : 0) );
+            if( bVert )
+                writeType1Val( static_cast<ValType>((i==mnStackIdx) ? nInt : 0) );
             bVert = !bVert;
             writeTypeOp( TYPE2OP::RCURVETO);
         }
@@ -1038,9 +1043,11 @@ void CffSubsetterContext::convertOneTypeEsc()
             // determine if nD6 is horizontal or vertical
             const int i = mnStackIdx;
             ValType nDeltaX = mnValStack[i-11] + mnValStack[i-9] + mnValStack[i-7] + mnValStack[i-5] + mnValStack[i-3];
-            if( nDeltaX < 0 ) nDeltaX = -nDeltaX;
+            if( nDeltaX < 0 )
+                nDeltaX = -nDeltaX;
             ValType nDeltaY = mnValStack[i-10] + mnValStack[i-8] + mnValStack[i-6] + mnValStack[i-4] + mnValStack[i-2];
-            if( nDeltaY < 0 ) nDeltaY = -nDeltaY;
+            if( nDeltaY < 0 )
+                nDeltaY = -nDeltaY;
             const bool bVertD6 = (nDeltaY > nDeltaX);
 
             // write the second part of the flex1-hinted curve
@@ -1194,14 +1201,22 @@ RealType CffSubsetterContext::readRealVal()
     // merge exponents
     if( !bComma)
         nExpVal = 0;
-    if( !nExpSign) { fReal *= nNumber;}
-    else if( nExpSign > 0) { nExpVal += static_cast<int>(nNumber);}
-    else if( nExpSign < 0) { nExpVal -= static_cast<int>(nNumber);}
+    if( !nExpSign)
+        fReal *= nNumber;
+    else if( nExpSign > 0)
+        nExpVal += static_cast<int>(nNumber);
+    else if( nExpSign < 0)
+        nExpVal -= static_cast<int>(nNumber);
 
     // apply exponents
-    if( !nExpVal) { /*nothing to apply*/}
-    else if( nExpVal > 0) { while( --nExpVal >= 0) fReal *= 10.0;}
-    else if( nExpVal < 0) { while( ++nExpVal <= 0) fReal /= 10.0;}
+    if( !nExpVal)
+        { /*nothing to apply*/}
+    else if( nExpVal > 0) {
+        while( --nExpVal >= 0) fReal *= 10.0;
+    }
+    else if( nExpVal < 0) {
+        while( ++nExpVal <= 0) fReal /= 10.0;
+    }
     return fReal;
 }
 

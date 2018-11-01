@@ -219,9 +219,12 @@ static rtl_Locale * parse_locale( const char * locale )
 
     ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : u"", pVariant ? pVariant->buffer : u"" );
 
-    if (pVariant) rtl_uString_release(pVariant);
-    if (pCountry) rtl_uString_release(pCountry);
-    if (pLanguage) rtl_uString_release(pLanguage);
+    if (pVariant)
+        rtl_uString_release(pVariant);
+    if (pCountry)
+        rtl_uString_release(pCountry);
+    if (pLanguage)
+        rtl_uString_release(pLanguage);
 
     return ret;
 }
