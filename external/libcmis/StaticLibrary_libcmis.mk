@@ -17,7 +17,7 @@ ifeq ($(COM_IS_CLANG),TRUE)
 # Also avoid -Wdynamic-exception-spec errors in C++17 mode.
 $(eval $(call gb_StaticLibrary_add_cxxflags,libcmis,\
     -Wno-error=c++11-narrowing \
-    $(if $(filter -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
+    $(if $(filter -std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
             $(CXXFLAGS_CXX11)), \
         -Wno-error=dynamic-exception-spec) \
 ))
