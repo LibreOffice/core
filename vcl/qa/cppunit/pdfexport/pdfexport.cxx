@@ -94,6 +94,7 @@ public:
     void testTdf99680();
     void testTdf99680_2();
     void testTdf108963();
+    void testTdf118244_radioButtonGroup();
 #if HAVE_MORE_FONTS
     /// Test writing ToUnicode CMAP for LTR ligatures.
     void testTdf115117_1();
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
+    CPPUNIT_TEST(testTdf118244_radioButtonGroup);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf115117_1);
     CPPUNIT_TEST(testTdf115117_1a);
@@ -870,6 +872,43 @@ void PdfExportTest::testTdf108963()
     }
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
+}
+
+void PdfExportTest::testTdf118244_radioButtonGroup()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf118244_radioButtonGroup.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // There are eight radio buttons.
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio buttons",static_cast<size_t>(8), pAnnots->GetElements().size());
+
+    sal_uInt32 nRadioGroups = 0;
+    for ( const auto& aElement : aDocument.GetElements() )
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if ( !pObject )
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("FT"));
+        if ( pType && pType->GetValue() == "Btn" )
+        {
+            auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("Kids"));
+            if ( pKids )
+            {
+                size_t expectedSize = 2;
+                ++nRadioGroups;
+                if ( nRadioGroups == 2 )
+                    expectedSize = 5;
+                CPPUNIT_ASSERT_EQUAL(expectedSize, pKids->GetElements().size());
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio groups", sal_uInt32(2), nRadioGroups);
 }
 
 #if HAVE_MORE_FONTS

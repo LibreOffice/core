@@ -20,6 +20,8 @@
 
 #include <memory>
 #include <toolkit/helper/formpdfexport.hxx>
+#include <tools/diagnose_ex.h>
+#include <unordered_map>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -130,7 +132,7 @@ namespace toolkitform
             // host document makes it somewhat difficult ...
             // Problem is that two form radio buttons belong to the same group if
             // - they have the same parent
-            // - AND they have the same name
+            // - AND they have the same group name
             // This implies that we need some knowledge about (potentially) *all* radio button
             // groups in the document.
 
@@ -156,29 +158,12 @@ namespace toolkitform
             ::std::vector< sal_Int32 >                 aPath;
 
             Reference< XInterface > xNormalizedLookup( _rxRadioModel, UNO_QUERY );
-            OUString sRadioGroupName;
-            OSL_VERIFY( _rxRadioModel->getPropertyValue( FM_PROP_NAME ) >>= sRadioGroupName );
-
             Reference< XIndexAccess > xCurrentContainer( xRoot );
             sal_Int32 nStartWithChild = 0;
             sal_Int32 nGroupsEncountered = 0;
             do
             {
-                Reference< XNameAccess > xElementNameAccess( xCurrentContainer, UNO_QUERY );
-                OSL_ENSURE( xElementNameAccess.is(), "determineRadioGroupId: no name container?" );
-                if ( !xElementNameAccess.is() )
-                    return -1;
-
-                if ( nStartWithChild == 0 )
-                {   // we encounter this container the first time. In particular, we did not
-                    // just step up
-                    nGroupsEncountered += xElementNameAccess->getElementNames().getLength();
-                        // this is way too much: Not all of the elements in the current container
-                        // may form groups, especially if they're forms. But anyway, this number is
-                        // sufficient for our purpose. Finally, the container contains *at most*
-                        // that much groups
-                }
-
+                std::unordered_map<OUString,sal_Int32> GroupNameMap;
                 sal_Int32 nCount = xCurrentContainer->getCount();
                 sal_Int32 i;
                 for ( i = nStartWithChild; i < nCount; ++i )
@@ -204,25 +189,45 @@ namespace toolkitform
 
                     if ( xElement.get() == xNormalizedLookup.get() )
                     {
-                        // look up the name of the radio group in the list of all element names
-                        Sequence< OUString > aElementNames( xElementNameAccess->getElementNames() );
-                        const OUString* pElementNames = aElementNames.getConstArray();
-                        const OUString* pElementNamesEnd = pElementNames + aElementNames.getLength();
-                        while ( pElementNames != pElementNamesEnd )
+                        // Our radio button is in this container.
+                        // Now take the time to ID this container's groups and return the button's groupId
+                        for ( i = 0; i < nCount; ++i )
                         {
-                            if ( *pElementNames == sRadioGroupName )
+                            try
                             {
-                                sal_Int32 nLocalGroupIndex = pElementNames - aElementNames.getConstArray();
-                                OSL_ENSURE( nLocalGroupIndex < xElementNameAccess->getElementNames().getLength(),
-                                    "determineRadioGroupId: inconsistency!" );
+                                xElement.set( xCurrentContainer->getByIndex( i ), UNO_QUERY_THROW );
+                                Reference< XServiceInfo > xModelSI( xElement, UNO_QUERY_THROW );
+                                if ( xModelSI->supportsService("com.sun.star.awt.UnoControlRadioButtonModel") )
+                                {
+                                    Reference< XPropertySet >  aProps( xElement, UNO_QUERY_THROW );
 
-                                sal_Int32 nGlobalGroupId = nGroupsEncountered - xElementNameAccess->getElementNames().getLength() + nLocalGroupIndex;
-                                return nGlobalGroupId;
+                                    OUString sGroupName;
+                                    aProps->getPropertyValue("GroupName") >>= sGroupName;
+                                    // map: unique key is the group name, so attempts to add a different ID value
+                                    // for an existing group are ignored - keeping the first ID - perfect for this scenario.
+                                    GroupNameMap.emplace( sGroupName, nGroupsEncountered + i );
+
+                                    if ( xElement.get() == xNormalizedLookup.get() )
+                                        return GroupNameMap[sGroupName];
+                                }
                             }
-                            ++pElementNames;
+                            catch( uno::Exception& )
+                            {
+                                DBG_UNHANDLED_EXCEPTION("toolkit");
+                            }
                         }
-                        OSL_FAIL( "determineRadioGroupId: did not find the radios element name!" );
+                        SAL_WARN("toolkit","determineRadioGroupId: did not find the radios element's group!" );
                     }
+                }
+
+                // we encounter this container the first time. In particular, we did not just step up
+                if ( nStartWithChild == 0 )
+                {
+                    // Our control wasn't in this container, so consider every item to be a possible unique group.
+                    // This is way too much: Not all of the elements in the current container will form groups.
+                    // But anyway, this number is sufficient for our purpose, since sequential group ids are not required.
+                    // Ultimately, the container contains *at most* this many groups.
+                    nGroupsEncountered += nCount;
                 }
 
                 if (  i >= nCount )
