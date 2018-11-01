@@ -64,6 +64,8 @@ Qt5Instance::Qt5Instance(bool bUseCairo)
     // is processed before the thread emitting the signal continues
     connect(this, SIGNAL(ImplYieldSignal(bool, bool)), this, SLOT(ImplYield(bool, bool)),
             Qt::BlockingQueuedConnection);
+    connect(this, &Qt5Instance::createMenuSignal, this, &Qt5Instance::CreateMenu,
+            Qt::BlockingQueuedConnection);
 }
 
 Qt5Instance::~Qt5Instance()
@@ -119,6 +121,12 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
 
 std::unique_ptr<SalMenu> Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT createMenuSignal(bMenuBar, pVCLMenu);
+    }
+
     Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
     pSalMenu->SetMenu(pVCLMenu);
     return std::unique_ptr<SalMenu>(pSalMenu);
