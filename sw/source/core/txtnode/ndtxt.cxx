@@ -4340,7 +4340,7 @@ void SwTextNode::AddToList()
     }
 
     SwList *const pList(FindList(this));
-    if (pList)
+    if (pList && GetNodes().IsDocNodes()) // not for undo nodes
     {
         assert(!mpNodeNum);
         mpNodeNum = new SwNodeNum(this, false);
