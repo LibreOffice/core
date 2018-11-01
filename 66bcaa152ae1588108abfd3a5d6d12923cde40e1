@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "5f2577a7_4782b2ca",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-01T12:29:11Z",
+      "side": 1,
+      "message": "\u003e Yes. As is, it doesn\u0027t do anything for the URM_MOVE case (if I\n\u003e didn\u0027t overlook something). However, that can\u0027t be unconditionally\n\u003e changed unless moving(cut\u0026paste) a conditional format would split\n\u003e the format for an existing applied-to range, which it currently\n\u003e isn\u0027t (ends up as the same condition (and thus formula) applied to\n\u003e different ranges). Hence the suggestion to pass an extra parameter\n\u003e to indicate an initial move really moving things..\n\nI don\u0027t understand a word. Like, none zero zilsch nada\n\n\u003e Another approach could be to recompile the initial formula string for the new position, which also the other still pending change tried, \n\nHow can one recompile a formula string for the new position? Any examples",
+      "parentUuid": "5f2577a7_d30e6c31",
+      "revId": "66bcaa152ae1588108abfd3a5d6d12923cde40e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f231b9d_164a9c7f",
         "filename": "sc/source/ui/condformat/condformatdlg.cxx",
         "patchSetId": 2
