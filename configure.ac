@@ -6200,7 +6200,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     printf 'foo\n' | $GPERF -L C++ > conftest.inc
     my_flags='-std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x'
     if test "$enable_c__17" != no; then
-        my_flags="-std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z $my_flags"
+        my_flags="-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z $my_flags"
     fi
     for flag in $my_flags; do
         if test "$COM" = MSC; then
