@@ -66,6 +66,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -191,6 +192,7 @@ public:
     void testTdf119015();
     void testTdf120028();
     void testTdf120028b();
+    void testTdf121205();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -275,6 +277,7 @@ public:
     CPPUNIT_TEST(testTdf119015);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
+    CPPUNIT_TEST(testTdf121205);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2632,6 +2635,32 @@ void SdImportTest::testTdf120028b()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf121205()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf121205.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xPropSet( getShapeFromPage( 0, 0, xDocShRef ) );
+    css::uno::Any aAny = xPropSet->getPropertyValue( "Model" );
+    CPPUNIT_ASSERT_MESSAGE( "The shape doesn't have the property", aAny.hasValue() );
+
+    uno::Reference< chart::XChartDocument > xChartDoc;
+    aAny >>= xChartDoc;
+    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChartDoc.is() );
+
+    uno::Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("chart doc does not have title", xTitled.is());
+    uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT_MESSAGE("chart doc does not have title", xTitle.is());
+
+    uno::Sequence<uno::Reference<chart2::XFormattedString> > aFSSeq = xTitle->getText();
+    OUString aText;
+    for (sal_Int32 i = 0; i < aFSSeq.getLength(); ++i)
+        aText += aFSSeq[i]->getString();
+
+    // We expect title splitted in 3 lines
+    CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
