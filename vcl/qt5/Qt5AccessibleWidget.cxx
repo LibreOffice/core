@@ -743,24 +743,24 @@ namespace
 OUString lcl_convertFontWeight(double fontWeight)
 {
     if (fontWeight == awt::FontWeight::THIN || fontWeight == awt::FontWeight::ULTRALIGHT)
-        return "100";
+        return OUString("100");
     if (fontWeight == awt::FontWeight::LIGHT)
-        return "200";
+        return OUString("200");
     if (fontWeight == awt::FontWeight::SEMILIGHT)
-        return "300";
+        return OUString("300");
     if (fontWeight == awt::FontWeight::NORMAL)
-        return "normal";
+        return OUString("normal");
     if (fontWeight == awt::FontWeight::SEMIBOLD)
-        return "500";
+        return OUString("500");
     if (fontWeight == awt::FontWeight::BOLD)
-        return "bold";
+        return OUString("bold");
     if (fontWeight == awt::FontWeight::ULTRABOLD)
-        return "800";
+        return OUString("800");
     if (fontWeight == awt::FontWeight::BLACK)
-        return "900";
+        return OUString("900");
 
     // awt::FontWeight::DONTKNOW || fontWeight == awt::FontWeight::NORMAL
-    return "normal";
+    return OUString("normal");
 }
 }
 
