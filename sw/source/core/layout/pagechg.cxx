@@ -1967,27 +1967,24 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
             pFlyFrame->NotifyDrawObj();
             // --> let the active embedded object be moved
             SwFrame* pLower = pFlyFrame->Lower();
-            if ( pLower )
+            if ( pLower && pLower->IsNoTextFrame() )
             {
-                if ( pLower->IsNoTextFrame() )
+                SwRootFrame* pRoot = pLower->getRootFrame();
+                SwViewShell *pSh = pRoot ? pRoot->GetCurrShell() : nullptr;
+                if ( pSh )
                 {
-                    SwRootFrame* pRoot = pLower->getRootFrame();
-                    SwViewShell *pSh = pRoot ? pRoot->GetCurrShell() : nullptr;
-                    if ( pSh )
+                    SwNoTextFrame *const pContentFrame = static_cast<SwNoTextFrame*>(pLower);
+                    SwOLENode* pNode = pContentFrame->GetNode()->GetOLENode();
+                    if ( pNode )
                     {
-                        SwNoTextFrame *const pContentFrame = static_cast<SwNoTextFrame*>(pLower);
-                        SwOLENode* pNode = pContentFrame->GetNode()->GetOLENode();
-                        if ( pNode )
+                        svt::EmbeddedObjectRef& xObj = pNode->GetOLEObj().GetObject();
+                        if ( xObj.is() )
                         {
-                            svt::EmbeddedObjectRef& xObj = pNode->GetOLEObj().GetObject();
-                            if ( xObj.is() )
+                            for(SwViewShell& rSh : pSh->GetRingContainer())
                             {
-                                for(SwViewShell& rSh : pSh->GetRingContainer())
-                                {
-                                    SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( &rSh );
-                                    if ( pFEShell )
-                                        pFEShell->MoveObjectIfActive( xObj, rOffset );
-                                }
+                                SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( &rSh );
+                                if ( pFEShell )
+                                    pFEShell->MoveObjectIfActive( xObj, rOffset );
                             }
                         }
                     }

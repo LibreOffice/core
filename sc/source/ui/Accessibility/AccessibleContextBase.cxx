@@ -263,11 +263,8 @@ sal_Int32 SAL_CALL
             for (sal_Int32 i=0; i<nChildCount; ++i)
             {
                 uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
-                if (xChild.is())
-                {
-                    if (xChild.get() == this)
-                        nIndex = i;
-                }
+                if (xChild.is() && xChild.get() == this)
+                    nIndex = i;
             }
         }
    }

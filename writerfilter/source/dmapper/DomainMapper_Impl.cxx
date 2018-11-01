@@ -5405,15 +5405,12 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
      */
     if(IsSdtEndBefore())
     {
-        if(xPropertySet.is())
+        if(xPropertySet.is() && bHasGrabBag)
         {
-            if (bHasGrabBag)
-            {
-                uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
-                    { "SdtEndBefore", uno::Any(true) }
-                }));
-                xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
-            }
+            uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
+                { "SdtEndBefore", uno::Any(true) }
+            }));
+            xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
         }
     }
 

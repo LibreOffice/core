@@ -413,10 +413,8 @@ void SwMailMergeDlg::Apply()
 
 IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn, void )
 {
-    if (pBtn == m_pOkBTN) {
-        if( ExecQryShell() )
-            EndDialog(RET_OK);
-    }
+    if (pBtn == m_pOkBTN && ExecQryShell() )
+        EndDialog(RET_OK);
 }
 
 IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, Button *, pBtn, void )

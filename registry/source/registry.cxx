@@ -57,13 +57,10 @@ static void REGISTRY_CALLTYPE release(RegHandle hReg)
 {
     ORegistry* pReg = static_cast<ORegistry*>(hReg);
 
-    if (pReg)
+    if (pReg && pReg->release() == 0)
     {
-        if (pReg->release() == 0)
-        {
-            delete pReg;
-            hReg = nullptr;
-        }
+        delete pReg;
+        hReg = nullptr;
     }
 }
 

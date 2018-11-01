@@ -1332,11 +1332,8 @@ bool XMLTextFrameContext::CreateIfNotThere( css::uno::Reference < css::beans::XP
 {
     SvXMLImportContext *pContext = m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl*>( pContext );
-    if( pImpl )
-    {
-        if( pImpl->CreateIfNotThere() )
-            rPropSet = pImpl->GetPropSet();
-    }
+    if( pImpl && pImpl->CreateIfNotThere() )
+        rPropSet = pImpl->GetPropSet();
 
     return rPropSet.is();
 }

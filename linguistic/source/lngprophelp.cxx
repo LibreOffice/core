@@ -599,13 +599,10 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
             rEvt.NewValue >>= *pnVal;
 
         bRes = (pnVal != nullptr);
-        if (bRes)
+        if (bRes && nLngSvcFlags)
         {
-            if (nLngSvcFlags)
-            {
-                LinguServiceEvent aEvt( GetEvtObj(), nLngSvcFlags );
-                LaunchEvent( aEvt );
-            }
+            LinguServiceEvent aEvt( GetEvtObj(), nLngSvcFlags );
+            LaunchEvent( aEvt );
         }
     }
 

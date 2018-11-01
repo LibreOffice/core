@@ -108,11 +108,8 @@ void
         puttokens(trp);
         anymacros = 0;
         cursource->line += cursource->lineinc;
-        if (cursource->lineinc > 1)
-        {
-            if (!Pflag)
-                genline();
-        }
+        if (cursource->lineinc > 1 && !Pflag)
+            genline();
     }
 }
 

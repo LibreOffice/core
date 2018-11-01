@@ -286,14 +286,13 @@ void ScOutputData::SetMetaFileMode( bool bNewMode )
 void ScOutputData::SetSyntaxMode( bool bNewMode )
 {
     mbSyntaxMode = bNewMode;
-    if ( bNewMode )
-        if ( !pValueColor )
-        {
-            const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-            pValueColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor ) );
-            pTextColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor ) );
-            pFormulaColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor ) );
-        }
+    if ( bNewMode && !pValueColor )
+    {
+        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        pValueColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor ) );
+        pTextColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor ) );
+        pFormulaColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor ) );
+    }
 }
 
 void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage)

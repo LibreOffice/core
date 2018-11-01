@@ -1750,13 +1750,10 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         }
     }
 
-    if( pUndo )
+    if( pUndo && bRet )
     {
-        if( bRet )
-        {
-            pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
-            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-        }
+        pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
     return bRet;
 }
@@ -1808,13 +1805,10 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         }
     }
 
-    if( pUndo )
+    if( pUndo && bRet )
     {
-        if( bRet )
-        {
-            pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
-            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-        }
+        pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
     return bRet;
 
@@ -2142,12 +2136,9 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         }
     }
 
-    if( pUndo )
+    if( pUndo && bRet )
     {
-        if( bRet )
-        {
-            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-        }
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
 
     return bRet;
@@ -2210,16 +2201,13 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
         }
     }
 
-    if( pUndo )
+    if( pUndo && bRet )
     {
-        if( bRet )
-        {
-            if( bVert )
-                pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
-            else
-                pUndo->SaveNewBoxes( *pTableNd, aTmpLst, rBoxes, aNdsCnts );
-            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-        }
+        if( bVert )
+            pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
+        else
+            pUndo->SaveNewBoxes( *pTableNd, aTmpLst, rBoxes, aNdsCnts );
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
 
     return bRet;
@@ -4297,15 +4285,12 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                                                 bCpyName );
         }
 
-        if( pUndo )
+        if( pUndo && bRet )
         {
-            if( bRet )
-            {
-                pInsTableNd = GetNodes()[ rInsPos.nNode.GetIndex() - 1 ]->FindTableNode();
+            pInsTableNd = GetNodes()[ rInsPos.nNode.GetIndex() - 1 ]->FindTableNode();
 
-                pUndo->SetTableSttIdx( pInsTableNd->GetIndex() );
-                GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-            }
+            pUndo->SetTableSttIdx( pInsTableNd->GetIndex() );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
     }
     else
@@ -4427,13 +4412,8 @@ bool SwDoc::UnProtectTableCells( SwTable& rTable )
         }
     }
 
-    if( pUndo )
-    {
-        if( bChgd )
-        {
-            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-        }
-    }
+    if( pUndo && bChgd )
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     return bChgd;
 }
 
@@ -4480,13 +4460,8 @@ bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
             }
         }
 
-        if( pUndo )
-        {
-            if( bChgd )
-            {
-                GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-            }
-        }
+        if( pUndo && bChgd )
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
     return bChgd;
 }

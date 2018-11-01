@@ -2631,12 +2631,9 @@ void DocumentContentOperationsManager::TransliterateText(
     else if( pTNd && nSttCnt < nEndCnt )
         pTNd->TransliterateText( rTrans, nSttCnt, nEndCnt, pUndo.get() );
 
-    if( pUndo )
+    if( pUndo && pUndo->HasData() )
     {
-        if( pUndo->HasData() )
-        {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
-        }
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
     m_rDoc.getIDocumentState().SetModified();
 }

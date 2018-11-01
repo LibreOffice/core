@@ -210,13 +210,10 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
 
 
     // #109989# do not show vertical directions in Writer/Web
-    if( !bWeb )
+    if( !bWeb && bCJK )
     {
-        if( bCJK )
-        {
-            m_xTextFlowBox->append(SvxFrameDirection::Vertical_RL_TB, SvxResId(RID_SVXSTR_PAGEDIR_RTL_VERT));
-            m_xTextFlowBox->append(SvxFrameDirection::Vertical_LR_TB, SvxResId(RID_SVXSTR_PAGEDIR_LTR_VERT));
-        }
+        m_xTextFlowBox->append(SvxFrameDirection::Vertical_RL_TB, SvxResId(RID_SVXSTR_PAGEDIR_RTL_VERT));
+        m_xTextFlowBox->append(SvxFrameDirection::Vertical_LR_TB, SvxResId(RID_SVXSTR_PAGEDIR_LTR_VERT));
     }
 
     // #109989# show the text direction box in Writer/Web too

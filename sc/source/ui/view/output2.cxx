@@ -4879,14 +4879,11 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 }
 
                                 long nClipStartY = nStartY;
-                                if (nArrY==0)
+                                if (nArrY==0 && nClipStartY < nRowPosY )
                                 {
-                                    if ( nClipStartY < nRowPosY )
-                                    {
-                                        long nDif = nRowPosY - nClipStartY;
-                                        nClipStartY = nRowPosY;
-                                        aClipSize.AdjustHeight( -nDif );
-                                    }
+                                    long nDif = nRowPosY - nClipStartY;
+                                    nClipStartY = nRowPosY;
+                                    aClipSize.AdjustHeight( -nDif );
                                 }
 
                                 if ( nAttrRotate /* && eRotMode != SVX_ROTATE_MODE_STANDARD */ )

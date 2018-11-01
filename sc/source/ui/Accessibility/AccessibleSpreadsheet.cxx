@@ -1068,11 +1068,8 @@ void SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (mpViewShell)
-    {
-        if (!IsFormulaMode())
-            mpViewShell->Unmark();
-    }
+    if (mpViewShell && !IsFormulaMode())
+        mpViewShell->Unmark();
 }
 
 void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )

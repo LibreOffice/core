@@ -724,9 +724,8 @@ retry:
             "exception", nullptr, rterr);
     }
 
-    if (err) {
-        if (handleError(iaioe, i_xHandler)) goto retry;
-    }
+    if (err && handleError(iaioe, i_xHandler))
+        goto retry;
 }
 
 /** init Impl struct */

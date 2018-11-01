@@ -294,11 +294,8 @@ rtlRandomError SAL_CALL rtl_random_getBytes (
 
     if (pImpl->m_hDigest || !osl_get_system_random_data(static_cast< char* >(Buffer), Bytes))
     {
-        if (!pImpl->m_hDigest)
-        {
-            if (!initPool (pImpl))
-                return rtl_Random_E_Unknown;
-        }
+        if (!pImpl->m_hDigest && !initPool(pImpl))
+            return rtl_Random_E_Unknown;
         readPool(pImpl, pBuffer, Bytes);
     }
     return rtl_Random_E_None;

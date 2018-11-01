@@ -733,12 +733,11 @@ ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, bool bCreate )
         if (maTabs[nTab])
         {
             pVal = maTabs[nTab]->GetOutlineTable();
-            if (!pVal)
-                if (bCreate)
-                {
-                    maTabs[nTab]->StartOutlineTable();
-                    pVal = maTabs[nTab]->GetOutlineTable();
-                }
+            if (!pVal && bCreate)
+            {
+                maTabs[nTab]->StartOutlineTable();
+                pVal = maTabs[nTab]->GetOutlineTable();
+            }
         }
 
     return pVal;

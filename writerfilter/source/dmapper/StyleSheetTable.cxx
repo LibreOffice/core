@@ -1535,11 +1535,8 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
         if( pStyleNames[nStyle].startsWith( cListLabel, &sSuffix ) )
         {
             sal_Int32 nSuffix = sSuffix.toInt32();
-            if( nSuffix > 0 )
-            {
-                if( nSuffix > nStyleFound )
-                    nStyleFound = nSuffix;
-            }
+            if( nSuffix > 0 && nSuffix > nStyleFound )
+                nStyleFound = nSuffix;
         }
     }
     sListLabel = cListLabel + OUString::number( ++nStyleFound );

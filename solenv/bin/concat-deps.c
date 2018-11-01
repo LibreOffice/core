@@ -848,15 +848,12 @@ static void print_fullpaths(char* line)
         }
         token = end;
         eat_space(&token);
-        if (!target_seen)
+        if (!target_seen && ':' == *token)
         {
-            if (':' == *token)
-            {
-                target_seen = 1;
-                fputc(':', stdout);
-                ++token;
-                eat_space(&token);
-            }
+            target_seen = 1;
+            fputc(':', stdout);
+            ++token;
+            eat_space(&token);
         }
     }
 }

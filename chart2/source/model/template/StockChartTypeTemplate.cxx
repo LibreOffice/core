@@ -219,11 +219,8 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
 
         bool bHasVolume = false;
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
-        if( bHasVolume )
-        {
-            if( nChartTypeIndex != 0 )
-                nNewAxisIndex = 1;
-        }
+        if( bHasVolume && nChartTypeIndex != 0 )
+            nNewAxisIndex = 1;
 
         Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
         if( xProp.is() )

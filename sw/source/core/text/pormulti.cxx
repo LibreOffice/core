@@ -2355,13 +2355,10 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
     SwFieldPortion *pField = nullptr;
     while( pPor )
     {
-        if( pPor->GetLen() )
+        if( pPor->GetLen() && !pHelpMulti )
         {
-            if( !pHelpMulti )
-            {
-                nMultiPos = nMultiPos + pPor->GetLen();
-                pTmpMulti = nullptr;
-            }
+            nMultiPos = nMultiPos + pPor->GetLen();
+            pTmpMulti = nullptr;
         }
         if( pPor->InFieldGrp() )
         {

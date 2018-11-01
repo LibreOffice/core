@@ -191,11 +191,8 @@ void InsertAnimator::Implementation::SetInsertPosition (
 
     // When the new insert position is in a different run then move the page
     // objects in the old run to their default positions.
-    if (pOldRun != pCurrentRun)
-    {
-        if (pOldRun)
-            pOldRun->ResetOffsets(eMode);
-    }
+    if (pOldRun != pCurrentRun && pOldRun)
+        pOldRun->ResetOffsets(eMode);
 
     if (pCurrentRun)
     {

@@ -163,14 +163,10 @@ void SwXMLExport::ExportMeta_()
 {
     SvXMLExport::ExportMeta_();
 
-    if( !m_bBlock )
+    if( !m_bBlock && IsShowProgress() )
     {
-
-        if( IsShowProgress() )
-        {
-            ProgressBarHelper *pProgress = GetProgressBarHelper();
-            pProgress->SetValue( pProgress->GetValue() + 2 );
-        }
+        ProgressBarHelper *pProgress = GetProgressBarHelper();
+        pProgress->SetValue( pProgress->GetValue() + 2 );
     }
 }
 

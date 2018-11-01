@@ -891,11 +891,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
 
         // Handle horizontal flip.
-        if (obFlipH == true)
-        {
-            if (xPropertySet.is())
-                xPropertySet->setPropertyValue("IsMirrored", uno::makeAny(true));
-        }
+        if (obFlipH == true && xPropertySet.is())
+            xPropertySet->setPropertyValue("IsMirrored", uno::makeAny(true));
         return;
     }
 

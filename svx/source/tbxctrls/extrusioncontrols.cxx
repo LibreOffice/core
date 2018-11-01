@@ -746,18 +746,15 @@ void ExtrusionLightingWindow::SelectHdl(void const * pControl)
     if( pControl == this )
     {
         int nLevel = getSelectedEntryId();
-        if( nLevel >= 0 )
+        if( nLevel >= 0 && nLevel != 3 )
         {
-            if( nLevel != 3 )
-            {
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = OUString(g_sExtrusionLightingIntensity).copy(5);
-                aArgs[0].Value <<= static_cast<sal_Int32>(nLevel);
+            Sequence< PropertyValue > aArgs( 1 );
+            aArgs[0].Name = OUString(g_sExtrusionLightingIntensity).copy(5);
+            aArgs[0].Value <<= static_cast<sal_Int32>(nLevel);
 
-                mrController.dispatchCommand( g_sExtrusionLightingIntensity, aArgs );
+            mrController.dispatchCommand( g_sExtrusionLightingIntensity, aArgs );
 
-                implSetIntensity( nLevel, true );
-            }
+            implSetIntensity( nLevel, true );
         }
     }
     else

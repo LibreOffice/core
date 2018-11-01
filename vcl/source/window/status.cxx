@@ -319,15 +319,12 @@ tools::Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
 {
     tools::Rectangle       aRect;
     ImplStatusItem* pItem = ( nPos < mvItemList.size() ) ? mvItemList[ nPos ].get() : nullptr;
-    if ( pItem )
+    if ( pItem && pItem->mbVisible )
     {
-        if ( pItem->mbVisible )
-        {
-            aRect.SetLeft( pItem->mnX );
-            aRect.SetRight( aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth );
-            aRect.SetTop( STATUSBAR_OFFSET_Y );
-            aRect.SetBottom( mnCalcHeight - STATUSBAR_OFFSET_Y );
-        }
+        aRect.SetLeft( pItem->mnX );
+        aRect.SetRight( aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth );
+        aRect.SetTop( STATUSBAR_OFFSET_Y );
+        aRect.SetBottom( mnCalcHeight - STATUSBAR_OFFSET_Y );
     }
 
     return aRect;

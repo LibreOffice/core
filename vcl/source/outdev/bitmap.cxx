@@ -136,9 +136,8 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    if ( !mpGraphics )
-        if ( !AcquireGraphics() )
-            return;
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -372,9 +371,8 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         if ( !IsDeviceOutputNecessary() )
             return;
 
-        if ( !mpGraphics )
-            if ( !AcquireGraphics() )
-                return;
+        if ( !mpGraphics && !AcquireGraphics() )
+            return;
 
         if ( mbInitClipRegion )
             InitClipRegion();

@@ -191,12 +191,9 @@ static void lcl_ExportPropertyString( SvXMLExport& rExport,
     rAny = rPropSet->getPropertyValue( sProperty );
 
     OUString sValue;
-    if( rAny >>= sValue )
+    if( (rAny >>= sValue) && !sValue.isEmpty() )
     {
-        if( !sValue.isEmpty() )
-        {
-            rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, sValue );
-        }
+        rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, sValue );
     }
 }
 
@@ -209,12 +206,9 @@ static void lcl_ExportPropertyBool( SvXMLExport& rExport,
     rAny = rPropSet->getPropertyValue( sProperty );
 
     bool bValue;
-    if( rAny >>= bValue )
+    if( (rAny >>= bValue) && bValue )
     {
-        if( bValue )
-        {
-            rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, XML_TRUE );
-        }
+        rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, XML_TRUE );
     }
 }
 

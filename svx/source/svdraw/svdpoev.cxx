@@ -126,21 +126,18 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
                 }
             }
 
-            if(!bSegmFuz)
+            if(!bSegmFuz && bCanSegment)
             {
-                if(bCanSegment)
-                {
-                    bool bCrv(aLocalPolygon.isNextControlPointUsed(nPntNum));
+                bool bCrv(aLocalPolygon.isNextControlPointUsed(nPntNum));
 
-                    if(b1stSegm)
-                    {
-                        b1stSegm = false;
-                        bCurve = bCrv;
-                    }
-                    else
-                    {
-                        bSegmFuz = (bCrv != bCurve);
-                    }
+                if(b1stSegm)
+                {
+                    b1stSegm = false;
+                    bCurve = bCrv;
+                }
+                else
+                {
+                    bSegmFuz = (bCrv != bCurve);
                 }
             }
         }

@@ -298,11 +298,8 @@ static PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 
         eStatus = implCheckStatusOfURL(_sURL,aDirItem);
 
-        if (eStatus == Bootstrap::PATH_EXISTS)
-        {
-            if (!implNormalizeURL(_sURL,aDirItem))
-                OSL_FAIL("Unexpected failure getting actual URL for existing object");
-        }
+        if (eStatus == Bootstrap::PATH_EXISTS && !implNormalizeURL(_sURL,aDirItem))
+            OSL_FAIL("Unexpected failure getting actual URL for existing object");
     }
     return eStatus;
 }

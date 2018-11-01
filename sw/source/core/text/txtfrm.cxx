@@ -267,18 +267,15 @@ namespace sw {
         else
         {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
-            if (pHints)
+            if (pHints && 0 < m_CurrentHint)
             {
-                if (0 < m_CurrentHint)
+                SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
+                --m_CurrentHint;
+                if (ppNode)
                 {
-                    SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
-                    --m_CurrentHint;
-                    if (ppNode)
-                    {
-                        *ppNode = m_pNode;
-                    }
-                    return pHint;
+                    *ppNode = m_pNode;
                 }
+                return pHint;
             }
             return nullptr;
         }
