@@ -166,9 +166,6 @@ public class FileUtilities {
         if (filename == null)
             return false;
 
-        if (byMode == ALL && byFilename.equals("")) {
-            return !filename.startsWith("."); //ignore hidden files
-        }
         // check extension
         if (byMode != ALL) {
             if (mExtnMap.get (getExtension (filename)) != byMode)
