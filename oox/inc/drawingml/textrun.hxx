@@ -41,6 +41,7 @@ public:
     const TextCharacterProperties&   getTextCharacterProperties() const { return maTextCharacterProperties; }
 
     void                 setLineBreak() { mbIsLineBreak = true; }
+    bool isLineBreak() const { return mbIsLineBreak; }
 
     virtual sal_Int32               insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
