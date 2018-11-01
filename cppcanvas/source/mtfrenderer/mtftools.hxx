@@ -199,6 +199,14 @@ namespace cppcanvas
         ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const ::basegfx::B2DPoint& rStartPos,
                                                               const double&              rLineWidth,
                                                               const TextLineInfo&        rTextLineInfo );
+
+        void createTextLinesPolyPolygon( const double&              rStartOffset,
+                                         const double&              rLineWidth,
+                                         const TextLineInfo&        rTextLineInfo,
+                                         ::basegfx::B2DPolyPolygon& rOverlinePolyPoly,
+                                         ::basegfx::B2DPolyPolygon& rUnderlinePolyPoly,
+                                         ::basegfx::B2DPolyPolygon& rStrikeoutPolyPoly );
+
     }
 }
 
