@@ -364,7 +364,10 @@ GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
 void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 {
     if( !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
-        ToolBox::KeyInput( rKEvt );
+    {
+        if( KEY_ESCAPE != rKEvt.GetKeyCode().GetCode() )
+            ToolBox::KeyInput(rKEvt);
+    }
 }
 
 
