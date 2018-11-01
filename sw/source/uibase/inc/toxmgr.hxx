@@ -66,8 +66,8 @@ class SW_DLLPUBLIC SwTOXDescription
     //TODO: TemplateNames
     //const String* pTemplateName = 0, ???
 
-    SwTOXDescription(SwTOXDescription&) = delete;
-    SwTOXDescription & operator= (SwTOXDescription&) = delete;
+    SwTOXDescription(SwTOXDescription const &) = delete;
+    SwTOXDescription & operator= (SwTOXDescription const &) = delete;
 
 public:
     // single argument ctors shall be explicit.
@@ -181,8 +181,8 @@ class SwTOXMarkDescription
     boost::optional<OUString>  maPhoneticReadingOfPrimKey;
     boost::optional<OUString>  maPhoneticReadingOfSecKey;
 
-    SwTOXMarkDescription(SwTOXMarkDescription&) = delete;
-    SwTOXMarkDescription & operator= (SwTOXMarkDescription&) = delete;
+    SwTOXMarkDescription(SwTOXMarkDescription const &) = delete;
+    SwTOXMarkDescription & operator= (SwTOXMarkDescription const &) = delete;
 
 public:
     // single argument ctors shall be explicit.

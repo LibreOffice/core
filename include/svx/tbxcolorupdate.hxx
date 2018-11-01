@@ -54,8 +54,8 @@ namespace svx
         Color const & GetCurrentColor() const { return maCurColor; }
 
     private:
-        ToolboxButtonColorUpdater(ToolboxButtonColorUpdater &) = delete;
-        void operator =(ToolboxButtonColorUpdater) = delete;
+        ToolboxButtonColorUpdater(ToolboxButtonColorUpdater const &) = delete;
+        ToolboxButtonColorUpdater& operator =(ToolboxButtonColorUpdater const &) = delete;
 
         bool const            mbWideButton;
         sal_uInt16 const      mnBtnId;

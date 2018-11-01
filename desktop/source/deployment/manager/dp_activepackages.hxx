@@ -83,8 +83,8 @@ public:
     void erase(OUString const & id, OUString const & fileName);
 
 private:
-    ActivePackages(ActivePackages &) = delete;
-    void operator =(ActivePackages &) = delete;
+    ActivePackages(ActivePackages const &) = delete;
+    ActivePackages& operator =(ActivePackages const &) = delete;
 #if HAVE_FEATURE_EXTENSIONS
     ::dp_misc::PersistentMap m_map;
 #endif

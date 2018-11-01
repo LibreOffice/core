@@ -278,8 +278,8 @@ public:
     }
 
 private:
-    Writer(Writer &) = delete;
-    void operator =(Writer) = delete;
+    Writer(Writer const &) = delete;
+    Writer& operator =(Writer const &) = delete;
 
     void * m_handle;
 };

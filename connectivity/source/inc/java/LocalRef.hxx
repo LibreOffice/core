@@ -76,8 +76,8 @@ namespace connectivity { namespace jdbc
         bool    is()  const { return m_object != nullptr; }
 
     private:
-        LocalRef(LocalRef &) = delete;
-        void operator =(LocalRef &) = delete;
+        LocalRef(LocalRef const &) = delete;
+        LocalRef& operator =(LocalRef const &) = delete;
 
         JNIEnv& m_environment;
         T       m_object;

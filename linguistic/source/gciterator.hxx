@@ -199,8 +199,8 @@ public:
     virtual css::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
 
 private:
-    LngXStringKeyMap(LngXStringKeyMap&) = delete;
-    void operator=(LngXStringKeyMap&) = delete;
+    LngXStringKeyMap(LngXStringKeyMap const &) = delete;
+    void operator=(LngXStringKeyMap const &) = delete;
 
     ~LngXStringKeyMap() override{};
 

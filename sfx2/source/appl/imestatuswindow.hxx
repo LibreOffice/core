@@ -87,7 +87,7 @@ public:
     using ImeStatusWindow_Impl::operator delete;
 
 private:
-    ImeStatusWindow(ImeStatusWindow &) = delete;
+    ImeStatusWindow(ImeStatusWindow const &) = delete;
     void operator =(const ImeStatusWindow&) = delete;
 
     virtual ~ImeStatusWindow() override;

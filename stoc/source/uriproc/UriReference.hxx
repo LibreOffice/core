@@ -100,8 +100,8 @@ public:
     bool m_hasFragment;
 
 private:
-    UriReference(UriReference &) = delete;
-    void operator =(UriReference) = delete;
+    UriReference(UriReference const &) = delete;
+    void operator =(UriReference const &) = delete;
 
     void appendSchemeSpecificPart(OUStringBuffer & buffer) const;
 };

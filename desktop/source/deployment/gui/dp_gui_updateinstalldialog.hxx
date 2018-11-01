@@ -66,8 +66,8 @@ public:
     virtual short Execute() override;
 
 private:
-    UpdateInstallDialog(UpdateInstallDialog &) = delete;
-    void operator =(UpdateInstallDialog &) = delete;
+    UpdateInstallDialog(UpdateInstallDialog const &) = delete;
+    UpdateInstallDialog& operator =(UpdateInstallDialog const &) = delete;
 
     class Thread;
     friend class Thread;

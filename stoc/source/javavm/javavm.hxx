@@ -106,7 +106,7 @@ public:
     elementReplaced(css::container::ContainerEvent const & rEvent) override;
 
 private:
-    JavaVirtualMachine(JavaVirtualMachine &) = delete;
+    JavaVirtualMachine(JavaVirtualMachine const &) = delete;
     void operator =(const JavaVirtualMachine&) = delete;
 
     virtual ~JavaVirtualMachine() override;

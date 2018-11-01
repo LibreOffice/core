@@ -48,8 +48,8 @@ namespace rptui
         css::uno::Reference< css::beans::XPropertySet>        m_xDest;
         css::uno::Reference< css::beans::XPropertySetInfo>    m_xDestInfo;
         bool                                                  m_bInChange;
-        OPropertyMediator(OPropertyMediator&) = delete;
-        void operator =(OPropertyMediator&) = delete;
+        OPropertyMediator(OPropertyMediator const &) = delete;
+        void operator =(OPropertyMediator const &) = delete;
     protected:
         virtual ~OPropertyMediator() override;
 

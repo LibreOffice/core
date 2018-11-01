@@ -48,8 +48,8 @@ namespace rptui
         virtual void ImplInitSettings() override;
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-        OStartMarker(OStartMarker&) = delete;
-        void operator =(OStartMarker&) = delete;
+        OStartMarker(OStartMarker const &) = delete;
+        void operator =(OStartMarker const &) = delete;
     public:
         OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry);
         virtual ~OStartMarker() override;

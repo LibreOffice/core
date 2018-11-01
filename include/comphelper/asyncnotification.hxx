@@ -44,8 +44,8 @@ namespace comphelper
         virtual ~AnyEvent() override;
 
     private:
-        AnyEvent( AnyEvent& ) = delete;
-        void operator=( AnyEvent& ) = delete;
+        AnyEvent( AnyEvent const & ) = delete;
+        AnyEvent& operator=( AnyEvent const & ) = delete;
     };
 
 

@@ -33,9 +33,8 @@ class ReconnectingFile
 
     bool        m_bDisconnect;
 
-    ReconnectingFile( ReconnectingFile& ) = delete;
-
-    ReconnectingFile& operator=( ReconnectingFile& ) = delete;
+    ReconnectingFile( ReconnectingFile const & ) = delete;
+    ReconnectingFile& operator=( ReconnectingFile const & ) = delete;
 
 public:
 

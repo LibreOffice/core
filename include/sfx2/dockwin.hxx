@@ -48,8 +48,8 @@ private:
     SfxChildWindow*         pMgr;
     std::unique_ptr< SfxDockingWindow_Impl >  pImpl;
 
-    SfxDockingWindow(SfxDockingWindow &) = delete;
-    void operator =(SfxDockingWindow &) = delete;
+    SfxDockingWindow(SfxDockingWindow const &) = delete;
+    SfxDockingWindow& operator =(SfxDockingWindow const &) = delete;
 
 protected:
     SfxChildAlignment   CalcAlignment(const Point& rPos, tools::Rectangle& rRect );

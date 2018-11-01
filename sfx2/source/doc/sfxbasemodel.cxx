@@ -435,7 +435,7 @@ class SfxSaveGuard
         IMPL_SfxBaseModel_DataContainer* m_pData;
         std::unique_ptr<SfxOwnFramesLocker> m_pFramesLock;
 
-        SfxSaveGuard(SfxSaveGuard &) = delete;
+        SfxSaveGuard(SfxSaveGuard const &) = delete;
         void operator =(const SfxSaveGuard&) = delete;
 
     public:

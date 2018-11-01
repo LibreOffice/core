@@ -447,8 +447,8 @@ namespace svt
         };
 
     private:
-        EditBrowseBox(EditBrowseBox&) = delete;
-        EditBrowseBox& operator=(EditBrowseBox&) = delete;
+        EditBrowseBox(EditBrowseBox const &) = delete;
+        EditBrowseBox& operator=(EditBrowseBox const &) = delete;
 
         class BrowserMouseEventPtr
         {

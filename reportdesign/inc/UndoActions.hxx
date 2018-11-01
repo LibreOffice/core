@@ -161,8 +161,8 @@ namespace rptui
 
     class REPORTDESIGN_DLLPUBLIC OUndoContainerAction: public OCommentUndoAction
     {
-        OUndoContainerAction(OUndoContainerAction&) = delete;
-        void operator =(OUndoContainerAction&) = delete;
+        OUndoContainerAction(OUndoContainerAction const &) = delete;
+        void operator =(OUndoContainerAction const &) = delete;
     protected:
         css::uno::Reference< css::uno::XInterface >
                         m_xElement;     // object not owned by the action

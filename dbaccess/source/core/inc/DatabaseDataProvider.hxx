@@ -206,8 +206,8 @@ private:
     virtual double SAL_CALL getNotANumber() override;
     virtual sal_Bool SAL_CALL isNotANumber(double nNumber ) override;
 private:
-    DatabaseDataProvider(DatabaseDataProvider &) = delete;
-    void operator =(DatabaseDataProvider &) = delete;
+    DatabaseDataProvider(DatabaseDataProvider const &) = delete;
+    DatabaseDataProvider& operator =(DatabaseDataProvider const &) = delete;
 
     virtual ~DatabaseDataProvider() override {}
 

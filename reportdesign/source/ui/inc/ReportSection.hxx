@@ -61,8 +61,8 @@ namespace rptui
         */
         void impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_Int32 i_nLeftMargin,sal_Int32 i_nRightMargin);
 
-        OReportSection(OReportSection&) = delete;
-        void operator =(OReportSection&) = delete;
+        OReportSection(OReportSection const &) = delete;
+        void operator =(OReportSection const &) = delete;
     protected:
         // DropTargetHelper overridables
         virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) override;

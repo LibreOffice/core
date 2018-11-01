@@ -183,7 +183,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override
         { NotifyClients( pOld, pNew ); };
 
-    SwModify(SwModify&) = delete;
+    SwModify(SwModify const &) = delete;
     SwModify &operator =(const SwModify&) = delete;
 public:
     SwModify()
@@ -241,7 +241,7 @@ namespace sw
         ListenerEntry(SwClient *const pTellHim, SwModify *const pDepend)
             : SwClient(pDepend), m_pToTell(pTellHim)
         {}
-        ListenerEntry(ListenerEntry&) = delete;
+        ListenerEntry(ListenerEntry const &) = delete;
         ListenerEntry& operator=(ListenerEntry const&) = delete;
         ListenerEntry(ListenerEntry&& other) noexcept
             : SwClient(std::move(other))

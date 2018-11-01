@@ -528,7 +528,7 @@ public:
     void PopTextListsHelper();
 
 private:
-        XMLTextParagraphExport(XMLTextParagraphExport &) = delete;
+        XMLTextParagraphExport(XMLTextParagraphExport const &) = delete;
 };
 
 inline const XMLTextListAutoStylePool&

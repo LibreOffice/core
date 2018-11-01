@@ -40,8 +40,8 @@ public:
 private:
     std::unique_ptr<UUIInteractionHelper> m_pImpl;
 
-    UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &) = delete;
-    void operator =(UUIInteractionRequestStringResolver&) = delete;
+    UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver const &) = delete;
+    void operator =(UUIInteractionRequestStringResolver const &) = delete;
 
     virtual ~UUIInteractionRequestStringResolver() override;
 

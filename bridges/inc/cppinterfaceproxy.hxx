@@ -74,8 +74,8 @@ public:
     static CppInterfaceProxy * castInterfaceToProxy(void * pInterface);
 
 private:
-    CppInterfaceProxy(CppInterfaceProxy &) = delete;
-    void operator =(const CppInterfaceProxy&) = delete;
+    CppInterfaceProxy(CppInterfaceProxy const &) = delete;
+    CppInterfaceProxy& operator =(const CppInterfaceProxy&) = delete;
 
     CppInterfaceProxy(
         Bridge * pBridge_, uno_Interface * pUnoI_,

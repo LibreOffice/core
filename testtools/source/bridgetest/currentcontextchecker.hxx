@@ -47,8 +47,8 @@ public:
         ::sal_Int32 setSteps, ::sal_Int32 checkSteps) override;
 
 private:
-    CurrentContextChecker(CurrentContextChecker &) = delete;
-    void operator =(CurrentContextChecker &) = delete;
+    CurrentContextChecker(CurrentContextChecker const &) = delete;
+    void operator =(CurrentContextChecker const &) = delete;
 
     SAL_DLLPRIVATE bool performCheck(
         css::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,

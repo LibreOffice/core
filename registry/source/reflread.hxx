@@ -103,8 +103,8 @@ public:
     OUString  getFieldFileName( sal_uInt16 index ) const;
 
 private:
-    RegistryTypeReader(RegistryTypeReader &) = delete;
-    void operator =(RegistryTypeReader) = delete;
+    RegistryTypeReader(RegistryTypeReader const &) = delete;
+    void operator =(RegistryTypeReader const &) = delete;
 
     /// stores the handle of an implementation class
     TypeReaderImpl                                              m_hImpl;

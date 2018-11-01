@@ -37,7 +37,7 @@ public:
     const OUString& getUri() const { return uri_; }
 
 private:
-    void operator =(NoSuchFileException) = delete;
+    NoSuchFileException& operator =(NoSuchFileException const &) = delete;
 
     OUString const uri_;
 };
@@ -60,7 +60,7 @@ public:
     const OUString& getDetail() const { return detail_; }
 
 private:
-    void operator =(FileFormatException) = delete;
+    FileFormatException& operator =(FileFormatException const &) = delete;
 
     OUString const uri_;
     OUString const detail_;

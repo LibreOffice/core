@@ -59,8 +59,8 @@ class PropBrw final : public DockingWindow , public SfxListener, public SfxBroad
     OSectionView*       m_pView;
     bool                m_bInitialStateChange;
 
-    PropBrw(PropBrw&) = delete;
-    void operator =(PropBrw&) = delete;
+    PropBrw(PropBrw const &) = delete;
+    void operator =(PropBrw const &) = delete;
 
     virtual void Resize() override;
     virtual bool Close() override;

@@ -50,8 +50,8 @@ class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
     std::unique_ptr<SfxItemSet> pOutputSet;
 
 private:
-    SfxModalDialog(SfxModalDialog &) = delete;
-    void operator =(SfxModalDialog &) = delete;
+    SfxModalDialog(SfxModalDialog const &) = delete;
+    SfxModalDialog& operator =(SfxModalDialog const &) = delete;
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();
@@ -81,8 +81,8 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
     Size                    aSize;
     std::unique_ptr< SfxModelessDialog_Impl > pImpl;
 
-    SfxModelessDialog(SfxModelessDialog &) = delete;
-    void operator =(SfxModelessDialog &) = delete;
+    SfxModelessDialog(SfxModelessDialog const &) = delete;
+    SfxModelessDialog& operator =(SfxModelessDialog const &) = delete;
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
@@ -115,8 +115,8 @@ class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
     Size                    aSize;
     std::unique_ptr< SfxFloatingWindow_Impl > pImpl;
 
-    SfxFloatingWindow(SfxFloatingWindow &) = delete;
-    void operator =(SfxFloatingWindow &) = delete;
+    SfxFloatingWindow(SfxFloatingWindow const &) = delete;
+    SfxFloatingWindow& operator =(SfxFloatingWindow const &) = delete;
 
 protected:
                             SfxFloatingWindow( SfxBindings *pBindings,

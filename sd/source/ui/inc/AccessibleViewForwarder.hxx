@@ -85,8 +85,8 @@ private:
     SdrPaintView* const mpView;
     sal_uInt16 mnWindowId;
 
-    AccessibleViewForwarder (AccessibleViewForwarder&) = delete;
-    AccessibleViewForwarder& operator= (AccessibleViewForwarder&) = delete;
+    AccessibleViewForwarder (AccessibleViewForwarder const &) = delete;
+    AccessibleViewForwarder& operator= (AccessibleViewForwarder const &) = delete;
 };
 
 } // end of namespace accessibility

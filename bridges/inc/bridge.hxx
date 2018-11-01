@@ -74,8 +74,8 @@ public:
     uno_Mapping * getUno2Cpp() { return &aUno2Cpp; }
 
 private:
-    Bridge(Bridge &) = delete;
-    void operator =(const Bridge&) = delete;
+    Bridge(Bridge const &) = delete;
+    Bridge& operator =(const Bridge&) = delete;
 
     Bridge(
         uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,

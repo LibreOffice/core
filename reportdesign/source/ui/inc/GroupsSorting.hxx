@@ -131,8 +131,8 @@ private:
     *
     */
     void fillColumns();
-    OGroupsSortingDialog(OGroupsSortingDialog&) = delete;
-    void operator =(OGroupsSortingDialog&) = delete;
+    OGroupsSortingDialog(OGroupsSortingDialog const &) = delete;
+    void operator =(OGroupsSortingDialog const &) = delete;
 protected:
     // OPropertyChangeListener
     virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;

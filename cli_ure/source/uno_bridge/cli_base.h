@@ -140,8 +140,8 @@ class TypeDescr
 {
     typelib_TypeDescription * m_td;
 
-    TypeDescr( TypeDescr & ) = delete;
-    void operator = ( TypeDescr ) = delete;
+    TypeDescr( TypeDescr const & ) = delete;
+    TypeDescr& operator = ( TypeDescr const & ) = delete;
 
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );

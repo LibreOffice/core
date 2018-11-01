@@ -88,8 +88,8 @@ public:
     void * getClassLoader() const { return m_classLoader;}
 
 private:
-    UnoVirtualMachine(UnoVirtualMachine &) = delete;
-    void operator =(UnoVirtualMachine &) = delete;
+    UnoVirtualMachine(UnoVirtualMachine const &) = delete;
+    UnoVirtualMachine& operator =(UnoVirtualMachine const &) = delete;
 
     virtual ~UnoVirtualMachine() override;
 

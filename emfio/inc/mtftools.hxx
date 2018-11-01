@@ -458,8 +458,8 @@ namespace emfio
 
     class EMFIO_DLLPUBLIC MtfTools
     {
-        MtfTools(MtfTools &) = delete;
-        void operator =(MtfTools) = delete;
+        MtfTools(MtfTools const &) = delete;
+        MtfTools& operator =(MtfTools const &) = delete;
 
     protected:
         WinMtfPathObj       maPathObj;

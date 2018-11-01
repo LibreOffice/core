@@ -74,8 +74,8 @@ private:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
 private:
-    ImportDocumentHandler(ImportDocumentHandler &) = delete;
-    void operator =(ImportDocumentHandler &) = delete;
+    ImportDocumentHandler(ImportDocumentHandler const &) = delete;
+    void operator =(ImportDocumentHandler const &) = delete;
 
     virtual ~ImportDocumentHandler() override;
 

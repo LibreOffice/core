@@ -427,8 +427,8 @@ struct DbusMessageHolder {
     DBusMessage * message;
 
 private:
-    DbusMessageHolder(DbusMessageHolder &) = delete;
-    void operator =(DbusMessageHolder) = delete;
+    DbusMessageHolder(DbusMessageHolder const &) = delete;
+    DbusMessageHolder& operator =(DbusMessageHolder const &) = delete;
 };
 
 }

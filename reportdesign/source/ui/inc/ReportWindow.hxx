@@ -58,8 +58,8 @@ namespace rptui
         sal_Int32 GetTotalHeight() const;
         sal_Int32 impl_getRealPixelWidth() const;
 
-        OReportWindow(OReportWindow&) = delete;
-        void operator =(OReportWindow&) = delete;
+        OReportWindow(OReportWindow const &) = delete;
+        void operator =(OReportWindow const &) = delete;
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
         // OPropertyChangeListener

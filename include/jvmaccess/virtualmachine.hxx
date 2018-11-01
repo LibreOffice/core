@@ -82,8 +82,8 @@ public:
         JNIEnv * getEnvironment() const { return m_pEnvironment; }
 
     private:
-        AttachGuard(AttachGuard &) = delete;
-        void operator =(AttachGuard) = delete;
+        AttachGuard(AttachGuard const &) = delete;
+        AttachGuard& operator =(AttachGuard const &) = delete;
 
         rtl::Reference< VirtualMachine > m_xMachine;
         JNIEnv * m_pEnvironment;
@@ -128,8 +128,8 @@ public:
                    JNIEnv const * pMainThreadEnv);
 
 private:
-    VirtualMachine(VirtualMachine &) = delete;
-    void operator =(VirtualMachine) = delete;
+    VirtualMachine(VirtualMachine const &) = delete;
+    VirtualMachine& operator =(VirtualMachine const & ) = delete;
 
     virtual ~VirtualMachine() override;
 

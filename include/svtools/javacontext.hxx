@@ -58,8 +58,8 @@ namespace svt
         virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
 
     private:
-        JavaContext(JavaContext&) = delete;
-        JavaContext& operator = (JavaContext&) = delete;
+        JavaContext(JavaContext const &) = delete;
+        JavaContext& operator = (JavaContext const &) = delete;
 
         oslInterlockedCount                                  m_aRefCount;
         css::uno::Reference< css::uno::XCurrentContext >     m_xNextContext;

@@ -75,7 +75,7 @@ namespace sw { namespace mark
             virtual OUString ToString( ) const =0;
             virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const = 0;
         private:
-            IMark(IMark&) = delete;
+            IMark(IMark const &) = delete;
             IMark &operator =(IMark const&) = delete;
     };
 
@@ -95,7 +95,7 @@ namespace sw { namespace mark
             virtual void Hide(bool hide) =0;
             virtual void SetHideCondition(const OUString&) =0;
         private:
-            IBookmark(IBookmark&) = delete;
+            IBookmark(IBookmark const &) = delete;
             IBookmark &operator =(IBookmark const&) = delete;
     };
 
@@ -118,7 +118,7 @@ namespace sw { namespace mark
             virtual void SetFieldHelptext(const OUString& rFieldHelptext) =0;
             virtual void Invalidate() = 0;
         private:
-            IFieldmark(IFieldmark&) = delete;
+            IFieldmark(IFieldmark const &) = delete;
             IFieldmark &operator =(IFieldmark const&) = delete;
     };
 
@@ -132,7 +132,7 @@ namespace sw { namespace mark
             virtual bool IsChecked() const =0;
             virtual void SetChecked(bool checked) =0;
         private:
-            ICheckboxFieldmark(ICheckboxFieldmark&) = delete;
+            ICheckboxFieldmark(ICheckboxFieldmark const &) = delete;
             ICheckboxFieldmark &operator =(ICheckboxFieldmark const&) = delete;
     };
 

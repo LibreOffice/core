@@ -77,8 +77,8 @@ private:
 
     void exportTableRows();
 private:
-    ExportDocumentHandler(ExportDocumentHandler &) = delete;
-    void operator =(ExportDocumentHandler &) = delete;
+    ExportDocumentHandler(ExportDocumentHandler const &) = delete;
+    void operator =(ExportDocumentHandler const &) = delete;
 
     virtual ~ExportDocumentHandler() override;
 

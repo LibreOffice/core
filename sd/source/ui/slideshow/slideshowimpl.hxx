@@ -233,8 +233,8 @@ public:
     void mouseButtonUp(const MouseEvent& rMEvt);
 
 private:
-    SlideshowImpl(SlideshowImpl &) = delete;
-    void operator =(SlideshowImpl &) = delete;
+    SlideshowImpl(SlideshowImpl const &) = delete;
+    void operator =(SlideshowImpl const &) = delete;
 
     virtual ~SlideshowImpl() override;
 
