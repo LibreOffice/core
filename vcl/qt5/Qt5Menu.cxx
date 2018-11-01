@@ -23,6 +23,7 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     , mpFrame(nullptr)
     , mbMenuBar(bMenuBar)
 {
+    connect(this, &Qt5Menu::setFrameSignal, this, &Qt5Menu::SetFrame, Qt::BlockingQueuedConnection);
 }
 
 Qt5Menu::~Qt5Menu() { maItems.clear(); }
@@ -63,6 +64,12 @@ void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned)
 
 void Qt5Menu::SetFrame(const SalFrame* pFrame)
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setFrameSignal(pFrame);
+    }
+
     SolarMutexGuard aGuard;
     assert(mbMenuBar);
     mpFrame = const_cast<Qt5Frame*>(static_cast<const Qt5Frame*>(pFrame));
@@ -71,9 +78,11 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
 
     Qt5MainWindow* pMainWindow = mpFrame->GetTopLevelWindow();
     if (pMainWindow)
+    {
         mpQMenuBar = pMainWindow->menuBar();
 
-    DoFullMenuUpdate(mpVCLMenu);
+        DoFullMenuUpdate(mpVCLMenu);
+    }
 }
 
 void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
