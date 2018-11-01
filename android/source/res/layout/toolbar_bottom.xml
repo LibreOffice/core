@@ -365,7 +365,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Font Color"
+                                        android:text="@string/font_color"
                                         android:paddingBottom="12dp"
                                         android:paddingTop="12dp"
                                         android:textSize="14sp"
@@ -394,7 +394,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Highlight Color"
+                                        android:text="@string/highlight_color"
                                         android:paddingBottom="12dp"
                                         android:paddingTop="12dp"
                                         android:textSize="14sp"

@@ -194,13 +194,13 @@
     <string-array name="insertrowscolumns">
         <item>Satırları öncekine ekle</item>
         <item>Satırları sonrakine ekle</item>
-        <item>Kolonları öncekine ekle</item>
-        <item>Kolonları sonrakine ekle</item>
+        <item>Sütunları öncekine ekle</item>
+        <item>Sütunları sonrakine ekle</item>
         <item>Tablo Ekle</item>
     </string-array>
     <string-array name="deleterowcolumns">
         <item>Satır Sil</item>
-        <item>Kolon Sil</item>
+        <item>Sütun Sil</item>
         <item>Tablo Sil</item>
     </string-array>
 
@@ -227,4 +227,17 @@
     <string name="pref_filter_summary">Varsayılan dosya filtrelemesini seç</string>
     <string name="display_language">Uygulama Dili</string>
     <string name="display_language_summary">Varsayılan dili değiştir</string>
+    <string name="unable_to_export_pdf">Unable to export to pdf</string>
+    <string name="pdf_exported_at">Exported to PDF at</string>
+    <string name="printing_not_supported">Your device does not support printing</string>
+    <string name="error">Hata</string>
+    <string name="enter_part_name">Bölüm ismi girin.</string>
+    <string name="bmp_null">Bmp boş!</string>
+    <string name="directory_not_saved">Dizin kaydedilmedi.</string>
+    <string name="page">Sayfa</string>
+    <string name="sheet">Tablo</string>
+    <string name="slide">Slide</string>
+    <string name="part">Bölüm</string>
+    <string name="highlight_color">Vurgulama Rengi</string>
+    <string name="font_color">Metin Rengi</string>
 </resources>

@@ -698,9 +698,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LibreOfficeMainActivity.this);
 
-        alertDialogBuilder.setTitle("Error");
+        alertDialogBuilder.setTitle(R.string.error);
         alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNeutralButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
@@ -748,7 +748,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public void renamePart(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter a part name");
+        builder.setTitle(R.string.enter_part_name);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);

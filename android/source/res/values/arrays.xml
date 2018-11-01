@@ -26,8 +26,8 @@
     </string-array>
     <!-- View Mode names,values -->
     <string-array name="ViewModeNames">
-        <item >Grid</item>
-        <item >List</item>
+        <item >@string/grid_view</item>
+        <item >@string/list_view</item>
     </string-array>
     <string-array name="ViewModeStringValues">
         <item >0</item>
