@@ -141,10 +141,11 @@ class FormattingController implements View.OnClickListener {
                 break;
             case R.id.button_insert_picture:
                 insertPicture();
+                break;
             case R.id.button_insert_table:
                 insertTable();
                 break;
-                case R.id.button_delete_table:
+            case R.id.button_delete_table:
                 deleteTable();
                 break;
         }
