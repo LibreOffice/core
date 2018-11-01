@@ -111,6 +111,7 @@ public:
     void testTdf115107_2(); // import complex data point labels in cobo charts with multiple data series
 
     void testTdf116163();
+    void testTdf121205();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -176,6 +177,7 @@ public:
     CPPUNIT_TEST(testTdf115107_2);
 
     CPPUNIT_TEST(testTdf116163);
+    CPPUNIT_TEST(testTdf121205);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1582,6 +1584,20 @@ void Chart2ImportTest::testTdf116163()
     uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Dddd..."), xLabel3->getString());
 }
+
+void Chart2ImportTest::testTdf121205()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf121205.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+
+    uno::Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("chart doc does not have title", xTitled.is());
+    OUString aTitle = getTitleString(xTitled);
+
+    // We expect title splitted in 3 lines
+    CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aTitle);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
 
