@@ -105,7 +105,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
-    connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute);
+    connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
+            Qt::BlockingQueuedConnection);
 
     // XExecutableDialog
     connect(this, &KDE5FilePicker::setTitleSignal, this, &KDE5FilePicker::setTitleSlot,
@@ -146,6 +147,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     // XFilePicker2
     connect(this, &KDE5FilePicker::getSelectedFilesSignal, this,
             &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getFilesSignal, this, &KDE5FilePicker::getFiles,
+            Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
 }
@@ -185,6 +188,7 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
 {
     if (qApp->thread() != QThread::currentThread())
     {
+        //SolarMutexReleaser aReleaser;
         return Q_EMIT executeSignal();
     }
 
@@ -249,6 +253,12 @@ OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
 
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        //SolarMutexReleaser aReleaser;
+        return Q_EMIT getFilesSignal();
+    }
+
     uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
