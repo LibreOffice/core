@@ -34,7 +34,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-
 enum GalleryBrowserMode
 {
     GALLERYBROWSERMODE_NONE = 0,
