@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_27744699",
+        "filename": "sfx2/source/doc/Metadatable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-01T06:21:21Z",
+      "side": 0,
+      "message": "Wasn\u0027t this Xml?",
+      "range": {
+        "startLine": 195,
+        "startChar": 23,
+        "endLine": 195,
+        "endChar": 26
+      },
+      "revId": "ef9bfdfe4f4ef75ca65547face0db09af7352314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
