@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_87753a9b",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultset.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-01T06:16:24Z",
+      "side": 1,
+      "message": "just for interest, this can be easily implemented using comphelper::SequenceInputStream",
+      "revId": "34be26bb7c8826b769f6692def57bbe418b95f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_677a4e89",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultset.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-01T06:16:24Z",
+      "side": 1,
+      "message": "you probably want a check here to avoid repeated next() calls advancing m_nRowCount past m_nRowPosition",
+      "revId": "34be26bb7c8826b769f6692def57bbe418b95f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
