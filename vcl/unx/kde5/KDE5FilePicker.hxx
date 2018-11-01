@@ -185,6 +185,7 @@ Q_SIGNALS:
                                  const css::uno::Sequence<css::beans::StringPair>& rFilters);
     void setCurrentFilterSignal(const OUString& rFilter);
     OUString getCurrentFilterSignal();
+    css::uno::Sequence<OUString> getFilesSignal();
     css::uno::Sequence<OUString> getSelectedFilesSignal();
     void setMultiSelectionSignal(bool bMulti);
 
