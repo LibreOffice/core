@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+2: Michael Stahl <Michael.Stahl@cib.de>
+Code-Review+2: Tor Lillqvist <tml@collabora.com>
+Verified+1: Tor Lillqvist <tml@collabora.com>
+Submitted-by: Tor Lillqvist <tml@collabora.com>
+Submitted-at: Thu, 01 Nov 2018 16:39:54 +0100
+Reviewed-on: https://gerrit.libreoffice.org/62705
+Project: core
+Branch: refs/heads/master
