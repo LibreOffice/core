@@ -19,7 +19,7 @@
 
 #include <impglyphitem.hxx>
 
-#if (defined UNX && !defined MACOSX)
+#if (defined UNX && !defined MACOSX && !defined IOS)
 #include <unx/freetype_glyphcache.hxx>
 #endif
 
@@ -62,7 +62,7 @@ bool SalGenericLayoutGlyphsImpl::IsValid() const
         return false;
     if (empty())
         return false;
-#if (defined UNX && !defined MACOSX)
+#if (defined UNX && !defined MACOSX && !defined IOS)
     const FreetypeFontInstance* pFFI = dynamic_cast<FreetypeFontInstance*>(m_rFontInstance.get());
     if (pFFI && !pFFI->GetFreetypeFont())
     {
