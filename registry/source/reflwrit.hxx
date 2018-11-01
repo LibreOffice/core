@@ -90,8 +90,8 @@ public:
     sal_uInt32       getBlopSize();
 
 private:
-    RegistryTypeWriter(RegistryTypeWriter &) = delete;
-    void operator =(RegistryTypeWriter) = delete;
+    RegistryTypeWriter(RegistryTypeWriter const &) = delete;
+    void operator =(RegistryTypeWriter const &) = delete;
 
     /// stores the handle of an implementation class
     TypeWriterImpl                                               m_hImpl;

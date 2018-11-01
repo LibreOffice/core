@@ -47,8 +47,8 @@ public:
     virtual OUString SAL_CALL abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) override;
 
 private:
-    UriAbbreviation(UriAbbreviation &) = delete;
-    void operator =(UriAbbreviation &) = delete;
+    UriAbbreviation(UriAbbreviation const &) = delete;
+    UriAbbreviation& operator =(UriAbbreviation const &) = delete;
 
     virtual ~UriAbbreviation() override {}
 };

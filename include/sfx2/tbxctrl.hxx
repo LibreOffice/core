@@ -75,8 +75,8 @@ friend class SfxFrameStatusListener;
     rtl::Reference<SfxFrameStatusListener>                 m_xStatusListener;
 
 private:
-    SfxPopupWindow(SfxPopupWindow &) = delete;
-    void operator =(SfxPopupWindow &) = delete;
+    SfxPopupWindow(SfxPopupWindow const &) = delete;
+    SfxPopupWindow& operator =(SfxPopupWindow const &) = delete;
     void Delete();
 
 protected:

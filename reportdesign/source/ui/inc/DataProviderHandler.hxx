@@ -91,8 +91,8 @@ namespace rptui
     protected:
         virtual ~DataProviderHandler() override {}
     private:
-        DataProviderHandler(DataProviderHandler &) = delete;
-        void operator =(DataProviderHandler &) = delete;
+        DataProviderHandler(DataProviderHandler const &) = delete;
+        void operator =(DataProviderHandler const &) = delete;
 
 
         bool impl_dialogLinkedFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;

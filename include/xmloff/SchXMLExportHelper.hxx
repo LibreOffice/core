@@ -57,8 +57,8 @@ public:
     void SetDestinationShellID( const OUString& rShellID );
 
 private:
-    SchXMLExportHelper(SchXMLExportHelper &) = delete;
-    void operator =(SchXMLExportHelper &) = delete;
+    SchXMLExportHelper(SchXMLExportHelper const &) = delete;
+    SchXMLExportHelper& operator =(SchXMLExportHelper const &) = delete;
 
 private:
     std::unique_ptr<SchXMLExportHelper_Impl> m_pImpl;

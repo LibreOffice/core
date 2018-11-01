@@ -80,7 +80,7 @@ public:
     XFFontFactory();
     ~XFFontFactory();
     XFFontFactory(const XFFontFactory&) = delete;
-void operator=(XFFontFactory&) = delete;
+    XFFontFactory& operator=(XFFontFactory const &) = delete;
 
 private:
     /**

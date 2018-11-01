@@ -77,8 +77,8 @@ public:
     void setIsSubstream( bool bSubstream );
 
 private:
-    OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &) = delete;
-    void operator =(OOXMLFastDocumentHandler &) = delete;
+    OOXMLFastDocumentHandler(OOXMLFastDocumentHandler const &) = delete;
+    void operator =(OOXMLFastDocumentHandler const &) = delete;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 

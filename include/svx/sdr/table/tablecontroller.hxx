@@ -124,8 +124,8 @@ public:
     bool isColumnHeader();
     sdr::table::SdrTableObj* GetTableObj() { return mxTableObj.get(); }
 private:
-    SvxTableController(SvxTableController &) = delete;
-    void operator =(SvxTableController &) = delete;
+    SvxTableController(SvxTableController const &) = delete;
+    SvxTableController& operator =(SvxTableController const &) = delete;
 
     // internals
     enum class TblAction

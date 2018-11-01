@@ -181,8 +181,8 @@ class VCL_DLLPUBLIC VclSimpleEvent
 private:
     VclEventId nId;
 
-    VclSimpleEvent(VclSimpleEvent &) = delete;
-    void operator =(VclSimpleEvent) = delete;
+    VclSimpleEvent(VclSimpleEvent const &) = delete;
+    VclSimpleEvent& operator =(VclSimpleEvent const &) = delete;
 
 public:
     VclSimpleEvent( VclEventId n ) { nId = n; }
@@ -211,8 +211,8 @@ private:
     VclPtr<Menu> pMenu;
     sal_uInt16 const mnPos;
 
-    VclMenuEvent(VclMenuEvent &) = delete;
-    void operator =(VclMenuEvent) = delete;
+    VclMenuEvent(VclMenuEvent const &) = delete;
+    VclMenuEvent& operator =(VclMenuEvent const &) = delete;
 
 public:
     VclMenuEvent( Menu* pM, VclEventId n, sal_uInt16 nPos );

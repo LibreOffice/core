@@ -57,7 +57,7 @@ class SortedAutoCompleteStrings
 {
     bool owning_;
 
-    void operator =(SortedAutoCompleteStrings) = delete;
+    SortedAutoCompleteStrings& operator =(SortedAutoCompleteStrings const &) = delete;
 
 #if !HAVE_CPP_GUARANTEED_COPY_ELISION
 public:

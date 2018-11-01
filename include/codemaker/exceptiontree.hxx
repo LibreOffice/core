@@ -55,8 +55,8 @@ struct ExceptionTreeNode {
     Children children;
 
 private:
-    ExceptionTreeNode(ExceptionTreeNode &) = delete;
-    void operator =(ExceptionTreeNode) = delete;
+    ExceptionTreeNode(ExceptionTreeNode const &) = delete;
+    ExceptionTreeNode& operator =(ExceptionTreeNode const &) = delete;
 
     void clearChildren();
 };
@@ -106,8 +106,8 @@ public:
     ExceptionTreeNode const & getRoot() const { return m_root; }
 
 private:
-    ExceptionTree(ExceptionTree &) = delete;
-    void operator =(const ExceptionTree&) = delete;
+    ExceptionTree(ExceptionTree const &) = delete;
+    ExceptionTree& operator =(const ExceptionTree&) = delete;
 
     ExceptionTreeNode m_root;
 };

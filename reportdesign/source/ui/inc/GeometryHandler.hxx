@@ -278,8 +278,8 @@ namespace rptui
     protected:
         virtual ~GeometryHandler() override;
     private:
-        GeometryHandler(GeometryHandler &) = delete;
-        void operator =(GeometryHandler &) = delete;
+        GeometryHandler(GeometryHandler const &) = delete;
+        void operator =(GeometryHandler const &) = delete;
 
         // override WeakComponentImplHelperBase::disposing()
         // This function is called upon disposing the component,

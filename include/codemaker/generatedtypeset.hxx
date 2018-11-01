@@ -58,8 +58,8 @@ public:
     { return m_set.find(type) != m_set.end(); }
 
 private:
-    GeneratedTypeSet(GeneratedTypeSet &) = delete;
-    void operator =(const GeneratedTypeSet&) = delete;
+    GeneratedTypeSet(GeneratedTypeSet const &) = delete;
+    GeneratedTypeSet& operator =(GeneratedTypeSet const &) = delete;
 
     std::unordered_set< OString > m_set;
 };

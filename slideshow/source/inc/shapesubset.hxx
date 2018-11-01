@@ -95,7 +95,7 @@ namespace slideshow
             // ctor, and deleted copy assignment op, see the "TODO(Q1)" comment in
             // CloningNodeCreator (slideshow/source/engine/animationnodes/animationnodefactory.cxx):
             ShapeSubset(ShapeSubset const &) = default;
-            void operator =(ShapeSubset) = delete;
+            void operator =(ShapeSubset const &) = delete;
 
             /** Get the actual subset shape.
 

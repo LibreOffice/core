@@ -96,8 +96,8 @@ public:
     virtual css::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
 
 private:
-    SwXStringKeyMap(SwXStringKeyMap &) = delete;
-    void operator =(SwXStringKeyMap &) = delete;
+    SwXStringKeyMap(SwXStringKeyMap const &) = delete;
+    void operator =(SwXStringKeyMap const &) = delete;
 
     virtual ~SwXStringKeyMap() override {}
 

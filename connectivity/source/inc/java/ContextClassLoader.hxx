@@ -64,8 +64,8 @@ namespace connectivity { namespace jdbc
         }
 
     private:
-        ContextClassLoaderScope(ContextClassLoaderScope &) = delete;
-        void operator =(ContextClassLoaderScope &) = delete;
+        ContextClassLoaderScope(ContextClassLoaderScope const &) = delete;
+        ContextClassLoaderScope& operator =(ContextClassLoaderScope const &) = delete;
 
         JNIEnv&                             m_environment;
         LocalRef< jobject >                 m_currentThread;

@@ -57,8 +57,8 @@ class XMLOFF_DLLPUBLIC SvXMLImportPropertyMapper : public salhelper::SimpleRefer
 
     SvXMLImport& rImport;   // access to error handling
 
-    SvXMLImportPropertyMapper(SvXMLImportPropertyMapper &) = delete;
-    void operator =(SvXMLImportPropertyMapper &) = delete;
+    SvXMLImportPropertyMapper(SvXMLImportPropertyMapper const &) = delete;
+    SvXMLImportPropertyMapper& operator =(SvXMLImportPropertyMapper const &) = delete;
 
 protected:
 

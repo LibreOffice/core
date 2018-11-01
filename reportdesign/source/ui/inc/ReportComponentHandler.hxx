@@ -85,8 +85,8 @@ namespace rptui
     protected:
         virtual ~ReportComponentHandler() override {}
     private:
-        ReportComponentHandler(ReportComponentHandler &) = delete;
-        void operator =(ReportComponentHandler &) = delete;
+        ReportComponentHandler(ReportComponentHandler const &) = delete;
+        void operator =(ReportComponentHandler const &) = delete;
 
 
         // override WeakComponentImplHelperBase::disposing()

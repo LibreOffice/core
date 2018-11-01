@@ -123,8 +123,8 @@ public:
     virtual void SAL_CALL setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor) override;
 
 private:
-    ShapeContextHandler(ShapeContextHandler &) = delete;
-    void operator =(ShapeContextHandler &) = delete;
+    ShapeContextHandler(ShapeContextHandler const &) = delete;
+    void operator =(ShapeContextHandler const &) = delete;
 
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;

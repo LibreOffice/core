@@ -64,8 +64,8 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:
-    FinalThreadManager(FinalThreadManager &) = delete;
-    void operator =(FinalThreadManager &) = delete;
+    FinalThreadManager(FinalThreadManager const &) = delete;
+    void operator =(FinalThreadManager const &) = delete;
 
     virtual ~FinalThreadManager() override;
 

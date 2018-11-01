@@ -1208,7 +1208,7 @@ private:
     sal_uInt8 const nTyp;
 
     WW8_WrPlcFootnoteEdn(const WW8_WrPlcFootnoteEdn&) = delete;
-    WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn &) = delete;
+    WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn const &) = delete;
 public:
     explicit WW8_WrPlcFootnoteEdn( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
 
@@ -1234,7 +1234,7 @@ class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // double Plc for Postits
 {
 private:
     WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&) = delete;
-    WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&) = delete;
+    WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations const &) = delete;
     std::set<const SwRedlineData*> maProcessedRedlines;
 
     std::map<const OUString, WW8_CP> m_aRangeStartPositions;
@@ -1258,7 +1258,7 @@ private:
     virtual const std::vector<sal_uInt32>* GetShapeIdArr() const override;
 
     WW8_WrPlcTextBoxes(const WW8_WrPlcTextBoxes&) = delete;
-    WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes&) = delete;
+    WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes const &) = delete;
 public:
     explicit WW8_WrPlcTextBoxes( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
 

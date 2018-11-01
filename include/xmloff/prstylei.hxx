@@ -44,8 +44,8 @@ private:
     css::uno::Reference < css::style::XStyle > mxStyle;
     SvXMLImportContextRef const                mxStyles;
 
-    XMLPropStyleContext(XMLPropStyleContext &) = delete;
-    void operator =(XMLPropStyleContext &) = delete;
+    XMLPropStyleContext(XMLPropStyleContext const &) = delete;
+    XMLPropStyleContext& operator =(XMLPropStyleContext const &) = delete;
 
 protected:
 

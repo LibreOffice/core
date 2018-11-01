@@ -49,7 +49,7 @@ struct BreakPoint
 class BreakPointList
 {
 private:
-    void operator =(BreakPointList) = delete;
+    BreakPointList& operator =(BreakPointList const &) = delete;
     std::vector<BreakPoint> maBreakPoints;
 
 public:

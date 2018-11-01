@@ -31,8 +31,8 @@ private:
     IndexBitSet& operator-=( sal_uInt16 nBit );
     bool Contains( sal_uInt16 nBit ) const;
 
-    IndexBitSet(IndexBitSet &) = delete;
-    void operator =(IndexBitSet) = delete;
+    IndexBitSet(IndexBitSet const &) = delete;
+    void operator =(IndexBitSet const &) = delete;
 
 public:
     IndexBitSet();

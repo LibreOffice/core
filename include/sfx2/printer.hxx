@@ -36,7 +36,7 @@ private:
     std::unique_ptr<SfxItemSet> pOptions;
     bool                    bKnown;
 
-    SAL_DLLPRIVATE void operator =(SfxPrinter &) = delete;
+    SfxPrinter& operator =(SfxPrinter const &) = delete;
 
 public:
                             SfxPrinter( std::unique_ptr<SfxItemSet> &&pTheOptions );

@@ -265,8 +265,8 @@ public:
 class MergedSettings final
 {
 private:
-    const MergedSettings& operator = (MergedSettings&) = delete;
-    MergedSettings(MergedSettings&) = delete;
+    MergedSettings& operator = (MergedSettings const &) = delete;
+    MergedSettings(MergedSettings const &) = delete;
 
     void merge(const NodeJava & share, const NodeJava & user);
 

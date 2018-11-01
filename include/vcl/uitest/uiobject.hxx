@@ -38,8 +38,8 @@ typedef std::map<const OUString, OUString> StringMap;
  */
 class UITEST_DLLPUBLIC UIObject
 {
-    UIObject(UIObject &) = delete;
-    void operator =(UIObject) = delete;
+    UIObject(UIObject const &) = delete;
+    UIObject& operator =(UIObject const &) = delete;
 
 public:
     UIObject() = default;

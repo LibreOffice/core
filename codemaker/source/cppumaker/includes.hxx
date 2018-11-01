@@ -65,8 +65,8 @@ public:
         FileStream & out, OString const & entityName, bool hpp);
 
 private:
-    Includes(Includes &) = delete;
-    void operator =(const Includes&) = delete;
+    Includes(Includes const &) = delete;
+    Includes& operator =(const Includes&) = delete;
 
     bool isInterfaceType(OString const & entityName) const;
 

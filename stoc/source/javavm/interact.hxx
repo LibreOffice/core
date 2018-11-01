@@ -50,7 +50,7 @@ public:
 private:
     class RetryContinuation;
 
-    InteractionRequest(InteractionRequest &) = delete;
+    InteractionRequest(InteractionRequest const &) = delete;
     void operator =(const InteractionRequest&) = delete;
 
     virtual ~InteractionRequest() override;

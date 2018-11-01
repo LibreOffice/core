@@ -80,8 +80,8 @@ namespace rptui
 
         void ImplInitSettings();
 
-        ODesignView(ODesignView&) = delete;
-        void operator =(ODesignView&) = delete;
+        ODesignView(ODesignView const &) = delete;
+        void operator =(ODesignView const &) = delete;
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(tools::Rectangle& rRect) override;

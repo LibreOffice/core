@@ -90,8 +90,8 @@ public:
     const std::vector< double >&  getDateCategories();
 
 private:
-    ExplicitCategoriesProvider(ExplicitCategoriesProvider &) = delete;
-    void operator =(ExplicitCategoriesProvider) = delete;
+    ExplicitCategoriesProvider(ExplicitCategoriesProvider const &) = delete;
+    ExplicitCategoriesProvider& operator =(ExplicitCategoriesProvider const &) = delete;
 
     bool volatile m_bDirty;
     css::uno::WeakReference< css::chart2::XCoordinateSystem >   m_xCooSysModel;

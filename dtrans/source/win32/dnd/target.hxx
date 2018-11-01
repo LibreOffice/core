@@ -103,8 +103,8 @@ private:
 public:
     explicit DropTarget(const Reference<XComponentContext>& rxContext);
     virtual ~DropTarget() override;
-    DropTarget(DropTarget&) = delete;
-    DropTarget &operator= (DropTarget&) = delete;
+    DropTarget(DropTarget const &) = delete;
+    DropTarget &operator= (DropTarget const &) = delete;
 
     // Overrides WeakComponentImplHelper::disposing which is called by
     // WeakComponentImplHelper::dispose

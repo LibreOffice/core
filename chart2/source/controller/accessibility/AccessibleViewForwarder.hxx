@@ -42,8 +42,8 @@ public:
     virtual Size LogicToPixel( const Size& rSize ) const override;
 
 private:
-    AccessibleViewForwarder( AccessibleViewForwarder& ) = delete;
-    AccessibleViewForwarder& operator=( AccessibleViewForwarder& ) = delete;
+    AccessibleViewForwarder( AccessibleViewForwarder const & ) = delete;
+    AccessibleViewForwarder& operator=( AccessibleViewForwarder const & ) = delete;
 
     AccessibleChartView* m_pAccChartView;
     VclPtr<vcl::Window> m_pWindow;

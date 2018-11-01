@@ -872,8 +872,8 @@ protected:
     }
 
 private:
-    TemporarySwap(TemporarySwap &) = delete;
-    void operator =(TemporarySwap &) = delete;
+    TemporarySwap(TemporarySwap const &) = delete;
+    void operator =(TemporarySwap const &) = delete;
 
     SwTextFrame * m_frame;
     bool m_undo;

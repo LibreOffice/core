@@ -73,8 +73,8 @@ public:
     com::sun::star::uno::XInterface * getCppI() { return pCppI; }
 
 private:
-    UnoInterfaceProxy(UnoInterfaceProxy &) = delete;
-    void operator =(const UnoInterfaceProxy&) = delete;
+    UnoInterfaceProxy(UnoInterfaceProxy const &) = delete;
+    UnoInterfaceProxy& operator =(const UnoInterfaceProxy&) = delete;
 
     UnoInterfaceProxy(
         Bridge * pBridge_, com::sun::star::uno::XInterface * pCppI_,

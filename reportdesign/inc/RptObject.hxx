@@ -48,8 +48,8 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
     private:
         DlgEdHintKind const eHintKind;
 
-        DlgEdHint(DlgEdHint&) = delete;
-        void operator =(DlgEdHint&) = delete;
+        DlgEdHint(DlgEdHint const &) = delete;
+        void operator =(DlgEdHint const &) = delete;
     public:
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint() override;
