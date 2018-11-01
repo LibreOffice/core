@@ -94,11 +94,11 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
         return bool(m_nStyle & nMask);
     }
 
-    bool isWindow();
-    QWindow* windowHandle();
+    bool isWindow() const;
+    QWindow* windowHandle() const;
     QScreen* screen();
-    bool isMinimized();
-    bool isMaximized();
+    bool isMinimized() const;
+    bool isMaximized() const;
 
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);
