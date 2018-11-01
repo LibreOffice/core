@@ -785,6 +785,7 @@ uno::Sequence< uno::Type > SvxShape::_getTypes()
     case E3D_EXTRUDEOBJ_ID|E3D_INVENTOR_FLAG:
     case E3D_POLYGONOBJ_ID|E3D_INVENTOR_FLAG:
     case OBJ_MEDIA:
+    case OBJ_TABLE:
         {
             static css::uno::Sequence< css::uno::Type > aTypeSequence;
 
@@ -1005,7 +1006,6 @@ uno::Sequence< uno::Type > SvxShape::_getTypes()
     case OBJ_GRAF:
     case OBJ_TEXT:
     case OBJ_CAPTION:
-    case OBJ_TABLE:
     case OBJ_OLE2: // #i118485# Moved to shapes with text
     default:
         {
