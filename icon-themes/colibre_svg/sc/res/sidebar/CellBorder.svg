@@ -10,7 +10,7 @@
    viewBox="0 0 43 43"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="CellBorder.svg">
   <metadata
      id="metadata10">
@@ -35,14 +35,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1375"
+     inkscape:window-height="1319"
      id="namedview6"
      showgrid="true"
      inkscape:zoom="21.953488"
      inkscape:cx="33.611099"
      inkscape:cy="19.641627"
      inkscape:window-x="0"
-     inkscape:window-y="36"
+     inkscape:window-y="30"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -50,35 +50,15 @@
        id="grid4138" />
   </sodipodi:namedview>
   <path
-     style="opacity:1;fill:#808080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 3 2 L 3 40 L 40 40 L 40 2 L 3 2 z M 5 4 L 38 4 L 38 38 L 5 38 L 5 4 z "
-     id="rect4144" />
-  <rect
      style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4149"
-     width="33"
-     height="34"
-     x="5"
-     y="4" />
-  <rect
+     d="M 5 4 L 5 38 L 38 38 L 38 4 L 5 4 z "
+     id="rect4149" />
+  <path
+     style="opacity:0.4;fill:#808080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 3 2 L 3 40 L 40 40 L 40 2 L 3 2 z M 5 4 L 20 4 L 20 20 L 5 20 L 5 4 z M 22 4 L 38 4 L 38 20 L 22 20 L 22 4 z M 5 22 L 20 22 L 20 38 L 5 38 L 5 22 z M 22 22 L 38 22 L 38 38 L 22 38 L 22 22 z "
+     id="rect4144" />
+  <path
      style="opacity:1;fill:#808080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4151"
-     width="33"
-     height="2"
-     x="5"
-     y="20" />
-  <rect
-     style="opacity:1;fill:#808080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4153"
-     width="2"
-     height="34"
-     x="20"
-     y="4" />
-  <rect
-     style="opacity:1;fill:#eac282;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4155"
-     width="37"
-     height="2"
-     x="3"
-     y="38" />
+     d="M 3 38 L 3 40 L 40 40 L 40 38 L 3 38 z "
+     id="rect4155" />
 </svg>
