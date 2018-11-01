@@ -183,7 +183,7 @@ public:
         Does not remove the metadata reference from the element.
         </p>
 
-        @see RemovemlIdForElement
+        @see RemoveXmlIdForElement
      */
     virtual void UnregisterMetadatable(Metadatable const&) = 0;
 
@@ -192,7 +192,7 @@ public:
         GetXmlIdForElement(Metadatable const&) const;
 
     /** remove the metadata reference for the given element. */
-    virtual void RemovemlIdForElement(Metadatable const&) = 0;
+    virtual void RemoveXmlIdForElement(Metadatable const&) = 0;
 
 protected:
 
@@ -221,7 +221,7 @@ public:
 
     virtual void UnregisterMetadatable(Metadatable const&) override;
 
-    virtual void RemovemlIdForElement(Metadatable const&) override;
+    virtual void RemoveXmlIdForElement(Metadatable const&) override;
 
     /** register i_rCopy as a copy of i_rSource,
         with precedence iff i_bCopyPrecedesSource is true */
@@ -312,7 +312,7 @@ public:
 
     virtual void UnregisterMetadatable(Metadatable const&) override;
 
-    virtual void RemovemlIdForElement(Metadatable const&) override;
+    virtual void RemoveXmlIdForElement(Metadatable const&) override;
 
     /** register i_rCopy as a copy of i_rSource */
     MetadatableClipboard & RegisterCopyClipboard(Metadatable & i_rCopy,
@@ -761,9 +761,9 @@ void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
     }
 }
 
-void XmlIdRegistryDocument::RemovemlIdForElement(const Metadatable& i_rObject)
+void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
 {
-    SAL_INFO("sfx", "RemovemlIdForElement: " << &i_rObject);
+    SAL_INFO("sfx", "RemoveXmlIdForElement: " << &i_rObject);
 
     const XmlIdReverseMap_t::iterator iter(
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
@@ -1165,9 +1165,9 @@ void XmlIdRegistryClipboard::UnregisterMetadatable(const Metadatable& i_rObject)
 }
 
 
-void XmlIdRegistryClipboard::RemovemlIdForElement(const Metadatable& i_rObject)
+void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
 {
-    SAL_INFO("sfx", "RemovemlIdForElement: " << &i_rObject);
+    SAL_INFO("sfx", "RemoveXmlIdForElement: " << &i_rObject);
 
     ClipboardXmlIdReverseMap_t::iterator iter(
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
@@ -1246,7 +1246,7 @@ void Metadatable::RemoveMetadataReference()
         if (m_pReg)
         {
             m_pReg->UnregisterMetadatable( *this );
-            m_pReg->RemovemlIdForElement( *this );
+            m_pReg->RemoveXmlIdForElement( *this );
             m_pReg = nullptr;
         }
     }
