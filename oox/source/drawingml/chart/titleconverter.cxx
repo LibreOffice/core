@@ -85,7 +85,7 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
             for( TextRunVector::const_iterator aRIt = rTextPara.getRuns().begin(), aREnd = rTextPara.getRuns().end(); aRIt != aREnd; ++aRIt )
             {
                 const TextRun& rTextRun = **aRIt;
-                bool bAddNewLine = (aRIt + 1 == aREnd) && (aPIt + 1 != aPEnd);
+                bool bAddNewLine = ((aRIt + 1 == aREnd) && (aPIt + 1 != aPEnd)) || rTextRun.isLineBreak();
                 Reference< XFormattedString > xFmtStr = appendFormattedString( aStringVec, rTextRun.getText(), bAddNewLine );
                 PropertySet aPropSet( xFmtStr );
                 TextCharacterProperties aRunProps( rParaProps );
