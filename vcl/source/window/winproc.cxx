@@ -535,11 +535,8 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                 pWinFrameData->mpMouseMoveWin = nullptr;
                 pWinFrameData->mbInMouseMove = false;
 
-                if ( pChild )
-                {
-                    if ( pChild->IsDisposed() )
-                        pChild = nullptr;
-                }
+                if ( pChild && pChild->IsDisposed() )
+                    pChild = nullptr;
                 if ( pMouseMoveWin->IsDisposed() )
                     return true;
             }

@@ -893,15 +893,12 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
     for ( auto& rItem : rItems )
     {
         pSet = rItem.mpSet.get();
-        if (pSet)
+        if (pSet && pSet->mpWallpaper)
         {
-            if (pSet->mpWallpaper)
-            {
-                Point aPoint(rItem.mnLeft, rItem.mnTop);
-                Size aSize(rItem.mnWidth, rItem.mnHeight);
-                tools::Rectangle aRect(aPoint, aSize);
-                rRenderContext.DrawWallpaper(aRect, *pSet->mpWallpaper);
-            }
+            Point aPoint(rItem.mnLeft, rItem.mnTop);
+            Size aSize(rItem.mnWidth, rItem.mnHeight);
+            tools::Rectangle aRect(aPoint, aSize);
+            rRenderContext.DrawWallpaper(aRect, *pSet->mpWallpaper);
         }
     }
 

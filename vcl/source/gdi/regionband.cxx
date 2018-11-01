@@ -650,11 +650,8 @@ bool RegionBand::OptimizeBandList()
         if ( pBand->mnYBottom < pBand->mnYTop )
             OSL_ENSURE(false, "RegionBand::OptimizeBandList(): YBottomBoundary < YTopBoundary" );
 
-        if ( pBand->mpNextBand )
-        {
-            if ( pBand->mnYBottom >= pBand->mpNextBand->mnYTop )
-                OSL_ENSURE(false, "RegionBand::OptimizeBandList(): overlapping bands in region!" );
-        }
+        if ( pBand->mpNextBand && pBand->mnYBottom >= pBand->mpNextBand->mnYTop )
+            OSL_ENSURE(false, "RegionBand::OptimizeBandList(): overlapping bands in region!" );
 
         pBand = pBand->mpNextBand;
     }

@@ -783,15 +783,12 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
 
                 beans::PropertyValue embeddingsTemp;
                 // This will add all .xlsx and .bin to grabbag list.
-                if(bFound)
+                if(bFound && mxEmbeddings.is())
                 {
-                    if(mxEmbeddings.is())
-                    {
-                        embeddingsTemp.Name = embeddingsTarget;
-                        embeddingsTemp.Value <<= mxEmbeddings;
-                        aEmbeddings.push_back(embeddingsTemp);
-                        mxEmbeddings.clear();
-                    }
+                    embeddingsTemp.Name = embeddingsTarget;
+                    embeddingsTemp.Value <<= mxEmbeddings;
+                    aEmbeddings.push_back(embeddingsTemp);
+                    mxEmbeddings.clear();
                 }
                 bFound = false;
                 bHeaderFooterFound = false;

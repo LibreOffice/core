@@ -731,10 +731,8 @@ sal_uInt64 writeMap(
                 bool dfltCtor = ent2->getConstructors().size() == 1
                     && ent2->getConstructors()[0].defaultConstructor;
                 bool ann = !ent2->getAnnotations().empty();
-                if (!dfltCtor) {
-                    if (!ann)
-                        ann = hasNotEmptyAnnotations(ent2->getConstructors());
-                }
+                if (!dfltCtor && !ann)
+                    ann = hasNotEmptyAnnotations(ent2->getConstructors());
                 i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann, dfltCtor);
                 writeIdxName(file, ent2->getBase());

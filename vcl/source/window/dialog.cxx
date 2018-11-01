@@ -1118,13 +1118,10 @@ void Dialog::EndDialog( long nResult )
 
     Hide();
 
-    if (bModal)
+    if (bModal && GetParent())
     {
-        if ( GetParent() )
-        {
-            NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
-            GetParent()->CompatNotify( aNEvt );
-        }
+        NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
+        GetParent()->CompatNotify( aNEvt );
     }
 
     mpDialogImpl->mnResult = nResult;
