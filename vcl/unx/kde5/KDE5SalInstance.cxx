@@ -46,12 +46,20 @@ KDE5SalInstance::KDE5SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
     pSVData->maAppData.mpToolkitName = new OUString("kde5");
 
     KDE5SalData::initNWF();
+
+    connect(this, &KDE5SalInstance::createFrameSignal, this, &KDE5SalInstance::CreateFrame,
+            Qt::BlockingQueuedConnection);
     connect(this, &KDE5SalInstance::createFilePickerSignal, this,
             &KDE5SalInstance::createFilePicker, Qt::BlockingQueuedConnection);
 }
 
 SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
+    if (!IsMainThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT createFrameSignal(pParent, nState);
+    }
     return new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
 }
 
