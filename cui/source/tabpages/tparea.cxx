@@ -188,6 +188,8 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         case drawing::FillStyle_HATCH:
         {
             m_rXFSet.Put( rSet.Get(XATTR_FILLHATCH) );
+            m_rXFSet.Put( rSet.Get(XATTR_FILLBACKGROUND) );
+            m_rXFSet.Put( rSet.Get(XATTR_FILLCOLOR) );
             SelectFillTypeHdl_Impl(*m_xBtnHatch);
             break;
         }
