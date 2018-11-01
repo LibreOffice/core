@@ -152,6 +152,8 @@ class LOKitTileProvider implements TileProvider {
                 String partName = mDocument.getPartName(i);
                 if (partName.isEmpty()) {
                     partName = getGenericPartName(i);
+                }else if (partName.startsWith("Slide") || partName.startsWith("Sheet") || partName.startsWith("Part")) {
+                    partName = getGenericPartName(i);
                 }
                 Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
 
@@ -312,7 +314,7 @@ class LOKitTileProvider implements TileProvider {
                     @Override
                     public void run() {
                         // There was some error
-                        mContext.showCustomStatusMessage("Unable to export to pdf");
+                        mContext.showCustomStatusMessage(mContext.getString(R.string.unable_to_export_pdf));
                     }
                 });
             }else {
@@ -338,7 +340,7 @@ class LOKitTileProvider implements TileProvider {
                     @Override
                     public void run() {
                         // There was no error
-                        mContext.showCustomStatusMessage("Exported to PDF at "+filePath);
+                        mContext.showCustomStatusMessage(mContext.getString(R.string.pdf_exported_at)+filePath);
                     }
                 });
             } else {
@@ -383,7 +385,7 @@ class LOKitTileProvider implements TileProvider {
                 e.printStackTrace();
             }
         } else {
-            mContext.showCustomStatusMessage("Your device does not support printing");
+            mContext.showCustomStatusMessage(mContext.getString(R.string.printing_not_supported));
         }
     }
 
@@ -440,14 +442,14 @@ class LOKitTileProvider implements TileProvider {
         switch (mDocument.getDocumentType()) {
             case Document.DOCTYPE_DRAWING:
             case Document.DOCTYPE_TEXT:
-                return "Page " + (i + 1);
+                return mContext.getString(R.string.page) + " " + (i + 1);
             case Document.DOCTYPE_SPREADSHEET:
-                return "Sheet " + (i + 1);
+                return mContext.getString(R.string.sheet) + " " + (i + 1);
             case Document.DOCTYPE_PRESENTATION:
-                return "Slide " + (i + 1);
+                return mContext.getString(R.string.slide) + " " + (i + 1);
             case Document.DOCTYPE_OTHER:
             default:
-                return "Part " + (i + 1);
+                return mContext.getString(R.string.part) + " " + (i + 1);
         }
     }
 

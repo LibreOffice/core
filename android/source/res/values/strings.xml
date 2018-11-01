@@ -227,4 +227,17 @@
     <string name="pref_filter_summary">Set which file filter should be used by default.</string>
     <string name="display_language">Display Language</string>
     <string name="display_language_summary">Set the default display language</string>
+    <string name="unable_to_export_pdf">Unable to export to pdf</string>
+    <string name="pdf_exported_at">Exported to PDF at</string>
+    <string name="printing_not_supported">Your device does not support printing</string>
+    <string name="error">Error</string>
+    <string name="enter_part_name">Enter a part name</string>
+    <string name="bmp_null">Bmp is null!</string>
+    <string name="directory_not_saved">Directory not saved.</string>
+    <string name="page">Page</string>
+    <string name="sheet">Sheet</string>
+    <string name="slide">Slide</string>
+    <string name="part">Part</string>
+    <string name="highlight_color">Highlight Color</string>
+    <string name="font_color">Font Color</string>
 </resources>

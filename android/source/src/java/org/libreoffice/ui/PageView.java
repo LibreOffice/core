@@ -61,7 +61,7 @@ public class PageView extends View{
                     mPaintBlack);//
         }
         if( bmp == null)
-            canvas.drawText("Bmp is null!", 100, 100, new Paint());
+            canvas.drawText(getContext().getString(R.string.bmp_null), 100, 100, new Paint());
     }
 
 }

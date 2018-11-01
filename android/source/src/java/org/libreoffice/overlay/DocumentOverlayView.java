@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.R;
 import org.libreoffice.canvas.AdjustLengthLine;
 import org.libreoffice.canvas.CalcSelectionBox;
 import org.libreoffice.canvas.Cursor;
@@ -301,7 +302,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         // if page rectangle canvas element is not visible or the page number is changed, show
         if (!mPageNumberRect.isVisible() || index != previousIndex) {
             previousIndex = index;
-            String pageNumberString = "Page " + index + " of " + mPartPageRectangles.size();
+            String pageNumberString = getContext().getString(R.string.page) + " " + index + "/" + mPartPageRectangles.size();
             mPageNumberRect.setPageNumberString(pageNumberString);
             mPageNumberRect.setVisible(true);
             invalidate();

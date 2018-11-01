@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import org.libreoffice.R;
 import org.libreoffice.storage.DocumentProviderFactory;
 
 import java.util.Set;
@@ -108,7 +109,7 @@ public class BrowserSelectorActivity extends AppCompatActivity {
         }
         unregisterListeners();
         Log.d(LOGTAG, "Preference saved: " +
-                preferences.getString(preferenceKey, "Directory not saved."));
+                preferences.getString(preferenceKey, getString(R.string.directory_not_saved)));
         finish();
     }
 
