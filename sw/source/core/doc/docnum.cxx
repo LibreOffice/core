@@ -2141,7 +2141,48 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
                 }
             }
 
+            --aIdx; // move before insertion
+
             getIDocumentContentOperations().CopyRange( aPam, aInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
+
+            // now delete all the delete redlines that were copied
+#ifndef NDEBUG
+            size_t nRedlines(getIDocumentRedlineAccess().GetRedlineTable().size());
+#endif
+            if (nOffset > 0)
+                assert(aPam.End()->nNode.GetIndex() - aPam.Start()->nNode.GetIndex() + nOffset == aInsPos.nNode.GetIndex() - aPam.End()->nNode.GetIndex());
+            else
+                assert(aPam.Start()->nNode.GetIndex() - aPam.End()->nNode.GetIndex() + nOffset == aInsPos.nNode.GetIndex() - aPam.End()->nNode.GetIndex());
+            SwRedlineTable::size_type i;
+            getIDocumentRedlineAccess().GetRedline(*aPam.End(), &i);
+            for ( ; 0 < i; --i)
+            {   // iterate backwards and offset via the start nodes difference
+                SwRangeRedline const*const pRedline = getIDocumentRedlineAccess().GetRedlineTable()[i - 1];
+                if (*pRedline->End() < *aPam.Start())
+                {
+                    break;
+                }
+                if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                {
+                    assert(*aPam.Start() <= *pRedline->Start()); // caller's fault
+                    SwRangeRedline* pNewRedline;
+                    {
+                        SwPaM pam(*pRedline, nullptr);
+                        sal_uLong const nCurrentOffset(
+                            aIdx.GetIndex() + 1 - aPam.Start()->nNode.GetIndex());
+                        pam.GetPoint()->nNode += nCurrentOffset;
+                        pam.GetPoint()->nContent.Assign(pam.GetPoint()->nNode.GetNode().GetContentNode(), pam.GetPoint()->nContent.GetIndex());
+                        pam.GetMark()->nNode += nCurrentOffset;
+                        pam.GetMark()->nContent.Assign(pam.GetMark()->nNode.GetNode().GetContentNode(), pam.GetMark()->nContent.GetIndex());
+
+                        pNewRedline = new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, pam );
+                    }
+                    // note: effectively this will DeleteAndJoin the pam!
+                    getIDocumentRedlineAccess().AppendRedline(pNewRedline, true);
+                    assert(getIDocumentRedlineAccess().GetRedlineTable().size() <= nRedlines);
+                }
+            }
+
             if( bDelLastPara )
             {
                 // We need to remove the last empty Node again
