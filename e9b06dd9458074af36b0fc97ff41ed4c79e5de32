@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_a2a82477",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-11-01T23:41:32Z",
+      "side": 1,
+      "message": "This becomes now a bit inconsistent, as we already have m_xUICmdDescription which is used by getCommandName, and yet we\u0027re calling the various vcl::CommandInfoProvider functions instead. Wouldn\u0027t it be easier to just get the command description once from m_xUICmdDescription and iterate its labels, and avoid the CommandInfoProvider overhead (i.e. find the command description, fill the resulting sequence, implement the label fallback mechanism etc.)?",
+      "revId": "e9b06dd9458074af36b0fc97ff41ed4c79e5de32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_42986069",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-11-01T23:41:32Z",
+      "side": 1,
+      "message": "Did you mean here GetMenuLabelForCommand? Because GetLabelForCommand and getCommandName get the same property (\"Name\"), so basically you\u0027re searching the same string twice.",
+      "range": {
+        "startLine": 220,
+        "startChar": 56,
+        "endLine": 220,
+        "endChar": 74
+      },
+      "revId": "e9b06dd9458074af36b0fc97ff41ed4c79e5de32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_e29e2c53",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-11-01T23:41:32Z",
+      "side": 1,
+      "message": "Note that GetTooltipForCommand not just gets the label, but also adds the keyboard shortcut. So with this in place, if you search e.g. \"ctrl+b\" you\u0027ll get the bold command. Is it the desired behavior here?",
+      "range": {
+        "startLine": 221,
+        "startChar": 59,
+        "endLine": 221,
+        "endChar": 79
+      },
+      "revId": "e9b06dd9458074af36b0fc97ff41ed4c79e5de32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
