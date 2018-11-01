@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5f2577a7_81bbeae3",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-01T20:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f2577a7_33d010ca",
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f287b81_ceaa43d1",
         "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
         "patchSetId": 4
@@ -30,6 +48,30 @@
       "writtenOn": "2018-10-28T20:24:25Z",
       "side": 1,
       "message": "To avoid the ImplShowTargetEmphasis line, consider not calling this and instead get the drop target entry and execute NotifyAcceptDrop code here.",
+      "range": {
+        "startLine": 503,
+        "startChar": 8,
+        "endLine": 503,
+        "endChar": 42
+      },
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_01949a43",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-01T20:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f287b81_ceaa43d1",
       "range": {
         "startLine": 503,
         "startChar": 8,
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "5f2577a7_41b502ee",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-01T20:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f2577a7_13d514ba",
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f2577a7_f3d968f4",
         "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
         "patchSetId": 4
@@ -70,6 +130,24 @@
       "writtenOn": "2018-10-30T15:13:06Z",
       "side": 1,
       "message": "gratuitous whitespace :)",
+      "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_61c0fe51",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-01T20:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f2577a7_f3d968f4",
       "revId": "ee7d9feb7a36f65c8453d0e42a62be6577ba618f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
