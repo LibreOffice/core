@@ -1143,6 +1143,28 @@ cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 cmd/sc_rulerrows.png cmd/sc_extrusiontiltleft.png
 cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
 
+# Light
+svx/res/lightofffrombottom_22.png svx/res/light.png
+svx/res/lightofffrombottomleft_22.png svx/res/light.png
+svx/res/lightofffrombottomright_22.png svx/res/light.png
+svx/res/lightofffromleft_22.png svx/res/light.png
+svx/res/lightofffromright_22.png svx/res/light.png
+svx/res/lightofffromtop_22.png svx/res/light.png
+svx/res/lightofffromtopleft_22.png svx/res/light.png
+svx/res/lightofffromtopright_22.png svx/res/light.png
+svx/res/lightonfrombottom_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfrombottomleft_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfrombottomright_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfromleft_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfromright_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfromtop_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfromtopleft_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/lightonfromtopright_22.png cmd/sc_extrusionlightingfloater.png
+svx/res/legtyp1.png cmd/sc_calloutshapes.line-callout-3.png
+svx/res/legtyp2.png cmd/sc_calloutshapes.line-callout-1.png
+svx/res/legtyp3.png cmd/sc_calloutshapes.line-callout-2.png
+
+
 # Style
 cmd/32/editstyled.png cmd/32/editstyle.png
 cmd/32/loadstyles.png cmd/32/open.png
@@ -1239,7 +1261,7 @@ cmd/32/refreshformcontrol.png cmd/32/reload.png
 cmd/32/updateallindexes.png cmd/32/reload.png
 cmd/32/updatecurindex.png cmd/32/reload.png
 cmd/32/updateall.png cmd/32/reload.png
-cmd/32/updatefields.png cmd/32/addfield.png
+cmd/32/updatefields.png cmd/32/insertfield.png
 cmd/32/updatemenu.png cmd/32/reload.png
 
 cmd/lc_draw.png cmd/lc_reload.png
@@ -1248,17 +1270,16 @@ cmd/lc_refreshformcontrol.png cmd/lc_reload.png
 cmd/lc_updateallindexes.png cmd/lc_reload.png
 cmd/lc_updateall.png cmd/lc_reload.png
 cmd/lc_updatecurindex.png cmd/lc_reload.png
-cmd/lc_updatefields.png cmd/lc_addfield.png
+cmd/lc_updatefields.png cmd/lc_insertfield.png
 cmd/lc_updatemenu.png cmd/lc_reload.png
 
 cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_refreshformcontrol.png cmd/sc_reload.png
-cmd/sc_styleupdatebyexample.png cmd/sc_reload.png
 cmd/sc_updatecurindex.png cmd/sc_reload.png
 cmd/sc_updateallindexes.png cmd/sc_reload.png
 cmd/sc_updateall.png cmd/sc_reload.png
-cmd/sc_updatefields.png cmd/sc_addfield.png
+cmd/sc_updatefields.png cmd/sc_insertfield.png
 cmd/sc_updatemenu.png cmd/sc_reload.png
 
 # Select
@@ -1623,6 +1644,8 @@ sc/res/lc26047.png cmd/lc_dbviewfunctions.png
 sc/res/lc26048.png cmd/lc_autosum.png
 sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
+sc/res/na05.png cmd/sc_upsearch.png
+sc/res/na06.png cmd/sc_downsearch.png
 sc/res/na010.png sw/res/sc20234.png
 sc/res/na011.png cmd/lc_ok.png
 sc/res/nc02.png cmd/sc_label.png
@@ -1743,6 +1766,8 @@ svtools/res/folderop.png cmd/sc_open.pngf
 
 # svx
 # ==============================================
+/svx/res/3dlight.png cmd/sc_extrusionlightingfloater.png
+
 svx/res/apply.png cmd/sc_ok.png
 svx/res/caution_11x16.png dbaccess/res/exwarning.png
 
@@ -1891,7 +1916,7 @@ sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 
 sw/res/sx01.png cmd/sc_viewdatasourcebrowser.png
-sw/res/sx02.png res/sx03187.png
+sw/res/sx02.png res/sx03126.png
 sw/res/sx03.png cmd/sc_dbqueryedit.png
 
 sw/res/wr01.png cmd/32/wrapoff.png
