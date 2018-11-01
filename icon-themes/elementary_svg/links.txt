@@ -1143,6 +1143,28 @@ cmd/lc_rulerrowsvertical.svg cmd/lc_extrusiontiltright.svg
 cmd/sc_rulerrows.svg cmd/sc_extrusiontiltleft.svg
 cmd/sc_rulerrowsvertical.svg cmd/sc_extrusiontiltright.svg
 
+# Light
+svx/res/lightofffrombottom_22.svg svx/res/light.svg
+svx/res/lightofffrombottomleft_22.svg svx/res/light.svg
+svx/res/lightofffrombottomright_22.svg svx/res/light.svg
+svx/res/lightofffromleft_22.svg svx/res/light.svg
+svx/res/lightofffromright_22.svg svx/res/light.svg
+svx/res/lightofffromtop_22.svg svx/res/light.svg
+svx/res/lightofffromtopleft_22.svg svx/res/light.svg
+svx/res/lightofffromtopright_22.svg svx/res/light.svg
+svx/res/lightonfrombottom_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfrombottomleft_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfrombottomright_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfromleft_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfromright_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfromtop_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfromtopleft_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/lightonfromtopright_22.svg cmd/sc_extrusionlightingfloater.svg
+svx/res/legtyp1.svg cmd/sc_calloutshapes.line-callout-3.svg
+svx/res/legtyp2.svg cmd/sc_calloutshapes.line-callout-1.svg
+svx/res/legtyp3.svg cmd/sc_calloutshapes.line-callout-2.svg
+
+
 # Style
 cmd/32/editstyled.svg cmd/32/editstyle.svg
 cmd/32/loadstyles.svg cmd/32/open.svg
@@ -1239,7 +1261,7 @@ cmd/32/refreshformcontrol.svg cmd/32/reload.svg
 cmd/32/updateallindexes.svg cmd/32/reload.svg
 cmd/32/updatecurindex.svg cmd/32/reload.svg
 cmd/32/updateall.svg cmd/32/reload.svg
-cmd/32/updatefields.svg cmd/32/addfield.svg
+cmd/32/updatefields.svg cmd/32/insertfield.svg
 cmd/32/updatemenu.svg cmd/32/reload.svg
 
 cmd/lc_draw.svg cmd/lc_reload.svg
@@ -1248,17 +1270,16 @@ cmd/lc_refreshformcontrol.svg cmd/lc_reload.svg
 cmd/lc_updateallindexes.svg cmd/lc_reload.svg
 cmd/lc_updateall.svg cmd/lc_reload.svg
 cmd/lc_updatecurindex.svg cmd/lc_reload.svg
-cmd/lc_updatefields.svg cmd/lc_addfield.svg
+cmd/lc_updatefields.svg cmd/lc_insertfield.svg
 cmd/lc_updatemenu.svg cmd/lc_reload.svg
 
 cmd/sc_draw.svg cmd/sc_reload.svg
 cmd/sc_refresh.svg cmd/sc_reload.svg
 cmd/sc_refreshformcontrol.svg cmd/sc_reload.svg
-cmd/sc_styleupdatebyexample.svg cmd/sc_reload.svg
 cmd/sc_updatecurindex.svg cmd/sc_reload.svg
 cmd/sc_updateallindexes.svg cmd/sc_reload.svg
 cmd/sc_updateall.svg cmd/sc_reload.svg
-cmd/sc_updatefields.svg cmd/sc_addfield.svg
+cmd/sc_updatefields.svg cmd/sc_insertfield.svg
 cmd/sc_updatemenu.svg cmd/sc_reload.svg
 
 # Select
@@ -1743,6 +1764,8 @@ svtools/res/folderop.svg cmd/sc_open.svgf
 
 # svx
 # ==============================================
+/svx/res/3dlight.svg cmd/sc_extrusionlightingfloater.svg
+
 svx/res/apply.svg cmd/sc_ok.svg
 svx/res/caution_11x16.svg dbaccess/res/exwarning.svg
 
@@ -1891,7 +1914,7 @@ sw/res/sr20016.svg cmd/sc_recsearch.svg
 sw/res/sr20017.svg cmd/sc_insertindexesentry.svg
 
 sw/res/sx01.svg cmd/sc_viewdatasourcebrowser.svg
-sw/res/sx02.svg res/sx03187.svg
+sw/res/sx02.svg res/sx03126.svg
 sw/res/sx03.svg cmd/sc_dbqueryedit.svg
 
 sw/res/wr01.svg cmd/32/wrapoff.svg
