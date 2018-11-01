@@ -354,15 +354,12 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
         }
     }
 
-    if ( fZoom != 0 )
+    if ( fZoom != 0 && window->lokdocview )
     {
-        if ( window->lokdocview )
-        {
-            lok_doc_view_set_zoom( LOK_DOC_VIEW(window->lokdocview), fZoom );
-            GdkRectangle aVisibleArea;
-            gtv_application_window_get_visible_area(window, &aVisibleArea);
-            lok_doc_view_set_visible_area(LOK_DOC_VIEW(window->lokdocview), &aVisibleArea);
-        }
+        lok_doc_view_set_zoom( LOK_DOC_VIEW(window->lokdocview), fZoom );
+        GdkRectangle aVisibleArea;
+        gtv_application_window_get_visible_area(window, &aVisibleArea);
+        lok_doc_view_set_visible_area(LOK_DOC_VIEW(window->lokdocview), &aVisibleArea);
     }
     const std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
     gtk_label_set_text(GTK_LABEL(window->zoomlabel), aZoom.c_str());

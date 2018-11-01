@@ -2104,15 +2104,12 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
                 OUString aName( rPage.GetLayoutName() + " " + OUString::number( nLevel ) );
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( rModel.GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page) );
 
-                if (pSheet)
+                if (pSheet && nLevel == 1)
                 {
-                    if (nLevel == 1)
-                    {
-                        SfxStyleSheet* pSubtitleSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
+                    SfxStyleSheet* pSubtitleSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
 
-                        if (pSubtitleSheet)
-                            pOutlParaObj->ChangeStyleSheetName(SfxStyleFamily::Page, pSubtitleSheet->GetName(), pSheet->GetName());
-                    }
+                    if (pSubtitleSheet)
+                        pOutlParaObj->ChangeStyleSheetName(SfxStyleFamily::Page, pSubtitleSheet->GetName(), pSheet->GetName());
                 }
             }
 

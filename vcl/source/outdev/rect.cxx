@@ -88,11 +88,8 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
     nVertRound = ImplLogicHeightToDevicePixel( nVertRound );
 
     // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -142,11 +139,8 @@ void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )
     aRect.Justify();
 
     // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -178,11 +172,8 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
     tools::Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
 
     // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();

@@ -378,23 +378,20 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
         case xlExtName:
             // TODO: For now, only global external names are supported.  In future
             // we should extend this to supporting per-sheet external names.
-            if (mnStorageId == 0)
+            if (mnStorageId == 0 && pFormulaConv)
             {
-                if (pFormulaConv)
-                {
-                    std::unique_ptr<ScTokenArray> pArray;
-                    sal_uInt16 nFmlaLen;
-                    nFmlaLen = rStrm.ReaduInt16();
-                    std::vector<OUString> aTabNames;
-                    sal_uInt16 nCount = rSupbook.GetTabCount();
-                    aTabNames.reserve(nCount);
-                    for (sal_uInt16 i = 0; i < nCount; ++i)
-                        aTabNames.push_back(rSupbook.GetTabName(i));
+                std::unique_ptr<ScTokenArray> pArray;
+                sal_uInt16 nFmlaLen;
+                nFmlaLen = rStrm.ReaduInt16();
+                std::vector<OUString> aTabNames;
+                sal_uInt16 nCount = rSupbook.GetTabCount();
+                aTabNames.reserve(nCount);
+                for (sal_uInt16 i = 0; i < nCount; ++i)
+                    aTabNames.push_back(rSupbook.GetTabName(i));
 
-                    pFormulaConv->ConvertExternName(pArray, rStrm, nFmlaLen, rSupbook.GetXclUrl(), aTabNames);
-                    if (pArray)
-                        mxArray = std::move( pArray );
-                }
+                pFormulaConv->ConvertExternName(pArray, rStrm, nFmlaLen, rSupbook.GetXclUrl(), aTabNames);
+                if (pArray)
+                    mxArray = std::move( pArray );
             }
         break;
         case xlExtOLE:

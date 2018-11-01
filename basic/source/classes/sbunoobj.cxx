@@ -3603,11 +3603,8 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ), aType );
 
                             // Check for out parameter if not already done
-                            if( !bOutParams )
-                            {
-                                if( xParam->isOut() )
-                                    bOutParams = true;
-                            }
+                            if( !bOutParams && xParam->isOut() )
+                                bOutParams = true;
                         }
                         else
                         {

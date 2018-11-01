@@ -881,13 +881,10 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         }
 
         aTemp = xNode->getEndSync();
-        if( aTemp.hasValue() )
+        if( aTemp.hasValue() && (aTemp >>= nTemp) )
         {
-            if( aTemp >>= nTemp )
-            {
-                SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_Endsync );
-                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ENDSYNC, sTmp.makeStringAndClear() );
-            }
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_Endsync );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ENDSYNC, sTmp.makeStringAndClear() );
         }
 
         sal_Int16 nContainerNodeType = EffectNodeType::DEFAULT;

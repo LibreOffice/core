@@ -92,12 +92,9 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     }
 
     css::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), css::uno::UNO_QUERY);
-    if (!xBaseFrame.is())
-    {
-        if (xListener.is())
-            xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
-    }
+    if (!xBaseFrame.is() && xListener.is())
+        xListener->dispatchFinished(
+            css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
 
     // OK ... now the internal loader seems to be usable for new requests
     // and our owner frame seems to be valid for such operations.

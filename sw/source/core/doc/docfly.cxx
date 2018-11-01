@@ -561,12 +561,9 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
 
     bool const bRet = lcl_SetFlyFrameAttr(*this, &SwDoc::SetFlyFrameAnchor, rFlyFormat, rSet);
 
-    if (pSaveUndo)
+    if (pSaveUndo && pSaveUndo->GetUndo() )
     {
-        if ( pSaveUndo->GetUndo() )
-        {
-            GetIDocumentUndoRedo().AppendUndo( pSaveUndo->ReleaseUndo() );
-        }
+        GetIDocumentUndoRedo().AppendUndo( pSaveUndo->ReleaseUndo() );
     }
 
     getIDocumentState().SetModified();

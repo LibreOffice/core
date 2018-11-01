@@ -805,11 +805,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     {
                         FormulaError nErrCode = FormulaError::NONE;
                         ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(nPosX, nPosY, nTab));
-                        if (pCell)
-                        {
-                            if (!pCell->IsRunning())
-                                nErrCode = pCell->GetErrCode();
-                        }
+                        if (pCell && !pCell->IsRunning())
+                            nErrCode = pCell->GetErrCode();
 
                         OUString aFuncStr;
                         if ( pTabViewShell->GetFunction( aFuncStr, nErrCode ) )

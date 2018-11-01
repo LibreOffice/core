@@ -842,19 +842,18 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
 
-            if (pArgs)
-                if (pArgs->Count () == 3)
-                {
-                    const SfxUInt32Item* pWidth = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGEWIDTH);
-                    const SfxUInt32Item* pHeight = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGEHEIGHT);
-                    const SfxBoolItem* pScaleAll = rReq.GetArg<SfxBoolItem>(ID_VAL_SCALEOBJECTS);
+            if (pArgs && pArgs->Count () == 3)
+            {
+                const SfxUInt32Item* pWidth = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGEWIDTH);
+                const SfxUInt32Item* pHeight = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGEHEIGHT);
+                const SfxBoolItem* pScaleAll = rReq.GetArg<SfxBoolItem>(ID_VAL_SCALEOBJECTS);
 
-                    Size aSize (pWidth->GetValue (), pHeight->GetValue ());
+                Size aSize (pWidth->GetValue (), pHeight->GetValue ());
 
-                    SetupPage (aSize, 0, 0, 0, 0, true, false, pScaleAll->GetValue ());
-                    rReq.Ignore ();
-                    break;
-                }
+                SetupPage (aSize, 0, 0, 0, 0, true, false, pScaleAll->GetValue ());
+                rReq.Ignore ();
+                break;
+            }
 #if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
@@ -866,23 +865,22 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
 
-            if (pArgs)
-                if (pArgs->Count () == 5)
-                {
-                    const SfxUInt32Item* pLeft = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGELEFT);
-                    const SfxUInt32Item* pRight = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGERIGHT);
-                    const SfxUInt32Item* pUpper = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGETOP);
-                    const SfxUInt32Item* pLower = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGEBOTTOM);
-                    const SfxBoolItem* pScaleAll = rReq.GetArg<SfxBoolItem>(ID_VAL_SCALEOBJECTS);
+            if (pArgs && pArgs->Count () == 5)
+            {
+                const SfxUInt32Item* pLeft = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGELEFT);
+                const SfxUInt32Item* pRight = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGERIGHT);
+                const SfxUInt32Item* pUpper = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGETOP);
+                const SfxUInt32Item* pLower = rReq.GetArg<SfxUInt32Item>(ID_VAL_PAGEBOTTOM);
+                const SfxBoolItem* pScaleAll = rReq.GetArg<SfxBoolItem>(ID_VAL_SCALEOBJECTS);
 
-                    Size aEmptySize (0, 0);
+                Size aEmptySize (0, 0);
 
-                    SetupPage (aEmptySize, pLeft->GetValue (), pRight->GetValue (),
-                               pUpper->GetValue (), pLower->GetValue (),
-                               false, true, pScaleAll->GetValue ());
-                    rReq.Ignore ();
-                    break;
-                }
+                SetupPage (aEmptySize, pLeft->GetValue (), pRight->GetValue (),
+                           pUpper->GetValue (), pLower->GetValue (),
+                           false, true, pScaleAll->GetValue ());
+                rReq.Ignore ();
+                break;
+            }
 #if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif

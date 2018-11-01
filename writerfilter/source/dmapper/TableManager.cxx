@@ -125,11 +125,8 @@ void TableManager::utext(const sal_uInt8* data, std::size_t len)
 void TableManager::text(const sal_uInt8* data, std::size_t len)
 {
     // optimization: cell/row end characters are the last characters in a run
-    if (len > 0)
-    {
-        if (data[len - 1] == 0x7)
-            handle0x7();
-    }
+    if (len > 0 && data[len - 1] == 0x7)
+        handle0x7();
 }
 
 void TableManager::handle0x7()

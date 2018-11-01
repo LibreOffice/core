@@ -616,10 +616,8 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                                     break;
                                 }
                             }
-                            if (!isFound)
-                            {
-                                if (!isTheAnswerYes) return false;
-                            }
+                            if (!isFound && !isTheAnswerYes)
+                                return false;
                         }
                         SfxItemSet const& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
                             ? static_cast<SfxItemSet const&>(pAttr->GetCharFormat().GetCharFormat()->GetAttrSet())

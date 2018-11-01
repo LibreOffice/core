@@ -1223,11 +1223,8 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
 
                 // look for a boolean return value of true
                 bool bRetValue = false;
-                if (aRet >>= bRetValue)
-                {
-                    if (bRetValue)
-                        bReturn = true;
-                }
+                if ((aRet >>= bRetValue) && bRetValue)
+                    bReturn = true;
             }
         }
 

@@ -99,47 +99,44 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
             bool bDest = (evt.Source == m_xDest);
             Reference<XPropertySet> xProp =  bDest ? m_xSource : m_xDest;
             Reference<XPropertySetInfo> xPropInfo = bDest ? m_xSourceInfo : m_xDestInfo;
-            if ( xProp.is() )
+            if ( xProp.is() && xPropInfo.is() )
             {
-                if ( xPropInfo.is() )
+                if ( xPropInfo->hasPropertyByName(evt.PropertyName) )
+                    xProp->setPropertyValue(evt.PropertyName,evt.NewValue);
+                else
                 {
-                    if ( xPropInfo->hasPropertyByName(evt.PropertyName) )
-                        xProp->setPropertyValue(evt.PropertyName,evt.NewValue);
+                    TPropertyNamePair::const_iterator aFind = m_aNameMap.find(evt.PropertyName);
+                    OUString sPropName;
+                    if ( aFind != m_aNameMap.end() )
+                        sPropName = aFind->second.first;
                     else
                     {
-                        TPropertyNamePair::const_iterator aFind = m_aNameMap.find(evt.PropertyName);
-                        OUString sPropName;
+                        aFind = ::std::find_if(
+                            m_aNameMap.begin(),
+                            m_aNameMap.end(),
+                            [&evt] (const TPropertyNamePair::value_type& namePair) {
+                                return namePair.second.first == evt.PropertyName;
+                            });
                         if ( aFind != m_aNameMap.end() )
-                            sPropName = aFind->second.first;
-                        else
-                        {
-                            aFind = ::std::find_if(
-                                m_aNameMap.begin(),
-                                m_aNameMap.end(),
-                                [&evt] (const TPropertyNamePair::value_type& namePair) {
-                                    return namePair.second.first == evt.PropertyName;
-                                });
-                            if ( aFind != m_aNameMap.end() )
-                                sPropName = aFind->first;
-                        }
-                        if (aFind != m_aNameMap.end() && !sPropName.isEmpty() && xPropInfo->hasPropertyByName(sPropName))
-                            xProp->setPropertyValue(sPropName,aFind->second.second->operator()(sPropName,evt.NewValue));
-                        else if (   evt.PropertyName == PROPERTY_CHARFONTNAME
-                                ||  evt.PropertyName == PROPERTY_CHARFONTSTYLENAME
-                                ||  evt.PropertyName == PROPERTY_CHARSTRIKEOUT
-                                ||  evt.PropertyName == PROPERTY_CHARWORDMODE
-                                ||  evt.PropertyName == PROPERTY_CHARROTATION
-                                ||  evt.PropertyName == PROPERTY_CHARSCALEWIDTH
-                                ||  evt.PropertyName == PROPERTY_CHARFONTFAMILY
-                                ||  evt.PropertyName == PROPERTY_CHARFONTCHARSET
-                                ||  evt.PropertyName == PROPERTY_CHARFONTPITCH
-                                ||  evt.PropertyName == PROPERTY_CHARHEIGHT
-                                ||  evt.PropertyName == PROPERTY_CHARUNDERLINE
-                                ||  evt.PropertyName == PROPERTY_CHARWEIGHT
-                                ||  evt.PropertyName == PROPERTY_CHARPOSTURE)
-                        {
-                            xProp->setPropertyValue(PROPERTY_FONTDESCRIPTOR,m_xSource->getPropertyValue(PROPERTY_FONTDESCRIPTOR));
-                        }
+                            sPropName = aFind->first;
+                    }
+                    if (aFind != m_aNameMap.end() && !sPropName.isEmpty() && xPropInfo->hasPropertyByName(sPropName))
+                        xProp->setPropertyValue(sPropName,aFind->second.second->operator()(sPropName,evt.NewValue));
+                    else if (   evt.PropertyName == PROPERTY_CHARFONTNAME
+                            ||  evt.PropertyName == PROPERTY_CHARFONTSTYLENAME
+                            ||  evt.PropertyName == PROPERTY_CHARSTRIKEOUT
+                            ||  evt.PropertyName == PROPERTY_CHARWORDMODE
+                            ||  evt.PropertyName == PROPERTY_CHARROTATION
+                            ||  evt.PropertyName == PROPERTY_CHARSCALEWIDTH
+                            ||  evt.PropertyName == PROPERTY_CHARFONTFAMILY
+                            ||  evt.PropertyName == PROPERTY_CHARFONTCHARSET
+                            ||  evt.PropertyName == PROPERTY_CHARFONTPITCH
+                            ||  evt.PropertyName == PROPERTY_CHARHEIGHT
+                            ||  evt.PropertyName == PROPERTY_CHARUNDERLINE
+                            ||  evt.PropertyName == PROPERTY_CHARWEIGHT
+                            ||  evt.PropertyName == PROPERTY_CHARPOSTURE)
+                    {
+                        xProp->setPropertyValue(PROPERTY_FONTDESCRIPTOR,m_xSource->getPropertyValue(PROPERTY_FONTDESCRIPTOR));
                     }
                 }
             }

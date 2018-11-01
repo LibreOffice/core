@@ -181,9 +181,8 @@ bool StgDirEntry::Store( StgDirStrm& rStrm )
     if( m_pRight )
         if( !static_cast<StgDirEntry*>(m_pRight)->Store( rStrm ) )
             return false;
-    if( m_pDown )
-        if( !m_pDown->Store( rStrm ) )
-            return false;
+    if( m_pDown && !m_pDown->Store( rStrm ) )
+        return false;
     return true;
 }
 

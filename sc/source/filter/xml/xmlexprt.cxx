@@ -2578,74 +2578,70 @@ void ScXMLExport::collectAutoStyles()
                 }
             }
             uno::Reference<table::XColumnRowRange> xColumnRowRange (xTable, uno::UNO_QUERY);
-            if (xColumnRowRange.is())
+            if (xColumnRowRange.is() && pDoc)
             {
-                if (pDoc)
+                pDoc->SyncColRowFlags();
+                uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
+                if (xTableColumns.is())
                 {
-                    pDoc->SyncColRowFlags();
-                    uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
-                    if (xTableColumns.is())
+                    sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
+                    pSharedData->SetLastColumn(nTable, nColumns);
+                    table::CellRangeAddress aCellAddress(GetEndAddress(xTable));
+                    if (aCellAddress.EndColumn > nColumns)
                     {
-                        sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
-                        pSharedData->SetLastColumn(nTable, nColumns);
-                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable));
-                        if (aCellAddress.EndColumn > nColumns)
-                        {
-                            ++nColumns;
-                            pColumnStyles->AddNewTable(nTable, aCellAddress.EndColumn);
-                        }
-                        else
-                            pColumnStyles->AddNewTable(nTable, nColumns);
-                        sal_Int32 nColumn = 0;
-                        while (nColumn <= MAXCOL)
-                        {
-                            sal_Int32 nIndex(-1);
-                            bool bIsVisible(true);
-                            uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex(nColumn), uno::UNO_QUERY);
-                            if (xColumnProperties.is())
-                            {
-                                AddStyleFromColumn( xColumnProperties, nullptr, nIndex, bIsVisible );
-                                pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
-                            }
-                            sal_Int32 nOld(nColumn);
-                            nColumn = pDoc->GetNextDifferentChangedCol(sal::static_int_cast<SCTAB>(nTable), static_cast<SCCOL>(nColumn));
-                            for (sal_Int32 i = nOld + 1; i < nColumn; ++i)
-                                pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
-                        }
-                        if (aCellAddress.EndColumn > nColumns)
-                        {
-                            bool bIsVisible(true);
-                            sal_Int32 nIndex(pColumnStyles->GetStyleNameIndex(nTable, nColumns, bIsVisible));
-                            for (sal_Int32 i = nColumns + 1; i <= aCellAddress.EndColumn; ++i)
-                                pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
-                        }
+                        ++nColumns;
+                        pColumnStyles->AddNewTable(nTable, aCellAddress.EndColumn);
                     }
-                    uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
-                    if (xTableRows.is())
+                    else
+                        pColumnStyles->AddNewTable(nTable, nColumns);
+                    sal_Int32 nColumn = 0;
+                    while (nColumn <= MAXCOL)
                     {
-                        sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
-                        pSharedData->SetLastRow(nTable, nRows);
-
-                        pRowStyles->AddNewTable(nTable, MAXROW);
-                        sal_Int32 nRow = 0;
-                        while (nRow <= MAXROW)
+                        sal_Int32 nIndex(-1);
+                        bool bIsVisible(true);
+                        uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex(nColumn), uno::UNO_QUERY);
+                        if (xColumnProperties.is())
                         {
-                            sal_Int32 nIndex = 0;
-                            uno::Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
-                            if(xRowProperties.is())
-                            {
-                                AddStyleFromRow( xRowProperties, nullptr, nIndex );
-                                pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
-                            }
-                            sal_Int32 nOld(nRow);
-                            nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow));
-                            if (nRow > nOld + 1)
-                                pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
+                            AddStyleFromColumn( xColumnProperties, nullptr, nIndex, bIsVisible );
+                            pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
                         }
+                        sal_Int32 nOld(nColumn);
+                        nColumn = pDoc->GetNextDifferentChangedCol(sal::static_int_cast<SCTAB>(nTable), static_cast<SCCOL>(nColumn));
+                        for (sal_Int32 i = nOld + 1; i < nColumn; ++i)
+                            pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
+                    }
+                    if (aCellAddress.EndColumn > nColumns)
+                    {
+                        bool bIsVisible(true);
+                        sal_Int32 nIndex(pColumnStyles->GetStyleNameIndex(nTable, nColumns, bIsVisible));
+                        for (sal_Int32 i = nColumns + 1; i <= aCellAddress.EndColumn; ++i)
+                            pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
+                    }
+                }
+                uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
+                if (xTableRows.is())
+                {
+                    sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
+                    pSharedData->SetLastRow(nTable, nRows);
+
+                    pRowStyles->AddNewTable(nTable, MAXROW);
+                    sal_Int32 nRow = 0;
+                    while (nRow <= MAXROW)
+                    {
+                        sal_Int32 nIndex = 0;
+                        uno::Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
+                        if(xRowProperties.is())
+                        {
+                            AddStyleFromRow( xRowProperties, nullptr, nIndex );
+                            pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
+                        }
+                        sal_Int32 nOld(nRow);
+                        nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow));
+                        if (nRow > nOld + 1)
+                            pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
                     }
                 }
             }
-
             ExportCellTextAutoStyles(nTable);
         }
 
@@ -5162,27 +5158,24 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
     rProps.realloc(4);
     beans::PropertyValue* pProps(rProps.getArray());
-    if(pProps)
+    if(pProps && GetModel().is())
     {
-        if (GetModel().is())
+        ScModelObj* pDocObj(ScModelObj::getImplementation( GetModel() ));
+        if (pDocObj)
         {
-            ScModelObj* pDocObj(ScModelObj::getImplementation( GetModel() ));
-            if (pDocObj)
+            SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+            if (pEmbeddedObj)
             {
-                SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
-                if (pEmbeddedObj)
-                {
-                    tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
-                    sal_uInt16 i(0);
-                    pProps[i].Name = "VisibleAreaTop";
-                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getY());
-                    pProps[++i].Name = "VisibleAreaLeft";
-                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getX());
-                    pProps[++i].Name = "VisibleAreaWidth";
-                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
-                    pProps[++i].Name = "VisibleAreaHeight";
-                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHeight());
-                }
+                tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
+                sal_uInt16 i(0);
+                pProps[i].Name = "VisibleAreaTop";
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getY());
+                pProps[++i].Name = "VisibleAreaLeft";
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getX());
+                pProps[++i].Name = "VisibleAreaWidth";
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
+                pProps[++i].Name = "VisibleAreaHeight";
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHeight());
             }
         }
     }

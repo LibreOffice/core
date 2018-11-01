@@ -505,11 +505,8 @@ bool SotStorage::IsStorageFile( SvStream* pStream )
 
 const OUString & SotStorage::GetName() const
 {
-    if( m_aName.isEmpty() )
-    {
-        if( m_pOwnStg )
-            const_cast<SotStorage *>(this)->m_aName = m_pOwnStg->GetName();
-    }
+    if( m_aName.isEmpty() && m_pOwnStg )
+        const_cast<SotStorage *>(this)->m_aName = m_pOwnStg->GetName();
     return m_aName;
 }
 

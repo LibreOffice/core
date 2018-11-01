@@ -3074,11 +3074,8 @@ const Wallpaper& Window::GetDisplayBackground() const
     // FIXME: fix issue 52349, need to fix this really in
     // all NWF enabled controls
     const ToolBox* pTB = dynamic_cast<const ToolBox*>(this);
-    if( pTB )
-    {
-        if( IsNativeWidgetEnabled() )
-            return pTB->ImplGetToolBoxPrivateData()->maDisplayBackground;
-    }
+    if( pTB && IsNativeWidgetEnabled() )
+        return pTB->ImplGetToolBoxPrivateData()->maDisplayBackground;
 
     if( !IsBackground() )
     {

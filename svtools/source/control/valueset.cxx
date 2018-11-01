@@ -500,13 +500,10 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     {
         mbHasVisibleItems = false;
 
-        if (nStyle & WB_NONEFIELD)
+        if ((nStyle & WB_NONEFIELD) && mpNoneItem)
         {
-            if (mpNoneItem)
-            {
-                mpNoneItem->mbVisible = false;
-                mpNoneItem->maText = GetText();
-            }
+            mpNoneItem->mbVisible = false;
+            mpNoneItem->maText = GetText();
         }
 
         for (size_t i = 0; i < nItemCount; i++)
@@ -1084,14 +1081,11 @@ void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
 {
     if ( bRepeat || mbSelection )
     {
-        if ( ImplScroll( rPos ) )
+        if ( ImplScroll( rPos ) && mbSelection )
         {
-            if ( mbSelection )
-            {
-                maTimer.SetInvokeHandler( LINK( this, ValueSet, ImplTimerHdl ) );
-                maTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
-                maTimer.Start();
-            }
+            maTimer.SetInvokeHandler( LINK( this, ValueSet, ImplTimerHdl ) );
+            maTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
+            maTimer.Start();
         }
     }
 
@@ -3113,13 +3107,10 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
     {
         mbHasVisibleItems = false;
 
-        if (nStyle & WB_NONEFIELD)
+        if ((nStyle & WB_NONEFIELD) && mpNoneItem)
         {
-            if (mpNoneItem)
-            {
-                mpNoneItem->mbVisible = false;
-                mpNoneItem->maText = GetText();
-            }
+            mpNoneItem->mbVisible = false;
+            mpNoneItem->maText = GetText();
         }
 
         for (size_t i = 0; i < nItemCount; i++)

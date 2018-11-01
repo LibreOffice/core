@@ -385,14 +385,11 @@ void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
             mpLBStart->Enable();
     }
 
-    if(bSetOrDefault)
+    if(bSetOrDefault && pItem)
     {
-        if(pItem)
-        {
-            mpStartItem.reset(static_cast<XLineStartItem*>(pItem->Clone()));
-            SelectEndStyle(true);
-            return;
-        }
+        mpStartItem.reset(static_cast<XLineStartItem*>(pItem->Clone()));
+        SelectEndStyle(true);
+        return;
     }
 
     mpStartItem.reset(nullptr);
@@ -412,14 +409,11 @@ void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
             mpLBEnd->Enable();
     }
 
-    if(bSetOrDefault)
+    if(bSetOrDefault && pItem)
     {
-        if(pItem)
-        {
-            mpEndItem.reset(static_cast<XLineEndItem*>(pItem->Clone()));
-            SelectEndStyle(false);
-            return;
-        }
+        mpEndItem.reset(static_cast<XLineEndItem*>(pItem->Clone()));
+        SelectEndStyle(false);
+        return;
     }
 
     mpEndItem.reset(nullptr);

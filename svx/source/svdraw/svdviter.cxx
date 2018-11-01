@@ -136,12 +136,9 @@ SdrView* SdrViewIter::ImpFindView()
                 {
                     SdrPageView* pPV = mpCurrentView->GetSdrPageView();
 
-                    if(pPV)
+                    if(pPV && ImpCheckPageView(pPV))
                     {
-                        if(ImpCheckPageView(pPV))
-                        {
-                            return mpCurrentView;
-                        }
+                        return mpCurrentView;
                     }
                 }
                 else

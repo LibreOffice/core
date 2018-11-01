@@ -432,11 +432,8 @@ namespace basctl
         try
         {
             Reference< XLibraryContainer > xLibContainer = getLibraryContainer( _eType );
-            if ( isValid() )
-            {
-                if ( xLibContainer.is() )
-                    xContainer.set( xLibContainer->getByName( _rLibName ), UNO_QUERY_THROW );
-            }
+            if ( isValid() && xLibContainer.is() )
+                xContainer.set( xLibContainer->getByName( _rLibName ), UNO_QUERY_THROW );
 
             if ( !xContainer.is() )
                 throw NoSuchElementException();

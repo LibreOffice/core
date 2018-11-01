@@ -666,11 +666,9 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 0 && aLineDash.DashLen == 0 && aLineDash.Distance == 0) {
                     OUString aLineDashName;
                     GET(aLineDashName, LineDashName);
-                    if (!aLineDashName.isEmpty()) {
-                        if (xModel) {
-                            css::uno::Any aAny = getLineDash(xModel, aLineDashName);
-                            aAny >>= aLineDash;
-                        }
+                    if (!aLineDashName.isEmpty() && xModel) {
+                        css::uno::Any aAny = getLineDash(xModel, aLineDashName);
+                        aAny >>= aLineDash;
                     }
                 }
                 bDashSet = true;

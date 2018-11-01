@@ -405,28 +405,25 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                     if(xTunnel.is())
                     {
                         OFileTable* pTable = reinterpret_cast< OFileTable* >( xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()) );
-                        if(pTable)
+                        if(pTable && !pTable->isReadOnly())
                         {
-                            if(!pTable->isReadOnly())
+                            aRow[6] = ODatabaseMetaDataResultSet::getInsertValue();
+                            aRows.push_back(aRow);
+                            if(!m_pConnection->showDeleted())
                             {
-                                aRow[6] = ODatabaseMetaDataResultSet::getInsertValue();
-                                aRows.push_back(aRow);
-                                if(!m_pConnection->showDeleted())
-                                {
-                                    aRow[6] = ODatabaseMetaDataResultSet::getDeleteValue();
-                                    aRows.push_back(aRow);
-                                }
-                                aRow[6] = ODatabaseMetaDataResultSet::getUpdateValue();
-                                aRows.push_back(aRow);
-                                aRow[6] = ODatabaseMetaDataResultSet::getCreateValue();
-                                aRows.push_back(aRow);
-                                aRow[6] = ODatabaseMetaDataResultSet::getReadValue();
-                                aRows.push_back(aRow);
-                                aRow[6] = ODatabaseMetaDataResultSet::getAlterValue();
-                                aRows.push_back(aRow);
-                                aRow[6] = ODatabaseMetaDataResultSet::getDropValue();
+                                aRow[6] = ODatabaseMetaDataResultSet::getDeleteValue();
                                 aRows.push_back(aRow);
                             }
+                            aRow[6] = ODatabaseMetaDataResultSet::getUpdateValue();
+                            aRows.push_back(aRow);
+                            aRow[6] = ODatabaseMetaDataResultSet::getCreateValue();
+                            aRows.push_back(aRow);
+                            aRow[6] = ODatabaseMetaDataResultSet::getReadValue();
+                            aRows.push_back(aRow);
+                            aRow[6] = ODatabaseMetaDataResultSet::getAlterValue();
+                            aRows.push_back(aRow);
+                            aRow[6] = ODatabaseMetaDataResultSet::getDropValue();
+                            aRows.push_back(aRow);
                         }
                     }
                 }

@@ -3041,11 +3041,8 @@ void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
     if( pShape )
     {
         SdrObject* pObj = pShape->GetSdrObject();
-        if( pObj )
-        {
-            if( GetPage()->IsPresObj( pObj ) )
-                GetPage()->RemovePresObj(pObj);
-        }
+        if( pObj && GetPage()->IsPresObj( pObj ) )
+            GetPage()->RemovePresObj(pObj);
     }
 
     SdGenericDrawPage::remove( xShape );

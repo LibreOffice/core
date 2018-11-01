@@ -130,9 +130,8 @@ namespace {
     {
         OGenericUnoDialog::executedDialog(_nExecutionResult);
 
-        if ( _nExecutionResult )
-            if ( m_aDialog )
-                static_cast< AddressBookSourceDialog* >( m_aDialog.m_xVclDialog.get() )->getFieldMapping( m_aAliases );
+        if ( _nExecutionResult && m_aDialog )
+            static_cast< AddressBookSourceDialog* >( m_aDialog.m_xVclDialog.get() )->getFieldMapping( m_aAliases );
     }
 
     void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments)

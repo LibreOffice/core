@@ -658,11 +658,8 @@ void SfxWorkWindow::ArrangeChildren_Impl( bool bForce )
         return;
 
     SvBorder aBorder;
-    if ( nChildren )
-    {
-        if ( IsVisible_Impl() )
-            aBorder = Arrange_Impl();
-    }
+    if ( nChildren && IsVisible_Impl() )
+        aBorder = Arrange_Impl();
     // If the current application document contains a IPClient, then the
     // object through SetTopToolFramePixel has to be assigned the available
     // space. The object will then point to its UITools and sets the app border
@@ -1288,11 +1285,8 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 if ( bCreate )
                     CreateChildWin_Impl( pCW, false );
 
-                if ( !bAllChildrenVisible )
-                {
-                    if ( pCW->pCli )
-                        pCW->pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
-                }
+                if ( !bAllChildrenVisible && pCW->pCli )
+                    pCW->pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
             }
             else if ( pChildWin )
             {
@@ -1593,8 +1587,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     for ( n=0; n<aSortedList.size(); ++n )
     {
         SfxChild_Impl *pChild = aChildren[aSortedList[n]];
-        if ( pChild )
-            if ( pChild->pWin == pWin )
+        if ( pChild && pChild->pWin == pWin )
             break;
     }
 

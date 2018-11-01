@@ -727,13 +727,10 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                     pOldPattern = pPattern;
                     sal_uInt16 nThis = static_cast<sal_uInt16>(GetNeededSize(
                         nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern));
-                    if (nThis)
+                    if (nThis && (nThis > nWidth || !bFound))
                     {
-                        if (nThis > nWidth || !bFound)
-                        {
-                            nWidth = nThis;
-                            bFound = true;
-                        }
+                        nWidth = nThis;
+                        bFound = true;
                     }
                 }
             }

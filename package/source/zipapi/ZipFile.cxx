@@ -83,13 +83,10 @@ ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolde
 , m_xContext ( rxContext )
 , bRecoveryMode( false )
 {
-    if (bInitialise)
+    if (bInitialise && readCEN() == -1 )
     {
-        if ( readCEN() == -1 )
-        {
-            aEntries.clear();
-            throw ZipException( "stream data looks to be broken" );
-        }
+        aEntries.clear();
+        throw ZipException( "stream data looks to be broken" );
     }
 }
 

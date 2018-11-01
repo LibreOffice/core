@@ -1196,11 +1196,8 @@ public:
             }
         }
 
-        if (bIsValueChanged)
-        {
-            if ( ! mpOptions )
-                mpOptions.reset(new PrintOptions(*this, maSlidesPerPage));
-        }
+        if (bIsValueChanged && ! mpOptions )
+            mpOptions.reset(new PrintOptions(*this, maSlidesPerPage));
         if( bIsValueChanged || bIsPaperChanged )
             PreparePages();
     }

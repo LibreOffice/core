@@ -3204,11 +3204,8 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
                     bOk = checkUnoObjectType(*pUnoObj, aClass);
                 else
                     bOk = false;
-                if ( !bOk )
-                {
-                    if( bRaiseErrors )
-                        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
-                }
+                if ( !bOk && bRaiseErrors )
+                    Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
             }
             else
             {
@@ -3337,12 +3334,9 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         }
         if( bLocal )
         {
-            if ( bStatic )
+            if ( bStatic && pMeth )
             {
-                if ( pMeth )
-                {
-                    pElem = pMeth->GetStatics()->Find( aName, SbxClassType::DontCare );
-                }
+                pElem = pMeth->GetStatics()->Find( aName, SbxClassType::DontCare );
             }
 
             if ( !pElem )

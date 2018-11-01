@@ -2442,11 +2442,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // #i29771# Two tries to split the table
                     // If an error occurred during splitting. We start a second
                     // try, this time without splitting of table rows.
-                    if ( bSplitError )
-                    {
-                        if ( HasFollowFlowLine() )
-                            RemoveFollowFlowLine();
-                    }
+                    if ( bSplitError && HasFollowFlowLine() )
+                        RemoveFollowFlowLine();
 
                     // If splitting the table was successful or not,
                     // we do not want to have 'empty' follow tables.

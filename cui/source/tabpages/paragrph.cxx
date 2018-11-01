@@ -1333,9 +1333,8 @@ void SvxParaAlignTabPage::EnableJustifyExt()
 void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
 {
     const SfxBoolItem* pBoolItem = aSet.GetItem<SfxBoolItem>(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT, false);
-    if (pBoolItem)
-        if(pBoolItem->GetValue())
-            EnableJustifyExt();
+    if (pBoolItem && pBoolItem->GetValue())
+        EnableJustifyExt();
 }
 
 VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
