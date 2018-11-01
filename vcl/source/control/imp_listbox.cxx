@@ -1493,16 +1493,13 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 SetTopEntry( 0 );
             }
-            else if ( !bCtrl && !bMod2 )
+            else if ( !bCtrl && !bMod2 &&  mnCurrentPos )
             {
-                if ( mnCurrentPos )
-                {
-                    nSelect = mpEntryList->FindFirstSelectable( mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND );
-                    if( mnTop != 0 )
-                        SetTopEntry( 0 );
+                nSelect = mpEntryList->FindFirstSelectable( mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND );
+                if( mnTop != 0 )
+                    SetTopEntry( 0 );
 
-                    bDone = true;
-                }
+                bDone = true;
             }
             maQuickSelectionEngine.Reset();
         }

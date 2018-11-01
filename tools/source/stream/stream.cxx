@@ -1674,11 +1674,8 @@ void SvMemoryStream::SetBuffer( void* pNewBuf, std::size_t nCount,
 {
     SetBufferSize( 0 ); // Init buffering in the base class
     Seek( 0 );
-    if( bOwnsData )
-    {
-        if( pNewBuf != pBuf )
-            FreeMemory();
-    }
+    if( bOwnsData && pNewBuf != pBuf )
+        FreeMemory();
 
     pBuf        = static_cast<sal_uInt8 *>(pNewBuf);
     nPos        = 0;

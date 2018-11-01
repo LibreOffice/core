@@ -3894,19 +3894,16 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
 
         uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
 
-        if(bIsPresShape)
+        if(bIsPresShape && xProps.is())
         {
-            if(xProps.is())
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() )
             {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
+                if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-                }
+                if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
             }
         }
 

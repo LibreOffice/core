@@ -1288,20 +1288,17 @@ const Reference< container::XNameContainer > & SvXMLImport::GetMarkerHelper()
 
 const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
 {
-    if( !mxDashHelper.is() )
+    if( !mxDashHelper.is() && mxModel.is() )
     {
-        if( mxModel.is() )
+        Reference< lang::XMultiServiceFactory > xServiceFact( mxModel, UNO_QUERY);
+        if( xServiceFact.is() )
         {
-            Reference< lang::XMultiServiceFactory > xServiceFact( mxModel, UNO_QUERY);
-            if( xServiceFact.is() )
+            try
             {
-                try
-                {
-                    mxDashHelper.set( xServiceFact->createInstance( "com.sun.star.drawing.DashTable" ), UNO_QUERY);
-                }
-                catch( lang::ServiceNotRegisteredException& )
-                {}
+                mxDashHelper.set( xServiceFact->createInstance( "com.sun.star.drawing.DashTable" ), UNO_QUERY);
             }
+            catch( lang::ServiceNotRegisteredException& )
+            {}
         }
     }
 

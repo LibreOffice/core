@@ -298,11 +298,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
         ImplSVData*         pSVData = ImplGetSVData();
 
         // we need a graphics
-        if ( !mpGraphics )
-        {
-            if ( !AcquireGraphics() )
-                return false;
-        }
+        if ( !mpGraphics && !AcquireGraphics() )
+            return false;
 
         pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(mpGraphics, nNewWidth, nNewHeight, meFormat);
         if ( pNewVirDev )

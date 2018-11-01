@@ -53,11 +53,8 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
-    if( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -101,11 +98,8 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
         return;
 
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();

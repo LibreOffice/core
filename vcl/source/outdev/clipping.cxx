@@ -78,9 +78,8 @@ bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pG
 
     if( !pGraphics )
     {
-        if( !mpGraphics )
-            if( !AcquireGraphics() )
-                return false;
+        if( !mpGraphics && !AcquireGraphics() )
+            return false;
         pGraphics = mpGraphics;
     }
 
