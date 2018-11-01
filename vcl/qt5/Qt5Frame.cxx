@@ -236,7 +236,7 @@ bool Qt5Frame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
     return true;
 }
 
-bool Qt5Frame::isWindow()
+bool Qt5Frame::isWindow() const
 {
     if (m_pTopLevel)
         return m_pTopLevel->isWindow();
@@ -244,7 +244,7 @@ bool Qt5Frame::isWindow()
         return m_pQWidget->isWindow();
 }
 
-QWindow* Qt5Frame::windowHandle()
+QWindow* Qt5Frame::windowHandle() const
 {
     if (m_pTopLevel)
         return m_pTopLevel->windowHandle();
@@ -252,7 +252,7 @@ QWindow* Qt5Frame::windowHandle()
         return m_pQWidget->windowHandle();
 }
 
-QScreen* Qt5Frame::screen()
+QScreen* Qt5Frame::screen() const
 {
     QWindow* const pWindow = windowHandle();
     if (pWindow)
@@ -261,7 +261,7 @@ QScreen* Qt5Frame::screen()
         return nullptr;
 }
 
-bool Qt5Frame::isMinimized()
+bool Qt5Frame::isMinimized() const
 {
     if (m_pTopLevel)
         return m_pTopLevel->isMinimized();
@@ -269,7 +269,7 @@ bool Qt5Frame::isMinimized()
         return m_pQWidget->isMinimized();
 }
 
-bool Qt5Frame::isMaximized()
+bool Qt5Frame::isMaximized() const
 {
     if (m_pTopLevel)
         return m_pTopLevel->isMaximized();
@@ -474,12 +474,7 @@ void Qt5Frame::SetModal(bool bModal)
     }
 }
 
-bool Qt5Frame::GetModal() const
-{
-    if (isWindow())
-        return windowHandle()->getModality() == Qt::WindowModal;
-    return false;
-}
+bool Qt5Frame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
 
 void Qt5Frame::SetWindowState(const SalFrameState* pState)
 {
