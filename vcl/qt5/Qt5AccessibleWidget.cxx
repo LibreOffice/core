@@ -766,7 +766,6 @@ OUString lcl_convertFontWeight(double fontWeight)
 
 QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOffset) const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::attributes");
     Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
     if (!xText.is())
         return QString();
