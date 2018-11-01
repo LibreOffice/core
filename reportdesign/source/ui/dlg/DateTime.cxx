@@ -72,6 +72,7 @@ ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, const uno::Reference< r
     weld::CheckButton* aCheckBoxes[] = { m_xDate.get(), m_xTime.get() };
     for (weld::CheckButton* pCheckBox : aCheckBoxes)
         pCheckBox->connect_toggled(LINK(this,ODateTimeDialog,CBClickHdl));
+    CBClickHdl(*m_xTime);
 }
 
 void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
