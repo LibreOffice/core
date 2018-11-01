@@ -474,12 +474,7 @@ void Qt5Frame::SetModal(bool bModal)
     }
 }
 
-bool Qt5Frame::GetModal() const
-{
-    if (isWindow())
-        return windowHandle()->getModality() == Qt::WindowModal;
-    return false;
-}
+bool Qt5Frame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
 
 void Qt5Frame::SetWindowState(const SalFrameState* pState)
 {
