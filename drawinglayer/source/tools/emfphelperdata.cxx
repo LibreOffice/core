@@ -33,6 +33,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -1365,7 +1366,8 @@ namespace emfplushelper
                             }
 
                             const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                        MapSize(font->emSize, font->emSize), Map(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
+                                        ::basegfx::B2DSize(font->emSize, font->emSize),
+                                        ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
 
                             const Color color = EMFPGetBrushColorOrARGBColor(flags, brushId);
                             mrPropertyHolders.Current().setTextColor(color.getBColor());
@@ -1374,38 +1376,28 @@ namespace emfplushelper
                             if (color.GetTransparency() < 255)
                             {
                                 std::vector<double> emptyVector;
-                                if (color.GetTransparency() == 0)
-                                {
-                                    // not transparent
-                                    mrTargetHolders.Current().append(
-                                                o3tl::make_unique<drawinglayer::primitive2d::TextSimplePortionPrimitive2D>(
-                                                    transformMatrix,
-                                                    text,
-                                                    0,             // text always starts at 0
-                                                    stringLength,
-                                                    emptyVector,   // EMF-PLUS has no DX-array
-                                                    fontAttribute,
-                                                    locale,
-                                                    color.getBColor()));
-                                }
-                                else
-                                {
-                                    const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                                    transformMatrix,
-                                                    text,
-                                                    0,             // text always starts at 0
-                                                    stringLength,
-                                                    emptyVector,   // EMF-PLUS has no DX-array
-                                                    fontAttribute,
-                                                    locale,
-                                                    color.getBColor()));
+                                drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(
+                                            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                                transformMatrix,
+                                                text,
+                                                0,             // text always starts at 0
+                                                stringLength,
+                                                emptyVector,   // EMF-PLUS has no DX-array
+                                                fontAttribute,
+                                                locale,
+                                                color.getBColor()));
 
-                                    mrTargetHolders.Current().append(
-                                                o3tl::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
-                                                    drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                                                    color.GetTransparency() / 255.0));
+                                if (color.GetTransparency() != 0)
+                                {
+                                    aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
+                                                color.GetTransparency() / 255.0);
                                 }
+
+                                mrTargetHolders.Current().append(
+                                            o3tl::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                                maMapTransform,
+                                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                             }
                         }
                         else
@@ -1793,45 +1785,33 @@ namespace emfplushelper
                                 // last entry
                                 aDXArray.push_back(0);
 
-                                // prepare transform matrix
                                 basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    MapSize(font->emSize,font->emSize),Map(charsPosX[pos],charsPosY[pos]));
+                                            ::basegfx::B2DSize(font->emSize, font->emSize),
+                                            ::basegfx::B2DPoint(charsPosX[pos], charsPosY[pos]));
                                 if (hasMatrix)
                                     transformMatrix *= transform;
                                 if (color.GetTransparency() < 255)
                                 {
-                                    if (color.GetTransparency() == 0)
+                                    drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(
+                                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                                    transformMatrix,
+                                                    text,
+                                                    pos,            // take character at current pos
+                                                    aLength,        // use determined length
+                                                    aDXArray,       // generated DXArray
+                                                    fontAttribute,
+                                                    Application::GetSettings().GetLanguageTag().getLocale(),
+                                                    color.getBColor()));
+                                    if (color.GetTransparency() != 0)
                                     {
-                                        // not transparent
-                                        mrTargetHolders.Current().append(
-                                                    o3tl::make_unique<drawinglayer::primitive2d::TextSimplePortionPrimitive2D>(
-                                                        transformMatrix,
-                                                        text,
-                                                        pos,            // take character at current pos
-                                                        aLength,        // use determined length
-                                                        aDXArray,       // generated DXArray
-                                                        fontAttribute,
-                                                        Application::GetSettings().GetLanguageTag().getLocale(),
-                                                        color.getBColor()));
+                                        aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                                                    drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
+                                                    color.GetTransparency() / 255.0);
                                     }
-                                    else
-                                    {
-                                        const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                                                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                                        transformMatrix,
-                                                        text,
-                                                        pos,            // take character at current pos
-                                                        aLength,        // use determined length
-                                                        aDXArray,       // generated DXArray
-                                                        fontAttribute,
-                                                        Application::GetSettings().GetLanguageTag().getLocale(),
-                                                        color.getBColor()));
-
-                                        mrTargetHolders.Current().append(
-                                                    o3tl::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
-                                                        drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                                                        color.GetTransparency() / 255.0));
-                                    }
+                                    mrTargetHolders.Current().append(
+                                                o3tl::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                                    maMapTransform,
+                                                    drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                                 }
 
                                 // update pos

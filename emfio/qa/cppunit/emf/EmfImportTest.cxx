@@ -106,12 +106,12 @@ void Test::TestDrawString()
     CPPUNIT_ASSERT (pDocument);
 
     // check correct import of the DrawString: height, position, text, color and font
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "height", "276");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "x", "25");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "y", "323");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "text", "TEST");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "fontcolor", "#000000");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "familyname", "CALIBRI");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "height", "120");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "x", "817");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "y", "1137");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "text", "TEST");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "familyname", "CALIBRI");
 }
 
 void Test::TestDrawStringTransparent()
@@ -127,15 +127,15 @@ void Test::TestDrawStringTransparent()
 
     //TODO Strange that transparency is set to 0 even if it is not fully transparent
     // check correct import of the DrawString: transparency, height, position, text, color and font
-    assertXPath(pDocument, "/primitive2D/metafile/transform/unifiedtransparence", "transparence", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/unifiedtransparence", "transparence", "0");
 
     //TODO Where was textsimpleportion gone?
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "height", "276");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "x", "25");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "y", "323");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "text", "Transparent Text");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "fontcolor", "#000000");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "familyname", "CALIBRI");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "height", "276");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "x", "25");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "y", "323");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "text", "Transparent Text");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "fontcolor", "#000000");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "familyname", "CALIBRI");
 }
 
 void Test::TestDrawLine()
