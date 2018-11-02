@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f3283f1_8cc5675e",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-11-02T08:49:54Z",
+      "side": 1,
+      "message": "It was my first take, but it turned out that m_xUICmdDescription doesn\u0027t have all of the labels. See: https://api.libreoffice.org/docs/idl/ref/servicecom_1_1sun_1_1star_1_1ui_1_1ModuleUICommandDescription.html\n\nOr am I missing something here? If so, I would be happy to get back to the first (unpublished) iteration of my patch.",
+      "parentUuid": "5f2577a7_a2a82477",
+      "revId": "e9b06dd9458074af36b0fc97ff41ed4c79e5de32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f2577a7_42986069",
         "filename": "cui/source/customize/CommandCategoryListBox.cxx",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "3f3283f1_6ca0fba6",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-11-02T08:49:54Z",
+      "side": 1,
+      "message": "Indeed, you are right. The second search seems redundant. I must have missed that because of multi-level method calls. :)\n\nWill fix. Thank you for catching that!",
+      "parentUuid": "5f2577a7_42986069",
+      "range": {
+        "startLine": 220,
+        "startChar": 56,
+        "endLine": 220,
+        "endChar": 74
+      },
+      "revId": "e9b06dd9458074af36b0fc97ff41ed4c79e5de32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f2577a7_e29e2c53",
         "filename": "cui/source/customize/CommandCategoryListBox.cxx",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2018-11-01T23:41:32Z",
       "side": 1,
       "message": "Note that GetTooltipForCommand not just gets the label, but also adds the keyboard shortcut. So with this in place, if you search e.g. \"ctrl+b\" you\u0027ll get the bold command. Is it the desired behavior here?",
+      "range": {
+        "startLine": 221,
+        "startChar": 59,
+        "endLine": 221,
+        "endChar": 79
+      },
+      "revId": "e9b06dd9458074af36b0fc97ff41ed4c79e5de32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_4ca53fb5",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-11-02T08:49:54Z",
+      "side": 1,
+      "message": "Yes. That was intended. No harm in providing more ways to find the desired command.",
+      "parentUuid": "5f2577a7_e29e2c53",
       "range": {
         "startLine": 221,
         "startChar": 59,
