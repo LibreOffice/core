@@ -560,17 +560,31 @@ class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialo
 class SwIndexMarkFloatDlg;
 class AbstractIndexMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl,SwIndexMarkFloatDlg)
-    virtual void    ReInitDlg(SwWrtShell& rWrtShell) override;
-    virtual vcl::Window *            GetWindow() override; //this method is added for return a Window type pointer
+protected:
+    std::shared_ptr<SwIndexMarkFloatDlg> m_xDlg;
+public:
+    explicit AbstractIndexMarkFloatDlg_Impl(std::unique_ptr<SwIndexMarkFloatDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual void ReInitDlg(SwWrtShell& rWrtShell) override;
+    virtual std::shared_ptr<SfxModelessDialogController> GetController() override;
 };
 
 class SwAuthMarkFloatDlg;
 class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl,SwAuthMarkFloatDlg)
-    virtual void    ReInitDlg(SwWrtShell& rWrtShell) override;
-    virtual vcl::Window *            GetWindow() override; //this method is added for return a Window type pointer
+protected:
+    std::shared_ptr<SwAuthMarkFloatDlg> m_xDlg;
+public:
+    explicit AbstractAuthMarkFloatDlg_Impl(std::unique_ptr<SwAuthMarkFloatDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual void ReInitDlg(SwWrtShell& rWrtShell) override;
+    virtual std::shared_ptr<SfxModelessDialogController> GetController() override;
 };
 
 class SwMailMergeWizard;
@@ -707,15 +721,15 @@ public:
     virtual VclPtr<AbstractMarkFloatDlg>       CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       vcl::Window *pParent,
+                                                       weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo) override;
     virtual VclPtr<AbstractMarkFloatDlg>       CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       vcl::Window *pParent,
+                                                       weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo) override;
     virtual VclPtr<VclAbstractDialog>         CreateIndexMarkModalDlg(
-                                                vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) override;
+                                                weld::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) override;
 
     virtual VclPtr<AbstractMailMergeWizard>    CreateMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem) override;
 
