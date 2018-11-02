@@ -56,10 +56,6 @@ struct ControlDrawParameters
     int64_t nValue;
 };
 
-#ifndef SAL_DLLPUBLIC_RTTI
-#define SAL_DLLPUBLIC_RTTI
-#endif
-
 typedef struct _WidgetThemeLibrary WidgetThemeLibrary;
 
 struct _WidgetThemeLibrary
