@@ -508,12 +508,15 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
                     INetURLObject aURLObj( xStorable->getLocation() );
-                    if ( !aURLObj.hasFinalSlash() &&
-                         aURLObj.setExtension( "mini", INetURLObject::LAST_SEGMENT, false ) ) {
+                    if ( !aURLObj.hasFinalSlash() ) {
                         // tdf#105382 uri-decode file name
+                        aURLObj.removeExtension(INetURLObject::LAST_SEGMENT, false);
                         auto aName( aURLObj.getName( INetURLObject::LAST_SEGMENT,
                                                      false,
                                                      INetURLObject::DecodeMechanism::WithCharset ) );
+                        // Add "(minimized)"
+                        aName += " ";
+                        aName += mrOptimizerDialog.getString(STR_FILENAME_SUFFIX);
                         aFileOpenDialog.setDefaultName( aName );
                     }
                 }
