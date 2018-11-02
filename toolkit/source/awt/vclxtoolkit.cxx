@@ -761,13 +761,6 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("workwindow"),         WindowType::WORKWINDOW }
 };
 
-#if !defined NDEBUG
-bool ComponentInfoCompare( const ComponentInfo & lhs, const ComponentInfo & rhs)
-{
-    return rtl_str_compare_WithLength(lhs.sName.data, lhs.sName.size, rhs.sName.data, rhs.sName.size) < 0;
-}
-#endif
-
 bool ComponentInfoFindCompare( const ComponentInfo & lhs, const OUString & s)
 {
     return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(s.pData->buffer, s.pData->length,
@@ -780,7 +773,12 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
     if( !bSorted )
     {
         assert( std::is_sorted( std::begin(aComponentInfos), std::end(aComponentInfos),
-                    ComponentInfoCompare ) );
+                    [](const ComponentInfo & lhs, const ComponentInfo & rhs) {
+                        return
+                            rtl_str_compare_WithLength(
+                                lhs.sName.data, lhs.sName.size, rhs.sName.data, rhs.sName.size)
+                            < 0;
+                    } ) );
         bSorted = true;
     }
 
