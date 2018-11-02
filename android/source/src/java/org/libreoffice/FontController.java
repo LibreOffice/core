@@ -64,6 +64,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void updateColorPickerPosition(int color) {
+            if(backColorPickerAdapter != null)
             backColorPickerAdapter.findSelectedTextColor(color + 0xFF000000);
             changeFontBackColorBoxColor(color + 0xFF000000);
 
