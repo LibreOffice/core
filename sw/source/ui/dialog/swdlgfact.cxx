@@ -231,8 +231,16 @@ short AbstractMailMergeFieldConnectionsDlg_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl);
+
+short AbstractIndexMarkFloatDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+short AbstractAuthMarkFloatDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 void AbstractTabDialog_Impl::SetCurPageId( const OString &rName )
 {
@@ -681,22 +689,22 @@ AbstractInsertSectionTabDialog_Impl::SetSectionData(SwSectionData const& rSect)
 
 void AbstractIndexMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    pDlg->ReInitDlg( rWrtShell);
+    m_xDlg->ReInitDlg( rWrtShell);
 }
 
-vcl::Window* AbstractIndexMarkFloatDlg_Impl::GetWindow()
+std::shared_ptr<SfxModelessDialogController> AbstractIndexMarkFloatDlg_Impl::GetController()
 {
-    return static_cast<vcl::Window*>(pDlg);
+    return m_xDlg;
 }
 
 void AbstractAuthMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    pDlg->ReInitDlg( rWrtShell);
+    m_xDlg->ReInitDlg(rWrtShell);
 }
 
-vcl::Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
+std::shared_ptr<SfxModelessDialogController> AbstractAuthMarkFloatDlg_Impl::GetController()
 {
-    return static_cast<vcl::Window*>(pDlg);
+    return m_xDlg;
 }
 
 std::shared_ptr<SfxModelessDialogController> AbstractSwWordCountFloatDlg_Impl::GetController()
@@ -1093,21 +1101,19 @@ VclPtr<AbstractInsertSectionTabDialog> SwAbstractDialogFactory_Impl::CreateInser
 VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       vcl::Window *pParent,
+                                                       weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo )
 {
-    VclPtr<SwIndexMarkFloatDlg> pDlg = VclPtr<SwIndexMarkFloatDlg>::Create(pBindings, pChild, pParent, pInfo, true/*bNew*/);
-    return VclPtr<AbstractIndexMarkFloatDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractIndexMarkFloatDlg_Impl>::Create(o3tl::make_unique<SwIndexMarkFloatDlg>(pBindings, pChild, pParent, pInfo, true/*bNew*/));
 }
 
 VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       vcl::Window *pParent,
+                                                       weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo)
 {
-    VclPtr<SwAuthMarkFloatDlg> pDlg = VclPtr<SwAuthMarkFloatDlg>::Create( pBindings, pChild, pParent, pInfo, true/*bNew*/ );
-    return VclPtr<AbstractAuthMarkFloatDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractAuthMarkFloatDlg_Impl>::Create(o3tl::make_unique<SwAuthMarkFloatDlg>(pBindings, pChild, pParent, pInfo, true/*bNew*/));
 }
 
 VclPtr<AbstractSwWordCountFloatDlg> SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(
@@ -1119,11 +1125,9 @@ VclPtr<AbstractSwWordCountFloatDlg> SwAbstractDialogFactory_Impl::CreateSwWordCo
     return VclPtr<AbstractSwWordCountFloatDlg_Impl>::Create(o3tl::make_unique<SwWordCountFloatDlg>(pBindings, pChild, pParent, pInfo));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(
-                                                vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark )
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark )
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwIndexMarkModalDlg>::Create( pParent, rSh, pCurTOXMark );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGenericDialog_Impl>::Create(o3tl::make_unique<SwIndexMarkModalDlg>(pParent, rSh, pCurTOXMark));
 }
 
 VclPtr<AbstractMailMergeWizard> SwAbstractDialogFactory_Impl::CreateMailMergeWizard(

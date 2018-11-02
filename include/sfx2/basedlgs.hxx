@@ -135,6 +135,7 @@ protected:
 
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
+    virtual void            Activate() {}
     void                    Initialize (SfxChildWinInfo const * pInfo);
     void                    Close();
     void                    DeInit();
