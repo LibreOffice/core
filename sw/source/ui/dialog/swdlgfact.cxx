@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "swdlgfact.hxx"
 #include <svl/style.hxx>
 #include <svx/svxids.hrc>
@@ -377,7 +379,14 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
         uno::Reference< sdbc::XConnection> xConnection,
         uno::Reference< sdbc::XResultSet > xResultSet)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
+#else
+    (void) rSelection;
+    (void) rxSource;
+    (void) xConnection;
+    (void) xResultSet;
+#endif
 }
 
 bool AbstractDropDownFieldDialog_Impl::PrevButtonPressed() const
@@ -800,8 +809,13 @@ VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     VclPtr<Dialog> pDlg = VclPtr<SwChangeDBDlg>::Create(rVw);
     return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
+#else
+    (void) rVw;
+    return nullptr;
+#endif
 }
 
 VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(weld::Window* pParent, SwView& pVw,
@@ -826,8 +840,16 @@ VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwIns
         uno::Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     VclPtr<SwInsertDBColAutoPilot> pDlg = VclPtr<SwInsertDBColAutoPilot>::Create( rView, rxSource, xColSupp, rData );
     return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create( pDlg );
+#else
+    (void) rView;
+    (void) rxSource;
+    (void) xColSupp;
+    (void) rData;
+    return nullptr;
+#endif
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh)
@@ -1126,7 +1148,13 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(
 VclPtr<AbstractMailMergeWizard> SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
                                     SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     return VclPtr<AbstractMailMergeWizard_Impl>::Create( VclPtr<SwMailMergeWizard>::Create(rView, rConfigItem));
+#else
+    (void) rView;
+    (void) rConfigItem;
+    return nullptr;
+#endif
 }
 
 GlossaryGetCurrGroup    SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc()
@@ -1199,20 +1227,32 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog(weld::Window* pParent)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwMMResultSaveDialog aDialog(pParent);
     aDialog.run();
+#else
+    (void) pParent;
+#endif
 }
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog(weld::Window* pParent)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwMMResultPrintDialog aDialog(pParent);
     aDialog.run();
+#else
+    (void) pParent;
+#endif
 }
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultEmailDialog(weld::Window* pParent)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwMMResultEmailDialog aDialog(pParent);
     aDialog.run();
+#else
+    (void) pParent;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
