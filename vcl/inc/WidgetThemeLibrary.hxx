@@ -60,47 +60,43 @@ struct ControlDrawParameters
 #define SAL_DLLPUBLIC_RTTI
 #endif
 
-class SAL_DLLPUBLIC_RTTI WidgetThemeLibrary
+typedef struct _WidgetThemeLibrary WidgetThemeLibrary;
+
+struct _WidgetThemeLibrary
 {
-public:
-    WidgetThemeLibrary();
-    virtual ~WidgetThemeLibrary();
+    uint32_t nSize;
 
-    virtual bool isNativeControlSupported(ControlType eType, ControlPart ePart);
-    virtual bool getRegion(ControlType eType, ControlPart ePart, ControlState eState,
-                           const tools::Rectangle& rBoundingControlRegion,
-                           tools::Rectangle& rNativeBoundingRegion,
-                           tools::Rectangle& rNativeContentRegion);
+    bool (*isNativeControlSupported)(ControlType eType, ControlPart ePart);
+    bool (*getRegion)(ControlType eType, ControlPart ePart, ControlState eState,
+                      const tools::Rectangle& rBoundingControlRegion,
+                      tools::Rectangle& rNativeBoundingRegion,
+                      tools::Rectangle& rNativeContentRegion);
 
-    virtual bool drawPushButton(ControlDrawParameters const& rParameters, long nWidth,
-                                long nHeight);
-    virtual bool drawRadiobutton(ControlDrawParameters const& rParameters, long nWidth,
-                                 long nHeight);
-    virtual bool drawCheckbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawCombobox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawEditbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawScrollbar(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawSpinButtons(ControlDrawParameters const& rParameters, long nWidth,
-                                 long nHeight);
-    virtual bool drawSpinbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawTabItem(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawTabPane(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawTabHeader(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawTabBody(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawSlider(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawFixedline(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawToolbar(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawProgress(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawWindowsBackground(ControlDrawParameters const& rParameters, long nWidth,
-                                       long nHeight);
-    virtual bool drawListbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawFrame(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawListNode(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawListNet(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    virtual bool drawListHeader(ControlDrawParameters const& rParameters, long nWidth,
-                                long nHeight);
+    bool (*drawPushButton)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawRadiobutton)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawCheckbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawCombobox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawEditbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawScrollbar)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawSpinButtons)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawSpinbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawTabItem)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawTabPane)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawTabHeader)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawTabBody)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawSlider)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawFixedline)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawToolbar)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawProgress)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawWindowsBackground)(ControlDrawParameters const& rParameters, long nWidth,
+                                  long nHeight);
+    bool (*drawListbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawFrame)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawListNode)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawListNet)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawListHeader)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
 
-    virtual bool updateSettings(WidgetDrawStyle& rSettings);
+    bool (*updateSettings)(WidgetDrawStyle& rSettings);
 };
 
 extern "C" vcl::WidgetThemeLibrary* CreateWidgetThemeLibrary();
