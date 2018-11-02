@@ -615,6 +615,11 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 
 // class OfaViewTabPage --------------------------------------------------
 
+static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1, const vcl::IconThemeInfo& rInfo2)
+{
+    return rInfo1.GetDisplayName().compareTo(rInfo2.GetDisplayName()) < 0;
+}
+
 OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
     , nSizeLB_InitialSelection(0)
@@ -671,6 +676,7 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pIconStyleLB->Clear();
     StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
+    std::sort(mInstalledIconThemes.begin(), mInstalledIconThemes.end(), DisplayNameCompareLessThan);
 
     // Start with the automatically chosen icon theme
     OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
