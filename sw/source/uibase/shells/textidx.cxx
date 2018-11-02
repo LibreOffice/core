@@ -85,7 +85,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
             if( nRet == RET_OK)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark()));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(GetView().GetFrameWeld(), GetShell(), aMgr.GetCurTOXMark()));
                 pDlg->Execute();
             }
             break;

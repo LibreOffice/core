@@ -5584,6 +5584,11 @@ public:
         bodge_wayland_menu_not_appearing();
     }
 
+    virtual bool get_popup_shown() const override
+    {
+        return m_bPopupActive;
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         if (GtkEntry* pEntry = get_entry())

@@ -354,6 +354,8 @@ public:
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable) = 0;
 
+    virtual bool get_popup_shown() const = 0;
+
     void connect_entry_activate(const Link<ComboBox&, void>& rLink) { m_aEntryActivateHdl = rLink; }
 
     void save_value() { m_sSavedValue = get_active_text(); }
@@ -781,6 +783,8 @@ public:
     {
         m_xTreeView->connect_row_activated(rLink);
     }
+
+    virtual bool get_popup_shown() const override { return false; }
 
     void set_height_request_by_rows(int nRows);
 };
