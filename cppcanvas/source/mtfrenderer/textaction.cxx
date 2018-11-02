@@ -476,7 +476,7 @@ namespace cppcanvas
                 virtual ~TextRenderer() {}
 
                 /// Render text with given RenderState
-                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const = 0;
+                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const = 0;
             };
 
             /** Render effect text.
@@ -514,7 +514,7 @@ namespace cppcanvas
                         vcl::unotools::colorToDoubleSequence( rShadowColor,
                                                                 xColorSpace );
 
-                    rRenderer( aShadowState, rTextFillColor );
+                    rRenderer( aShadowState, rTextFillColor, false );
                 }
 
                 // draw relief text, if enabled
@@ -532,11 +532,11 @@ namespace cppcanvas
                         vcl::unotools::colorToDoubleSequence( rReliefColor,
                                                                 xColorSpace );
 
-                    rRenderer( aReliefState, rTextFillColor );
+                    rRenderer( aReliefState, rTextFillColor, false );
                 }
 
                 // draw normal text
-                rRenderer( rRenderState, rTextFillColor );
+                rRenderer( rRenderState, rTextFillColor, true );
 
                 return true;
             }
@@ -789,7 +789,7 @@ namespace cppcanvas
 
             private:
                 /// Interface TextRenderer
-                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const override;
+                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 geometry::RealRectangle2D queryTextBounds() const;
                 css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const;
@@ -895,7 +895,7 @@ namespace cppcanvas
                                   "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
             }
 
-            bool EffectTextAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const
+            bool EffectTextAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
             {
                 const rendering::ViewState& rViewState( mpCanvas->getViewState() );
                 const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
@@ -1246,7 +1246,7 @@ namespace cppcanvas
 
             private:
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const override;
+                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const;
 
@@ -1369,7 +1369,7 @@ namespace cppcanvas
                 return ::basegfx::unotools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
             }
 
-            bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const
+            bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
             {
                 const rendering::ViewState& rViewState( mpCanvas->getViewState() );
                 const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
@@ -1429,7 +1429,7 @@ namespace cppcanvas
                 }
 
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const override
+                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor,bool /*bNormalText*/ ) const override
                 {
                     mrCanvas->fillPolyPolygon( mrLinePolygon,
                                                mrViewState,
@@ -1635,7 +1635,7 @@ namespace cppcanvas
 
             private:
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor ) const override;
+                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -1765,7 +1765,7 @@ namespace cppcanvas
                       rTextTransform );
             }
 
-            bool OutlineAction::operator()( const rendering::RenderState& rRenderState, const ::Color& /*rTextFillColor*/ ) const
+            bool OutlineAction::operator()( const rendering::RenderState& rRenderState, const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
             {
                 const rendering::ViewState&                 rViewState( mpCanvas->getViewState() );
                 const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
