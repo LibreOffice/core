@@ -2441,6 +2441,11 @@ public:
         m_xComboBox->SetStyle(m_xComboBox->GetStyle() | WB_SORT);
     }
 
+    virtual bool get_popup_shown() const override
+    {
+        return m_xComboBox->IsInDropDown();
+    }
+
     virtual ~SalInstanceComboBox() override
     {
         clear();

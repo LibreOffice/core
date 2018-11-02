@@ -335,7 +335,7 @@ protected:
     virtual ~AbstractMarkFloatDlg() override = default;
 public:
     virtual void    ReInitDlg(SwWrtShell& rWrtShell) = 0;
-    virtual vcl::Window *    GetWindow() = 0; //this method is added for return a Window type pointer
+    virtual std::shared_ptr<SfxModelessDialogController> GetController() = 0;
 };
 
 #define RET_LOAD_DOC            100
@@ -479,15 +479,15 @@ public:
     virtual VclPtr<AbstractMarkFloatDlg>       CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       vcl::Window *pParent,
+                                                       weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo) = 0;
     virtual VclPtr<AbstractMarkFloatDlg>       CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       vcl::Window *pParent,
+                                                       weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo) = 0;
     virtual VclPtr<VclAbstractDialog>         CreateIndexMarkModalDlg(
-                                                vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) = 0;
+                                                weld::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) = 0;
 
     virtual VclPtr<AbstractMailMergeWizard>    CreateMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem) = 0;
 
