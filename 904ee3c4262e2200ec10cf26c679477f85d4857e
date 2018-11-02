@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_cc200fb4",
+        "filename": "sc/inc/lookupcache.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-02T19:56:06Z",
+      "side": 1,
+      "message": "Note that an empty string does not necessarily equal an empty cell. A formula returning an empty string would also fullfil this condition.",
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_4f9f71b4",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9796,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-02T19:56:06Z",
+      "side": 1,
+      "message": "This means that in the worst case of no match at all we\u0027d now try every row above the current one. I don\u0027t think this is a good idea.",
+      "range": {
+        "startLine": 9796,
+        "startChar": 16,
+        "endLine": 9796,
+        "endChar": 24
+      },
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_2fa42508",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9804,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-02T19:56:06Z",
+      "side": 1,
+      "message": "Huh? Not found if FOUND?",
+      "range": {
+        "startLine": 9804,
+        "startChar": 16,
+        "endLine": 9804,
+        "endChar": 38
+      },
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_cc092f32",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9818,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-02T19:56:06Z",
+      "side": 1,
+      "message": "Evaluating every flag that later is AND-combined is unnecessary if already the previous flag is false, use short-circuit boolean evaluation in such cases instead.",
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_ac2dc3a9",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9862,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-02T19:56:06Z",
+      "side": 1,
+      "message": "This is executed for every NOT_CACHED case, which in all non-empty lookups now adds an unnecessary processing penalty.",
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
