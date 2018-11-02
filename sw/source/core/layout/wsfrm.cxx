@@ -4448,7 +4448,8 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     }
     mbHideRedlines = bHideRedlines;
     SwDoc & rDoc(*GetFormat()->GetDoc());
-    if (rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    if (!bHideRedlines // Show->Hide must init hidden number trees
+        && rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
         return;
     }
