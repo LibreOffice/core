@@ -8687,7 +8687,7 @@ AC_SUBST(POSTGRESQL_LIB)
 dnl ===================================================================
 dnl Check for Firebird stuff
 dnl ===================================================================
-ENABLE_FIREBIRD_SDBC=""
+ENABLE_FIREBIRD_SDBC=
 if test "$enable_firebird_sdbc" = "yes" ; then
     SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
 
@@ -8735,7 +8735,8 @@ int fb_api_is_30(void) { return 0; }
 #endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 3.0.x is installed]))
             CFLAGS="${__save_CFLAGS}"
         fi
-        ENABLE_FIREBIRD_SDBC="TRUE"
+        ENABLE_FIREBIRD_SDBC=TRUE
+        AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
     elif test "$enable_database_connectivity" != yes; then
         AC_MSG_RESULT([none])
     elif test "$cross_compiling" = "yes"; then
@@ -8781,8 +8782,8 @@ int fb_api_is_30(void) { return 0; }
         fi
 
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
-        ENABLE_FIREBIRD_SDBC="TRUE"
-        AC_DEFINE(ENABLE_FIREBIRD_SDBC)
+        ENABLE_FIREBIRD_SDBC=TRUE
+        AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
     fi
 fi
 AC_SUBST(ENABLE_FIREBIRD_SDBC)
