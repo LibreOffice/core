@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_6ffead06",
+        "filename": "sdext/source/minimizer/optimizerdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-02T17:51:21Z",
+      "side": 1,
+      "message": "doing this you will catch things like length_error and bad_alloc i.e. OOM, which will make debugging stuff like that even harder?",
+      "revId": "f96e284fbbf32db2b7a87c96a9defeaee93e3feb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
