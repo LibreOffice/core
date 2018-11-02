@@ -615,6 +615,11 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 
 // class OfaViewTabPage --------------------------------------------------
 
+static bool StringPtrCompareLessThan(const OUString* pStr1, const OUString* pStr2)
+{
+    return pStr1->compareTo(*pStr2) < 0;
+}
+
 OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
     , nSizeLB_InitialSelection(0)
@@ -681,10 +686,13 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
                                 ")";
     m_pIconStyleLB->InsertEntry(entryForAuto);
 
+    // Then append the sorted style list
+    std::vector<const OUString*> aStyleList;
     for (auto const& installIconTheme : mInstalledIconThemes)
-    {
-        m_pIconStyleLB->InsertEntry(installIconTheme.GetDisplayName());
-    }
+        aStyleList.push_back(&installIconTheme.GetDisplayName());
+    std::sort(aStyleList.begin(), aStyleList.end(), StringPtrCompareLessThan);
+    for (auto* aIconStyleName : aStyleList)
+        m_pIconStyleLB->InsertEntry(*aIconStyleName);
 
     // separate auto and other icon themes
     m_pIconStyleLB->SetSeparatorPos( 0 );
