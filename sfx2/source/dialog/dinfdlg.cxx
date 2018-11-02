@@ -883,13 +883,20 @@ void SfxDocumentPage::ImplUpdateSignatures()
         SfxMedium* pMedium = pDoc->GetMedium();
         if ( pMedium && !pMedium->GetName().isEmpty() && pMedium->GetStorage().is() )
         {
-            Reference< security::XDocumentDigitalSignatures > xD(
-                security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
-
+            Reference< security::XDocumentDigitalSignatures > xD;
+            try
+            {
+                xD = security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
+            }
+            catch ( const css::uno::DeploymentException& )
+            {
+            }
             OUString s;
             Sequence< security::DocumentSignatureInformation > aInfos;
-            aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
-                                                            uno::Reference< io::XInputStream >() );
+
+            if ( xD.is() )
+                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
+                                                              uno::Reference< io::XInputStream >() );
             if ( aInfos.getLength() > 1 )
                 s = m_aMultiSignedStr;
             else if ( aInfos.getLength() == 1 )
