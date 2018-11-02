@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_targets,sw,\
 	Library_msword \
 	Library_sw \
 	Library_swd \
-	$(call gb_Helper_optional,DESKTOP,Library_swui) \
+	Library_swui \
 	UIConfig_sglobal \
 	UIConfig_sweb \
 	UIConfig_swform \
