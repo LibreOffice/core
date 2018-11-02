@@ -244,6 +244,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Name...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:FocusInputLine" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -323,6 +326,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Margins</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ScalingFactor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -332,6 +338,9 @@
       <node oor:name=".uno:ClosePreview" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Close Preview</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:StatusDocPos" oor:op="replace">
@@ -2392,6 +2401,9 @@
       <node oor:name=".uno:ExportAsGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Export as Image</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:EditShapeHyperlink" oor:op="replace">
