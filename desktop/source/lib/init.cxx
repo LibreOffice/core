@@ -2159,6 +2159,9 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #ifdef IOS
 
+// This function is separate only to be used by LibreOfficeLight. If that app can be retired, this
+// function's code can be inlined into the iOS part of doc_paintTile().
+
 static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
                                      void* rCGContext,
                                      const int nCanvasWidth, const int nCanvasHeight,
@@ -3572,6 +3575,33 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
         return;
     }
 
+#if defined(IOS)
+
+    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
+
+    CGContextTranslateCTM(cgc, 0, nHeight);
+    CGContextScaleCTM(cgc, 1, -1);
+
+    SystemGraphicsData aData;
+    aData.rCGContext = cgc;
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+
+    pDevice->SetOutputSizePixel(Size(nWidth, nHeight));
+
+    MapMode aMapMode(pDevice->GetMapMode());
+    aMapMode.SetOrigin(Point(-nX, -nY));
+    pDevice->SetMapMode(aMapMode);
+
+    comphelper::LibreOfficeKit::setDialogPainting(true);
+    pWindow->PaintToDevice(pDevice.get(), Point(0, 0), Size());
+    comphelper::LibreOfficeKit::setDialogPainting(false);
+
+    CGContextRelease(cgc);
+
+#else
+
     ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
@@ -3584,6 +3614,8 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
     comphelper::LibreOfficeKit::setDialogPainting(true);
     pWindow->PaintToDevice(pDevice.get(), Point(0, 0), Size());
     comphelper::LibreOfficeKit::setDialogPainting(false);
+
+#endif
 }
 
 static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction)
