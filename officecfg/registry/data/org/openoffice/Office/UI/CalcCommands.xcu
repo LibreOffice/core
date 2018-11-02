@@ -259,6 +259,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sheet ~Events...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DataPilotFilter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1461,6 +1464,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Row ~Height...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetOptimalRowHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1483,6 +1489,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">H~ide Rows</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ShowRow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1494,6 +1503,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Sho~w Rows</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ColumnWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1504,6 +1516,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Column ~Width...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SetOptimalColumnWidth" oor:op="replace">
@@ -1527,6 +1542,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">H~ide Columns</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ShowColumn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1537,6 +1555,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">S~how Columns</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:Hide" oor:op="replace">
@@ -1829,10 +1850,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Rename Sheet...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Name" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rename Sheet</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SetTabBgColor" oor:op="replace">
@@ -1842,10 +1869,16 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Tab Color...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:TabBgColor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Tab Color</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:Move" oor:op="replace">
@@ -1860,10 +1893,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select All Sheets</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:TableDeselectAll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Deselect All Sheets</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:Add" oor:op="replace">
@@ -2082,6 +2121,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Sheet R~ight-To-Left</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SetAnchorToPage" oor:op="replace">

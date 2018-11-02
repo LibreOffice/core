@@ -1721,3 +1721,25 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
+
+# calc context menu sheettab
+# ==============================================
+cmd/sc_tableselectall.png cmd/sc_selecttable.png
+cmd/sc_tabledeselectall.png cmd/sc_dbviewtablenames.png
+cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
+cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
+cmd/sc_tableevents.png cmd/sc_animationeffects.png
+
+cmd/lc_tableselectall.png cmd/lc_selecttable.png
+cmd/lc_tabledeselectall.png cmd/lc_dbviewtablenames.png
+cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
+cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
+cmd/lc_tableevents.png cmd/lc_animationeffects.png
+
+# calc context menu rowheader
+# ==============================================
+cmd/sc_rowheight.png cmd/sc_setminimalrowheight.png
+cmd/sc_columnheight.png cmd/sc_setminimalcolumnheight.png
+
+cmd/lc_rowheight.png cmd/lc_setminimalrowheight.png
+cmd/lc_columnheight.png cmd/lc_setminimalcolumnheight.png
