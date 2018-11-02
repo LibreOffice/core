@@ -40,6 +40,7 @@ class VirtualDevice;
 class PhysicalFontCollection;
 class ImplFontCache;
 class VCLXWindow;
+class WindowStateData;
 class SalFrame;
 class SalObject;
 enum class MouseEventModifiers;
@@ -413,6 +414,9 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                            long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
+
+VCL_DLLPUBLIC void ImplWindowStateFromStr(WindowStateData& rData, const OString& rStr);
+VCL_DLLPUBLIC OString ImplWindowStateToStr(const WindowStateData& rData);
 
 #endif // INCLUDED_VCL_INC_WINDOW_H
 

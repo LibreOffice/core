@@ -730,11 +730,15 @@ public:
     virtual void set_modal(bool bModal) override
     {
         if (::Dialog* pDialog = dynamic_cast<::Dialog*>(m_xWindow.get()))
-        {
-            pDialog->SetModalInputMode(bModal);
-            return;
-        }
-        m_xWindow->ImplGetFrame()->SetModal(bModal);
+            return pDialog->SetModalInputMode(bModal);
+        return m_xWindow->ImplGetFrame()->SetModal(bModal);
+    }
+
+    virtual bool get_modal() const override
+    {
+        if (const ::Dialog* pDialog = dynamic_cast<const ::Dialog*>(m_xWindow.get()))
+            return pDialog->IsModalInputMode();
+        return m_xWindow->ImplGetFrame()->GetModal();
     }
 
     virtual void window_move(int x, int y) override
@@ -755,6 +759,40 @@ public:
         width = aRect.GetWidth();
         height = aRect.GetHeight();
         return true;
+    }
+
+    virtual Size get_size() const override
+    {
+        return m_xWindow->GetSizePixel();
+    }
+
+    virtual Point get_position() const override
+    {
+        return m_xWindow->GetPosPixel();
+    }
+
+    virtual bool get_resizable() const override
+    {
+        return m_xWindow->GetStyle() & WB_SIZEABLE;
+    }
+
+    virtual bool has_toplevel_focus() const override
+    {
+        return m_xWindow->HasChildPathFocus();
+    }
+
+    virtual void set_window_state(const OString& rStr) override
+    {
+        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
+        assert(pSysWin);
+        pSysWin->SetWindowState(rStr);
+    }
+
+    virtual OString get_window_state(WindowStateMask nMask) const override
+    {
+        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
+        assert(pSysWin);
+        return pSysWin->GetWindowState(nMask);
     }
 
     virtual SystemEnvData get_system_data() const override

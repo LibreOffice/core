@@ -36,7 +36,9 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/weld.hxx>
+#include <window.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -2057,6 +2059,11 @@ public:
         gtk_window_set_modal(m_pWindow, bModal);
     }
 
+    virtual bool get_modal() const override
+    {
+        return gtk_window_get_modal(m_pWindow);
+    }
+
     virtual void resize_to_request() override
     {
         gtk_window_resize(m_pWindow, 1, 1);
@@ -2081,6 +2088,92 @@ public:
     {
         assert(false && "nothing should call this impl, yet anyway, if ever");
         return SystemEnvData();
+    }
+
+    virtual Size get_size() const override
+    {
+        int current_width, current_height;
+        gtk_window_get_size(m_pWindow, &current_width, &current_height);
+        return Size(current_width, current_height);
+    }
+
+    virtual Point get_position() const override
+    {
+        int current_x, current_y;
+        gtk_window_get_position(m_pWindow, &current_x, &current_y);
+        return Point(current_x, current_y);
+    }
+
+    virtual bool get_resizable() const override
+    {
+        return gtk_window_get_resizable(m_pWindow);
+    }
+
+    virtual bool has_toplevel_focus() const override
+    {
+        return gtk_window_has_toplevel_focus(m_pWindow);
+    }
+
+    virtual void set_window_state(const OString& rStr) override
+    {
+        WindowStateData aData;
+        ImplWindowStateFromStr( aData, rStr );
+
+        auto nMask = aData.GetMask();
+        auto nState = aData.GetState() & WindowStateState::SystemMask;
+
+        if (nMask & WindowStateMask::Width && nMask & WindowStateMask::Height)
+        {
+            gtk_window_set_default_size(m_pWindow, aData.GetWidth(), aData.GetHeight());
+        }
+        if (nMask & WindowStateMask::State)
+        {
+            if (nState & WindowStateState::Maximized)
+                gtk_window_maximize(m_pWindow);
+            else
+                gtk_window_unmaximize(m_pWindow);
+        }
+    }
+
+    virtual OString get_window_state(WindowStateMask nMask) const override
+    {
+        bool bPositioningAllowed = true;
+#if defined(GDK_WINDOWING_WAYLAND)
+        // drop x/y when under wayland
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        bPositioningAllowed = !GDK_IS_WAYLAND_DISPLAY(pDisplay);
+#endif
+
+        WindowStateData aData;
+        WindowStateMask nAvailable = WindowStateMask::State |
+                                     WindowStateMask::Width | WindowStateMask::Height;
+        if (bPositioningAllowed)
+            nAvailable |= WindowStateMask::X | WindowStateMask::Y;
+        aData.SetMask(nMask & nAvailable);
+
+        if (nMask & WindowStateMask::State)
+        {
+            WindowStateState nState = WindowStateState::Normal;
+            if (gtk_window_is_maximized(m_pWindow))
+                nState |= WindowStateState::Maximized;
+            aData.SetState(nState);
+        }
+
+        if (bPositioningAllowed && (nMask & (WindowStateMask::X | WindowStateMask::Y)))
+        {
+            auto aPos = get_position();
+            aData.SetX(aPos.X());
+            aData.SetY(aPos.Y());
+        }
+
+        if (nMask & (WindowStateMask::Width | WindowStateMask::Height))
+        {
+            auto aSize = get_size();
+            aData.SetWidth(aSize.Width());
+            aData.SetHeight(aSize.Height());
+        }
+
+        return ImplWindowStateToStr(aData);
     }
 
     virtual ~GtkInstanceWindow() override
@@ -2232,11 +2325,7 @@ public:
         m_xDialogController = rDialogController;
         m_aFunc = func;
 
-        if (!gtk_widget_get_visible(m_pWidget))
-        {
-            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-            gtk_widget_show(m_pWidget);
-        }
+        show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
 
@@ -2275,8 +2364,11 @@ public:
 
     virtual void show() override
     {
-        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-        gtk_widget_show(m_pWidget);
+        if (!gtk_widget_get_visible(m_pWidget))
+        {
+            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+            gtk_widget_show(m_pWidget);
+        }
     }
 
     static int VclToGtk(int nResponse)

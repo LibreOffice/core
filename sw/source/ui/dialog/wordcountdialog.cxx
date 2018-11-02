@@ -31,126 +31,92 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 
-IMPL_STATIC_LINK_NOARG(SwWordCountFloatDlg, CloseHdl, Button*, void)
-{
-    SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
-    if (pVFrame != nullptr)
-    {
-        pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-    }
-}
-
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
-    disposeOnce();
-}
-
-void SwWordCountFloatDlg::dispose()
-{
     SwViewShell::SetCareWin( nullptr );
-    m_pCurrentWordFT.clear();
-    m_pCurrentCharacterFT.clear();
-    m_pCurrentCharacterExcludingSpacesFT.clear();
-    m_pCurrentCjkcharsFT.clear();
-    m_pCurrentStandardizedPagesFT.clear();
-    m_pDocWordFT.clear();
-    m_pDocCharacterFT.clear();
-    m_pDocCharacterExcludingSpacesFT.clear();
-    m_pDocCjkcharsFT.clear();
-    m_pDocStandardizedPagesFT.clear();
-    m_pCjkcharsLabelFT.clear();
-    m_pStandardizedPagesLabelFT.clear();
-    m_pClosePB.clear();
-    SfxModelessDialog::dispose();
 }
 
 namespace
 {
-    void setValue(FixedText *pWidget, sal_uLong nValue, const LocaleDataWrapper& rLocaleData)
+    void setValue(weld::Label& rWidget, sal_uLong nValue, const LocaleDataWrapper& rLocaleData)
     {
-        pWidget->SetText(rLocaleData.getNum(nValue, 0));
+        rWidget.set_label(rLocaleData.getNum(nValue, 0));
     }
 
-    void setDoubleValue(FixedText *pWidget, double fValue)
+    void setDoubleValue(weld::Label& rWidget, double fValue)
     {
         OUString sValue(OUString::number(::rtl::math::round(fValue, 1)));
-        pWidget->SetText(sValue);
+        rWidget.set_label(sValue);
     }
 }
 
 void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
-    const LocaleDataWrapper& rLocaleData = GetSettings().GetUILocaleDataWrapper();
-    setValue(m_pCurrentWordFT, rCurrent.nWord, rLocaleData);
-    setValue(m_pCurrentCharacterFT, rCurrent.nChar, rLocaleData);
-    setValue(m_pCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces, rLocaleData);
-    setValue(m_pCurrentCjkcharsFT, rCurrent.nAsianWord, rLocaleData);
-    setValue(m_pDocWordFT, rDoc.nWord, rLocaleData);
-    setValue(m_pDocCharacterFT, rDoc.nChar, rLocaleData);
-    setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces, rLocaleData);
-    setValue(m_pDocCjkcharsFT, rDoc.nAsianWord, rLocaleData);
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
+    setValue(*m_xCurrentWordFT, rCurrent.nWord, rLocaleData);
+    setValue(*m_xCurrentCharacterFT, rCurrent.nChar, rLocaleData);
+    setValue(*m_xCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces, rLocaleData);
+    setValue(*m_xCurrentCjkcharsFT, rCurrent.nAsianWord, rLocaleData);
+    setValue(*m_xDocWordFT, rDoc.nWord, rLocaleData);
+    setValue(*m_xDocCharacterFT, rDoc.nChar, rLocaleData);
+    setValue(*m_xDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces, rLocaleData);
+    setValue(*m_xDocCjkcharsFT, rDoc.nAsianWord, rLocaleData);
 
-    if (m_pStandardizedPagesLabelFT->IsVisible())
+    if (m_xStandardizedPagesLabelFT->get_visible())
     {
         sal_Int64 nCharsPerStandardizedPage = officecfg::Office::Writer::WordCount::StandardizedPageSize::get();
-        setDoubleValue(m_pCurrentStandardizedPagesFT,
+        setDoubleValue(*m_xCurrentStandardizedPagesFT,
             static_cast<double>(rCurrent.nChar) / nCharsPerStandardizedPage);
-        setDoubleValue(m_pDocStandardizedPagesFT,
+        setDoubleValue(*m_xDocStandardizedPagesFT,
             static_cast<double>(rDoc.nChar) / nCharsPerStandardizedPage);
     }
 
     bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
-    bool bToggleCJK = m_pCurrentCjkcharsFT->IsVisible() != bShowCJK;
+    bool bToggleCJK = m_xCurrentCjkcharsFT->get_visible() != bShowCJK;
     if (bToggleCJK)
     {
         showCJK(bShowCJK);
-        setOptimalLayoutSize(); //force resize of dialog
+        m_xDialog->resize_to_request(); //force resize of dialog
     }
 }
 
 void SwWordCountFloatDlg::showCJK(bool bShowCJK)
 {
-    m_pCurrentCjkcharsFT->Show(bShowCJK);
-    m_pDocCjkcharsFT->Show(bShowCJK);
-    m_pCjkcharsLabelFT->Show(bShowCJK);
+    m_xCurrentCjkcharsFT->show(bShowCJK);
+    m_xDocCjkcharsFT->show(bShowCJK);
+    m_xCjkcharsLabelFT->show(bShowCJK);
 }
 
 void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 {
-    m_pCurrentStandardizedPagesFT->Show(bShowStandardizedPages);
-    m_pDocStandardizedPagesFT->Show(bShowStandardizedPages);
-    m_pStandardizedPagesLabelFT->Show(bShowStandardizedPages);
+    m_xCurrentStandardizedPagesFT->show(bShowStandardizedPages);
+    m_xDocStandardizedPagesFT->show(bShowStandardizedPages);
+    m_xStandardizedPagesLabelFT->show(bShowStandardizedPages);
 }
 
 SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
-                                         vcl::Window *pParent,
+                                         weld::Window *pParent,
                                          SfxChildWinInfo const * pInfo)
-    : SfxModelessDialog(_pBindings, pChild, pParent, "WordCountDialog", "modules/swriter/ui/wordcount.ui")
+    : SfxModelessDialogController(_pBindings, pChild, pParent, "modules/swriter/ui/wordcount.ui", "WordCountDialog")
+    , m_xCurrentWordFT(m_xBuilder->weld_label("selectwords"))
+    , m_xCurrentCharacterFT(m_xBuilder->weld_label("selectchars"))
+    , m_xCurrentCharacterExcludingSpacesFT(m_xBuilder->weld_label("selectcharsnospaces"))
+    , m_xCurrentCjkcharsFT(m_xBuilder->weld_label("selectcjkchars"))
+    , m_xCurrentStandardizedPagesFT(m_xBuilder->weld_label("selectstandardizedpages"))
+    , m_xDocWordFT(m_xBuilder->weld_label("docwords"))
+    , m_xDocCharacterFT(m_xBuilder->weld_label("docchars"))
+    , m_xDocCharacterExcludingSpacesFT(m_xBuilder->weld_label("doccharsnospaces"))
+    , m_xDocCjkcharsFT(m_xBuilder->weld_label("doccjkchars"))
+    , m_xDocStandardizedPagesFT(m_xBuilder->weld_label("docstandardizedpages"))
+    , m_xCjkcharsLabelFT(m_xBuilder->weld_label("cjkcharsft"))
+    , m_xStandardizedPagesLabelFT(m_xBuilder->weld_label("standardizedpages"))
+    , m_xClosePB(m_xBuilder->weld_button("close"))
 {
-    get(m_pCurrentWordFT, "selectwords");
-    get(m_pCurrentCharacterFT, "selectchars");
-    get(m_pCurrentCharacterExcludingSpacesFT, "selectcharsnospaces");
-    get(m_pCurrentCjkcharsFT, "selectcjkchars");
-    get(m_pCurrentStandardizedPagesFT, "selectstandardizedpages");
-
-    get(m_pDocWordFT, "docwords");
-    get(m_pDocCharacterFT, "docchars");
-    get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
-    get(m_pDocCjkcharsFT, "doccjkchars");
-    get(m_pDocStandardizedPagesFT, "docstandardizedpages");
-
-    get(m_pCjkcharsLabelFT, "cjkcharsft");
-    get(m_pStandardizedPagesLabelFT, "standardizedpages");
-
-    get(m_pClosePB, "close");
-
     showCJK(SvtCJKOptions().IsAnyEnabled());
     showStandardizedPages(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
 
     Initialize(pInfo);
-
-    m_pClosePB->SetClickHdl(LINK(this, SwWordCountFloatDlg, CloseHdl));
 }
 
 void SwWordCountFloatDlg::UpdateCounts()
