@@ -238,6 +238,7 @@ void GalleryPreview::StartDrag( sal_Int8, const Point& )
 
 void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 {
+#if HAVE_FEATURE_AVMEDIA
     if (rURL.GetProtocol() != INetProtocol::NotValid)
     {
         ::avmedia::MediaFloater* pFloater = avmedia::getMediaFloater();
@@ -251,6 +252,9 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
         if (pFloater)
             pFloater->setURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "", true );
     }
+#else
+    (void) rURL;
+#endif
 }
 
 void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
