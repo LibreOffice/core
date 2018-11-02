@@ -400,10 +400,12 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         m_bDefaultSize = false;
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
-            if (m_pTopLevel)
-                m_pTopLevel->resize(nWidth, nHeight);
+            QWidget* const pWidget = (m_pTopLevel) ? m_pTopLevel : m_pQWidget;
+
+            if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
+                pWidget->resize(nWidth, nHeight);
             else
-                m_pQWidget->resize(nWidth, nHeight);
+                pWidget->setFixedSize(nWidth, nHeight);
         }
     }
     else if (m_bDefaultSize)
