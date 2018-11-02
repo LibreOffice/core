@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <unotools/confignode.hxx>
@@ -81,6 +83,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
+#if HAVE_FEATURE_DBCONNECTIVITY
         bool bDatabaseFields = true;
         aCfgRoot.getNodeValue(
             OUString("DatabaseFields")) >>= bDatabaseFields;
@@ -88,7 +91,9 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
         if (bDatabaseFields)
             m_nDbId = AddTabPage("database", SwFieldDBPage::Create, nullptr);
         else
+#else
             RemoveTabPage("database");
+#endif
     }
     else
     {
@@ -278,6 +283,7 @@ void SwFieldDlg::InsertHdl()
 
 void SwFieldDlg::ActivateDatabasePage()
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     m_bDataBaseMode = true;
     ShowPage(m_nDbId);
     SfxTabPage* pDBPage = GetTabPage(m_nDbId);
@@ -291,6 +297,7 @@ void SwFieldDlg::ActivateDatabasePage()
     RemoveTabPage("docinfo");
     RemoveTabPage("ref");
     RemoveTabPage("functions");
+#endif
 }
 
 void SwFieldDlg::ShowReferencePage()
@@ -300,6 +307,7 @@ void SwFieldDlg::ShowReferencePage()
 
 void SwFieldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     if (nId == m_nDbId)
     {
         SfxDispatcher* pDispatch = m_pBindings->GetDispatcher();
@@ -315,6 +323,10 @@ void SwFieldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
                 static_cast<SwFieldDBPage&>(rPage).SetWrtShell(static_cast<SwView*>(pViewShell)->GetWrtShell());
         }
     }
+#else
+    (void) nId;
+    (void) rPage;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

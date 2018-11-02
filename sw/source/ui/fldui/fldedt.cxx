@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <vcl/msgbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -189,10 +191,12 @@ VclPtr<SfxTabPage> SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
                 pTabPage = SwFieldDokInfPage::Create(get_content_area(), pSet);
                 break;
             }
+#if HAVE_FEATURE_DBCONNECTIVITY
         case GRP_DB:
             pTabPage = SwFieldDBPage::Create(get_content_area(), nullptr);
             static_cast<SwFieldDBPage*>(pTabPage.get())->SetWrtShell(*pSh);
             break;
+#endif
         case GRP_VAR:
             pTabPage = SwFieldVarPage::Create(get_content_area(), nullptr);
             break;

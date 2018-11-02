@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <algorithm>
@@ -869,6 +871,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
     }
 
+#if HAVE_FEATURE_AVMEDIA
     // media filters
     static const char aWildcard[] = "*.";
     ::avmedia::FilterNameVector     aFilters;
@@ -898,6 +901,9 @@ void TPGalleryThemeProperties::FillFilterList()
             }
         }
     }
+#else
+    (void) nFirstExtFilterPos;
+#endif
 
     // 'All' filters
     OUString aExtensions;
@@ -922,6 +928,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
     }
 
+#if HAVE_FEATURE_AVMEDIA
     // media filters
     for(std::pair<OUString,OUString> & aFilter : aFilters)
     {
@@ -932,6 +939,7 @@ void TPGalleryThemeProperties::FillFilterList()
             aExtensions += aWildcard + aFilter.second.getToken( 0, ';', nIndex );
         }
      }
+#endif
 
 #if defined(_WIN32)
     if (aExtensions.getLength() > 240)
@@ -1064,13 +1072,14 @@ void TPGalleryThemeProperties::DoPreview()
             ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
             GetParent()->EnterWait();
         }
+#if HAVE_FEATURE_AVMEDIA
         else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
         {
             xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" );
             if( xMediaPlayer.is() )
                 xMediaPlayer->start();
         }
-
+#endif
         bInputAllowed = true;
         aPreviewString = aString;
     }
