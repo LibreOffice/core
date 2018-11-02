@@ -11,10 +11,11 @@
 #ifndef INCLUDED_VCL_INC_WIDGETTHEME_HXX
 #define INCLUDED_VCL_INC_WIDGETTHEME_HXX
 
-#include <cairo.h>
-#include <vcl/dllapi.h>
-#include <vcl/salnativewidgets.hxx>
-#include <tools/color.hxx>
+/**
+ * This file expects cairo.h and the definition of
+ * the other types used here to be defined before
+ * including it.
+ */
 
 namespace vcl
 {
@@ -52,8 +53,12 @@ struct ControlDrawParameters
     ControlState eState;
     ButtonValue eButtonValue;
     bool bIsStock;
-    sal_Int64 nValue;
+    int64_t nValue;
 };
+
+#ifndef SAL_DLLPUBLIC_RTTI
+#define SAL_DLLPUBLIC_RTTI
+#endif
 
 class SAL_DLLPUBLIC_RTTI WidgetThemeLibrary
 {
