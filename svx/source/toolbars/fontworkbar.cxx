@@ -340,7 +340,10 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
 
                     if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aFormModel ) )
                     {
-                        const SdrObject* pSourceObj = aFormModel.GetPage( 0 )->GetObj( 0 );
+                        const SdrObject* pSourceObj = nullptr;
+                        if (aFormModel.GetPageCount() > 0)
+                            pSourceObj = aFormModel.GetPage( 0 )->GetObj( 0 );
+                        SAL_WARN_IF(!pSourceObj, "svx.form", "No content in gallery custom shape '" << rCustomShape << "'" );
                         if( pSourceObj )
                         {
                             PropertyValue aPropVal_;
