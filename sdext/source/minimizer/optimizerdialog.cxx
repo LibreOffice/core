@@ -513,24 +513,17 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
-                    OUString aLocation( xStorable->getLocation() );
-                    if ( !aLocation.isEmpty() )
-                    {
-                        sal_Int32 nIndex = aLocation.lastIndexOf( '/', aLocation.getLength() - 1 );
-                        if ( nIndex >= 0 )
-                        {
-                            if ( nIndex < aLocation.getLength() - 1 )
-                                aLocation = aLocation.copy( nIndex + 1 );
-
-                            // remove extension
-                            nIndex = aLocation.lastIndexOf( '.', aLocation.getLength() - 1 );
-                            if ( nIndex >= 0 )
-                                aLocation = aLocation.copy( 0, nIndex );
-
-                            // adding .mini
-                            aLocation = aLocation.concat( ".mini" );
-                            aFileOpenDialog.setDefaultName( aLocation );
-                        }
+                    INetURLObject aURLObj( xStorable->getLocation() );
+                    if ( !aURLObj.hasFinalSlash() ) {
+                        // tdf#105382 uri-decode file name
+                        aURLObj.removeExtension(INetURLObject::LAST_SEGMENT, false);
+                        auto aName( aURLObj.getName( INetURLObject::LAST_SEGMENT,
+                                                     false,
+                                                     INetURLObject::DECODE_WITH_CHARSET ) );
+                        // Add "(minimized)"
+                        aName += " ";
+                        aName += mrOptimizerDialog.getString(STR_FILENAME_SUFFIX);
+                        aFileOpenDialog.setDefaultName( aName );
                     }
                 }
                  bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
