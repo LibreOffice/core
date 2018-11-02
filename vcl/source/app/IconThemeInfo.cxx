@@ -20,10 +20,6 @@ const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID("sifr");
 
 namespace {
 
-static const OUStringLiteral BREEZE_DARK_ID("breeze_dark");
-static const OUStringLiteral BREEZE_DARK_DISPLAY_NAME("Breeze Dark");
-static const OUStringLiteral SIFR_DARK_ID("sifr_dark");
-static const OUStringLiteral SIFR_DARK_DISPLAY_NAME("Sifr Dark");
 static const OUStringLiteral KARASA_JAGA_ID("karasa_jaga");
 static const OUStringLiteral KARASA_JAGA_DISPLAY_NAME("Karasa Jaga");
 static const OUStringLiteral HELPIMG_FAKE_THEME("helpimg");
@@ -122,30 +118,38 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         throw std::runtime_error("IconThemeInfo::ThemeIdToDisplayName() called with invalid id.");
     }
 
+    // Strip _svg and _dark filename "extensions"
+    OUString aDisplayName = themeId;
+
+    bool bIsSvg = aDisplayName.endsWith("_svg", &aDisplayName);
+    bool bIsDark = aDisplayName.endsWith("_dark", &aDisplayName);
+    if (!bIsSvg && bIsDark)
+        bIsSvg = aDisplayName.endsWith("_svg", &aDisplayName);
+
     // special cases
-    if (themeId.equalsIgnoreAsciiCase(BREEZE_DARK_ID)) {
-        return BREEZE_DARK_DISPLAY_NAME;
+    if (aDisplayName.equalsIgnoreAsciiCase(KARASA_JAGA_ID)) {
+        aDisplayName = KARASA_JAGA_DISPLAY_NAME;
     }
-    else if (themeId.equalsIgnoreAsciiCase(SIFR_DARK_ID)) {
-        return SIFR_DARK_DISPLAY_NAME;
-    }
-
-    else if (themeId.equalsIgnoreAsciiCase(KARASA_JAGA_ID)) {
-        return KARASA_JAGA_DISPLAY_NAME;
-    }
-
-    // make the first letter uppercase
-    OUString r;
-    sal_Unicode firstLetter = themeId[0];
-    if (rtl::isAsciiLowerCase(firstLetter)) {
-        r = OUString(sal_Unicode(rtl::toAsciiUpperCase(firstLetter)));
-        r += themeId.copy(1);
-    }
-    else {
-        r = themeId;
+    else
+    {
+        // make the first letter uppercase
+        sal_Unicode firstLetter = aDisplayName[0];
+        if (rtl::isAsciiLowerCase(firstLetter))
+        {
+            OUString aUpper(sal_Unicode(rtl::toAsciiUpperCase(firstLetter)));
+            aUpper += aDisplayName.copy(1);
+            aDisplayName = aUpper;
+        }
     }
 
-    return r;
+    if (bIsSvg && bIsDark)
+        aDisplayName += " (SVG + dark)";
+    else if (bIsSvg)
+        aDisplayName += " (SVG)";
+    else if (bIsDark)
+        aDisplayName += " (dark)";
+
+    return aDisplayName;
 }
 
 namespace
