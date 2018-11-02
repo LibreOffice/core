@@ -250,8 +250,7 @@ typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char
 typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
 #if defined(IOS)
-extern __attribute__ ((visibility("default")))
-    LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
+LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
 
 static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
