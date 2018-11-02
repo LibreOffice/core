@@ -143,9 +143,10 @@ public:
 
 class SFX2_DLLPUBLIC SfxChildWindow
 {
-    VclPtr<vcl::Window>        pParent;        // parent window ( Topwindow )
-    sal_uInt16 const           nType;          // ChildWindow-Id
+    VclPtr<vcl::Window>        pParent;         // parent window ( Topwindow )
+    sal_uInt16 const           nType;           // ChildWindow-Id
     VclPtr<vcl::Window>        pWindow;         // actual contents
+    std::shared_ptr<SfxModelessDialogController> xController;     // actual contents
     SfxChildAlignment          eChildAlignment; // Current css::drawing::Alignment
     std::unique_ptr< SfxChildWindow_Impl>       pImpl;            // Implementation data
     std::unique_ptr<SfxChildWindowContext>      pContext;        // With context-sensitive ChildWindows:
@@ -161,6 +162,9 @@ public:
     void                Destroy();
     vcl::Window*        GetWindow() const
                         { return pWindow; }
+    void                SetController(std::shared_ptr<SfxModelessDialogController> controller) { xController = controller; }
+    void                ClearController() { xController.reset(); }
+    std::shared_ptr<SfxModelessDialogController>& GetController() { return xController; }
     vcl::Window*        GetParent() const
                         { return pParent; }
     SfxChildAlignment   GetAlignment() const
