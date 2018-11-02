@@ -21,7 +21,6 @@
 #include "optimizerdialog.hxx"
 #include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
-#include "errordialog.hxx"
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -31,7 +30,9 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
-
+#include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
@@ -585,6 +586,8 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 lArguments[ 2 ].Name = "InformationDialog";
                 lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
+
+                ErrCode errorCode = ERRCODE_NONE;
                 try
                 {
                     ImpOptimizer aOptimizer(
@@ -594,15 +597,30 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 }
                 catch (css::io::IOException&)
                 {
-                    mrOptimizerDialog.maStats.SetStatusValue(TK_Progress, Any(static_cast<sal_Int32>(0)));
+                    // We always receive just ERRCODE_IO_CANTWRITE in case of problems, so no need to bother
+                    // about extracting error code from exception text
+                    errorCode = ERRCODE_IO_CANTWRITE;
+                }
+                catch (css::uno::Exception&)
+                {
+                    // Other general exception
+                    errorCode = ERRCODE_IO_GENERAL;
+                }
+
+                if (errorCode != ERRCODE_NONE)
+                {
+                    // Restore wizard controls
+                    mrOptimizerDialog.maStats.SetStatusValue(TK_Progress,
+                                                             Any(static_cast<sal_Int32>(0)));
                     mrOptimizerDialog.setControlProperty("btnNavBack", "Enabled", Any(true));
                     mrOptimizerDialog.setControlProperty("btnNavNext", "Enabled", Any(false));
                     mrOptimizerDialog.setControlProperty("btnNavFinish", "Enabled", Any(true));
                     mrOptimizerDialog.setControlProperty("btnNavCancel", "Enabled", Any(true));
-                    ErrorDialog aInformationDialog(
-                        mrOptimizerDialog.UnoDialog::mxContext, mrOptimizerDialog.GetFrame(),
-                        mrOptimizerDialog.getString(STR_ERROR_IO));
-                    aInformationDialog.execute();
+
+                    OUString aFileName;
+                    mrOptimizerDialog.GetConfigProperty(TK_SaveAsURL) >>= aFileName;
+                    SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC, aFileName);
+                    ErrorHandler::HandleError(errorCode);
                     break;
                 }
 
