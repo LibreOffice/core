@@ -20,7 +20,7 @@
     <string name="new_presentation">Yeni Sunum</string>
     <string name="new_spreadsheet">Yeni Hesap Tablosu</string>
     <string name="new_drawing">Yeni Çizim</string>
-    <string name="default_document_name">başlıksız</string>
+    <string name="default_document_name">adsız</string>
 
     <string name="browser_app_name">LibreOffice Tarayıcı</string>
     <string name="menu_search">Ara</string>
@@ -39,7 +39,7 @@
     <string name="menu_sort_az">Alfabetik Sırala</string>
     <string name="menu_sort_modified">Tarihe Göre Sırala</string>
     <string name="menu_preferences">Seçenekler</string>
-    <string name="file_icon_desc">fileicon</string>
+    <string name="file_icon_desc">dosya_simgesi</string>
     <string name="title_recents">Son açılan dosyalar</string>
     <string name="title_browser">Tüm dosyalar</string>
     <!-- Pref keys as resources ; Not currently used -->
@@ -48,7 +48,7 @@
     <string name="pref_category_explorer">Dosya Gezgini Ayarları</string>
     <string name="pref_category_general">Genel</string>
     <string name="pref_experimental_editing">Deneysel Mod</string>
-    <string name="pref_experimental_editing_summary">Deneysel editleme modunu etkinleştirin. Kullanım riski size aittir.</string>
+    <string name="pref_experimental_editing_summary">Deneysel düzenleme modunu etkinleştirin. Kullanım riski size aittir.</string>
     <string name="pref_show_hidden_files">Gizli Dosyalar ve Dizinler</string>
     <string name="pref_show_hidden_files_summary">Gizli dosyalar ve dizinleri göstermeyi etkinleştir.</string>
     <string name="pref_developer_mode">Geliştirici Modu</string>
@@ -95,14 +95,14 @@
     <string name="action_save">Kaydet</string>
     <string name="action_fromat">Biçimlendirmeyi etkinleştir.</string>
     <string name="action_search">Ara</string>
-    <string name="action_UNO_commands">UNO Komutu yolla</string>
+    <string name="action_UNO_commands">UNO komutu yolla</string>
 
     <!-- Feedback messages -->
     <string name="message_saved">Kaydetme tamamlandı.</string>
     <string name="message_saving">Belge kaydediliyor…</string>
     <string name="message_save_incomplete">Kayıt tamamlanmadı. Değişiklik yapıldı mı?</string>
-    <string name="create_new_file_success">"Yeni dosya yaratıldı - "</string>
-    <string name="create_new_file_error">Yeni dosya yaratma başarısız. Lütfen dosya ismini kontrol ediniz.</string>
+    <string name="create_new_file_success">"Yeni dosya oluşturuldu - "</string>
+    <string name="create_new_file_error">Yeni dosya oluşturma başarısız. Lütfen dosya ismini kontrol ediniz.</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Depolama sağlayıcısı ayarları</string>
@@ -214,12 +214,12 @@
     <string name="tabhost_character">Karakter</string>
     <string name="tabhost_paragraph">Paragraf</string>
     <string name="tabhost_insert">Ekle</string>
-    <string name="tabhost_style">Stil</string>
+    <string name="tabhost_style">Biçim</string>
     <string name="alert_ok">Tamam</string>
     <string name="alert_cancel">İptal</string>
     <string name="unable_to_go_further">Daha fazla ilerlenemiyor.</string>
     <string name="current_uno_command">Şuan ki UNO komutu</string>
-    <string name="pref_sort_summary">Dosyaların nasıl sıralanacağını seçiniz. A-Z, Z-A yada boyutsal.</string>
+    <string name="pref_sort_summary">Dosyaların nasıl sıralanacağını seçiniz. A-Z, Z-A ya da boyuta göre.</string>
     <string name="pref_viewmode_summary">Dosyaları grid veya liste şeklinde görüntüle.</string>
     <string name="pref_file_explorer_title">Dosya Gezgini</string>
     <string name="pref_sort_title">Dosya Sıralaması</string>
@@ -227,16 +227,16 @@
     <string name="pref_filter_summary">Varsayılan dosya filtrelemesini seç</string>
     <string name="display_language">Uygulama Dili</string>
     <string name="display_language_summary">Varsayılan dili değiştir</string>
-    <string name="unable_to_export_pdf">Unable to export to pdf</string>
-    <string name="pdf_exported_at">Exported to PDF at</string>
-    <string name="printing_not_supported">Your device does not support printing</string>
+    <string name="unable_to_export_pdf">Pdf dışa aktarılamıyor.</string>
+    <string name="pdf_exported_at">Şu konumda pdf'e aktarıldı: </string>
+    <string name="printing_not_supported">Cihazınız yazdırmayı desteklemiyor.</string>
     <string name="error">Hata</string>
     <string name="enter_part_name">Bölüm ismi girin.</string>
     <string name="bmp_null">Bmp boş!</string>
     <string name="directory_not_saved">Dizin kaydedilmedi.</string>
     <string name="page">Sayfa</string>
     <string name="sheet">Tablo</string>
-    <string name="slide">Slide</string>
+    <string name="slide">Slayt</string>
     <string name="part">Bölüm</string>
     <string name="highlight_color">Vurgulama Rengi</string>
     <string name="font_color">Metin Rengi</string>
