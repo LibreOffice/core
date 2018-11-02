@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <hintids.hxx>
@@ -2886,6 +2888,7 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -2896,6 +2899,7 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
             pDlg->Execute();
         }
         break;
+#endif
         default:
             OSL_FAIL("wrong dispatcher");
     }
