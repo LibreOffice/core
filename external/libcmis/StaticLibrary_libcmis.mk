@@ -28,7 +28,7 @@ endif
 # C++17:
 ifeq ($(COM)-$(COM_IS_CLANG),GCC-)
 $(eval $(call gb_StaticLibrary_add_cxxflags,libcmis, \
-    $(if $(filter -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
+    $(if $(filter -std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
             $(CXXFLAGS_CXX11)), \
         -std=gnu++14) \
 ))
