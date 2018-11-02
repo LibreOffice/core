@@ -21,6 +21,7 @@ namespace vcl
 {
 struct WidgetDrawStyle
 {
+    uint32_t nSize;
     Color maFaceColor;
     Color maLightColor;
     Color maLightBorderColor;
@@ -39,7 +40,8 @@ struct WidgetDrawStyle
 struct ControlDrawParameters
 {
     ControlDrawParameters(cairo_t* i_pCairo, ControlPart i_ePart, ControlState i_eState)
-        : pCairo(i_pCairo)
+        : nSize(sizeof(ControlDrawParameters))
+        , pCairo(i_pCairo)
         , ePart(i_ePart)
         , eState(i_eState)
         , eButtonValue(ButtonValue::DontKnow)
@@ -48,6 +50,7 @@ struct ControlDrawParameters
     {
     }
 
+    uint32_t nSize;
     cairo_t* pCairo;
     ControlPart ePart;
     ControlState eState;
@@ -92,7 +95,7 @@ struct _WidgetThemeLibrary
     bool (*drawListNet)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     bool (*drawListHeader)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
 
-    bool (*updateSettings)(WidgetDrawStyle& rSettings);
+    bool (*updateSettings)(WidgetDrawStyle& rStyle);
 };
 
 extern "C" vcl::WidgetThemeLibrary* CreateWidgetThemeLibrary();

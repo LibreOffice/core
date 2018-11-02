@@ -311,6 +311,7 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
         return false;
 
     WidgetDrawStyle aStyle;
+    aStyle.nSize = sizeof(WidgetDrawStyle);
 
     if (s_pWidgetImplementation->updateSettings(aStyle))
     {
