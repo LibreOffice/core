@@ -1743,3 +1743,12 @@ cmd/sc_columnheight.png cmd/sc_setminimalcolumnheight.png
 
 cmd/lc_rowheight.png cmd/lc_setminimalrowheight.png
 cmd/lc_columnheight.png cmd/lc_setminimalcolumnheight.png
+
+# calc toolbar previewbar
+# ==============================================
+cmd/sc_margins.png cmd/sc_pagemargin.png
+cmd/sc_exportasgraphic.png cmd/sc_insertgraphic.png
+cmd/sc_namegroup.png cmd/sc_renameobject.png
+
+cmd/lc_margins.png cmd/lc_pagemargin.png
+cmd/lc_exportasgraphic.png cmd/lc_insertgraphic.png
