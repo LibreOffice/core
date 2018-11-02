@@ -17801,6 +17801,7 @@ vcl/inc/unx/x11_cursors/wsshow_curs.h
 vcl/inc/unx/x11_cursors/wsshow_mask.h
 vcl/inc/vcleventlisteners.hxx
 vcl/inc/vclpluginapi.h
+vcl/inc/WidgetThemeLibraryTypes.hxx
 vcl/inc/wall2.hxx
 vcl/inc/win/DWriteTextRenderer.hxx
 vcl/inc/win/ScopedHDC.hxx

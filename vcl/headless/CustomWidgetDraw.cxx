@@ -8,14 +8,13 @@
  *
  */
 
+#include <cairo.h>
 #include <headless/CustomWidgetDraw.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <sal/main.h>
 #include <sal/config.h>
 #include <rtl/bootstrap.hxx>
 #include <tools/svlibrary.h>
 #include <osl/module.hxx>
-#include <cairo.h>
 #include <svdata.hxx>
 
 namespace vcl

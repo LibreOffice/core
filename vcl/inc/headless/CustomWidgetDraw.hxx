@@ -12,7 +12,6 @@
 #define INCLUDED_VCL_INC_CUSTOMWIDGETDRAW_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/salnativewidgets.hxx>
 #include <WidgetDrawInterface.hxx>
 #include <WidgetThemeLibrary.hxx>
 #include <headless/svpgdi.hxx>
