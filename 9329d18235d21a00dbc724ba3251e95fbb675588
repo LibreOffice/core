@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_ecdbcb7a",
+        "filename": "test/source/container/xenumerationaccess.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-02T05:51:20Z",
+      "side": 1,
+      "message": "CPPUNIT_ASSERT_MESSAGE shows the message in case assertion is failed, not the other way round",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 68
+      },
+      "revId": "9329d18235d21a00dbc724ba3251e95fbb675588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
