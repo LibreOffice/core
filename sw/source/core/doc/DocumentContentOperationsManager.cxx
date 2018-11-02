@@ -824,6 +824,10 @@ namespace
         {
             rSvRedLine.SetPos( nInsPos );
             pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
+            if (rSvRedLine.pRedl->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                UpdateFramesForAddDeleteRedline(*pDoc, *rSvRedLine.pRedl);
+            }
         }
 
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
