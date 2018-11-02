@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -61,11 +62,13 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
 {
     bool bRet = true;
     Graphic aGraphic;
+#if HAVE_FEATURE_AVMEDIA
     if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
     {
         aGraphic = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
     }
     else
+#endif
     {
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         GalleryProgress aProgress( &rFilter );
