@@ -41,7 +41,6 @@ cmd/sc_addtable.svg cmd/sc_dbnewtable.svg
 
 # Insert
 cmd/32/charmapcontrol.svg cmd/32/insertsymbol.svg
-cmd/32/insert.svg cmd/32/togglesheetgrid.svg
 cmd/32/insertavmedia.svg cmd/32/avmediaplayer.svg
 cmd/32/insertauthorfield.svg cmd/32/dbviewaliases.svg
 cmd/32/insertcell.svg cmd/32/insertcellsright.svg
@@ -82,7 +81,7 @@ cmd/32/insertrowbreak.svg cmd/32/insertpagebreak.svg
 cmd/32/insertrowsbefore.svg cmd/32/insertrows.svg
 cmd/32/insertslidefield.svg cmd/32/insertslidenumber.svg
 cmd/32/insertslidetitlefield.svg cmd/32/inserttitlefield.svg
-cmd/32/insertspreadsheet.svg cmd/32/togglesheetgrid.svg
+cmd/32/insertspreadsheet.svg cmd/32/insert.svg
 cmd/32/inserttextframe.svg cmd/32/insertframe.svg
 cmd/32/inserttimefield.svg cmd/32/timefield.svg
 cmd/32/inserttimefieldfix.svg cmd/32/timefield.svg
@@ -97,7 +96,6 @@ cmd/32/showtrackedchanges.svg cmd/32/addwatch.svg
 cmd/32/tracechangemode.svg cmd/32/trackchanges.svg
 
 cmd/lc_charmapcontrol.svg cmd/lc_insertsymbol.svg
-cmd/lc_insert.svg cmd/lc_togglesheetgrid.svg
 cmd/lc_insertavmedia.svg cmd/lc_avmediaplayer.svg
 cmd/lc_insertauthorfield.svg cmd/lc_dbviewaliases.svg
 cmd/lc_insertcell.svg cmd/lc_insertcellsright.svg
@@ -140,7 +138,7 @@ cmd/lc_insertrowsbefore.svg cmd/lc_insertrows.svg
 cmd/lc_insertsignatureline.svg cmd/lc_signaturelinedialog.svg
 cmd/lc_insertslidefield.svg cmd/lc_insertslidenumber.svg
 cmd/lc_insertslidetitlefield.svg cmd/lc_inserttitlefield.svg
-cmd/lc_insertspreadsheet.svg cmd/lc_togglesheetgrid.svg
+cmd/lc_insertspreadsheet.svg cmd/lc_insert.svg
 cmd/lc_inserttextframe.svg cmd/lc_insertframe.svg
 cmd/lc_inserttimefield.svg cmd/lc_timefield.svg
 cmd/lc_inserttimefieldfix.svg cmd/lc_timefield.svg
@@ -155,7 +153,6 @@ cmd/lc_showtrackedchanges.svg cmd/lc_addwatch.svg
 cmd/lc_tracechangemode.svg cmd/lc_trackchanges.svg
 
 cmd/sc_charmapcontrol.svg cmd/sc_insertsymbol.svg
-cmd/sc_insert.svg cmd/sc_togglesheetgrid.svg
 cmd/sc_insertavmedia.svg cmd/sc_avmediaplayer.svg
 cmd/sc_insertauthorfield.svg cmd/sc_dbviewaliases.svg
 cmd/sc_insertcell.svg cmd/sc_insertcellsright.svg
@@ -198,7 +195,7 @@ cmd/sc_insertrowsbefore.svg cmd/sc_insertrows.svg
 cmd/sc_insertsignatureline.svg cmd/sc_signaturelinedialog.svg
 cmd/sc_insertslidefield.svg cmd/sc_insertslidenumber.svg
 cmd/sc_insertslidetitlefield.svg cmd/sc_inserttitlefield.svg
-cmd/sc_insertspreadsheet.svg cmd/sc_togglesheetgrid.svg
+cmd/sc_insertspreadsheet.svg cmd/sc_insert.svg
 cmd/sc_inserttextframe.svg cmd/sc_insertframe.svg
 cmd/sc_inserttimefield.svg cmd/sc_timefield.svg
 cmd/sc_inserttimefieldfix.svg cmd/sc_timefield.svg
@@ -772,21 +769,21 @@ cmd/sc_xlinestyle.svg cmd/sc_linestyle.svg
 
 # Mail merge
 cmd/32/dsbformletter.svg cmd/32/mailmergewizard.svg
-cmd/32/dsbinsertcolumns.svg cmd/32/addfield.svg
+cmd/32/dsbinsertcolumns.svg cmd/32/insertfield.svg
 cmd/32/mailmergefirstentry.svg cmd/32/firstrecord.svg
 cmd/32/mailmergelastentry.svg cmd/32/lastrecord.svg
 cmd/32/mailmergenextentry.svg cmd/32/nextrecord.svg
 cmd/32/mailmergepreventry.svg cmd/32/prevrecord.svg
 
 cmd/lc_dsbformletter.svg cmd/lc_mailmergewizard.svg
-cmd/lc_dsbinsertcolumns.svg cmd/lc_addfield.svg
+cmd/lc_dsbinsertcolumns.svg cmd/lc_insertfield.svg
 cmd/lc_mailmergefirstentry.svg cmd/lc_firstrecord.svg
 cmd/lc_mailmergelastentry.svg cmd/lc_lastrecord.svg
 cmd/lc_mailmergenextentry.svg cmd/lc_nextrecord.svg
 cmd/lc_mailmergepreventry.svg cmd/lc_prevrecord.svg
 
 cmd/sc_dsbformletter.svg cmd/sc_mailmergewizard.svg
-cmd/sc_dsbinsertcolumns.svg cmd/sc_addfield.svg
+cmd/sc_dsbinsertcolumns.svg cmd/sc_insertfield.svg
 cmd/sc_mailmergefirstentry.svg cmd/sc_firstrecord.svg
 cmd/sc_mailmergelastentry.svg cmd/sc_lastrecord.svg
 cmd/sc_mailmergenextentry.svg cmd/sc_nextrecord.svg
@@ -1050,15 +1047,12 @@ cmd/sc_exporttopdf.svg cmd/sc_exportdirecttopdf.svg
 # Square
 cmd/32/square.svg cmd/32/basicshapes.quadrat.svg
 cmd/32/flowchartshapes.flowchart-process.svg cmd/32/basicshapes.quadrat.svg
-cmd/32/basicshapes.frame.svg cmd/32/rect_unfilled.svg
 
 cmd/lc_square.svg cmd/lc_basicshapes.quadrat.svg
 cmd/lc_flowchartshapes.flowchart-process.svg cmd/lc_basicshapes.quadrat.svg
-cmd/lc_basicshapes.frame.svg cmd/lc_rect_unfilled.svg
 
 cmd/sc_square.svg cmd/sc_basicshapes.quadrat.svg
 cmd/sc_flowchartshapes.flowchart-process.svg cmd/sc_basicshapes.quadrat.svg
-cmd/sc_basicshapes.frame.svg cmd/sc_rect_unfilled.svg
 
 # Sort
 cmd/32/ordercrit.svg cmd/32/sortascending.svg
@@ -1644,6 +1638,8 @@ sc/res/lc26047.svg cmd/lc_dbviewfunctions.svg
 sc/res/lc26048.svg cmd/lc_autosum.svg
 sc/res/lc26050.svg cmd/lc_cancel.svg
 sc/res/lc26051.svg cmd/lc_ok.svg
+sc/res/na05.svg cmd/sc_upsearch.svg
+sc/res/na06.svg cmd/sc_downsearch.svg
 sc/res/na010.svg sw/res/sc20234.svg
 sc/res/na011.svg cmd/lc_ok.svg
 sc/res/nc02.svg cmd/sc_label.svg
@@ -1712,8 +1708,6 @@ sfx2/res/closedoc.svg vcl/res/closedoc.svg
 sfx2/res/deleterow.svg cmd/sc_cancel.svg
 sfx2/res/favourite_big.svg cmd/lc_insertbookmark.svg
 sfx2/res/hlpdoc.svg cmd/sc_helpindex.svg
-sfx2/res/indexon_small.svg cmd/sc_defaultnumbering.svg
-sfx2/res/indexon_big.svg cmd/lc_defaultnumbering.svg
 sfx2/res/sortascending.svg cmd/lc_sortascending.svg
 sfx2/res/styfam1.svg cmd/sc_charfontname.svg
 sfx2/res/styfam2.svg cmd/sc_controlcodes.svg
@@ -2003,3 +1997,7 @@ cmd/sc_objecttitledescription.svg cmd/sc_insertcaptiondialog.svg
 cmd/32/linenumberingdialog.svg cmd/32/linenumberdialog.svg
 cmd/lc_linenumberingdialog.svg cmd/lc_linenumberdialog.svg
 cmd/sc_linenumberingdialog.svg cmd/sc_linenumberdialog.svg
+
+cmd/32/renametable.svg cmd/32/name.svg
+cmd/lc_renametable.svg cmd/lc_name.svg
+cmd/sc_renametable.svg cmd/sc_name.svg
