@@ -139,7 +139,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
 private:
-    bool            ImplStartExecute();
+    bool            ImplStartExecuteModal();
     static void     ImplEndExecuteModal();
     void            ImplSetModalInputMode(bool bModal);
 public:
@@ -174,9 +174,6 @@ public:
     void            GrabFocusToFirstControl();
     virtual void    Resize() override;
 
-    void            Activate() override;
-
-
     void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink);
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
@@ -191,6 +188,8 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 
 public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
+
+    void            Activate() override;
 };
 
 class VCL_DLLPUBLIC ModalDialog : public Dialog

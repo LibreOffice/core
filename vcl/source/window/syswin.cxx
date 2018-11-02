@@ -431,7 +431,7 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
     return mpImplData->maMaxOutSize;
 }
 
-void ImplWindowStateFromStr(WindowStateData& rData,
+static void ImplWindowStateFromStr(WindowStateData& rData,
     const OString& rStr)
 {
     WindowStateMask nValidMask = WindowStateMask::NONE;
@@ -545,7 +545,7 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     rData.SetMask( nValidMask );
 }
 
-OString ImplWindowStateToStr(const WindowStateData& rData)
+static OString ImplWindowStateToStr(const WindowStateData& rData)
 {
     const WindowStateMask nValidMask = rData.GetMask();
     if ( nValidMask == WindowStateMask::NONE )

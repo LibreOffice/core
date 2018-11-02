@@ -819,7 +819,7 @@ bool Dialog::Close()
         return bRet;
     }
 
-    if (IsInExecute() || mpDialogImpl->maEndCtx.isSet())
+    if ( IsInExecute() )
     {
         EndDialog();
         mbInClose = false;
@@ -832,11 +832,11 @@ bool Dialog::Close()
     }
 }
 
-bool Dialog::ImplStartExecute()
+bool Dialog::ImplStartExecuteModal()
 {
     setDeferredProperties();
 
-    if (IsInExecute() || mpDialogImpl->maEndCtx.isSet())
+    if ( mbInExecute || mpDialogImpl->maEndCtx.isSet() )
     {
 #ifdef DBG_UTIL
         SAL_WARN( "vcl", "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "
@@ -854,74 +854,68 @@ bool Dialog::ImplStartExecute()
             SetLOKNotifier(pViewShell);
     }
 
-    const bool bModal = GetType() != WindowType::MODELESSDIALOG;
-
-    if (bModal)
+    switch ( Application::GetDialogCancelMode() )
     {
-        switch ( Application::GetDialogCancelMode() )
+    case Application::DialogCancelMode::Off:
+        break;
+    case Application::DialogCancelMode::Silent:
+        if (GetLOKNotifier())
         {
-        case Application::DialogCancelMode::Off:
-            break;
-        case Application::DialogCancelMode::Silent:
-            if (bModal && GetLOKNotifier())
-            {
-                // check if there's already some dialog being ::Execute()d
-                const bool bDialogExecuting = std::any_of(pSVData->maWinData.mpExecuteDialogs.begin(),
-                                                          pSVData->maWinData.mpExecuteDialogs.end(),
-                                                          [](const Dialog* pDialog) {
-                                                              return pDialog->IsInSyncExecute();
-                                                          });
-                if (!(bDialogExecuting && IsInSyncExecute()))
-                    break;
-                else
-                    SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
-            }
-
-            SAL_INFO(
-                "vcl",
-                "Dialog \"" << ImplGetDialogText(this)
-                    << "\"cancelled in silent mode");
-            return false;
-        default: // default cannot happen
-        case Application::DialogCancelMode::Fatal:
-            std::abort();
+            // check if there's already some dialog being ::Execute()d
+            const bool bDialogExecuting = std::any_of(pSVData->maWinData.mpExecuteDialogs.begin(),
+                                                      pSVData->maWinData.mpExecuteDialogs.end(),
+                                                      [](const Dialog* pDialog) {
+                                                          return pDialog->IsInSyncExecute();
+                                                      });
+            if (!(bDialogExecuting && IsInSyncExecute()))
+                break;
+            else
+                SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
         }
 
-#ifdef DBG_UTIL
-        vcl::Window* pParent = GetParent();
-        if ( pParent )
-        {
-            pParent = pParent->ImplGetFirstOverlapWindow();
-            SAL_WARN_IF( !pParent->IsReallyVisible(), "vcl",
-                        "Dialog::StartExecuteModal() - Parent not visible" );
-            SAL_WARN_IF( !pParent->IsInputEnabled(), "vcl",
-                        "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
-            SAL_WARN_IF(  pParent->IsInModalMode(), "vcl",
-                        "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
-
-        }
-#endif
-
-        // link all dialogs which are being executed
-        pSVData->maWinData.mpExecuteDialogs.push_back(this);
-
-        // stop capturing, in order to have control over the dialog
-        if ( pSVData->maWinData.mpTrackWin )
-            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
-        if ( pSVData->maWinData.mpCaptureWin )
-            pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-        EnableInput();
-
-        if ( GetParent() )
-        {
-            NotifyEvent aNEvt( MouseNotifyEvent::EXECUTEDIALOG, this );
-            GetParent()->CompatNotify( aNEvt );
-        }
+        SAL_INFO(
+            "vcl",
+            "Dialog \"" << ImplGetDialogText(this)
+                << "\"cancelled in silent mode");
+        return false;
+    default: // default cannot happen
+    case Application::DialogCancelMode::Fatal:
+        std::abort();
     }
 
+#ifdef DBG_UTIL
+    vcl::Window* pParent = GetParent();
+    if ( pParent )
+    {
+        pParent = pParent->ImplGetFirstOverlapWindow();
+        SAL_WARN_IF( !pParent->IsReallyVisible(), "vcl",
+                    "Dialog::StartExecuteModal() - Parent not visible" );
+        SAL_WARN_IF( !pParent->IsInputEnabled(), "vcl",
+                    "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
+        SAL_WARN_IF(  pParent->IsInModalMode(), "vcl",
+                    "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
+
+    }
+#endif
+
+    // link all dialogs which are being executed
+    pSVData->maWinData.mpExecuteDialogs.push_back(this);
+
+    // stop capturing, in order to have control over the dialog
+    if ( pSVData->maWinData.mpTrackWin )
+        pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
+    if ( pSVData->maWinData.mpCaptureWin )
+        pSVData->maWinData.mpCaptureWin->ReleaseMouse();
+    EnableInput();
+
+    if ( GetParent() )
+    {
+        NotifyEvent aNEvt( MouseNotifyEvent::EXECUTEDIALOG, this );
+        GetParent()->CompatNotify( aNEvt );
+    }
     mbInExecute = true;
     // no real modality in LibreOfficeKit
-    if (!bKitActive && bModal)
+    if (!bKitActive)
         SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
@@ -933,17 +927,13 @@ bool Dialog::ImplStartExecute()
     ShowFlags showFlags = bForceFocusAndToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE;
     Show(true, showFlags);
 
-    if (bModal)
-        pSVData->maAppData.mnModalMode++;
+    pSVData->maAppData.mnModalMode++;
 
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
-    if (bModal)
-        UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
-    else
-        UITestLogger::getInstance().log("ModelessDialogExecuted Id:" + get_id());
+    UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
 
     if (bKitActive)
     {
@@ -1025,7 +1015,7 @@ short Dialog::Execute()
             mbInSyncExecute = false;
         });
 
-    if ( !ImplStartExecute() )
+    if ( !ImplStartExecuteModal() )
         return 0;
 
     // Yield util EndDialog is called or dialog gets destroyed
@@ -1064,8 +1054,7 @@ short Dialog::Execute()
 // virtual
 bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
 {
-    const bool bModal = GetType() != WindowType::MODELESSDIALOG;
-    if (!ImplStartExecute())
+    if ( !ImplStartExecuteModal() )
     {
         rCtx.mxOwner.disposeAndClear();
         rCtx.mxOwnerDialog.reset();
@@ -1073,7 +1062,7 @@ bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
     }
 
     mpDialogImpl->maEndCtx = rCtx;
-    mpDialogImpl->mbStartedModal = bModal;
+    mpDialogImpl->mbStartedModal = true;
 
     return true;
 }
@@ -1092,60 +1081,47 @@ void Dialog::EndDialog( long nResult )
     if ( !mbInExecute )
         return;
 
-    const bool bModal = GetType() != WindowType::MODELESSDIALOG;
+    SetModalInputMode(false);
 
-    if (bModal)
+    RemoveFromDlgList();
+
+    // set focus to previous modal dialogue if it is modal for
+    // the same frame parent (or NULL)
+    ImplSVData* pSVData = ImplGetSVData();
+    if (!pSVData->maWinData.mpExecuteDialogs.empty())
     {
-        SetModalInputMode(false);
+        VclPtr<Dialog> pPrevious = pSVData->maWinData.mpExecuteDialogs.back();
 
-        RemoveFromDlgList();
-
-        // set focus to previous modal dialogue if it is modal for
-        // the same frame parent (or NULL)
-        ImplSVData* pSVData = ImplGetSVData();
-        if (!pSVData->maWinData.mpExecuteDialogs.empty())
+        vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
+        vcl::Window* pPrevFrameParent = pPrevious->ImplGetFrameWindow()? pPrevious->ImplGetFrameWindow()->ImplGetParent(): nullptr;
+        if( ( !pFrameParent && !pPrevFrameParent ) ||
+            ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
+            )
         {
-            VclPtr<Dialog> pPrevious = pSVData->maWinData.mpExecuteDialogs.back();
-
-            vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
-            vcl::Window* pPrevFrameParent = pPrevious->ImplGetFrameWindow()? pPrevious->ImplGetFrameWindow()->ImplGetParent(): nullptr;
-            if( ( !pFrameParent && !pPrevFrameParent ) ||
-                ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
-                )
-            {
-                pPrevious->GrabFocus();
-            }
+            pPrevious->GrabFocus();
         }
     }
 
     Hide();
-
-    if (bModal)
+    if ( GetParent() )
     {
-        if ( GetParent() )
-        {
-            NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
-            GetParent()->CompatNotify( aNEvt );
-        }
+        NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
+        GetParent()->CompatNotify( aNEvt );
     }
 
     mpDialogImpl->mnResult = nResult;
 
     if ( mpDialogImpl->mbStartedModal )
+    {
         ImplEndExecuteModal();
-
-    if (mpDialogImpl->maEndCtx.isSet())
-    {
-        mpDialogImpl->maEndCtx.maEndDialogFn(nResult);
-        mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
-    }
-
-    if ( mpDialogImpl->mbStartedModal )
-    {
+        if (mpDialogImpl->maEndCtx.isSet())
+        {
+            mpDialogImpl->maEndCtx.maEndDialogFn(nResult);
+            mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
+        }
         mpDialogImpl->mbStartedModal = false;
         mpDialogImpl->mnResult = -1;
     }
-
     mbInExecute = false;
 
     // Destroy ourselves (if we have a context with VclPtr owner)
@@ -1498,18 +1474,15 @@ ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUStr
 {
 }
 
-void Dialog::Activate()
+void ModelessDialog::Activate()
 {
-    if (GetType() == WindowType::MODELESSDIALOG)
-    {
-        css::uno::Reference< css::uno::XComponentContext > xContext(
-                comphelper::getProcessComponentContext() );
-        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
-        css::document::DocumentEvent aObject;
-        aObject.EventName = "ModelessDialogVisible";
-        xEventBroadcaster->documentEventOccured(aObject);
-    }
-    SystemWindow::Activate();
+    css::uno::Reference< css::uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::document::DocumentEvent aObject;
+    aObject.EventName = "ModelessDialogVisible";
+    xEventBroadcaster->documentEventOccured(aObject);
+    Dialog::Activate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

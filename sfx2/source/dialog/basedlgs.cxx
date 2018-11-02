@@ -56,7 +56,6 @@ public:
     OString aWinState;
     SfxChildWindow* pMgr;
     bool            bConstructed;
-    bool            bClosing;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     Idle            aMoveIdle;
@@ -285,7 +284,6 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     pImpl.reset(new SfxModelessDialog_Impl);
     pImpl->pMgr = pCW;
     pImpl->bConstructed = false;
-    pImpl->bClosing = false;
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
     pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
@@ -382,129 +380,6 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aSize  = aSize;
     if ( IsRollUp() )
         rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
-}
-
-void SfxModelessDialogController::Initialize(SfxChildWinInfo const *pInfo)
-
-/*  [Description]
-
-    Initialization of the class SfxModelessDialog via a SfxChildWinInfo.
-    The initialization is done only in a 2nd step after the constructor, this
-    constructor should be called from the derived class or from the
-    SfxChildWindows.
-*/
-
-{
-    if (!pInfo)
-        return;
-    m_xImpl->aWinState = pInfo->aWinState;
-    if (m_xImpl->aWinState.isEmpty())
-        return;
-    m_xDialog->set_window_state(m_xImpl->aWinState);
-}
-
-SfxModelessDialogController::SfxModelessDialogController(SfxBindings* pBindinx,
-    SfxChildWindow *pCW, weld::Window *pParent, const OUString& rUIXMLDescription,
-    const OString& rID)
-    : SfxDialogController(pParent, rUIXMLDescription, rID)
-{
-    Init(pBindinx, pCW);
-    m_xDialog->connect_focus_in(LINK(this, SfxModelessDialogController, FocusInHdl));
-    m_xDialog->connect_focus_out(LINK(this, SfxModelessDialogController, FocusOutHdl));
-}
-
-void SfxModelessDialogController::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
-{
-    m_pBindings = pBindinx;
-    m_xImpl.reset(new SfxModelessDialog_Impl);
-    m_xImpl->pMgr = pCW;
-    m_xImpl->bConstructed = true;
-    m_xImpl->bClosing = false;
-    if (pBindinx)
-        m_xImpl->StartListening( *pBindinx );
-}
-
-void SfxModelessDialogController::DeInit()
-{
-    if (m_xImpl->pMgr)
-    {
-        WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
-        if (m_xDialog->get_resizable())
-            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
-        m_xImpl->aWinState = m_xDialog->get_window_state(nMask);
-        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, m_xImpl->pMgr->GetType() );
-    }
-
-    m_xImpl->pMgr = nullptr;
-}
-
-/*  [Description]
-
-    If a ModelessDialog is enabled its ViewFrame will be activated.
-    This is necessary by PluginInFrames.
-*/
-IMPL_LINK_NOARG(SfxModelessDialogController, FocusInHdl, weld::Widget&, void)
-{
-    if (!m_xImpl)
-        return;
-    m_pBindings->SetActiveFrame(m_xImpl->pMgr->GetFrame());
-    m_xImpl->pMgr->Activate_Impl();
-}
-
-IMPL_LINK_NOARG(SfxModelessDialogController, FocusOutHdl, weld::Widget&, void)
-{
-    if (!m_xImpl)
-        return;
-    m_pBindings->SetActiveFrame(css::uno::Reference< css::frame::XFrame>());
-}
-
-SfxModelessDialogController::~SfxModelessDialogController()
-{
-    if (!m_xImpl->pMgr)
-        return;
-    auto xFrame = m_xImpl->pMgr->GetFrame();
-    if (!xFrame)
-        return;
-    if (xFrame == m_pBindings->GetActiveFrame())
-        m_pBindings->SetActiveFrame(nullptr);
-}
-
-void SfxModelessDialogController::EndDialog()
-{
-    if (!m_xDialog->get_visible())
-        return;
-    m_xImpl->bClosing = true;
-    response(RET_CLOSE);
-    m_xImpl->bClosing = false;
-}
-
-/*  [Description]
-
-    The window is closed when the ChildWindow is destroyed by running the
-    ChildWindow-slots.
-*/
-void SfxModelessDialogController::Close()
-{
-    if (m_xImpl->bClosing)
-        return;
-    // Execute with Parameters, since Toggle is ignored by some ChildWindows.
-    SfxBoolItem aValue(m_xImpl->pMgr->GetType(), false);
-    m_pBindings->GetDispatcher_Impl()->ExecuteList(
-        m_xImpl->pMgr->GetType(),
-        SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue } );
-}
-
-/*  [Description]
-
-    Fills a SfxChildWinInfo with specific data from SfxModelessDialog,
-    so that it can be written in the INI file. It is assumed that rinfo
-    receives all other possible relevant data in the ChildWindow class.
-    ModelessDialogs have no specific information, so that the base
-    implementation does nothing and therefore must not be called.
-*/
-void SfxModelessDialogController::FillInfo(SfxChildWinInfo& rInfo) const
-{
-    rInfo.aSize = m_xDialog->get_size();
 }
 
 bool SfxFloatingWindow::EventNotify( NotifyEvent& rEvt )
@@ -881,6 +756,7 @@ void SfxSingleTabDialogController::SetTabPage(SfxTabPage* pTabPage)
         aUserItem >>= sUserData;
         m_xSfxPage->SetUserData(sUserData);
         m_xSfxPage->Reset(GetInputItemSet());
+//TODO        m_xSfxPage->Show();
 
         m_xHelpBtn->show(Help::IsContextHelpEnabled());
 

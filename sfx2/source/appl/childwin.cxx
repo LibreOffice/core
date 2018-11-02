@@ -194,10 +194,7 @@ SfxChildWindow::~SfxChildWindow()
 {
     pContext.reset();
     ClearWorkwin();
-    if (xController)
-        xController->DeInit();
-    else
-        pWindow.disposeAndClear();
+    pWindow.disposeAndClear();
 }
 
 
@@ -273,7 +270,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
 
     DBG_ASSERT(pFact && (pChild || !rInfo.bVisible), "ChildWindow-Typ not registered!");
 
-    if (pChild && (!pChild->pWindow && !pChild->xController))
+    if ( pChild && !pChild->pWindow )
     {
         DELETEZ(pChild);
         SAL_INFO("sfx.appl", "ChildWindow has no Window!");
@@ -322,38 +319,26 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
+
     SfxChildWinInfo aInfo(pImpl->pFact->aInfo);
-    if (xController)
+    aInfo.aPos  = pWindow->GetPosPixel();
+    aInfo.aSize = pWindow->GetSizePixel();
+    if ( pWindow->IsSystemWindow() )
     {
-        weld::Dialog* pDialog = xController->getDialog();
-        aInfo.aPos  = pDialog->get_position();
-        aInfo.aSize = pDialog->get_size();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
-        if (pDialog->get_resizable())
-            nMask |= (WindowStateMask::Width | WindowStateMask::Height);
-        aInfo.aWinState = pDialog->get_window_state(nMask);
+        if ( pWindow->GetStyle() & WB_SIZEABLE )
+            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
+        aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
     }
-    else if (pWindow)
+    else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
     {
-        aInfo.aPos  = pWindow->GetPosPixel();
-        aInfo.aSize = pWindow->GetSizePixel();
-        if ( pWindow->IsSystemWindow() )
+        if (pDockingWindow->GetFloatingWindow())
+            aInfo.aWinState = pDockingWindow->GetFloatingWindow()->GetWindowState();
+        else if (SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(pDockingWindow))
         {
-            WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
-            if ( pWindow->GetStyle() & WB_SIZEABLE )
-                nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
-            aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
-        }
-        else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
-        {
-            if (pDockingWindow->GetFloatingWindow())
-                aInfo.aWinState = pDockingWindow->GetFloatingWindow()->GetWindowState();
-            else if (SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(pDockingWindow))
-            {
-                SfxChildWinInfo aTmpInfo;
-                pSfxDockingWindow->FillInfo( aTmpInfo );
-                aInfo.aExtraString = aTmpInfo.aExtraString;
-            }
+            SfxChildWinInfo aTmpInfo;
+            pSfxDockingWindow->FillInfo( aTmpInfo );
+            aInfo.aExtraString = aTmpInfo.aExtraString;
         }
     }
 
@@ -623,24 +608,12 @@ void SfxChildWindow::SetVisible_Impl( bool bVis )
 
 void SfxChildWindow::Hide()
 {
-    if (xController)
-        xController->EndDialog();
-    else
-        pWindow->Hide();
+    pWindow->Hide();
 }
 
 void SfxChildWindow::Show( ShowFlags nFlags )
 {
-    if (xController)
-    {
-        if (!xController->getDialog()->get_visible())
-        {
-            weld::DialogController::runAsync(xController,
-                [=](sal_Int32 /*nResult*/){ xController->Close(); });
-        }
-    }
-    else
-        pWindow->Show(true, nFlags);
+    pWindow->Show(true, nFlags);
 }
 
 vcl::Window* SfxChildWindow::GetContextWindow( SfxModule const *pModule ) const
@@ -673,15 +646,7 @@ bool SfxChildWindow::QueryClose()
     }
 
     if ( bAllow )
-    {
-        if (GetController())
-        {
-            weld::Dialog* pDialog = GetController()->getDialog();
-            bAllow = !pDialog->get_visible() || !pDialog->get_modal();
-        }
-        else if (GetWindow())
-            bAllow = !GetWindow()->IsInModalMode();
-    }
+        bAllow = !GetWindow()->IsInModalMode();
 
     return bAllow;
 }

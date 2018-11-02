@@ -25,32 +25,37 @@ struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include <swabstdlg.hxx>
 
-class SwWordCountFloatDlg : public SfxModelessDialogController
+class SwWordCountFloatDlg : public SfxModelessDialog
 {
     void SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
     void showCJK(bool bShowCJK);
     void showStandardizedPages(bool bShowStandardizedPages);
 
-    std::unique_ptr<weld::Label> m_xCurrentWordFT;
-    std::unique_ptr<weld::Label> m_xCurrentCharacterFT;
-    std::unique_ptr<weld::Label> m_xCurrentCharacterExcludingSpacesFT;
-    std::unique_ptr<weld::Label> m_xCurrentCjkcharsFT;
-    std::unique_ptr<weld::Label> m_xCurrentStandardizedPagesFT;
-    std::unique_ptr<weld::Label> m_xDocWordFT;
-    std::unique_ptr<weld::Label> m_xDocCharacterFT;
-    std::unique_ptr<weld::Label> m_xDocCharacterExcludingSpacesFT;
-    std::unique_ptr<weld::Label> m_xDocCjkcharsFT;
-    std::unique_ptr<weld::Label> m_xDocStandardizedPagesFT;
-    std::unique_ptr<weld::Label> m_xCjkcharsLabelFT;
-    std::unique_ptr<weld::Label> m_xStandardizedPagesLabelFT;
-    std::unique_ptr<weld::Button> m_xClosePB;
+    VclPtr<FixedText> m_pCurrentWordFT;
+    VclPtr<FixedText> m_pCurrentCharacterFT;
+    VclPtr<FixedText> m_pCurrentCharacterExcludingSpacesFT;
+    VclPtr<FixedText> m_pCurrentCjkcharsFT;
+    VclPtr<FixedText> m_pCurrentStandardizedPagesFT;
 
+    VclPtr<FixedText> m_pDocWordFT;
+    VclPtr<FixedText> m_pDocCharacterFT;
+    VclPtr<FixedText> m_pDocCharacterExcludingSpacesFT;
+    VclPtr<FixedText> m_pDocCjkcharsFT;
+    VclPtr<FixedText> m_pDocStandardizedPagesFT;
+
+    VclPtr<FixedText> m_pCjkcharsLabelFT;
+    VclPtr<FixedText> m_pStandardizedPagesLabelFT;
+
+    VclPtr<CloseButton> m_pClosePB;
+
+    DECL_STATIC_LINK( SwWordCountFloatDlg, CloseHdl, Button*, void );
 public:
-    SwWordCountFloatDlg(SfxBindings* pBindings,
-                        SfxChildWindow* pChild,
-                        weld::Window *pParent,
-                        SfxChildWinInfo const * pInfo);
+    SwWordCountFloatDlg(     SfxBindings* pBindings,
+                             SfxChildWindow* pChild,
+                             vcl::Window *pParent,
+                             SfxChildWinInfo const * pInfo);
     virtual ~SwWordCountFloatDlg() override;
+    virtual void dispose() override;
     void    UpdateCounts();
 
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);

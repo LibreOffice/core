@@ -107,41 +107,6 @@ public:
     DECL_LINK(TimerHdl, Timer *, void);
 };
 
-class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
-{
-private:
-    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
-public:
-    SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
-};
-
-class SfxModelessDialog_Impl;
-class SFX2_DLLPUBLIC SfxModelessDialogController : public SfxDialogController
-{
-    SfxBindings* m_pBindings;
-    std::unique_ptr<SfxModelessDialog_Impl> m_xImpl;
-
-    SfxModelessDialogController(SfxModelessDialogController&) = delete;
-    void operator =(SfxModelessDialogController&) = delete;
-
-    void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
-
-    DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
-    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
-protected:
-    SfxModelessDialogController(SfxBindings*, SfxChildWindow* pChildWin,
-        weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
-    virtual ~SfxModelessDialogController() override;
-
-public:
-    virtual void            FillInfo(SfxChildWinInfo&) const;
-    void                    Initialize (SfxChildWinInfo const * pInfo);
-    void                    Close();
-    void                    DeInit();
-    void                    EndDialog();
-    SfxBindings&            GetBindings() { return *m_pBindings; }
-};
-
 // class SfxFloatingWindow --------------------------------------------------
 class SfxFloatingWindow_Impl;
 class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
@@ -221,6 +186,14 @@ protected:
 
 private:
     std::unique_ptr<SingleTabDlgImpl>   pImpl;
+};
+
+class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
+{
+private:
+    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+public:
+    SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
 };
 
 class SFX2_DLLPUBLIC SfxSingleTabDialogController : public SfxDialogController

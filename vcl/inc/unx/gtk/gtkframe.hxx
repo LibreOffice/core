@@ -537,7 +537,6 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     virtual void                PositionByToolkit(const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void                SetModal(bool bModal) override;
-    virtual bool                GetModal() const override;
     void                        HideTooltip();
     virtual bool                ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
     virtual void*               ShowPopover(const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;

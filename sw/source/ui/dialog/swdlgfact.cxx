@@ -87,11 +87,7 @@ using namespace ::com::sun::star;
 using namespace css::frame;
 using namespace css::uno;
 
-short AbstractSwWordCountFloatDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
+IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
 IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
 
@@ -699,19 +695,19 @@ vcl::Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
     return static_cast<vcl::Window*>(pDlg);
 }
 
-std::shared_ptr<SfxModelessDialogController> AbstractSwWordCountFloatDlg_Impl::GetController()
+vcl::Window* AbstractSwWordCountFloatDlg_Impl::GetWindow()
 {
-    return m_xDlg;
+    return static_cast<vcl::Window*>(pDlg);
 }
 
 void AbstractSwWordCountFloatDlg_Impl::UpdateCounts()
 {
-    m_xDlg->UpdateCounts();
+    pDlg->UpdateCounts();
 }
 
 void AbstractSwWordCountFloatDlg_Impl::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
 {
-    m_xDlg->SetCounts(rCurrCnt, rDocStat);
+    pDlg->SetCounts(rCurrCnt, rDocStat);
 }
 
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
@@ -1113,10 +1109,11 @@ VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDl
 VclPtr<AbstractSwWordCountFloatDlg> SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(
                                                                               SfxBindings* pBindings,
                                                                               SfxChildWindow* pChild,
-                                                                              weld::Window *pParent,
+                                                                              vcl::Window *pParent,
                                                                               SfxChildWinInfo* pInfo)
 {
-    return VclPtr<AbstractSwWordCountFloatDlg_Impl>::Create(o3tl::make_unique<SwWordCountFloatDlg>(pBindings, pChild, pParent, pInfo));
+    VclPtr<SwWordCountFloatDlg> pDlg = VclPtr<SwWordCountFloatDlg>::Create( pBindings, pChild, pParent, pInfo );
+    return VclPtr<AbstractSwWordCountFloatDlg_Impl>::Create( pDlg );
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(

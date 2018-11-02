@@ -200,7 +200,7 @@ protected:
 public:
     virtual void        UpdateCounts() = 0;
     virtual void        SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) = 0;
-    virtual std::shared_ptr<SfxModelessDialogController> GetController() = 0;
+    virtual vcl::Window *    GetWindow() = 0; //this method is added for return a Window type pointer
 };
 
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog
@@ -364,7 +364,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
 
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,
-        SfxChildWindow* pChild, weld::Window *pParent, SfxChildWinInfo* pInfo) = 0;
+        SfxChildWindow* pChild, vcl::Window *pParent, SfxChildWinInfo* pInfo) = 0;
 
     virtual VclPtr<AbstractSwInsertAbstractDlg> CreateSwInsertAbstractDlg() = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwAddressAbstractDlg(vcl::Window* pParent, const SfxItemSet& rSet) = 0;
