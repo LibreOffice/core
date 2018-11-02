@@ -449,6 +449,7 @@ IMPL_LINK_NOARG(SfxModelessDialogController, FocusInHdl, weld::Widget&, void)
         return;
     m_pBindings->SetActiveFrame(m_xImpl->pMgr->GetFrame());
     m_xImpl->pMgr->Activate_Impl();
+    Activate();
 }
 
 IMPL_LINK_NOARG(SfxModelessDialogController, FocusOutHdl, weld::Widget&, void)
