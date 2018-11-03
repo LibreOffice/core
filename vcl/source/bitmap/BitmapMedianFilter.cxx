@@ -114,7 +114,8 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
                 Scanline pScanline = pWriteAcc->GetScanline(nY);
                 for (nX = 0; nX < nWidth; nX++)
                 {
-                    nR1 = (pColor = pRowTmp1 + nX)->GetRed();
+                    pColor = pRowTmp1 + nX;
+                    nR1 = pColor->GetRed();
                     nG1 = pColor->GetGreen();
                     nB1 = pColor->GetBlue();
                     nR2 = (++pColor)->GetRed();
@@ -124,7 +125,8 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
                     nG3 = pColor->GetGreen();
                     nB3 = pColor->GetBlue();
 
-                    nR4 = (pColor = pRowTmp2 + nX)->GetRed();
+                    pColor = pRowTmp2 + nX;
+                    nR4 = pColor->GetRed();
                     nG4 = pColor->GetGreen();
                     nB4 = pColor->GetBlue();
                     nR5 = (++pColor)->GetRed();
@@ -134,7 +136,8 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
                     nG6 = pColor->GetGreen();
                     nB6 = pColor->GetBlue();
 
-                    nR7 = (pColor = pRowTmp3 + nX)->GetRed();
+                    pColor = pRowTmp3 + nX;
+                    nR7 = pColor->GetRed();
                     nG7 = pColor->GetGreen();
                     nB7 = pColor->GetBlue();
                     nR8 = (++pColor)->GetRed();

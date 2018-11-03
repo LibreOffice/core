@@ -521,7 +521,8 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
 
     if( xPolyPoly )
     {
-        xPolyPoly->Insert( aPoly = rRect );
+        aPoly = rRect;
+        xPolyPoly->Insert( aPoly );
         xPolyPoly->Insert( aPoly );
     }
     else
@@ -534,17 +535,22 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         aExtRect.AdjustRight(1 );
         aExtRect.AdjustBottom(1 );
 
-        ImplDrawPolygon( aPoly = aExtRect, pClixPolyPoly );
+        aPoly = aExtRect;
+        ImplDrawPolygon( aPoly, pClixPolyPoly );
     }
 
     // loop to output Polygon/PolyPolygon sequentially
     for( long i = 1; i < nSteps; i++ )
     {
         // calculate new Polygon
-        aRect.SetLeft( static_cast<long>( fScanLeft += fScanIncX ) );
-        aRect.SetTop( static_cast<long>( fScanTop += fScanIncY ) );
-        aRect.SetRight( static_cast<long>( fScanRight -= fScanIncX ) );
-        aRect.SetBottom( static_cast<long>( fScanBottom -= fScanIncY ) );
+        fScanLeft += fScanIncX;
+        aRect.SetLeft( static_cast<long>( fScanLeft ) );
+        fScanTop += fScanIncY;
+        aRect.SetTop( static_cast<long>( fScanTop ) );
+        fScanRight -= fScanIncX;
+        aRect.SetRight( static_cast<long>( fScanRight ) );
+        fScanBottom -= fScanIncY;
+        aRect.SetBottom( static_cast<long>( fScanBottom ) );
 
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
@@ -863,17 +869,22 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
 
     mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
-    xPolyPoly->Insert( aPoly = rRect );
+    aPoly = rRect;
+    xPolyPoly->Insert( aPoly );
     xPolyPoly->Insert( aPoly );
 
     // loop to output Polygon/PolyPolygon sequentially
     for( long i = 1; i < nSteps; i++ )
     {
         // calculate new Polygon
-        aRect.SetLeft( static_cast<long>( fScanLeft += fScanIncX ) );
-        aRect.SetTop( static_cast<long>( fScanTop += fScanIncY ) );
-        aRect.SetRight( static_cast<long>( fScanRight -= fScanIncX ) );
-        aRect.SetBottom( static_cast<long>( fScanBottom -= fScanIncY ) );
+        fScanLeft += fScanIncX;
+        aRect.SetLeft( static_cast<long>( fScanLeft ) );
+        fScanTop += fScanIncY;
+        aRect.SetTop( static_cast<long>( fScanTop ) );
+        fScanRight -= fScanIncX;
+        aRect.SetRight( static_cast<long>( fScanRight ) );
+        fScanBottom -= fScanIncY;
+        aRect.SetBottom( static_cast<long>( fScanBottom ) );
 
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;

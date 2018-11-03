@@ -465,7 +465,8 @@ namespace
         bool bRet = _xNameContainer->hasByName(sName);
         if ( bRet )
         {
-            _rRet = _xNameContainer->getByName(_sSimpleName = sName);
+            _sSimpleName = sName;
+            _rRet = _xNameContainer->getByName(_sSimpleName);
             while ( nIndex != -1 && bRet )
             {
                 sName = _sName.getToken(0,'/',nIndex);

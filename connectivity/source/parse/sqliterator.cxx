@@ -1737,7 +1737,7 @@ OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName
     sal_Int32 i=1;
     while(aIter != m_aSelectColumns->get().end())
     {
-        (aAlias = rColumnName) += OUString::number(i++);
+        aAlias = rColumnName + OUString::number(i++);
         aIter = find(
             m_aSelectColumns->get().begin(),
             m_aSelectColumns->get().end(),

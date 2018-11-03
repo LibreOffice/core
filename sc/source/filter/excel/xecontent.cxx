@@ -125,7 +125,7 @@ sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 
     // calculate hash value in range [0,EXC_SST_HASHTABLE_SIZE)
     sal_uInt16 nHash = xString->GetHash();
-    (nHash ^= (nHash / EXC_SST_HASHTABLE_SIZE)) %= EXC_SST_HASHTABLE_SIZE;
+    nHash = (nHash ^ (nHash / EXC_SST_HASHTABLE_SIZE)) % EXC_SST_HASHTABLE_SIZE;
 
     XclExpHashVec& rVec = maHashTab[ nHash ];
     XclExpHashEntry aEntry( xString.get(), mnSize );

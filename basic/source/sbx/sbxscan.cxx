@@ -408,7 +408,13 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         if( nExpWidth < 3 ) nExpWidth = 3;
         nExpWidth -= 2;
         *pBuf++ = 'E';
-        *pBuf++ =( nExp < 0 ) ?( (nExp = -nExp ), '-' ) : '+';
+        if ( nExp < 0 )
+        {
+            nExp = -nExp;
+            *pBuf++ = '-';
+        }
+        else
+            *pBuf++ = '+';
         while( nExpWidth > 3 )
         {
             *pBuf++ = '0';

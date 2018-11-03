@@ -36,10 +36,10 @@
      *((c)++) = static_cast<sal_uInt8>(((l)       ) & 0xff))
 
 #define RTL_DIGEST_LTOC(l,c) \
-    (*((c)++) = static_cast<sal_uInt8>(((l)       ) & 0xff), \
-     *((c)++) = static_cast<sal_uInt8>(((l) >>  8) & 0xff), \
-     *((c)++) = static_cast<sal_uInt8>(((l) >> 16) & 0xff), \
-     *((c)++) = static_cast<sal_uInt8>(((l) >> 24) & 0xff))
+    *((c)++) = static_cast<sal_uInt8>(((l)      ) & 0xff); \
+    *((c)++) = static_cast<sal_uInt8>(((l) >>  8) & 0xff); \
+    *((c)++) = static_cast<sal_uInt8>(((l) >> 16) & 0xff); \
+    *((c)++) = static_cast<sal_uInt8>(((l) >> 24) & 0xff);
 
 typedef rtlDigestError (Digest_init_t) (
     void *ctx, const sal_uInt8 *Data, sal_uInt32 DatLen);

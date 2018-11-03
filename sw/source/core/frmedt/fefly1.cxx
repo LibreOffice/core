@@ -193,7 +193,8 @@ static bool lcl_FindAnchorPos(
             }
         }
 
-        aNewAnch.SetType( nNew = RndStdIds::FLY_AT_PAGE );
+        nNew = RndStdIds::FLY_AT_PAGE;
+        aNewAnch.SetType( nNew );
         SAL_FALLTHROUGH;
 
     case RndStdIds::FLY_AT_PAGE:
@@ -1526,8 +1527,8 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
                         // without MapMode-Offset, without Offset, o ... !!!!!
                         aPt = GetOut()->LogicToPixel(
                                 aPt, MapMode( MapUnit::MapTwip ) );
-                        ((( *pURL += "?" ) += OUString::number( aPt.getX() ))
-                                  += "," ) += OUString::number(aPt.getY() );
+                        *pURL = *pURL + "?" + OUString::number( aPt.getX() )
+                                + "," + OUString::number(aPt.getY() );
                     }
                 }
                 pRet = pFly->GetFormat();
@@ -1719,7 +1720,10 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
 
         SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
         if (pObj)
-            eType = GetObjCntType( *(rpObj = pObj) );
+        {
+            rpObj = pObj;
+            eType = GetObjCntType( *rpObj );
+        }
 
         pDView->SetHitTolerancePixel( nOld );
     }

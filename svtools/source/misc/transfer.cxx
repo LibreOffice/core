@@ -331,8 +331,8 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                         if( GraphicConverter::Export( aDstStm, aGraphic, ConvertDataFormat::EMF ) == ERRCODE_NONE )
                         {
-                            maAny <<= ( aSeq = Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
-                                                                     aDstStm.TellEnd() ) );
+                            maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
+                                                            aDstStm.TellEnd() );
                             bDone = true;
                         }
                     }
@@ -361,8 +361,8 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                         // taking wmf without file header
                         if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, nullptr, false ) )
                         {
-                            maAny <<= ( aSeq = Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
-                                                                     aDstStm.TellEnd() ) );
+                            maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
+                                                            aDstStm.TellEnd() );
                             bDone = true;
                         }
                     }
@@ -913,9 +913,10 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 
     try
     {
-        TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
+        TransferableHelper* pThis = const_cast< TransferableHelper* >( this );
+        pThis->mxTerminateListener = new TerminateListener( *pThis );
         Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+        xDesktop->addTerminateListener( pThis->mxTerminateListener );
 
         mxClipboard->setContents( pThis, pThis );
     }
@@ -938,9 +939,10 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 
     try
     {
-        TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
+        TransferableHelper* pThis = const_cast< TransferableHelper* >( this );
+        pThis->mxTerminateListener = new TerminateListener( *pThis );
         Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+        xDesktop->addTerminateListener( pThis->mxTerminateListener );
 
         xSelection->setContents( pThis, pThis );
     }

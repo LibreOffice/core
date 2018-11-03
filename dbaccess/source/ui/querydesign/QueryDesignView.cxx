@@ -334,7 +334,7 @@ namespace
                 bBrace = true;
                 _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,OUString(' '));
             }
-            (_rJoin += C_AND) += BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
+            _rJoin += C_AND + BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
             if(bBrace)
                 _rJoin += ")";
             _pEntryConn->SetVisited(true);

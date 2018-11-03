@@ -167,8 +167,8 @@ Calendar_gregorian::init(const Era *_eraArray)
      * */
     icu::Locale aIcuLocale( "", nullptr, nullptr, "calendar=gregorian");
 
-    UErrorCode status;
-    body.reset( icu::Calendar::createInstance( aIcuLocale, status = U_ZERO_ERROR) );
+    UErrorCode status = U_ZERO_ERROR;
+    body.reset( icu::Calendar::createInstance( aIcuLocale, status) );
     if (!body || !U_SUCCESS(status)) throw ERROR;
     eraArray=_eraArray;
 }
@@ -300,8 +300,8 @@ Calendar_gregorian::setDateTime( double fTimeInDays )
     double fR = rtl::math::round( fM );
     SAL_INFO_IF( fM != fR, "i18npool",
             "Calendar_gregorian::setDateTime: " << std::fixed << fM << " rounded to " << fR);
-    UErrorCode status;
-    body->setTime( fR, status = U_ZERO_ERROR);
+    UErrorCode status = U_ZERO_ERROR;
+    body->setTime( fR, status);
     if ( !U_SUCCESS(status) ) throw ERROR;
     getValue();
 }
@@ -313,8 +313,8 @@ Calendar_gregorian::getDateTime()
         setValue();
         getValue();
     }
-    UErrorCode status;
-    double fR = body->getTime(status = U_ZERO_ERROR);
+    UErrorCode status = U_ZERO_ERROR;
+    double fR = body->getTime(status);
     if ( !U_SUCCESS(status) ) throw ERROR;
     return fR / U_MILLIS_PER_DAY;
 }
@@ -328,10 +328,11 @@ Calendar_gregorian::setLocalDateTime( double fTimeInDays )
     SAL_INFO_IF( fM != fR, "i18npool",
             "Calendar_gregorian::setLocalDateTime: " << std::fixed << fM << " rounded to " << fR);
     int32_t nZoneOffset, nDSTOffset;
-    UErrorCode status;
-    body->getTimeZone().getOffset( fR, TRUE, nZoneOffset, nDSTOffset, status = U_ZERO_ERROR );
+    UErrorCode status = U_ZERO_ERROR;
+    body->getTimeZone().getOffset( fR, TRUE, nZoneOffset, nDSTOffset, status );
     if ( !U_SUCCESS(status) ) throw ERROR;
-    body->setTime( fR - (nZoneOffset + nDSTOffset), status = U_ZERO_ERROR );
+    status = U_ZERO_ERROR;
+    body->setTime( fR - (nZoneOffset + nDSTOffset), status );
     if ( !U_SUCCESS(status) ) throw ERROR;
     getValue();
 }
@@ -343,12 +344,14 @@ Calendar_gregorian::getLocalDateTime()
         setValue();
         getValue();
     }
-    UErrorCode status;
-    double fTime = body->getTime( status = U_ZERO_ERROR );
+    UErrorCode status = U_ZERO_ERROR;
+    double fTime = body->getTime( status );
     if ( !U_SUCCESS(status) ) throw ERROR;
-    int32_t nZoneOffset = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR );
+    status = U_ZERO_ERROR;
+    int32_t nZoneOffset = body->get( UCAL_ZONE_OFFSET, status );
     if ( !U_SUCCESS(status) ) throw ERROR;
-    int32_t nDSTOffset = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR );
+    status = U_ZERO_ERROR;
+    int32_t nDSTOffset = body->get( UCAL_DST_OFFSET, status );
     if ( !U_SUCCESS(status) ) throw ERROR;
     return (fTime + (nZoneOffset + nDSTOffset)) / U_MILLIS_PER_DAY;
 }
@@ -528,8 +531,9 @@ void Calendar_gregorian::getValue()
                 fieldIndex == CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS)
             continue;   // not ICU fields
 
-        UErrorCode status; sal_Int32 value = body->get( fieldNameConverter(
-                    fieldIndex), status = U_ZERO_ERROR);
+        UErrorCode status = U_ZERO_ERROR;
+        sal_Int32 value = body->get( fieldNameConverter(
+                    fieldIndex), status);
         if ( !U_SUCCESS(status) ) throw ERROR;
 
         // Convert millisecond to minute for ZONE and DST and set remainder in
@@ -579,8 +583,8 @@ void SAL_CALL
 Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value )
 {
     // since ZONE and DST could not be add, we don't need to convert value here
-    UErrorCode status;
-    body->add(fieldNameConverter(fieldIndex), value, status = U_ZERO_ERROR);
+    UErrorCode status = U_ZERO_ERROR;
+    body->add(fieldNameConverter(fieldIndex), value, status);
     if ( !U_SUCCESS(status) ) throw ERROR;
     getValue();
 }

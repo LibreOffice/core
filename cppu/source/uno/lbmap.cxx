@@ -414,11 +414,20 @@ static Mapping loadExternalMapping(
         OUString aName;
 
         if ( EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO )
-            bModule = loadModule( aModule, aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
+        {
+            aName = getBridgeName( rTo, rFrom, rAddPurpose );
+            bModule = loadModule( aModule, aName );
+        }
         if (!bModule)
-            bModule = loadModule( aModule, aName = getBridgeName( rFrom, rTo, rAddPurpose ) );
+        {
+            aName = getBridgeName( rFrom, rTo, rAddPurpose );
+            bModule = loadModule( aModule, aName );
+        }
         if (!bModule)
-            bModule = loadModule( aModule, aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
+        {
+            aName = getBridgeName( rTo, rFrom, rAddPurpose );
+            bModule = loadModule( aModule, aName );
+        }
 
         if (bModule)
         {

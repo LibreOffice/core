@@ -2311,7 +2311,10 @@ bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool
                 if( SwRedlineTable::npos != nFndPos || ( 0 != ( --nLoopCnt ) &&
                     SwRedlineTable::npos != ( nFndPos =
                         mpRedlineTable->FindPrevSeqNo( nSeqNo, nPos ))) )
-                    pTmp = (*mpRedlineTable)[ nPos = nFndPos ];
+                {
+                    nPos = nFndPos;
+                    pTmp = (*mpRedlineTable)[ nPos ];
+                }
                 else
                     nLoopCnt = 0;
             }
@@ -2450,7 +2453,10 @@ bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool
                 if( SwRedlineTable::npos != nFndPos || ( 0 != ( --nLoopCnt ) &&
                     SwRedlineTable::npos != ( nFndPos =
                             mpRedlineTable->FindPrevSeqNo( nSeqNo, nPos ))) )
-                    pTmp = (*mpRedlineTable)[ nPos = nFndPos ];
+                {
+                    nPos = nFndPos;
+                    pTmp = (*mpRedlineTable)[ nPos ];
+                }
                 else
                     nLoopCnt = 0;
             }

@@ -696,10 +696,11 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         {
                             short nTempDigit;
 #ifdef with_sprintf_
-                            AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPosScan( j, bFoundFirstDigit ) );
+                            nTempDigit = GetDigitAtPosScan( j, bFoundFirstDigit );
 #else
-                            AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPos( dNumber, j, dNumber, bFoundFirstDigit ) );
+                            nTempDigit = GetDigitAtPos( dNumber, j, dNumber, bFoundFirstDigit );
 #endif
+                            AppendDigit( sReturnStrg, nTempDigit );
                             if( nTempDigit != NO_DIGIT_ )
                             {
                                 bFirstDigit = false;
@@ -729,10 +730,11 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 {
                     short nTempDigit;
 #ifdef with_sprintf_
-                    AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit ) );
+                    nTempDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit );
 #else
-                    AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPos( dNumber, nDigitPos, dNumber, bFoundFirstDigit ) );
+                    nTempDigit = GetDigitAtPos( dNumber, nDigitPos, dNumber, bFoundFirstDigit );
 #endif
+                    AppendDigit( sReturnStrg, nTempDigit );
 
                     if( nTempDigit != NO_DIGIT_ )
                     {

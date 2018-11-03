@@ -583,7 +583,8 @@ SvParserState SvRTFParser::CallParser()
     rInput.ReadChar( cFirstCh ); nNextCh = cFirstCh;
     eState = SvParserState::Working;
     nOpenBrakets = 0;
-    SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );
+    eCodeSet = RTL_TEXTENCODING_MS_1252;
+    SetSrcEncoding( eCodeSet );
 
     // the first two tokens should be '{' and \\rtf !!
     if( '{' == GetNextToken() && RTF_RTF == GetNextToken() )
@@ -646,16 +647,20 @@ void SvRTFParser::Continue( int nToken )
             break;      // skip unknown token
         case RTF_NEXTTYPE:
         case RTF_ANSITYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );
+            eCodeSet = RTL_TEXTENCODING_MS_1252;
+            SetSrcEncoding( eCodeSet );
             break;
         case RTF_MACTYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN );
+            eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN;
+            SetSrcEncoding( eCodeSet );
             break;
         case RTF_PCTYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );
+            eCodeSet = RTL_TEXTENCODING_IBM_437;
+            SetSrcEncoding( eCodeSet );
             break;
         case RTF_PCATYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );
+            eCodeSet = RTL_TEXTENCODING_IBM_850;
+            SetSrcEncoding( eCodeSet );
             break;
         case RTF_ANSICPG:
             eCodeSet = rtl_getTextEncodingFromWindowsCodePage(nTokenValue);

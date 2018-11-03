@@ -179,8 +179,8 @@ sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
 
 sal_uInt16 MSWordStyles::BuildGetSlot( const SwFormat& rFormat )
 {
-    sal_uInt16 nRet;
-    switch ( nRet = rFormat.GetPoolFormatId() )
+    sal_uInt16 nRet = rFormat.GetPoolFormatId();
+    switch ( nRet )
     {
         case RES_POOLCOLL_STANDARD:
             nRet = 0;

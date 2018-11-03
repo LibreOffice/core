@@ -230,7 +230,8 @@ ImplVectMap::~ImplVectMap()
 inline void ImplVectMap::Set( long nY, long nX, sal_uInt8 cVal )
 {
     const sal_uInt8 cShift = sal::static_int_cast<sal_uInt8>(6 - ( ( nX & 3 ) << 1 ));
-    ( ( mpScan[ nY ][ nX >> 2 ] ) &= ~( 3 << cShift ) ) |= ( cVal << cShift );
+    auto & rPixel = mpScan[ nY ][ nX >> 2 ];
+    rPixel = (rPixel & ~( 3 << cShift ) ) | ( cVal << cShift );
 }
 
 inline sal_uInt8    ImplVectMap::Get( long nY, long nX ) const
@@ -589,7 +590,8 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
         }
     }
 
-    aNewArr1.ImplSetRealSize( nCount = nNewPos );
+    nCount = nNewPos;
+    aNewArr1.ImplSetRealSize( nCount );
 
     // pass 2
     aNewArr2.ImplSetSize( nCount );
@@ -611,7 +613,8 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
                 pLeast = &( aNewArr1[ n++ ] );
         }
 
-        aNewArr2[ nNewPos++ ] = *( pLast = pLeast );
+        pLast = pLeast;
+        aNewArr2[ nNewPos++ ] = *pLast;
     }
 
     aNewArr2.ImplSetRealSize( nNewPos );
@@ -926,7 +929,9 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
         if( pMap->IsCont( nTryY, nTryX ) )
         {
             rChain.ImplAdd( static_cast<sal_uInt8>(nLastDir) );
-            pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
+            nActY = nTryY;
+            nActX = nTryX;
+            pMap->Set( nActY, nActX, VECT_DONE_INDEX );
             nFound = 1;
         }
         else
@@ -943,7 +948,9 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
                     if( pMap->IsCont( nTryY, nTryX ) )
                     {
                         rChain.ImplAdd( static_cast<sal_uInt8>(nDir) );
-                        pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
+                        nActY = nTryY;
+                        nActX = nTryX;
+                        pMap->Set( nActY, nActX, VECT_DONE_INDEX );
                         nFound = 1;
                         nLastDir = nDir;
                         break;

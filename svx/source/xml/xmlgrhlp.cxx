@@ -416,8 +416,9 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
     {
         try
         {
+            maCurStorageName = rStorageName;
             xRetStorage = mxRootStorage->openStorageElement(
-                maCurStorageName = rStorageName,
+                maCurStorageName,
                 ( SvXMLGraphicHelperMode::Write == meCreateMode )
                     ? embed::ElementModes::READWRITE
                     : embed::ElementModes::READ );
@@ -430,7 +431,8 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
         {
             try
             {
-                xRetStorage = mxRootStorage->openStorageElement( maCurStorageName = rStorageName, embed::ElementModes::READ );
+                maCurStorageName = rStorageName;
+                xRetStorage = mxRootStorage->openStorageElement( maCurStorageName, embed::ElementModes::READ );
             }
             catch ( uno::Exception& )
             {
@@ -889,12 +891,13 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
     if( SvXMLGraphicHelperMode::Read == meCreateMode )
     {
-        SvXMLGraphicOutputStream* pOutputStream = new SvXMLGraphicOutputStream;
+        std::unique_ptr<SvXMLGraphicOutputStream> pOutputStream(new SvXMLGraphicOutputStream);
 
         if( pOutputStream->Exists() )
-            maGrfStms.push_back( xRet = pOutputStream );
-        else
-            delete pOutputStream;
+        {
+            xRet = pOutputStream.release();
+            maGrfStms.push_back( xRet );
+        }
     }
 
     return xRet;

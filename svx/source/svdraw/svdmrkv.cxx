@@ -1527,9 +1527,13 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     size_t nSearchBeg(0);
     E3dScene* pScene(nullptr);
     SdrObject* pObjHit(bPrev ? pBtmObjHit : pTopObjHit);
-    const bool bRemap(
-        nullptr != dynamic_cast< const E3dCompoundObject* >(pObjHit)
-        && nullptr != (pScene = dynamic_cast< E3dScene* >(pObjHit->getParentSdrObjectFromSdrObject())));
+    bool bRemap =
+        nullptr != dynamic_cast< const E3dCompoundObject* >(pObjHit);
+    if (bRemap)
+    {
+        pScene = dynamic_cast< E3dScene* >(pObjHit->getParentSdrObjectFromSdrObject());
+        bRemap = nullptr != pScene;
+    }
 
     if(bPrev)
     {

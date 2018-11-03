@@ -636,7 +636,8 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             bAnchorChgd = true;
 
             const SwFormatAnchor* pAnchor = static_cast<const SwFormatAnchor*>(pItem);
-            switch( nOldAnchorTyp = pAnchor->GetAnchorId() )
+            nOldAnchorTyp = pAnchor->GetAnchorId();
+            switch( nOldAnchorTyp )
             {
             case RndStdIds::FLY_AS_CHAR:
             case RndStdIds::FLY_AT_CHAR:
@@ -652,7 +653,8 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             }
 
             pAnchor = &pFrameFormat->GetAnchor();
-            switch( nNewAnchorTyp = pAnchor->GetAnchorId() )
+            nNewAnchorTyp = pAnchor->GetAnchorId();
+            switch( nNewAnchorTyp )
             {
             case RndStdIds::FLY_AS_CHAR:
             case RndStdIds::FLY_AT_CHAR:

@@ -32,7 +32,8 @@ VersionCompat::VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16
         if( StreamMode::WRITE == mnStmMode )
         {
             mpRWStm->WriteUInt16( mnVersion );
-            mnTotalSize = ( mnCompatPos = mpRWStm->Tell() ) + 4;
+            mnCompatPos = mpRWStm->Tell();
+            mnTotalSize = mnCompatPos + 4;
             mpRWStm->SeekRel( 4 );
         }
         else

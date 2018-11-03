@@ -160,7 +160,8 @@ static void cpp_call(
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-            uno_copyAndConvertData( pCppArgs[nPos] = alloca( 8 ), pUnoArgs[nPos], pParamTypeDescr,
+            pCppArgs[nPos] = alloca( 8 );
+            uno_copyAndConvertData( pCppArgs[nPos], pUnoArgs[nPos], pParamTypeDescr,
                                     pThis->getBridge()->getUno2Cpp() );
 
             switch (pParamTypeDescr->eTypeClass)
@@ -199,9 +200,8 @@ static void cpp_call(
             if (! rParam.bIn) // is pure out
             {
                 // cpp out is constructed mem, uno out is not!
-                uno_constructData(
-                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    pParamTypeDescr );
+                pCppArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                uno_constructData( pCppArgs[nPos], pParamTypeDescr );
                 pTempIndices[nTempIndices] = nPos; // default constructed for cpp call
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
@@ -209,9 +209,9 @@ static void cpp_call(
             // is in/inout
             else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
             {
+                pCppArgs[nPos] = alloca( pParamTypeDescr->nSize );
                 uno_copyAndConvertData(
-                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
+                    pCppArgs[nPos], pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
 
                 pTempIndices[nTempIndices] = nPos; // has to be reconverted
                 // will be released at reconversion

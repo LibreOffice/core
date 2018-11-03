@@ -2018,11 +2018,11 @@ void SvxRuler::ApplyMargins()
     else
     {
         const long lOldNull = lLogicNullOffset;
-        mxULSpaceItem->SetUpper(
-            PixelVAdjust(
-                lLogicNullOffset =
+        lLogicNullOffset =
                 ConvertVPosLogic(GetFrameLeft()) -
-                lAppNullOffset, mxULSpaceItem->GetUpper()));
+                lAppNullOffset;
+        mxULSpaceItem->SetUpper(
+            PixelVAdjust(lLogicNullOffset, mxULSpaceItem->GetUpper()));
         if(bAppSetNullOffset)
         {
             lAppNullOffset += lLogicNullOffset - lOldNull;

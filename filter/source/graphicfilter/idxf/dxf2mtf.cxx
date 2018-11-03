@@ -154,11 +154,13 @@ bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
     aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
 
     if (aActLineColor!=aColor) {
-        pVirDev->SetLineColor( aActLineColor = aColor );
+        aActLineColor = aColor;
+        pVirDev->SetLineColor( aActLineColor );
     }
 
     if (aActFillColor!=COL_TRANSPARENT) {
-        pVirDev->SetFillColor(aActFillColor = COL_TRANSPARENT);
+        aActFillColor = COL_TRANSPARENT;
+        pVirDev->SetFillColor(aActFillColor);
     }
     return true;
 }
@@ -174,11 +176,13 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
     aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
 
     if (aActLineColor!=aColor) {
-        pVirDev->SetLineColor( aActLineColor = aColor );
+        aActLineColor = aColor;
+        pVirDev->SetLineColor( aActLineColor );
     }
 
     if ( aActFillColor == COL_TRANSPARENT || aActFillColor != aColor) {
-        pVirDev->SetFillColor( aActFillColor = aColor );
+        aActFillColor = aColor;
+        pVirDev->SetFillColor( aActFillColor );
     }
     return true;
 }

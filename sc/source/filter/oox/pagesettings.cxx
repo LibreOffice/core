@@ -537,7 +537,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                 eState = STATE_TEXT;
                 // ignore case of token codes
                 if( ('a' <= cChar) && (cChar <= 'z') )
-                    (cChar -= 'a') += 'A';
+                    cChar = (cChar - 'a') + 'A';
                 switch( cChar )
                 {
                     case '&':   maBuffer.append( cChar );   break;  // the '&' character

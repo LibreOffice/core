@@ -628,11 +628,16 @@ void OCopyTableWizard::construct()
 {
     SetSizePixel(Size(700, 350));
 
-    AddButton( m_pbHelp = VclPtr<HelpButton>::Create(this, WB_TABSTOP) );
-    AddButton( m_pbCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP) );
-    AddButton( m_pbPrev = VclPtr<PushButton>::Create(this, WB_TABSTOP));
-    AddButton( m_pbNext = VclPtr<PushButton>::Create(this, WB_TABSTOP));
-    AddButton( m_pbFinish = VclPtr<PushButton>::Create(this, WB_TABSTOP));
+    m_pbHelp = VclPtr<HelpButton>::Create(this, WB_TABSTOP);
+    AddButton(m_pbHelp);
+    m_pbCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP);
+    AddButton(m_pbCancel);
+    m_pbPrev = VclPtr<PushButton>::Create(this, WB_TABSTOP);
+    AddButton(m_pbPrev);
+    m_pbNext = VclPtr<PushButton>::Create(this, WB_TABSTOP);
+    AddButton(m_pbNext);
+    m_pbFinish = VclPtr<PushButton>::Create(this, WB_TABSTOP);
+    AddButton(m_pbFinish);
 
     m_pbHelp->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );
     m_pbCancel->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );

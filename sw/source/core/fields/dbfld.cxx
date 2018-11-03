@@ -329,8 +329,11 @@ void SwDBField::Evaluate()
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue);
     if( !( nSubType & nsSwExtendedSubType::SUB_OWN_FMT ) )
-        SetFormat( nFormat = pMgr->GetColumnFormat( aTmpData.sDataSource, aTmpData.sCommand,
-                                        aColNm, pDocFormatter, GetLanguage() ));
+    {
+        nFormat = pMgr->GetColumnFormat( aTmpData.sDataSource, aTmpData.sCommand,
+                                        aColNm, pDocFormatter, GetLanguage() );
+        SetFormat( nFormat );
+    }
 
     sal_Int32 nColumnType = nValue == DBL_MAX
         ? 0

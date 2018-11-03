@@ -1532,9 +1532,12 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
     SdrObject* pObj = nullptr;
     SdrView *pView = Imp()->GetDrawView();
 
-    bool bRet = 1 == pView->GetMarkedObjectList().GetMarkCount() &&
-        (pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj())->IsClosedObj() &&
-        dynamic_cast<const SdrOle2Obj*>( pObj) ==  nullptr;
+    bool bRet = 1 == pView->GetMarkedObjectList().GetMarkCount();
+    if (bRet)
+    {
+        pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
+        bRet = pObj->IsClosedObj() && dynamic_cast<const SdrOle2Obj*>( pObj) == nullptr;
+    }
 
     if( bRet && pObj )
     {

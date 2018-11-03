@@ -310,7 +310,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                 aSelection[nListPos] >>= nNextRow;
                                 if ( nRowsRead+1 < nNextRow )
                                     bRealSelection = true;
-                                bEnd = !xRowSet->absolute(nRowsRead = nNextRow);
+                                nRowsRead = nNextRow;
+                                bEnd = !xRowSet->absolute(nRowsRead);
                             }
                             ++nListPos;
                         }

@@ -82,7 +82,7 @@ sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& 
     sal_uInt32 nHash = rVec.size();
     typedef typename ::std::vector< Type >::const_iterator CIT;
     for( CIT aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
-        (nHash *= 31) += rHasher( *aIt );
+        nHash = (nHash * 31) + rHasher( *aIt );
     return static_cast< sal_uInt16 >( nHash ^ (nHash >> 16) );
 }
 

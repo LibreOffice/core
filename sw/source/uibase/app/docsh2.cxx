@@ -637,10 +637,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( !aFileName.isEmpty() )
                 {
                     SwgReaderOption aOpt;
-                    aOpt.SetTextFormats(    bText  = bool(nFlags & SfxTemplateFlags::LOAD_TEXT_STYLES ));
-                    aOpt.SetFrameFormats(    bFrame = bool(nFlags & SfxTemplateFlags::LOAD_FRAME_STYLES));
-                    aOpt.SetPageDescs(  bPage  = bool(nFlags & SfxTemplateFlags::LOAD_PAGE_STYLES ));
-                    aOpt.SetNumRules(   bNum   = bool(nFlags & SfxTemplateFlags::LOAD_NUM_STYLES  ));
+                    bText  = bool(nFlags & SfxTemplateFlags::LOAD_TEXT_STYLES );
+                    aOpt.SetTextFormats(bText);
+                    bFrame = bool(nFlags & SfxTemplateFlags::LOAD_FRAME_STYLES);
+                    aOpt.SetFrameFormats(bFrame);
+                    bPage  = bool(nFlags & SfxTemplateFlags::LOAD_PAGE_STYLES );
+                    aOpt.SetPageDescs(bPage);
+                    bNum   = bool(nFlags & SfxTemplateFlags::LOAD_NUM_STYLES  );
+                    aOpt.SetNumRules(bNum);
                     //different meaning between SFX_MERGE_STYLES and aOpt.SetMerge!
                     bMerge = bool(nFlags & SfxTemplateFlags::MERGE_STYLES);
                     aOpt.SetMerge( !bMerge );

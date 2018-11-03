@@ -1170,8 +1170,18 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
                 bool bYear1 = (sStrArray[nNums[0]].getLength() >= 3);
                 bool bYear2 = (sStrArray[nNums[1]].getLength() >= 3);
                 sal_Int32 n;
-                bool bDay1 = (!bYear1 && (n = sStrArray[nNums[0]].toInt32()) >= 1 && n <= 31);
-                bool bDay2 = (!bYear2 && (n = sStrArray[nNums[1]].toInt32()) >= 1 && n <= 31);
+                bool bDay1 = !bYear1;
+                if (bDay1)
+                {
+                    n = sStrArray[nNums[0]].toInt32();
+                    bDay1 = n >= 1 && n <= 31;
+                }
+                bool bDay2 = !bYear2;
+                if (bDay2)
+                {
+                    n = sStrArray[nNums[1]].toInt32();
+                    bDay2 = n >= 1 && n <= 31;
+                }
 
                 if (bDay1 && !bDay2)
                 {

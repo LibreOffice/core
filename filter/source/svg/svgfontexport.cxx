@@ -189,7 +189,8 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                 pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                 pVDev->SetFont( aFont );
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += OUString::number( ++mnCurFontId ) );
+                aCurIdStr += OUString::number( ++mnCurFontId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
 
                 {

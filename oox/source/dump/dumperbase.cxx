@@ -682,7 +682,7 @@ bool StringHelper::convertFromDec( sal_Int64& ornData, const OUString& rData )
         sal_Unicode cChar = rData[ nPos ];
         if( (cChar < '0') || (cChar > '9') )
             return false;
-        (ornData *= 10) += (cChar - '0');
+        ornData = (ornData * 10) + (cChar - '0');
     }
     if( bNeg )
         ornData *= -1;
@@ -703,7 +703,7 @@ bool StringHelper::convertFromHex( sal_Int64& ornData, const OUString& rData )
             cChar -= ('a' - 10);
         else
             return false;
-        (ornData <<= 4) += cChar;
+        ornData = (ornData << 4) + cChar;
     }
     return true;
 }

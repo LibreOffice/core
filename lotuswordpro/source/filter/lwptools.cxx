@@ -93,7 +93,7 @@ void LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
 
         while(strlen)
         {
-            strlen>1023?len=1023 :len=strlen;
+            len = std::min(sal_uInt16(1023), strlen);
             len = pObjStrm->QuickRead(buf, len);
             buf[len] = '\0';
             strBuf.append( OUString(buf, len, aEncoding) );
