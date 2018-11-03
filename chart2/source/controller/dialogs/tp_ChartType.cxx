@@ -28,6 +28,7 @@
 
 #include <svtools/controldims.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -654,22 +655,24 @@ ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference<
         }
     }
 
-    m_aChartTypeDialogControllerList.emplace_back(new ColumnChartDialogController() );
-    m_aChartTypeDialogControllerList.emplace_back(new BarChartDialogController() );
-    m_aChartTypeDialogControllerList.emplace_back(new PieChartDialogController() );
-    m_aChartTypeDialogControllerList.emplace_back(new AreaChartDialogController() );
-    m_aChartTypeDialogControllerList.emplace_back(new LineChartDialogController() );
+    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<ColumnChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<BarChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<PieChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<AreaChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<LineChartDialogController>());
     if (bEnableComplexChartTypes)
     {
-        m_aChartTypeDialogControllerList.emplace_back(new XYChartDialogController() );
-        m_aChartTypeDialogControllerList.emplace_back(new BubbleChartDialogController() );
+        m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<XYChartDialogController>());
+        m_aChartTypeDialogControllerList.push_back(
+            o3tl::make_unique<BubbleChartDialogController>());
     }
-    m_aChartTypeDialogControllerList.emplace_back(new NetChartDialogController() );
+    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<NetChartDialogController>());
     if (bEnableComplexChartTypes)
     {
-        m_aChartTypeDialogControllerList.emplace_back(new StockChartDialogController() );
+        m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<StockChartDialogController>());
     }
-    m_aChartTypeDialogControllerList.emplace_back(new CombiColumnLineChartDialogController() );
+    m_aChartTypeDialogControllerList.push_back(
+        o3tl::make_unique<CombiColumnLineChartDialogController>());
 
     for (auto const& elem : m_aChartTypeDialogControllerList)
     {
