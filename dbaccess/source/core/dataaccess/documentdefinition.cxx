@@ -1969,8 +1969,7 @@ bool ODocumentDefinition::prepareClose()
             // document has not yet been activated, i.e. has no UI, yet
             return true;
 
-        bool bCouldSuspend = xController->suspend( true );
-        if ( !bCouldSuspend )
+        if (!xController->suspend(true))
             // controller vetoed the closing
             return false;
 
@@ -1984,9 +1983,8 @@ bool ODocumentDefinition::prepareClose()
             }
             if ( !save( true ) )
             {
-                if ( bCouldSuspend )
-                    // revert suspension
-                    xController->suspend( false );
+                // revert suspension
+                xController->suspend(false);
                 // saving failed or was cancelled
                 return false;
             }

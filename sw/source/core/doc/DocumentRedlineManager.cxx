@@ -729,7 +729,8 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             bool bSaveInXMLImportFlag = m_rDoc.IsInXMLImport();
             m_rDoc.SetInXMLImport( false );
             // and then hide/display everything
-            void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
+            void (SwRangeRedline::*pFnc)(sal_uInt16, size_t); // Allow compiler warn if use of
+                                                              // uninitialized ptr is possible
 
             RedlineFlags eShowMode = RedlineFlags::ShowMask & eMode;
             if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
@@ -747,16 +748,13 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )
 
-            if (pFnc)
-            {
-                for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
-                    for (size_t i = 0; i < mpRedlineTable->size(); ++i)
-                        ((*mpRedlineTable)[i]->*pFnc)(nLoop, i);
+            for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
+                for (size_t i = 0; i < mpRedlineTable->size(); ++i)
+                    ((*mpRedlineTable)[i]->*pFnc)(nLoop, i);
 
-                //SwRangeRedline::MoveFromSection routinely changes
-                //the keys that mpRedlineTable is sorted by
-                mpRedlineTable->Resort();
-            }
+            //SwRangeRedline::MoveFromSection routinely changes
+            //the keys that mpRedlineTable is sorted by
+            mpRedlineTable->Resort();
 
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )

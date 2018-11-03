@@ -6178,7 +6178,7 @@ void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
     /*  break code:   0 No break, 1 New column
         2 New page, 3 Even page, 4 Odd page
         */
-    const char* pType = nullptr;
+    const char* pType;
     switch ( nBreakCode )
     {
         case 1:  pType = "nextColumn"; break;
@@ -6188,10 +6188,7 @@ void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
         default: pType = "continuous"; break;
     }
 
-    if ( pType )
-        m_pSerializer->singleElementNS( XML_w, XML_type,
-                FSNS( XML_w, XML_val ), pType,
-                FSEND );
+    m_pSerializer->singleElementNS(XML_w, XML_type, FSNS(XML_w, XML_val), pType, FSEND);
 }
 
 void DocxAttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdjust nVA )
@@ -6254,7 +6251,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
 
 void DocxAttributeOutput::FontFamilyType( FontFamily eFamily ) const
 {
-    const char *pFamily = nullptr;
+    const char* pFamily;
     switch ( eFamily )
     {
         case FAMILY_ROMAN:      pFamily = "roman"; break;
@@ -6265,15 +6262,12 @@ void DocxAttributeOutput::FontFamilyType( FontFamily eFamily ) const
         default:                pFamily = "auto"; break; // no font family
     }
 
-    if ( pFamily )
-        m_pSerializer->singleElementNS( XML_w, XML_family,
-                FSNS( XML_w, XML_val ), pFamily,
-                FSEND );
+    m_pSerializer->singleElementNS(XML_w, XML_family, FSNS(XML_w, XML_val), pFamily, FSEND);
 }
 
 void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
 {
-    const char *pPitch = nullptr;
+    const char* pPitch;
     switch ( ePitch )
     {
         case PITCH_VARIABLE: pPitch = "variable"; break;
@@ -6281,10 +6275,7 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
         default:             pPitch = "default"; break; // no info about the pitch
     }
 
-    if ( pPitch )
-        m_pSerializer->singleElementNS( XML_w, XML_pitch,
-                FSNS( XML_w, XML_val ), pPitch,
-                FSEND );
+    m_pSerializer->singleElementNS(XML_w, XML_pitch, FSNS(XML_w, XML_val), pPitch, FSEND);
 }
 
 void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch )

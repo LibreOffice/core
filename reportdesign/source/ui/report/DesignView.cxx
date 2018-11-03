@@ -340,8 +340,7 @@ void ODesignView::UpdatePropertyBrowserDelayed(OSectionView& _rView)
         if ( m_pCurrentView )
             m_aScrollWindow->setMarked(m_pCurrentView,false);
         m_pCurrentView = &_rView;
-        if ( m_pCurrentView )
-            m_aScrollWindow->setMarked(m_pCurrentView,true);
+        m_aScrollWindow->setMarked(m_pCurrentView, true);
         m_xReportComponent.clear();
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         Broadcast( aHint );

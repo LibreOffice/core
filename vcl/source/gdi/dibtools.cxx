@@ -917,8 +917,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
             nMaxWidth *= 256;   //assume generous compression ratio
-            if (aHeader.nHeight != 0)
-                nMaxWidth /= aHeader.nHeight;
+            nMaxWidth /= aHeader.nHeight;
             if (nMaxWidth < static_cast<sal_uInt64>(aHeader.nWidth))
                 return false;
             break;
@@ -929,8 +928,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
                 return false;
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
             nMaxWidth *= 512;   //assume generous compression ratio
-            if (aHeader.nHeight != 0)
-                nMaxWidth /= aHeader.nHeight;
+            nMaxWidth /= aHeader.nHeight;
             if (nMaxWidth < static_cast<sal_uInt64>(aHeader.nWidth))
                 return false;
             break;
@@ -942,8 +940,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
         {
             // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
-            if (aHeader.nHeight != 0)
-                nMaxWidth /= aHeader.nHeight;
+            nMaxWidth /= aHeader.nHeight;
             if (nMaxWidth < nAlignedWidth)
                 return false;
             break;

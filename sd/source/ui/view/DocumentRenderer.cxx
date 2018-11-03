@@ -1280,15 +1280,12 @@ public:
             {
                 mbHasOrientationWarningBeenShown = true;
                 // Show warning that the orientation could not be set.
-                if (pViewShell)
-                {
-                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
-                                                               VclMessageType::Warning, VclButtonsType::OkCancel,
-                                                               SdResId(STR_WARN_PRINTFORMAT_FAILURE)));
-                    xWarn->set_default_response(RET_CANCEL);
-                    if (xWarn->run() != RET_OK)
-                        return;
-                }
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(
+                    pViewShell->GetFrameWeld(), VclMessageType::Warning, VclButtonsType::OkCancel,
+                    SdResId(STR_WARN_PRINTFORMAT_FAILURE)));
+                xWarn->set_default_response(RET_CANCEL);
+                if (xWarn->run() != RET_OK)
+                    return;
             }
         }
 

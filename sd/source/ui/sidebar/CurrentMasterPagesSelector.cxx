@@ -182,9 +182,8 @@ void CurrentMasterPagesSelector::UpdateSelection()
             else
             {
                 SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
-                SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
-                if (pMasterPage != nullptr)
-                    aNames.insert (pMasterPage->GetName());
+                assert(dynamic_cast<SdPage*>(&rMasterPage));
+                aNames.insert(static_cast<SdPage&>(rMasterPage).GetName());
             }
         }
     }
