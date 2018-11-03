@@ -27,18 +27,14 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdpage.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <document.hxx>
 #include <table.hxx>
 #include <drwlayer.hxx>
-#include <chartarr.hxx>
 #include <chartlis.hxx>
 #include <chartlock.hxx>
 #include <refupdat.hxx>
-#include <tools/globname.hxx>
-#include <sot/exchange.hxx>
 
 #include <miscuno.hxx>
 #include <chart2uno.hxx>

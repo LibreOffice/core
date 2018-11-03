@@ -26,7 +26,6 @@
 #include <document.hxx>
 #include <formula/errorcodes.hxx>
 #include <stringutil.hxx>
-#include <globalnames.hxx>
 
 using namespace ::com::sun::star;
 

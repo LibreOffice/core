@@ -25,9 +25,7 @@
 #include <brdcst.hxx>
 #include <bcaslot.hxx>
 #include <scerrors.hxx>
-#include <docoptio.hxx>
 #include <refupdat.hxx>
-#include <table.hxx>
 #include <bulkdatahint.hxx>
 #include <columnspanset.hxx>
 

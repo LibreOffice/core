@@ -20,15 +20,9 @@
 #include <dpgroup.hxx>
 
 #include <dpcache.hxx>
-#include <global.hxx>
 #include <document.hxx>
 #include <dpfilteredcache.hxx>
-#include <dptabsrc.hxx>
-#include <dptabres.hxx>
-#include <dpobject.hxx>
-#include <dpglobal.hxx>
 #include <dputil.hxx>
-#include <globalnames.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>

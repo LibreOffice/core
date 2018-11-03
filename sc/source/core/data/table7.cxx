@@ -11,7 +11,6 @@
 #include <clipcontext.hxx>
 #include <document.hxx>
 #include <clipparam.hxx>
-#include <bcaslot.hxx>
 #include <segmenttree.hxx>
 #include <sharedformula.hxx>
 #include <cellvalues.hxx>

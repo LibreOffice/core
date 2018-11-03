@@ -18,17 +18,13 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <o3tl/make_unique.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
@@ -39,9 +35,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/misccfg.hxx>
-#include <sfx2/app.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <unotools/securityoptions.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/virdev.hxx>
@@ -62,26 +56,21 @@
 #include <ddelink.hxx>
 #include <scmatrix.hxx>
 #include <arealink.hxx>
-#include <dociter.hxx>
 #include <patattr.hxx>
-#include <hints.hxx>
 #include <editutil.hxx>
 #include <progress.hxx>
 #include <document.hxx>
 #include <chartlis.hxx>
 #include <chartlock.hxx>
 #include <refupdat.hxx>
-#include <validat.hxx>
 #include <markdata.hxx>
 #include <scmod.hxx>
-#include <printopt.hxx>
 #include <externalrefmgr.hxx>
 #include <globstr.hrc>
 #include <strings.hrc>
 #include <sc.hrc>
 #include <charthelper.hxx>
 #include <macromgr.hxx>
-#include <dpobject.hxx>
 #include <docuno.hxx>
 #include <scresid.hxx>
 #include <columniterator.hxx>

@@ -32,14 +32,10 @@
 #include <docoptio.hxx>
 #include <subtotal.hxx>
 #include <markdata.hxx>
-#include <detfunc.hxx>
-#include <postit.hxx>
 #include <stringutil.hxx>
 #include <docpool.hxx>
-#include <globalnames.hxx>
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
-#include <stlalgorithm.hxx>
 #include <clipcontext.hxx>
 #include <columnspanset.hxx>
 #include <mtvcellfunc.hxx>
@@ -50,18 +46,15 @@
 #include <filterentries.hxx>
 
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <memory>
 
 #include <rtl/tencinfo.h>
-#include <mdds/flat_segment_tree.hpp>
 
-#include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svl/broadcast.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <editeng/editstat.hxx>
 
 #include <cstdio>
 #include <refdata.hxx>

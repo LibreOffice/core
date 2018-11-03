@@ -20,26 +20,19 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
-#include <sot/exchange.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/langitem.hxx>
 #include <osl/thread.h>
 #include <svl/asiancfg.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
-#include <svx/svdocapt.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <unotools/saveopt.hxx>
-#include <unotools/pathoptions.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
@@ -51,11 +44,8 @@
 #include <rechead.hxx>
 #include <poolhelp.hxx>
 #include <docpool.hxx>
-#include <detfunc.hxx>
 #include <editutil.hxx>
-#include <postit.hxx>
 #include <charthelper.hxx>
-#include <interpre.hxx>
 #include <conditio.hxx>
 #include <documentlinkmgr.hxx>
 

@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/objsh.hxx>
-
 #include <drawpage.hxx>
 #include <drwlayer.hxx>
-#include <document.hxx>
 #include <pageuno.hxx>
 
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)

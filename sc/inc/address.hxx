@@ -32,13 +32,14 @@
 #include <formula/grammar.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
         struct ExternalLinkInfo;
     }
 }}}
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class ScDocument;
 

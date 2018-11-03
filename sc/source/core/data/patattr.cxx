@@ -22,7 +22,6 @@
 #include <scitems.hxx>
 #include <editeng/adjustitem.hxx>
 #include <o3tl/make_unique.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -40,7 +39,6 @@
 #include <editeng/postitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <editeng/scriptspaceitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -50,7 +48,6 @@
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/fract.hxx>
 
 #include <patattr.hxx>
@@ -61,7 +58,6 @@
 #include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <conditio.hxx>
 #include <validat.hxx>
 #include <scmod.hxx>
 #include <fillinfo.hxx>

@@ -30,7 +30,6 @@
 
 #include <compiler.hxx>
 #include <document.hxx>
-#include <globalnames.hxx>
 #include <cellvalue.hxx>
 #include <interpre.hxx>
 #include <macromgr.hxx>
@@ -53,11 +52,8 @@
 #include <editeng/editobj.hxx>
 #include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
-#include <formula/vectortoken.hxx>
 #include <svl/intitem.hxx>
 #include <o3tl/make_unique.hxx>
-#include <rtl/strbuf.hxx>
-#include <officecfg/Office/Calc.hxx>
 #include <formulagroup.hxx>
 #include <listenercontext.hxx>
 #include <types.hxx>

@@ -23,18 +23,16 @@
 #include "global.hxx"
 #include "dpfilteredcache.hxx"
 #include "calcmacros.hxx"
+#include "dpitemdata.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>
 #include <vector>
-
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldReference;
-} } } }
 
 namespace com { namespace sun { namespace star { namespace sheet { struct DataResult; } } } }
 namespace com { namespace sun { namespace star { namespace sheet { struct MemberResult; } } } }
@@ -48,7 +46,6 @@ class ScDPResultMember;
 class ScDPResultVisibilityData;
 
 struct ScDPValue;
-class ScDPItemData;
 struct ScDPResultFilterContext;
 
 /**

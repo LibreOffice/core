@@ -26,20 +26,15 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <document.hxx>
 #include <attrib.hxx>
 #include <table.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
-#include <pivot.hxx>
 #include <docpool.hxx>
 #include <poolhelp.hxx>
-#include <autoform.hxx>
 #include <rangelst.hxx>
-#include <chartarr.hxx>
 #include <chartlock.hxx>
 #include <refupdat.hxx>
 #include <docoptio.hxx>
@@ -47,15 +42,12 @@
 #include <clipoptions.hxx>
 #include <viewopti.hxx>
 #include <scextopt.hxx>
-#include <brdcst.hxx>
-#include <bcaslot.hxx>
 #include <tablink.hxx>
 #include <externalrefmgr.hxx>
 #include <markdata.hxx>
 #include <validat.hxx>
 #include <dociter.hxx>
 #include <detdata.hxx>
-#include <detfunc.hxx>
 #include <inputopt.hxx>
 #include <chartlis.hxx>
 #include <sc.hrc>
@@ -64,24 +56,21 @@
 #include <drwlayer.hxx>
 #include <unoreflist.hxx>
 #include <listenercalls.hxx>
-#include <dpshttab.hxx>
-#include <dpcache.hxx>
 #include <tabprotection.hxx>
 #include <formulaparserpool.hxx>
 #include <clipparam.hxx>
 #include <sheetevents.hxx>
-#include <colorscale.hxx>
 #include <queryentry.hxx>
 #include <formulacell.hxx>
 #include <refupdatecontext.hxx>
 #include <scopetools.hxx>
 #include <filterentries.hxx>
 #include <docsh.hxx>
+#include <queryparam.hxx>
 
 #include <globalnames.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <o3tl/make_unique.hxx>
 #include <memory>
 
 using namespace com::sun::star;

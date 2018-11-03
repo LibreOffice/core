@@ -19,20 +19,13 @@
 
 #include <scitems.hxx>
 #include <attrib.hxx>
-#include <patattr.hxx>
-#include <docpool.hxx>
 #include <formulacell.hxx>
 #include <table.hxx>
 #include <column.hxx>
 #include <document.hxx>
 #include <drwlayer.hxx>
-#include <olinetab.hxx>
-#include <userlist.hxx>
-#include <stlsheet.hxx>
 #include <global.hxx>
-#include <rechead.hxx>
 #include <stlpool.hxx>
-#include <brdcst.hxx>
 #include <tabprotection.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -48,7 +41,6 @@
 
 #include <algorithm>
 #include <limits>
-#include <iostream>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;

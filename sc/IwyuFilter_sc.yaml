@@ -61,6 +61,9 @@ blacklist:
     sc/inc/chgviset.hxx:
     # base class has to be a complete type
     - unotools/textsearch.hxx
+    sc/inc/colcontainer.hxx:
+    # Needed to silence the check on colcontainer.cxx
+    - column.hxx
     sc/inc/column.hxx:
     # base class has to be a complete type
     - mdds/flat_segment_tree.hpp
@@ -488,4 +491,33 @@ blacklist:
     sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
-
+    sc/source/core/data/column2.cxx:
+    # Used in #if DEBUG_COLUMN_STORAGE
+    - tokenstringcontext.hxx
+    sc/source/core/data/conditio.cxx:
+    # Needed for #define
+    - attrib.hxx
+    sc/source/core/data/documen8.cxx:
+    # Needed for template
+    - docpool.hxx
+    sc/source/core/data/document.cxx:
+    # Complete type needed for method type
+    - com/sun/star/sheet/TablePageBreakData.hpp
+    sc/source/core/data/documentimport.cxx:
+    # Needed for member access in assert()
+    - stringutil.hxx
+    sc/source/core/data/dptabres.cxx:
+    # Used in #if DUMP_PIVOT_TABLE
+    - document.hxx
+    sc/source/core/data/formulacell.cxx:
+    # Used in #if DBG_UTIL
+    - com/sun/star/sheet/FormulaLanguage.hpp
+    # Used in #if HAVE_FEATURE_OPENCL
+    - opencl/openclwrapper.hxx
+    sc/source/core/data/stlsheet.cxx:
+    # Needed for #define
+    - editeng/shaditem.hxx
+    - editeng/xmlcnitm.hxx
+    sc/source/core/data/types.cxx:
+    # Complete type is needed for complex data type
+    - scmatrix.hxx

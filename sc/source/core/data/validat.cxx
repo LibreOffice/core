@@ -23,12 +23,10 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
-#include <basic/basmgr.hxx>
 
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
@@ -36,20 +34,18 @@
 #include <vcl/weld.hxx>
 #include <rtl/math.hxx>
 
-#include <scitems.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <patattr.hxx>
-#include <rechead.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
 #include <typedstrdata.hxx>
-#include <dociter.hxx>
 #include <editutil.hxx>
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
+#include <cellvalue.hxx>
 
 #include <math.h>
 #include <memory>

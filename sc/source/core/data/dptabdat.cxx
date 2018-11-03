@@ -19,17 +19,11 @@
 
 #include <dptabdat.hxx>
 #include <dpcache.hxx>
-#include <global.hxx>
 #include <dpfilteredcache.hxx>
 #include <dptabres.hxx>
-#include <document.hxx>
-#include <dpobject.hxx>
 
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <unotools/collatorwrapper.hxx>
 
 
 using namespace ::com::sun::star;

@@ -28,12 +28,9 @@
 #include <compiler.hxx>
 #include <brdcst.hxx>
 #include <markdata.hxx>
-#include <detfunc.hxx>
 #include <postit.hxx>
-#include <globalnames.hxx>
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
-#include <cellform.hxx>
 #include <clipcontext.hxx>
 #include <types.hxx>
 #include <editutil.hxx>
@@ -43,21 +40,16 @@
 #include <sharedformula.hxx>
 #include <refupdatecontext.hxx>
 #include <listenercontext.hxx>
-#include <refhint.hxx>
-#include <stlalgorithm.hxx>
 #include <formulagroup.hxx>
-#include <userdat.hxx>
 #include <drwlayer.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/fieldupdater.hxx>
 #include <formula/errorcodes.hxx>
 #include <osl/diagnose.h>
 
-#include <cstring>
 #include <map>
 #include <cstdio>
 #include <memory>

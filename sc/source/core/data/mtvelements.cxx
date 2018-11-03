@@ -8,7 +8,6 @@
  */
 
 #include <mtvelements.hxx>
-#include <globalnames.hxx>
 #include <document.hxx>
 #include <cellvalue.hxx>
 #include <column.hxx>

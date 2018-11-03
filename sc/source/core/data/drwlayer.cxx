@@ -20,9 +20,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
@@ -34,8 +32,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/svdocirc.hxx>
-#include <svx/svdoedge.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
@@ -45,17 +41,11 @@
 #include <svx/drawitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
-#include <svx/shapepropertynotifier.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sot/storage.hxx>
 #include <svl/itempool.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/pathoptions.hxx>
+#include <tools/globname.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -64,13 +54,11 @@
 #include <drawpage.hxx>
 #include <global.hxx>
 #include <document.hxx>
-#include <rechead.hxx>
 #include <userdat.hxx>
 #include <markdata.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scmod.hxx>
-#include <chartarr.hxx>
 #include <postit.hxx>
 #include <attrib.hxx>
 #include <charthelper.hxx>
@@ -79,6 +67,8 @@
 
 #include <vcl/field.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
 
 #define DET_ARROW_OFFSET    1000
 

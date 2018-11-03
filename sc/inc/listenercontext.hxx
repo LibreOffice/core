@@ -12,6 +12,7 @@
 
 #include "address.hxx"
 #include "columnspanset.hxx"
+#include "mtvelements.hxx"
 
 #include <memory>
 
@@ -20,8 +21,6 @@ class ScTokenArray;
 
 namespace sc {
 
-struct ColumnBlockPosition;
-class ColumnBlockPositionSet;
 class ColumnSet;
 
 class StartListeningContext

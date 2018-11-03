@@ -31,7 +31,6 @@
 #include <rtl/math.hxx>
 #include <algorithm>
 
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 

@@ -27,23 +27,18 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/pbinitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/xmlcnitm.hxx>
-#include <sfx2/printer.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
 #include <attrib.hxx>
 
-#include <vcl/svapp.hxx>
-
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <sc.hrc>
-#include <helpids.h>
 
 #define TWO_CM      1134
 #define HFDIST_CM   142

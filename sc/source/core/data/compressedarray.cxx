@@ -18,10 +18,7 @@
  */
 
 #include <compressedarray.hxx>
-#include <address.hxx>
 #include <global.hxx>
-
-#include <algorithm>
 
 static const size_t nScCompressedArrayDelta = 4;
 

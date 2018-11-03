@@ -39,20 +39,15 @@
 #include <svx/sdsxyitm.hxx>
 #include <tools/gen.hxx>
 
-#include <table.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
-#include <formulacell.hxx>
 #include <drwlayer.hxx>
 #include <undocell.hxx>
 #include <userdat.hxx>
-#include <detdata.hxx>
 #include <detfunc.hxx>
 #include <editutil.hxx>
 #include <o3tl/make_unique.hxx>
-
-#include <utility>
 
 using namespace com::sun::star;
 

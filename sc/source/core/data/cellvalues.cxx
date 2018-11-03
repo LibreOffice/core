@@ -10,7 +10,6 @@
 #include <memory>
 #include <cellvalues.hxx>
 #include <column.hxx>
-#include <cellvalue.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <cassert>

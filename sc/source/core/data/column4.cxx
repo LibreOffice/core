@@ -15,8 +15,6 @@
 #include <cellvalues.hxx>
 #include <columnspanset.hxx>
 #include <columniterator.hxx>
-#include <listenercontext.hxx>
-#include <tokenstringcontext.hxx>
 #include <mtvcellfunc.hxx>
 #include <clipcontext.hxx>
 #include <attrib.hxx>
@@ -25,11 +23,11 @@
 #include <conditio.hxx>
 #include <formulagroup.hxx>
 #include <tokenarray.hxx>
-#include <globalnames.hxx>
 #include <scitems.hxx>
 #include <cellform.hxx>
 #include <sharedformula.hxx>
 #include <drwlayer.hxx>
+#include <compiler.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>

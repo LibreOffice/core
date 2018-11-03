@@ -10,7 +10,6 @@
 #include <dputil.hxx>
 #include <dpitemdata.hxx>
 #include <dpnumgroupinfo.hxx>
-#include <globalnames.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <generalfunction.hxx>
@@ -24,7 +23,6 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 using namespace com::sun::star;
 

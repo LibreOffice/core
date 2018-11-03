@@ -18,27 +18,18 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <editeng/boxitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/editobj.hxx>
-#include <svx/pageitem.hxx>
-#include <editeng/editeng.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <svx/svditer.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdocapt.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/poolcach.hxx>
-#include <unotools/saveopt.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
 
@@ -52,7 +43,6 @@
 #include <column.hxx>
 #include <attrib.hxx>
 #include <attarray.hxx>
-#include <markarr.hxx>
 #include <patattr.hxx>
 #include <rangenam.hxx>
 #include <poolhelp.hxx>
@@ -61,19 +51,14 @@
 #include <stlsheet.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <rechead.hxx>
 #include <dbdata.hxx>
-#include <pivot.hxx>
 #include <chartlis.hxx>
 #include <rangelst.hxx>
 #include <markdata.hxx>
 #include <drwlayer.hxx>
-#include <conditio.hxx>
-#include <colorscale.hxx>
 #include <validat.hxx>
 #include <prnsave.hxx>
 #include <chgtrack.hxx>
-#include <sc.hrc>
 #include <hints.hxx>
 #include <detdata.hxx>
 #include <dpobject.hxx>
@@ -84,8 +69,6 @@
 #include <autonamecache.hxx>
 #include <bcaslot.hxx>
 #include <postit.hxx>
-#include <externalrefmgr.hxx>
-#include <tabprotection.hxx>
 #include <clipparam.hxx>
 #include <defaultsoptions.hxx>
 #include <editutil.hxx>
@@ -97,7 +80,6 @@
 #include <scopetools.hxx>
 #include <refupdatecontext.hxx>
 #include <formulagroup.hxx>
-#include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 #include <compressedarray.hxx>
 #include <docsh.hxx>
@@ -106,7 +88,6 @@
 #include <formula/vectortoken.hxx>
 
 #include <limits>
-#include <map>
 #include <memory>
 #include <utility>
 

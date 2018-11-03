@@ -18,8 +18,6 @@
  */
 
 #include <userdat.hxx>
-#include <drwlayer.hxx>
-#include <rechead.hxx>
 
 
 ScDrawObjData::ScDrawObjData() :

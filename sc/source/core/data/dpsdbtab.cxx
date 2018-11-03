@@ -18,11 +18,9 @@
  */
 
 #include <dpsdbtab.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <dpfilteredcache.hxx>
-#include <dptabres.hxx>
 #include <document.hxx>
 #include <dpobject.hxx>
 

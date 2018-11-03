@@ -26,6 +26,7 @@
 #include <stack>
 #include <vector>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>

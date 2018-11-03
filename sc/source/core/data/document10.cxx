@@ -10,11 +10,9 @@
 #include <memory>
 #include <document.hxx>
 #include <clipcontext.hxx>
-#include <formulacell.hxx>
 #include <clipparam.hxx>
 #include <table.hxx>
 #include <tokenarray.hxx>
-#include <editutil.hxx>
 #include <listenercontext.hxx>
 #include <tokenstringcontext.hxx>
 #include <poolhelp.hxx>
@@ -23,10 +21,7 @@
 #include <docpool.hxx>
 #include <columniterator.hxx>
 
-#include <dociter.hxx>
-#include <patattr.hxx>
 #include <refupdatecontext.hxx>
-#include <svl/whiter.hxx>
 #include <sal/log.hxx>
 #include <editeng/colritem.hxx>
 #include <scitems.hxx>

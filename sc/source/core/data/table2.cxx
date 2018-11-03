@@ -26,11 +26,9 @@
 #include <document.hxx>
 #include <drwlayer.hxx>
 #include <olinetab.hxx>
-#include <rechead.hxx>
 #include <stlpool.hxx>
 #include <attarray.hxx>
 #include <markdata.hxx>
-#include <progress.hxx>
 #include <dociter.hxx>
 #include <conditio.hxx>
 #include <chartlis.hxx>
@@ -39,10 +37,7 @@
 #include <postit.hxx>
 #include <sheetevents.hxx>
 #include <segmenttree.hxx>
-#include <queryparam.hxx>
-#include <queryentry.hxx>
 #include <dbdata.hxx>
-#include <colorscale.hxx>
 #include <tokenarray.hxx>
 #include <clipcontext.hxx>
 #include <types.hxx>
@@ -53,11 +48,10 @@
 #include <tabprotection.hxx>
 #include <columnspanset.hxx>
 #include <rowheightcontext.hxx>
-#include <refhint.hxx>
 #include <listenercontext.hxx>
-#include <token.hxx>
 #include <compressedarray.hxx>
 #include <brdcst.hxx>
+#include <refdata.hxx>
 
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>
@@ -65,8 +59,6 @@
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
-#include <svl/PasswordHelper.hxx>
-#include <unotools/transliterationwrapper.hxx>
 
 namespace {
 

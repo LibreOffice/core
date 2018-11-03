@@ -20,17 +20,12 @@
 #include <attarray.hxx>
 #include <scitems.hxx>
 #include <o3tl/make_unique.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/poolcach.hxx>
-#include <editeng/fontitem.hxx>
-#include <unotools/fontcvt.hxx>
-#include <sal/log.hxx>
 
 #include <global.hxx>
 #include <document.hxx>
@@ -39,15 +34,12 @@
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <markarr.hxx>
-#include <rechead.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <segmenttree.hxx>
 #include <editdataarray.hxx>
-#include <formulacell.hxx>
 #include <cellvalue.hxx>
 #include <editutil.hxx>
-#include <rtl/strbuf.hxx>
 #include <memory>
 
 using ::editeng::SvxBorderLine;
