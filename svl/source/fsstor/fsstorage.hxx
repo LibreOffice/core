@@ -55,14 +55,14 @@ public:
 
     virtual ~FSStorage() override;
 
-    ::ucbhelper::Content* GetContent();
+    ucbhelper::Content& GetContent();
 
     static void CopyStreamToSubStream( const OUString& aSourceURL,
                                 const css::uno::Reference< css::embed::XStorage >& xDest,
                                 const OUString& aNewEntryName );
 
-    void CopyContentToStorage_Impl( ::ucbhelper::Content* pContent,
-                                    const css::uno::Reference< css::embed::XStorage >& xDest );
+    void CopyContentToStorage_Impl(ucbhelper::Content& rContent,
+                                   const css::uno::Reference<css::embed::XStorage>& xDest);
 
     static bool MakeFolderNoUI( const OUString& rFolder );
 
