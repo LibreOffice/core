@@ -152,14 +152,11 @@ namespace cppcanvas
                                                        rTextTransform );
             }
 
-            ::basegfx::B2DPolyPolygon textLinesFromLogicalOffsets( const uno::Sequence< double >&   rOffsets,
-                                                                   const tools::TextLineInfo&       rTextLineInfo )
+            void initLayoutWidth(double& rLayoutWidth, const uno::Sequence<double>& rOffsets)
             {
-                return tools::createTextLinesPolyPolygon(
-                    0.0,
-                    // extract character cell furthest to the right
-                    *(std::max_element( rOffsets.begin(), rOffsets.end() )),
-                    rTextLineInfo );
+                ENSURE_OR_THROW(rOffsets.getLength(),
+                                  "::cppcanvas::internal::initLayoutWidth(): zero-length array" );
+                rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
 
             uno::Sequence< double > setupDXArray( const long*   pCharWidths,
@@ -229,7 +226,6 @@ namespace cppcanvas
              */
             void initArrayAction( rendering::RenderState&                   o_rRenderState,
                                   uno::Reference< rendering::XTextLayout >& o_rTextLayout,
-                                  double&                                   nLayoutWidth,
                                   const ::basegfx::B2DPoint&                rStartPoint,
                                   const OUString&                    rText,
                                   sal_Int32                                 nStartPos,
@@ -262,8 +258,6 @@ namespace cppcanvas
 
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
 
-                const double* pOffsets(rOffsets.getConstArray());
-                nLayoutWidth = *std::max_element(pOffsets, pOffsets + rOffsets.getLength());
             }
 
             double getLineWidth( ::VirtualDevice const &         rVDev,
@@ -576,24 +570,6 @@ namespace cppcanvas
                 return tools::calcDevicePixelBounds( aTotalBounds,
                                                      rViewState,
                                                      rRenderState );
-            }
-
-            void initEffectLinePolyPolygon( ::basegfx::B2DSize&                             o_rOverallSize,
-                                            uno::Reference< rendering::XPolyPolygon2D >&    o_rTextLines,
-                                            const CanvasSharedPtr&                          rCanvas,
-                                            const uno::Sequence< double >&                  rOffsets,
-                                            const tools::TextLineInfo&                      rLineInfo   )
-            {
-                const ::basegfx::B2DPolyPolygon aPoly(
-                    textLinesFromLogicalOffsets(
-                        rOffsets,
-                        rLineInfo ) );
-
-                o_rOverallSize = ::basegfx::utils::getRange( aPoly ).getRange();
-
-                o_rTextLines = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                    rCanvas->getUNOCanvas()->getDevice(),
-                    aPoly );
             }
 
             void initEffectLinePolyPolygon( ::basegfx::B2DSize&                             o_rOverallSize,
@@ -1094,9 +1070,10 @@ namespace cppcanvas
                 mpCanvas( rCanvas ),
                 maState()
             {
+                initLayoutWidth(mnLayoutWidth, rOffsets);
+
                 initArrayAction( maState,
                                  mxTextLayout,
-                                 mnLayoutWidth,
                                  rStartPoint,
                                  rString,
                                  nStartPos,
@@ -1118,9 +1095,10 @@ namespace cppcanvas
                 mpCanvas( rCanvas ),
                 maState()
             {
+                initLayoutWidth(mnLayoutWidth, rOffsets);
+
                 initArrayAction( maState,
                                  mxTextLayout,
-                                 mnLayoutWidth,
                                  rStartPoint,
                                  rString,
                                  nStartPos,
@@ -1318,15 +1296,16 @@ namespace cppcanvas
                 maShadowColor( rShadowColor ),
                 maTextFillColor( rTextFillColor )
             {
+                initLayoutWidth(mnLayoutWidth, rOffsets);
+
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
                                            rCanvas,
-                                           rOffsets,
+                                           mnLayoutWidth,
                                            maTextLineInfo );
 
                 initArrayAction( maState,
                                  mxTextLayout,
-                                 mnLayoutWidth,
                                  rStartPoint,
                                  rText,
                                  nStartPos,
@@ -1362,15 +1341,16 @@ namespace cppcanvas
                 maShadowColor( rShadowColor ),
                 maTextFillColor( rTextFillColor )
             {
+                initLayoutWidth(mnLayoutWidth, rOffsets);
+
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
                                            rCanvas,
-                                           rOffsets,
+                                           mnLayoutWidth,
                                            maTextLineInfo );
 
                 initArrayAction( maState,
                                  mxTextLayout,
-                                 mnLayoutWidth,
                                  rStartPoint,
                                  rText,
                                  nStartPos,
@@ -1723,10 +1703,14 @@ namespace cppcanvas
                 maShadowOffset( rShadowOffset ),
                 maShadowColor( rShadowColor )
             {
+                double nLayoutWidth = 0.0;
+
+                initLayoutWidth(nLayoutWidth, rOffsets);
+
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
                                            rCanvas,
-                                           rOffsets,
+                                           nLayoutWidth,
                                            maTextLineInfo );
 
                 init( maState,
@@ -1765,10 +1749,13 @@ namespace cppcanvas
                 maShadowOffset( rShadowOffset ),
                 maShadowColor( rShadowColor )
             {
+                double nLayoutWidth = 0.0;
+                initLayoutWidth(nLayoutWidth, rOffsets);
+
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
                                            rCanvas,
-                                           rOffsets,
+                                           nLayoutWidth,
                                            maTextLineInfo );
 
                 init( maState,
