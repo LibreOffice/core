@@ -236,16 +236,15 @@ enum class ButtonValue {
 };
 
 // Color types
-typedef uint32_t ColorData;
 
-constexpr ColorData RGB_COLORDATA(uint8_t r, uint8_t g, uint8_t b) {
+constexpr uint32_t RGB_COLORDATA(uint8_t r, uint8_t g, uint8_t b) {
     return uint32_t(b) | (uint32_t(g) << 8) | (uint32_t(r) << 16);
 }
 
 #define COLORDATA_RED( n )          ((uint8_t)((n)>>16))
 #define COLORDATA_GREEN( n )        ((uint8_t)(((uint16_t)(n)) >> 8))
 #define COLORDATA_BLUE( n )         ((uint8_t)(n))
-#define COLORDATA_RGB( n )          ((ColorData)((n) & 0x00FFFFFF))
+#define COLORDATA_RGB( n )          ((uint32_t)((n) & 0x00FFFFFF))
 
 #define COL_BLACK                   RGB_COLORDATA( 0x00, 0x00, 0x00 )
 #define COL_BLUE                    RGB_COLORDATA( 0x00, 0x00, 0x80 )
@@ -272,46 +271,6 @@ constexpr ColorData RGB_COLORDATA(uint8_t r, uint8_t g, uint8_t b) {
 #ifndef SAL_DLLPUBLIC_EXPORT
 #   define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
 #endif
-
-class SAL_DLLPUBLIC_EXPORT Color final
-{
-    ColorData mnColor;
-
-public:
-    explicit Color(ColorData nColor = COL_BLACK)
-        : mnColor(nColor)
-    {}
-    Color(uint8_t nRed, uint8_t nGreen, uint8_t nBlue)
-        : mnColor(RGB_COLORDATA(nRed, nGreen, nBlue))
-    {}
-
-    bool operator<(const Color& b) const
-    {
-        return mnColor < b.GetColor();
-    }
-
-    void SetColor(ColorData nColor)
-    {
-        mnColor = nColor;
-    }
-    ColorData GetColor() const
-    {
-        return mnColor;
-    }
-    ColorData GetRGBColor() const
-    {
-        return COLORDATA_RGB(mnColor);
-    }
-
-    bool operator==(const Color& rColor) const
-    {
-        return mnColor == rColor.mnColor;
-    }
-    bool operator!=(const Color& rColor) const
-    {
-        return !(Color::operator==(rColor));
-    }
-};
 
 namespace tools
 {
