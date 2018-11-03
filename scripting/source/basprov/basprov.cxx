@@ -158,6 +158,17 @@ namespace basprov
         return bIsShared;
     }
 
+    // SfxListener
+    void BasicProviderImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+    {
+        if (auto pManager = dynamic_cast<const BasicManager*>(&rBC))
+            if (pManager == m_pAppBasicManager && rHint.GetId() == SfxHintId::Dying)
+            {
+                EndListening(*m_pAppBasicManager);
+                m_pAppBasicManager = nullptr;
+            }
+    }
+
     // XServiceInfo
     OUString BasicProviderImpl::getImplementationName(  )
     {
@@ -258,7 +269,11 @@ namespace basprov
 
         // TODO
         if ( !m_pAppBasicManager )
+        {
             m_pAppBasicManager = SfxApplication::GetBasicManager();
+            if (m_pAppBasicManager)
+                StartListening(*m_pAppBasicManager);
+        }
 
         if ( !m_xLibContainerApp.is() )
             m_xLibContainerApp.set( SfxGetpApp()->GetBasicContainer(), UNO_QUERY );
