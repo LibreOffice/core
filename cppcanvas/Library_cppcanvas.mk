@@ -65,6 +65,7 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/polypolyaction \
 	cppcanvas/source/mtfrenderer/emfpstringformat \
 	cppcanvas/source/mtfrenderer/textaction \
+	cppcanvas/source/mtfrenderer/textlineshelper \
 	cppcanvas/source/mtfrenderer/transparencygroupaction \
 	cppcanvas/source/tools/canvasgraphichelper \
 	cppcanvas/source/tools/tools \
