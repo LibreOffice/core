@@ -196,7 +196,8 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rDs
 
             for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
             {
-                aCol.SetBlue( *( pPixel = ( pSrcScan + pMapX[ nX ] * 3 ) )++ );
+                pPixel = pSrcScan + pMapX[ nX ] * 3;
+                aCol.SetBlue( *pPixel++ );
                 aCol.SetGreen( *pPixel++ );
                 aCol.SetRed( *pPixel );
                 pFncSetPixel( pDstScan, nX, aCol, rDstMask );

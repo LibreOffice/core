@@ -92,7 +92,10 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
     if( pFirstFrameOutDev )
-        maClip = ( mpOut = pOut )->GetClipRegion();
+    {
+        mpOut = pOut;
+        maClip = mpOut->GetClipRegion();
+    }
 }
 
 ImplAnimView::~ImplAnimView()
@@ -212,7 +215,8 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         Size                    aSizePix;
         Size                    aBmpSizePix;
         const sal_uLong             nLastPos = mpParent->Count() - 1;
-        const AnimationBitmap&  rAnm = mpParent->Get( static_cast<sal_uInt16>( mnActPos = std::min( nPos, nLastPos ) ) );
+        mnActPos = std::min( nPos, nLastPos );
+        const AnimationBitmap&  rAnm = mpParent->Get( static_cast<sal_uInt16>( mnActPos ) );
 
         getPosSize( rAnm, aPosPix, aSizePix );
 

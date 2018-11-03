@@ -626,7 +626,8 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
-                    const bool insert = ( ndx = aKeywordPair.indexOf( ';' ) ) != -1;
+                    ndx = aKeywordPair.indexOf( ';' );
+                    const bool insert = ndx != -1;
 
                     if ( insert )
                     {

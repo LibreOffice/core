@@ -79,7 +79,8 @@ RTFError RTFTokenizer::resolveParse()
         m_xStatusIndicator->start(sDocLoad, nEndPos);
         nPercentSize = nEndPos / 100;
 
-        m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
+        nLastPos = nCurrentPos;
+        m_xStatusIndicator->setValue(nLastPos);
     }
 
     while (Strm().ReadChar(ch), !Strm().eof())
@@ -88,7 +89,10 @@ RTFError RTFTokenizer::resolveParse()
 
         sal_uInt64 const nCurrentPos = Strm().Tell();
         if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
-            m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
+        {
+            nLastPos = nCurrentPos;
+            m_xStatusIndicator->setValue(nLastPos);
+        }
 
         if (m_nGroup < 0)
             return RTFError::GROUP_UNDER;

@@ -91,41 +91,53 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
                 for (nX = 0; nX < nWidth; nX++)
                 {
                     // first row
-                    nSumR = (pTmp = pKoeff[0])[(pColor = pRowTmp1 + nX)->GetRed()];
+                    pTmp = pKoeff[0];
+                    pColor = pRowTmp1 + nX;
+                    nSumR = pTmp[pColor->GetRed()];
                     nSumG = pTmp[pColor->GetGreen()];
                     nSumB = pTmp[pColor->GetBlue()];
 
-                    nSumR += (pTmp = pKoeff[1])[(++pColor)->GetRed()];
+                    pTmp = pKoeff[1];
+                    nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    nSumR += (pTmp = pKoeff[2])[(++pColor)->GetRed()];
+                    pTmp = pKoeff[2];
+                    nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
                     // second row
-                    nSumR += (pTmp = pKoeff[3])[(pColor = pRowTmp2 + nX)->GetRed()];
+                    pTmp = pKoeff[3];
+                    pColor = pRowTmp2 + nX;
+                    nSumR += pTmp[pColor->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    nSumR += (pTmp = pKoeff[4])[(++pColor)->GetRed()];
+                    pTmp = pKoeff[4];
+                    nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    nSumR += (pTmp = pKoeff[5])[(++pColor)->GetRed()];
+                    pTmp = pKoeff[5];
+                    nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
                     // third row
-                    nSumR += (pTmp = pKoeff[6])[(pColor = pRowTmp3 + nX)->GetRed()];
+                    pTmp = pKoeff[6];
+                    pColor = pRowTmp3 + nX;
+                    nSumR += pTmp[pColor->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    nSumR += (pTmp = pKoeff[7])[(++pColor)->GetRed()];
+                    pTmp = pKoeff[7];
+                    nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    nSumR += (pTmp = pKoeff[8])[(++pColor)->GetRed()];
+                    pTmp = pKoeff[8];
+                    nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 

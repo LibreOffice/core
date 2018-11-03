@@ -427,7 +427,8 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
 
     i = 0;
     while (i <= lastPoint) {
-        pa[i++].flags = static_cast<sal_uInt32>(flag = *p++);
+        flag = *p++;
+        pa[i++].flags = static_cast<sal_uInt32>(flag);
         if (flag & 8) {                                     /*- repeat flag */
             n = *p++;
             for (j=0; j<n; j++) {
