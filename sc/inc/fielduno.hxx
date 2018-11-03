@@ -185,7 +185,7 @@ class ScEditFieldObj : public cppu::WeakImplHelper<
     bool mbIsFixed:1;
 
 private:
-    SvxFieldData* getData();
+    SvxFieldData& getData();
 
     void setPropertyValueURL(const OUString& rName, const css::uno::Any& rVal);
     css::uno::Any getPropertyValueURL(const OUString& rName);
