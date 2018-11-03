@@ -311,7 +311,6 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                                 ::basegfx::B2DRectangle const & rDestRect,
                                 ::basegfx::B2DHomMatrix const & rLocalTransform )
 {
-    bool bCopyBack( false );
     const Size aBmpSize( rBitmap.GetSizePixel() );
     Bitmap aSrcBitmap( rBitmap.GetBitmap() );
     Bitmap aSrcAlpha;
@@ -455,8 +454,6 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                     }
                 }
             }
-
-            bCopyBack = true;
         }
         else
         {
@@ -466,10 +463,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
         }
     }
 
-    if( bCopyBack )
-        return BitmapEx( aDstBitmap, AlphaMask( aDstAlpha ) );
-    else
-        return BitmapEx();
+    return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
 }
 
 

@@ -1474,24 +1474,21 @@ namespace
                         // write number of entries
                         if (write_sal_uInt32(aHandle, nSize))
                         {
-                            if (bRetval)
+                            // write placeholder for headers. Due to the fact that
+                            // PackFileSize for newly added files gets set during
+                            // writing the content entry, write headers after content
+                            // is written. To do so, write placeholders here
+                            sal_uInt32 nWriteSize(0);
+
+                            nWriteSize += maPackedFileEntryVector.size() * PackedFileEntry::getEntrySize();
+
+                            aArray[0] = aArray[1] = aArray[2] = aArray[3] = 0;
+
+                            for (sal_uInt32 a(0); bRetval && a < nWriteSize; a++)
                             {
-                                // write placeholder for headers. Due to the fact that
-                                // PackFileSize for newly added files gets set during
-                                // writing the content entry, write headers after content
-                                // is written. To do so, write placeholders here
-                                sal_uInt32 nWriteSize(0);
-
-                                nWriteSize += maPackedFileEntryVector.size() * PackedFileEntry::getEntrySize();
-
-                                aArray[0] = aArray[1] = aArray[2] = aArray[3] = 0;
-
-                                for (sal_uInt32 a(0); bRetval && a < nWriteSize; a++)
+                                if (osl_File_E_None != osl_writeFile(aHandle, static_cast<const void*>(aArray), 1, &nBaseWritten) || 1 != nBaseWritten)
                                 {
-                                    if (osl_File_E_None != osl_writeFile(aHandle, static_cast<const void*>(aArray), 1, &nBaseWritten) || 1 != nBaseWritten)
-                                    {
-                                        bRetval = false;
-                                    }
+                                    bRetval = false;
                                 }
                             }
 

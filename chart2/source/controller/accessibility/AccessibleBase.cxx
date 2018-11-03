@@ -685,14 +685,10 @@ awt::Point SAL_CALL AccessibleBase::getLocationOnScreen()
 {
     CheckDisposeState();
 
-    if( m_aAccInfo.m_pParent != nullptr )
+    if (AccessibleBase* pParent = m_aAccInfo.m_pParent)
     {
-        AccessibleBase * pParent = m_aAccInfo.m_pParent;
         awt::Point aLocThisRel( getLocation());
-        awt::Point aUpperLeft;
-
-        if( pParent != nullptr )
-            aUpperLeft = pParent->getLocationOnScreen();
+        awt::Point aUpperLeft(pParent->getLocationOnScreen());
 
         return  awt::Point( aUpperLeft.X + aLocThisRel.X,
                             aUpperLeft.Y + aLocThisRel.Y );

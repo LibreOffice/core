@@ -182,8 +182,7 @@ bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
     case UM_EVENT_STATE_FOCUSED:
         {
             UpdateAccFocus(pXAcc);
-            if( selfAccObj )
-                selfAccObj->UpdateDefaultAction( );
+            selfAccObj->UpdateDefaultAction( );
             UpdateValue(pXAcc);
             NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
             break;

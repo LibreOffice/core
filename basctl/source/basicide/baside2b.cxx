@@ -148,13 +148,10 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
     if ( nIndexStart != -1 )
     {
         sal_Int32 nIndexEnd = rVar.indexOf( ')', nIndexStart );
-        if ( nIndexStart != -1 )
-        {
-            rIndex = rVar.copy( nIndexStart+1, nIndexEnd-nIndexStart-1 );
-            rVar = rVar.copy( 0, nIndexStart );
-            rVar = comphelper::string::stripEnd(rVar, ' ');
-            rIndex = comphelper::string::strip(rIndex, ' ');
-        }
+        rIndex = rVar.copy(nIndexStart + 1, nIndexEnd - nIndexStart - 1);
+        rVar = rVar.copy(0, nIndexStart);
+        rVar = comphelper::string::stripEnd(rVar, ' ');
+        rIndex = comphelper::string::strip(rIndex, ' ');
     }
 
     if ( !rVar.isEmpty() )
@@ -2412,7 +2409,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         SbxDimArray* pOldArray = pItem->mpArray.get();
 
                         bool bArrayChanged = false;
-                        if( pNewArray != nullptr && pOldArray != nullptr )
+                        if (pOldArray != nullptr)
                         {
                             // Compare Array dimensions to see if array has changed
                             // Can be a copy, so comparing pointers does not work
@@ -2439,27 +2436,21 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                                 }
                             }
                         }
-                        else if( pNewArray == nullptr || pOldArray == nullptr )
+                        else
                         {
                             bArrayChanged = true;
                         }
-                        if( pNewArray )
-                        {
-                            implEnableChildren( pEntry, true );
-                        }
+                        implEnableChildren(pEntry, true);
                         // #i37227 Clear always and replace array
                         if( pNewArray != pOldArray )
                         {
                             pItem->clearWatchItem();
-                            if( pNewArray )
-                            {
-                                implEnableChildren( pEntry, true );
+                            implEnableChildren(pEntry, true);
 
-                                pItem->mpArray = pNewArray;
-                                sal_uInt16 nDims = pNewArray->GetDims();
-                                pItem->nDimLevel = 0;
-                                pItem->nDimCount = nDims;
-                            }
+                            pItem->mpArray = pNewArray;
+                            sal_uInt16 nDims = pNewArray->GetDims();
+                            pItem->nDimLevel = 0;
+                            pItem->nDimCount = nDims;
                         }
                         if( bArrayChanged && pOldArray != nullptr )
                         {

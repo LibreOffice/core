@@ -854,23 +854,13 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _r
                 static_cast< OTableTreeListBox* >( pTreeView )->removedTable( _rName );
                 break;
             case E_QUERY:
-                if ( pTreeView )
-                {
-                    SvTreeListEntry* pEntry = lcl_findEntry_impl(*pTreeView,_rName,pTreeView->First());
-                    if ( pEntry )
-                        pTreeView->GetModel()->Remove(pEntry);
-                }
+                if (auto pEntry = lcl_findEntry_impl(*pTreeView, _rName, pTreeView->First()))
+                    pTreeView->GetModel()->Remove(pEntry);
                 break;
             case E_FORM:
             case E_REPORT:
-                {
-                    if ( pTreeView )
-                    {
-                        SvTreeListEntry* pEntry = lcl_findEntry(*pTreeView,_rName,pTreeView->First());
-                        if ( pEntry )
-                            pTreeView->GetModel()->Remove(pEntry);
-                    }
-                }
+                if (auto pEntry = lcl_findEntry(*pTreeView, _rName, pTreeView->First()))
+                    pTreeView->GetModel()->Remove(pEntry);
                 break;
             default:
                 OSL_FAIL("Invalid element type");

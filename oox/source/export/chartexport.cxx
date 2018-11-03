@@ -3589,7 +3589,8 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
 
     sal_Int32 nSymbol = aSymbol.StandardSymbol;
     // TODO: more properties support for marker
-    const char* pSymbolType = nullptr;
+    const char* pSymbolType; // no initialization here, to let compiler warn if we have a code path
+                             // where it stays uninitialized
     switch( nSymbol )
     {
         case 0:
@@ -3631,12 +3632,7 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
         pSymbolType = "none";
     }
 
-    if( pSymbolType )
-    {
-        pFS->singleElement( FSNS( XML_c, XML_symbol ),
-            XML_val, pSymbolType,
-            FSEND );
-    }
+    pFS->singleElement(FSNS(XML_c, XML_symbol), XML_val, pSymbolType, FSEND);
 
     if (!bSkipFormatting)
     {

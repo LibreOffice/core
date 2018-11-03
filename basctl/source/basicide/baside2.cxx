@@ -341,15 +341,12 @@ void ModulWindow::BasicExecute()
                 ChooseMacro( uno::Reference< frame::XModel >() );
                 return;
             }
-            if ( pMethod )
-            {
-                pMethod->SetDebugFlags( m_aStatus.nBasicFlags );
-                BasicDLL::SetDebugMode( true );
-                RunMethod( pMethod );
-                BasicDLL::SetDebugMode( false );
-                // if cancelled during Interactive=false
-                BasicDLL::EnableBreak( true );
-            }
+            pMethod->SetDebugFlags(m_aStatus.nBasicFlags);
+            BasicDLL::SetDebugMode(true);
+            RunMethod(pMethod);
+            BasicDLL::SetDebugMode(false);
+            // if cancelled during Interactive=false
+            BasicDLL::EnableBreak(true);
             ClearStatus( BASWIN_RUNNINGBASIC );
         }
         else

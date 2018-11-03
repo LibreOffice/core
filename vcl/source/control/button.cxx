@@ -3811,10 +3811,6 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     Image* pImg
         = IsChecked() ? rCtrlData.mpDisclosureMinus.get() : rCtrlData.mpDisclosurePlus.get();
 
-    SAL_WARN_IF(!pImg, "vcl", "no disclosure image");
-    if (!pImg)
-        return;
-
     DrawImageFlags nStyle = DrawImageFlags::NONE;
     if (!IsEnabled())
         nStyle |= DrawImageFlags::Disable;
@@ -3825,7 +3821,6 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
                (aSize.Height() - aImgSize.Height()) / 2);
     aOff += aStateRect.TopLeft();
     rRenderContext.DrawImage(aOff, *pImg, nStyle);
-
 }
 
 void DisclosureButton::KeyInput( const KeyEvent& rKEvt )

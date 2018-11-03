@@ -1066,11 +1066,8 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 
             bRet = true;
 
-            if (bRet)
-            {
-                aBitmap.AdaptBitCount(aOutBmp);
-                aBitmap = aOutBmp;
-            }
+            aBitmap.AdaptBitCount(aOutBmp);
+            aBitmap = aOutBmp;
         }
     }
 

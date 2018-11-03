@@ -542,10 +542,8 @@ void AreaChart::impl_createSeriesShapes()
             for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
             {
                 sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
-                if(!pPosHelper)
-                    pPosHelper = m_pMainPosHelper.get();
-                PlotterBase::m_pPosHelper = pPosHelper;
+                PlottingPositionHelper& rPosHelper = getPlottingPositionHelper(nAttachedAxisIndex);
+                m_pPosHelper = &rPosHelper;
 
                 createRegressionCurvesShapes( *pSeries, m_xErrorBarTarget, m_xRegressionCurveEquationTarget,
                                               m_pPosHelper->maySkipPointsInRegressionCalculation());
@@ -553,12 +551,13 @@ void AreaChart::impl_createSeriesShapes()
                 pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
                 if( m_bArea )
                 {
-                    if( !impl_createArea( pSeries.get(), pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
+                    if (!impl_createArea(pSeries.get(), pSeriesPoly,
+                                         aPreviousSeriesPolyMap[nAttachedAxisIndex], &rPosHelper))
                         continue;
                 }
                 if( m_bLine )
                 {
-                    if( !impl_createLine( pSeries.get(), pSeriesPoly, pPosHelper ) )
+                    if (!impl_createLine(pSeries.get(), pSeriesPoly, &rPosHelper))
                         continue;
                 }
                 aPreviousSeriesPolyMap[nAttachedAxisIndex] = pSeriesPoly;
@@ -677,10 +676,7 @@ void AreaChart::createShapes()
                     if( rLogicYSumMap.find(nAttachedAxisIndex)==rLogicYSumMap.end() )
                         rLogicYSumMap[nAttachedAxisIndex]=0.0;
 
-                    PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
-                    if(!pPosHelper)
-                        pPosHelper = m_pMainPosHelper.get();
-                    PlotterBase::m_pPosHelper = pPosHelper;
+                    m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
                     double fAdd = pSeries->getYValue( nIndex );
                     if( !::rtl::math::isNan(fAdd) && !::rtl::math::isInf(fAdd) )
@@ -707,10 +703,8 @@ void AreaChart::createShapes()
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries.get(), m_xSeriesTarget);
 
                 sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
-                if(!pPosHelper)
-                    pPosHelper = m_pMainPosHelper.get();
-                PlotterBase::m_pPosHelper = pPosHelper;
+                PlottingPositionHelper& rPosHelper = getPlottingPositionHelper(nAttachedAxisIndex);
+                m_pPosHelper = &rPosHelper;
 
                 if(m_nDimension==3)
                     fLogicZ = nZ+0.5;
@@ -735,7 +729,7 @@ void AreaChart::createShapes()
                         fLogicY = fabs( fLogicY );
 
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
-                    if( pPosHelper->isPercentY() && rLogicYSumMap[nAttachedAxisIndex] != 0.0 )
+                    if (rPosHelper.isPercentY() && rLogicYSumMap[nAttachedAxisIndex] != 0.0)
                     {
                         fLogicY = fabs( fLogicY )/rLogicYSumMap[nAttachedAxisIndex];
                     }
@@ -766,7 +760,7 @@ void AreaChart::createShapes()
                     fLogicY += rLogicYForNextSeriesMap[nAttachedAxisIndex];
                     rLogicYForNextSeriesMap[nAttachedAxisIndex] = fLogicY;
 
-                    bool bIsVisible = pPosHelper->isLogicVisible( fLogicX, fLogicY, fLogicZ );
+                    bool bIsVisible = rPosHelper.isLogicVisible(fLogicX, fLogicY, fLogicZ);
 
                     //remind minimal and maximal x values for area 'grounding' points
                     //only for filled area
@@ -781,18 +775,20 @@ void AreaChart::createShapes()
 
                     drawing::Position3D aUnscaledLogicPosition( fLogicX, fLogicY, fLogicZ );
                     drawing::Position3D aScaledLogicPosition(aUnscaledLogicPosition);
-                    pPosHelper->doLogicScaling( aScaledLogicPosition );
+                    rPosHelper.doLogicScaling(aScaledLogicPosition);
 
                     //transformation 3) -> 4)
-                    drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
+                    drawing::Position3D aScenePosition(
+                        rPosHelper.transformLogicToScene(fLogicX, fLogicY, fLogicZ, false));
 
                     //better performance for big data
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries.get()] );
-                    pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
-                    if( !pSeries->isAttributedDataPoint(nIndex)
-                            &&
-                            pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
-                                , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
+                    rPosHelper.setCoordinateSystemResolution(m_aCoordinateSystemResolution);
+                    if (!pSeries->isAttributedDataPoint(nIndex)
+                        && rPosHelper.isSameForGivenResolution(
+                               aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ,
+                               aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY,
+                               aScaledLogicPosition.PositionZ))
                     {
                         ++nSkippedPoints;
                         m_bPointsWereSkipped = true;
@@ -859,31 +855,27 @@ void AreaChart::createShapes()
                         {
                             if(m_nDimension!=3)
                             {
-                                if( pSymbolProperties )
+                                if (pSymbolProperties->Style != SymbolStyle_NONE)
                                 {
-                                    if( pSymbolProperties->Style != SymbolStyle_NONE )
-                                    {
-                                        aSymbolSize.DirectionX = pSymbolProperties->Size.Width;
-                                        aSymbolSize.DirectionY = pSymbolProperties->Size.Height;
-                                    }
-
-                                    if( pSymbolProperties->Style == SymbolStyle_STANDARD )
-                                    {
-                                        sal_Int32 nSymbol = pSymbolProperties->StandardSymbol;
-                                        m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
-                                                , aScenePosition, aSymbolSize
-                                                , nSymbol
-                                                , pSymbolProperties->BorderColor
-                                                , pSymbolProperties->FillColor );
-                                    }
-                                    else if( pSymbolProperties->Style == SymbolStyle_GRAPHIC )
-                                    {
-                                        m_pShapeFactory->createGraphic2D( xPointGroupShape_Shapes
-                                                , aScenePosition , aSymbolSize
-                                                , pSymbolProperties->Graphic );
-                                    }
-                                    //@todo other symbol styles
+                                    aSymbolSize.DirectionX = pSymbolProperties->Size.Width;
+                                    aSymbolSize.DirectionY = pSymbolProperties->Size.Height;
                                 }
+
+                                if (pSymbolProperties->Style == SymbolStyle_STANDARD)
+                                {
+                                    sal_Int32 nSymbol = pSymbolProperties->StandardSymbol;
+                                    m_pShapeFactory->createSymbol2D(
+                                        xPointGroupShape_Shapes, aScenePosition, aSymbolSize,
+                                        nSymbol, pSymbolProperties->BorderColor,
+                                        pSymbolProperties->FillColor);
+                                }
+                                else if (pSymbolProperties->Style == SymbolStyle_GRAPHIC)
+                                {
+                                    m_pShapeFactory->createGraphic2D(xPointGroupShape_Shapes,
+                                                                     aScenePosition, aSymbolSize,
+                                                                     pSymbolProperties->Graphic);
+                                }
+                                //@todo other symbol styles
                             }
                         }
                         //create error bars
@@ -901,7 +893,8 @@ void AreaChart::createShapes()
                                     , aScenePosition.PositionY
                                     , aScenePosition.PositionZ+getTransformedDepth() );
 
-                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, pPosHelper->isSwapXAndY() );
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement(
+                                nIndex, m_xChartTypeModel, rPosHelper.isSwapXAndY());
 
                             switch(nLabelPlacement)
                             {

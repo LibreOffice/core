@@ -260,11 +260,11 @@ namespace basegfx
                     // against X-Axis, higher value
                     if(aRetval.count() == 1)
                     {
-                        aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), true, !bInside, rRange.getMaxY(), bStroke);
+                        aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), true, false, rRange.getMaxY(), bStroke);
                     }
                     else
                     {
-                        aRetval = clipPolyPolygonOnParallelAxis(aRetval, true, !bInside, rRange.getMaxY(), bStroke);
+                        aRetval = clipPolyPolygonOnParallelAxis(aRetval, true, false, rRange.getMaxY(), bStroke);
                     }
 
                     if(aRetval.count())
@@ -272,11 +272,11 @@ namespace basegfx
                         // against Y-Axis, higher value
                         if(aRetval.count() == 1)
                         {
-                            aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, !bInside, rRange.getMaxX(), bStroke);
+                            aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, false, rRange.getMaxX(), bStroke);
                         }
                         else
                         {
-                            aRetval = clipPolyPolygonOnParallelAxis(aRetval, false, !bInside, rRange.getMaxX(), bStroke);
+                            aRetval = clipPolyPolygonOnParallelAxis(aRetval, false, false, rRange.getMaxX(), bStroke);
                         }
                     }
                 }
