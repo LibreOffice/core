@@ -10,17 +10,17 @@ ___
 
 Notices for CoinMP library:
 The Computational Infrastructure for Operations Research COIN_OR
-project developed the CoinMP library (a lightweight API and DLL 
+project developed the CoinMP library (a lightweight API and DLL
 for CLP, CBC, and CGL).
-It includes and depends on 
-- CoinUtils: COIN-OR utilities, utilities, data structures, and 
+It includes and depends on
+- CoinUtils: COIN-OR utilities, utilities, data structures, and
 linear algebra methods for COIN-OR projects
-- CLP: COIN-OR Graph Classes, a collection of network representations 
+- CLP: COIN-OR Graph Classes, a collection of network representations
 and algorithms
 - CBC: COIN-OR Branch and Cut, an LP-based branch-and-cut library
 - CGL: Cut Generator Library, a library of cutting-plane generators
-The source code of these dependencies which are available under 
-license EPL can found at 
+The source code of these dependencies which are available under
+license EPL can found at
     http://www.coin-or.org/download/source/CoinMP/
 
 ___
