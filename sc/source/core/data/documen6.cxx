@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/scripttypeitem.hxx>
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -30,7 +29,6 @@
 #include <scrdata.hxx>
 #include <poolhelp.hxx>
 #include <attrib.hxx>
-#include <globalnames.hxx>
 #include <columnspanset.hxx>
 #include <table.hxx>
 

@@ -21,12 +21,10 @@
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
 #include <miscuno.hxx>
-#include <scerrors.hxx>
 #include <unonames.hxx>
-#include <global.hxx>
-#include <dptabsrc.hxx>
 #include <dputil.hxx>
 #include <generalfunction.hxx>
+#include <dptabdat.hxx>
 
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -34,8 +32,7 @@
 #include <o3tl/make_unique.hxx>
 #include <comphelper/stl_types.hxx>
 
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/sheet/GeneralFunction2.hpp>
+#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
@@ -49,7 +46,6 @@
 
 
 #include <unordered_map>
-#include <unordered_set>
 #include <algorithm>
 
 using namespace com::sun::star;

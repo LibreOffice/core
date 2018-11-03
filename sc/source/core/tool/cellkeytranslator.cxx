@@ -26,6 +26,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/syslocale.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using ::com::sun::star::uno::Sequence;
 

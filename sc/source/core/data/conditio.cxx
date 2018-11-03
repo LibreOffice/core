@@ -18,8 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -31,11 +29,8 @@
 #include <conditio.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
-#include <hints.hxx>
 #include <compiler.hxx>
-#include <rechead.hxx>
 #include <rangelst.hxx>
-#include <stlpool.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
 #include <colorscale.hxx>
