@@ -163,7 +163,8 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
             }
 #endif
             _aKey2Element.erase( pEntry->aKey );
-            _aKey2Element[ pEntry->aKey = rKey ] = pEntry;
+            pEntry->aKey = rKey;
+            _aKey2Element[ rKey ] = pEntry;
         }
         else
         {

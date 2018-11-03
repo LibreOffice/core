@@ -643,7 +643,8 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 
                     // Offset of the first IFD
                     rStm.ReadUInt32( nTemp32 );
-                    rStm.SeekRel( ( nCount = ( nTemp32 + 2 ) ) - 0x08 );
+                    nCount = nTemp32 + 2;
+                    rStm.SeekRel( nCount - 0x08 );
 
                     if ( nCount < nMax )
                     {

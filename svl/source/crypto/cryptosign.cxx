@@ -474,8 +474,9 @@ bad_data:
     } while (len > 0);
     /* now result contains result_bytes of data */
     if (to->data && to->len >= result_bytes) {
-        PORT_Memcpy(to->data, result, to->len = result_bytes);
-    rv = SECSuccess;
+        to->len = result_bytes;
+        PORT_Memcpy(to->data, result, to->len);
+        rv = SECSuccess;
     } else {
         SECItem result_item = {siBuffer, nullptr, 0 };
     result_item.data = result;
@@ -1855,7 +1856,8 @@ bad_data:
     /* now result contains result_bytes of data */
     if (to->data && to->len >= result_bytes)
     {
-        PORT_Memcpy(to->data, result, to->len = result_bytes);
+        to->len = result_bytes;
+        PORT_Memcpy(to->data, result, to->len);
         rv = SECSuccess;
     }
     else

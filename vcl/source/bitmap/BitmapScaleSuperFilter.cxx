@@ -201,7 +201,8 @@ void scale24bitBGR(ScaleContext &rCtx, long nStartY, long nEndY)
             pTmp0++; pTmp1++;
             sal_uInt8 cR0 = MAP( *pTmp0, *pTmp1, nTempFX );
 
-            pTmp1 = ( pTmp0 = pLine1 + nOff ) + 3;
+            pTmp0 = pLine1 + nOff;
+            pTmp1 = pTmp0 + 3;
             sal_uInt8 cB1 = MAP( *pTmp0, *pTmp1, nTempFX );
             pTmp0++; pTmp1++;
             sal_uInt8 cG1 = MAP( *pTmp0, *pTmp1, nTempFX );
@@ -241,7 +242,8 @@ void scale24bitRGB(ScaleContext &rCtx, long nStartY, long nEndY)
             pTmp0++; pTmp1++;
             sal_uInt8 cB0 = MAP( *pTmp0, *pTmp1, nTempFX );
 
-            pTmp1 = ( pTmp0 = pLine1 + nOff ) + 3;
+            pTmp0 = pLine1 + nOff;
+            pTmp1 = pTmp0 + 3;
             sal_uInt8 cR1 = MAP( *pTmp0, *pTmp1, nTempFX );
             pTmp0++; pTmp1++;
             sal_uInt8 cG1 = MAP( *pTmp0, *pTmp1, nTempFX );

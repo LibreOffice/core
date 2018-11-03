@@ -465,18 +465,23 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                     {
                         nXTmp = nX;
 
-                        nSum1 = -( nSum2 = lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ ) );
+                        nSum2 = lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
+                        nSum1 = -nSum2;
                         nSum2 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
-                        nSum1 += ( lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp ) );
+                        lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp );
+                        nSum1 += lGray;
                         nSum2 += lGray;
 
                         nSum1 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
-                        nSum1 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp -= 2 )) << 1;
+                        nXTmp -= 2;
+                        nSum1 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
 
-                        nSum1 += ( lGray = -static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) );
+                        lGray = -static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ ));
+                        nSum1 += lGray;
                         nSum2 += lGray;
                         nSum2 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
-                        nSum1 += ( lGray = static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp )) );
+                        lGray = static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp ));
+                        nSum1 += lGray;
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )

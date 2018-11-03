@@ -149,16 +149,16 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
             Point* pDstAry = mxPointAry.get();
 
             for( i = 0, nEnd = nSize4; i < nEnd; i++ )
-                ( pDstAry[ i ] = pSrcAry[ i ] ) += aTR;
+                pDstAry[ i ] = pSrcAry[ i ] + aTR;
 
             for( nEnd = nEnd + nSize4; i < nEnd; i++ )
-                ( pDstAry[ i ] = pSrcAry[ i ] ) += aTL;
+                pDstAry[ i ] = pSrcAry[ i ] + aTL;
 
             for( nEnd = nEnd + nSize4; i < nEnd; i++ )
-                ( pDstAry[ i ] = pSrcAry[ i ] ) += aBL;
+                pDstAry[ i ] = pSrcAry[ i ] + aBL;
 
             for( nEnd = nEnd + nSize4; i < nEnd; i++ )
-                ( pDstAry[ i ] = pSrcAry[ i ] ) += aBR;
+                pDstAry[ i ] = pSrcAry[ i ] + aBR;
 
             pDstAry[ nEnd ] = pDstAry[ 0 ];
         }
@@ -1054,7 +1054,8 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
                     if( ( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ] ) &&
                         ( !nReduce || ( nReduce < FRound( CalcDistance( nLast, i ) ) ) ) )
                     {
-                        aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ nLast = i ];
+                        nLast = i;
+                        aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ i ];
                     }
                 }
 
@@ -1292,7 +1293,8 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                 else
                 {
                     Vector2D    aVecB( rPoly[ nIndNext ] );
-                    double      fDistB = ( aVecB -= Vector2D(rPoly[ nIndPrev ] )).GetLength();
+                    aVecB -= Vector2D(rPoly[ nIndPrev ] );
+                    double      fDistB = aVecB.GetLength();
                     double      fLenWithB = fDist2 + fDist3;
                     double      fLenFact = ( fDistB != 0.0 ) ? fLenWithB / fDistB : 1.0;
                     double      fTurnPrev = aVec1.Normalize().Scalar( aVec2 );

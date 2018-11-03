@@ -1157,7 +1157,10 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeep
     if ( nCurRow == BROWSER_ENDOFSELECTION )
         GoToRow( 0, false, bKeepSelection );
     else if ( nRow <= nCurRow )
-        GoToRow( nCurRow += nNumRows, false, bKeepSelection );
+    {
+        nCurRow += nNumRows;
+        GoToRow( nCurRow, false, bKeepSelection );
+    }
 
     // adjust the vertical scrollbar
     if ( bDoPaint )

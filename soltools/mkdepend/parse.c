@@ -47,7 +47,8 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
     boolean recfailOK;
 
     while ((line = get_line(filep))) {
-        switch(type = deftype(line, filep, file, TRUE, symbols)) {
+        type = deftype(line, filep, file, TRUE, symbols);
+        switch(type) {
         case IF:
         doif:
             type = find_includes(filep, file,
@@ -171,7 +172,8 @@ int gobble(struct filepointer *filep,
     int    type;
 
     while ((line = get_line(filep))) {
-        switch(type = deftype(line, filep, file, FALSE, symbols)) {
+        type = deftype(line, filep, file, FALSE, symbols);
+        switch(type) {
         case IF:
         case IFFALSE:
         case IFGUESSFALSE:

@@ -206,7 +206,7 @@ void lcl_SplineCalculation::Calculate()
     // is always true.
     for( lcl_tSizeType k = n; k > 0; --k )
     {
-        ( m_aSecDerivY[ k - 1 ] *= m_aSecDerivY[ k ] ) += u[ k - 1 ];
+        m_aSecDerivY[ k - 1 ] = (m_aSecDerivY[ k - 1 ] * m_aSecDerivY[ k ] ) + u[ k - 1 ];
     }
 }
 

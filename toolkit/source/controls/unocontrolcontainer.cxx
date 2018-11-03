@@ -617,7 +617,10 @@ sal_Int32 UnoControlContainer::impl_addControl( const uno::Reference< awt::XCont
     {
         container::ContainerEvent aEvent;
         aEvent.Source = *this;
-        _pName ? ( aEvent.Accessor <<= *_pName ) : ( aEvent.Accessor <<= static_cast<sal_Int32>(id) );
+        if (_pName)
+            aEvent.Accessor <<= *_pName;
+        else
+            aEvent.Accessor <<= static_cast<sal_Int32>(id);
         aEvent.Element <<= _rxControl;
         maCListeners.elementInserted( aEvent );
     }

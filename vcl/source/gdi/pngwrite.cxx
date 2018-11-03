@@ -279,8 +279,10 @@ bool PNGWriterImpl::Write(SvStream& rOStm)
 bool PNGWriterImpl::ImplWriteHeader()
 {
     ImplOpenChunk(PNGCHUNK_IHDR);
-    ImplWriteChunk(sal_uInt32(mnWidth =  mpAccess->Width()));
-    ImplWriteChunk(sal_uInt32(mnHeight = mpAccess->Height()));
+    mnWidth = mpAccess->Width();
+    ImplWriteChunk(sal_uInt32(mnWidth));
+    mnHeight = mpAccess->Height();
+    ImplWriteChunk(sal_uInt32(mnHeight));
 
     if (mnWidth && mnHeight && mnBitsPerPixel && mbStatus)
     {
