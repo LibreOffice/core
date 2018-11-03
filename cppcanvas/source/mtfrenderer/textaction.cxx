@@ -43,6 +43,7 @@
 #include <sal/log.hxx>
 
 #include "textaction.hxx"
+#include "textlineshelper.hxx"
 #include <outdevstate.hxx>
 #include "mtftools.hxx"
 
@@ -1261,8 +1262,7 @@ namespace cppcanvas
                 const CanvasSharedPtr                           mpCanvas;
                 rendering::RenderState                          maState;
                 const tools::TextLineInfo                       maTextLineInfo;
-                ::basegfx::B2DSize                              maLinesOverallSize;
-                uno::Reference< rendering::XPolyPolygon2D >     mxTextLines;
+                TextLinesHelper                                 maTextLinesHelper;
                 const ::basegfx::B2DSize                        maReliefOffset;
                 const ::Color                                   maReliefColor;
                 const ::basegfx::B2DSize                        maShadowOffset;
@@ -1288,8 +1288,7 @@ namespace cppcanvas
                 mpCanvas( rCanvas ),
                 maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
-                maLinesOverallSize(),
-                mxTextLines(),
+                maTextLinesHelper(mpCanvas, rState),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
@@ -1298,11 +1297,7 @@ namespace cppcanvas
             {
                 initLayoutWidth(mnLayoutWidth, rOffsets);
 
-                initEffectLinePolyPolygon( maLinesOverallSize,
-                                           mxTextLines,
-                                           rCanvas,
-                                           mnLayoutWidth,
-                                           maTextLineInfo );
+                maTextLinesHelper.init(mnLayoutWidth, maTextLineInfo);
 
                 initArrayAction( maState,
                                  mxTextLayout,
@@ -1333,8 +1328,7 @@ namespace cppcanvas
                 mpCanvas( rCanvas ),
                 maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
-                maLinesOverallSize(),
-                mxTextLines(),
+                maTextLinesHelper(mpCanvas, rState),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
@@ -1343,11 +1337,7 @@ namespace cppcanvas
             {
                 initLayoutWidth(mnLayoutWidth, rOffsets);
 
-                initEffectLinePolyPolygon( maLinesOverallSize,
-                                           mxTextLines,
-                                           rCanvas,
-                                           mnLayoutWidth,
-                                           maTextLineInfo );
+                maTextLinesHelper.init(mnLayoutWidth, maTextLineInfo);
 
                 initArrayAction( maState,
                                  mxTextLayout,
@@ -1369,14 +1359,12 @@ namespace cppcanvas
                 return ::basegfx::unotools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
             }
 
-            bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
+            bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText) const
             {
                 const rendering::ViewState& rViewState( mpCanvas->getViewState() );
                 const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
 
-                rCanvas->fillPolyPolygon( mxTextLines,
-                                          rViewState,
-                                          rRenderState );
+                maTextLinesHelper.render(rRenderState, bNormalText);
 
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
@@ -1419,21 +1407,19 @@ namespace cppcanvas
             public:
                 EffectTextArrayRenderHelper( const uno::Reference< rendering::XCanvas >&        rCanvas,
                                              const uno::Reference< rendering::XTextLayout >&    rTextLayout,
-                                             const uno::Reference< rendering::XPolyPolygon2D >& rLinePolygon,
+                                             const TextLinesHelper&                             rTextLinesHelper,
                                              const rendering::ViewState&                        rViewState ) :
                     mrCanvas( rCanvas ),
                     mrTextLayout( rTextLayout ),
-                    mrLinePolygon( rLinePolygon ),
+                    mrTextLinesHelper( rTextLinesHelper ),
                     mrViewState( rViewState )
                 {
                 }
 
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor,bool /*bNormalText*/ ) const override
+                virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor,bool bNormalText) const override
                 {
-                    mrCanvas->fillPolyPolygon( mrLinePolygon,
-                                               mrViewState,
-                                               rRenderState );
+                    mrTextLinesHelper.render(rRenderState, bNormalText);
 
                     //rhbz#1589029 non-transparent text fill background support
                     if (rTextFillColor != COL_AUTO)
@@ -1465,7 +1451,7 @@ namespace cppcanvas
 
                 const uno::Reference< rendering::XCanvas >&         mrCanvas;
                 const uno::Reference< rendering::XTextLayout >&     mrTextLayout;
-                const uno::Reference< rendering::XPolyPolygon2D >&  mrLinePolygon;
+                const TextLinesHelper&                              mrTextLinesHelper;
                 const rendering::ViewState&                         mrViewState;
             };
 
@@ -1500,12 +1486,8 @@ namespace cppcanvas
                 uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
                 const rendering::ViewState&          rViewState( mpCanvas->getViewState() );
 
-                uno::Reference< rendering::XPolyPolygon2D > xTextLines(
-                    ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                        xCanvas->getDevice(),
-                        tools::createTextLinesPolyPolygon(
-                            0.0, nMaxPos - nMinPos,
-                            maTextLineInfo ) ) );
+                TextLinesHelper aHelper = maTextLinesHelper;
+                aHelper.init(nMaxPos - nMinPos, maTextLineInfo);
 
 
                 // render everything
@@ -1514,7 +1496,7 @@ namespace cppcanvas
                 return renderEffectText(
                     EffectTextArrayRenderHelper( xCanvas,
                                                  xTextLayout,
-                                                 xTextLines,
+                                                 aHelper,
                                                  rViewState ),
                     aLocalState,
                     xCanvas,
@@ -1530,11 +1512,13 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
+                ::basegfx::B2DSize aSize = maTextLinesHelper.getOverallSize();
+
                 return calcEffectTextBounds( ::basegfx::unotools::b2DRectangleFromRealRectangle2D(
                                                  mxTextLayout->queryTextBounds() ),
                                              ::basegfx::B2DRange( 0,0,
-                                                                  maLinesOverallSize.getX(),
-                                                                  maLinesOverallSize.getY() ),
+                                                                  aSize.getX(),
+                                                                  aSize.getY() ),
                                              maReliefOffset,
                                              maShadowOffset,
                                              aLocalState,
