@@ -547,7 +547,9 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_b
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
 
-    CGContextRef rContext = [[NSGraphicsContext currentContext] CGContext];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'graphicsPort' is deprecated: first deprecated in macOS 10.14
+    CGContextRef rContext = static_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
     SetupPrinterGraphics( rContext );
 

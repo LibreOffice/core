@@ -118,7 +118,9 @@ bool AquaSalGraphics::CheckContext()
         {
             const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
             NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
-            CGContextRef xCGContext = [pNSGContext CGContext];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'graphicsPort' is deprecated: first deprecated in macOS 10.14
+            CGContextRef xCGContext = static_cast<CGContextRef>([pNSGContext graphicsPort]);
+SAL_WNODEPRECATED_DECLARATIONS_POP
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, nullptr );
             SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
             if( mxLayer )
@@ -192,7 +194,9 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
     if( (mxLayer != nullptr) && (pContext != nullptr) )
     {
-        CGContextRef rCGContext = [pContext CGContext];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'graphicsPort' is deprecated: first deprecated in macOS 10.14
+        CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
+SAL_WNODEPRECATED_DECLARATIONS_POP
         SAL_INFO( "vcl.cg", "[[NSGraphicsContext currentContext] graphicsPort] = " << rCGContext );
 
         CGMutablePathRef rClip = mpFrame->getClipPath();
