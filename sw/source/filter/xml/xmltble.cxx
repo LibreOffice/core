@@ -339,7 +339,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
         return false;
 
     // order is: -/-/-/num,
-    //           -/-/box/-, --/-/box/num,
+    //           -/-/box/-, -/-/box/num,
     //           -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
     //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
     //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,

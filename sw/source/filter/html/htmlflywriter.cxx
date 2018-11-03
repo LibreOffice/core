@@ -295,9 +295,9 @@ void SwHTMLWriter::CollectFlyFrames()
 
     SwPosFlyFrames aFlyPos(m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam, true));
 
-    for(SwPosFlyFrames::const_iterator aIter(aFlyPos.begin()); aIter != aFlyPos.end(); ++aIter)
+    for(const auto& rpItem : aFlyPos)
     {
-        const SwFrameFormat& rFrameFormat = (*aIter)->GetFormat();
+        const SwFrameFormat& rFrameFormat = rpItem->GetFormat();
         const SdrObject *pSdrObj = nullptr;
         const SwPosition *pAPos;
         const SwContentNode *pACNd;
@@ -347,7 +347,7 @@ void SwHTMLWriter::CollectFlyFrames()
         if( !m_pHTMLPosFlyFrames )
             m_pHTMLPosFlyFrames.reset(new SwHTMLPosFlyFrames);
 
-        m_pHTMLPosFlyFrames->insert( o3tl::make_unique<SwHTMLPosFlyFrame>(**aIter, pSdrObj, nMode) );
+        m_pHTMLPosFlyFrames->insert( o3tl::make_unique<SwHTMLPosFlyFrame>(*rpItem, pSdrObj, nMode) );
     }
 }
 

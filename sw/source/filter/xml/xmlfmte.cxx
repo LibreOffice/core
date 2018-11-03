@@ -290,20 +290,17 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
 
     if( XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily )
     {
-        for( std::vector< XMLPropertyState >::const_iterator
-                    aProperty = rProperties.begin();
-             aProperty != rProperties.end();
-              ++aProperty )
+        for( const auto& rProperty : rProperties )
         {
-            if (aProperty->mnIndex != -1) // #i26762#
+            if (rProperty.mnIndex != -1) // #i26762#
             {
                 switch( rPropExp.getPropertySetMapper()->
-                        GetEntryContextId( aProperty->mnIndex ) )
+                        GetEntryContextId( rProperty.mnIndex ) )
                 {
                 case CTF_NUMBERINGSTYLENAME:
                     {
                         OUString sStyleName;
-                        aProperty->maValue >>= sStyleName;
+                        rProperty.maValue >>= sStyleName;
                         // #i70748# - export also empty list styles
                         if( !sStyleName.isEmpty() )
                         {
@@ -319,7 +316,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                 case CTF_PAGEDESCNAME:
                     {
                         OUString sStyleName;
-                        aProperty->maValue >>= sStyleName;
+                        rProperty.maValue >>= sStyleName;
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       sMasterPageName,
                                       GetExport().EncodeStyleName( sStyleName ) );

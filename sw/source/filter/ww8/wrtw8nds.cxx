@@ -747,15 +747,8 @@ bool SwWW8AttrIter::IsDropCap( int nSwPos )
 
 bool SwWW8AttrIter::RequiresImplicitBookmark()
 {
-    std::vector<aBookmarkPair>::iterator bkmkIterEnd = m_rExport.m_aImplicitBookmarks.end();
-    for ( std::vector<aBookmarkPair>::iterator aIter = m_rExport.m_aImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
-    {
-        sal_uLong sample  = aIter->second;
-
-        if ( sample == rNd.GetIndex() )
-            return true;
-    }
-    return false;
+    return std::any_of(m_rExport.m_aImplicitBookmarks.begin(), m_rExport.m_aImplicitBookmarks.end(),
+        [this](const aBookmarkPair& rBookmarkPair) { return rBookmarkPair.second == rNd.GetIndex(); });
 }
 
 //HasItem is for the summary of the double attributes: Underline and WordlineMode as TextItems.
@@ -940,12 +933,11 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
         if ( sRefType == "outline" )
         {
             OUString sLink = sMark.copy(0, nPos);
-            std::vector<aBookmarkPair>::iterator bkmkIterEnd = GetExport().m_aImplicitBookmarks.end();
-            for ( std::vector<aBookmarkPair>::iterator aIter = GetExport().m_aImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
+            for ( const auto& rBookmarkPair : GetExport().m_aImplicitBookmarks )
             {
-                if ( aIter->first == sLink )
+                if ( rBookmarkPair.first == sLink )
                 {
-                    sMark = "_toc" + OUString::number( aIter->second );
+                    sMark = "_toc" + OUString::number( rBookmarkPair.second );
                 }
             }
         }
@@ -1187,21 +1179,17 @@ void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr)
 
 void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
 {
-    for(auto aIter = maCharRuns.begin(); aIter != maCharRuns.end(); ++aIter)
-    {
-        if(aIter->mnEndPos == nSplitEndPos)
-            return;
-        else if (aIter->mnEndPos > nSplitEndPos)
-        {
-            CharRunEntry aNewEntry = *aIter;
-            aIter->mnEndPos = nSplitEndPos;
-            maCharRuns.insert( ++aIter, aNewEntry);
-            maCharRunIter = maCharRuns.begin();
-            IterToCurrent();
-            nCurrentSwPos = SearchNext(1);
-            break;
-        }
-    }
+    auto aIter = std::find_if(maCharRuns.begin(), maCharRuns.end(),
+        [nSplitEndPos](const CharRunEntry& rCharRun) { return rCharRun.mnEndPos >= nSplitEndPos; });
+    if (aIter == maCharRuns.end() || aIter->mnEndPos == nSplitEndPos)
+        return;
+
+    CharRunEntry aNewEntry = *aIter;
+    aIter->mnEndPos = nSplitEndPos;
+    maCharRuns.insert( ++aIter, aNewEntry);
+    maCharRunIter = maCharRuns.begin();
+    IterToCurrent();
+    nCurrentSwPos = SearchNext(1);
 }
 
 void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*/ )
@@ -2024,11 +2012,8 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_In
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
-        for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
-              it != end; ++it )
+        for ( IMark* pMark : aMarksStart )
         {
-            IMark* pMark = (*it);
-
             // Remove the positions equal to the current pos
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
@@ -2060,11 +2045,8 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nC
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
-        for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
-              it != end; ++it )
+        for ( IMark* pMark : aMarksStart )
         {
-            IMark* pMark = (*it);
-
             // Remove the positions equal to the current pos
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();

@@ -932,16 +932,13 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             const sal_Int32 nCount = rParamMap.size();
             uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
 
-            std::map < const OUString, OUString > ::iterator aIter = rParamMap.begin();
-            std::map < const OUString, OUString > ::iterator aEnd = rParamMap.end();
             sal_Int32 nIndex=0;
-            while (aIter != aEnd )
+            for (const auto& rParam : rParamMap )
             {
-                aCommandSequence[nIndex].Name = (*aIter).first;
+                aCommandSequence[nIndex].Name = rParam.first;
                 aCommandSequence[nIndex].Handle = -1;
-                aCommandSequence[nIndex].Value <<= (*aIter).second;
+                aCommandSequence[nIndex].Value <<= rParam.second;
                 aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-                ++aIter;
                 ++nIndex;
             }
 

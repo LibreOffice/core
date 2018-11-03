@@ -208,12 +208,9 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
     rBase.GetTablePageSize( this, nPageSize, bRelBoxSize );
 
     SwTwips nSz = 0;
-    Widths::const_iterator aWidthsEnd = pWidths->end();
-    for ( Widths::const_iterator aIt = pWidths->begin();
-          aIt != aWidthsEnd;
-          ++aIt)
+    for (const auto& rWidth : *pWidths)
     {
-        nSz += *aIt;
+        nSz += rWidth;
         SwTwips nCalc = nSz;
         if ( bRelBoxSize )
             nCalc = ( nCalc * nPageSize ) / nTableSz;
@@ -267,10 +264,8 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
         // column separators
         pWidths = std::make_shared<Widths>();
         sal_uInt32 nPreviousWidth = 0;
-        Widths::const_iterator aItEnd2 = pSeparators->end();
-        for (Widths::const_iterator aIt2 = pSeparators->begin(); aIt2 != aItEnd2; ++aIt2)
+        for (const sal_uInt32 nCurrentWidth : *pSeparators)
         {
-            sal_uInt32 nCurrentWidth = *aIt2;
             pWidths->push_back(nCurrentWidth - nPreviousWidth);
             nPreviousWidth = nCurrentWidth;
         }
@@ -393,15 +388,10 @@ std::string WW8TableNodeInfo::toString() const
 
     std::string sResult(buffer);
 
-    Inners_t::const_iterator aIt(mInners.begin());
-    Inners_t::const_iterator aEnd(mInners.end());
-
-    while (aIt != aEnd)
+    for (const auto& rInner : mInners)
     {
-        WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
+        WW8TableNodeInfoInner::Pointer_t pInner = rInner.second;
         sResult += pInner->toString();
-
-        ++aIt;
     }
     sResult += dbg_out(*mpNode);
     sResult += "</tableNodeInfo>";

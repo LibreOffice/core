@@ -84,10 +84,9 @@ Writer_Impl::Writer_Impl()
 
 void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 {
-    for( std::vector<const SvxFontItem*>::const_iterator it = aFontRemoveLst.begin();
-        it != aFontRemoveLst.end(); ++it )
+    for( const auto& rpFontItem : aFontRemoveLst )
     {
-        rDoc.GetAttrPool().Remove( **it );
+        rDoc.GetAttrPool().Remove( *rpFontItem );
     }
 }
 

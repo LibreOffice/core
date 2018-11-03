@@ -286,10 +286,9 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
 XMLRedlineImportHelper::~XMLRedlineImportHelper()
 {
     // delete all left over (and obviously incomplete) RedlineInfos (and map)
-    RedlineMapType::iterator aFind = aRedlineMap.begin();
-    for( ; aRedlineMap.end() != aFind; ++aFind )
+    for( auto& rEntry : aRedlineMap )
     {
-        RedlineInfo* pInfo = aFind->second;
+        RedlineInfo* pInfo = rEntry.second;
 
         // left-over redlines. Insert them if possible (but assert),
         // and delete the incomplete ones. Finally, delete it.

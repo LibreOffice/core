@@ -886,18 +886,12 @@ void SwWW8WrGrf::Write()
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 
-        bool bDuplicated = false;
-        for (auto aIter2 = maDetails.begin(); aIter2 != aIter; ++aIter2)
+        auto aIter2 = std::find(maDetails.begin(), aIter, *aIter);
+        if (aIter2 != aIter)
         {
-            if (*aIter2 == *aIter)
-            {
-                aIter->mnPos = aIter2->mnPos;
-                bDuplicated = true;
-                break;
-            }
+            aIter->mnPos = aIter2->mnPos;
         }
-
-        if (!bDuplicated)
+        else
         {
             aIter->mnPos = rStrm.Tell();
             WriteGraphicNode(rStrm, *aIter);
