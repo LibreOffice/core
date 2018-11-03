@@ -172,10 +172,8 @@ void ScClient::ObjectAreaChanged()
 
         //  set document modified (SdrModel::SetChanged is not used)
         pViewSh->GetViewData().GetDocShell()->SetDrawModified();
+        pViewSh->ScrollToObject(pDrawObj);
     }
-
-    if (pDrawObj)
-        pViewSh->ScrollToObject( pDrawObj );
 }
 
 void ScClient::ViewChanged()
