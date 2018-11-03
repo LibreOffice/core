@@ -902,13 +902,13 @@ void PdfExportTest::testTdf118244_radioButtonGroup()
             {
                 size_t expectedSize = 2;
                 ++nRadioGroups;
-                if ( nRadioGroups == 2 )
-                    expectedSize = 5;
+                if ( nRadioGroups == 3 )
+                    expectedSize = 3;
                 CPPUNIT_ASSERT_EQUAL(expectedSize, pKids->GetElements().size());
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio groups", sal_uInt32(2), nRadioGroups);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio groups", sal_uInt32(3), nRadioGroups);
 }
 
 #if HAVE_MORE_FONTS
