@@ -22,9 +22,9 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- <xsl:output method="text" doctype-public="-//W3C//DTD HTML 3.2//EN" omit-xml-declaration="yes"/> --> 
-  	
-  <!-- inputvariable declaration -->
+<!-- <xsl:output method="text" doctype-public="-//W3C//DTD HTML 3.2//EN" omit-xml-declaration="yes"/> -->
+
+	<!-- inputvariable declaration -->
 	<xsl:param name="os1"/>
 	<xsl:param name="gui1"/>
 	<xsl:param name="cp1"/>
@@ -161,11 +161,11 @@
 			</xsl:when>
 			<xsl:when test="name(.)='h1'">
 				<xsl:value-of select="$lf"/>
-				<xsl:text>======================================================================</xsl:text>
+				<xsl:text>==================================================================</xsl:text>
 				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
 				<xsl:value-of select="$lf"/>
-				<xsl:text>======================================================================</xsl:text>
+				<xsl:text>==================================================================</xsl:text>
 				<xsl:value-of select="$lf"/>
 			</xsl:when>
 			<xsl:when test="name(.)='h2'">
