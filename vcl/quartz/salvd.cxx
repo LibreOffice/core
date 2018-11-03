@@ -264,7 +264,9 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pNSWindow];
                 if( pNSContext )
                 {
-                    xCGContext = [pNSContext CGContext];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'graphicsPort' is deprecated: first deprecated in macOS 10.14
+                    xCGContext = static_cast<CGContextRef>([pNSContext graphicsPort]);
+SAL_WNODEPRECATED_DECLARATIONS_POP
                 }
             }
             // At least on macOS 10.14 during CppunitTests (that have hidden windows), it happens

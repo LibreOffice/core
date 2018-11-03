@@ -948,7 +948,9 @@ NSImage* CreateNSImage( const Image& rImage )
     {
         [pImage lockFocusFlipped:YES];
         NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-        CGContextRef rCGContext = [pContext CGContext];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'graphicsPort' is deprecated: first deprecated in macOS 10.14
+        CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
         const CGRect aDstRect = { {0, 0}, { static_cast<CGFloat>(aSize.Width()), static_cast<CGFloat>(aSize.Height()) } };
         CGContextDrawImage( rCGContext, aDstRect, xImage );
