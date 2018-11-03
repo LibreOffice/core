@@ -2020,7 +2020,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
     SvtScriptType nScript = SvtScriptType::NONE;      // GetSelectionScriptType never returns 0
     if ( rSet.GetItemState( ATTR_FONT ) != SfxItemState::UNKNOWN )
     {
-        if (nScript == SvtScriptType::NONE) nScript = pTabViewShell->GetSelectionScriptType();
+        nScript = pTabViewShell->GetSelectionScriptType();
         ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT, nScript );
     }
     if ( rSet.GetItemState( ATTR_FONT_HEIGHT ) != SfxItemState::UNKNOWN )
@@ -2237,7 +2237,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     SvtScriptType nScript = SvtScriptType::NONE;      // GetSelectionScriptType never returns 0
     if ( rSet.GetItemState( ATTR_FONT_WEIGHT ) != SfxItemState::UNKNOWN )
     {
-        if (nScript == SvtScriptType::NONE) nScript = pTabViewShell->GetSelectionScriptType();
+        nScript = pTabViewShell->GetSelectionScriptType();
         ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_WEIGHT, nScript );
     }
     if ( rSet.GetItemState( ATTR_FONT_POSTURE ) != SfxItemState::UNKNOWN )

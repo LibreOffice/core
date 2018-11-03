@@ -588,16 +588,11 @@ namespace pcr
 
         try
         {
-            bool bEnable = true;
-
             // only show the button when both forms are based on the same data source
-            if ( bEnable )
-            {
-                OUString sMasterDS, sDetailDS;
-                xMasterFormProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sMasterDS;
-                xDetailFormProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sDetailDS;
-                bEnable = ( sMasterDS == sDetailDS );
-            }
+            OUString sMasterDS, sDetailDS;
+            xMasterFormProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sMasterDS;
+            xDetailFormProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sDetailDS;
+            bool bEnable = ( sMasterDS == sDetailDS );
 
             // only show the button when the connection supports relations
             if ( bEnable )
