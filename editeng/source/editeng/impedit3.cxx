@@ -744,7 +744,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     ImplInitLayoutMode( GetRefDevice(), nPara, nIndex );
 
-    bool bCalcCharPositions = true;
     std::unique_ptr<long[]> pBuf(new long[ pNode->Len() ]);
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
@@ -798,15 +797,12 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         // Solution:
         // The line before can only become longer, not smaller
         // => ...
-        if ( bCalcCharPositions )
-            pLine->GetCharPosArray().clear();
+        pLine->GetCharPosArray().clear();
 
         sal_Int32 nTmpPos = nIndex;
         sal_Int32 nTmpPortion = pLine->GetStartPortion();
         long nTmpWidth = 0;
         long nXWidth = nMaxLineWidth;
-        if ( nXWidth <= nTmpWidth ) // while has to be looped once
-            nXWidth = nTmpWidth+1;
 
         LongDqPtr pTextRanges = nullptr;
         long nTextExtraYOffset = 0;
@@ -1033,84 +1029,80 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     case EE_FEATURE_FIELD:
                     {
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                        sal_Unicode cChar = 0;  // later: NBS?
                         aTmpFont.SetPhysFont( GetRefDevice() );
                         ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
-                        OUString aFieldValue = cChar ? OUString(cChar) : static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
-                        if ( bCalcCharPositions || !pPortion->HasValidSize() )
+                        OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
+                        // get size, but also DXArray to allow length information in line breaking below
+                        const sal_Int32 nLength(aFieldValue.getLength());
+                        std::unique_ptr<long[]> pTmpDXArray(new long[nLength]);
+                        pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), pTmpDXArray.get());
+
+                        // So no scrolling for oversized fields
+                        if ( pPortion->GetSize().Width() > nXWidth )
                         {
-                            // get size, but also DXArray to allow length information in line breaking below
-                            const sal_Int32 nLength(aFieldValue.getLength());
-                            std::unique_ptr<long[]> pTmpDXArray(new long[nLength]);
-                            pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), pTmpDXArray.get());
+                            // create ExtraPortionInfo on-demand, flush lineBreaksList
+                            ExtraPortionInfo *pExtraInfo = pPortion->GetExtraInfos();
 
-                            // So no scrolling for oversized fields
-                            if ( pPortion->GetSize().Width() > nXWidth )
+                            if(nullptr == pExtraInfo)
                             {
-                                // create ExtraPortionInfo on-demand, flush lineBreaksList
-                                ExtraPortionInfo *pExtraInfo = pPortion->GetExtraInfos();
+                                pExtraInfo = new ExtraPortionInfo();
+                                pExtraInfo->nOrgWidth = nXWidth;
+                                pPortion->SetExtraInfos(pExtraInfo);
+                            }
+                            else
+                            {
+                                pExtraInfo->lineBreaksList.clear();
+                            }
 
-                                if(nullptr == pExtraInfo)
+                            // iterate over CellBreaks using XBreakIterator to be on the
+                            // safe side with international texts/charSets
+                            Reference < i18n::XBreakIterator > xBreakIterator(ImplGetBreakIterator());
+                            const sal_Int32 nTextLength(aFieldValue.getLength());
+                            const lang::Locale aLocale(GetLocale(EditPaM(pNode, nPortionStart)));
+                            sal_Int32 nDone(0);
+                            sal_Int32 nNextCellBreak(
+                                xBreakIterator->nextCharacters(
+                                        aFieldValue,
+                                        0,
+                                        aLocale,
+                                        css::i18n::CharacterIteratorMode::SKIPCELL,
+                                        0,
+                                        nDone));
+                            sal_Int32 nLastCellBreak(0);
+                            sal_Int32 nLineStartX(0);
+
+                            // always add 1st line break (safe, we already know we are larger than nXWidth)
+                            pExtraInfo->lineBreaksList.push_back(0);
+
+                            for(sal_Int32 a(0); a < nTextLength; a++)
+                            {
+                                if(a == nNextCellBreak)
                                 {
-                                    pExtraInfo = new ExtraPortionInfo();
-                                    pExtraInfo->nOrgWidth = nXWidth;
-                                    pPortion->SetExtraInfos(pExtraInfo);
-                                }
-                                else
-                                {
-                                    pExtraInfo->lineBreaksList.clear();
-                                }
-
-                                // iterate over CellBreaks using XBreakIterator to be on the
-                                // safe side with international texts/charSets
-                                Reference < i18n::XBreakIterator > xBreakIterator(ImplGetBreakIterator());
-                                const sal_Int32 nTextLength(aFieldValue.getLength());
-                                const lang::Locale aLocale(GetLocale(EditPaM(pNode, nPortionStart)));
-                                sal_Int32 nDone(0);
-                                sal_Int32 nNextCellBreak(
-                                    xBreakIterator->nextCharacters(
-                                            aFieldValue,
-                                            0,
-                                            aLocale,
-                                            css::i18n::CharacterIteratorMode::SKIPCELL,
-                                            0,
-                                            nDone));
-                                sal_Int32 nLastCellBreak(0);
-                                sal_Int32 nLineStartX(0);
-
-                                // always add 1st line break (safe, we already know we are larger than nXWidth)
-                                pExtraInfo->lineBreaksList.push_back(0);
-
-                                for(sal_Int32 a(0); a < nTextLength; a++)
-                                {
-                                    if(a == nNextCellBreak)
+                                    // check width
+                                    if(pTmpDXArray[a] - nLineStartX > nXWidth)
                                     {
-                                        // check width
-                                        if(pTmpDXArray[a] - nLineStartX > nXWidth)
+                                        // new CellBreak does not fit in current line, need to
+                                        // create a break at LastCellBreak - but do not add 1st
+                                        // line break twice for very tall frames
+                                        if(0 != a)
                                         {
-                                            // new CellBreak does not fit in current line, need to
-                                            // create a break at LastCellBreak - but do not add 1st
-                                            // line break twice for very tall frames
-                                            if(0 != a)
-                                            {
-                                                pExtraInfo->lineBreaksList.push_back(a);
-                                            }
-
-                                            // moveLineStart forward in X
-                                            nLineStartX = pTmpDXArray[nLastCellBreak];
+                                            pExtraInfo->lineBreaksList.push_back(a);
                                         }
 
-                                        // update CellBreak iteration values
-                                        nLastCellBreak = a;
-                                        nNextCellBreak = xBreakIterator->nextCharacters(
-                                            aFieldValue,
-                                            a,
-                                            aLocale,
-                                            css::i18n::CharacterIteratorMode::SKIPCELL,
-                                            1,
-                                            nDone);
+                                        // moveLineStart forward in X
+                                        nLineStartX = pTmpDXArray[nLastCellBreak];
                                     }
+
+                                    // update CellBreak iteration values
+                                    nLastCellBreak = a;
+                                    nNextCellBreak = xBreakIterator->nextCharacters(
+                                        aFieldValue,
+                                        a,
+                                        aLocale,
+                                        css::i18n::CharacterIteratorMode::SKIPCELL,
+                                        1,
+                                        nDone);
                                 }
                             }
                         }
@@ -1118,7 +1110,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
-                        pPortion->SetKind( cChar ? PortionKind::TEXT : PortionKind::FIELD );
+                        pPortion->SetKind(PortionKind::FIELD);
                         // If this is the first token on the line,
                         // and nTmpWidth > aPaperSize.Width, => infinite loop!
                         if ( ( nTmpWidth >= nXWidth ) && ( nTmpPortion == pLine->GetStartPortion() ) )
@@ -1146,41 +1138,34 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if (!bContinueLastPortion)
                     pPortion->SetRightToLeftLevel( GetRightToLeft( nPara, nTmpPos+1 ) );
 
-                if ( bCalcCharPositions || !pPortion->HasValidSize() )
+                if (bContinueLastPortion)
                 {
-                    if (bContinueLastPortion)
-                    {
-                         Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
-                                pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() ));
-                         pPortion->GetSize().AdjustWidth(aSize.Width() );
-                         if (pPortion->GetSize().Height() < aSize.Height())
-                             pPortion->GetSize().setHeight( aSize.Height() );
-                    }
-                    else
-                    {
-                        pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(),
-                                pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() );
-                    }
+                     Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
+                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() ));
+                     pPortion->GetSize().AdjustWidth(aSize.Width() );
+                     if (pPortion->GetSize().Height() < aSize.Height())
+                         pPortion->GetSize().setHeight( aSize.Height() );
+                }
+                else
+                {
+                    pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(),
+                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() );
+                }
 
-                    // #i9050# Do Kerning also behind portions...
-                    if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + nPortionLen ) < pNode->Len() ) )
-                        pPortion->GetSize().AdjustWidth(aTmpFont.GetFixKerning() );
-                    if ( IsFixedCellHeight() )
-                        pPortion->GetSize().setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
-                }
-                if ( bCalcCharPositions )
-                {
-                    // The array is  generally flattened at the beginning
-                    // => Always simply quick inserts.
-                    size_t nPos = nTmpPos - pLine->GetStart();
-                    EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                    rArray.insert( rArray.begin() + nPos, pBuf.get(), pBuf.get() + nPortionLen);
-                }
+                // #i9050# Do Kerning also behind portions...
+                if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + nPortionLen ) < pNode->Len() ) )
+                    pPortion->GetSize().AdjustWidth(aTmpFont.GetFixKerning() );
+                if ( IsFixedCellHeight() )
+                    pPortion->GetSize().setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
+                // The array is  generally flattened at the beginning
+                // => Always simply quick inserts.
+                size_t nPos = nTmpPos - pLine->GetStart();
+                EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
+                rArray.insert( rArray.begin() + nPos, pBuf.get(), pBuf.get() + nPortionLen);
 
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
                 {
-                    EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                     long* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
                     bCompressedChars |= ImplCalcAsianCompression(
                         pNode, pPortion, nTmpPos, pDXArray, 10000, false);
@@ -1547,13 +1532,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         // If a portion was wrapped there may be far too many positions in
         // CharPosArray:
-        if ( bCalcCharPositions )
-        {
-            EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-            size_t nLen = pLine->GetLen();
-            if (rArray.size() > nLen)
-                rArray.erase(rArray.begin()+nLen, rArray.end());
-        }
+        EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
+        size_t nLen = pLine->GetLen();
+        if (rArray.size() > nLen)
+            rArray.erase(rArray.begin()+nLen, rArray.end());
 
         if ( GetTextRanger() )
         {
@@ -1591,7 +1573,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             ( ( nEnd-nInvalidDiff ) == aSaveLine.GetEnd() ) )
                     {
                         pLine->SetValid();
-                        if ( bCalcCharPositions && bQuickFormat )
+                        if (bQuickFormat)
                         {
                             bLineBreak = false;
                             pParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
@@ -1599,7 +1581,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         }
                     }
                 }
-                else if ( bCalcCharPositions && bQuickFormat && ( nEnd > nInvalidEnd) )
+                else if (bQuickFormat && (nEnd > nInvalidEnd))
                 {
                     // If the invalid line ends so that the next begins on the
                     // 'same' passage as before, i.e. not wrapped differently,
