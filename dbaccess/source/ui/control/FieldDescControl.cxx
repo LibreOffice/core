@@ -1085,9 +1085,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         m_bAdded = true;
     }
 
-    TOTypeInfoSP pFieldType;
-    if( pFieldDescr )
-        pFieldType = pFieldDescr->getTypeInfo();
+    TOTypeInfoSP pFieldType(pFieldDescr->getTypeInfo());
 
     ActivateAggregate( tpColumnName );
     ActivateAggregate( tpType );
@@ -1237,19 +1235,17 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         }
         m_pPreviousType = pFieldType;
     }
-    if(pFieldDescr)
+
+    if (pFieldDescr->IsPrimaryKey())
     {
-        if(pFieldDescr->IsPrimaryKey())
-        {
-            DeactivateAggregate( tpRequired );
-        }
-        else if ( !pAutoIncrement && pFieldType.get() )
-        {
-            if ( pFieldType->bNullable )
-                ActivateAggregate( tpRequired );
-            else
-                DeactivateAggregate( tpRequired );
-        }
+        DeactivateAggregate(tpRequired);
+    }
+    else if (!pAutoIncrement && pFieldType.get())
+    {
+        if (pFieldType->bNullable)
+            ActivateAggregate(tpRequired);
+        else
+            DeactivateAggregate(tpRequired);
     }
     // Initialize Controls
     if( pAutoIncrement )
