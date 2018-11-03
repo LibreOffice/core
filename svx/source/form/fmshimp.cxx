@@ -3043,24 +3043,22 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
             for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
                  j != rControllerList.end(); ++j)
             {
-                if (bSave)
-                {   // remember the current filter settings in case we're going to reload the forms below (which may fail)
-                    try
-                    {
-                        Reference< XPropertySet > xFormAsSet((*j)->getModel(), UNO_QUERY);
-                        aOriginalFilters.push_back(::comphelper::getString(xFormAsSet->getPropertyValue(FM_PROP_FILTER)));
-                        aOriginalApplyFlags.push_back(::comphelper::getBOOL(xFormAsSet->getPropertyValue(FM_PROP_APPLYFILTER)));
-                    }
-                    catch(Exception&)
-                    {
-                        OSL_FAIL("FmXFormShell::stopFiltering : could not get the original filter !");
-                        // put dummies into the arrays so the they have the right size
+                // remember the current filter settings in case we're going to reload the forms below (which may fail)
+                try
+                {
+                    Reference< XPropertySet > xFormAsSet((*j)->getModel(), UNO_QUERY);
+                    aOriginalFilters.push_back(::comphelper::getString(xFormAsSet->getPropertyValue(FM_PROP_FILTER)));
+                    aOriginalApplyFlags.push_back(::comphelper::getBOOL(xFormAsSet->getPropertyValue(FM_PROP_APPLYFILTER)));
+                }
+                catch(Exception&)
+                {
+                    OSL_FAIL("FmXFormShell::stopFiltering : could not get the original filter !");
+                    // put dummies into the arrays so the they have the right size
 
-                        if (aOriginalFilters.size() == aOriginalApplyFlags.size())
-                            // the first getPropertyValue failed -> use two dummies
-                            aOriginalFilters.emplace_back( );
-                        aOriginalApplyFlags.push_back( false );
-                    }
+                    if (aOriginalFilters.size() == aOriginalApplyFlags.size())
+                        // the first getPropertyValue failed -> use two dummies
+                        aOriginalFilters.emplace_back( );
+                    aOriginalApplyFlags.push_back( false );
                 }
                 saveFilter(*j);
             }
