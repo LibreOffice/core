@@ -132,7 +132,7 @@ namespace toolkitform
             // host document makes it somewhat difficult ...
             // Problem is that two form radio buttons belong to the same group if
             // - they have the same parent
-            // - AND they have the same group name
+            // - AND they have the same name or group name
             // This implies that we need some knowledge about (potentially) *all* radio button
             // groups in the document.
 
@@ -164,6 +164,7 @@ namespace toolkitform
             do
             {
                 std::unordered_map<OUString,sal_Int32> GroupNameMap;
+                std::unordered_map<OUString,sal_Int32> SharedNameMap;
                 sal_Int32 nCount = xCurrentContainer->getCount();
                 sal_Int32 i;
                 for ( i = nStartWithChild; i < nCount; ++i )
@@ -203,12 +204,25 @@ namespace toolkitform
 
                                     OUString sGroupName;
                                     aProps->getPropertyValue("GroupName") >>= sGroupName;
-                                    // map: unique key is the group name, so attempts to add a different ID value
-                                    // for an existing group are ignored - keeping the first ID - perfect for this scenario.
-                                    GroupNameMap.emplace( sGroupName, nGroupsEncountered + i );
+                                    if ( !sGroupName.isEmpty() )
+                                    {
+                                        // map: unique key is the group name, so attempts to add a different ID value
+                                        // for an existing group are ignored - keeping the first ID - perfect for this scenario.
+                                        GroupNameMap.emplace( sGroupName, nGroupsEncountered + i );
 
-                                    if ( xElement.get() == xNormalizedLookup.get() )
-                                        return GroupNameMap[sGroupName];
+                                        if ( xElement.get() == xNormalizedLookup.get() )
+                                            return GroupNameMap[sGroupName];
+                                    }
+                                    else
+                                    {
+                                        // Old implementation didn't have a GroupName, just identical Control names.
+                                        aProps->getPropertyValue( FM_PROP_NAME ) >>= sGroupName;
+                                        SharedNameMap.emplace( sGroupName, nGroupsEncountered + i );
+
+                                        if ( xElement.get() == xNormalizedLookup.get() )
+                                            return SharedNameMap[sGroupName];
+                                    }
+
                                 }
                             }
                             catch( uno::Exception& )
