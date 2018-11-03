@@ -27,14 +27,14 @@
 #include <unotools/pathoptions.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 
 #include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
+
+namespace com { namespace sun { namespace star { namespace ucb { class XCommandEnvironment; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

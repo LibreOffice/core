@@ -25,7 +25,6 @@
 #include <compiler.hxx>
 #include <compiler.hrc>
 #include <global.hxx>
-#include <sc.hrc>
 #include <scfuncs.hrc>
 #include <scmod.hxx>
 #include <scresid.hxx>
@@ -33,12 +32,10 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <formula/funcvarargs.h>
 
 #include <memory>
-#include <numeric>
 
 struct ScFuncDescCore
 {

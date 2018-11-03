@@ -17,15 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
-
 #include <olinetab.hxx>
-#include <global.hxx>
-#include <rechead.hxx>
 #include <address.hxx>
 #include <table.hxx>
-
-#include <o3tl/make_unique.hxx>
 
 #include <osl/diagnose.h>
 

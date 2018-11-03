@@ -21,11 +21,8 @@
 
 #include <autonamecache.hxx>
 #include <dociter.hxx>
-#include <queryparam.hxx>
 #include <formulacell.hxx>
-#include <cellvalue.hxx>
 #include <editutil.hxx>
-#include <document.hxx>
 
 ScAutoNameCache::ScAutoNameCache( ScDocument* pD ) :
     pDoc( pD ),

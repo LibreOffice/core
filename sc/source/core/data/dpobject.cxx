@@ -27,13 +27,10 @@
 #include <dpsdbtab.hxx>
 #include <dpgroup.hxx>
 #include <document.hxx>
-#include <rechead.hxx>
 #include <pivot.hxx>
 #include <dapiuno.hxx>
 #include <miscuno.hxx>
-#include <scerrors.hxx>
 #include <refupdat.hxx>
-#include <sc.hrc>
 #include <attrib.hxx>
 #include <scitems.hxx>
 #include <unonames.hxx>
@@ -71,7 +68,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <sal/macros.h>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>

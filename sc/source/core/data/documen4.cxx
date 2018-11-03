@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <formula/token.hxx>
@@ -30,7 +29,6 @@
 #include <scresid.hxx>
 #include <subtotal.hxx>
 #include <docoptio.hxx>
-#include <interpre.hxx>
 #include <markdata.hxx>
 #include <validat.hxx>
 #include <scitems.hxx>
@@ -43,11 +41,9 @@
 #include <paramisc.hxx>
 #include <compiler.hxx>
 #include <externalrefmgr.hxx>
-#include <colorscale.hxx>
 #include <attrib.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
-#include <scmatrix.hxx>
 #include <tokenstringcontext.hxx>
 #include <memory>
 

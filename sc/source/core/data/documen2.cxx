@@ -17,29 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
 #include <scextopt.hxx>
 #include <autonamecache.hxx>
-#include <editeng/eeitem.hxx>
 
-#include <editeng/editeng.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <osl/thread.h>
 #include <svx/xtable.hxx>
-#include <sfx2/linkmgr.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/asiancfg.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
 #include <vcl/virdev.hxx>
-#include <svl/PasswordHelper.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
@@ -47,28 +36,18 @@
 
 #include <document.hxx>
 #include <table.hxx>
-#include <attrib.hxx>
 #include <patattr.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
-#include <pivot.hxx>
-#include <docpool.hxx>
-#include <stlpool.hxx>
-#include <stlsheet.hxx>
-#include <chartarr.hxx>
 #include <chartlock.hxx>
 #include <rechead.hxx>
 #include <global.hxx>
-#include <brdcst.hxx>
 #include <bcaslot.hxx>
 #include <adiasync.hxx>
 #include <addinlis.hxx>
 #include <chartlis.hxx>
 #include <markdata.hxx>
-#include <conditio.hxx>
-#include <colorscale.hxx>
 #include <validat.hxx>
-#include <progress.hxx>
 #include <detdata.hxx>
 #include <sc.hrc>
 #include <ddelink.hxx>
@@ -84,8 +63,6 @@
 #include <recursionhelper.hxx>
 #include <lookupcache.hxx>
 #include <externalrefmgr.hxx>
-#include <appoptio.hxx>
-#include <scmod.hxx>
 #include <viewdata.hxx>
 #include <viewutil.hxx>
 #include <tabprotection.hxx>
@@ -97,7 +74,6 @@
 #include <refupdatecontext.hxx>
 #include <refreshtimerprotector.hxx>
 #include <scopetools.hxx>
-#include <formulagroup.hxx>
 #include <documentlinkmgr.hxx>
 #include <interpre.hxx>
 #include <tokenstringcontext.hxx>
