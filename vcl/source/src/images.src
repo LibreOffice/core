@@ -29,90 +29,90 @@
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_STDOFFSET)
 {
-    File = "check.bmp";
+    File = "check.png" ;
 };
 
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
 {
-    File = "checkmono.bmp";
+    File = "checkmono.png" ;
 };
 
 Bitmap (SV_RESID_BITMAP_SCROLLBMP)
 {
-    File = "scrbmp.bmp";
+    File = "scrbmp.png" ;
 };
 
 Bitmap (SV_RESID_BITMAP_SCROLLMSK)
 {
-    File = "scrmsk.bmp";
+    File = "scrmsk.png" ;
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_STDOFFSET)
 {
-    File = "radio.bmp";
+    File = "radio.png" ;
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
 {
-    File = "radiomono.bmp";
+    File = "radiomono.png" ;
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap SV_RESID_BITMAP_MSGBOX
 {
-    File = "msgbox.png";
+    File = "msgbox.png" ;
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap SV_RESID_BITMAP_MSGBOX_HC
 {
-    File = "msgbox_hc.png";
+    File = "msgbox_hc.png" ;
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap SV_RESID_BITMAP_PIN
 {
-    File = "pin.bmp";
+    File = "pin.png" ;
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap SV_RESID_BITMAP_CLOSEDOC
 {
-    File = "closedoc.bmp";
+    File = "closedoc.png" ;
 };
 
 Bitmap SV_RESID_BITMAP_CLOSEDOCHC
 {
-    File = "closedochc.bmp";
+    File = "closedochc.png" ;
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap SV_RESID_BITMAP_SPLITHPIN
 {
-    File = "splhpin.bmp";
+    File = "splhpin.png" ;
 };
 
 Bitmap SV_RESID_BITMAP_SPLITVPIN
 {
-    File = "splvpin.bmp";
+    File = "splvpin.png" ;
 };
 
 Bitmap SV_RESID_BITMAP_SPLITHARW
 {
-    File = "splharw.bmp";
+    File = "splharw.png" ;
 };
 
 Bitmap SV_RESID_BITMAP_SPLITVARW
 {
-    File = "splvarw.bmp";
+    File = "splvarw.png" ;
 };
 
 // -----------------------------------------------------------------------
@@ -787,21 +787,21 @@ Bitmap (SV_ICON_SMALL_HC_START + SV_ICON_ID_PRINTERADMIN)
 
 Bitmap SV_DISCLOSURE_PLUS
 {
-    File = "plus.png";
+    File = "plus.png" ;
 };
 
 Bitmap SV_DISCLOSURE_PLUS_HC
 {
-    File = "plus_sch.png";
+    File = "plus_sch.png" ;
 };
 
 Bitmap SV_DISCLOSURE_MINUS
 {
-    File = "minus.png";
+    File = "minus.png" ;
 };
 
 Bitmap SV_DISCLOSURE_MINUS_HC
 {
-    File = "minus_sch.png";
+    File = "minus_sch.png" ;
 };
 
