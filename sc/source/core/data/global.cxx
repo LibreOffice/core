@@ -22,7 +22,6 @@
 #include <svx/algitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/docfile.hxx>
@@ -33,42 +32,30 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
-#include <sal/macros.h>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
-#include <stdlib.h>
-#include <time.h>
-#include <numeric>
-#include <svx/svdmodel.hxx>
-#include <svtools/colorcfg.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
 #include <global.hxx>
 #include <scresid.hxx>
 #include <autoform.hxx>
-#include <document.hxx>
 #include <patattr.hxx>
 #include <addincol.hxx>
 #include <adiasync.hxx>
 #include <userlist.hxx>
 #include <interpre.hxx>
-#include <docpool.hxx>
 #include <unitconv.hxx>
 #include <compiler.hxx>
 #include <parclass.hxx>
@@ -76,7 +63,6 @@
 #include <globstr.hrc>
 #include <strings.hrc>
 #include <scmod.hxx>
-#include <appoptio.hxx>
 #include <editutil.hxx>
 #include <docsh.hxx>
 

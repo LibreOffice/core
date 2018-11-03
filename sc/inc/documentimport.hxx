@@ -12,6 +12,7 @@
 
 #include "scdllapi.h"
 #include "address.hxx"
+#include "attarray.hxx"
 
 #include <rtl/ustring.hxx>
 
@@ -21,7 +22,6 @@
 class EditTextObject;
 class ScDocument;
 class ScColumn;
-struct ScAttrEntry;
 class ScTokenArray;
 class ScFormulaCell;
 class ScStyleSheet;

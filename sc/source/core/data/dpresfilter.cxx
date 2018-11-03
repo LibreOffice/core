@@ -16,6 +16,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace com::sun::star;
 using namespace std;

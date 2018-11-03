@@ -8,10 +8,10 @@
  */
 
 #include <grouptokenconverter.hxx>
-#include <compiler.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
+#include <refdata.hxx>
 
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
