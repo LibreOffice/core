@@ -18,11 +18,10 @@
  */
 
 #include <dpitemdata.hxx>
+#include <global.hxx>
 
-#include <document.hxx>
-#include <dpobject.hxx>
-#include <formulacell.hxx>
-#include <dptabdat.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <rtl/math.hxx>
 
 const sal_Int32 ScDPItemData::DateFirst = -1;

@@ -19,7 +19,6 @@
 
 #include <svl/zforlist.hxx>
 
-#include <scitems.hxx>
 #include <global.hxx>
 #include <dociter.hxx>
 #include <document.hxx>
@@ -36,7 +35,6 @@
 #include <queryentry.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <editutil.hxx>
 #include <cellvalue.hxx>
 #include <scmatrix.hxx>
 #include <rowheightcontext.hxx>

@@ -31,9 +31,7 @@
 #include <stlsheet.hxx>
 #include <markdata.hxx>
 #include <editutil.hxx>
-#include <detfunc.hxx>
 #include <postit.hxx>
-#include <stringutil.hxx>
 
 namespace {
 

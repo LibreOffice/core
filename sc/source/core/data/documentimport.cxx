@@ -13,10 +13,8 @@
 #include <column.hxx>
 #include <formulacell.hxx>
 #include <docoptio.hxx>
-#include <globalnames.hxx>
 #include <mtvelements.hxx>
 #include <tokenarray.hxx>
-#include <stringutil.hxx>
 #include <compiler.hxx>
 #include <paramisc.hxx>
 #include <listenercontext.hxx>

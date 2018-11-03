@@ -21,21 +21,15 @@
 
 #include <scitems.hxx>
 
-#include <editeng/eeitem.hxx>
-
-#include <editeng/boxitem.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/flditem.hxx>
-#include <sal/log.hxx>
+#include <editeng/borderline.hxx>
 
 #include <libxml/xmlwriter.h>
 
 #include <attrib.hxx>
 #include <global.hxx>
 #include <editutil.hxx>
-#include <sc.hrc>
 #include <mid.h>
 #include <globstr.hrc>
 #include <scresid.hxx>

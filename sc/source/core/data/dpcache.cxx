@@ -22,7 +22,6 @@
 #include <document.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
-#include <dpglobal.hxx>
 #include <dpobject.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -36,7 +35,6 @@
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <formula/errorcodes.hxx>
 #include <svl/zforlist.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
