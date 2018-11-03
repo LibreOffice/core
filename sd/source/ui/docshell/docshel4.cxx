@@ -568,17 +568,11 @@ bool DrawDocShell::Save()
 bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
     mpDoc->setDocAccTitle(OUString());
-    SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
-    if (pFrame1)
+    if (SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst(this))
     {
-        vcl::Window* pWindow = &pFrame1->GetWindow();
-        if ( pWindow )
+        if (vcl::Window* pSysWin = pFrame1->GetWindow().GetSystemWindow())
         {
-            vcl::Window* pSysWin = pWindow->GetSystemWindow();
-            if ( pSysWin )
-            {
-                pSysWin->SetAccessibleName(OUString());
-            }
+            pSysWin->SetAccessibleName(OUString());
         }
     }
     mpDoc->StopWorkStartupDelay();

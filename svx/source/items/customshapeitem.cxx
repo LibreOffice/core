@@ -178,25 +178,22 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             pSeqAny = &aPropSeq[ nIndex ].Value;
         }
 
-        DBG_ASSERT( pSeqAny, "SdrCustomShapeGeometryItem::SetPropertyValue() - No Value??" );
-
-        if( pSeqAny )
+        if (auto pSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pSeqAny))
         {
-            if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pSeqAny) )
+            PropertyPairHashMap::iterator aHashIter(
+                aPropPairHashMap.find(PropertyPair(rSequenceName, rPropVal.Name)));
+            auto& rSeq = const_cast<css::uno::Sequence<css::beans::PropertyValue>&>(*pSecSequence);
+            if (aHashIter != aPropPairHashMap.end())
             {
-                PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropVal.Name ) ) );
-                if ( aHashIter != aPropPairHashMap.end() )
-                {
-                    const_cast<css::uno::Sequence<css::beans::PropertyValue> &>(*rSecSequence)[ (*aHashIter).second ].Value = rPropVal.Value;
-                }
-                else
-                {
-                    sal_Int32 nCount = rSecSequence->getLength();
-                    const_cast<css::uno::Sequence<css::beans::PropertyValue> &>(*rSecSequence).realloc( nCount + 1 );
-                    const_cast<css::uno::Sequence<css::beans::PropertyValue> &>(*rSecSequence)[ nCount ] = rPropVal;
+                rSeq[(*aHashIter).second].Value = rPropVal.Value;
+            }
+            else
+            {
+                const sal_Int32 nCount = pSecSequence->getLength();
+                rSeq.realloc(nCount + 1);
+                rSeq[nCount] = rPropVal;
 
-                    aPropPairHashMap[ PropertyPair( rSequenceName, rPropVal.Name ) ] = nCount;
-                }
+                aPropPairHashMap[PropertyPair(rSequenceName, rPropVal.Name)] = nCount;
             }
         }
     }
@@ -209,18 +206,15 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
         PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
         if ( aHashIter != aPropHashMap.end() )
         {
-             css::uno::Any* pSeqAny = &aPropSeq[ (*aHashIter).second ].Value;
-            if ( pSeqAny )
+            css::uno::Any& rSeqAny = aPropSeq[(*aHashIter).second].Value;
+            if (auto pSecSequence
+                = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(rSeqAny))
             {
-                if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pSeqAny) )
+                for (const auto& rPropVal : *pSecSequence)
                 {
-                    sal_Int32 i;
-                    for ( i = 0; i < rSecSequence->getLength(); i++ )
-                    {
-                        PropertyPairHashMap::iterator _aHashIter( aPropPairHashMap.find( PropertyPair( rPropName, (*rSecSequence)[ i ].Name ) ) );
-                        if ( _aHashIter != aPropPairHashMap.end() )
-                            aPropPairHashMap.erase( _aHashIter );       // removing property from pair hashmap
-                    }
+                    auto _aHashIter(aPropPairHashMap.find(PropertyPair(rPropName, rPropVal.Name)));
+                    if (_aHashIter != aPropPairHashMap.end())
+                        aPropPairHashMap.erase(_aHashIter); // removing property from pair hashmap
                 }
             }
             sal_Int32 nLength = aPropSeq.getLength();

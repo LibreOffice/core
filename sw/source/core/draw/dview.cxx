@@ -954,16 +954,9 @@ void SwDrawView::DeleteMarked()
         pTmpRoot->StartAllAction();
     pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
     // replace marked <SwDrawVirtObj>-objects by its reference objects.
+    if (SdrPageView* pDrawPageView = m_rImp.GetPageView())
     {
-        SdrPageView* pDrawPageView = m_rImp.GetPageView();
-        if ( pDrawPageView )
-        {
-            SdrMarkView* pMarkView = &(pDrawPageView->GetView());
-            if ( pMarkView )
-            {
-                ReplaceMarkedDrawVirtObjs( *pMarkView );
-            }
-        }
+        ReplaceMarkedDrawVirtObjs(pDrawPageView->GetView());
     }
 
     // Check what textboxes have to be deleted afterwards.

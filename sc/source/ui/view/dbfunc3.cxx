@@ -1697,29 +1697,26 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
         typedef std::unordered_map<OUString, sal_uInt16> UserSortMap;
         UserSortMap aSubStrs;
         sal_uInt16 nSubCount = 0;
-        if (pUserListId)
+        ScUserList* pUserList = ScGlobal::GetUserList();
+        if (!pUserList)
+            return;
+
         {
-            ScUserList* pUserList = ScGlobal::GetUserList();
-            if (!pUserList)
+            size_t n = pUserList->size();
+            if (!n || *pUserListId >= static_cast<sal_uInt16>(n))
                 return;
+        }
 
-            {
-                size_t n = pUserList->size();
-                if (!n || *pUserListId >= static_cast<sal_uInt16>(n))
-                    return;
-            }
+        const ScUserListData& rData = (*pUserList)[*pUserListId];
+        sal_uInt16 n = rData.GetSubCount();
+        for (sal_uInt16 i = 0; i < n; ++i)
+        {
+            OUString aSub = rData.GetSubStr(i);
+            if (!aMemberSet.count(aSub))
+                // This string doesn't exist in the member name set.  Don't add this.
+                continue;
 
-            const ScUserListData& rData = (*pUserList)[*pUserListId];
-            sal_uInt16 n = rData.GetSubCount();
-            for (sal_uInt16 i = 0; i < n; ++i)
-            {
-                OUString aSub = rData.GetSubStr(i);
-                if (!aMemberSet.count(aSub))
-                    // This string doesn't exist in the member name set.  Don't add this.
-                    continue;
-
-                aSubStrs.emplace(aSub, nSubCount++);
-            }
+            aSubStrs.emplace(aSub, nSubCount++);
         }
 
         // Rank all members.
