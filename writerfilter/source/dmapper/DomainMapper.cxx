@@ -1555,7 +1555,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     uno::Any aStyleVal = m_pImpl->GetPropertyFromStyleSheet(ePropertyId);
                     if( !aStyleVal.hasValue() )
                     {
-                        nIntValue = 0x83a == nSprmId ?
+                        nIntValue = NS_ooxml::LN_EG_RPrBase_smallCaps == nSprmId ?
                             4 : 1;
                     }
                     else if(aStyleVal.getValueTypeClass() == uno::TypeClass_FLOAT )
@@ -1568,7 +1568,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     else if((aStyleVal >>= nStyleValue) ||
                             (nStyleValue = static_cast<sal_Int16>(comphelper::getEnumAsINT32(aStyleVal))) >= 0 )
                     {
-                        nIntValue = 0x83a == nSprmId ?
+                        nIntValue = NS_ooxml::LN_EG_RPrBase_smallCaps == nSprmId ?
                             nStyleValue ? 0 : 4 :
                             nStyleValue ? 0 : 1;
                     }
