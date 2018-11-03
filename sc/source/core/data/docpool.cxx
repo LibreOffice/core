@@ -29,7 +29,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
 #include <svx/algitem.hxx>
@@ -59,7 +58,6 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <svx/svxitems.hrc>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -73,7 +71,6 @@
 #include <patattr.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <document.hxx>
 #include <scmod.hxx>
 #include <sc.hrc>
 

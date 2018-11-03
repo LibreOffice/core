@@ -19,14 +19,8 @@
 
 #include <dpcache.hxx>
 #include <dpfilteredcache.hxx>
-#include <document.hxx>
 #include <address.hxx>
-#include <formulacell.hxx>
-#include <dptabdat.hxx>
-#include <dptabsrc.hxx>
-#include <dpobject.hxx>
 #include <queryparam.hxx>
-#include <queryentry.hxx>
 #include <dpitemdata.hxx>
 
 #include <osl/diagnose.h>

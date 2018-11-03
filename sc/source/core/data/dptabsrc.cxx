@@ -29,20 +29,12 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <svl/itemprop.hxx>
-#include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
-
-#include <scitems.hxx>
-#include <document.hxx>
-#include <docpool.hxx>
-#include <patattr.hxx>
-#include <formulacell.hxx>
 
 #include <dpcache.hxx>
 #include <dptabres.hxx>
 #include <dptabdat.hxx>
 #include <global.hxx>
-#include <datauno.hxx>
 #include <miscuno.hxx>
 #include <unonames.hxx>
 #include <dpitemdata.hxx>
@@ -58,8 +50,8 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
+#include <com/sun/star/sheet/TableFilterField.hpp>
 
-#include <unotools/collatorwrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 

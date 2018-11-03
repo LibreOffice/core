@@ -17,25 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <svx/algitem.hxx>
-#include <unotools/transliterationwrapper.hxx>
-
-#include <subtotal.hxx>
-#include <rangeutl.hxx>
-#include <attrib.hxx>
-#include <patattr.hxx>
-#include <docpool.hxx>
-#include <document.hxx>
-#include <userlist.hxx>
 #include <pivot.hxx>
-#include <rechead.hxx>
-#include <formula/errorcodes.hxx>
-#include <refupdat.hxx>
-#include <stlpool.hxx>
-#include <stlsheet.hxx>
 #include <o3tl/make_unique.hxx>
 
 #if DEBUG_PIVOT_TABLE
