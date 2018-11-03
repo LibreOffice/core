@@ -1434,9 +1434,9 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( const std::shared_ptr<DrawModelWrap
     if(!pDrawModelWrapper)
         return nWritingMode;
 
-    const SfxPoolItem* pItem = &(pDrawModelWrapper->GetItemPool().GetDefaultItem( EE_PARA_WRITINGDIR ));
-    if( pItem )
-        nWritingMode = static_cast< sal_Int16 >(static_cast< const SvxFrameDirectionItem * >( pItem )->GetValue());
+    const SfxPoolItem& rItem = pDrawModelWrapper->GetItemPool().GetDefaultItem(EE_PARA_WRITINGDIR);
+    nWritingMode
+        = static_cast<sal_Int16>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue());
     return nWritingMode;
 }
 

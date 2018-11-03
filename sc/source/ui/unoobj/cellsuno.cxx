@@ -8417,8 +8417,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {
             OUString aCodeName;
-            if ( pDocSh )
-                pDocSh->GetDocument().GetCodeName( GetTab_Impl(), aCodeName );
+            pDocSh->GetDocument().GetCodeName(GetTab_Impl(), aCodeName);
             rAny <<= aCodeName;
         }
         else if (pEntry->nWID == SC_WID_UNO_CONDFORMAT)

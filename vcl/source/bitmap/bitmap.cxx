@@ -852,15 +852,7 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 
 bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
 {
-    bool bRet = false;
-    if (mxSalBmp)
-    {
-        SalBitmap* pSalBitmap = mxSalBmp.get();
-        if( pSalBitmap )
-            bRet = pSalBitmap->GetSystemData( rData );
-    }
-
-    return bRet;
+    return mxSalBmp && mxSalBmp->GetSystemData(rData);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

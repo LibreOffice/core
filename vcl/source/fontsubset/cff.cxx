@@ -1641,8 +1641,7 @@ void Type1Emitter::updateLen( int nTellPos, size_t nLength)
     if (fseek( mpFileOut, nTellPos, SEEK_SET) != 0)
         return;
     fwrite(cData, 1, sizeof(cData), mpFileOut);
-    if( nCurrPos >= 0)
-        (void)fseek(mpFileOut, nCurrPos, SEEK_SET);
+    (void)fseek(mpFileOut, nCurrPos, SEEK_SET);
 }
 
 inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const

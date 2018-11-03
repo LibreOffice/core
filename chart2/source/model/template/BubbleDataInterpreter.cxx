@@ -134,8 +134,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
         }
         if( aYValuesVector.size() > nN )
             aNewData.push_back( aYValuesVector[nN] );
-        if( aSizeValuesVector.size() > nN )
-            aNewData.push_back( aSizeValuesVector[nN] );
+        aNewData.push_back(aSizeValuesVector[nN]);
 
         Reference< XDataSeries > xSeries;
         if( nSeriesIndex < aSeriesToReUse.getLength())

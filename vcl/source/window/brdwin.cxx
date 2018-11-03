@@ -821,20 +821,17 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if ( rMEvt.GetClicks() == 1 )
                 {
-                    if ( bTracking )
-                    {
-                        Point   aPos         = pBorderWindow->GetPosPixel();
-                        Size    aSize        = pBorderWindow->GetOutputSizePixel();
-                        maFrameData.mnTrackX      = aPos.X();
-                        maFrameData.mnTrackY      = aPos.Y();
-                        maFrameData.mnTrackWidth  = aSize.Width();
-                        maFrameData.mnTrackHeight = aSize.Height();
+                    Point aPos  = pBorderWindow->GetPosPixel();
+                    Size  aSize = pBorderWindow->GetOutputSizePixel();
+                    maFrameData.mnTrackX      = aPos.X();
+                    maFrameData.mnTrackY      = aPos.Y();
+                    maFrameData.mnTrackWidth  = aSize.Width();
+                    maFrameData.mnTrackHeight = aSize.Height();
 
-                        if ( maFrameData.mnHitTest & BorderWindowHitTest::Title )
-                            nDragFullTest = DragFullOptions::WindowMove;
-                        else
-                            nDragFullTest = DragFullOptions::WindowSize;
-                    }
+                    if (maFrameData.mnHitTest & BorderWindowHitTest::Title)
+                        nDragFullTest = DragFullOptions::WindowMove;
+                    else
+                        nDragFullTest = DragFullOptions::WindowSize;
                 }
                 else
                 {
