@@ -1686,13 +1686,6 @@ int Desktop::doShutdown()
     if ( pExecGlobals->bRestartRequested )
         SetRestartState();
 
-    if (pExecGlobals->xGlobalBroadcaster.is())
-    {
-        css::document::DocumentEvent aEvent;
-        aEvent.EventName = "OnCloseApp";
-        pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
-    }
-
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
