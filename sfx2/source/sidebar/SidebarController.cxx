@@ -1046,6 +1046,8 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
     {
         case MID_UNLOCK_TASK_PANEL:
             mpParentWindow->SetFloatingMode(true);
+            if (mpParentWindow->IsFloatingMode())
+                mpParentWindow->ToTop(ToTopFlags::GrabFocusOnly);
             break;
 
         case MID_LOCK_TASK_PANEL:
