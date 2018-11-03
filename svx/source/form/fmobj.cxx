@@ -109,7 +109,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
     if ( !pFormModel || !pFormModel->ControlsUseRefDevice() )
         return;
 
-    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : nullptr;
+    OutputDevice* pCurrentRefDevice = pFormModel->GetRefDevice();
     if ( ( m_pLastKnownRefDevice.get() == pCurrentRefDevice ) && !_force )
         return;
 
@@ -313,8 +313,7 @@ void FmFormObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     m_xEnvironmentHistory = nullptr;
     m_aEventsHistory.realloc(0);
 
-    if ( pNewFormPage )
-        pNewFormPage->GetImpl().formObjectInserted( *this );
+    pNewFormPage->GetImpl().formObjectInserted( *this );
 }
 
 

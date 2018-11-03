@@ -467,12 +467,9 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         };
         const size_t nCount = SAL_N_ELEMENTS(aMap);
         // Preallocate vector elements.
-        if (aVec.size() < nCount)
-        {
-            FormulaOpCodeMapEntry aEntry;
-            aEntry.Token.OpCode = getOpCodeUnknown();
-            aVec.resize( nCount, aEntry);
-        } // if (aVec.size() < nCount)
+        FormulaOpCodeMapEntry aEntry;
+        aEntry.Token.OpCode = getOpCodeUnknown();
+        aVec.resize(nCount, aEntry);
 
         FormulaOpCodeMapEntry aEntry;
         for (auto& i : aMap)
