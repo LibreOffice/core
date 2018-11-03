@@ -2378,20 +2378,20 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
     sal_Int32 nRelWidth = 0;
     sal_Int32 nMinRelColWidth = 0;
     sal_uInt32 nRelCols = 0;
-    for( colIter = m_aColumnWidths.begin(); colIter < m_aColumnWidths.end(); ++colIter)
+    for( const auto& rCol : m_aColumnWidths)
     {
-        if( colIter->isRelative )
+        if( rCol.isRelative )
         {
-            nRelWidth += colIter->width;
-            if( 0 == nMinRelColWidth || colIter->width < nMinRelColWidth )
-                nMinRelColWidth = colIter->width;
+            nRelWidth += rCol.width;
+            if( 0 == nMinRelColWidth || rCol.width < nMinRelColWidth )
+                nMinRelColWidth = rCol.width;
             nRelCols++;
         }
         else
         {
-            nAbsWidth += colIter->width;
-            if( 0 == nMinAbsColWidth || colIter->width < nMinAbsColWidth )
-                nMinAbsColWidth = colIter->width;
+            nAbsWidth += rCol.width;
+            if( 0 == nMinAbsColWidth || rCol.width < nMinAbsColWidth )
+                nMinAbsColWidth = rCol.width;
         }
     }
     sal_uInt32 nAbsCols = nCols - nRelCols;
@@ -2410,20 +2410,22 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             if( 0 == nMinRelColWidth )
                 nMinRelColWidth = nMinAbsColWidth;
 
-            for( colIter = m_aColumnWidths.begin(); nAbsCols > 0 && colIter < m_aColumnWidths.end(); ++colIter)
+            for( auto& rCol : m_aColumnWidths)
             {
-                if( !colIter->isRelative )
+                if( !rCol.isRelative )
                 {
                     if (nMinAbsColWidth == 0)
                         throw o3tl::divide_by_zero();
                     sal_Int32 nVal;
-                    if (o3tl::checked_multiply<sal_Int32>(colIter->width, nMinRelColWidth, nVal))
+                    if (o3tl::checked_multiply<sal_Int32>(rCol.width, nMinRelColWidth, nVal))
                         throw std::overflow_error("overflow in multiply");
                     sal_Int32 nRelCol = nVal / nMinAbsColWidth;
-                    colIter->width = nRelCol;
-                    colIter->isRelative = true;
+                    rCol.width = nRelCol;
+                    rCol.isRelative = true;
                     nRelWidth += nRelCol;
                     nAbsCols--;
+                    if (nAbsCols <= 0)
+                        break;
                 }
             }
         }
@@ -2494,9 +2496,9 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             // Otherwise, if there is enough space for every column, every
             // column gets this space.
 
-            for( colIter = m_aColumnWidths.begin(); nRelCols > 0 && colIter < m_aColumnWidths.end(); ++colIter )
+            for( auto& rCol : m_aColumnWidths )
             {
-                if( colIter->isRelative )
+                if( rCol.isRelative )
                 {
                     sal_Int32 nAbsCol;
                     if( 1 == nRelCols )
@@ -2513,20 +2515,22 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
                         }
                         else if( bMinExtra )
                         {
-                            sal_Int32 nExtraRelCol = colIter->width - nMinRelColWidth;
+                            sal_Int32 nExtraRelCol = rCol.width - nMinRelColWidth;
                             nAbsCol = MINLAY + (nExtraRelCol * nExtraAbs) /
                                                  nExtraRel;
                         }
                         else
                         {
-                            nAbsCol = ( colIter->width * nAbsForRelWidth) / nRelWidth;
+                            nAbsCol = ( rCol.width * nAbsForRelWidth) / nRelWidth;
                         }
                     }
-                    colIter->width = nAbsCol;
-                    colIter->isRelative = false;
+                    rCol.width = nAbsCol;
+                    rCol.isRelative = false;
                     nAbsForRelWidth -= nAbsCol;
                     nAbsWidth += nAbsCol;
                     nRelCols--;
+                    if (nRelCols <= 0)
+                        break;
                 }
             }
         }

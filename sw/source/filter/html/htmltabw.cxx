@@ -196,10 +196,9 @@ static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, bool *pBorders )
 
     if( !pBox->GetSttNd() )
     {
-        for( SwTableLines::const_iterator it = pBox->GetTabLines().begin();
-                 it != pBox->GetTabLines().end(); ++it)
+        for( const auto& rpLine : pBox->GetTabLines() )
         {
-            if ( lcl_TableLine_HasTabBorders( *it, pBorders ) )
+            if ( lcl_TableLine_HasTabBorders( rpLine, pBorders ) )
                 break;
         }
     }
@@ -220,10 +219,9 @@ static bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, bool *pBorder
     if( *pBorders )
         return false;
 
-    for( SwTableBoxes::const_iterator it = pLine->GetTabBoxes().begin();
-             it != pLine->GetTabBoxes().end(); ++it)
+    for( const auto& rpBox : pLine->GetTabBoxes() )
     {
-        if ( lcl_TableBox_HasTabBorders( *it, pBorders ) )
+        if ( lcl_TableBox_HasTabBorders( rpBox, pBorders ) )
             break;
     }
     return !*pBorders;

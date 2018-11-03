@@ -2725,21 +2725,18 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
 
     //Check to see if we already have a ruby charstyle that this fits
-    std::vector<const SwCharFormat*>::const_iterator aEnd =
-        m_aRubyCharFormats.end();
-    for(std::vector<const SwCharFormat*>::const_iterator aIter
-        = m_aRubyCharFormats.begin(); aIter != aEnd; ++aIter)
+    for(const auto& rpCharFormat : m_aRubyCharFormats)
     {
         const SvxFontHeightItem &rFH =
-            ItemGet<SvxFontHeightItem>(*(*aIter),
+            ItemGet<SvxFontHeightItem>(*rpCharFormat,
             GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
         if (rFH.GetHeight() == nFontSize*10)
         {
-            const SvxFontItem &rF = ItemGet<SvxFontItem>(*(*aIter),
+            const SvxFontItem &rF = ItemGet<SvxFontItem>(*rpCharFormat,
                 GetWhichOfScript(RES_CHRATR_FONT,nScript));
             if (rF.GetFamilyName() == sFontName)
             {
-                pCharFormat=*aIter;
+                pCharFormat = rpCharFormat;
                 break;
             }
         }
@@ -3244,14 +3241,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 }
                 else
                 {
-                    for (SwFormTokens::iterator aItr = aPattern.begin();aItr!= aPattern.end();++aItr)
-                    {
-                        if (aItr->eTokenType == TOKEN_PAGE_NUMS)
-                        {
-                            aPattern.insert(aItr,aLinkStart);
-                            break;
-                        }
-                    }
+                    auto aItr = std::find_if(aPattern.begin(), aPattern.end(),
+                        [](const SwFormToken& rToken) { return rToken.eTokenType == TOKEN_PAGE_NUMS; });
+                    if (aItr != aPattern.end())
+                        aPattern.insert(aItr, aLinkStart);
                 }
                 aPattern.push_back(aLinkEnd);
                 aForm.SetPattern(nLevel, aPattern);

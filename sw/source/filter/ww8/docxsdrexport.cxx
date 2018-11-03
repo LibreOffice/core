@@ -1522,28 +1522,25 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
     }
 
     //first, loop through ALL of the chained textboxes to identify a unique ID for each chain, and sequence number for each textbox in that chain.
-    std::map<OUString, MSWordExportBase::LinkedTextboxInfo>::iterator linkedTextboxesIter;
     if (!m_pImpl->m_rExport.m_bLinkedTextboxesHelperInitialized)
     {
         sal_Int32 nSeq = 0;
-        linkedTextboxesIter = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.begin();
-        while (linkedTextboxesIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end())
+        for (auto& rEntry : m_pImpl->m_rExport.m_aLinkedTextboxesHelper)
         {
             //find the start of a textbox chain: has no PREVIOUS link, but does have NEXT link
-            if (linkedTextboxesIter->second.sPrevChain.isEmpty()
-                && !linkedTextboxesIter->second.sNextChain.isEmpty())
+            if (rEntry.second.sPrevChain.isEmpty() && !rEntry.second.sNextChain.isEmpty())
             {
                 //assign this chain a unique ID and start a new sequence
                 nSeq = 0;
-                linkedTextboxesIter->second.nId = ++m_pImpl->m_rExport.m_nLinkedTextboxesChainId;
-                linkedTextboxesIter->second.nSeq = nSeq;
+                rEntry.second.nId = ++m_pImpl->m_rExport.m_nLinkedTextboxesChainId;
+                rEntry.second.nSeq = nSeq;
 
-                OUString sCheckForBrokenChains = linkedTextboxesIter->first;
+                OUString sCheckForBrokenChains = rEntry.first;
 
                 //follow the chain and assign the same id, and incremental sequence numbers.
                 std::map<OUString, MSWordExportBase::LinkedTextboxInfo>::iterator followChainIter;
-                followChainIter = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.find(
-                    linkedTextboxesIter->second.sNextChain);
+                followChainIter
+                    = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.find(rEntry.second.sNextChain);
                 while (followChainIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end())
                 {
                     //verify that the NEXT textbox also points to me as the PREVIOUS.
@@ -1563,7 +1560,6 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
                         followChainIter->second.sNextChain);
                 }
             }
-            ++linkedTextboxesIter;
         }
         m_pImpl->m_rExport.m_bLinkedTextboxesHelperInitialized = true;
     }
@@ -1582,7 +1578,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
     }
 
     // second, check if THIS textbox is linked and then decide whether to write the tag txbx or linkedTxbx
-    linkedTextboxesIter = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.find(sLinkChainName);
+    std::map<OUString, MSWordExportBase::LinkedTextboxInfo>::iterator linkedTextboxesIter
+        = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.find(sLinkChainName);
     if (linkedTextboxesIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end())
     {
         if ((linkedTextboxesIter->second.nId != 0) && (linkedTextboxesIter->second.nSeq != 0))

@@ -152,11 +152,8 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
     IMarkVector aMarks;
     if ( GetBookmarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
-        for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-              it != end; ++it )
+        for ( IMark* pMark : aMarks )
         {
-            IMark* pMark = (*it);
-
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
@@ -196,11 +193,8 @@ void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nCurr
     IMarkVector aMarks;
     if ( GetAnnotationMarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
-        for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-              it != end; ++it )
+        for ( IMark* pMark : aMarks )
         {
-            IMark* pMark = (*it);
-
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 

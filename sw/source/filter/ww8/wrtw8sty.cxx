@@ -953,10 +953,9 @@ void WW8_WrPlc0::Append( sal_uLong nStartCpOrFc )
 
 void WW8_WrPlc0::Write( SvStream& rStrm )
 {
-    std::vector<sal_uLong>::const_iterator iter;
-    for( iter = aPos.begin(); iter != aPos.end(); ++iter )
+    for( const auto& rPos : aPos )
     {
-        rStrm.WriteUInt32(*iter);
+        rStrm.WriteUInt32(rPos);
     }
 }
 
@@ -1258,10 +1257,9 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
     // 2 values getting set
     //      Dop.fFacingPages            == Header and Footer different
     //      Dop.fSwapBordersFacingPgs   == mirrored borders
-    std::vector<WW8_SepInfo>::const_iterator iter = aSects.begin();
-    for( sal_uInt16 nEnde = 0; iter != aSects.end(); ++iter )
+    sal_uInt16 nEnde = 0;
+    for( const WW8_SepInfo& rSepInfo : aSects )
     {
-        const WW8_SepInfo& rSepInfo = *iter;
         if( !rSepInfo.pSectionFormat )
         {
             const SwPageDesc* pPd = rSepInfo.pPageDesc;

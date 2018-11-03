@@ -18,6 +18,7 @@
  */
 
 #include <iterator>
+#include <numeric>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdpage.hxx>
@@ -83,15 +84,8 @@ void wwZOrderer::InsertEscherObject( SdrObject* pObject,
 
 wwZOrderer::myeiter wwZOrderer::MapEscherIdxToIter(sal_uLong nIdx)
 {
-    myeiter aIter = maEscherLayer.begin();
-    myeiter aEnd = maEscherLayer.end();
-    while (aIter != aEnd)
-    {
-        if (aIter->mnEscherShapeOrder == nIdx)
-            break;
-        ++aIter;
-    }
-    return aIter;
+    return std::find_if(maEscherLayer.begin(), maEscherLayer.end(),
+        [nIdx](const EscherShape& rShape) { return rShape.mnEscherShapeOrder == nIdx; });
 }
 
 sal_uInt16 wwZOrderer::GetEscherObjectIdx(sal_uLong nSpId)
@@ -187,13 +181,8 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
         sal_uInt16 nIdx = maIndexes.top();
         myeiter aEnd = MapEscherIdxToIter(nIdx);
 
-        sal_uLong nInsertPos=0;
-        myeiter aIter = maEscherLayer.begin();
-        while (aIter != aEnd)
-        {
-            nInsertPos += aIter->mnNoInlines+1;
-            ++aIter;
-        }
+        sal_uLong nInsertPos = std::accumulate(maEscherLayer.begin(), aEnd, sal_uLong(0),
+            [](const sal_uLong nPos, const EscherShape& rShape) { return nPos + rShape.mnNoInlines + 1; });
 
         OSL_ENSURE(aEnd != maEscherLayer.end(), "Something very wrong here");
         if (aEnd != maEscherLayer.end())

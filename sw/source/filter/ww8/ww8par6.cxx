@@ -663,12 +663,10 @@ SwSectionFormat *wwSectionManager::InsertSection(
         return nullptr;
 
     SwPageDesc *pPage = nullptr;
-    auto aEnd = maSegments.rend();
-    for (auto aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
-    {
-        if (nullptr != (pPage = aIter->mpPage))
-            break;
-    }
+    auto aIter = std::find_if(maSegments.rbegin(), maSegments.rend(),
+        [](const wwSection& rSegment) { return rSegment.mpPage != nullptr; });
+    if (aIter != maSegments.rend())
+        pPage = aIter->mpPage;
 
     OSL_ENSURE(pPage, "no page outside this section!");
 

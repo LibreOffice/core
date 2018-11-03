@@ -1357,12 +1357,12 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     // XML_r node should be surrounded with permission-begin and permission-end nodes if it has permission.
     DoWritePermissionsEnd();
 
-    for (std::vector<const SwOLENode*>::iterator it = m_aPostponedMaths.begin(); it != m_aPostponedMaths.end(); ++it)
-        WritePostponedMath(*it);
+    for (const auto& rpMath : m_aPostponedMaths)
+        WritePostponedMath(rpMath);
     m_aPostponedMaths.clear();
 
-    for (std::vector<const SdrObject*>::iterator it = m_aPostponedFormControls.begin(); it != m_aPostponedFormControls.end(); ++it)
-        WritePostponedFormControl(*it);
+    for (const auto& rpControl : m_aPostponedFormControls)
+        WritePostponedFormControl(rpControl);
     m_aPostponedFormControls.clear();
 
     WritePostponedActiveXControl(false);
@@ -7436,13 +7436,13 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     // if new special ones are added, update also WriteFootnoteEndnotePr()
 
     // footnotes/endnotes themselves
-    for ( FootnotesVector::const_iterator i = rVector.begin(); i != rVector.end(); ++i, ++nIndex )
+    for ( const auto& rpItem : rVector )
     {
         m_pSerializer->startElementNS( XML_w, nItem,
                 FSNS( XML_w, XML_id ), OString::number( nIndex ).getStr(),
                 FSEND );
 
-        const SwNodeIndex* pIndex = (*i)->GetTextFootnote()->GetStartNode();
+        const SwNodeIndex* pIndex = rpItem->GetTextFootnote()->GetStartNode();
         // tag required at the start of each footnote/endnote
         m_footnoteEndnoteRefTag = bFootnotes ? XML_footnoteRef : XML_endnoteRef;
 
@@ -7451,6 +7451,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
                 bFootnotes? TXT_FTN: TXT_EDN );
 
         m_pSerializer->endElementNS( XML_w, nItem );
+        ++nIndex;
     }
 
     m_pSerializer->endElementNS( XML_w, nBody );

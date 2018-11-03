@@ -108,9 +108,9 @@ namespace
     {
         ww8::Frames aRet;
 
-        for(SwPosFlyFrames::const_iterator aIter(rFlys.begin()); aIter != rFlys.end(); ++aIter)
+        for(const auto& rpFly : rFlys)
         {
-            const SwFrameFormat &rEntry = (*aIter)->GetFormat();
+            const SwFrameFormat &rEntry = rpFly->GetFormat();
 
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetContentAnchor())
             {
@@ -122,7 +122,7 @@ namespace
             }
             else
             {
-                SwPosition aPos((*aIter)->GetNdIndex());
+                SwPosition aPos(rpFly->GetNdIndex());
 
                 if (SwTextNode* pTextNd = aPos.nNode.GetNode().GetTextNode())
                 {
