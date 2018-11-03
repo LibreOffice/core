@@ -9,9 +9,17 @@
 
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
+#include <vcl/scheduler.hxx>
+#include <dcontact.hxx>
+#include <drawdoc.hxx>
+#include <ndtxt.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <redline.hxx>
+
 
 namespace
 {
@@ -24,16 +32,33 @@ class SwUiWriterTest2 : public SwModelTestBase
 public:
     void testTdf101534();
     void testTdf54819();
+    void testTdf108687_tabstop();
     void testTdf119571();
     void testTdf119019();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf54819);
+    CPPUNIT_TEST(testTdf108687_tabstop);
     CPPUNIT_TEST(testTdf119571);
     CPPUNIT_TEST(testTdf119019);
     CPPUNIT_TEST_SUITE_END();
+private:
+    SwDoc* createDoc(const char* pName = nullptr);
 };
+
+
+SwDoc* SwUiWriterTest2::createDoc(const char* pName)
+{
+    if (!pName)
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    return pTextDoc->GetDocShell()->GetDoc();
+}
 
 void SwUiWriterTest2::testTdf101534()
 {
@@ -93,6 +118,23 @@ void SwUiWriterTest2::testTdf54819()
     // remaining paragraph keeps its original style
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
+void SwUiWriterTest2::testTdf108687_tabstop()
+{
+    SwDoc* pDoc = createDoc("tdf108687_tabstop.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sal_Int32 nStartIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nStartIndex);
+
+    // Now pressing 'tab' should jump to the radio buttons.
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+//    sal_Int32 nEndIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+//    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), nEndIndex);
 }
 
 void SwUiWriterTest2::testTdf119571()
