@@ -92,7 +92,6 @@ cmd/32/numberformatmenu.svg cmd/32/numberformatstandard.svg
 cmd/32/numericfield.svg cmd/32/numberformatstandard.svg
 cmd/32/repaginate.svg cmd/32/insertpagenumberfield.svg
 cmd/32/showchanges.svg cmd/32/addwatch.svg
-cmd/32/showtrackedchanges.svg cmd/32/addwatch.svg
 cmd/32/tracechangemode.svg cmd/32/trackchanges.svg
 
 cmd/lc_charmapcontrol.svg cmd/lc_insertsymbol.svg
@@ -149,7 +148,6 @@ cmd/lc_numberformatmenu.svg cmd/lc_numberformatstandard.svg
 cmd/lc_numericfield.svg cmd/lc_numberformatstandard.svg
 cmd/lc_repaginate.svg cmd/lc_insertpagenumberfield.svg
 cmd/lc_showchanges.svg cmd/lc_addwatch.svg
-cmd/lc_showtrackedchanges.svg cmd/lc_addwatch.svg
 cmd/lc_tracechangemode.svg cmd/lc_trackchanges.svg
 
 cmd/sc_charmapcontrol.svg cmd/sc_insertsymbol.svg
@@ -206,7 +204,6 @@ cmd/sc_numberformatmenu.svg cmd/sc_numberformatstandard.svg
 cmd/sc_numericfield.svg cmd/sc_numberformatstandard.svg
 cmd/sc_repaginate.svg cmd/sc_insertpagenumberfield.svg
 cmd/sc_showchanges.svg cmd/sc_addwatch.svg
-cmd/sc_showtrackedchanges.svg cmd/sc_addwatch.svg
 cmd/sc_tracechangemode.svg cmd/sc_trackchanges.svg
 
 # Zoom
@@ -507,6 +504,10 @@ cmd/sc_starshapes.svg cmd/sc_starshapes.star5.svg
 cmd/sc_symbolshapes.svg cmd/sc_symbolshapes.smiley.svg
 cmd/sc_square_rounded.svg cmd/sc_basicshapes.round-quadrat.svg
 
+# Sheet
+cmd/32/tableevents.svg cmd/32/animationeffects.svg
+cmd/lc_tableevents.svg cmd/lc_animationeffects.svg
+cmd/sc_tableevents.svg cmd/sc_animationeffects.svg
 
 # Open
 cmd/32/openfromwriter.svg cmd/32/open.svg
@@ -867,16 +868,19 @@ cmd/32/backgroundpatterncontroller.svg cmd/32/backgroundcolor.svg
 cmd/32/characterbackgroundpattern.svg cmd/32/backcolor.svg
 cmd/32/fontcolor.svg cmd/32/color.svg
 cmd/32/formatarea.svg cmd/32/backgroundcolor.svg
+cmd/32/settabbgcolor.svg cmd/32/backgroundcolor.svg
 
 cmd/lc_backgroundpatterncontroller.svg cmd/lc_backgroundcolor.svg
 cmd/lc_characterbackgroundpattern.svg cmd/lc_backcolor.svg
 cmd/lc_fontcolor.svg cmd/lc_color.svg
 cmd/lc_formatarea.svg cmd/lc_backgroundcolor.svg
+cmd/lc_settabbgcolor.svg cmd/lc_backgroundcolor.svg
 
 cmd/sc_backgroundpatterncontroller.svg cmd/sc_backgroundcolor.svg
 cmd/sc_characterbackgroundpattern.svg cmd/sc_backcolor.svg
 cmd/sc_fontcolor.svg cmd/sc_color.svg
 cmd/sc_formatarea.svg cmd/sc_backgroundcolor.svg
+cmd/sc_settabbgcolor.svg cmd/sc_backgroundcolor.svg
 
 # Paragraph Alignment
 cmd/32/leftpara.svg cmd/32/alignleft.svg
@@ -1055,20 +1059,20 @@ cmd/sc_square.svg cmd/sc_basicshapes.quadrat.svg
 cmd/sc_flowchartshapes.flowchart-process.svg cmd/sc_basicshapes.quadrat.svg
 
 # Sort
-cmd/32/ordercrit.svg cmd/32/sortascending.svg
+cmd/32/ordercrit.svg cmd/32/datasort.svg
 cmd/32/sortdown.svg cmd/32/sortdescending.svg
 cmd/32/sortup.svg cmd/32/sortascending.svg
-cmd/32/tablesort.svg cmd/32/sortascending.svg
+cmd/32/tablesort.svg cmd/32/datasort.svg
 
-cmd/lc_ordercrit.svg cmd/lc_sortascending.svg
+cmd/lc_ordercrit.svg cmd/lc_datasort.svg
 cmd/lc_sortdown.svg cmd/lc_sortdescending.svg
 cmd/lc_sortup.svg cmd/lc_sortascending.svg
-cmd/lc_tablesort.svg cmd/lc_sortascending.svg
+cmd/lc_tablesort.svg cmd/lc_datasort.svg
 
-cmd/sc_ordercrit.svg cmd/sc_sortascending.svg
+cmd/sc_ordercrit.svg cmd/sc_datasort.svg
 cmd/sc_sortdown.svg cmd/sc_sortdescending.svg
 cmd/sc_sortup.svg cmd/sc_sortascending.svg
-cmd/sc_tablesort.svg cmd/sc_sortascending.svg
+cmd/sc_tablesort.svg cmd/sc_datasort.svg
 
 # Config
 cmd/32/formatselection.svg cmd/32/configuredialog.svg
@@ -1331,6 +1335,8 @@ cmd/32/columnoperations.svg cmd/32/entirecolumn.svg
 cmd/32/inscellsctrl.svg cmd/32/inserttable.svg
 cmd/32/rowoperations.svg cmd/32/entirerow.svg
 cmd/32/setoptimalcolumnwidthdirect.svg cmd/32/setoptimalcolumnwidth.svg
+cmd/32/setcolumnwidth.svg cmd/32/columnwidth.svg
+cmd/32/setrowheight.svg cmd/32/rowheight.svg
 cmd/32/starchartdialog.svg cmd/32/drawchart.svg
 
 cmd/lc_cellprotection.svg cmd/lc_protect.svg
@@ -1338,6 +1344,8 @@ cmd/lc_columnoperations.svg cmd/lc_entirecolumn.svg
 cmd/lc_inscellsctrl.svg cmd/lc_inserttable.svg
 cmd/lc_rowoperations.svg cmd/lc_entirerow.svg
 cmd/lc_setoptimalcolumnwidthdirect.svg cmd/lc_setoptimalcolumnwidth.svg
+cmd/lc_setcolumnwidth.svg cmd/lc_columnwidth.svg
+cmd/lc_setrowheight.svg cmd/lc_rowheight.svg
 cmd/lc_starchartdialog.svg cmd/lc_drawchart.svg
 
 cmd/sc_cellprotection.svg cmd/sc_protect.svg
@@ -1345,6 +1353,8 @@ cmd/sc_columnoperations.svg cmd/sc_entirecolumn.svg
 cmd/sc_inscellsctrl.svg cmd/sc_inserttable.svg
 cmd/sc_rowoperations.svg cmd/sc_entirerow.svg
 cmd/sc_setoptimalcolumnwidthdirect.svg cmd/sc_setoptimalcolumnwidth.svg
+cmd/sc_setcolumnwidth.svg cmd/sc_columnwidth.svg
+cmd/sc_setrowheight.svg cmd/sc_rowheight.svg
 cmd/sc_starchartdialog.svg cmd/sc_drawchart.svg
 
 # Help
@@ -1509,7 +1519,6 @@ reportdesign/res/sx12594.svg cmd/sc_dbviewfunctions.svg
 # ==============================================
 res/adrbook.svg cmd/sc_viewdatasourcebrowser.svg
 res/browse.svg cmd/sc_browseview.svg
-res/baswatr.svg cmd/lc_addwatch.svg
 res/dir-clos.svg cmd/sc_open.svg
 res/dir-open.svg cmd/sc_open.svg
 res/fileopen.svg cmd/sc_open.svg
@@ -1819,7 +1828,7 @@ svx/res/notcertificate_16.svg xmlsecurity/res/notcertificate_16.svg
 
 svx/res/nu01.svg cmd/sc_ok.svg
 svx/res/nu02.svg cmd/sc_cancel.svg
-svx/res/nu03.svg cmd/sc_addwatch.svg
+svx/res/nu03.svg cmd/sc_showannotations.svg
 
 svx/res/ole.svg sc/res/nc05.svg
 svx/res/persp3d.svg cmd/lc_extrusiondirectionfloater.svg

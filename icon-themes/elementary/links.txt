@@ -92,7 +92,6 @@ cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
 cmd/32/numericfield.png cmd/32/numberformatstandard.png
 cmd/32/repaginate.png cmd/32/insertpagenumberfield.png
 cmd/32/showchanges.png cmd/32/addwatch.png
-cmd/32/showtrackedchanges.png cmd/32/addwatch.png
 cmd/32/tracechangemode.png cmd/32/trackchanges.png
 
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
@@ -149,7 +148,6 @@ cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
 cmd/lc_numericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_repaginate.png cmd/lc_insertpagenumberfield.png
 cmd/lc_showchanges.png cmd/lc_addwatch.png
-cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
 
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
@@ -206,7 +204,6 @@ cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_numericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
-cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
 
 # Zoom
@@ -507,6 +504,10 @@ cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
 cmd/sc_square_rounded.png cmd/sc_basicshapes.round-quadrat.png
 
+# Sheet
+cmd/32/tableevents.png cmd/32/animationeffects.png
+cmd/lc_tableevents.png cmd/lc_animationeffects.png
+cmd/sc_tableevents.png cmd/sc_animationeffects.png
 
 # Open
 cmd/32/openfromwriter.png cmd/32/open.png
@@ -867,16 +868,19 @@ cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
 cmd/32/characterbackgroundpattern.png cmd/32/backcolor.png
 cmd/32/fontcolor.png cmd/32/color.png
 cmd/32/formatarea.png cmd/32/backgroundcolor.png
+cmd/32/settabbgcolor.png cmd/32/backgroundcolor.png
 
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
 cmd/lc_characterbackgroundpattern.png cmd/lc_backcolor.png
 cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/lc_formatarea.png cmd/lc_backgroundcolor.png
+cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
 
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
 cmd/sc_characterbackgroundpattern.png cmd/sc_backcolor.png
 cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/sc_formatarea.png cmd/sc_backgroundcolor.png
+cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
 
 # Paragraph Alignment
 cmd/32/leftpara.png cmd/32/alignleft.png
@@ -1055,20 +1059,20 @@ cmd/sc_square.png cmd/sc_basicshapes.quadrat.png
 cmd/sc_flowchartshapes.flowchart-process.png cmd/sc_basicshapes.quadrat.png
 
 # Sort
-cmd/32/ordercrit.png cmd/32/sortascending.png
+cmd/32/ordercrit.png cmd/32/datasort.png
 cmd/32/sortdown.png cmd/32/sortdescending.png
 cmd/32/sortup.png cmd/32/sortascending.png
-cmd/32/tablesort.png cmd/32/sortascending.png
+cmd/32/tablesort.png cmd/32/datasort.png
 
-cmd/lc_ordercrit.png cmd/lc_sortascending.png
+cmd/lc_ordercrit.png cmd/lc_datasort.png
 cmd/lc_sortdown.png cmd/lc_sortdescending.png
 cmd/lc_sortup.png cmd/lc_sortascending.png
-cmd/lc_tablesort.png cmd/lc_sortascending.png
+cmd/lc_tablesort.png cmd/lc_datasort.png
 
-cmd/sc_ordercrit.png cmd/sc_sortascending.png
+cmd/sc_ordercrit.png cmd/sc_datasort.png
 cmd/sc_sortdown.png cmd/sc_sortdescending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
-cmd/sc_tablesort.png cmd/sc_sortascending.png
+cmd/sc_tablesort.png cmd/sc_datasort.png
 
 # Config
 cmd/32/formatselection.png cmd/32/configuredialog.png
@@ -1331,6 +1335,8 @@ cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/inscellsctrl.png cmd/32/inserttable.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
 cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
+cmd/32/setcolumnwidth.png cmd/32/columnwidth.png
+cmd/32/setrowheight.png cmd/32/rowheight.png
 cmd/32/starchartdialog.png cmd/32/drawchart.png
 
 cmd/lc_cellprotection.png cmd/lc_protect.png
@@ -1338,6 +1344,8 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_inscellsctrl.png cmd/lc_inserttable.png
 cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
+cmd/lc_setcolumnwidth.png cmd/lc_columnwidth.png
+cmd/lc_setrowheight.png cmd/lc_rowheight.png
 cmd/lc_starchartdialog.png cmd/lc_drawchart.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
@@ -1345,6 +1353,8 @@ cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_inscellsctrl.png cmd/sc_inserttable.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
+cmd/sc_setcolumnwidth.png cmd/sc_columnwidth.png
+cmd/sc_setrowheight.png cmd/sc_rowheight.png
 cmd/sc_starchartdialog.png cmd/sc_drawchart.png
 
 # Help
@@ -1509,7 +1519,6 @@ reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
 # ==============================================
 res/adrbook.png cmd/sc_viewdatasourcebrowser.png
 res/browse.png cmd/sc_browseview.png
-res/baswatr.png cmd/lc_addwatch.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
@@ -1819,7 +1828,7 @@ svx/res/notcertificate_16.png xmlsecurity/res/notcertificate_16.png
 
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png cmd/sc_cancel.png
-svx/res/nu03.png cmd/sc_addwatch.png
+svx/res/nu03.png cmd/sc_showannotations.png
 
 svx/res/ole.png sc/res/nc05.png
 svx/res/persp3d.png cmd/lc_extrusiondirectionfloater.png
