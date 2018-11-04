@@ -73,11 +73,10 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
         message += OUString::createFromAscii(aOperation) + ": ";
     }
     message += OUString::createFromAscii(ldap_err2string(aRetCode)) + " (" ;
-    sal_Char *stub = nullptr ;
 
 #ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
+    sal_Char* stub = nullptr;
     ldap_get_lderrno(aConnection, NULL, &stub) ;
-#endif
     if (stub != nullptr)
     {
         message += OUString::createFromAscii(stub) ;
@@ -88,7 +87,10 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
         // This call is thus disabled for the moment.
         //ldap_memfree(stub) ;
     }
-    else { message += "No additional information" ; }
+    else
+#endif
+    { message += "No additional information"; }
+
     message += ")" ;
     throw ldap::LdapGenericException(message, nullptr, aRetCode) ;
 }
