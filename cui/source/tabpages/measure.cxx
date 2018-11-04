@@ -166,75 +166,40 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureLineDistItem
     if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldLineDist, nValue, eUnit );
-    }
-    else
-    {
-        m_xMtrFldLineDist->set_text(OUString());
-    }
+    long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
+    SetMetricValue( *m_xMtrFldLineDist, nValue, eUnit );
     m_xMtrFldLineDist->save_value();
 
     // SdrMeasureHelplineOverhangItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldHelplineOverhang, nValue, eUnit );
-    }
-    else
-    {
-        m_xMtrFldHelplineOverhang->set_text(OUString());
-    }
+    long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
+    SetMetricValue( *m_xMtrFldHelplineOverhang, nValue, eUnit );
     m_xMtrFldHelplineOverhang->save_value();
 
     // SdrMeasureHelplineDistItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEDIST );
     if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldHelplineDist, nValue, eUnit );
-    }
-    else
-    {
-        m_xMtrFldHelplineDist->set_text(OUString());
-    }
+    long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
+    SetMetricValue( *m_xMtrFldHelplineDist, nValue, eUnit );
     m_xMtrFldHelplineDist->save_value();
 
     // SdrMeasureHelpline1LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldHelpline1Len, nValue, eUnit );
-    }
-    else
-    {
-        m_xMtrFldHelpline1Len->set_text(OUString());
-    }
+    long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
+    SetMetricValue( *m_xMtrFldHelpline1Len, nValue, eUnit );
     m_xMtrFldHelpline1Len->save_value();
 
     // SdrMeasureHelpline2LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldHelpline2Len, nValue, eUnit );
-    }
-    else
-    {
-        m_xMtrFldHelpline2Len->set_text(OUString());
-    }
+    long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
+    SetMetricValue( *m_xMtrFldHelpline2Len, nValue, eUnit );
     m_xMtrFldHelpline2Len->save_value();
 
     // SdrMeasureBelowRefEdgeItem
@@ -253,15 +218,8 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREDECIMALPLACES );
     if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
-    if( pItem )
-    {
-        sal_Int16 nValue = static_cast<const SdrMeasureDecimalPlacesItem*>( pItem )->GetValue();
-        m_xMtrFldDecimalPlaces->set_value(nValue);
-    }
-    else
-    {
-        m_xMtrFldDecimalPlaces->set_text(OUString());
-    }
+    sal_Int16 nValue = static_cast<const SdrMeasureDecimalPlacesItem*>( pItem )->GetValue();
+    m_xMtrFldDecimalPlaces->set_value(nValue);
     m_xMtrFldDecimalPlaces->save_value();
 
     // SdrMeasureTextRota90Item

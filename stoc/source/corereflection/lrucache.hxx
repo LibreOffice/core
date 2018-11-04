@@ -90,16 +90,13 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash >::LRU_Cache()
     , _pHead( nullptr )
     , _pTail( nullptr )
 {
-    if (_nCachedElements > 0)
+    _pBlock.reset(new CacheEntry[_nCachedElements]);
+    _pHead = _pBlock.get();
+    _pTail = _pBlock.get() + _nCachedElements - 1;
+    for (sal_Int32 nPos = _nCachedElements; nPos--;)
     {
-        _pBlock.reset(new CacheEntry[_nCachedElements]);
-        _pHead  = _pBlock.get();
-        _pTail  = _pBlock.get() + _nCachedElements -1;
-        for ( sal_Int32 nPos = _nCachedElements; nPos--; )
-        {
-            _pBlock[nPos].pPred = _pBlock.get() + nPos -1;
-            _pBlock[nPos].pSucc = _pBlock.get() + nPos +1;
-        }
+        _pBlock[nPos].pPred = _pBlock.get() + nPos - 1;
+        _pBlock[nPos].pSucc = _pBlock.get() + nPos + 1;
     }
 }
 
