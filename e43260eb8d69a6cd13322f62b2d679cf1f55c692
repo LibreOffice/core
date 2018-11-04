@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_752d5a45",
+        "filename": "svl/source/fsstor/oinputstreamcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-04T19:10:43Z",
+      "side": 1,
+      "message": "the original code looks like it has a bug. It looks like the original code wants to have two different function-local statics, and return either one or the other of the statics depending on how m_bSeekable is set.",
+      "revId": "e43260eb8d69a6cd13322f62b2d679cf1f55c692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
