@@ -713,7 +713,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     const SdrTextObj* pText = GetTextEditObject();
     bool bTextFrame(pText && pText->IsTextFrame());
     bool bFitToSize(pTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
-    bool bModifyMerk(pTextEditOutliner->IsModified());
+    bool bModified(pTextEditOutliner->IsModified());
     tools::Rectangle aBlankRect(rOutlView.GetOutputArea());
     aBlankRect.Union(aMinTextEditArea);
     tools::Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
@@ -729,7 +729,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     rOutlView.GetOutliner()->SetUpdateMode(true); // Bugfix #22596#
     rOutlView.Paint(aBlankRect, &rTargetDevice);
 
-    if(!bModifyMerk)
+    if(!bModified)
     {
         pTextEditOutliner->ClearModifyFlag();
     }
@@ -744,7 +744,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
 
         if (xProcessor)
         {
-            const bool bMerk(rTargetDevice.IsMapModeEnabled());
+            const bool bMapModeEnabled(rTargetDevice.IsMapModeEnabled());
             const basegfx::B2DRange aRange(aPixRect.Left(), aPixRect.Top(), aPixRect.Right(), aPixRect.Bottom());
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
@@ -762,7 +762,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
 
             rTargetDevice.EnableMapMode(false);
             xProcessor->process(aSequence);
-            rTargetDevice.EnableMapMode(bMerk);
+            rTargetDevice.EnableMapMode(bMapModeEnabled);
         }
     }
 
@@ -810,10 +810,10 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const & rOutlView) c
             aOuterPix.AdjustRight(nPixSiz );
             aOuterPix.AdjustBottom(nPixSiz );
 
-            bool bMerk(pWin->IsMapModeEnabled());
+            bool bMapModeEnabled(pWin->IsMapModeEnabled());
             pWin->EnableMapMode(false);
             pWin->Invalidate(aOuterPix);
-            pWin->EnableMapMode(bMerk);
+            pWin->EnableMapMode(bMapModeEnabled);
         }
     }
 }
