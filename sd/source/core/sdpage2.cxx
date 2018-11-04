@@ -30,6 +30,7 @@
 #include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
+#include <com/sun/star/text/XTextCopy.hpp>
 
 #include <Annotation.hxx>
 #include <notifydocumentevent.hxx>
@@ -390,6 +391,22 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 
     // animations
     rSrcPage.cloneAnimations(*this);
+
+    // annotations
+    for(const Reference< XAnnotation >& srcAnnotation : rSrcPage.maAnnotations)
+    {
+        Reference< XAnnotation > ref;
+        createAnnotation(ref);
+        ref->setPosition(srcAnnotation->getPosition());
+        ref->setSize(srcAnnotation->getSize());
+        ref->setAuthor(srcAnnotation->getAuthor());
+        ref->setInitials(srcAnnotation->getInitials());
+        ref->setDateTime(srcAnnotation->getDateTime());
+        Reference< ::css::text::XTextCopy > srcRange ( srcAnnotation->getTextRange(), uno::UNO_QUERY);
+        Reference< ::css::text::XTextCopy > range ( ref->getTextRange(), uno::UNO_QUERY);
+        if(srcRange.is() && range.is())
+            range->copyText( srcRange );
+    }
 
     // fix user calls for duplicated slide
     SdrObjListIter aSourceIter( &rSrcPage, SdrIterMode::DeepWithGroups );
