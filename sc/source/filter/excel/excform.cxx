@@ -1537,7 +1537,7 @@ void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, std::s
 void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
 {
     TokenId                 eParam[ 256 ];
-    sal_Int32                   nLauf;
+    sal_Int32               nPass;
 
     if( eId == ocCeil || eId == ocFloor )
     {
@@ -1545,11 +1545,11 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
         nCnt++;
     }
 
-    for( nLauf = 0; aStack.HasMoreTokens() && (nLauf < nCnt); nLauf++ )
-        aStack >> eParam[ nLauf ];
+    for( nPass = 0; aStack.HasMoreTokens() && (nPass < nCnt); nPass++ )
+        aStack >> eParam[ nPass ];
     // #i70925# reduce parameter count, if no more tokens available on token stack
-    if( nLauf < nCnt )
-        nCnt = static_cast< sal_uInt8 >( nLauf );
+    if( nPass < nCnt )
+        nCnt = static_cast< sal_uInt8 >( nPass );
 
     if( nCnt > 0 && eId == ocExternal )
     {
@@ -1586,13 +1586,13 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
         else if( eId == ocIf )
         {
             sal_uInt16          nNullParam = 0;
-            for( nLauf = 0 ; nLauf < nCnt ; nLauf++ )
+            for( nPass = 0 ; nPass < nCnt ; nPass++ )
             {
-                if( aPool.IsSingleOp( eParam[ nLauf ], ocMissing ) )
+                if( aPool.IsSingleOp( eParam[ nPass ], ocMissing ) )
                 {
                     if( !nNullParam )
                         nNullParam = static_cast<sal_uInt16>(aPool.Store( 0.0 ));
-                    eParam[ nLauf ] = nNullParam;
+                    eParam[ nPass ] = nNullParam;
                 }
             }
         }
@@ -1602,10 +1602,10 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
         {
             // nSkipEnd is either 0 or -1 => nLast >= 0
             aPool << eParam[ nLast ];
-            for( nLauf = nLast - 1 ; nLauf > nSkipEnd ; nLauf-- )
+            for( nPass = nLast - 1 ; nPass > nSkipEnd ; nPass-- )
             {
-                // nLauf > nSkipEnd => nLauf >= 0
-                aPool << ocSep << eParam[nLauf];
+                // nPass > nSkipEnd => nPass >= 0
+                aPool << ocSep << eParam[nPass];
             }
         }
     }
