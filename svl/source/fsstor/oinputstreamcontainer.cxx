@@ -39,36 +39,21 @@ OFSInputStreamContainer::~OFSInputStreamContainer()
 
 uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
 {
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
-
-    if ( pTypeCollection == nullptr )
+    if (m_bSeekable)
     {
-        ::osl::MutexGuard aGuard( m_aMutex ) ;
+        static cppu::OTypeCollection aTypeCollection(cppu::UnoType<io::XStream>::get(),
+                                                     cppu::UnoType<io::XInputStream>::get(),
+                                                     cppu::UnoType<io::XSeekable>::get());
 
-        if ( pTypeCollection == nullptr )
-        {
-            if ( m_bSeekable )
-            {
-                static ::cppu::OTypeCollection aTypeCollection(
-                        cppu::UnoType<io::XStream>::get(),
-                        cppu::UnoType<io::XInputStream>::get(),
-                        cppu::UnoType<io::XSeekable>::get());
-
-                pTypeCollection = &aTypeCollection ;
-            }
-            else
-            {
-                static ::cppu::OTypeCollection aTypeCollection(
-                        cppu::UnoType<io::XStream>::get(),
-                        cppu::UnoType<io::XInputStream>::get());
-
-                pTypeCollection = &aTypeCollection ;
-            }
-        }
+        return aTypeCollection.getTypes();
     }
+    else
+    {
+        static cppu::OTypeCollection aTypeCollection(cppu::UnoType<io::XStream>::get(),
+                                                     cppu::UnoType<io::XInputStream>::get());
 
-    return pTypeCollection->getTypes() ;
-
+        return aTypeCollection.getTypes();
+    }
 }
 
 uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rType )
