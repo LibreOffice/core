@@ -20,13 +20,6 @@ namespace
 typedef std::unordered_map<const char*, const char*, rtl::CStringHash, rtl::CStringEqual>
     PresetGeometryHashMap;
 
-static PresetGeometryHashMap* pHashMap = nullptr;
-::osl::Mutex& getHashMapMutex()
-{
-    static osl::Mutex s_aHashMapProtection;
-    return s_aHashMapProtection;
-}
-
 struct PresetGeometryName
 {
     const char* pMsoName;
@@ -79,27 +72,20 @@ static const PresetGeometryName pPresetGeometryNameArray[]
 
 OUString PresetGeometryTypeNames::GetFontworkType(const OUString& rMsoType)
 {
-    if (!pHashMap)
-    { // init hash map
-        ::osl::MutexGuard aGuard(getHashMapMutex());
-        if (!pHashMap)
-        {
-            PresetGeometryHashMap* pH = new PresetGeometryHashMap;
-            const PresetGeometryName* pPtr = pPresetGeometryNameArray;
-            const PresetGeometryName* pEnd = pPtr + SAL_N_ELEMENTS(pPresetGeometryNameArray);
-            for (; pPtr < pEnd; pPtr++)
-                (*pH)[pPtr->pMsoName] = pPtr->pFontworkType;
-            pHashMap = pH;
-        }
-    }
+    static const PresetGeometryHashMap s_HashMap = []() {
+        PresetGeometryHashMap aH;
+        for (const auto& item : pPresetGeometryNameArray)
+            aH[item.pMsoName] = item.pFontworkType;
+        return aH;
+    }();
     const char* pRetValue = "";
     int i, nLen = rMsoType.getLength();
     std::unique_ptr<char[]> pBuf(new char[nLen + 1]);
     for (i = 0; i < nLen; i++)
         pBuf[i] = static_cast<char>(rMsoType[i]);
     pBuf[i] = 0;
-    PresetGeometryHashMap::const_iterator aHashIter(pHashMap->find(pBuf.get()));
-    if (aHashIter != pHashMap->end())
+    PresetGeometryHashMap::const_iterator aHashIter(s_HashMap.find(pBuf.get()));
+    if (aHashIter != s_HashMap.end())
         pRetValue = (*aHashIter).second;
 
     return OUString(pRetValue, strlen(pRetValue), RTL_TEXTENCODING_ASCII_US);

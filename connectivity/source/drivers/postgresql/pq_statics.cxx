@@ -108,12 +108,7 @@ static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
 
 Statics & getStatics()
 {
-    static Statics * p;
-    if( ! p )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! p )
-        {
+    static Statics* p = []() {
             static Statics statics ;
             statics.SYSTEM_TABLE = "SYSTEM TABLE";
             statics.TABLE = "TABLE";
@@ -665,9 +660,8 @@ Statics & getStatics()
                         defTypeInfoMetaData[i].isAutoIncrement ) );
             }
 
-            p = &statics;
-        }
-    }
+            return &statics;
+    }();
     return *p;
 }
 
