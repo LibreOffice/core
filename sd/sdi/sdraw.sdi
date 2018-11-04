@@ -3282,7 +3282,7 @@ SfxVoidItem RenameLayer SID_RENAMELAYER
 ]
 
 SfxVoidItem RenamePage SID_RENAMEPAGE
-()
+(SfxStringItem Name SID_RENAMEPAGE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

@@ -788,26 +788,36 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aDescr = SdResId(STR_DESC_RENAMESLIDE);
                 const OUString& aPageName = pCurrentPage->GetName();
 
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
-                aNameDlg->SetText( aTitle );
-                aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
-                aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
-
-                if( aNameDlg->Execute() == RET_OK )
+                if(rReq.GetArgs())
                 {
-                    OUString aNewName;
-                    aNameDlg->GetName( aNewName );
-                    if (aNewName != aPageName)
+                    OUString aName;
+                    aName = rReq.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
+
+                    bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aName );
+                    DBG_ASSERT( bResult, "Couldn't rename slide" );
+                }
+                else
+                {
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
+                    aNameDlg->SetText( aTitle );
+                    aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
+                    aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+
+                    if( aNameDlg->Execute() == RET_OK )
                     {
-                        bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aNewName );
-                        DBG_ASSERT( bResult, "Couldn't rename slide" );
+                        OUString aNewName;
+                        aNameDlg->GetName( aNewName );
+                        if (aNewName != aPageName)
+                        {
+                            bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aNewName );
+                            DBG_ASSERT( bResult, "Couldn't rename slide" );
+                        }
                     }
                 }
             }
-
             Cancel();
-            rReq.Ignore ();
+            rReq.Ignore();
         }
         break;
 
