@@ -209,6 +209,7 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 mContext.addPart();
                 return true;
             case R.id.action_rename_worksheet:
+            case R.id.action_rename_slide:
                 mContext.renamePart();
                 return true;
             case R.id.action_delete_worksheet:

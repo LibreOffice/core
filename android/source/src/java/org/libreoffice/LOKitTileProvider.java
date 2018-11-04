@@ -249,20 +249,20 @@ class LOKitTileProvider implements TileProvider {
                     return;
                 }
             }
-            if(isSpreadsheet() == false) {
-                //document must be spreadsheet
-                return;
-            }
             JSONObject parameter = new JSONObject();
             JSONObject name = new JSONObject();
-            JSONObject index = new JSONObject();
             name.put("type", "string");
             name.put("value", partName);
-            index.put("type","long");
-            index.put("value", getCurrentPartNumber()+1);
             parameter.put("Name", name);
-            parameter.put("Index", index);
-            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Name", parameter.toString(),true));
+            if(isPresentation()){
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:RenamePage", parameter.toString(),true));
+            }else {
+                JSONObject index = new JSONObject();
+                index.put("type","long");
+                index.put("value", getCurrentPartNumber()+1);
+                parameter.put("Index", index);
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Name", parameter.toString(),true));
+            }
         }catch (JSONException e){
             e.printStackTrace();
         }
