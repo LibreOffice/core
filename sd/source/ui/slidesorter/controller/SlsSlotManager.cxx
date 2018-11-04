@@ -873,29 +873,39 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
         OUString aPageName = pSelectedPage->GetName();
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        vcl::Window* pWin = mrSlideSorter.GetContentWindow();
-        ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
-                pWin ? pWin->GetFrameWeld() : nullptr,
-                aPageName, aDescr));
-        aNameDlg->SetText( aTitle );
-        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
-        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
-
-        if( aNameDlg->Execute() == RET_OK )
+        if(rRequest.GetArgs())
         {
-            OUString aNewName;
-            aNameDlg->GetName( aNewName );
-            if (aNewName != aPageName)
-            {
-                bool bResult =
-                        RenameSlideFromDrawViewShell(
-                          pSelectedPage->GetPageNum()/2, aNewName );
-                DBG_ASSERT( bResult, "Couldn't rename slide" );
-            }
-        }
-        aNameDlg.disposeAndClear();
+           OUString aName;
+           aName = rRequest.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
 
+           bool bResult =  RenameSlideFromDrawViewShell(pSelectedPage->GetPageNum()/2, aName );
+           DBG_ASSERT( bResult, "Couldn't rename slide" );
+        }
+        else
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            vcl::Window* pWin = mrSlideSorter.GetContentWindow();
+            ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+                    pWin ? pWin->GetFrameWeld() : nullptr,
+                    aPageName, aDescr));
+            aNameDlg->SetText( aTitle );
+            aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
+            aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+
+            if( aNameDlg->Execute() == RET_OK )
+            {
+                OUString aNewName;
+                aNameDlg->GetName( aNewName );
+                if (aNewName != aPageName)
+                {
+                    bool bResult =
+                            RenameSlideFromDrawViewShell(
+                              pSelectedPage->GetPageNum()/2, aNewName );
+                    DBG_ASSERT( bResult, "Couldn't rename slide" );
+                }
+            }
+            aNameDlg.disposeAndClear();
+        }
         // Tell the slide sorter about the name change (necessary for
         // accessibility.)
         mrSlideSorter.GetController().PageNameHasChanged(
