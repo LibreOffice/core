@@ -252,7 +252,7 @@ void SdrGluePoint::Shear(const Point& rRef, double tn, bool bVShear, const SdrOb
 
 void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
-    bool bMapMerk=rWin.IsMapModeEnabled();
+    bool bMapMode=rWin.IsMapModeEnabled();
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
     rWin.EnableMapMode(false);
@@ -264,7 +264,7 @@ void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(aRect, InvalidateFlags::NoErase);
 
-    rWin.EnableMapMode(bMapMerk);
+    rWin.EnableMapMode(bMapMode);
 }
 
 bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
