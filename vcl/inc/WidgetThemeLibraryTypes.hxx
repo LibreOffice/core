@@ -235,39 +235,6 @@ enum class ButtonValue {
     Mixed
 };
 
-// Color types
-
-constexpr uint32_t RGB_COLORDATA(uint8_t r, uint8_t g, uint8_t b) {
-    return uint32_t(b) | (uint32_t(g) << 8) | (uint32_t(r) << 16);
-}
-
-#define COLORDATA_RED( n )          ((uint8_t)((n)>>16))
-#define COLORDATA_GREEN( n )        ((uint8_t)(((uint16_t)(n)) >> 8))
-#define COLORDATA_BLUE( n )         ((uint8_t)(n))
-#define COLORDATA_RGB( n )          ((uint32_t)((n) & 0x00FFFFFF))
-
-#define COL_BLACK                   RGB_COLORDATA( 0x00, 0x00, 0x00 )
-#define COL_BLUE                    RGB_COLORDATA( 0x00, 0x00, 0x80 )
-#define COL_GREEN                   RGB_COLORDATA( 0x00, 0x80, 0x00 )
-#define COL_CYAN                    RGB_COLORDATA( 0x00, 0x80, 0x80 )
-#define COL_RED                     RGB_COLORDATA( 0x80, 0x00, 0x00 )
-#define COL_RED_FONTCOLOR           RGB_COLORDATA( 0xCE, 0x18, 0x1E )
-#define COL_MAGENTA                 RGB_COLORDATA( 0x80, 0x00, 0x80 )
-#define COL_BROWN                   RGB_COLORDATA( 0x80, 0x80, 0x00 )
-#define COL_GRAY                    RGB_COLORDATA( 0x80, 0x80, 0x80 )
-#define COL_GRAY3                   RGB_COLORDATA( 0xCC, 0xCC, 0xCC )
-#define COL_GRAY7                   RGB_COLORDATA( 0x66, 0x66, 0x66 )
-#define COL_LIGHTGRAY               RGB_COLORDATA( 0xC0, 0xC0, 0xC0 )
-#define COL_LIGHTBLUE               RGB_COLORDATA( 0x00, 0x00, 0xFF )
-#define COL_LIGHTGREEN              RGB_COLORDATA( 0x00, 0xFF, 0x00 )
-#define COL_LIGHTCYAN               RGB_COLORDATA( 0x00, 0xFF, 0xFF )
-#define COL_LIGHTRED                RGB_COLORDATA( 0xFF, 0x00, 0x00 )
-#define COL_LIGHTMAGENTA            RGB_COLORDATA( 0xFF, 0x00, 0xFF )
-#define COL_LIGHTGRAYBLUE           RGB_COLORDATA( 0xE0, 0xE0, 0xFF )
-#define COL_YELLOW                  RGB_COLORDATA( 0xFF, 0xFF, 0x00 )
-#define COL_YELLOW_HIGHLIGHT        RGB_COLORDATA( 0xFF, 0xF2, 0x00 )
-#define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
