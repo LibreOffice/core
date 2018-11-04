@@ -16,6 +16,24 @@
       "revId": "0ef42310f58eb27afdd8277ce8a47993a90136a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_b5ef42e8",
+        "filename": "shell/source/win32/shlxthandler/ooofilt/ooofilt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-04T19:34:41Z",
+      "side": 1,
+      "message": "Yes, the m_eState is only being assigned correctly in the code here AFAICS.",
+      "parentUuid": "3f3283f1_f5202a4c",
+      "revId": "0ef42310f58eb27afdd8277ce8a47993a90136a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
