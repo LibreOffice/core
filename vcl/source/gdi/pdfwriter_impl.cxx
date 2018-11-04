@@ -6543,8 +6543,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     if( GetFontInstance()->GetFontFace()->GetWeight() <= WEIGHT_MEDIUM &&
         GetFontInstance()->GetFontSelectPattern().GetWeight() > WEIGHT_MEDIUM )
     {
-        if( ! bPop )
-            aLine.append( "q " );
+        aLine.append("q ");
         bPop = true;
         bABold = true;
     }

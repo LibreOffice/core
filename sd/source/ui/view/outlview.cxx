@@ -1474,8 +1474,7 @@ void OutlineView::UpdateDocument()
         mrOutlineViewShell.UpdateTitleObject( pPage, pPara );
         mrOutlineViewShell.UpdateOutlineObject( pPage, pPara );
 
-        if( pPara )
-            pPara = GetNextTitle(pPara);
+        pPara = GetNextTitle(pPara);
     }
 }
 
