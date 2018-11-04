@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_7278d0f7",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-04T09:22:25Z",
+      "side": 1,
+      "message": "Should be \"schemaPattern\"",
+      "range": {
+        "startLine": 742,
+        "startChar": 12,
+        "endLine": 742,
+        "endChar": 28
+      },
+      "revId": "965a1e170324b4c2b78cd88eeb849a719aa72142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
