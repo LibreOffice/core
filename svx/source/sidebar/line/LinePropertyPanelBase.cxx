@@ -792,7 +792,7 @@ void LinePropertyPanelBase::SelectLineStyle()
         return;
     }
 
-    const drawing::LineStyle eXLS(mpStyleItem ? mpStyleItem->GetValue() : drawing::LineStyle_NONE);
+    const drawing::LineStyle eXLS(mpStyleItem->GetValue());
     bool bSelected(false);
 
     switch(eXLS)
@@ -804,7 +804,7 @@ void LinePropertyPanelBase::SelectLineStyle()
             bSelected = true;
             break;
         default:
-            if(mpDashItem && mxLineStyleList.is())
+            if(mxLineStyleList.is())
             {
                 const XDash& rDash = mpDashItem->GetDashValue();
                 for(long a(0);!bSelected &&  a < mxLineStyleList->Count(); a++)
@@ -840,7 +840,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
             return;
         }
 
-        if (mpStartItem && mxLineEndList.is())
+        if (mxLineEndList.is())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpStartItem->GetLineStartValue();
             for(long a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
@@ -869,7 +869,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
             return;
         }
 
-        if (mpEndItem && mxLineEndList.is())
+        if (mxLineEndList.is())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpEndItem->GetLineEndValue();
             for(long a(0);!bSelected &&  a < mxLineEndList->Count(); a++)

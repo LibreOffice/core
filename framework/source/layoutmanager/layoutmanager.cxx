@@ -1238,7 +1238,6 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
         m_aAsyncLayoutTimer.Stop();
 
     bool bAutomaticToolbars( m_bAutomaticToolbars );
-    std::vector< Reference< awt::XWindow > > oldDockingAreaWindows;
 
     ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
 
@@ -1261,7 +1260,6 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
             pContainerWindow->RemoveChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
     }
 
-    Reference< ui::XDockingAreaAcceptor > xOldDockingAreaAcceptor( m_xDockingAreaAcceptor );
     m_xDockingAreaAcceptor = xDockingAreaAcceptor;
     if ( m_xDockingAreaAcceptor.is() )
     {
@@ -1301,13 +1299,6 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
     }
     else
         implts_destroyElements(); // remove all elements
-
-    if ( !oldDockingAreaWindows.empty() )
-    {
-        // Reset docking area size for our old docking area acceptor
-        awt::Rectangle aEmptyRect;
-        xOldDockingAreaAcceptor->setDockingAreaSpace( aEmptyRect );
-    }
 
     if ( pToolbarManager && xDockingAreaAcceptor.is() )
     {
