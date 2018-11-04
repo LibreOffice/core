@@ -78,7 +78,7 @@ void SdrObjEditView::ImpClearVars()
     pTextEditOutlinerView=nullptr;
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
-    pTextEditCursorMerker=nullptr;
+    pTextEditCursorBuffer=nullptr;
     bTextEditNewObj=false;
     bMacroDown=false;
     pMacroObj=nullptr;
@@ -1157,7 +1157,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             aTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             aMinTextEditArea += pTextObj->GetGridOffset();
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
-            pTextEditCursorMerker=pWin->GetCursor();
+            pTextEditCursorBuffer=pWin->GetCursor();
 
             maHdlList.SetMoveOutside(true);
 
@@ -1352,7 +1352,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrTextObj* pTEObj = mxTextEditObj.get();
     vcl::Window*       pTEWin         =pTextEditWin;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
-    vcl::Cursor*  pTECursorMerker=pTextEditCursorMerker;
+    vcl::Cursor*  pTECursorBuffer=pTextEditCursorBuffer;
     SdrUndoManager* pUndoEditUndoManager = nullptr;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
@@ -1422,7 +1422,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     pTextEditWin=nullptr;
     SdrOutliner* pTEOutliner = pTextEditOutliner.release();
     pTextEditOutlinerView=nullptr;
-    pTextEditCursorMerker=nullptr;
+    pTextEditCursorBuffer=nullptr;
     aTextEditArea=tools::Rectangle();
 
     if (pTEOutliner!=nullptr)
@@ -1564,7 +1564,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         if (!bTextEditDontDelete) delete pTEOutliner;
         else pTEOutliner->Clear();
         if (pTEWin!=nullptr) {
-            pTEWin->SetCursor(pTECursorMerker);
+            pTEWin->SetCursor(pTECursorBuffer);
         }
         maHdlList.SetMoveOutside(false);
         if (eRet!=SdrEndTextEditKind::Unchanged)
