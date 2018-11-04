@@ -838,32 +838,14 @@ static bool                                 bInitedByVCLToolkit = false;
 
 osl::Mutex & getInitMutex()
 {
-    static osl::Mutex * pM;
-    if( !pM )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pM )
-        {
-            static osl::Mutex aMutex;
-            pM = &aMutex;
-        }
-    }
-    return *pM;
+    static osl::Mutex aMutex;
+    return aMutex;
 }
 
 osl::Condition & getInitCondition()
 {
-    static osl::Condition * pC = nullptr;
-    if( !pC )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pC )
-        {
-            static osl::Condition aCondition;
-            pC = &aCondition;
-        }
-    }
-    return *pC;
+    static osl::Condition aCondition;
+    return aCondition;
 }
 
 extern "C"

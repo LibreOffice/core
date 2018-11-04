@@ -285,20 +285,12 @@ char const * FilePermission::s_actions [] = { "read", "write", "execute", "delet
 
 static OUString const & getWorkingDir()
 {
-    static OUString * s_workingDir = nullptr;
-    if (! s_workingDir)
-    {
+    static OUString s_workingDir = []() {
         OUString workingDir;
-        ::osl_getProcessWorkingDir( &workingDir.pData );
-
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if (! s_workingDir)
-        {
-            static OUString s_dir( workingDir );
-            s_workingDir = &s_dir;
-        }
-    }
-    return *s_workingDir;
+        ::osl_getProcessWorkingDir(&workingDir.pData);
+        return workingDir;
+    }();
+    return s_workingDir;
 }
 
 FilePermission::FilePermission(

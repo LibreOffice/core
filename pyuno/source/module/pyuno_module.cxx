@@ -202,26 +202,20 @@ void fillStruct(
 
 OUString getLibDir()
 {
-    static OUString *pLibDir;
-    if( !pLibDir )
-    {
-        osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( ! pLibDir )
-        {
-            static OUString libDir;
+    static OUString sLibDir = []() {
+        OUString libDir;
 
-            // workarounds the $(ORIGIN) until it is available
-            if( Module::getUrlFromAddress(
-                    reinterpret_cast< oslGenericFunction >(getLibDir), libDir ) )
-            {
-                libDir = libDir.copy( 0, libDir.lastIndexOf('/') );
-                OUString name ( "PYUNOLIBDIR" );
-                rtl_bootstrap_set( name.pData, libDir.pData );
-            }
-            pLibDir = &libDir;
+        // workarounds the $(ORIGIN) until it is available
+        if (Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getLibDir), libDir))
+        {
+            libDir = libDir.copy(0, libDir.lastIndexOf('/'));
+            OUString name("PYUNOLIBDIR");
+            rtl_bootstrap_set(name.pData, libDir.pData);
         }
-    }
-    return *pLibDir;
+        return libDir;
+    }();
+
+    return sLibDir;
 }
 
 void raisePySystemException( const char * exceptionType, const OUString & message )

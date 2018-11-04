@@ -598,7 +598,6 @@ SvNumberFormatObj::~SvNumberFormatObj()
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatObj::getPropertySetInfo()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( lcl_GetNumberFormatPropertyMap() );
     return aRef;
@@ -808,7 +807,6 @@ SvNumberFormatSettingsObj::~SvNumberFormatSettingsObj()
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatSettingsObj::getPropertySetInfo()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( lcl_GetNumberSettingsPropertyMap() );
     return aRef;

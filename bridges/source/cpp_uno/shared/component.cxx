@@ -38,39 +38,21 @@
 
 namespace {
 
-#if (defined(__GNUC__) && defined(__APPLE__))
-static OUString * s_pStaticOidPart = nullptr;
-#endif
-
 const OUString & cppu_cppenv_getStaticOIdPart()
 {
-#if ! (defined(__GNUC__) && defined(__APPLE__))
-    static OUString * s_pStaticOidPart = nullptr;
-#endif
-    if (! s_pStaticOidPart)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pStaticOidPart)
+    static OUString s_aStaticOidPart = []() {
+        OUStringBuffer aRet(64);
+        aRet.append("];");
+        // good guid
+        sal_uInt8 ar[16];
+        ::rtl_getGlobalProcessId(ar);
+        for (unsigned char i : ar)
         {
-            OUStringBuffer aRet( 64 );
-            aRet.append( "];" );
-            // good guid
-            sal_uInt8 ar[16];
-            ::rtl_getGlobalProcessId( ar );
-            for (unsigned char i : ar)
-            {
-                aRet.append( static_cast<sal_Int32>(i), 16 );
-            }
-#if (defined(__GNUC__) && defined(__APPLE__))
-            s_pStaticOidPart = new OUString( aRet.makeStringAndClear() );
-#else
-            static OUString s_aStaticOidPart(
-                aRet.makeStringAndClear() );
-            s_pStaticOidPart = &s_aStaticOidPart;
-#endif
+            aRet.append(static_cast<sal_Int32>(i), 16);
         }
-    }
-    return *s_pStaticOidPart;
+        return aRet.makeStringAndClear();
+    }();
+    return s_aStaticOidPart;
 }
 
 }

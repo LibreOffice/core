@@ -787,207 +787,135 @@ uno::Sequence< uno::Type > SvxShape::_getTypes()
     case OBJ_MEDIA:
     case OBJ_TABLE:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 12 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                }
-            }
             return aTypeSequence;
         }
     // group shape
     case OBJ_GRUP:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+                cppu::UnoType<drawing::XShapes>::get(),
+                cppu::UnoType<drawing::XShapeGroup>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 14 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XShapes>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XShapeGroup>::get();
-                }
-            }
             return aTypeSequence;
         }
     // connector shape
     case OBJ_EDGE:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+                cppu::UnoType<drawing::XConnectorShape>::get(),
+                // from SvxUnoTextBase::getTypes()
+                cppu::UnoType<text::XTextAppend>::get(),
+                cppu::UnoType<text::XTextCopy>::get(),
+                cppu::UnoType<container::XEnumerationAccess>::get(),
+                cppu::UnoType<text::XTextRangeMover>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 17 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XConnectorShape>::get();
-                    // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = cppu::UnoType<text::XTextAppend>::get();
-                    *pTypes++ = cppu::UnoType<text::XTextCopy>::get();
-                    *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
-                    *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
-                }
-            }
             return aTypeSequence;
         }
     // control shape
     case OBJ_UNO:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+                cppu::UnoType<drawing::XControlShape>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 13 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XControlShape>::get();
-                }
-            }
             return aTypeSequence;
         }
     // 3d scene shape
     case E3D_SCENE_ID|E3D_INVENTOR_FLAG:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+                cppu::UnoType<drawing::XShapes>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 13 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XShapes>::get();
-                }
-            }
             return aTypeSequence;
         }
     case OBJ_CUSTOMSHAPE:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+                // from SvxUnoTextBase::getTypes()
+                cppu::UnoType<text::XText>::get(),
+                cppu::UnoType<container::XEnumerationAccess>::get(),
+                cppu::UnoType<text::XTextRangeMover>::get(),
+                cppu::UnoType<drawing::XEnhancedCustomShapeDefaulter>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 16 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                    // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = cppu::UnoType<text::XText>::get();
-                    *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
-                    *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XEnhancedCustomShapeDefaulter>::get();
-                }
-            }
             return aTypeSequence;
         }
     // shapes with text
@@ -1009,38 +937,26 @@ uno::Sequence< uno::Type > SvxShape::_getTypes()
     case OBJ_OLE2: // #i118485# Moved to shapes with text
     default:
         {
-            static css::uno::Sequence< css::uno::Type > aTypeSequence;
+            static uno::Sequence<uno::Type> aTypeSequence{
+                cppu::UnoType<drawing::XShape>::get(),
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<drawing::XGluePointsSupplier>::get(),
+                cppu::UnoType<container::XChild>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get(),
+                cppu::UnoType<container::XNamed>::get(),
+                // from SvxUnoTextBase::getTypes()
+                cppu::UnoType<text::XTextAppend>::get(),
+                cppu::UnoType<text::XTextCopy>::get(),
+                cppu::UnoType<container::XEnumerationAccess>::get(),
+                cppu::UnoType<text::XTextRangeMover>::get(),
+            };
 
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 16 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-
-                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
-                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
-                    *pTypes++ = cppu::UnoType<container::XChild>::get();
-                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
-                    // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = cppu::UnoType<text::XTextAppend>::get();
-                    *pTypes++ = cppu::UnoType<text::XTextCopy>::get();
-                    *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
-                    *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
-                }
-            }
             return aTypeSequence;
         }
     }
