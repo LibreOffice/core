@@ -732,7 +732,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
     if (!schemaPattern.isEmpty())
     {
         OUString sAppend;
-        if (tableNamePattern.match("%"))
+        if (schemaPattern.match("%"))
             sAppend = "AND TABLE_SCHEMA LIKE '%' ";
         else
             sAppend = "AND TABLE_SCHEMA = '%' ";
