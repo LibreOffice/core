@@ -788,7 +788,11 @@ bool Sane::Start( BitmapTransporter& rBitmap )
 
             for (nLine = nHeight-1; nLine >= 0; --nLine)
             {
-                fseek( pFrame, nLine * aParams.bytes_per_line, SEEK_SET );
+                if (fseek(pFrame, nLine * aParams.bytes_per_line, SEEK_SET) == -1)
+                {
+                    bSuccess = false;
+                    break;
+                }
                 if( eType == FrameStyle_BW ||
                     ( eType == FrameStyle_Gray && aParams.depth == 8 )
                     )
