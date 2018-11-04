@@ -184,7 +184,7 @@ public:
     SbiDdeControl* GetDdeControl() { return pDdeCtrl.get(); }
     StarBASIC* GetBasic() { return pBasic; }
     SbiDllMgr* GetDllMgr();
-    SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
+    SbiRTLData& GetRTLData() const { return const_cast<SbiRTLData&>(aRTLData); }
 
     std::shared_ptr<SvNumberFormatter> const & GetNumberFormatter();
     sal_uInt32 GetStdDateIdx() const { return nStdDateIdx; }
