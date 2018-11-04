@@ -226,7 +226,6 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     pVDev->SetFont( aFont );
     pVDev->SetTextColor( COL_BLACK );
     pVDev->SetTextFillColor();
-    pVDev->ImplNewFont();
     if (!pVDev->InitFont())
         return false;
     pVDev->ImplInitTextColor();
