@@ -139,23 +139,10 @@ void SAL_CALL VCLXHatchWindow::release()
 
 uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
 {
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
+    static cppu::OTypeCollection aTypeCollection(cppu::UnoType<embed::XHatchWindow>::get(),
+                                                 VCLXWindow::getTypes());
 
-    if ( pTypeCollection == nullptr )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pTypeCollection == nullptr )
-        {
-            static ::cppu::OTypeCollection aTypeCollection(
-                    cppu::UnoType<embed::XHatchWindow>::get(),
-                    VCLXHatchWindow::getTypes() );
-
-            pTypeCollection = &aTypeCollection ;
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
+    return aTypeCollection.getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
