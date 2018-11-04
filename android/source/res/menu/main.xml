@@ -60,6 +60,7 @@
             android:title="@string/action_add_worksheet"
             android:orderInCategory="100"
             android:visible="false" />
+
         <item android:id="@+id/action_rename_worksheet"
             android:title="@string/action_rename_worksheet"
             android:orderInCategory="100"
@@ -77,6 +78,10 @@
 
         <item android:id="@+id/action_add_slide"
             android:title="@string/action_add_slide"
+            android:orderInCategory="100"
+            android:visible="false" />
+        <item android:id="@+id/action_rename_slide"
+            android:title="@string/action_rename_slide"
             android:orderInCategory="100"
             android:visible="false" />
 
