@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
@@ -1320,10 +1321,6 @@ namespace emfplushelper
                             mrPropertyHolders.Current().setFont(vcl::Font(font->family, Size(font->emSize, font->emSize)));
                             // done reading
 
-                            // transform to TextSimplePortionPrimitive2D
-                            // TODO add more decorations: underline, strikeout, etc
-                            //      and create a TextDecoratedPortionPrimitive2D
-
                             const OUString emptyString;
                             drawinglayer::attribute::FontAttribute fontAttribute(
                                 font->family,                                          // font family
@@ -1376,8 +1373,10 @@ namespace emfplushelper
                             if (color.GetTransparency() < 255)
                             {
                                 std::vector<double> emptyVector;
-                                drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(
-                                            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                drawinglayer::primitive2d::BasePrimitive2D* pBaseText = nullptr;
+                                if (font->Underline() || font->Strikeout())
+                                {
+                                    pBaseText = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
                                                 transformMatrix,
                                                 text,
                                                 0,             // text always starts at 0
@@ -1385,8 +1384,28 @@ namespace emfplushelper
                                                 emptyVector,   // EMF-PLUS has no DX-array
                                                 fontAttribute,
                                                 locale,
-                                                color.getBColor()));
-
+                                                color.getBColor(),
+                                                COL_TRANSPARENT,
+                                                color.getBColor(),
+                                                color.getBColor(),
+                                                drawinglayer::primitive2d::TEXT_LINE_NONE,
+                                                font->Underline() ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
+                                                false,
+                                                font->Strikeout() ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE);
+                                }
+                                else
+                                {
+                                    pBaseText = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                                transformMatrix,
+                                                text,
+                                                0,             // text always starts at 0
+                                                stringLength,
+                                                emptyVector,   // EMF-PLUS has no DX-array
+                                                fontAttribute,
+                                                locale,
+                                                color.getBColor());
+                                }
+                                drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);
                                 if (color.GetTransparency() != 0)
                                 {
                                     aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
@@ -1765,8 +1784,8 @@ namespace emfplushelper
                             const Color color = EMFPGetBrushColorOrARGBColor(flags, brushIndexOrColor);
                             std::vector<double> aDXArray; // dummy for DX array (not used)
 
-                            // generate TextSimplePortionPrimitive2Ds for all portions of text with
-                            // the same charsPosY values
+                            // generate TextSimplePortionPrimitive2Ds or TextDecoratedPortionPrimitive2D
+                            // for all portions of text with the same charsPosY values
                             sal_uInt32 pos = 0;
                             while (pos < glyphsCount)
                             {
@@ -1777,10 +1796,10 @@ namespace emfplushelper
 
                                 // generate the DX-Array
                                 aDXArray.clear();
-                                double mappedPosX = Map(charsPosX[pos],charsPosY[pos]).getX();
-                                for (size_t i=0; i<aLength-1; i++)
+                                double mappedPosX = Map(charsPosX[pos], charsPosY[pos]).getX();
+                                for (size_t i = 0; i < aLength-1; i++)
                                 {
-                                    aDXArray.push_back(Map(charsPosX[pos+i+1],charsPosY[pos+i+1]).getX() - mappedPosX);
+                                    aDXArray.push_back(Map(charsPosX[pos + i + 1], charsPosY[pos + i + 1]).getX() - mappedPosX);
                                 }
                                 // last entry
                                 aDXArray.push_back(0);
@@ -1792,8 +1811,10 @@ namespace emfplushelper
                                     transformMatrix *= transform;
                                 if (color.GetTransparency() < 255)
                                 {
-                                    drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(
-                                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    drawinglayer::primitive2d::BasePrimitive2D* pBaseText = nullptr;
+                                    if (font->Underline() || font->Strikeout())
+                                    {
+                                        pBaseText = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
                                                     transformMatrix,
                                                     text,
                                                     pos,            // take character at current pos
@@ -1801,7 +1822,28 @@ namespace emfplushelper
                                                     aDXArray,       // generated DXArray
                                                     fontAttribute,
                                                     Application::GetSettings().GetLanguageTag().getLocale(),
-                                                    color.getBColor()));
+                                                    color.getBColor(),
+                                                    COL_TRANSPARENT,
+                                                    color.getBColor(),
+                                                    color.getBColor(),
+                                                    drawinglayer::primitive2d::TEXT_LINE_NONE,
+                                                    font->Underline() ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
+                                                    false,
+                                                    font->Strikeout() ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE);
+                                    }
+                                    else
+                                    {
+                                        pBaseText = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                                    transformMatrix,
+                                                    text,
+                                                    pos,            // take character at current pos
+                                                    aLength,        // use determined length
+                                                    aDXArray,       // generated DXArray
+                                                    fontAttribute,
+                                                    Application::GetSettings().GetLanguageTag().getLocale(),
+                                                    color.getBColor());
+                                    }
+                                    drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);
                                     if (color.GetTransparency() != 0)
                                     {
                                         aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
