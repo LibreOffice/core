@@ -265,10 +265,7 @@ namespace cppcanvas
                              sal_Int8                   nLineStyle)
             {
                 const double x(rStartPos.getX());
-                const double y(rStartPos.getY());
-                const double nY1 = y + nStartOffset;
-                const double nX2 = x + nWidth;
-                const double nY2 = nY1 + nHeight;
+                const double y(rStartPos.getY() + nStartOffset + nHeight);
                 double nWaveWidth = nHeight * 10.6 * 0.25;
                 // Offset for the double line.
                 double nOffset = 0.0;
@@ -278,18 +275,20 @@ namespace cppcanvas
                 else
                     nWaveWidth *= 2.0;
 
-                o_rPoly.append(::basegfx::utils::createWaveline(
-                            ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x, nY1 + nOffset, nX2, nY2 + nOffset)),
-                            nWaveWidth,
-                            nWaveWidth * 0.5));
+                basegfx::B2DPolygon aLine;
+                aLine.append(basegfx::B2DPoint(x, y + nOffset));
+                aLine.append(basegfx::B2DPoint(x + nWidth, y + nOffset));
+
+                o_rPoly.append(::basegfx::utils::createWaveline(aLine, nWaveWidth, nWaveWidth * 0.5));
 
                 if (nLineStyle == LINESTYLE_DOUBLEWAVE)
                 {
                     nOffset = nHeight * 1.2;
-                    o_rPoly.append(::basegfx::utils::createWaveline(
-                                ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x, nY1 + nOffset, nX2, nY2 + nOffset)),
-                                nWaveWidth,
-                                nWaveWidth * 0.5));
+
+                    basegfx::B2DPolygon aLine2;
+                    aLine2.append(basegfx::B2DPoint(x, y + nOffset));
+                    aLine2.append(basegfx::B2DPoint(x + nWidth, y + nOffset));
+                    o_rPoly.append(::basegfx::utils::createWaveline(aLine2, nWaveWidth, nWaveWidth * 0.5));
                 }
             }
 
