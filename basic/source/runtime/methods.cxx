@@ -2521,15 +2521,15 @@ void SbRtl_IsMissing(StarBASIC *, SbxArray & rPar, bool)
 }
 
 // Function looks for wildcards, removes them and always returns the pure path
-static OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
+static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLData)
 {
     static sal_Char cDelim1 = '/';
     static sal_Char cDelim2 = '\\';
     static sal_Char cWild1 = '*';
     static sal_Char cWild2 = '?';
 
-    pRTLData->pWildCard.reset();
-    pRTLData->sFullNameToBeChecked.clear();
+    rRTLData.pWildCard.reset();
+    rRTLData.sFullNameToBeChecked.clear();
 
     OUString aFileParam = rFileParam;
     sal_Int32 nLastWild = aFileParam.lastIndexOf( cWild1 );
@@ -2558,7 +2558,7 @@ static OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLD
         OUString aPathStr = getFullPath( aFileParam );
         if( nLastDelim != aFileParam.getLength() - 1 )
         {
-            pRTLData->sFullNameToBeChecked = aPathStr;
+            rRTLData.sFullNameToBeChecked = aPathStr;
         }
         return aPathStr;
     }
@@ -2582,18 +2582,18 @@ static OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLD
     // invalid anyway because it was not accepted by OSL before
     if (aPureFileName != "*")
     {
-        pRTLData->pWildCard = o3tl::make_unique<WildCard>( aPureFileName );
+        rRTLData.pWildCard = o3tl::make_unique<WildCard>(aPureFileName);
     }
     return aPathStr;
 }
 
-static bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLData )
+static bool implCheckWildcard(const OUString& rName, SbiRTLData const& rRTLData)
 {
     bool bMatch = true;
 
-    if( pRTLData->pWildCard )
+    if (rRTLData.pWildCard)
     {
-        bMatch = pRTLData->pWildCard->Matches( rName );
+        bMatch = rRTLData.pWildCard->Matches(rName);
     }
     return bMatch;
 }
@@ -2641,14 +2641,8 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        SbiRTLData* pRTLData = GetSbData()->pInst->GetRTLData();
+        SbiRTLData& rRTLData = GetSbData()->pInst->GetRTLData();
 
-        // #34645: can also be called from the URL line via 'macro: Dir'
-        // there's no pRTLDate existing in that case and the method must be left
-        if( !pRTLData )
-        {
-            return;
-        }
         if( hasUno() )
         {
             const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
@@ -2658,8 +2652,8 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                 {
                     OUString aFileParam = rPar.Get(1)->GetOUString();
 
-                    OUString aFileURLStr = implSetupWildcard( aFileParam, pRTLData );
-                    if( !pRTLData->sFullNameToBeChecked.isEmpty())
+                    OUString aFileURLStr = implSetupWildcard(aFileParam, rRTLData);
+                    if (!rRTLData.sFullNameToBeChecked.isEmpty())
                     {
                         bool bExists = false;
                         try { bExists = xSFI->exists( aFileURLStr ); }
@@ -2693,16 +2687,17 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                         SbAttributes nFlags = SbAttributes::NONE;
                         if ( nParCount > 2 )
                         {
-                            pRTLData->nDirFlags = nFlags = static_cast<SbAttributes>(rPar.Get(2)->GetInteger());
+                            rRTLData.nDirFlags = nFlags
+                                = static_cast<SbAttributes>(rPar.Get(2)->GetInteger());
                         }
                         else
                         {
-                            pRTLData->nDirFlags = SbAttributes::NONE;
+                            rRTLData.nDirFlags = SbAttributes::NONE;
                         }
                         // Read directory
                         bool bIncludeFolders = bool(nFlags & SbAttributes::DIRECTORY);
-                        pRTLData->aDirSeq = xSFI->getFolderContents( aDirURLStr, bIncludeFolders );
-                        pRTLData->nCurDirPos = 0;
+                        rRTLData.aDirSeq = xSFI->getFolderContents(aDirURLStr, bIncludeFolders);
+                        rRTLData.nCurDirPos = 0;
 
                         // #78651 Add "." and ".." directories for VB compatibility
                         if( bIncludeFolders )
@@ -2715,7 +2710,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                             // returned "." and for -1 ".."
                             if( !bRoot )
                             {
-                                pRTLData->nCurDirPos = -2;
+                                rRTLData.nCurDirPos = -2;
                             }
                         }
                     }
@@ -2725,35 +2720,36 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                 }
 
 
-                if( pRTLData->aDirSeq.getLength() > 0 )
+                if (rRTLData.aDirSeq.getLength() > 0)
                 {
-                    bool bFolderFlag = bool(pRTLData->nDirFlags & SbAttributes::DIRECTORY);
+                    bool bFolderFlag = bool(rRTLData.nDirFlags & SbAttributes::DIRECTORY);
 
                     SbiInstance* pInst = GetSbData()->pInst;
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                     for( ;; )
                     {
-                        if( pRTLData->nCurDirPos < 0 )
+                        if (rRTLData.nCurDirPos < 0)
                         {
-                            if( pRTLData->nCurDirPos == -2 )
+                            if (rRTLData.nCurDirPos == -2)
                             {
                                 aPath = ".";
                             }
-                            else if( pRTLData->nCurDirPos == -1 )
+                            else if (rRTLData.nCurDirPos == -1)
                             {
                                 aPath = "..";
                             }
-                            pRTLData->nCurDirPos++;
+                            rRTLData.nCurDirPos++;
                         }
-                        else if( pRTLData->nCurDirPos >= pRTLData->aDirSeq.getLength() )
+                        else if (rRTLData.nCurDirPos >= rRTLData.aDirSeq.getLength())
                         {
-                            pRTLData->aDirSeq.realloc( 0 );
+                            rRTLData.aDirSeq.realloc(0);
                             aPath.clear();
                             break;
                         }
                         else
                         {
-                            OUString aFile = pRTLData->aDirSeq.getConstArray()[pRTLData->nCurDirPos++];
+                            OUString aFile
+                                = rRTLData.aDirSeq.getConstArray()[rRTLData.nCurDirPos++];
 
                             if( bCompatibility )
                             {
@@ -2784,7 +2780,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                                                   INetURLObject::DecodeMechanism::WithCharset );
                         }
 
-                        bool bMatch = implCheckWildcard( aPath, pRTLData );
+                        bool bMatch = implCheckWildcard(aPath, rRTLData);
                         if( !bMatch )
                         {
                             continue;
@@ -2802,31 +2798,32 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
             {
                 OUString aFileParam = rPar.Get(1)->GetOUString();
 
-                OUString aDirURL = implSetupWildcard( aFileParam, pRTLData );
+                OUString aDirURL = implSetupWildcard(aFileParam, rRTLData);
 
                 SbAttributes nFlags = SbAttributes::NONE;
                 if ( nParCount > 2 )
                 {
-                    pRTLData->nDirFlags = nFlags = static_cast<SbAttributes>( rPar.Get(2)->GetInteger() );
+                    rRTLData.nDirFlags = nFlags
+                        = static_cast<SbAttributes>(rPar.Get(2)->GetInteger());
                 }
                 else
                 {
-                    pRTLData->nDirFlags = SbAttributes::NONE;
+                    rRTLData.nDirFlags = SbAttributes::NONE;
                 }
 
                 // Read directory
                 bool bIncludeFolders = bool(nFlags & SbAttributes::DIRECTORY);
-                pRTLData->pDir = o3tl::make_unique<Directory>( aDirURL );
-                FileBase::RC nRet = pRTLData->pDir->open();
+                rRTLData.pDir = o3tl::make_unique<Directory>(aDirURL);
+                FileBase::RC nRet = rRTLData.pDir->open();
                 if( nRet != FileBase::E_None )
                 {
-                    pRTLData->pDir.reset();
+                    rRTLData.pDir.reset();
                     rPar.Get(0)->PutString( OUString() );
                     return;
                 }
 
                 // #86950 Add "." and ".." directories for VB compatibility
-                pRTLData->nCurDirPos = 0;
+                rRTLData.nCurDirPos = 0;
                 if( bIncludeFolders )
                 {
                     bool bRoot = isRootDir( aDirURL );
@@ -2837,36 +2834,36 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                     // returned "." and for -1 ".."
                     if( !bRoot )
                     {
-                        pRTLData->nCurDirPos = -2;
+                        rRTLData.nCurDirPos = -2;
                     }
                 }
 
             }
 
-            if( pRTLData->pDir )
+            if (rRTLData.pDir)
             {
-                bool bFolderFlag = bool(pRTLData->nDirFlags & SbAttributes::DIRECTORY);
+                bool bFolderFlag = bool(rRTLData.nDirFlags & SbAttributes::DIRECTORY);
                 for( ;; )
                 {
-                    if( pRTLData->nCurDirPos < 0 )
+                    if (rRTLData.nCurDirPos < 0)
                     {
-                        if( pRTLData->nCurDirPos == -2 )
+                        if (rRTLData.nCurDirPos == -2)
                         {
                             aPath = ".";
                         }
-                        else if( pRTLData->nCurDirPos == -1 )
+                        else if (rRTLData.nCurDirPos == -1)
                         {
                             aPath = "..";
                         }
-                        pRTLData->nCurDirPos++;
+                        rRTLData.nCurDirPos++;
                     }
                     else
                     {
                         DirectoryItem aItem;
-                        FileBase::RC nRet = pRTLData->pDir->getNextItem( aItem );
+                        FileBase::RC nRet = rRTLData.pDir->getNextItem(aItem);
                         if( nRet != FileBase::E_None )
                         {
-                            pRTLData->pDir.reset();
+                            rRTLData.pDir.reset();
                             aPath.clear();
                             break;
                         }
@@ -2894,7 +2891,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                         aPath = aFileStatus.getFileName();
                     }
 
-                    bool bMatch = implCheckWildcard( aPath, pRTLData );
+                    bool bMatch = implCheckWildcard(aPath, rRTLData);
                     if( !bMatch )
                     {
                         continue;
