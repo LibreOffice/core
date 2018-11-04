@@ -848,9 +848,9 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                         }
                     }
                 }
-                 int nGap = aConverter.Tell() & 3;
-                 if( nGap )
-                     aConverter.SeekRel( 4-nGap );
+                int nGap = aConverter.Tell() & 3;
+                if (nGap)
+                    aConverter.SeekRel( 4-nGap );
             }
             fclose( pFrame ); // deletes tmpfile
             if( eType != FrameStyle_Separated )
