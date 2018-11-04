@@ -634,7 +634,6 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
 
         lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
 
-        std::vector< std::vector< OUString > >::iterator aDataIter;
         for(const auto& rData : m_pCSVData->aDBData)
         {
             lcl_WriteValues(&rData, pStream);
