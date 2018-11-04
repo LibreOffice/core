@@ -64,7 +64,7 @@ const CLSID CLSID_PERSISTENT_HANDLER_ADDIN =
 const CLSID CLSID_FILTER_HANDLER =
 {0x7bc0e710, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
 
-enum FilterState
+enum class FilterState
 {
     FilteringContent,                           // Filtering the content property
     FilteringProperty                           // Filtering the pseudo property
