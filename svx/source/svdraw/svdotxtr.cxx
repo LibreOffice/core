@@ -102,8 +102,8 @@ void SdrTextObj::NbcMove(const Size& rSiz)
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    bool bNoShearMerk=aGeo.nShearAngle==0;
-    bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;
+    bool bNotSheared=aGeo.nShearAngle==0;
+    bool bRotate90=bNotSheared && aGeo.nRotationAngle % 9000 ==0;
     bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
     bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
@@ -153,7 +153,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         Poly2Rect(aPol, maRect, aGeo);
     }
 
-    if (bRota90Merk) {
+    if (bRotate90) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (!bRota90) { // there's seems to be a rounding error occurring: correct it
             long a=NormAngle36000(aGeo.nRotationAngle);
@@ -165,7 +165,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aGeo.nRotationAngle=a;
             aGeo.RecalcSinCos();
         }
-        if (bNoShearMerk!=(aGeo.nShearAngle==0)) { // correct a rounding error occurring with Shear
+        if (bNotSheared!=(aGeo.nShearAngle==0)) { // correct a rounding error occurring with Shear
             aGeo.nShearAngle=0;
             aGeo.RecalcTan();
         }
@@ -233,12 +233,12 @@ void SdrTextObj::NbcShear(const Point& rRef, long /*nAngle*/, double tn, bool bV
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    bool bNoShearMerk=aGeo.nShearAngle==0;
-    bool bRota90Merk = false;
-    if (bNoShearMerk &&
+    bool bNotSheared=aGeo.nShearAngle==0;
+    bool bRotate90 = false;
+    if (bNotSheared &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
-        bRota90Merk=aGeo.nRotationAngle % 9000 ==0;
+        bRotate90=aGeo.nRotationAngle % 9000 ==0;
     }
     tools::Polygon aPol(Rect2Poly(maRect,aGeo));
     sal_uInt16 i;
@@ -255,9 +255,9 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     aPol[4]=aPol0[1];
     Poly2Rect(aPol,maRect,aGeo);
 
-    if (bRota90Merk) {
+    if (bRotate90) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
-        if (bRota90Merk && !bRota90) { // there's seems to be a rounding error occurring: correct it
+        if (bRotate90 && !bRota90) { // there's seems to be a rounding error occurring: correct it
             long a=NormAngle36000(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
@@ -268,7 +268,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
             aGeo.RecalcSinCos();
         }
     }
-    if (bNoShearMerk!=(aGeo.nShearAngle==0)) { // correct a rounding error occurring with Shear
+    if (bNotSheared!=(aGeo.nShearAngle==0)) { // correct a rounding error occurring with Shear
         aGeo.nShearAngle=0;
         aGeo.RecalcTan();
     }
