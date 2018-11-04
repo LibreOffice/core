@@ -482,20 +482,16 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
     uno::Sequence< uno::Any > aOutArgs;
 
     try
-    {   ErrCode nErr( ERRCODE_BASIC_INTERNAL_ERROR );
-        if ( pShell )
+    {
+        ErrCode nErr = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+        sal_Int32 nLen = aOutArgs.getLength();
+        // convert any out params to seem like they were inputs
+        if (nLen)
         {
-            nErr = pShell->CallXScript( sUrl,
-                               aArgs, aRet, aOutArgsIndex, aOutArgs, false );
-            sal_Int32 nLen = aOutArgs.getLength();
-            // convert any out params to seem like they were inputs
-            if ( nLen )
+            for (sal_Int32 index = 0; index < nLen; ++index)
             {
-                for ( sal_Int32 index=0; index < nLen; ++index )
-                {
-                    sal_Int32 nOutIndex = aOutArgsIndex[ index ];
-                    aArgs[ nOutIndex ] = aOutArgs[ index ];
-                }
+                sal_Int32 nOutIndex = aOutArgsIndex[index];
+                aArgs[nOutIndex] = aOutArgs[index];
             }
         }
         bRes = ( nErr == ERRCODE_NONE );
