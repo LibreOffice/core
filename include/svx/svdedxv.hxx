@@ -80,7 +80,7 @@ protected:
     std::unique_ptr<SdrOutliner> pTextEditOutliner;     // outliner for the TextEdit
     OutlinerView*               pTextEditOutlinerView; // current view of the outliners
     VclPtr<vcl::Window>         pTextEditWin;          // matching window to pTextEditOutlinerView
-    vcl::Cursor*                pTextEditCursorMerker; // to restore the cursor in each window
+    vcl::Cursor*                pTextEditCursorBuffer; // to restore the cursor in each window
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;
     VclPtr<vcl::Window>         pMacroWin;
