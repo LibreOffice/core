@@ -78,7 +78,7 @@ COooFilter::COooFilter() :
     m_lRefs(1),
     m_pContentReader(nullptr),
     m_pMetaInfoReader(nullptr),
-    m_eState(FilteringContent),
+    m_eState(FilterState::FilteringContent),
     m_ulUnicodeBufferLen(0),
     m_ulUnicodeCharsRead(0),
     m_ulPropertyNum(0),
@@ -263,14 +263,14 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
         if ( m_fContents )
         {
             m_fEof = FALSE;
-            m_eState = FilteringContent;
+            m_eState = FilterState::FilteringContent;
             m_ulUnicodeCharsRead = 0;
             m_ChunkPosition = 0;
         }
         else
         {
             m_fEof = TRUE;
-            m_eState = FilteringProperty;
+            m_eState = FilterState::FilteringProperty;
         }
         m_ulChunkID = 1;
     }
@@ -307,7 +307,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
     {
         switch ( m_eState )
         {
-        case FilteringContent:
+        case FilterState::FilteringContent:
         {
             if( m_ChunkPosition == m_pContentReader ->getChunkBuffer().size() )
             {
@@ -317,7 +317,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
 
             if ( !m_fContents || m_fEof )
             {
-                m_eState = FilteringProperty;
+                m_eState = FilterState::FilteringProperty;
                 continue;
             }
             m_pwsBuffer = m_pContentReader -> getChunkBuffer()[m_ChunkPosition].second;
@@ -339,7 +339,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
             m_ChunkPosition++;
             return S_OK;
         }
-        case FilteringProperty:
+        case FilterState::FilteringProperty:
         {
             if ( m_cAttributes ==  0 )
                 return FILTER_E_END_OF_CHUNKS;
@@ -377,8 +377,6 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
                 return S_OK;
             }
         }
-        default:
-            return E_FAIL;
         }//switch(...)
     }//for(;;)
 }
@@ -401,9 +399,9 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
 {
     switch ( m_eState )
     {
-    case FilteringProperty:
+    case FilterState::FilteringProperty:
         return FILTER_E_NO_TEXT;
-    case FilteringContent:
+    case FilterState::FilteringContent:
     {
         if ( !m_fContents || 0 == m_ulUnicodeBufferLen )
         {
@@ -425,9 +423,8 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
         }
         return S_OK;
     }
-    default:
-        return E_FAIL;
     }
+    return E_FAIL; // Should not happen!
 }
 //M-------------------------------------------------------------------------
 //  Method:     GetMetaInfoNameFromPropertyId
@@ -463,9 +460,9 @@ static ::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
 
 SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
 {
-    if (m_eState == FilteringContent)
+    if (m_eState == FilterState::FilteringContent)
         return FILTER_E_NO_VALUES;
-    else if (m_eState == FilteringProperty)
+    else // m_eState == FilteringProperty
     {
         if ( m_cAttributes == 0 || ( m_ulCurrentPropertyNum == m_ulPropertyNum ) )
             return FILTER_E_NO_MORE_VALUES;
@@ -489,8 +486,6 @@ SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
         m_ulCurrentPropertyNum = m_ulPropertyNum;
         return S_OK;
     }
-    else
-        return E_FAIL;
 }
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::BindRegion          (IFilter::BindRegion)
