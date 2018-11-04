@@ -227,7 +227,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     pVDev->SetTextColor( COL_BLACK );
     pVDev->SetTextFillColor();
     pVDev->ImplNewFont();
-    pVDev->InitFont();
+    if (!pVDev->InitFont())
+        return false;
     pVDev->ImplInitTextColor();
 
     // draw text into upper left corner

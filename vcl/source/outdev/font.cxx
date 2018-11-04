@@ -974,7 +974,8 @@ bool OutputDevice::InitFont() const
 
 const LogicalFontInstance* OutputDevice::GetFontInstance() const
 {
-    InitFont();
+    if (!InitFont())
+        return nullptr;
     return mpFontInstance.get();
 }
 
