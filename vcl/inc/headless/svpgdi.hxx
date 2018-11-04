@@ -29,7 +29,6 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
-#include <headless/CustomWidgetDraw.hxx>
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
