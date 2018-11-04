@@ -278,18 +278,20 @@ namespace cppcanvas
                 else
                     nWaveWidth *= 2.0;
 
-                o_rPoly.append(::basegfx::utils::createWaveline(
-                            ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x, nY1 + nOffset, nX2, nY2 + nOffset)),
-                            nWaveWidth,
-                            nWaveWidth * 0.5));
+                basegfx::B2DPolygon aLine;
+                aLine.append(basegfx::B2DPoint(x, nY2 + nOffset));
+                aLine.append(basegfx::B2DPoint(x + nWidth, nY2 + nOffset));
+
+                o_rPoly.append(::basegfx::utils::createWaveline(aLine, nWaveWidth, nWaveWidth * 0.5));
 
                 if (nLineStyle == LINESTYLE_DOUBLEWAVE)
                 {
                     nOffset = nHeight * 1.2;
-                    o_rPoly.append(::basegfx::utils::createWaveline(
-                                ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x, nY1 + nOffset, nX2, nY2 + nOffset)),
-                                nWaveWidth,
-                                nWaveWidth * 0.5));
+
+                    basegfx::B2DPolygon aLine2;
+                    aLine2.append(basegfx::B2DPoint(x, nY2 + nOffset));
+                    aLine2.append(basegfx::B2DPoint(x + nWidth, nY2 + nOffset));
+                    o_rPoly.append(::basegfx::utils::createWaveline(aLine2, nWaveWidth, nWaveWidth * 0.5));
                 }
             }
 
