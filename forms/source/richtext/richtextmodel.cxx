@@ -524,17 +524,8 @@ namespace frm
 
     Sequence< sal_Int8 > ORichTextModel::getEditEngineTunnelId()
     {
-        static ::cppu::OImplementationId * pId = nullptr;
-        if (! pId)
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if (! pId)
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        static cppu::OImplementationId aId;
+        return aId.getImplementationId();
     }
 
 
