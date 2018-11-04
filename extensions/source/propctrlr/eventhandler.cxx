@@ -154,56 +154,53 @@ namespace pcr
 
     namespace
     {
-        #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
-            s_aKnownEvents.emplace(  \
+        #define DESCRIBE_EVENT( map, asciinamespace, asciilistener, asciimethod, id_postfix ) \
+            map.emplace(  \
                 asciimethod, \
                 EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) )
 
         bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )
         {
-            static EventMap s_aKnownEvents;
-            if ( s_aKnownEvents.empty() )
-            {
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                if ( s_aKnownEvents.empty() )
-                {
-                    static sal_Int32 nEventId = 0;
+            static EventMap s_aKnownEvents = []() {
+                EventMap aMap;
+                sal_Int32 nEventId = 0;
 
-                    DESCRIBE_EVENT( "form", "XApproveActionListener",       "approveAction",            APPROVEACTIONPERFORMED );
-                    DESCRIBE_EVENT( "awt",  "XActionListener",              "actionPerformed",          ACTIONPERFORMED );
-                    DESCRIBE_EVENT( "form", "XChangeListener",              "changed",                  CHANGED );
-                    DESCRIBE_EVENT( "awt",  "XTextListener",                "textChanged",              TEXTCHANGED );
-                    DESCRIBE_EVENT( "awt",  "XItemListener",                "itemStateChanged",         ITEMSTATECHANGED );
-                    DESCRIBE_EVENT( "awt",  "XFocusListener",               "focusGained",              FOCUSGAINED );
-                    DESCRIBE_EVENT( "awt",  "XFocusListener",               "focusLost",                FOCUSLOST );
-                    DESCRIBE_EVENT( "awt",  "XKeyListener",                 "keyPressed",               KEYTYPED );
-                    DESCRIBE_EVENT( "awt",  "XKeyListener",                 "keyReleased",              KEYUP );
-                    DESCRIBE_EVENT( "awt",  "XMouseListener",               "mouseEntered",             MOUSEENTERED );
-                    DESCRIBE_EVENT( "awt",  "XMouseMotionListener",         "mouseDragged",             MOUSEDRAGGED );
-                    DESCRIBE_EVENT( "awt",  "XMouseMotionListener",         "mouseMoved",               MOUSEMOVED );
-                    DESCRIBE_EVENT( "awt",  "XMouseListener",               "mousePressed",             MOUSEPRESSED );
-                    DESCRIBE_EVENT( "awt",  "XMouseListener",               "mouseReleased",            MOUSERELEASED );
-                    DESCRIBE_EVENT( "awt",  "XMouseListener",               "mouseExited",              MOUSEEXITED );
-                    DESCRIBE_EVENT( "form", "XResetListener",               "approveReset",             APPROVERESETTED );
-                    DESCRIBE_EVENT( "form", "XResetListener",               "resetted",                 RESETTED );
-                    DESCRIBE_EVENT( "form", "XSubmitListener",              "approveSubmit",            SUBMITTED );
-                    DESCRIBE_EVENT( "form", "XUpdateListener",              "approveUpdate",            BEFOREUPDATE );
-                    DESCRIBE_EVENT( "form", "XUpdateListener",              "updated",                  AFTERUPDATE );
-                    DESCRIBE_EVENT( "form", "XLoadListener",                "loaded",                   LOADED );
-                    DESCRIBE_EVENT( "form", "XLoadListener",                "reloading",                RELOADING );
-                    DESCRIBE_EVENT( "form", "XLoadListener",                "reloaded",                 RELOADED );
-                    DESCRIBE_EVENT( "form", "XLoadListener",                "unloading",                UNLOADING );
-                    DESCRIBE_EVENT( "form", "XLoadListener",                "unloaded",                 UNLOADED );
-                    DESCRIBE_EVENT( "form", "XConfirmDeleteListener",       "confirmDelete",            CONFIRMDELETE );
-                    DESCRIBE_EVENT( "sdb",  "XRowSetApproveListener",       "approveRowChange",         APPROVEROWCHANGE );
-                    DESCRIBE_EVENT( "sdbc", "XRowSetListener",              "rowChanged",               ROWCHANGE );
-                    DESCRIBE_EVENT( "sdb",  "XRowSetApproveListener",       "approveCursorMove",        POSITIONING );
-                    DESCRIBE_EVENT( "sdbc", "XRowSetListener",              "cursorMoved",              POSITIONED );
-                    DESCRIBE_EVENT( "form", "XDatabaseParameterListener",   "approveParameter",         APPROVEPARAMETER );
-                    DESCRIBE_EVENT( "sdb",  "XSQLErrorListener",            "errorOccured",             ERROROCCURRED );
-                    DESCRIBE_EVENT( "awt",  "XAdjustmentListener",          "adjustmentValueChanged",   ADJUSTMENTVALUECHANGED );
-                }
-            }
+                DESCRIBE_EVENT(aMap, "form", "XApproveActionListener",     "approveAction",          APPROVEACTIONPERFORMED);
+                DESCRIBE_EVENT(aMap, "awt",  "XActionListener",            "actionPerformed",        ACTIONPERFORMED);
+                DESCRIBE_EVENT(aMap, "form", "XChangeListener",            "changed",                CHANGED);
+                DESCRIBE_EVENT(aMap, "awt",  "XTextListener",              "textChanged",            TEXTCHANGED);
+                DESCRIBE_EVENT(aMap, "awt",  "XItemListener",              "itemStateChanged",       ITEMSTATECHANGED);
+                DESCRIBE_EVENT(aMap, "awt",  "XFocusListener",             "focusGained",            FOCUSGAINED);
+                DESCRIBE_EVENT(aMap, "awt",  "XFocusListener",             "focusLost",              FOCUSLOST);
+                DESCRIBE_EVENT(aMap, "awt",  "XKeyListener",               "keyPressed",             KEYTYPED);
+                DESCRIBE_EVENT(aMap, "awt",  "XKeyListener",               "keyReleased",            KEYUP);
+                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mouseEntered",           MOUSEENTERED);
+                DESCRIBE_EVENT(aMap, "awt",  "XMouseMotionListener",       "mouseDragged",           MOUSEDRAGGED);
+                DESCRIBE_EVENT(aMap, "awt",  "XMouseMotionListener",       "mouseMoved",             MOUSEMOVED);
+                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mousePressed",           MOUSEPRESSED);
+                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mouseReleased",          MOUSERELEASED);
+                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mouseExited",            MOUSEEXITED);
+                DESCRIBE_EVENT(aMap, "form", "XResetListener",             "approveReset",           APPROVERESETTED);
+                DESCRIBE_EVENT(aMap, "form", "XResetListener",             "resetted",               RESETTED);
+                DESCRIBE_EVENT(aMap, "form", "XSubmitListener",            "approveSubmit",          SUBMITTED);
+                DESCRIBE_EVENT(aMap, "form", "XUpdateListener",            "approveUpdate",          BEFOREUPDATE);
+                DESCRIBE_EVENT(aMap, "form", "XUpdateListener",            "updated",                AFTERUPDATE);
+                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "loaded",                 LOADED);
+                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "reloading",              RELOADING);
+                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "reloaded",               RELOADED);
+                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "unloading",              UNLOADING);
+                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "unloaded",               UNLOADED);
+                DESCRIBE_EVENT(aMap, "form", "XConfirmDeleteListener",     "confirmDelete",          CONFIRMDELETE);
+                DESCRIBE_EVENT(aMap, "sdb",  "XRowSetApproveListener",     "approveRowChange",       APPROVEROWCHANGE);
+                DESCRIBE_EVENT(aMap, "sdbc", "XRowSetListener",            "rowChanged",             ROWCHANGE);
+                DESCRIBE_EVENT(aMap, "sdb",  "XRowSetApproveListener",     "approveCursorMove",      POSITIONING);
+                DESCRIBE_EVENT(aMap, "sdbc", "XRowSetListener",            "cursorMoved",            POSITIONED);
+                DESCRIBE_EVENT(aMap, "form", "XDatabaseParameterListener", "approveParameter",       APPROVEPARAMETER);
+                DESCRIBE_EVENT(aMap, "sdb",  "XSQLErrorListener",          "errorOccured",           ERROROCCURRED);
+                DESCRIBE_EVENT(aMap, "awt",  "XAdjustmentListener",        "adjustmentValueChanged", ADJUSTMENTVALUECHANGED);
+
+                return aMap;
+            }();
 
             EventMap::const_iterator pos = s_aKnownEvents.find( _rMethodName );
             if ( pos == s_aKnownEvents.end() )

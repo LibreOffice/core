@@ -79,18 +79,8 @@ namespace
 {
     const Sequence< OUString >& lcl_getLanguageDependentProperties()
     {
-        static Sequence< OUString > s_aLanguageDependentProperties;
-        if ( s_aLanguageDependentProperties.getLength() == 0 )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( s_aLanguageDependentProperties.getLength() == 0 )
-            {
-                s_aLanguageDependentProperties.realloc( 2 );
-                s_aLanguageDependentProperties[0] = "HelpText";
-                s_aLanguageDependentProperties[1] = "Title";
-                // note: properties must be sorted
-            }
-        }
+        // note: properties must be sorted
+        static Sequence<OUString> s_aLanguageDependentProperties{ "HelpText", "Title" };
         return s_aLanguageDependentProperties;
     }
 }

@@ -95,35 +95,25 @@ static const DispatchInfo SupportedCommandsArray[] =
     { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , true  },
     { ".uno:Bib/sdbsource"      ,   frame::CommandGroup::DATA       , true  },
     { ".uno:Bib/Mapping"        ,   frame::CommandGroup::DATA       , true  },
-    { nullptr                         ,   0                               , false }
 };
 
 typedef std::unordered_map< OUString, CacheDispatchInfo > CmdToInfoCache;
 
 static const CmdToInfoCache& GetCommandToInfoCache()
 {
-    static bool       bCacheInitialized = false;
-    static CmdToInfoCache aCmdToInfoCache;
-
-    if ( !bCacheInitialized )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !bCacheInitialized )
+    static CmdToInfoCache aCmdToInfoCache = []() {
+        CmdToInfoCache aCache;
+        for (const auto& command : SupportedCommandsArray)
         {
-            sal_Int32 i( 0 );
-            while ( SupportedCommandsArray[i].pCommand != nullptr )
-            {
-                OUString aCommand( OUString::createFromAscii( SupportedCommandsArray[i].pCommand ));
+            OUString aCommand(OUString::createFromAscii(command.pCommand));
 
-                CacheDispatchInfo aDispatchInfo;
-                aDispatchInfo.nGroupId          = SupportedCommandsArray[i].nGroupId;
-                aDispatchInfo.bActiveConnection = SupportedCommandsArray[i].bActiveConnection;
-                aCmdToInfoCache.emplace(aCommand, aDispatchInfo);
-                ++i;
-            }
-            bCacheInitialized = true;
+            CacheDispatchInfo aDispatchInfo;
+            aDispatchInfo.nGroupId = command.nGroupId;
+            aDispatchInfo.bActiveConnection = command.bActiveConnection;
+            aCache.emplace(aCommand, aDispatchInfo);
         }
-    }
+        return aCache;
+    }();
 
     return aCmdToInfoCache;
 }
