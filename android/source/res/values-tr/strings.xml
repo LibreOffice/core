@@ -240,4 +240,5 @@
     <string name="part">Bölüm</string>
     <string name="highlight_color">Vurgulama Rengi</string>
     <string name="font_color">Metin Rengi</string>
+    <string name="action_rename_slide">Slaytı yeniden adlandır</string>
 </resources>

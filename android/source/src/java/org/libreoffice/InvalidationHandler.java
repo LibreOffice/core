@@ -132,7 +132,8 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                 if (payloadObject.getString("success").equals("true")) {
                     mContext.saveFilesToCloud();
                 }
-            }else if(payloadObject.getString("commandName").equals(".uno:Name")){
+            }else if(payloadObject.getString("commandName").equals(".uno:Name") ||
+                    payloadObject.getString("commandName").equals(".uno:RenamePage")){
                 //success returns false even though its true for some reason,
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
@@ -144,7 +145,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                     }
                 });
             } else if(payloadObject.getString("commandName").equals(".uno:Remove") ||
-                    payloadObject.getString("commandName").equals(".uno:DeletePage")  ) {
+                    payloadObject.getString("commandName").equals(".uno:DeletePage") ) {
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
