@@ -39,35 +39,11 @@ OFSInputStreamContainer::~OFSInputStreamContainer()
 
 uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
 {
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
+    static cppu::OTypeCollection aTypeCollection(cppu::UnoType<io::XStream>::get(),
+                                                 cppu::UnoType<io::XInputStream>::get(),
+                                                 cppu::UnoType<io::XSeekable>::get());
 
-    if ( pTypeCollection == nullptr )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex ) ;
-
-        if ( pTypeCollection == nullptr )
-        {
-            if ( m_bSeekable )
-            {
-                static ::cppu::OTypeCollection aTypeCollection(
-                        cppu::UnoType<io::XStream>::get(),
-                        cppu::UnoType<io::XInputStream>::get(),
-                        cppu::UnoType<io::XSeekable>::get());
-
-                pTypeCollection = &aTypeCollection ;
-            }
-            else
-            {
-                static ::cppu::OTypeCollection aTypeCollection(
-                        cppu::UnoType<io::XStream>::get(),
-                        cppu::UnoType<io::XInputStream>::get());
-
-                pTypeCollection = &aTypeCollection ;
-            }
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
+    return aTypeCollection.getTypes();
 
 }
 
