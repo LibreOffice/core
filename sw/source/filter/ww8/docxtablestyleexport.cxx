@@ -29,13 +29,16 @@ private:
     sax_fastparser::FSHelperPtr m_pSerializer;
 
 public:
+    Impl(SwDoc* pDoc)
+        : m_pDoc(pDoc)
+    {
+    }
+
     void TableStyle(uno::Sequence<beans::PropertyValue>& rStyle);
 
     void setSerializer(sax_fastparser::FSHelperPtr pSerializer) { m_pSerializer = pSerializer; }
 
     sax_fastparser::FSHelperPtr getSerializer() const { return m_pSerializer; }
-
-    void setDoc(SwDoc* pDoc) { m_pDoc = pDoc; }
 
     SwDoc* getDoc() const { return m_pDoc; }
 
@@ -705,9 +708,8 @@ void DocxTableStyleExport::SetSerializer(const sax_fastparser::FSHelperPtr& pSer
 
 DocxTableStyleExport::DocxTableStyleExport(SwDoc* pDoc,
                                            const sax_fastparser::FSHelperPtr& pSerializer)
-    : m_pImpl(o3tl::make_unique<Impl>())
+    : m_pImpl(o3tl::make_unique<Impl>(pDoc))
 {
-    m_pImpl->setDoc(pDoc);
     m_pImpl->setSerializer(pSerializer);
 }
 
