@@ -82,7 +82,17 @@ void SAL_CALL OContentHelper::disposing()
 }
 
 IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.star.ucb.Content");
-IMPLEMENT_IMPLEMENTATION_ID(OContentHelper)
+
+css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelImplementationId()
+{
+    static cppu::OImplementationId aId;
+    return aId.getImplementationId();
+}
+
+css::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
+{
+    return css::uno::Sequence<sal_Int8>();
+}
 
 // XContent
 Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  )

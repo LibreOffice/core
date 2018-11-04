@@ -151,7 +151,16 @@ sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8
     return 0;
 }
 
-IMPLEMENT_IMPLEMENTATION_ID(OQueryDescriptor_Base)
+css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getUnoTunnelImplementationId()
+{
+    static cppu::OImplementationId aId;
+    return aId.getImplementationId();
+}
+
+css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getImplementationId()
+{
+    return css::uno::Sequence<sal_Int8>();
+}
 
 void OQueryDescriptor_Base::setColumnsOutOfDate( bool _bOutOfDate )
 {

@@ -152,17 +152,6 @@ public:
 
 // XTypeProvider helpers
 
-#define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
-css::uno::Sequence< sal_Int8 > classname::getUnoTunnelImplementationId() \
-{   \
-    static ::cppu::OImplementationId aId;  \
-    return aId.getImplementationId();  \
-} \
-css::uno::Sequence< sal_Int8 > classname::getImplementationId()    \
-{   \
-    return css::uno::Sequence<sal_Int8>(); \
-}
-
 #define IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )    \
     css::uno::Sequence< css::uno::Type > classname::getTypes()    \
     {   \
