@@ -148,10 +148,13 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
     if ( nIndexStart != -1 )
     {
         sal_Int32 nIndexEnd = rVar.indexOf( ')', nIndexStart );
-        rIndex = rVar.copy(nIndexStart + 1, nIndexEnd - nIndexStart - 1);
-        rVar = rVar.copy(0, nIndexStart);
-        rVar = comphelper::string::stripEnd(rVar, ' ');
-        rIndex = comphelper::string::strip(rIndex, ' ');
+        if (nIndexEnd != -1)
+        {
+            rIndex = rVar.copy(nIndexStart + 1, nIndexEnd - nIndexStart - 1);
+            rVar = rVar.copy(0, nIndexStart);
+            rVar = comphelper::string::stripEnd(rVar, ' ');
+            rIndex = comphelper::string::strip(rIndex, ' ');
+        }
     }
 
     if ( !rVar.isEmpty() )
