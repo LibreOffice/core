@@ -113,23 +113,15 @@ uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rTyp
 
 uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
 {
-    static uno::Sequence< uno::Type > aTypeList;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !aTypeList.getLength() )
-    {
-        std::vector< uno::Type > aTypes;
-        aTypes.push_back( cppu::UnoType<lang::XComponent>::get() );
-        aTypes.push_back( cppu::UnoType<lang::XTypeProvider>::get() );
-        aTypes.push_back( cppu::UnoType<uno::XAggregation>::get() );
-        aTypes.push_back( cppu::UnoType<uno::XWeak>::get() );
-        aTypes.push_back( cppu::UnoType<lang::XServiceInfo>::get() );
-        aTypes.push_back( cppu::UnoType<lang::XInitialization>::get() );
-        aTypes.push_back( cppu::UnoType<frame::XTerminateListener>::get() );
-        aTypes.push_back( cppu::UnoType<ui::dialogs::XExecutableDialog>::get() );
-        aTypes.push_back( cppu::UnoType<beans::XPropertySet>::get() );
-        aTypeList = comphelper::containerToSequence( aTypes );
-    }
+    static uno::Sequence<uno::Type> aTypeList{ cppu::UnoType<lang::XComponent>::get(),
+                                               cppu::UnoType<lang::XTypeProvider>::get(),
+                                               cppu::UnoType<uno::XAggregation>::get(),
+                                               cppu::UnoType<uno::XWeak>::get(),
+                                               cppu::UnoType<lang::XServiceInfo>::get(),
+                                               cppu::UnoType<lang::XInitialization>::get(),
+                                               cppu::UnoType<frame::XTerminateListener>::get(),
+                                               cppu::UnoType<ui::dialogs::XExecutableDialog>::get(),
+                                               cppu::UnoType<beans::XPropertySet>::get() };
 
     return aTypeList;
 }

@@ -76,33 +76,14 @@ css::uno::Sequence< sal_Int8 > SAL_CALL SoundHandler::getImplementationId()
 
 css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes()
 {
-    /* Optimize this method !                                       */
-    /* We initialize a static variable only one time.               */
-    /* And we don't must use a mutex at every call!                 */
-    /* For the first call; pTypeCollection is NULL -                */
-    /* for the second call pTypeCollection is different from NULL!  */
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
-    if ( pTypeCollection == nullptr )
-    {
-        /* Ready for multithreading; get global mutex for first call of this method only! see before   */
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        /* Control these pointer again ... it can be, that another instance will be faster then these! */
-        if ( pTypeCollection == nullptr )
-        {
-            /* Create a static typecollection ...           */
-            static ::cppu::OTypeCollection aTypeCollection
-                (
-                    cppu::UnoType<css::lang::XTypeProvider>::get(),
-                    cppu::UnoType<css::lang::XServiceInfo>::get(),
-                    cppu::UnoType<css::frame::XNotifyingDispatch>::get(),
-                    cppu::UnoType<css::frame::XDispatch>::get(),
-                    cppu::UnoType<css::document::XExtendedFilterDetection>::get()
-                );
-            /* ... and set his address to static pointer! */
-            pTypeCollection = &aTypeCollection ;
-        }
-    }
-    return pTypeCollection->getTypes();
+    static ::cppu::OTypeCollection aTypeCollection(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::lang::XServiceInfo>::get(),
+        cppu::UnoType<css::frame::XNotifyingDispatch>::get(),
+        cppu::UnoType<css::frame::XDispatch>::get(),
+        cppu::UnoType<css::document::XExtendedFilterDetection>::get());
+
+    return aTypeCollection.getTypes();
 }
 
 #define IMPLEMENTATIONNAME_SOUNDHANDLER OUString("com.sun.star.comp.framework.SoundHandler")
