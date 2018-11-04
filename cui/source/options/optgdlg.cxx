@@ -1785,16 +1785,13 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
         SupportHdl( m_pAsianSupportCB );
     }
 
-    const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry(
+    const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry(
             (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang);
     sal_Int32 nPos = m_pCurrencyLB->GetEntryPos( nullptr );
-    if (pCurr)
-    {
-        // Update the "Default ..." currency.
-        m_pCurrencyLB->RemoveEntry( nPos );
-        OUString aDefaultCurr = m_sSystemDefaultString + " - " + pCurr->GetBankSymbol();
-        nPos = m_pCurrencyLB->InsertEntry( aDefaultCurr );
-    }
+    // Update the "Default ..." currency.
+    m_pCurrencyLB->RemoveEntry(nPos);
+    OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
+    nPos = m_pCurrencyLB->InsertEntry(aDefaultCurr);
     m_pCurrencyLB->SelectEntryPos( nPos );
 
     // obtain corresponding locale data
