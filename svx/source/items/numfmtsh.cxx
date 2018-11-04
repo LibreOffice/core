@@ -1548,25 +1548,18 @@ bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos, bool const bTmpBanki
     if (nPos != sal_uInt16(-1))
     {
         const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
-        sal_uInt16 nCount = rCurrencyTable.size();
 
-        if (nPos < nCount)
+        if (nPos < rCurrencyTable.size())
         {
             NfWSStringsDtor aWSStringsDtor;
+            pFormatter->GetCurrencyFormatStrings(aWSStringsDtor, rCurrencyTable[nPos], bTmpBanking);
 
-            const NfCurrencyEntry* pTmpCurrencyEntry = &rCurrencyTable[nPos];
-
-            if (pTmpCurrencyEntry != nullptr)
+            for (const OUString& s : aWSStringsDtor)
             {
-                pFormatter->GetCurrencyFormatStrings(aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking);
-
-                for (const OUString& s : aWSStringsDtor)
+                if (s == rFmtString)
                 {
-                    if (s == rFmtString)
-                    {
-                        bFlag = true;
-                        break;
-                    }
+                    bFlag = true;
+                    break;
                 }
             }
         }

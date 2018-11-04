@@ -660,8 +660,7 @@ namespace svxform
         // but because I disabled SelectionHandling, I have to do it later
         sal_uIntPtr nExpectedSelectionCount = GetSelectionCount();
 
-        if( pEntry )
-            GetModel()->Remove( pEntry );
+        GetModel()->Remove(pEntry);
 
         if (nExpectedSelectionCount != GetSelectionCount())
             SynchronizeSelection();

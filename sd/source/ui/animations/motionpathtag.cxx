@@ -947,16 +947,16 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                         rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
                         rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
                     }
-                    else
+                    else // !bWdt0 && !bHgt0
                     {
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
-                        if (          !bHgt0) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
-                        if (!bWdt0          ) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
-                        if (!bWdt0          ) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
-                        if (          !bHgt0) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
+                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
                     }
 
                     while( nCount < rHandlerList.GetHdlCount() )

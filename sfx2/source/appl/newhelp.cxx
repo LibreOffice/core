@@ -3065,10 +3065,8 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                     aURL.Complete = ".uno:SourceView";
                 else if ( TBI_COPY == nActionId )
                     aURL.Complete = ".uno:Copy";
-                else if ( TBI_SELECTIONMODE == nActionId )
+                else // TBI_SELECTIONMODE == nActionId
                     aURL.Complete = ".uno:SelectTextMode";
-                else
-                    aURL.Complete = ".uno:SearchDialog";
                 Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
                 xTrans->parseStrict(aURL);
                 Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
