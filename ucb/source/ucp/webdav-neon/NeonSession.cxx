@@ -2021,7 +2021,7 @@ namespace {
 void runResponseHeaderHandler( void * userdata,
                                const char * value )
 {
-    OUString aHeader( OUString::createFromAscii( value ) );
+    OUString aHeader(value, strlen(value), RTL_TEXTENCODING_ASCII_US);
     sal_Int32 nPos = aHeader.indexOf( ':' );
 
     if ( nPos != -1 )
