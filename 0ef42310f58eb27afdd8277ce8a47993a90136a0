@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_f5202a4c",
+        "filename": "shell/source/win32/shlxthandler/ooofilt/ooofilt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-04T19:14:02Z",
+      "side": 1,
+      "message": "are you sure nothing is being cast to FilterState somewhere? because one way to end up with \"invalid\" values in an enum field is for external data to be static_cast or reinterpret_cast to an enum.\n\nIn which case the default here is serving a purspose.\n\nSometimes these illegal conversions get caught by our ASAN testing, but not always.....",
+      "revId": "0ef42310f58eb27afdd8277ce8a47993a90136a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
