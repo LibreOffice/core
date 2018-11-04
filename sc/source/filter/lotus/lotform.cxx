@@ -39,8 +39,8 @@ static DefTokenId           lcl_KnownAddIn(const OString& rTest);
 void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtString )
 {
     TokenId                     eParam[ 256 ];
-    sal_Int32                       nLauf;
-    TokenId                     nMerk0, nMerk1;
+    sal_Int32                   nPass;
+    TokenId                     nBuf0, nBuf1;
 
     bool                        bAddIn = false;
 
@@ -72,41 +72,41 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
         if( eOc == ocNoName )
         {
             bAddIn = true;
-            nMerk0 = aPool.Store(eOc, OStringToOUString(t, eSrcChar));
+            nBuf0 = aPool.Store(eOc, OStringToOUString(t, eSrcChar));
 
-            aPool << nMerk0;
+            aPool << nBuf0;
         }
     }
 
-    for( nLauf = 0 ; nLauf < nCnt && aStack.HasMoreTokens() ; nLauf++ )
-        aStack >> eParam[ nLauf ];
+    for( nPass = 0 ; nPass < nCnt && aStack.HasMoreTokens() ; nPass++ )
+        aStack >> eParam[ nPass ];
 
-    if (nLauf < nCnt)
+    if (nPass < nCnt)
         // Adapt count to reality. All sort of binary crap is possible.
-        nCnt = static_cast<sal_uInt8>(nLauf);
+        nCnt = static_cast<sal_uInt8>(nPass);
 
     // special cases...
     switch( eOc )
     {
         case ocIndex:
             SAL_WARN_IF( nCnt < 2, "sc.filter", "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
-            nMerk0 = eParam[ 0 ];
+            nBuf0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
-            eParam[ 1 ] = nMerk0;
+            eParam[ 1 ] = nBuf0;
             IncToken( eParam[ 0 ] );
             IncToken( eParam[ 1 ] );
             break;
         case ocIRR:
         {
             SAL_WARN_IF( nCnt != 2, "sc.filter", "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
-            nMerk0 = eParam[ 0 ];
+            nBuf0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
-            eParam[ 1 ] = nMerk0;
+            eParam[ 1 ] = nBuf0;
         }
             break;
         case ocGetYear:
         {
-            nMerk0 = aPool.Store( 1900.0 );
+            nBuf0 = aPool.Store( 1900.0 );
             aPool << ocOpen;
         }
             break;
@@ -158,9 +158,9 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
             {
                 // @CTERM(int,fv,pv) -> NPER(int,pmt=0,-pv,fv)
                 NegToken( eParam[ 0 ] );
-                nMerk0 = eParam[ 1 ];
+                nBuf0 = eParam[ 1 ];
                 eParam[ 1 ] = eParam[ 0 ];
-                eParam[ 0 ] = nMerk0;
+                eParam[ 0 ] = nBuf0;
                 eParam[ 3 ] = eParam[ 2 ];
                 eParam[ 2 ] = aPool.Store( 0.0 );
             }
@@ -217,9 +217,9 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
             // [Parameter{;Parameter}]
             aPool << eParam[ nLast ];
 
-            for( nLauf = nLast - 1 ; nLauf >= 0 ; nLauf-- )
+            for( nPass = nLast - 1 ; nPass >= 0 ; nPass-- )
             {
-                aPool << ocSep << eParam[nLauf];
+                aPool << ocSep << eParam[nPass];
             }
         }
     }
@@ -227,7 +227,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
     // special cases ...
     if( eOc == ocGetYear )
     {
-        aPool << ocClose << ocSub << nMerk0;
+        aPool << ocClose << ocSub << nBuf0;
     }
     else if( eOc == ocFixed )
     {
@@ -235,9 +235,9 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
     }
     else if( eOc == ocFind )
     {
-        nMerk1 = aPool.Store();
-        DecToken( nMerk1 );
-        aPool << nMerk1;
+        nBuf1 = aPool.Store();
+        DecToken( nBuf1 );
+        aPool << nBuf1;
     }
 
     aPool << ocClose;
@@ -391,7 +391,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
     sal_uInt16              nStrLen;
     sal_uInt16              nRngIndex;
     FUNC_TYPE           eType = FT_NOP;
-    TokenId             nMerk0;
+    TokenId             nBuf0;
     DefTokenId          eOc;
     const sal_Char*     pExtName = nullptr;
     RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pLotusRoot->pRngNmBffWK3;
@@ -469,8 +469,8 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 aPool >> aStack;
                 break;
             case FT_Op:
-                aStack >> nMerk0;
-                aPool << aStack << eOc << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << eOc << nBuf0;
                 aPool >> aStack;
                 break;
             case FT_ConstFloat:
