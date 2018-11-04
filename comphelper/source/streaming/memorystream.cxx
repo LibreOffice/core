@@ -190,7 +190,7 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
     const sal_Int32 nBytesToWrite( aData.getLength() );
     if( nBytesToWrite )
     {
-        sal_Int64 nNewSize = static_cast< sal_Int64 >( mnCursor + nBytesToWrite );
+        sal_Int64 nNewSize = static_cast<sal_Int64>(mnCursor) + nBytesToWrite;
         if( nNewSize > SAL_MAX_INT32 )
         {
             OSL_ASSERT(false);
