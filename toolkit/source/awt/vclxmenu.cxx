@@ -237,43 +237,21 @@ css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
     const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    static ::cppu::OTypeCollection* pCollectionMenuBar = nullptr;
-    static ::cppu::OTypeCollection* pCollectionPopupMenu = nullptr;
-
     if ( bIsPopupMenu )
     {
-        if( !pCollectionPopupMenu )
-        {
-            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pCollectionPopupMenu )
-            {
-                static ::cppu::OTypeCollection collectionPopupMenu(
-                cppu::UnoType<css::lang::XTypeProvider>::get(),
-                cppu::UnoType<css::awt::XMenu>::get(),
-                cppu::UnoType<css::awt::XPopupMenu>::get(),
-                cppu::UnoType<css::lang::XServiceInfo>::get());
-                pCollectionPopupMenu = &collectionPopupMenu;
-            }
-        }
-
-        return (*pCollectionPopupMenu).getTypes();
+        static cppu::OTypeCollection collectionPopupMenu(
+            cppu::UnoType<css::lang::XTypeProvider>::get(), cppu::UnoType<css::awt::XMenu>::get(),
+            cppu::UnoType<css::awt::XPopupMenu>::get(),
+            cppu::UnoType<css::lang::XServiceInfo>::get());
+        return collectionPopupMenu.getTypes();
     }
     else
     {
-        if( !pCollectionMenuBar )
-        {
-            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pCollectionMenuBar )
-            {
-                static ::cppu::OTypeCollection collectionMenuBar(
-                cppu::UnoType<css::lang::XTypeProvider>::get(),
-                cppu::UnoType<css::awt::XMenu>::get(),
-                cppu::UnoType<css::awt::XMenuBar>::get(),
-                cppu::UnoType<css::lang::XServiceInfo>::get());
-                pCollectionMenuBar = &collectionMenuBar;
-            }
-        }
-        return (*pCollectionMenuBar).getTypes();
+        static cppu::OTypeCollection collectionMenuBar(
+            cppu::UnoType<css::lang::XTypeProvider>::get(), cppu::UnoType<css::awt::XMenu>::get(),
+            cppu::UnoType<css::awt::XMenuBar>::get(),
+            cppu::UnoType<css::lang::XServiceInfo>::get());
+        return collectionMenuBar.getTypes();
     }
 }
 

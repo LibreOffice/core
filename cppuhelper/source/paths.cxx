@@ -38,22 +38,17 @@ namespace {
 
 #ifndef ANDROID
 OUString get_this_libpath() {
-    static OUString s_uri;
-    if (s_uri.isEmpty()) {
+    static OUString s_uri = []() {
         OUString uri;
-        osl::Module::getUrlFromAddress(
-            reinterpret_cast< oslGenericFunction >(get_this_libpath), uri);
+        osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(get_this_libpath), uri);
         sal_Int32 i = uri.lastIndexOf('/');
-        if (i == -1) {
-            throw css::uno::DeploymentException(
-                "URI " + uri + " is expected to contain a slash");
+        if (i == -1)
+        {
+            throw css::uno::DeploymentException("URI " + uri + " is expected to contain a slash");
         }
-        uri = uri.copy(0, i);
-        osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
-        if (s_uri.isEmpty()) {
-            s_uri = uri;
-        }
-    }
+        return uri.copy(0, i);
+    }();
+
     return s_uri;
 }
 #endif

@@ -384,15 +384,7 @@ ExceptionInfos::~ExceptionInfos() throw ()
 
 void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
 {
-    static ExceptionInfos * s_pInfos = 0;
-    if (! s_pInfos)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pInfos)
-        {
-            s_pInfos = new ExceptionInfos();
-        }
-    }
+    static ExceptionInfos* s_pInfos = new ExceptionInfos();
 
     assert( pTypeDescr &&
                 (pTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
@@ -427,15 +419,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
 
 type_info * msci_getRTTI( OUString const & rUNOname )
 {
-    static RTTInfos * s_pRTTIs = 0;
-    if (! s_pRTTIs)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pRTTIs)
-        {
-            s_pRTTIs = new RTTInfos();
-        }
-    }
+    static RTTInfos* s_pRTTIs = new RTTInfos();
     return s_pRTTIs->getRTTI( rUNOname );
 }
 

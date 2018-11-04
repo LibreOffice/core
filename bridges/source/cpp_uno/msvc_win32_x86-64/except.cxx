@@ -681,19 +681,13 @@ ExceptionInfos::ExceptionInfos() throw ()
 
 RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw ()
 {
-    static ExceptionInfos * s_pInfos = nullptr;
-    if (! s_pInfos)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pInfos)
-        {
-            SYSTEM_INFO systemInfo;
-            GetSystemInfo( &systemInfo );
-            allocationGranularity = systemInfo.dwAllocationGranularity;
+    static ExceptionInfos* s_pInfos = []() {
+        SYSTEM_INFO systemInfo;
+        GetSystemInfo(&systemInfo);
+        allocationGranularity = systemInfo.dwAllocationGranularity;
 
-            s_pInfos = new ExceptionInfos();
-        }
-    }
+        return new ExceptionInfos();
+    }();
 
     assert( pTD &&
                 (pTD->eTypeClass == typelib_TypeClass_STRUCT ||
@@ -726,29 +720,13 @@ RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw 
 type_info * mscx_getRTTI(
     OUString const & rUNOname )
 {
-    static RTTInfos * s_pRTTIs = nullptr;
-    if (! s_pRTTIs)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pRTTIs)
-        {
-            s_pRTTIs = new RTTInfos();
-        }
-    }
+    static RTTInfos* s_pRTTIs = new RTTInfos();
     return s_pRTTIs->getRTTI( rUNOname );
 }
 int mscx_getRTTI_len(
     OUString const & rUNOname)
 {
-    static RTTInfos * s_pRTTIs = nullptr;
-    if (!s_pRTTIs)
-    {
-        MutexGuard aGuard(Mutex::getGlobalMutex());
-        if (!s_pRTTIs)
-        {
-            s_pRTTIs = new RTTInfos();
-        }
-    }
+    static RTTInfos* s_pRTTIs = new RTTInfos();
     return s_pRTTIs->getRTTI_len(rUNOname);
 }
 

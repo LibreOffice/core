@@ -225,17 +225,8 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
         // destruct uno exception
         ::uno_any_destruct( pUnoExc, 0 );
         // avoiding locked counts
-        static RTTI * s_rtti = 0;
-        if (! s_rtti)
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if (! s_rtti)
-            {
-                static RTTI rtti_data;
-                s_rtti = &rtti_data;
-            }
-        }
-        rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+        static RTTI rtti_data;
+        rtti = (type_info*)rtti_data.getRTTI((typelib_CompoundTypeDescription*)pTypeDescr);
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         if (! rtti)
             terminate();

@@ -515,7 +515,6 @@ Sequence< OUString > SAL_CALL XMLSignature_GpgImpl::getSupportedServiceNames() {
 
 //Helper for XServiceInfo
 Sequence< OUString > XMLSignature_GpgImpl::impl_getSupportedServiceNames() {
-    ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSignature" };
     return seqServiceNames ;
 }

@@ -227,10 +227,7 @@ static void getExecutableDirectory_Impl(rtl_uString ** ppDirURL)
 
 static OUString & getIniFileName_Impl()
 {
-    osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
-    static OUString *pStaticName = nullptr;
-    if (!pStaticName)
-    {
+    static OUString aStaticName = []() {
         OUString fileName;
 
 #if defined IOS
@@ -284,14 +281,10 @@ static OUString & getIniFileName_Impl()
         }
 #endif
 
-        static OUString theFileName;
-        if (fileName.getLength())
-            theFileName = fileName;
+        return fileName;
+    }();
 
-        pStaticName = &theFileName;
-    }
-
-    return *pStaticName;
+    return aStaticName;
 }
 
 // ensure the given file url has no final slash
@@ -395,20 +388,17 @@ namespace {
 
 Bootstrap_Impl * get_static_bootstrap_handle()
 {
-    osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
-    static Bootstrap_Impl * s_handle = nullptr;
-    if (!s_handle)
-    {
+    static Bootstrap_Impl* s_handle = []() {
         OUString iniName(getIniFileName_Impl());
-        s_handle = static_cast< Bootstrap_Impl * >(
-            rtl_bootstrap_args_open(iniName.pData));
-        if (!s_handle)
+        Bootstrap_Impl* that = static_cast<Bootstrap_Impl*>(rtl_bootstrap_args_open(iniName.pData));
+        if (!that)
         {
-            Bootstrap_Impl * that = new Bootstrap_Impl( iniName );
+            that = new Bootstrap_Impl(iniName);
             ++that->_nRefCount;
-            s_handle = that;
         }
-    }
+        return that;
+    }();
+
     return s_handle;
 }
 

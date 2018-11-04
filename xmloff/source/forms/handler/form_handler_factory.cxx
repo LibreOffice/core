@@ -26,12 +26,6 @@
 namespace xmloff
 {
 
-    namespace
-    {
-        static PPropertyHandler s_pVCLDateHandler;
-        static PPropertyHandler s_pVCLTimeHandler;
-    }
-
     //= FormHandlerFactory
     PPropertyHandler FormHandlerFactory::getFormPropertyHandler( const PropertyId i_propertyId )
     {
@@ -43,26 +37,20 @@ namespace xmloff
         case PID_DATE_MAX:
         case PID_DEFAULT_DATE:
         case PID_DATE:
-            if ( s_pVCLDateHandler.get() == nullptr )
             {
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                if ( s_pVCLDateHandler == nullptr )
-                    s_pVCLDateHandler = new VCLDateHandler();
+                static PPropertyHandler s_pVCLDateHandler = new VCLDateHandler();
+                pHandler = s_pVCLDateHandler;
             }
-            pHandler = s_pVCLDateHandler;
             break;
 
         case PID_TIME_MIN:
         case PID_TIME_MAX:
         case PID_DEFAULT_TIME:
         case PID_TIME:
-            if ( s_pVCLTimeHandler.get() == nullptr )
             {
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                if ( s_pVCLTimeHandler == nullptr )
-                    s_pVCLTimeHandler = new VCLTimeHandler();
+                static PPropertyHandler s_pVCLTimeHandler = new VCLTimeHandler();
+                pHandler = s_pVCLTimeHandler;
             }
-            pHandler = s_pVCLTimeHandler;
             break;
 
         default:

@@ -239,17 +239,8 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, nullptr );
     // avoiding locked counts
-    static RTTI * s_rtti = nullptr;
-    if (! s_rtti)
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if (! s_rtti)
-        {
-            static RTTI rtti_data;
-            s_rtti = &rtti_data;
-        }
-    }
-    rtti = s_rtti->getRTTI(reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr));
+    static RTTI rtti_data;
+    rtti = rtti_data.getRTTI(reinterpret_cast<typelib_CompoundTypeDescription*>(pTypeDescr));
     TYPELIB_DANGER_RELEASE( pTypeDescr );
 #if !defined(ANDROID) // see TODO above
     assert(rtti && "### no rtti for throwing exception!");

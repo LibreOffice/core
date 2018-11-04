@@ -93,29 +93,16 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     typelib_InterfaceTypeDescription * pTypeDescr )
 {
     // init queryInterface() td
-    static typelib_TypeDescription * s_pQITD = nullptr;
-    if (s_pQITD == nullptr)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (s_pQITD == nullptr)
-        {
-            typelib_TypeDescription * pTXInterfaceDescr = nullptr;
-            TYPELIB_DANGER_GET(
-                &pTXInterfaceDescr,
-                cppu::UnoType<XInterface>::get().getTypeLibType() );
-            typelib_TypeDescription * pQITD = nullptr;
-            typelib_typedescriptionreference_getDescription(
-                &pQITD, reinterpret_cast< typelib_InterfaceTypeDescription * >(
-                    pTXInterfaceDescr )->ppAllMembers[ 0 ] );
-            TYPELIB_DANGER_RELEASE( pTXInterfaceDescr );
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            s_pQITD = pQITD;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
+    static typelib_TypeDescription* s_pQITD = []() {
+        typelib_TypeDescription* pTXInterfaceDescr = nullptr;
+        TYPELIB_DANGER_GET(&pTXInterfaceDescr, cppu::UnoType<XInterface>::get().getTypeLibType());
+        typelib_TypeDescription* pQITD = nullptr;
+        typelib_typedescriptionreference_getDescription(
+            &pQITD, reinterpret_cast<typelib_InterfaceTypeDescription*>(pTXInterfaceDescr)
+                        ->ppAllMembers[0]);
+        TYPELIB_DANGER_RELEASE(pTXInterfaceDescr);
+        return pQITD;
+    }();
 
     void * args[ 1 ];
     args[ 0 ] = &reinterpret_cast< typelib_TypeDescription * >(
