@@ -300,9 +300,26 @@ bool CustomWidgetDraw::getNativeControlRegion(
     ControlState eState, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
     tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
 {
-    return s_pWidgetImplementation
-           && s_pWidgetImplementation->getRegion(eType, ePart, eState, rBoundingControlRegion,
-                                                 rNativeBoundingRegion, rNativeContentRegion);
+    // Translate to POD rectangle and back.
+    const rectangle_t aRegion
+        = { rBoundingControlRegion.getX(), rBoundingControlRegion.getY(),
+            rBoundingControlRegion.GetWidth(), rBoundingControlRegion.GetHeight() };
+    if (s_pWidgetImplementation)
+    {
+        rectangle_t aNativeBoundingRegion;
+        rectangle_t aNativeContentRegion;
+        s_pWidgetImplementation->getRegion(eType, ePart, eState, aRegion, aNativeBoundingRegion,
+                                           aNativeContentRegion);
+
+        rNativeBoundingRegion
+            = tools::Rectangle(aNativeBoundingRegion.x, aNativeBoundingRegion.y,
+                               aNativeBoundingRegion.width, aNativeBoundingRegion.height);
+        rNativeContentRegion
+            = tools::Rectangle(aNativeBoundingRegion.x, aNativeBoundingRegion.y,
+                               aNativeBoundingRegion.width, aNativeBoundingRegion.height);
+    }
+
+    return false;
 }
 
 bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)

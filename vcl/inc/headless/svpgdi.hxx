@@ -33,7 +33,6 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
-#include <headless/CustomWidgetDraw.hxx>
 
 #include <cairo.h>
 

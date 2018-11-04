@@ -24,6 +24,7 @@
 #include <headless/svpbmp.hxx>
 #include <headless/svpframe.hxx>
 #include <headless/svpcairotextrender.hxx>
+#include <headless/CustomWidgetDraw.hxx>
 #include <saldatabasic.hxx>
 
 #include <sal/log.hxx>
