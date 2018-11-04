@@ -658,10 +658,9 @@ bool StgDirEntry::Tmp2Strm()
             {
                 m_pStgStrm->SetSize( 0 );
                 delete m_pStgStrm;
-                m_pStgStrm = pNewStrm.get();
-                pNewStrm->SetEntry( *this );
-                pNewStrm->Pos2Page( m_nPos );
-                pNewStrm.release();
+                m_pStgStrm = pNewStrm.release();
+                m_pStgStrm->SetEntry(*this);
+                m_pStgStrm->Pos2Page(m_nPos);
                 delete m_pTmpStrm;
                 delete m_pCurStrm;
                 m_pTmpStrm = m_pCurStrm = nullptr;
