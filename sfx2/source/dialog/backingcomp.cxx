@@ -235,38 +235,25 @@ void SAL_CALL BackingComp::release()
 
 css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
 {
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr;
-    if (!pTypeCollection)
-    {
-        /* GLOBAL SAFE { */
-        ::osl::MutexGuard aGlobalLock(m_aTypeProviderMutex);
-        // Control these pointer again ... it can be, that another instance will be faster then this one!
-        if (!pTypeCollection)
-        {
-            /* LOCAL SAFE { */
-            SolarMutexGuard aGuard;
-            css::uno::Reference< css::lang::XTypeProvider > xProvider(m_xWindow, css::uno::UNO_QUERY);
+    static cppu::OTypeCollection aTypeCollection = [this]() {
+        SolarMutexGuard aGuard;
+        css::uno::Reference<css::lang::XTypeProvider> xProvider(m_xWindow, css::uno::UNO_QUERY);
 
-            css::uno::Sequence< css::uno::Type > lWindowTypes;
-            if (xProvider.is())
-                lWindowTypes = xProvider->getTypes();
+        css::uno::Sequence<css::uno::Type> lWindowTypes;
+        if (xProvider.is())
+            lWindowTypes = xProvider->getTypes();
 
-            static ::cppu::OTypeCollection aTypeCollection(
-                    cppu::UnoType<css::lang::XInitialization>::get(),
-                    cppu::UnoType<css::lang::XTypeProvider>::get(),
-                    cppu::UnoType<css::lang::XServiceInfo>::get(),
-                    cppu::UnoType<css::frame::XController>::get(),
-                    cppu::UnoType<css::lang::XComponent>::get(),
-                    cppu::UnoType<css::frame::XDispatchProvider>::get(),
-                    cppu::UnoType<css::frame::XDispatch>::get(),
-                    lWindowTypes);
+        return cppu::OTypeCollection(
+            cppu::UnoType<css::lang::XInitialization>::get(),
+            cppu::UnoType<css::lang::XTypeProvider>::get(),
+            cppu::UnoType<css::lang::XServiceInfo>::get(),
+            cppu::UnoType<css::frame::XController>::get(),
+            cppu::UnoType<css::lang::XComponent>::get(),
+            cppu::UnoType<css::frame::XDispatchProvider>::get(),
+            cppu::UnoType<css::frame::XDispatch>::get(), lWindowTypes);
+    }();
 
-            pTypeCollection = &aTypeCollection;
-            /* } LOCAL SAFE */
-        }
-        /* } GLOBAL SAFE */
-    }
-    return pTypeCollection->getTypes();
+    return aTypeCollection.getTypes();
 }
 
 
