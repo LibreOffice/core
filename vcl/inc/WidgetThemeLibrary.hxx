@@ -11,11 +11,7 @@
 #ifndef INCLUDED_VCL_INC_WIDGETTHEME_HXX
 #define INCLUDED_VCL_INC_WIDGETTHEME_HXX
 
-/**
- * This file expects cairo.h and the definition of
- * the other types used here to be defined before
- * including it.
- */
+#include <cstdint>
 
 namespace vcl
 {
@@ -76,6 +72,7 @@ struct WidgetDrawStyle
 
 struct ControlDrawParameters
 {
+    typedef struct _cairo cairo_t;
     ControlDrawParameters(cairo_t* i_pCairo, ControlPart i_ePart, ControlState i_eState)
         : nSize(sizeof(ControlDrawParameters))
         , pCairo(i_pCairo)
@@ -98,15 +95,20 @@ struct ControlDrawParameters
 
 typedef struct _WidgetThemeLibrary WidgetThemeLibrary;
 
+typedef struct _rectangle
+{
+    long x, y;
+    long width, height;
+} rectangle_t;
+
 struct _WidgetThemeLibrary
 {
     uint32_t nSize;
 
     bool (*isNativeControlSupported)(ControlType eType, ControlPart ePart);
     bool (*getRegion)(ControlType eType, ControlPart ePart, ControlState eState,
-                      const tools::Rectangle& rBoundingControlRegion,
-                      tools::Rectangle& rNativeBoundingRegion,
-                      tools::Rectangle& rNativeContentRegion);
+                      const rectangle_t& rBoundingControlRegion, rectangle_t& rNativeBoundingRegion,
+                      rectangle_t& rNativeContentRegion);
 
     bool (*drawPushButton)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     bool (*drawRadiobutton)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);

@@ -12,7 +12,7 @@
 #define INCLUDED_VCL_INC_WIDGETTHEMETYPES_HXX
 
 #include <cstdint>
-#include <type_traits>
+#include <type_traits> // Used for enum operator
 
 /**
  * These types are all based on the supported variants
@@ -268,96 +268,6 @@ constexpr uint32_t RGB_COLORDATA(uint8_t r, uint8_t g, uint8_t b) {
 #define COL_YELLOW_HIGHLIGHT        RGB_COLORDATA( 0xFF, 0xF2, 0x00 )
 #define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
 
-#ifndef SAL_DLLPUBLIC_EXPORT
-#   define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
-#endif
-
-namespace tools
-{
-
-#define RECT_EMPTY  ((short)-32767)
-
-class SAL_DLLPUBLIC_EXPORT Rectangle
-{
-public:
-                        Rectangle();
-                        Rectangle( long nLeft, long nTop,
-                                   long nRight, long nBottom );
-
-    long                Left() const    { return nLeft;   }
-    long                Right() const   { return nRight;  }
-    long                Top() const     { return nTop;    }
-    long                Bottom() const  { return nBottom; }
-
-    long&               Left()          { return nLeft;   }
-    long&               Right()         { return nRight;  }
-    long&               Top()           { return nTop;    }
-    long&               Bottom()        { return nBottom; }
-
-    /// Returns the difference between right and left, assuming the range is inclusive.
-    inline long         GetWidth() const;
-    /// Returns the difference between bottom and top, assuming the range is inclusive.
-    inline long         GetHeight() const;
-
-    long                getX() const { return nLeft; }
-    long                getY() const { return nTop; }
-
-private:
-    long                nLeft;
-    long                nTop;
-    long                nRight;
-    long                nBottom;
-};
-}
-
-inline tools::Rectangle::Rectangle()
-{
-    nLeft = nTop = 0;
-    nRight = nBottom = RECT_EMPTY;
-}
-
-inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop,
-                             long _nRight, long _nBottom )
-{
-    nLeft   = _nLeft;
-    nTop    = _nTop;
-    nRight  = _nRight;
-    nBottom = _nBottom;
-}
-
-inline long tools::Rectangle::GetWidth() const
-{
-    long n;
-    if ( nRight == RECT_EMPTY )
-        n = 0;
-    else
-    {
-        n = nRight - nLeft;
-        if( n < 0 )
-            n--;
-        else
-            n++;
-    }
-
-    return n;
-}
-
-inline long tools::Rectangle::GetHeight() const
-{
-    long n;
-    if ( nBottom == RECT_EMPTY )
-        n = 0;
-    else
-    {
-        n = nBottom - nTop;
-        if ( n < 0 )
-            n--;
-        else
-            n++;
-    }
-
-    return n;
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
