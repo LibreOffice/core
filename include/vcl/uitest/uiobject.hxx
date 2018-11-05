@@ -23,6 +23,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/treelistbox.hxx>
 
 #include <vcl/dllapi.h>
 
@@ -403,9 +404,6 @@ protected:
 
     virtual OUString get_name() const override;
 };
-
-class SvTreeListBox;
-class SvTreeListEntry;
 
 class UITEST_DLLPUBLIC TreeListUIObject : public WindowUIObject
 {
