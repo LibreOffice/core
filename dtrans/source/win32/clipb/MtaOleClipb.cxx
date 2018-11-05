@@ -161,7 +161,6 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hEvtThrdReady( nullptr ),
     m_hwndMtaOleReqWnd( nullptr ),
     m_MtaOleReqWndClassAtom( 0 ),
-    m_hwndNextClipViewer( nullptr ),
     m_pfncClipViewerCallback( nullptr ),
     m_bRunClipboardNotifierThread( true ),
     m_hClipboardChangedEvent( m_hClipboardChangedNotifierEvents[0] ),
@@ -238,8 +237,7 @@ CMtaOleClipboard::~CMtaOleClipboard( )
     if ( m_MtaOleReqWndClassAtom )
         UnregisterClassW( g_szWndClsName, nullptr );
 
-    OSL_ENSURE( ( nullptr == m_pfncClipViewerCallback ) &&
-                !IsWindow( m_hwndNextClipViewer ),
+    OSL_ENSURE( ( nullptr == m_pfncClipViewerCallback ),
                 "Clipboard viewer not properly unregistered" );
 }
 
@@ -354,7 +352,7 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
 
 bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
 {
-    bool bRet = true;
+    bool bRet = false;
 
     // we need exclusive access because the clipboard changed notifier
     // thread also accesses this variable
@@ -366,12 +364,8 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
         // SetClipboardViewer sends a WM_DRAWCLIPBOARD message we ignore
         // this message if we register ourself as clip viewer
         m_bInRegisterClipViewer = true;
-        m_hwndNextClipViewer = SetClipboardViewer( m_hwndMtaOleReqWnd );
+        bRet = AddClipboardFormatListener(m_hwndMtaOleReqWnd);
         m_bInRegisterClipViewer = false;
-
-        // if there is no other cb-viewer the
-        // return value is NULL!!!
-        bRet = IsWindow( m_hwndNextClipViewer );
 
         // save the new callback function
         m_pfncClipViewerCallback = pfncClipViewerCallback;
@@ -382,8 +376,7 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 
         // unregister if input parameter is NULL and we previously registered
         // as clipboard viewer
-        ChangeClipboardChain( m_hwndMtaOleReqWnd, m_hwndNextClipViewer );
-        m_hwndNextClipViewer = nullptr;
+        bRet = RemoveClipboardFormatListener(m_hwndMtaOleReqWnd);
     }
 
     return bRet;
@@ -417,32 +410,9 @@ LRESULT CMtaOleClipboard::onFlushClipboard( )
     return static_cast<LRESULT>( OleFlushClipboard( ) );
 }
 
-// handle clipboard chain change event
+// handle clipboard update event
 
-LRESULT CMtaOleClipboard::onChangeCBChain( HWND hWndRemove, HWND hWndNext )
-{
-    if ( hWndRemove == m_hwndNextClipViewer )
-        m_hwndNextClipViewer = hWndNext;
-    else if ( IsWindow( m_hwndNextClipViewer ) )
-    {
-        // forward the message to the next one
-        DWORD_PTR dwpResult;
-        SendMessageTimeoutW(
-            m_hwndNextClipViewer,
-            WM_CHANGECBCHAIN,
-            reinterpret_cast<WPARAM>(hWndRemove),
-            reinterpret_cast<LPARAM>(hWndNext),
-            SMTO_BLOCK,
-            MAX_CLIPEVENT_PROCESSING_TIME,
-            &dwpResult );
-    }
-
-    return 0;
-}
-
-// handle draw clipboard event
-
-LRESULT CMtaOleClipboard::onDrawClipboard( )
+LRESULT CMtaOleClipboard::onClipboardUpdate()
 {
     // we don't send a notification if we are
     // registering ourself as clipboard
@@ -454,20 +424,6 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
         SetEvent( m_hClipboardChangedEvent );
 
         aGuard.clear( );
-    }
-
-    // forward the message to the next viewer in the chain
-    if ( IsWindow( m_hwndNextClipViewer ) )
-    {
-        DWORD_PTR dwpResult;
-        SendMessageTimeoutW(
-            m_hwndNextClipViewer,
-            WM_DRAWCLIPBOARD,
-            static_cast< WPARAM >( 0 ),
-            static_cast< LPARAM >( 0 ),
-            SMTO_BLOCK,
-            MAX_CLIPEVENT_PROCESSING_TIME,
-            &dwpResult );
     }
 
     return 0;
@@ -543,13 +499,8 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
             reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));
         break;
 
-    case WM_CHANGECBCHAIN:
-        lResult = pImpl->onChangeCBChain(
-            reinterpret_cast< HWND >( wParam ), reinterpret_cast< HWND >( lParam ) );
-        break;
-
-    case WM_DRAWCLIPBOARD:
-        lResult = pImpl->onDrawClipboard( );
+    case WM_CLIPBOARDUPDATE:
+        lResult = pImpl->onClipboardUpdate();
         break;
 
     case MSG_SHUTDOWN:
