@@ -2055,9 +2055,9 @@ void XMLShapeExport::ImpExportLineShape(
     if (auto pSourcePolyPolygon
             = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
     {
-        if (pSourcePolyPolygon->getLength() > 1)
+        if (pSourcePolyPolygon->getLength() > 0)
         {
-            const drawing::PointSequence& rInnerSequence = (*pSourcePolyPolygon)[1];
+            const drawing::PointSequence& rInnerSequence = (*pSourcePolyPolygon)[0];
             if (rInnerSequence.getLength() > 0)
             {
                 const awt::Point& rPoint = rInnerSequence[0];
