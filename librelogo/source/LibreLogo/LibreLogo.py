@@ -1782,7 +1782,7 @@ def __l2p__(i, par, insub, inarray):
             atom = i[pos:par["atom"][pos]]
             par["out"] += atom
             par["pos"] += len(atom)
-            # handle subroutines with explicite parentheses
+            # handle subroutines with explicit parentheses
             # and array indices
             if i[par["pos"]:par["pos"]+1] in "([":
                 first = True
@@ -1924,7 +1924,7 @@ def __compil__(s):
         # tokens: {startpos: endpos} dictionaries for subroutine names, operators and other tokens
 
         # sub: subroutine tokens = positions of Logo subroutine names
-        # (without explicite parentheses, for example: "f x" or "f (x*2)", but not "f(x)")
+        # (without explicit parentheses, for example: "f x" or "f (x*2)", but not "f(x)")
         sub = {key: value for (key, value) in [j.span() for j in list(subroutines.finditer(i))]}
         if sub != {}:
             # op: operator tokens
