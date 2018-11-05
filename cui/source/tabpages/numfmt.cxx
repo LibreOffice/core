@@ -30,6 +30,7 @@
 #include <svx/dialogs.hrc>
 #include <svtools/colorcfg.hxx>
 
+#include <numcategories.hrc>
 #include <strings.hrc>
 
 #include <svx/numinf.hxx>
@@ -218,6 +219,9 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("languagelb")))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
 {
+    for (size_t i = 0; i < SAL_N_ELEMENTS(NUM_CATEGORIES); ++i)
+        m_xLbCategory->append_text(CuiResId(NUM_CATEGORIES[i]));
+
     auto nWidth = approximate_char_width() * 26;
     m_xLbCategory->set_size_request(nWidth, m_xLbCategory->get_height_rows(7));
     m_xLbFormat->set_size_request(nWidth, m_xLbFormat->get_height_rows(5));
