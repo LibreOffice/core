@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_1b5be72e",
+        "filename": "sw/source/core/text/itratr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-05T14:16:34Z",
+      "side": 1,
+      "message": "this \"if\" can fold nicely into the \"else\" as in\n\n  else if (!isTheAnswerYes)",
+      "revId": "3d3a05541206a50bbd9de06a90f52bb34ceee9f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_3b6fc3c6",
+        "filename": "sw/source/core/text/wrong.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-05T14:16:34Z",
+      "side": 1,
+      "message": "this condition does not seem to match the original code? I would think it would look like\n\n    return (rST.mnPos \u003c\u003d nValue \u0026\u0026 nValue \u003c\u003d rST.mnPos + rST.mnLen)\n           || rST.mnPos \u003e nValue;",
+      "revId": "3d3a05541206a50bbd9de06a90f52bb34ceee9f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
