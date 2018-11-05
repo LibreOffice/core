@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_e0ccea62",
+        "filename": "include/oox/drawingml/shapepropertymap.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-05T11:29:54Z",
+      "side": 1,
+      "message": "Nitpick: you probably meant ///\u003c here, /// will document the token on the *next* line (yes, surrounding code has the same problem).",
+      "revId": "b861a3ea280952e8ca4b50c3ee0679d5ac6a3047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
