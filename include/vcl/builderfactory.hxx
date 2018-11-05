@@ -13,32 +13,22 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/builder.hxx>
 
-// For iOS, SAL_DLLPUBLIC_EXPORT actually expands to __attribute__
-// ((visibility("hidden"))). (Ditto for other DISABLE_DYNLOADING
-// cases, but let it be as is for them for now.) Undo that trick.
-
-#ifdef IOS
-#define BUILDER_FACTORY_EXPORT __attribute__ ((visibility("default")))
-#else
-#define BUILDER_FACTORY_EXPORT SAL_DLLPUBLIC_EXPORT
-#endif
-
 #define VCL_BUILDER_FACTORY(typeName) \
-    extern "C" BUILDER_FACTORY_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
         (void)rMap; \
         rRet = VclPtr<typeName>::Create(pParent); \
     }
 
 #define VCL_BUILDER_FACTORY_ARGS(typeName,arg1) \
-    extern "C" BUILDER_FACTORY_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
         (void)rMap; \
         rRet = VclPtr<typeName>::Create(pParent,arg1); \
     }
 
 #define VCL_BUILDER_FACTORY_CONSTRUCTOR(typeName,arg2) \
-    extern "C" BUILDER_FACTORY_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
         OUString sBorder = BuilderUtils::extractCustomProperty(rMap); \
         WinBits wb = arg2; \
