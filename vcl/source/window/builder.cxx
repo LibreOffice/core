@@ -39,6 +39,8 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/throbber.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
@@ -491,13 +493,16 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         vcl::Window* pTarget = get<vcl::Window>(elem.m_sID);
         ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
         ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
+        SvTreeListBox *pTreeBoxTarget = dynamic_cast<SvTreeListBox*>(pTarget);
         // pStore may be empty
         const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
-        SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget, "vcl", "missing elements of combobox");
+        SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget && !pTreeBoxTarget, "vcl", "missing elements of combobox");
         if (pListBoxTarget && pStore)
             mungeModel(*pListBoxTarget, *pStore, elem.m_nActiveId);
         else if (pComboBoxTarget && pStore)
             mungeModel(*pComboBoxTarget, *pStore, elem.m_nActiveId);
+        else if (pTreeBoxTarget && pStore)
+            mungeModel(*pTreeBoxTarget, *pStore, elem.m_nActiveId);
     }
 
     //Set TextView buffers when everything has been imported
@@ -1809,10 +1814,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkTreeView")
     {
         //To-Do
-        //a) make SvTreeViewBox the default target for GtkTreeView
+        //a) make SvTreeListBox the default target for GtkTreeView
         //b) remove the non-drop down mode of ListBox and convert
-        //   everything over to SvTreeViewBox
-        //c) remove the users of makeSvTreeViewBox
+        //   everything over to SvTreeListBox
+        //c) remove the users of makeSvTreeListBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
         if (m_bLegacy)
@@ -1821,11 +1826,18 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (!sBorder.isEmpty())
                 nWinStyle |= WB_BORDER;
         }
-        //ListBox manages its own scrolling,
+        //ListBox/SvTreeListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         if (pRealParent != pParent)
             nWinStyle |= WB_BORDER;
-        xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
+        if (m_bLegacy)
+            xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
+        else
+        {
+            VclPtrInstance<SvTreeListBox> xBox(pRealParent, nWinStyle);
+            xBox->SetNoAutoCurEntry(true);
+            xWindow = xBox;
+        }
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
     }
@@ -3997,6 +4009,34 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
     if (nActiveId < rStore.m_aEntries.size())
         rTarget.SelectEntryPos(nActiveId);
 }
+
+void VclBuilder::mungeModel(SvTreeListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
+{
+    for (auto const& entry : rStore.m_aEntries)
+    {
+        const ListStore::row &rRow = entry;
+        auto pEntry = rTarget.InsertEntry(rRow[0]);
+        if (rRow.size() > 1)
+        {
+            if (m_bLegacy)
+            {
+                sal_IntPtr nValue = rRow[1].toInt32();
+                pEntry->SetUserData(reinterpret_cast<void*>(nValue));
+            }
+            else
+            {
+                if (!rRow[1].isEmpty())
+                    pEntry->SetUserData(new OUString(rRow[1]));
+            }
+        }
+    }
+    if (nActiveId < rStore.m_aEntries.size())
+    {
+        SvTreeListEntry* pEntry = rTarget.GetEntry(nullptr, nActiveId);
+        rTarget.Select(pEntry);
+    }
+}
+
 
 void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)
 {
