@@ -644,7 +644,6 @@ darwin*) # Mac OS X or iOS
         enable_postgresql_sdbc=no
         enable_extension_integration=no
         enable_report_builder=no
-        with_theme="tango"
         with_ppds=no
         if test "$enable_ios_simulator" = "yes"; then
             host=x86_64-apple-darwin
