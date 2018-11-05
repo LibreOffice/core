@@ -22,22 +22,20 @@
 
 #include <bastype2.hxx>
 #include <sfx2/basedlgs.hxx>
-
 #include <com/sun/star/frame/XFrame.hpp>
-
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 namespace basctl
 {
 
 enum MacroExitCode {
-    Macro_Close = 10,
-    Macro_OkRun = 11,
-    Macro_New   = 12,
-    Macro_Edit  = 14,
+    Macro_Close = 110,
+    Macro_OkRun = 111,
+    Macro_New   = 112,
+    Macro_Edit  = 114,
 };
 
-class MacroChooser : public SfxModalDialog
+class MacroChooser : public SfxDialogController
 {
 public:
     enum Mode {
@@ -47,58 +45,58 @@ public:
     };
 
 private:
-    VclPtr<Edit>                   m_pMacroNameEdit;
-    VclPtr<FixedText>              m_pMacroFromTxT;
-    VclPtr<FixedText>              m_pMacrosSaveInTxt;
-    VclPtr<TreeListBox>            m_pBasicBox;
-    VclPtr<FixedText>              m_pMacrosInTxt;
     OUString                       m_aMacrosInTxtBaseStr;
-    VclPtr<SvTreeListBox>          m_pMacroBox;
-
-    VclPtr<PushButton>             m_pRunButton;
-    VclPtr<CloseButton>            m_pCloseButton;
-    VclPtr<PushButton>             m_pAssignButton;
-    VclPtr<PushButton>             m_pEditButton;
-    VclPtr<PushButton>             m_pDelButton;
-    VclPtr<PushButton>             m_pOrganizeButton;
-    VclPtr<PushButton>             m_pNewLibButton;
-    VclPtr<PushButton>             m_pNewModButton;
 
     // For forwarding to Assign dialog
     ::css::uno::Reference< ::css::frame::XFrame > m_xDocumentFrame;
 
-    bool                    bNewDelIsDel;
     bool                    bForceStoreBasic;
 
     Mode                    nMode;
 
-    DECL_LINK( MacroSelectHdl, SvTreeListBox *, void );
-    DECL_LINK( MacroDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK( BasicSelectHdl, SvTreeListBox *, void );
-    DECL_LINK( EditModifyHdl, Edit&, void );
-    DECL_LINK( ButtonHdl, Button *, void );
+    DECL_LINK(MacroSelectHdl, weld::TreeView&, void);
+    DECL_LINK(MacroDoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(BasicSelectHdl, weld::TreeView&, void);
+    DECL_LINK(EditModifyHdl, weld::Entry&, void);
+    DECL_LINK(ButtonHdl, weld::Button&, void);
 
     void                CheckButtons();
-    void                SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry );
+    void                SaveSetCurEntry(weld::TreeView& rBox, weld::TreeIter& rEntry);
     void                UpdateFields();
 
-    void                EnableButton( Button& rButton, bool bEnable );
+    void                EnableButton(weld::Button& rButton, bool bEnable);
 
     static OUString     GetInfo( SbxVariable* pVar );
 
     void                StoreMacroDescription();
     void                RestoreMacroDescription();
 
+    std::unique_ptr<weld::Entry> m_xMacroNameEdit;
+    std::unique_ptr<weld::Label> m_xMacroFromTxT;
+    std::unique_ptr<weld::Label> m_xMacrosSaveInTxt;
+    std::unique_ptr<SbTreeListBox> m_xBasicBox;
+    std::unique_ptr<weld::TreeIter> m_xBasicBoxIter;
+    std::unique_ptr<weld::Label> m_xMacrosInTxt;
+    std::unique_ptr<weld::TreeView> m_xMacroBox;
+    std::unique_ptr<weld::TreeIter> m_xMacroBoxIter;
+    std::unique_ptr<weld::Button> m_xRunButton;
+    std::unique_ptr<weld::Button> m_xCloseButton;
+    std::unique_ptr<weld::Button> m_xAssignButton;
+    std::unique_ptr<weld::Button> m_xEditButton;
+    std::unique_ptr<weld::Button> m_xDelButton;
+    std::unique_ptr<weld::Button> m_xNewButton;
+    std::unique_ptr<weld::Button> m_xOrganizeButton;
+    std::unique_ptr<weld::Button> m_xNewLibButton;
+    std::unique_ptr<weld::Button> m_xNewModButton;
 public:
-                        MacroChooser( vcl::Window* pParent, const ::css::uno::Reference< ::css::frame::XFrame >& xDocFrame, bool bCreateEntries );
-                        virtual ~MacroChooser() override;
-    virtual void        dispose() override;
+    MacroChooser(weld::Window *pParent, const ::css::uno::Reference< ::css::frame::XFrame >& xDocFrame, bool bCreateEntries);
+    virtual ~MacroChooser() override;
 
     SbMethod*           GetMacro();
     void                DeleteMacro();
     SbMethod*           CreateMacro();
 
-    virtual short       Execute() override;
+    virtual short       run() override;
 
     void                SetMode (Mode);
     Mode                GetMode () const { return nMode; }
