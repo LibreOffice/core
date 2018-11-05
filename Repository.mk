@@ -388,6 +388,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	hyphen \
     icg \
 	$(if $(ENABLE_JAVA),jdbc) \
+	$(if $(ENABLE_JAVA),mysql_jdbc) \
 	ldapbe2 \
 	$(if $(filter WNT,$(OS)),WinUserInfoBe) \
 	localebe1 \
@@ -403,7 +404,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc) \
 	numbertext \
 	odbc \
