@@ -626,11 +626,15 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             bool bCertainTextNodeSelected( false );
             for ( size_t nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
             {
-                bool isSubstring = MatchSubstring(pIDoc->getListItemText( *maNumItems[nNumItemIdx] ), filterString);
+                if (!pIDoc->isNumberedInLayout(*maNumItems[nNumItemIdx], *pSh->GetLayout()))
+                {
+                    continue; // skip it
+                }
+                bool isSubstring = MatchSubstring(pIDoc->getListItemText(*maNumItems[nNumItemIdx], *pSh->GetLayout()), filterString);
                 if(isSubstring)
                 {
                     SvTreeListEntry* pEntry = m_pSelectionToolTipLB->InsertEntry(
-                    pIDoc->getListItemText( *maNumItems[nNumItemIdx] ) );
+                        pIDoc->getListItemText(*maNumItems[nNumItemIdx], *pSh->GetLayout()));
                     pEntry->SetUserData( reinterpret_cast<void*>(nNumItemIdx) );
                     if ( ( IsFieldEdit() &&
                            pRefField->GetReferencedTextNode() == maNumItems[nNumItemIdx]->GetTextNode() ) ||

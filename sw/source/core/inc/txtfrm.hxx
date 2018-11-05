@@ -45,6 +45,7 @@ struct SwCursorMoveState;
 struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
+enum class ExpandMode;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
@@ -124,6 +125,10 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
 void AddRemoveFlysAnchoredToFrameStartingAtNode(
         SwTextFrame & rFrame, SwTextNode & rTextNode,
         std::set<sal_uLong> *pSkipped);
+
+OUString GetExpandTextMerged(SwRootFrame const* pLayout,
+        SwTextNode const& rNode, bool bWithNumber,
+        bool bWithSpacesForLevel, ExpandMode i_mode);
 
 } // namespace sw
 

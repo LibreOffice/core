@@ -1237,7 +1237,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             if( pONd )
             {
                 rContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
-                rContentAtPos.sStr = pONd->GetExpandText( 0, -1, true, true );
+                rContentAtPos.sStr = sw::GetExpandTextMerged(GetLayout(), *pONd, true, false, ExpandMode(0));
                 bRet = true;
             }
         }
