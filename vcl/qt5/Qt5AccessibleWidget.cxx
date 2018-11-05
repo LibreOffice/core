@@ -60,7 +60,7 @@ using namespace css::uno;
 Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessible)
     : m_xAccessible(xAccessible)
 {
-    Reference<XAccessibleContext> xContext(xAccessible, UNO_QUERY);
+    Reference<XAccessibleContext> xContext = xAccessible->getAccessibleContext();
     Reference<XAccessibleEventBroadcaster> xBroadcaster(xContext, UNO_QUERY);
     if (xBroadcaster.is())
     {
