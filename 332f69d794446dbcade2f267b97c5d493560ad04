@@ -22,6 +22,30 @@
       "revId": "332f69d794446dbcade2f267b97c5d493560ad04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_3b458371",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-11-05T21:37:57Z",
+      "side": 1,
+      "message": "I prefer the single version. I can revert if you prefer.",
+      "parentUuid": "3f3283f1_7b942be9",
+      "range": {
+        "startLine": 738,
+        "startChar": 49,
+        "endLine": 738,
+        "endChar": 58
+      },
+      "revId": "332f69d794446dbcade2f267b97c5d493560ad04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
