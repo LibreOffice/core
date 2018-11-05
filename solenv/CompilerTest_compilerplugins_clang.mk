@@ -13,6 +13,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/badstatics \
     compilerplugins/clang/test/blockblock \
     compilerplugins/clang/test/casttovoid \
+    compilerplugins/clang/test/collapseif \
     compilerplugins/clang/test/commaoperator \
     $(if $(filter-out WNT,$(OS)),compilerplugins/clang/test/constfields) \
     compilerplugins/clang/test/constparams \
