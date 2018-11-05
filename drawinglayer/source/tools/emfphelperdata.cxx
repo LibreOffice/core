@@ -1318,7 +1318,6 @@ namespace emfplushelper
                                 break;
                             }
                             mrPropertyHolders.Current().setFont(vcl::Font(font->family, Size(font->emSize, font->emSize)));
-                            // done reading
 
                             // transform to TextSimplePortionPrimitive2D
                             // TODO add more decorations: underline, strikeout, etc
@@ -1361,6 +1360,10 @@ namespace emfplushelper
                             }
                             else
                             {
+                                // By default LeadingMargin is 1/6 inch
+                                // TODO for typographic fonts set value to 0.
+                                stringAlignmentHorizontalOffset = 16.0;
+
                                 // use system default
                                 locale = Application::GetSettings().GetLanguageTag().getLocale();
                             }
