@@ -5686,7 +5686,10 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
                 // messages in the message queue and dispatch them before we return control to the system.
 
                 if ( nRet )
+                {
+                    SolarMutexGuard aGuard;
                     while ( Application::Reschedule( true ) );
+                }
             }
             else
             {
