@@ -66,81 +66,8 @@ namespace /* private */
     const bool MANUAL_RESET                     = true;
     const bool INIT_NONSIGNALED                 = false;
 
-    /*  Cannot use osl conditions because they are blocking
-        without waking up on messages sent by another thread
-        this leads to deadlocks because we are blocking the
-        communication between inter-thread marshalled COM
-        pointers.
-        COM Proxy-Stub communication uses SendMessages for
-        synchronization purposes.
-    */
-    class Win32Condition
-    {
-        public:
-            // ctor
-            Win32Condition()
-            {
-                m_hEvent = CreateEventW(
-                    nullptr, /* no security */
-                    true,   /* manual reset */
-                    false,  /* initial state not signaled */
-                    nullptr); /* automatic name */
-            }
-
-            // dtor
-            ~Win32Condition()
-            {
-                CloseHandle(m_hEvent);
-            }
-
-            // wait infinite for event be signaled
-            // leave messages sent through
-            void wait()
-            {
-                while(true)
-                {
-                    DWORD dwResult =
-                        MsgWaitForMultipleObjects(1, &m_hEvent, FALSE, INFINITE, QS_SENDMESSAGE);
-
-                       switch (dwResult)
-                    {
-                        case WAIT_OBJECT_0:
-                            return;
-
-                        case WAIT_OBJECT_0 + 1:
-                        {
-                            /* PeekMessage processes all messages in the SendMessage
-                               queue that's what we want, messages from the PostMessage
-                               queue stay untouched */
-                            MSG msg;
-                            PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // reset the event
-            void set()
-            {
-                SetEvent(m_hEvent);
-            }
-
-        private:
-            HANDLE m_hEvent;
-
-        // prevent copy/assignment
-        private:
-            Win32Condition(const Win32Condition&) = delete;
-            Win32Condition& operator=(const Win32Condition&) = delete;
-    };
-
-    // we use one condition for every request
-
     struct MsgCtx
     {
-        Win32Condition  aCondition;
         HRESULT         hr;
     };
 
@@ -329,11 +256,9 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 
     MsgCtx  aMsgCtx;
 
-    postMessage( MSG_FLUSHCLIPBOARD,
+    sendMessage( MSG_FLUSHCLIPBOARD,
                  static_cast< WPARAM >( 0 ),
                  reinterpret_cast< LPARAM >( &aMsgCtx ) );
-
-    aMsgCtx.aCondition.wait( /* infinite */ );
 
     return aMsgCtx.hr;
 }
@@ -357,11 +282,9 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 
     MsgCtx    aMsgCtx;
 
-    postMessage( MSG_GETCLIPBOARD,
+    sendMessage( MSG_GETCLIPBOARD,
                  reinterpret_cast< WPARAM >( &lpStream ),
                  reinterpret_cast< LPARAM >( &aMsgCtx ) );
-
-    aMsgCtx.aCondition.wait( /* infinite */ );
 
     HRESULT hr = aMsgCtx.hr;
 
@@ -422,13 +345,7 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
 
-    MsgCtx  aMsgCtx;
-
-    postMessage( MSG_REGCLIPVIEWER,
-                 reinterpret_cast<WPARAM>( pfncClipViewerCallback ),
-                 reinterpret_cast<LPARAM>( &aMsgCtx ) );
-
-    aMsgCtx.aCondition.wait( /* infinite */ );
+    sendMessage(MSG_REGCLIPVIEWER, reinterpret_cast<WPARAM>(pfncClipViewerCallback), 0);
 
     return false;
 }
@@ -609,7 +526,6 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
             OSL_ASSERT( aMsgCtx );
 
             aMsgCtx->hr = CMtaOleClipboard::onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
-            aMsgCtx->aCondition.set( );
         }
         break;
 
@@ -619,18 +535,12 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
             OSL_ASSERT( aMsgCtx );
 
             aMsgCtx->hr = CMtaOleClipboard::onFlushClipboard( );
-            aMsgCtx->aCondition.set( );
         }
         break;
 
     case MSG_REGCLIPVIEWER:
-        {
-            MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-            OSL_ASSERT( aMsgCtx );
-
-            pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
-            aMsgCtx->aCondition.set( );
-        }
+        pImpl->onRegisterClipViewer(
+            reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));
         break;
 
     case WM_CHANGECBCHAIN:
