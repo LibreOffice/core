@@ -1305,16 +1305,13 @@ void SwTextNode::Update(
                             {
                                pCollector.reset( new SwpHts );
                             }
-                            for(SwpHts::iterator it =  pCollector->begin(); it != pCollector->end(); ++it)
+                            auto it = std::find_if(pCollector->begin(), pCollector->end(),
+                                [nWhich](const SwTextAttr *pTmp) { return nWhich == pTmp->Which(); });
+                            if (it != pCollector->end())
                             {
-                               SwTextAttr *pTmp = *it;
-                               if( nWhich == pTmp->Which() )
-                               {
-                                   pCollector->erase( it );
-                                   SwTextAttr::Destroy( pTmp,
-                                       GetDoc()->GetAttrPool() );
-                                   break;
-                               }
+                                SwTextAttr *pTmp = *it;
+                                pCollector->erase( it );
+                                SwTextAttr::Destroy( pTmp, GetDoc()->GetAttrPool() );
                             }
                             SwTextAttr * const pTmp =
                             MakeTextAttr( *GetDoc(),
@@ -1441,9 +1438,9 @@ void SwTextNode::Update(
 #if OSL_DEBUG_LEVEL > 0
         std::vector<SwFrameFormat*> checkFormats;
         const SwFrameFormats& rFormats = *GetDoc()->GetSpzFrameFormats();
-        for (SwFrameFormats::const_iterator pFormat = rFormats.begin(); pFormat != rFormats.end(); ++pFormat)
+        for (auto& rpFormat : rFormats)
         {
-            const SwFormatAnchor& rAnchor = (*pFormat)->GetAnchor();
+            const SwFormatAnchor& rAnchor = rpFormat->GetAnchor();
             const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
             if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
             {
@@ -1455,7 +1452,7 @@ void SwTextNode::Update(
                     #if 0
                     rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
                     #endif
-                    checkFormats.push_back( *pFormat );
+                    checkFormats.push_back( rpFormat );
                 }
             }
         }
@@ -4987,17 +4984,16 @@ namespace {
     {
         bool bRemoveFromList( false );
         {
-            std::vector<sal_uInt16>::const_iterator it;
-            for ( it = rWhichArr.begin(); it != rWhichArr.end(); ++it)
+            for (const auto& rWhich : rWhichArr)
             {
                 // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
-                if ( *it == RES_PARATR_NUMRULE )
+                if ( rWhich == RES_PARATR_NUMRULE )
                 {
                     bRemoveFromList = bRemoveFromList ||
                                       mrTextNode.GetNumRule() != nullptr;
                     mbListStyleOrIdReset = true;
                 }
-                else if ( *it == RES_PARATR_LIST_ID )
+                else if ( rWhich == RES_PARATR_LIST_ID )
                 {
                     bRemoveFromList = bRemoveFromList ||
                         ( mrTextNode.GetpSwAttrSet() &&
@@ -5007,7 +5003,7 @@ namespace {
                 }
                 // #i70748#
                 // RES_PARATR_OUTLINELEVEL
-                else if ( *it == RES_PARATR_OUTLINELEVEL )
+                else if ( rWhich == RES_PARATR_OUTLINELEVEL )
                 {
                     mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                 }
@@ -5016,19 +5012,19 @@ namespace {
                 {
                     // RES_PARATR_LIST_LEVEL
                     mbUpdateListLevel = mbUpdateListLevel ||
-                                        ( *it == RES_PARATR_LIST_LEVEL &&
+                                        ( rWhich == RES_PARATR_LIST_LEVEL &&
                                           mrTextNode.HasAttrListLevel() );
 
                     // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
                     mbUpdateListRestart = mbUpdateListRestart ||
-                                          ( *it == RES_PARATR_LIST_ISRESTART &&
+                                          ( rWhich == RES_PARATR_LIST_ISRESTART &&
                                             mrTextNode.IsListRestart() ) ||
-                                          ( *it == RES_PARATR_LIST_RESTARTVALUE &&
+                                          ( rWhich == RES_PARATR_LIST_RESTARTVALUE &&
                                             mrTextNode.HasAttrListRestartValue() );
 
                     // RES_PARATR_LIST_ISCOUNTED
                     mbUpdateListCount = mbUpdateListCount ||
-                                        ( *it == RES_PARATR_LIST_ISCOUNTED &&
+                                        ( rWhich == RES_PARATR_LIST_ISCOUNTED &&
                                           !mrTextNode.IsCountedInList() );
                 }
             }

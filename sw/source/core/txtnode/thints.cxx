@@ -444,20 +444,18 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
     // so any hint in OverlappingExisting can be split at most by one hint
     // in SplitNew, or even not at all (this is not true for existing hints
     // that go _around_ new hint, which is the reason d'^etre for pass 4)
-    for (NestList_t::iterator itOther = OverlappingExisting.begin();
-            itOther != OverlappingExisting.end(); ++itOther)
+    for (auto& rpOther : OverlappingExisting)
     {
-        const sal_Int32 nOtherStart( (*itOther)->GetStart() );
-        const sal_Int32 nOtherEnd  ( *(*itOther)->GetEnd()   );
+        const sal_Int32 nOtherStart( rpOther->GetStart() );
+        const sal_Int32 nOtherEnd  ( *rpOther->GetEnd()   );
 
-        for (NestList_t::iterator itNew = SplitNew.begin();
-                itNew != SplitNew.end(); ++itNew)
+        for (const auto& rpNew : SplitNew)
         {
-            const sal_Int32 nSplitNewStart( (*itNew)->GetStart() );
-            const sal_Int32 nSplitNewEnd  ( *(*itNew)->GetEnd()   );
+            const sal_Int32 nSplitNewStart( rpNew->GetStart() );
+            const sal_Int32 nSplitNewEnd  ( *rpNew->GetEnd()   );
             // 4 cases: within, around, overlap l, overlap r, (OTHER: no action)
             const bool bRemoveOverlap(
-                !bNewSelfNestable && (nNewWhich == (*itOther)->Which()) );
+                !bNewSelfNestable && (nNewWhich == rpOther->Which()) );
 
             switch (ComparePosition(nSplitNewStart, nSplitNewEnd,
                                     nOtherStart,    nOtherEnd))
@@ -476,9 +474,9 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                     break;
                 case SwComparePosition::OverlapBefore:
                     {
-                        Delete( *itOther ); // this also does NoteInHistory!
-                        (*itOther)->GetStart() = nSplitNewEnd;
-                        InsertNesting( **itOther );
+                        Delete( rpOther ); // this also does NoteInHistory!
+                        rpOther->GetStart() = nSplitNewEnd;
+                        InsertNesting( *rpOther );
                         if (!bRemoveOverlap)
                         {
                             if ( MAX_HINTS <= Count() )
@@ -487,7 +485,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                                 return false;
                             }
                             SwTextAttrNesting * const pOtherLeft(
-                                MakeTextAttrNesting( rNode, **itOther,
+                                MakeTextAttrNesting( rNode, *rpOther,
                                     nOtherStart, nSplitNewEnd ) );
                             InsertNesting( *pOtherLeft );
                         }
@@ -495,9 +493,9 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                     break;
                 case SwComparePosition::OverlapBehind:
                     {
-                        Delete( *itOther ); // this also does NoteInHistory!
-                        *(*itOther)->GetEnd() = nSplitNewStart;
-                        InsertNesting( **itOther );
+                        Delete( rpOther ); // this also does NoteInHistory!
+                        *rpOther->GetEnd() = nSplitNewStart;
+                        InsertNesting( *rpOther );
                         if (!bRemoveOverlap)
                         {
                             if ( MAX_HINTS <= Count() )
@@ -506,7 +504,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                                 return false;
                             }
                             SwTextAttrNesting * const pOtherRight(
-                                MakeTextAttrNesting( rNode, **itOther,
+                                MakeTextAttrNesting( rNode, *rpOther,
                                     nSplitNewStart, nOtherEnd ) );
                             InsertNesting( *pOtherRight );
                         }
@@ -525,26 +523,24 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
     }
 
     // pass 3: insert new hints
-    for (NestList_t::iterator iter = SplitNew.begin();
-            iter != SplitNew.end(); ++iter)
+    for (const auto& rpHint : SplitNew)
     {
-        InsertNesting(**iter);
+        InsertNesting(*rpHint);
     }
 
     // pass 4: handle overwritten hints
     // RES_TXTATR_INETFMT and RES_TXTATR_CJK_RUBY should displace attributes
     // of the same kind.
-    for (NestList_t::iterator itOther = OverwrittenExisting.begin();
-            itOther != OverwrittenExisting.end(); ++itOther)
+    for (auto& rpOther : OverwrittenExisting)
     {
-        const sal_Int32 nOtherStart( (*itOther)->GetStart() );
-        const sal_Int32 nOtherEnd  ( *(*itOther)->GetEnd()   );
+        const sal_Int32 nOtherStart( rpOther->GetStart() );
+        const sal_Int32 nOtherEnd  ( *rpOther->GetEnd()   );
 
         // overwritten portion is given by start/end of inserted hint
         if ((nNewStart <= nOtherStart) && (nOtherEnd <= nNewEnd))
         {
-            Delete(*itOther);
-            rNode.DestroyAttr( *itOther );
+            Delete(rpOther);
+            rNode.DestroyAttr( rpOther );
         }
         else
         {
@@ -553,24 +549,24 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
         // now a RUBY is inserted within the META => the existing RUBY is split:
         // here it is not possible to simply insert the left/right fragment
         // of the existing RUBY because they <em>overlap</em> with the META!
-            Delete( *itOther ); // this also does NoteInHistory!
+            Delete( rpOther ); // this also does NoteInHistory!
             if (nNewEnd < nOtherEnd)
             {
                 SwTextAttrNesting * const pOtherRight(
                     MakeTextAttrNesting(
-                        rNode, **itOther, nNewEnd, nOtherEnd ) );
+                        rNode, *rpOther, nNewEnd, nOtherEnd ) );
                 bool const bSuccess( TryInsertNesting(rNode, *pOtherRight) );
                 SAL_WARN_IF(!bSuccess, "sw.core", "recursive call 1 failed?");
             }
             if (nOtherStart < nNewStart)
             {
-                *(*itOther)->GetEnd() = nNewStart;
-                bool const bSuccess( TryInsertNesting(rNode, **itOther) );
+                *rpOther->GetEnd() = nNewStart;
+                bool const bSuccess( TryInsertNesting(rNode, *rpOther) );
                 SAL_WARN_IF(!bSuccess, "sw.core", "recursive call 2 failed?");
             }
             else
             {
-                rNode.DestroyAttr(*itOther);
+                rNode.DestroyAttr(rpOther);
             }
         }
     }
@@ -657,10 +653,10 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         }
 
         // Insert the newly created attributes:
-        for ( aIter = aInsDelHints.begin(); aIter != aInsDelHints.end(); ++aIter )
+        for ( const auto& rpHint : aInsDelHints )
         {
-            Insert( *aIter );
-            NoteInHistory( *aIter, true );
+            Insert( rpHint );
+            NoteInHistory( rpHint, true );
         }
     }
 
@@ -736,13 +732,12 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             // This should ensure, that pNewHint comes behind the already present
             // character style
             sal_uInt16 nCharStyleCount = 0;
-            aIter = aInsDelHints.begin();
-            while ( aIter != aInsDelHints.end() )
+            for ( const auto& rpHint : aInsDelHints )
             {
-                if ( RES_TXTATR_CHARFMT == (*aIter)->Which() )
+                if ( RES_TXTATR_CHARFMT == rpHint->Which() )
                 {
                     // #i74589#
-                    const SwFormatCharFormat& rOtherCharFormat = (*aIter)->GetCharFormat();
+                    const SwFormatCharFormat& rOtherCharFormat = rpHint->GetCharFormat();
                     const SwFormatCharFormat& rThisCharFormat = rNewHint.GetCharFormat();
                     const bool bSameCharFormat = rOtherCharFormat.GetCharFormat() == rThisCharFormat.GetCharFormat();
 
@@ -754,8 +749,8 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                            bSameCharFormat ) )
                     {
                         // Remove old hint
-                        Delete( *aIter );
-                        rNode.DestroyAttr( *aIter );
+                        Delete( rpHint );
+                        rNode.DestroyAttr( rpHint );
                     }
                     else
                         ++nCharStyleCount;
@@ -764,8 +759,8 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 {
                     // remove all attributes from auto styles, which are explicitly set in
                     // the new character format:
-                    OSL_ENSURE( RES_TXTATR_AUTOFMT == (*aIter)->Which(), "AUTOSTYLES - Misc trouble" );
-                    SwTextAttr* pOther = *aIter;
+                    OSL_ENSURE( RES_TXTATR_AUTOFMT == rpHint->Which(), "AUTOSTYLES - Misc trouble" );
+                    SwTextAttr* pOther = rpHint;
                     std::shared_ptr<SfxItemSet> pOldStyle = static_cast<const SwFormatAutoFormat&>(pOther->GetAttr()).GetStyleHandle();
 
                     // For each attribute in the automatic style check if it
@@ -800,7 +795,6 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                         NoteInHistory( pNewAttr, true );
                     }
                 }
-                ++aIter;
             }
 
             // If there is no current hint and start and end of rNewHint
@@ -824,14 +818,12 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             // Find the current autostyle. Mix attributes if necessary.
             SwTextAttr* pCurrentAutoStyle = nullptr;
             SwTextAttr* pCurrentCharFormat = nullptr;
-            aIter = aInsDelHints.begin();
-            while ( aIter != aInsDelHints.end() )
+            for ( const auto& rpHint : aInsDelHints )
             {
-                if ( RES_TXTATR_AUTOFMT == (*aIter)->Which() )
-                    pCurrentAutoStyle = *aIter;
-                else if ( RES_TXTATR_CHARFMT == (*aIter)->Which() )
-                    pCurrentCharFormat = *aIter;
-                ++aIter;
+                if ( RES_TXTATR_AUTOFMT == rpHint->Which() )
+                    pCurrentAutoStyle = rpHint;
+                else if ( RES_TXTATR_CHARFMT == rpHint->Which() )
+                    pCurrentCharFormat = rpHint;
             }
 
             std::shared_ptr<SfxItemSet> pNewStyle = static_cast<const SwFormatAutoFormat&>(rNewHint.GetAttr()).GetStyleHandle();

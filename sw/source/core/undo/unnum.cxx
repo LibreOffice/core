@@ -172,11 +172,11 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    for( std::vector<NodeLevel>::const_iterator i = aNodes.begin(); i != aNodes.end(); ++i )
+    for( const auto& rNode : aNodes )
     {
-        SwTextNode* pNd = rDoc.GetNodes()[ i->index ]->GetTextNode();
+        SwTextNode* pNd = rDoc.GetNodes()[ rNode.index ]->GetTextNode();
         OSL_ENSURE( pNd, "Where has the TextNode gone?" );
-        pNd->SetAttrListLevel( i->level );
+        pNd->SetAttrListLevel( rNode.level );
 
         if( pNd->GetCondFormatColl() )
             pNd->ChkCondColl();

@@ -2933,17 +2933,15 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
     // #i21237#
     SwFormTokens aPattern = rTOXBase.GetTOXForm().
         GetPattern(static_cast<sal_uInt16>(nIndex));
-    SwFormTokens::iterator aIt = aPattern.begin();
 
     sal_Int32 nTokenCount = 0;
     uno::Sequence< beans::PropertyValues > aRetSeq;
     OUString aProgCharStyle;
-    while(aIt != aPattern.end()) // #i21237#
+    for(const SwFormToken& aToken : aPattern) // #i21237#
     {
         nTokenCount++;
         aRetSeq.realloc(nTokenCount);
         beans::PropertyValues* pTokenProps = aRetSeq.getArray();
-        SwFormToken  aToken = *aIt; // #i21237#
 
         uno::Sequence< beans::PropertyValue >& rCurTokenSeq =
             pTokenProps[nTokenCount-1];
@@ -3157,8 +3155,6 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             default:
                 ;
         }
-
-        ++aIt; // #i21237#
     }
 
     uno::Any aRet;
