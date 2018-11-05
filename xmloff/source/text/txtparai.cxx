@@ -639,6 +639,11 @@ void XMLImpRubyContext_Impl::EndElement()
         GetImport().GetTextImport());
     const Reference < XTextCursor > xAttrCursor(
         xTextImport->GetText()->createTextCursorByRange( m_xStart ));
+    if (!xAttrCursor.is())
+    {
+        SAL_WARN("xmloff.text", "cannot insert ruby");
+        return;
+    }
     xAttrCursor->gotoRange(xTextImport->GetCursorAsRange()->getStart(),
             true);
     xTextImport->SetRuby( GetImport(), xAttrCursor,
