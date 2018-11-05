@@ -63,6 +63,7 @@ class VCL_DLLPUBLIC SvTreeListEntry
     void*               pUserData;
     SvTLEntryFlags      nEntryFlags;
     Color               maBackColor;
+    std::unique_ptr<Color> mxTextColor;
 
 private:
     void ClearChildren();
@@ -108,8 +109,12 @@ public:
     SvTLEntryFlags GetFlags() const { return nEntryFlags;}
     void SetFlags( SvTLEntryFlags nFlags );
 
-    void SetBackColor( const Color& aColor ) { maBackColor = aColor; }
+    void SetBackColor( const Color& rColor ) { maBackColor = rColor; }
     const Color& GetBackColor() const { return maBackColor; }
+
+    void SetTextColor( const Color* pColor ) { mxTextColor.reset(pColor ? new Color(*pColor) : nullptr); }
+    const Color* GetTextColor() const { return mxTextColor.get(); }
+
     SvTreeListEntry* GetParent() const { return pParent; }
 
     SvTreeListEntry* NextSibling() const;

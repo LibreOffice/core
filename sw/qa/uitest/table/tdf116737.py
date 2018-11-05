@@ -25,9 +25,8 @@ class tdf116737(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
 
         formatlbinstable = xDialog.getChild("formatlbinstable")
-        props = {"TEXT": "Simple List Shaded"}
-        actionProps = mkPropertyValues(props)
-        formatlbinstable.executeAction("SELECT", actionProps)
+        entry = formatlbinstable.getChild("11") #Simple List Shaded
+        entry.executeAction("SELECT", tuple())
 
         xOkBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOkBtn)

@@ -192,6 +192,7 @@ namespace o3tl
 
 struct SvTreeListBoxImpl;
 class SalInstanceTreeView;
+class SalInstanceEntryTreeView;
 
 class VCL_DLLPUBLIC SvTreeListBox
                 :public Control
@@ -205,6 +206,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     friend class IconViewImpl;
     friend class TreeControlPeer;
     friend class SalInstanceTreeView;
+    friend class SalInstanceEntryTreeView;
 
     std::unique_ptr<SvTreeListBoxImpl> mpImpl;
     Link<SvTreeListBox*,void>  aCheckButtonHdl;
