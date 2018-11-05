@@ -1337,6 +1337,7 @@ namespace emfplushelper
 
                             css::lang::Locale locale;
                             double stringAlignmentHorizontalOffset = 0.0;
+
                             if (stringFormat)
                             {
                                 SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer", "EMF+ DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
@@ -1359,6 +1360,10 @@ namespace emfplushelper
                             }
                             else
                             {
+                                // By default LeadingMargin is 1/6 inch
+                                // TODO for typographic fonts set value to 0.
+                                stringAlignmentHorizontalOffset = 16.0;
+
                                 // use system default
                                 locale = Application::GetSettings().GetLanguageTag().getLocale();
                             }
