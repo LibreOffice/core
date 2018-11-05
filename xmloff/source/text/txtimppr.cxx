@@ -282,7 +282,7 @@ void lcl_SeparateBorder(
     XMLPropertyState const * pAllBorder, XMLPropertyState* pBorders[4],
     XMLPropertyState* pNewBorders[4], XMLPropertyState* pAllBorderWidth,
     XMLPropertyState* pBorderWidths[4]
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     , const rtl::Reference< XMLPropertySetMapper >& rMapper
 #endif
 )
@@ -569,7 +569,7 @@ void XMLTextImportPropertyMapper::finished(
             i, pAllBorderDistance, pBorderDistances, pNewBorderDistances,
             pAllBorder, pBorders, pNewBorders,
             pAllBorderWidth, pBorderWidths
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
             , getPropertySetMapper()
 #endif
             );
@@ -578,7 +578,7 @@ void XMLTextImportPropertyMapper::finished(
             i, pCharAllBorderDistance, pCharBorderDistances,
             pCharNewBorderDistances, pCharAllBorder, pCharBorders,
             pCharNewBorders, pCharAllBorderWidth, pCharBorderWidths
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
             , getPropertySetMapper()
 #endif
             );
