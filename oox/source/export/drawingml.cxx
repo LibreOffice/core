@@ -735,7 +735,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         int relDotLen = nLineWidth ? aLineDash.DotLen / nLineWidth : 0;
         int relDashLen = nLineWidth ? aLineDash.DashLen / nLineWidth : 0;
         int relDistance = nLineWidth ? aLineDash.Distance / nLineWidth : 0;
-        // fixing relative values in the case of linewidths smaller than 1 pt
+        // fixing relative values in the case of linewidth smaller than 1 pt
         if (0 < nLineWidth && nLineWidth < 35) //35 HMM == 1 pt
         {
             relDotLen = relDotLen ? (relDotLen + 1) * (nLineWidth * 360.0 / 12700) : 0;

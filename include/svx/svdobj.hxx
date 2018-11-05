@@ -919,7 +919,7 @@ public:
     void setSuitableOutlinerBg(Outliner& rOutliner) const;
 
 protected:
-    tools::Rectangle            aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
+    tools::Rectangle            aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
     Point                       aAnchor;      // anchor position (Writer)
     SdrObjUserCall*             pUserCall;
     std::unique_ptr<SdrObjPlusData>
