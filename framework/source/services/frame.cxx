@@ -1637,7 +1637,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
                     source of thrown exception is the right one. May it will be the frame himself.
 
     @throws     CloseVetoException
-                    if any internal things willn't be closed
+                    if any internal things will not be closed
 
     @threadsafe yes
 *//*-*****************************************************************************************************/

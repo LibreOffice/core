@@ -45,7 +45,7 @@ class InsertPosition;
     5.) Borders around every page object.
     6.) Vertical and horizontal borders between enclosing page and outer
         page objects.
-    From these it calculates various output values:
+    From these, it calculates various output values:
     1.) The width of page objects.
     2.) The number of columns.
     3.) The size of the enclosing page.

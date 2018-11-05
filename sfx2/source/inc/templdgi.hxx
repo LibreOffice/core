@@ -269,7 +269,7 @@ protected:
     void Update_Impl();
     void UpdateFamily_Impl();
 
-    // In which FamilyState do I have to look , in order to get the
+    // In which FamilyState do I have to look, in order to get the
     // information of the ith Family in the pStyleFamilies.
     sal_uInt16 StyleNrToInfoOffset( sal_uInt16 i );
 
