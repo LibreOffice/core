@@ -28,6 +28,7 @@
 #include <scresid.hxx>
 #include <sc.hrc>
 #include <strings.hrc>
+#include <subtotals.hrc>
 
 #include <subtdlg.hxx>
 #include <tpsubt.hxx>
@@ -53,6 +54,9 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
     get(mpLbGroup, "group_by");
     get(mpLbColumns, "columns");
     get(mpLbFunctions, "functions");
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_SUBTOTALS); ++i)
+        mpLbFunctions->InsertEntry(ScResId(SCSTR_SUBTOTALS[i]));
 
     long nHeight = mpLbColumns->GetTextHeight() * 14;
     mpLbColumns->set_height_request(nHeight);
