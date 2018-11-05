@@ -30,7 +30,7 @@ class StarBASIC;
 class SfxUInt16Item;
 class SfxBindings;
 class SfxDispatcher;
-namespace weld { class Widget; }
+namespace weld { class Widget; class Window; }
 
 namespace basctl
 {
@@ -73,12 +73,11 @@ namespace basctl
 
     // new methods for macros
 
-    OUString        ChooseMacro(
+    OUString        ChooseMacro(weld::Window* pParent,
         const css::uno::Reference< css::frame::XModel >& rxLimitToDocument, const css::uno::Reference< css::frame::XFrame >& xDocFrame,
         bool bChooseOnly );
-    inline OUString ChooseMacro(
-        const css::uno::Reference< css::frame::XModel >& rxLimitToDocument )
-    { return ChooseMacro(rxLimitToDocument, css::uno::Reference< css::frame::XFrame >(), false/*bChooseOnly*/); }
+    inline OUString ChooseMacro(weld::Window* pParent, const css::uno::Reference<css::frame::XModel>& rLimitToDocument)
+    { return ChooseMacro(pParent, rLimitToDocument, css::uno::Reference< css::frame::XFrame >(), false/*bChooseOnly*/); }
 
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException

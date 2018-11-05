@@ -2,42 +2,13 @@
 <!-- Generated with glade 3.20.4 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 7</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 9</col>
-      </row>
-    </data>
   </object>
   <object class="GtkDialog" id="NumberingNameDialog">
     <property name="can_focus">False</property>
