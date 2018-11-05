@@ -210,8 +210,8 @@ void MysqlTestDriver::testDBPositionChange()
     xResultSet->last();
     CPPUNIT_ASSERT_EQUAL(ROW_COUNT, nUpdateCount);
     CPPUNIT_ASSERT_EQUAL(ROW_COUNT, xResultSet->getRow());
-    bool successPrevios = xResultSet->previous();
-    CPPUNIT_ASSERT(successPrevios);
+    bool successPrevious = xResultSet->previous();
+    CPPUNIT_ASSERT(successPrevious);
     CPPUNIT_ASSERT_EQUAL(ROW_COUNT - 1, nUpdateCount);
     xResultSet->beforeFirst();
     xResultSet->next();
