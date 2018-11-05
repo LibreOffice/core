@@ -1836,7 +1836,6 @@ def __compil__(s):
     rmsp = re.compile(r"[ ]*([=+*/]|==|<=|>=|<>|!=|-[ ]+)[ ]*")
     chsp = re.compile(r"[ \t]+")
     chch = re.compile(r"(?u)(?<!\w):(?=\w)")
-    parenfix = re.compile(r"(?ui)(\([^\(\[\]\)]+)]\)")
 
     # remove CR characters and split lines
     s = re.sub(r'[ \t\r]*(?=\n)', '', s)
