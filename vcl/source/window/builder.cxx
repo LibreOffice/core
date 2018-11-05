@@ -1836,6 +1836,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         {
             VclPtrInstance<SvTreeListBox> xBox(pRealParent, nWinStyle);
             xBox->SetNoAutoCurEntry(true);
+            xBox->SetHighlightRange(); // select over the whole width
             xWindow = xBox;
         }
         if (pRealParent != pParent)
