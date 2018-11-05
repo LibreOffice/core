@@ -98,8 +98,10 @@ enum XMLUserDefinedTransformerAction
 
 // a macro to put two tokens into one sal_Int32 for the action
 // XML_ATACTION_RENAME_ATTRIBUTE
-#define RENAME_ENTRY( f, s ) \
-    (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
+static constexpr sal_Int32 RENAME_ENTRY( XMLTokenEnum f, XMLTokenEnum s )
+{
+    return static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16);
+}
 
 static XMLTransformerActionInit const aActionTable[] =
 {

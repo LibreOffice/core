@@ -34,11 +34,13 @@
 
 #include <comphelper/fileformat.h>
 
-#define SWAPNIBBLES(c)      \
-unsigned char nSwapTmp=c;   \
-nSwapTmp <<= 4;             \
-c >>= 4;                    \
-c |= nSwapTmp;
+static constexpr void swapNibbles(unsigned char &c)
+{
+    unsigned char nSwapTmp=c;
+    nSwapTmp <<= 4;
+    c >>= 4;
+    c |= nSwapTmp;
+}
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -1488,7 +1490,7 @@ std::size_t SvStream::CryptAndWriteBuffer( const void* pStart, std::size_t nLen)
         {
             unsigned char aCh = rn;
             aCh ^= nMask;
-            SWAPNIBBLES(aCh)
+            swapNibbles(aCh);
             rn = aCh;
         }
         // *************************
@@ -1507,7 +1509,7 @@ void SvStream::EncryptBuffer(void* pStart, std::size_t nLen) const
     for ( std::size_t n=0; n < nLen; n++, pTemp++ )
     {
         unsigned char aCh = *pTemp;
-        SWAPNIBBLES(aCh)
+        swapNibbles(aCh);
         aCh ^= nMask;
         *pTemp = aCh;
     }
