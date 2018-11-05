@@ -398,7 +398,10 @@ bool SvpSalInstance::IsMainThread() const
 void SvpSalInstance::updateMainThread()
 {
     if (!IsMainThread())
+    {
         m_MainThread = osl::Thread::getCurrentIdentifier();
+        ImplGetSVData()->mnMainThreadId = osl::Thread::getCurrentIdentifier();
+    }
 }
 
 bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
