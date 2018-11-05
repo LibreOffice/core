@@ -217,8 +217,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 const UnifiedTransparencePrimitive2D& rUnifiedTransparencePrimitive2D = dynamic_cast<const UnifiedTransparencePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("unifiedtransparence");
-
-                rWriter.attribute("transparence", rUnifiedTransparencePrimitive2D.getTransparence());
+                rWriter.attribute("transparence", OString::number(rUnifiedTransparencePrimitive2D.getTransparence()));
+                decomposeAndWrite(rUnifiedTransparencePrimitive2D.getChildren(), rWriter);
 
                 rWriter.endElement();
             }
@@ -240,7 +240,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("svgradialgradient");
                 basegfx::B2DPoint aFocusAttribute = rSvgRadialGradientPrimitive2D.getFocal();
 
-                rWriter.attribute("radius", rSvgRadialGradientPrimitive2D.getRadius());
+                rWriter.attribute("radius", OString::number(rSvgRadialGradientPrimitive2D.getRadius()));
                 rWriter.attribute("x", aFocusAttribute.getX());
                 rWriter.attribute("y", aFocusAttribute.getY());
 
