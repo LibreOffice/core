@@ -895,6 +895,690 @@ bool TreeListBox::OpenCurrent()
     return false;
 }
 
+SbTreeListBox::SbTreeListBox(std::unique_ptr<weld::TreeView> xControl, weld::Window* pTopLevel)
+    : m_xControl(std::move(xControl))
+    , m_xIter(m_xControl->make_iterator())
+    , m_pTopLevel(pTopLevel)
+    , m_aNotifier(*this)
+{
+    m_xControl->connect_row_activated(LINK(this, SbTreeListBox, OpenCurrentHdl));
+    m_xControl->connect_expanding(LINK(this, SbTreeListBox, RequestingChildrenHdl));
+    nMode = BrowseMode::All;   // everything
+}
+
+SbTreeListBox::~SbTreeListBox()
+{
+    m_aNotifier.dispose();
+
+    bool bValidIter = m_xControl->get_iter_first(*m_xIter);
+    while (bValidIter)
+    {
+        Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(*m_xIter).toInt64());
+        delete pBasicEntry;
+        bValidIter = m_xControl->iter_next(*m_xIter);
+    }
+}
+
+void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
+{
+    OSL_ENSURE( rDocument.isAlive(), "TreeListBox::ScanEntry: illegal document!" );
+    if ( !rDocument.isAlive() )
+        return;
+
+    // can be called multiple times for updating!
+
+    // actually test if basic's in the tree already?!
+    m_xControl->freeze();
+    // level 1: BasicManager (application, document, ...)
+    bool bDocumentRootEntry = FindRootEntry(rDocument, eLocation, *m_xIter);
+    if (bDocumentRootEntry && m_xControl->get_row_expanded(*m_xIter))
+        ImpCreateLibEntries(*m_xIter, rDocument, eLocation);
+    if (!bDocumentRootEntry)
+    {
+        OUString aRootName(GetRootEntryName(rDocument, eLocation));
+        OUString aImage(GetRootEntryBitmaps(rDocument));
+        AddEntry(aRootName, aImage, nullptr, true, o3tl::make_unique<DocumentEntry>(rDocument, eLocation));
+    }
+    m_xControl->thaw();
+}
+
+void SbTreeListBox::ImpCreateLibEntries(weld::TreeIter& rIter, const ScriptDocument& rDocument, LibraryLocation eLocation)
+{
+    // get a sorted list of library names
+    Sequence< OUString > aLibNames( rDocument.getLibraryNames() );
+    sal_Int32 nLibCount = aLibNames.getLength();
+    const OUString* pLibNames = aLibNames.getConstArray();
+
+    for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+    {
+        OUString aLibName = pLibNames[ i ];
+
+        if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
+        {
+            // check, if the module library is loaded
+            bool bModLibLoaded = false;
+            Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryLoaded( aLibName ) )
+                bModLibLoaded = true;
+
+            // check, if the dialog library is loaded
+            bool bDlgLibLoaded = false;
+            Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryLoaded( aLibName ) )
+                bDlgLibLoaded = true;
+
+            bool bLoaded = bModLibLoaded || bDlgLibLoaded;
+
+            // if only one of the libraries is loaded, load also the other
+            if ( bLoaded )
+            {
+                if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
+                    xModLibContainer->loadLibrary( aLibName );
+
+                if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && !xDlgLibContainer->isLibraryLoaded( aLibName ) )
+                    xDlgLibContainer->loadLibrary( aLibName );
+            }
+
+            // create tree list box entry
+            OUString sId;
+            if ( ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules ) )
+                sId = bLoaded ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_DLGLIBNOTLOADED);
+            else
+                sId = bLoaded ? OUStringLiteral(RID_BMP_MODLIB) : OUStringLiteral(RID_BMP_MODLIBNOTLOADED);
+            std::unique_ptr<weld::TreeIter> xLibRootEntry(m_xControl->make_iterator(&rIter));
+            bool bLibRootEntry = FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xLibRootEntry);
+            if (bLibRootEntry)
+            {
+                SetEntryBitmaps(*xLibRootEntry, sId);
+                if (m_xControl->get_row_expanded(*xLibRootEntry))
+                    ImpCreateLibSubEntries(*xLibRootEntry, rDocument, aLibName);
+            }
+            else
+            {
+                AddEntry(aLibName, sId, &rIter, true, o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+            }
+        }
+    }
+}
+
+void SbTreeListBox::ImpCreateLibSubEntries(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName)
+{
+    // modules
+    if ( nMode & BrowseMode::Modules )
+    {
+        Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
+
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( rLibName ) && xModLibContainer->isLibraryLoaded( rLibName ) )
+        {
+            try
+            {
+                if( rDocument.isInVBAMode() )
+                {
+                    ImpCreateLibSubEntriesInVBAMode(rLibRootEntry, rDocument, rLibName);
+                }
+                else
+                {
+                    // get a sorted list of module names
+                    Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
+                    sal_Int32 nModCount = aModNames.getLength();
+                    const OUString* pModNames = aModNames.getConstArray();
+
+                    auto xTreeIter = m_xControl->make_iterator();
+
+                    for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+                    {
+                        OUString aModName = pModNames[ i ];
+                        m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
+                        bool bModuleEntry = FindEntry(aModName, OBJ_TYPE_MODULE, *xTreeIter);
+                        if (!bModuleEntry)
+                        {
+                            AddEntry(aModName, RID_BMP_MODULE, &rLibRootEntry, false, o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                        }
+
+                        // methods
+                        if ( nMode & BrowseMode::Subs )
+                        {
+                            Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
+                            sal_Int32 nCount = aNames.getLength();
+                            const OUString* pNames = aNames.getConstArray();
+
+                            auto xSubTreeIter = m_xControl->make_iterator();
+
+                            for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                            {
+                                OUString aName = pNames[ j ];
+                                m_xControl->copy_iterator(*xTreeIter, *xSubTreeIter);
+                                bool bEntry = FindEntry(aName, OBJ_TYPE_METHOD, *xSubTreeIter);
+                                if (!bEntry)
+                                {
+                                    AddEntry(aName, RID_BMP_MACRO, xTreeIter.get(), false, o3tl::make_unique<Entry>(OBJ_TYPE_METHOD));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( const container::NoSuchElementException& )
+            {
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+            }
+        }
+    }
+
+    // dialogs
+    if ( nMode & BrowseMode::Dialogs )
+    {
+         Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
+
+         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( rLibName ) && xDlgLibContainer->isLibraryLoaded( rLibName ) )
+         {
+            try
+            {
+                // get a sorted list of dialog names
+                Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
+                sal_Int32 nDlgCount = aDlgNames.getLength();
+                const OUString* pDlgNames = aDlgNames.getConstArray();
+
+                auto xTreeIter = m_xControl->make_iterator();
+
+                for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+                {
+                    OUString aDlgName = pDlgNames[ i ];
+                    m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
+                    bool bDialogEntry = FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xTreeIter);
+                    if (!bDialogEntry)
+                    {
+                        AddEntry(aDlgName, RID_BMP_DIALOG, &rLibRootEntry, false, o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
+                    }
+                }
+            }
+            catch (const container::NoSuchElementException& )
+            {
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+            }
+        }
+    }
+}
+
+void SbTreeListBox::ImpCreateLibSubEntriesInVBAMode(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
+{
+    auto const aEntries = {
+        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDEResId(RID_STR_DOCUMENT_OBJECTS) ),
+        std::make_pair( OBJ_TYPE_USERFORMS, IDEResId(RID_STR_USERFORMS) ),
+        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDEResId(RID_STR_NORMAL_MODULES) ),
+        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDEResId(RID_STR_CLASS_MODULES) ) };
+    for( auto const & iter: aEntries )
+    {
+        EntryType eType = iter.first;
+        OUString const & aEntryName = iter.second;
+        std::unique_ptr<weld::TreeIter> xLibSubRootEntry(m_xControl->make_iterator(&rLibRootEntry));
+        bool bLibSubRootEntry = FindEntry(aEntryName, eType, *xLibSubRootEntry);
+        if (bLibSubRootEntry)
+        {
+            SetEntryBitmaps(*xLibSubRootEntry, RID_BMP_MODLIB);
+            if (m_xControl->get_row_expanded(*xLibSubRootEntry))
+                ImpCreateLibSubSubEntriesInVBAMode(*xLibSubRootEntry, rDocument, rLibName);
+        }
+        else
+        {
+            m_xControl->copy_iterator(rLibRootEntry, *xLibSubRootEntry);
+            AddEntry(aEntryName, RID_BMP_MODLIB, xLibSubRootEntry.get(), true, o3tl::make_unique<Entry>(eType));
+        }
+    }
+}
+
+void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(weld::TreeIter& rLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName)
+{
+    uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, rLibName );
+    if( !xLib.is() )
+        return;
+
+    try
+    {
+        // get a sorted list of module names
+        Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
+        sal_Int32 nModCount = aModNames.getLength();
+        const OUString* pModNames = aModNames.getConstArray();
+
+        EntryDescriptor aDesc(GetEntryDescriptor(&rLibSubRootEntry));
+        EntryType eCurrentType(aDesc.GetType());
+
+        for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+        {
+            OUString aModName = pModNames[ i ];
+            EntryType eType = OBJ_TYPE_UNKNOWN;
+            switch( ModuleInfoHelper::getModuleType( xLib, aModName ) )
+            {
+                case script::ModuleType::DOCUMENT:
+                    eType = OBJ_TYPE_DOCUMENT_OBJECTS;
+                    break;
+                case script::ModuleType::FORM:
+                    eType = OBJ_TYPE_USERFORMS;
+                    break;
+                case script::ModuleType::NORMAL:
+                    eType = OBJ_TYPE_NORMAL_MODULES;
+                    break;
+                case script::ModuleType::CLASS:
+                    eType = OBJ_TYPE_CLASS_MODULES;
+                    break;
+            }
+            if( eType != eCurrentType )
+                continue;
+
+            // display a nice friendly name in the ObjectModule tab,
+               // combining the objectname and module name, e.g. Sheet1 ( Financials )
+            OUString aEntryName = aModName;
+            if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
+            {
+                OUString sObjName;
+                ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
+                if( !sObjName.isEmpty() )
+                {
+                    aEntryName += " (" + sObjName + ")";
+                }
+            }
+            std::unique_ptr<weld::TreeIter> xModuleEntry(m_xControl->make_iterator(&rLibSubRootEntry));
+            bool bModuleEntry = FindEntry(aEntryName, OBJ_TYPE_MODULE, *xModuleEntry);
+            if (!bModuleEntry)
+            {
+                m_xControl->copy_iterator(rLibSubRootEntry, *xModuleEntry);
+                AddEntry(aEntryName, RID_BMP_MODULE, xModuleEntry.get(), false,
+                         o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+            }
+
+            // methods
+            if ( nMode & BrowseMode::Subs )
+            {
+                Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
+                sal_Int32 nCount = aNames.getLength();
+                const OUString* pNames = aNames.getConstArray();
+
+                for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                {
+                    OUString aName = pNames[ j ];
+                    std::unique_ptr<weld::TreeIter> xEntry(m_xControl->make_iterator(xModuleEntry.get()));
+                    bool bEntry = FindEntry(aName, OBJ_TYPE_METHOD, *xEntry);
+                    if (!bEntry)
+                    {
+                        AddEntry(aName, RID_BMP_MACRO, xModuleEntry.get(), false, o3tl::make_unique<Entry>(OBJ_TYPE_METHOD));
+                    }
+                }
+            }
+        }
+    }
+    catch ( const container::NoSuchElementException& )
+    {
+        DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+    }
+}
+
+bool SbTreeListBox::ImpFindEntry(weld::TreeIter& rIter, const OUString& rText)
+{
+    bool bValidIter = m_xControl->iter_children(rIter);
+    while (bValidIter)
+    {
+        if (rText == m_xControl->get_text(rIter))
+            return true;
+        bValidIter = m_xControl->iter_next_sibling(rIter);
+    }
+    return false;
+}
+
+void SbTreeListBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateEntries();
+}
+
+void SbTreeListBox::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateEntries();
+}
+
+void SbTreeListBox::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void SbTreeListBox::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void SbTreeListBox::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void SbTreeListBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateEntries();
+}
+
+void SbTreeListBox::onDocumentClosed( const ScriptDocument& rDocument )
+{
+    UpdateEntries();
+    // The document is not yet actually deleted, so we need to remove its entry
+    // manually.
+    RemoveEntry(rDocument);
+}
+
+void SbTreeListBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void SbTreeListBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void SbTreeListBox::UpdateEntries()
+{
+    bool bValidIter = m_xControl->get_selected(m_xIter.get());
+    EntryDescriptor aCurDesc(GetEntryDescriptor(bValidIter ? m_xIter.get() : nullptr));
+
+    // removing the invalid entries
+    std::unique_ptr<weld::TreeIter> xLastValid(m_xControl->make_iterator(nullptr));
+    bool bLastValid = false;
+    bValidIter = m_xControl->get_iter_first(*m_xIter);
+    while (bValidIter)
+    {
+        if (IsValidEntry(*m_xIter))
+        {
+            m_xControl->copy_iterator(*m_xIter, *xLastValid);
+            bLastValid = true;
+        }
+        else
+            RemoveEntry(*m_xIter);
+        if (bLastValid)
+        {
+            m_xControl->copy_iterator(*xLastValid, *m_xIter);
+            bValidIter = m_xControl->iter_next(*m_xIter);
+        }
+        else
+            bValidIter = m_xControl->get_iter_first(*m_xIter);
+    }
+
+    ScanAllEntries();
+
+    SetCurrentEntry( aCurDesc );
+}
+
+// Removes the entry from the tree.
+void SbTreeListBox::RemoveEntry(const weld::TreeIter& rIter)
+{
+    // removing the associated user data
+    Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(rIter).toInt64());
+    delete pBasicEntry;
+    // removing the entry
+    m_xControl->remove(rIter);
+}
+
+// Removes the entry of rDocument.
+void SbTreeListBox::RemoveEntry (ScriptDocument const& rDocument)
+{
+    // finding the entry of rDocument
+    bool bValidIter = m_xControl->get_iter_first(*m_xIter);
+    while (bValidIter)
+    {
+        if (rDocument == GetEntryDescriptor(m_xIter.get()).GetDocument())
+        {
+            RemoveEntry(*m_xIter);
+            break;
+        }
+        bValidIter = m_xControl->iter_next(*m_xIter);
+    }
+}
+
+bool SbTreeListBox::FindEntry(const OUString& rText, EntryType eType, weld::TreeIter& rIter)
+{
+    bool bValidIter = m_xControl->iter_children(rIter);
+    while (bValidIter)
+    {
+        Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(rIter).toInt64());
+        assert(pBasicEntry && "FindEntry: no Entry ?!");
+        if (pBasicEntry->GetType() == eType && rText == m_xControl->get_text(rIter))
+            return true;
+        bValidIter = m_xControl->iter_next_sibling(rIter);
+    }
+    return false;
+}
+
+bool SbTreeListBox::IsEntryProtected(weld::TreeIter* pEntry)
+{
+    bool bProtected = false;
+    if (pEntry && m_xControl->get_iter_depth(*pEntry) == 1)
+    {
+        EntryDescriptor aDesc(GetEntryDescriptor(pEntry));
+        const ScriptDocument& rDocument( aDesc.GetDocument() );
+        OSL_ENSURE( rDocument.isAlive(), "TreeListBox::IsEntryProtected: no document, or document is dead!" );
+        if ( rDocument.isAlive() )
+        {
+            const OUString& aOULibName( aDesc.GetLibName() );
+            Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+            {
+                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                {
+                    bProtected = true;
+                }
+            }
+        }
+    }
+    return bProtected;
+}
+
+void SbTreeListBox::AddEntry(
+    const OUString& rText,
+    const OUString& rImage,
+    weld::TreeIter* pParent,
+    bool bChildrenOnDemand,
+    std::unique_ptr<Entry>&& rUserData)
+{
+    OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(rUserData.release())));
+    m_xControl->insert(pParent, -1, rText, &sId, nullptr, nullptr, &rImage, bChildrenOnDemand);
+}
+
+void SbTreeListBox::SetEntryBitmaps(weld::TreeIter& rIter, const OUString& rImage)
+{
+    m_xControl->set_expander_image(rIter, rImage);
+}
+
+LibraryType SbTreeListBox::GetLibraryType() const
+{
+    LibraryType eType = LibraryType::All;
+    if ( ( nMode & BrowseMode::Modules ) && !( nMode & BrowseMode::Dialogs ) )
+        eType = LibraryType::Module;
+    else if ( !( nMode & BrowseMode::Modules ) && ( nMode & BrowseMode::Dialogs ) )
+        eType = LibraryType::Dialog;
+    return eType;
+}
+
+OUString SbTreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const
+{
+    return rDocument.getTitle( eLocation, GetLibraryType() );
+}
+
+OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
+{
+    OSL_ENSURE( rDocument.isValid(), "TreeListBox::GetRootEntryBitmaps: illegal document!" );
+    if (!rDocument.isValid())
+        return OUString();
+
+    if ( rDocument.isDocument() )
+    {
+        OUString sFactoryURL;
+        Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
+        try
+        {
+            OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
+            Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
+            if ( xModuleConfig.is() )
+            {
+                Sequence< beans::PropertyValue > aModuleDescr;
+                xModuleConfig->getByName( sModule ) >>= aModuleDescr;
+                sal_Int32 nCount = aModuleDescr.getLength();
+                const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
+                for ( sal_Int32 i = 0; i < nCount; ++i )
+                {
+                    if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
+                    {
+                        pModuleDescr[ i ].Value >>= sFactoryURL;
+                        break;
+                    }
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+        }
+
+        if ( !sFactoryURL.isEmpty() )
+        {
+            return SvFileInformationManager::GetFileImageId(INetURLObject(sFactoryURL));
+        }
+        else
+        {
+            // default icon
+            return OUString(RID_BMP_DOCUMENT);
+        }
+    }
+    return OUString(RID_BMP_INSTALLATION);
+}
+
+void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
+{
+    bool bCurEntry = false;
+    auto xCurIter = m_xControl->make_iterator();
+    EntryDescriptor aDesc = rDesc;
+    if ( aDesc.GetType() == OBJ_TYPE_UNKNOWN )
+    {
+        aDesc = EntryDescriptor(
+            ScriptDocument::getApplicationScriptDocument(),
+            LIBRARY_LOCATION_USER, "Standard",
+            OUString(), ".", OBJ_TYPE_UNKNOWN
+        );
+    }
+    ScriptDocument aDocument = aDesc.GetDocument();
+    OSL_ENSURE( aDocument.isValid(), "TreeListBox::SetCurrentEntry: invalid document!" );
+    LibraryLocation eLocation = aDesc.GetLocation();
+    bool bRootEntry = FindRootEntry(aDocument, eLocation, *m_xIter);
+    if (bRootEntry)
+    {
+        m_xControl->copy_iterator(*m_xIter, *xCurIter);
+        bCurEntry = true;
+        const OUString& aLibName( aDesc.GetLibName() );
+        if ( !aLibName.isEmpty() )
+        {
+            m_xControl->expand_row(*m_xIter);
+            auto xLibIter = m_xControl->make_iterator(m_xIter.get());
+            bool bLibEntry = FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xLibIter);
+            if (bLibEntry)
+            {
+                m_xControl->copy_iterator(*xLibIter, *xCurIter);
+                const OUString& aLibSubName( aDesc.GetLibSubName() );
+                if( !aLibSubName.isEmpty() )
+                {
+                    m_xControl->expand_row(*xLibIter);
+                    auto xSubLibIter = m_xControl->make_iterator(xLibIter.get());
+                    bool bSubLibEntry = ImpFindEntry(*xSubLibIter, aLibSubName);
+                    if (bSubLibEntry)
+                    {
+                        m_xControl->copy_iterator(*xSubLibIter, *xCurIter);
+                    }
+                }
+                const OUString& aName( aDesc.GetName() );
+                if ( !aName.isEmpty() )
+                {
+                    m_xControl->expand_row(*xCurIter);
+                    EntryType eType = OBJ_TYPE_MODULE;
+                    if ( aDesc.GetType() == OBJ_TYPE_DIALOG )
+                        eType = OBJ_TYPE_DIALOG;
+                    auto xEntryIter = m_xControl->make_iterator(xCurIter.get());
+                    bool bEntry = FindEntry(aName, eType, *xEntryIter);
+                    if (bEntry)
+                    {
+                        m_xControl->copy_iterator(*xEntryIter, *xCurIter);
+                        const OUString& aMethodName( aDesc.GetMethodName() );
+                        if (!aMethodName.isEmpty())
+                        {
+                            m_xControl->expand_row(*xCurIter);
+                            auto xSubEntryIter = m_xControl->make_iterator(xCurIter.get());
+                            bool bSubEntry = FindEntry(aMethodName, OBJ_TYPE_METHOD, *xSubEntryIter);
+                            if (bSubEntry)
+                            {
+                                m_xControl->copy_iterator(*xSubEntryIter, *xCurIter);
+                            }
+                            else
+                            {
+                                m_xControl->copy_iterator(*xCurIter, *xSubEntryIter);
+                                if (m_xControl->iter_children(*xSubEntryIter))
+                                    m_xControl->copy_iterator(*xSubEntryIter, *xCurIter);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        auto xSubEntryIter = m_xControl->make_iterator(xCurIter.get());
+                        if (m_xControl->iter_children(*xSubEntryIter))
+                            m_xControl->copy_iterator(*xSubEntryIter, *xCurIter);
+                    }
+                }
+            }
+            else
+            {
+                auto xSubLibIter = m_xControl->make_iterator(m_xIter.get());
+                if (m_xControl->iter_children(*xSubLibIter))
+                    m_xControl->copy_iterator(*xLibIter, *xCurIter);
+            }
+        }
+    }
+    else
+    {
+        bCurEntry = m_xControl->get_iter_first(*xCurIter);
+    }
+
+    if (!bCurEntry)
+        return;
+
+    m_xControl->set_cursor(*xCurIter);
+}
+
+IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
+{
+    bool bValidIter = m_xControl->get_cursor(m_xIter.get());
+    if (!bValidIter)
+        return;
+    EntryDescriptor aDesc = GetEntryDescriptor(m_xIter.get());
+    switch (aDesc.GetType())
+    {
+        case OBJ_TYPE_METHOD:
+        case OBJ_TYPE_MODULE:
+        case OBJ_TYPE_DIALOG:
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
+            {
+                SbxItem aSbxItem(
+                    SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
+                    aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
+                    ConvertType(aDesc.GetType())
+                );
+                pDispatcher->ExecuteList(
+                    SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
+                    { &aSbxItem }
+                );
+                return;
+            }
+            break;
+
+        default:
+            m_xControl->expand_row(*m_xIter);
+            break;
+    }
+}
+
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
