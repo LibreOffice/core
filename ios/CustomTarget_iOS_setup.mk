@@ -45,7 +45,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/filter
 	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)
-	cp $(INSTDIR)/share/config/*zip $(IOSRES)/config
+	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
 
 	# Set up rc, the "inifile". See getIniFileName_Impl().
 	echo '[Bootstrap]' > $(IOSRES)/rc
