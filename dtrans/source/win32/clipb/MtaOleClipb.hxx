@@ -72,9 +72,8 @@ private:
     static LRESULT onFlushClipboard( );
     bool     onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
 
-    // win32 clipboard-viewer support
-    LRESULT onChangeCBChain( HWND hWndRemove, HWND hWndNext );
-    LRESULT onDrawClipboard( );
+    // win32 clipboard listener support
+    LRESULT onClipboardUpdate();
 
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
@@ -89,7 +88,6 @@ private:
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
     ATOM                        m_MtaOleReqWndClassAtom;
-    HWND                        m_hwndNextClipViewer;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     bool                        m_bInRegisterClipViewer;
 
