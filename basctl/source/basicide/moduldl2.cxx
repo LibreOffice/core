@@ -698,7 +698,7 @@ IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 
 void LibPage::NewLib()
 {
-    createLibImpl(GetFrameWeld(), m_aCurDocument, m_pLibBox, nullptr);
+    createLibImpl(GetFrameWeld(), m_aCurDocument, m_pLibBox, static_cast<SbTreeListBox*>(nullptr));
 }
 
 void LibPage::InsertLib()
@@ -1552,6 +1552,106 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
         }
     }
 }
+
+void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+                   CheckBox* pLibBox, SbTreeListBox* pBasicBox)
+{
+    OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
+    if ( !rDocument.isAlive() )
+        return;
+
+    // create library name
+    OUString aLibName;
+    bool bValid = false;
+    sal_Int32 i = 1;
+    while ( !bValid )
+    {
+        aLibName = "Library" + OUString::number( i );
+        if ( !rDocument.hasLibrary( E_SCRIPTS, aLibName ) && !rDocument.hasLibrary( E_DIALOGS, aLibName ) )
+            bValid = true;
+        i++;
+    }
+
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
+    aNewDlg.SetObjectName(aLibName);
+
+    if (aNewDlg.run())
+    {
+        if (!aNewDlg.GetObjectName().isEmpty())
+            aLibName = aNewDlg.GetObjectName();
+
+        if ( aLibName.getLength() > 30 )
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBNAMETOLONG)));
+            xErrorBox->run();
+        }
+        else if ( !IsValidSbxName( aLibName ) )
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+            xErrorBox->run();
+        }
+        else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+            xErrorBox->run();
+        }
+        else
+        {
+            try
+            {
+                // create module and dialog library
+                Reference< container::XNameContainer > xModLib( rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName ) );
+                Reference< container::XNameContainer > xDlgLib( rDocument.getOrCreateLibrary( E_DIALOGS, aLibName ) );
+
+                if( pLibBox )
+                {
+                    SvTreeListEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
+                    pEntry->SetUserData( new LibUserData( rDocument ) );
+                    pLibBox->SetCurEntry( pEntry );
+                }
+
+                // create a module
+                OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
+                OUString sModuleCode;
+                if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
+                    throw Exception("could not create module " + aModName, nullptr);
+
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+                if (SfxDispatcher* pDispatcher = GetDispatcher())
+                    pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
+                                          SfxCallMode::SYNCHRON, { &aSbxItem });
+
+                if( pBasicBox )
+                {
+                    std::unique_ptr<weld::TreeIter> xIter(pBasicBox->make_iterator(nullptr));
+                    bool bValidIter = pBasicBox->get_cursor(xIter.get());
+                    std::unique_ptr<weld::TreeIter> xRootEntry(pBasicBox->make_iterator(xIter.get()));
+                    while (bValidIter)
+                    {
+                        pBasicBox->copy_iterator(*xIter, *xRootEntry);
+                        bValidIter = pBasicBox->iter_parent(*xIter);
+                    }
+
+                    BrowseMode nMode = pBasicBox->GetMode();
+                    bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
+                    const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
+                    pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+                    pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                    pBasicBox->set_cursor(*xRootEntry);
+                    pBasicBox->select(*xRootEntry);
+                }
+            }
+            catch (const uno::Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+            }
+        }
+    }
+}
+
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
