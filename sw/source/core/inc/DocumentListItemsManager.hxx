@@ -36,7 +36,11 @@ public:
     void addListItem( const SwNodeNum& rNodeNum ) override;
     void removeListItem( const SwNodeNum& rNodeNum ) override;
 
-    OUString getListItemText( const SwNodeNum& rNodeNum ) const override;
+    OUString getListItemText(const SwNodeNum& rNodeNum,
+                             SwRootFrame const& rLayout) const override;
+
+    bool isNumberedInLayout(SwNodeNum const& rNodeNum,
+            SwRootFrame const& rLayout) const override;
 
     void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const override;
 
