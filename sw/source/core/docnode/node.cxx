@@ -1361,8 +1361,6 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
             {
                 if (this != pMerged->pFirstNode)
                 {
-                    // pointer should have been updated to a different node
-                    assert(this != pMerged->pParaPropsNode);
                     // SwNodes::RemoveNode iterates *backwards* - so
                     // ensure there are no more extents pointing to this
                     // node as SwFrame::InvalidatePage() will access them.
@@ -1370,6 +1368,8 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                     // because that would access deleted wrong-lists
                     sw::UpdateMergedParaForDelete(*pMerged, true,
                             *static_cast<SwTextNode*>(this), 0, Len());
+                    // pointer should have been updated to a different node
+                    assert(this != pMerged->pParaPropsNode);
                     if (this == pMerged->pLastNode)
                     {
                         pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
