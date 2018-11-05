@@ -1697,7 +1697,6 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)\b" % a['BACKWARD'], "\n)backward("],
     [r"(?<!:)\b(?:%s)\b" % a['TURNRIGHT'], "\n)turnright("],
     [r"(?<!:)\b(?:%s)\b" % a['RANDOM'], "Random"],
-    [r"(?<!:)\b(?:%s)\b(?= \d)" % 'Random', "random.random()*"],
     [r"(?<!:)\b(?:%s)\b" % a['SET'], "set"],
     [r"(?<!:)\b(?:%s)\b" % a['RANGE'], "range"],
     [r"(?<!:)\b(?:%s)\b" % a['LIST'], "list"],
@@ -1708,21 +1707,105 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)\b ?\(" % a['REFINDALL'], "re.findall('(?u)'+"],
     [r"(?<!:)\b(?:%s)\b" % a['ANY'], "u'any'"],
     [r"(?<!:)\b(?:%s) (\w+|[[][^\]]*])\b" % a['INPUT'], " Input(\\1)"],
-    [r"(?<!:)\b(?:%s)\b" % a['PRINT'], "\n)Print("],
+    [r"(?<!:)\b(?:%s)\b" % a['PRINT'], "\nPrint"],
     [r"(?<!:)\b(?:%s)\b" % a['TURNLEFT'], "\n)turnleft("],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['PT'], "\\1"],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], lambda r: str(float(r.group(1).replace(",", "."))*72)],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], lambda r: str(float(r.group(1).replace(",", "."))*__MM_TO_PT__)],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], lambda r: str(float(r.group(1).replace(",", "."))*__MM_TO_PT__*10)],
-    [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|log10|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|0[xX][0-9a-fA-F]+|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
     [r"(?<=[-*/=+,]) ?\n\)(\w+)\(", "\\1()"], # read attributes, eg. x = fillcolor
     [r"(?<=return) ?\n\)(\w+)\(", "\\1()"], # return + user function
-    [r"(?<=(?:Print|label)\() ?\n\)(\w+)\(", "\\1()\n"] # Print/label + user function
     ]
 
 def __concatenation__(r): # keep line positions with extra line breaks
     s = re.subn("~[ \t]*\n", " ", r.group(0))
     return s[0] + "\n" * s[1]
+
+# convert Logo expressions to Python ones by adding
+# missing parentheses to procedure and function calls
+# f x y z -> f(x, y, z)
+# a = [sin len f [cos 45, 6] [1, 2, 3] sin 90] ->
+# a = [sin(len(f([cos(45),6],[1, 2, 3], sin(90))]
+# NOTE: "f(45)" and "f (45)" are not the same:
+# sin(45) + cos 45 -> sin(45) + cos(45)
+# sin (45) + cos 45 -> sin(45 + cos(45))
+def __l2p__(i, par, insub, inarray):
+    first = True
+    while par["pos"] < len(i):
+        pos = par["pos"]
+        ch = i[pos]
+        ignored = False
+        # starting parenthesis
+        if ch in "([":
+            if insub and not inarray and not first and par["out"][-1:] != "]":
+                return
+            par["out"] += ch
+            par["pos"] += 1
+            __l2p__(i, par, insub, True)
+        # ending parenthesis
+        elif ch in ")]":
+            if insub and not inarray:
+                return
+            # put character before terminating spaces
+            par["out"] = re.sub("( *)$", ch + "\\1", par["out"])
+            par["pos"] += 1
+            return
+        # starting a subroutine
+        elif pos in par["sub"]:
+            if insub and not inarray and not first:
+                return
+            first = False
+            subname = i[pos:par["sub"][pos]]
+            par["pos"] += len(subname)
+            par["out"] += subname
+            # Logo syntax: add parentheses
+            # for example: foo x y z -> foo(x, y, z)
+            par["out"] += "("
+            for j in range(par["names"][subname]):
+                # add commas, except if already added, eg. with special RANGE
+                # (variable argument counts: RANGE 1 or RANGE 1 100 or RANGE 1 100 10)
+                if j > 0 and par["out"][-1] != ",":
+                    par["out"] = re.sub("( *)$",",\\1", par["out"])
+                __l2p__(i, par, True, False)
+            par["out"] = re.sub("( *)$", ")\\1", par["out"])
+        # operators
+        elif pos in par["op"]:
+            op = i[pos:par["op"][pos]]
+            par["out"] += op
+            par["pos"] += len(op)
+            __l2p__(i, par, insub, False)
+        # other atoms
+        elif pos in par["atom"]:
+            if insub and not inarray and not first:
+                return
+            first = False
+            atom = i[pos:par["atom"][pos]]
+            par["out"] += atom
+            par["pos"] += len(atom)
+            # handle subroutines with explicite parentheses
+            # and array indices
+            if i[par["pos"]:par["pos"]+1] in "([":
+                first = True
+                continue
+        # optional negative or positive sign
+        elif ch in "-+":
+            if insub and not inarray and not first:
+                return
+            par["out"] += ch
+            par["pos"] += 1
+            ignored = first
+        elif ch == " ":
+            par["out"] += ch
+            par["pos"] += 1
+            ignored = first
+        elif insub and ((ch == ","  and not inarray) or (ch != ",")):
+            return
+        else:
+            par["out"] += ch
+            par["pos"] += 1
+        # end of first subexpression, except in the case of ignored characters
+        if not ignored:
+            first = False
 
 def __compil__(s):
     global _, comp, __strings__, __compiled__
@@ -1749,7 +1832,6 @@ def __compil__(s):
             __loadlang__(_.lng, __l12n__(_.lng)) 
 
     _.decimal = __l12n__(_.lng)['DECIMAL']
-    names = {}
 
     rmsp = re.compile(r"[ ]*([=+*/]|==|<=|>=|<>|!=|-[ ]+)[ ]*")
     chsp = re.compile(r"[ \t]+")
@@ -1791,6 +1873,10 @@ def __compil__(s):
     subnames = re.findall(u"(?iu)(?<=__def__ )\w+", s)
     globs = ""
     functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "log10", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
+    defaultfunc = ["Print"] # TODO handle all default procedures
+    names ={key: 1 for key in functions + defaultfunc}
+    names["range"] = names["re.sub"] = 3
+    names["re.search"] = names["re.findall"] = 2
 
     if len(subnames) > 0:
         globs = "global %s" % ", ".join(subnames)
@@ -1810,66 +1896,56 @@ def __compil__(s):
         if len(procedures) > 0:
             s = re.sub(r"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + ")(?!\w)", r"\n\1", s)
 
-    # compile native Logo
+    # substitute LibreLogo functions and specifiers with their Python equivalents
     for i in __comp__[_.lng]:
         s = re.sub(u"(?u)" + i[0], i[1], s)
-    indent = 0
+
+    indent = 0 # Python indentation level
     result = ""
     func = re.compile("(?iu)(def (\w+))(\(.*\):)")
-    expr = r"""(?iu)(?<!def[ ])(?<![:\w])%(name)s(?!\w)(?!\()(?![ ]\()
-        (
-            ([ ]+\[*([-+]|\([ ]?)*((%(functions)s)\b[ ]*\(*)*
-            (?:0x[0-9a-f]+|[0-9]+([,.][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?]*|\[])]*[\)]*
-            (
-                (?:[ ]*([+*/,<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|-|[ ]*[*][*][ ]*) # operators, eg. "**", " - ", "-", "- "
-                \[*([-+]|\([ ]?)* # minus sign, parenthesis
-                ((%(functions)s)\b[ ]*\(*)*(0x[0-9a-f]+|[0-9]+([.,][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?)]*
-            ([ ]?\))*)*
-        [\)]*){,%(repeat)s}
-    )
-"""
-    chargsp = re.compile(r"(?<![\(,])(?<!%s) (?!\)|,)" % ")(?<!".join(functions))
 
     # compile to Python
-    joinfunc = "|".join(functions)
-    funcnames = {}
+    subroutines = re.compile(r"(?iu)(?<!def )(?<![_\w])\b(%s)\b(?![\w(])" % "|".join(subnames + functions + defaultfunc))
+    operators = re.compile(r"(?iu)(%s)" % "(?:[ ]*([+*/<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|(?<! )-[ ]*|[ ]*[*][*][ ]*)") # operators, eg. " - ", "-", "- "
+    atoms = re.compile(r"(?iu)(%s)" % "[0-9]+([.,][0-9]+)?|\w+([.]\w)?")
 
     for i in s.split("\n"):
         i = i.strip()
+        # store argument numbers of subroutines in names
         if i[0:4] == 'def ':
             s = func.search(i)
             if s.group(3) == '():':
-                names[s.group(2)] = (0, "")
+                names[s.group(2)] = 0
             else:
                 s2 = len(chsp.findall(s.group(3))) + 1
                 i = s.group(1) + chsp.sub(", ", s.group(3))
-                names[s.group(2)] = (s2, re.compile(expr % {"name": s.group(2), "functions": joinfunc, "repeat": s2}, re.X))
-        for j in functions:
-            if j in i:
-                if not j in funcnames:
-                    funcnames[j] = (1, re.compile(expr % {"name": j, "functions": joinfunc, "repeat": 1 + 2 * int(j == 'range')}, re.X))
-                r = funcnames[j][1].search(i)
-                while r:
-                    i = i[:r.start()] + j + '(' + chargsp.sub(", ", rmsp.sub(lambda l: l.group(1).strip(), r.group(1).strip())) + ')' + i[r.end():]
-                    i = parenfix.sub("\\1)]", i)
-                    r = funcnames[j][1].search(i)
-        for j in names:
-            if j in i:
-                if names[j][0] == 0:
-                    if not j in functions:
-                        i = re.sub(r"(?iu)(?<!def )(?<![_\w])\b%s\b(?!\w)" %j, j+'()', i)
-                else:
-                    r = names[j][1].search(i)
-                    if r:
-                        i = i[:r.start()] + j + '(' + chargsp.sub(", ", rmsp.sub(lambda l: l.group(1).strip(), r.group(1).strip())) + ')' + i[r.end():]
-                        i = parenfix.sub("\\1)]", i)
+                names[s.group(2)] = s2
+
+        # convert Logo expressions to Python ones using regex based tokenization
+        # tokens: {startpos: endpos} dictionaries for subroutine names, operators and other tokens
+
+        # sub: subroutine tokens = positions of Logo subroutine names
+        # (without explicite parentheses, for example: "f x" or "f (x*2)", but not "f(x)")
+        sub = {key: value for (key, value) in [j.span() for j in list(subroutines.finditer(i))]}
+        if sub != {}:
+            # op: operator tokens
+            op = {key: value for (key, value) in [j.span() for j in list(operators.finditer(i))]}
+            # atom: other tokens (variable names, numbers and function names)
+            atom = {key: value for (key, value) in [j.span() for j in list(atoms.finditer(i))]}
+            par = {"pos": 0, "out": "", "sub": sub, "op": op, "atom": atom, "names": names}
+            __l2p__(i, par, False, False)
+            i = par["out"]
+        # starting program block
         if i[0:1] == '[':
             i = i[1:]
             indent += 1
+            # check program stop, for example, in every execution of a loop
             result = result + "\n" + " " * indent + "__checkhalt__()\n"
+        # fix position of ending parenthesis
         if i[0:1] == ')':
             i = i[1:] + ')'
         result = result + "\n" + " " * indent + i
+        # ending program block
         if i[0:1] == ']':
             result = result[:-1]
             indent -= 1
