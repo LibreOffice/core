@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <memory>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
@@ -1698,6 +1700,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
 #else
             pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
+#if !HAVE_FEATURE_DESKTOP
+            SAL_WARN_IF(!pFunction, "vcl.layout", "Lookup of " << sFunction << " failed");
+            assert(pFunction);
+#endif
 #endif
             if (pFunction)
             {
