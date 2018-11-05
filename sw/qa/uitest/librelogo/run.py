@@ -69,6 +69,35 @@ class LibreLogoTest(UITestCase):
         # first paragraph is empty (for working page break)
         self.assertEqual(document.Text.createEnumeration().nextElement().String, "")
 
+        # function definitions and calls can be in arbitrary order
+        document.Text.String = """
+; dragon curve
+TO x n
+IF n = 0 [ STOP ]
+x n-1
+RIGHT 90
+y n-1 ; it worked only as "y(n-1)"
+FORWARD 10
+END
+
+TO y n
+IF n = 0 [ STOP ]
+FORWARD 10
+x n-1
+LEFT 90
+y n-1
+END
+
+PICTURE ; start new line draw
+x 3 ; draw only a few levels
+"""
+        self.logo("run")
+        # wait for LibreLogo program termination
+        while xIsAlive.invoke((), (), ())[0]:
+            pass
+        # new shape + previous two ones = 3
+        self.assertEqual(document.DrawPage.getCount(), 3)
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
