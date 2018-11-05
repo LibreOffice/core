@@ -69,12 +69,10 @@ class ImplListBoxFloatingWindow;
 class ImplBtn;
 class ImplWin;
 class ImplListBoxWindow;
-class SalInstanceEntryTreeView;
 
 class VCL_DLLPUBLIC ListBox : public Control
 {
 private:
-    friend SalInstanceEntryTreeView;
     VclPtr<ImplListBox>                mpImplLB;
     VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
     VclPtr<ImplWin>                    mpImplWin;
@@ -177,8 +175,6 @@ public:
     void                SetEntryData( sal_Int32  nPos, void* pNewData );
     void*               GetEntryData( sal_Int32  nPos ) const;
     void*               GetSelectedEntryData() const { return GetEntryData(GetSelectedEntryPos()); }
-
-    void                SetEntryTextColor(sal_Int32 nPos, const Color* pTextColor);
 
     /** this methods stores a combination of flags from the
         ListBoxEntryFlags::* defines at the given entry.
