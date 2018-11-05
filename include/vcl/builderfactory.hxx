@@ -37,6 +37,9 @@
         rRet = VclPtr<typeName>::Create(pParent,wb); \
     }
 
+#define VCL_BUILDER_FACTORY_EXTERN(typeName) \
+    extern "C" void make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

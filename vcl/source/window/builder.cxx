@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
@@ -1488,6 +1489,15 @@ void VclBuilder::preload()
 #endif // DISABLE_DYNLOADING
 }
 
+#if defined DISABLE_DYNLOADING && !HAVE_FEATURE_DESKTOP
+
+VCL_BUILDER_FACTORY_EXTERN(CustomPropertiesControl);
+VCL_BUILDER_FACTORY_EXTERN(RefButton);
+VCL_BUILDER_FACTORY_EXTERN(RefEdit);
+VCL_BUILDER_FACTORY_EXTERN(ScRefButtonEx);
+
+#endif
+
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
@@ -2040,12 +2050,22 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             else
                 pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
+#elif !HAVE_FEATURE_DESKTOP
+            if (false)
+                ; // Just so that all the other condition line pairs look the same
+            else if (sFunction == "makeCustomPropertiesControl")
+                pFunction = makeCustomPropertiesControl;
+            else if (sFunction == "makeRefButton")
+                pFunction = makeRefButton;
+            else if (sFunction == "makeRefEdit")
+                pFunction = makeRefEdit;
+            else if (sFunction == "makeScRefButtonEx")
+                pFunction = makeScRefButtonEx;
+
+            SAL_WARN_IF(!pFunction, "vcl.layout", "Missing case for " << sFunction);
+            assert(pFunction);
 #else
             pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
-#if !HAVE_FEATURE_DESKTOP
-            SAL_WARN_IF(!pFunction, "vcl.layout", "Lookup of " << sFunction << " failed");
-            assert(pFunction);
-#endif
 #endif
             if (pFunction)
             {
