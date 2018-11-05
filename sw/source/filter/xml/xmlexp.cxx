@@ -128,11 +128,6 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if (!pDoc)
         return ERR_SWG_WRITE_ERROR;
 
-    // Make sure the layout is available to have more stability in the output
-    // markup.
-    if (SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell())
-        pViewShell->CalcLayout();
-
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
                             SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
