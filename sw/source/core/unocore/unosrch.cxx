@@ -80,15 +80,12 @@ void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Property
     const sal_uInt32 nLen = aSearchAttribs.getLength();
     for(sal_uInt32 i = 0; i < nLen; ++i)
     {
-        sal_uInt32 nIndex = 0;
-        PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
-        while(pProps[i].Name != aIt->sName)
-        {
-            ++aIt;
-            nIndex++;
-            if( aIt == aPropertyEntries.end() )
-                throw beans::UnknownPropertyException();
-        }
+        const OUString& sName = pProps[i].Name;
+        auto aIt = std::find_if(aPropertyEntries.begin(), aPropertyEntries.end(),
+            [&sName](const SfxItemPropertyNamedEntry& rProp) { return rProp.sName == sName; });
+        if( aIt == aPropertyEntries.end() )
+            throw beans::UnknownPropertyException();
+        auto nIndex = static_cast<sal_uInt32>(std::distance(aPropertyEntries.begin(), aIt));
         pValueArr[nIndex].reset( new beans::PropertyValue(pProps[i]) );
     }
 }

@@ -966,9 +966,9 @@ MapViewToModel(MergedPara const& rMerged, TextFrameIndex const i_nIndex)
 {
     sal_Int32 nIndex(i_nIndex);
     sw::Extent const* pExtent(nullptr);
-    for (auto it = rMerged.extents.begin(); it != rMerged.extents.end(); ++it)
+    for (const auto& rExt : rMerged.extents)
     {
-        pExtent = &*it;
+        pExtent = &rExt;
         if (nIndex < (pExtent->nEnd - pExtent->nStart))
         {
             return std::make_pair(pExtent->pNode, pExtent->nStart + nIndex);
@@ -1680,23 +1680,23 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
     std::vector<std::pair<sal_Int32, sal_Int32>> deleted;
     sal_Int32 const nSourceEnd(nSourceStart + nLen);
     sal_Int32 nLastEnd(0);
-    for (auto it = rMerged.extents.begin(); it != rMerged.extents.end(); ++it)
+    for (const auto& rExt : rMerged.extents)
     {
-        if (it->pNode == &rNode)
+        if (rExt.pNode == &rNode)
         {
             sal_Int32 const nStart(std::max(nLastEnd, nSourceStart));
-            sal_Int32 const nEnd(std::min(it->nStart, nSourceEnd));
+            sal_Int32 const nEnd(std::min(rExt.nStart, nSourceEnd));
             if (nStart < nEnd)
             {
                 deleted.emplace_back(nStart, nEnd);
             }
-            nLastEnd = it->nEnd;
-            if (nSourceEnd <= it->nEnd)
+            nLastEnd = rExt.nEnd;
+            if (nSourceEnd <= rExt.nEnd)
             {
                 break;
             }
         }
-        else if (rNode.GetIndex() < it->pNode->GetIndex())
+        else if (rNode.GetIndex() < rExt.pNode->GetIndex())
         {
             break;
         }

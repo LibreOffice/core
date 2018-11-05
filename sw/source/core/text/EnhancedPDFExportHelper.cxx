@@ -110,10 +110,9 @@ void lcl_DBGCheckStack()
      */
 
     sal_uInt16 nElement;
-    std::vector< sal_uInt16 >::iterator aIter;
-    for ( aIter = aStructStack.begin(); aIter != aStructStack.end(); ++aIter )
+    for ( const auto& rItem : aStructStack )
     {
-        nElement = *aIter;
+        nElement = rItem;
     }
     (void)nElement;
 }
@@ -806,16 +805,12 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             SwRect aPorRect;
             rInf.CalcRect( *pPor, &aPorRect );
             const Point aPorCenter = aPorRect.Center();
-            LinkIdMap::const_iterator aIter;
-            for ( aIter = rLinkIdMap.begin(); aIter != rLinkIdMap.end(); ++aIter )
+            auto aIter = std::find_if(rLinkIdMap.begin(), rLinkIdMap.end(),
+                [&aPorCenter](const IdMapEntry& rEntry) { return rEntry.first.IsInside(aPorCenter); });
+            if (aIter != rLinkIdMap.end())
             {
-                const SwRect& rLinkRect = (*aIter).first;
-                if ( rLinkRect.IsInside( aPorCenter ) )
-                {
-                    sal_Int32 nLinkId = (*aIter).second;
-                    mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::LinkAnnotation, nLinkId );
-                    break;
-                }
+                sal_Int32 nLinkId = (*aIter).second;
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::LinkAnnotation, nLinkId );
             }
         }
     }
@@ -2119,11 +2114,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         // LINKS FROM EDITENGINE
 
         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
-        std::vector< vcl::PDFExtOutDevBookmarkEntry >::const_iterator aIBeg = rBookmarks.begin();
-        const std::vector< vcl::PDFExtOutDevBookmarkEntry >::const_iterator aIEnd = rBookmarks.end();
-        while ( aIBeg != aIEnd )
+        for ( const auto& rBookmark : rBookmarks )
         {
-            OUString aBookmarkName( aIBeg->aBookmark );
+            OUString aBookmarkName( rBookmark.aBookmark );
             const bool bIntern = '#' == aBookmarkName[0];
             if ( bIntern )
             {
@@ -2142,24 +2135,22 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 if ( -1 != nDestPageNum )
                 {
                     tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                    if ( aIBeg->nLinkId != -1 )
+                    if ( rBookmark.nLinkId != -1 )
                     {
                         // Destination Export
                         const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                         // Connect Link and Destination:
-                        pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
+                        pPDFExtOutDevData->SetLinkDest( rBookmark.nLinkId, nDestId );
                     }
                     else
                     {
-                        pPDFExtOutDevData->DescribeRegisteredDest(aIBeg->nDestId, aRect, nDestPageNum);
+                        pPDFExtOutDevData->DescribeRegisteredDest(rBookmark.nDestId, aRect, nDestPageNum);
                     }
                 }
             }
             else
-                pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aBookmarkName );
-
-            ++aIBeg;
+                pPDFExtOutDevData->SetLinkURL( rBookmark.nLinkId, aBookmarkName );
         }
         rBookmarks.clear();
     }

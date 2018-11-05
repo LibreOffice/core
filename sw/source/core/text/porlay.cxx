@@ -1372,13 +1372,13 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 // position and that we don't have "empty" changes.
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
                 sal_Int32 nLastPos = 0;
-                for (std::vector<ScriptChangeInfo>::const_iterator i2 = m_ScriptChanges.begin(); i2 != m_ScriptChanges.end(); ++i2)
+                for (const auto& rScriptChange : m_ScriptChanges)
                 {
-                    SAL_WARN_IF( nLastTyp == i2->type ||
-                            nLastPos >= i2->position,
+                    SAL_WARN_IF( nLastTyp == rScriptChange.type ||
+                            nLastPos >= rScriptChange.position,
                             "sw.core", "Heavy InitScriptType() confusion" );
-                    nLastPos = i2->position;
-                    nLastTyp = i2->type;
+                    nLastPos = rScriptChange.position;
+                    nLastTyp = rScriptChange.type;
                 }
 #endif
             }

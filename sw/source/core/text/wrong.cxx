@@ -198,18 +198,12 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
         // position of the first smart tag which covers nValue
         if ( !maList[0].maType.isEmpty() || maList[0].mpSubList )
         {
-            for (std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end()); aIter != aEnd; ++aIter)
-            {
-                const sal_Int32 nSTPos = (*aIter).mnPos;
-                const sal_Int32 nSTLen = (*aIter).mnLen;
-                if ( nSTPos <= nValue && nValue < nSTPos + nSTLen )
-                    break;
-                if ( nSTPos > nValue )
-                    break;
-
-                ++nMin;
-            }
-            return nMin;
+            auto aIter = std::find_if(maList.begin(), maList.end(),
+                [nValue](const SwWrongArea& rST) {
+                    return (rST.mnPos <= nValue && nValue < rST.mnPos + rST.mnLen)
+                        || (rST.mnPos > nValue);
+                });
+            return static_cast<sal_uInt16>(std::distance(maList.begin(), aIter));
         }
 
         --nMax;
@@ -591,38 +585,36 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 }
 
 void SwWrongList::RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
-    sal_uInt16 nDelPos = 0;
-    sal_uInt16 nDel = 0;
-    std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end());
-    while( aIter != aEnd && (*aIter).mnPos < nBegin )
-    {
-        ++aIter;
-        ++nDelPos;
-    }
+    std::vector<SwWrongArea>::const_iterator aEnd(maList.end());
+    auto aDelIter = std::find_if(maList.cbegin(), aEnd,
+        [nBegin](const SwWrongArea& rST) { return rST.mnPos >= nBegin; });
+    auto aIter = aDelIter;
     if( WRONGLIST_GRAMMAR == GetWrongListType() )
     {
-        while( aIter != aEnd && nBegin < nEnd && nEnd > (*aIter).mnPos )
+        if( nBegin < nEnd )
         {
-            ++aIter;
-            ++nDel;
+            aIter = std::find_if(aDelIter, aEnd,
+                [nEnd](const SwWrongArea& rST) { return rST.mnPos >= nEnd; });
         }
     }
     else
     {
-        while( aIter != aEnd && nBegin == (*aIter).mnPos && nEnd == (*aIter).mnPos +(*aIter).mnLen )
-        {
-            ++aIter;
-            ++nDel;
-        }
+        aIter = std::find_if(aDelIter, aEnd,
+            [nBegin, nEnd](const SwWrongArea& rST) {
+                return (rST.mnPos != nBegin) || ((rST.mnPos + rST.mnLen) != nEnd);
+            });
     }
+    auto nDel = static_cast<sal_uInt16>(std::distance(aDelIter, aIter));
     if( nDel )
+    {
+        auto nDelPos = static_cast<sal_uInt16>(std::distance(maList.cbegin(), aDelIter));
         Remove( nDelPos, nDel );
+    }
 }
 
 bool SwWrongList::LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
-    std::vector<SwWrongArea>::iterator aIter = maList.begin();
-    while( aIter != maList.end() && (*aIter).mnPos < nBegin )
-        ++aIter;
+    auto aIter = std::find_if(maList.begin(), maList.end(),
+        [nBegin](const SwWrongArea& rST) { return rST.mnPos >= nBegin; });
     return aIter != maList.end()
            && nBegin == (*aIter).mnPos
            && nEnd == (*aIter).mnPos + (*aIter).mnLen;
@@ -632,31 +624,14 @@ void SwWrongList::Insert( const OUString& rType,
                           css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                           sal_Int32 nNewPos, sal_Int32 nNewLen )
 {
-    std::vector<SwWrongArea>::iterator aIter = maList.begin();
-
-    while ( aIter != maList.end() )
+    auto aIter = std::find_if(maList.begin(), maList.end(),
+        [nNewPos](const SwWrongArea& rST) { return nNewPos <= rST.mnPos; });
+    if ( aIter != maList.end() && nNewPos == (*aIter).mnPos )
     {
         const sal_Int32 nSTPos = (*aIter).mnPos;
 
-        if ( nNewPos < nSTPos )
-        {
-            // insert at current position
-            break;
-        }
-        else if ( nNewPos == nSTPos )
-        {
-            while ( aIter != maList.end() && (*aIter).mnPos == nSTPos )
-            {
-                if ( nNewLen < (*aIter).mnLen )
-                {
-                    // insert at current position
-                    break;
-                }
-                ++aIter;
-            }
-            break;
-        }
-        ++aIter;
+        aIter = std::find_if(aIter, maList.end(),
+            [nSTPos, nNewLen](const SwWrongArea& rST) { return rST.mnPos != nSTPos || nNewLen < rST.mnLen; });
     }
 
     maList.insert(aIter, SwWrongArea( rType, meType, xPropertyBag, nNewPos, nNewLen) );

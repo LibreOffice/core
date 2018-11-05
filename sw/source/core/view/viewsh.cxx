@@ -1871,9 +1871,9 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+            for(const auto& rRectangle : aRectangles)
             {
-                Imp()->AddPaintRect(*aRectIter);
+                Imp()->AddPaintRect(rRectangle);
             }
 
             //RegionHandle hHdl( aRegion.BeginEnumRects() );

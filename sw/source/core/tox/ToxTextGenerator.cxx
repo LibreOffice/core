@@ -178,11 +178,9 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<std::unique_ptr<Sw
         // create an enumerator
         // #i21237#
         SwFormTokens aPattern = mToxForm.GetPattern(nLvl);
-        SwFormTokens::iterator aIt = aPattern.begin();
         // remove text from node
-        while(aIt != aPattern.end()) // #i21237#
+        for(const auto& aToken : aPattern) // #i21237#
         {
-            SwFormToken aToken = *aIt; // #i21237#
             sal_Int32 nStartCharStyle = rText.getLength();
             switch( aToken.eTokenType )
             {
@@ -259,8 +257,6 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<std::unique_ptr<Sw
                         rText.getLength(), SetAttrMode::DONTEXPAND );
                 }
             }
-
-            ++aIt; // #i21237#
         }
 
         pTOXNd->SetAttr( aTStops );

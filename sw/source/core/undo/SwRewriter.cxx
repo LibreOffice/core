@@ -46,9 +46,9 @@ OUString SwRewriter::Apply(const OUString & rStr) const
 {
     OUString aResult = rStr;
 
-    for (std::vector<SwRewriteRule>::const_iterator aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
+    for (const auto& rRule : mRules)
     {
-        aResult = aResult.replaceAll(GetPlaceHolder(aIt->first), aIt->second);
+        aResult = aResult.replaceAll(GetPlaceHolder(rRule.first), rRule.second);
     }
 
     return aResult;

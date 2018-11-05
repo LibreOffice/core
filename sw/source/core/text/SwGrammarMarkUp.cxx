@@ -41,9 +41,8 @@ void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
     Move( nPos, nDiff );
     if( maSentence.empty() )
         return;
-    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter < nPos )
-        ++pIter;
+    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+        [nPos](const sal_Int32& rPos) { return rPos >= nPos; });
     const sal_Int32 nEnd = nDiff < 0 ? nPos-nDiff : nPos;
     while( pIter != maSentence.end() )
     {
@@ -60,9 +59,8 @@ SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
     SwGrammarMarkUp* pNew = static_cast<SwGrammarMarkUp*>(SplitList( nSplitPos ));
     if( maSentence.empty() )
         return pNew;
-    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter < nSplitPos )
-        ++pIter;
+    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+        [nSplitPos](const sal_Int32& rPos) { return rPos >= nSplitPos; });
     if( pIter != maSentence.begin() )
     {
         if( !pNew ) {
@@ -82,11 +80,9 @@ void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsert
     {
         if( pNext->maSentence.empty() )
             return;
-        std::vector< sal_Int32 >::iterator pIter = pNext->maSentence.begin();
-        while( pIter != pNext->maSentence.end() )
+        for( auto& rPos : pNext->maSentence )
         {
-            *pIter = *pIter + nInsertPos;
-            ++pIter;
+            rPos += nInsertPos;
         }
         maSentence.insert( maSentence.end(), pNext->maSentence.begin(), pNext->maSentence.end() );
     }
@@ -106,9 +102,8 @@ void SwGrammarMarkUp::ClearGrammarList( sal_Int32 nSentenceEnd )
             nStart = *pIter;
             ++pIter;
         }
-        std::vector< sal_Int32 >::iterator pLast = pIter;
-        while( pLast != maSentence.end() && *pLast <= nSentenceEnd )
-            ++pLast;
+        auto pLast = std::find_if(pIter, maSentence.end(),
+            [nSentenceEnd](const sal_Int32& rPos) { return rPos > nSentenceEnd; });
         maSentence.erase( pIter, pLast );
         RemoveEntry( nStart, nSentenceEnd );
         SetInvalid( nSentenceEnd + 1, COMPLETE_STRING );
@@ -117,9 +112,8 @@ void SwGrammarMarkUp::ClearGrammarList( sal_Int32 nSentenceEnd )
 
 void SwGrammarMarkUp::setSentence( sal_Int32 nStart )
 {
-    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter < nStart )
-        ++pIter;
+    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+        [nStart](const sal_Int32& rPos) { return rPos >= nStart; });
     if( pIter == maSentence.end() || *pIter > nStart )
         maSentence.insert( pIter, nStart );
 }
@@ -128,9 +122,8 @@ sal_Int32 SwGrammarMarkUp::getSentenceStart( sal_Int32 nPos )
 {
     if( maSentence.empty() )
         return 0;
-    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter < nPos )
-        ++pIter;
+    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+        [nPos](const sal_Int32& rPos) { return rPos >= nPos; });
     if( pIter != maSentence.begin() )
         --pIter;
     if( pIter != maSentence.end() && *pIter < nPos )
@@ -142,9 +135,8 @@ sal_Int32 SwGrammarMarkUp::getSentenceEnd( sal_Int32 nPos )
 {
     if( maSentence.empty() )
         return COMPLETE_STRING;
-    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter <= nPos )
-        ++pIter;
+    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+        [nPos](const sal_Int32& rPos) { return rPos > nPos; });
     if( pIter != maSentence.end() )
         return *pIter;
     return COMPLETE_STRING;
