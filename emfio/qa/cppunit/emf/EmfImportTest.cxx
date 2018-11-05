@@ -125,17 +125,14 @@ void Test::TestDrawStringTransparent()
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
-    //TODO Strange that transparency is set to 0 even if it is not fully transparent
-    // check correct import of the DrawString: transparency, height, position, text, color and font
-    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/unifiedtransparence", "transparence", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence", "transparence", "0.498039215686275");
 
-    //TODO Where was textsimpleportion gone?
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "height", "276");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "x", "25");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "y", "323");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "text", "Transparent Text");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "fontcolor", "#000000");
-    //assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "familyname", "CALIBRI");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "height", "24");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "x", "66");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "y", "74");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "text", "Transparent Text");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "fontcolor", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "familyname", "ARIAL");
 }
 
 void Test::TestDrawLine()
