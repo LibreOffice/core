@@ -216,29 +216,36 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (eMode == FrameMode::Existing)
     {
         // remove existing footnote frames for first node;
-        // for non-first notes, DelFrames will remove all
+        // for non-first nodes with own frames, DelFrames will remove all
         // (could possibly call lcl_ChangeFootnoteRef, not sure if worth it)
         // note: must be done *before* changing listeners!
-        sal_Int32 nLast(0);
-        std::vector<std::pair<sal_Int32, sal_Int32>> hidden;
-        for (auto const& rExtent : extents)
+        // for non-first nodes that are already merged with this frame,
+        // need to remove here too, otherwise footnotes can be removed only
+        // by lucky accident, e.g. TruncLines().
+        auto itExtent(extents.begin());
+        for (auto const pTextNode : nodes)
         {
-            if (rExtent.pNode != &rTextNode)
+            sal_Int32 nLast(0);
+            std::vector<std::pair<sal_Int32, sal_Int32>> hidden;
+            for ( ; itExtent != extents.end(); ++itExtent)
             {
-                break;
+                if (itExtent->pNode != pTextNode)
+                {
+                    break;
+                }
+                if (itExtent->nStart != 0)
+                {
+                    assert(itExtent->nStart != nLast);
+                    hidden.emplace_back(nLast, itExtent->nStart);
+                }
+                nLast = itExtent->nEnd;
             }
-            if (rExtent.nStart != 0)
+            if (nLast != pTextNode->Len())
             {
-                assert(rExtent.nStart != nLast);
-                hidden.emplace_back(nLast, rExtent.nStart);
+                hidden.emplace_back(nLast, pTextNode->Len());
             }
-            nLast = rExtent.nEnd;
+            sw::RemoveFootnotesForNode(rFrame, *pTextNode, &hidden);
         }
-        if (nLast != rTextNode.Len())
-        {
-            hidden.emplace_back(nLast, rTextNode.Len());
-        }
-        sw::RemoveFootnotesForNode(rFrame, rTextNode, &hidden);
         // unfortunately DelFrames() must be done before StartListening too,
         // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
         for (auto iter = ++nodes.begin(); iter != nodes.end(); ++iter)
