@@ -970,9 +970,11 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     if (auto pCertificate = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
     {
         SECKEYPrivateKey* pPrivateKey = pCertificate->getPrivateKey();
-        if (pPrivateKey)
+        SECKEYPrivateKey* copy
+            = pPrivateKey == nullptr ? nullptr : SECKEY_CopyPrivateKey(pPrivateKey);
+        if (copy)
         {
-            xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);
+            xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(copy, nullptr);
             xmlSecKeyPtr pKey = xmlSecKeyCreate();
             xmlSecKeySetValue(pKey, pKeyData);
             xmlSecNssAppDefaultKeysMngrAdoptKey(pKeysMngr, pKey);
