@@ -1328,6 +1328,7 @@ SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     , mxCreateLabel(m_xBuilder->weld_label("create_label"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
 {
+    mxLBCategory->append_text(SfxResId(STR_CATEGORY_NONE));
     mxNewCategoryEdit->connect_changed(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));
     mxLBCategory->set_size_request(mxLBCategory->get_approximate_digit_width() * 32,
                                    mxLBCategory->get_height_rows(8));

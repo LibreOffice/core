@@ -2,16 +2,11 @@
 <!-- Generated with glade 3.20.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkListStore" id="categorylist">
+  <object class="GtkTreeStore" id="categorylist">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="saveastemplatedlg|categorylist">None</col>
-      </row>
-    </data>
   </object>
   <object class="GtkDialog" id="SaveAsTemplateDialog">
     <property name="can_focus">False</property>

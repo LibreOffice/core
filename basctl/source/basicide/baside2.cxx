@@ -339,7 +339,7 @@ void ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                ChooseMacro( uno::Reference< frame::XModel >() );
+                ChooseMacro(GetFrameWeld(), uno::Reference<frame::XModel>());
                 return;
             }
             pMethod->SetDebugFlags(m_aStatus.nBasicFlags);
