@@ -422,13 +422,7 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
 
-    MsgCtx  aMsgCtx;
-
-    postMessage( MSG_REGCLIPVIEWER,
-                 reinterpret_cast<WPARAM>( pfncClipViewerCallback ),
-                 reinterpret_cast<LPARAM>( &aMsgCtx ) );
-
-    aMsgCtx.aCondition.wait( /* infinite */ );
+    sendMessage(MSG_REGCLIPVIEWER, reinterpret_cast<WPARAM>(pfncClipViewerCallback), 0);
 
     return false;
 }
@@ -624,13 +618,8 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
         break;
 
     case MSG_REGCLIPVIEWER:
-        {
-            MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-            OSL_ASSERT( aMsgCtx );
-
-            pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
-            aMsgCtx->aCondition.set( );
-        }
+        pImpl->onRegisterClipViewer(
+            reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));
         break;
 
     case WM_CHANGECBCHAIN:
