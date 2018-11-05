@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_7b942be9",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-05T21:09:19Z",
+      "side": 1,
+      "message": "What\u0027s the problem with using plural form here?",
+      "range": {
+        "startLine": 738,
+        "startChar": 49,
+        "endLine": 738,
+        "endChar": 58
+      },
+      "revId": "332f69d794446dbcade2f267b97c5d493560ad04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
