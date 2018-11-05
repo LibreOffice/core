@@ -970,7 +970,10 @@ Bitmap Dialog::createScreenshot()
 
 short Dialog::Execute()
 {
-#if HAVE_FEATURE_DESKTOP
+// Once the Android app is based on same idea as the iOS one currently
+// being developed, no conditional should be needed here. Until then,
+// play it safe.
+#if HAVE_FEATURE_DESKTOP || defined IOS
     VclPtr<vcl::Window> xWindow = this;
 
     mbInSyncExecute = true;
