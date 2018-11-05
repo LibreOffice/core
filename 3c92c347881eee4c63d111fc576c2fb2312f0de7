@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_40b5feed",
+        "filename": "Repository.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-05T10:23:52Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this combine both conditionals here, like\n\n    $(if $(ENABLE_JAVA),$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc))",
+      "range": {
+        "startLine": 406,
+        "startChar": 1,
+        "endLine": 406,
+        "endChar": 32
+      },
+      "revId": "3c92c347881eee4c63d111fc576c2fb2312f0de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
