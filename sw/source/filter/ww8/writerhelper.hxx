@@ -636,10 +636,10 @@ namespace sw
             */
             void SendObjectToHell(SdrObject &rObject) const;
 
-            /** Make Object lives in the top top layer
+            /** Make Object lives in the top layer
 
                 @param rObject
-                The object to be set to the bottom layer
+                The object to be set to the top layer
             */
             void SendObjectToHeaven(SdrObject &rObject) const;
 

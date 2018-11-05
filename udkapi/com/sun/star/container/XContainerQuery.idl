@@ -64,7 +64,7 @@ published interface XContainerQuery: com::sun::star::uno::XInterface
         <p>
         It's not possible to use special commands or search specific parameters here.
         You can match by properties only. Enumerated elements must provide queried
-        properties as minimum. Not specified properties willn't be used for searching.
+        properties as minimum. Not specified properties will not be used for searching.
         <p>
 
         @param Properties   items of sub set must support given properties as minimum<br>
