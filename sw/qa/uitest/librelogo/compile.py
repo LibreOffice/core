@@ -80,7 +80,7 @@ class LibreLogoCompileTest(UITestCase):
                 ("TO x\nOUTPUT 3\nEND", "global x\ndef x():\n __checkhalt__()\n %s\n return 3\n %s" % (((self.LS),)*2)),
                 # PROCEDURE WITH ARGUMENTS
                 ("TO x y\nLABEL y\nEND\nx 25", "global x\ndef x(y):\n __checkhalt__()\n %s\n label(y)\n %s\n%s\nx(25)" % (((self.LS),)*3)),
-                ("TO x :y :z\nLABEL :y + :z\nEND\nx 25", "global x\ndef x(_y, _z):\n __checkhalt__()\n %s\n label(_y + _z)\n %s\n%s\nx(25)" % (((self.LS),)*3)),
+                ("TO x :y :z\nLABEL :y + :z\nEND\nx 25 26", "global x\ndef x(_y, _z):\n __checkhalt__()\n %s\n label(_y + _z)\n %s\n%s\nx(25, 26)" % (((self.LS),)*3)),
                 # UNICODE VARIABLE NAMES
                 ("Erdős=1", "Erd__u__0151s=1"),
                 # STRING CONSTANTS
@@ -88,9 +88,37 @@ class LibreLogoCompileTest(UITestCase):
                 ("LABEL “label”", "label(u'label')"),
                 ("LABEL 'label'", "label(u'label')"),
                 ("LABEL ‘label’", "label(u'label')"),
+                # check apostrophe and quote usage within strings
                 ("LABEL “label\’s”", "label(u'label’s')"),
                 ("LABEL ““It\’s quote\’s...\””", "label(u'“It’s quote’s...”')"),
                 ("LABEL ““It\\'s quote\\'s...\””", "label(u'“It\\'s quote\\'s...”')"),
+                # CONVERSION OF LOGO EXPRESSIONS
+                ("a=SIN 100 + COS 100", "a=sin(100 + cos(100))"),
+                ("a=SIN(101) + COS(101)", "a=sin(101) + cos(101)"),
+                ("a=(SIN 102) + (COS 102)", "a=(sin(102)) + (cos(102))"),
+                ("a=SIN 103 + COS 103 - SQRT 103", "a=sin(103 + cos(103 - sqrt(103)))"),
+                ("a=(SIN 104 + COS 104) - SQRT 104", "a=(sin(104 + cos(104))) - sqrt(104)"),
+                ("a=COUNT [1, 2, 3]", "a=len([1, 2, 3])"),
+                ("PRINT COUNT [1, 2, 3]", "Print(len([1, 2, 3]))"),
+                ("PRINT 'TEXT: ' + 'CHAR'[0] + ' TEXT2: ' + variable[-1]", "Print(u'TEXT: ' + u'CHAR'[0] + u' TEXT2: ' + variable[-1])"),
+                ("PRINT 'TEXT: ' + 'CHAR'[0][n] + ' TEXT2: ' + varia[len k][i+1]", "Print(u'TEXT: ' + u'CHAR'[0][n] + u' TEXT2: ' + varia[len(k)][i+1])"),
+                ("a=SQRT COUNT [1, 2, 3]", "a=sqrt(len([1, 2, 3]))"),
+                ("a=RANGE 1", "a=range(1,)"),
+                ("a=RANGE 1 10", "a=range(1, 10,)"),
+                ("a=RANGE 1 10 5", "a=range(1, 10, 5)"),
+                ("a=RANDOM 40 + 120", "a=Random(40 + 120)"),
+                ("a=RANDOM(40) + 120", "a=Random(40) + 120"),
+                ("a=RANDOM [1, 2, 3]", "a=Random([1, 2, 3])"),
+                ("a=[sin 90 + cos 15, cos 100 * x, sqrt 25 * 25]", "a=[sin(90 + cos(15)), cos(100 * x), sqrt(25 * 25)]"),
+                ("a=[sin 90 + cos 15, cos 100 * x, sqrt 25 * 25]", "a=[sin(90 + cos(15)), cos(100 * x), sqrt(25 * 25)]"),
+                ("a=[sin(90) + cos 15, cos(100) * x, sqrt(25) * 25]", "a=[sin(90) + cos(15), cos(100) * x, sqrt(25) * 25]"),
+                ("TO x y z\nOUTPUT 3\nEND", "global x\ndef x(y, z):\n __checkhalt__()\n %s\n return 3\n %s" % (((self.LS),)*2)),
+                ("TO x\nOUTPUT 3\nEND", "global x\ndef x():\n __checkhalt__()\n %s\n return 3\n %s" % (((self.LS),)*2)),
+                ("TO f x y z\nOUTPUT x+y+z\nEND\na = [-sin -len f [-cos 45, 6] -len [1, 2, 3] -sin -90", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n return x+y+z\n %s\n%s\na = [-sin(-len(f([-cos(45), 6], -len([1, 2, 3]), -sin(-90))))" % (((self.LS),)*3)),
+                ("TO f x y z\nOUTPUT x+y+z\nEND\na = [sin len f [cos 45, 6] [1, 2, 3] sin 90", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n return x+y+z\n %s\n%s\na = [sin(len(f([cos(45), 6], [1, 2, 3], sin(90))))" % (((self.LS),)*3)),
+                ("TO f x y z\nLABEL x+y+z\nEND\nf len [1, cos 2, [65]] sqrt len [1, 2, 3, 4] sin 90 * cos 270", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n label(x+y+z)\n %s\n%s\nf(len([1, cos(2), [65]]), sqrt(len([1, 2, 3, 4])), sin(90 * cos(270)))" % (((self.LS),)*3)),
+                ("TO f x y z\nLABEL x+y+z\nEND\nf len([1, cos 2, [65]]) sqrt(len [1, 2, 3, 4]) sin(90) * cos 270", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n label(x+y+z)\n %s\n%s\nf(len([1, cos(2), [65]]), sqrt(len([1, 2, 3, 4])), sin(90) * cos(270))" % (((self.LS),)*3)),
+                ("TO f x y z\nLABEL x+y+z\nEND\nf (len [1, cos 2, [65]]) (sqrt len [1, 2, 3, 4]) (sin 90) * (cos 270)", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n label(x+y+z)\n %s\n%s\nf((len([1, cos(2), [65]])), (sqrt(len([1, 2, 3, 4]))), (sin(90)) * (cos(270)))" % (((self.LS),)*3)),
                 ):
             compiled = xCompile.invoke((test[0],), (), ())[0]
             self.assertEqual(test[1], re.sub(r'(\n| +\n)+', '\n', re.sub(r'\( ', '(', compiled)).strip())
