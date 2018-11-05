@@ -101,8 +101,10 @@ bool const DEV_Composible[2][2] = {
 /* Mode 1 */    {false, true}  // STRICT = 1
 };
 
-#define getCharType(x) \
-    ((x >= 0x0900 && x < 0x097f) ? devaCT[x - 0x0900] : ND_)
+static constexpr sal_uInt16 getCharType(sal_Unicode x)
+{
+    return (x >= 0x0900 && x < 0x097f) ? devaCT[x - 0x0900] : ND_;
+}
 
 sal_Bool SAL_CALL
 InputSequenceChecker_hi::checkInputSequence(const OUString& Text,

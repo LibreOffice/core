@@ -104,6 +104,8 @@ private:
     void
     impl_getVetoableChangeListenerContainer();
 
+    void verifyGet();
+
 protected:
 
 

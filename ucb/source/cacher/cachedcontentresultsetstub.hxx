@@ -82,6 +82,9 @@ private:
     void
     impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection );
 
+    css::ucb::FetchResult impl_fetchHelper(sal_Int32 nRowStartPosition, sal_Int32 nRowCount, bool bDirection,
+        std::function<void(css::uno::Any& rRowContent)> impl_loadRow);
+
 public:
     CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
 

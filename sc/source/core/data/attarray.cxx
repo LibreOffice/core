@@ -697,19 +697,23 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleS
 }
 
     // const cast, otherwise it will be too inefficient/complicated
-#define SET_LINECOLOR(dest,c)                    \
-    if ((dest))                                  \
-    {                                            \
-        const_cast<SvxBorderLine*>(dest)->SetColor((c)); \
+static void SetLineColor(SvxBorderLine const * dest, Color c)
+{
+    if (dest)
+    {
+        const_cast<SvxBorderLine*>(dest)->SetColor(c);
     }
+}
 
-#define SET_LINE(dest,src)                             \
-    if ((dest))                                        \
-    {                                                  \
-        SvxBorderLine* pCast = const_cast<SvxBorderLine*>(dest); \
-        pCast->SetBorderLineStyle( (src)->GetBorderLineStyle() ); \
-        pCast->SetWidth( (src)->GetWidth( ) );         \
+static void SetLine(const SvxBorderLine* dest, const SvxBorderLine* src)
+{
+    if (dest)
+    {
+        SvxBorderLine* pCast = const_cast<SvxBorderLine*>(dest);
+        pCast->SetBorderLineStyle( src->GetBorderLineStyle() );
+        pCast->SetWidth( src->GetWidth() );
     }
+}
 
 void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                       const SvxBorderLine* pLine, bool bColorOnly )
@@ -773,29 +777,29 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                         Color aColor( pLine->GetColor() );
                         if( pNewBoxItem )
                         {
-                            SET_LINECOLOR( pNewBoxItem->GetTop(),    aColor );
-                            SET_LINECOLOR( pNewBoxItem->GetBottom(), aColor );
-                            SET_LINECOLOR( pNewBoxItem->GetLeft(),   aColor );
-                            SET_LINECOLOR( pNewBoxItem->GetRight(),   aColor );
+                            SetLineColor( pNewBoxItem->GetTop(),    aColor );
+                            SetLineColor( pNewBoxItem->GetBottom(), aColor );
+                            SetLineColor( pNewBoxItem->GetLeft(),   aColor );
+                            SetLineColor( pNewBoxItem->GetRight(),   aColor );
                         }
                         if( pNewTLBRItem )
-                            SET_LINECOLOR( pNewTLBRItem->GetLine(), aColor );
+                            SetLineColor( pNewTLBRItem->GetLine(), aColor );
                         if( pNewBLTRItem )
-                            SET_LINECOLOR( pNewBLTRItem->GetLine(), aColor );
+                            SetLineColor( pNewBLTRItem->GetLine(), aColor );
                     }
                     else
                     {
                         if( pNewBoxItem )
                         {
-                            SET_LINE( pNewBoxItem->GetTop(),    pLine );
-                            SET_LINE( pNewBoxItem->GetBottom(), pLine );
-                            SET_LINE( pNewBoxItem->GetLeft(),   pLine );
-                            SET_LINE( pNewBoxItem->GetRight(),   pLine );
+                            SetLine( pNewBoxItem->GetTop(),    pLine );
+                            SetLine( pNewBoxItem->GetBottom(), pLine );
+                            SetLine( pNewBoxItem->GetLeft(),   pLine );
+                            SetLine( pNewBoxItem->GetRight(),   pLine );
                         }
                         if( pNewTLBRItem )
-                            SET_LINE( pNewTLBRItem->GetLine(), pLine );
+                            SetLine( pNewTLBRItem->GetLine(), pLine );
                         if( pNewBLTRItem )
-                            SET_LINE( pNewBLTRItem->GetLine(), pLine );
+                            SetLine( pNewBLTRItem->GetLine(), pLine );
                     }
                 }
                 if( pNewBoxItem )   rNewSet.Put( *pNewBoxItem );
@@ -833,9 +837,6 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
         while ((nStart <= nEndRow) && (nPos < mvData.size()));
     }
 }
-
-#undef SET_LINECOLOR
-#undef SET_LINE
 
 void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
