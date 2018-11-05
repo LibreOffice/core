@@ -2187,14 +2187,11 @@ bool SwContentTree::HasContentChanged()
                     }
                     if(bRemoveChildren)
                     {
-                        SvTreeListEntry* pChild = FirstChild(pEntry);
-                        SvTreeListEntry* pRemove = pChild;
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
-                            pChild = Next(pRemove);
+                            SvTreeListEntry *const pRemove = FirstChild(pEntry);
                             assert(pRemove);
                             GetModel()->Remove(pRemove);
-                            pRemove = pChild;
                         }
                     }
                     if(!nChildCount)
