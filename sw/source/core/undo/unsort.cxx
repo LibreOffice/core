@@ -145,8 +145,8 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwMoveFlags::DEFAULT);
         }
         // delete indices
-        for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
-            delete *it;
+        for(auto& rpIdx : aIdxList)
+            delete rpIdx;
         aIdxList.clear();
         SetPaM(rPam, true);
     }
@@ -220,8 +220,8 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
                 SwMoveFlags::DEFAULT);
         }
         // delete indices
-        for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
-            delete *it;
+        for(auto& rpIdx : aIdxList)
+            delete rpIdx;
         aIdxList.clear();
         SetPaM(rPam, true);
         SwTextNode const*const pTNd = rPam.GetNode().GetTextNode();

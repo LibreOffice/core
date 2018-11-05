@@ -606,20 +606,12 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                         // char formats must be *nominally* the same
                         if (pAttr->Which() == RES_TXTATR_CHARFMT)
                         {
-                            bool isFound(false);
-                            for (auto iter = activeCharFmts.begin(); iter != activeCharFmts.end(); ++iter)
-                            {
-                                if (**iter == *pAttr)
-                                {
-                                    activeCharFmts.erase(iter);
-                                    isFound = true;
-                                    break;
-                                }
-                            }
-                            if (!isFound)
-                            {
-                                if (!isTheAnswerYes) return false;
-                            }
+                            auto iter = std::find_if(activeCharFmts.begin(), activeCharFmts.end(),
+                                [&pAttr](const SwTextAttr* pCharFmt) { return *pCharFmt == *pAttr; });
+                            if (iter != activeCharFmts.end())
+                                activeCharFmts.erase(iter);
+                            else if (!isTheAnswerYes)
+                                return false;
                         }
                         SfxItemSet const& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
                             ? static_cast<SfxItemSet const&>(pAttr->GetCharFormat().GetCharFormat()->GetAttrSet())

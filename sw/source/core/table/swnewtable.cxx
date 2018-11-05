@@ -1347,18 +1347,16 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
         rCurr.insert( rCurr.end(), nHeight );
         pLines[ i - nFirst ] = nHeight;
     }
-    auto pSplit = aBoxes.begin();
-    while( pSplit != aBoxes.end() )
+    for( const auto& rSplit : aBoxes )
     {
-        SwTwips nBase = pSplit->first <= nFirst ? 0 :
-                        pLines[ pSplit->first - nFirst - 1 ];
-        SwTwips nDiff = pLines[ pSplit->second - nFirst ] - nBase;
+        SwTwips nBase = rSplit.first <= nFirst ? 0 :
+                        pLines[ rSplit.first - nFirst - 1 ];
+        SwTwips nDiff = pLines[ rSplit.second - nFirst ] - nBase;
         for( sal_uInt16 i = 1; i < nCnt; ++i )
         {
             SwTwips nSplit = nBase + ( i * nDiff ) / nCnt;
             rNew.insert( nSplit );
         }
-        ++pSplit;
     }
     return nFirst;
 }
@@ -1422,10 +1420,9 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         aFndBox.DelFrames( *this );
         SwTwips nLast = 0;
         SwSplitLines::iterator pSplit = aSplitLines.begin();
-        SwSplitLines::iterator pCurr = aRowLines.begin();
-        while( pCurr != aRowLines.end() )
+        for( const auto& rCurr : aRowLines )
         {
-            while( pSplit != aSplitLines.end() && *pSplit < *pCurr )
+            while( pSplit != aSplitLines.end() && *pSplit < rCurr )
             {
                 InsertSpannedRow( pDoc, nFirst, 1 );
                 SwTableLine* pRow = GetTabLines()[ nFirst ];
@@ -1438,16 +1435,15 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                 ++pSplit;
                 ++nFirst;
             }
-            if( pSplit != aSplitLines.end() && *pCurr == *pSplit )
+            if( pSplit != aSplitLines.end() && rCurr == *pSplit )
                 ++pSplit;
             SwTableLine* pRow = GetTabLines()[ nFirst ];
             SwFrameFormat* pRowFormat = pRow->ClaimFrameFormat();
             SwFormatFrameSize aFSz( pRowFormat->GetFrameSize() );
             aFSz.SetHeightSizeType( ATT_MIN_SIZE );
-            aFSz.SetHeight( *pCurr - nLast );
+            aFSz.SetHeight( rCurr - nLast );
             pRowFormat->SetFormatAttr( aFSz );
-            nLast = *pCurr;
-            ++pCurr;
+            nLast = rCurr;
             ++nFirst;
         }
     }
@@ -1476,9 +1472,8 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             aIndices.insert( i );
     }
 
-    std::set<size_t>::iterator pCurrBox = aIndices.begin();
-    while( pCurrBox != aIndices.end() )
-        lcl_UnMerge( *this, *rBoxes[*pCurrBox++], nCnt, bSameHeight );
+    for( const auto& rCurrBox : aIndices )
+        lcl_UnMerge( *this, *rBoxes[rCurrBox], nCnt, bSameHeight );
 
     CHECK_TABLE( *this )
     // update the layout
