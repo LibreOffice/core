@@ -1874,9 +1874,6 @@ def __compil__(s):
     globs = ""
     functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "log10", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
     defaultfunc = ["Print"] # TODO handle all default procedures
-    names ={key: 1 for key in functions + defaultfunc}
-    names["range"] = names["re.sub"] = 3
-    names["re.search"] = names["re.findall"] = 2
 
     if len(subnames) > 0:
         globs = "global %s" % ", ".join(subnames)
@@ -1909,17 +1906,29 @@ def __compil__(s):
     operators = re.compile(r"(?iu)(%s)" % "(?:[ ]*([+*/<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|(?<! )-[ ]*|[ ]*[*][*][ ]*)") # operators, eg. " - ", "-", "- "
     atoms = re.compile(r"(?iu)(%s)" % "[0-9]+([.,][0-9]+)?|\w+([.]\w)?")
 
+    # store argument numbers of all subroutines in dictionary "names"
+    names = {key: 1 for key in functions + defaultfunc}
+    names["range"] = names["re.sub"] = 3
+    names["re.search"] = names["re.findall"] = 2
+
+    # match a function header
+    search_funcdef = re.compile(r"(^|\n) *(def (\w+))(\([^\n]*\):) *(?=\n)")
+
+    # "multiline" lambda function to process function headers: add commas to argument list and
+    # add {"subroutine_name": argument_count} into names using a temporary array
+    # (instead of using global variable "names" and a new global function to process the matching patterns)
+    # for example: "def f(x y z):" -> "def f(x,y,z):" and names = {"f": 3}
+    process_funcdef = lambda r: r.group(1) + r.group(2) + \
+        [chsp.sub(", ", r.group(4)), names.update({r.group(3): len(re.findall(r"\w+", r.group(4)))})][0]
+    # process all function headers calling process_funcdef for every matching
+    # (before parsing Logo expressions line by line, we need to know about all functions,
+    # because functions can be defined in any order, ie. their calls can be before
+    # their definitions)
+    s = search_funcdef.sub(process_funcdef, s)
+
+    # process line by line
     for i in s.split("\n"):
         i = i.strip()
-        # store argument numbers of subroutines in names
-        if i[0:4] == 'def ':
-            s = func.search(i)
-            if s.group(3) == '():':
-                names[s.group(2)] = 0
-            else:
-                s2 = len(chsp.findall(s.group(3))) + 1
-                i = s.group(1) + chsp.sub(", ", s.group(3))
-                names[s.group(2)] = s2
 
         # convert Logo expressions to Python ones using regex based tokenization
         # tokens: {startpos: endpos} dictionaries for subroutine names, operators and other tokens

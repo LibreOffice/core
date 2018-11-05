@@ -98,6 +98,8 @@ class LibreLogoCompileTest(UITestCase):
                 ("a=(SIN 102) + (COS 102)", "a=(sin(102)) + (cos(102))"),
                 ("a=SIN 103 + COS 103 - SQRT 103", "a=sin(103 + cos(103 - sqrt(103)))"),
                 ("a=(SIN 104 + COS 104) - SQRT 104", "a=(sin(104 + cos(104))) - sqrt(104)"),
+                # SIN(x) is Python-like, SIN (x) is Logo-like syntax
+                ("a=SIN(105) + COS (105) - SQRT 105", "a=sin(105) + cos((105) - sqrt(105))"),
                 ("a=COUNT [1, 2, 3]", "a=len([1, 2, 3])"),
                 ("PRINT COUNT [1, 2, 3]", "Print(len([1, 2, 3]))"),
                 ("PRINT 'TEXT: ' + 'CHAR'[0] + ' TEXT2: ' + variable[-1]", "Print(u'TEXT: ' + u'CHAR'[0] + u' TEXT2: ' + variable[-1])"),
@@ -119,6 +121,8 @@ class LibreLogoCompileTest(UITestCase):
                 ("TO f x y z\nLABEL x+y+z\nEND\nf len [1, cos 2, [65]] sqrt len [1, 2, 3, 4] sin 90 * cos 270", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n label(x+y+z)\n %s\n%s\nf(len([1, cos(2), [65]]), sqrt(len([1, 2, 3, 4])), sin(90 * cos(270)))" % (((self.LS),)*3)),
                 ("TO f x y z\nLABEL x+y+z\nEND\nf len([1, cos 2, [65]]) sqrt(len [1, 2, 3, 4]) sin(90) * cos 270", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n label(x+y+z)\n %s\n%s\nf(len([1, cos(2), [65]]), sqrt(len([1, 2, 3, 4])), sin(90) * cos(270))" % (((self.LS),)*3)),
                 ("TO f x y z\nLABEL x+y+z\nEND\nf (len [1, cos 2, [65]]) (sqrt len [1, 2, 3, 4]) (sin 90) * (cos 270)", "global f\ndef f(x, y, z):\n __checkhalt__()\n %s\n label(x+y+z)\n %s\n%s\nf((len([1, cos(2), [65]])), (sqrt(len([1, 2, 3, 4]))), (sin(90)) * (cos(270)))" % (((self.LS),)*3)),
+                # arbitrary order of function definitions and calls
+                ("f 1 1 f 2 2\nTO f x y\nPRINT x + y\nEND", "global f\nf(1, 1)\nf(2, 2)\n%s\ndef f(x, y):\n __checkhalt__()\n %s\n Print(x + y)\n %s" % (((self.LS),)*3)),
                 ):
             compiled = xCompile.invoke((test[0],), (), ())[0]
             self.assertEqual(test[1], re.sub(r'(\n| +\n)+', '\n', re.sub(r'\( ', '(', compiled)).strip())
