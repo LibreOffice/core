@@ -3630,6 +3630,8 @@ static void lo_startmain(void*)
     if (GetpApp())
         Application::GetSolarMutex().tryToAcquire();
 
+    Application::UpdateMainThread();
+
     soffice_main();
 }
 
