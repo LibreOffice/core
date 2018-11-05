@@ -596,7 +596,7 @@ bool OpenGLSalBitmap::ReadTexture()
 
         maTexture.Read(nFormat, nType, pData);
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         // If we read over the end of pData we have a real hidden memory
         // corruption problem !
         size_t nCanary = mnBytesPerRow * mnHeight;
