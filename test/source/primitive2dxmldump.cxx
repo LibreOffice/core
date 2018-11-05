@@ -220,6 +220,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.attribute("transparence", rUnifiedTransparencePrimitive2D.getTransparence());
 
+                decomposeAndWrite(rUnifiedTransparencePrimitive2D.getChildren(), rWriter);
+
                 rWriter.endElement();
             }
             break;

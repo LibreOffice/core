@@ -10,6 +10,7 @@
 #include <test/xmltesttools.hxx>
 
 #include <memory>
+#include <iostream>
 
 namespace {
 
@@ -46,6 +47,7 @@ xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
+    std::cout << "bako pBuffer is '"<< std::endl <<(char*)pBuffer.get()<< "'" << std::endl<< std::endl;
     return xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
 }
 
