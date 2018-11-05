@@ -51,7 +51,7 @@ class ManualCalcTests(UITestCase):
 
         xListBox = xSelectNameDlg.getChild("treeview")
         xListBoxState = get_state_as_dict(xListBox)
-        self.assertEqual(xListBoxState["SelectEntryCount"], "1")
+        self.assertEqual(xListBoxState["SelectionCount"], "1")
         self.assertEqual(xListBoxState["SelectEntryText"], "my_database")
 
         xOkBtn = xSelectNameDlg.getChild("ok")
