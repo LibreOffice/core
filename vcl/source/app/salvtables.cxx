@@ -43,8 +43,11 @@
 #include <vcl/prgsbar.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/svlbitm.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <bitmaps.hlst>
@@ -1749,13 +1752,13 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
 private:
-    VclPtr<ListBox> m_xTreeView;
+    VclPtr<SvTreeListBox> m_xTreeView;
 
-    DECL_LINK(SelectHdl, ListBox&, void);
-    DECL_LINK(DoubleClickHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
 
 public:
-    SalInstanceTreeView(ListBox* pTreeView, bool bTakeOwnership)
+    SalInstanceTreeView(SvTreeListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
     {
@@ -1766,52 +1769,61 @@ public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
-        sal_Int32 nInsertedAt;
+        void* pUserData = pId ?  new OUString(*pId) : nullptr;
+
         if (!pIconName && !pImageSurface)
-            nInsertedAt = m_xTreeView->InsertEntry(rStr, nInsertPos);
-        else if (pIconName)
-            nInsertedAt = m_xTreeView->InsertEntry(rStr, createImage(*pIconName), nInsertPos);
+            m_xTreeView->InsertEntry(rStr, nullptr, false, nInsertPos, pUserData);
         else
-            nInsertedAt = m_xTreeView->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
-        if (pId)
-            m_xTreeView->SetEntryData(nInsertedAt, new OUString(*pId));
+        {
+            SvTreeListEntry* pEntry = new SvTreeListEntry;
+            Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rStr));
+            pEntry->SetUserData(pUserData);
+            m_xTreeView->Insert(pEntry, nInsertPos);
+        }
     }
 
     virtual void set_font_color(int pos, const Color& rColor) const override
     {
-        m_xTreeView->SetEntryTextColor(pos, &rColor);
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        pEntry->SetTextColor(&rColor);
     }
 
     virtual void remove(int pos) override
     {
-        m_xTreeView->RemoveEntry(pos);
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        m_xTreeView->RemoveEntry(pEntry);
     }
 
     virtual int find_text(const OUString& rText) const override
     {
-        sal_Int32 nRet = m_xTreeView->GetEntryPos(rText);
-        if (nRet == LISTBOX_ENTRY_NOTFOUND)
-            return -1;
-        return nRet;
+        for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
+        {
+            if (m_xTreeView->GetEntryText(pEntry) == rText)
+                return m_xTreeView->GetAbsPos(pEntry);
+        }
+        return -1;
     }
 
     virtual int find_id(const OUString& rId) const override
     {
-        sal_Int32 nCount = m_xTreeView->GetEntryCount();
-        for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
+        for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
         {
-            OUString* pId = static_cast<OUString*>(m_xTreeView->GetEntryData(nPos));
+            const OUString* pId = static_cast<const OUString*>(pEntry->GetUserData());
             if (!pId)
                 continue;
             if (rId == *pId)
-                return nPos;
+                return m_xTreeView->GetAbsPos(pEntry);
         }
         return -1;
     }
 
     virtual void set_top_entry(int pos) override
     {
-        m_xTreeView->SetTopEntry(pos);
+        SvTreeList* pModel = m_xTreeView->GetModel();
+        SvTreeListEntry* pEntry = pModel->GetEntry(nullptr, pos);
+        pModel->Move(pEntry, nullptr, 0);
     }
 
     virtual void clear() override
@@ -1827,44 +1839,52 @@ public:
     virtual void select(int pos) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        disable_notify_events();
         if (pos == -1)
-            m_xTreeView->SetNoSelection();
+            m_xTreeView->SelectAll(false);
         else
-            m_xTreeView->SelectEntryPos(pos);
+        {
+            SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+            m_xTreeView->Select(pEntry, true);
+        }
+        enable_notify_events();
     }
 
     virtual void unselect(int pos) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        disable_notify_events();
         if (pos == -1)
-        {
-            for (sal_Int32 i = 0; i < m_xTreeView->GetEntryCount(); ++i)
-                m_xTreeView->SelectEntryPos(i);
-        }
+            m_xTreeView->SelectAll(true);
         else
-            m_xTreeView->SelectEntryPos(pos, false);
+        {
+            SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+            m_xTreeView->Select(pEntry, false);
+        }
+        enable_notify_events();
     }
 
     virtual std::vector<int> get_selected_rows() const override
     {
         std::vector<int> aRows;
 
-        sal_Int32 nCount = m_xTreeView->GetSelectedEntryCount();
-        aRows.reserve(nCount);
-        for (sal_Int32 i = 0; i < nCount; ++i)
-            aRows.push_back(m_xTreeView->GetSelectedEntryPos(i));
+        aRows.reserve(m_xTreeView->GetSelectionCount());
+        for (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected(); pEntry; pEntry = m_xTreeView->NextSelected(pEntry))
+            aRows.push_back(m_xTreeView->GetAbsPos(pEntry));
 
         return aRows;
     }
 
     virtual OUString get_text(int pos) const override
     {
-        return m_xTreeView->GetEntry(pos);
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        return m_xTreeView->GetEntryText(pEntry);
     }
 
     const OUString* getEntryData(int index) const
     {
-        return static_cast<const OUString*>(m_xTreeView->GetEntryData(index));
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, index);
+        return static_cast<const OUString*>(pEntry->GetUserData());
     }
 
     virtual OUString get_id(int pos) const override
@@ -1877,25 +1897,25 @@ public:
 
     virtual int get_selected_index() const override
     {
-        const sal_Int32 nRet = m_xTreeView->GetSelectedEntryPos();
-        if (nRet == LISTBOX_ENTRY_NOTFOUND)
+        SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
+        if (!pEntry)
             return -1;
-        return nRet;
+        return m_xTreeView->GetAbsPos(pEntry);
     }
 
     virtual void set_selection_mode(bool bMultiple) override
     {
-        m_xTreeView->EnableMultiSelection(bMultiple);
+        m_xTreeView->SetSelectionMode(bMultiple ? SelectionMode::Multiple : SelectionMode::Single);
     }
 
     virtual int count_selected_rows() const override
     {
-        return m_xTreeView->GetSelectedEntryCount();
+        return m_xTreeView->GetSelectionCount();
     }
 
     virtual int get_height_rows(int nRows) const override
     {
-        return m_xTreeView->CalcWindowSizePixel(nRows);
+        return m_xTreeView->GetEntryHeight() * nRows;
     }
 
     virtual void make_sorted() override
@@ -1903,30 +1923,31 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
     }
 
-    ListBox& getTreeView()
+    SvTreeListBox& getTreeView()
     {
         return *m_xTreeView;
     }
 
     virtual ~SalInstanceTreeView() override
     {
-        m_xTreeView->SetDoubleClickHdl(Link<ListBox&, void>());
-        m_xTreeView->SetSelectHdl(Link<ListBox&, void>());
+        m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
+        m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
     }
 };
 
-IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, SvTreeListBox*, void)
 {
     if (notify_events_disabled())
         return;
     signal_changed();
 }
 
-IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
 {
     if (notify_events_disabled())
-        return;
+        return false;
     signal_row_activated();
+    return false;
 }
 
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
@@ -2710,9 +2731,11 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
     if (nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP || nKeyCode == KEY_PAGEDOWN)
     {
         m_pTreeView->disable_notify_events();
-        ListBox& rListBox = m_pTreeView->getTreeView();
-        NotifyEvent aNotifyEvt(MouseNotifyEvent::KEYINPUT, reinterpret_cast<vcl::Window*>(rListBox.mpImplWin.get()), &rKeyEvent);
-        rListBox.PreNotify(aNotifyEvt);
+        auto& rListBox = m_pTreeView->getTreeView();
+        if (!rListBox.FirstSelected())
+            rListBox.Select(rListBox.First(), true);
+        else
+            rListBox.KeyInput(rKeyEvent);
         m_xEntry->set_text(m_xTreeView->get_selected_text());
         m_xEntry->select_region(0, -1);
         m_pTreeView->enable_notify_events();
@@ -2927,7 +2950,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
     {
-        ListBox* pTreeView = m_xBuilder->get<ListBox>(id);
+        SvTreeListBox* pTreeView = m_xBuilder->get<SvTreeListBox>(id);
         return pTreeView ? o3tl::make_unique<SalInstanceTreeView>(pTreeView, bTakeOwnership) : nullptr;
     }
 

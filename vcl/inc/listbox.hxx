@@ -48,7 +48,6 @@ struct ImplEntryType
 {
     OUString const    maStr;
     SalLayoutGlyphs   maStrGlyphs;
-    std::unique_ptr<Color> mxTextColor;
     Image const       maImage;
     void*       mpUserData;
     bool        mbIsSelected;
@@ -134,9 +133,6 @@ public:
 
     void              SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
     ListBoxEntryFlags GetEntryFlags( sal_Int32  nPos ) const;
-
-    void            SetEntryTextColor(sal_Int32 nPos, const Color* pColor);
-    const Color*    GetEntryTextColor(sal_Int32 nPos) const;
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
 
@@ -427,8 +423,6 @@ public:
     void            Clear();
 
     void            SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
-
-    void            SetEntryTextColor(sal_Int32 nPos, const Color* pTextColor) { maLBWindow->GetEntryList()->SetEntryTextColor(nPos, pTextColor); }
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            SetNoSelection();
