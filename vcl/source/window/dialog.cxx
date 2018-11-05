@@ -1055,12 +1055,7 @@ short Dialog::Execute()
     return static_cast<short>(nRet);
 
 #else
-
-    // touch_ui_dialog_modal was dummied out both for Android and iOS (well, TiledLibreOffice anyway)
-    // For Android it returned MLODialogOK always, for iOS Cancel. Let's go with OK.
-    // MLODialogResult result = touch_ui_dialog_modal(kind, ImplGetDialogText(this).getStr());
     return RET_OK;
-
 #endif
 }
 
