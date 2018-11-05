@@ -3408,7 +3408,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
         }
     }
 
-    if (sClass == "GtkListStore")
+    if (sClass == "GtkListStore" || sClass == "GtkTreeStore")
     {
         handleListStore(reader, sID);
         return nullptr;
