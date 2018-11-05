@@ -375,7 +375,7 @@ private:
     void        handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader);
 
-    void        handleListStore(xmlreader::XmlReader &reader, const OString &rID);
+    void        handleListStore(xmlreader::XmlReader &reader, const OString &rID, const OString &rClass);
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);

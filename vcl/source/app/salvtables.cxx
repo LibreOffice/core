@@ -1750,6 +1750,17 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
         signal_cursor_position();
 }
 
+struct SalInstanceTreeIter : public weld::TreeIter
+{
+    SalInstanceTreeIter(const SalInstanceTreeIter* pOrig)
+    {
+        if (!pOrig)
+            return;
+        iter = pOrig->iter;
+    }
+    SvTreeListEntry* iter;
+};
+
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -1759,19 +1770,26 @@ private:
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
+    DECL_LINK(ExpandingHdl, SvTreeListBox*, bool);
 
 public:
     SalInstanceTreeView(SvTreeListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
     {
+        m_xTreeView->SetNodeDefaultImages();
         m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
+        m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
     }
 
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface, const OUString* pExpanderName,
+                        bool bChildrenOnDemand) override
     {
-        auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
+        SalInstanceTreeIter* pVclIter = static_cast<SalInstanceTreeIter*>(pParent);
+        SvTreeListEntry* iter = pVclIter ? pVclIter->iter : nullptr;
+        auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
         void* pUserData;
         if (pId)
         {
@@ -1781,8 +1799,9 @@ public:
         else
             pUserData = nullptr;
 
+        SvTreeListEntry* pResult;
         if (!pIconName && !pImageSurface)
-            m_xTreeView->InsertEntry(rStr, nullptr, false, nInsertPos, pUserData);
+            pResult = m_xTreeView->InsertEntry(rStr, iter, false, nInsertPos, pUserData);
         else
         {
             SvTreeListEntry* pEntry = new SvTreeListEntry;
@@ -1790,7 +1809,20 @@ public:
             pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
             pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rStr));
             pEntry->SetUserData(pUserData);
-            m_xTreeView->Insert(pEntry, nInsertPos);
+            m_xTreeView->Insert(pEntry, iter, nInsertPos);
+            pResult = pEntry;
+        }
+
+        if (pExpanderName)
+        {
+            Image aImage(createImage(*pExpanderName));
+            m_xTreeView->SetExpandedEntryBmp(pResult, aImage);
+            m_xTreeView->SetCollapsedEntryBmp(pResult, aImage);
+        }
+
+        if (bChildrenOnDemand)
+        {
+            m_xTreeView->InsertEntry("<dummy>", pResult, false, 0, nullptr);
         }
     }
 
@@ -1914,6 +1946,157 @@ public:
         return m_xTreeView->GetAbsPos(pEntry);
     }
 
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
+    {
+        return std::unique_ptr<weld::TreeIter>(new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
+    }
+
+    virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override
+    {
+        const SalInstanceTreeIter& rVclSource(static_cast<const SalInstanceTreeIter&>(rSource));
+        SalInstanceTreeIter& rVclDest(static_cast<SalInstanceTreeIter&>(rDest));
+        rVclDest.iter = rVclSource.iter;
+    }
+
+    virtual bool get_selected(weld::TreeIter* pIter) const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
+        auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+        if (pVclIter)
+            pVclIter->iter = pEntry;
+        return pEntry != nullptr;
+    }
+
+    virtual bool get_cursor(weld::TreeIter* pIter) const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
+        auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+        if (pVclIter)
+            pVclIter->iter = pEntry;
+        return pEntry != nullptr;
+    }
+
+    virtual void set_cursor(const weld::TreeIter& rIter) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->SetCurEntry(rVclIter.iter);
+    }
+
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = m_xTreeView->GetEntry(0);
+        return rVclIter.iter != nullptr;
+    }
+
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = rVclIter.iter->NextSibling();
+        return rVclIter.iter != nullptr;
+    }
+
+    virtual bool iter_next(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = m_xTreeView->Next(rVclIter.iter);
+        if (rVclIter.iter && m_xTreeView->GetEntryText(rVclIter.iter) == "<dummy>")
+            return iter_next(rVclIter);
+        return rVclIter.iter != nullptr;
+    }
+
+    virtual bool iter_children(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = m_xTreeView->FirstChild(rVclIter.iter);
+        bool bRet = rVclIter.iter != nullptr;
+        if (bRet)
+        {
+            //on-demand dummy entry doesn't count
+            return m_xTreeView->GetEntryText(rVclIter.iter) != "<dummy>";
+        }
+        return bRet;
+    }
+
+    virtual bool iter_parent(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = m_xTreeView->GetParent(rVclIter.iter);
+        return rVclIter.iter != nullptr;
+    }
+
+    virtual void remove(const weld::TreeIter& rIter) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->RemoveEntry(rVclIter.iter);
+    }
+
+    virtual void select(const weld::TreeIter& rIter) override
+    {
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        disable_notify_events();
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->Select(rVclIter.iter, true);
+        enable_notify_events();
+    }
+
+    virtual void unselect(const weld::TreeIter& rIter) override
+    {
+        assert(m_xTreeView->IsUpdateMode() && "don't unselect when frozen");
+        disable_notify_events();
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->Select(rVclIter.iter, false);
+        enable_notify_events();
+    }
+
+    virtual int get_iter_depth(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return m_xTreeView->GetModel()->GetDepth(rVclIter.iter);
+    }
+
+    virtual bool iter_has_child(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return rVclIter.iter->HasChildren();
+    }
+
+    virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return m_xTreeView->IsExpanded(rVclIter.iter);
+    }
+
+    virtual void expand_row(weld::TreeIter& rIter) override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        if (!m_xTreeView->IsExpanded(rVclIter.iter) && signal_expanding(rIter))
+            m_xTreeView->Expand(rVclIter.iter);
+    }
+
+    virtual OUString get_text(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return m_xTreeView->GetEntryText(rVclIter.iter);
+    }
+
+    virtual OUString get_id(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
+        if (pStr)
+            return *pStr;
+        return OUString();
+    }
+
+    virtual void set_expander_image(const weld::TreeIter& rIter, const OUString& rImage) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        Image aImage(createImage(rImage));
+        m_xTreeView->SetExpandedEntryBmp(rVclIter.iter, aImage);
+        m_xTreeView->SetCollapsedEntryBmp(rVclIter.iter, aImage);
+    }
+
     virtual void set_selection_mode(bool bMultiple) override
     {
         m_xTreeView->SetSelectionMode(bMultiple ? SelectionMode::Multiple : SelectionMode::Single);
@@ -1941,6 +2124,7 @@ public:
 
     virtual ~SalInstanceTreeView() override
     {
+        m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
     }
@@ -1959,6 +2143,41 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
         return false;
     signal_row_activated();
     return false;
+}
+
+IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetHdlEntry();
+    if (m_xTreeView->IsExpanded(pEntry))
+    {
+        //collapsing;
+        return true;
+    }
+
+    // if there's a preexisting placeholder child, required to make this
+    // potentially expandable in the first place, now we remove it
+    bool bPlaceHolder = false;
+    if (pEntry->HasChildren())
+    {
+        auto pChild = m_xTreeView->FirstChild(pEntry);
+        if (m_xTreeView->GetEntryText(pChild) == "<dummy>")
+        {
+            m_xTreeView->RemoveEntry(pChild);
+            bPlaceHolder = true;
+        }
+    }
+
+    SalInstanceTreeIter aIter(nullptr);
+    aIter.iter = pEntry;
+    bool bRet = signal_expanding(aIter);
+
+    //expand disallowed, restore placeholder
+    if (!bRet && bPlaceHolder)
+    {
+        m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+    }
+
+    return bRet;
 }
 
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton

@@ -1055,6 +1055,102 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
     return pModule;
 }
 
+SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+    SbTreeListBox& rBasicBox, const OUString& rLibName, const OUString& _aModName, bool bMain )
+{
+    OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
+    if ( !rDocument.isAlive() )
+        return nullptr;
+
+    SbModule* pModule = nullptr;
+
+    OUString aLibName( rLibName );
+    if ( aLibName.isEmpty() )
+        aLibName = "Standard" ;
+    rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+    OUString aModName = _aModName;
+    if ( aModName.isEmpty() )
+        aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
+
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Module, true);
+    aNewDlg.SetObjectName(aModName);
+
+    if (aNewDlg.run() != RET_CANCEL)
+    {
+        if (!aNewDlg.GetObjectName().isEmpty())
+            aModName = aNewDlg.GetObjectName();
+
+        try
+        {
+            OUString sModuleCode;
+            // the module has existed
+            if( rDocument.hasModule( aLibName, aModName ) )
+                return nullptr;
+            rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
+            BasicManager* pBasMgr = rDocument.getBasicManager();
+            StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
+                if ( pBasic )
+                    pModule = pBasic->FindModule( aModName );
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
+            {
+                pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
+                      SfxCallMode::SYNCHRON, { &aSbxItem });
+            }
+            LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
+            std::unique_ptr<weld::TreeIter> xIter(rBasicBox.make_iterator());
+            bool bRootEntry = rBasicBox.FindRootEntry(rDocument, eLocation, *xIter);
+            if (bRootEntry)
+            {
+                if (!rBasicBox.get_row_expanded(*xIter))
+                    rBasicBox.expand_row(*xIter);
+                bool bLibEntry = rBasicBox.FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xIter);
+                DBG_ASSERT( bLibEntry, "LibEntry not found!" );
+                if (bLibEntry)
+                {
+                    if (!rBasicBox.get_row_expanded(*xIter))
+                        rBasicBox.expand_row(*xIter);
+                    std::unique_ptr<weld::TreeIter> xSubRootEntry(rBasicBox.make_iterator(xIter.get()));
+                    if (pBasic && rDocument.isInVBAMode())
+                    {
+                        // add the new module in the "Modules" entry
+                        std::unique_ptr<weld::TreeIter> xLibSubEntry(rBasicBox.make_iterator(xIter.get()));
+                        bool bLibSubEntry = rBasicBox.FindEntry(IDEResId(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES, *xLibSubEntry);
+                        if (bLibSubEntry)
+                        {
+                            if (!rBasicBox.get_row_expanded(*xLibSubEntry))
+                                rBasicBox.expand_row(*xLibSubEntry);
+                            rBasicBox.copy_iterator(*xLibSubEntry, *xSubRootEntry);
+                        }
+                    }
+
+                    std::unique_ptr<weld::TreeIter> xEntry(rBasicBox.make_iterator(xSubRootEntry.get()));
+                    bool bEntry = rBasicBox.FindEntry(aModName, OBJ_TYPE_MODULE, *xEntry);
+                    if (!bEntry)
+                    {
+                        rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xEntry.get(), false,
+                                           o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                    }
+                    rBasicBox.set_cursor(*xEntry);
+                    rBasicBox.select(*xEntry);
+                }
+            }
+        }
+        catch (const container::ElementExistException& )
+        {
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pWin,
+                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+            xError->run();
+        }
+        catch (const container::NoSuchElementException& )
+        {
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+        }
+    }
+    return pModule;
+}
+
+
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

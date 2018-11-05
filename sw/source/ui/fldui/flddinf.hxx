@@ -71,6 +71,8 @@ public:
     virtual void        FillUserData() override;
 };
 
+void FillFieldSelect(ListBox& rListBox);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
