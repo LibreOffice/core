@@ -43,6 +43,7 @@ class PopupMenu;
 class SalInstanceBuilder;
 class ScreenshotTest;
 class ScrollBar;
+class SvTreeListBox;
 class Slider;
 class DateField;
 class TimeField;
@@ -220,6 +221,7 @@ private:
     const ListStore* get_model_by_name(const OString& sID) const;
     void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
+    void     mungeModel(SvTreeListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
     const TextBuffer* get_buffer_by_name(const OString& sID) const;

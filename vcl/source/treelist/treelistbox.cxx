@@ -2745,10 +2745,13 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             {
                 aWallpaper.SetColor(rSettings.GetFieldColor());
             }
-            else if (bCurFontIsSel)
+            else if (bCurFontIsSel || rEntry.GetTextColor())
             {
                 bCurFontIsSel = false;
-                rRenderContext.SetTextColor(aBackupTextColor);
+                if (const auto* pCustomTextColor = rEntry.GetTextColor())
+                    rRenderContext.SetTextColor(*pCustomTextColor);
+                else
+                    rRenderContext.SetTextColor(aBackupTextColor);
                 rRenderContext.SetFont(aBackupFont);
             }
             else
@@ -2825,7 +2828,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         nCurTab++;
     }
 
-    if (bCurFontIsSel)
+    if (bCurFontIsSel || rEntry.GetTextColor())
     {
         rRenderContext.SetTextColor(aBackupTextColor);
         rRenderContext.SetFont(aBackupFont);
