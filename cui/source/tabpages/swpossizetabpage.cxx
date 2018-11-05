@@ -136,8 +136,8 @@ static RelationMap const aAsCharRelationMap[] =
     Anchored at page
  --------------------------------------------------------------------*/
 
-#define HORI_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft| \
-                        LB::RelPageRight)
+static constexpr auto HORI_PAGE_REL = LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft|
+                                      LB::RelPageRight;
 
 static FrmMap const aHPageMap[] =
 {
@@ -171,8 +171,8 @@ static FrmMap const aVPageHtmlMap[] =
     Anchored at frame
  --------------------------------------------------------------------*/
 
-#define HORI_FRAME_REL  (LB::FlyRelPageFrame|LB::FlyRelPagePrintArea| \
-                        LB::FlyRelPageLeft|LB::FlyRelPageRight)
+static constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame|LB::FlyRelPagePrintArea|
+                                       LB::FlyRelPageLeft|LB::FlyRelPageRight;
 
 static FrmMap const aHFrameMap[] =
 {
@@ -219,9 +219,9 @@ static FrmMap const aHMultiSelectionMap[] =
     Anchored at paragraph
  --------------------------------------------------------------------*/
 
-#define HORI_PARA_REL   (LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight| \
-                        LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
-                        LB::RelFrameRight)
+static constexpr auto HORI_PARA_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight|
+                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft|
+                                      LB::RelFrameRight;
 
 static FrmMap const aHParaMap[] =
 {
@@ -246,8 +246,8 @@ static FrmMap const aHParaHtmlAbsMap[] =
 };
 
 
-#define VERT_PARA_REL   (LB::VertFrame|LB::VertPrintArea| \
-                         LB::RelPageFrame|LB::RelPagePrintArea)
+static constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
+                                      LB::RelPageFrame|LB::RelPagePrintArea;
 
 static FrmMap const aVParaMap[] =
 {
@@ -266,9 +266,9 @@ static FrmMap const aVParaHtmlMap[] =
     Anchored at character
  --------------------------------------------------------------------*/
 
-#define HORI_CHAR_REL   (LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight| \
-                        LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
-                        LB::RelFrameRight|LB::RelChar)
+static constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight|
+                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft|
+                                      LB::RelFrameRight|LB::RelChar;
 
 static FrmMap aHCharMap[] =
 {
@@ -295,8 +295,8 @@ static FrmMap aHCharHtmlAbsMap[] =
 
 // #i18732# - allow vertical alignment at page areas
 // #i22341# - handle <LB::RelChar> on its own
-#define VERT_CHAR_REL   (LB::VertFrame|LB::VertPrintArea| \
-                         LB::RelPageFrame|LB::RelPagePrintArea)
+static constexpr auto VERT_CHAR_REL = LB::VertFrame|LB::VertPrintArea|
+                                      LB::RelPageFrame|LB::RelPagePrintArea;
 
 static FrmMap aVCharMap[] =
 {

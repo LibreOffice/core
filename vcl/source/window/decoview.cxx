@@ -23,10 +23,10 @@
 #include <vcl/window.hxx>
 #include <vcl/ctrl.hxx>
 
-#define BUTTON_DRAW_FLATTEST    (DrawButtonFlags::Flat |             \
-                                 DrawButtonFlags::Pressed |          \
-                                 DrawButtonFlags::Checked |          \
-                                 DrawButtonFlags::Highlight)
+static constexpr auto BUTTON_DRAW_FLATTEST = DrawButtonFlags::Flat |
+                                 DrawButtonFlags::Pressed |
+                                 DrawButtonFlags::Checked |
+                                 DrawButtonFlags::Highlight;
 
 using namespace std;
 

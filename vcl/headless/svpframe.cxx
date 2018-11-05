@@ -302,9 +302,9 @@ SalFrame* SvpSalFrame::GetParent() const
     return m_pParent;
 }
 
-#define FRAMESTATE_MASK_GEOMETRY \
-     (WindowStateMask::X     | WindowStateMask::Y |   \
-      WindowStateMask::Width | WindowStateMask::Height)
+static constexpr auto FRAMESTATE_MASK_GEOMETRY =
+     WindowStateMask::X     | WindowStateMask::Y |
+     WindowStateMask::Width | WindowStateMask::Height;
 
 void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 {

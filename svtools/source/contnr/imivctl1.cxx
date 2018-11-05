@@ -42,9 +42,9 @@
 #define IMPICNVIEW_ACC_RETURN 1
 #define IMPICNVIEW_ACC_ESCAPE 2
 
-#define DRAWTEXT_FLAGS_ICON \
-    ( DrawTextFlags::Center | DrawTextFlags::Top | DrawTextFlags::EndEllipsis | \
-      DrawTextFlags::Clip | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Mnemonic )
+static constexpr auto DRAWTEXT_FLAGS_ICON =
+    DrawTextFlags::Center | DrawTextFlags::Top | DrawTextFlags::EndEllipsis |
+    DrawTextFlags::Clip | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Mnemonic;
 
 #define DRAWTEXT_FLAGS_SMALLICON (DrawTextFlags::Left|DrawTextFlags::EndEllipsis|DrawTextFlags::Clip)
 

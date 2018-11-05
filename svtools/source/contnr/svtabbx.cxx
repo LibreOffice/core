@@ -33,8 +33,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-#define MYTABMASK \
-    SvLBoxTabFlags( SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::ADJUST_NUMERIC )
+static constexpr SvLBoxTabFlags MYTABMASK =
+    SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::ADJUST_NUMERIC;
 
 // SvTreeListBox callback
 
