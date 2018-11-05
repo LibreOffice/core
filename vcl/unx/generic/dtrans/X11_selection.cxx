@@ -73,11 +73,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 
-#define DRAG_EVENT_MASK ButtonPressMask         |\
-                              ButtonReleaseMask     |\
-                              PointerMotionMask     |\
-                              EnterWindowMask           |\
-                              LeaveWindowMask
+static constexpr auto DRAG_EVENT_MASK = ButtonPressMask |
+                              ButtonReleaseMask |
+                              PointerMotionMask |
+                              EnterWindowMask |
+                              LeaveWindowMask;
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;

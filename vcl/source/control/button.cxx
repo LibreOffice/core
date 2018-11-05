@@ -50,21 +50,21 @@
 
 using namespace css;
 
-#define PUSHBUTTON_VIEW_STYLE       (WB_3DLOOK |                        \
-                                     WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                     WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                     WB_WORDBREAK | WB_NOLABEL |        \
-                                     WB_DEFBUTTON | WB_NOLIGHTBORDER |  \
-                                     WB_RECTSTYLE | WB_SMALLSTYLE |     \
-                                     WB_TOGGLE )
-#define RADIOBUTTON_VIEW_STYLE      (WB_3DLOOK |                        \
-                                     WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                     WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                     WB_WORDBREAK | WB_NOLABEL)
-#define CHECKBOX_VIEW_STYLE         (WB_3DLOOK |                        \
-                                     WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                     WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                     WB_WORDBREAK | WB_NOLABEL)
+static constexpr auto PUSHBUTTON_VIEW_STYLE = WB_3DLOOK |
+                                     WB_LEFT | WB_CENTER | WB_RIGHT |
+                                     WB_TOP | WB_VCENTER | WB_BOTTOM |
+                                     WB_WORDBREAK | WB_NOLABEL |
+                                     WB_DEFBUTTON | WB_NOLIGHTBORDER |
+                                     WB_RECTSTYLE | WB_SMALLSTYLE |
+                                     WB_TOGGLE;
+static constexpr auto RADIOBUTTON_VIEW_STYLE = WB_3DLOOK |
+                                     WB_LEFT | WB_CENTER | WB_RIGHT |
+                                     WB_TOP | WB_VCENTER | WB_BOTTOM |
+                                     WB_WORDBREAK | WB_NOLABEL;
+static constexpr auto CHECKBOX_VIEW_STYLE = WB_3DLOOK |
+                                     WB_LEFT | WB_CENTER | WB_RIGHT |
+                                     WB_TOP | WB_VCENTER | WB_BOTTOM |
+                                     WB_WORDBREAK | WB_NOLABEL;
 
 #define STYLE_RADIOBUTTON_MONO      (sal_uInt16(0x0001)) // legacy
 #define STYLE_CHECKBOX_MONO         (sal_uInt16(0x0001)) // legacy
