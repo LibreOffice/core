@@ -1838,7 +1838,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (m_bLegacy)
             xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
         else
-            xWindow = VclPtr<SvTreeListBox>::Create(pRealParent, nWinStyle);
+        {
+            VclPtrInstance<SvTreeListBox> xBox(pRealParent, nWinStyle);
+            xBox->SetHighlightRange(); // select over the whole width
+            xWindow = xBox;
+        }
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
     }
