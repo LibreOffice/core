@@ -669,9 +669,8 @@ static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 //   now back in the dialog:
 //      rParam.nHeight += rParam.nDistance;             // not in the dialog any more ???
 
-        if (rParam.pBorder)
-            rParam.nHeight += lcl_LineTotal( rParam.pBorder->GetTop() ) +
-                              lcl_LineTotal( rParam.pBorder->GetBottom() );
+        rParam.nHeight += lcl_LineTotal( rParam.pBorder->GetTop() ) +
+                          lcl_LineTotal( rParam.pBorder->GetBottom() );
 
         rParam.nManHeight = rParam.nHeight;
     }
