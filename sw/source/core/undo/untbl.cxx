@@ -1811,10 +1811,9 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTableNd->GetTable() )
 
     SwSelBoxes aSelBoxes;
-    for (std::set<sal_uLong>::iterator it = m_Boxes.begin();
-            it != m_Boxes.end(); ++it)
+    for (const auto& rBox : m_Boxes)
     {
-        SwTableBox* pBox = pTableNd->GetTable().GetTableBox( *it );
+        SwTableBox* pBox = pTableNd->GetTable().GetTableBox( rBox );
         aSelBoxes.insert( pBox );
     }
 
@@ -1962,10 +1961,9 @@ CHECKTABLE(pTableNd->GetTable())
     SwSelBoxes aSelBoxes;
     SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
 
-    std::set<sal_uLong>::iterator it;
-    for (it = m_Boxes.begin(); it != m_Boxes.end(); ++it)
+    for (const auto& rBox : m_Boxes)
     {
-        aIdx = *it;
+        aIdx = rBox;
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
                                             SwTableBoxStartNode, pColl );
         pBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), *pSttNd,
