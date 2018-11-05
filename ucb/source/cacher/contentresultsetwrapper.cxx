@@ -1055,15 +1055,16 @@ Reference< XInterface > SAL_CALL ContentResultSetWrapper::getStatement()
 // XRow methods.
 
 
-#define XROW_GETXXX( getXXX )                                   \
-impl_EnsureNotDisposed();                                       \
-impl_init_xRowOrigin();                                         \
-if( !m_xRowOrigin.is() )                                        \
-{                                                               \
-    OSL_FAIL( "broadcaster was disposed already" );\
-    throw RuntimeException();                                   \
-}                                                               \
-return m_xRowOrigin->getXXX( columnIndex );
+void ContentResultSetWrapper::verifyGet()
+{
+    impl_EnsureNotDisposed();
+    impl_init_xRowOrigin();
+    if( !m_xRowOrigin.is() )
+    {
+        OSL_FAIL( "broadcaster was disposed already" );
+        throw RuntimeException();
+    }
+}
 
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::wasNull()
@@ -1081,85 +1082,99 @@ sal_Bool SAL_CALL ContentResultSetWrapper::wasNull()
 //virtual
 OUString SAL_CALL ContentResultSetWrapper::getString( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getString );
+    verifyGet();
+    return m_xRowOrigin->getString( columnIndex );
 }
 
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::getBoolean( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getBoolean );
+    verifyGet();
+    return m_xRowOrigin->getBoolean( columnIndex );
 }
 
 //virtual
 sal_Int8 SAL_CALL ContentResultSetWrapper::getByte( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getByte );
+    verifyGet();
+    return m_xRowOrigin->getByte( columnIndex );
 }
 
 //virtual
 sal_Int16 SAL_CALL ContentResultSetWrapper::getShort( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getShort );
+    verifyGet();
+    return m_xRowOrigin->getShort( columnIndex );
 }
 
 //virtual
 sal_Int32 SAL_CALL ContentResultSetWrapper::getInt( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getInt );
+    verifyGet();
+    return m_xRowOrigin->getInt( columnIndex );
 }
 
 //virtual
 sal_Int64 SAL_CALL ContentResultSetWrapper::getLong( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getLong );
+    verifyGet();
+    return m_xRowOrigin->getLong( columnIndex );
 }
 
 //virtual
 float SAL_CALL ContentResultSetWrapper::getFloat( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getFloat );
+    verifyGet();
+    return m_xRowOrigin->getFloat( columnIndex );
 }
 
 //virtual
 double SAL_CALL ContentResultSetWrapper::getDouble( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getDouble );
+    verifyGet();
+    return m_xRowOrigin->getDouble( columnIndex );
 }
 
 //virtual
 Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper::getBytes( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getBytes );
+    verifyGet();
+    return m_xRowOrigin->getBytes( columnIndex );
 }
 
 //virtual
 Date SAL_CALL ContentResultSetWrapper::getDate( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getDate );
+    verifyGet();
+    return m_xRowOrigin->getDate( columnIndex );
 }
 
 //virtual
 Time SAL_CALL ContentResultSetWrapper::getTime( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getTime );
+    verifyGet();
+    return m_xRowOrigin->getTime( columnIndex );
 }
 
 //virtual
 DateTime SAL_CALL ContentResultSetWrapper::getTimestamp( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getTimestamp );
+    verifyGet();
+    return m_xRowOrigin->getTimestamp( columnIndex );
 }
 
 //virtual
 Reference< css::io::XInputStream > SAL_CALL ContentResultSetWrapper::getBinaryStream( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getBinaryStream );
+    verifyGet();
+    return m_xRowOrigin->getBinaryStream( columnIndex );
 }
 
 //virtual
 Reference< css::io::XInputStream > SAL_CALL ContentResultSetWrapper::getCharacterStream( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getCharacterStream );
+    verifyGet();
+    return m_xRowOrigin->getCharacterStream( columnIndex );
 }
 
 //virtual
@@ -1181,25 +1196,29 @@ Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Re
 //virtual
 Reference< XRef > SAL_CALL ContentResultSetWrapper::getRef( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getRef );
+    verifyGet();
+    return m_xRowOrigin->getRef( columnIndex );
 }
 
 //virtual
 Reference< XBlob > SAL_CALL ContentResultSetWrapper::getBlob( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getBlob );
+    verifyGet();
+    return m_xRowOrigin->getBlob( columnIndex );
 }
 
 //virtual
 Reference< XClob > SAL_CALL ContentResultSetWrapper::getClob( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getClob );
+    verifyGet();
+    return m_xRowOrigin->getClob( columnIndex );
 }
 
 //virtual
 Reference< XArray > SAL_CALL ContentResultSetWrapper::getArray( sal_Int32 columnIndex )
 {
-    XROW_GETXXX( getArray );
+    verifyGet();
+    return m_xRowOrigin->getArray( columnIndex );
 }
 
 

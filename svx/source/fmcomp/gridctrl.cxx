@@ -79,14 +79,14 @@ using namespace com::sun::star::accessibility;
 
 #define ROWSTATUS(row) (!row.is() ? "NULL" : row->GetStatus() == GridRowStatus::Clean ? "CLEAN" : row->GetStatus() == GridRowStatus::Modified ? "MODIFIED" : row->GetStatus() == GridRowStatus::Deleted ? "DELETED" : "INVALID")
 
-#define DEFAULT_BROWSE_MODE             \
-              BrowserMode::COLUMNSELECTION   \
-            | BrowserMode::MULTISELECTION    \
-            | BrowserMode::KEEPHIGHLIGHT     \
-            | BrowserMode::TRACKING_TIPS     \
-            | BrowserMode::HLINES        \
-            | BrowserMode::VLINES        \
-            | BrowserMode::HEADERBAR_NEW     \
+static constexpr auto DEFAULT_BROWSE_MODE =
+              BrowserMode::COLUMNSELECTION
+            | BrowserMode::MULTISELECTION
+            | BrowserMode::KEEPHIGHLIGHT
+            | BrowserMode::TRACKING_TIPS
+            | BrowserMode::HLINES
+            | BrowserMode::VLINES
+            | BrowserMode::HEADERBAR_NEW;
 
 class RowSetEventListener : public ::cppu::WeakImplHelper<XRowsChangeListener>
 {

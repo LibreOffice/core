@@ -993,13 +993,13 @@ bool SwTextFrame::CalcPreps()
 }
 
 // We rewire the footnotes and the character bound objects
-#define CHG_OFFSET( pFrame, nNew )\
-    {\
-        if( pFrame->GetOfst() < nNew )\
-            pFrame->MoveFlyInCnt( this, TextFrameIndex(0), nNew );\
-        else if( pFrame->GetOfst() > nNew )\
-            MoveFlyInCnt( pFrame, nNew, TextFrameIndex(COMPLETE_STRING) );\
-    }
+void SwTextFrame::ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew )
+{
+    if( pFrame->GetOfst() < nNew )
+        pFrame->MoveFlyInCnt( this, TextFrameIndex(0), nNew );
+    else if( pFrame->GetOfst() > nNew )
+        MoveFlyInCnt( pFrame, nNew, TextFrameIndex(COMPLETE_STRING) );
+}
 
 void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                              WidowsAndOrphans &rFrameBreak,
@@ -1077,7 +1077,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         {
             if( nNew && nOld < nEnd )
                 RemoveFootnote( nOld, nEnd - nOld );
-            CHG_OFFSET( GetFollow(), nEnd )
+            ChangeOffset( GetFollow(), nEnd );
             if( !bDelta )
                 GetFollow()->ManipOfst( nEnd );
         }
@@ -1112,7 +1112,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 // for the paragraph mark.
                 nNew |= 1;
             }
-            CHG_OFFSET( GetFollow(), nEnd )
+            ChangeOffset( GetFollow(), nEnd );
             GetFollow()->ManipOfst( nEnd );
         }
         else

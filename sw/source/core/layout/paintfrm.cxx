@@ -121,22 +121,6 @@ using std::make_pair;
 
 struct SwPaintProperties;
 
-//other subsidiary lines enabled?
-#define IS_SUBS (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
-                 !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() && \
-                 !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
-                 !gProp.pSGlobalShell->GetViewOptions()->IsWhitespaceHidden() &&\
-                 SwViewOption::IsDocBoundaries())
-//subsidiary lines for sections
-#define IS_SUBS_SECTION (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
-                         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly()&&\
-                         !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
-                          SwViewOption::IsSectionBoundaries())
-#define IS_SUBS_FLYS (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
-                      !gProp.pSGlobalShell->GetViewOptions()->IsReadonly()&&\
-                      !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
-                       SwViewOption::IsObjectBoundaries())
-
 //Class declaration; here because they are only used in this file
 enum class SubColFlags {
     Page     = 0x01,    //Helplines of the page
@@ -316,6 +300,32 @@ struct SwPaintProperties {
 };
 
 static SwPaintProperties gProp;
+
+static bool isSubsidiaryLinesFlysEnabled()
+{
+    return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
+           SwViewOption::IsObjectBoundaries();
+}
+//other subsidiary lines enabled?
+static bool isSubsidiaryLinesEnabled()
+{
+    return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsWhitespaceHidden() &&
+           SwViewOption::IsDocBoundaries();
+}
+//subsidiary lines for sections
+static bool isSubsidiaryLinesForSectionsEnabled()
+{
+    return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+           !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
+           SwViewOption::IsSectionBoundaries();
+}
+
 
 namespace {
 
@@ -6325,7 +6335,8 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 /// Refreshes all subsidiary lines of a page.
 void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 {
-    if ( IS_SUBS || isTableBoundariesEnabled() || IS_SUBS_SECTION || IS_SUBS_FLYS )
+    if ( isSubsidiaryLinesEnabled() || isTableBoundariesEnabled()
+        || isSubsidiaryLinesForSectionsEnabled() || isSubsidiaryLinesFlysEnabled() )
     {
         if ( rRect.HasArea() )
         {
@@ -6359,7 +6370,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                                         const SwRect &rRect ) const
 {
-    const bool bSubsOpt   = IS_SUBS;
+    const bool bSubsOpt   = isSubsidiaryLinesEnabled();
     if ( bSubsOpt )
         PaintSubsidiaryLines( pPage, rRect );
 

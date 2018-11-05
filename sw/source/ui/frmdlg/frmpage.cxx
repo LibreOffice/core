@@ -170,8 +170,8 @@ static RelationMap const aAsCharRelationMap[] =
 };
 
 // site anchored
-#define HORI_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft| \
-                        LB::RelPageRight)
+static constexpr auto HORI_PAGE_REL = LB::RelPageFrame | LB::RelPagePrintArea | LB::RelPageLeft |
+                        LB::RelPageRight;
 
 static FrameMap const aHPageMap[] =
 {
@@ -202,8 +202,8 @@ static FrameMap const aVPageHtmlMap[] =
 };
 
 // frame anchored
-#define HORI_FRAME_REL  (LB::FlyRelPageFrame|LB::FlyRelPagePrintArea| \
-                        LB::FlyRelPageLeft|LB::FlyRelPageRight)
+static constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame | LB::FlyRelPagePrintArea |
+                                       LB::FlyRelPageLeft | LB::FlyRelPageRight;
 
 static FrameMap const aHFrameMap[] =
 {
@@ -237,9 +237,9 @@ static FrameMap const aVFlyHtmlMap[] =
 };
 
 // paragraph anchored
-#define HORI_PARA_REL   (LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight| \
-                        LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
-                        LB::RelFrameRight)
+static constexpr auto HORI_PARA_REL = LB::Frame | LB::PrintArea | LB::RelPageLeft | LB::RelPageRight |
+                        LB::RelPageFrame | LB::RelPagePrintArea | LB::RelFrameLeft |
+                        LB::RelFrameRight;
 
 static FrameMap const aHParaMap[] =
 {
@@ -264,8 +264,8 @@ static FrameMap const aHParaHtmlAbsMap[] =
 };
 
 // allow vertical alignment at page areas
-#define VERT_PARA_REL   (LB::VertFrame|LB::VertPrintArea| \
-                         LB::RelPageFrame|LB::RelPagePrintArea)
+static constexpr auto VERT_PARA_REL = LB::VertFrame | LB::VertPrintArea |
+                                      LB::RelPageFrame | LB::RelPagePrintArea;
 
 static FrameMap const aVParaMap[] =
 {
@@ -281,9 +281,9 @@ static FrameMap const aVParaHtmlMap[] =
 };
 
 // anchored relative to the character
-#define HORI_CHAR_REL   (LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight| \
-                        LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
-                        LB::RelFrameRight|LB::RelChar)
+static constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea | LB::RelPageLeft | LB::RelPageRight |
+                                      LB::RelPageFrame | LB::RelPagePrintArea | LB::RelFrameLeft |
+                                      LB::RelFrameRight | LB::RelChar;
 
 static FrameMap const aHCharMap[] =
 {
@@ -309,8 +309,8 @@ static FrameMap const aHCharHtmlAbsMap[] =
 };
 
 // allow vertical alignment at page areas
-#define VERT_CHAR_REL   (LB::VertFrame|LB::VertPrintArea| \
-                         LB::RelPageFrame|LB::RelPagePrintArea)
+static constexpr auto VERT_CHAR_REL = LB::VertFrame | LB::VertPrintArea |
+                                      LB::RelPageFrame | LB::RelPagePrintArea;
 
 static FrameMap const aVCharMap[] =
 {

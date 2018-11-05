@@ -179,125 +179,131 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupported
 // XFetchProvider methods.
 
 
-#define FETCH_XXX( impl_loadRow, loadInterface ) \
-impl_EnsureNotDisposed(); \
-if( !m_xResultSetOrigin.is() ) \
-{ \
-    OSL_FAIL( "broadcaster was disposed already" ); \
-    throw RuntimeException(); \
-} \
-impl_propagateFetchSizeAndDirection( nRowCount, bDirection ); \
-FetchResult aRet; \
-aRet.StartIndex = nRowStartPosition; \
-aRet.Orientation = bDirection; \
-aRet.FetchError = FetchError::SUCCESS; /*ENDOFDATA, EXCEPTION*/ \
-sal_Int32 nOldOriginal_Pos = m_xResultSetOrigin->getRow(); \
-if( impl_isForwardOnly() ) \
-{ \
-    if( nOldOriginal_Pos != nRowStartPosition ) \
-    { \
-        /*@todo*/ \
-        aRet.FetchError = FetchError::EXCEPTION; \
-        return aRet; \
-    } \
-    if( nRowCount != 1 ) \
-        aRet.FetchError = FetchError::EXCEPTION; \
- \
-    aRet.Rows.realloc( 1 ); \
- \
-    try \
-    { \
-        impl_loadRow( aRet.Rows[0], loadInterface ); \
-    } \
-    catch( SQLException& ) \
-    { \
-        aRet.Rows.realloc( 0 ); \
-        aRet.FetchError = FetchError::EXCEPTION; \
-        return aRet; \
-    } \
-    return aRet; \
-} \
-aRet.Rows.realloc( nRowCount ); \
-bool bOldOriginal_AfterLast = false; \
-if( !nOldOriginal_Pos ) \
-    bOldOriginal_AfterLast = m_xResultSetOrigin->isAfterLast(); \
-sal_Int32 nN = 1; \
-bool bValidNewPos = false; \
-try \
-{ \
-    try \
-    { \
-        /*if( nOldOriginal_Pos != nRowStartPosition )*/ \
-        bValidNewPos = m_xResultSetOrigin->absolute( nRowStartPosition ); \
-    } \
-    catch( SQLException& ) \
-    { \
-        aRet.Rows.realloc( 0 ); \
-        aRet.FetchError = FetchError::EXCEPTION; \
-        return aRet; \
-    } \
-    if( !bValidNewPos ) \
-    { \
-        aRet.Rows.realloc( 0 ); \
-        aRet.FetchError = FetchError::EXCEPTION; \
- \
-        /*restore old position*/ \
-        if( nOldOriginal_Pos ) \
-            m_xResultSetOrigin->absolute( nOldOriginal_Pos ); \
-        else if( bOldOriginal_AfterLast ) \
-            m_xResultSetOrigin->afterLast(); \
-        else \
-            m_xResultSetOrigin->beforeFirst(); \
- \
-        return aRet; \
-    } \
-    for( ; nN <= nRowCount; ) \
-    { \
-        impl_loadRow( aRet.Rows[nN-1], loadInterface ); \
-        nN++; \
-        if( nN <= nRowCount ) \
-        { \
-            if( bDirection ) \
-            { \
-                if( !m_xResultSetOrigin->next() ) \
-                { \
-                    aRet.Rows.realloc( nN-1 ); \
-                    aRet.FetchError = FetchError::ENDOFDATA; \
-                    break; \
-                } \
-            } \
-            else \
-            { \
-                if( !m_xResultSetOrigin->previous() ) \
-                { \
-                    aRet.Rows.realloc( nN-1 ); \
-                    aRet.FetchError = FetchError::ENDOFDATA; \
-                    break; \
-                } \
-            } \
-        } \
-    } \
-} \
-catch( SQLException& ) \
-{ \
-    aRet.Rows.realloc( nN-1 ); \
-    aRet.FetchError = FetchError::EXCEPTION; \
-} \
-/*restore old position*/ \
-if( nOldOriginal_Pos ) \
-    m_xResultSetOrigin->absolute( nOldOriginal_Pos ); \
-else if( bOldOriginal_AfterLast ) \
-    m_xResultSetOrigin->afterLast(); \
-else \
-    m_xResultSetOrigin->beforeFirst(); \
-return aRet;
+FetchResult CachedContentResultSetStub::impl_fetchHelper(
+        sal_Int32 nRowStartPosition, sal_Int32 nRowCount, bool bDirection,
+        std::function<void( css::uno::Any& rRowContent)> impl_loadRow)
+{
+    impl_EnsureNotDisposed();
+    if( !m_xResultSetOrigin.is() )
+    {
+        OSL_FAIL( "broadcaster was disposed already" );
+        throw RuntimeException();
+    }
+    impl_propagateFetchSizeAndDirection( nRowCount, bDirection );
+    FetchResult aRet;
+    aRet.StartIndex = nRowStartPosition;
+    aRet.Orientation = bDirection;
+    aRet.FetchError = FetchError::SUCCESS; /*ENDOFDATA, EXCEPTION*/
+    sal_Int32 nOldOriginal_Pos = m_xResultSetOrigin->getRow();
+    if( impl_isForwardOnly() )
+    {
+        if( nOldOriginal_Pos != nRowStartPosition )
+        {
+            /*@todo*/
+            aRet.FetchError = FetchError::EXCEPTION;
+            return aRet;
+        }
+        if( nRowCount != 1 )
+            aRet.FetchError = FetchError::EXCEPTION;
+
+        aRet.Rows.realloc( 1 );
+
+        try
+        {
+            impl_loadRow( aRet.Rows[0] );
+        }
+        catch( SQLException& )
+        {
+            aRet.Rows.realloc( 0 );
+            aRet.FetchError = FetchError::EXCEPTION;
+            return aRet;
+        }
+        return aRet;
+    }
+    aRet.Rows.realloc( nRowCount );
+    bool bOldOriginal_AfterLast = false;
+    if( !nOldOriginal_Pos )
+        bOldOriginal_AfterLast = m_xResultSetOrigin->isAfterLast();
+    sal_Int32 nN = 1;
+    bool bValidNewPos = false;
+    try
+    {
+        try
+        {
+            /*if( nOldOriginal_Pos != nRowStartPosition )*/
+            bValidNewPos = m_xResultSetOrigin->absolute( nRowStartPosition );
+        }
+        catch( SQLException& )
+        {
+            aRet.Rows.realloc( 0 );
+            aRet.FetchError = FetchError::EXCEPTION;
+            return aRet;
+        }
+        if( !bValidNewPos )
+        {
+            aRet.Rows.realloc( 0 );
+            aRet.FetchError = FetchError::EXCEPTION;
+
+            /*restore old position*/
+            if( nOldOriginal_Pos )
+                m_xResultSetOrigin->absolute( nOldOriginal_Pos );
+            else if( bOldOriginal_AfterLast )
+                m_xResultSetOrigin->afterLast();
+            else
+                m_xResultSetOrigin->beforeFirst();
+
+            return aRet;
+        }
+        for( ; nN <= nRowCount; )
+        {
+            impl_loadRow( aRet.Rows[nN-1] );
+            nN++;
+            if( nN <= nRowCount )
+            {
+                if( bDirection )
+                {
+                    if( !m_xResultSetOrigin->next() )
+                    {
+                        aRet.Rows.realloc( nN-1 );
+                        aRet.FetchError = FetchError::ENDOFDATA;
+                        break;
+                    }
+                }
+                else
+                {
+                    if( !m_xResultSetOrigin->previous() )
+                    {
+                        aRet.Rows.realloc( nN-1 );
+                        aRet.FetchError = FetchError::ENDOFDATA;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    catch( SQLException& )
+    {
+        aRet.Rows.realloc( nN-1 );
+        aRet.FetchError = FetchError::EXCEPTION;
+    }
+    /*restore old position*/
+    if( nOldOriginal_Pos )
+        m_xResultSetOrigin->absolute( nOldOriginal_Pos );
+    else if( bOldOriginal_AfterLast )
+        m_xResultSetOrigin->afterLast();
+    else
+        m_xResultSetOrigin->beforeFirst();
+    return aRet;
+}
 
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetch( sal_Int32 nRowStartPosition
     , sal_Int32 nRowCount, sal_Bool bDirection )
 {
     impl_init_xRowOrigin();
-    FETCH_XXX( impl_getCurrentRowContent, m_xRowOrigin );
+    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
+        [&](css::uno::Any& rRowContent)
+        { return impl_getCurrentRowContent(rRowContent, m_xRowOrigin); });
 }
 
 sal_Int32 CachedContentResultSetStub
@@ -460,7 +466,9 @@ FetchResult SAL_CALL CachedContentResultSetStub
         , sal_Int32 nRowCount, sal_Bool bDirection )
 {
     impl_init_xContentAccessOrigin();
-    FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
+    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
+        [&](css::uno::Any& rRowContent)
+        { return impl_getCurrentContentIdentifierString(rRowContent, m_xContentAccessOrigin); });
 }
 
 //virtual
@@ -469,7 +477,9 @@ FetchResult SAL_CALL CachedContentResultSetStub
         , sal_Int32 nRowCount, sal_Bool bDirection )
 {
     impl_init_xContentAccessOrigin();
-    FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
+    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
+        [&](css::uno::Any& rRowContent)
+        { return impl_getCurrentContentIdentifier(rRowContent, m_xContentAccessOrigin); });
 }
 
 //virtual
@@ -478,7 +488,9 @@ FetchResult SAL_CALL CachedContentResultSetStub
         , sal_Int32 nRowCount, sal_Bool bDirection )
 {
     impl_init_xContentAccessOrigin();
-    FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
+    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
+        [&](css::uno::Any& rRowContent)
+        { return impl_getCurrentContent(rRowContent, m_xContentAccessOrigin); });
 }
 
 

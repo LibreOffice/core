@@ -186,6 +186,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     // WidowsAndOrphans, AdjustFrame, AdjustFollow
     void FormatAdjust( SwTextFormatter &rLine, WidowsAndOrphans &rFrameBreak,
                        TextFrameIndex nStrLen, const bool bDummy );
+    void ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew );
 
     bool mbLocked        : 1;        // In the Format?
     bool mbWidow         : 1;        // Are we a Widow?
