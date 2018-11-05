@@ -27,6 +27,7 @@
 #include "doceventnotifier.hxx"
 
 #include <vcl/treelistbox.hxx>
+#include <vcl/weld.hxx>
 #include <basic/sbstar.hxx>
 #include "sbxitem.hxx"
 #include "basobj.hxx"
@@ -181,7 +182,7 @@ private:
     BrowseMode            nMode;
     DocumentEventNotifier m_aNotifier;
     void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
 
 protected:
     virtual void            RequestingChildren( SvTreeListEntry* pParent ) override;
@@ -246,6 +247,93 @@ public:
     static void     GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry (EntryDescriptor const &);
+
+private:
+    LibraryType     GetLibraryType() const;
+};
+
+class SbTreeListBox : public DocumentEventListener
+{
+private:
+    std::unique_ptr<weld::TreeView> m_xControl;
+    std::unique_ptr<weld::TreeIter> m_xIter;
+    weld::Window* m_pTopLevel;
+    BrowseMode nMode;
+    DocumentEventNotifier m_aNotifier;
+    void            SetEntryBitmaps(weld::TreeIter& rIter, const OUString& rImage);
+
+protected:
+    DECL_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
+    DECL_LINK(OpenCurrentHdl, weld::TreeView&, void);
+    void                    ImpCreateLibEntries(weld::TreeIter& rShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation);
+    void                    ImpCreateLibSubEntries(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
+    void                    ImpCreateLibSubEntriesInVBAMode(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    void                    ImpCreateLibSubSubEntriesInVBAMode(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
+    bool                    ImpFindEntry(weld::TreeIter& rIter, const OUString& rText);
+
+    // DocumentEventListener
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSave( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
+
+public:
+    SbTreeListBox(std::unique_ptr<weld::TreeView> xControl, weld::Window* pTopLevel);
+    virtual ~SbTreeListBox() override;
+
+    void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
+    void            ScanAllEntries();
+    void            UpdateEntries();
+
+    bool            IsEntryProtected(weld::TreeIter* pEntry);
+
+    void            SetMode( BrowseMode nM ) { nMode = nM; }
+    BrowseMode      GetMode() const { return nMode; }
+
+    SbModule*       FindModule(weld::TreeIter* pEntry);
+    SbxVariable*    FindVariable(weld::TreeIter* pEntry);
+    bool            FindRootEntry(const ScriptDocument& rDocument, LibraryLocation eLocation, weld::TreeIter& rIter);
+    bool            FindEntry(const OUString& rText, EntryType eType, weld::TreeIter& rIter);
+    EntryDescriptor GetEntryDescriptor(weld::TreeIter* pEntry);
+
+    static ItemType ConvertType (EntryType eType);
+    bool            IsValidEntry(weld::TreeIter& rEntry);
+    void AddEntry(const OUString& rText, const OUString& rImage,
+                  weld::TreeIter* pIter, bool bChildrenOnDemand, std::unique_ptr<Entry>&& rUserData);
+
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    std::unique_ptr<weld::TreeIter> make_iterator(weld::TreeIter* pIter = nullptr) const { return m_xControl->make_iterator(pIter); }
+    void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const { m_xControl->copy_iterator(rSource, rDest); }
+    bool get_selected(weld::TreeIter* pIter) const { return m_xControl->get_selected(pIter); }
+    void select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }
+    bool get_cursor(weld::TreeIter* pIter) const { return m_xControl->get_cursor(pIter); }
+    void set_cursor(const weld::TreeIter& rIter) { m_xControl->set_cursor(rIter); }
+    bool get_iter_first(weld::TreeIter& rIter) const { return m_xControl->get_iter_first(rIter); }
+    bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xControl->iter_next_sibling(rIter); }
+    bool iter_children(weld::TreeIter& rIter) const { return m_xControl->iter_children(rIter); }
+    bool iter_parent(weld::TreeIter& rIter) const { return m_xControl->iter_parent(rIter); }
+    int get_iter_depth(const weld::TreeIter& rIter) const { return m_xControl->get_iter_depth(rIter); }
+    OUString get_text(const weld::TreeIter& rIter) const { return m_xControl->get_text(rIter); }
+    bool get_row_expanded(const weld::TreeIter& rIter) const { return m_xControl->get_row_expanded(rIter); }
+    void expand_row(weld::TreeIter& rIter) { m_xControl->expand_row(rIter); }
+    void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
+    float get_approximate_digit_width() const { return m_xControl->get_approximate_digit_width(); }
+    int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }
+
+    void            RemoveEntry(const weld::TreeIter& rIter);
+    void            RemoveEntry(const ScriptDocument&);
+
+    OUString        GetRootEntryName(const ScriptDocument& rDocument, LibraryLocation eLocation) const;
+    static OUString GetRootEntryBitmaps(const ScriptDocument& rDocument);
+
+    void            SetCurrentEntry (EntryDescriptor const &);
+
+    weld::TreeView& get_widget() { return *m_xControl; }
 
 private:
     LibraryType     GetLibraryType() const;

@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_CUI_INC_TWO_LINES_HRC
+#define INCLUDED_CUI_INC_TWO_LINES_HRC
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#define CHRDLG_ENCLOSE_NONE                 0
+#define CHRDLG_ENCLOSE_ROUND                1
+#define CHRDLG_ENCLOSE_SQUARE               2
+#define CHRDLG_ENCLOSE_POINTED              3
+#define CHRDLG_ENCLOSE_CURVED               4
+#define CHRDLG_ENCLOSE_SPECIAL_CHAR         5
+
+const std::pair<const char*, sal_uInt16> TWOLINE_OPEN[] =
+{
+    { NC_("twolinespage|liststore1", "(None)"), CHRDLG_ENCLOSE_NONE },
+    { NC_("twolinespage|liststore1", "("), CHRDLG_ENCLOSE_ROUND },
+    { NC_("twolinespage|liststore1", "["), CHRDLG_ENCLOSE_SQUARE },
+    { NC_("twolinespage|liststore1", "<"), CHRDLG_ENCLOSE_POINTED },
+    { NC_("twolinespage|liststore1", "{"), CHRDLG_ENCLOSE_CURVED },
+    { NC_("twolinespage|liststore1", "Other Characters..."), CHRDLG_ENCLOSE_SPECIAL_CHAR }
+};
+
+const std::pair<const char*, sal_uInt16> TWOLINE_CLOSE[] =
+{
+    { NC_("twolinespage|liststore2", "(None)"), CHRDLG_ENCLOSE_NONE },
+    { NC_("twolinespage|liststore2", ")"), CHRDLG_ENCLOSE_ROUND },
+    { NC_("twolinespage|liststore2", "]"), CHRDLG_ENCLOSE_SQUARE },
+    { NC_("twolinespage|liststore2", ">"), CHRDLG_ENCLOSE_POINTED },
+    { NC_("twolinespage|liststore2", "}"), CHRDLG_ENCLOSE_CURVED },
+    { NC_("twolinespage|liststore2", "Other Characters..."), CHRDLG_ENCLOSE_SPECIAL_CHAR }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

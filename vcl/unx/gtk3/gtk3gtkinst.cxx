@@ -4023,6 +4023,89 @@ namespace
             }
         }
     }
+
+    GdkPixbuf* getPixbuf(const OUString& rIconName)
+    {
+        GdkPixbuf* pixbuf = nullptr;
+
+        if (rIconName.lastIndexOf('.') != rIconName.getLength() - 4)
+        {
+            assert((rIconName== "dialog-warning" || rIconName== "dialog-error" || rIconName== "dialog-information") &&
+                   "unknown stock image");
+
+            GError *error = nullptr;
+            GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+            pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
+                                              16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+        }
+        else
+        {
+            const AllSettings& rSettings = Application::GetSettings();
+            pixbuf = load_icon_by_name(rIconName,
+                                       rSettings.GetStyleSettings().DetermineIconTheme(),
+                                       rSettings.GetUILanguageTag().getBcp47());
+        }
+
+        return pixbuf;
+    }
+
+    void insert_row(GtkTreeStore* pTreeStore, GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString& rText,
+                    const OUString* pIconName, VirtualDevice* pDevice, const OUString* pExpanderName)
+    {
+        if (!pIconName && !pDevice)
+        {
+            gtk_tree_store_insert_with_values(pTreeStore, &iter, parent, pos,
+                                              0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                              1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                              -1);
+        }
+        else
+        {
+            if (pIconName)
+            {
+                GdkPixbuf* pixbuf = getPixbuf(*pIconName);
+
+                gtk_tree_store_insert_with_values(pTreeStore, &iter, parent, pos,
+                                                  0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  2, pixbuf,
+                                                  -1);
+
+                if (pixbuf)
+                    g_object_unref(pixbuf);
+            }
+            else
+            {
+                cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
+
+                Size aSize(pDevice->GetOutputSizePixel());
+                cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                                        cairo_surface_get_content(surface),
+                                                                        aSize.Width(),
+                                                                        aSize.Height());
+
+                cairo_t* cr = cairo_create(target);
+                cairo_set_source_surface(cr, surface, 0, 0);
+                cairo_paint(cr);
+                cairo_destroy(cr);
+
+                gtk_tree_store_insert_with_values(pTreeStore, &iter, parent, pos,
+                                                  0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  3, target,
+                                                  -1);
+                cairo_surface_destroy(target);
+            }
+        }
+
+        if (pExpanderName)
+        {
+            GdkPixbuf* pixbuf = getPixbuf(*pExpanderName);
+            gtk_tree_store_set(pTreeStore, &iter, 4, pixbuf, -1);
+            if (pixbuf)
+                g_object_unref(pixbuf);
+        }
+    }
 }
 
 namespace
@@ -4042,14 +4125,26 @@ namespace
     }
 }
 
+struct GtkInstanceTreeIter : public weld::TreeIter
+{
+    GtkInstanceTreeIter(const GtkInstanceTreeIter* pOrig)
+    {
+        if (!pOrig)
+            return;
+        iter = pOrig->iter;
+    }
+    GtkTreeIter iter;
+};
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
     GtkTreeView* m_pTreeView;
-    GtkListStore* m_pListStore;
+    GtkTreeStore* m_pTreeStore;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
+    gulong m_nTestExpandRowSignalId;
 
     DECL_LINK(async_signal_changed, void*, void);
 
@@ -4075,7 +4170,7 @@ private:
     OUString get(int pos, int col) const
     {
         OUString sRet;
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pListStore);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
         {
@@ -4087,53 +4182,99 @@ private:
         return sRet;
     }
 
+    static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        return !pThis->signal_test_expand_row(*iter);
+    }
+
+    bool signal_test_expand_row(GtkTreeIter& iter)
+    {
+        GtkInstanceTreeIter aIter(nullptr);
+
+        // if there's a preexisting placeholder child, required to make this
+        // potentially expandable in the first place, now we remove it
+        bool bPlaceHolder = false;
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter tmp;
+        if (gtk_tree_model_iter_children(pModel, &tmp, &iter))
+        {
+            aIter.iter = tmp;
+            if (get_text(aIter) == "<dummy>")
+            {
+                gtk_tree_store_remove(m_pTreeStore, &tmp);
+                bPlaceHolder = true;
+            }
+        }
+
+        aIter.iter = iter;
+        bool bRet = signal_expanding(aIter);
+
+        //expand disallowed, restore placeholder
+        if (!bRet && bPlaceHolder)
+        {
+            GtkTreeIter subiter;
+            insert_row(m_pTreeStore, subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
+        }
+
+        return bRet;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), bTakeOwnership)
         , m_pTreeView(pTreeView)
-        , m_pListStore(GTK_LIST_STORE(gtk_tree_view_get_model(m_pTreeView)))
+        , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
+        , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
     {
     }
 
-    virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rText, const OUString* pId, const OUString* pIconName,
+                        VirtualDevice* pImageSurface, const OUString* pExpanderName, bool bChildrenOnDemand) override
     {
         disable_notify_events();
         GtkTreeIter iter;
-        insert_row(m_pListStore, iter, pos, pId, rText, pIconName, pImageSurface);
+        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pParent);
+        insert_row(m_pTreeStore, iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, rText, pIconName, pImageSurface, pExpanderName);
+        if (bChildrenOnDemand)
+        {
+            GtkTreeIter subiter;
+            insert_row(m_pTreeStore, subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
+        }
         enable_notify_events();
     }
 
     virtual void set_font_color(int pos, const Color& rColor) const override
     {
         GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &iter, nullptr, pos);
+        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
         GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-        gtk_list_store_set(m_pListStore, &iter, 4, &aColor, -1);
+        gtk_tree_store_set(m_pTreeStore, &iter, 4, &aColor, -1);
     }
 
     virtual void remove(int pos) override
     {
         disable_notify_events();
         GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &iter, nullptr, pos);
-        gtk_list_store_remove(m_pListStore, &iter);
+        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
+        gtk_tree_store_remove(m_pTreeStore, &iter);
         enable_notify_events();
     }
 
     virtual int find_text(const OUString& rText) const override
     {
         Search aSearch(rText, 0);
-        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pListStore), foreach_find, &aSearch);
+        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pTreeStore), foreach_find, &aSearch);
         return aSearch.index;
     }
 
     virtual int find_id(const OUString& rId) const override
     {
         Search aSearch(rId, 1);
-        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pListStore), foreach_find, &aSearch);
+        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pTreeStore), foreach_find, &aSearch);
         return aSearch.index;
     }
 
@@ -4142,14 +4283,16 @@ public:
         if (pos == before)
             return;
 
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+
         disable_notify_events();
         GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &iter, nullptr, pos);
+        gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos);
 
         GtkTreeIter position;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &position, nullptr, before);
+        gtk_tree_model_iter_nth_child(pModel, &position, nullptr, before);
 
-        gtk_list_store_move_before(m_pListStore, &iter, &position);
+        gtk_tree_store_move_before(m_pTreeStore, &iter, &position);
         enable_notify_events();
     }
 
@@ -4163,7 +4306,7 @@ public:
     virtual void clear() override
     {
         disable_notify_events();
-        gtk_list_store_clear(m_pListStore);
+        gtk_tree_store_clear(m_pTreeStore);
         enable_notify_events();
     }
 
@@ -4172,14 +4315,14 @@ public:
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pListStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
         gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
     }
 
     virtual int n_children() const override
     {
-        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pListStore), nullptr);
+        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), nullptr);
     }
 
     virtual void select(int pos) override
@@ -4257,15 +4400,214 @@ public:
         return nRet;
     }
 
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
+    {
+        return std::unique_ptr<weld::TreeIter>(new GtkInstanceTreeIter(static_cast<const GtkInstanceTreeIter*>(pOrig)));
+    }
+
+    virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override
+    {
+        const GtkInstanceTreeIter& rGtkSource(static_cast<const GtkInstanceTreeIter&>(rSource));
+        GtkInstanceTreeIter& rGtkDest(static_cast<GtkInstanceTreeIter&>(rDest));
+        rGtkDest.iter = rGtkSource.iter;
+    }
+
+    virtual bool get_selected(weld::TreeIter* pIter) const override
+    {
+        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
+        return gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), nullptr, pGtkIter ? &pGtkIter->iter : nullptr);
+    }
+
+    virtual bool get_cursor(weld::TreeIter* pIter) const override
+    {
+        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
+        GtkTreePath* path;
+        gtk_tree_view_get_cursor(m_pTreeView, &path, nullptr);
+        if (pGtkIter && path)
+        {
+            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+            gtk_tree_model_get_iter(pModel, &pGtkIter->iter, path);
+        }
+        return path != nullptr;
+    }
+
+    virtual void set_cursor(const weld::TreeIter& rIter) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
+        gtk_tree_path_free(path);
+    }
+
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        return gtk_tree_model_get_iter_first(pModel, &rGtkIter.iter);
+    }
+
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        return gtk_tree_model_iter_next(pModel, &rGtkIter.iter);
+    }
+
+    virtual bool iter_next(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter = rGtkIter.iter;
+        if (iter_children(rGtkIter))
+            return true;
+        GtkTreeIter tmp = iter;
+        if (gtk_tree_model_iter_next(pModel, &tmp))
+        {
+            rGtkIter.iter = tmp;
+            return true;
+        }
+        if (!gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+            return false;
+        tmp = iter;
+        if (gtk_tree_model_iter_next(pModel, &tmp))
+        {
+            rGtkIter.iter = tmp;
+            return true;
+        }
+        return false;
+    }
+
+    virtual bool iter_children(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter tmp;
+        gboolean ret = gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter);
+        rGtkIter.iter = tmp;
+        if (ret)
+        {
+            //on-demand dummy entry doesn't count
+            return get_text(rGtkIter) != "<dummy>";
+        }
+        return ret;
+    }
+
+    virtual bool iter_parent(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter tmp;
+        auto ret = gtk_tree_model_iter_parent(pModel, &tmp, &rGtkIter.iter);
+        rGtkIter.iter = tmp;
+        return ret;
+    }
+
+    virtual void remove(const weld::TreeIter& rIter) override
+    {
+        disable_notify_events();
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        gtk_tree_store_remove(m_pTreeStore, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        enable_notify_events();
+    }
+
+    virtual void select(const weld::TreeIter& rIter) override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        disable_notify_events();
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        gtk_tree_selection_select_iter(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        enable_notify_events();
+    }
+
+    virtual void unselect(const weld::TreeIter& rIter) override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        disable_notify_events();
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        gtk_tree_selection_unselect_iter(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        enable_notify_events();
+    }
+
+    virtual int get_iter_depth(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        int ret = gtk_tree_path_get_depth(path) - 1;
+        gtk_tree_path_free(path);
+        return ret;
+    }
+
+    virtual bool iter_has_child(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        return gtk_tree_model_iter_has_child(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+    }
+
+    virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        bool ret = gtk_tree_view_row_expanded(m_pTreeView, path);
+        gtk_tree_path_free(path);
+        return ret;
+    }
+
+    virtual void expand_row(weld::TreeIter& rIter) override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, &rGtkIter.iter);
+        if (!gtk_tree_view_row_expanded(m_pTreeView, path))
+            gtk_tree_view_expand_row(m_pTreeView, path, false);
+        gtk_tree_path_free(path);
+    }
+
+    virtual OUString get_text(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gchar* pStr;
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), 0, &pStr, -1);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+        return sRet;
+    }
+
+    virtual OUString get_id(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gchar* pStr;
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), 1, &pStr, -1);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+        return sRet;
+    }
+
+    virtual void set_expander_image(const weld::TreeIter& rIter, const OUString& rExpanderName) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        disable_notify_events();
+        GdkPixbuf* pixbuf = getPixbuf(rExpanderName);
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&rGtkIter.iter), 4, pixbuf, -1);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+        enable_notify_events();
+    }
+
     virtual void freeze() override
     {
         disable_notify_events();
-        g_object_ref(m_pListStore);
+        g_object_ref(m_pTreeStore);
         GtkInstanceContainer::freeze();
         gtk_tree_view_set_model(m_pTreeView, nullptr);
         if (m_xSorter)
         {
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pListStore);
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
             gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
         }
         enable_notify_events();
@@ -4276,12 +4618,12 @@ public:
         disable_notify_events();
         if (m_xSorter)
         {
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pListStore);
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
             gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
         }
-        gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pListStore));
+        gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore));
         GtkInstanceContainer::thaw();
-        g_object_unref(m_pListStore);
+        g_object_unref(m_pTreeStore);
         enable_notify_events();
     }
 
@@ -4371,8 +4713,9 @@ public:
 
     virtual ~GtkInstanceTreeView() override
     {
-        g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
+        g_signal_handler_disconnect(m_pTreeView, m_nTestExpandRowSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
+        g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
     }
 };
 
