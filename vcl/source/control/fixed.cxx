@@ -32,20 +32,20 @@
 
 #define FIXEDLINE_TEXT_BORDER    4
 
-#define FIXEDTEXT_VIEW_STYLE    (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                 WB_WORDBREAK | WB_NOLABEL |        \
-                                 WB_PATHELLIPSIS)
-#define FIXEDLINE_VIEW_STYLE    (WB_3DLOOK | WB_NOLABEL)
-#define FIXEDBITMAP_VIEW_STYLE  (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                 WB_SCALE)
-#define FIXEDIMAGE_VIEW_STYLE   (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                 WB_SCALE)
+static constexpr auto FIXEDTEXT_VIEW_STYLE = WB_3DLOOK |
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |
+                                 WB_WORDBREAK | WB_NOLABEL |
+                                 WB_PATHELLIPSIS;
+static constexpr auto FIXEDLINE_VIEW_STYLE = WB_3DLOOK | WB_NOLABEL;
+static constexpr auto FIXEDBITMAP_VIEW_STYLE = WB_3DLOOK |
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |
+                                 WB_SCALE;
+static constexpr auto FIXEDIMAGE_VIEW_STYLE = WB_3DLOOK |
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |
+                                 WB_SCALE;
 
 static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
                           const Size& rObjSize, const Size& rWinSize )

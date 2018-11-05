@@ -64,8 +64,8 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     // query notification for changes of the keyboard group
     if ( mbUseExtension )
     {
-        #define XkbGroupMask (  XkbGroupStateMask | XkbGroupBaseMask \
-                                | XkbGroupLatchMask | XkbGroupLockMask )
+        constexpr auto XkbGroupMask = XkbGroupStateMask | XkbGroupBaseMask
+                                | XkbGroupLatchMask | XkbGroupLockMask;
 
         mbUseExtension = XkbSelectEventDetails( pDisplay,
             XkbUseCoreKbd, XkbStateNotify, XkbGroupMask, XkbGroupMask );

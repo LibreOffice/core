@@ -42,11 +42,20 @@
 #define VECT_POLY_OUTLINE_INNER 4UL
 #define VECT_POLY_OUTLINE_OUTER 8UL
 
-#define VECT_MAP( _def_pIn, _def_pOut, _def_nVal )  _def_pOut[_def_nVal]=(_def_pIn[_def_nVal]=((_def_nVal)*4)+1)+5;
-#define BACK_MAP( _def_nVal )                       ((((_def_nVal)+2)>>2)-1)
-#define VECT_PROGRESS( _def_pProgress, _def_nVal ) \
-  if(_def_pProgress)      \
-      (_def_pProgress->Call(_def_nVal));
+static constexpr void VECT_MAP( std::unique_ptr<long []> & pMapIn, std::unique_ptr<long []>& pMapOut, long nVal )
+{
+    pMapIn[nVal] = (nVal * 4) + 1;
+    pMapOut[nVal] = pMapIn[nVal] + 5;
+}
+static constexpr auto BACK_MAP( long _def_nVal )
+{
+    return ((_def_nVal + 2) >> 2) - 1;
+}
+static constexpr void VECT_PROGRESS( const Link<long, void>* pProgress, long _def_nVal )
+{
+    if(pProgress)
+      pProgress->Call(_def_nVal);
+}
 
 class ImplVectMap;
 class ImplChain;

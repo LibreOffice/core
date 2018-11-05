@@ -711,13 +711,14 @@ bool SwNoTextFrame::GetCursorOfst(SwPosition* pPos, Point& ,
     return true;
 }
 
-#define CLEARCACHE {\
-    SwFlyFrame* pFly = FindFlyFrame();\
-    if( pFly && pFly->GetFormat()->GetSurround().IsContour() )\
-    {\
-        ClrContourCache( pFly->GetVirtDrawObj() );\
-        pFly->NotifyBackground( FindPageFrame(), getFramePrintArea(), PREP_FLY_ATTR_CHG );\
-    }\
+void SwNoTextFrame::ClearCache()
+{
+    SwFlyFrame* pFly = FindFlyFrame();
+    if( pFly && pFly->GetFormat()->GetSurround().IsContour() )
+    {
+        ClrContourCache( pFly->GetVirtDrawObj() );
+        pFly->NotifyBackground( FindPageFrame(), getFramePrintArea(), PREP_FLY_ATTR_CHG );
+    }
 }
 
 void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -755,7 +756,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
         SAL_FALLTHROUGH;
     case RES_FMT_CHG:
-        CLEARCACHE
+        ClearCache();
         break;
 
     case RES_ATTRSET_CHG:
@@ -765,7 +766,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->
                                 GetItemState( n, false ))
                 {
-                    CLEARCACHE
+                    ClearCache();
 
                     if(RES_GRFATR_ROTATION == n)
                     {
@@ -814,7 +815,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             bComplete = false;
             SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
 
-            CLEARCACHE
+            ClearCache();
 
             SwRect aRect( getFrameArea() );
 
