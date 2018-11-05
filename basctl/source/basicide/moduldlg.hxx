@@ -250,9 +250,13 @@ public:
 
 // Helper functions
 SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+                        SbTreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain);
+SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                         TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain);
 void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                    CheckBox* pLibBox, TreeListBox* pBasicBox);
+void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+                   CheckBox* pLibBox, SbTreeListBox* pBasicBox);
 
 } // namespace basctl
 

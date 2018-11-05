@@ -44,6 +44,7 @@ SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog(weld::Window* pParent, const un
     , mnRegionPos(0)
     , m_xModel(rModel)
 {
+    m_xLBCategory->append_text(SfxResId(STR_CATEGORY_NONE));
     initialize();
     SetCategoryLBEntries(msCategories);
 

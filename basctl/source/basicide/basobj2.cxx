@@ -45,11 +45,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, sal_Bool bChooseOnly )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro(void* pParent, void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, sal_Bool bChooseOnly )
     {
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
         Reference< frame::XFrame > aDocFrame( static_cast< frame::XFrame* >( pDocFrame_AsXFrame ) );
-        OUString aScriptURL = basctl::ChooseMacro( aDocument, aDocFrame, bChooseOnly );
+        OUString aScriptURL = basctl::ChooseMacro(static_cast<weld::Window*>(pParent), aDocument, aDocFrame, bChooseOnly);
         rtl_uString* pScriptURL = aScriptURL.pData;
         rtl_uString_acquire( pScriptURL );
 
@@ -235,9 +235,10 @@ namespace
     }
 }
 
-OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument,
-                      const uno::Reference< frame::XFrame >& xDocFrame,
-                      bool bChooseOnly )
+OUString ChooseMacro(weld::Window* pParent,
+                     const uno::Reference< frame::XModel >& rxLimitToDocument,
+                     const uno::Reference< frame::XFrame >& xDocFrame,
+                     bool bChooseOnly)
 {
     EnsureIde();
 
@@ -246,15 +247,17 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument,
     OUString aScriptURL;
     SbMethod* pMethod = nullptr;
 
-    ScopedVclPtrInstance< MacroChooser > pChooser( nullptr, xDocFrame, true );
+    MacroChooser aChooser(pParent, xDocFrame, true);
     if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
-        pChooser->SetMode(MacroChooser::ChooseOnly);
+        aChooser.SetMode(MacroChooser::ChooseOnly);
 
     if ( !bChooseOnly && rxLimitToDocument.is() )
+    {
         // Hack!
-        pChooser->SetMode(MacroChooser::Recording);
+        aChooser.SetMode(MacroChooser::Recording);
+    }
 
-    short nRetValue = pChooser->Execute();
+    short nRetValue = aChooser.run();
 
     GetExtraData()->ChoosingMacro() = false;
 
@@ -264,9 +267,9 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument,
         {
             bool bError = false;
 
-            pMethod = pChooser->GetMacro();
-            if ( !pMethod && pChooser->GetMode() == MacroChooser::Recording )
-                pMethod = pChooser->CreateMacro();
+            pMethod = aChooser.GetMacro();
+            if ( !pMethod && aChooser.GetMode() == MacroChooser::Recording )
+                pMethod = aChooser.CreateMacro();
 
             if ( !pMethod )
                 break;
