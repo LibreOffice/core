@@ -3161,10 +3161,10 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
         while( pAttr )
         {
             OSL_ENSURE( !pAttr->GetPrev(), "Attribute has previous list" );
-            pAttr->nSttPara = rSttPara;
-            pAttr->nEndPara = rSttPara;
-            pAttr->nSttContent = nSttCnt;
-            pAttr->nEndContent = nSttCnt;
+            pAttr->m_nStartPara = rSttPara;
+            pAttr->m_nEndPara = rSttPara;
+            pAttr->m_nStartContent = nSttCnt;
+            pAttr->m_nEndContent = nSttCnt;
 
             pAttr = pAttr->GetNext();
         }

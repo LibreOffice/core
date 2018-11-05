@@ -1360,7 +1360,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
         for( auto i = m_aSetAttrTab.size(); i; )
         {
             HTMLAttr* pAttr = m_aSetAttrTab[ --i ];
-            if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )
+            if( RES_FLTR_BOOKMARK == pAttr->m_pItem->Which() )
             {
                 if( pAttr->GetSttParaIdx() == nNodeIdx )
                     bHasMarks = true;

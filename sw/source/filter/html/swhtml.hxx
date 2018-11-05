@@ -129,17 +129,17 @@ class HTMLAttr
     friend class SwHTMLParser;
     friend class CellSaveStruct;
 
-    SwNodeIndex nSttPara, nEndPara;
-    sal_Int32 nSttContent, nEndContent;
-    bool bInsAtStart : 1;
-    bool bLikePara : 1; // set attribute above the whole paragraph
-    bool bValid : 1;    // is the attribute valid?
+    SwNodeIndex m_nStartPara, m_nEndPara;
+    sal_Int32 m_nStartContent, m_nEndContent;
+    bool m_bInsAtStart : 1;
+    bool m_bLikePara : 1; // set attribute above the whole paragraph
+    bool m_bValid : 1;    // is the attribute valid?
 
-    std::unique_ptr<SfxPoolItem> pItem;
-    std::shared_ptr<HTMLAttrTable> xAttrTab;
-    HTMLAttr *pNext;   // still to close attributes with different values
-    HTMLAttr *pPrev;   // already closed but not set attributes
-    HTMLAttr **ppHead; // list head
+    std::unique_ptr<SfxPoolItem> m_pItem;
+    std::shared_ptr<HTMLAttrTable> m_xAttrTab;
+    HTMLAttr *m_pNext;   // still to close attributes with different values
+    HTMLAttr *m_pPrev;   // already closed but not set attributes
+    HTMLAttr **m_ppHead; // list head
 
     HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
@@ -156,39 +156,39 @@ public:
                 HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
     inline void SetStart( const SwPosition& rPos );
 
-    sal_uInt32 GetSttParaIdx() const { return nSttPara.GetIndex(); }
-    sal_uInt32 GetEndParaIdx() const { return nEndPara.GetIndex(); }
+    sal_uInt32 GetSttParaIdx() const { return m_nStartPara.GetIndex(); }
+    sal_uInt32 GetEndParaIdx() const { return m_nEndPara.GetIndex(); }
 
-    const SwNodeIndex& GetSttPara() const { return nSttPara; }
-    const SwNodeIndex& GetEndPara() const { return nEndPara; }
+    const SwNodeIndex& GetSttPara() const { return m_nStartPara; }
+    const SwNodeIndex& GetEndPara() const { return m_nEndPara; }
 
-    sal_Int32 GetSttCnt() const { return nSttContent; }
-    sal_Int32 GetEndCnt() const { return nEndContent; }
+    sal_Int32 GetSttCnt() const { return m_nStartContent; }
+    sal_Int32 GetEndCnt() const { return m_nEndContent; }
 
-    bool IsLikePara() const { return bLikePara; }
-    void SetLikePara() { bLikePara = true; }
+    bool IsLikePara() const { return m_bLikePara; }
+    void SetLikePara() { m_bLikePara = true; }
 
-          SfxPoolItem& GetItem()        { return *pItem; }
-    const SfxPoolItem& GetItem() const  { return *pItem; }
+          SfxPoolItem& GetItem()        { return *m_pItem; }
+    const SfxPoolItem& GetItem() const  { return *m_pItem; }
 
-    HTMLAttr *GetNext() const { return pNext; }
-    void InsertNext( HTMLAttr *pNxt ) { pNext = pNxt; }
+    HTMLAttr *GetNext() const { return m_pNext; }
+    void InsertNext( HTMLAttr *pNxt ) { m_pNext = pNxt; }
 
-    HTMLAttr *GetPrev() const { return pPrev; }
+    HTMLAttr *GetPrev() const { return m_pPrev; }
     void InsertPrev( HTMLAttr *pPrv );
-    void ClearPrev() { pPrev = nullptr; }
+    void ClearPrev() { m_pPrev = nullptr; }
 
     void SetHead(HTMLAttr **ppHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab)
     {
-        ppHead = ppHd;
-        xAttrTab = rAttrTab;
+        m_ppHead = ppHd;
+        m_xAttrTab = rAttrTab;
     }
 
     // During setting attributes from styles it can happen that these
     // shouldn't be set anymore. To delete them would be very expensive, because
     // you don't know all the places where they are linked in. Therefore they're
     // made invalid and deleted at the next call of SetAttr_().
-    void Invalidate() { bValid = false; }
+    void Invalidate() { m_bValid = false; }
 };
 
 class HTMLAttrContext_SaveDoc;
@@ -945,10 +945,10 @@ struct SwPending
 
 inline void HTMLAttr::SetStart( const SwPosition& rPos )
 {
-    nSttPara = rPos.nNode;
-    nSttContent = rPos.nContent.GetIndex();
-    nEndPara = nSttPara;
-    nEndContent = nSttContent;
+    m_nStartPara = rPos.nNode;
+    m_nStartContent = rPos.nContent.GetIndex();
+    m_nEndPara = m_nStartPara;
+    m_nEndContent = m_nStartContent;
 }
 
 inline void HTMLAttrContext::SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight,

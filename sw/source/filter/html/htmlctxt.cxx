@@ -197,7 +197,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             HTMLAttr *pNext = pAttr->GetNext();
             HTMLAttr *pPrev = pAttr->GetPrev();
 
-            sal_uInt16 nWhich = pAttr->pItem->Which();
+            sal_uInt16 nWhich = pAttr->m_pItem->Which();
             if( !nOldEndCnt && RES_PARATR_BEGIN <= nWhich &&
                 pAttr->GetSttParaIdx() < pOldEndPara->GetIndex() )
             {
@@ -229,7 +229,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                     pNext->InsertPrev( pSetAttr );
                 else
                 {
-                    if (pSetAttr->bInsAtStart)
+                    if (pSetAttr->m_bInsAtStart)
                         m_aSetAttrTab.push_front( pSetAttr );
                     else
                         m_aSetAttrTab.push_back( pSetAttr );
@@ -243,7 +243,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                     pNext->InsertPrev( pPrev );
                 else
                 {
-                    if (pPrev->bInsAtStart)
+                    if (pPrev->m_bInsAtStart)
                         m_aSetAttrTab.push_front( pPrev );
                     else
                         m_aSetAttrTab.push_back( pPrev );
@@ -251,11 +251,11 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             }
 
             // Set the start of the attribute
-            pAttr->nSttPara = rNewSttPara;
-            pAttr->nEndPara = rNewSttPara;
-            pAttr->nSttContent = nNewSttCnt;
-            pAttr->nEndContent = nNewSttCnt;
-            pAttr->pPrev = nullptr;
+            pAttr->m_nStartPara = rNewSttPara;
+            pAttr->m_nEndPara = rNewSttPara;
+            pAttr->m_nStartContent = nNewSttCnt;
+            pAttr->m_nEndContent = nNewSttCnt;
+            pAttr->m_pPrev = nullptr;
 
             pAttr = pNext;
         }
