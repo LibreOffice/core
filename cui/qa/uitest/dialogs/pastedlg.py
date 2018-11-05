@@ -29,10 +29,11 @@ class Test(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
         pasteSpecial = self.xUITest.getTopFocusWindow()
         formats = pasteSpecial.getChild("list")
-        entryCount = int(get_state_as_dict(formats)["EntryCount"])
+        entryCount = int(get_state_as_dict(formats)["Children"])
         items = []
         for index in range(entryCount):
-            formats.executeAction("SELECT", mkPropertyValues({"POS": str(index)}))
+            entry = formats.getChild(str(index))
+            entry.executeAction("SELECT", tuple())
             items.append(get_state_as_dict(formats)["SelectEntryText"])
 
         # Make sure there is no RTF vs Richtext duplication.

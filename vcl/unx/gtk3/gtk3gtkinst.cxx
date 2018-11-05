@@ -5620,10 +5620,18 @@ private:
             gboolean ret;
             m_pTreeView->disable_notify_events();
             GtkWidget* pWidget = m_pTreeView->getWidget();
-            gtk_widget_grab_focus(pWidget);
-            g_signal_emit_by_name(pWidget, "key-press-event", pEvent, &ret);
-            m_xEntry->set_text(m_xTreeView->get_selected_text());
-            gtk_widget_grab_focus(m_pEntry->getWidget());
+            if (m_pTreeView->get_selected_index() == -1)
+            {
+                m_pTreeView->select(0);
+                m_xEntry->set_text(m_xTreeView->get_selected_text());
+            }
+            else
+            {
+                gtk_widget_grab_focus(pWidget);
+                g_signal_emit_by_name(pWidget, "key-press-event", pEvent, &ret);
+                m_xEntry->set_text(m_xTreeView->get_selected_text());
+                gtk_widget_grab_focus(m_pEntry->getWidget());
+            }
             m_xEntry->select_region(0, -1);
             m_pTreeView->enable_notify_events();
             m_pEntry->fire_signal_changed();
