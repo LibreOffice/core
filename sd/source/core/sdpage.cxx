@@ -551,7 +551,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page));
                 DBG_ASSERT(pSheet, "StyleSheet for outline object not found");
                 if (pSheet)
-                    pSdrObj->StartListening(*pSheet);
+                    pSdrObj->StartListening(*pSheet, DuplicateHandling::Allow);
             }
         }
 
