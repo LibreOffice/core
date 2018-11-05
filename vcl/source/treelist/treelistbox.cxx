@@ -2670,8 +2670,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     const Color aHighlightTextColor(rSettings.GetHighlightTextColor());
     aHighlightFont.SetColor(aHighlightTextColor);
 
-    Size aRectSize(0, nTempEntryHeight);
-
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
 
     sal_uInt16 nTabCount = aTabs.size();
@@ -2757,38 +2755,28 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             }
         }
 
-        // draw background
-        if (!(nTreeFlags & SvTreeFlags::USESEL))
+        // draw background from the current to the next tab
+        if (nCurTab != 0)
+            aRect.SetLeft( nTabPos );
+        else
+            // if we're in the 0th tab, always draw from column 0 --
+            // else we get problems with centered tabs
+            aRect.SetLeft( 0 );
+        aRect.SetTop( nLine );
+        aRect.SetBottom( nLine + nTempEntryHeight - 1 );
+        if (pNextTab)
         {
-            // only draw the area that is used by the item
-            aRectSize.setWidth( aSize.Width() );
-            aRect.SetPos(aEntryPos);
-            aRect.SetSize(aRectSize);
+            long nRight;
+            nRight = GetTabPos(&rEntry, pNextTab) - 1;
+            if (nRight > nMaxRight)
+                nRight = nMaxRight;
+            aRect.SetRight( nRight );
         }
         else
         {
-            // draw from the current to the next tab
-            if (nCurTab != 0)
-                aRect.SetLeft( nTabPos );
-            else
-                // if we're in the 0th tab, always draw from column 0 --
-                // else we get problems with centered tabs
-                aRect.SetLeft( 0 );
-            aRect.SetTop( nLine );
-            aRect.SetBottom( nLine + nTempEntryHeight - 1 );
-            if (pNextTab)
-            {
-                long nRight;
-                nRight = GetTabPos(&rEntry, pNextTab) - 1;
-                if (nRight > nMaxRight)
-                    nRight = nMaxRight;
-                aRect.SetRight( nRight );
-            }
-            else
-            {
-                aRect.SetRight( nMaxRight );
-            }
+            aRect.SetRight( nMaxRight );
         }
+
         // A custom selection that starts at a tab position > 0, do not fill
         // the background of the 0th item, else e.g. we might not be able to
         // realize tab listboxes with lines.
@@ -2955,63 +2943,41 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
             nNextTabPos += 50;
     }
 
-    bool bUserSelection = bool( nTreeFlags & SvTreeFlags::USESEL );
-    if( !bUserSelection )
+    // if SelTab != 0, we have to calculate also
+    if( nFocusWidth == -1 || nFirstSelTab )
     {
-        if( pTab && nCurTab < pEntry->ItemCount() )
-        {
-            SvLBoxItem& rItem = pEntry->GetItem( nCurTab );
-            aSize.setWidth( rItem.GetSize( this, pEntry ).Width() );
-            if( !aSize.Width() )
-                aSize.setWidth( 15 );
-            long nX = nTabPos; //GetTabPos( pEntry, pTab );
-            // alignment
-            nX += pTab->CalcOffset( aSize.Width(), nNextTabPos - nTabPos );
-            aRect.SetLeft( nX );
-            // make sure that first and last letter aren't cut off slightly
-            aRect.SetSize( aSize );
-            if( aRect.Left() > 0 )
-                aRect.AdjustLeft( -1 );
-            aRect.AdjustRight( 1 );
-        }
+        SvLBoxTab* pLastTab = nullptr; // default to select whole width
+
+        sal_uInt16 nLastTab;
+        GetLastTab(SvLBoxTabFlags::SHOW_SELECTION,nLastTab);
+        nLastTab++;
+        if( nLastTab < aTabs.size() ) // is there another one?
+            pLastTab = aTabs[ nLastTab ].get();
+
+        aSize.setWidth( pLastTab ? pLastTab->GetPos() : 0x0fffffff );
+        nFocusWidth = static_cast<short>(aSize.Width());
+        if( pTab )
+            nFocusWidth = nFocusWidth - static_cast<short>(nTabPos); //pTab->GetPos();
     }
     else
     {
-        // if SelTab != 0, we have to calculate also
-        if( nFocusWidth == -1 || nFirstSelTab )
+        aSize.setWidth( nFocusWidth );
+        if( pTab )
         {
-            SvLBoxTab* pLastTab = nullptr; // default to select whole width
-
-            sal_uInt16 nLastTab;
-            GetLastTab(SvLBoxTabFlags::SHOW_SELECTION,nLastTab);
-            nLastTab++;
-            if( nLastTab < aTabs.size() ) // is there another one?
-                pLastTab = aTabs[ nLastTab ].get();
-
-            aSize.setWidth( pLastTab ? pLastTab->GetPos() : 0x0fffffff );
-            nFocusWidth = static_cast<short>(aSize.Width());
-            if( pTab )
-                nFocusWidth = nFocusWidth - static_cast<short>(nTabPos); //pTab->GetPos();
+            if( nCurTab )
+                aSize.AdjustWidth(nTabPos );
+            else
+                aSize.AdjustWidth(pTab->GetPos() ); // Tab0 always from the leftmost position
         }
-        else
-        {
-            aSize.setWidth( nFocusWidth );
-            if( pTab )
-            {
-                if( nCurTab )
-                    aSize.AdjustWidth(nTabPos );
-                else
-                    aSize.AdjustWidth(pTab->GetPos() ); // Tab0 always from the leftmost position
-            }
-        }
-        // if selection starts with 0th tab, draw from column 0 on
-        if( nCurTab != 0 )
-        {
-            aRect.SetLeft( nTabPos );
-            aSize.AdjustWidth( -nTabPos );
-        }
-        aRect.SetSize( aSize );
     }
+    // if selection starts with 0th tab, draw from column 0 on
+    if( nCurTab != 0 )
+    {
+        aRect.SetLeft( nTabPos );
+        aSize.AdjustWidth( -nTabPos );
+    }
+    aRect.SetSize( aSize );
+
     // adjust right edge because of clipping
     if( aRect.Right() >= nRealWidth )
     {
