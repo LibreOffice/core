@@ -26,6 +26,7 @@
 #include <reffld.hxx>
 #include <wrtsh.hxx>
 
+#include <fldref.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <SwNodeNum.hxx>
@@ -68,6 +69,11 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet *const pCo
     get(m_pSelectionToolTipLB, "selecttip");
     get(m_pFormat, "formatframe");
     get(m_pFormatLB, "format");
+    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_REF_PAGE_TYPES); ++i)
+    {
+        m_pTypeLB->InsertEntry(SwResId(FLD_REF_PAGE_TYPES[i]));
+        m_pFormatLB->InsertEntry(SwResId(FLD_REF_PAGE_TYPES[i]));
+    }
     get(m_pNameFT, "nameft");
     get(m_pNameED, "name");
     get(m_pValueED, "value");

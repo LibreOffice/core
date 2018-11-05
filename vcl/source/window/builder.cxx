@@ -1892,7 +1892,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
         else
         {
-            VclPtrInstance<SvTreeListBox> xBox(pRealParent, nWinStyle);
+            VclPtrInstance<SvTreeListBox> xBox(pRealParent, nWinStyle | WB_HASBUTTONS | WB_HASBUTTONSATROOT);
             xBox->SetNoAutoCurEntry(true);
             xBox->SetHighlightRange(); // select over the whole width
             xWindow = xBox;
@@ -2909,10 +2909,9 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
     m_pParserState->m_aModels[rID].m_aEntries.push_back(aRow);
 }
 
-void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rID)
+void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rID, const OString &rClass)
 {
     int nLevel = 1;
-    sal_Int32 nRowIndex = 0;
 
     while(true)
     {
@@ -2929,8 +2928,10 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
         {
             if (name.equals("row"))
             {
-                handleRow(reader, rID);
-                nRowIndex++;
+                bool bNotTreeStore = rClass != "GtkTreeStore";
+                if (bNotTreeStore)
+                    handleRow(reader, rID);
+                assert(bNotTreeStore && "gtk, as the time of writing, doesn't support data in GtkTreeStore serialization");
             }
             else
                 ++nLevel;
@@ -3433,9 +3434,9 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
         }
     }
 
-    if (sClass == "GtkListStore")
+    if (sClass == "GtkListStore" || sClass == "GtkTreeStore")
     {
-        handleListStore(reader, sID);
+        handleListStore(reader, sID, sClass);
         return nullptr;
     }
     else if (sClass == "GtkMenu")

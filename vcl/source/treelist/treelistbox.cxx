@@ -2137,9 +2137,11 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
 
     if( pParent->HasChildrenOnDemand() )
         RequestingChildren( pParent );
-    if( pParent->HasChildren() )
+    bool bExpandAllowed = pParent->HasChildren() && ExpandingHdl();
+    // double check if the expander callback ended up removing all children
+    if (pParent->HasChildren())
     {
-        if( ExpandingHdl() )
+        if (bExpandAllowed)
         {
             bExpanded = true;
             ExpandListEntry( pParent );
@@ -3649,12 +3651,20 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     {
         set_min_width_in_chars(rValue.toInt32());
     }
-    if (rKey == "enable-tree-lines")
+    else if (rKey == "enable-tree-lines")
     {
         auto nStyle = GetStyle();
         nStyle &= ~(WB_HASLINES | WB_HASLINESATROOT);
         if (toBool(rValue))
             nStyle |= (WB_HASLINES | WB_HASLINESATROOT);
+        SetStyle(nStyle);
+    }
+    else if (rKey == "show-expanders")
+    {
+        auto nStyle = GetStyle();
+        nStyle &= ~(WB_HASBUTTONS | WB_HASBUTTONSATROOT);
+        if (toBool(rValue))
+            nStyle |= (WB_HASBUTTONS | WB_HASBUTTONSATROOT);
         SetStyle(nStyle);
     }
     else

@@ -1,4 +1,3 @@
-basctl/uiconfig/basicide/ui/basicmacrodialog.ui://basctllo-TreeListBox[@id='libraries:border'] no-labelled-by
 basctl/uiconfig/basicide/ui/basicmacrodialog.ui://GtkLabel[@id='macrofromft'] orphan-label
 basctl/uiconfig/basicide/ui/basicmacrodialog.ui://GtkLabel[@id='macrotoft'] orphan-label
 basctl/uiconfig/basicide/ui/basicmacrodialog.ui://GtkEntry[@id='macronameedit'] no-labelled-by
