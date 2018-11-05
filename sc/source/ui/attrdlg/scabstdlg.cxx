@@ -51,7 +51,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
         fp = reinterpret_cast<ScAbstractDialogFactory* (SAL_CALL*)()>(
             aDialogLibrary.getFunctionSymbol( "ScCreateDialogFactory" ));
 #else
-    fp = ScCreateDialogFactory();
+    fp = ScCreateDialogFactory;
 #endif
 #endif
     if ( fp )
