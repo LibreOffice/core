@@ -331,7 +331,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_CHOOSEMACRO:
         {
-            ChooseMacro( nullptr );
+            ChooseMacro(rReq.GetFrameWeld(), nullptr);
         }
         break;
         case SID_BASICIDE_CREATEMACRO:

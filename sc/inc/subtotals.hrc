@@ -16,13 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_TABPAGES_CHARDLG_H
-#define INCLUDED_CUI_SOURCE_TABPAGES_CHARDLG_H
 
-// define ----------------------------------------------------------------
+#ifndef INCLUDED_SC_INC_SUBTOTALS_HRC
+#define INCLUDED_SC_INC_SUBTOTALS_HRC
 
-#define CHRDLG_POSITION_OVER                0
-#define CHRDLG_POSITION_UNDER               1
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+const char* SCSTR_SUBTOTALS[] =
+{
+    NC_("subtotalgrppage|liststore1", "Sum"),
+    NC_("subtotalgrppage|liststore1", "Count"),
+    NC_("subtotalgrppage|liststore1", "Average"),
+    NC_("subtotalgrppage|liststore1", "Max"),
+    NC_("subtotalgrppage|liststore1", "Min"),
+    NC_("subtotalgrppage|liststore1", "Product"),
+    NC_("subtotalgrppage|liststore1", "Count (numbers only)"),
+    NC_("subtotalgrppage|liststore1", "StDev (Sample)"),
+    NC_("subtotalgrppage|liststore1", "StDevP (Population)"),
+    NC_("subtotalgrppage|liststore1", "Var (Sample)"),
+    NC_("subtotalgrppage|liststore1", "VarP (Population)")
+};
 
 #endif
 

@@ -9,29 +9,15 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Bar</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Cylinder</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Cone</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Pyramid</col>
-      </row>
-    </data>
   </object>
-  <object class="GtkListStore" id="liststore2">
+  <object class="GtkTreeStore" id="liststore2">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
