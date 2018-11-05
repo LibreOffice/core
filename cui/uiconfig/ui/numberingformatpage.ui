@@ -32,48 +32,21 @@
     <property name="can_focus">False</property>
     <property name="icon_name">svx/res/nu03.png</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name gchararray1 -->
+      <!-- column-name text -->
       <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name image -->
+      <column type="CairoSurface"/>
+      <!-- column-name textcolor -->
+      <column type="GdkRGBA"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">All</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">User-defined</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Number</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Percent</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Currency</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Date</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Time</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Scientific</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Fraction</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Boolean Value</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Text</col>
-      </row>
-    </data>
   </object>
-  <object class="GtkListStore" id="liststore3">
+  <object class="GtkTreeStore" id="liststore3">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>

@@ -30,6 +30,7 @@
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include "fldfunc.hxx"
+#include "flddinf.hxx"
 #include <flddropdown.hxx>
 
 #define USER_DATA_VERSION_1 "1"
@@ -46,7 +47,9 @@ SwFieldFuncPage::SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet *const p
     get(m_pTypeLB, "type");
     get(m_pFormat, "formatframe");
     get(m_pSelectionLB, "select");
+    FillFieldSelect(*m_pSelectionLB);
     get(m_pFormatLB, "format");
+    FillFieldSelect(*m_pFormatLB);
     get(m_pNameFT, "nameft");
     get(m_pNameED, "condFunction");
     get(m_pValueGroup, "valuegroup");

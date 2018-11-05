@@ -25,6 +25,7 @@
 #include <vcl/treelistentry.hxx>
 
 #include <swtypes.hxx>
+#include <flddinf.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <fldbas.hxx>
@@ -45,6 +46,12 @@
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
 
+void FillFieldSelect(ListBox& rListBox)
+{
+    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_SELECT); ++i)
+        rListBox.InsertEntry(SwResId(FLD_SELECT[i]));
+}
+
 SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet)
     :  SwFieldPage(pParent, "FieldDocInfoPage",
         "modules/swriter/ui/flddocinfopage.ui", pCoreSet)
@@ -56,6 +63,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet *con
     get(m_pSelection, "selectframe");
     get(m_pFormat, "formatframe");
     get(m_pSelectionLB, "select");
+    FillFieldSelect(*m_pSelectionLB);
     get(m_pFormatLB, "format");
     get(m_pFixedCB, "fixed");
 
