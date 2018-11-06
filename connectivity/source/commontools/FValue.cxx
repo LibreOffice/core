@@ -993,12 +993,9 @@ OUString ORowSetValue::getString( ) const
                 {
                     Any aValue( getAny() );
                     Reference< XClob > xClob;
-                    if ( aValue >>= xClob )
+                    if ( (aValue >>= xClob) && xClob.is() )
                     {
-                        if ( xClob.is() )
-                        {
-                            aRet = xClob->getSubString(1,static_cast<sal_Int32>(xClob->length()) );
-                        }
+                        aRet = xClob->getSubString(1,static_cast<sal_Int32>(xClob->length()) );
                     }
                 }
                 break;

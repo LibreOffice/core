@@ -80,11 +80,8 @@ void View3DDialog::dispose()
 short View3DDialog::Execute()
 {
     short nResult = TabDialog::Execute();
-    if( nResult == RET_OK )
-    {
-        if( m_pGeometry )
-            m_pGeometry->commitPendingChanges();
-    }
+    if( nResult == RET_OK && m_pGeometry )
+        m_pGeometry->commitPendingChanges();
     return nResult;
 }
 

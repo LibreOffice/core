@@ -515,9 +515,8 @@ public:
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) override
     {
         m_ConvertedBuf += static_cast<sal_uInt8>(eOp);
-        if ( eOp == SbiOpcode::CASEIS_ )
-                if ( nOp1 )
-                    nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
+        if ( eOp == SbiOpcode::CASEIS_  && nOp1 )
+            nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
         m_ConvertedBuf += static_cast<S>(nOp1);
         m_ConvertedBuf += static_cast<S>(nOp2);
 
