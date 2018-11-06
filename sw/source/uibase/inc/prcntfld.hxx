@@ -55,15 +55,15 @@ public:
     void Enable(bool bEnable = true) { m_pField->Enable(bEnable); }
     void Disable() { m_pField->Disable(); }
 
-    void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FUNIT_NONE); }
+    void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FieldUnit::NONE); }
 
-    void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+    void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FieldUnit::NONE);
 
     void SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit);
 
     void SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit);
 
-    sal_Int64 GetValue(FieldUnit eOutUnit = FUNIT_NONE);
+    sal_Int64 GetValue(FieldUnit eOutUnit = FieldUnit::NONE);
 
     bool IsValueModified();
 
@@ -118,12 +118,12 @@ public:
     bool get_value_changed_from_saved() const { return m_pField->get_value_changed_from_saved(); }
     void set_text(const OUString& rStr) { m_pField->set_text(rStr); }
     void set_accessible_name(const OUString& rStr) { m_pField->set_accessible_name(rStr); }
-    void SetMetricFieldMin(int nNewMin) { m_pField->set_min(nNewMin, FUNIT_NONE); }
-    void SetMetricFieldMax(int nNewMax) { m_pField->set_max(nNewMax, FUNIT_NONE); }
+    void SetMetricFieldMin(int nNewMin) { m_pField->set_min(nNewMin, FieldUnit::NONE); }
+    void SetMetricFieldMax(int nNewMax) { m_pField->set_max(nNewMax, FieldUnit::NONE); }
 
-    void SetPrcntValue(int nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+    void SetPrcntValue(int nNewValue, FieldUnit eInUnit = FieldUnit::NONE);
 
-    int get_value(FieldUnit eOutUnit = FUNIT_NONE);
+    int get_value(FieldUnit eOutUnit = FieldUnit::NONE);
 
     void set_min(int nNewMin, FieldUnit eInUnit);
     void set_max(int nNewMax, FieldUnit eInUnit);

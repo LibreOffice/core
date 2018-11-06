@@ -608,17 +608,17 @@ static FrPair GetInchOrMM(MapUnit eU)
 static FrPair GetInchOrMM(FieldUnit eU)
 {
     switch (eU) {
-        case FUNIT_INCH       : return FrPair(   1,1);
-        case FUNIT_POINT      : return FrPair(  72,1);
-        case FUNIT_TWIP       : return FrPair(1440,1);
-        case FUNIT_100TH_MM   : return FrPair( 100,1);
-        case FUNIT_MM         : return FrPair(   1,1);
-        case FUNIT_CM         : return FrPair(   1,10);
-        case FUNIT_M          : return FrPair(   1,1000);
-        case FUNIT_KM         : return FrPair(   1,1000000);
-        case FUNIT_PICA       : return FrPair(   6,1);
-        case FUNIT_FOOT       : return FrPair(   1,12);
-        case FUNIT_MILE       : return FrPair(   1,63360);
+        case FieldUnit::INCH       : return FrPair(   1,1);
+        case FieldUnit::POINT      : return FrPair(  72,1);
+        case FieldUnit::TWIP       : return FrPair(1440,1);
+        case FieldUnit::MM_100TH   : return FrPair( 100,1);
+        case FieldUnit::MM         : return FrPair(   1,1);
+        case FieldUnit::CM         : return FrPair(   1,10);
+        case FieldUnit::M          : return FrPair(   1,1000);
+        case FieldUnit::KM         : return FrPair(   1,1000000);
+        case FieldUnit::PICA       : return FrPair(   6,1);
+        case FieldUnit::FOOT       : return FrPair(   1,12);
+        case FieldUnit::MILE       : return FrPair(   1,63360);
         default: break;
     }
     return Fraction(1,1);
@@ -925,74 +925,74 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
     switch(eUnit)
     {
         default             :
-        case FUNIT_NONE     :
-        case FUNIT_CUSTOM   :
+        case FieldUnit::NONE     :
+        case FieldUnit::CUSTOM   :
         {
             rStr.clear();
             break;
         }
 
         // metrically
-        case FUNIT_100TH_MM:
+        case FieldUnit::MM_100TH:
         {
             rStr = "/100mm";
             break;
         }
-        case FUNIT_MM     :
+        case FieldUnit::MM     :
         {
             rStr = "mm";
             break;
         }
-        case FUNIT_CM     :
+        case FieldUnit::CM     :
         {
             rStr = "cm";
             break;
         }
-        case FUNIT_M      :
+        case FieldUnit::M      :
         {
             rStr = "m";
             break;
         }
-        case FUNIT_KM     :
+        case FieldUnit::KM     :
         {
             rStr = "km";
             break;
         }
 
         // Inch
-        case FUNIT_TWIP   :
+        case FieldUnit::TWIP   :
         {
             rStr = "twip";
             break;
         }
-        case FUNIT_POINT  :
+        case FieldUnit::POINT  :
         {
             rStr = "pt";
             break;
         }
-        case FUNIT_PICA   :
+        case FieldUnit::PICA   :
         {
             rStr = "pica";
             break;
         }
-        case FUNIT_INCH   :
+        case FieldUnit::INCH   :
         {
             rStr = "\"";
             break;
         }
-        case FUNIT_FOOT   :
+        case FieldUnit::FOOT   :
         {
             rStr = "ft";
             break;
         }
-        case FUNIT_MILE   :
+        case FieldUnit::MILE   :
         {
             rStr = "mile(s)";
             break;
         }
 
         // others
-        case FUNIT_PERCENT:
+        case FieldUnit::PERCENT:
         {
             rStr = "%";
             break;

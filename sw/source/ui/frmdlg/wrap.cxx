@@ -79,10 +79,10 @@ SwWrapTabPage::SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xWrapParallelRB(m_xBuilder->weld_radio_button("parallel"))
     , m_xWrapThroughRB(m_xBuilder->weld_radio_button("through"))
     , m_xIdealWrapRB(m_xBuilder->weld_radio_button("optimal"))
-    , m_xLeftMarginED(m_xBuilder->weld_metric_spin_button("left", FUNIT_CM))
-    , m_xRightMarginED(m_xBuilder->weld_metric_spin_button("right", FUNIT_CM))
-    , m_xTopMarginED(m_xBuilder->weld_metric_spin_button("top", FUNIT_CM))
-    , m_xBottomMarginED(m_xBuilder->weld_metric_spin_button("bottom", FUNIT_CM))
+    , m_xLeftMarginED(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
+    , m_xRightMarginED(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
+    , m_xTopMarginED(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
+    , m_xBottomMarginED(m_xBuilder->weld_metric_spin_button("bottom", FieldUnit::CM))
     , m_xWrapAnchorOnlyCB(m_xBuilder->weld_check_button("anchoronly"))
     , m_xWrapTransparentCB(m_xBuilder->weld_check_button("transparent"))
     , m_xWrapOutlineCB(m_xBuilder->weld_check_button("outline"))
@@ -236,10 +236,10 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     const SvxLRSpaceItem& rLR = rSet->Get(RES_LR_SPACE);
 
     // gap to text
-    m_xLeftMarginED->set_value(m_xLeftMarginED->normalize(rLR.GetLeft()), FUNIT_TWIP);
-    m_xRightMarginED->set_value(m_xRightMarginED->normalize(rLR.GetRight()), FUNIT_TWIP);
-    m_xTopMarginED->set_value(m_xTopMarginED->normalize(rUL.GetUpper()), FUNIT_TWIP);
-    m_xBottomMarginED->set_value(m_xBottomMarginED->normalize(rUL.GetLower()), FUNIT_TWIP);
+    m_xLeftMarginED->set_value(m_xLeftMarginED->normalize(rLR.GetLeft()), FieldUnit::TWIP);
+    m_xRightMarginED->set_value(m_xRightMarginED->normalize(rLR.GetRight()), FieldUnit::TWIP);
+    m_xTopMarginED->set_value(m_xTopMarginED->normalize(rUL.GetUpper()), FieldUnit::TWIP);
+    m_xBottomMarginED->set_value(m_xBottomMarginED->normalize(rUL.GetLower()), FieldUnit::TWIP);
 
     m_xLeftMarginED->save_value();
     m_xRightMarginED->save_value();
@@ -312,8 +312,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bBottomMod = m_xBottomMarginED->get_value_changed_from_saved();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper(static_cast<sal_uInt16>(m_xTopMarginED->denormalize(m_xTopMarginED->get_value(FUNIT_TWIP))));
-    aUL.SetLower(static_cast<sal_uInt16>(m_xBottomMarginED->denormalize(m_xBottomMarginED->get_value(FUNIT_TWIP))));
+    aUL.SetUpper(static_cast<sal_uInt16>(m_xTopMarginED->denormalize(m_xTopMarginED->get_value(FieldUnit::TWIP))));
+    aUL.SetLower(static_cast<sal_uInt16>(m_xBottomMarginED->denormalize(m_xBottomMarginED->get_value(FieldUnit::TWIP))));
 
     if ( bTopMod || bBottomMod )
     {
@@ -329,8 +329,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bRightMod = m_xRightMarginED->get_value_changed_from_saved();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft(static_cast<sal_uInt16>(m_xLeftMarginED->denormalize(m_xLeftMarginED->get_value(FUNIT_TWIP))));
-    aLR.SetRight(static_cast<sal_uInt16>(m_xRightMarginED->denormalize(m_xRightMarginED->get_value(FUNIT_TWIP))));
+    aLR.SetLeft(static_cast<sal_uInt16>(m_xLeftMarginED->denormalize(m_xLeftMarginED->get_value(FieldUnit::TWIP))));
+    aLR.SetRight(static_cast<sal_uInt16>(m_xRightMarginED->denormalize(m_xRightMarginED->get_value(FieldUnit::TWIP))));
 
     if ( bLeftMod || bRightMod )
     {
@@ -435,11 +435,11 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
             nRight = nLeft;
         }
 
-        m_xLeftMarginED->set_max(m_xLeftMarginED->normalize(nLeft), FUNIT_TWIP);
-        m_xRightMarginED->set_max(m_xRightMarginED->normalize(nRight), FUNIT_TWIP);
+        m_xLeftMarginED->set_max(m_xLeftMarginED->normalize(nLeft), FieldUnit::TWIP);
+        m_xRightMarginED->set_max(m_xRightMarginED->normalize(nRight), FieldUnit::TWIP);
 
-        m_xTopMarginED->set_max(m_xTopMarginED->normalize(nTop), FUNIT_TWIP);
-        m_xBottomMarginED->set_max(m_xBottomMarginED->normalize(nBottom), FUNIT_TWIP);
+        m_xTopMarginED->set_max(m_xTopMarginED->normalize(nTop), FieldUnit::TWIP);
+        m_xBottomMarginED->set_max(m_xBottomMarginED->normalize(nBottom), FieldUnit::TWIP);
 
         RangeModifyHdl(*m_xLeftMarginED);
         RangeModifyHdl(*m_xTopMarginED);
@@ -538,7 +538,7 @@ DeactivateRC SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 
 IMPL_LINK(SwWrapTabPage, RangeModifyHdl, weld::MetricSpinButton&, rEdit, void)
 {
-    auto nValue = rEdit.get_value(FUNIT_NONE);
+    auto nValue = rEdit.get_value(FieldUnit::NONE);
     weld::MetricSpinButton* pOpposite = nullptr;
     if (&rEdit == m_xLeftMarginED.get())
         pOpposite = m_xRightMarginED.get();
@@ -553,10 +553,10 @@ IMPL_LINK(SwWrapTabPage, RangeModifyHdl, weld::MetricSpinButton&, rEdit, void)
 
     if (pOpposite)
     {
-        auto nOpposite = pOpposite->get_value(FUNIT_NONE);
+        auto nOpposite = pOpposite->get_value(FieldUnit::NONE);
 
-        if (nValue + nOpposite > std::max(rEdit.get_max(FUNIT_NONE), pOpposite->get_max(FUNIT_NONE)))
-            pOpposite->set_value(pOpposite->get_max(FUNIT_NONE) - nValue, FUNIT_NONE);
+        if (nValue + nOpposite > std::max(rEdit.get_max(FieldUnit::NONE), pOpposite->get_max(FieldUnit::NONE)))
+            pOpposite->set_value(pOpposite->get_max(FieldUnit::NONE) - nValue, FieldUnit::NONE);
     }
 }
 

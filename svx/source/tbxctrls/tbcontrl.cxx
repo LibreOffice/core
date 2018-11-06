@@ -2363,7 +2363,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl
     m_aLineStyleLb->setPosSizePixel( 2, 2, 110, 140 );
     SetOutputSizePixel( Size( 114, 144 ) );
 
-    m_aLineStyleLb->SetSourceUnit( FUNIT_TWIP );
+    m_aLineStyleLb->SetSourceUnit( FieldUnit::TWIP );
     m_aLineStyleLb->SetNone( SvxResId(RID_SVXSTR_NONE) );
 
     m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::SOLID ), SvxBorderLineStyle::SOLID );

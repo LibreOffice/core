@@ -62,7 +62,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mlRotY(0),
     maUIScale(),
     mePoolUnit(),
-    meDlgUnit(FUNIT_INCH), // #i124409# init with fallback default
+    meDlgUnit(FieldUnit::INCH), // #i124409# init with fallback default
     maTransfPosXControl(SID_ATTR_TRANSFORM_POS_X, *pBindings, *this),
     maTransfPosYControl(SID_ATTR_TRANSFORM_POS_Y, *pBindings, *this),
     maTransfWidthControl(SID_ATTR_TRANSFORM_WIDTH, *pBindings, *this),
@@ -196,14 +196,14 @@ void PosSizePropertyPanel::Initialize()
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
 
-    mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(4500, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(9000, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(13500, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(18000, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(22500, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(27000, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(31500, FUNIT_CUSTOM);
+    mpMtrAngle->InsertValue(0, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(4500, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(9000, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(13500, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(18000, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(22500, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(27000, FieldUnit::CUSTOM);
+    mpMtrAngle->InsertValue(31500, FieldUnit::CUSTOM);
     mpMtrAngle->AdaptDropDownLineCountToMaximum();
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
@@ -326,16 +326,16 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
         mpCbxScale->IsEnabled() )
     {
         long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mpMtrWidth->GetValue())) / static_cast<double>(mlOldWidth) );
-        if( nHeight <= mpMtrHeight->GetMax( FUNIT_NONE ) )
+        if( nHeight <= mpMtrHeight->GetMax( FieldUnit::NONE ) )
         {
-            mpMtrHeight->SetUserValue( nHeight, FUNIT_NONE );
+            mpMtrHeight->SetUserValue( nHeight, FieldUnit::NONE );
         }
         else
         {
-            nHeight = static_cast<long>(mpMtrHeight->GetMax( FUNIT_NONE ));
+            nHeight = static_cast<long>(mpMtrHeight->GetMax( FieldUnit::NONE ));
             mpMtrHeight->SetUserValue( nHeight );
             const long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
-            mpMtrWidth->SetUserValue( nWidth, FUNIT_NONE );
+            mpMtrWidth->SetUserValue( nWidth, FieldUnit::NONE );
         }
     }
     executeSize();
@@ -348,16 +348,16 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
         mpCbxScale->IsEnabled() )
     {
         long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mpMtrHeight->GetValue())) / static_cast<double>(mlOldHeight) );
-        if( nWidth <= mpMtrWidth->GetMax( FUNIT_NONE ) )
+        if( nWidth <= mpMtrWidth->GetMax( FieldUnit::NONE ) )
         {
-            mpMtrWidth->SetUserValue( nWidth, FUNIT_NONE );
+            mpMtrWidth->SetUserValue( nWidth, FieldUnit::NONE );
         }
         else
         {
-            nWidth = static_cast<long>(mpMtrWidth->GetMax( FUNIT_NONE ));
+            nWidth = static_cast<long>(mpMtrWidth->GetMax( FieldUnit::NONE ));
             mpMtrWidth->SetUserValue( nWidth );
             const long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
-            mpMtrHeight->SetUserValue( nHeight, FUNIT_NONE );
+            mpMtrHeight->SetUserValue( nHeight, FieldUnit::NONE );
         }
     }
     executeSize();
@@ -819,14 +819,14 @@ void PosSizePropertyPanel::executeSize()
 
     // get Width
     double nWidth = static_cast<double>(mpMtrWidth->GetValue( meDlgUnit ));
-    nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
+    nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FieldUnit::MM_100TH );
     long lWidth = static_cast<long>(nWidth * static_cast<double>(aUIScale));
     lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
     lWidth = static_cast<long>(mpMtrWidth->Denormalize( lWidth ));
 
     // get Height
     double nHeight = static_cast<double>(mpMtrHeight->GetValue( meDlgUnit ));
-    nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
+    nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FieldUnit::MM_100TH );
     long lHeight = static_cast<long>(nHeight * static_cast<double>(aUIScale));
     lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
     lHeight = static_cast<long>(mpMtrWidth->Denormalize( lHeight ));
@@ -899,7 +899,7 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
 
 FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
-    FieldUnit eUnit = FUNIT_NONE;
+    FieldUnit eUnit = FieldUnit::NONE;
 
     if ( pState && eState >= SfxItemState::DEFAULT )
     {

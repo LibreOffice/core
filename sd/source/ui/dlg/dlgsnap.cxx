@@ -35,9 +35,9 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
     : GenericDialogController(pWindow, "modules/sdraw/ui/dlgsnap.ui", "SnapObjectDialog")
     , aUIScale(pView->GetDoc().GetUIScale())
     , m_xFtX(m_xBuilder->weld_label("xlabel"))
-    , m_xMtrFldX(m_xBuilder->weld_metric_spin_button("x", FUNIT_CM))
+    , m_xMtrFldX(m_xBuilder->weld_metric_spin_button("x", FieldUnit::CM))
     , m_xFtY(m_xBuilder->weld_label("ylabel"))
-    , m_xMtrFldY(m_xBuilder->weld_metric_spin_button("y", FUNIT_CM))
+    , m_xMtrFldY(m_xBuilder->weld_metric_spin_button("y", FieldUnit::CM))
     , m_xRadioGroup(m_xBuilder->weld_widget("radiogroup"))
     , m_xRbPoint(m_xBuilder->weld_radio_button("point"))
     , m_xRbVert(m_xBuilder->weld_radio_button("vert"))
@@ -73,24 +73,24 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
     // WorkArea, PoolUnit and FieldUnit:
     SetMetricValue(*m_xMtrFldX, aLeftTop.X(), ePoolUnit );
 
-    int nValue = m_xMtrFldX->get_value(FUNIT_NONE);
+    int nValue = m_xMtrFldX->get_value(FieldUnit::NONE);
     nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldX->set_min(nValue, FUNIT_NONE);
+    m_xMtrFldX->set_min(nValue, FieldUnit::NONE);
 
     SetMetricValue(*m_xMtrFldX, aRightBottom.X(), ePoolUnit);
-    nValue = m_xMtrFldX->get_value(FUNIT_NONE);
+    nValue = m_xMtrFldX->get_value(FieldUnit::NONE);
     nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldX->set_max(nValue, FUNIT_NONE);
+    m_xMtrFldX->set_max(nValue, FieldUnit::NONE);
 
     SetMetricValue(*m_xMtrFldY, aLeftTop.Y(), ePoolUnit);
-    nValue = m_xMtrFldY->get_value(FUNIT_NONE);
+    nValue = m_xMtrFldY->get_value(FieldUnit::NONE);
     nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldY->set_min(nValue, FUNIT_NONE);
+    m_xMtrFldY->set_min(nValue, FieldUnit::NONE);
 
     SetMetricValue(*m_xMtrFldY, aRightBottom.Y(), ePoolUnit);
-    nValue = m_xMtrFldY->get_value(FUNIT_NONE);
+    nValue = m_xMtrFldY->get_value(FieldUnit::NONE);
     nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldY->set_max(nValue, FUNIT_NONE);
+    m_xMtrFldY->set_max(nValue, FieldUnit::NONE);
 
     // set values
     nXValue = static_cast<const SfxInt32Item&>( rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
@@ -150,13 +150,13 @@ void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
     if ( bEnableX )
     {
         if (!m_xMtrFldX->get_sensitive())
-            m_xMtrFldX->set_value(nXValue, FUNIT_NONE);
+            m_xMtrFldX->set_value(nXValue, FieldUnit::NONE);
         m_xMtrFldX->set_sensitive(true);
         m_xFtX->set_sensitive(true);
     }
     else if (m_xMtrFldX->get_sensitive())
     {
-        nXValue = m_xMtrFldX->get_value(FUNIT_NONE);
+        nXValue = m_xMtrFldX->get_value(FieldUnit::NONE);
         m_xMtrFldX->set_text(OUString());
         m_xMtrFldX->set_sensitive(false);
         m_xFtX->set_sensitive(false);
@@ -164,13 +164,13 @@ void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
     if ( bEnableY )
     {
         if (!m_xMtrFldY->get_sensitive())
-            m_xMtrFldY->set_value(nYValue, FUNIT_NONE);
+            m_xMtrFldY->set_value(nYValue, FieldUnit::NONE);
         m_xMtrFldY->set_sensitive(true);
         m_xFtY->set_sensitive(true);
     }
     else if (m_xMtrFldY->get_sensitive())
     {
-        nYValue = m_xMtrFldY->get_value(FUNIT_NONE);
+        nYValue = m_xMtrFldY->get_value(FieldUnit::NONE);
         m_xMtrFldY->set_text(OUString());
         m_xMtrFldY->set_sensitive(false);
         m_xFtY->set_sensitive(false);

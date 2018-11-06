@@ -85,10 +85,10 @@ SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xYpreset(m_xBuilder->weld_entry("Y_preset"))
     , m_xMpreset(m_xBuilder->weld_entry("M_preset"))
     , m_xKpreset(m_xBuilder->weld_entry("K_preset"))
-    , m_xCcustom(m_xBuilder->weld_metric_spin_button("C_custom", FUNIT_PERCENT))
-    , m_xYcustom(m_xBuilder->weld_metric_spin_button("Y_custom", FUNIT_PERCENT))
-    , m_xMcustom(m_xBuilder->weld_metric_spin_button("M_custom", FUNIT_PERCENT))
-    , m_xKcustom(m_xBuilder->weld_metric_spin_button("K_custom", FUNIT_PERCENT))
+    , m_xCcustom(m_xBuilder->weld_metric_spin_button("C_custom", FieldUnit::PERCENT))
+    , m_xYcustom(m_xBuilder->weld_metric_spin_button("Y_custom", FieldUnit::PERCENT))
+    , m_xMcustom(m_xBuilder->weld_metric_spin_button("M_custom", FieldUnit::PERCENT))
+    , m_xKcustom(m_xBuilder->weld_metric_spin_button("K_custom", FieldUnit::PERCENT))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnDelete(m_xBuilder->weld_button("delete"))
     , m_xBtnWorkOn(m_xBuilder->weld_button("edit"))
@@ -302,10 +302,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, SpinValueHdl_Impl, weld::SpinButton&, void)
 IMPL_LINK_NOARG(SvxColorTabPage, MetricSpinValueHdl_Impl, weld::MetricSpinButton&, void)
 {
     // read current MtrFields, if cmyk, then k-value as transparency
-    aCurrentColor = Color(static_cast<sal_uInt8>(PercentToColor_Impl(m_xKcustom->get_value(FUNIT_NONE))),
-                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xCcustom->get_value(FUNIT_NONE))),
-                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xYcustom->get_value(FUNIT_NONE))),
-                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xMcustom->get_value(FUNIT_NONE))));
+    aCurrentColor = Color(static_cast<sal_uInt8>(PercentToColor_Impl(m_xKcustom->get_value(FieldUnit::NONE))),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xCcustom->get_value(FieldUnit::NONE))),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xYcustom->get_value(FieldUnit::NONE))),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xMcustom->get_value(FieldUnit::NONE))));
     ConvertColorValues (aCurrentColor, ColorModel::RGB);
 
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
@@ -584,10 +584,10 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
         ConvertColorValues (aPreviousColor, eCM );
         ConvertColorValues (aCurrentColor, eCM);
 
-        m_xCcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetRed() ), FUNIT_PERCENT );
-        m_xMcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetBlue() ), FUNIT_PERCENT );
-        m_xYcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetGreen() ), FUNIT_PERCENT );
-        m_xKcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetTransparency() ), FUNIT_PERCENT );
+        m_xCcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetRed() ), FieldUnit::PERCENT );
+        m_xMcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetBlue() ), FieldUnit::PERCENT );
+        m_xYcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetGreen() ), FieldUnit::PERCENT );
+        m_xKcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetTransparency() ), FieldUnit::PERCENT );
 
         if( bUpdatePreset )
         {
