@@ -86,11 +86,11 @@ void ParaULSpacingWindow::SetValue(const SvxULSpaceItem* pItem)
 {
     sal_Int64 nVal = pItem->GetUpper();
     nVal = m_pAboveSpacing->Normalize(nVal);
-    m_pAboveSpacing->SetValue(nVal, FUNIT_100TH_MM);
+    m_pAboveSpacing->SetValue(nVal, FieldUnit::MM_100TH);
 
     nVal = pItem->GetLower();
     nVal = m_pBelowSpacing->Normalize(nVal);
-    m_pBelowSpacing->SetValue(nVal, FUNIT_100TH_MM);
+    m_pBelowSpacing->SetValue(nVal, FieldUnit::MM_100TH);
 }
 
 IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
@@ -193,9 +193,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
     case CombinedEnumContext(Application::WriterVariants, Context::Text):
     case CombinedEnumContext(Application::WriterVariants, Context::Table):
         {
-            m_pBeforeSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
-            m_pAfterSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
-            m_pFLSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
+            m_pBeforeSpacing->SetMin(NEGA_MAXVALUE, FieldUnit::MM_100TH);
+            m_pAfterSpacing->SetMin(NEGA_MAXVALUE, FieldUnit::MM_100TH);
+            m_pFLSpacing->SetMin(NEGA_MAXVALUE, FieldUnit::MM_100TH);
         }
         break;
     }
@@ -217,7 +217,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Table))
         {
-            m_pFLSpacing->SetMin(aTxtLeft*-1, FUNIT_100TH_MM);
+            m_pFLSpacing->SetMin(aTxtLeft*-1, FieldUnit::MM_100TH);
         }
 
         aTxtRight = static_cast<long>(m_pAfterSpacing->Normalize(aTxtRight));
@@ -230,9 +230,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         case CombinedEnumContext(Application::WriterVariants, Context::Table):
         case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
             {
-                m_pBeforeSpacing->SetMax(MAX_SW - aTxtRight, FUNIT_100TH_MM);
-                m_pAfterSpacing->SetMax(MAX_SW - aTxtLeft, FUNIT_100TH_MM);
-                m_pFLSpacing->SetMax(MAX_SW - aTxtLeft - aTxtRight, FUNIT_100TH_MM);
+                m_pBeforeSpacing->SetMax(MAX_SW - aTxtRight, FieldUnit::MM_100TH);
+                m_pAfterSpacing->SetMax(MAX_SW - aTxtLeft, FieldUnit::MM_100TH);
+                m_pFLSpacing->SetMax(MAX_SW - aTxtLeft - aTxtRight, FieldUnit::MM_100TH);
             }
             break;
         case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
@@ -241,17 +241,17 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
         case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
             {
-                m_pBeforeSpacing->SetMax(MAX_SC_SD - aTxtRight, FUNIT_100TH_MM);
-                m_pAfterSpacing->SetMax(MAX_SC_SD - aTxtLeft, FUNIT_100TH_MM);
-                m_pFLSpacing->SetMax(MAX_SC_SD - aTxtLeft - aTxtRight, FUNIT_100TH_MM);
+                m_pBeforeSpacing->SetMax(MAX_SC_SD - aTxtRight, FieldUnit::MM_100TH);
+                m_pAfterSpacing->SetMax(MAX_SC_SD - aTxtLeft, FieldUnit::MM_100TH);
+                m_pFLSpacing->SetMax(MAX_SC_SD - aTxtLeft - aTxtRight, FieldUnit::MM_100TH);
             }
         }
 
-        m_pBeforeSpacing->SetValue(aTxtLeft, FUNIT_100TH_MM);
-        m_pAfterSpacing->SetValue(aTxtRight, FUNIT_100TH_MM);
+        m_pBeforeSpacing->SetValue(aTxtLeft, FieldUnit::MM_100TH);
+        m_pAfterSpacing->SetValue(aTxtRight, FieldUnit::MM_100TH);
 
         aTxtFirstLineOfst = static_cast<long>(m_pFLSpacing->Normalize(aTxtFirstLineOfst));
-        m_pFLSpacing->SetValue(aTxtFirstLineOfst, FUNIT_100TH_MM);
+        m_pFLSpacing->SetValue(aTxtFirstLineOfst, FieldUnit::MM_100TH);
     }
     else if(eState == SfxItemState::DISABLED)
     {

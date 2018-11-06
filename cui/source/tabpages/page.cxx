@@ -151,8 +151,8 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     , mbDelPrinter(false)
     , mbEnableDrawingLayerFillStyles(false)
     , m_xPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("comboPageFormat")))
-    , m_xPaperWidthEdit(m_xBuilder->weld_metric_spin_button("spinWidth", FUNIT_CM))
-    , m_xPaperHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FUNIT_CM))
+    , m_xPaperWidthEdit(m_xBuilder->weld_metric_spin_button("spinWidth", FieldUnit::CM))
+    , m_xPaperHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FieldUnit::CM))
     , m_xOrientationFT(m_xBuilder->weld_label("labelOrientation"))
     , m_xPortraitBtn(m_xBuilder->weld_radio_button("radiobuttonPortrait"))
     , m_xLandscapeBtn(m_xBuilder->weld_radio_button("radiobuttonLandscape"))
@@ -160,11 +160,11 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     , m_xTextFlowBox(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboTextFlowBox")))
     , m_xPaperTrayBox(m_xBuilder->weld_combo_box("comboPaperTray"))
     , m_xLeftMarginLbl(m_xBuilder->weld_label("labelLeftMargin"))
-    , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FUNIT_CM))
+    , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FieldUnit::CM))
     , m_xRightMarginLbl(m_xBuilder->weld_label("labelRightMargin"))
-    , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FUNIT_CM))
-    , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargTop", FUNIT_CM))
-    , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargBot", FUNIT_CM))
+    , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FieldUnit::CM))
+    , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargTop", FieldUnit::CM))
+    , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargBot", FieldUnit::CM))
     , m_xPageText(m_xBuilder->weld_label("labelPageLayout"))
     , m_xLayoutBox(m_xBuilder->weld_combo_box("comboPageLayout"))
     , m_xNumberFormatBox(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("comboLayoutFormat")))
@@ -261,28 +261,28 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     Point aPrintOffset = mpDefPrinter->GetPageOffset() - mpDefPrinter->PixelToLogic( Point() );
     mpDefPrinter->SetMapMode( aOldMode );
 
-    nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(aPrintOffset.X()), FUNIT_TWIP);
-    nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X()), FUNIT_TWIP);
-    nFirstTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() ), FUNIT_TWIP);
-    nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y()), FUNIT_TWIP );
-    nLastLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(aPrintOffset.X() + aPrintSize.Width()), FUNIT_TWIP);
-    nLastRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPrintOffset.X() + aPrintSize.Width()), FUNIT_TWIP);
-    nLastTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FUNIT_TWIP);
-    nLastBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FUNIT_TWIP);
+    nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(aPrintOffset.X()), FieldUnit::TWIP);
+    nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X()), FieldUnit::TWIP);
+    nFirstTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() ), FieldUnit::TWIP);
+    nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y()), FieldUnit::TWIP );
+    nLastLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(aPrintOffset.X() + aPrintSize.Width()), FieldUnit::TWIP);
+    nLastRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPrintOffset.X() + aPrintSize.Width()), FieldUnit::TWIP);
+    nLastTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FieldUnit::TWIP);
+    nLastBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FieldUnit::TWIP);
 
     // #i4219# get DrawingLayer options
     const SvtOptionsDrawinglayer aDrawinglayerOpt;
 
     // #i4219# take Maximum now from configuration (1/100th cm)
     // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
-    m_xPaperWidthEdit->set_max(m_xPaperWidthEdit->normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
-    m_xPaperHeightEdit->set_max(m_xPaperHeightEdit->normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
+    m_xPaperWidthEdit->set_max(m_xPaperWidthEdit->normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
+    m_xPaperHeightEdit->set_max(m_xPaperHeightEdit->normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
 
     // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
-    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FUNIT_MM);
-    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FUNIT_MM);
-    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FUNIT_MM);
-    m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
+    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FieldUnit::MM);
+    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FieldUnit::MM);
+    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FieldUnit::MM);
+    m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FieldUnit::MM);
 
     // Get the i18n framework numberings and add them to the listbox.
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xNumberFormatBox->get_widget(), std::numeric_limits<sal_uInt16>::max());
@@ -839,12 +839,12 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
         if (m_xLandscapeBtn->get_active())
             Swap( aSize );
 
-        if ( aSize.Height() < m_xPaperHeightEdit->get_min( FUNIT_100TH_MM ) )
+        if ( aSize.Height() < m_xPaperHeightEdit->get_min( FieldUnit::MM_100TH ) )
             m_xPaperHeightEdit->set_min(
-                m_xPaperHeightEdit->normalize( aSize.Height() ), FUNIT_100TH_MM );
-        if ( aSize.Width() < m_xPaperWidthEdit->get_min( FUNIT_100TH_MM ) )
+                m_xPaperHeightEdit->normalize( aSize.Height() ), FieldUnit::MM_100TH );
+        if ( aSize.Width() < m_xPaperWidthEdit->get_min( FieldUnit::MM_100TH ) )
             m_xPaperWidthEdit->set_min(
-                m_xPaperWidthEdit->normalize( aSize.Width() ), FUNIT_100TH_MM );
+                m_xPaperWidthEdit->normalize( aSize.Width() ), FieldUnit::MM_100TH );
         SetMetricValue( *m_xPaperHeightEdit, aSize.Height(), MapUnit::Map100thMM );
         SetMetricValue( *m_xPaperWidthEdit, aSize.Width(), MapUnit::Map100thMM );
 
@@ -863,13 +863,13 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
                 // no margin if screen
                 nTmp = 1; // accordingly 1 cm
 
-            if ( bScreen || m_xRightMarginEdit->get_value(FUNIT_NONE) == 0 )
+            if ( bScreen || m_xRightMarginEdit->get_value(FieldUnit::NONE) == 0 )
                 SetMetricValue( *m_xRightMarginEdit, nTmp, MapUnit::MapCM );
-            if ( bScreen || m_xLeftMarginEdit->get_value(FUNIT_NONE) == 0 )
+            if ( bScreen || m_xLeftMarginEdit->get_value(FieldUnit::NONE) == 0 )
                 SetMetricValue( *m_xLeftMarginEdit, nTmp, MapUnit::MapCM );
-            if ( bScreen || m_xBottomMarginEdit->get_value(FUNIT_NONE) == 0 )
+            if ( bScreen || m_xBottomMarginEdit->get_value(FieldUnit::NONE) == 0 )
                 SetMetricValue( *m_xBottomMarginEdit, nTmp, MapUnit::MapCM );
-            if ( bScreen || m_xTopMarginEdit->get_value(FUNIT_NONE) == 0 )
+            if ( bScreen || m_xTopMarginEdit->get_value(FieldUnit::NONE) == 0 )
                 SetMetricValue( *m_xTopMarginEdit, nTmp, MapUnit::MapCM );
             UpdateExample_Impl( true );
         }
@@ -951,38 +951,38 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     mpDefPrinter->SetOrientation( eOldOri );
 
     sal_Int64 nSetL = m_xLeftMarginEdit->denormalize(
-                    m_xLeftMarginEdit->get_value( FUNIT_TWIP ) );
+                    m_xLeftMarginEdit->get_value( FieldUnit::TWIP ) );
     sal_Int64 nSetR = m_xRightMarginEdit->denormalize(
-                    m_xRightMarginEdit->get_value( FUNIT_TWIP ) );
+                    m_xRightMarginEdit->get_value( FieldUnit::TWIP ) );
     sal_Int64 nSetT = m_xTopMarginEdit->denormalize(
-                    m_xTopMarginEdit->get_value( FUNIT_TWIP ) );
+                    m_xTopMarginEdit->get_value( FieldUnit::TWIP ) );
     sal_Int64 nSetB = m_xBottomMarginEdit->denormalize(
-                    m_xBottomMarginEdit->get_value( FUNIT_TWIP ) );
+                    m_xBottomMarginEdit->get_value( FieldUnit::TWIP ) );
 
     long nNewL = aPrintOffset.X();
     long nNewR = aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X();
     long nNewT = aPrintOffset.Y();
     long nNewB = aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y();
 
-    nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(nNewL), FUNIT_TWIP);
-    nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(nNewR), FUNIT_TWIP);
-    nFirstTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(nNewT), FUNIT_TWIP);
-    nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(nNewB), FUNIT_TWIP);
+    nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(nNewL), FieldUnit::TWIP);
+    nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(nNewR), FieldUnit::TWIP);
+    nFirstTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(nNewT), FieldUnit::TWIP);
+    nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(nNewB), FieldUnit::TWIP);
 
     if ( bSet )
     {
         if ( nSetL < nNewL )
             m_xLeftMarginEdit->set_value( m_xLeftMarginEdit->normalize( nNewL ),
-                                      FUNIT_TWIP );
+                                      FieldUnit::TWIP );
         if ( nSetR < nNewR )
             m_xRightMarginEdit->set_value( m_xRightMarginEdit->normalize( nNewR ),
-                                       FUNIT_TWIP );
+                                       FieldUnit::TWIP );
         if ( nSetT < nNewT )
             m_xTopMarginEdit->set_value( m_xTopMarginEdit->normalize( nNewT ),
-                                     FUNIT_TWIP );
+                                     FieldUnit::TWIP );
         if ( nSetB < nNewB )
             m_xBottomMarginEdit->set_value( m_xBottomMarginEdit->normalize( nNewB ),
-                                        FUNIT_TWIP );
+                                        FieldUnit::TWIP );
     }
 }
 
@@ -1312,10 +1312,10 @@ void SvxPageDescPage::RangeHdl_Impl()
     long nHFRight = std::max(m_aBspWin.GetHdRight(), m_aBspWin.GetFtRight());
 
     // current values for page margins
-    long nBT = static_cast<long>(m_xTopMarginEdit->denormalize(m_xTopMarginEdit->get_value(FUNIT_TWIP)));
-    long nBB = static_cast<long>(m_xBottomMarginEdit->denormalize(m_xBottomMarginEdit->get_value(FUNIT_TWIP)));
-    long nBL = static_cast<long>(m_xLeftMarginEdit->denormalize(m_xLeftMarginEdit->get_value(FUNIT_TWIP)));
-    long nBR = static_cast<long>(m_xRightMarginEdit->denormalize(m_xRightMarginEdit->get_value(FUNIT_TWIP)));
+    long nBT = static_cast<long>(m_xTopMarginEdit->denormalize(m_xTopMarginEdit->get_value(FieldUnit::TWIP)));
+    long nBB = static_cast<long>(m_xBottomMarginEdit->denormalize(m_xBottomMarginEdit->get_value(FieldUnit::TWIP)));
+    long nBL = static_cast<long>(m_xLeftMarginEdit->denormalize(m_xLeftMarginEdit->get_value(FieldUnit::TWIP)));
+    long nBR = static_cast<long>(m_xRightMarginEdit->denormalize(m_xRightMarginEdit->get_value(FieldUnit::TWIP)));
 
     // calculate width of page border
     const SfxItemSet* _pSet = &GetItemSet();
@@ -1336,33 +1336,33 @@ void SvxPageDescPage::RangeHdl_Impl()
 
     long nMin = nHHeight + nHDist + nFDist + nFHeight + nBT + nBB +
                 MINBODY + aBorder.Height();
-    m_xPaperHeightEdit->set_min(m_xPaperHeightEdit->normalize(nMin), FUNIT_TWIP);
+    m_xPaperHeightEdit->set_min(m_xPaperHeightEdit->normalize(nMin), FieldUnit::TWIP);
 
     nMin = MINBODY + nBL + nBR + aBorder.Width();
-    m_xPaperWidthEdit->set_min(m_xPaperWidthEdit->normalize(nMin), FUNIT_TWIP);
+    m_xPaperWidthEdit->set_min(m_xPaperWidthEdit->normalize(nMin), FieldUnit::TWIP);
 
-    long nH = static_cast<long>(m_xPaperHeightEdit->denormalize(m_xPaperHeightEdit->get_value(FUNIT_TWIP)));
-    long nW = static_cast<long>(m_xPaperWidthEdit->denormalize(m_xPaperWidthEdit->get_value(FUNIT_TWIP)));
+    long nH = static_cast<long>(m_xPaperHeightEdit->denormalize(m_xPaperHeightEdit->get_value(FieldUnit::TWIP)));
+    long nW = static_cast<long>(m_xPaperWidthEdit->denormalize(m_xPaperWidthEdit->get_value(FieldUnit::TWIP)));
 
     // Top
     long nMax = nH - nBB - aBorder.Height() - MINBODY -
                 nFDist - nFHeight - nHDist - nHHeight;
 
-    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(nMax), FUNIT_TWIP);
+    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(nMax), FieldUnit::TWIP);
 
     // Bottom
     nMax = nH - nBT - aBorder.Height() - MINBODY -
            nFDist - nFHeight - nHDist - nHHeight;
 
-    m_xBottomMarginEdit->set_max(m_xTopMarginEdit->normalize(nMax), FUNIT_TWIP);
+    m_xBottomMarginEdit->set_max(m_xTopMarginEdit->normalize(nMax), FieldUnit::TWIP);
 
     // Left
     nMax = nW - nBR - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
-    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(nMax), FUNIT_TWIP);
+    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(nMax), FieldUnit::TWIP);
 
     // Right
     nMax = nW - nBL - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
-    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(nMax), FUNIT_TWIP);
+    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(nMax), FieldUnit::TWIP);
 }
 
 void SvxPageDescPage::CalcMargin_Impl()
@@ -1465,12 +1465,12 @@ bool SvxPageDescPage::IsPrinterRangeOverflow(
 {
     bool bRet = false;
     bool bCheck = ( ( m_nPos & nPos ) == 0 );
-    long nValue = rField.get_value(FUNIT_NONE);
+    long nValue = rField.get_value(FieldUnit::NONE);
     if ( bCheck &&
          (  nValue < nFirstMargin || nValue > nLastMargin ) &&
          rField.get_value_changed_from_saved() )
     {
-        rField.set_value(nValue < nFirstMargin ? nFirstMargin : nLastMargin, FUNIT_NONE);
+        rField.set_value(nValue < nFirstMargin ? nFirstMargin : nLastMargin, FieldUnit::NONE);
         bRet = true;
     }
 
@@ -1485,16 +1485,16 @@ void SvxPageDescPage::CheckMarginEdits( bool _bClear )
     if ( _bClear )
         m_nPos = 0;
 
-    sal_Int64 nValue = m_xLeftMarginEdit->get_value(FUNIT_NONE);
+    sal_Int64 nValue = m_xLeftMarginEdit->get_value(FieldUnit::NONE);
     if (  nValue < nFirstLeftMargin || nValue > nLastLeftMargin )
         m_nPos |= MARGIN_LEFT;
-    nValue = m_xRightMarginEdit->get_value(FUNIT_NONE);
+    nValue = m_xRightMarginEdit->get_value(FieldUnit::NONE);
     if (  nValue < nFirstRightMargin || nValue > nLastRightMargin )
         m_nPos |= MARGIN_RIGHT;
-    nValue = m_xTopMarginEdit->get_value(FUNIT_NONE);
+    nValue = m_xTopMarginEdit->get_value(FieldUnit::NONE);
     if (  nValue < nFirstTopMargin || nValue > nLastTopMargin )
         m_nPos |= MARGIN_TOP;
-    nValue = m_xBottomMarginEdit->get_value(FUNIT_NONE);
+    nValue = m_xBottomMarginEdit->get_value(FieldUnit::NONE);
     if (  nValue < nFirstBottomMargin || nValue > nLastBottomMargin )
         m_nPos |= MARGIN_BOTTOM;
 }
@@ -1503,20 +1503,20 @@ bool SvxPageDescPage::IsMarginOutOfRange()
 {
     bool bRet = ( ( ( !( m_nPos & MARGIN_LEFT ) &&
                       m_xLeftMarginEdit->get_value_changed_from_saved() ) &&
-                    ( m_xLeftMarginEdit->get_value(FUNIT_NONE) < nFirstLeftMargin ||
-                      m_xLeftMarginEdit->get_value(FUNIT_NONE) > nLastLeftMargin ) ) ||
+                    ( m_xLeftMarginEdit->get_value(FieldUnit::NONE) < nFirstLeftMargin ||
+                      m_xLeftMarginEdit->get_value(FieldUnit::NONE) > nLastLeftMargin ) ) ||
                   ( ( !( m_nPos & MARGIN_RIGHT ) &&
                       m_xRightMarginEdit->get_value_changed_from_saved() ) &&
-                    ( m_xRightMarginEdit->get_value(FUNIT_NONE) < nFirstRightMargin ||
-                      m_xRightMarginEdit->get_value(FUNIT_NONE) > nLastRightMargin ) ) ||
+                    ( m_xRightMarginEdit->get_value(FieldUnit::NONE) < nFirstRightMargin ||
+                      m_xRightMarginEdit->get_value(FieldUnit::NONE) > nLastRightMargin ) ) ||
                   ( ( !( m_nPos & MARGIN_TOP ) &&
                       m_xTopMarginEdit->get_value_changed_from_saved() ) &&
-                    ( m_xTopMarginEdit->get_value(FUNIT_NONE) < nFirstTopMargin ||
-                      m_xTopMarginEdit->get_value(FUNIT_NONE) > nLastTopMargin ) ) ||
+                    ( m_xTopMarginEdit->get_value(FieldUnit::NONE) < nFirstTopMargin ||
+                      m_xTopMarginEdit->get_value(FieldUnit::NONE) > nLastTopMargin ) ) ||
                   ( ( !( m_nPos & MARGIN_BOTTOM ) &&
                       m_xBottomMarginEdit->get_value_changed_from_saved() ) &&
-                    ( m_xBottomMarginEdit->get_value(FUNIT_NONE) < nFirstBottomMargin ||
-                      m_xBottomMarginEdit->get_value(FUNIT_NONE) > nLastBottomMargin ) ) );
+                    ( m_xBottomMarginEdit->get_value(FieldUnit::NONE) < nFirstBottomMargin ||
+                      m_xBottomMarginEdit->get_value(FieldUnit::NONE) > nLastBottomMargin ) ) );
     return bRet;
 }
 

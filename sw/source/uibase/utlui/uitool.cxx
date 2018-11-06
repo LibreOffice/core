@@ -87,13 +87,13 @@ using namespace ::com::sun::star;
 
 void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
 {
-    SwTwips nMin = static_cast< SwTwips >(rCtrl.GetMin(FUNIT_TWIP));
-    SwTwips nMax = static_cast< SwTwips >(rCtrl.GetMax(FUNIT_TWIP));
+    SwTwips nMin = static_cast< SwTwips >(rCtrl.GetMin(FieldUnit::TWIP));
+    SwTwips nMax = static_cast< SwTwips >(rCtrl.GetMax(FieldUnit::TWIP));
 
     rCtrl.SetUnit(eUnit);
 
-    rCtrl.SetMin(nMin, FUNIT_TWIP);
-    rCtrl.SetMax(nMax, FUNIT_TWIP);
+    rCtrl.SetMin(nMin, FieldUnit::TWIP);
+    rCtrl.SetMax(nMax, FieldUnit::TWIP);
 }
 
 // Set boxinfo attribute

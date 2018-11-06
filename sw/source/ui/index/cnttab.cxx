@@ -2481,7 +2481,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
     m_pAutoRightCB->Enable(bTabStop);
     if(bTabStop)
     {
-        m_pTabPosMF->SetValue(m_pTabPosMF->Normalize(rToken.nTabStopPosition), FUNIT_TWIP);
+        m_pTabPosMF->SetValue(m_pTabPosMF->Normalize(rToken.nTabStopPosition), FieldUnit::TWIP);
         m_pAutoRightCB->Check(SvxTabAdjust::End == rToken.eTabAlign);
         m_pFillCharCB->SetText(OUString(rToken.cTabFillChar));
         m_pTabPosFT->Enable(!m_pAutoRightCB->IsChecked());
@@ -2616,7 +2616,7 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, Edit&, rEdit, void)
     if( pCtrl && WindowType::EDIT != pCtrl->GetType() )
     {
         static_cast<SwTOXButton*>(pCtrl)->SetTabPosition( static_cast< SwTwips >(
-                pField->Denormalize( pField->GetValue( FUNIT_TWIP ))));
+                pField->Denormalize( pField->GetValue( FieldUnit::TWIP ))));
     }
     ModifyHdl(nullptr);
 }

@@ -43,8 +43,8 @@ SchOptionTabPage::SchOptionTabPage(TabPageParent pWindow,const SfxItemSet& rInAt
     , m_xRbtAxis1(m_xBuilder->weld_radio_button("RBT_OPT_AXIS_1"))
     , m_xRbtAxis2(m_xBuilder->weld_radio_button("RBT_OPT_AXIS_2"))
     , m_xGrpBar(m_xBuilder->weld_widget("frameSettings"))
-    , m_xMTGap(m_xBuilder->weld_metric_spin_button("MT_GAP", FUNIT_PERCENT))
-    , m_xMTOverlap(m_xBuilder->weld_metric_spin_button("MT_OVERLAP", FUNIT_PERCENT))
+    , m_xMTGap(m_xBuilder->weld_metric_spin_button("MT_GAP", FieldUnit::PERCENT))
+    , m_xMTOverlap(m_xBuilder->weld_metric_spin_button("MT_OVERLAP", FieldUnit::PERCENT))
     , m_xCBConnect(m_xBuilder->weld_check_button("CB_CONNECTOR"))
     , m_xCBAxisSideBySide(m_xBuilder->weld_check_button("CB_BARS_SIDE_BY_SIDE"))
     , m_xGrpPlotOptions(m_xBuilder->weld_widget("frameFL_PLOT_OPTIONS"))
@@ -85,10 +85,10 @@ bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
         rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
 
     if(m_xMTGap->get_visible())
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( m_xMTGap->get_value(FUNIT_PERCENT))));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( m_xMTGap->get_value(FieldUnit::PERCENT))));
 
     if(m_xMTOverlap->get_visible())
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( m_xMTOverlap->get_value(FUNIT_PERCENT))));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( m_xMTOverlap->get_value(FieldUnit::PERCENT))));
 
     if(m_xCBConnect->get_visible())
         rOutAttrs->Put(SfxBoolItem(SCHATTR_BAR_CONNECT,m_xCBConnect->get_active()));
@@ -131,13 +131,13 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     if (rInAttrs->GetItemState(SCHATTR_BAR_GAPWIDTH, true, &pPoolItem) == SfxItemState::SET)
     {
         nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
-        m_xMTGap->set_value(nTmp, FUNIT_PERCENT);
+        m_xMTGap->set_value(nTmp, FieldUnit::PERCENT);
     }
 
     if (rInAttrs->GetItemState(SCHATTR_BAR_OVERLAP, true, &pPoolItem) == SfxItemState::SET)
     {
         nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
-        m_xMTOverlap->set_value(nTmp, FUNIT_PERCENT);
+        m_xMTOverlap->set_value(nTmp, FieldUnit::PERCENT);
     }
 
     if (rInAttrs->GetItemState(SCHATTR_BAR_CONNECT, true, &pPoolItem) == SfxItemState::SET)

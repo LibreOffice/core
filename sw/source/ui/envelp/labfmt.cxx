@@ -292,16 +292,16 @@ SwLabFormatPage::SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xMakeFI(m_xBuilder->weld_label("make"))
     , m_xTypeFI(m_xBuilder->weld_label("type"))
     , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
-    , m_xHDistField(m_xBuilder->weld_metric_spin_button("hori", FUNIT_CM))
-    , m_xVDistField(m_xBuilder->weld_metric_spin_button("vert", FUNIT_CM))
-    , m_xWidthField(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
-    , m_xHeightField(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
-    , m_xLeftField(m_xBuilder->weld_metric_spin_button("left", FUNIT_CM))
-    , m_xUpperField(m_xBuilder->weld_metric_spin_button("top", FUNIT_CM))
+    , m_xHDistField(m_xBuilder->weld_metric_spin_button("hori", FieldUnit::CM))
+    , m_xVDistField(m_xBuilder->weld_metric_spin_button("vert", FieldUnit::CM))
+    , m_xWidthField(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
+    , m_xHeightField(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
+    , m_xLeftField(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
+    , m_xUpperField(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
     , m_xColsField(m_xBuilder->weld_spin_button("cols"))
     , m_xRowsField(m_xBuilder->weld_spin_button("rows"))
-    , m_xPWidthField(m_xBuilder->weld_metric_spin_button("pagewidth", FUNIT_CM))
-    , m_xPHeightField(m_xBuilder->weld_metric_spin_button("pageheight", FUNIT_CM))
+    , m_xPWidthField(m_xBuilder->weld_metric_spin_button("pagewidth", FieldUnit::CM))
+    , m_xPHeightField(m_xBuilder->weld_metric_spin_button("pageheight", FieldUnit::CM))
     , m_xSavePB(m_xBuilder->weld_button("save"))
 {
     SetExchangeSupport();
@@ -381,26 +381,26 @@ void SwLabFormatPage::ChangeMinMax()
          lMinPWidth  = lLeft  + (nCols - 1) * lHDist + lWidth,
          lMinPHeight = lUpper + (nRows - 1) * lVDist + lHeight;
 
-    m_xHDistField->set_min(nMinSize, FUNIT_CM);
-    m_xVDistField->set_min(nMinSize, FUNIT_CM);
+    m_xHDistField->set_min(nMinSize, FieldUnit::CM);
+    m_xVDistField->set_min(nMinSize, FieldUnit::CM);
 
-    m_xHDistField->set_max(long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<long>(nCols))), FUNIT_TWIP);
-    m_xVDistField->set_max(long(100) * ((lMax - lUpper) / std::max(1L, static_cast<long>(nRows))), FUNIT_TWIP);
+    m_xHDistField->set_max(long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<long>(nCols))), FieldUnit::TWIP);
+    m_xVDistField->set_max(long(100) * ((lMax - lUpper) / std::max(1L, static_cast<long>(nRows))), FieldUnit::TWIP);
 
-    m_xWidthField->set_min(nMinSize, FUNIT_CM);
-    m_xHeightField->set_min(nMinSize, FUNIT_CM);
+    m_xWidthField->set_min(nMinSize, FieldUnit::CM);
+    m_xHeightField->set_min(nMinSize, FieldUnit::CM);
 
-    m_xWidthField->set_max(long(100) * lHDist, FUNIT_TWIP);
-    m_xHeightField->set_max(long(100) * lVDist, FUNIT_TWIP);
+    m_xWidthField->set_max(long(100) * lHDist, FieldUnit::TWIP);
+    m_xHeightField->set_max(long(100) * lVDist, FieldUnit::TWIP);
 
-    m_xLeftField->set_max(long(100) * (lMax - nCols * lHDist), FUNIT_TWIP);
-    m_xUpperField->set_max(long(100) * (lMax - nRows * lVDist), FUNIT_TWIP);
+    m_xLeftField->set_max(long(100) * (lMax - nCols * lHDist), FieldUnit::TWIP);
+    m_xUpperField->set_max(long(100) * (lMax - nRows * lVDist), FieldUnit::TWIP);
 
     m_xColsField->set_range(1, (lMax - lLeft ) / std::max(1L, lHDist));
     m_xRowsField->set_range(1, (lMax - lUpper) / std::max(1L, lVDist));
 
-    m_xPWidthField->set_range(long(100) * lMinPWidth, long(100) * lMax, FUNIT_TWIP);
-    m_xPHeightField->set_range(long(100) * lMinPHeight, long(100) * lMax, FUNIT_TWIP);
+    m_xPWidthField->set_range(long(100) * lMinPWidth, long(100) * lMax, FieldUnit::TWIP);
+    m_xPHeightField->set_range(long(100) * lMinPHeight, long(100) * lMax, FieldUnit::TWIP);
 }
 
 VclPtr<SfxTabPage> SwLabFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
@@ -456,14 +456,14 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    m_xHDistField->set_max(100 * aItem.m_lHDist , FUNIT_TWIP);
-    m_xVDistField->set_max(100 * aItem.m_lVDist , FUNIT_TWIP);
-    m_xWidthField->set_max(100 * aItem.m_lWidth , FUNIT_TWIP);
-    m_xHeightField->set_max(100 * aItem.m_lHeight, FUNIT_TWIP);
-    m_xLeftField->set_max(100 * aItem.m_lLeft  , FUNIT_TWIP);
-    m_xUpperField->set_max(100 * aItem.m_lUpper , FUNIT_TWIP);
-    m_xPWidthField->set_max(100 * aItem.m_lPWidth , FUNIT_TWIP);
-    m_xPHeightField->set_max(100 * aItem.m_lPHeight, FUNIT_TWIP);
+    m_xHDistField->set_max(100 * aItem.m_lHDist , FieldUnit::TWIP);
+    m_xVDistField->set_max(100 * aItem.m_lVDist , FieldUnit::TWIP);
+    m_xWidthField->set_max(100 * aItem.m_lWidth , FieldUnit::TWIP);
+    m_xHeightField->set_max(100 * aItem.m_lHeight, FieldUnit::TWIP);
+    m_xLeftField->set_max(100 * aItem.m_lLeft  , FieldUnit::TWIP);
+    m_xUpperField->set_max(100 * aItem.m_lUpper , FieldUnit::TWIP);
+    m_xPWidthField->set_max(100 * aItem.m_lPWidth , FieldUnit::TWIP);
+    m_xPHeightField->set_max(100 * aItem.m_lPHeight, FieldUnit::TWIP);
 
     setfldval(*m_xHDistField, aItem.m_lHDist );
     setfldval(*m_xVDistField , aItem.m_lVDist );

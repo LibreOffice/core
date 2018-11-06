@@ -24,15 +24,15 @@
 
 const std::pair<const char*, FieldUnit> SCSTR_UNIT[] =
 {
-    { NC_("SCSTR_UNIT", "Millimeter") , FUNIT_MM },
-    { NC_("SCSTR_UNIT", "Centimeter") , FUNIT_CM },
-    { NC_("SCSTR_UNIT", "Meter") , FUNIT_M },
-    { NC_("SCSTR_UNIT", "Kilometer") , FUNIT_KM },
-    { NC_("SCSTR_UNIT", "Inch") , FUNIT_INCH },
-    { NC_("SCSTR_UNIT", "Foot") , FUNIT_FOOT },
-    { NC_("SCSTR_UNIT", "Miles") , FUNIT_MILE },
-    { NC_("SCSTR_UNIT", "Pica") , FUNIT_PICA },
-    { NC_("SCSTR_UNIT", "Point") , FUNIT_POINT }
+    { NC_("SCSTR_UNIT", "Millimeter") , FieldUnit::MM },
+    { NC_("SCSTR_UNIT", "Centimeter") , FieldUnit::CM },
+    { NC_("SCSTR_UNIT", "Meter") , FieldUnit::M },
+    { NC_("SCSTR_UNIT", "Kilometer") , FieldUnit::KM },
+    { NC_("SCSTR_UNIT", "Inch") , FieldUnit::INCH },
+    { NC_("SCSTR_UNIT", "Foot") , FieldUnit::FOOT },
+    { NC_("SCSTR_UNIT", "Miles") , FieldUnit::MILE },
+    { NC_("SCSTR_UNIT", "Pica") , FieldUnit::PICA },
+    { NC_("SCSTR_UNIT", "Point") , FieldUnit::POINT }
 };
 
 #endif

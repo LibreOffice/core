@@ -226,7 +226,7 @@ namespace weld
 
         unsigned int nDecimalDigits = m_xSpinButton->get_digits();
         //pawn percent off to icu to decide whether percent is separated from its number for this locale
-        if (m_eSrcUnit == FUNIT_PERCENT)
+        if (m_eSrcUnit == FieldUnit::PERCENT)
         {
             double fValue = nValue;
             fValue /= SpinButton::Power10(nDecimalDigits);
@@ -235,9 +235,9 @@ namespace weld
         else
         {
             aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
-            if (m_eSrcUnit != FUNIT_NONE && m_eSrcUnit != FUNIT_DEGREE)
+            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE)
                 aStr += " ";
-            assert(m_eSrcUnit != FUNIT_PERCENT);
+            assert(m_eSrcUnit != FieldUnit::PERCENT);
             aStr += MetricToString(m_eSrcUnit);
         }
 
@@ -1202,44 +1202,44 @@ namespace
 
     FieldUnit detectMetricUnit(const OUString& sUnit)
     {
-        FieldUnit eUnit = FUNIT_NONE;
+        FieldUnit eUnit = FieldUnit::NONE;
 
         if (sUnit == "mm")
-            eUnit = FUNIT_MM;
+            eUnit = FieldUnit::MM;
         else if (sUnit == "cm")
-            eUnit = FUNIT_CM;
+            eUnit = FieldUnit::CM;
         else if (sUnit == "m")
-            eUnit = FUNIT_M;
+            eUnit = FieldUnit::M;
         else if (sUnit == "km")
-            eUnit = FUNIT_KM;
+            eUnit = FieldUnit::KM;
         else if ((sUnit == "twips") || (sUnit == "twip"))
-            eUnit = FUNIT_TWIP;
+            eUnit = FieldUnit::TWIP;
         else if (sUnit == "pt")
-            eUnit = FUNIT_POINT;
+            eUnit = FieldUnit::POINT;
         else if (sUnit == "pc")
-            eUnit = FUNIT_PICA;
+            eUnit = FieldUnit::PICA;
         else if (sUnit == "\"" || (sUnit == "in") || (sUnit == "inch"))
-            eUnit = FUNIT_INCH;
+            eUnit = FieldUnit::INCH;
         else if ((sUnit == "'") || (sUnit == "ft") || (sUnit == "foot") || (sUnit == "feet"))
-            eUnit = FUNIT_FOOT;
+            eUnit = FieldUnit::FOOT;
         else if (sUnit == "mile" || (sUnit == "miles"))
-            eUnit = FUNIT_MILE;
+            eUnit = FieldUnit::MILE;
         else if (sUnit == "ch")
-            eUnit = FUNIT_CHAR;
+            eUnit = FieldUnit::CHAR;
         else if (sUnit == "line")
-            eUnit = FUNIT_LINE;
+            eUnit = FieldUnit::LINE;
         else if (sUnit == "%")
-            eUnit = FUNIT_PERCENT;
+            eUnit = FieldUnit::PERCENT;
         else if ((sUnit == "pixels") || (sUnit == "pixel") || (sUnit == "px"))
-            eUnit = FUNIT_PIXEL;
+            eUnit = FieldUnit::PIXEL;
         else if ((sUnit == "degrees") || (sUnit == "degree"))
-            eUnit = FUNIT_DEGREE;
+            eUnit = FieldUnit::DEGREE;
         else if ((sUnit == "sec") || (sUnit == "seconds") || (sUnit == "second"))
-            eUnit = FUNIT_SECOND;
+            eUnit = FieldUnit::SECOND;
         else if ((sUnit == "ms") || (sUnit == "milliseconds") || (sUnit == "millisecond"))
-            eUnit = FUNIT_MILLISECOND;
+            eUnit = FieldUnit::MILLISECOND;
         else if (sUnit != "0")
-            eUnit = FUNIT_CUSTOM;
+            eUnit = FieldUnit::CUSTOM;
 
         return eUnit;
     }
@@ -1723,7 +1723,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 SAL_INFO("vcl.layout", "making metric field for " << name << " " << sUnit);
                 VclPtrInstance<MetricField> xField(pParent, nBits);
                 xField->SetUnit(eUnit);
-                if (eUnit == FUNIT_CUSTOM)
+                if (eUnit == FieldUnit::CUSTOM)
                     xField->SetCustomUnitText(sUnit);
                 xWindow = xField;
             }
@@ -1757,7 +1757,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xBox->EnableAutoSize(true);
             xBox->SetUnit(eUnit);
             xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-            if (eUnit == FUNIT_CUSTOM)
+            if (eUnit == FieldUnit::CUSTOM)
                 xBox->SetCustomUnitText(sUnit);
             xWindow = xBox;
         }
@@ -1797,7 +1797,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xBox->EnableAutoSize(true);
             xBox->SetUnit(eUnit);
             xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-            if (eUnit == FUNIT_CUSTOM)
+            if (eUnit == FieldUnit::CUSTOM)
                 xBox->SetCustomUnitText(sUnit);
             xWindow = xBox;
         }

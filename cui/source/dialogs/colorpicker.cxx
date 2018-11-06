@@ -781,13 +781,13 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_In
     , m_xMFGreen(m_xBuilder->weld_spin_button("greenSpinbutton"))
     , m_xMFBlue(m_xBuilder->weld_spin_button("blueSpinbutton"))
     , m_xEDHex(new weld::HexColorControl(m_xBuilder->weld_entry("hexEntry")))
-    , m_xMFHue(m_xBuilder->weld_metric_spin_button("hueSpinbutton", FUNIT_DEGREE))
-    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button("satSpinbutton", FUNIT_PERCENT))
-    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button("brightSpinbutton", FUNIT_PERCENT))
-    , m_xMFCyan(m_xBuilder->weld_metric_spin_button("cyanSpinbutton", FUNIT_PERCENT))
-    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton", FUNIT_PERCENT))
-    , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton", FUNIT_PERCENT))
-    , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton", FUNIT_PERCENT))
+    , m_xMFHue(m_xBuilder->weld_metric_spin_button("hueSpinbutton", FieldUnit::DEGREE))
+    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button("satSpinbutton", FieldUnit::PERCENT))
+    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button("brightSpinbutton", FieldUnit::PERCENT))
+    , m_xMFCyan(m_xBuilder->weld_metric_spin_button("cyanSpinbutton", FieldUnit::PERCENT))
+    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton", FieldUnit::PERCENT))
+    , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton", FieldUnit::PERCENT))
+    , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton", FieldUnit::PERCENT))
     , meMode( DefaultMode )
 {
     m_aColorField.SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
@@ -868,17 +868,17 @@ void ColorPickerDialog::update_color( UpdateFlags n )
 
     if (n & UpdateFlags::CMYK) // update CMYK
     {
-        m_xMFCyan->set_value(toInt(mdCyan, 100.0), FUNIT_PERCENT);
-        m_xMFMagenta->set_value(toInt(mdMagenta, 100.0), FUNIT_PERCENT);
-        m_xMFYellow->set_value(toInt(mdYellow, 100.0), FUNIT_PERCENT);
-        m_xMFKey->set_value(toInt(mdKey, 100.0), FUNIT_PERCENT);
+        m_xMFCyan->set_value(toInt(mdCyan, 100.0), FieldUnit::PERCENT);
+        m_xMFMagenta->set_value(toInt(mdMagenta, 100.0), FieldUnit::PERCENT);
+        m_xMFYellow->set_value(toInt(mdYellow, 100.0), FieldUnit::PERCENT);
+        m_xMFKey->set_value(toInt(mdKey, 100.0), FieldUnit::PERCENT);
     }
 
     if (n & UpdateFlags::HSB ) // update HSB
     {
-        m_xMFHue->set_value(toInt(mdHue, 1.0), FUNIT_DEGREE);
-        m_xMFSaturation->set_value(toInt( mdSat, 100.0), FUNIT_PERCENT);
-        m_xMFBrightness->set_value(toInt( mdBri, 100.0), FUNIT_PERCENT);
+        m_xMFHue->set_value(toInt(mdHue, 1.0), FieldUnit::DEGREE);
+        m_xMFSaturation->set_value(toInt( mdSat, 100.0), FieldUnit::PERCENT);
+        m_xMFBrightness->set_value(toInt( mdBri, 100.0), FieldUnit::PERCENT);
     }
 
     if (n & UpdateFlags::ColorChooser ) // update Color Chooser 1
@@ -1010,37 +1010,37 @@ IMPL_LINK(ColorPickerDialog, ColorModifyMetricHdl, weld::MetricSpinButton&, rEdi
 
     if (&rEdit == m_xMFHue.get())
     {
-        setColorComponent( ColorComponent::Hue, static_cast<double>(m_xMFHue->get_value(FUNIT_DEGREE)) );
+        setColorComponent( ColorComponent::Hue, static_cast<double>(m_xMFHue->get_value(FieldUnit::DEGREE)) );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == m_xMFSaturation.get())
     {
-        setColorComponent( ColorComponent::Saturation, static_cast<double>(m_xMFSaturation->get_value(FUNIT_PERCENT)) / 100.0 );
+        setColorComponent( ColorComponent::Saturation, static_cast<double>(m_xMFSaturation->get_value(FieldUnit::PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == m_xMFBrightness.get())
     {
-        setColorComponent( ColorComponent::Brightness, static_cast<double>(m_xMFBrightness->get_value(FUNIT_PERCENT)) / 100.0 );
+        setColorComponent( ColorComponent::Brightness, static_cast<double>(m_xMFBrightness->get_value(FieldUnit::PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == m_xMFCyan.get())
     {
-        setColorComponent( ColorComponent::Cyan, static_cast<double>(m_xMFCyan->get_value(FUNIT_PERCENT)) / 100.0 );
+        setColorComponent( ColorComponent::Cyan, static_cast<double>(m_xMFCyan->get_value(FieldUnit::PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == m_xMFMagenta.get())
     {
-        setColorComponent( ColorComponent::Magenta, static_cast<double>(m_xMFMagenta->get_value(FUNIT_PERCENT)) / 100.0 );
+        setColorComponent( ColorComponent::Magenta, static_cast<double>(m_xMFMagenta->get_value(FieldUnit::PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == m_xMFYellow.get())
     {
-        setColorComponent( ColorComponent::Yellow, static_cast<double>(m_xMFYellow->get_value(FUNIT_PERCENT)) / 100.0 );
+        setColorComponent( ColorComponent::Yellow, static_cast<double>(m_xMFYellow->get_value(FieldUnit::PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == m_xMFKey.get())
     {
-        setColorComponent( ColorComponent::Key, static_cast<double>(m_xMFKey->get_value(FUNIT_PERCENT)) / 100.0 );
+        setColorComponent( ColorComponent::Key, static_cast<double>(m_xMFKey->get_value(FieldUnit::PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
 

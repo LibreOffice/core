@@ -265,12 +265,14 @@ inline bool IsInch(MapUnit eU) {
 }
 
 inline bool IsMetric(FieldUnit eU) {
-    return (eU==FUNIT_MM || eU==FUNIT_CM || eU==FUNIT_M || eU==FUNIT_KM || eU==FUNIT_100TH_MM);
+    return (eU == FieldUnit::MM || eU == FieldUnit::CM || eU == FieldUnit::M
+            || eU == FieldUnit::KM || eU == FieldUnit::MM_100TH);
 }
 
 inline bool IsInch(FieldUnit eU) {
-    return (eU==FUNIT_TWIP || eU==FUNIT_POINT || eU==FUNIT_PICA ||
-            eU==FUNIT_INCH || eU==FUNIT_FOOT || eU==FUNIT_MILE);
+    return (eU == FieldUnit::TWIP || eU == FieldUnit::POINT
+            || eU == FieldUnit::PICA || eU == FieldUnit::INCH
+            || eU == FieldUnit::FOOT || eU == FieldUnit::MILE);
 }
 
 class SVX_DLLPUBLIC SdrFormatter {

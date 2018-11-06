@@ -79,9 +79,9 @@ const sal_uInt16 SvxBorderTabPage::pRanges[] =
 
 static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
 {
-    auto nMin = rField.denormalize(rField.get_min(FUNIT_TWIP));
+    auto nMin = rField.denormalize(rField.get_min(FieldUnit::TWIP));
     rField.set_digits(1);
-    rField.set_min(rField.normalize(nMin), FUNIT_TWIP);
+    rField.set_min(rField.normalize(nMin), FieldUnit::TWIP);
 }
 
 // number of preset images to show
@@ -128,7 +128,7 @@ SvxShadowItem ShadowControlsWrapper::GetControlValue(const SvxShadowItem& rItem)
     // has not changed its value, to avoid round-trip errors (like twip->cm->twip)
     // E.g., initial 100 twip will become 0.18 cm, which will return as 102 twip
     if (mrMfSize.get_value_changed_from_saved())
-        aItem.SetWidth(mrMfSize.denormalize(mrMfSize.get_value(FUNIT_TWIP)));
+        aItem.SetWidth(mrMfSize.denormalize(mrMfSize.get_value(FieldUnit::TWIP)));
     if (!mrLbColor.IsNoSelection())
         aItem.SetColor(mrLbColor.GetSelectEntryColor());
     return aItem;
@@ -157,7 +157,7 @@ void ShadowControlsWrapper::SetControlValue(const SvxShadowItem& rItem)
             mrVsPos.SetNoSelection();
             break;
     }
-    mrMfSize.set_value(mrMfSize.normalize(rItem.GetWidth()), FUNIT_TWIP);
+    mrMfSize.set_value(mrMfSize.normalize(rItem.GetWidth()), FieldUnit::TWIP);
     mrLbColor.SelectEntry(rItem.GetColor());
 }
 
@@ -181,13 +181,13 @@ SvxMarginItem MarginControlsWrapper::GetControlValue(const SvxMarginItem &rItem)
 {
     SvxMarginItem aItem(rItem);
     if (mrLeftWrp.get_sensitive())
-        aItem.SetLeftMargin(mrLeftWrp.denormalize(mrLeftWrp.get_value(FUNIT_TWIP)));
+        aItem.SetLeftMargin(mrLeftWrp.denormalize(mrLeftWrp.get_value(FieldUnit::TWIP)));
     if (mrRightWrp.get_sensitive())
-        aItem.SetRightMargin(mrRightWrp.denormalize(mrRightWrp.get_value(FUNIT_TWIP)));
+        aItem.SetRightMargin(mrRightWrp.denormalize(mrRightWrp.get_value(FieldUnit::TWIP)));
     if (mrTopWrp.get_sensitive())
-        aItem.SetTopMargin(mrTopWrp.denormalize(mrTopWrp.get_value(FUNIT_TWIP)));
+        aItem.SetTopMargin(mrTopWrp.denormalize(mrTopWrp.get_value(FieldUnit::TWIP)));
     if (mrBottomWrp.get_sensitive())
-        aItem.SetBottomMargin(mrBottomWrp.denormalize(mrBottomWrp.get_value(FUNIT_TWIP)));
+        aItem.SetBottomMargin(mrBottomWrp.denormalize(mrBottomWrp.get_value(FieldUnit::TWIP)));
     return aItem;
 }
 
@@ -201,10 +201,10 @@ bool MarginControlsWrapper::get_value_changed_from_saved() const
 
 void MarginControlsWrapper::SetControlValue(const SvxMarginItem& rItem)
 {
-    mrLeftWrp.set_value(mrLeftWrp.normalize(rItem.GetLeftMargin()), FUNIT_TWIP);
-    mrRightWrp.set_value(mrRightWrp.normalize(rItem.GetRightMargin()), FUNIT_TWIP);
-    mrTopWrp.set_value(mrTopWrp.normalize(rItem.GetTopMargin()), FUNIT_TWIP);
-    mrBottomWrp.set_value(mrBottomWrp.normalize(rItem.GetBottomMargin()), FUNIT_TWIP);
+    mrLeftWrp.set_value(mrLeftWrp.normalize(rItem.GetLeftMargin()), FieldUnit::TWIP);
+    mrRightWrp.set_value(mrRightWrp.normalize(rItem.GetRightMargin()), FieldUnit::TWIP);
+    mrTopWrp.set_value(mrTopWrp.normalize(rItem.GetTopMargin()), FieldUnit::TWIP);
+    mrBottomWrp.set_value(mrBottomWrp.normalize(rItem.GetBottomMargin()), FieldUnit::TWIP);
     mrLeftWrp.save_value();
     mrRightWrp.save_value();
     mrTopWrp.save_value();
@@ -245,22 +245,22 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, "framesel", m_aFrameSel))
     , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
-    , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FUNIT_POINT))
+    , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FieldUnit::POINT))
     , m_xSpacingFrame(m_xBuilder->weld_container("spacing"))
     , m_xLeftFT(m_xBuilder->weld_label("leftft"))
-    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("leftmf", FUNIT_MM))
+    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("leftmf", FieldUnit::MM))
     , m_xRightFT(m_xBuilder->weld_label("rightft"))
-    , m_xRightMF(m_xBuilder->weld_metric_spin_button("rightmf", FUNIT_MM))
+    , m_xRightMF(m_xBuilder->weld_metric_spin_button("rightmf", FieldUnit::MM))
     , m_xTopFT(m_xBuilder->weld_label("topft"))
-    , m_xTopMF(m_xBuilder->weld_metric_spin_button("topmf", FUNIT_MM))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button("topmf", FieldUnit::MM))
     , m_xBottomFT(m_xBuilder->weld_label("bottomft"))
-    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottommf", FUNIT_MM))
+    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottommf", FieldUnit::MM))
     , m_xSynchronizeCB(m_xBuilder->weld_check_button("sync"))
     , m_xShadowFrame(m_xBuilder->weld_container("shadow"))
     , m_xWndShadows(new SvtValueSet(m_xBuilder->weld_scrolled_window("shadowswin")))
     , m_xWndShadowsWin(new weld::CustomWeld(*m_xBuilder, "shadows", *m_xWndShadows))
     , m_xFtShadowSize(m_xBuilder->weld_label("distanceft"))
-    , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button("distancemf", FUNIT_MM))
+    , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button("distancemf", FieldUnit::MM))
     , m_xFtShadowColor(m_xBuilder->weld_label("shadowcolorft"))
     , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("shadowcolorlb"), pParent.GetFrameWeld()))
     , m_xPropertiesFrame(m_xBuilder->weld_container("properties"))
@@ -340,7 +340,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     {
         // The caller specifies default line width.  Honor it.
         const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
-        m_xLineWidthMF->set_value(p->GetValue(), FUNIT_POINT);
+        m_xLineWidthMF->set_value(p->GetValue(), FieldUnit::POINT);
     }
 
     // set metric
@@ -353,17 +353,17 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
         {
             //  #103396# the default value (1pt) can't be accurately represented in
             //  inches or pica with two decimals, so point is used instead.
-            case FUNIT_PICA:
-            case FUNIT_INCH:
-            case FUNIT_FOOT:
-            case FUNIT_MILE:
-                eFUnit = FUNIT_POINT;
+            case FieldUnit::PICA:
+            case FieldUnit::INCH:
+            case FieldUnit::FOOT:
+            case FieldUnit::MILE:
+                eFUnit = FieldUnit::POINT;
                 break;
 
-            case FUNIT_CM:
-            case FUNIT_M:
-            case FUNIT_KM:
-                eFUnit = FUNIT_MM;
+            case FieldUnit::CM:
+            case FieldUnit::M:
+            case FieldUnit::KM:
+                eFUnit = FieldUnit::MM;
                 break;
             default: ;//prevent warning
         }
@@ -372,9 +372,9 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     {
         switch ( eFUnit )
         {
-            case FUNIT_M:
-            case FUNIT_KM:
-                eFUnit = FUNIT_MM;
+            case FieldUnit::M:
+            case FieldUnit::KM:
+                eFUnit = FieldUnit::MM;
                 break;
             default: ; //prevent warning
         }
@@ -414,7 +414,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
         }
         bIsDontCare = !pBoxInfo->IsValid( SvxBoxInfoItemValidFlags::DISABLE );
     }
-    if(!mbUseMarginItem && eFUnit == FUNIT_MM && MapUnit::MapTwip == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
+    if(!mbUseMarginItem && eFUnit == FieldUnit::MM && MapUnit::MapTwip == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
         //#i91548# changing the number of decimal digits changes the minimum values, too
         lcl_SetDecimalDigitsTo1(*m_xLeftMF);
@@ -628,7 +628,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                 SetMetricValue(*m_xTopMF,     pBoxInfoItem->GetDefDist(), eCoreUnit);
                 SetMetricValue(*m_xBottomMF,  pBoxInfoItem->GetDefDist(), eCoreUnit);
 
-                nMinValue = m_xLeftMF->get_value(FUNIT_NONE);
+                nMinValue = m_xLeftMF->get_value(FieldUnit::NONE);
 
                 if ( pBoxInfoItem->IsDist() )
                 {
@@ -637,10 +637,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                         bool bIsAnyBorderVisible = m_aFrameSel.IsAnyBorderVisible();
                         if( !bIsAnyBorderVisible || !pBoxInfoItem->IsMinDist() )
                         {
-                            m_xLeftMF->set_min(0, FUNIT_NONE);
-                            m_xRightMF->set_min(0, FUNIT_NONE);
-                            m_xTopMF->set_min(0, FUNIT_NONE);
-                            m_xBottomMF->set_min(0, FUNIT_NONE);
+                            m_xLeftMF->set_min(0, FieldUnit::NONE);
+                            m_xRightMF->set_min(0, FieldUnit::NONE);
+                            m_xTopMF->set_min(0, FieldUnit::NONE);
+                            m_xBottomMF->set_min(0, FieldUnit::NONE);
                         }
                         long nLeftDist = pBoxItem->GetDistance( SvxBoxItemLine::LEFT);
                         SetMetricValue(*m_xLeftMF, nLeftDist, eCoreUnit);
@@ -704,8 +704,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             // Determine the width first as some styles can be missing depending on it
             sal_Int64 nWidthPt =  static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                         sal_Int64( nWidth ), m_xLineWidthMF->get_digits(),
-                        MapUnit::MapTwip, FUNIT_POINT ));
-            m_xLineWidthMF->set_value(nWidthPt, FUNIT_POINT);
+                        MapUnit::MapTwip, FieldUnit::POINT ));
+            m_xLineWidthMF->set_value(nWidthPt, FieldUnit::POINT);
             m_xLbLineStyle->SetWidth(nWidth);
 
             // then set the style
@@ -772,9 +772,9 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     }
 
     LinesChanged_Impl( nullptr );
-    if (m_xLeftMF->get_value(FUNIT_NONE) == m_xRightMF->get_value(FUNIT_NONE) &&
-        m_xTopMF->get_value(FUNIT_NONE) == m_xBottomMF->get_value(FUNIT_NONE) &&
-        m_xTopMF->get_value(FUNIT_NONE) == m_xLeftMF->get_value(FUNIT_NONE))
+    if (m_xLeftMF->get_value(FieldUnit::NONE) == m_xRightMF->get_value(FieldUnit::NONE) &&
+        m_xTopMF->get_value(FieldUnit::NONE) == m_xBottomMF->get_value(FieldUnit::NONE) &&
+        m_xTopMF->get_value(FieldUnit::NONE) == m_xLeftMF->get_value(FieldUnit::NONE))
     {
         mbSync = true;
     }
@@ -945,10 +945,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                         m_xRightMF->get_value_changed_from_saved() ||
                         m_xTopMF->get_value_changed_from_saved() ||
                         m_xBottomMF->get_value_changed_from_saved() ||
-                        nMinValue == m_xLeftMF->get_value(FUNIT_NONE) ||
-                        nMinValue == m_xRightMF->get_value(FUNIT_NONE) ||
-                        nMinValue == m_xTopMF->get_value(FUNIT_NONE) ||
-                        nMinValue == m_xBottomMF->get_value(FUNIT_NONE) ||
+                        nMinValue == m_xLeftMF->get_value(FieldUnit::NONE) ||
+                        nMinValue == m_xRightMF->get_value(FieldUnit::NONE) ||
+                        nMinValue == m_xTopMF->get_value(FieldUnit::NONE) ||
+                        nMinValue == m_xBottomMF->get_value(FieldUnit::NONE) ||
                         (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
                        )
                     {
@@ -1139,11 +1139,11 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_Int64 nVal = m_xLineWidthMF->get_value(FUNIT_NONE);
+    sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
     nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 nVal,
                 m_xLineWidthMF->get_digits(),
-                FUNIT_POINT, MapUnit::MapTwip ));
+                FieldUnit::POINT, MapUnit::MapTwip ));
     m_xLbLineStyle->SetWidth( nVal );
 
     m_aFrameSel.SetStyleToSelection( nVal,
@@ -1152,11 +1152,11 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, weld::MetricSpinButton&, 
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
 {
-    sal_Int64 nVal = m_xLineWidthMF->get_value(FUNIT_NONE);
+    sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
     nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 nVal,
                 m_xLineWidthMF->get_digits(),
-                FUNIT_POINT, MapUnit::MapTwip ));
+                FieldUnit::POINT, MapUnit::MapTwip ));
     m_aFrameSel.SetStyleToSelection ( nVal,
         m_xLbLineStyle->GetSelectEntryStyle() );
 }
@@ -1321,7 +1321,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
         { SvxBorderLineStyle::INSET,  10, &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
     };
 
-    m_xLbLineStyle->SetSourceUnit( FUNIT_TWIP );
+    m_xLbLineStyle->SetSourceUnit( FieldUnit::TWIP );
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aLines); ++i)
     {
@@ -1333,7 +1333,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
             aLines[i].mnMinWidth, aLines[i].mpColor1Fn, aLines[i].mpColor2Fn, aLines[i].mpColorDistFn);
     }
 
-    sal_Int64 nVal = m_xLineWidthMF->get_value(FUNIT_NONE);
+    sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
     nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(nVal, m_xLineWidthMF->get_digits(),
                                                                   m_xLineWidthMF->get_unit(), MapUnit::MapTwip));
     m_xLbLineStyle->SetWidth( nVal );
@@ -1354,24 +1354,24 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         {
             if(!bSpaceModified)
             {
-                m_xLeftMF->set_value(nMinValue, FUNIT_NONE);
-                m_xRightMF->set_value(nMinValue, FUNIT_NONE);
-                m_xTopMF->set_value(nMinValue, FUNIT_NONE);
-                m_xBottomMF->set_value(nMinValue, FUNIT_NONE);
+                m_xLeftMF->set_value(nMinValue, FieldUnit::NONE);
+                m_xRightMF->set_value(nMinValue, FieldUnit::NONE);
+                m_xTopMF->set_value(nMinValue, FieldUnit::NONE);
+                m_xBottomMF->set_value(nMinValue, FieldUnit::NONE);
             }
         }
         else
         {
-            m_xLeftMF->set_min(0, FUNIT_NONE);
-            m_xRightMF->set_min(0, FUNIT_NONE);
-            m_xTopMF->set_min(0, FUNIT_NONE);
-            m_xBottomMF->set_min(0, FUNIT_NONE);
+            m_xLeftMF->set_min(0, FieldUnit::NONE);
+            m_xRightMF->set_min(0, FieldUnit::NONE);
+            m_xTopMF->set_min(0, FieldUnit::NONE);
+            m_xBottomMF->set_min(0, FieldUnit::NONE);
             if(!bSpaceModified && !mbAllowPaddingWithoutBorders)
             {
-                m_xLeftMF->set_value(0, FUNIT_NONE);
-                m_xRightMF->set_value(0, FUNIT_NONE);
-                m_xTopMF->set_value(0, FUNIT_NONE);
-                m_xBottomMF->set_value(0, FUNIT_NONE);
+                m_xLeftMF->set_value(0, FieldUnit::NONE);
+                m_xRightMF->set_value(0, FieldUnit::NONE);
+                m_xTopMF->set_value(0, FieldUnit::NONE);
+                m_xBottomMF->set_value(0, FieldUnit::NONE);
             }
         }
         // for tables everything is allowed
@@ -1418,15 +1418,15 @@ IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, weld::MetricSpinButton&, rF
 
     if (mbSync)
     {
-        const auto nVal = rField.get_value(FUNIT_NONE);
+        const auto nVal = rField.get_value(FieldUnit::NONE);
         if (&rField != m_xLeftMF.get())
-            m_xLeftMF->set_value(nVal, FUNIT_NONE);
+            m_xLeftMF->set_value(nVal, FieldUnit::NONE);
         if (&rField != m_xRightMF.get())
-            m_xRightMF->set_value(nVal, FUNIT_NONE);
+            m_xRightMF->set_value(nVal, FieldUnit::NONE);
         if (&rField != m_xTopMF.get())
-            m_xTopMF->set_value(nVal, FUNIT_NONE);
+            m_xTopMF->set_value(nVal, FieldUnit::NONE);
         if (&rField != m_xBottomMF.get())
-            m_xBottomMF->set_value(nVal, FUNIT_NONE);
+            m_xBottomMF->set_value(nVal, FieldUnit::NONE);
     }
 }
 

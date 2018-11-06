@@ -171,8 +171,8 @@ void SvxStdParagraphTabPage::ELRLoseFocus()
     sal_Int64 nR = m_xRightIndent->denormalize(m_xRightIndent->get_value(eUnit));
     OUString aTmp = m_xFLineIndent->get_text();
 
-    if (m_xLeftIndent->get_min(FUNIT_NONE) < 0)
-        m_xFLineIndent->set_min(-99999, FUNIT_MM);
+    if (m_xLeftIndent->get_min(FieldUnit::NONE) < 0)
+        m_xFLineIndent->set_min(-99999, FieldUnit::MM);
     else
         m_xFLineIndent->set_min(m_xFLineIndent->normalize(-nL), eUnit);
 
@@ -242,7 +242,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             case LLINESPACE_PROP:
                 SetLineSpace_Impl( aSpacing, nPos,
                                    static_cast<long>(m_xLineDistAtPercentBox->denormalize(
-                                   m_xLineDistAtPercentBox->get_value(FUNIT_NONE) )) );
+                                   m_xLineDistAtPercentBox->get_value(FieldUnit::NONE) )) );
                 break;
 
             case LLINESPACE_MIN:
@@ -284,13 +284,13 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
             if ( m_xTopDist->IsRelative() )
                 aMargin.SetUpper( rOldItem.GetUpper(),
-                                  static_cast<sal_uInt16>(m_xTopDist->get_value(FUNIT_NONE)) );
+                                  static_cast<sal_uInt16>(m_xTopDist->get_value(FieldUnit::NONE)) );
             else
                 aMargin.SetUpper( static_cast<sal_uInt16>(m_xTopDist->GetCoreValue(eUnit)) );
 
             if ( m_xBottomDist->IsRelative() )
                 aMargin.SetLower( rOldItem.GetLower(),
-                                  static_cast<sal_uInt16>(m_xBottomDist->get_value(FUNIT_NONE)) );
+                                  static_cast<sal_uInt16>(m_xBottomDist->get_value(FieldUnit::NONE)) );
             else
                 aMargin.SetLower( static_cast<sal_uInt16>(m_xBottomDist->GetCoreValue(eUnit)) );
 
@@ -331,19 +331,19 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
             if (m_xLeftIndent->IsRelative())
                 aMargin.SetTextLeft( rOldItem.GetTextLeft(),
-                                    static_cast<sal_uInt16>(m_xLeftIndent->get_value(FUNIT_NONE)) );
+                                    static_cast<sal_uInt16>(m_xLeftIndent->get_value(FieldUnit::NONE)) );
             else
                 aMargin.SetTextLeft(m_xLeftIndent->GetCoreValue(eUnit));
 
             if ( m_xRightIndent->IsRelative() )
                 aMargin.SetRight( rOldItem.GetRight(),
-                                  static_cast<sal_uInt16>(m_xRightIndent->get_value(FUNIT_NONE)) );
+                                  static_cast<sal_uInt16>(m_xRightIndent->get_value(FieldUnit::NONE)) );
             else
                 aMargin.SetRight(m_xRightIndent->GetCoreValue(eUnit));
 
             if ( m_xFLineIndent->IsRelative() )
                 aMargin.SetTextFirstLineOfst( rOldItem.GetTextFirstLineOfst(),
-                                             static_cast<sal_uInt16>(m_xFLineIndent->get_value(FUNIT_NONE)) );
+                                             static_cast<sal_uInt16>(m_xFLineIndent->get_value(FieldUnit::NONE)) );
             else
                 aMargin.SetTextFirstLineOfst(static_cast<sal_uInt16>(m_xFLineIndent->GetCoreValue(eUnit)));
         }
@@ -422,16 +422,16 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     SvtCJKOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
-        eFUnit = FUNIT_CHAR;
+        eFUnit = FieldUnit::CHAR;
 
     m_xLeftIndent->SetFieldUnit(eFUnit);
     m_xRightIndent->SetFieldUnit(eFUnit);
     m_xFLineIndent->SetFieldUnit(eFUnit);
-    if ( eFUnit == FUNIT_CHAR )
+    if ( eFUnit == FieldUnit::CHAR )
     {
-        m_xTopDist->SetFieldUnit(FUNIT_LINE);
-        m_xBottomDist->SetFieldUnit(FUNIT_LINE);
-        SetFieldUnit(*m_xLineDistAtMetricBox, FUNIT_POINT);
+        m_xTopDist->SetFieldUnit(FieldUnit::LINE);
+        m_xBottomDist->SetFieldUnit(FieldUnit::LINE);
+        SetFieldUnit(*m_xLineDistAtMetricBox, FieldUnit::POINT);
     }
     else
     {
@@ -455,7 +455,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             if ( rOldItem.GetPropLeft() != 100 )
             {
                 m_xLeftIndent->SetRelative( true );
-                m_xLeftIndent->set_value(rOldItem.GetPropLeft(), FUNIT_NONE);
+                m_xLeftIndent->set_value(rOldItem.GetPropLeft(), FieldUnit::NONE);
             }
             else
             {
@@ -467,7 +467,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             if ( rOldItem.GetPropRight() != 100 )
             {
                 m_xRightIndent->SetRelative( true );
-                m_xRightIndent->set_value(rOldItem.GetPropRight(), FUNIT_NONE);
+                m_xRightIndent->set_value(rOldItem.GetPropRight(), FieldUnit::NONE);
             }
             else
             {
@@ -479,12 +479,12 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             if ( rOldItem.GetPropTextFirstLineOfst() != 100 )
             {
                 m_xFLineIndent->SetRelative(true);
-                m_xFLineIndent->set_value(rOldItem.GetPropTextFirstLineOfst(), FUNIT_NONE);
+                m_xFLineIndent->set_value(rOldItem.GetPropTextFirstLineOfst(), FieldUnit::NONE);
             }
             else
             {
                 m_xFLineIndent->SetRelative(false);
-                m_xFLineIndent->set_min(-9999, FUNIT_NONE);
+                m_xFLineIndent->set_min(-9999, FieldUnit::NONE);
                 m_xFLineIndent->SetFieldUnit(eFUnit);
                 m_xFLineIndent->SetMetricValue(rOldItem.GetTextFirstLineOfst(), eUnit);
             }
@@ -524,13 +524,13 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             if ( rOldItem.GetPropUpper() != 100 )
             {
                 m_xTopDist->SetRelative( true );
-                m_xTopDist->set_value(rOldItem.GetPropUpper(), FUNIT_NONE);
+                m_xTopDist->set_value(rOldItem.GetPropUpper(), FieldUnit::NONE);
             }
             else
             {
                 m_xTopDist->SetRelative(false);
-                if (eFUnit == FUNIT_CHAR)
-                    m_xTopDist->SetFieldUnit(FUNIT_LINE);
+                if (eFUnit == FieldUnit::CHAR)
+                    m_xTopDist->SetFieldUnit(FieldUnit::LINE);
                 else
                     m_xTopDist->SetFieldUnit(eFUnit);
                 m_xTopDist->SetMetricValue(rOldItem.GetUpper(), eUnit);
@@ -539,13 +539,13 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             if ( rOldItem.GetPropLower() != 100 )
             {
                 m_xBottomDist->SetRelative( true );
-                m_xBottomDist->set_value(rOldItem.GetPropLower(), FUNIT_NONE);
+                m_xBottomDist->set_value(rOldItem.GetPropLower(), FieldUnit::NONE);
             }
             else
             {
                 m_xBottomDist->SetRelative(false);
-                if (eFUnit == FUNIT_CHAR)
-                    m_xBottomDist->SetFieldUnit(FUNIT_LINE);
+                if (eFUnit == FieldUnit::CHAR)
+                    m_xBottomDist->SetFieldUnit(FieldUnit::LINE);
                 else
                     m_xBottomDist->SetFieldUnit(eFUnit);
                 m_xBottomDist->SetMetricValue(rOldItem.GetLower(), eUnit);
@@ -674,18 +674,18 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(TabPageParent pParent,  const Sfx
     , nWidth(11905 /*567 * 50*/)
     , nMinFixDist(0)
     , bRelativeMode(false)
-    , m_xLeftIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_LEFTINDENT", FUNIT_CM)))
+    , m_xLeftIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_LEFTINDENT", FieldUnit::CM)))
     , m_xRightLabel(m_xBuilder->weld_label("labelFT_RIGHTINDENT"))
-    , m_xRightIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_RIGHTINDENT", FUNIT_CM)))
+    , m_xRightIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_RIGHTINDENT", FieldUnit::CM)))
     , m_xFLineLabel(m_xBuilder->weld_label("labelFT_FLINEINDENT"))
-    , m_xFLineIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_FLINEINDENT", FUNIT_CM)))
+    , m_xFLineIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_FLINEINDENT", FieldUnit::CM)))
     , m_xAutoCB(m_xBuilder->weld_check_button("checkCB_AUTO"))
-    , m_xTopDist(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_TOPDIST", FUNIT_CM)))
-    , m_xBottomDist(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_BOTTOMDIST", FUNIT_CM)))
+    , m_xTopDist(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_TOPDIST", FieldUnit::CM)))
+    , m_xBottomDist(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_BOTTOMDIST", FieldUnit::CM)))
     , m_xContextualCB(m_xBuilder->weld_check_button("checkCB_CONTEXTUALSPACING"))
     , m_xLineDist(m_xBuilder->weld_combo_box("comboLB_LINEDIST"))
-    , m_xLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTPERCENT", FUNIT_PERCENT))
-    , m_xLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTMETRIC", FUNIT_CM))
+    , m_xLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTPERCENT", FieldUnit::PERCENT))
+    , m_xLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTMETRIC", FieldUnit::CM))
     , m_xLineDistAtLabel(m_xBuilder->weld_label("labelFT_LINEDIST"))
     , m_xAbsDist(m_xBuilder->weld_label("labelST_LINEDIST_ABS"))
     , m_xRegisterFL(m_xBuilder->weld_widget("frameFL_REGISTER"))
@@ -700,7 +700,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(TabPageParent pParent,  const Sfx
     m_xLineDistAtMetricBox->hide();
 
     Init_Impl();
-    m_xFLineIndent->set_min(-9999, FUNIT_NONE);    // is set to 0 on default
+    m_xFLineIndent->set_min(-9999, FieldUnit::NONE);    // is set to 0 on default
 }
 
 SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
@@ -709,8 +709,8 @@ SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
 
 void SvxStdParagraphTabPage::EnableNegativeMode()
 {
-    m_xLeftIndent->set_min(-9999, FUNIT_NONE);
-    m_xRightIndent->set_min(-9999, FUNIT_NONE);
+    m_xLeftIndent->set_min(-9999, FieldUnit::NONE);
+    m_xRightIndent->set_min(-9999, FieldUnit::NONE);
     m_xRightIndent->EnableNegativeMode();
     m_xLeftIndent->EnableNegativeMode();
 }
@@ -761,7 +761,7 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
                         break;
                     }
                     // the set per cent value
-                    m_xLineDistAtPercentBox->set_value(m_xLineDistAtPercentBox->normalize(rAttr.GetPropLineSpace()), FUNIT_NONE);
+                    m_xLineDistAtPercentBox->set_value(m_xLineDistAtPercentBox->normalize(rAttr.GetPropLineSpace()), FieldUnit::NONE);
                     m_xLineDist->set_active( LLINESPACE_PROP );
                     break;
 
@@ -805,10 +805,10 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
         case LLINESPACE_DURCH:
             // setting a sensible default?
             // limit MS min(10, aPageSize)
-            m_xLineDistAtMetricBox->set_min(0, FUNIT_NONE);
+            m_xLineDistAtMetricBox->set_min(0, FieldUnit::NONE);
 
             if (m_xLineDistAtMetricBox->get_text().isEmpty())
-                m_xLineDistAtMetricBox->set_value(m_xLineDistAtMetricBox->normalize(1), FUNIT_NONE);
+                m_xLineDistAtMetricBox->set_value(m_xLineDistAtMetricBox->normalize(1), FieldUnit::NONE);
             m_xLineDistAtPercentBox->hide();
             m_xLineDistAtMetricBox->show();
             m_xLineDistAtMetricBox->set_sensitive(true);
@@ -816,10 +816,10 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
             break;
 
         case LLINESPACE_MIN:
-            m_xLineDistAtMetricBox->set_min(0, FUNIT_NONE);
+            m_xLineDistAtMetricBox->set_min(0, FieldUnit::NONE);
 
             if (m_xLineDistAtMetricBox->get_text().isEmpty())
-                m_xLineDistAtMetricBox->set_value(m_xLineDistAtMetricBox->normalize(10), FUNIT_TWIP);
+                m_xLineDistAtMetricBox->set_value(m_xLineDistAtMetricBox->normalize(10), FieldUnit::TWIP);
             m_xLineDistAtPercentBox->hide();
             m_xLineDistAtMetricBox->show();
             m_xLineDistAtMetricBox->set_sensitive(true);
@@ -829,7 +829,7 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
         case LLINESPACE_PROP:
 
             if (m_xLineDistAtPercentBox->get_text().isEmpty())
-                m_xLineDistAtPercentBox->set_value(m_xLineDistAtPercentBox->normalize(100), FUNIT_TWIP);
+                m_xLineDistAtPercentBox->set_value(m_xLineDistAtPercentBox->normalize(100), FieldUnit::TWIP);
             m_xLineDistAtMetricBox->hide();
             m_xLineDistAtPercentBox->show();
             m_xLineDistAtPercentBox->set_sensitive(true);
@@ -837,12 +837,12 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
             break;
         case LLINESPACE_FIX:
         {
-            auto nTemp = m_xLineDistAtMetricBox->get_value(FUNIT_NONE);
-            m_xLineDistAtMetricBox->set_min(m_xLineDistAtMetricBox->normalize(nMinFixDist), FUNIT_TWIP);
+            auto nTemp = m_xLineDistAtMetricBox->get_value(FieldUnit::NONE);
+            m_xLineDistAtMetricBox->set_min(m_xLineDistAtMetricBox->normalize(nMinFixDist), FieldUnit::TWIP);
 
             // if the value has been changed at SetMin,
             // it is time for the default
-            if (m_xLineDistAtMetricBox->get_value(FUNIT_NONE) != nTemp)
+            if (m_xLineDistAtMetricBox->get_value(FieldUnit::NONE) != nTemp)
                 SetMetricValue( *m_xLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip ); // fix is only in Writer
             m_xLineDistAtPercentBox->hide();
             m_xLineDistAtMetricBox->show();
@@ -890,11 +890,11 @@ void SvxStdParagraphTabPage::Init_Impl()
 
 void SvxStdParagraphTabPage::UpdateExample_Impl()
 {
-    m_aExampleWin.SetFirstLineOfst( static_cast<short>(m_xFLineIndent->denormalize( m_xFLineIndent->get_value( FUNIT_TWIP ) )) );
-    m_aExampleWin.SetLeftMargin( static_cast<long>(m_xLeftIndent->denormalize( m_xLeftIndent->get_value( FUNIT_TWIP ) ) ) );
-    m_aExampleWin.SetRightMargin( static_cast<long>(m_xRightIndent->denormalize( m_xRightIndent->get_value( FUNIT_TWIP ) ) ) );
-    m_aExampleWin.SetUpper( static_cast<sal_uInt16>(m_xTopDist->denormalize( m_xTopDist->get_value( FUNIT_TWIP ) )) );
-    m_aExampleWin.SetLower( static_cast<sal_uInt16>(m_xBottomDist->denormalize( m_xBottomDist->get_value( FUNIT_TWIP ) )) );
+    m_aExampleWin.SetFirstLineOfst( static_cast<short>(m_xFLineIndent->denormalize( m_xFLineIndent->get_value( FieldUnit::TWIP ) )) );
+    m_aExampleWin.SetLeftMargin( static_cast<long>(m_xLeftIndent->denormalize( m_xLeftIndent->get_value( FieldUnit::TWIP ) ) ) );
+    m_aExampleWin.SetRightMargin( static_cast<long>(m_xRightIndent->denormalize( m_xRightIndent->get_value( FieldUnit::TWIP ) ) ) );
+    m_aExampleWin.SetUpper( static_cast<sal_uInt16>(m_xTopDist->denormalize( m_xTopDist->get_value( FieldUnit::TWIP ) )) );
+    m_aExampleWin.SetLower( static_cast<sal_uInt16>(m_xBottomDist->denormalize( m_xBottomDist->get_value( FieldUnit::TWIP ) )) );
 
     int nPos = m_xLineDist->get_active();
 

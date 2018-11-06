@@ -54,7 +54,7 @@ All scalar numbers in 1/100 of the corresponding unit.
 
 Line1 is the outer, Line2 the inner line, Distance is the distance between
 these two lines. If Line2 == 0, only Line1 will be shown. Defaults for
-source and target unit are FUNIT_POINT.
+source and target unit are FieldUnit::POINT.
 
 SetColor() sets the line color.
 

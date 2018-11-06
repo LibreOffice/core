@@ -65,13 +65,13 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
     OUString sMetric;
     const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep()[0];
-    sal_Int64 nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, FUNIT_100TH_MM, eOutUnit );
+    sal_Int64 nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, FieldUnit::MM_100TH, eOutUnit );
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
         sMetric += "-";
     sMetric += OUString::number(nConvVal / 100);
 
-    if( FUNIT_NONE != eOutUnit )
+    if( FieldUnit::NONE != eOutUnit )
     {
         sMetric += OUStringLiteral1(cSep);
         sal_Int64 nFract = nConvVal % 100;

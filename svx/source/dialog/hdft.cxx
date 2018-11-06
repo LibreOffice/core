@@ -134,14 +134,14 @@ SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 n
     , m_xCntSharedBox(m_xBuilder->weld_check_button("checkSameLR"))
     , m_xCntSharedFirstBox(m_xBuilder->weld_check_button("checkSameFP"))
     , m_xLMLbl(m_xBuilder->weld_label("labelLeftMarg"))
-    , m_xLMEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FUNIT_CM))
+    , m_xLMEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FieldUnit::CM))
     , m_xRMLbl(m_xBuilder->weld_label("labelRightMarg"))
-    , m_xRMEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FUNIT_CM))
+    , m_xRMEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FieldUnit::CM))
     , m_xDistFT(m_xBuilder->weld_label("labelSpacing"))
-    , m_xDistEdit(m_xBuilder->weld_metric_spin_button("spinSpacing", FUNIT_CM))
+    , m_xDistEdit(m_xBuilder->weld_metric_spin_button("spinSpacing", FieldUnit::CM))
     , m_xDynSpacingCB(m_xBuilder->weld_check_button("checkDynSpacing"))
     , m_xHeightFT(m_xBuilder->weld_label("labelHeight"))
-    , m_xHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FUNIT_CM))
+    , m_xHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FieldUnit::CM))
     , m_xHeightDynBtn(m_xBuilder->weld_check_button("checkAutofit"))
     , m_xBackgroundBtn(m_xBuilder->weld_button("buttonMore"))
     , m_xBspWin(new weld::CustomWeld(*m_xBuilder, "drawingareaPageHF", m_aBspWin))
@@ -979,9 +979,9 @@ void SvxHFPage::RangeHdl()
     long nFDist   = m_aBspWin.GetFtDist();
 
     long nHeight = std::max(long(MINBODY),
-        static_cast<long>(m_xHeightEdit->denormalize(m_xHeightEdit->get_value(FUNIT_TWIP))));
+        static_cast<long>(m_xHeightEdit->denormalize(m_xHeightEdit->get_value(FieldUnit::TWIP))));
     long nDist   = m_xTurnOnBox->get_active() ?
-        static_cast<long>(m_xDistEdit->denormalize(m_xDistEdit->get_value(FUNIT_TWIP))) : 0;
+        static_cast<long>(m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP))) : 0;
 
     long nMin;
     long nMax;
@@ -1013,11 +1013,11 @@ void SvxHFPage::RangeHdl()
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nMax = std::max( nH - nMin - nHDist - nFDist - nFHeight - nBB - nBT,
                     nMin );
-        m_xHeightEdit->set_max(m_xHeightEdit->normalize(nMax), FUNIT_TWIP);
+        m_xHeightEdit->set_max(m_xHeightEdit->normalize(nMax), FieldUnit::TWIP);
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nDist = std::max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
                      long(0) );
-        m_xDistEdit->set_max(m_xDistEdit->normalize(nDist), FUNIT_TWIP);
+        m_xDistEdit->set_max(m_xDistEdit->normalize(nDist), FieldUnit::TWIP);
     }
     else
     {
@@ -1025,21 +1025,21 @@ void SvxHFPage::RangeHdl()
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nMax = std::max( nH - nMin - nFDist - nHDist - nHHeight - nBT - nBB,
                     nMin );
-        m_xHeightEdit->set_max(m_xHeightEdit->normalize(nMax), FUNIT_TWIP);
+        m_xHeightEdit->set_max(m_xHeightEdit->normalize(nMax), FieldUnit::TWIP);
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nDist = std::max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
                      long(0) );
-        m_xDistEdit->set_max(m_xDistEdit->normalize(nDist), FUNIT_TWIP);
+        m_xDistEdit->set_max(m_xDistEdit->normalize(nDist), FieldUnit::TWIP);
     }
 
     // Limit Indentation
     nMax = nW - nBL - nBR -
-           static_cast<long>(m_xRMEdit->denormalize(m_xRMEdit->get_value(FUNIT_TWIP))) - MINBODY;
-    m_xLMEdit->set_max(m_xLMEdit->normalize(nMax), FUNIT_TWIP);
+           static_cast<long>(m_xRMEdit->denormalize(m_xRMEdit->get_value(FieldUnit::TWIP))) - MINBODY;
+    m_xLMEdit->set_max(m_xLMEdit->normalize(nMax), FieldUnit::TWIP);
 
     nMax = nW - nBL - nBR -
-           static_cast<long>(m_xLMEdit->denormalize(m_xLMEdit->get_value(FUNIT_TWIP))) - MINBODY;
-    m_xRMEdit->set_max(m_xLMEdit->normalize(nMax), FUNIT_TWIP);
+           static_cast<long>(m_xLMEdit->denormalize(m_xLMEdit->get_value(FieldUnit::TWIP))) - MINBODY;
+    m_xRMEdit->set_max(m_xLMEdit->normalize(nMax), FieldUnit::TWIP);
 }
 
 void SvxHFPage::EnableDynamicSpacing()

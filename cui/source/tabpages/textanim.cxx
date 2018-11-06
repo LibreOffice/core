@@ -103,9 +103,9 @@ SvxTextAnimationPage::SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet
     , m_xTsbEndless(m_xBuilder->weld_check_button("TSB_ENDLESS"))
     , m_xNumFldCount(m_xBuilder->weld_spin_button("NUM_FLD_COUNT"))
     , m_xTsbPixel(m_xBuilder->weld_check_button("TSB_PIXEL"))
-    , m_xMtrFldAmount(m_xBuilder->weld_metric_spin_button("MTR_FLD_AMOUNT", FUNIT_PIXEL))
+    , m_xMtrFldAmount(m_xBuilder->weld_metric_spin_button("MTR_FLD_AMOUNT", FieldUnit::PIXEL))
     , m_xTsbAuto(m_xBuilder->weld_check_button("TSB_AUTO"))
-    , m_xMtrFldDelay(m_xBuilder->weld_metric_spin_button("MTR_FLD_DELAY", FUNIT_MILLISECOND))
+    , m_xMtrFldDelay(m_xBuilder->weld_metric_spin_button("MTR_FLD_DELAY", FieldUnit::MILLISECOND))
 {
     eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rOutAttrs.GetPool();
@@ -248,7 +248,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     {
         m_xTsbAuto->set_inconsistent(false);
         long nValue = static_cast<long>(static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue());
-        m_xMtrFldDelay->set_value(nValue, FUNIT_NONE);
+        m_xMtrFldDelay->set_value(nValue, FieldUnit::NONE);
         if( nValue == 0 )
         {
             m_xTsbAuto->set_state( TRISTATE_TRUE );
@@ -279,12 +279,12 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
             nValue = -nValue;
             if( nValue == 0 )
                 nValue++;
-            m_xMtrFldAmount->set_unit( FUNIT_CUSTOM );
+            m_xMtrFldAmount->set_unit( FieldUnit::CUSTOM );
             m_xMtrFldAmount->set_digits(0);
 
-            m_xMtrFldAmount->set_increments(1, 10, FUNIT_NONE);
-            m_xMtrFldAmount->set_range(1, 100, FUNIT_NONE);
-            m_xMtrFldAmount->set_value(nValue, FUNIT_NONE);
+            m_xMtrFldAmount->set_increments(1, 10, FieldUnit::NONE);
+            m_xMtrFldAmount->set_range(1, 100, FieldUnit::NONE);
+            m_xMtrFldAmount->set_value(nValue, FieldUnit::NONE);
         }
         else
         {
@@ -292,8 +292,8 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
             m_xMtrFldAmount->set_unit( eFUnit );
             m_xMtrFldAmount->set_digits(2);
 
-            m_xMtrFldAmount->set_increments(10, 100, FUNIT_NONE);
-            m_xMtrFldAmount->set_range(1, 10000, FUNIT_NONE);
+            m_xMtrFldAmount->set_increments(10, 100, FieldUnit::NONE);
+            m_xMtrFldAmount->set_range(1, 10000, FieldUnit::NONE);
 
             SetMetricValue( *m_xMtrFldAmount, nValue, eUnit );
         }
@@ -391,7 +391,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
         {
             if( m_xMtrFldDelay->get_value_changed_from_saved() )
             {
-                nValue = m_xMtrFldDelay->get_value(FUNIT_NONE);
+                nValue = m_xMtrFldDelay->get_value(FieldUnit::NONE);
                 bModified = true;
             }
         }
@@ -407,7 +407,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE )
         {
-            nValue = m_xMtrFldAmount->get_value(FUNIT_NONE);
+            nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE);
             nValue = -nValue;
         }
         else
@@ -519,7 +519,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::Button&, void)
     else
     {
         m_xMtrFldDelay->set_sensitive(true);
-        m_xMtrFldDelay->set_value(m_xMtrFldDelay->get_value(FUNIT_NONE), FUNIT_NONE); //to-do
+        m_xMtrFldDelay->set_value(m_xMtrFldDelay->get_value(FieldUnit::NONE), FieldUnit::NONE); //to-do
     }
 }
 
@@ -528,27 +528,27 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Button&, void)
     TriState eState = m_xTsbPixel->get_state();
     if (eState == TRISTATE_TRUE)
     {
-        int nValue = m_xMtrFldAmount->get_value(FUNIT_NONE) / 10;
+        int nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) / 10;
         m_xMtrFldAmount->set_sensitive(true);
-        m_xMtrFldAmount->set_unit(FUNIT_CUSTOM);
+        m_xMtrFldAmount->set_unit(FieldUnit::CUSTOM);
         m_xMtrFldAmount->set_digits(0);
 
-        m_xMtrFldAmount->set_increments(1, 10, FUNIT_NONE);
-        m_xMtrFldAmount->set_range(1, 100, FUNIT_NONE);
+        m_xMtrFldAmount->set_increments(1, 10, FieldUnit::NONE);
+        m_xMtrFldAmount->set_range(1, 100, FieldUnit::NONE);
 
-        m_xMtrFldAmount->set_value(nValue, FUNIT_NONE);
+        m_xMtrFldAmount->set_value(nValue, FieldUnit::NONE);
     }
     else if( eState == TRISTATE_FALSE )
     {
-        int nValue = m_xMtrFldAmount->get_value(FUNIT_NONE) * 10;
+        int nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) * 10;
         m_xMtrFldAmount->set_sensitive(true);
         m_xMtrFldAmount->set_unit(eFUnit);
         m_xMtrFldAmount->set_digits(2);
 
-        m_xMtrFldAmount->set_increments(10, 100, FUNIT_NONE);
-        m_xMtrFldAmount->set_range(1, 10000, FUNIT_NONE);
+        m_xMtrFldAmount->set_increments(10, 100, FieldUnit::NONE);
+        m_xMtrFldAmount->set_range(1, 10000, FieldUnit::NONE);
 
-        m_xMtrFldAmount->set_value(nValue, FUNIT_NONE);
+        m_xMtrFldAmount->set_value(nValue, FieldUnit::NONE);
     }
 }
 
