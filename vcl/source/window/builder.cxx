@@ -1490,12 +1490,7 @@ void VclBuilder::preload()
 }
 
 #if defined DISABLE_DYNLOADING && !HAVE_FEATURE_DESKTOP
-
-VCL_BUILDER_FACTORY_EXTERN(CustomPropertiesControl);
-VCL_BUILDER_FACTORY_EXTERN(RefButton);
-VCL_BUILDER_FACTORY_EXTERN(RefEdit);
-VCL_BUILDER_FACTORY_EXTERN(ScRefButtonEx);
-
+extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
 #endif
 
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
@@ -2051,18 +2046,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             else
                 pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
 #elif !HAVE_FEATURE_DESKTOP
-            if (false)
-                ; // Just so that all the other condition line pairs look the same
-            else if (sFunction == "makeCustomPropertiesControl")
-                pFunction = makeCustomPropertiesControl;
-            else if (sFunction == "makeRefButton")
-                pFunction = makeRefButton;
-            else if (sFunction == "makeRefEdit")
-                pFunction = makeRefEdit;
-            else if (sFunction == "makeScRefButtonEx")
-                pFunction = makeScRefButtonEx;
-
-            SAL_WARN_IF(!pFunction, "vcl.layout", "Missing case for " << sFunction);
+            pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());
+            SAL_WARN_IF(!pFunction, "vcl.layout", "Could not find " << sFunction);
             assert(pFunction);
 #else
             pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));

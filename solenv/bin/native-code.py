@@ -396,6 +396,138 @@ constructor_map = {
     'writer' : writer_constructor_list,
     }
 
+custom_widgets = [
+    'ArgEdit',
+    'AutoCompleteMultiListBox',
+    'AutoCorrEdit',
+    'BookmarksBox',
+    'CaptionComboBox',
+    'CategoryListBox',
+    'ClassificationEditView',
+    'ColorConfigCtrl',
+    'ColumnEdit',
+    'CommandCategoryListBox',
+    'ConditionEdit',
+    'ContentListBox',
+    'ContextVBox',
+    'CuiCustomMultilineEdit',
+    'CustomAnimationList',
+    'CustomPropertiesControl',
+    'DataTreeListBox',
+    'DriverListControl',
+    'DropdownBox',
+    'EditBox',
+    'EmojiView',
+    'ExtBoxWithBtns',
+    'ExtensionBox',
+    'FEdit',
+    'FontNameBox',
+    'FontSizeBox',
+    'FontStyleBox',
+    'FormattedField',
+    'FormulaListBox',
+    'GalleryPreview',
+    'IndexBox',
+    'IndexBox',
+    'IntellectualPropertyPartEdit',
+    'LightButton',
+    'LookUpComboBox',
+    'MacroEventListBox',
+    'ManagedMenuButton',
+    'MultiLineEditSyntaxHighlight',
+    'NumFormatListBox',
+    'OFileURLControl',
+    'OptionalBox',
+    'PageNumberListBox',
+    'PaperSizeListBox',
+    'PriorityHBox',
+    'PriorityMergedHBox',
+    'PropertyControl',
+    'RecentDocsView',
+    'RefButton',
+    'RefEdit',
+    'ReplaceEdit',
+    'ReturnActionEdit',
+    'RowEdit',
+    'RubyEdit',
+    'RubyPreview',
+    'RubyRadioButton',
+    'SFTreeListBox',
+    'SameContentListBox',
+    'ScAutoFmtPreview',
+    'ScCondFormatList',
+    'ScCsvTableBox',
+    'ScCursorRefEdit',
+    'ScDPFunctionListBox',
+    'ScDataTableView',
+    'ScDoubleField',
+    'ScEditWindow',
+    'ScPivotLayoutTreeList',
+    'ScPivotLayoutTreeListData',
+    'ScPivotLayoutTreeListLabel',
+    'ScRefButtonEx',
+    'SdPageObjsTLB',
+    'SearchBox',
+    'SearchResultsBox',
+    'SelectionListBox',
+    'SentenceEditWindow',
+    'SeriesListBox',
+    'SfxAccCfgTabListBox',
+    'SfxConfigFunctionListBox',
+    'SfxConfigGroupListBox',
+    'ShowNupOrderWindow',
+    'ShowNupOrderWindow',
+    'SidebarDialControl',
+    'SidebarToolBox',
+    'SmallButton',
+    'SpacingListBox',
+    'StatusBar',
+    'StructListBox',
+    'SuggestionDisplay',
+    'SuggestionEdit',
+    'SvSimpleTableContainer',
+    'SvTabListBox',
+    'SvTreeListBox',
+    'SvtFileView',
+    'SvtIconChoiceCtrl',
+    'SvtURLBox',
+    'Svx3DPreviewControl',
+    'SvxCharViewControl',
+    'SvxCheckListBox',
+    'SvxColorListBox',
+    'SvxColorValueSet',
+    'SvxDictEdit',
+    'SvxFillAttrBox',
+    'SvxFillTypeBox',
+    'SvxFontPrevWindow',
+    'SvxHlmarkTreeLBox',
+    'SvxHyperURLBox',
+    'SvxLanguageBox',
+    'SvxLanguageComboBox',
+    'SvxLightCtl3D',
+    'SvxNoSpaceEdit',
+    'SvxPathControl',
+    'SvxRelativeField',
+    'SvxSwFrameExample',
+    'SvxTextEncodingBox',
+    'SvxTextEncodingBox',
+    'SwAddressPreview',
+    'SwCaptionPreview',
+    'SwFieldRefTreeListBox',
+    'SwGlTreeListBox',
+    'SwGlossaryGroupTLB',
+    'SwIdxTreeListBox',
+    'SwMarkPreview',
+    'SwNavHelpToolBox',
+    'SwTokenWindow',
+    'TableValueSet',
+    'TemplateDefaultView',
+    'TemplateLocalView',
+    'TemplateSearchView',
+    'ThesaurusAlternativesCtrl',
+    'ValueSet',
+    ]
+
 def get_constructor_guard(constructor):
     if type(full_constructor_map[constructor]) is bool:
         return None
@@ -500,6 +632,24 @@ for constructor in sorted(full_constructor_map.keys()):
     print ('void * '+constructor+'( void *, void * );')
     if constructor_guard:
         print ('#endif')
+
+print ('')
+for entry in sorted(custom_widgets):
+    print ('void make' + entry + '();')
+print ('static struct { const char *name; void(*func)(); } custom_widgets[] = {')
+for entry in sorted(custom_widgets):
+    print ('    { "make' + entry + '", make' + entry + ' },')
+print ('};')
+print ('')
+print ("""
+void (*lo_get_custom_widget_func(const char* name))()
+{
+    for (int i = 0; i < sizeof(custom_widgets) / sizeof(custom_widgets[0]); i++)
+        if (strcmp(name, custom_widgets[i].name) == 0)
+            return custom_widgets[i].func;
+    return nullptr;
+}
+""")
 
 print ("""
 const lib_to_factory_mapping *
