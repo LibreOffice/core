@@ -43,7 +43,6 @@ public:
     void testDBConnection();
     void testCreateAndDropTable();
     void testIntegerInsertAndQuery();
-    void testDBPositionChange();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
@@ -171,53 +170,6 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
         CPPUNIT_ASSERT_MESSAGE("not enough result after query", hasRow);
         CPPUNIT_ASSERT_EQUAL(i, xRow->getLong(1)); // first and only column
     }
-
-    nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
-    CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
-}
-
-void MysqlTestDriver::testDBPositionChange()
-{
-    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
-    if (!xConnection.is())
-    {
-        CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
-    }
-
-    Reference<XStatement> xStatement = xConnection->createStatement();
-    CPPUNIT_ASSERT(xStatement.is());
-
-    auto nUpdateCount
-        = xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY)");
-    CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
-    Reference<XPreparedStatement> xPrepared
-        = xConnection->prepareStatement(OUString{ "INSERT INTO myTestTable VALUES (?)" });
-    Reference<XParameters> xParams(xPrepared, UNO_QUERY);
-    constexpr int ROW_COUNT = 3;
-    for (int i = 1; i <= ROW_COUNT; ++i)
-    {
-        xParams->setLong(1, i); // first and only column
-        nUpdateCount = xPrepared->executeUpdate();
-        CPPUNIT_ASSERT_EQUAL(1, nUpdateCount); // one row is inserted at a time
-    }
-    Reference<XResultSet> xResultSet = xStatement->executeQuery("SELECT id from myTestTable");
-    CPPUNIT_ASSERT_MESSAGE("result set cannot be instantiated after query", xResultSet.is());
-    Reference<XRow> xRow(xResultSet, UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xRow.is());
-
-    xResultSet->afterLast();
-    CPPUNIT_ASSERT_EQUAL(ROW_COUNT + 1, xResultSet->getRow());
-    xResultSet->last();
-    CPPUNIT_ASSERT_EQUAL(ROW_COUNT, nUpdateCount);
-    CPPUNIT_ASSERT_EQUAL(ROW_COUNT, xResultSet->getRow());
-    bool successPrevios = xResultSet->previous();
-    CPPUNIT_ASSERT(successPrevios);
-    CPPUNIT_ASSERT_EQUAL(ROW_COUNT - 1, nUpdateCount);
-    xResultSet->beforeFirst();
-    xResultSet->next();
-    CPPUNIT_ASSERT_EQUAL(1, xResultSet->getRow());
-    xResultSet->first();
-    CPPUNIT_ASSERT_EQUAL(1, xResultSet->getRow());
 
     nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
     CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
