@@ -24,17 +24,17 @@
 
 const std::pair<const char*, FieldUnit> STR_ARR_METRIC[] =
 {
-    { NC_("STR_ARR_METRIC", "Millimeter") , FUNIT_MM },
-    { NC_("STR_ARR_METRIC", "Centimeter") , FUNIT_CM },
-    { NC_("STR_ARR_METRIC", "Meter") , FUNIT_M },
-    { NC_("STR_ARR_METRIC", "Kilometer") , FUNIT_KM },
-    { NC_("STR_ARR_METRIC", "Inch") , FUNIT_INCH },
-    { NC_("STR_ARR_METRIC", "Foot") , FUNIT_FOOT },
-    { NC_("STR_ARR_METRIC", "Miles") , FUNIT_MILE },
-    { NC_("STR_ARR_METRIC", "Pica") , FUNIT_PICA },
-    { NC_("STR_ARR_METRIC", "Point") , FUNIT_POINT },
-    { NC_("STR_ARR_METRIC", "Char") , FUNIT_CHAR },
-    { NC_("STR_ARR_METRIC", "Line") , FUNIT_LINE }
+    { NC_("STR_ARR_METRIC", "Millimeter") , FieldUnit::MM },
+    { NC_("STR_ARR_METRIC", "Centimeter") , FieldUnit::CM },
+    { NC_("STR_ARR_METRIC", "Meter") , FieldUnit::M },
+    { NC_("STR_ARR_METRIC", "Kilometer") , FieldUnit::KM },
+    { NC_("STR_ARR_METRIC", "Inch") , FieldUnit::INCH },
+    { NC_("STR_ARR_METRIC", "Foot") , FieldUnit::FOOT },
+    { NC_("STR_ARR_METRIC", "Miles") , FieldUnit::MILE },
+    { NC_("STR_ARR_METRIC", "Pica") , FieldUnit::PICA },
+    { NC_("STR_ARR_METRIC", "Point") , FieldUnit::POINT },
+    { NC_("STR_ARR_METRIC", "Char") , FieldUnit::CHAR },
+    { NC_("STR_ARR_METRIC", "Line") , FieldUnit::LINE }
 };
 
 #endif

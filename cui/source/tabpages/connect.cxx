@@ -75,15 +75,15 @@ SvxConnectionPage::SvxConnectionPage(TabPageParent pWindow, const SfxItemSet& rI
     , pView(nullptr)
     , m_xLbType(m_xBuilder->weld_combo_box("LB_TYPE"))
     , m_xFtLine1(m_xBuilder->weld_label("FT_LINE_1"))
-    , m_xMtrFldLine1(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_1", FUNIT_CM))
+    , m_xMtrFldLine1(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_1", FieldUnit::CM))
     , m_xFtLine2(m_xBuilder->weld_label("FT_LINE_2"))
-    , m_xMtrFldLine2(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_2", FUNIT_CM))
+    , m_xMtrFldLine2(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_2", FieldUnit::CM))
     , m_xFtLine3(m_xBuilder->weld_label("FT_LINE_3"))
-    , m_xMtrFldLine3(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_3", FUNIT_CM))
-    , m_xMtrFldHorz1(m_xBuilder->weld_metric_spin_button("MTR_FLD_HORZ_1", FUNIT_MM))
-    , m_xMtrFldVert1(m_xBuilder->weld_metric_spin_button("MTR_FLD_VERT_1", FUNIT_MM))
-    , m_xMtrFldHorz2(m_xBuilder->weld_metric_spin_button("MTR_FLD_HORZ_2", FUNIT_MM))
-    , m_xMtrFldVert2(m_xBuilder->weld_metric_spin_button("MTR_FLD_VERT_2", FUNIT_MM))
+    , m_xMtrFldLine3(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_3", FieldUnit::CM))
+    , m_xMtrFldHorz1(m_xBuilder->weld_metric_spin_button("MTR_FLD_HORZ_1", FieldUnit::MM))
+    , m_xMtrFldVert1(m_xBuilder->weld_metric_spin_button("MTR_FLD_VERT_1", FieldUnit::MM))
+    , m_xMtrFldHorz2(m_xBuilder->weld_metric_spin_button("MTR_FLD_HORZ_2", FieldUnit::MM))
+    , m_xMtrFldVert2(m_xBuilder->weld_metric_spin_button("MTR_FLD_VERT_2", FieldUnit::MM))
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
 {
     SfxItemPool* pPool = rOutAttrs.GetPool();
@@ -100,15 +100,15 @@ SvxConnectionPage::SvxConnectionPage(TabPageParent pWindow, const SfxItemSet& rI
     SetFieldUnit( *m_xMtrFldLine1, eFUnit );
     SetFieldUnit( *m_xMtrFldLine2, eFUnit );
     SetFieldUnit( *m_xMtrFldLine3, eFUnit );
-    if( eFUnit == FUNIT_MM )
+    if( eFUnit == FieldUnit::MM )
     {
-        m_xMtrFldHorz1->set_increments(50, 500, FUNIT_NONE);
-        m_xMtrFldHorz2->set_increments(50, 500, FUNIT_NONE);
-        m_xMtrFldVert1->set_increments(50, 500, FUNIT_NONE);
-        m_xMtrFldVert2->set_increments(50, 500, FUNIT_NONE);
-        m_xMtrFldLine1->set_increments(50, 500, FUNIT_NONE);
-        m_xMtrFldLine2->set_increments(50, 500, FUNIT_NONE);
-        m_xMtrFldLine3->set_increments(50, 500, FUNIT_NONE);
+        m_xMtrFldHorz1->set_increments(50, 500, FieldUnit::NONE);
+        m_xMtrFldHorz2->set_increments(50, 500, FieldUnit::NONE);
+        m_xMtrFldVert1->set_increments(50, 500, FieldUnit::NONE);
+        m_xMtrFldVert2->set_increments(50, 500, FieldUnit::NONE);
+        m_xMtrFldLine1->set_increments(50, 500, FieldUnit::NONE);
+        m_xMtrFldLine2->set_increments(50, 500, FieldUnit::NONE);
+        m_xMtrFldLine3->set_increments(50, 500, FieldUnit::NONE);
     }
 
     Link<weld::MetricSpinButton&,void> aLink(LINK(this, SvxConnectionPage, ChangeAttrEditHdl_Impl));
@@ -337,21 +337,21 @@ IMPL_LINK_NOARG(SvxConnectionPage, ChangeAttrListBoxHdl_Impl, weld::ComboBox&, v
     m_xFtLine3->set_sensitive( nCount > 2 );
     m_xMtrFldLine3->set_sensitive( nCount > 2 );
     if( nCount > 2 )
-        m_xMtrFldLine3->set_value(m_xMtrFldLine3->get_value(FUNIT_NONE), FUNIT_NONE);
+        m_xMtrFldLine3->set_value(m_xMtrFldLine3->get_value(FieldUnit::NONE), FieldUnit::NONE);
     else
         m_xMtrFldLine3->set_text("");
 
     m_xFtLine2->set_sensitive( nCount > 1 );
     m_xMtrFldLine2->set_sensitive( nCount > 1 );
     if( nCount > 1 )
-        m_xMtrFldLine2->set_value(m_xMtrFldLine2->get_value(FUNIT_NONE), FUNIT_NONE);
+        m_xMtrFldLine2->set_value(m_xMtrFldLine2->get_value(FieldUnit::NONE), FieldUnit::NONE);
     else
         m_xMtrFldLine2->set_text("");
 
     m_xFtLine1->set_sensitive( nCount > 0 );
     m_xMtrFldLine1->set_sensitive( nCount > 0 );
     if( nCount > 0 )
-        m_xMtrFldLine1->set_value(m_xMtrFldLine1->get_value(FUNIT_NONE), FUNIT_NONE);
+        m_xMtrFldLine1->set_value(m_xMtrFldLine1->get_value(FieldUnit::NONE), FieldUnit::NONE);
     else
         m_xMtrFldLine1->set_text("");
 }

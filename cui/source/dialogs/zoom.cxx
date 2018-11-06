@@ -39,7 +39,7 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
         return 100;
 
     if (m_xUserBtn->get_active())
-        return static_cast<sal_uInt16>(m_xUserEdit->get_value(FUNIT_PERCENT));
+        return static_cast<sal_uInt16>(m_xUserEdit->get_value(FieldUnit::PERCENT));
     else
         return SPECIAL_FACTOR;
 }
@@ -59,13 +59,13 @@ void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, ZoomButtonId nButtonId)
         {
             m_xUserBtn->set_active(true);
             m_xUserEdit->set_sensitive(true);
-            m_xUserEdit->set_value(nNewFactor, FUNIT_PERCENT);
+            m_xUserEdit->set_value(nNewFactor, FieldUnit::PERCENT);
             m_xUserEdit->grab_focus();
         }
     }
     else
     {
-        m_xUserEdit->set_value(nNewFactor, FUNIT_PERCENT);
+        m_xUserEdit->set_value(nNewFactor, FieldUnit::PERCENT);
         switch(nButtonId)
         {
             case ZoomButtonId::OPTIMAL:
@@ -115,7 +115,7 @@ void SvxZoomDialog::HideButton(ZoomButtonId nButtonId)
 void SvxZoomDialog::SetLimits(sal_uInt16 nMin, sal_uInt16 nMax)
 {
     DBG_ASSERT(nMin < nMax, "invalid limits");
-    m_xUserEdit->set_range(nMin, nMax, FUNIT_PERCENT);
+    m_xUserEdit->set_range(nMin, nMax, FieldUnit::PERCENT);
 }
 
 const SfxItemSet* SvxZoomDialog::GetOutputItemSet() const
@@ -132,7 +132,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     , m_xPageWidthBtn(m_xBuilder->weld_radio_button("fitw"))
     , m_x100Btn(m_xBuilder->weld_radio_button("100pc"))
     , m_xUserBtn(m_xBuilder->weld_radio_button("variable"))
-    , m_xUserEdit(m_xBuilder->weld_metric_spin_button("zoomsb", FUNIT_PERCENT))
+    , m_xUserEdit(m_xBuilder->weld_metric_spin_button("zoomsb", FieldUnit::PERCENT))
     , m_xViewFrame(m_xBuilder->weld_widget("viewframe"))
     , m_xAutomaticBtn(m_xBuilder->weld_radio_button("automatic"))
     , m_xSingleBtn(m_xBuilder->weld_radio_button("singlepage"))
@@ -184,7 +184,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
         nMax = nValue;
 
     SetLimits(nMin, nMax);
-    m_xUserEdit->set_value(nValue, FUNIT_PERCENT);
+    m_xUserEdit->set_value(nValue, FieldUnit::PERCENT);
 
     const SfxPoolItem& rItem = m_rSet.Get(m_rSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
 
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, OKHdl, weld::Button&, void)
 
         if (pShell)
         {
-            sal_uInt16 nZoomValue = static_cast<sal_uInt16>(m_xUserEdit->get_value(FUNIT_PERCENT));
+            sal_uInt16 nZoomValue = static_cast<sal_uInt16>(m_xUserEdit->get_value(FieldUnit::PERCENT));
             pShell->PutItem(SfxUInt16Item(SID_ATTR_ZOOM_USER, nZoomValue));
         }
         m_xDialog->response(RET_OK);

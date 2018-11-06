@@ -32,7 +32,7 @@ private:
 public:
     HtmlExportTest() :
         SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)"),
-        m_eUnit(FUNIT_NONE)
+        m_eUnit(FieldUnit::NONE)
     {}
 
     /**
@@ -93,7 +93,7 @@ private:
                 }));
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
             m_eUnit = pPref->GetMetric();
-            pPref->SetMetric(FUNIT_CM);
+            pPref->SetMetric(FieldUnit::CM);
             return pResetter;
         }
         return nullptr;

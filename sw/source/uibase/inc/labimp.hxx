@@ -28,17 +28,17 @@
 #include "label.hxx"
 #include "labimg.hxx"
 
-#define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
-#define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
+#define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
+#define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::TWIP)
 
 inline int getfldval(weld::MetricSpinButton& rField)
 {
-    return rField.denormalize(rField.get_value(FUNIT_TWIP));
+    return rField.denormalize(rField.get_value(FieldUnit::TWIP));
 }
 
 inline void setfldval(weld::MetricSpinButton& rField, int lValue)
 {
-    rField.set_value(rField.normalize(lValue), FUNIT_TWIP);
+    rField.set_value(rField.normalize(lValue), FieldUnit::TWIP);
 }
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX

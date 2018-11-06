@@ -129,10 +129,10 @@ void PageFormatPanel::Initialize()
     aCustomEntry = mpCustomEntry->GetText();
 
     const SvtOptionsDrawinglayer aDrawinglayerOpt;
-    mpPaperWidth->SetMax(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
-    mpPaperWidth->SetLast(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
-    mpPaperHeight->SetMax(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
-    mpPaperHeight->SetLast(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
+    mpPaperWidth->SetMax(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
+    mpPaperWidth->SetLast(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
+    mpPaperHeight->SetMax(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
+    mpPaperHeight->SetLast(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
 
     mpPaperSizeBox->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
     mpPaperOrientation->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
@@ -166,8 +166,8 @@ void PageFormatPanel::NotifyItemUpdate(
             {
                 Size aPaperSize = pSizeItem->GetSize();
 
-                mpPaperWidth->SetValue( mpPaperWidth->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
-                mpPaperHeight->SetValue( mpPaperHeight->Normalize( aPaperSize.Height() ), FUNIT_TWIP );
+                mpPaperWidth->SetValue( mpPaperWidth->Normalize( aPaperSize.Width() ), FieldUnit::TWIP );
+                mpPaperHeight->SetValue( mpPaperHeight->Normalize( aPaperSize.Height() ), FieldUnit::TWIP );
 
                 if(mpPaperOrientation->GetSelectedEntryPos() == 1)
                    Swap(aPaperSize);
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
 
 FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
-    FieldUnit eUnit = FUNIT_NONE;
+    FieldUnit eUnit = FieldUnit::NONE;
 
     if ( pState && eState >= SfxItemState::DEFAULT )
         eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());

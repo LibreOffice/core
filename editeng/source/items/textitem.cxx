@@ -1043,7 +1043,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 
     if( MapUnit::MapRelative != eUnit )
         nHeight = nNewHeight + ::ItemToControl( short(nNewProp), eUnit,
-                                                FUNIT_TWIP );
+                                                FieldUnit::TWIP );
     else if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );
     else
@@ -1061,7 +1061,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
     if( MapUnit::MapRelative != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl(static_cast<short>(nNewProp), eMetric,
-                                        FUNIT_TWIP ), FUNIT_TWIP,
+                                        FieldUnit::TWIP ), FieldUnit::TWIP,
                                         eCoreMetric );
     else if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );

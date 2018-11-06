@@ -639,7 +639,7 @@ CharHeightPropertyBox::CharHeightPropertyBox(sal_Int32 nControlType, vcl::Window
     , maModifyHdl(rModifyHdl)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_PERCENT );
+    mpMetric->SetUnit( FieldUnit::PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
@@ -711,7 +711,7 @@ private:
 SdCharHeightPropertyBox::SdCharHeightPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxMetric(mxBuilder->weld_metric_spin_button("fontsize", FUNIT_PERCENT))
+    , mxMetric(mxBuilder->weld_metric_spin_button("fontsize", FieldUnit::PERCENT))
     , mxControl(mxBuilder->weld_menu_button("fontsizemenu"))
 {
     mxMetric->connect_value_changed(LINK(this, SdCharHeightPropertyBox, EditModifyHdl));
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(SdCharHeightPropertyBox, EditModifyHdl, weld::MetricSpinButton&,
 IMPL_LINK(SdCharHeightPropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
 {
     sal_Int32 nValue = rIdent.toInt32();
-    mxMetric->set_value(nValue, FUNIT_PERCENT);
+    mxMetric->set_value(nValue, FieldUnit::PERCENT);
     EditModifyHdl(*mxMetric);
 }
 
@@ -744,13 +744,13 @@ void SdCharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        mxMetric->set_value(static_cast<long>(fValue * 100.0), FUNIT_PERCENT);
+        mxMetric->set_value(static_cast<long>(fValue * 100.0), FieldUnit::PERCENT);
     }
 }
 
 Any SdCharHeightPropertyBox::getValue()
 {
-    return makeAny(static_cast<double>(mxMetric->get_value(FUNIT_PERCENT)) / 100.0);
+    return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
 }
 
 class TransparencyPropertyBox : public PropertySubControl
@@ -781,7 +781,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 , maModifyHdl( rModifyHdl )
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_PERCENT );
+    mpMetric->SetUnit( FieldUnit::PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 100 );
 
@@ -875,7 +875,7 @@ private:
 SdTransparencyPropertyBox::SdTransparencyPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxMetric(mxBuilder->weld_metric_spin_button("transparent", FUNIT_PERCENT))
+    , mxMetric(mxBuilder->weld_metric_spin_button("transparent", FieldUnit::PERCENT))
     , mxControl(mxBuilder->weld_menu_button("transparentmenu"))
 {
     for (sal_Int32 i = 25; i < 101; i += 25)
@@ -899,7 +899,7 @@ SdTransparencyPropertyBox::SdTransparencyPropertyBox(weld::Label* pLabel, weld::
 
 void SdTransparencyPropertyBox::updateMenu()
 {
-    sal_Int64 nValue = mxMetric->get_value(FUNIT_PERCENT);
+    sal_Int64 nValue = mxMetric->get_value(FieldUnit::PERCENT);
     for (sal_uInt16 i = 25; i < 101; i += 25)
         mxControl->set_item_active(OString::number(i), nValue == i);
 }
@@ -913,9 +913,9 @@ IMPL_LINK_NOARG(SdTransparencyPropertyBox, implModifyHdl, weld::MetricSpinButton
 IMPL_LINK(SdTransparencyPropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
 {
     auto nValue = rIdent.toInt32();
-    if (nValue != mxMetric->get_value(FUNIT_PERCENT))
+    if (nValue != mxMetric->get_value(FieldUnit::PERCENT))
     {
-        mxMetric->set_value(nValue, FUNIT_PERCENT);
+        mxMetric->set_value(nValue, FieldUnit::PERCENT);
         implModifyHdl(*mxMetric);
     }
 }
@@ -927,14 +927,14 @@ void SdTransparencyPropertyBox::setValue(const Any& rValue, const OUString&)
         double fValue = 0.0;
         rValue >>= fValue;
         long nValue = static_cast<long>(fValue * 100);
-        mxMetric->set_value(nValue, FUNIT_PERCENT);
+        mxMetric->set_value(nValue, FieldUnit::PERCENT);
         updateMenu();
     }
 }
 
 Any SdTransparencyPropertyBox::getValue()
 {
-    return makeAny(static_cast<double>(mxMetric->get_value(FUNIT_PERCENT)) / 100.0);
+    return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
 }
 
 class RotationPropertyBox : public PropertySubControl
@@ -967,7 +967,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
     , maModifyHdl(rModifyHdl)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_CUSTOM );
+    mpMetric->SetUnit( FieldUnit::CUSTOM );
     mpMetric->SetCustomUnitText( OUString( u'\x00b0') ); // degree sign
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
@@ -1079,7 +1079,7 @@ private:
 SdRotationPropertyBox::SdRotationPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxMetric(mxBuilder->weld_metric_spin_button("rotate", FUNIT_DEGREE))
+    , mxMetric(mxBuilder->weld_metric_spin_button("rotate", FieldUnit::DEGREE))
     , mxControl(mxBuilder->weld_menu_button("rotatemenu"))
 {
     mxMetric->connect_value_changed(LINK( this, SdRotationPropertyBox, implModifyHdl));
@@ -1096,7 +1096,7 @@ SdRotationPropertyBox::SdRotationPropertyBox(weld::Label* pLabel, weld::Containe
 
 void SdRotationPropertyBox::updateMenu()
 {
-    sal_Int64 nValue = mxMetric->get_value(FUNIT_DEGREE);
+    sal_Int64 nValue = mxMetric->get_value(FieldUnit::DEGREE);
     bool bDirection = nValue >= 0;
     nValue = (nValue < 0 ? -nValue : nValue);
 
@@ -1117,7 +1117,7 @@ IMPL_LINK_NOARG(SdRotationPropertyBox, implModifyHdl, weld::MetricSpinButton&, v
 
 IMPL_LINK(SdRotationPropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
 {
-    auto nValue = mxMetric->get_value(FUNIT_DEGREE);
+    auto nValue = mxMetric->get_value(FieldUnit::DEGREE);
     bool bDirection = nValue >= 0;
     nValue = (nValue < 0 ? -nValue : nValue);
 
@@ -1131,9 +1131,9 @@ IMPL_LINK(SdRotationPropertyBox, implMenuSelectHdl, const OString&, rIdent, void
     if( !bDirection )
         nValue = -nValue;
 
-    if (nValue != mxMetric->get_value(FUNIT_DEGREE))
+    if (nValue != mxMetric->get_value(FieldUnit::DEGREE))
     {
-        mxMetric->set_value(nValue, FUNIT_DEGREE);
+        mxMetric->set_value(nValue, FieldUnit::DEGREE);
         implModifyHdl(*mxMetric);
     }
 }
@@ -1145,14 +1145,14 @@ void SdRotationPropertyBox::setValue( const Any& rValue, const OUString& )
         double fValue = 0.0;
         rValue >>= fValue;
         long nValue = static_cast<long>(fValue);
-        mxMetric->set_value(nValue, FUNIT_DEGREE);
+        mxMetric->set_value(nValue, FieldUnit::DEGREE);
         updateMenu();
     }
 }
 
 Any SdRotationPropertyBox::getValue()
 {
-    return makeAny(static_cast<double>(mxMetric->get_value(FUNIT_DEGREE)));
+    return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::DEGREE)));
 }
 
 class ScalePropertyBox : public PropertySubControl
@@ -1186,7 +1186,7 @@ ScalePropertyBox::ScalePropertyBox(sal_Int32 nControlType, vcl::Window* pParent,
     , maModifyHdl( rModifyHdl )
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_PERCENT );
+    mpMetric->SetUnit( FieldUnit::PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
@@ -1357,7 +1357,7 @@ private:
 SdScalePropertyBox::SdScalePropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl( rModifyHdl )
-    , mxMetric(mxBuilder->weld_metric_spin_button("scale", FUNIT_PERCENT))
+    , mxMetric(mxBuilder->weld_metric_spin_button("scale", FieldUnit::PERCENT))
     , mxControl(mxBuilder->weld_menu_button("scalemenu"))
 {
     mxControl->connect_selected(LINK(this, SdScalePropertyBox, implMenuSelectHdl));
@@ -1374,7 +1374,7 @@ SdScalePropertyBox::SdScalePropertyBox(weld::Label* pLabel, weld::Container* pPa
 
 void SdScalePropertyBox::updateMenu()
 {
-    auto nValue = mxMetric->get_value(FUNIT_PERCENT);
+    auto nValue = mxMetric->get_value(FieldUnit::PERCENT);
 
     mxControl->set_item_active("25scale", nValue == 25);
     mxControl->set_item_active("50scale", nValue == 50);
@@ -1394,7 +1394,7 @@ IMPL_LINK_NOARG(SdScalePropertyBox, implModifyHdl, weld::MetricSpinButton&, void
 
 IMPL_LINK(SdScalePropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
 {
-    auto nValue = mxMetric->get_value(FUNIT_PERCENT);
+    auto nValue = mxMetric->get_value(FieldUnit::PERCENT);
 
     int nDirection = mnDirection;
 
@@ -1415,9 +1415,9 @@ IMPL_LINK(SdScalePropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
         bModified = true;
     }
 
-    if (nValue != mxMetric->get_value(FUNIT_PERCENT))
+    if (nValue != mxMetric->get_value(FieldUnit::PERCENT))
     {
-        mxMetric->set_value(nValue, FUNIT_PERCENT);
+        mxMetric->set_value(nValue, FieldUnit::PERCENT);
         bModified = true;
     }
 
@@ -1462,14 +1462,14 @@ void SdScalePropertyBox::setValue(const Any& rValue, const OUString&)
             nValue = static_cast<long>(fValue1 * 100.0);
         else
             nValue = static_cast<long>(fValue2 * 100.0);
-        mxMetric->set_value(nValue, FUNIT_PERCENT);
+        mxMetric->set_value(nValue, FieldUnit::PERCENT);
         updateMenu();
     }
 }
 
 Any SdScalePropertyBox::getValue()
 {
-    double fValue1 = static_cast<double>(mxMetric->get_value(FUNIT_PERCENT)) / 100.0;
+    double fValue1 = static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0;
 
     // Shrink animation is represented by value < 1 (< 100%)
     // Shrink factor is calculated as (1 + $fValue)
@@ -1783,7 +1783,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
     , mxCLBDimColor(new ColorListBox(mxBuilder->weld_menu_button("dim_color_list"), pDialog))
     , mxFTTextAnim(mxBuilder->weld_label("text_animation_label"))
     , mxLBTextAnim(mxBuilder->weld_combo_box("text_animation_list"))
-    , mxMFTextDelay(mxBuilder->weld_metric_spin_button("text_delay", FUNIT_PERCENT))
+    , mxMFTextDelay(mxBuilder->weld_metric_spin_button("text_delay", FieldUnit::PERCENT))
     , mxFTTextDelay(mxBuilder->weld_label("text_delay_label"))
 {
     mxCLBDimColor->SelectEntry(COL_BLACK);
@@ -1908,7 +1908,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
         {
             double fIterateInterval = 0.0;
             pSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
-            mxMFTextDelay->set_value(static_cast<long>(fIterateInterval*10), FUNIT_NONE);
+            mxMFTextDelay->set_value(static_cast<long>(fIterateInterval*10), FieldUnit::NONE);
         }
     }
     else
@@ -1997,8 +1997,8 @@ void CustomAnimationEffectTabPage::implHdl(const weld::Widget* pControl)
 {
     if (pControl == mxLBTextAnim.get())
     {
-        if (mxMFTextDelay->get_value(FUNIT_NONE) == 0)
-            mxMFTextDelay->set_value(100, FUNIT_NONE);
+        if (mxMFTextDelay->get_value(FieldUnit::NONE) == 0)
+            mxMFTextDelay->set_value(100, FieldUnit::NONE);
     }
     else if (pControl == mxLBSound.get())
     {
@@ -2115,7 +2115,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
     }
 
     {
-        double fIterateInterval = static_cast<double>(mxMFTextDelay->get_value(FUNIT_NONE)) / 10;
+        double fIterateInterval = static_cast<double>(mxMFTextDelay->get_value(FieldUnit::NONE)) / 10;
         double fOldIterateInterval = -1.0;
 
         if( mpSet->getPropertyState( nHandleIterateInterval ) != STLPropertyState::Ambiguous )
@@ -2295,9 +2295,9 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     , mxFTStart(mxBuilder->weld_label("start_label"))
     , mxLBStart(mxBuilder->weld_combo_box("start_list"))
     , mxFTStartDelay(mxBuilder->weld_label("delay_label"))
-    , mxMFStartDelay(mxBuilder->weld_metric_spin_button("delay_value", FUNIT_SECOND))
+    , mxMFStartDelay(mxBuilder->weld_metric_spin_button("delay_value", FieldUnit::SECOND))
     , mxFTDuration(mxBuilder->weld_label("duration_label"))
-    , mxCBXDuration(mxBuilder->weld_metric_spin_button("anim_duration", FUNIT_SECOND))
+    , mxCBXDuration(mxBuilder->weld_metric_spin_button("anim_duration", FieldUnit::SECOND))
     , mxFTRepeat(mxBuilder->weld_label("repeat_label"))
     , mxCBRepeat(mxBuilder->weld_combo_box("repeat_list"))
     , mxCBXRewind(mxBuilder->weld_check_button("rewind"))
@@ -2330,7 +2330,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     {
         double fBegin = 0.0;
         pSet->getPropertyValue( nHandleBegin ) >>= fBegin;
-        mxMFStartDelay->set_value(static_cast<long>(fBegin*10), FUNIT_NONE);
+        mxMFStartDelay->set_value(static_cast<long>(fBegin*10), FieldUnit::NONE);
     }
 
     if( pSet->getPropertyState( nHandleDuration ) != STLPropertyState::Ambiguous )
@@ -2348,7 +2348,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
         }
         else
         {
-            mxCBXDuration->set_value(fDuration * 100.0, FUNIT_NONE);
+            mxCBXDuration->set_value(fDuration * 100.0, FieldUnit::NONE);
         }
     }
 
@@ -2460,11 +2460,11 @@ IMPL_LINK_NOARG(CustomAnimationDurationTabPage, DurationModifiedHdl, weld::Metri
 {
     if (!mxCBXDuration->get_text().isEmpty())
     {
-        double duration_value = static_cast<double>(mxCBXDuration->get_value(FUNIT_NONE));
+        double duration_value = static_cast<double>(mxCBXDuration->get_value(FieldUnit::NONE));
         if(duration_value <= 0.0)
-            mxCBXDuration->set_value(1, FUNIT_NONE);
+            mxCBXDuration->set_value(1, FieldUnit::NONE);
         else
-            mxCBXDuration->set_value(duration_value, FUNIT_NONE);
+            mxCBXDuration->set_value(duration_value, FieldUnit::NONE);
     }
 }
 
@@ -2501,7 +2501,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     }
 
     {
-        double fBegin = static_cast<double>(mxMFStartDelay->get_value(FUNIT_NONE)) / 10.0;
+        double fBegin = static_cast<double>(mxMFStartDelay->get_value(FieldUnit::NONE)) / 10.0;
         double fOldBegin = -1.0;
 
         if( mpSet->getPropertyState( nHandleBegin ) != STLPropertyState::Ambiguous )
@@ -2560,7 +2560,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 
     if (!mxCBXDuration->get_text().isEmpty())
     {
-        double duration_value = static_cast<double>(mxCBXDuration->get_value(FUNIT_NONE));
+        double duration_value = static_cast<double>(mxCBXDuration->get_value(FieldUnit::NONE));
 
         if(duration_value > 0)
             fDuration = duration_value/100.0;
@@ -2656,7 +2656,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(weld::Container* 
     , mxFTGroupText(mxBuilder->weld_label("group_text_label"))
     , mxLBGroupText(mxBuilder->weld_combo_box("group_text_list"))
     , mxCBXGroupAuto(mxBuilder->weld_check_button("auto_after"))
-    , mxMFGroupAuto(mxBuilder->weld_metric_spin_button("auto_after_value",FUNIT_SECOND))
+    , mxMFGroupAuto(mxBuilder->weld_metric_spin_button("auto_after_value",FieldUnit::SECOND))
     , mxCBXAnimateForm(mxBuilder->weld_check_button("animate_shape"))
     , mxCBXReverse(mxBuilder->weld_check_button("reverse_order"))
 {
@@ -2679,7 +2679,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(weld::Container* 
         {
             mxCBXGroupAuto->set_active(fTextGroupingAuto >= 0.0);
             if( fTextGroupingAuto >= 0.0 )
-                mxMFGroupAuto->set_value(static_cast<long>(fTextGroupingAuto*10), FUNIT_NONE);
+                mxMFGroupAuto->set_value(static_cast<long>(fTextGroupingAuto*10), FieldUnit::NONE);
         }
     }
     else
@@ -2756,7 +2756,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
         if( nPos > 1 )
         {
-            double fTextGroupingAuto = mxCBXGroupAuto->get_active() ? mxMFGroupAuto->get_value(FUNIT_NONE) / 10.0 : -1.0;
+            double fTextGroupingAuto = mxCBXGroupAuto->get_active() ? mxMFGroupAuto->get_value(FieldUnit::NONE) / 10.0 : -1.0;
             double fOldTextGroupingAuto = -2.0;
 
             if(mpSet->getPropertyState( nHandleTextGroupingAuto ) != STLPropertyState::Ambiguous)

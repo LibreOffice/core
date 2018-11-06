@@ -110,11 +110,11 @@ ErrorBarResources::ErrorBarResources(weld::Builder* pParent, TabPageParent pPare
     , m_xLbFunction(pParent->weld_combo_box("LB_FUNCTION"))
     , m_xFlParameters(pParent->weld_frame("framePARAMETERS"))
     , m_xBxPositive(pParent->weld_widget("boxPOSITIVE"))
-    , m_xMfPositive(pParent->weld_metric_spin_button("MF_POSITIVE", FUNIT_NONE))
+    , m_xMfPositive(pParent->weld_metric_spin_button("MF_POSITIVE", FieldUnit::NONE))
     , m_xEdRangePositive(pParent->weld_entry("ED_RANGE_POSITIVE"))
     , m_xIbRangePositive(pParent->weld_button("IB_RANGE_POSITIVE"))
     , m_xBxNegative(pParent->weld_widget("boxNEGATIVE"))
-    , m_xMfNegative(pParent->weld_metric_spin_button("MF_NEGATIVE", FUNIT_NONE))
+    , m_xMfNegative(pParent->weld_metric_spin_button("MF_NEGATIVE", FieldUnit::NONE))
     , m_xEdRangeNegative(pParent->weld_entry("ED_RANGE_NEGATIVE"))
     , m_xIbRangeNegative(pParent->weld_button("IB_RANGE_NEGATIVE"))
     , m_xCbSyncPosNeg(pParent->weld_check_button("CB_SYN_POS_NEG"))
@@ -256,29 +256,29 @@ void ErrorBarResources::UpdateControlStates()
         ( m_xRbFunction->get_active()) &&
         ( m_xLbFunction->get_active() == CHART_LB_FUNCTION_ERROR_MARGIN ));
     bool bIsPercentage( m_xRbPercent->get_active() || bIsErrorMargin );
-    FieldUnit eFieldUnit = FUNIT_NONE;
+    FieldUnit eFieldUnit = FieldUnit::NONE;
 
     if( bIsPercentage )
     {
-        eFieldUnit = FUNIT_PERCENT;
+        eFieldUnit = FieldUnit::PERCENT;
         m_xMfPositive->set_digits( 1 );
-        m_xMfPositive->set_increments(10, 100, FUNIT_NONE);
+        m_xMfPositive->set_increments(10, 100, FieldUnit::NONE);
         m_xMfNegative->set_digits( 1 );
-        m_xMfNegative->set_increments(10, 100, FUNIT_NONE);
+        m_xMfNegative->set_increments(10, 100, FieldUnit::NONE);
     }
     else
     {
         m_xMfPositive->set_digits( m_nConstDecimalDigits );
-        m_xMfPositive->set_increments(m_nConstSpinSize, m_nConstSpinSize * 10, FUNIT_NONE);
+        m_xMfPositive->set_increments(m_nConstSpinSize, m_nConstSpinSize * 10, FieldUnit::NONE);
         m_xMfNegative->set_digits( m_nConstDecimalDigits );
-        m_xMfNegative->set_increments(m_nConstSpinSize, m_nConstSpinSize * 10, FUNIT_NONE);
+        m_xMfNegative->set_increments(m_nConstSpinSize, m_nConstSpinSize * 10, FieldUnit::NONE);
     }
 
     sal_Int32 nPlusValue = static_cast< sal_Int32 >( m_fPlusValue * pow(10.0,m_xMfPositive->get_digits()) );
     sal_Int32 nMinusValue = static_cast< sal_Int32 >( m_fMinusValue * pow(10.0,m_xMfNegative->get_digits()) );
 
-    m_xMfPositive->set_value(nPlusValue, FUNIT_NONE);
-    m_xMfNegative->set_value(nMinusValue, FUNIT_NONE);
+    m_xMfPositive->set_value(nPlusValue, FieldUnit::NONE);
+    m_xMfNegative->set_value(nMinusValue, FieldUnit::NONE);
 
     m_xMfPositive->set_unit(eFieldUnit);
     m_xMfNegative->set_unit(eFieldUnit);
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, weld::ToggleButton&, void )
     else if( m_eErrorKind != SvxChartKindError::Range &&
         eOldError == SvxChartKindError::Range )
     {
-        m_xCbSyncPosNeg->set_active( m_xMfPositive->get_value(FUNIT_NONE) == m_xMfNegative->get_value(FUNIT_NONE));
+        m_xCbSyncPosNeg->set_active( m_xMfPositive->get_value(FieldUnit::NONE) == m_xMfNegative->get_value(FieldUnit::NONE));
     }
 
     UpdateControlStates();
@@ -414,7 +414,7 @@ IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged, weld::MetricSpinButton&, voi
             m_bRangeNegUnique = m_bRangePosUnique;
         }
         else
-            m_xMfNegative->set_value(m_xMfPositive->get_value(FUNIT_NONE), FUNIT_NONE);
+            m_xMfNegative->set_value(m_xMfPositive->get_value(FieldUnit::NONE), FieldUnit::NONE);
     }
 }
 
@@ -628,14 +628,14 @@ void ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
                  m_eErrorKind == SvxChartKindError::Percent ||
                  m_eErrorKind == SvxChartKindError::BigError )
         {
-            double fPosValue = static_cast< double >( m_xMfPositive->get_value(FUNIT_NONE)) /
+            double fPosValue = static_cast< double >( m_xMfPositive->get_value(FieldUnit::NONE)) /
                 pow( 10.0, m_xMfPositive->get_digits());
             double fNegValue = 0.0;
 
             if( m_xCbSyncPosNeg->get_active())
                 fNegValue = fPosValue;
             else
-                fNegValue = static_cast< double >( m_xMfNegative->get_value(FUNIT_NONE)) /
+                fNegValue = static_cast< double >( m_xMfNegative->get_value(FieldUnit::NONE)) /
                     pow( 10.0, m_xMfNegative->get_digits());
 
             rOutAttrs.Put( SvxDoubleItem( fPosValue, SCHATTR_STAT_CONSTPLUS ));

@@ -3405,18 +3405,18 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 aMenu->CheckItem(nId, eMenuUnit == eUnit);
                 if( bReduceMetric )
                 {
-                    if (eMenuUnit == FUNIT_M    ||
-                        eMenuUnit == FUNIT_KM   ||
-                        eMenuUnit == FUNIT_FOOT ||
-                        eMenuUnit == FUNIT_MILE)
+                    if (eMenuUnit == FieldUnit::M    ||
+                        eMenuUnit == FieldUnit::KM   ||
+                        eMenuUnit == FieldUnit::FOOT ||
+                        eMenuUnit == FieldUnit::MILE)
                     {
                         aMenu->RemoveItem(i - 1);
                     }
-                    else if (( eMenuUnit == FUNIT_CHAR ) && !bHorz )
+                    else if (( eMenuUnit == FieldUnit::CHAR ) && !bHorz )
                     {
                         aMenu->RemoveItem(i - 1);
                     }
-                    else if (( eMenuUnit == FUNIT_LINE ) && bHorz )
+                    else if (( eMenuUnit == FieldUnit::LINE ) && bHorz )
                     {
                         aMenu->RemoveItem(i - 1);
                     }

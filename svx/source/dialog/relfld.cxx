@@ -91,7 +91,7 @@ void RelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
     bRelativeMode = true;
     nRelMin       = nMin;
     nRelMax       = nMax;
-    m_xSpinButton->set_unit(FUNIT_CM);
+    m_xSpinButton->set_unit(FieldUnit::CM);
 }
 
 void RelativeField::SetRelative( bool bNewRelative )
@@ -106,15 +106,15 @@ void RelativeField::SetRelative( bool bNewRelative )
     {
         bRelative = true;
         m_xSpinButton->set_digits(0);
-        m_xSpinButton->set_range(nRelMin, nRelMax, FUNIT_NONE);
-        m_xSpinButton->set_unit(FUNIT_PERCENT);
+        m_xSpinButton->set_range(nRelMin, nRelMax, FieldUnit::NONE);
+        m_xSpinButton->set_unit(FieldUnit::PERCENT);
     }
     else
     {
         bRelative = false;
         m_xSpinButton->set_digits(2);
-        m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FUNIT_NONE);
-        m_xSpinButton->set_unit(FUNIT_CM);
+        m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
+        m_xSpinButton->set_unit(FieldUnit::CM);
     }
 
     rSpinButton.set_text(aStr);

@@ -31,7 +31,7 @@ DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nA
                               bRow ? OString("RowHeightDialog") : OString("ColWidthDialog"))
     , m_nPrevValue(nVal)
     , m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
-    , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button("value", FUNIT_CM))
+    , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
     , m_xCB_STANDARD(m_xBuilder->weld_check_button("automatic"))
 {
     if ( _nAlternativeStandard > 0 )
@@ -54,14 +54,14 @@ DlgSize::~DlgSize()
 
 void DlgSize::SetValue( sal_Int32 nVal )
 {
-    m_xMF_VALUE->set_value(nVal, FUNIT_CM );
+    m_xMF_VALUE->set_value(nVal, FieldUnit::CM );
 }
 
 sal_Int32 DlgSize::GetValue()
 {
     if (m_xCB_STANDARD->get_active())
         return -1;
-    return static_cast<sal_Int32>(m_xMF_VALUE->get_value( FUNIT_CM ));
+    return static_cast<sal_Int32>(m_xMF_VALUE->get_value( FieldUnit::CM ));
 }
 
 IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::ToggleButton&, void)
@@ -70,7 +70,7 @@ IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::ToggleButton&, void)
     if (!m_xCB_STANDARD->get_active())
     {
         // don't use getValue as this will use m_xCB_STANDARD->to determine if we're standard
-        m_nPrevValue = static_cast<sal_Int32>(m_xMF_VALUE->get_value(FUNIT_CM));
+        m_nPrevValue = static_cast<sal_Int32>(m_xMF_VALUE->get_value(FieldUnit::CM));
         m_xMF_VALUE->set_text("");
     }
     else

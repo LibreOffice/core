@@ -19,10 +19,32 @@
 #ifndef INCLUDED_TOOLS_FLDUNIT_HXX
 #define INCLUDED_TOOLS_FLDUNIT_HXX
 
-enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
-                 FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
-                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CHAR, FUNIT_LINE, FUNIT_CUSTOM,
-                 FUNIT_PERCENT, FUNIT_100TH_MM, FUNIT_PIXEL, FUNIT_DEGREE, FUNIT_SECOND, FUNIT_MILLISECOND };
+#include <sal/types.h>
+
+// Corresponds to offapi/com/sun/star/awt/FieldUnit.idl
+enum class FieldUnit : sal_uInt16
+{
+    NONE,
+    MM,
+    CM,
+    M,
+    KM,
+    TWIP,
+    POINT,
+    PICA,
+    INCH,
+    FOOT,
+    MILE,
+    CHAR,
+    LINE,
+    CUSTOM,
+    PERCENT,
+    MM_100TH,
+    PIXEL,
+    DEGREE,
+    SECOND,
+    MILLISECOND,
+};
 
 #endif
 

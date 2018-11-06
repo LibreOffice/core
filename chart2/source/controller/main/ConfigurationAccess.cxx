@@ -62,7 +62,7 @@ void CalcConfigItem::Notify( const uno::Sequence<OUString>& ) {}
 
 FieldUnit CalcConfigItem::getFieldUnit()
 {
-    FieldUnit eResult( FUNIT_CM );
+    FieldUnit eResult( FieldUnit::CM );
 
     uno::Sequence< OUString > aNames( 1 );
     if( lcl_IsMetric() )

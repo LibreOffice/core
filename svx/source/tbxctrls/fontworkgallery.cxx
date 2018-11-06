@@ -626,9 +626,9 @@ com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation(
 
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog(weld::Window* pParent, sal_Int32 nScale)
     : GenericDialogController(pParent, "svx/ui/fontworkspacingdialog.ui", "FontworkSpacingDialog")
-    , m_xMtrScale(m_xBuilder->weld_metric_spin_button("entry", FUNIT_PERCENT))
+    , m_xMtrScale(m_xBuilder->weld_metric_spin_button("entry", FieldUnit::PERCENT))
 {
-    m_xMtrScale->set_value(nScale, FUNIT_PERCENT);
+    m_xMtrScale->set_value(nScale, FieldUnit::PERCENT);
 }
 
 FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
@@ -637,7 +637,7 @@ FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {
-    return static_cast<sal_Int32>(m_xMtrScale->get_value(FUNIT_PERCENT));
+    return static_cast<sal_Int32>(m_xMtrScale->get_value(FieldUnit::PERCENT));
 }
 
 }
