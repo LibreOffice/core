@@ -261,8 +261,18 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.ReadInt16( nVersion );                              // Version
     sal_Int32 nTmp32(0);
     rIStm.ReadInt32( nTmp32 );
+    if (nTmp32 < 0)
+    {
+        rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
+        return;
+    }
     aPrefSz.setWidth( nTmp32 );                       // PrefSize.Width()
     rIStm.ReadInt32( nTmp32 );
+    if (nTmp32 < 0)
+    {
+        rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
+        return;
+    }
     aPrefSz.setHeight( nTmp32 );                      // PrefSize.Height()
 
     // check header-magic and version
