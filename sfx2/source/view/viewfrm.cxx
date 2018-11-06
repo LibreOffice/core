@@ -1219,7 +1219,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 // inform about the community involvement
                 const sal_Int64 nLastShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
                 const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                const sal_Int64 nPeriodSec(60 * 60 * 24 * 30); // 30 days in seconds
+                const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
                 bool bUpdateLastTimeGetInvolvedShown = false;
 
                 if (nLastShown == 0)
@@ -1370,14 +1370,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
 {
-    try
-    {
-        OUString sURL("https://hub.libreoffice.org/joinus/?LOlocale=" + utl::ConfigManager::getUILocale());
-        sfx2::openUriExternally(sURL, false);
-    }
-    catch (const Exception&)
-    {
-    }
+    GetDispatcher()->Execute(SID_GETINVOLVED);
 }
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, Button*, pButton, void)
