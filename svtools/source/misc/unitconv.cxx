@@ -22,7 +22,7 @@
 void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 {
     int nMin, nMax;
-    rField.get_range(nMin, nMax, FUNIT_TWIP);
+    rField.get_range(nMin, nMax, FieldUnit::TWIP);
     nMin = rField.denormalize(nMin);
     nMax = rField.denormalize(nMax);
 
@@ -30,13 +30,13 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
     {
         switch (eUnit)
         {
-            case FUNIT_M:
-            case FUNIT_KM:
-                eUnit = FUNIT_CM;
+            case FieldUnit::M:
+            case FieldUnit::KM:
+                eUnit = FieldUnit::CM;
                 break;
-            case FUNIT_FOOT:
-            case FUNIT_MILE:
-                eUnit = FUNIT_INCH;
+            case FieldUnit::FOOT:
+            case FieldUnit::MILE:
+                eUnit = FieldUnit::INCH;
                 break;
             default: //prevent warning
                 break;
@@ -45,20 +45,20 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 
     rField.set_unit(eUnit);
 
-    if (FUNIT_POINT == eUnit && rField.get_digits() > 1)
+    if (FieldUnit::POINT == eUnit && rField.get_digits() > 1)
         rField.set_digits(1);
     else
         rField.set_digits(2);
 
     switch (eUnit)
     {
-        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
-        case FUNIT_CHAR:
-        case FUNIT_LINE:
-        case FUNIT_MM:
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FieldUnit::MM
+        case FieldUnit::CHAR:
+        case FieldUnit::LINE:
+        case FieldUnit::MM:
             rField.set_increments(50, 500, eUnit);
             break;
-        case FUNIT_INCH:
+        case FieldUnit::INCH:
             rField.set_increments(2, 20, eUnit);
             break;
         default:
@@ -70,29 +70,29 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
     {
         nMin = rField.normalize(nMin);
         nMax = rField.normalize(nMax);
-        rField.set_range(nMin, nMax, FUNIT_TWIP);
+        rField.set_range(nMin, nMax, FieldUnit::TWIP);
     }
 }
 
 void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 {
-    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
-    sal_Int64 nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
-    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
-    sal_Int64 nMax = rField.Denormalize( rField.GetMax( FUNIT_TWIP ) );
+    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FieldUnit::TWIP ) );
+    sal_Int64 nLast = rField.Denormalize( rField.GetLast( FieldUnit::TWIP ) );
+    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FieldUnit::TWIP ) );
+    sal_Int64 nMax = rField.Denormalize( rField.GetMax( FieldUnit::TWIP ) );
 
     if ( !bAll )
     {
         switch ( eUnit )
         {
-            case FUNIT_M:
-            case FUNIT_KM:
-                eUnit = FUNIT_CM;
+            case FieldUnit::M:
+            case FieldUnit::KM:
+                eUnit = FieldUnit::CM;
                 break;
 
-            case FUNIT_FOOT:
-            case FUNIT_MILE:
-                eUnit = FUNIT_INCH;
+            case FieldUnit::FOOT:
+            case FieldUnit::MILE:
+                eUnit = FieldUnit::INCH;
                 break;
             default: ;//prevent warning
         }
@@ -100,14 +100,14 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
     rField.SetUnit( eUnit );
     switch( eUnit )
     {
-        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
-        case FUNIT_CHAR:
-        case FUNIT_LINE:
-        case FUNIT_MM:
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FieldUnit::MM
+        case FieldUnit::CHAR:
+        case FieldUnit::LINE:
+        case FieldUnit::MM:
             rField.SetSpinSize( 50 );
             break;
 
-        case FUNIT_INCH:
+        case FieldUnit::INCH:
             rField.SetSpinSize( 2 );
             break;
 
@@ -115,7 +115,7 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
             rField.SetSpinSize( 10 );
     }
 
-    if ( FUNIT_POINT == eUnit )
+    if ( FieldUnit::POINT == eUnit )
     {
         if( rField.GetDecimalDigits() > 1 )
             rField.SetDecimalDigits( 1 );
@@ -125,10 +125,10 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 
     if ( !bAll )
     {
-        rField.SetFirst( rField.Normalize( nFirst ), FUNIT_TWIP );
-        rField.SetLast( rField.Normalize( nLast ), FUNIT_TWIP );
-        rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
-        rField.SetMax( rField.Normalize( nMax ), FUNIT_TWIP );
+        rField.SetFirst( rField.Normalize( nFirst ), FieldUnit::TWIP );
+        rField.SetLast( rField.Normalize( nLast ), FieldUnit::TWIP );
+        rField.SetMin( rField.Normalize( nMin ), FieldUnit::TWIP );
+        rField.SetMax( rField.Normalize( nMax ), FieldUnit::TWIP );
     }
 }
 
@@ -136,20 +136,20 @@ void SetMetricValue(weld::MetricSpinButton& rField, int nCoreValue, MapUnit eUni
 {
     auto nVal = OutputDevice::LogicToLogic(nCoreValue, eUnit, MapUnit::Map100thMM);
     nVal = rField.normalize(nVal);
-    rField.set_value(nVal, FUNIT_100TH_MM);
+    rField.set_value(nVal, FieldUnit::MM_100TH);
 }
 
 void SetMetricValue( MetricField& rField, long nCoreValue, MapUnit eUnit )
 {
     sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, eUnit, MapUnit::Map100thMM );
     nVal = rField.Normalize( nVal );
-    rField.SetValue( nVal, FUNIT_100TH_MM );
+    rField.SetValue(nVal, FieldUnit::MM_100TH);
 
 }
 
 int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
 {
-    int nVal = rField.get_value(FUNIT_100TH_MM);
+    int nVal = rField.get_value(FieldUnit::MM_100TH);
     // avoid rounding issues
     const int nSizeMask = 0xff000000;
     bool bRoundBefore = true;
@@ -173,7 +173,7 @@ int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
 
 long GetCoreValue( const MetricField& rField, MapUnit eUnit )
 {
-    sal_Int64 nVal = rField.GetValue( FUNIT_100TH_MM );
+    sal_Int64 nVal = rField.GetValue(FieldUnit::MM_100TH);
     // avoid rounding issues
     const sal_Int64 nSizeMask = 0xffffffffff000000LL;
     bool bRoundBefore = true;
@@ -240,13 +240,13 @@ long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
                 nIn /= 10;
             else if ( eItem == MapUnit::Map100thMM )
                 nIn /= 100;
-            nOut = TransformMetric( nIn, FUNIT_MM, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::MM, eCtrl );
         }
         break;
 
         case MapUnit::MapCM:
         {
-            nOut = TransformMetric( nIn, FUNIT_CM, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::CM, eCtrl );
         }
         break;
 
@@ -261,19 +261,19 @@ long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
                 nIn /= 100;
             else if ( eItem == MapUnit::Map1000thInch )
                 nIn /= 1000;
-            nOut = TransformMetric( nIn, FUNIT_INCH, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::INCH, eCtrl );
         }
         break;
 
         case MapUnit::MapPoint:
         {
-            nOut = TransformMetric( nIn, FUNIT_POINT, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::POINT, eCtrl );
         }
         break;
 
         case MapUnit::MapTwip:
         {
-            nOut = TransformMetric( nIn, FUNIT_TWIP, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::TWIP, eCtrl );
         }
         break;
         default: ;//prevent warning
@@ -295,25 +295,25 @@ FieldUnit MapToFieldUnit( const MapUnit eUnit )
         case MapUnit::Map100thMM:
         case MapUnit::Map10thMM:
         case MapUnit::MapMM:
-            return FUNIT_MM;
+            return FieldUnit::MM;
 
         case MapUnit::MapCM:
-            return FUNIT_CM;
+            return FieldUnit::CM;
 
         case MapUnit::Map1000thInch:
         case MapUnit::Map100thInch:
         case MapUnit::Map10thInch:
         case MapUnit::MapInch:
-            return FUNIT_INCH;
+            return FieldUnit::INCH;
 
         case MapUnit::MapPoint:
-            return FUNIT_POINT;
+            return FieldUnit::POINT;
 
         case MapUnit::MapTwip:
-            return FUNIT_TWIP;
+            return FieldUnit::TWIP;
         default: ;//prevent warning
     }
-    return FUNIT_NONE;
+    return FieldUnit::NONE;
 }
 
 
@@ -650,8 +650,8 @@ FUNC_CONVERT const ConvertTable[6][6] =
 
 long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
 {
-    if ( aOld == FUNIT_NONE   || aNew == FUNIT_NONE ||
-         aOld == FUNIT_CUSTOM || aNew == FUNIT_CUSTOM )
+    if ( aOld == FieldUnit::NONE   || aNew == FieldUnit::NONE ||
+         aOld == FieldUnit::CUSTOM || aNew == FieldUnit::CUSTOM )
     {
         return nVal;
     }
@@ -661,34 +661,34 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
 
     switch ( aOld )
     {
-        case FUNIT_CM:
+        case FieldUnit::CM:
             nOld = 0; break;
-        case FUNIT_MM:
+        case FieldUnit::MM:
             nOld = 1; break;
-        case FUNIT_INCH:
+        case FieldUnit::INCH:
             nOld = 2; break;
-        case FUNIT_POINT:
+        case FieldUnit::POINT:
             nOld = 3; break;
-        case FUNIT_PICA:
+        case FieldUnit::PICA:
             nOld = 4; break;
-        case FUNIT_TWIP:
+        case FieldUnit::TWIP:
             nOld = 5; break;
         default: ;//prevent warning
     }
 
     switch ( aNew )
     {
-        case FUNIT_CM:
+        case FieldUnit::CM:
             nNew = 0; break;
-        case FUNIT_MM:
+        case FieldUnit::MM:
             nNew = 1; break;
-        case FUNIT_INCH:
+        case FieldUnit::INCH:
             nNew = 2; break;
-        case FUNIT_POINT:
+        case FieldUnit::POINT:
             nNew = 3; break;
-        case FUNIT_PICA:
+        case FieldUnit::PICA:
             nNew = 4; break;
-        case FUNIT_TWIP:
+        case FieldUnit::TWIP:
             nNew = 5; break;
         default: ;//prevent warning
     }

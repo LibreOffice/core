@@ -117,15 +117,15 @@ static long lUserH = 5669; // 10 cm
 SwEnvFormatPage::SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/envformatpage.ui", "EnvFormatPage", &rSet)
     , m_pDialog(nullptr)
-    , m_xAddrLeftField(m_xBuilder->weld_metric_spin_button("leftaddr", FUNIT_CM))
-    , m_xAddrTopField(m_xBuilder->weld_metric_spin_button("topaddr", FUNIT_CM))
+    , m_xAddrLeftField(m_xBuilder->weld_metric_spin_button("leftaddr", FieldUnit::CM))
+    , m_xAddrTopField(m_xBuilder->weld_metric_spin_button("topaddr", FieldUnit::CM))
     , m_xAddrEditButton(m_xBuilder->weld_menu_button("addredit"))
-    , m_xSendLeftField(m_xBuilder->weld_metric_spin_button("leftsender", FUNIT_CM))
-    , m_xSendTopField(m_xBuilder->weld_metric_spin_button("topsender", FUNIT_CM))
+    , m_xSendLeftField(m_xBuilder->weld_metric_spin_button("leftsender", FieldUnit::CM))
+    , m_xSendTopField(m_xBuilder->weld_metric_spin_button("topsender", FieldUnit::CM))
     , m_xSendEditButton(m_xBuilder->weld_menu_button("senderedit"))
     , m_xSizeFormatBox(m_xBuilder->weld_combo_box("format"))
-    , m_xSizeWidthField(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
-    , m_xSizeHeightField(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
+    , m_xSizeWidthField(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
+    , m_xSizeHeightField(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
     , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
 {
     SetExchangeSupport();
@@ -403,13 +403,13 @@ void SwEnvFormatPage::SetMinMax()
 
     // Min and Max
     m_xAddrLeftField->set_range(100 * (getfieldval(*m_xSendLeftField) + 566),
-                                100 * (lWidth  - 2 * 566), FUNIT_TWIP);
+                                100 * (lWidth  - 2 * 566), FieldUnit::TWIP);
     m_xAddrTopField->set_range(100 * (getfieldval(*m_xSendTopField ) + 2 * 566),
-                               100 * (lHeight - 2 * 566), FUNIT_TWIP);
+                               100 * (lHeight - 2 * 566), FieldUnit::TWIP);
     m_xSendLeftField->set_range(100 * 566,
-                                100 * (getfieldval(*m_xAddrLeftField) - 566), FUNIT_TWIP);
+                                100 * (getfieldval(*m_xAddrLeftField) - 566), FieldUnit::TWIP);
     m_xSendTopField->set_range(100 * 566,
-                               100 * (getfieldval(*m_xAddrTopField ) - 2 * 566), FUNIT_TWIP);
+                               100 * (getfieldval(*m_xAddrTopField ) - 2 * 566), FieldUnit::TWIP);
 }
 
 VclPtr<SfxTabPage> SwEnvFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)

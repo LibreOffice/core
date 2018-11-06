@@ -31,17 +31,17 @@
 
 #include "envimg.hxx"
 
-#define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
-#define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
+#define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
+#define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::TWIP)
 
 inline int getfieldval(weld::MetricSpinButton& rField)
 {
-    return rField.denormalize(rField.get_value(FUNIT_TWIP));
+    return rField.denormalize(rField.get_value(FieldUnit::TWIP));
 }
 
 inline void setfieldval(weld::MetricSpinButton& rField, int lValue)
 {
-    rField.set_value(rField.normalize(lValue), FUNIT_TWIP);
+    rField.set_value(rField.normalize(lValue), FieldUnit::TWIP);
 }
 
 class SwEnvDlg;

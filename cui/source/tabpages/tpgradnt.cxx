@@ -58,16 +58,16 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xLbGradientType(m_xBuilder->weld_combo_box("gradienttypelb"))
     , m_xFtCenter(m_xBuilder->weld_label("centerft"))
-    , m_xMtrCenterX(m_xBuilder->weld_metric_spin_button("centerxmtr", FUNIT_PERCENT))
-    , m_xMtrCenterY(m_xBuilder->weld_metric_spin_button("centerymtr", FUNIT_PERCENT))
+    , m_xMtrCenterX(m_xBuilder->weld_metric_spin_button("centerxmtr", FieldUnit::PERCENT))
+    , m_xMtrCenterY(m_xBuilder->weld_metric_spin_button("centerymtr", FieldUnit::PERCENT))
     , m_xFtAngle(m_xBuilder->weld_label("angleft"))
-    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FUNIT_DEGREE))
-    , m_xMtrBorder(m_xBuilder->weld_metric_spin_button("bordermtr", FUNIT_PERCENT))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
+    , m_xMtrBorder(m_xBuilder->weld_metric_spin_button("bordermtr", FieldUnit::PERCENT))
     , m_xSliderBorder(m_xBuilder->weld_scale("borderslider"))
     , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"), pParent.GetFrameWeld()))
-    , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button("colorfrommtr", FUNIT_PERCENT))
+    , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button("colorfrommtr", FieldUnit::PERCENT))
     , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"), pParent.GetFrameWeld()))
-    , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button("colortomtr", FUNIT_PERCENT))
+    , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button("colortomtr", FieldUnit::PERCENT))
     , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin")))
     , m_xMtrIncrement(m_xBuilder->weld_spin_button("incrementmtr"))
     , m_xCbIncrement(m_xBuilder->weld_check_button("autoincrement"))
@@ -85,8 +85,8 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
 
     // as long as NOT supported by the item
 
-    m_xMtrColorTo->set_value(100, FUNIT_PERCENT);
-    m_xMtrColorFrom->set_value(100, FUNIT_PERCENT);
+    m_xMtrColorTo->set_value(100, FieldUnit::PERCENT);
+    m_xMtrColorFrom->set_value(100, FieldUnit::PERCENT);
 
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
@@ -210,12 +210,12 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         pXGradient.reset(new XGradient( m_xLbColorFrom->GetSelectEntryColor(),
                     m_xLbColorTo->GetSelectEntryColor(),
                     static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                    static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10), // should be changed in resource
-                    static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FUNIT_NONE)),
-                    static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FUNIT_NONE)),
-                    static_cast<sal_uInt16>(m_xMtrBorder->get_value(FUNIT_NONE)),
-                    static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FUNIT_NONE)),
-                    static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FUNIT_NONE)),
+                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                    static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
+                    static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
+                    static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
+                    static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
+                    static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) ));
     }
 
@@ -298,9 +298,9 @@ IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, weld::ToggleButton&
 void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
 {
     if (pControl == m_xMtrBorder.get())
-        m_xSliderBorder->set_value(m_xMtrBorder->get_value(FUNIT_NONE));
+        m_xSliderBorder->set_value(m_xMtrBorder->get_value(FieldUnit::NONE));
     if (pControl == m_xSliderBorder.get())
-        m_xMtrBorder->set_value(m_xSliderBorder->get_value(), FUNIT_NONE);
+        m_xMtrBorder->set_value(m_xSliderBorder->get_value(), FieldUnit::NONE);
     if (pControl == m_xMtrIncrement.get())
         m_xSliderIncrement->set_value(m_xMtrIncrement->get_value());
     if (pControl == m_xSliderIncrement.get())
@@ -311,12 +311,12 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
     XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                           m_xLbColorTo->GetSelectEntryColor(),
                           eXGS,
-                          static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10), // should be changed in resource
-                          static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FUNIT_NONE)),
-                          static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FUNIT_NONE)),
-                          static_cast<sal_uInt16>(m_xMtrBorder->get_value(FUNIT_NONE)),
-                          static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FUNIT_NONE)),
-                          static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FUNIT_NONE)),
+                          static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                          static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
 
     // enable/disable controls
@@ -378,12 +378,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                               m_xLbColorTo->GetSelectEntryColor(),
                               static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                              static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10), // should be changed in resource
-                              static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrBorder->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FUNIT_NONE)),
+                              static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                              static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
 
         m_pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nCount);
@@ -417,12 +417,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
         XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                               m_xLbColorTo->GetSelectEntryColor(),
                               static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                              static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10), // should be changed in resource
-                              static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrBorder->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FUNIT_NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FUNIT_NONE)),
+                              static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                              static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
+                              static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
 
         m_pGradientList->Replace(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nPos);
@@ -565,13 +565,13 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         m_xLbColorTo->SetNoSelection();
         m_xLbColorTo->SelectEntry( pGradient->GetEndColor() );
 
-        m_xMtrAngle->set_value(pGradient->GetAngle() / 10, FUNIT_NONE); // should be changed in resource
-        m_xMtrBorder->set_value(pGradient->GetBorder(), FUNIT_NONE);
+        m_xMtrAngle->set_value(pGradient->GetAngle() / 10, FieldUnit::NONE); // should be changed in resource
+        m_xMtrBorder->set_value(pGradient->GetBorder(), FieldUnit::NONE);
         m_xSliderBorder->set_value(pGradient->GetBorder());
-        m_xMtrCenterX->set_value(pGradient->GetXOffset(), FUNIT_NONE);
-        m_xMtrCenterY->set_value(pGradient->GetYOffset(), FUNIT_NONE);
-        m_xMtrColorFrom->set_value(pGradient->GetStartIntens(), FUNIT_NONE);
-        m_xMtrColorTo->set_value(pGradient->GetEndIntens(), FUNIT_NONE);
+        m_xMtrCenterX->set_value(pGradient->GetXOffset(), FieldUnit::NONE);
+        m_xMtrCenterY->set_value(pGradient->GetYOffset(), FieldUnit::NONE);
+        m_xMtrColorFrom->set_value(pGradient->GetStartIntens(), FieldUnit::NONE);
+        m_xMtrColorTo->set_value(pGradient->GetEndIntens(), FieldUnit::NONE);
 
         // disable/enable controls
         SetControlState_Impl( eXGS );

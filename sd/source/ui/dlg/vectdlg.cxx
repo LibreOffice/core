@@ -35,9 +35,9 @@ SdVectorizeDlg::SdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::
     , m_pDocSh(pDocShell)
     , aBmp(rBmp)
     , m_xNmLayers(m_xBuilder->weld_spin_button("colors"))
-    , m_xMtReduce(m_xBuilder->weld_metric_spin_button("points", FUNIT_PIXEL))
+    , m_xMtReduce(m_xBuilder->weld_metric_spin_button("points", FieldUnit::PIXEL))
     , m_xFtFillHoles(m_xBuilder->weld_label("tilesft"))
-    , m_xMtFillHoles(m_xBuilder->weld_metric_spin_button("tiles", FUNIT_PIXEL))
+    , m_xMtFillHoles(m_xBuilder->weld_metric_spin_button("tiles", FieldUnit::PIXEL))
     , m_xCbFillHoles(m_xBuilder->weld_check_button("fillholes"))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "source", m_aBmpWin))
     , m_xMtfWin(new weld::CustomWeld(*m_xBuilder, "vectorized", m_aMtfWin))
@@ -136,7 +136,7 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     if( !!aTmp )
     {
         const Link<long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_xMtReduce->get_value(FUNIT_NONE)), &aPrgsHdl );
+        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_xMtReduce->get_value(FieldUnit::NONE)), &aPrgsHdl );
 
         if (m_xCbFillHoles->get_active())
         {
@@ -147,8 +147,8 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
             {
                 const long      nWidth = pRAcc->Width();
                 const long      nHeight = pRAcc->Height();
-                const long      nTileX = m_xMtFillHoles->get_value(FUNIT_NONE);
-                const long      nTileY = m_xMtFillHoles->get_value(FUNIT_NONE);
+                const long      nTileX = m_xMtFillHoles->get_value(FieldUnit::NONE);
+                const long      nTileY = m_xMtFillHoles->get_value(FieldUnit::NONE);
                 assert(nTileX && "div-by-zero");
                 const long      nCountX = nWidth / nTileX;
                 assert(nTileY && "div-by-zero");
@@ -310,8 +310,8 @@ void SdVectorizeDlg::LoadSettings()
     }
 
     m_xNmLayers->set_value(nLayers);
-    m_xMtReduce->set_value(nReduce, FUNIT_NONE);
-    m_xMtFillHoles->set_value(nFillHoles, FUNIT_NONE);
+    m_xMtReduce->set_value(nReduce, FieldUnit::NONE);
+    m_xMtFillHoles->set_value(nFillHoles, FieldUnit::NONE);
     m_xCbFillHoles->set_active(bFillHoles);
 
     ToggleHdl(*m_xCbFillHoles);
@@ -326,8 +326,8 @@ void SdVectorizeDlg::SaveSettings() const
     if( xOStm.is() )
     {
         SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
-        xOStm->WriteUInt16( m_xNmLayers->get_value() ).WriteUInt16(m_xMtReduce->get_value(FUNIT_NONE));
-        xOStm->WriteUInt16( m_xMtFillHoles->get_value(FUNIT_NONE) ).WriteBool(m_xCbFillHoles->get_active());
+        xOStm->WriteUInt16( m_xNmLayers->get_value() ).WriteUInt16(m_xMtReduce->get_value(FieldUnit::NONE));
+        xOStm->WriteUInt16( m_xMtFillHoles->get_value(FieldUnit::NONE) ).WriteBool(m_xCbFillHoles->get_active());
     }
 }
 

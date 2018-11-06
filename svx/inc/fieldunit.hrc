@@ -27,17 +27,17 @@
 
 const std::pair<const char*, FieldUnit> RID_SVXSTR_FIELDUNIT_TABLE[] =
 {
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Millimeter") , FUNIT_MM },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Centimeter") , FUNIT_CM },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Meter") , FUNIT_M },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Kilometer") , FUNIT_KM },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Inch") , FUNIT_INCH },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Foot") , FUNIT_FOOT },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Miles") , FUNIT_MILE },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Pica") , FUNIT_PICA },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Point") , FUNIT_POINT },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Char") , FUNIT_CHAR },
-    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Line") , FUNIT_LINE },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Millimeter") , FieldUnit::MM },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Centimeter") , FieldUnit::CM },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Meter") , FieldUnit::M },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Kilometer") , FieldUnit::KM },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Inch") , FieldUnit::INCH },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Foot") , FieldUnit::FOOT },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Miles") , FieldUnit::MILE },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Pica") , FieldUnit::PICA },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Point") , FieldUnit::POINT },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Char") , FieldUnit::CHAR },
+    { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Line") , FieldUnit::LINE },
 };
 
 #endif

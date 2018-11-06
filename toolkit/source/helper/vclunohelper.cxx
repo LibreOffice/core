@@ -364,22 +364,22 @@ namespace
             sal_Int16 nMeasurementUnit;
             sal_Int16 nFieldToMeasureFactor;
         } const aUnits[] = {
-            { FUNIT_NONE,       -1 , -1},
-            { FUNIT_MM,         MeasureUnit::MM,            1 },    // must precede MM_10TH
-            { FUNIT_MM,         MeasureUnit::MM_10TH,       10 },
-            { FUNIT_100TH_MM,   MeasureUnit::MM_100TH,      1 },
-            { FUNIT_CM,         MeasureUnit::CM,            1 },
-            { FUNIT_M,          MeasureUnit::M,             1 },
-            { FUNIT_KM,         MeasureUnit::KM,            1 },
-            { FUNIT_TWIP,       MeasureUnit::TWIP,          1 },
-            { FUNIT_POINT,      MeasureUnit::POINT,         1 },
-            { FUNIT_PICA,       MeasureUnit::PICA,          1 },
-            { FUNIT_INCH,       MeasureUnit::INCH,          1 },    // must precede INCH_*TH
-            { FUNIT_INCH,       MeasureUnit::INCH_10TH,     10 },
-            { FUNIT_INCH,       MeasureUnit::INCH_100TH,    100 },
-            { FUNIT_INCH,       MeasureUnit::INCH_1000TH,   1000 },
-            { FUNIT_FOOT,       MeasureUnit::FOOT,          1 },
-            { FUNIT_MILE,       MeasureUnit::MILE,          1 },
+            { FieldUnit::NONE,       -1 , -1},
+            { FieldUnit::MM,         MeasureUnit::MM,            1 },    // must precede MM_10TH
+            { FieldUnit::MM,         MeasureUnit::MM_10TH,       10 },
+            { FieldUnit::MM_100TH,   MeasureUnit::MM_100TH,      1 },
+            { FieldUnit::CM,         MeasureUnit::CM,            1 },
+            { FieldUnit::M,          MeasureUnit::M,             1 },
+            { FieldUnit::KM,         MeasureUnit::KM,            1 },
+            { FieldUnit::TWIP,       MeasureUnit::TWIP,          1 },
+            { FieldUnit::POINT,      MeasureUnit::POINT,         1 },
+            { FieldUnit::PICA,       MeasureUnit::PICA,          1 },
+            { FieldUnit::INCH,       MeasureUnit::INCH,          1 },    // must precede INCH_*TH
+            { FieldUnit::INCH,       MeasureUnit::INCH_10TH,     10 },
+            { FieldUnit::INCH,       MeasureUnit::INCH_100TH,    100 },
+            { FieldUnit::INCH,       MeasureUnit::INCH_1000TH,   1000 },
+            { FieldUnit::FOOT,       MeasureUnit::FOOT,          1 },
+            { FieldUnit::MILE,       MeasureUnit::MILE,          1 },
         };
         for (auto & aUnit : aUnits)
         {
@@ -401,7 +401,7 @@ namespace
             return -1;
 
         _rFieldToUNOValueFactor = 1;
-        return sal_Int16(FUNIT_NONE);
+        return sal_Int16(FieldUnit::NONE);
     }
 }
 

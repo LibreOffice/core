@@ -219,7 +219,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Initialize Units
     mnUnitIndex     = RULER_UNIT_CM;
-    meUnit          = FUNIT_CM;
+    meUnit          = FieldUnit::CM;
     maZoom          = Fraction( 1, 1 );
 
     // Recalculate border widths
@@ -2387,37 +2387,37 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
     meUnit = eNewUnit;
     switch ( meUnit )
     {
-        case FUNIT_MM:
+        case FieldUnit::MM:
             mnUnitIndex = RULER_UNIT_MM;
             break;
-        case FUNIT_CM:
+        case FieldUnit::CM:
             mnUnitIndex = RULER_UNIT_CM;
             break;
-        case FUNIT_M:
+        case FieldUnit::M:
             mnUnitIndex = RULER_UNIT_M;
             break;
-        case FUNIT_KM:
+        case FieldUnit::KM:
             mnUnitIndex = RULER_UNIT_KM;
             break;
-        case FUNIT_INCH:
+        case FieldUnit::INCH:
             mnUnitIndex = RULER_UNIT_INCH;
             break;
-        case FUNIT_FOOT:
+        case FieldUnit::FOOT:
             mnUnitIndex = RULER_UNIT_FOOT;
             break;
-        case FUNIT_MILE:
+        case FieldUnit::MILE:
             mnUnitIndex = RULER_UNIT_MILE;
             break;
-        case FUNIT_POINT:
+        case FieldUnit::POINT:
             mnUnitIndex = RULER_UNIT_POINT;
             break;
-        case FUNIT_PICA:
+        case FieldUnit::PICA:
             mnUnitIndex = RULER_UNIT_PICA;
             break;
-        case FUNIT_CHAR:
+        case FieldUnit::CHAR:
             mnUnitIndex = RULER_UNIT_CHAR;
             break;
-        case FUNIT_LINE:
+        case FieldUnit::LINE:
             mnUnitIndex = RULER_UNIT_LINE;
             break;
         default:

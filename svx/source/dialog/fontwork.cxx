@@ -253,7 +253,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     SetFieldUnit(*m_pMtrFldTextStart, eDlgUnit, true);
     SetFieldUnit(*m_pMtrFldShadowX, eDlgUnit, true);
     SetFieldUnit(*m_pMtrFldShadowY, eDlgUnit, true);
-    if( eDlgUnit == FUNIT_MM )
+    if( eDlgUnit == FieldUnit::MM )
     {
         m_pMtrFldDistance->SetSpinSize( 50 );
         m_pMtrFldTextStart->SetSpinSize( 50 );
@@ -496,7 +496,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 m_pMtrFldShadowX->SetDecimalDigits(2);
                 m_pMtrFldShadowX->SetMin(LONG_MIN);
                 m_pMtrFldShadowX->SetMax(LONG_MAX);
-                if( eDlgUnit == FUNIT_MM )
+                if( eDlgUnit == FieldUnit::MM )
                     m_pMtrFldShadowX->SetSpinSize( 50 );
                 else
                     m_pMtrFldShadowX->SetSpinSize( 10 );
@@ -505,7 +505,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 m_pMtrFldShadowY->SetDecimalDigits(2);
                 m_pMtrFldShadowY->SetMin(LONG_MIN);
                 m_pMtrFldShadowY->SetMax(LONG_MAX);
-                if( eDlgUnit == FUNIT_MM )
+                if( eDlgUnit == FieldUnit::MM )
                     m_pMtrFldShadowY->SetSpinSize( 50 );
                 else
                     m_pMtrFldShadowY->SetSpinSize( 10 );
@@ -527,13 +527,13 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             {
                 nId = nShadowSlantId;
 
-                m_pMtrFldShadowX->SetUnit(FUNIT_DEGREE);
+                m_pMtrFldShadowX->SetUnit(FieldUnit::DEGREE);
                 m_pMtrFldShadowX->SetDecimalDigits(1);
                 m_pMtrFldShadowX->SetMin(-1800);
                 m_pMtrFldShadowX->SetMax( 1800);
                 m_pMtrFldShadowX->SetSpinSize(10);
 
-                m_pMtrFldShadowY->SetUnit(FUNIT_PERCENT);
+                m_pMtrFldShadowY->SetUnit(FieldUnit::PERCENT);
                 m_pMtrFldShadowY->SetDecimalDigits(0);
                 m_pMtrFldShadowY->SetMin(-999);
                 m_pMtrFldShadowY->SetMax( 999);
@@ -746,16 +746,16 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Timer *, void)
     {
         SetFieldUnit(*m_pMtrFldDistance, eDlgUnit, true);
         SetFieldUnit(*m_pMtrFldTextStart, eDlgUnit, true);
-        m_pMtrFldDistance->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
-        m_pMtrFldTextStart->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
+        m_pMtrFldDistance->SetSpinSize( eDlgUnit == FieldUnit::MM ? 50 : 10 );
+        m_pMtrFldTextStart->SetSpinSize( eDlgUnit == FieldUnit::MM ? 50 : 10 );
     }
     if( eDlgUnit != m_pMtrFldShadowX->GetUnit() &&
         m_pTbxShadow->IsItemChecked(nShadowNormalId) )
     {
         SetFieldUnit(*m_pMtrFldShadowX, eDlgUnit, true);
         SetFieldUnit(*m_pMtrFldShadowY, eDlgUnit, true);
-        m_pMtrFldShadowX->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
-        m_pMtrFldShadowY->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
+        m_pMtrFldShadowX->SetSpinSize( eDlgUnit == FieldUnit::MM ? 50 : 10 );
+        m_pMtrFldShadowY->SetSpinSize( eDlgUnit == FieldUnit::MM ? 50 : 10 );
     }
 
     long nValue = GetCoreValue(*m_pMtrFldDistance, MapUnit::Map100thMM);
