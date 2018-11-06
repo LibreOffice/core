@@ -338,10 +338,15 @@ bool SwCursorShell::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     }
     // 2. CASE: Cursor is at beginning of numbered paragraph. A move
     // to the left will simply set the bInFrontOfLabel flag:
-    else if ( bLeft && 0 == pShellCursor->GetPoint()->nContent.GetIndex() &&
-             !pShellCursor->IsInFrontOfLabel() && !pShellCursor->HasMark() &&
-             nullptr != ( pTextNd = pShellCursor->GetNode().GetTextNode() ) &&
-             pTextNd->HasVisibleNumberingOrBullet() )
+    else if (bLeft
+        && pShellCursor->GetPoint()->nNode.GetNode().IsTextNode()
+        && static_cast<SwTextFrame const*>(
+            pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->getLayoutFrame(GetLayout())
+            )->MapModelToViewPos(*pShellCursor->GetPoint()) == TextFrameIndex(0)
+        && !pShellCursor->IsInFrontOfLabel()
+        && !pShellCursor->HasMark()
+        && nullptr != (pTextNd = sw::GetParaPropsNode(*GetLayout(), pShellCursor->GetPoint()->nNode))
+        && pTextNd->HasVisibleNumberingOrBullet())
     {
         SetInFrontOfLabel( true );
         bRet = true;
@@ -756,7 +761,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
 
-    SwTextNode * pTextNd = pCursor->GetNode().GetTextNode();
+    SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
 
     if ( pTextNd && !IsTableMode() &&
         // #i37515# No bInFrontOfLabel during selection
