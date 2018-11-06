@@ -67,14 +67,6 @@
             "AMPM", "Long Date", "Long Time"
 */
 
-/*
-  There are two possibilities to get the number of digits of a number:
-
-        a) use sprintf()
-        b) use log10() and pow() digit
-*/
-#define with_sprintf_   // use a)
-
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <basic/basicdllapi.h>
@@ -115,7 +107,6 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos );
     BASIC_DLLPRIVATE static void ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
                                        short nFormatPos );
-#ifdef with_sprintf_
     // Methods for string conversion with sprintf():
     BASIC_DLLPRIVATE void   InitScan( double _dNum );
     BASIC_DLLPRIVATE void   InitExp( double _dNewExp );
@@ -123,12 +114,6 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( double dNewExponent, short nPos,
                                                   bool& bFoundFirstDigit );
     BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit );
-#else
-    // Methods for direct 'calculation' with log10() and pow():
-    BASIC_DLLPRIVATE short  GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
-                                           bool& bFoundFirstDigit );
-    BASIC_DLLPRIVATE short  RoundDigit( double dNumber );
-#endif
     BASIC_DLLPRIVATE static OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
     BASIC_DLLPRIVATE static OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
     BASIC_DLLPRIVATE static OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
