@@ -74,9 +74,8 @@ static bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const 
         {
             bool bVisible;
             Any aVisAny = xProp->getPropertyValue("IsVisible");
-            if ( aVisAny >>= bVisible )
-                if (!bVisible)
-                    return true;                // hidden
+            if ( (aVisAny >>= bVisible) && !bVisible)
+                return true;                // hidden
         }
 
         //  use the same data area as in OCalcTable to test for empty table

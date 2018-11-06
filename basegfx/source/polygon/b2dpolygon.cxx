@@ -1029,14 +1029,11 @@ public:
             {
                 bool bRemove(maPoints.getCoordinate(nIndex) == maPoints.getCoordinate(nIndex + 1));
 
-                if(bRemove)
+                if(bRemove && mpControlVector)
                 {
-                    if(mpControlVector)
+                    if(!mpControlVector->getNextVector(nIndex).equalZero() || !mpControlVector->getPrevVector(nIndex + 1).equalZero())
                     {
-                        if(!mpControlVector->getNextVector(nIndex).equalZero() || !mpControlVector->getPrevVector(nIndex + 1).equalZero())
-                        {
-                            bRemove = false;
-                        }
+                        bRemove = false;
                     }
                 }
 

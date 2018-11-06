@@ -94,13 +94,10 @@ namespace accessibility
             if ( xChild.is() )
             {
                 AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-                if ( pAccessibleTabBarPage )
+                if ( pAccessibleTabBarPage && m_pTabBar )
                 {
-                    if ( m_pTabBar )
-                    {
-                        OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) ) );
-                        pAccessibleTabBarPage->SetPageText( sPageText );
-                    }
+                    OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) ) );
+                    pAccessibleTabBarPage->SetPageText( sPageText );
                 }
             }
         }

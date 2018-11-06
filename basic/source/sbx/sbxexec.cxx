@@ -150,12 +150,9 @@ static SbxVariableRef Operand
                 return nullptr;
             }
             // Double quotes are OK
-            if( *p == '"' )
+            if( *p == '"' && (*++p) != '"' )
             {
-                if( *++p != '"' )
-                {
-                    break;
-                }
+                break;
             }
             aString.append(*p++);
         }
