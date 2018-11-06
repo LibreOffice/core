@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_7351ef0e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-11-06T23:00:10Z",
+      "side": 1,
+      "message": "We don\u0027t need eMode variable here. You can use the two bool variables in the if condition.",
+      "revId": "cf251084ee835ead526d121cbca56ab9a8cb311f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
