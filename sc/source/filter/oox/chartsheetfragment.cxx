@@ -51,7 +51,7 @@ ContextHandlerRef ChartsheetFragment::onCreateContext( sal_Int32 nElement, const
             {
                 case XLS_TOKEN( sheetViews ):       return this;
 
-                case XLS_TOKEN( sheetPr ):          getWorksheetSettings().importChartSheetPr( rAttribs );              break;
+                case XLS_TOKEN( sheetPr ):          getWorksheetSettings().importChartSheetPr( rAttribs );              return this;
                 case XLS_TOKEN( sheetProtection ):  getWorksheetSettings().importChartProtection( rAttribs );           break;
                 case XLS_TOKEN( pageMargins ):      getPageSettings().importPageMargins( rAttribs );                    break;
                 case XLS_TOKEN( pageSetup ):        getPageSettings().importChartPageSetup( getRelations(), rAttribs ); break;
@@ -76,6 +76,14 @@ ContextHandlerRef ChartsheetFragment::onCreateContext( sal_Int32 nElement, const
                 case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onCharacters()
             }
         break;
+
+        case XLS_TOKEN( sheetPr ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( tabColor ):         getWorksheetSettings().importTabColor( rAttribs );              break;
+            }
+        break;
+
     }
     return nullptr;
 }
