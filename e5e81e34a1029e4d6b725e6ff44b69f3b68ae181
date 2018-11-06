@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_c11b3071",
+        "filename": "sc/uiconfig/scalc/ui/conditionalentry.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-11-06T12:36:52Z",
+      "side": 1,
+      "message": "add context\u003d\"conditionalentry|Label_minimum\" here",
+      "revId": "e5e81e34a1029e4d6b725e6ff44b69f3b68ae181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_a1182475",
+        "filename": "sc/uiconfig/scalc/ui/conditionalentry.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-11-06T12:36:52Z",
+      "side": 1,
+      "message": "add context\u003d\"conditionalentry|Label_maximum\" here",
+      "revId": "e5e81e34a1029e4d6b725e6ff44b69f3b68ae181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
