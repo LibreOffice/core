@@ -140,11 +140,13 @@ sw::annotation::SwAnnotationWin* SwFrameSidebarWinContainer::get( const SwFrame&
     if ( aFrameIter != mpFrameSidebarWinContainer->end() && nIndex >= 0 )
     {
         SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
-        auto aIter = rSidebarWinContainer.begin();
-        std::advance(aIter, nIndex);
-        pRet = (*aIter).second;
+        if (nIndex < sal_Int32(rSidebarWinContainer.size()))
+        {
+            auto aIter = rSidebarWinContainer.begin();
+            std::advance(aIter, nIndex);
+            pRet = (*aIter).second;
+        }
     }
-
     return pRet;
 }
 
