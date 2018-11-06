@@ -2817,8 +2817,7 @@ void SwTextNode::GCAttr()
     }
 }
 
-// #i23726#
-SwNumRule* SwTextNode::GetNumRule_(bool bInParent) const
+SwNumRule* SwTextNode::GetNumRule(bool bInParent) const
 {
     SwNumRule* pRet = nullptr;
 
@@ -2856,11 +2855,6 @@ SwNumRule* SwTextNode::GetNumRule_(bool bInParent) const
     }
 
     return pRet;
-}
-
-SwNumRule* SwTextNode::GetNumRule(bool bInParent) const
-{
-    return GetNumRule_(bInParent);
 }
 
 void SwTextNode::NumRuleChgd()
