@@ -65,4 +65,7 @@
   <menu:menuitem menu:id=".uno:DeleteShapeHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:AssignMacro"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:EditSignatureLine"/>
+  <menu:menuitem menu:id=".uno:SignSignatureLine"/>
 </menu:menupopup>
