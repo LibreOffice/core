@@ -225,9 +225,8 @@ std::set<Color> ScDocShell::GetDocColors()
 void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh)
-        if (pViewSh->GetViewData().GetDocShell() == this)
-            SC_MOD()->InputEnterHandler();
+    if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
+        SC_MOD()->InputEnterHandler();
 }
 
 SCTAB ScDocShell::GetSaveTab()
@@ -2938,13 +2937,10 @@ void ScDocShell::SetDrawModified()
     SetModified();
 
     SfxBindings* pBindings = GetViewBindings();
-    if (bUpdate)
+    if (bUpdate && pBindings)
     {
-        if (pBindings)
-        {
-            pBindings->Invalidate( SID_SAVEDOC );
-            pBindings->Invalidate( SID_DOC_MODIFIED );
-        }
+        pBindings->Invalidate( SID_SAVEDOC );
+        pBindings->Invalidate( SID_DOC_MODIFIED );
     }
 
     if (pBindings)

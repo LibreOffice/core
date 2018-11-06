@@ -4978,14 +4978,11 @@ ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& 
         }
         printAreas[ index - 1 ] = rangeAddress;
     }
-    if ( pShell )
+    if ( pShell && xPrintAreas.is() )
     {
-        if ( xPrintAreas.is() )
-        {
-            xPrintAreas->setPrintAreas( printAreas );
-            uno::Reference< frame::XModel > xModel = pShell->GetModel();
-            PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, true );
-        }
+        xPrintAreas->setPrintAreas( printAreas );
+        uno::Reference< frame::XModel > xModel = pShell->GetModel();
+        PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, true );
     }
 }
 

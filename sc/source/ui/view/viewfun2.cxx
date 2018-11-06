@@ -2397,12 +2397,9 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         if (rDoc.DeleteTab(TheTabs[i]))
         {
             bDelDone = true;
-            if( bVbaEnabled )
+            if( bVbaEnabled && bHasCodeName )
             {
-                if( bHasCodeName )
-                {
-                    VBA_DeleteModule( *pDocSh, sCodeName );
-                }
+                VBA_DeleteModule( *pDocSh, sCodeName );
             }
             pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[i] ) );
         }

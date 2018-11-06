@@ -3767,11 +3767,8 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         if( t->GetOpCode() == ocName )
         {
             const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
-            if (pName)
-            {
-                if (pName->IsModified())
-                    bRefChanged = true;
-            }
+            if (pName && pName->IsModified())
+                bRefChanged = true;
         }
         else if( t->GetType() != svIndex )
         {
@@ -3822,11 +3819,8 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         if( t->GetOpCode() == ocName )
         {
             const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
-            if (pName)
-            {
-                if (pName->IsModified())
-                    bRefChanged = true;
-            }
+            if (pName && pName->IsModified())
+                bRefChanged = true;
         }
         else if( t->GetType() != svIndex )
         {

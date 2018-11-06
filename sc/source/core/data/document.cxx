@@ -4985,13 +4985,8 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 
         for (const auto& a : maTabs)
         {
-            if (a)
-            {
-                if ( a->IsStyleSheetUsed( rStyle ) )
-                {
-                    bIsUsed = true;
-                }
-            }
+            if (a && a->IsStyleSheetUsed( rStyle ) )
+                bIsUsed = true;
         }
 
         bStyleSheetUsageInvalid = false;
@@ -5665,18 +5660,15 @@ bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
         pData = maTabs[nTab]->GetAnonymousDBData();
     else
         pData=nullptr;
-    if (pData)
+    if (pData && pData->HasAutoFilter())
     {
-        if (pData->HasAutoFilter())
+        pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
+        if ( nDBTab==nTab && nDBStartRow<=nEndRow && nDBEndRow>=nStartRow &&
+                                nDBStartCol<=nEndCol && nDBEndCol>=nStartCol )
         {
-            pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
-            if ( nDBTab==nTab && nDBStartRow<=nEndRow && nDBEndRow>=nStartRow &&
-                                    nDBStartCol<=nEndCol && nDBEndCol>=nStartCol )
-            {
-                if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
-                                    nDBTab, ScMF::Auto ))
-                    bChange = true;
-            }
+            if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
+                                nDBTab, ScMF::Auto ))
+                bChange = true;
         }
     }
     return bChange;

@@ -2003,9 +2003,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             break;
         }
 
-        if( ! rReq.IsAPI() )
-            if( ! rReq.IsDone() )
-                rReq.Done();
+        if( ! rReq.IsAPI() && ! rReq.IsDone() )
+            rReq.Done();
     }
 }
 
