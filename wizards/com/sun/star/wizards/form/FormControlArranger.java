@@ -21,6 +21,7 @@ import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.task.XStatusIndicator;
 import com.sun.star.uno.AnyConverter;
@@ -588,6 +589,8 @@ public class FormControlArranger
         {
             String sFieldName = FieldColumns[i].getFieldName();
             int nFieldType = FieldColumns[i].getFieldType();
+            boolean bFieldNullable = AnyConverter.toInt(FieldColumns[i].getXColumnPropertySet().getPropertyValue(PropertyNames.PROPERTY_IS_NULLABLE)) != ColumnValue.NO_NULLS;
+            boolean bFieldHasDefaultValue = !AnyConverter.toString(FieldColumns[i].getXColumnPropertySet().getPropertyValue(PropertyNames.PROPERTY_DEFAULT_VALUE)).isEmpty();
 
             Point aPoint = new Point(m_currentControlPosX, m_currentControlPosY);
             if (bControlsareCreated)
@@ -629,6 +632,7 @@ public class FormControlArranger
             }
             checkOuterPoints(m_currentControlPosX, m_dbControlWidth, m_currentControlPosY, m_dbControlHeight, true);
             aDBControl.setPropertyValue(PropertyNames.PROPERTY_BORDER, NBorderType);
+            aDBControl.setPropertyValue(PropertyNames.PROPERTY_INPUT_REQUIRED, !(bFieldNullable || bFieldHasDefaultValue));
         }
         catch (Exception e)
         {

@@ -20,6 +20,9 @@ package com.sun.star.wizards.common;
 public class PropertyNames
 {
 
+    public static String PROPERTY_DEFAULT_VALUE = "DefaultValue";
+    public static String PROPERTY_IS_NULLABLE = "IsNullable";
+    public static String PROPERTY_INPUT_REQUIRED = "InputRequired";
     public static String PROPERTY_ENABLED = "Enabled";
     public static String PROPERTY_HEIGHT = "Height";
     public static String PROPERTY_HELPURL = "HelpURL";

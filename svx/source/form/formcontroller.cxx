@@ -301,7 +301,7 @@ namespace
 
     bool lcl_isInputRequired( const Reference< XPropertySet >& _rxControlModel )
     {
-        bool bInputRequired = true;
+        bool bInputRequired = false;
         OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_INPUT_REQUIRED ) >>= bInputRequired );
         return bInputRequired;
     }
