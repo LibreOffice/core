@@ -19,7 +19,7 @@
 #  
 #**************************************************************
 
-# Builds the Comonent Thumbs of the Developers Guide.
+# Builds the Component Thumbs of the Developers Guide.
 
 PRJ=../../../..
 SETTINGS=$(PRJ)/settings
@@ -42,13 +42,13 @@ include $(SETTINGS)/stdtarget.mk
 
 .PHONY : $(SUBDIRS)
 $(SUBDIRS) :
-	$(MAKE) -C $@	  
+	$(MAKE) -C $@
 
 org/openoffice/comp/test : org/openoffice/test
 
 ComponentsThumbsExample : $(COMP_PACKAGE)
 	@echo --------------------------------------------------------------------------------
-	@echo Please use one of the following command to execute the example!
+	@echo Please use one of the following commands to execute the example!
 	@echo -
 	@echo $(MAKE) $(APP1_NAME).run
 	@echo --------
