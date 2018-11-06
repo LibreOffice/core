@@ -177,16 +177,19 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     bCacheComment = false;
 }
 
+// bit of a hack, replace everything...
 SwRewriter SwUndoRedlineDelete::GetRewriter() const
 {
     SwRewriter aResult;
     OUString aStr = m_sRedlineText;
     aStr = DenoteSpecialCharacters(aStr);
     aStr = ShortenString(aStr, nUndoStringLength, SwResId(STR_LDOTS));
-    aResult.AddRule(UndoArg1, aStr);
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, aStr);
+    OUString ret = aRewriter.Apply(SwResId(STR_UNDO_REDLINE_DELETE));
+    aResult.AddRule(UndoArg1, ret);
     return aResult;
 }
-
 
 void SwUndoRedlineDelete::SetRedlineText(const OUString & rText)
 {
