@@ -553,7 +553,7 @@
             Calc,           Draw,       visible ;
             Calc,           OLE,        hidden  ;
             DrawImpress,    3DObject,   visible ;
-            DrawImpress,    Draw,       visible ;
+            DrawImpress,    Draw,       hidden ;
             DrawImpress,    Graphic,    hidden  ;
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
@@ -653,7 +653,7 @@
             Calc,           MultiObject, visible                       ;
             Calc,           OLE,         visible                       ;
             DrawImpress,    3DObject,    visible                       ;
-            DrawImpress,    Draw,        hidden                        ;
+            DrawImpress,    Draw,        visible                       ;
             DrawImpress,    DrawLine,    visible                       ;
             DrawImpress,    Form,        visible                       ;
             DrawImpress,    Graphic,     hidden                        ;
