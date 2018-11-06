@@ -90,6 +90,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
         mxPlayer.clear();
     }
 
+#if HAVE_FEATURE_AVMEDIA
     if( mbLabelPlaying )
     {
         try
@@ -139,6 +140,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
             }
         }
     }
+#endif
 }
 
 IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
