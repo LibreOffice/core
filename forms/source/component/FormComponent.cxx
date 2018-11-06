@@ -1137,7 +1137,7 @@ OBoundControlModel::OBoundControlModel(
     ,m_aResetHelper( *this, m_aMutex )
     ,m_aUpdateListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
-    ,m_bInputRequired( true )
+    ,m_bInputRequired( false )
     ,m_pAggPropMultiplexer( nullptr )
     ,m_bFormListening( false )
     ,m_bLoaded(false)
@@ -1170,7 +1170,7 @@ OBoundControlModel::OBoundControlModel(
     ,m_aUpdateListeners( m_aMutex )
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
-    ,m_bInputRequired( true )
+    ,m_bInputRequired( false )
     ,m_pAggPropMultiplexer( nullptr )
     ,m_bFormListening( false )
     ,m_bLoaded( false )
@@ -1676,7 +1676,7 @@ Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     switch ( _nHandle )
     {
         case PROPERTY_ID_INPUT_REQUIRED:
-            aDefault <<= true;
+            aDefault <<= false;
             break;
         case PROPERTY_ID_CONTROLSOURCE:
             aDefault <<= OUString();

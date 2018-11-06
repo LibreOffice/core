@@ -835,7 +835,7 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName( DAFlags::InputRequired ),
                 PROPERTY_INPUT_REQUIRED,
-                BoolAttrFlags::DefaultTrue
+                BoolAttrFlags::DefaultFalse
             );
             RESET_BIT( nIncludeDatabase, DAFlags::InputRequired );
         }
