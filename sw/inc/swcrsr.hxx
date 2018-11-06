@@ -157,8 +157,8 @@ public:
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const* pLayout);
     bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX, SwRootFrame & rLayout);
-    bool LeftRightMargin( bool bLeftMargin, bool bAPI );
-    bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI ) const;
+    bool LeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI);
+    bool IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI) const;
     bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 

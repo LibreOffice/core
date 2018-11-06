@@ -529,14 +529,14 @@ bool SwCursorShell::LRMargin( bool bLeft, bool bAPI)
     if( m_pBlockCursor )
         m_pBlockCursor->clearPoints();
 
-    const bool bWasAtLM =
-            ( 0 == GetCursor_()->GetPoint()->nContent.GetIndex() );
+    const bool bWasAtLM = GetCursor_()->IsAtLeftRightMargin(*GetLayout(), true, bAPI);
 
-    bool bRet = pTmpCursor->LeftRightMargin( bLeft, bAPI );
+    bool bRet = pTmpCursor->LeftRightMargin(*GetLayout(), bLeft, bAPI);
 
     if ( bLeft && !bTableMode && bRet && bWasAtLM && !GetCursor_()->HasMark() )
     {
         const SwTextNode * pTextNd = GetCursor_()->GetNode().GetTextNode();
+        assert(sw::GetParaPropsNode(*GetLayout(), GetCursor_()->GetPoint()->nNode) == pTextNd);
         if ( pTextNd && pTextNd->HasVisibleNumberingOrBullet() )
             SetInFrontOfLabel( true );
     }
@@ -555,7 +555,7 @@ bool SwCursorShell::LRMargin( bool bLeft, bool bAPI)
 bool SwCursorShell::IsAtLRMargin( bool bLeft, bool bAPI ) const
 {
     const SwShellCursor* pTmpCursor = getShellCursor( true );
-    return pTmpCursor->IsAtLeftRightMargin( bLeft, bAPI );
+    return pTmpCursor->IsAtLeftRightMargin(*GetLayout(), bLeft, bAPI);
 }
 
 bool SwCursorShell::SttEndDoc( bool bStt )
