@@ -1181,6 +1181,10 @@ void VclBuilder::preload()
 #endif // DISABLE_DYNLOADING
 }
 
+#if defined DISABLE_DYNLOADING && !HAVE_FEATURE_DESKTOP
+extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
+#endif
+
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
@@ -1698,12 +1702,12 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             else
                 pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
+#elif !HAVE_FEATURE_DESKTOP
+            pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());
+            SAL_WARN_IF(!pFunction, "vcl.layout", "Could not find " << sFunction);
+            assert(pFunction);
 #else
             pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
-#if !HAVE_FEATURE_DESKTOP
-            SAL_WARN_IF(!pFunction, "vcl.layout", "Lookup of " << sFunction << " failed");
-            assert(pFunction);
-#endif
 #endif
             if (pFunction)
             {
