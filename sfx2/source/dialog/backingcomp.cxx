@@ -90,8 +90,6 @@ private:
     /** the owner frame of this component. */
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
-    osl::Mutex m_aTypeProviderMutex;
-
     Size m_aInitialWindowMinSize;
 
 public:
