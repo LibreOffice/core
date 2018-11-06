@@ -14426,17 +14426,6 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
                             <child>
-                              <object class="GtkToolButton" id="Tools-MacroRecorder">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:MacroRecorder</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkToolButton" id="Tools-RunMacro">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
