@@ -22,7 +22,10 @@
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -84,6 +87,13 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         // Frame is (probably) being deleted.  Broadcasting context
         // changes is not necessary anymore.
         return;
+    }
+
+    // notify the LOK too
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (SfxViewShell* pViewShell = SfxViewShell::Get(rxFrame->getController()))
+            SfxLokHelper::notifyContextChange(pViewShell, rsModuleName, rsContextName);
     }
 
     const css::ui::ContextChangeEventObject aEvent(
