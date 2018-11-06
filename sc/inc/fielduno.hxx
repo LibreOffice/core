@@ -63,7 +63,7 @@ private:
     ScAddress const               aCellPos;
     std::unique_ptr<ScEditSource> mpEditSource;
     /// List of refresh listeners.
-    comphelper::OInterfaceContainerHelper2* mpRefreshListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex              aMutex;
 
@@ -117,7 +117,7 @@ private:
     std::unique_ptr<ScEditSource> mpEditSource;
 
     /// List of refresh listeners.
-    comphelper::OInterfaceContainerHelper2* mpRefreshListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex                  aMutex;
 
