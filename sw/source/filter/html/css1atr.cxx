@@ -370,10 +370,10 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     const sal_Char *pUnit;
     switch( eUnit )
     {
-    case FUNIT_100TH_MM:
-        OSL_ENSURE( FUNIT_MM == eUnit, "Measuring unit not supported" );
+    case FieldUnit::MM_100TH:
+        OSL_ENSURE( FieldUnit::MM == eUnit, "Measuring unit not supported" );
         SAL_FALLTHROUGH;
-    case FUNIT_MM:
+    case FieldUnit::MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
         nDiv = 1440;    // 72 * 20;
@@ -381,11 +381,11 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         pUnit = sCSS1_UNIT_mm;
         break;
 
-    case FUNIT_M:
-    case FUNIT_KM:
-        OSL_ENSURE( FUNIT_CM == eUnit, "Measuring unit not supported" );
+    case FieldUnit::M:
+    case FieldUnit::KM:
+        OSL_ENSURE( FieldUnit::CM == eUnit, "Measuring unit not supported" );
         SAL_FALLTHROUGH;
-    case FUNIT_CM:
+    case FieldUnit::CM:
         // 0.01cm = 5.7twip (not exact, but the UI is also not exact)
         nMul = 2540;    // 2.54 * 1000
         nDiv = 1440;    // 72 * 20;
@@ -393,10 +393,10 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         pUnit = sCSS1_UNIT_cm;
         break;
 
-    case FUNIT_TWIP:
-        OSL_ENSURE( FUNIT_POINT == eUnit, "Measuring unit not supported" );
+    case FieldUnit::TWIP:
+        OSL_ENSURE( FieldUnit::POINT == eUnit, "Measuring unit not supported" );
         SAL_FALLTHROUGH;
-    case FUNIT_POINT:
+    case FieldUnit::POINT:
         // 0.1pt = 2.0twip (not exact, but the UI is also not exact)
         nMul = 100;
         nDiv = 20;
@@ -404,7 +404,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         pUnit = sCSS1_UNIT_pt;
         break;
 
-    case FUNIT_PICA:
+    case FieldUnit::PICA:
         // 0.01pc = 2.40twip (not exact, but the UI is also not exact)
         nMul = 1000;
         nDiv = 240;     // 12 * 20;
@@ -412,14 +412,14 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         pUnit = sCSS1_UNIT_pc;
         break;
 
-    case FUNIT_NONE:
-    case FUNIT_FOOT:
-    case FUNIT_MILE:
-    case FUNIT_CUSTOM:
-    case FUNIT_PERCENT:
-    case FUNIT_INCH:
+    case FieldUnit::NONE:
+    case FieldUnit::FOOT:
+    case FieldUnit::MILE:
+    case FieldUnit::CUSTOM:
+    case FieldUnit::PERCENT:
+    case FieldUnit::INCH:
     default:
-        OSL_ENSURE( FUNIT_INCH == eUnit, "Measuring unit not supported" );
+        OSL_ENSURE( FieldUnit::INCH == eUnit, "Measuring unit not supported" );
         // 0.01in = 14.4twip (not exact, but the UI is also not exact)
         nMul = 1000;
         nDiv = 1440;    // 72 * 20;

@@ -107,7 +107,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nPos = m_xMtrTransparent->get_value(FUNIT_PERCENT);
+    sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
     rXFSet.Put(XFillTransparenceItem(nPos));
 
     // preview
@@ -133,16 +133,16 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBox* pControl
     }
 
     // preview
-    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrStartValue->get_value(FUNIT_PERCENT)) * 255) / 100);
-    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrEndValue->get_value(FUNIT_PERCENT)) * 255) / 100);
+    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
+    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
     XGradient aTmpGradient(
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
                 static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active()),
-                static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FUNIT_DEGREE)) * 10,
-                static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FUNIT_PERCENT)),
-                static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FUNIT_PERCENT)),
-                static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FUNIT_PERCENT)),
+                static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10,
+                static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),
+                static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FieldUnit::PERCENT)),
+                static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FieldUnit::PERCENT)),
                 100, 100);
 
     XFillFloatTransparenceItem aItem( aTmpGradient);
@@ -211,18 +211,18 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxI
     , m_xRbtTransOff(m_xBuilder->weld_radio_button("RBT_TRANS_OFF"))
     , m_xRbtTransLinear(m_xBuilder->weld_radio_button("RBT_TRANS_LINEAR"))
     , m_xRbtTransGradient(m_xBuilder->weld_radio_button("RBT_TRANS_GRADIENT"))
-    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_TRANSPARENT", FUNIT_PERCENT))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_TRANSPARENT", FieldUnit::PERCENT))
     , m_xGridGradient(m_xBuilder->weld_widget("gridGradient"))
     , m_xLbTrgrGradientType(m_xBuilder->weld_combo_box("LB_TRGR_GRADIENT_TYPES"))
     , m_xFtTrgrCenterX(m_xBuilder->weld_label("FT_TRGR_CENTER_X"))
-    , m_xMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_X", FUNIT_PERCENT))
+    , m_xMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_X", FieldUnit::PERCENT))
     , m_xFtTrgrCenterY(m_xBuilder->weld_label("FT_TRGR_CENTER_Y"))
-    , m_xMtrTrgrCenterY(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_Y", FUNIT_PERCENT))
+    , m_xMtrTrgrCenterY(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_Y", FieldUnit::PERCENT))
     , m_xFtTrgrAngle(m_xBuilder->weld_label("FT_TRGR_ANGLE"))
-    , m_xMtrTrgrAngle(m_xBuilder->weld_metric_spin_button("MTR_TRGR_ANGLE", FUNIT_DEGREE))
-    , m_xMtrTrgrBorder(m_xBuilder->weld_metric_spin_button("MTR_TRGR_BORDER", FUNIT_PERCENT))
-    , m_xMtrTrgrStartValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_START_VALUE", FUNIT_PERCENT))
-    , m_xMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_END_VALUE", FUNIT_PERCENT))
+    , m_xMtrTrgrAngle(m_xBuilder->weld_metric_spin_button("MTR_TRGR_ANGLE", FieldUnit::DEGREE))
+    , m_xMtrTrgrBorder(m_xBuilder->weld_metric_spin_button("MTR_TRGR_BORDER", FieldUnit::PERCENT))
+    , m_xMtrTrgrStartValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_START_VALUE", FieldUnit::PERCENT))
+    , m_xMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_END_VALUE", FieldUnit::PERCENT))
     , m_xCtlBitmapBorder(m_xBuilder->weld_widget("bitmap_border"))
     , m_xCtlXRectBorder(m_xBuilder->weld_widget("trans_border"))
     , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_BITMAP_PREVIEW", m_aCtlBitmapPreview))
@@ -234,12 +234,12 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxI
     m_xRbtTransGradient->connect_toggled(LINK(this, SvxTransparenceTabPage, ClickTransGradientHdl_Impl));
 
     // linear transparency
-    m_xMtrTransparent->set_value(50, FUNIT_PERCENT);
+    m_xMtrTransparent->set_value(50, FieldUnit::PERCENT);
     m_xMtrTransparent->connect_value_changed(LINK(this, SvxTransparenceTabPage, ModifyTransparentHdl_Impl));
 
     // gradient transparency
-    m_xMtrTrgrEndValue->set_value(100, FUNIT_PERCENT);
-    m_xMtrTrgrStartValue->set_value(0, FUNIT_PERCENT);
+    m_xMtrTrgrEndValue->set_value(100, FieldUnit::PERCENT);
+    m_xMtrTrgrStartValue->set_value(0, FieldUnit::PERCENT);
     Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl);
     m_xLbTrgrGradientType->connect_changed(LINK(this, SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl));
     m_xMtrTrgrCenterX->connect_value_changed( aLink );
@@ -277,7 +277,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrTransparent->get_sensitive())
     {
         // linear transparence
-        sal_uInt16 nPos = m_xMtrTransparent->get_value(FUNIT_PERCENT);
+        sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
         if (m_xMtrTransparent->get_value_changed_from_saved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
@@ -304,16 +304,16 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             || m_xMtrTrgrStartValue->get_value_changed_from_saved()
             || m_xMtrTrgrEndValue->get_value_changed_from_saved())
         {
-            sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrStartValue->get_value(FUNIT_PERCENT)) * 255) / 100);
-            sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrEndValue->get_value(FUNIT_PERCENT)) * 255) / 100);
+            sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
+            sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
             XGradient aTmpGradient(
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
                         static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active()),
-                        static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FUNIT_DEGREE)) * 10,
-                        static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FUNIT_PERCENT)),
-                        static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FUNIT_PERCENT)),
-                        static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FUNIT_PERCENT)),
+                        static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10,
+                        static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),
+                        static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FieldUnit::PERCENT)),
+                        static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FieldUnit::PERCENT)),
                         100, 100);
 
             XFillFloatTransparenceItem aItem(aTmpGradient);
@@ -377,16 +377,16 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
     css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
     m_xLbTrgrGradientType->set_active(sal::static_int_cast< sal_Int32 >(eXGS));
-    m_xMtrTrgrAngle->set_value(rGradient.GetAngle() / 10, FUNIT_DEGREE);
-    m_xMtrTrgrBorder->set_value(rGradient.GetBorder(), FUNIT_PERCENT);
-    m_xMtrTrgrCenterX->set_value(rGradient.GetXOffset(), FUNIT_PERCENT);
-    m_xMtrTrgrCenterY->set_value(rGradient.GetYOffset(), FUNIT_PERCENT);
-    m_xMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255), FUNIT_PERCENT);
-    m_xMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FUNIT_PERCENT);
+    m_xMtrTrgrAngle->set_value(rGradient.GetAngle() / 10, FieldUnit::DEGREE);
+    m_xMtrTrgrBorder->set_value(rGradient.GetBorder(), FieldUnit::PERCENT);
+    m_xMtrTrgrCenterX->set_value(rGradient.GetXOffset(), FieldUnit::PERCENT);
+    m_xMtrTrgrCenterY->set_value(rGradient.GetYOffset(), FieldUnit::PERCENT);
+    m_xMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
+    m_xMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
 
     // linear transparence
     sal_uInt16 nTransp = static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue();
-    m_xMtrTransparent->set_value(bLinearActive ? nTransp : 50, FUNIT_PERCENT);
+    m_xMtrTransparent->set_value(bLinearActive ? nTransp : 50, FieldUnit::PERCENT);
     ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 
     // select the correct radio button

@@ -248,7 +248,7 @@ SvxMetricField::SvxMetricField(
     Size aSize( CalcMinimumSize() );
     SetSizePixel( aSize );
     aLogicalSize = PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
-    SetUnit( FUNIT_MM );
+    SetUnit( FieldUnit::MM );
     SetDecimalDigits( 2 );
     SetMax( 5000 );
     SetMin( 0 );

@@ -69,8 +69,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet
     , aCurrentTab(0)
     , aNewTabs(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP))
     , nDefDist(0)
-    , eDefUnit(FUNIT_100TH_MM)
-    , m_xTabSpin(m_xBuilder->weld_metric_spin_button("SP_TABPOS", FUNIT_CM))
+    , eDefUnit(FieldUnit::MM_100TH)
+    , m_xTabSpin(m_xBuilder->weld_metric_spin_button("SP_TABPOS", FieldUnit::CM))
     , m_xTabBox(m_xBuilder->weld_entry_tree_view("tabgrid", "ED_TABPOS", "LB_TABPOS"))
     , m_xCenterTab(m_xBuilder->weld_radio_button("radiobuttonBTN_TABTYPE_CENTER"))
     , m_xDezTab(m_xBuilder->weld_radio_button("radiobuttonBTN_TABTYPE_DECIMAL"))
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ReformatHdl_Impl, weld::Widget&, void)
 {
     m_xTabSpin->set_text(m_xTabBox->get_active_text());
-    m_xTabSpin->set_value(m_xTabSpin->get_value(FUNIT_NONE), FUNIT_NONE);
+    m_xTabSpin->set_value(m_xTabSpin->get_value(FieldUnit::NONE), FieldUnit::NONE);
     m_xTabBox->set_entry_text(m_xTabSpin->get_text());
 }
 

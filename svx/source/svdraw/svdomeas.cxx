@@ -81,8 +81,8 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
     Fraction aMeasureScale(1, 1);
     bool bTextRota90(false);
     bool bShowUnit(false);
-    FieldUnit eMeasureUnit(FUNIT_NONE);
-    FieldUnit eModUIUnit(FUNIT_NONE);
+    FieldUnit eMeasureUnit(FieldUnit::NONE);
+    FieldUnit eModUIUnit(FieldUnit::NONE);
 
     const SfxItemSet& rSet = GetMergedItemSet();
     bTextRota90 = rSet.Get(SDRATTR_MEASURETEXTROTA90).GetValue();
@@ -97,7 +97,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
         {
             eModUIUnit = getSdrModelFromSdrObject().GetUIUnit();
 
-            if(eMeasureUnit == FUNIT_NONE)
+            if(eMeasureUnit == FieldUnit::NONE)
                 eMeasureUnit = eModUIUnit;
 
             sal_Int32 nLen(GetLen(aPt2 - aPt1));
@@ -162,7 +162,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
             {
                 eModUIUnit = getSdrModelFromSdrObject().GetUIUnit();
 
-                if(eMeasureUnit == FUNIT_NONE)
+                if(eMeasureUnit == FieldUnit::NONE)
                     eMeasureUnit = eModUIUnit;
 
                 aStr = SdrModel::GetUnitString(eMeasureUnit);

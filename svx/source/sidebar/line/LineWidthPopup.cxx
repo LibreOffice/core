@@ -198,7 +198,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
     {
         sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, eMapUnit, MapUnit::Map100thMM );
         nVal = m_xMFWidth->Normalize(nVal);
-        m_xMFWidth->SetValue( nVal, FUNIT_100TH_MM );
+        m_xMFWidth->SetValue( nVal, FieldUnit::MM_100TH );
     }
     else
     {

@@ -39,7 +39,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     {
         FieldUnit eUserMet = SC_MOD()->GetAppOptions().GetAppMetric();
 
-        sal_Int64 nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FUNIT_TWIP, eUserMet );
+        sal_Int64 nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
 
         OUString aStr = rText + " "
                         + ScGlobal::pLocaleData->getNum( nUserVal, 2 )

@@ -108,7 +108,7 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
     {
         const long nMinVal = maCommand == ".uno:GrafTransparence" ? 0 : -100;
 
-        SetUnit(FUNIT_PERCENT);
+        SetUnit(FieldUnit::PERCENT);
         SetDecimalDigits( 0 );
 
         SetMin( nMinVal );

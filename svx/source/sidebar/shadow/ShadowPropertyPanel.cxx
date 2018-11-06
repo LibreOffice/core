@@ -130,7 +130,7 @@ void ShadowPropertyPanel::Initialize()
     mpShadowTransSlider->SetUpdateMode(true);
     mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
     for(sal_uInt16 i = 0; i <= 20 ; i++)
-        mpShadowDistance->InsertValue(i*2,FUNIT_POINT);
+        mpShadowDistance->InsertValue(i*2,FieldUnit::POINT);
     InsertAngleValues();
 }
 
@@ -178,7 +178,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, void)
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
 {
     OUString sAngle = mpShadowAngle->GetText();
-    nXY = mpShadowDistance->GetValue(FUNIT_100TH_MM);
+    nXY = mpShadowDistance->GetValue(FieldUnit::MM_100TH);
     switch(ParseText(sAngle))
     {
         case 0: nX = nXY; nY = 0;             break;
@@ -235,7 +235,7 @@ void ShadowPropertyPanel::UpdateControls()
     else if( nX == 0 && nY > 0 ) { mpShadowAngle->SelectEntryPos(6); nXY = nY; }
     else if( nX > 0 && nY > 0 ) { mpShadowAngle->SelectEntryPos(7); nXY = nX; }
     else { nXY = 0; }
-    mpShadowDistance->SetValue(nXY, FUNIT_100TH_MM);
+    mpShadowDistance->SetValue(nXY, FieldUnit::MM_100TH);
 }
 
 void ShadowPropertyPanel::SetTransparencyValue(long nVal)
@@ -250,14 +250,14 @@ void ShadowPropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
 
 void ShadowPropertyPanel::InsertAngleValues()
 {
-    mpShadowAngle->InsertValue(0, FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(45, FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(90, FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(135, FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(180, FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(225,FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(270, FUNIT_CUSTOM);
-    mpShadowAngle->InsertValue(315,FUNIT_CUSTOM);
+    mpShadowAngle->InsertValue(0, FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(45, FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(90, FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(135, FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(180, FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(225,FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(270, FieldUnit::CUSTOM);
+    mpShadowAngle->InsertValue(315,FieldUnit::CUSTOM);
 }
 
 void ShadowPropertyPanel::NotifyItemUpdate(
