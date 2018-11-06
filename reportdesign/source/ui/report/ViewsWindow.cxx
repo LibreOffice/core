@@ -1401,11 +1401,8 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
     {
         OReportSection& rReportSection = (*aIter)->getReportSection();
         SdrHdl* pCurrentHdl = rReportSection.getSectionView().GetDragHdl();
-        if ( pCurrentHdl )
-        {
-            if ( aRealMousePos.Y() > 0 )
-                aRealMousePos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
-        }
+        if ( pCurrentHdl && aRealMousePos.Y() > 0 )
+            aRealMousePos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
         rReportSection.getSectionView().MovAction ( aRealMousePos );
         const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
         aRealMousePos.AdjustY( -nSectionHeight );
