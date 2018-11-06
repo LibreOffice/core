@@ -351,6 +351,7 @@ cmd/sc_dbreportdelete.png cmd/sc_delete.png
 cmd/sc_dbquerydelete.png cmd/sc_delete.png
 cmd/sc_dbformdelete.png cmd/sc_delete.png
 cmd/sc_dbclearquery.png cmd/sc_delete.png
+cmd/sc_deletecell.png cmd/sc_delete.png
 
 # Folder
 cmd/lc_dbtableopen.png cmd/lc_open.png
@@ -829,6 +830,11 @@ cmd/sc_fliphorizontal.png cmd/sc_mirror.png
 cmd/lc_flipvertical.png cmd/lc_mirrorvert.png
 cmd/sc_flipvertical.png cmd/sc_mirrorvert.png
 cmd/sc_mirrorhorz.png cmd/sc_mirror.png
+cmd/sc_flipmenu.png cmd/sc_mirror.png
+cmd/lc_objectmirrorhorizontal.png cmd/lc_mirror.png
+cmd/sc_objectmirrorhorizontal.png cmd/sc_mirror.png
+cmd/lc_objectmirrorvertical.png cmd/lc_mirrorvert.png
+cmd/sc_objectmirrorvertical.png cmd/sc_mirrorvert.png
 
 # Connector
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
@@ -1752,3 +1758,23 @@ cmd/sc_namegroup.png cmd/sc_renameobject.png
 
 cmd/lc_margins.png cmd/lc_pagemargin.png
 cmd/lc_exportasgraphic.png cmd/lc_insertgraphic.png
+
+# calc toolbar draw
+# ===============================================
+cmd/sc_assignmacro.png cmd/sc_starshapes.vertical-scroll.png
+cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
+cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
+cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
+
+cmd/lc_assignmacro.png cmd/lc_starshapes.vertical-scroll.png
+cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
+cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
+cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
+
+cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
+
+# calc menubar icons
+# ===============================================
+cmd/sc_chartmenu.png cmd/sc_drawchart.png
+cmd/sc_objectmenu.png cmd/sc_insertframe.png
+
