@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -187,17 +188,7 @@ bool SvXMLNumUsedList_Impl::GetNextUsed(sal_uInt32& nKey)
 
 uno::Sequence<sal_Int32> SvXMLNumUsedList_Impl::GetWasUsed()
 {
-    uno::Sequence<sal_Int32> ret(nWasUsedCount);
-    sal_Int32* pWasUsed = ret.getArray();
-    if (pWasUsed)
-    {
-        for (const auto nWasUsed : aWasUsed)
-        {
-            *pWasUsed = nWasUsed;
-            ++pWasUsed;
-        }
-    }
-    return ret;
+    return comphelper::containerToSequence<sal_Int32>(aWasUsed);
 }
 
 void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)

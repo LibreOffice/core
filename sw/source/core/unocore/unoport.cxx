@@ -222,155 +222,152 @@ void SwXTextPortion::GetPropertyValue(
     OSL_ENSURE( pUnoCursor, "UNO cursor missing" );
     if (!pUnoCursor)
         return;
-    if(pUnoCursor)
+    switch(rEntry.nWID)
     {
-        switch(rEntry.nWID)
+        case FN_UNO_TEXT_PORTION_TYPE:
         {
-            case FN_UNO_TEXT_PORTION_TYPE:
+            const char* pRet;
+            switch (m_ePortionType)
             {
-                const char* pRet;
-                switch (m_ePortionType)
-                {
-                case PORTION_TEXT:          pRet = "Text";break;
-                case PORTION_FIELD:         pRet = "TextField";break;
-                case PORTION_FRAME:         pRet = "Frame";break;
-                case PORTION_FOOTNOTE:      pRet = "Footnote";break;
-                case PORTION_REFMARK_START:
-                case PORTION_REFMARK_END:   pRet = UNO_NAME_REFERENCE_MARK;break;
-                case PORTION_TOXMARK_START:
-                case PORTION_TOXMARK_END:   pRet = UNO_NAME_DOCUMENT_INDEX_MARK;break;
-                case PORTION_BOOKMARK_START :
-                case PORTION_BOOKMARK_END : pRet = UNO_NAME_BOOKMARK;break;
-                case PORTION_REDLINE_START:
-                case PORTION_REDLINE_END:   pRet = "Redline";break;
-                case PORTION_RUBY_START:
-                case PORTION_RUBY_END:      pRet = "Ruby";break;
-                case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
-                case PORTION_META:          pRet = UNO_NAME_META; break;
-                case PORTION_FIELD_START:pRet = "TextFieldStart";break;
-                case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
-                case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
-                case PORTION_ANNOTATION:
-                    pRet = "Annotation";
-                    break;
-                case PORTION_ANNOTATION_END:
-                    pRet = "AnnotationEnd";
-                    break;
-                default:
-                    pRet = nullptr;
-                }
-
-                OUString sRet;
-                if( pRet )
-                    sRet = OUString::createFromAscii( pRet );
-                rVal <<= sRet;
-            }
-            break;
-            case FN_UNO_CONTROL_CHARACTER: // obsolete!
-            break;
-            case FN_UNO_DOCUMENT_INDEX_MARK:
-                rVal <<= m_xTOXMark;
-            break;
-            case FN_UNO_REFERENCE_MARK:
-                rVal <<= m_xRefMark;
-            break;
-            case FN_UNO_BOOKMARK:
-                rVal <<= m_xBookmark;
-            break;
-            case FN_UNO_FOOTNOTE:
-                rVal <<= m_xFootnote;
-            break;
-            case FN_UNO_TEXT_FIELD:
-                rVal <<= m_xTextField;
-            break;
-            case FN_UNO_META:
-                rVal <<= m_xMeta;
-            break;
-            case FN_UNO_IS_COLLAPSED:
-            {
-                switch (m_ePortionType)
-                {
-                    case PORTION_REFMARK_START:
-                    case PORTION_BOOKMARK_START :
-                    case PORTION_TOXMARK_START:
-                    case PORTION_REFMARK_END:
-                    case PORTION_TOXMARK_END:
-                    case PORTION_BOOKMARK_END :
-                    case PORTION_REDLINE_START :
-                    case PORTION_REDLINE_END :
-                    case PORTION_RUBY_START:
-                    case PORTION_RUBY_END:
-                    case PORTION_FIELD_START:
-                    case PORTION_FIELD_END:
-                        rVal <<= m_bIsCollapsed;
-                    break;
-                    default:
-                    break;
-                }
-            }
-            break;
-            case FN_UNO_IS_START:
-            {
-                bool bStart = true, bPut = true;
-                switch (m_ePortionType)
-                {
-                    case PORTION_REFMARK_START:
-                    case PORTION_BOOKMARK_START:
-                    case PORTION_TOXMARK_START:
-                    case PORTION_REDLINE_START:
-                    case PORTION_RUBY_START:
-                    case PORTION_FIELD_START:
-                    break;
-
-                    case PORTION_REFMARK_END:
-                    case PORTION_TOXMARK_END:
-                    case PORTION_BOOKMARK_END:
-                    case PORTION_REDLINE_END:
-                    case PORTION_RUBY_END:
-                    case PORTION_FIELD_END:
-                        bStart = false;
-                    break;
-                    default:
-                        bPut = false;
-                }
-                if(bPut)
-                    rVal <<= bStart;
-            }
-            break;
-            case RES_TXTATR_CJK_RUBY:
-            {
-                const uno::Any* pToSet = nullptr;
-                switch(rEntry.nMemberId)
-                {
-                    case MID_RUBY_TEXT :    pToSet = m_pRubyText.get();   break;
-                    case MID_RUBY_ADJUST :  pToSet = m_pRubyAdjust.get(); break;
-                    case MID_RUBY_CHARSTYLE:pToSet = m_pRubyStyle.get();  break;
-                    case MID_RUBY_ABOVE :   pToSet = m_pRubyIsAbove.get();break;
-                    case MID_RUBY_POSITION: pToSet = m_pRubyPosition.get();break;
-                }
-                if(pToSet)
-                    rVal = *pToSet;
-            }
-            break;
+            case PORTION_TEXT:          pRet = "Text";break;
+            case PORTION_FIELD:         pRet = "TextField";break;
+            case PORTION_FRAME:         pRet = "Frame";break;
+            case PORTION_FOOTNOTE:      pRet = "Footnote";break;
+            case PORTION_REFMARK_START:
+            case PORTION_REFMARK_END:   pRet = UNO_NAME_REFERENCE_MARK;break;
+            case PORTION_TOXMARK_START:
+            case PORTION_TOXMARK_END:   pRet = UNO_NAME_DOCUMENT_INDEX_MARK;break;
+            case PORTION_BOOKMARK_START :
+            case PORTION_BOOKMARK_END : pRet = UNO_NAME_BOOKMARK;break;
+            case PORTION_REDLINE_START:
+            case PORTION_REDLINE_END:   pRet = "Redline";break;
+            case PORTION_RUBY_START:
+            case PORTION_RUBY_END:      pRet = "Ruby";break;
+            case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
+            case PORTION_META:          pRet = UNO_NAME_META; break;
+            case PORTION_FIELD_START:pRet = "TextFieldStart";break;
+            case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
+            case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
+            case PORTION_ANNOTATION:
+                pRet = "Annotation";
+                break;
+            case PORTION_ANNOTATION_END:
+                pRet = "AnnotationEnd";
+                break;
             default:
-                beans::PropertyState eTemp;
-                bool bDone = SwUnoCursorHelper::getCursorPropertyValue(
-                                    rEntry, *pUnoCursor, &rVal, eTemp );
-                if(!bDone)
-                {
-                    if(!pSet)
-                    {
-                        pSet = o3tl::make_unique<SfxItemSet>(
-                            pUnoCursor->GetDoc()->GetAttrPool(),
-                            svl::Items<
-                                RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                                RES_UNKNOWNATR_CONTAINER,
-                                    RES_UNKNOWNATR_CONTAINER>{});
-                        SwUnoCursorHelper::GetCursorAttr(*pUnoCursor, *pSet);
-                    }
-                    m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);
-                }
+                pRet = nullptr;
+            }
+
+            OUString sRet;
+            if( pRet )
+                sRet = OUString::createFromAscii( pRet );
+            rVal <<= sRet;
         }
+        break;
+        case FN_UNO_CONTROL_CHARACTER: // obsolete!
+        break;
+        case FN_UNO_DOCUMENT_INDEX_MARK:
+            rVal <<= m_xTOXMark;
+        break;
+        case FN_UNO_REFERENCE_MARK:
+            rVal <<= m_xRefMark;
+        break;
+        case FN_UNO_BOOKMARK:
+            rVal <<= m_xBookmark;
+        break;
+        case FN_UNO_FOOTNOTE:
+            rVal <<= m_xFootnote;
+        break;
+        case FN_UNO_TEXT_FIELD:
+            rVal <<= m_xTextField;
+        break;
+        case FN_UNO_META:
+            rVal <<= m_xMeta;
+        break;
+        case FN_UNO_IS_COLLAPSED:
+        {
+            switch (m_ePortionType)
+            {
+                case PORTION_REFMARK_START:
+                case PORTION_BOOKMARK_START :
+                case PORTION_TOXMARK_START:
+                case PORTION_REFMARK_END:
+                case PORTION_TOXMARK_END:
+                case PORTION_BOOKMARK_END :
+                case PORTION_REDLINE_START :
+                case PORTION_REDLINE_END :
+                case PORTION_RUBY_START:
+                case PORTION_RUBY_END:
+                case PORTION_FIELD_START:
+                case PORTION_FIELD_END:
+                    rVal <<= m_bIsCollapsed;
+                break;
+                default:
+                break;
+            }
+        }
+        break;
+        case FN_UNO_IS_START:
+        {
+            bool bStart = true, bPut = true;
+            switch (m_ePortionType)
+            {
+                case PORTION_REFMARK_START:
+                case PORTION_BOOKMARK_START:
+                case PORTION_TOXMARK_START:
+                case PORTION_REDLINE_START:
+                case PORTION_RUBY_START:
+                case PORTION_FIELD_START:
+                break;
+
+                case PORTION_REFMARK_END:
+                case PORTION_TOXMARK_END:
+                case PORTION_BOOKMARK_END:
+                case PORTION_REDLINE_END:
+                case PORTION_RUBY_END:
+                case PORTION_FIELD_END:
+                    bStart = false;
+                break;
+                default:
+                    bPut = false;
+            }
+            if(bPut)
+                rVal <<= bStart;
+        }
+        break;
+        case RES_TXTATR_CJK_RUBY:
+        {
+            const uno::Any* pToSet = nullptr;
+            switch(rEntry.nMemberId)
+            {
+                case MID_RUBY_TEXT :    pToSet = m_pRubyText.get();   break;
+                case MID_RUBY_ADJUST :  pToSet = m_pRubyAdjust.get(); break;
+                case MID_RUBY_CHARSTYLE:pToSet = m_pRubyStyle.get();  break;
+                case MID_RUBY_ABOVE :   pToSet = m_pRubyIsAbove.get();break;
+                case MID_RUBY_POSITION: pToSet = m_pRubyPosition.get();break;
+            }
+            if(pToSet)
+                rVal = *pToSet;
+        }
+        break;
+        default:
+            beans::PropertyState eTemp;
+            bool bDone = SwUnoCursorHelper::getCursorPropertyValue(
+                                rEntry, *pUnoCursor, &rVal, eTemp );
+            if(!bDone)
+            {
+                if(!pSet)
+                {
+                    pSet = o3tl::make_unique<SfxItemSet>(
+                        pUnoCursor->GetDoc()->GetAttrPool(),
+                        svl::Items<
+                            RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
+                            RES_UNKNOWNATR_CONTAINER,
+                                RES_UNKNOWNATR_CONTAINER>{});
+                    SwUnoCursorHelper::GetCursorAttr(*pUnoCursor, *pSet);
+                }
+                m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);
+            }
     }
 }
 

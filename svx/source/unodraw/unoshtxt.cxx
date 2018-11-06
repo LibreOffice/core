@@ -206,12 +206,9 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
             mpText = pTextObj->getText( 0 );
     }
 
-    if( mpModel )
-        StartListening( *mpModel );
-    if( mpView )
-        StartListening( *mpView );
-    if( mpObject )
-        mpObject->AddObjectUser( *this );
+    StartListening( *mpModel );
+    StartListening( *mpView );
+    mpObject->AddObjectUser( *this );
 
     // Init edit mode state from shape info (IsTextEditActive())
     mbShapeIsEditMode = IsEditMode();

@@ -1589,10 +1589,8 @@ void VCartesianAxis::createLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
+    std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
-    if( !pTickFactory2D )
-        return;
 
     //get the transformed screen values for all tickmarks in aAllTickInfos
     pTickFactory2D->updateScreenValues( m_aAllTickInfos );
@@ -1644,10 +1642,8 @@ void VCartesianAxis::createMaximumLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
+    std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
-    if( !pTickFactory2D )
-        return;
 
     //get the transformed screen values for all tickmarks in aAllTickInfos
     pTickFactory2D->updateScreenValues( m_aAllTickInfos );
@@ -1682,10 +1678,8 @@ void VCartesianAxis::updatePositions()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
+    std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
-    if( !pTickFactory2D )
-        return;
 
     //update positions of all existing text shapes
     pTickFactory2D->updateScreenValues( m_aAllTickInfos );
@@ -1778,10 +1772,8 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
+    std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
-    if( !pTickFactory2D )
-        return;
 
     //create line shapes
     if(m_nDimension==2)

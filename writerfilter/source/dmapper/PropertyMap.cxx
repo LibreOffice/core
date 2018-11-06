@@ -1506,9 +1506,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         {
             uno::Reference< beans::XPropertySet > xDocProperties;
             xDocProperties.set( rDM_Impl.GetTextDocument(), uno::UNO_QUERY_THROW );
-            bool bSquaredPageMode = false;
-            Insert( PROP_GRID_STANDARD_MODE, uno::makeAny( !bSquaredPageMode ) );
-            xDocProperties->setPropertyValue( "DefaultPageMode", uno::makeAny( bSquaredPageMode ) );
+            Insert(PROP_GRID_STANDARD_MODE, uno::makeAny(true));
+            xDocProperties->setPropertyValue("DefaultPageMode", uno::makeAny(false));
         }
         catch ( const uno::Exception& )
         {
@@ -1592,7 +1591,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
                 if (0 <= m_nPageNumber)
                 {
-                    sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
+                    sal_Int16 nPageNumber = static_cast< sal_Int16 >(m_nPageNumber);
                     xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
                         uno::makeAny(nPageNumber));
                 }

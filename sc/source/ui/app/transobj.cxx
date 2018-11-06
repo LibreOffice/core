@@ -495,11 +495,8 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
         case SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT:
             {
                 ScTabEditEngine* pEngine = static_cast<ScTabEditEngine*>(pUserObject);
-                if ( nUserObjectId == SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT )
-                {
-                    pEngine->Write( *rxOStm, EETextFormat::Xml );
-                    bRet = ( rxOStm->GetError() == ERRCODE_NONE );
-                }
+                pEngine->Write(*rxOStm, EETextFormat::Xml);
+                bRet = (rxOStm->GetError() == ERRCODE_NONE);
             }
             break;
 

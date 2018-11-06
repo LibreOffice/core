@@ -126,9 +126,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     if( dynamic_cast<const E3dObject* >(pSdrShape) !=  nullptr )
     {
         GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape );
-
-        if(pShape)
-            pShape->Create( pSdrShape, mxPage.get()  );
+        pShape->Create(pSdrShape, mxPage.get());
     }
     else
     {

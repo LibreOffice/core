@@ -390,17 +390,9 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
                               ? rFrame.GetContent()->GetGrfNode() : nullptr;
     if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
-        OUString sStr( FieldString(ww::eINCLUDEPICTURE) );
-        sStr += " \"";
-        {
-            if ( pGrfNd )
-            {
-                OUString aFileURL;
-                pGrfNd->GetFileFilterNms( &aFileURL, nullptr );
-                sStr += aFileURL;
-            }
-        }
-        sStr += "\" \\d";
+        OUString sStr;
+        pGrfNd->GetFileFilterNms(&sStr, nullptr);
+        sStr = FieldString(ww::eINCLUDEPICTURE) + " \"" + sStr + "\" \\d";
 
         OutputField( nullptr, ww::eINCLUDEPICTURE, sStr,
                    FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd );

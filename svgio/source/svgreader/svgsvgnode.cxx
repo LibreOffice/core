@@ -501,12 +501,12 @@ namespace svgio
                         basegfx::B2DRange aSvgCanvasRange; // viewport
                         double fW = 0.0; // dummy values
                         double fH = 0.0;
-                        if(getViewBox())
+                        if (const basegfx::B2DRange* pBox = getViewBox())
                         {
                             // SVG 1.1 defines in section 7.7 that a negative value for width or height
                             // in viewBox is an error and that 0.0 disables rendering
-                            const double fViewBoxWidth = getViewBox()->getWidth();
-                            const double fViewBoxHeight = getViewBox()->getHeight();
+                            const double fViewBoxWidth = pBox->getWidth();
+                            const double fViewBoxHeight = pBox->getHeight();
                             if(basegfx::fTools::more(fViewBoxWidth,0.0) && basegfx::fTools::more(fViewBoxHeight,0.0))
                             {
                                 // The intrinsic aspect ratio of the svg element is given by absolute values of svg width and svg height
@@ -542,14 +542,10 @@ namespace svgio
                                     // We get viewport >= content, therefore no clipping.
                                     bNeedsMapping = false;
 
-                                    const basegfx::B2DRange aChildRange(
-                                        aSequence.getB2DRange(
-                                            drawinglayer::geometry::ViewInformation2D()));
-
-                                    const double fChildWidth(getViewBox() ? getViewBox()->getWidth() : aChildRange.getWidth());
-                                    const double fChildHeight(getViewBox() ? getViewBox()->getHeight() : aChildRange.getHeight());
-                                    const double fLeft(getViewBox() ? getViewBox()->getMinX()  : aChildRange.getMinX());
-                                    const double fTop (getViewBox() ? getViewBox()->getMinY() : aChildRange.getMinY());
+                                    const double fChildWidth(pBox->getWidth());
+                                    const double fChildHeight(pBox->getHeight());
+                                    const double fLeft(pBox->getMinX());
+                                    const double fTop(pBox->getMinY());
                                     if ( fChildWidth / fViewBoxWidth > fChildHeight / fViewBoxHeight )
                                     {  // expand y
                                         fW = fChildWidth;
@@ -572,7 +568,7 @@ namespace svgio
                                     const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
 
                                     basegfx::B2DHomMatrix aViewBoxMapping;
-                                    aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, *getViewBox());
+                                    aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, *pBox);
                                     // no need to check ratio here for slice, the outermost Svg will
                                     // be clipped anyways (see below)
 

@@ -252,9 +252,7 @@ SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
 bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/,
                                                      MapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper&) const
 {
-    rText.clear();
-
-    const char* pId = nullptr;
+    const char* pId;
 
     switch( GetValue() )
     {
@@ -271,8 +269,7 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCo
         break;
     }
 
-    if (pId)
-        rText = SvxResId(pId);
+    rText = SvxResId(pId);
 
     return true;
 }

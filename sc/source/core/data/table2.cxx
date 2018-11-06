@@ -2932,30 +2932,19 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
                 bSingle = false;    // no difference in this range
             }
         }
-        if (bSingle)
-        {
-            if (nEndRow-nStartRow < 20)
-            {
-                if (!bChanged)
-                    bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
 
-                mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
-            }
-            else
-            {
-                SCROW nMid = (nStartRow+nEndRow) / 2;
-                if (SetRowHeightRange( nStartRow, nMid, nNewHeight, 1.0 ))
-                    bChanged = true;
-                if (SetRowHeightRange( nMid+1, nEndRow, nNewHeight, 1.0 ))
-                    bChanged = true;
-            }
+        if (!bSingle || nEndRow - nStartRow < 20)
+        {
+            bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
+            mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
         }
         else
         {
-            if (!bChanged)
-                bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
-
-            mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
+            SCROW nMid = (nStartRow + nEndRow) / 2;
+            if (SetRowHeightRange(nStartRow, nMid, nNewHeight, 1.0))
+                bChanged = true;
+            if (SetRowHeightRange(nMid + 1, nEndRow, nNewHeight, 1.0))
+                bChanged = true;
         }
 
         if (bChanged)

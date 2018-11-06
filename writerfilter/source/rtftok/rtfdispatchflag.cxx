@@ -748,7 +748,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTF_SECTUNLOCKED:
         {
-            auto pValue = new RTFValue(int(!nParam));
+            auto pValue = new RTFValue(0);
             m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
         }
         break;

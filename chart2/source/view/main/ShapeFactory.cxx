@@ -2517,14 +2517,7 @@ uno::Reference< drawing::XShape >
 
 ShapeFactory* ShapeFactory::getOrCreateShapeFactory(const uno::Reference< lang::XMultiServiceFactory>& xFactory)
 {
-    static ShapeFactory* pShapeFactory = nullptr;
-
-    if (pShapeFactory)
-        return pShapeFactory;
-
-    if (!pShapeFactory)
-        pShapeFactory = new ShapeFactory(xFactory);
-
+    static ShapeFactory* pShapeFactory = new ShapeFactory(xFactory);
     return pShapeFactory;
 }
 

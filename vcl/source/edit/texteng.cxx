@@ -2000,25 +2000,21 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                     break;
                                 case PORTIONKIND_TAB:
                                     // for HideSelection() only Range, pSelection = 0.
-                                    if ( pSelStart )
+                                    if ( pSelStart ) // also implies pSelEnd
                                     {
                                         const tools::Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
-                                        bool bDone = false;
-                                        if ( pSelStart )
+                                        // is the Tab in the Selection???
+                                        const TextPaM aTextStart(nPara, nIndex);
+                                        const TextPaM aTextEnd(nPara, nIndex + 1);
+                                        if ((aTextStart < *pSelEnd) && (aTextEnd > *pSelStart))
                                         {
-                                            // is the Tab in the Selection???
-                                            const TextPaM aTextStart( nPara, nIndex );
-                                            const TextPaM aTextEnd( nPara, nIndex+1 );
-                                            if ( ( aTextStart < *pSelEnd ) && ( aTextEnd > *pSelStart ) )
-                                            {
-                                                const Color aOldColor = pOutDev->GetFillColor();
-                                                pOutDev->SetFillColor( rStyleSettings.GetHighlightColor() );
-                                                pOutDev->DrawRect( aTabArea );
-                                                pOutDev->SetFillColor( aOldColor );
-                                                bDone = true;
-                                            }
+                                            const Color aOldColor = pOutDev->GetFillColor();
+                                            pOutDev->SetFillColor(
+                                                rStyleSettings.GetHighlightColor());
+                                            pOutDev->DrawRect(aTabArea);
+                                            pOutDev->SetFillColor(aOldColor);
                                         }
-                                        if ( !bDone )
+                                        else
                                         {
                                             pOutDev->Erase( aTabArea );
                                         }

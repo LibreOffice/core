@@ -2674,17 +2674,17 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
 
-    sal_uInt16 nTabCount = aTabs.size();
-    sal_uInt16 nItemCount = rEntry.ItemCount();
-    sal_uInt16 nCurTab = 0;
-    sal_uInt16 nCurItem = 0;
+    const size_t nTabCount = aTabs.size();
+    const size_t nItemCount = rEntry.ItemCount();
+    size_t nCurTab = 0;
+    size_t nCurItem = 0;
 
     while (nCurTab < nTabCount && nCurItem < nItemCount)
     {
         SvLBoxTab* pTab = aTabs[nCurTab].get();
-        sal_uInt16 nNextTab = nCurTab + 1;
+        const size_t nNextTab = nCurTab + 1;
         SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab].get() : nullptr;
-        SvLBoxItem* pItem = nCurItem < nItemCount ? &rEntry.GetItem(nCurItem) : nullptr;
+        SvLBoxItem& rItem = rEntry.GetItem(nCurItem);
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
         Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
@@ -2715,7 +2715,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         Wallpaper aWallpaper = rRenderContext.GetBackground();
 
         bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
-        SvLBoxItemType nItemType = pItem->GetType();
+        SvLBoxItemType nItemType = rItem.GetType();
 
         if (pViewDataEntry->IsHighlighted() && bSelTab)
         {
@@ -2811,10 +2811,10 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
         pViewDataEntry->SetPaintRectangle(aRect);
 
-        pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+        rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 
         // division line between tabs
-        if (pNextTab && pItem->GetType() == SvLBoxItemType::String &&
+        if (pNextTab && rItem.GetType() == SvLBoxItemType::String &&
             // not at the right edge of the window!
             aRect.Right() < nMaxRight)
         {

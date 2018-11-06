@@ -797,13 +797,10 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
 
     uno::Reference< drawing::XDrawPage > xPage;
 
-    if( mpDoc )
-    {
-        initializeDocument();
-        SdPage* pPage = mpDoc->GetMasterSdPage( 0, PageKind::Handout );
-        if( pPage )
-            xPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
-    }
+    initializeDocument();
+    SdPage* pPage = mpDoc->GetMasterSdPage(0, PageKind::Handout);
+    if (pPage)
+        xPage.set(pPage->getUnoPage(), uno::UNO_QUERY);
     return xPage;
 }
 
@@ -956,7 +953,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 
     if( aServiceSpecifier == "com.sun.star.document.ExportEmbeddedObjectResolver" )
     {
-        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : nullptr;
+        comphelper::IEmbeddedHelper* pPersist = mpDoc->GetPersist();
         if( nullptr == pPersist )
             throw lang::DisposedException();
 
@@ -965,7 +962,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 
     if( aServiceSpecifier == "com.sun.star.document.ImportEmbeddedObjectResolver" )
     {
-        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : nullptr;
+        comphelper::IEmbeddedHelper* pPersist = mpDoc->GetPersist();
         if( nullptr == pPersist )
             throw lang::DisposedException();
 

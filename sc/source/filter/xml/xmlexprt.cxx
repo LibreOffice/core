@@ -1478,14 +1478,9 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 else
                 {
                     assert(nPrevIndex >= 0 && "coverity#1438402");
-                    if (nRow < nEndRow)
-                    {
-                        ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges.get());
-                        OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
-                        pRowFormatRanges.reset(pTempRowFormatRanges);
-                    }
-                    else
-                        OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
+                    ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges.get());
+                    OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
+                    pRowFormatRanges.reset(pTempRowFormatRanges);
                     nEqualRows = 1;
                     nPrevIndex = nIndex;
                     bPrevHidden = bHidden;

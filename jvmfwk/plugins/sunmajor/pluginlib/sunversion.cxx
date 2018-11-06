@@ -79,8 +79,7 @@ bool SunVersion::init(const char *szVersion)
     {
         if (pCur < pEnd && rtl::isAsciiDigit(static_cast<unsigned char>(*pCur)))
         {
-            if (pCur < pEnd)
-                pCur ++;
+            pCur ++;
             nPartPos ++;
         }
         //if  correct separator then form integer

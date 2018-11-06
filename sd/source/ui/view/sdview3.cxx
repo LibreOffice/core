@@ -935,18 +935,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     svt::EmbeddedObjectRef aObjRef( xObj, aObjDesc.mnViewAspect );
 
-                    // try to get the replacement image from the clipboard
-                    Graphic aGraphic;
-                    SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
-
-                    // insert replacement image ( if there is one ) into the object helper
-                    if ( nGrFormat != SotClipboardFormatId::NONE )
-                    {
-                        datatransfer::DataFlavor aDataFlavor;
-                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        aObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
-                    }
-
                     Size aSize;
                     if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
                     {

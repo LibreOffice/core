@@ -1299,8 +1299,6 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Sequence < beans::PropertyValue > aProps;
 
     // export sub streams for package, else full stream into a file
-    bool bErr = false;
-
     uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
     if ( xProp.is() )
     {
@@ -1349,44 +1347,23 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     aDelegatorArguments[nArgsLen++] <<= xObjectResolver;
 
     uno::Reference<XComponent> xCom(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
-    if( !bErr )
-    {
-        xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("settings.xml")));
-        WriteThroughComponent(
-            xCom, "settings.xml",
-            "com.sun.star.comp.report.XMLSettingsExporter",
-            aDelegatorArguments, aProps, _xStorageToSaveTo );
-    }
+    // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
+    // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("settings.xml")));
+    WriteThroughComponent(xCom, "settings.xml", "com.sun.star.comp.report.XMLSettingsExporter",
+                          aDelegatorArguments, aProps, _xStorageToSaveTo);
 
-    if( !bErr )
-    {
-        xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("meta.xml")));
-        WriteThroughComponent(
-            xCom, "meta.xml",
-            "com.sun.star.comp.report.XMLMetaExporter",
-            aDelegatorArguments, aProps, _xStorageToSaveTo );
-    }
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("meta.xml")));
+    WriteThroughComponent(xCom, "meta.xml", "com.sun.star.comp.report.XMLMetaExporter",
+                          aDelegatorArguments, aProps, _xStorageToSaveTo);
 
-    if( !bErr )
-    {
-        xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("styles.xml")));
-        WriteThroughComponent(
-            xCom, "styles.xml",
-            "com.sun.star.comp.report.XMLStylesExporter",
-            aDelegatorArguments, aProps, _xStorageToSaveTo );
-    }
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("styles.xml")));
+    WriteThroughComponent(xCom, "styles.xml", "com.sun.star.comp.report.XMLStylesExporter",
+                          aDelegatorArguments, aProps, _xStorageToSaveTo);
 
-    if ( !bErr )
-    {
-        xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
-        if( !WriteThroughComponent(
-                xCom, "content.xml",
-                "com.sun.star.comp.report.ExportFilter",
-                aDelegatorArguments, aProps, _xStorageToSaveTo ) )
-        {
-            bErr = true;
-        }
-    }
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
+    bool bOk = WriteThroughComponent(xCom, "content.xml", "com.sun.star.comp.report.ExportFilter",
+                                     aDelegatorArguments, aProps, _xStorageToSaveTo);
 
     uno::Any aImage;
     uno::Reference< embed::XVisualObject > xCurrentController(getCurrentController(),uno::UNO_QUERY);
@@ -1403,7 +1380,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         m_pImpl->m_pObjectContainer->InsertGraphicStreamDirectly(xStream, "report", "image/png");
     }
 
-    if ( !bErr )
+    if (bOk)
     {
         bool bPersist = false;
         if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
