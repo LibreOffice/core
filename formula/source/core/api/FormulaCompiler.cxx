@@ -2101,11 +2101,8 @@ bool FormulaCompiler::CompileTokenArray()
         FormulaToken** pData = pDataArray + 1;
         pCode = pData;
         bool bWasForced = pArr->IsRecalcModeForced();
-        if ( bWasForced )
-        {
-            if ( bAutoCorrect )
-                aCorrectedFormula = "=";
-        }
+        if ( bWasForced && bAutoCorrect )
+            aCorrectedFormula = "=";
         pArr->ClearRecalcMode();
         maArrIterator.Reset();
         eLastOp = ocOpen;

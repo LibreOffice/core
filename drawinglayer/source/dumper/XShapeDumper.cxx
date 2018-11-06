@@ -1812,13 +1812,10 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
     if(xInfo->hasPropertyByName("Name"))
     {
         uno::Any aAny = xPropSet->getPropertyValue("Name");
-        if (aAny >>= aName)
+        if ((aAny >>= aName) && !aName.isEmpty())
         {
-            if (!aName.isEmpty())
-            {
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
-                m_bNameDumped = true;
-            }
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+            m_bNameDumped = true;
         }
     }
 

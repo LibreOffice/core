@@ -1672,11 +1672,8 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
             bDoTrans = true;
             while (true)
             {
-                if ( mnLevel == 1 )
-                {
-                    if ( nHeight > 10 )
-                        nHeight = 8;
-                }
+                if ( mnLevel == 1 && nHeight > 10 )
+                    nHeight = 8;
                 aRect = tools::Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( nWidth, nHeight ) );
                 aRegion = vcl::Region( pMaskBitmap->CreateRegion( COL_BLACK, aRect ) );
 

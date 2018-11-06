@@ -536,18 +536,15 @@ void LwpFribPtr::RegisterStyle()
 
 void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
 {
-    if (pStory)
+    if (pStory && pStory->GetDropcapFlag())
     {
-        if (pStory->GetDropcapFlag())
-        {
-            XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            XFTextStyle* pFribStyle = pXFStyleManager->FindTextStyle(pFrib->GetStyleName());
-            pFribStyle->GetFont()->SetFontSize(0);
+        XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+        XFTextStyle* pFribStyle = pXFStyleManager->FindTextStyle(pFrib->GetStyleName());
+        pFribStyle->GetFont()->SetFontSize(0);
 
-            LwpDropcapLayout* pObj = dynamic_cast<LwpDropcapLayout*>(pStory->GetLayoutsWithMe().GetOnlyLayout().obj().get());
-            if (pObj)
-                pObj->SetChars(nLen);
-        }
+        LwpDropcapLayout* pObj = dynamic_cast<LwpDropcapLayout*>(pStory->GetLayoutsWithMe().GetOnlyLayout().obj().get());
+        if (pObj)
+            pObj->SetChars(nLen);
     }
 }
 /**

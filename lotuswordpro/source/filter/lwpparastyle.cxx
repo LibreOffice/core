@@ -436,17 +436,14 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
         pTotalIndent.reset(pIndent->clone());
 
         //for bullet only
-        if (pPara)
+        if (pPara && pPara->GetBulletFlag())
         {
-            if (pPara->GetBulletFlag())
-            {
-                pTotalIndent->SetMAll(o3tl::saturating_add(pParentIndent->GetMAll(), pTotalIndent->GetMAll()));
-                pTotalIndent->SetMRight(o3tl::saturating_add(pParentIndent->GetMRight(), pTotalIndent->GetMRight()));
-                pParaStyle->SetMargins(LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(
-                    pTotalIndent->GetMAll())), pTotalIndent->GetRight());
-                pPara->SetIndent(pTotalIndent.release());
-                return;
-            }
+            pTotalIndent->SetMAll(o3tl::saturating_add(pParentIndent->GetMAll(), pTotalIndent->GetMAll()));
+            pTotalIndent->SetMRight(o3tl::saturating_add(pParentIndent->GetMRight(), pTotalIndent->GetMRight()));
+            pParaStyle->SetMargins(LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(
+                pTotalIndent->GetMAll())), pTotalIndent->GetRight());
+            pPara->SetIndent(pTotalIndent.release());
+            return;
         }
         sal_uInt16 relative = pParentIndent->GetRelative();
 
@@ -467,15 +464,12 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
     else
     {
         pTotalIndent.reset(pIndent->clone());
-        if (pPara)
+        if (pPara && pPara->GetBulletFlag())
         {
-            if (pPara->GetBulletFlag())
-            {
-                pParaStyle->SetMargins(LwpTools::ConvertToMetric(
-                    LwpTools::ConvertFromUnits(pIndent->GetMAll())), pIndent->GetRight());
-                pPara->SetIndent(pTotalIndent.release());
-                return;
-            }
+            pParaStyle->SetMargins(LwpTools::ConvertToMetric(
+                LwpTools::ConvertFromUnits(pIndent->GetMAll())), pIndent->GetRight());
+            pPara->SetIndent(pTotalIndent.release());
+            return;
         }
 
         pParaStyle->SetIndent(pIndent->GetFirst());

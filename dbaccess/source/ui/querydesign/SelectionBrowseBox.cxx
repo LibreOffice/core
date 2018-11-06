@@ -2047,11 +2047,8 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
     const long nCount = m_bVisibleRow.size();
     for(i=0;i < nCount; ++i)
     {
-        if(m_bVisibleRow[i])
-        {
-            if(nErg++ == nRowId)
-                break;
-        }
+        if(m_bVisibleRow[i] && nErg++ == nRowId)
+            break;
     }
     OSL_ENSURE(nErg <= long(m_bVisibleRow.size()),"nErg cannot be greater than BROW_ROW_CNT!");
     return i;
