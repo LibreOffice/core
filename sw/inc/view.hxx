@@ -521,6 +521,7 @@ public:
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
     bool isSignatureLineSelected();
+    bool isSignatureLineSigned();
 
     void            StateTabWin(SfxItemSet&);
 
