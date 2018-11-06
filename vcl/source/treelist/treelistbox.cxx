@@ -3656,6 +3656,14 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     {
         set_min_width_in_chars(rValue.toInt32());
     }
+    if (rKey == "enable-tree-lines")
+    {
+        auto nStyle = GetStyle();
+        nStyle &= ~(WB_HASLINES | WB_HASLINESATROOT);
+        if (toBool(rValue))
+            nStyle |= (WB_HASLINES | WB_HASLINESATROOT);
+        SetStyle(nStyle);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
