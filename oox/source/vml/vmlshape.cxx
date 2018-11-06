@@ -1248,6 +1248,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     if( getShapeModel().mbIsSignatureLine )
     {
         uno::Reference<graphic::XGraphic> xGraphic;
+        bool bIsSigned(false);
         try
         {
             // Get the document signatures
@@ -1271,6 +1272,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 // then the signature line is not digitally signed.
                 if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
                 {
+                    bIsSigned = true;
                     if (xSignatureInfo[i].SignatureIsValid)
                     {
                         // Signature is valid, use the 'valid' image
@@ -1330,6 +1332,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         xPropertySet->setPropertyValue(
             "SignatureLineCanAddComment",
             uno::makeAny(getShapeModel().mbSignatureLineCanAddComment));
+        xPropertySet->setPropertyValue("SignatureLineIsSigned", uno::makeAny(bIsSigned));
 
         if (!aGraphicPath.isEmpty())
         {

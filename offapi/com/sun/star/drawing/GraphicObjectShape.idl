@@ -151,6 +151,9 @@ published service GraphicObjectShape
      *  (you can get the matching signature with the SignatureLineId property).
      */
     [optional, property] com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
+
+    /// Whether the signature line is signed using a digital signature
+    [optional, property] boolean SignatureLineIsSigned;
 };
 
 

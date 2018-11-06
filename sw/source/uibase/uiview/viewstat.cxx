@@ -111,7 +111,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 break;
             case SID_EDIT_SIGNATURELINE:
             case SID_SIGN_SIGNATURELINE:
-                if (!isSignatureLineSelected())
+                if (!isSignatureLineSelected() || isSignatureLineSigned())
                     rSet.DisableItem(nWhich);
                 break;
             case FN_INSERT_CAPTION:
