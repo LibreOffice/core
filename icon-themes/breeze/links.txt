@@ -777,7 +777,7 @@ cmd/sc_grafattrcrop.png cmd/sc_crop.png
 # Group
 cmd/sc_formatgroup.png cmd/sc_group.png
 
-# Extrusion Rotat
+# Extrusion Rotate
 cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 cmd/lc_rulerrows.png cmd/lc_extrusiontiltleft.png
 cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
