@@ -1601,18 +1601,15 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 }
             }
 
-            if (!bConverted)
+            if (!bConverted && pGraphicProvider )
             {
-                if ( pGraphicProvider )
+                const OUString& rBaseURI( pGraphicProvider->GetBaseURI() );
+                INetURLObject aBaseURI( rBaseURI );
+                if( aBaseURI.GetProtocol() == aTmp.GetProtocol() )
                 {
-                    const OUString& rBaseURI( pGraphicProvider->GetBaseURI() );
-                    INetURLObject aBaseURI( rBaseURI );
-                    if( aBaseURI.GetProtocol() == aTmp.GetProtocol() )
-                    {
-                        OUString aRelUrl( INetURLObject::GetRelURL( rBaseURI, aGraphicUrl ) );
-                        if ( !aRelUrl.isEmpty() )
-                            aGraphicUrl = aRelUrl;
-                    }
+                    OUString aRelUrl( INetURLObject::GetRelURL( rBaseURI, aGraphicUrl ) );
+                    if ( !aRelUrl.isEmpty() )
+                        aGraphicUrl = aRelUrl;
                 }
             }
         }
@@ -2268,20 +2265,17 @@ void EscherPropertyContainer::CreateShadowProperties(
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "Shadow", true ) )
         {
             bool bHasShadow = false; // shadow is possible only if at least a fillcolor, linecolor or graphic is set
-            if ( aAny >>= bHasShadow )
+            if ( (aAny >>= bHasShadow) && bHasShadow )
             {
-                if ( bHasShadow )
-                {
-                    nShadowFlags |= 2;
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowColor" ) )
-                        AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowXDistance" ) )
-                        AddOpt( ESCHER_Prop_shadowOffsetX, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowYDistance" ) )
-                        AddOpt( ESCHER_Prop_shadowOffsetY, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowTransparence" ) )
-                        AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (static_cast<sal_uInt32>(*o3tl::doAccess<sal_uInt16>(aAny)) * 655 ) );
-                }
+                nShadowFlags |= 2;
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowColor" ) )
+                    AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) );
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowXDistance" ) )
+                    AddOpt( ESCHER_Prop_shadowOffsetX, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowYDistance" ) )
+                    AddOpt( ESCHER_Prop_shadowOffsetY, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowTransparence" ) )
+                    AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (static_cast<sal_uInt32>(*o3tl::doAccess<sal_uInt16>(aAny)) * 655 ) );
             }
         }
     }

@@ -465,11 +465,9 @@ void XRMResMerge::WorkOnText(
     const OString &,
     OString & )
 {
-    if ( pMergeDataFile ) {
-        if ( !pResData ) {
-            pResData.reset( new ResData( GetGID(), sFilename ) );
-            pResData->sResTyp = sResourceType;
-        }
+    if ( pMergeDataFile && !pResData ) {
+        pResData.reset( new ResData( GetGID(), sFilename ) );
+        pResData->sResTyp = sResourceType;
     }
 }
 
