@@ -120,7 +120,8 @@ private:
     std::unique_ptr< XFillHatchItem >       mpHatchItem;
     std::unique_ptr< XFillBitmapItem >      mpBitmapItem;
 
-    bool mbEditModeChangePending;
+    bool mbSwitchModeToNormal;
+    bool mbSwitchModeToMaster;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     vcl::EnumContext maContext;
