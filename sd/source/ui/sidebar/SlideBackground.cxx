@@ -113,7 +113,8 @@ SlideBackground::SlideBackground(
     mpGradientItem(),
     mpHatchItem(),
     mpBitmapItem(),
-    mbEditModeChangePending(false),
+    mbSwitchModeToNormal(false),
+    mbSwitchModeToMaster(false),
     mxFrame(rxFrame),
     maContext(),
     maDrawOtherContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::DrawPage),
@@ -480,37 +481,34 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
             populateMasterSlideDropdown();
             break;
         case EventMultiplexerEventId::EditModeNormal:
+            mbSwitchModeToNormal = true;
+            break;
         case EventMultiplexerEventId::EditModeMaster:
-            mbEditModeChangePending = true;
+            mbSwitchModeToMaster = true;
             break;
         case EventMultiplexerEventId::EditViewSelection:
         case EventMultiplexerEventId::EndTextEdit:
         {
-            if (mbEditModeChangePending)
+            if (mbSwitchModeToNormal || mbSwitchModeToMaster)
             {
-                ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-
-                if (pMainViewShell)
+                EditMode eMode = mbSwitchModeToNormal ? EditMode::Page : EditMode::MasterPage;
+                if ( eMode == EditMode::MasterPage)
                 {
-                    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-                    EditMode eMode = pDrawViewShell->GetEditMode();
-
-                    if ( eMode == EditMode::MasterPage)
-                    {
-                        if( IsImpress() )
-                            SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
-                        else
-                            SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
-                    }
-                    else // EditMode::Page
-                    {
-                        if( IsImpress() )
-                            SetPanelTitle(SdResId(STR_SLIDE_NAME));
-                        else
-                            SetPanelTitle(SdResId(STR_PAGE_NAME));
-                    }
+                    if( IsImpress() )
+                        SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
+                    else
+                        SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
+                    mbSwitchModeToMaster = false;
                 }
-                mbEditModeChangePending = false;
+                else // EditMode::Page
+                {
+                    if( IsImpress() )
+                        SetPanelTitle(SdResId(STR_SLIDE_NAME));
+                    else
+                        SetPanelTitle(SdResId(STR_PAGE_NAME));
+                    mbSwitchModeToNormal = false;
+                }
+
             }
         }
         break;
