@@ -1064,35 +1064,32 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
             uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
             pUpObj = pMarkedObj->getParentSdrObjectFromSdrObject();
 
-            if( pMarkedObj == pFocusedObj )
+            if( pMarkedObj == pFocusedObj && pUpObj )
             {
-                if( pUpObj )
+                uno::Reference< drawing::XShape > xUpGroupXShape (pUpObj->getUnoShape(), uno::UNO_QUERY);
+                uno::Reference < XAccessible > xAccGroupShape =
+                    const_cast<ScChildrenShapes*>(this)->GetAccessibleCaption( xUpGroupXShape );
+                if( xAccGroupShape.is() )
                 {
-                    uno::Reference< drawing::XShape > xUpGroupXShape (pUpObj->getUnoShape(), uno::UNO_QUERY);
-                    uno::Reference < XAccessible > xAccGroupShape =
-                        const_cast<ScChildrenShapes*>(this)->GetAccessibleCaption( xUpGroupXShape );
-                    if( xAccGroupShape.is() )
+                    ::accessibility::AccessibleShape* pAccGroupShape =
+                        static_cast< ::accessibility::AccessibleShape* >(xAccGroupShape.get());
+                    if( pAccGroupShape )
                     {
-                        ::accessibility::AccessibleShape* pAccGroupShape =
-                            static_cast< ::accessibility::AccessibleShape* >(xAccGroupShape.get());
-                        if( pAccGroupShape )
+                        sal_Int32 nCount =  pAccGroupShape->getAccessibleChildCount();
+                        for( sal_Int32 i = 0; i < nCount; i++ )
                         {
-                            sal_Int32 nCount =  pAccGroupShape->getAccessibleChildCount();
-                            for( sal_Int32 i = 0; i < nCount; i++ )
+                            uno::Reference<XAccessible> xAccShape = pAccGroupShape->getAccessibleChild(i);
+                            if (xAccShape.is())
                             {
-                                uno::Reference<XAccessible> xAccShape = pAccGroupShape->getAccessibleChild(i);
-                                if (xAccShape.is())
+                                ::accessibility::AccessibleShape* pChildAccShape =  static_cast< ::accessibility::AccessibleShape* >(xAccShape.get());
+                                uno::Reference< drawing::XShape > xChildShape = pChildAccShape->GetXShape();
+                                if (xChildShape == xMarkedXShape)
                                 {
-                                    ::accessibility::AccessibleShape* pChildAccShape =  static_cast< ::accessibility::AccessibleShape* >(xAccShape.get());
-                                    uno::Reference< drawing::XShape > xChildShape = pChildAccShape->GetXShape();
-                                    if (xChildShape == xMarkedXShape)
-                                    {
-                                        pChildAccShape->SetState(AccessibleStateType::FOCUSED);
-                                    }
-                                    else
-                                    {
-                                        pChildAccShape->ResetState(AccessibleStateType::FOCUSED);
-                                    }
+                                    pChildAccShape->SetState(AccessibleStateType::FOCUSED);
+                                }
+                                else
+                                {
+                                    pChildAccShape->ResetState(AccessibleStateType::FOCUSED);
                                 }
                             }
                         }

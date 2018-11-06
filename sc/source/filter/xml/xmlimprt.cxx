@@ -1073,23 +1073,20 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
                 SetChangeTrackingViewSettings(aChangeProps);
         }
     }
-    if (nHeight && nWidth)
+    if (nHeight && nWidth && GetModel().is())
     {
-        if (GetModel().is())
+        ScModelObj* pDocObj(ScModelObj::getImplementation( GetModel() ));
+        if (pDocObj)
         {
-            ScModelObj* pDocObj(ScModelObj::getImplementation( GetModel() ));
-            if (pDocObj)
+            SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+            if (pEmbeddedObj)
             {
-                SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
-                if (pEmbeddedObj)
-                {
-                    tools::Rectangle aRect;
-                    aRect.setX( nLeft );
-                    aRect.setY( nTop );
-                    aRect.setWidth( nWidth );
-                    aRect.setHeight( nHeight );
-                    pEmbeddedObj->SetVisArea(aRect);
-                }
+                tools::Rectangle aRect;
+                aRect.setX( nLeft );
+                aRect.setY( nTop );
+                aRect.setWidth( nWidth );
+                aRect.setHeight( nHeight );
+                pEmbeddedObj->SetVisArea(aRect);
             }
         }
     }

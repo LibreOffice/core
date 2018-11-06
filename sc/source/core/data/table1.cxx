@@ -584,21 +584,18 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
                 if (nColY > nMaxY)
                     nMaxY = nColY;
             }
-            if (bNotes)
+            if (bNotes && aCol[i].HasCellNotes() )
             {
-                if ( aCol[i].HasCellNotes() )
+                SCROW maxNoteRow = aCol[i].GetCellNotesMaxRow();
+                if (maxNoteRow >= nMaxY)
                 {
-                    SCROW maxNoteRow = aCol[i].GetCellNotesMaxRow();
-                    if (maxNoteRow >= nMaxY)
-                    {
-                        bFound = true;
-                        nMaxY = maxNoteRow;
-                    }
-                    if (i>nMaxX)
-                    {
-                        bFound = true;
-                        nMaxX = i;
-                    }
+                    bFound = true;
+                    nMaxY = maxNoteRow;
+                }
+                if (i>nMaxX)
+                {
+                    bFound = true;
+                    nMaxX = i;
                 }
             }
         }
@@ -722,16 +719,13 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
-        if (bNotes)
+        if (bNotes && aCol[i].HasCellNotes() )
         {
-            if ( aCol[i].HasCellNotes() )
+            SCROW maxNoteRow =aCol[i].GetCellNotesMaxRow();
+            if (maxNoteRow > nMaxY)
             {
-                SCROW maxNoteRow =aCol[i].GetCellNotesMaxRow();
-                if (maxNoteRow > nMaxY)
-                {
-                    bFound = true;
-                    nMaxY = maxNoteRow;
-                }
+                bFound = true;
+                nMaxY = maxNoteRow;
             }
         }
     }

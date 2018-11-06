@@ -352,9 +352,8 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
         nId = static_cast<sal_uInt16>(ocErrNull) + nScTokenOff + 1;
     }
 
-    if( nP_IdCurrent >= nP_Id )
-        if (!GrowId())
-            return *this;
+    if( nP_IdCurrent >= nP_Id && !GrowId())
+        return *this;
 
     pP_Id[ nP_IdCurrent ] = nId - 1;
     nP_IdCurrent++;
@@ -369,9 +368,8 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
         SAL_WARN("sc.filter", "-TokenPool::operator<<: enum too large! " << static_cast<sal_uInt32>(eId));
     }
 
-    if( nP_IdCurrent >= nP_Id )
-        if (!GrowId())
-            return *this;
+    if( nP_IdCurrent >= nP_Id && !GrowId())
+        return *this;
 
     pP_Id[ nP_IdCurrent ] = static_cast<sal_uInt16>(eId) + nScTokenOff;
     nP_IdCurrent++;
@@ -381,9 +379,8 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 
 inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
 {
-    if( nP_IdCurrent >= nP_Id )
-        if (!GrowId())
-            return *this;
+    if( nP_IdCurrent >= nP_Id && !GrowId())
+        return *this;
 
     sal_uInt16 nId = static_cast<sal_uInt16>(rStack.Get());
     if (nId == 0)
