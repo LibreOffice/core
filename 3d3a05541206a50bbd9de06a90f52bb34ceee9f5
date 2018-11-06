@@ -33,6 +33,24 @@
       "revId": "3d3a05541206a50bbd9de06a90f52bb34ceee9f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_21eb14b1",
+        "filename": "sw/source/core/text/wrong.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-11-06T17:45:17Z",
+      "side": 1,
+      "message": "Combined condition looks like a || !a \u0026\u0026 b, where\na \u003d rST.mnPos \u003e nValue\nb \u003d nValue \u003c\u003d rST.mnPos + rST.mnLen.\n(a || !a \u0026\u0026 b) is equal to a || b.\nProbably this optimization worth separate patch. I\u0027ll restore a || !a \u0026\u0026 b pattern.",
+      "parentUuid": "3f3283f1_3b6fc3c6",
+      "revId": "3d3a05541206a50bbd9de06a90f52bb34ceee9f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
