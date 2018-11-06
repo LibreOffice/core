@@ -60,6 +60,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
     xPropSet->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComment));
 
     Reference<XGraphic> xGraphic;
+    bool bIsSigned(false);
     try
     {
         // Get the document signatures
@@ -86,6 +87,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
             // then the signature line is not digitally signed.
             if (xSignatureInfo[i].SignatureLineId == xAttrList->getValueByName("loext:id"))
             {
+                bIsSigned = true;
                 if (xSignatureInfo[i].SignatureIsValid)
                 {
                     // Signature is valid, use the 'valid' image
@@ -111,6 +113,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
                 break;
             }
         }
+        xPropSet->setPropertyValue("SignatureLineIsSigned", Any(bIsSigned));
     }
     catch (css::uno::Exception&)
     {
