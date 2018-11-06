@@ -460,7 +460,7 @@ namespace
 
             // conversion twips for the example-window
             aSize.setHeight(
-                ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FUNIT_TWIP ) );
+                ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FieldUnit::TWIP ) );
         }
         else if ( !_pFontSizeLB->get_active_text().isEmpty() )
             aSize.setHeight( PointToTwips( static_cast<long>(_pFontSizeLB->get_value() / 10) ) );
@@ -2457,10 +2457,10 @@ SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet
     , m_xNormalPosBtn(m_xBuilder->weld_radio_button("normal"))
     , m_xLowPosBtn(m_xBuilder->weld_radio_button("subscript"))
     , m_xHighLowFT(m_xBuilder->weld_label("raiselower"))
-    , m_xHighLowMF(m_xBuilder->weld_metric_spin_button("raiselowersb", FUNIT_PERCENT))
+    , m_xHighLowMF(m_xBuilder->weld_metric_spin_button("raiselowersb", FieldUnit::PERCENT))
     , m_xHighLowRB(m_xBuilder->weld_check_button("automatic"))
     , m_xFontSizeFT(m_xBuilder->weld_label("relativefontsize"))
-    , m_xFontSizeMF(m_xBuilder->weld_metric_spin_button("fontsizesb", FUNIT_PERCENT))
+    , m_xFontSizeMF(m_xBuilder->weld_metric_spin_button("fontsizesb", FieldUnit::PERCENT))
     , m_xRotationContainer(m_xBuilder->weld_widget("rotationcontainer"))
     , m_xScalingFT(m_xBuilder->weld_label("scale"))
     , m_xScalingAndRotationFT(m_xBuilder->weld_label("rotateandscale"))
@@ -2468,8 +2468,8 @@ SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet
     , m_x90degRB(m_xBuilder->weld_radio_button("90deg"))
     , m_x270degRB(m_xBuilder->weld_radio_button("270deg"))
     , m_xFitToLineCB(m_xBuilder->weld_check_button("fittoline"))
-    , m_xScaleWidthMF(m_xBuilder->weld_metric_spin_button("scalewidthsb", FUNIT_PERCENT))
-    , m_xKerningMF(m_xBuilder->weld_metric_spin_button("kerningsb", FUNIT_POINT))
+    , m_xScaleWidthMF(m_xBuilder->weld_metric_spin_button("scalewidthsb", FieldUnit::PERCENT))
+    , m_xKerningMF(m_xBuilder->weld_metric_spin_button("kerningsb", FieldUnit::POINT))
     , m_xPairKerningBtn(m_xBuilder->weld_check_button("pairkerning"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
@@ -2536,8 +2536,8 @@ void SvxCharPositionPage::SetEscapement_Impl( SvxEscapement nEsc )
 
     short nFac = aEscItm.GetEsc() < 0 ? -1 : 1;
 
-    m_xHighLowMF->set_value(aEscItm.GetEsc() * nFac, FUNIT_PERCENT);
-    m_xFontSizeMF->set_value(aEscItm.GetProportionalHeight(), FUNIT_PERCENT);
+    m_xHighLowMF->set_value(aEscItm.GetEsc() * nFac, FieldUnit::PERCENT);
+    m_xFontSizeMF->set_value(aEscItm.GetProportionalHeight(), FieldUnit::PERCENT);
 
     if ( SvxEscapement::Off == nEsc )
     {
@@ -2590,8 +2590,8 @@ IMPL_LINK_NOARG(SvxCharPositionPage, RotationHdl_Impl, weld::ToggleButton&, void
 
 void SvxCharPositionPage::FontModifyHdl_Impl()
 {
-    sal_uInt8 nEscProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FUNIT_PERCENT));
-    short nEsc  = static_cast<short>(m_xHighLowMF->get_value(FUNIT_PERCENT));
+    sal_uInt8 nEscProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FieldUnit::PERCENT));
+    short nEsc  = static_cast<short>(m_xHighLowMF->get_value(FieldUnit::PERCENT));
     nEsc *= m_xLowPosBtn->get_active() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
 }
@@ -2614,13 +2614,13 @@ IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::ToggleButton&, voi
     sal_uInt16 nVal = m_nScaleWidthInitialVal;
     if (m_xFitToLineCB->get_active())
         nVal = m_nScaleWidthItemSetVal;
-    m_xScaleWidthMF->set_value(nVal, FUNIT_PERCENT);
+    m_xScaleWidthMF->set_value(nVal, FieldUnit::PERCENT);
     m_aPreviewWin.SetFontWidthScale( nVal );
 }
 
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
-    long nVal = static_cast<long>(m_xKerningMF->get_value(FUNIT_POINT));
+    long nVal = static_cast<long>(m_xKerningMF->get_value(FieldUnit::POINT));
     nVal = LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
     long nKern = static_cast<short>(m_xKerningMF->denormalize(nVal));
 
@@ -2643,16 +2643,16 @@ IMPL_LINK(SvxCharPositionPage, ValueChangedHdl_Impl, weld::MetricSpinButton&, rF
     if (m_xHighLowMF.get() == &rField)
     {
         if ( bLow )
-            m_nSubEsc = static_cast<short>(m_xHighLowMF->get_value(FUNIT_PERCENT)) * -1;
+            m_nSubEsc = static_cast<short>(m_xHighLowMF->get_value(FieldUnit::PERCENT)) * -1;
         else
-            m_nSuperEsc = static_cast<short>(m_xHighLowMF->get_value(FUNIT_PERCENT));
+            m_nSuperEsc = static_cast<short>(m_xHighLowMF->get_value(FieldUnit::PERCENT));
     }
     else if (m_xFontSizeMF.get() == &rField)
     {
         if ( bLow )
-            m_nSubProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FUNIT_PERCENT));
+            m_nSubProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FieldUnit::PERCENT));
         else
-            m_nSuperProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FUNIT_PERCENT));
+            m_nSuperProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FieldUnit::PERCENT));
     }
 
     FontModifyHdl_Impl();
@@ -2660,7 +2660,7 @@ IMPL_LINK(SvxCharPositionPage, ValueChangedHdl_Impl, weld::MetricSpinButton&, rF
 
 IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
-    m_aPreviewWin.SetFontWidthScale(sal_uInt16(m_xScaleWidthMF->get_value(FUNIT_PERCENT)));
+    m_aPreviewWin.SetFontWidthScale(sal_uInt16(m_xScaleWidthMF->get_value(FieldUnit::PERCENT)));
 }
 
 DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
@@ -2689,13 +2689,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         //fdo#75307 validate all the entries and discard all of them if any are
         //out of range
         bool bValid = true;
-        if (m_nSuperEsc < m_xHighLowMF->get_min(FUNIT_PERCENT) || m_nSuperEsc > m_xHighLowMF->get_max(FUNIT_PERCENT))
+        if (m_nSuperEsc < m_xHighLowMF->get_min(FieldUnit::PERCENT) || m_nSuperEsc > m_xHighLowMF->get_max(FieldUnit::PERCENT))
             bValid = false;
-        if (m_nSubEsc*-1 < m_xHighLowMF->get_min(FUNIT_PERCENT) || m_nSubEsc*-1 > m_xHighLowMF->get_max(FUNIT_PERCENT))
+        if (m_nSubEsc*-1 < m_xHighLowMF->get_min(FieldUnit::PERCENT) || m_nSubEsc*-1 > m_xHighLowMF->get_max(FieldUnit::PERCENT))
             bValid = false;
-        if (m_nSuperProp < m_xFontSizeMF->get_min(FUNIT_PERCENT) || m_nSuperProp > m_xFontSizeMF->get_max(FUNIT_PERCENT))
+        if (m_nSuperProp < m_xFontSizeMF->get_min(FieldUnit::PERCENT) || m_nSuperProp > m_xFontSizeMF->get_max(FieldUnit::PERCENT))
             bValid = false;
-        if (m_nSubProp < m_xFontSizeMF->get_min(FUNIT_PERCENT) || m_nSubProp > m_xFontSizeMF->get_max(FUNIT_PERCENT))
+        if (m_nSubProp < m_xFontSizeMF->get_min(FieldUnit::PERCENT) || m_nSubProp > m_xFontSizeMF->get_max(FieldUnit::PERCENT))
             bValid = false;
 
         if (!bValid)
@@ -2767,7 +2767,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                 m_xHighLowFT->set_sensitive(false);
                 m_xHighLowMF->set_sensitive(false);
             }
-            m_xHighLowMF->set_value(m_xHighLowMF->normalize(nFac * nEsc), FUNIT_PERCENT);
+            m_xHighLowMF->set_value(m_xHighLowMF->normalize(nFac * nEsc), FieldUnit::PERCENT);
         }
         else
         {
@@ -2776,7 +2776,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             PositionHdl_Impl(*m_xNormalPosBtn);
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
-        m_xFontSizeMF->set_value(m_xFontSizeMF->normalize(nEscProp), FUNIT_PERCENT);
+        m_xFontSizeMF->set_value(m_xFontSizeMF->normalize(nEscProp), FieldUnit::PERCENT);
     }
     else
     {
@@ -2805,10 +2805,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         rCTLFont.SetFixKerning( static_cast<short>(nKern) );
 
         //the attribute value must be displayed also if it's above the maximum allowed value
-        long nVal = static_cast<long>(m_xKerningMF->get_max(FUNIT_POINT));
+        long nVal = static_cast<long>(m_xKerningMF->get_max(FieldUnit::POINT));
         if(nVal < nKerning)
-            m_xKerningMF->set_max(nKerning, FUNIT_POINT);
-        m_xKerningMF->set_value(nKerning, FUNIT_POINT);
+            m_xKerningMF->set_max(nKerning, FieldUnit::POINT);
+        m_xKerningMF->set_value(nKerning, FieldUnit::POINT);
     }
     else
         m_xKerningMF->set_text(OUString());
@@ -2830,10 +2830,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxCharScaleWidthItem& rItem = static_cast<const SvxCharScaleWidthItem&>( rSet->Get( nWhich ) );
         m_nScaleWidthInitialVal = rItem.GetValue();
-        m_xScaleWidthMF->set_value(m_nScaleWidthInitialVal, FUNIT_PERCENT);
+        m_xScaleWidthMF->set_value(m_nScaleWidthInitialVal, FieldUnit::PERCENT);
     }
     else
-        m_xScaleWidthMF->set_value(100, FUNIT_PERCENT);
+        m_xScaleWidthMF->set_value(100, FieldUnit::PERCENT);
 
     nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
     if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
@@ -2924,10 +2924,10 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
             nEsc = bHigh ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
         else
         {
-            nEsc = static_cast<short>(m_xHighLowMF->denormalize(m_xHighLowMF->get_value(FUNIT_PERCENT)));
+            nEsc = static_cast<short>(m_xHighLowMF->denormalize(m_xHighLowMF->get_value(FieldUnit::PERCENT)));
             nEsc *= (bHigh ? 1 : -1);
         }
-        nEscProp = static_cast<sal_uInt8>(m_xFontSizeMF->denormalize(m_xFontSizeMF->get_value(FUNIT_PERCENT)));
+        nEscProp = static_cast<sal_uInt8>(m_xFontSizeMF->denormalize(m_xFontSizeMF->get_value(FieldUnit::PERCENT)));
     }
     else
     {
@@ -2963,7 +2963,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     short nKerning = 0;
     MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
-    long nTmp = static_cast<long>(m_xKerningMF->get_value(FUNIT_POINT));
+    long nTmp = static_cast<long>(m_xKerningMF->get_value(FieldUnit::POINT));
     long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, eUnit );
     nKerning = static_cast<short>(m_xKerningMF->denormalize( nVal ));
 
@@ -2998,7 +2998,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if (m_xScaleWidthMF->get_value_changed_from_saved())
     {
-        rSet->Put(SvxCharScaleWidthItem(static_cast<sal_uInt16>(m_xScaleWidthMF->get_value(FUNIT_PERCENT)), nWhich));
+        rSet->Put(SvxCharScaleWidthItem(static_cast<sal_uInt16>(m_xScaleWidthMF->get_value(FieldUnit::PERCENT)), nWhich));
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )

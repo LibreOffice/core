@@ -478,13 +478,13 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
         nDefTab = pOptions->GetDefTab();
     pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, nDefTab ) );
 
-    FieldUnit nMetric = FieldUnit(0xffff);
+    FieldUnit nMetric = FieldUnit::UNDEFINED;
     if( pFrameView)
         nMetric = pDoc->GetUIUnit();
     else
         nMetric = static_cast<FieldUnit>(pOptions->GetMetric());
 
-    if( nMetric == FieldUnit(0xffff) )
+    if (nMetric == FieldUnit::UNDEFINED)
         nMetric = GetFieldUnit();
 
     pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(nMetric) ) );

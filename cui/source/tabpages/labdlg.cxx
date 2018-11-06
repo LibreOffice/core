@@ -81,15 +81,15 @@ SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rI
     , nExtension(0)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
-    , m_xMF_SPACING(m_xBuilder->weld_metric_spin_button("spacing", FUNIT_MM))
+    , m_xMF_SPACING(m_xBuilder->weld_metric_spin_button("spacing", FieldUnit::MM))
     , m_xLB_EXTENSION(m_xBuilder->weld_combo_box("extension"))
     , m_xFT_BYFT(m_xBuilder->weld_label("byft"))
-    , m_xMF_BY(m_xBuilder->weld_metric_spin_button("by", FUNIT_MM))
+    , m_xMF_BY(m_xBuilder->weld_metric_spin_button("by", FieldUnit::MM))
     , m_xFT_POSITIONFT(m_xBuilder->weld_label("positionft"))
     , m_xLB_POSITION(m_xBuilder->weld_combo_box("position"))
     , m_xLineTypes(m_xBuilder->weld_combo_box("linetypes"))
     , m_xFT_LENGTHFT(m_xBuilder->weld_label("lengthft"))
-    , m_xMF_LENGTH(m_xBuilder->weld_metric_spin_button("length", FUNIT_MM))
+    , m_xMF_LENGTH(m_xBuilder->weld_metric_spin_button("length", FieldUnit::MM))
     , m_xCB_OPTIMAL(m_xBuilder->weld_check_button("optimal"))
     , m_xCT_CAPTTYPE(new SvtValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , m_xCT_CAPTTYPEWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xCT_CAPTTYPE))
@@ -232,10 +232,10 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
     switch ( eFUnit )
     {
-        case FUNIT_CM:
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::CM:
+        case FieldUnit::M:
+        case FieldUnit::KM:
+            eFUnit = FieldUnit::MM;
             break;
         default: ;//prevent warning
     }
@@ -253,7 +253,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     eUnit = pPool->GetMetric( nWhich );
     nEscAbs = static_cast<const SdrCaptionEscAbsItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_xMF_BY, nEscAbs, eUnit );
-    nEscAbs = m_xMF_BY->get_value(FUNIT_NONE);
+    nEscAbs = m_xMF_BY->get_value(FieldUnit::NONE);
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
     nEscRel = static_cast<long>(static_cast<const SdrCaptionEscRelItem&>( rOutAttrs.Get( nWhich ) ).GetValue());
@@ -263,14 +263,14 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     eUnit = pPool->GetMetric( nWhich );
     nLineLen = static_cast<const SdrCaptionLineLenItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_xMF_LENGTH, nLineLen, eUnit );
-    nLineLen = m_xMF_LENGTH->get_value(FUNIT_NONE);
+    nLineLen = m_xMF_LENGTH->get_value(FieldUnit::NONE);
 
     //------- distance to box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
     nGap = static_cast<const SdrCaptionGapItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_xMF_SPACING, nGap, eUnit );
-    nGap = m_xMF_SPACING->get_value(FUNIT_NONE);
+    nGap = m_xMF_SPACING->get_value(FieldUnit::NONE);
 
     nCaptionType = static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
     bFitLineLen = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
@@ -291,7 +291,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     nPosition = POS_MIDDLE;
     nExtension = EXT_OPTIMAL;
 
-    m_xMF_SPACING->set_value(nGap, FUNIT_NONE);
+    m_xMF_SPACING->set_value(nGap, FieldUnit::NONE);
 
     if( nEscDir == SdrCaptionEscDir::Horizontal )
     {
@@ -306,7 +306,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
         else
         {
             nExtension = EXT_FROM_TOP;
-            m_xMF_BY->set_value(nEscAbs, FUNIT_NONE);
+            m_xMF_BY->set_value(nEscAbs, FieldUnit::NONE);
         }
     }
     else if( nEscDir == SdrCaptionEscDir::Vertical )
@@ -322,7 +322,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
         else
         {
             nExtension = EXT_FROM_LEFT;
-            m_xMF_BY->set_value(nEscAbs, FUNIT_NONE);
+            m_xMF_BY->set_value(nEscAbs, FieldUnit::NONE);
         }
     }
     else if( nEscDir == SdrCaptionEscDir::BestFit )
@@ -331,7 +331,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     }
 
     m_xCB_OPTIMAL->set_active(bFitLineLen);
-    m_xMF_LENGTH->set_value(nLineLen, FUNIT_NONE);
+    m_xMF_LENGTH->set_value(nLineLen, FieldUnit::NONE);
 
     m_xLB_EXTENSION->set_active(nExtension);
 

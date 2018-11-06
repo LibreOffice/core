@@ -308,7 +308,7 @@ class OfaAutoFmtPrcntSet : public weld::GenericDialogController
 public:
     explicit OfaAutoFmtPrcntSet(weld::Window* pParent)
         : GenericDialogController(pParent, "cui/ui/percentdialog.ui", "PercentDialog")
-        , m_xPrcntMF(m_xBuilder->weld_metric_spin_button("margin", FUNIT_PERCENT))
+        , m_xPrcntMF(m_xBuilder->weld_metric_spin_button("margin", FieldUnit::PERCENT))
     {
     }
 
@@ -743,10 +743,10 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
     {
         // dialog for per cent settings
         OfaAutoFmtPrcntSet aDlg(GetFrameWeld());
-        aDlg.GetPrcntFld().set_value(nPercent, FUNIT_PERCENT);
+        aDlg.GetPrcntFld().set_value(nPercent, FieldUnit::PERCENT);
         if (aDlg.run() == RET_OK)
         {
-            nPercent = static_cast<sal_uInt16>(aDlg.GetPrcntFld().get_value(FUNIT_PERCENT));
+            nPercent = static_cast<sal_uInt16>(aDlg.GetPrcntFld().get_value(FieldUnit::PERCENT));
             sMargin = " " +
                 unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
         }

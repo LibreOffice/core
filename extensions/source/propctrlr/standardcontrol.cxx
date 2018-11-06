@@ -477,10 +477,10 @@ namespace pcr
 
     ONumericControl::ONumericControl( vcl::Window* _pParent, WinBits _nWinStyle )
         :ONumericControl_Base( PropertyControlType::NumericField, _pParent, _nWinStyle )
-        ,m_eValueUnit( FUNIT_NONE )
+        ,m_eValueUnit( FieldUnit::NONE )
         ,m_nFieldToUNOValueFactor( 1 )
     {
-        MetricField::SetDefaultUnit( FUNIT_NONE );
+        MetricField::SetDefaultUnit( FieldUnit::NONE );
 
         getTypedControlWindow()->EnableEmptyFieldValue( true );
         getTypedControlWindow()->SetStrictFormat( true );

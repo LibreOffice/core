@@ -41,9 +41,15 @@ constants FieldUnit
     const short FUNIT_INCH = 8;
     const short FUNIT_FOOT = 9;
     const short FUNIT_MILE = 10;
-    const short FUNIT_CUSTOM = 11;
-    const short FUNIT_PERCENT = 12;
-    const short FUNIT_100TH_MM = 13;
+    const short FUNIT_CHAR = 11;
+    const short FUNIT_LINE = 12;
+    const short FUNIT_CUSTOM = 13;
+    const short FUNIT_PERCENT = 14;
+    const short FUNIT_100TH_MM = 15;
+    const short FUNIT_PIXEL = 16;
+    const short FUNIT_DEGREE = 17;
+    const short FUNIT_SECOND = 18;
+    const short FUNIT_MILLISECOND = 19;
 };
 
 

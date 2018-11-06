@@ -67,24 +67,24 @@ SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemS
     , m_xLevelLB(m_xBuilder->weld_tree_view("levellb"))
     , m_xPositionFrame(m_xBuilder->weld_widget("numberingframe"))
     , m_xDistBorderFT(m_xBuilder->weld_label("indent"))
-    , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button("indentmf", FUNIT_CM))
+    , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button("indentmf", FieldUnit::CM))
     , m_xRelativeCB(m_xBuilder->weld_check_button("relative"))
     , m_xIndentFT(m_xBuilder->weld_label("numberingwidth"))
-    , m_xIndentMF(m_xBuilder->weld_metric_spin_button("numberingwidthmf", FUNIT_CM))
+    , m_xIndentMF(m_xBuilder->weld_metric_spin_button("numberingwidthmf", FieldUnit::CM))
     , m_xDistNumFT(m_xBuilder->weld_label("numdist"))
-    , m_xDistNumMF(m_xBuilder->weld_metric_spin_button("numdistmf", FUNIT_CM))
+    , m_xDistNumMF(m_xBuilder->weld_metric_spin_button("numdistmf", FieldUnit::CM))
     , m_xAlignFT(m_xBuilder->weld_label("numalign"))
     , m_xAlignLB(m_xBuilder->weld_combo_box("numalignlb"))
     , m_xLabelFollowedByFT(m_xBuilder->weld_label("numfollowedby"))
     , m_xLabelFollowedByLB(m_xBuilder->weld_combo_box("numfollowedbylb"))
     , m_xListtabFT(m_xBuilder->weld_label("at"))
-    , m_xListtabMF(m_xBuilder->weld_metric_spin_button("atmf", FUNIT_CM))
+    , m_xListtabMF(m_xBuilder->weld_metric_spin_button("atmf", FieldUnit::CM))
     , m_xAlign2FT(m_xBuilder->weld_label("num2align"))
     , m_xAlign2LB(m_xBuilder->weld_combo_box("num2alignlb"))
     , m_xAlignedAtFT(m_xBuilder->weld_label("alignedat"))
-    , m_xAlignedAtMF(m_xBuilder->weld_metric_spin_button("alignedatmf", FUNIT_CM))
+    , m_xAlignedAtMF(m_xBuilder->weld_metric_spin_button("alignedatmf", FieldUnit::CM))
     , m_xIndentAtFT(m_xBuilder->weld_label("indentat"))
-    , m_xIndentAtMF(m_xBuilder->weld_metric_spin_button("indentatmf", FUNIT_CM))
+    , m_xIndentAtMF(m_xBuilder->weld_metric_spin_button("indentatmf", FieldUnit::CM))
     , m_xStandardPB(m_xBuilder->weld_button("standard"))
     , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
 {
@@ -243,17 +243,17 @@ void SwNumPositionTabPage::InitControls()
         {
             nDistBorderNum = static_cast<long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
         }
-        m_xDistBorderMF->set_value(m_xDistBorderMF->normalize(nDistBorderNum),FUNIT_TWIP);
+        m_xDistBorderMF->set_value(m_xDistBorderMF->normalize(nDistBorderNum),FieldUnit::TWIP);
     }
     else
         bSetDistEmpty = true;
 
     if(bSameDist)
-        m_xDistNumMF->set_value(m_xDistNumMF->normalize(aNumFormatArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
+        m_xDistNumMF->set_value(m_xDistNumMF->normalize(aNumFormatArr[nLvl]->GetCharTextDistance()), FieldUnit::TWIP);
     else
         m_xDistNumMF->set_text(aEmptyOUStr);
     if(bSameIndent)
-        m_xIndentMF->set_value(m_xIndentMF->normalize(-aNumFormatArr[nLvl]->GetFirstLineOffset()), FUNIT_TWIP);
+        m_xIndentMF->set_value(m_xIndentMF->normalize(-aNumFormatArr[nLvl]->GetFirstLineOffset()), FieldUnit::TWIP);
     else
         m_xIndentMF->set_text(aEmptyOUStr);
 
@@ -301,7 +301,7 @@ void SwNumPositionTabPage::InitControls()
         m_xListtabMF->set_sensitive(true);
         if ( bSameListtab )
         {
-            m_xListtabMF->set_value(m_xListtabMF->normalize(aNumFormatArr[nLvl]->GetListtabPos()),FUNIT_TWIP);
+            m_xListtabMF->set_value(m_xListtabMF->normalize(aNumFormatArr[nLvl]->GetListtabPos()),FieldUnit::TWIP);
         }
         else
         {
@@ -320,7 +320,7 @@ void SwNumPositionTabPage::InitControls()
         m_xAlignedAtMF->set_value(
             m_xAlignedAtMF->normalize( aNumFormatArr[nLvl]->GetIndentAt() +
                                     aNumFormatArr[nLvl]->GetFirstLineIndent()),
-            FUNIT_TWIP );
+            FieldUnit::TWIP );
     }
     else
     {
@@ -330,7 +330,7 @@ void SwNumPositionTabPage::InitControls()
     if ( bSameIndentAt )
     {
         m_xIndentAtMF->set_value(
-            m_xIndentAtMF->normalize( aNumFormatArr[nLvl]->GetIndentAt()), FUNIT_TWIP );
+            m_xIndentAtMF->normalize( aNumFormatArr[nLvl]->GetIndentAt()), FieldUnit::TWIP );
     }
     else
     {
@@ -508,17 +508,17 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
 
     const SwTwips nWidth = pWrtSh->GetAnyCurRect(CurRectType::Frame).Width();
 
-    m_xDistBorderMF->set_max(m_xDistBorderMF->normalize( nWidth ), FUNIT_TWIP );
-    m_xDistNumMF->set_max(m_xDistNumMF->normalize( nWidth ), FUNIT_TWIP);
-    m_xIndentMF->set_max(m_xIndentMF->normalize( nWidth ), FUNIT_TWIP );
-    m_xListtabMF->set_max(m_xListtabMF->normalize( nWidth ), FUNIT_TWIP );
-    m_xAlignedAtMF->set_max(m_xAlignedAtMF->normalize( nWidth ), FUNIT_TWIP );
-    m_xIndentAtMF->set_max(m_xIndentAtMF->normalize( nWidth ), FUNIT_TWIP );
+    m_xDistBorderMF->set_max(m_xDistBorderMF->normalize( nWidth ), FieldUnit::TWIP );
+    m_xDistNumMF->set_max(m_xDistNumMF->normalize( nWidth ), FieldUnit::TWIP);
+    m_xIndentMF->set_max(m_xIndentMF->normalize( nWidth ), FieldUnit::TWIP );
+    m_xListtabMF->set_max(m_xListtabMF->normalize( nWidth ), FieldUnit::TWIP );
+    m_xAlignedAtMF->set_max(m_xAlignedAtMF->normalize( nWidth ), FieldUnit::TWIP );
+    m_xIndentAtMF->set_max(m_xIndentAtMF->normalize( nWidth ), FieldUnit::TWIP );
 
     const SwRect& rPrtRect = pWrtSh->GetAnyCurRect(CurRectType::Page);
     m_aPreviewWIN.SetPageWidth(rPrtRect.Width());
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &pWrtSh->GetView()) != nullptr  );
-    if(eMetric == FUNIT_MM)
+    if(eMetric == FieldUnit::MM)
     {
         m_xDistBorderMF->set_digits(1);
         m_xDistNumMF->set_digits(1);
@@ -608,7 +608,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
 {
     if(bInInintControl)
         return;
-    long nValue = static_cast< long >(rField.denormalize(rField.get_value(FUNIT_TWIP)));
+    long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
@@ -693,7 +693,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::ToggleButton&, rBox, void )
 
     }
     if(bSetValue)
-        m_xDistBorderMF->set_value(m_xDistBorderMF->normalize(nValue), FUNIT_TWIP);
+        m_xDistBorderMF->set_value(m_xDistBorderMF->normalize(nValue), FieldUnit::TWIP);
     else
         m_xDistBorderMF->set_text(aEmptyOUStr);
     m_xDistBorderMF->set_sensitive(bOn || bSingleSelection || pOutlineDlg);
@@ -753,7 +753,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, weld::ComboBox&, 
     {
         m_xListtabMF->set_value(
             m_xListtabMF->normalize( pActNum->Get( nFirstLvl ).GetListtabPos() ),
-            FUNIT_TWIP );
+            FieldUnit::TWIP );
     }
     else
     {
@@ -766,7 +766,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, weld::ComboBox&, 
 IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, weld::MetricSpinButton&, rField, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -787,7 +787,7 @@ IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, weld::MetricSpinButton&, rF
 IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rField, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -809,7 +809,7 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rFiel
 IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, weld::MetricSpinButton&, rField, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;

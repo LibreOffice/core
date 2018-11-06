@@ -458,7 +458,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
     , mxRbLosslessCompression(m_xBuilder->weld_radio_button("losslesscompress"))
     , mxRbJPEGCompression(m_xBuilder->weld_radio_button("jpegcompress"))
     , mxQualityFrame(m_xBuilder->weld_widget("qualityframe"))
-    , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FUNIT_PERCENT))
+    , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FieldUnit::PERCENT))
     , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
     , mxCoReduceImageResolution(m_xBuilder->weld_combo_box("resolution"))
     , mxCbPDFA1b(m_xBuilder->weld_check_button("pdfa"))
@@ -517,7 +517,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     else
         mxRbJPEGCompression->set_active(true);
 
-    mxNfQuality->set_value( pParent->mnQuality, FUNIT_PERCENT );
+    mxNfQuality->set_value( pParent->mnQuality, FieldUnit::PERCENT );
     mxQualityFrame->set_sensitive(!bUseLosslessCompression);
 
     mxCbReduceImageResolution->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl));
@@ -611,7 +611,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
 {
     // updating the FilterData sequence and storing FilterData to configuration
     pParent->mbUseLosslessCompression = mxRbLosslessCompression->get_active();
-    pParent->mnQuality = static_cast<sal_Int32>(mxNfQuality->get_value(FUNIT_PERCENT));
+    pParent->mnQuality = static_cast<sal_Int32>(mxNfQuality->get_value(FieldUnit::PERCENT));
     pParent->mbReduceImageResolution = mxCbReduceImageResolution->get_active();
     pParent->mnMaxImageResolution = mxCoReduceImageResolution->get_active_text().toInt32();
     pParent->mbExportNotes = mxCbExportNotes->get_active();

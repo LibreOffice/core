@@ -28,14 +28,14 @@
 // local functions
 static void lcl_GetMinMax(weld::MetricSpinButton const& rField, int& nMin, int& nMax)
 {
-    rField.get_range(nMin, nMax, FUNIT_TWIP);
+    rField.get_range(nMin, nMax, FieldUnit::TWIP);
     nMin = rField.denormalize(nMin);
     nMax = rField.denormalize(nMax);
 }
 
 static void lcl_SetMinMax(weld::MetricSpinButton& rField, int nMin, int nMax)
 {
-    rField.set_range(rField.normalize(nMin), rField.normalize(nMax), FUNIT_TWIP);
+    rField.set_range(rField.normalize(nMin), rField.normalize(nMax), FieldUnit::TWIP);
 }
 
 SvxOptionsGrid::SvxOptionsGrid() :
@@ -93,8 +93,8 @@ SvxGridTabPage::SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet
     , bAttrModified(false)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
     , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
-    , m_xMtrFldDrawX(m_xBuilder->weld_metric_spin_button("mtrflddrawx", FUNIT_CM))
-    , m_xMtrFldDrawY(m_xBuilder->weld_metric_spin_button("mtrflddrawy", FUNIT_CM))
+    , m_xMtrFldDrawX(m_xBuilder->weld_metric_spin_button("mtrflddrawx", FieldUnit::CM))
+    , m_xMtrFldDrawY(m_xBuilder->weld_metric_spin_button("mtrflddrawy", FieldUnit::CM))
     , m_xNumFldDivisionX(m_xBuilder->weld_spin_button("numflddivisionx"))
     , m_xNumFldDivisionY(m_xBuilder->weld_spin_button("numflddivisiony"))
     , m_xCbxSynchronize(m_xBuilder->weld_check_button("synchronize"))
@@ -103,12 +103,12 @@ SvxGridTabPage::SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet
     , m_xCbxSnapBorder(m_xBuilder->weld_check_button("snapborder"))
     , m_xCbxSnapFrame(m_xBuilder->weld_check_button("snapframe"))
     , m_xCbxSnapPoints(m_xBuilder->weld_check_button("snappoints"))
-    , m_xMtrFldSnapArea(m_xBuilder->weld_metric_spin_button("mtrfldsnaparea", FUNIT_PIXEL))
+    , m_xMtrFldSnapArea(m_xBuilder->weld_metric_spin_button("mtrfldsnaparea", FieldUnit::PIXEL))
     , m_xCbxOrtho(m_xBuilder->weld_check_button("ortho"))
     , m_xCbxBigOrtho(m_xBuilder->weld_check_button("bigortho"))
     , m_xCbxRotate(m_xBuilder->weld_check_button("rotate"))
-    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("mtrfldangle", FUNIT_DEGREE))
-    , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button("mtrfldbezangle", FUNIT_DEGREE))
+    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("mtrfldangle", FieldUnit::DEGREE))
+    , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button("mtrfldbezangle", FieldUnit::DEGREE))
 {
     // This page requires exchange Support
     SetExchangeSupport();
@@ -226,19 +226,19 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         {
             // Set Metrics
             int nMin, nMax;
-            int nVal = m_xMtrFldDrawX->denormalize(m_xMtrFldDrawX->get_value(FUNIT_TWIP));
+            int nVal = m_xMtrFldDrawX->denormalize(m_xMtrFldDrawX->get_value(FieldUnit::TWIP));
 
             lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);
             SetFieldUnit(*m_xMtrFldDrawX, eFUnit, true);
             lcl_SetMinMax(*m_xMtrFldDrawX, nMin, nMax);
 
-            m_xMtrFldDrawX->set_value(m_xMtrFldDrawX->normalize(nVal), FUNIT_TWIP);
+            m_xMtrFldDrawX->set_value(m_xMtrFldDrawX->normalize(nVal), FieldUnit::TWIP);
 
-            nVal = m_xMtrFldDrawY->denormalize(m_xMtrFldDrawY->get_value(FUNIT_TWIP));
+            nVal = m_xMtrFldDrawY->denormalize(m_xMtrFldDrawY->get_value(FieldUnit::TWIP));
             lcl_GetMinMax(*m_xMtrFldDrawY, nMin, nMax);
             SetFieldUnit(*m_xMtrFldDrawY, eFUnit, true);
             lcl_SetMinMax(*m_xMtrFldDrawY, nMin, nMax);
-            m_xMtrFldDrawY->set_value(m_xMtrFldDrawY->normalize(nVal), FUNIT_TWIP);
+            m_xMtrFldDrawY->set_value(m_xMtrFldDrawY->normalize(nVal), FieldUnit::TWIP);
 
         }
     }
@@ -257,9 +257,9 @@ IMPL_LINK(SvxGridTabPage, ChangeDrawHdl_Impl, weld::MetricSpinButton&, rField, v
     if (m_xCbxSynchronize->get_active())
     {
         if (&rField == m_xMtrFldDrawX.get())
-            m_xMtrFldDrawY->set_value(m_xMtrFldDrawX->get_value(FUNIT_NONE), FUNIT_NONE);
+            m_xMtrFldDrawY->set_value(m_xMtrFldDrawX->get_value(FieldUnit::NONE), FieldUnit::NONE);
         else
-            m_xMtrFldDrawX->set_value(m_xMtrFldDrawY->get_value(FUNIT_NONE), FUNIT_NONE);
+            m_xMtrFldDrawX->set_value(m_xMtrFldDrawY->get_value(FieldUnit::NONE), FieldUnit::NONE);
     }
 }
 

@@ -159,16 +159,16 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
 GraphicFilterMosaic::GraphicFilterMosaic(weld::Window* pParent, const Graphic& rGraphic,
                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges)
     : GraphicFilterDialog(pParent, "cui/ui/mosaicdialog.ui", "MosaicDialog", rGraphic)
-    , mxMtrWidth(m_xBuilder->weld_metric_spin_button("width", FUNIT_PIXEL))
-    , mxMtrHeight(m_xBuilder->weld_metric_spin_button("height", FUNIT_PIXEL))
+    , mxMtrWidth(m_xBuilder->weld_metric_spin_button("width", FieldUnit::PIXEL))
+    , mxMtrHeight(m_xBuilder->weld_metric_spin_button("height", FieldUnit::PIXEL))
     , mxCbxEdges(m_xBuilder->weld_check_button("edges"))
 {
-    mxMtrWidth->set_value(nTileWidth, FUNIT_PIXEL);
-    mxMtrWidth->set_max(GetGraphicSizePixel().Width(), FUNIT_PIXEL);
+    mxMtrWidth->set_value(nTileWidth, FieldUnit::PIXEL);
+    mxMtrWidth->set_max(GetGraphicSizePixel().Width(), FieldUnit::PIXEL);
     mxMtrWidth->connect_value_changed(LINK(this, GraphicFilterMosaic, EditModifyHdl));
 
-    mxMtrHeight->set_value(nTileHeight, FUNIT_PIXEL);
-    mxMtrHeight->set_max(GetGraphicSizePixel().Height(), FUNIT_PIXEL);
+    mxMtrHeight->set_value(nTileHeight, FieldUnit::PIXEL);
+    mxMtrHeight->set_max(GetGraphicSizePixel().Height(), FieldUnit::PIXEL);
     mxMtrHeight->connect_value_changed(LINK(this, GraphicFilterMosaic, EditModifyHdl));
 
     mxCbxEdges->set_active(bEnhanceEdges);
@@ -191,8 +191,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
 {
     Graphic         aRet;
-    long            nTileWidth = static_cast<long>(mxMtrWidth->get_value(FUNIT_PIXEL));
-    long            nTileHeight = static_cast<long>(mxMtrHeight->get_value(FUNIT_PIXEL));
+    long            nTileWidth = static_cast<long>(mxMtrWidth->get_value(FieldUnit::PIXEL));
+    long            nTileHeight = static_cast<long>(mxMtrHeight->get_value(FieldUnit::PIXEL));
     const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), 1L ),
                            std::max( FRound( nTileHeight * fScaleY ), 1L ) );
 
@@ -268,10 +268,10 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 GraphicFilterSolarize::GraphicFilterSolarize(weld::Window* pParent, const Graphic& rGraphic,
                                              sal_uInt8 cGreyThreshold, bool bInvert)
     : GraphicFilterDialog(pParent, "cui/ui/solarizedialog.ui", "SolarizeDialog", rGraphic)
-    , mxMtrThreshold(m_xBuilder->weld_metric_spin_button("value", FUNIT_PERCENT))
+    , mxMtrThreshold(m_xBuilder->weld_metric_spin_button("value", FieldUnit::PERCENT))
     , mxCbxInvert(m_xBuilder->weld_check_button("invert"))
 {
-    mxMtrThreshold->set_value(FRound(cGreyThreshold / 2.55), FUNIT_PERCENT);
+    mxMtrThreshold->set_value(FRound(cGreyThreshold / 2.55), FieldUnit::PERCENT);
     mxMtrThreshold->connect_value_changed(LINK(this, GraphicFilterSolarize, EditModifyHdl));
 
     mxCbxInvert->set_active(bInvert);
@@ -291,7 +291,7 @@ IMPL_LINK_NOARG(GraphicFilterSolarize, EditModifyHdl, weld::MetricSpinButton&, v
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound(mxMtrThreshold->get_value(FUNIT_PERCENT) * 2.55));
+    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound(mxMtrThreshold->get_value(FieldUnit::PERCENT) * 2.55));
 
     if( rGraphic.IsAnimated() )
     {
@@ -324,9 +324,9 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
 GraphicFilterSepia::GraphicFilterSepia(weld::Window* pParent, const Graphic& rGraphic,
                                        sal_uInt16 nSepiaPercent)
     : GraphicFilterDialog(pParent, "cui/ui/agingdialog.ui", "AgingDialog", rGraphic)
-    , mxMtrSepia(m_xBuilder->weld_metric_spin_button("value", FUNIT_PERCENT))
+    , mxMtrSepia(m_xBuilder->weld_metric_spin_button("value", FieldUnit::PERCENT))
 {
-    mxMtrSepia->set_value(nSepiaPercent, FUNIT_PERCENT);
+    mxMtrSepia->set_value(nSepiaPercent, FieldUnit::PERCENT);
     mxMtrSepia->connect_value_changed(LINK(this, GraphicFilterSepia, EditModifyHdl));
 }
 
@@ -338,7 +338,7 @@ IMPL_LINK_NOARG(GraphicFilterSepia, EditModifyHdl, weld::MetricSpinButton&, void
 Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt16      nSepiaPct = sal::static_int_cast< sal_uInt16 >(mxMtrSepia->get_value(FUNIT_PERCENT));
+    sal_uInt16      nSepiaPct = sal::static_int_cast< sal_uInt16 >(mxMtrSepia->get_value(FieldUnit::PERCENT));
 
     if( rGraphic.IsAnimated() )
     {
