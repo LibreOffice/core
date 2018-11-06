@@ -50,9 +50,6 @@ class MiscTest
 {
 public:
     virtual void setUp() override;
-    void testODFCustomMetadata();
-    void testNoThumbnail();
-    void testHardLinks();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
@@ -64,14 +61,6 @@ public:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("foo"), BAD_CAST("http://foo.net"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("baz"), BAD_CAST("http://baz.net"));
     }
-
-    CPPUNIT_TEST_SUITE(MiscTest);
-    CPPUNIT_TEST(testODFCustomMetadata);
-    CPPUNIT_TEST(testNoThumbnail);
-    CPPUNIT_TEST(testHardLinks);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
 };
 
 void MiscTest::setUp()
@@ -81,7 +70,7 @@ void MiscTest::setUp()
     SfxApplication::GetOrCreate();
 }
 
-void MiscTest::testODFCustomMetadata()
+CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 {
     uno::Reference<document::XDocumentProperties> const xProps(
         ::com::sun::star::document::DocumentProperties::create(m_xContext));
@@ -110,7 +99,7 @@ void MiscTest::testODFCustomMetadata()
     aTempFile.EnableKillingFile();
 }
 
-void MiscTest::testNoThumbnail()
+CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 {
     // Load a document.
     const OUString aURL(m_directories.getURLFromSrc("/sfx2/qa/cppunit/misc/hello.odt"));
@@ -160,7 +149,7 @@ void MiscTest::testNoThumbnail()
     xComponent->dispose();
 }
 
-void MiscTest::testHardLinks()
+CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 {
 #ifndef _WIN32
     OUString aSourceDir = m_directories.getURLFromSrc("/sfx2/qa/cppunit/misc/");
@@ -200,8 +189,6 @@ void MiscTest::testHardLinks()
     xComponent->dispose();
 #endif
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(MiscTest);
 
 }
 
