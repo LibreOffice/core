@@ -1483,7 +1483,16 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
         //if ( pViewFrm )
         //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
 
-        m_nCurRefDlgId = bVis ? nId : 0 ;             // before SetChildWindow
+        // before SetChildWindow
+        if ( comphelper::LibreOfficeKit::isActive() )
+        {
+            if ( bVis )
+                m_nCurRefDlgId = nId;
+        }
+        else
+        {
+            m_nCurRefDlgId = bVis ? nId : 0;
+        }
 
         if ( pViewFrm )
         {
@@ -1753,7 +1762,13 @@ void ScModule::EndReference()
     //FIXME: ShowRefFrame at InputHdl, if the Function AutoPilot is open?
     if ( m_nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+        SfxChildWindow* pChildWnd = nullptr;
+
+        if ( comphelper::LibreOfficeKit::isActive() )
+            pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+        else
+            pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+
         OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
