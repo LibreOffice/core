@@ -1207,27 +1207,24 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
                     // nAccumulate 0 = none, 1 = always
                     // nTransformType 0: "property" else "image"
 
-                    if( nBits & 3 )
+                    if( nBits & 3 && xAnimate.is() )
                     {
-                        if( xAnimate.is() )
+                        if( nBits & 1 )
                         {
-                            if( nBits & 1 )
+                            sal_Int16 nTemp = AnimationAdditiveMode::BASE;
+                            switch( nAdditive )
                             {
-                                sal_Int16 nTemp = AnimationAdditiveMode::BASE;
-                                switch( nAdditive )
-                                {
-                                case 1: nTemp = AnimationAdditiveMode::SUM; break;
-                                case 2: nTemp = AnimationAdditiveMode::REPLACE; break;
-                                case 3: nTemp = AnimationAdditiveMode::MULTIPLY; break;
-                                case 4: nTemp = AnimationAdditiveMode::NONE; break;
-                                }
-                                xAnimate->setAdditive( nTemp );
+                            case 1: nTemp = AnimationAdditiveMode::SUM; break;
+                            case 2: nTemp = AnimationAdditiveMode::REPLACE; break;
+                            case 3: nTemp = AnimationAdditiveMode::MULTIPLY; break;
+                            case 4: nTemp = AnimationAdditiveMode::NONE; break;
                             }
+                            xAnimate->setAdditive( nTemp );
+                        }
 
-                            if( nBits & 2 )
-                            {
-                                xAnimate->setAccumulate( nAccumulate == 0 );
-                            }
+                        if( nBits & 2 )
+                        {
+                            xAnimate->setAccumulate( nAccumulate == 0 );
                         }
                     }
 #ifdef DBG_ANIM_LOG

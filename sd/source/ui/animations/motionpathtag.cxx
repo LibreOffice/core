@@ -837,27 +837,24 @@ bool MotionPathTag::getContext( SdrViewContext& rContext )
 
 void MotionPathTag::CheckPossibilities()
 {
-    if( mpPathObj )
+    if( mpPathObj && isSelected() )
     {
-        if( isSelected() )
+        mrView.SetMoveAllowed( true );
+        mrView.SetMoveProtected( false );
+        mrView.SetResizeFreeAllowed( true );
+        mrView.SetResizePropAllowed( true );
+        mrView.SetResizeProtected( false );
+
+        if( !mrView.IsFrameDragSingles() )
         {
-            mrView.SetMoveAllowed( true );
-            mrView.SetMoveProtected( false );
-            mrView.SetResizeFreeAllowed( true );
-            mrView.SetResizePropAllowed( true );
-            mrView.SetResizeProtected( false );
+            bool b1stSmooth(true);
+            bool b1stSegm(true);
+            bool bCurve(false);
+            bool bSmoothFuz(false);
+            bool bSegmFuz(false);
+            basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
 
-            if( !mrView.IsFrameDragSingles() )
-            {
-                bool b1stSmooth(true);
-                bool b1stSegm(true);
-                bool bCurve(false);
-                bool bSmoothFuz(false);
-                bool bSegmFuz(false);
-                basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
-
-                mrView.CheckPolyPossibilitiesHelper( mpMark.get(), b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
-            }
+            mrView.CheckPolyPossibilitiesHelper( mpMark.get(), b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
         }
     }
 }

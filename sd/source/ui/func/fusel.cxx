@@ -522,9 +522,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // Point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
                 pHdl = mpView->PickHandle(aMDPos);
-                if(pHdl)
-                    if ( ! rMEvt.IsRight())
-                        mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
+                if(pHdl && ! rMEvt.IsRight())
+                    mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             }
         }
         else
@@ -683,14 +682,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 **************************************************************/
                 SdrPageView* pPV;
                 SdrObject* pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK);
-                if (pObj)
+                if (pObj && pPV->IsObjMarkable(pObj))
                 {
-                    if (pPV->IsObjMarkable(pObj))
-                    {
-                        mpView->UnmarkAllObj();
-                        mpView->MarkObj(pObj,pPV);
-                        return true;
-                    }
+                    mpView->UnmarkAllObj();
+                    mpView->MarkObj(pObj,pPV);
+                    return true;
                 }
                 /**************************************************************
                 * Toggle between selection and rotation
