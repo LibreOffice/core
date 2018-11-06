@@ -85,7 +85,7 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 {
     if ( pMTRequest )
     {
-        if ( Application::GetMainThreadIdentifier() == osl::Thread::getCurrentIdentifier() )
+        if ( Application::IsMainThread() )
         {
             // this is the main thread
             worker( nullptr, pMTRequest );

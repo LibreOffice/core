@@ -518,9 +518,9 @@ comphelper::SolarMutex& Application::GetSolarMutex()
     return *(pSVData->mpDefInst->GetYieldMutex());
 }
 
-oslThreadIdentifier Application::GetMainThreadIdentifier()
+bool Application::IsMainThread()
 {
-    return ImplGetSVData()->mnMainThreadId;
+    return ImplGetSVData()->mnMainThreadId == osl::Thread::getCurrentIdentifier();
 }
 
 sal_uInt32 Application::ReleaseSolarMutex()
