@@ -393,7 +393,8 @@ void SwCursorShell::MarkListLevel( const OUString& sListId,
 
 void SwCursorShell::UpdateMarkedListLevel()
 {
-    SwTextNode * pTextNd = GetCursor_()->GetNode().GetTextNode();
+    SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(),
+            GetCursor_()->GetPoint()->nNode);
 
     if ( pTextNd )
     {

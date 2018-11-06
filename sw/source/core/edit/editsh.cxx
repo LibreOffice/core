@@ -782,6 +782,7 @@ void SwEditShell::SetNumberingRestart()
                             SwTextNode* pTextNd( pNd->GetTextNode() );
                             SwNumRule* pNumRule( pTextNd->GetNumRule() );
 
+                            // sw_redlinehide: not sure what this should do, only called from mail-merge
                             bool bIsNodeNum =
                                ( pNumRule && pTextNd->GetNum() &&
                                  ( pTextNd->HasNumber() || pTextNd->HasBullet() ) &&
