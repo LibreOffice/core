@@ -272,8 +272,7 @@ ScCellFieldsObj::ScCellFieldsObj(
     ScDocShell* pDocSh, const ScAddress& rPos) :
     mxContent(xContent),
     pDocShell( pDocSh ),
-    aCellPos( rPos ),
-    mpRefreshListeners( nullptr )
+    aCellPos( rPos )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
@@ -296,11 +295,8 @@ ScCellFieldsObj::~ScCellFieldsObj()
     {
         lang::EventObject aEvent;
         aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-        if (mpRefreshListeners)
-        {
-            mpRefreshListeners->disposeAndClear(aEvent);
-            DELETEZ( mpRefreshListeners );
-        }
+        mpRefreshListeners->disposeAndClear(aEvent);
+        mpRefreshListeners.reset();
     }
 }
 
@@ -408,7 +404,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
     {
         SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
-            mpRefreshListeners = new comphelper::OInterfaceContainerHelper2(aMutex);
+            mpRefreshListeners.reset( new comphelper::OInterfaceContainerHelper2(aMutex) );
         mpRefreshListeners->addInterface(xListener);
     }
 }
@@ -424,8 +420,7 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 }
 
 ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
-    mrData(rData),
-    mpRefreshListeners( nullptr )
+    mrData(rData)
 {
     mpEditSource.reset( new ScHeaderFooterEditSource(rData) );
 }
@@ -442,7 +437,7 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
         lang::EventObject aEvent;
         aEvent.Source = static_cast<cppu::OWeakObject*>(this);
         mpRefreshListeners->disposeAndClear(aEvent);
-        DELETEZ(mpRefreshListeners);
+        mpRefreshListeners.reset();
     }
 }
 
@@ -561,7 +556,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
     {
         SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
-            mpRefreshListeners = new comphelper::OInterfaceContainerHelper2(aMutex);
+            mpRefreshListeners.reset(new comphelper::OInterfaceContainerHelper2(aMutex));
         mpRefreshListeners->addInterface(xListener);
     }
 }
