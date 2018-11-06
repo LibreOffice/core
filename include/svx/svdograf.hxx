@@ -110,6 +110,7 @@ private:
     OUString maSignatureLineSigningInstructions;
     bool mbIsSignatureLineShowSignDate;
     bool mbIsSignatureLineCanAddComment;
+    bool mbSignatureLineIsSigned;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
     void                    ImpRegisterLink();
@@ -280,6 +281,8 @@ public:
     {
         mpSignatureLineUnsignedGraphic = rGraphic;
     };
+    bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; };
+    void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX

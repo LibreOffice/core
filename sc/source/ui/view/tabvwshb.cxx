@@ -537,7 +537,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
             case SID_EDIT_SIGNATURELINE:
             case SID_SIGN_SIGNATURELINE:
-                if (!IsSignatureLineSelected())
+                if (!IsSignatureLineSelected() || IsSignatureLineSigned())
                     rSet.DisableItem(nWhich);
                 break;
 
@@ -593,6 +593,26 @@ bool ScTabViewShell::IsSignatureLineSelected()
         return false;
 
     return pGraphic->isSignatureLine();
+}
+
+bool ScTabViewShell::IsSignatureLineSigned()
+{
+    SdrView* pSdrView = GetSdrView();
+    if (!pSdrView)
+        return false;
+
+    if (pSdrView->GetMarkedObjectCount() != 1)
+        return false;
+
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    if (!pPickObj)
+        return false;
+
+    SdrGrafObj* pGraphic = dynamic_cast<SdrGrafObj*>(pPickObj);
+    if (!pGraphic)
+        return false;
+
+    return pGraphic->isSignatureLineSigned();
 }
 
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)

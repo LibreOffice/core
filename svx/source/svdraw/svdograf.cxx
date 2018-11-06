@@ -193,6 +193,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
+    ,mbSignatureLineIsSigned(false)
 {
     onGraphicChanged();
 
@@ -219,6 +220,7 @@ SdrGrafObj::SdrGrafObj(
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
+    ,mbSignatureLineIsSigned(false)
 {
     onGraphicChanged();
 
@@ -244,6 +246,7 @@ SdrGrafObj::SdrGrafObj(
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
+    ,mbSignatureLineIsSigned(false)
 {
     onGraphicChanged();
 
@@ -731,6 +734,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     maSignatureLineSigningInstructions = rObj.maSignatureLineSigningInstructions;
     mbIsSignatureLineShowSignDate = rObj.mbIsSignatureLineShowSignDate;
     mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
+    mbSignatureLineIsSigned = false;
     mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
     if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
         mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
