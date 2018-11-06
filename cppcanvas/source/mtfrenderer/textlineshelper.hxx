@@ -65,7 +65,7 @@ public:
 
     ::basegfx::B2DSize getOverallSize() const { return maOverallSize; }
 
-    /** Init textlines with specified linewdith and TextLineInfo.
+    /** Init textlines with specified linewidth and TextLineInfo.
      */
     void init(double nLineWidth, const tools::TextLineInfo& rLineInfo);
 

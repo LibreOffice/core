@@ -1023,7 +1023,7 @@ SwFrame *SwSectionNode::MakeFrame( SwFrame *pSib )
 // The created ContentFrames are attached to the corresponding Layout
 void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
-    // Take my succsessive or preceding ContentFrame
+    // Take my successive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
     if( rNds.IsDocNodes() && rNds.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {

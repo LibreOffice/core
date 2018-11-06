@@ -387,7 +387,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokeniz
     else
     {
         // more complex search for all filters
-        // We check first, which office modules are installed ...
+        // We check first, which office modules are installed...
         std::vector<OUString> lModules = impl_getListOfInstalledModules();
         for (auto const& module : lModules)
         {
