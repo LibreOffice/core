@@ -116,52 +116,31 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     MapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
     const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_TEXT_LEFTDIST );
-
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LEFTDIST );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldLeft, nValue, eUnit );
-    }
-    else
-        m_xMtrFldLeft->set_text("");
+
+    SetMetricValue(*m_xMtrFldLeft, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
     m_xMtrFldLeft->save_value();
 
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_RIGHTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_RIGHTDIST );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldRight, nValue, eUnit );
-    }
-    else
-        m_xMtrFldRight->set_text("");
+
+    SetMetricValue(*m_xMtrFldRight, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
     m_xMtrFldRight->save_value();
 
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_UPPERDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_UPPERDIST );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_xMtrFldTop, nValue, eUnit );
-    }
-    else
-        m_xMtrFldTop->set_text("");
+
+    SetMetricValue(*m_xMtrFldTop, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
     m_xMtrFldTop->save_value();
 
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_LOWERDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LOWERDIST );
-    if( pItem )
-    {
-        long nValue = static_cast<const SdrMetricItem*>(pItem)->GetValue();
-        SetMetricValue( *m_xMtrFldBottom, nValue, eUnit );
-    }
-    else
-        m_xMtrFldBottom->set_text("");
+
+    SetMetricValue(*m_xMtrFldBottom, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
     m_xMtrFldBottom->save_value();
 
     // adjust to height and autogrowsize

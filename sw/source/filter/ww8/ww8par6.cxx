@@ -673,9 +673,6 @@ SwSectionFormat *wwSectionManager::InsertSection(
     if (!pPage)
         pPage = &mrReader.m_rDoc.GetPageDesc(0);
 
-    if (!pPage)
-        return nullptr;
-
     SwSectionFormat *pFormat = rSection.mpSection->GetFormat();
     OSL_ENSURE(pFormat, "impossible");
     if (!pFormat)
@@ -4261,7 +4258,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
     {
         long n = nSpace * 10 / 24;  // WW: 240 = 100%, SW: 100 = 100%
 
-        if( n>SAL_MAX_UINT16 ) n = SAL_MAX_UINT16;
+        // here n is in [0..13653]
         aLSpc.SetPropLineSpace( static_cast<sal_uInt16>(n) );
         const SvxFontHeightItem* pH = static_cast<const SvxFontHeightItem*>(
             GetFormatAttr( RES_CHRATR_FONTSIZE ));

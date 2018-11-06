@@ -2188,7 +2188,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( IsExpandable() && !pView->IsExpanded( pCursor ) )
                     pView->Expand( pCursor );
             }
-            else if ( bIsCellFocusEnabled && pCursor )
+            else if (bIsCellFocusEnabled)
             {
                 if ( nCurTabPos < ( pView->TabCount() - 1 /*!2*/ ) )
                 {
@@ -2219,7 +2219,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_LEFT:
         {
-            if ( bIsCellFocusEnabled && pCursor )
+            if (bIsCellFocusEnabled)
             {
                 if ( nCurTabPos > FIRST_ENTRY_TAB )
                 {
@@ -2394,24 +2394,19 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_ADD:
-            if( pCursor )
+            if (!pView->IsExpanded(pCursor))
+                pView->Expand(pCursor);
+            if (bMod1)
             {
-                if( !pView->IsExpanded(pCursor))
-                    pView->Expand( pCursor );
-                if( bMod1 )
+                sal_uInt16 nRefDepth = pTree->GetDepth(pCursor);
+                SvTreeListEntry* pCur = pTree->Next(pCursor);
+                while (pCur && pTree->GetDepth(pCur) > nRefDepth)
                 {
-                    sal_uInt16 nRefDepth = pTree->GetDepth( pCursor );
-                    SvTreeListEntry* pCur = pTree->Next( pCursor );
-                    while( pCur && pTree->GetDepth(pCur) > nRefDepth )
-                    {
-                        if( pCur->HasChildren() && !pView->IsExpanded(pCur))
-                            pView->Expand( pCur );
-                        pCur = pTree->Next( pCur );
-                    }
+                    if (pCur->HasChildren() && !pView->IsExpanded(pCur))
+                        pView->Expand(pCur);
+                    pCur = pTree->Next(pCur);
                 }
             }
-            else
-                bKeyUsed = false;
             break;
 
         case KEY_A:
@@ -2422,46 +2417,41 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_SUBTRACT:
-            if( pCursor )
+            if (pView->IsExpanded(pCursor))
+                pView->Collapse(pCursor);
+            if (bMod1)
             {
-                if( pView->IsExpanded(pCursor))
-                    pView->Collapse( pCursor );
-                if( bMod1 )
+                // collapse all parents until we get to the root
+                SvTreeListEntry* pParentToCollapse = pTree->GetRootLevelParent(pCursor);
+                if (pParentToCollapse)
                 {
-                    // collapse all parents until we get to the root
-                    SvTreeListEntry* pParentToCollapse = pTree->GetRootLevelParent(pCursor);
-                    if( pParentToCollapse )
+                    sal_uInt16 nRefDepth;
+                    // special case explorer: if the root only has a single
+                    // entry, don't collapse the root entry
+                    if (pTree->GetChildList(nullptr).size() < 2)
                     {
-                        sal_uInt16 nRefDepth;
-                        // special case explorer: if the root only has a single
-                        // entry, don't collapse the root entry
-                        if (pTree->GetChildList(nullptr).size() < 2)
+                        nRefDepth = 1;
+                        pParentToCollapse = pCursor;
+                        while (pTree->GetParent(pParentToCollapse)
+                               && pTree->GetDepth(pTree->GetParent(pParentToCollapse)) > 0)
                         {
-                            nRefDepth = 1;
-                            pParentToCollapse = pCursor;
-                            while( pTree->GetParent(pParentToCollapse) &&
-                                   pTree->GetDepth( pTree->GetParent(pParentToCollapse)) > 0)
-                            {
-                                pParentToCollapse = pTree->GetParent(pParentToCollapse);
-                            }
+                            pParentToCollapse = pTree->GetParent(pParentToCollapse);
                         }
-                        else
-                            nRefDepth = 0;
+                    }
+                    else
+                        nRefDepth = 0;
 
-                        if( pView->IsExpanded(pParentToCollapse) )
-                            pView->Collapse( pParentToCollapse );
-                        SvTreeListEntry* pCur = pTree->Next( pParentToCollapse );
-                        while( pCur && pTree->GetDepth(pCur) > nRefDepth )
-                        {
-                            if( pCur->HasChildren() && pView->IsExpanded(pCur) )
-                                pView->Collapse( pCur );
-                            pCur = pTree->Next( pCur );
-                        }
+                    if (pView->IsExpanded(pParentToCollapse))
+                        pView->Collapse(pParentToCollapse);
+                    SvTreeListEntry* pCur = pTree->Next(pParentToCollapse);
+                    while (pCur && pTree->GetDepth(pCur) > nRefDepth)
+                    {
+                        if (pCur->HasChildren() && pView->IsExpanded(pCur))
+                            pView->Collapse(pCur);
+                        pCur = pTree->Next(pCur);
                     }
                 }
             }
-            else
-                bKeyUsed = false;
             break;
 
         case KEY_DIVIDE :

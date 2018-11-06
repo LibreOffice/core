@@ -325,8 +325,7 @@ TextConversion_ko::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
                 aBuf.append(str + start, result.Boundary.startPos - start); // append skip portion
             aBuf.append(result.Candidates[0]); // append converted portion
         } else {
-            if (length + nStartPos > start)
-                aBuf.append(str + start, length + nStartPos - start); // append last portion
+            aBuf.append(str + start, length + nStartPos - start); // append last portion
             break;
         }
     }

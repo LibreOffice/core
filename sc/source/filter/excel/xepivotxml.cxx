@@ -286,7 +286,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         // TODO In same cases, disable listing of items, as it is done in MS Excel.
         // Exporting savePivotCacheRecordsXml method needs to be updated accordingly
-        bool bListItems = true;
+        //bool bListItems = true;
 
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
         aDPTypesWithoutBlank.erase(ScDPItemData::Empty);
@@ -352,7 +352,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
             pAttList->add(XML_maxDate, XclXmlUtils::ToOString(GetExcelFormattedDate(fMax, GetFormatter())));
         }
 
-        if (bListItems)
+        //if (bListItems) // see TODO above
         {
             pAttList->add(XML_count, OString::number(static_cast<long>(rFieldItems.size())));
         }
@@ -360,7 +360,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         pDefStrm->startElement(XML_sharedItems, xAttributeList);
 
-        if (bListItems)
+        //if (bListItems) // see TODO above
         {
             it = rFieldItems.begin();
             for (; it != itEnd; ++it)

@@ -1460,13 +1460,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     if( pCurRedline )
     {
         const SwPosition* pEnd = pCurRedline->End();
-        if( pEnd->nNode == rNd &&
-            pEnd->nContent.GetIndex() <= nPos )
-        {
-            pCurRedline = nullptr;
-            ++nCurRedlinePos;
-        }
-        else
+        if (!(pEnd->nNode == rNd && pEnd->nContent.GetIndex() <= nPos))
         {
             switch( pCurRedline->GetType() )
             {
@@ -1479,57 +1473,55 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                 default:
                     break;
             }
-            pCurRedline = nullptr;
-            ++nCurRedlinePos;
         }
+        pCurRedline = nullptr;
+        ++nCurRedlinePos;
     }
 
-    if( !pCurRedline )
+    assert(!pCurRedline);
+    // search next Redline
+    for( ; nCurRedlinePos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size();
+            ++nCurRedlinePos )
     {
-        // search next Redline
-        for( ; nCurRedlinePos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size();
-                ++nCurRedlinePos )
+        const SwRangeRedline* pRedl = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nCurRedlinePos ];
+
+        const SwPosition* pStt = pRedl->Start();
+        const SwPosition* pEnd = pStt == pRedl->GetPoint()
+                                    ? pRedl->GetMark()
+                                    : pRedl->GetPoint();
+
+        if( pStt->nNode == rNd )
         {
-            const SwRangeRedline* pRedl = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nCurRedlinePos ];
-
-            const SwPosition* pStt = pRedl->Start();
-            const SwPosition* pEnd = pStt == pRedl->GetPoint()
-                                        ? pRedl->GetMark()
-                                        : pRedl->GetPoint();
-
-            if( pStt->nNode == rNd )
+            if( pStt->nContent.GetIndex() >= nPos )
             {
-                if( pStt->nContent.GetIndex() >= nPos )
+                if( pStt->nContent.GetIndex() == nPos )
                 {
-                    if( pStt->nContent.GetIndex() == nPos )
-                    {
-                            switch( pRedl->GetType() )
-                            {
-                                case nsRedlineType_t::REDLINE_INSERT:
-                                case nsRedlineType_t::REDLINE_DELETE:
-                                case nsRedlineType_t::REDLINE_FORMAT:
-                                    // write data of this redline
-                                    pCurRedline = pRedl;
-                                    return &( pCurRedline->GetRedlineData() );
-                                    break;
-                                default:
-                                    break;
-                            }
-                    }
-                    break;
+                        switch( pRedl->GetType() )
+                        {
+                            case nsRedlineType_t::REDLINE_INSERT:
+                            case nsRedlineType_t::REDLINE_DELETE:
+                            case nsRedlineType_t::REDLINE_FORMAT:
+                                // write data of this redline
+                                pCurRedline = pRedl;
+                                return &( pCurRedline->GetRedlineData() );
+                                break;
+                            default:
+                                break;
+                        }
                 }
-            }
-            else
-            {
                 break;
             }
+        }
+        else
+        {
+            break;
+        }
 
-            if( pEnd->nNode == rNd &&
-                pEnd->nContent.GetIndex() < nPos )
-            {
-                pCurRedline = pRedl;
-                break;
-            }
+        if( pEnd->nNode == rNd &&
+            pEnd->nContent.GetIndex() < nPos )
+        {
+            pCurRedline = pRedl;
+            break;
         }
     }
     return nullptr;

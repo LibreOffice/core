@@ -168,10 +168,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
 
     if(mbModify)
     {
-        if(!mpClone)
-        {
-            mpClone = maOriginal.getFullDragClone();
-        }
+        mpClone = maOriginal.getFullDragClone();
 
         // apply original transformation, implemented at the DragMethods
         rDragMethod.applyCurrentTransformationToSdrObject(*mpClone);

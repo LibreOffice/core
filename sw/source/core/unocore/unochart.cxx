@@ -652,274 +652,264 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     if (!pTableFormat || !pUnoCursor)
         throw lang::IllegalArgumentException();
 
-    if(pTableFormat)
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    if (pTable->IsTableComplex())
+        return xRes; // we can't handle this thus returning an empty references
+
+    // get a character map in the size of the table to mark
+    // all the ranges to use in
+    sal_Int32 nRows = pTable->GetTabLines().size();
+    sal_Int32 nCols = pTable->GetTabLines().front()->GetTabBoxes().size();
+    std::vector<std::vector<sal_Char>> aMap(nRows);
+    for (sal_Int32 i = 0; i < nRows; ++i)
+        aMap[i].resize(nCols);
+
+    // iterate over subranges and mark used cells in above map
+    //!! by proceeding this way we automatically get rid of
+    //!! multiple listed or overlapping cell ranges which should
+    //!! just be ignored silently
+    sal_Int32 nSubRanges = aSubRanges.getLength();
+    for (sal_Int32 i = 0; i < nSubRanges; ++i)
     {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(pTable->IsTableComplex())
-            return xRes;    // we can't handle this thus returning an empty references
-        else
+        OUString aTableName, aStartCell, aEndCell;
+        bool bOk2 = GetTableAndCellsFromRangeRep(
+                            pSubRanges[i], aTableName, aStartCell, aEndCell );
+        OSL_ENSURE(bOk2, "failed to get table and start/end cells");
+
+        sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
+        SwXTextTable::GetCellPosition(aStartCell, nStartCol, nStartRow);
+        SwXTextTable::GetCellPosition(aEndCell, nEndCol, nEndRow);
+        OSL_ENSURE( nStartRow <= nEndRow && nStartCol <= nEndCol,
+                "cell range not normalized");
+
+        // test if the ranges span more than the available cells
+        if( nStartRow < 0 || nEndRow >= nRows ||
+            nStartCol < 0 || nEndCol >= nCols )
         {
-            // get a character map in the size of the table to mark
-            // all the ranges to use in
-            sal_Int32 nRows = pTable->GetTabLines().size();
-            sal_Int32 nCols = pTable->GetTabLines().front()->GetTabBoxes().size();
-            std::vector< std::vector< sal_Char > > aMap( nRows );
-            for (sal_Int32 i = 0;  i < nRows;  ++i)
-                aMap[i].resize( nCols );
-
-            // iterate over subranges and mark used cells in above map
-            //!! by proceeding this way we automatically get rid of
-            //!! multiple listed or overlapping cell ranges which should
-            //!! just be ignored silently
-            sal_Int32 nSubRanges = aSubRanges.getLength();
-            for (sal_Int32 i = 0;  i < nSubRanges;  ++i)
-            {
-                OUString aTableName, aStartCell, aEndCell;
-                bool bOk2 = GetTableAndCellsFromRangeRep(
-                                    pSubRanges[i], aTableName, aStartCell, aEndCell );
-                OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
-
-                sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
-                SwXTextTable::GetCellPosition( aStartCell, nStartCol, nStartRow );
-                SwXTextTable::GetCellPosition( aEndCell,   nEndCol,   nEndRow );
-                OSL_ENSURE( nStartRow <= nEndRow && nStartCol <= nEndCol,
-                        "cell range not normalized");
-
-                // test if the ranges span more than the available cells
-                if( nStartRow < 0 || nEndRow >= nRows ||
-                    nStartCol < 0 || nEndCol >= nCols )
-                {
-                    throw lang::IllegalArgumentException();
-                }
-                for (sal_Int32 k1 = nStartRow;  k1 <= nEndRow;  ++k1)
-                {
-                    for (sal_Int32 k2 = nStartCol;  k2 <= nEndCol;  ++k2)
-                        aMap[k1][k2] = 'x';
-                }
-            }
-
-            // find label and data sequences to use
-
-            sal_Int32 oi;  // outer index (slower changing index)
-            sal_Int32 ii;  // inner index (faster changing index)
-            sal_Int32 oiEnd = bDtaSrcIsColumns ? nCols : nRows;
-            sal_Int32 iiEnd = bDtaSrcIsColumns ? nRows : nCols;
-            std::vector< sal_Int32 > aLabelIdx( oiEnd );
-            std::vector< sal_Int32 > aDataStartIdx( oiEnd );
-            std::vector< sal_Int32 > aDataLen( oiEnd );
-            for (oi = 0;  oi < oiEnd;  ++oi)
-            {
-                aLabelIdx[oi]       = -1;
-                aDataStartIdx[oi]   = -1;
-                aDataLen[oi]        = 0;
-            }
-
-            for (oi = 0;  oi < oiEnd;  ++oi)
-            {
-                ii = 0;
-                while (ii < iiEnd)
-                {
-                    sal_Char &rChar = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii];
-
-                    // label should be used but is not yet found?
-                    if (rChar == 'x' && bFirstIsLabel && aLabelIdx[oi] == -1)
-                    {
-                        aLabelIdx[oi] = ii;
-                        rChar = 'L';    // setting a different char for labels here
-                                        // makes the test for the data sequence below
-                                        // easier
-                    }
-
-                    // find data sequence
-                    if (rChar == 'x' && aDataStartIdx[oi] == -1)
-                    {
-                        aDataStartIdx[oi] = ii;
-
-                        // get length of data sequence
-                        sal_Int32 nL = 0;
-                        sal_Char c;
-                        while (ii< iiEnd && 'x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
-                        {
-                            ++nL;   ++ii;
-                        }
-                        aDataLen[oi] = nL;
-
-                        // check that there is no other separate sequence of data
-                        // to be found because that is not supported
-                        while (ii < iiEnd)
-                        {
-                            if ('x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
-                                throw lang::IllegalArgumentException();
-                            ++ii;
-                        }
-                    }
-                    else
-                        ++ii;
-                }
-            }
-
-            // make some other consistency checks while calculating
-            // the number of XLabeledDataSequence to build:
-            // - labels should always be used or not at all
-            // - the data sequences should have equal non-zero length
-            sal_Int32 nNumLDS = 0;
-            if (oiEnd > 0)
-            {
-                sal_Int32 nFirstSeqLen = 0;
-                sal_Int32 nFirstSeqLabelIdx = -1;
-                bool bFirstFound = false;
-                for (oi = 0;  oi < oiEnd;  ++oi)
-                {
-                    // row/col used at all?
-                    if (aDataStartIdx[oi] != -1 &&
-                        (!bFirstIsLabel || aLabelIdx[oi] != -1))
-                    {
-                        ++nNumLDS;
-                        if (!bFirstFound)
-                        {
-                            nFirstSeqLen        = aDataLen[oi];
-                            nFirstSeqLabelIdx   = aLabelIdx[oi];
-                            bFirstFound = true;
-                        }
-                        else
-                        {
-                            if (nFirstSeqLen != aDataLen[oi] ||
-                                nFirstSeqLabelIdx != aLabelIdx[oi])
-                                throw lang::IllegalArgumentException();
-                        }
-                    }
-                }
-            }
-            if (nNumLDS == 0)
-                throw lang::IllegalArgumentException();
-
-            // now we should have all necessary data to build a proper DataSource
-            // thus if we came this far there should be no further problem
-            if (bTestOnly)
-                return xRes;    // have createDataSourcePossible return true
-
-            // create data source from found label and data sequences
-            uno::Sequence< uno::Reference< chart2::data::XDataSequence > > aLabelSeqs( nNumLDS );
-            uno::Reference< chart2::data::XDataSequence > *pLabelSeqs = aLabelSeqs.getArray();
-            uno::Sequence< uno::Reference< chart2::data::XDataSequence > > aDataSeqs( nNumLDS );
-            uno::Reference< chart2::data::XDataSequence > *pDataSeqs = aDataSeqs.getArray();
-            sal_Int32 nSeqsIdx = 0;
-            for (oi = 0;  oi < oiEnd;  ++oi)
-            {
-                // row/col not used? (see if-statement above where nNumLDS was counted)
-                if (!(aDataStartIdx[oi] != -1 &&
-                        (!bFirstIsLabel || aLabelIdx[oi] != -1)))
-                    continue;
-
-                // get cell ranges for label and data
-
-                SwRangeDescriptor aLabelDesc;
-                SwRangeDescriptor aDataDesc;
-                if (bDtaSrcIsColumns)   // use columns
-                {
-                    aLabelDesc.nTop     = aLabelIdx[oi];
-                    aLabelDesc.nLeft    = oi;
-                    aLabelDesc.nBottom  = aLabelDesc.nTop;
-                    aLabelDesc.nRight   = oi;
-
-                    aDataDesc.nTop      = aDataStartIdx[oi];
-                    aDataDesc.nLeft     = oi;
-                    aDataDesc.nBottom   = aDataDesc.nTop + aDataLen[oi] - 1;
-                    aDataDesc.nRight    = oi;
-                }
-                else    // use rows
-                {
-                    aLabelDesc.nTop     = oi;
-                    aLabelDesc.nLeft    = aLabelIdx[oi];
-                    aLabelDesc.nBottom  = oi;
-                    aLabelDesc.nRight   = aLabelDesc.nLeft;
-
-                    aDataDesc.nTop      = oi;
-                    aDataDesc.nLeft     = aDataStartIdx[oi];
-                    aDataDesc.nBottom   = oi;
-                    aDataDesc.nRight    = aDataDesc.nLeft + aDataLen[oi] - 1;
-                }
-                const OUString aBaseName =  pTableFormat->GetName() + ".";
-
-                OUString aLabelRange;
-                if (aLabelIdx[oi] != -1)
-                {
-                    aLabelRange = aBaseName
-                        + sw_GetCellName( aLabelDesc.nLeft, aLabelDesc.nTop )
-                        + ":" + sw_GetCellName( aLabelDesc.nRight, aLabelDesc.nBottom );
-                }
-
-                OUString aDataRange;
-                if (aDataStartIdx[oi] != -1)
-                {
-                    aDataRange = aBaseName
-                        + sw_GetCellName( aDataDesc.nLeft, aDataDesc.nTop )
-                        + ":" + sw_GetCellName( aDataDesc.nRight, aDataDesc.nBottom );
-                }
-
-                // get cursors spanning the cell ranges for label and data
-                std::shared_ptr<SwUnoCursor> pLabelUnoCursor;
-                std::shared_ptr<SwUnoCursor> pDataUnoCursor;
-                GetFormatAndCreateCursorFromRangeRep( pDoc, aLabelRange, &pTableFormat, pLabelUnoCursor);
-                GetFormatAndCreateCursorFromRangeRep( pDoc, aDataRange,  &pTableFormat, pDataUnoCursor);
-
-                // create XDataSequence's from cursors
-                if (pLabelUnoCursor)
-                    pLabelSeqs[ nSeqsIdx ] = new SwChartDataSequence( *this, *pTableFormat, pLabelUnoCursor );
-                OSL_ENSURE( pDataUnoCursor, "pointer to data sequence missing" );
-                if (pDataUnoCursor)
-                    pDataSeqs [ nSeqsIdx ] = new SwChartDataSequence( *this, *pTableFormat, pDataUnoCursor );
-                if (pLabelUnoCursor || pDataUnoCursor)
-                    ++nSeqsIdx;
-            }
-            OSL_ENSURE( nSeqsIdx == nNumLDS, "mismatch between sequence size and num,ber of entries" );
-
-            // build data source from data and label sequences
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLDS( nNumLDS );
-            uno::Reference< chart2::data::XLabeledDataSequence > *pLDS = aLDS.getArray();
-            for (sal_Int32 i = 0;  i < nNumLDS;  ++i)
-            {
-                SwChartLabeledDataSequence *pLabeledDtaSeq = new SwChartLabeledDataSequence;
-                pLabeledDtaSeq->setLabel( pLabelSeqs[i] );
-                pLabeledDtaSeq->setValues( pDataSeqs[i] );
-                pLDS[i] = pLabeledDtaSeq;
-            }
-
-            // apply 'SequenceMapping' if it was provided
-            sal_Int32 nSequenceMappingLen = aSequenceMapping.getLength();
-            if (nSequenceMappingLen)
-            {
-                sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
-                uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aOld_LDS( aLDS );
-                uno::Reference< chart2::data::XLabeledDataSequence > *pOld_LDS = aOld_LDS.getArray();
-
-                sal_Int32 nNewCnt = 0;
-                for (sal_Int32 i = 0;  i < nSequenceMappingLen;  ++i)
-                {
-                    // check that index to be used is valid
-                    // and has not yet been used
-                    sal_Int32 nIdx = pSequenceMapping[i];
-                    if (0 <= nIdx && nIdx < nNumLDS && pOld_LDS[nIdx].is())
-                    {
-                        pLDS[nNewCnt++] = pOld_LDS[nIdx];
-
-                        // mark index as being used already (avoids duplicate entries)
-                        pOld_LDS[nIdx].clear();
-                    }
-                }
-                // add not yet used 'old' sequences to new one
-                for (sal_Int32 i = 0;  i < nNumLDS;  ++i)
-                {
-                    if (pOld_LDS[i].is())
-                        pLDS[nNewCnt++] = pOld_LDS[i];
-                }
-                OSL_ENSURE( nNewCnt == nNumLDS, "unexpected size of resulting sequence" );
-            }
-
-            xRes = new SwChartDataSource( aLDS );
+            throw lang::IllegalArgumentException();
+        }
+        for (sal_Int32 k1 = nStartRow;  k1 <= nEndRow;  ++k1)
+        {
+            for (sal_Int32 k2 = nStartCol;  k2 <= nEndCol;  ++k2)
+                aMap[k1][k2] = 'x';
         }
     }
 
+    // find label and data sequences to use
+
+    sal_Int32 oi;  // outer index (slower changing index)
+    sal_Int32 ii;  // inner index (faster changing index)
+    sal_Int32 oiEnd = bDtaSrcIsColumns ? nCols : nRows;
+    sal_Int32 iiEnd = bDtaSrcIsColumns ? nRows : nCols;
+    std::vector<sal_Int32> aLabelIdx(oiEnd);
+    std::vector<sal_Int32> aDataStartIdx(oiEnd);
+    std::vector<sal_Int32> aDataLen(oiEnd);
+    for (oi = 0; oi < oiEnd; ++oi)
+    {
+        aLabelIdx[oi]       = -1;
+        aDataStartIdx[oi]   = -1;
+        aDataLen[oi]        = 0;
+    }
+
+    for (oi = 0; oi < oiEnd; ++oi)
+    {
+        ii = 0;
+        while (ii < iiEnd)
+        {
+            sal_Char &rChar = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii];
+
+            // label should be used but is not yet found?
+            if (rChar == 'x' && bFirstIsLabel && aLabelIdx[oi] == -1)
+            {
+                aLabelIdx[oi] = ii;
+                rChar = 'L';    // setting a different char for labels here
+                                // makes the test for the data sequence below
+                                // easier
+            }
+
+            // find data sequence
+            if (rChar == 'x' && aDataStartIdx[oi] == -1)
+            {
+                aDataStartIdx[oi] = ii;
+
+                // get length of data sequence
+                sal_Int32 nL = 0;
+                sal_Char c;
+                while (ii< iiEnd && 'x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
+                {
+                    ++nL;   ++ii;
+                }
+                aDataLen[oi] = nL;
+
+                // check that there is no other separate sequence of data
+                // to be found because that is not supported
+                while (ii < iiEnd)
+                {
+                    if ('x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
+                        throw lang::IllegalArgumentException();
+                    ++ii;
+                }
+            }
+            else
+                ++ii;
+        }
+    }
+
+    // make some other consistency checks while calculating
+    // the number of XLabeledDataSequence to build:
+    // - labels should always be used or not at all
+    // - the data sequences should have equal non-zero length
+    sal_Int32 nNumLDS = 0;
+    if (oiEnd > 0)
+    {
+        sal_Int32 nFirstSeqLen = 0;
+        sal_Int32 nFirstSeqLabelIdx = -1;
+        bool bFirstFound = false;
+        for (oi = 0; oi < oiEnd; ++oi)
+        {
+            // row/col used at all?
+            if (aDataStartIdx[oi] != -1 &&
+                (!bFirstIsLabel || aLabelIdx[oi] != -1))
+            {
+                ++nNumLDS;
+                if (!bFirstFound)
+                {
+                    nFirstSeqLen        = aDataLen[oi];
+                    nFirstSeqLabelIdx   = aLabelIdx[oi];
+                    bFirstFound = true;
+                }
+                else
+                {
+                    if (nFirstSeqLen != aDataLen[oi] ||
+                        nFirstSeqLabelIdx != aLabelIdx[oi])
+                        throw lang::IllegalArgumentException();
+                }
+            }
+        }
+    }
+    if (nNumLDS == 0)
+        throw lang::IllegalArgumentException();
+
+    // now we should have all necessary data to build a proper DataSource
+    // thus if we came this far there should be no further problem
+    if (bTestOnly)
+        return xRes;    // have createDataSourcePossible return true
+
+    // create data source from found label and data sequences
+    uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aLabelSeqs(nNumLDS);
+    uno::Reference<chart2::data::XDataSequence>* pLabelSeqs = aLabelSeqs.getArray();
+    uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aDataSeqs(nNumLDS);
+    uno::Reference<chart2::data::XDataSequence>* pDataSeqs = aDataSeqs.getArray();
+    sal_Int32 nSeqsIdx = 0;
+    for (oi = 0; oi < oiEnd; ++oi)
+    {
+        // row/col not used? (see if-statement above where nNumLDS was counted)
+        if (!(aDataStartIdx[oi] != -1 &&
+                (!bFirstIsLabel || aLabelIdx[oi] != -1)))
+            continue;
+
+        // get cell ranges for label and data
+
+        SwRangeDescriptor aLabelDesc;
+        SwRangeDescriptor aDataDesc;
+        if (bDtaSrcIsColumns)   // use columns
+        {
+            aLabelDesc.nTop     = aLabelIdx[oi];
+            aLabelDesc.nLeft    = oi;
+            aLabelDesc.nBottom  = aLabelDesc.nTop;
+            aLabelDesc.nRight   = oi;
+
+            aDataDesc.nTop      = aDataStartIdx[oi];
+            aDataDesc.nLeft     = oi;
+            aDataDesc.nBottom   = aDataDesc.nTop + aDataLen[oi] - 1;
+            aDataDesc.nRight    = oi;
+        }
+        else    // use rows
+        {
+            aLabelDesc.nTop     = oi;
+            aLabelDesc.nLeft    = aLabelIdx[oi];
+            aLabelDesc.nBottom  = oi;
+            aLabelDesc.nRight   = aLabelDesc.nLeft;
+
+            aDataDesc.nTop      = oi;
+            aDataDesc.nLeft     = aDataStartIdx[oi];
+            aDataDesc.nBottom   = oi;
+            aDataDesc.nRight    = aDataDesc.nLeft + aDataLen[oi] - 1;
+        }
+        const OUString aBaseName = pTableFormat->GetName() + ".";
+
+        OUString aLabelRange;
+        if (aLabelIdx[oi] != -1)
+        {
+            aLabelRange = aBaseName
+                + sw_GetCellName( aLabelDesc.nLeft, aLabelDesc.nTop )
+                + ":" + sw_GetCellName( aLabelDesc.nRight, aLabelDesc.nBottom );
+        }
+
+        OUString aDataRange = aBaseName
+            + sw_GetCellName( aDataDesc.nLeft, aDataDesc.nTop )
+            + ":" + sw_GetCellName( aDataDesc.nRight, aDataDesc.nBottom );
+
+        // get cursors spanning the cell ranges for label and data
+        std::shared_ptr<SwUnoCursor> pLabelUnoCursor;
+        std::shared_ptr<SwUnoCursor> pDataUnoCursor;
+        GetFormatAndCreateCursorFromRangeRep(pDoc, aLabelRange, &pTableFormat, pLabelUnoCursor);
+        GetFormatAndCreateCursorFromRangeRep(pDoc, aDataRange, &pTableFormat, pDataUnoCursor);
+
+        // create XDataSequence's from cursors
+        if (pLabelUnoCursor)
+            pLabelSeqs[nSeqsIdx] = new SwChartDataSequence(*this, *pTableFormat, pLabelUnoCursor);
+        OSL_ENSURE(pDataUnoCursor, "pointer to data sequence missing");
+        if (pDataUnoCursor)
+            pDataSeqs[nSeqsIdx] = new SwChartDataSequence(*this, *pTableFormat, pDataUnoCursor);
+        if (pLabelUnoCursor || pDataUnoCursor)
+            ++nSeqsIdx;
+    }
+    OSL_ENSURE(nSeqsIdx == nNumLDS, "mismatch between sequence size and num,ber of entries");
+
+    // build data source from data and label sequences
+    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aLDS(nNumLDS);
+    uno::Reference<chart2::data::XLabeledDataSequence>* pLDS = aLDS.getArray();
+    for (sal_Int32 i = 0; i < nNumLDS; ++i)
+    {
+        SwChartLabeledDataSequence* pLabeledDtaSeq = new SwChartLabeledDataSequence;
+        pLabeledDtaSeq->setLabel(pLabelSeqs[i]);
+        pLabeledDtaSeq->setValues(pDataSeqs[i]);
+        pLDS[i] = pLabeledDtaSeq;
+    }
+
+    // apply 'SequenceMapping' if it was provided
+    sal_Int32 nSequenceMappingLen = aSequenceMapping.getLength();
+    if (nSequenceMappingLen)
+    {
+        sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
+        uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aOld_LDS(aLDS);
+        uno::Reference<chart2::data::XLabeledDataSequence>* pOld_LDS = aOld_LDS.getArray();
+
+        sal_Int32 nNewCnt = 0;
+        for (sal_Int32 i = 0; i < nSequenceMappingLen; ++i)
+        {
+            // check that index to be used is valid
+            // and has not yet been used
+            sal_Int32 nIdx = pSequenceMapping[i];
+            if (0 <= nIdx && nIdx < nNumLDS && pOld_LDS[nIdx].is())
+            {
+                pLDS[nNewCnt++] = pOld_LDS[nIdx];
+
+                // mark index as being used already (avoids duplicate entries)
+                pOld_LDS[nIdx].clear();
+            }
+        }
+        // add not yet used 'old' sequences to new one
+        for (sal_Int32 i = 0; i < nNumLDS; ++i)
+        {
+            if (pOld_LDS[i].is())
+                pLDS[nNewCnt++] = pOld_LDS[i];
+        }
+        OSL_ENSURE(nNewCnt == nNumLDS, "unexpected size of resulting sequence");
+    }
+
+    xRes = new SwChartDataSource(aLDS);
     return xRes;
 }
 

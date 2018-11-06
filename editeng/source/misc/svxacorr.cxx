@@ -932,65 +932,63 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     // Found [ \t]+[A-Z0-9]+ until here. Test now on the paragraph separator.
     // all three can happen, but not more than once!
     const sal_Unicode* pExceptStt = nullptr;
-    if( !bAtStart )
+    bool bContinue = true;
+    Flags nFlag = Flags::NONE;
+    do
     {
-        bool bContinue = true;
-        Flags nFlag = Flags::NONE;
-        do {
-            switch( *pStr )
-            {
+        switch (*pStr)
+        {
             // Western and Asian full stop
             case '.':
-            case 0x3002 :
-            case 0xFF0E :
+            case 0x3002:
+            case 0xFF0E:
+            {
+                if (pStr >= pStart + 2 && *(pStr - 2) == '.')
                 {
-                    if (pStr >= pStart + 2 && *(pStr-2) == '.')
-                    {
-                        //e.g. text "f.o.o. word": Now currently considering
-                        //capitalizing word but second last character of
-                        //previous word is a .  So probably last word is an
-                        //anagram that ends in . and not truly the end of a
-                        //previous sentence, so don't autocapitalize this word
-                        return;
-                    }
-                    if( nFlag & Flags::FullStop )
-                        return;  // no valid separator -> no replacement
-                    nFlag |= Flags::FullStop;
-                    pExceptStt = pStr;
+                    //e.g. text "f.o.o. word": Now currently considering
+                    //capitalizing word but second last character of
+                    //previous word is a .  So probably last word is an
+                    //anagram that ends in . and not truly the end of a
+                    //previous sentence, so don't autocapitalize this word
+                    return;
                 }
-                break;
+                if (nFlag & Flags::FullStop)
+                    return; // no valid separator -> no replacement
+                nFlag |= Flags::FullStop;
+                pExceptStt = pStr;
+            }
+            break;
             case '!':
-            case 0xFF01 :
-                {
-                    if( nFlag & Flags::ExclamationMark )
-                        return;   // no valid separator -> no replacement
-                    nFlag |= Flags::ExclamationMark;
-                }
-                break;
+            case 0xFF01:
+            {
+                if (nFlag & Flags::ExclamationMark)
+                    return; // no valid separator -> no replacement
+                nFlag |= Flags::ExclamationMark;
+            }
+            break;
             case '?':
-            case 0xFF1F :
-                {
-                    if( nFlag & Flags::QuestionMark)
-                        return;   // no valid separator -> no replacement
-                    nFlag |= Flags::QuestionMark;
-                }
-                break;
+            case 0xFF1F:
+            {
+                if (nFlag & Flags::QuestionMark)
+                    return; // no valid separator -> no replacement
+                nFlag |= Flags::QuestionMark;
+            }
+            break;
             default:
-                if( nFlag == Flags::NONE )
-                    return;       // no valid separator -> no replacement
+                if (nFlag == Flags::NONE)
+                    return; // no valid separator -> no replacement
                 else
                     bContinue = false;
                 break;
-            }
+        }
 
-            if( bContinue && pStr-- == pStart )
-            {
-                return;       // no valid separator -> no replacement
-            }
-        } while( bContinue );
-        if( Flags::FullStop != nFlag )
-            pExceptStt = nullptr;
-    }
+        if (bContinue && pStr-- == pStart)
+        {
+            return; // no valid separator -> no replacement
+        }
+    } while (bContinue);
+    if (Flags::FullStop != nFlag)
+        pExceptStt = nullptr;
 
     if( 2 > ( pStr - pStart ) )
         return;

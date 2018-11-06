@@ -311,8 +311,8 @@ bool EquidistantTickFactory::isVisible( double fScaledValue ) const
 void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) const
 {
     //create point sequences for each tick depth
-    sal_Int32 nDepthCount = getTickDepth();
-    sal_Int32 nMaxMajorTickCount = getMaxTickCount(0);
+    const sal_Int32 nDepthCount = getTickDepth();
+    const sal_Int32 nMaxMajorTickCount = getMaxTickCount(0);
 
     if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
         return;
@@ -333,8 +333,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
         return;
     aAllTicks[0].realloc(nRealMajorTickCount);
 
-    if(nDepthCount>0)
-        addSubTicks( 1, aAllTicks );
+    addSubTicks(1, aAllTicks);
 
     //so far we have added all ticks between the outer major tick marks
     //this was necessary to create sub ticks correctly

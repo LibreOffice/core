@@ -269,33 +269,22 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
             pResourceId = STR_ObjNameSingulRECT;
             break;
         case DRAWING_CUSTOM:
-            {
-                pResourceId = STR_ObjNameSingulCUSTOMSHAPE;
+            pResourceId = STR_ObjNameSingulCUSTOMSHAPE;
 
-                SvxShape* pShape = SvxShape::getImplementation( rxShape );
-                if (pShape)
+            if (SvxShape* pShape = SvxShape::getImplementation(rxShape))
+            {
+                if (auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->GetSdrObject()))
                 {
-                    SdrObject *pSdrObj = pShape->GetSdrObject();
-                    if (pSdrObj)
+                    if (pCustomShape->IsTextPath())
+                        pResourceId = STR_ObjNameSingulFONTWORK;
+                    else
                     {
-                        if(dynamic_cast<const SdrObjCustomShape*>( pSdrObj) !=  nullptr)
-                        {
-                            SdrObjCustomShape* pCustomShape = static_cast<SdrObjCustomShape*>(pSdrObj);
-                            if(pCustomShape)
-                            {
-                                if (pCustomShape->IsTextPath())
-                                    pResourceId = STR_ObjNameSingulFONTWORK;
-                                else
-                                {
-                                    pResourceId = nullptr;
-                                    sName = pCustomShape->GetCustomShapeName();
-                                }
-                            }
-                        }
+                        pResourceId = nullptr;
+                        sName = pCustomShape->GetCustomShapeName();
                     }
                 }
-                break;
             }
+            break;
         case DRAWING_TEXT:
             pResourceId = STR_ObjNameSingulTEXT;
             break;

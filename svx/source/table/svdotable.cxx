@@ -1169,46 +1169,43 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     // get vertical edge number and check for a hit
     const bool bRTL = (GetWritingMode() == WritingMode_RL_TB);
     bool bVrtHit = false;
-    if( nX >= 0 )
+    if( !bRTL )
     {
-        if( !bRTL )
+        while( rnX <= nColCount )
         {
-            while( rnX <= nColCount )
+            if( nX - aTol <= 0 )
             {
-                if( nX - aTol <= 0 )
-                {
-                    bVrtHit = true;
-                    break;
-                }
-
-                if( rnX == nColCount )
-                    break;
-
-                nX -= mpImpl->mpLayouter->getColumnWidth( rnX );
-                if( nX < 0 )
-                    break;
-                rnX++;
+                bVrtHit = true;
+                break;
             }
+
+            if( rnX == nColCount )
+                break;
+
+            nX -= mpImpl->mpLayouter->getColumnWidth( rnX );
+            if( nX < 0 )
+                break;
+            rnX++;
         }
-        else
+    }
+    else
+    {
+        rnX = nColCount;
+        while( rnX >= 0 )
         {
-            rnX = nColCount;
-            while( rnX >= 0 )
+            if( nX - aTol <= 0 )
             {
-                if( nX - aTol <= 0 )
-                {
-                    bVrtHit = true;
-                    break;
-                }
-
-                if( rnX == 0 )
-                    break;
-
-                rnX--;
-                nX -= mpImpl->mpLayouter->getColumnWidth( rnX );
-                if( nX < 0 )
-                    break;
+                bVrtHit = true;
+                break;
             }
+
+            if( rnX == 0 )
+                break;
+
+            rnX--;
+            nX -= mpImpl->mpLayouter->getColumnWidth( rnX );
+            if( nX < 0 )
+                break;
         }
     }
 
@@ -1216,24 +1213,21 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
 
     // get vertical edge number and check for a hit
     bool bHrzHit = false;
-    if( nY >= 0 )
+    while( rnY <= nRowCount )
     {
-        while( rnY <= nRowCount )
+        if( nY - aTol <= 0 )
         {
-            if( nY - aTol <= 0 )
-            {
-                bHrzHit = true;
-                break;
-            }
-
-            if( rnY == nRowCount )
-                break;
-
-            nY -= mpImpl->mpLayouter->getRowHeight(rnY);
-            if( nY < 0 )
-                break;
-            rnY++;
+            bHrzHit = true;
+            break;
         }
+
+        if( rnY == nRowCount )
+            break;
+
+        nY -= mpImpl->mpLayouter->getRowHeight(rnY);
+        if( nY < 0 )
+            break;
+        rnY++;
     }
 
     // rnY is now the edge number above the pointer, if it was hit bVrtHit is also true

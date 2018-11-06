@@ -650,33 +650,30 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 bOk = false;
             }
         }
-        else
+        else // bOk
         {
-            if( bOk )
+            try
             {
+                Reference< XFlushable > xFlushable( mxFilterContainer, UNO_QUERY );
+                if( xFlushable.is() )
+                    xFlushable->flush();
+            }
+            catch( const Exception& )
+            {
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+                bOk = false;
+            }
+
+            if( !bOk )
+            {
+                // we failed to add the filter, so lets remove the type
                 try
                 {
-                    Reference< XFlushable > xFlushable( mxFilterContainer, UNO_QUERY );
-                    if( xFlushable.is() )
-                        xFlushable->flush();
+                    mxTypeDetection->removeByName( pFilterEntry->maType );
                 }
                 catch( const Exception& )
                 {
                     OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
-                    bOk = false;
-                }
-
-                if( !bOk )
-                {
-                    // we failed to add the filter, so lets remove the type
-                    try
-                    {
-                        mxTypeDetection->removeByName( pFilterEntry->maType );
-                    }
-                    catch( const Exception& )
-                    {
-                        OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
-                    }
                 }
 
             }

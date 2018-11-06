@@ -3219,12 +3219,9 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     }
     else
     {
-        if ( !bVBAEnabled )
-        {
-            if( bRaiseErrors )
-                Error( ERRCODE_BASIC_NEEDS_OBJECT );
-            bOk = false;
-        }
+        if( bRaiseErrors )
+            Error( ERRCODE_BASIC_NEEDS_OBJECT );
+        bOk = false;
     }
     return bOk;
 }

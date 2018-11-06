@@ -659,73 +659,71 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
     ScChangeAction* pChangeAction = pTrack->GetAction(pAction->nActionNumber);
     if (pChangeAction)
     {
+        assert(dynamic_cast<ScChangeActionContent*>(pChangeAction));
         ScChangeActionContent* pChangeActionContent = static_cast<ScChangeActionContent*>(pChangeAction);
-        if (pChangeActionContent)
+        if (pChangeActionContent->IsTopContent() && !pChangeActionContent->IsDeletedIn())
         {
-            if (pChangeActionContent->IsTopContent() && !pChangeActionContent->IsDeletedIn())
+            sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
+            pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
+            if ((nCol >= 0) && (nCol <= MAXCOL) &&
+                (nRow >= 0) && (nRow <= MAXROW) &&
+                (nTab >= 0) && (nTab <= MAXTAB))
             {
-                sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
-                pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
-                if ((nCol >= 0) && (nCol <= MAXCOL) &&
-                    (nRow >= 0) && (nRow <= MAXROW) &&
-                    (nTab >= 0) && (nTab <= MAXTAB))
+                ScAddress aAddress (static_cast<SCCOL>(nCol),
+                                    static_cast<SCROW>(nRow),
+                                    static_cast<SCTAB>(nTab));
+                ScCellValue aCell;
+                aCell.assign(*pDoc, aAddress);
+                if (!aCell.isEmpty())
                 {
-                    ScAddress aAddress (static_cast<SCCOL>(nCol),
-                                        static_cast<SCROW>(nRow),
-                                        static_cast<SCTAB>(nTab));
-                    ScCellValue aCell;
-                    aCell.assign(*pDoc, aAddress);
-                    if (!aCell.isEmpty())
+                    ScCellValue aNewCell;
+                    if (aCell.meType != CELLTYPE_FORMULA)
                     {
-                        ScCellValue aNewCell;
-                        if (aCell.meType != CELLTYPE_FORMULA)
+                        aNewCell = aCell;
+                        pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
+                        pChangeActionContent->SetNewValue(aCell, pDoc);
+                    }
+                    else
+                    {
+                        ScMatrixMode nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
+                        OUString sFormula;
+                        // With GRAM_ODFF reference detection is faster on compilation.
+                        /* FIXME: new cell should be created with a clone
+                         * of the token array instead. Any reason why this
+                         * wasn't done? */
+                        aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
+
+                        // #i87826# [Collaboration] Rejected move destroys formulas
+                        // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
+                        //        is returned and no further string handling is necessary
+                        OUString sFormula2;
+                        if ( nMatrixFlag != ScMatrixMode::NONE )
                         {
-                            aNewCell = aCell;
-                            pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
-                            pChangeActionContent->SetNewValue(aCell, pDoc);
+                            sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );
                         }
                         else
                         {
-                            ScMatrixMode nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
-                            OUString sFormula;
-                            // With GRAM_ODFF reference detection is faster on compilation.
-                            /* FIXME: new cell should be created with a clone
-                             * of the token array instead. Any reason why this
-                             * wasn't done? */
-                            aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
-
-                            // #i87826# [Collaboration] Rejected move destroys formulas
-                            // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
-                            //        is returned and no further string handling is necessary
-                            OUString sFormula2;
-                            if ( nMatrixFlag != ScMatrixMode::NONE )
-                            {
-                                sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );
-                            }
-                            else
-                            {
-                                sFormula2 = sFormula.copy( 1 );
-                            }
-
-                            aNewCell.meType = CELLTYPE_FORMULA;
-                            aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
-                            if (nMatrixFlag == ScMatrixMode::Formula)
-                            {
-                                SCCOL nCols;
-                                SCROW nRows;
-                                aCell.mpFormula->GetMatColsRows(nCols, nRows);
-                                aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
-                            }
-                            aNewCell.mpFormula->SetInChangeTrack(true);
-                            pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
-                            // #i40704# don't overwrite the formula string via SetNewValue()
+                            sFormula2 = sFormula.copy( 1 );
                         }
+
+                        aNewCell.meType = CELLTYPE_FORMULA;
+                        aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
+                        if (nMatrixFlag == ScMatrixMode::Formula)
+                        {
+                            SCCOL nCols;
+                            SCROW nRows;
+                            aCell.mpFormula->GetMatColsRows(nCols, nRows);
+                            aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
+                        }
+                        aNewCell.mpFormula->SetInChangeTrack(true);
+                        pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
+                        // #i40704# don't overwrite the formula string via SetNewValue()
                     }
                 }
-                else
-                {
-                    OSL_FAIL("wrong cell position");
-                }
+            }
+            else
+            {
+                OSL_FAIL("wrong cell position");
             }
         }
     }

@@ -399,13 +399,10 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     if(pWin)
         SetActiveWindow(pWin);
 
-    if(!bReturn)
-    {
-        // give key input first to SfxViewShell to give CTRL+Key
-        // (e.g. CTRL+SHIFT+'+', to front) priority.
-        OSL_ASSERT (GetViewShell()!=nullptr);
-        bReturn = GetViewShell()->KeyInput(rKEvt);
-    }
+    // give key input first to SfxViewShell to give CTRL+Key
+    // (e.g. CTRL+SHIFT+'+', to front) priority.
+    OSL_ASSERT(GetViewShell() != nullptr);
+    bReturn = GetViewShell()->KeyInput(rKEvt);
 
     const size_t OriCount = GetView()->GetMarkedObjectList().GetMarkCount();
     if(!bReturn)

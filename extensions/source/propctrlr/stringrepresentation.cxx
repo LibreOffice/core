@@ -338,14 +338,12 @@ namespace
 
         // loop through the elements and concatenate the string representations of the integers
         // (separated by a line break)
-        const ElementType* pElements = _rElements.getConstArray();
-        const ElementType* pElementsEnd = pElements + _rElements.getLength();
-        for ( ; pElements != pElementsEnd; ++pElements )
+        for (const auto& rElement : _rElements)
         {
-            sCompose.append( OUString( _rTransformer( *pElements ) ) );
-            if ( pElements != pElementsEnd )
-                sCompose.append("\n");
+            sCompose.append(OUString(_rTransformer(rElement)));
+            sCompose.append("\n");
         }
+        sCompose.stripEnd('\n');
 
         return sCompose.makeStringAndClear();
     }
