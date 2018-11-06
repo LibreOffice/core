@@ -108,6 +108,9 @@ SwPosition GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos);
 std::pair<SwTextNode *, SwTextNode *>
 GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos);
 
+void GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
+void GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
+
 TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 nLen);
