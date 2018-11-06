@@ -23,7 +23,9 @@
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -37,6 +39,13 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 {
     if (rxController.is() && rxController->getFrame().is())
     {
+        // notify the LOK too
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (SfxViewShell* pViewShell = SfxViewShell::Get(rxController))
+                SfxLokHelper::notifyContextChange(pViewShell, GetModuleName(rxController->getFrame()), vcl::EnumContext::GetContextName(eContext));
+        }
+
         const css::ui::ContextChangeEventObject aEvent(
             rxController,
             GetModuleName(rxController->getFrame()),
