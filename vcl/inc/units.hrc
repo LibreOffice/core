@@ -25,32 +25,32 @@
 std::pair<const char*, FieldUnit> SV_FUNIT_STRINGS[] =
 {
     // To translators: This is the first entry of a sequence of measurement unit names
-    { NC_("SV_FUNIT_STRINGS", "mm"), FUNIT_MM },
-    { NC_("SV_FUNIT_STRINGS", "cm"), FUNIT_CM },
-    { NC_("SV_FUNIT_STRINGS", "m"), FUNIT_M },
-    { NC_("SV_FUNIT_STRINGS", "km"), FUNIT_KM },
-    { NC_("SV_FUNIT_STRINGS", "twips"), FUNIT_TWIP },
-    { NC_("SV_FUNIT_STRINGS", "twip"), FUNIT_TWIP },
-    { NC_("SV_FUNIT_STRINGS", "pt"), FUNIT_POINT },
-    { NC_("SV_FUNIT_STRINGS", "pc"), FUNIT_PICA },
-    { NC_("SV_FUNIT_STRINGS", "\""), FUNIT_INCH },
-    { NC_("SV_FUNIT_STRINGS", "in"), FUNIT_INCH },
-    { NC_("SV_FUNIT_STRINGS", "inch"), FUNIT_INCH },
-    { NC_("SV_FUNIT_STRINGS", "'"), FUNIT_FOOT },
-    { NC_("SV_FUNIT_STRINGS", "ft"), FUNIT_FOOT },
-    { NC_("SV_FUNIT_STRINGS", "foot"), FUNIT_FOOT },
-    { NC_("SV_FUNIT_STRINGS", "feet"), FUNIT_FOOT },
-    { NC_("SV_FUNIT_STRINGS", "miles"), FUNIT_MILE },
-    { NC_("SV_FUNIT_STRINGS", "mile"), FUNIT_MILE },
-    { NC_("SV_FUNIT_STRINGS", "ch"), FUNIT_CHAR },
-    { NC_("SV_FUNIT_STRINGS", "line"), FUNIT_LINE },
-    { NC_("SV_FUNIT_STRINGS", "pixels"), FUNIT_PIXEL },
-    { NC_("SV_FUNIT_STRINGS", "pixel"), FUNIT_PIXEL },
+    { NC_("SV_FUNIT_STRINGS", "mm"), FieldUnit::MM },
+    { NC_("SV_FUNIT_STRINGS", "cm"), FieldUnit::CM },
+    { NC_("SV_FUNIT_STRINGS", "m"), FieldUnit::M },
+    { NC_("SV_FUNIT_STRINGS", "km"), FieldUnit::KM },
+    { NC_("SV_FUNIT_STRINGS", "twips"), FieldUnit::TWIP },
+    { NC_("SV_FUNIT_STRINGS", "twip"), FieldUnit::TWIP },
+    { NC_("SV_FUNIT_STRINGS", "pt"), FieldUnit::POINT },
+    { NC_("SV_FUNIT_STRINGS", "pc"), FieldUnit::PICA },
+    { NC_("SV_FUNIT_STRINGS", "\""), FieldUnit::INCH },
+    { NC_("SV_FUNIT_STRINGS", "in"), FieldUnit::INCH },
+    { NC_("SV_FUNIT_STRINGS", "inch"), FieldUnit::INCH },
+    { NC_("SV_FUNIT_STRINGS", "'"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "ft"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "foot"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "feet"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "miles"), FieldUnit::MILE },
+    { NC_("SV_FUNIT_STRINGS", "mile"), FieldUnit::MILE },
+    { NC_("SV_FUNIT_STRINGS", "ch"), FieldUnit::CHAR },
+    { NC_("SV_FUNIT_STRINGS", "line"), FieldUnit::LINE },
+    { NC_("SV_FUNIT_STRINGS", "pixels"), FieldUnit::PIXEL },
+    { NC_("SV_FUNIT_STRINGS", "pixel"), FieldUnit::PIXEL },
     /* To translators: degree */
-    { NC_("SV_FUNIT_STRINGS", "°"), FUNIT_DEGREE },
-    { NC_("SV_FUNIT_STRINGS", "sec"), FUNIT_SECOND },
+    { NC_("SV_FUNIT_STRINGS", "°"), FieldUnit::DEGREE },
+    { NC_("SV_FUNIT_STRINGS", "sec"), FieldUnit::SECOND },
     // To translators: This is the last entry of the sequence of measurement unit names
-    { NC_("SV_FUNIT_STRINGS", "ms"), FUNIT_MILLISECOND }
+    { NC_("SV_FUNIT_STRINGS", "ms"), FieldUnit::MILLISECOND }
 };
 
 #endif // INCLUDED_VCL_INC_UNITS_HRC

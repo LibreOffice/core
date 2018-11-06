@@ -524,9 +524,9 @@ SwXViewSettings::SwXViewSettings(SwView* pVw)
     , mpConstViewOption(nullptr)
     , bObjectValid(true)
     , mbApplyZoom(false)
-    , eHRulerUnit(FUNIT_CM)
+    , eHRulerUnit(FieldUnit::CM)
     , mbApplyHRulerMetric(false)
-    , eVRulerUnit(FUNIT_CM)
+    , eVRulerUnit(FieldUnit::CM)
     , mbApplyVRulerMetric(false)
 {
     // This property only exists if we have a view (ie, not at the module )
@@ -732,13 +732,13 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         {
             sal_uInt16 nUnit;
             if( rValue >>= nUnit )
-                switch( nUnit )
+                switch (static_cast<FieldUnit>(nUnit))
                 {
-                case FUNIT_MM:
-                case FUNIT_CM:
-                case FUNIT_POINT:
-                case FUNIT_PICA:
-                case FUNIT_INCH:
+                case FieldUnit::MM:
+                case FieldUnit::CM:
+                case FieldUnit::POINT:
+                case FieldUnit::PICA:
+                case FieldUnit::INCH:
                     if( rInfo.mnHandle == HANDLE_VIEWSET_HORI_RULER_METRIC )
                     {
                         eHRulerUnit = static_cast<FieldUnit>(nUnit);

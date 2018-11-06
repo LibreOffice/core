@@ -64,9 +64,9 @@ SvxLineDefTabPage::SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rI
     , m_xLbType2(m_xBuilder->weld_combo_box("LB_TYPE_2"))
     , m_xNumFldNumber1(m_xBuilder->weld_spin_button("NUM_FLD_1"))
     , m_xNumFldNumber2(m_xBuilder->weld_spin_button("NUM_FLD_2"))
-    , m_xMtrLength1(m_xBuilder->weld_metric_spin_button("MTR_FLD_LENGTH_1", FUNIT_CM))
-    , m_xMtrLength2(m_xBuilder->weld_metric_spin_button("MTR_FLD_LENGTH_2", FUNIT_CM))
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FUNIT_CM))
+    , m_xMtrLength1(m_xBuilder->weld_metric_spin_button("MTR_FLD_LENGTH_1", FieldUnit::CM))
+    , m_xMtrLength2(m_xBuilder->weld_metric_spin_button("MTR_FLD_LENGTH_2", FieldUnit::CM))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FieldUnit::CM))
     , m_xCbxSynchronize(m_xBuilder->weld_check_button("CBX_SYNCHRONIZE"))
     , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
     , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
@@ -83,9 +83,9 @@ SvxLineDefTabPage::SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rI
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::M:
+        case FieldUnit::KM:
+            eFUnit = FieldUnit::MM;
             break;
         default: ; //prevent warning
     }
@@ -412,7 +412,7 @@ void SvxLineDefTabPage::ChangeMetricHdl_Impl(weld::ToggleButton* p)
         SetMetricValue( *m_xMtrLength2, nTmp2, ePoolUnit );
         SetMetricValue( *m_xMtrDistance, nTmp3, ePoolUnit );
     }
-    else if( m_xCbxSynchronize->get_active() && m_xMtrLength1->get_unit() != FUNIT_PERCENT )
+    else if( m_xCbxSynchronize->get_active() && m_xMtrLength1->get_unit() != FieldUnit::PERCENT )
     {
         long nTmp1, nTmp2, nTmp3;
 
@@ -434,9 +434,9 @@ void SvxLineDefTabPage::ChangeMetricHdl_Impl(weld::ToggleButton* p)
         m_xMtrLength2->set_digits(0);
         m_xMtrDistance->set_digits(0);
 
-        m_xMtrLength1->set_unit(FUNIT_PERCENT);
-        m_xMtrLength2->set_unit(FUNIT_PERCENT);
-        m_xMtrDistance->set_unit(FUNIT_PERCENT);
+        m_xMtrLength1->set_unit(FieldUnit::PERCENT);
+        m_xMtrLength2->set_unit(FieldUnit::PERCENT);
+        m_xMtrDistance->set_unit(FieldUnit::PERCENT);
 
         SetMetricValue( *m_xMtrLength1, nTmp1, ePoolUnit );
         SetMetricValue( *m_xMtrLength2, nTmp2, ePoolUnit );

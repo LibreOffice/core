@@ -222,7 +222,7 @@ public:
     void                    SetMin( sal_Int64 nNewMin, FieldUnit eInUnit );
     using NumericFormatter::GetMin;
     sal_Int64               GetMin( FieldUnit eOutUnit ) const;
-    void                    SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit = FUNIT_NONE );
+    void                    SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit = FieldUnit::NONE );
     sal_Int64               GetBaseValue() const;
 
     virtual void            SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
@@ -486,10 +486,10 @@ public:
     virtual void            SetUnit( FieldUnit meUnit ) override;
 
     void                    SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit );
-    void             SetFirst(sal_Int64 first) { SetFirst(first, FUNIT_NONE); }
+    void             SetFirst(sal_Int64 first) { SetFirst(first, FieldUnit::NONE); }
     sal_Int64               GetFirst( FieldUnit eOutUnit ) const;
     void                    SetLast( sal_Int64 nNewLast, FieldUnit eInUnit );
-    void             SetLast(sal_Int64 last) { SetLast(last, FUNIT_NONE); }
+    void             SetLast(sal_Int64 last) { SetLast(last, FieldUnit::NONE); }
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
 
     static void             SetDefaultUnit( FieldUnit eDefaultUnit );
@@ -660,7 +660,7 @@ public:
     virtual void            CustomConvert() override;
     virtual void            ReformatAll() override;
 
-    void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
+    void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FieldUnit::NONE,
                                          sal_Int32  nPos = COMBOBOX_APPEND );
 
     // Needed, because GetValue() with nPos hide these functions

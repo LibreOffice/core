@@ -34,15 +34,15 @@ IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, weld::SpinButton&, void)
 {
     sal_uInt16 nId = static_cast<sal_uInt16>(m_xColNF->get_value()) - 1;
     const SwTwips lWidth = m_rFnc.GetColWidth(nId);
-    m_xWidthMF->set_max(m_xWidthMF->normalize(m_rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
-    m_xWidthMF->set_value(m_xWidthMF->normalize(lWidth), FUNIT_TWIP);
+    m_xWidthMF->set_max(m_xWidthMF->normalize(m_rFnc.GetMaxColWidth(nId)), FieldUnit::TWIP);
+    m_xWidthMF->set_value(m_xWidthMF->normalize(lWidth), FieldUnit::TWIP);
 }
 
 SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
     : GenericDialogController(pParent, "modules/swriter/ui/columnwidth.ui", "ColumnWidthDialog")
     , m_rFnc(rTableFnc)
     , m_xColNF(m_xBuilder->weld_spin_button("column"))
-    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
 {
     bool bIsWeb = rTableFnc.GetShell()
                   && (dynamic_cast< const SwWebDocShell* >(
@@ -54,9 +54,9 @@ SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
     m_xColNF->set_value(m_rFnc.GetCurColNum() + 1);
 
     if (m_rFnc.GetColCount() == 0)
-        m_xWidthMF->set_min(m_xWidthMF->normalize(m_rFnc.GetColWidth(0)), FUNIT_TWIP);
+        m_xWidthMF->set_min(m_xWidthMF->normalize(m_rFnc.GetColWidth(0)), FieldUnit::TWIP);
     else
-        m_xWidthMF->set_min(m_xWidthMF->normalize(MINLAY), FUNIT_TWIP);
+        m_xWidthMF->set_min(m_xWidthMF->normalize(MINLAY), FieldUnit::TWIP);
     m_xColNF->connect_value_changed(LINK(this, SwTableWidthDlg, LoseFocusHdl));
     LoseFocusHdl(*m_xColNF);
 }
@@ -65,7 +65,7 @@ void SwTableWidthDlg::Apply()
 {
     m_rFnc.InitTabCols();
     m_rFnc.SetColWidth(static_cast<sal_uInt16>(m_xColNF->get_value() - 1),
-                       static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP))));
+                       static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::TWIP))));
 }
 
 short SwTableWidthDlg::run()

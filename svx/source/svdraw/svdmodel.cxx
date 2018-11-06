@@ -111,7 +111,7 @@ void SdrModel::ImpCtor(
     mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
-    eUIUnit=FUNIT_MM;
+    eUIUnit=FieldUnit::MM;
     aUIScale=Fraction(1,1);
     nUIUnitDecimalMark=0;
     pLayerAdmin=nullptr;
@@ -914,30 +914,30 @@ void SdrModel::ImpSetUIUnit()
     // 1 ft      = 12 "       =      1" =       304,8mm
     switch (eUIUnit)
     {
-        case FUNIT_NONE   : break;
+        case FieldUnit::NONE   : break;
         // metric
-        case FUNIT_100TH_MM: nUIUnitDecimalMark-=5; break;
-        case FUNIT_MM     : nUIUnitDecimalMark-=3; break;
-        case FUNIT_CM     : nUIUnitDecimalMark-=2; break;
-        case FUNIT_M      : nUIUnitDecimalMark+=0; break;
-        case FUNIT_KM     : nUIUnitDecimalMark+=3; break;
+        case FieldUnit::MM_100TH: nUIUnitDecimalMark-=5; break;
+        case FieldUnit::MM     : nUIUnitDecimalMark-=3; break;
+        case FieldUnit::CM     : nUIUnitDecimalMark-=2; break;
+        case FieldUnit::M      : nUIUnitDecimalMark+=0; break;
+        case FieldUnit::KM     : nUIUnitDecimalMark+=3; break;
         // Inch
-        case FUNIT_TWIP   : nMul=144; nUIUnitDecimalMark--;  break;  // 1Twip = 1/1440"
-        case FUNIT_POINT  : nMul=72;     break;            // 1Pt   = 1/72"
-        case FUNIT_PICA   : nMul=6;      break;            // 1Pica = 1/6"
-        case FUNIT_INCH   : break;                         // 1"    = 1"
-        case FUNIT_FOOT   : nDiv*=12;    break;            // 1Ft   = 12"
-        case FUNIT_MILE   : nDiv*=6336; nUIUnitDecimalMark++; break; // 1mile = 63360"
+        case FieldUnit::TWIP   : nMul=144; nUIUnitDecimalMark--;  break;  // 1Twip = 1/1440"
+        case FieldUnit::POINT  : nMul=72;     break;            // 1Pt   = 1/72"
+        case FieldUnit::PICA   : nMul=6;      break;            // 1Pica = 1/6"
+        case FieldUnit::INCH   : break;                         // 1"    = 1"
+        case FieldUnit::FOOT   : nDiv*=12;    break;            // 1Ft   = 12"
+        case FieldUnit::MILE   : nDiv*=6336; nUIUnitDecimalMark++; break; // 1mile = 63360"
         // other
-        case FUNIT_CUSTOM : break;
-        case FUNIT_PERCENT: nUIUnitDecimalMark+=2; break;
+        case FieldUnit::CUSTOM : break;
+        case FieldUnit::PERCENT: nUIUnitDecimalMark+=2; break;
         // TODO: Add code to handle the following if needed (added to remove warning)
-        case FUNIT_CHAR   : break;
-        case FUNIT_LINE   : break;
-        case FUNIT_PIXEL  : break;
-        case FUNIT_DEGREE : break;
-        case FUNIT_SECOND : break;
-        case FUNIT_MILLISECOND : break;
+        case FieldUnit::CHAR   : break;
+        case FieldUnit::LINE   : break;
+        case FieldUnit::PIXEL  : break;
+        case FieldUnit::DEGREE : break;
+        case FieldUnit::SECOND : break;
+        case FieldUnit::MILLISECOND : break;
     } // switch
 
     // check if mapping is from metric to inch and adapt
@@ -1065,32 +1065,32 @@ OUString SdrModel::GetUnitString(FieldUnit eUnit)
     switch(eUnit)
     {
         default:
-        case FUNIT_NONE   :
-        case FUNIT_CUSTOM :
+        case FieldUnit::NONE   :
+        case FieldUnit::CUSTOM :
             return OUString();
-        case FUNIT_100TH_MM:
+        case FieldUnit::MM_100TH:
             return OUString{"/100mm"};
-        case FUNIT_MM     :
+        case FieldUnit::MM     :
             return OUString{"mm"};
-        case FUNIT_CM     :
+        case FieldUnit::CM     :
             return OUString{"cm"};
-        case FUNIT_M      :
+        case FieldUnit::M      :
             return OUString{"m"};
-        case FUNIT_KM     :
+        case FieldUnit::KM     :
             return OUString{"km"};
-        case FUNIT_TWIP   :
+        case FieldUnit::TWIP   :
             return OUString{"twip"};
-        case FUNIT_POINT  :
+        case FieldUnit::POINT  :
             return OUString{"pt"};
-        case FUNIT_PICA   :
+        case FieldUnit::PICA   :
             return OUString{"pica"};
-        case FUNIT_INCH   :
+        case FieldUnit::INCH   :
             return OUString{"\""};
-        case FUNIT_FOOT   :
+        case FieldUnit::FOOT   :
             return OUString{"ft"};
-        case FUNIT_MILE   :
+        case FieldUnit::MILE   :
             return OUString{"mile(s)"};
-        case FUNIT_PERCENT:
+        case FieldUnit::PERCENT:
             return OUString{"%"};
     }
 }

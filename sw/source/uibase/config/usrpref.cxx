@@ -62,11 +62,11 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
 {
     if (utl::ConfigManager::IsFuzzing())
     {
-        m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FUNIT_CM;
+        m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FieldUnit::CM;
         return;
     }
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    m_eUserMetric = MeasurementSystem::Metric == eSystem ? FUNIT_CM : FUNIT_INCH;
+    m_eUserMetric = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
     m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric;
 
     m_aContentConfig.Load();

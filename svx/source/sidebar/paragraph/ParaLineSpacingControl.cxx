@@ -78,7 +78,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pPar
     mpLineDistAtPercentBox->SetModifyHdl( aLink2 );
     mpLineDistAtMetricBox->SetModifyHdl( aLink2 );
 
-    FieldUnit eUnit = FUNIT_INCH;
+    FieldUnit eUnit = FieldUnit::INCH;
     const SfxPoolItem* pItem = nullptr;
     if (SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) >= SfxItemState::DEFAULT)
         eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
@@ -281,7 +281,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             mpLineDistAtMetricBox->SetMin(0);
 
             if (mpLineDistAtMetricBox->GetText().isEmpty())
-                mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0), FUNIT_TWIP);
+                mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0), FieldUnit::TWIP);
 
             mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
@@ -294,7 +294,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             mpActLineDistFld = mpLineDistAtPercentBox.get();
 
             if (mpLineDistAtPercentBox->GetText().isEmpty())
-                mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(100), FUNIT_TWIP);
+                mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(100), FieldUnit::TWIP);
 
             mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
@@ -306,7 +306,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
 
             mpActLineDistFld = mpLineDistAtMetricBox.get();
             sal_Int64 nTemp = mpLineDistAtMetricBox->GetValue();
-            mpLineDistAtMetricBox->SetMin(mpLineDistAtMetricBox->Normalize(MIN_FIXED_DISTANCE), FUNIT_TWIP);
+            mpLineDistAtMetricBox->SetMin(mpLineDistAtMetricBox->Normalize(MIN_FIXED_DISTANCE), FieldUnit::TWIP);
 
             if (mpLineDistAtMetricBox->GetValue() != nTemp)
                 SetMetricValue(*mpLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip);

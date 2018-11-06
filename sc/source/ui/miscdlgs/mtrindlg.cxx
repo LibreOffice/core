@@ -32,7 +32,7 @@ ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
 
     : GenericDialogController(pParent, OStringToOUString("modules/scalc/ui/" +
         sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8), sDialogName)
-    , m_xEdValue(m_xBuilder->weld_metric_spin_button("value", FUNIT_CM))
+    , m_xEdValue(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
     , m_xBtnDefVal(m_xBuilder->weld_check_button("default"))
 {
     m_xBtnDefVal->connect_clicked(LINK(this, ScMetricInputDlg, SetDefValHdl));
@@ -41,17 +41,17 @@ ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
     m_xEdValue->set_unit(eFUnit);
     m_xEdValue->set_digits(nDecimals);
     m_xEdValue->set_range(m_xEdValue->normalize(nMinimum),
-                          m_xEdValue->normalize(nMaximum), FUNIT_TWIP);
+                          m_xEdValue->normalize(nMaximum), FieldUnit::TWIP);
 
     int nMin(0), nMax(0);
-    m_xEdValue->get_range(nMin, nMax, FUNIT_TWIP);
+    m_xEdValue->get_range(nMin, nMax, FieldUnit::TWIP);
 
     auto nIncrement = m_xEdValue->normalize(1);
-    m_xEdValue->set_increments(nIncrement / 10, nIncrement, FUNIT_NONE);
-    m_xEdValue->set_value(m_xEdValue->normalize(nDefault), FUNIT_TWIP);
-    nDefaultValue = m_xEdValue->get_value(FUNIT_NONE);
-    m_xEdValue->set_value(m_xEdValue->normalize(nCurrent), FUNIT_TWIP);
-    nCurrentValue = m_xEdValue->get_value(FUNIT_NONE);
+    m_xEdValue->set_increments(nIncrement / 10, nIncrement, FieldUnit::NONE);
+    m_xEdValue->set_value(m_xEdValue->normalize(nDefault), FieldUnit::TWIP);
+    nDefaultValue = m_xEdValue->get_value(FieldUnit::NONE);
+    m_xEdValue->set_value(m_xEdValue->normalize(nCurrent), FieldUnit::TWIP);
+    nCurrentValue = m_xEdValue->get_value(FieldUnit::NONE);
     m_xBtnDefVal->set_active(nCurrentValue == nDefaultValue);
 }
 
@@ -80,7 +80,7 @@ int ScMetricInputDlg::GetInputValue() const
 */
     // first cut off the decimal digits - not that great...
 
-    return m_xEdValue->denormalize(m_xEdValue->get_value(FUNIT_TWIP));
+    return m_xEdValue->denormalize(m_xEdValue->get_value(FieldUnit::TWIP));
 }
 
 // Handler:
@@ -89,16 +89,16 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, weld::Button&, void)
 {
     if (m_xBtnDefVal->get_active())
     {
-        nCurrentValue = m_xEdValue->get_value(FUNIT_NONE);
-        m_xEdValue->set_value(nDefaultValue, FUNIT_NONE);
+        nCurrentValue = m_xEdValue->get_value(FieldUnit::NONE);
+        m_xEdValue->set_value(nDefaultValue, FieldUnit::NONE);
     }
     else
-        m_xEdValue->set_value(nCurrentValue, FUNIT_NONE);
+        m_xEdValue->set_value(nCurrentValue, FieldUnit::NONE);
 }
 
 IMPL_LINK_NOARG(ScMetricInputDlg, ModifyHdl, weld::MetricSpinButton&, void)
 {
-    m_xBtnDefVal->set_active(nDefaultValue == m_xEdValue->get_value(FUNIT_NONE));
+    m_xBtnDefVal->set_active(nDefaultValue == m_xEdValue->get_value(FieldUnit::NONE));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

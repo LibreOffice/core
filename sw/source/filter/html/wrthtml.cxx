@@ -92,7 +92,7 @@ static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
 SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     : m_pNumRuleInfo(new SwHTMLNumRuleInfo)
     , m_nHTMLMode(0)
-    , m_eCSS1Unit(FUNIT_NONE)
+    , m_eCSS1Unit(FieldUnit::NONE)
     , mxFormComps()
     , m_pStartNdIdx(nullptr)
     , m_pCurrPageDesc(nullptr)

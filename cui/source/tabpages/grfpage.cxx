@@ -57,16 +57,16 @@ SvxGrfCropPage::SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xCropFrame(m_xBuilder->weld_widget("cropframe"))
     , m_xZoomConstRB(m_xBuilder->weld_radio_button("keepscale"))
     , m_xSizeConstRB(m_xBuilder->weld_radio_button("keepsize"))
-    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("left", FUNIT_CM))
-    , m_xRightMF(m_xBuilder->weld_metric_spin_button("right", FUNIT_CM))
-    , m_xTopMF(m_xBuilder->weld_metric_spin_button("top", FUNIT_CM))
-    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottom", FUNIT_CM))
+    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
+    , m_xRightMF(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
+    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottom", FieldUnit::CM))
     , m_xScaleFrame(m_xBuilder->weld_widget("scaleframe"))
-    , m_xWidthZoomMF(m_xBuilder->weld_metric_spin_button("widthzoom", FUNIT_PERCENT))
-    , m_xHeightZoomMF(m_xBuilder->weld_metric_spin_button("heightzoom", FUNIT_PERCENT))
+    , m_xWidthZoomMF(m_xBuilder->weld_metric_spin_button("widthzoom", FieldUnit::PERCENT))
+    , m_xHeightZoomMF(m_xBuilder->weld_metric_spin_button("heightzoom", FieldUnit::PERCENT))
     , m_xSizeFrame(m_xBuilder->weld_widget("sizeframe"))
-    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
-    , m_xHeightMF(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
+    , m_xHeightMF(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
     , m_xOrigSizeGrid(m_xBuilder->weld_widget("origsizegrid"))
     , m_xOrigSizeFT(m_xBuilder->weld_label("origsizeft"))
     , m_xOrigSizePB(m_xBuilder->weld_button("origsize"))
@@ -151,10 +151,10 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     }
     else
     {
-        m_xLeftMF->set_value(0, FUNIT_NONE);
-        m_xRightMF->set_value(0, FUNIT_NONE);
-        m_xTopMF->set_value(0, FUNIT_NONE);
-        m_xBottomMF->set_value(0, FUNIT_NONE);
+        m_xLeftMF->set_value(0, FieldUnit::NONE);
+        m_xRightMF->set_value(0, FieldUnit::NONE);
+        m_xTopMF->set_value(0, FieldUnit::NONE);
+        m_xBottomMF->set_value(0, FieldUnit::NONE);
     }
 
     m_xLeftMF->save_value();
@@ -301,12 +301,12 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     auto nWidth = m_xWidthMF->normalize(nOldWidth);
     auto nHeight = m_xHeightMF->normalize(nOldHeight);
 
-    if (nWidth != m_xWidthMF->get_value(FUNIT_TWIP))
-        m_xWidthMF->set_value(nWidth, FUNIT_TWIP);
+    if (nWidth != m_xWidthMF->get_value(FieldUnit::TWIP))
+        m_xWidthMF->set_value(nWidth, FieldUnit::TWIP);
     m_xWidthMF->save_value();
 
-    if (nHeight != m_xHeightMF->get_value(FUNIT_TWIP))
-        m_xHeightMF->set_value(nHeight, FUNIT_TWIP);
+    if (nHeight != m_xHeightMF->get_value(FieldUnit::TWIP))
+        m_xHeightMF->set_value(nHeight, FieldUnit::TWIP);
     m_xHeightMF->save_value();
 
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
@@ -364,7 +364,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
         long nLRBorders = lcl_GetValue(*m_xLeftMF, eUnit)
                          +lcl_GetValue(*m_xRightMF, eUnit);
         m_xWidthMF->set_value( m_xWidthMF->normalize(
-            ((aOrigSize.Width() - nLRBorders) * rField.get_value(FUNIT_NONE))/100),
+            ((aOrigSize.Width() - nLRBorders) * rField.get_value(FieldUnit::NONE))/100),
             eUnit);
     }
     else
@@ -372,7 +372,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
         long nULBorders = lcl_GetValue(*m_xTopMF, eUnit)
                          +lcl_GetValue(*m_xBottomMF, eUnit);
         m_xHeightMF->set_value( m_xHeightMF->normalize(
-            ((aOrigSize.Height() - nULBorders ) * rField.get_value(FUNIT_NONE))/100) ,
+            ((aOrigSize.Height() - nULBorders ) * rField.get_value(FieldUnit::NONE))/100) ,
             eUnit );
     }
 }
@@ -399,7 +399,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
         if(!nWidth)
             nWidth++;
         sal_uInt16 nZoom = static_cast<sal_uInt16>( aSize.Width() * 100 / nWidth);
-        m_xWidthZoomMF->set_value(nZoom, FUNIT_NONE);
+        m_xWidthZoomMF->set_value(nZoom, FieldUnit::NONE);
     }
     else
     {
@@ -409,7 +409,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
         if(!nHeight)
             nHeight++;
         sal_uInt16 nZoom = static_cast<sal_uInt16>( aSize.Height() * 100 / nHeight);
-        m_xHeightZoomMF->set_value(nZoom, FUNIT_NONE);
+        m_xHeightZoomMF->set_value(nZoom, FieldUnit::NONE);
     }
 }
 
@@ -429,7 +429,7 @@ IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void 
     {
         long nLeft = lcl_GetValue( *m_xLeftMF, eUnit );
         long nRight = lcl_GetValue( *m_xRightMF, eUnit );
-        long nWidthZoom = static_cast<long>(m_xWidthZoomMF->get_value(FUNIT_NONE));
+        long nWidthZoom = static_cast<long>(m_xWidthZoomMF->get_value(FieldUnit::NONE));
         if (bZoom && nWidthZoom != 0 && ( ( ( aOrigSize.Width() - (nLeft + nRight )) * nWidthZoom )
                             / 100 >= aPageSize.Width() ) )
         {
@@ -466,7 +466,7 @@ IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void 
     {
         long nTop = lcl_GetValue( *m_xTopMF, eUnit );
         long nBottom = lcl_GetValue( *m_xBottomMF, eUnit );
-        long nHeightZoom = static_cast<long>(m_xHeightZoomMF->get_value(FUNIT_NONE));
+        long nHeightZoom = static_cast<long>(m_xHeightZoomMF->get_value(FieldUnit::NONE));
         if(bZoom && ( ( ( aOrigSize.Height() - (nTop + nBottom )) * nHeightZoom)
                                             / 100 >= aPageSize.Height()))
         {
@@ -517,8 +517,8 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, weld::Button&, void)
         lcl_GetValue( *m_xTopMF, eUnit ) -
         lcl_GetValue( *m_xBottomMF, eUnit );
     m_xHeightMF->set_value( m_xHeightMF->normalize( nHeight ), eUnit );
-    m_xWidthZoomMF->set_value(100, FUNIT_NONE);
-    m_xHeightZoomMF->set_value(100, FUNIT_NONE);
+    m_xWidthZoomMF->set_value(100, FieldUnit::NONE);
+    m_xHeightZoomMF->set_value(100, FieldUnit::NONE);
     bSetOrigSize = true;
 }
 /*--------------------------------------------------------------------
@@ -542,12 +542,12 @@ void SvxGrfCropPage::CalcZoom()
     long nDen;
     if( (nDen = aOrigSize.Width() - nLRBorders) > 0)
         nZoom = static_cast<sal_uInt16>((( nWidth  * 1000 / nDen )+5)/10);
-    m_xWidthZoomMF->set_value(nZoom, FUNIT_NONE);
+    m_xWidthZoomMF->set_value(nZoom, FieldUnit::NONE);
     if( (nDen = aOrigSize.Height() - nULBorders) > 0)
         nZoom = static_cast<sal_uInt16>((( nHeight * 1000 / nDen )+5)/10);
     else
         nZoom = 0;
-    m_xHeightZoomMF->set_value(nZoom, FUNIT_NONE);
+    m_xHeightZoomMF->set_value(nZoom, FieldUnit::NONE);
 }
 
 /*--------------------------------------------------------------------
@@ -618,13 +618,13 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
             m_aExampleWN.SetBottom(nVal);
         }
 
-        m_xLeftMF->set_increments(nSpin, nSpin * 10, FUNIT_NONE);
-        m_xRightMF->set_increments(nSpin, nSpin * 10, FUNIT_NONE);
+        m_xLeftMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
+        m_xRightMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         nSpin = m_xTopMF->normalize(aOrigSize.Height()) / 20;
         nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
                                                eUnit, m_xLeftMF->get_unit() );
-        m_xTopMF->set_increments(nSpin, nSpin * 10, FUNIT_NONE);
-        m_xBottomMF->set_increments(nSpin, nSpin * 10, FUNIT_NONE);
+        m_xTopMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
+        m_xBottomMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
 
         // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
