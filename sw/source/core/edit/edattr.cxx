@@ -566,7 +566,8 @@ static inline SvtScriptType lcl_SetScriptFlags( sal_uInt16 nType )
     }
 }
 
-static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
+static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
+        const SwTextNode& rTNd, sal_Int32 const nPos,
                             SvtScriptType &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;
@@ -577,7 +578,7 @@ static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
     {
         bRet = false;
 
-        if ( rTNd.IsInList() )
+        if (sw::IsParaPropsNode(rLayout, rTNd) && rTNd.IsInList())
         {
             OSL_ENSURE( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect." );
@@ -687,7 +688,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                     else
                         nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
-                    if( !lcl_IsNoEndTextAttrAtPos( *pTNd, nPos, nRet, false, false ))
+                    if (!lcl_IsNoEndTextAttrAtPos(*GetLayout(), *pTNd, nPos, nRet, false, false))
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
@@ -729,7 +730,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                                       g_pBreakIt->GetBreakIter()->getScriptType(
                                                                 rText, nChg );
 
-                            if( !lcl_IsNoEndTextAttrAtPos( *pTNd, nChg, nRet, true,
+                            if (!lcl_IsNoEndTextAttrAtPos(*GetLayout(), *pTNd, nChg, nRet, true,
                                       0 == nChg && rText.getLength() == nEndPos))
                                 nRet |= lcl_SetScriptFlags( nScript );
 
