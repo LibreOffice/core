@@ -2179,17 +2179,17 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
     FieldUnit eFieldUnit = pSh->GetModule()->GetFieldUnit();
     switch ( eFieldUnit )
     {
-        case FUNIT_MM:          eMapUnit = MapUnit::MapMM; break;
-        case FUNIT_CM:
-        case FUNIT_M:
-        case FUNIT_KM:          eMapUnit = MapUnit::MapCM; break;
-        case FUNIT_TWIP:        eMapUnit = MapUnit::MapTwip; break;
-        case FUNIT_POINT:
-        case FUNIT_PICA:        eMapUnit = MapUnit::MapPoint; break;
-        case FUNIT_INCH:
-        case FUNIT_FOOT:
-        case FUNIT_MILE:        eMapUnit = MapUnit::MapInch; break;
-        case FUNIT_100TH_MM:    eMapUnit = MapUnit::Map100thMM; break;
+        case FieldUnit::MM:          eMapUnit = MapUnit::MapMM; break;
+        case FieldUnit::CM:
+        case FieldUnit::M:
+        case FieldUnit::KM:          eMapUnit = MapUnit::MapCM; break;
+        case FieldUnit::TWIP:        eMapUnit = MapUnit::MapTwip; break;
+        case FieldUnit::POINT:
+        case FieldUnit::PICA:        eMapUnit = MapUnit::MapPoint; break;
+        case FieldUnit::INCH:
+        case FieldUnit::FOOT:
+        case FieldUnit::MILE:        eMapUnit = MapUnit::MapInch; break;
+        case FieldUnit::MM_100TH:    eMapUnit = MapUnit::Map100thMM; break;
         default: ;//prevent warning
     }
 

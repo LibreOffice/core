@@ -112,7 +112,7 @@ ScTablePage::ScTablePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
     , m_xBtnNullVals(m_xBuilder->weld_check_button("checkBTN_NULLVALS"))
     , m_xLbScaleMode(m_xBuilder->weld_combo_box("comboLB_SCALEMODE"))
     , m_xBxScaleAll(m_xBuilder->weld_widget("boxSCALEALL"))
-    , m_xEdScaleAll(m_xBuilder->weld_metric_spin_button("spinED_SCALEALL", FUNIT_PERCENT))
+    , m_xEdScaleAll(m_xBuilder->weld_metric_spin_button("spinED_SCALEALL", FieldUnit::PERCENT))
     , m_xGrHeightWidth(m_xBuilder->weld_widget("gridWH"))
     , m_xEdScalePageWidth(m_xBuilder->weld_spin_button("spinED_SCALEPAGEWIDTH"))
     , m_xCbScalePageWidth(m_xBuilder->weld_check_button("labelWP"))
@@ -179,7 +179,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         sal_uInt16 nScale = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
         if( nScale > 0 )
             m_xLbScaleMode->set_active(SC_TPTABLE_SCALE_PERCENT);
-        m_xEdScaleAll->set_value((nScale > 0) ? nScale : 100, FUNIT_PERCENT);
+        m_xEdScaleAll->set_value((nScale > 0) ? nScale : 100, FieldUnit::PERCENT);
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
@@ -227,7 +227,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         // fall back to 100%
         OSL_FAIL( "ScTablePage::Reset - missing scaling item" );
         m_xLbScaleMode->set_active(SC_TPTABLE_SCALE_PERCENT);
-        m_xEdScaleAll->set_value(100, FUNIT_PERCENT);
+        m_xEdScaleAll->set_value(100, FieldUnit::PERCENT);
     }
 
     PageDirHdl(*m_xBtnTopDown);
@@ -324,13 +324,13 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     if( !m_xEdScalePageWidth->get_sensitive() && !m_xEdScalePageHeight->get_sensitive() )
     {
         m_xLbScaleMode->set_active(SC_TPTABLE_SCALE_PERCENT);
-        m_xEdScaleAll->set_value(100, FUNIT_PERCENT);
+        m_xEdScaleAll->set_value(100, FieldUnit::PERCENT);
     }
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
                                       *rCoreSet, rOldSet,
                                       *m_xLbScaleMode, SC_TPTABLE_SCALE_PERCENT,
-                                      *m_xEdScaleAll, static_cast<sal_uInt16>(m_xEdScaleAll->get_value(FUNIT_PERCENT)) );
+                                      *m_xEdScaleAll, static_cast<sal_uInt16>(m_xEdScaleAll->get_value(FieldUnit::PERCENT)) );
 
     bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
                                       *rCoreSet, rOldSet,

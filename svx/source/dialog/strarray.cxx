@@ -41,7 +41,7 @@ FieldUnit SvxFieldUnitTable::GetValue(sal_uInt32 nPos)
 {
     if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
         return RID_SVXSTR_FIELDUNIT_TABLE[nPos].second;
-    return FUNIT_NONE;
+    return FieldUnit::NONE;
 }
 
 OUString SvxAttrNameTable::GetString(sal_uInt32 nPos)

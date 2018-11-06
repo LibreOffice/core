@@ -94,18 +94,18 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     , m_xLbLineStyle(new SvxLineLB(m_xBuilder->weld_combo_box("LB_LINE_STYLE")))
     , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pParent.GetFrameWeld()))
     , m_xBoxWidth(m_xBuilder->weld_widget("boxWIDTH"))
-    , m_xMtrLineWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_WIDTH", FUNIT_CM))
+    , m_xMtrLineWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_WIDTH", FieldUnit::CM))
     , m_xBoxTransparency(m_xBuilder->weld_widget("boxTRANSPARENCY"))
-    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_LINE_TRANSPARENT", FUNIT_PERCENT))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_LINE_TRANSPARENT", FieldUnit::PERCENT))
     , m_xFlLineEnds(m_xBuilder->weld_widget("FL_LINE_ENDS"))
     , m_xBoxArrowStyles(m_xBuilder->weld_widget("boxARROW_STYLES"))
     , m_xLbStartStyle(new SvxLineEndLB(m_xBuilder->weld_combo_box("LB_START_STYLE")))
     , m_xBoxStart(m_xBuilder->weld_widget("boxSTART"))
-    , m_xMtrStartWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_START_WIDTH", FUNIT_CM))
+    , m_xMtrStartWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_START_WIDTH", FieldUnit::CM))
     , m_xTsbCenterStart(m_xBuilder->weld_check_button("TSB_CENTER_START"))
     , m_xBoxEnd(m_xBuilder->weld_widget("boxEND"))
     , m_xLbEndStyle(new SvxLineEndLB(m_xBuilder->weld_combo_box("LB_END_STYLE")))
-    , m_xMtrEndWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_END_WIDTH", FUNIT_CM))
+    , m_xMtrEndWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_END_WIDTH", FieldUnit::CM))
     , m_xTsbCenterEnd(m_xBuilder->weld_check_button("TSB_CENTER_END"))
     , m_xCbxSynchronize(m_xBuilder->weld_check_button("CBX_SYNCHRONIZE"))
     , m_xMenu(m_xBuilder->weld_menu("menuSELECT"))
@@ -117,8 +117,8 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     , m_xFlSymbol(m_xBuilder->weld_widget("FL_SYMBOL_FORMAT")) //#58425# Symbols on a line (e.g. StarChart)
     , m_xGridIconSize(m_xBuilder->weld_widget("gridICON_SIZE"))
     , m_xSymbolMB(m_xBuilder->weld_menu_button("MB_SYMBOL_BITMAP"))
-    , m_xSymbolWidthMF(m_xBuilder->weld_metric_spin_button("MF_SYMBOL_WIDTH", FUNIT_CM))
-    , m_xSymbolHeightMF(m_xBuilder->weld_metric_spin_button("MF_SYMBOL_HEIGHT", FUNIT_CM))
+    , m_xSymbolWidthMF(m_xBuilder->weld_metric_spin_button("MF_SYMBOL_WIDTH", FieldUnit::CM))
+    , m_xSymbolHeightMF(m_xBuilder->weld_metric_spin_button("MF_SYMBOL_HEIGHT", FieldUnit::CM))
     , m_xSymbolRatioCB(m_xBuilder->weld_check_button("CB_SYMBOL_RATIO"))
 {
     // This Page requires ExchangeSupport
@@ -129,20 +129,20 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::M:
+        case FieldUnit::KM:
+            eFUnit = FieldUnit::MM;
             SAL_FALLTHROUGH; // we now have mm
-        case FUNIT_MM:
-            m_xMtrLineWidth->set_increments(50, 500, FUNIT_NONE);
-            m_xMtrStartWidth->set_increments(50, 500, FUNIT_NONE);
-            m_xMtrEndWidth->set_increments(50, 500, FUNIT_NONE);
+        case FieldUnit::MM:
+            m_xMtrLineWidth->set_increments(50, 500, FieldUnit::NONE);
+            m_xMtrStartWidth->set_increments(50, 500, FieldUnit::NONE);
+            m_xMtrEndWidth->set_increments(50, 500, FieldUnit::NONE);
             break;
 
-            case FUNIT_INCH:
-            m_xMtrLineWidth->set_increments(2, 20, FUNIT_NONE);
-            m_xMtrStartWidth->set_increments(2, 20, FUNIT_NONE);
-            m_xMtrEndWidth->set_increments(2, 20, FUNIT_NONE);
+            case FieldUnit::INCH:
+            m_xMtrLineWidth->set_increments(2, 20, FieldUnit::NONE);
+            m_xMtrStartWidth->set_increments(2, 20, FieldUnit::NONE);
+            m_xMtrEndWidth->set_increments(2, 20, FieldUnit::NONE);
             break;
             default: ;// prevent warning
     }
@@ -529,7 +529,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // Transparency
-    sal_uInt16 nVal = m_xMtrTransparent->get_value(FUNIT_PERCENT);
+    sal_uInt16 nVal = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
     if( m_xMtrTransparent->get_value_changed_from_saved() )
     {
         XLineTransparenceItem aItem( nVal );
@@ -774,7 +774,7 @@ void SvxLineTabPage::FillXLSet_Impl()
         m_rXLSet.Put( XLineEndCenterItem( false ) );
 
     // Transparency
-    sal_uInt16 nVal = m_xMtrTransparent->get_value(FUNIT_PERCENT);
+    sal_uInt16 nVal = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
     m_rXLSet.Put( XLineTransparenceItem( nVal ) );
 
     m_aCtlPreview.SetLineAttributes(m_aXLineAttr.GetItemSet());
@@ -1088,7 +1088,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( XATTR_LINETRANSPARENCE ) != SfxItemState::DONTCARE )
     {
         sal_uInt16 nTransp = rAttrs->Get( XATTR_LINETRANSPARENCE ).GetValue();
-        m_xMtrTransparent->set_value(nTransp, FUNIT_PERCENT);
+        m_xMtrTransparent->set_value(nTransp, FieldUnit::PERCENT);
         ChangeTransparentHdl_Impl(*m_xMtrTransparent);
     }
     else
@@ -1270,7 +1270,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeStartListBoxHdl_Impl, weld::ComboBox&, voi
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeStartModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
     if (m_xCbxSynchronize->get_active())
-        m_xMtrEndWidth->set_value(m_xMtrStartWidth->get_value(FUNIT_NONE), FUNIT_NONE);
+        m_xMtrEndWidth->set_value(m_xMtrStartWidth->get_value(FieldUnit::NONE), FieldUnit::NONE);
 
     ChangePreviewHdl_Impl(nullptr);
 }
@@ -1340,14 +1340,14 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndListBoxHdl_Impl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
     if (m_xCbxSynchronize->get_active())
-        m_xMtrStartWidth->set_value(m_xMtrEndWidth->get_value(FUNIT_NONE), FUNIT_NONE);
+        m_xMtrStartWidth->set_value(m_xMtrEndWidth->get_value(FieldUnit::NONE), FieldUnit::NONE);
 
     ChangePreviewHdl_Impl(nullptr);
 }
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nVal = m_xMtrTransparent->get_value(FUNIT_PERCENT);
+    sal_uInt16 nVal = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
 
     m_rXLSet.Put(XLineTransparenceItem(nVal));
 
@@ -1599,8 +1599,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
     bool bWidth = &rField == m_xSymbolWidthMF.get();
     m_bLastWidthModified = bWidth;
     bool bRatio = m_xSymbolRatioCB->get_active();
-    long nWidthVal = static_cast<long>(m_xSymbolWidthMF->denormalize(m_xSymbolWidthMF->get_value(FUNIT_100TH_MM)));
-    long nHeightVal= static_cast<long>(m_xSymbolHeightMF->denormalize(m_xSymbolHeightMF->get_value(FUNIT_100TH_MM)));
+    long nWidthVal = static_cast<long>(m_xSymbolWidthMF->denormalize(m_xSymbolWidthMF->get_value(FieldUnit::MM_100TH)));
+    long nHeightVal= static_cast<long>(m_xSymbolHeightMF->denormalize(m_xSymbolHeightMF->get_value(FieldUnit::MM_100TH)));
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MapUnit::Map100thMM, m_ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MapUnit::Map100thMM, m_ePoolUnit);
     m_aSymbolSize = Size(nWidthVal,nHeightVal);
@@ -1620,8 +1620,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
         {
             m_aSymbolSize.setHeight( m_aSymbolLastSize.Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio) );
             m_aSymbolSize.setHeight( OutputDevice::LogicToLogic( m_aSymbolSize.Height(), m_ePoolUnit, MapUnit::Map100thMM ) );
-//TODO            m_xSymbolHeightMF->SetUserValue(m_xSymbolHeightMF->normalize(m_aSymbolSize.Height()), FUNIT_100TH_MM);
-            m_xSymbolHeightMF->set_value(m_xSymbolHeightMF->normalize(m_aSymbolSize.Height()), FUNIT_100TH_MM);
+//TODO            m_xSymbolHeightMF->SetUserValue(m_xSymbolHeightMF->normalize(m_aSymbolSize.Height()), FieldUnit::MM_100TH);
+            m_xSymbolHeightMF->set_value(m_xSymbolHeightMF->normalize(m_aSymbolSize.Height()), FieldUnit::MM_100TH);
         }
     }
     else
@@ -1632,8 +1632,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
         {
             m_aSymbolSize.setWidth( m_aSymbolLastSize.Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio) );
             m_aSymbolSize.setWidth( OutputDevice::LogicToLogic( m_aSymbolSize.Width(), m_ePoolUnit, MapUnit::Map100thMM ) );
-//TODO            m_xSymbolWidthMF->SetUserValue(m_xSymbolWidthMF->normalize(m_aSymbolSize.Width()), FUNIT_100TH_MM);
-            m_xSymbolWidthMF->set_value(m_xSymbolWidthMF->normalize(m_aSymbolSize.Width()), FUNIT_100TH_MM);
+//TODO            m_xSymbolWidthMF->SetUserValue(m_xSymbolWidthMF->normalize(m_aSymbolSize.Width()), FieldUnit::MM_100TH);
+            m_xSymbolWidthMF->set_value(m_xSymbolWidthMF->normalize(m_aSymbolSize.Width()), FieldUnit::MM_100TH);
         }
     }
     m_aCtlPreview.ResizeSymbol(m_aSymbolSize);

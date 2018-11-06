@@ -108,7 +108,7 @@ AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCor
     // text alignment
     , m_xLbHorAlign(m_xBuilder->weld_combo_box("comboboxHorzAlign"))
     , m_xFtIndent(m_xBuilder->weld_label("labelIndent"))
-    , m_xEdIndent(m_xBuilder->weld_metric_spin_button("spinIndentFrom", FUNIT_POINT))
+    , m_xEdIndent(m_xBuilder->weld_metric_spin_button("spinIndentFrom", FieldUnit::POINT))
     , m_xFtVerAlign(m_xBuilder->weld_label("labelVertAlign"))
     , m_xLbVerAlign(m_xBuilder->weld_combo_box("comboboxVertAlign"))
     //text rotation
@@ -207,7 +207,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xEdIndent->get_value_changed_from_saved())
     {
-        rSet->Put(SfxUInt16Item(GetWhich(SID_ATTR_ALIGN_INDENT), m_xEdIndent->get_value(FUNIT_TWIP)));
+        rSet->Put(SfxUInt16Item(GetWhich(SID_ATTR_ALIGN_INDENT), m_xEdIndent->get_value(FieldUnit::TWIP)));
         bChanged = true;
     }
 
@@ -419,7 +419,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::SET:
         {
             const SfxUInt16Item& rIndentItem = static_cast<const SfxUInt16Item&>(pCoreAttrs->Get(nWhich));
-            m_xEdIndent->set_value(rIndentItem.GetValue(), FUNIT_TWIP);
+            m_xEdIndent->set_value(rIndentItem.GetValue(), FieldUnit::TWIP);
             break;
         }
     }

@@ -56,8 +56,8 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distancemtr", FUNIT_MM))
-    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FUNIT_DEGREE))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distancemtr", FieldUnit::MM))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
     , m_xLbLineType(m_xBuilder->weld_combo_box("linetypelb"))
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
@@ -81,9 +81,9 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::M:
+        case FieldUnit::KM:
+            eFUnit = FieldUnit::MM;
             break;
         default: ;//prevent warning
     }
@@ -245,7 +245,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
         pXHatch.reset(new XHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) ));
+                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) ));
     }
     assert( pXHatch && "XHatch couldn't be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
@@ -337,15 +337,15 @@ IMPL_LINK( SvxHatchTabPage, ModifiedSliderHdl_Impl, weld::Scale&, rSlider, void 
 void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
 {
     if (p == m_xMtrAngle.get())
-        m_xSliderAngle->set_value(m_xMtrAngle->get_value(FUNIT_NONE));
+        m_xSliderAngle->set_value(m_xMtrAngle->get_value(FieldUnit::NONE));
 
     if (p == m_xSliderAngle.get())
-        m_xMtrAngle->set_value(m_xSliderAngle->get_value(), FUNIT_NONE);
+        m_xMtrAngle->set_value(m_xSliderAngle->get_value(), FieldUnit::NONE);
 
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) );
+                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
 
@@ -392,7 +392,7 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         m_xLbLineColor->SelectEntry( pHatch->GetColor() );
         SetMetricValue( *m_xMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
         long mHatchAngle = pHatch->GetAngle() / 10;
-        m_xMtrAngle->set_value(mHatchAngle, FUNIT_NONE);
+        m_xMtrAngle->set_value(mHatchAngle, FieldUnit::NONE);
         m_xSliderAngle->set_value(mHatchAngle);
 
         // fill ItemSet and pass it on to m_aCtlPreview
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
         XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                         static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                         GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                        static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) );
+                        static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
         m_pHatchingList->Insert(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
         XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                         static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                          GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                        static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) );
+                        static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
         m_pHatchingList->Replace(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 

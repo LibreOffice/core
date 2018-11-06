@@ -290,7 +290,7 @@ namespace pcr
     OTimeDurationControl::OTimeDurationControl( vcl::Window* pParent )
         :ONumericControl( pParent, WB_BORDER | WB_TABSTOP )
     {
-        getTypedControlWindow()->SetUnit( FUNIT_CUSTOM );
+        getTypedControlWindow()->SetUnit( FieldUnit::CUSTOM );
         getTypedControlWindow()->SetCustomUnitText(" ms");
         getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
     }

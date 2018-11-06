@@ -163,7 +163,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemS
     , m_xSizeNormal(m_xBuilder->weld_radio_button("sizenormal"))
     , m_xSizeScaled(m_xBuilder->weld_radio_button("sizescaled"))
     , m_xSizeZoomed(m_xBuilder->weld_radio_button("sizezoomed"))
-    , m_xZoom(m_xBuilder->weld_metric_spin_button("zoom", FUNIT_PERCENT))
+    , m_xZoom(m_xBuilder->weld_metric_spin_button("zoom", FieldUnit::PERCENT))
     , m_xNoRightSpaces(m_xBuilder->weld_check_button("norightspaces"))
     , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button("saveonlyusedsymbols"))
     , m_xAutoCloseBrackets(m_xBuilder->weld_check_button("autoclosebrackets"))
@@ -190,7 +190,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
         nPrintSize = PRINT_SIZE_ZOOMED;
 
     rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), nPrintSize));
-    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), sal::static_int_cast<sal_uInt16>(m_xZoom->get_value(FUNIT_PERCENT))));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), sal::static_int_cast<sal_uInt16>(m_xZoom->get_value(FieldUnit::PERCENT))));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_xTitle->get_active()));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_xText->get_active()));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_xFrame->get_active()));
@@ -211,7 +211,7 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 
     m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 
-    m_xZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue(), FUNIT_PERCENT);
+    m_xZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue(), FieldUnit::PERCENT);
 
     m_xTitle->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
     m_xNoRightSpaces->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
@@ -360,12 +360,12 @@ IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, weld::Button&, void )
 
 SmFontSizeDialog::SmFontSizeDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/smath/ui/fontsizedialog.ui", "FontSizeDialog")
-    , m_xBaseSize(m_xBuilder->weld_metric_spin_button("spinB_baseSize", FUNIT_POINT))
-    , m_xTextSize(m_xBuilder->weld_metric_spin_button("spinB_text", FUNIT_PERCENT))
-    , m_xIndexSize(m_xBuilder->weld_metric_spin_button("spinB_index", FUNIT_PERCENT))
-    , m_xFunctionSize(m_xBuilder->weld_metric_spin_button("spinB_function", FUNIT_PERCENT))
-    , m_xOperatorSize(m_xBuilder->weld_metric_spin_button("spinB_operator", FUNIT_PERCENT))
-    , m_xBorderSize(m_xBuilder->weld_metric_spin_button("spinB_limit", FUNIT_PERCENT))
+    , m_xBaseSize(m_xBuilder->weld_metric_spin_button("spinB_baseSize", FieldUnit::POINT))
+    , m_xTextSize(m_xBuilder->weld_metric_spin_button("spinB_text", FieldUnit::PERCENT))
+    , m_xIndexSize(m_xBuilder->weld_metric_spin_button("spinB_index", FieldUnit::PERCENT))
+    , m_xFunctionSize(m_xBuilder->weld_metric_spin_button("spinB_function", FieldUnit::PERCENT))
+    , m_xOperatorSize(m_xBuilder->weld_metric_spin_button("spinB_operator", FieldUnit::PERCENT))
+    , m_xBorderSize(m_xBuilder->weld_metric_spin_button("spinB_limit", FieldUnit::PERCENT))
     , m_xDefaultButton(m_xBuilder->weld_button("default"))
 {
     m_xDefaultButton->connect_clicked(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
@@ -379,24 +379,24 @@ void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 {
     //! watch out: round properly!
     m_xBaseSize->set_value( SmRoundFraction(
-        Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ), FUNIT_NONE );
+        Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ), FieldUnit::NONE );
 
-    m_xTextSize->set_value( rFormat.GetRelSize(SIZ_TEXT), FUNIT_NONE );
-    m_xIndexSize->set_value( rFormat.GetRelSize(SIZ_INDEX), FUNIT_NONE );
-    m_xFunctionSize->set_value( rFormat.GetRelSize(SIZ_FUNCTION), FUNIT_NONE );
-    m_xOperatorSize->set_value( rFormat.GetRelSize(SIZ_OPERATOR), FUNIT_NONE );
-    m_xBorderSize->set_value( rFormat.GetRelSize(SIZ_LIMITS), FUNIT_NONE );
+    m_xTextSize->set_value( rFormat.GetRelSize(SIZ_TEXT), FieldUnit::NONE );
+    m_xIndexSize->set_value( rFormat.GetRelSize(SIZ_INDEX), FieldUnit::NONE );
+    m_xFunctionSize->set_value( rFormat.GetRelSize(SIZ_FUNCTION), FieldUnit::NONE );
+    m_xOperatorSize->set_value( rFormat.GetRelSize(SIZ_OPERATOR), FieldUnit::NONE );
+    m_xBorderSize->set_value( rFormat.GetRelSize(SIZ_LIMITS), FieldUnit::NONE );
 }
 
 void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
-    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_xBaseSize->get_value(FUNIT_NONE)))) );
+    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_xBaseSize->get_value(FieldUnit::NONE)))) );
 
-    rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_xTextSize->get_value(FUNIT_NONE)));
-    rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_xIndexSize->get_value(FUNIT_NONE)));
-    rFormat.SetRelSize(SIZ_FUNCTION, sal::static_int_cast<sal_uInt16>(m_xFunctionSize->get_value(FUNIT_NONE)));
-    rFormat.SetRelSize(SIZ_OPERATOR, sal::static_int_cast<sal_uInt16>(m_xOperatorSize->get_value(FUNIT_NONE)));
-    rFormat.SetRelSize(SIZ_LIMITS,   sal::static_int_cast<sal_uInt16>(m_xBorderSize->get_value(FUNIT_NONE)));
+    rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_xTextSize->get_value(FieldUnit::NONE)));
+    rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_xIndexSize->get_value(FieldUnit::NONE)));
+    rFormat.SetRelSize(SIZ_FUNCTION, sal::static_int_cast<sal_uInt16>(m_xFunctionSize->get_value(FieldUnit::NONE)));
+    rFormat.SetRelSize(SIZ_OPERATOR, sal::static_int_cast<sal_uInt16>(m_xOperatorSize->get_value(FieldUnit::NONE)));
+    rFormat.SetRelSize(SIZ_LIMITS,   sal::static_int_cast<sal_uInt16>(m_xBorderSize->get_value(FieldUnit::NONE)));
 
     const Size aTmp (rFormat.GetBaseSize());
     for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
@@ -680,10 +680,10 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     if (nActiveCategory != CATEGORY_NONE)
     {
         pCat = Categories[nActiveCategory];
-        pCat->SetValue(0, sal::static_int_cast<sal_uInt16>(m_xMetricField1->get_value(FUNIT_NONE)));
-        pCat->SetValue(1, sal::static_int_cast<sal_uInt16>(m_xMetricField2->get_value(FUNIT_NONE)));
-        pCat->SetValue(2, sal::static_int_cast<sal_uInt16>(m_xMetricField3->get_value(FUNIT_NONE)));
-        pCat->SetValue(3, sal::static_int_cast<sal_uInt16>(m_xMetricField4->get_value(FUNIT_NONE)));
+        pCat->SetValue(0, sal::static_int_cast<sal_uInt16>(m_xMetricField1->get_value(FieldUnit::NONE)));
+        pCat->SetValue(1, sal::static_int_cast<sal_uInt16>(m_xMetricField2->get_value(FieldUnit::NONE)));
+        pCat->SetValue(2, sal::static_int_cast<sal_uInt16>(m_xMetricField3->get_value(FieldUnit::NONE)));
+        pCat->SetValue(3, sal::static_int_cast<sal_uInt16>(m_xMetricField4->get_value(FieldUnit::NONE)));
 
         if (nActiveCategory == 5)
             bScaleAllBrackets = m_xCheckBox1->get_active();
@@ -712,12 +712,12 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         sal_uInt16     nDigits;
         if (nCategory < 9)
         {
-            eUnit = FUNIT_PERCENT;
+            eUnit = FieldUnit::PERCENT;
             nDigits = 0;
         }
         else
         {
-            eUnit   = FUNIT_100TH_MM;
+            eUnit   = FieldUnit::MM_100TH;
             nDigits = 2;
         }
         pMF->set_unit(eUnit);            // changes the value
@@ -728,8 +728,8 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
             pCat = Categories[nCategory];
             pFT->set_label(pCat->GetString(i));
 
-            pMF->set_range(pCat->GetMinimum(i), pCat->GetMaximum(i), FUNIT_NONE);
-            pMF->set_value(pCat->GetValue(i), FUNIT_NONE);
+            pMF->set_range(pCat->GetMinimum(i), pCat->GetMaximum(i), FieldUnit::NONE);
+            pMF->set_value(pCat->GetValue(i), FieldUnit::NONE);
 
             pMF->set_help_id(aCatMf2Hid[nCategory][i]);
         }
@@ -759,14 +759,14 @@ SmDistanceDialog::SmDistanceDialog(weld::Window *pParent)
     : GenericDialogController(pParent, "modules/smath/ui/spacingdialog.ui", "SpacingDialog")
     , m_xFrame(m_xBuilder->weld_frame("template"))
     , m_xFixedText1(m_xBuilder->weld_label("label1"))
-    , m_xMetricField1(m_xBuilder->weld_metric_spin_button("spinbutton1", FUNIT_CM))
+    , m_xMetricField1(m_xBuilder->weld_metric_spin_button("spinbutton1", FieldUnit::CM))
     , m_xFixedText2(m_xBuilder->weld_label("label2"))
-    , m_xMetricField2(m_xBuilder->weld_metric_spin_button("spinbutton2", FUNIT_CM))
+    , m_xMetricField2(m_xBuilder->weld_metric_spin_button("spinbutton2", FieldUnit::CM))
     , m_xFixedText3(m_xBuilder->weld_label("label3"))
-    , m_xMetricField3(m_xBuilder->weld_metric_spin_button("spinbutton3", FUNIT_CM))
+    , m_xMetricField3(m_xBuilder->weld_metric_spin_button("spinbutton3", FieldUnit::CM))
     , m_xCheckBox1(m_xBuilder->weld_check_button("checkbutton"))
     , m_xFixedText4(m_xBuilder->weld_label("label4"))
-    , m_xMetricField4(m_xBuilder->weld_metric_spin_button("spinbutton4", FUNIT_CM))
+    , m_xMetricField4(m_xBuilder->weld_metric_spin_button("spinbutton4", FieldUnit::CM))
     , m_xMenuButton(m_xBuilder->weld_menu_button("category"))
     , m_xDefaultButton(m_xBuilder->weld_button("default"))
     , m_xBitmap(m_xBuilder->weld_widget("image"))

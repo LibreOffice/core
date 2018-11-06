@@ -469,7 +469,7 @@ SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xLinesText(m_xBuilder->weld_label("labelTXT_LINES"))
     , m_xLinesField(m_xBuilder->weld_spin_button("spinFLD_LINES"))
     , m_xDistanceText(m_xBuilder->weld_label("labelTXT_DISTANCE"))
-    , m_xDistanceField(m_xBuilder->weld_metric_spin_button("spinFLD_DISTANCE", FUNIT_CM))
+    , m_xDistanceField(m_xBuilder->weld_metric_spin_button("spinFLD_DISTANCE", FieldUnit::CM))
     , m_xTextText(m_xBuilder->weld_label("labelTXT_TEXT"))
     , m_xTextEdit(m_xBuilder->weld_entry("entryEDT_TEXT"))
     , m_xTemplateText(m_xBuilder->weld_label("labelTXT_TEMPLATE"))
@@ -535,14 +535,14 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     {
         m_xDropCapsField->set_value(aFormatDrop.GetChars());
         m_xLinesField->set_value(aFormatDrop.GetLines());
-        m_xDistanceField->set_value(m_xDistanceField->normalize(aFormatDrop.GetDistance()), FUNIT_TWIP);
+        m_xDistanceField->set_value(m_xDistanceField->normalize(aFormatDrop.GetDistance()), FieldUnit::TWIP);
         m_xWholeWordCB->set_active(aFormatDrop.GetWholeWord());
     }
     else
     {
         m_xDropCapsField->set_value(1);
         m_xLinesField->set_value(3);
-        m_xDistanceField->set_value(0, FUNIT_TWIP);
+        m_xDistanceField->set_value(0, FieldUnit::TWIP);
     }
 
     ::FillCharStyleListBox(*m_xTemplateBox, rSh.GetView().GetDocShell(), true);
@@ -569,7 +569,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     // Preview
     m_aPict.SetValues(m_xTextEdit->get_text(),
                       sal_uInt8(m_xLinesField->get_value()),
-                      sal_uInt16(m_xDistanceField->denormalize(m_xDistanceField->get_value(FUNIT_TWIP))));
+                      sal_uInt16(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP))));
 
     ClickHdl(*m_xDropCapsBox);
     bModified = false;
@@ -657,7 +657,7 @@ void SwDropCapsPage::ModifyEntry(weld::Entry& rEdit)
     else if (&rEdit == m_xLinesField.get())
         m_aPict.SetLines(static_cast<sal_uInt8>(m_xLinesField->get_value()));
     else
-        m_aPict.SetDistance(static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FUNIT_TWIP))));
+        m_aPict.SetDistance(static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP))));
 
     bModified = true;
 }
@@ -695,7 +695,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             // quantity, lines, gap
             aFormat.GetChars()     = static_cast<sal_uInt8>(m_xDropCapsField->get_value());
             aFormat.GetLines()     = static_cast<sal_uInt8>(m_xLinesField->get_value());
-            aFormat.GetDistance()  = static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FUNIT_TWIP)));
+            aFormat.GetDistance()  = static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)));
             aFormat.GetWholeWord() = m_xWholeWordCB->get_active();
 
             // template
