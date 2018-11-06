@@ -243,6 +243,14 @@ namespace
 
 #define LF_FACESIZE 32
 
+void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, const sal_uLong& nPos)
+{
+    SAL_WARN("vcl.gdi", "svm: value should be positive for width and height");
+    rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
+    rIStm.SetEndian( nOldFormat );
+    rIStm.Seek( nPos );
+    return;
+}
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
     const sal_uLong         nPos = rIStm.Tell();
@@ -261,8 +269,18 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.ReadInt16( nVersion );                              // Version
     sal_Int32 nTmp32(0);
     rIStm.ReadInt32( nTmp32 );
+    if (nTmp32 < 0)
+    {
+        lcl_error(rIStm, nOldFormat, nPos);
+        return;
+    }
     aPrefSz.setWidth( nTmp32 );                       // PrefSize.Width()
     rIStm.ReadInt32( nTmp32 );
+    if (nTmp32 < 0)
+    {
+        lcl_error(rIStm, nOldFormat, nPos);
+        return;
+    }
     aPrefSz.setHeight( nTmp32 );                      // PrefSize.Height()
 
     // check header-magic and version
