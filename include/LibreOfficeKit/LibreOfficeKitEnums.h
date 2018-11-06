@@ -594,6 +594,15 @@ typedef enum
      * convenience.
      */
     LOK_CALLBACK_CLIPBOARD_CHANGED = 38,
+
+    /**
+     * When the (editing) context changes - like the user switches from
+     * editing textbox in Impress to editing a shape there.
+     *
+     * Payload is the application ID and context, delimited by space.
+     * Eg. com.sun.star.presentation.PresentationDocument TextObject
+     */
+    LOK_CALLBACK_CONTEXT_CHANGED = 39,
 }
 LibreOfficeKitCallbackType;
 

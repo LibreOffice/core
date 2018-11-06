@@ -53,6 +53,10 @@ public:
     static void notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle);
     /// Notifies all views with the given type and payload.
     static void notifyAllViews(int nType, const OString& rPayload);
+
+    /// Notify about the editing context change.
+    static void notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext);
+
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const long MaxTwips = 1e9;
