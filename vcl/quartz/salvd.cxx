@@ -283,12 +283,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
                 const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
                 void* pRawData = std::malloc( nBytesPerRow * nDY );
-#ifdef DBG_UTIL
-                for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
-                {
-                    static_cast<sal_uInt8*>(pRawData)[i] = (i & 0xFF);
-                }
-#endif
                 mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                          8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
                 SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
@@ -300,12 +294,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
         void* pRawData = std::malloc( nBytesPerRow * nDY );
-#ifdef DBG_UTIL
-        for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
-        {
-            ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
-        }
-#endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little );
         SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
