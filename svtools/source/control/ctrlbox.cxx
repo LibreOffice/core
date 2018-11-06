@@ -426,7 +426,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     aSize.setHeight( aTxtSize.Height() );
 
     // SourceUnit to Twips
-    if ( eSourceUnit == FUNIT_POINT )
+    if ( eSourceUnit == FieldUnit::POINT )
     {
         nLine1      /= 5;
         nLine2      /= 5;
@@ -485,7 +485,7 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     aTxtSize.setWidth( GetTextWidth( " " ) );
     aTxtSize.setHeight( GetTextHeight() );
-    eSourceUnit = FUNIT_POINT;
+    eSourceUnit = FieldUnit::POINT;
 
     aVirDev->SetLineColor();
     aVirDev->SetMapMode( MapMode( MapUnit::MapTwip ) );
@@ -1352,7 +1352,7 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
     pTempAry = pAry;
     while ( *pTempAry )
     {
-        InsertValue( *pTempAry, FUNIT_NONE, nPos );
+        InsertValue( *pTempAry, FieldUnit::NONE, nPos );
         ComboBox::SetEntryData( nPos, reinterpret_cast<void*>(*pTempAry) );
         nPos++;
         pTempAry++;
@@ -1383,7 +1383,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 
 void FontSizeBox::SetValue( sal_Int64 nNewValue )
 {
-    SetValue( nNewValue, FUNIT_NONE );
+    SetValue( nNewValue, FieldUnit::NONE );
 }
 
 sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const
@@ -1399,7 +1399,7 @@ sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eO
 SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
     : pFontList(nullptr)
     , nSavedValue(0)
-    , eUnit(FUNIT_POINT)
+    , eUnit(FieldUnit::POINT)
     , nDecimalDigits(1)
     , nRelMin(0)
     , nRelMax(0)
@@ -1577,7 +1577,7 @@ void SvtFontSizeBox::EnableRelativeMode( sal_uInt16 nNewMin, sal_uInt16 nNewMax,
     nRelMin       = nNewMin;
     nRelMax       = nNewMax;
     nRelStep      = nStep;
-    SetUnit(FUNIT_POINT);
+    SetUnit(FieldUnit::POINT);
 }
 
 void SvtFontSizeBox::EnablePtRelativeMode( short nNewMin, short nNewMax, short nStep )
@@ -1586,7 +1586,7 @@ void SvtFontSizeBox::EnablePtRelativeMode( short nNewMin, short nNewMax, short n
     nPtRelMin     = nNewMin;
     nPtRelMax     = nNewMax;
     nPtRelStep    = nStep;
-    SetUnit(FUNIT_POINT);
+    SetUnit(FieldUnit::POINT);
 }
 
 void SvtFontSizeBox::InsertValue(int i)
@@ -1614,7 +1614,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
         if (bPtRelative)
         {
             SetDecimalDigits( 1 );
-            SetUnit(FUNIT_POINT);
+            SetUnit(FieldUnit::POINT);
 
             short i = nPtRelMin, n = 0;
             // JP 30.06.98: more than 100 values are not useful
@@ -1627,7 +1627,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
         else
         {
             SetDecimalDigits(0);
-            SetUnit(FUNIT_PERCENT);
+            SetUnit(FieldUnit::PERCENT);
 
             sal_uInt16 i = nRelMin;
             while ( i <= nRelMax )
@@ -1643,7 +1643,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
             m_xComboBox->clear();
         bRelative = bPtRelative = false;
         SetDecimalDigits(1);
-        SetUnit(FUNIT_POINT);
+        SetUnit(FieldUnit::POINT);
         if ( pFontList)
             Fill( &aFontMetric, pFontList );
     }
@@ -1657,7 +1657,7 @@ OUString SvtFontSizeBox::format_number(int nValue) const
     OUString sRet;
 
     //pawn percent off to icu to decide whether percent is separated from its number for this locale
-    if (eUnit == FUNIT_PERCENT)
+    if (eUnit == FieldUnit::PERCENT)
     {
         double fValue = nValue;
         fValue /= weld::SpinButton::Power10(nDecimalDigits);
@@ -1668,9 +1668,9 @@ OUString SvtFontSizeBox::format_number(int nValue) const
         const SvtSysLocale aSysLocale;
         const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
         sRet = rLocaleData.getNum(nValue, nDecimalDigits, true, false);
-        if (eUnit != FUNIT_NONE && eUnit != FUNIT_DEGREE)
+        if (eUnit != FieldUnit::NONE && eUnit != FieldUnit::DEGREE)
             sRet += " ";
-        assert(eUnit != FUNIT_PERCENT);
+        assert(eUnit != FieldUnit::PERCENT);
         sRet += weld::MetricSpinButton::MetricToString(eUnit);
     }
 
@@ -1749,7 +1749,7 @@ void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     Size aSize(getPreviewSize(*m_xControl));
 
     // SourceUnit to Twips
-    if ( eSourceUnit == FUNIT_POINT )
+    if ( eSourceUnit == FieldUnit::POINT )
     {
         nLine1      /= 5;
         nLine2      /= 5;
@@ -1848,7 +1848,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     m_xControl->set_size_request(std::max(aNonePrefSize.Width(), aSolidPrefSize.Width()),
                                  std::max(aNonePrefSize.Height(), aSolidPrefSize.Height()));
 
-    eSourceUnit = FUNIT_POINT;
+    eSourceUnit = FieldUnit::POINT;
 
     aVirDev->SetLineColor();
     aVirDev->SetMapMode(MapMode(MapUnit::MapTwip));

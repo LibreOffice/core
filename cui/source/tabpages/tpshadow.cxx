@@ -56,9 +56,9 @@ SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInA
     , m_aCtlPosition(this)
     , m_xTsbShowShadow(m_xBuilder->weld_check_button("TSB_SHOW_SHADOW"))
     , m_xGridShadow(m_xBuilder->weld_widget("gridSHADOW"))
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FUNIT_CM))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FieldUnit::CM))
     , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), pParent.GetFrameWeld()))
-    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_SHADOW_TRANSPARENT", FUNIT_PERCENT))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_SHADOW_TRANSPARENT", FieldUnit::PERCENT))
     , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
     , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_COLOR_PREVIEW", m_aCtlXRectPreview))
 {
@@ -70,9 +70,9 @@ SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInA
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::M:
+        case FieldUnit::KM:
+            eFUnit = FieldUnit::MM;
             break;
         default: ;//prevent warning
     }
@@ -302,7 +302,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // transparency
-    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FUNIT_PERCENT));
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
     if (m_xMtrTransparent->get_value_changed_from_saved())
     {
         SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
@@ -397,7 +397,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SfxItemState::DONTCARE )
     {
         sal_uInt16 nTransp = rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ).GetValue();
-        m_xMtrTransparent->set_value(nTransp, FUNIT_PERCENT);
+        m_xMtrTransparent->set_value(nTransp, FieldUnit::PERCENT);
     }
     else
         m_xMtrTransparent->set_text("");
@@ -451,7 +451,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, weld::MetricSpinButton&,
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     m_rXFSet.Put( XFillColorItem( OUString(), m_xLbShadowColor->GetSelectEntryColor() ) );
-    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FUNIT_PERCENT));
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
     m_rXFSet.Put( XFillTransparenceItem( nVal ) );
 
     // shadow removal

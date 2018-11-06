@@ -25,8 +25,8 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
     , m_xTextInput(m_xBuilder->weld_entry("TextInput"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_xFont(m_xBuilder->weld_combo_box("FontBox"))
-    , m_xAngle(m_xBuilder->weld_metric_spin_button("Angle", FUNIT_DEGREE))
-    , m_xTransparency(m_xBuilder->weld_metric_spin_button("Transparency", FUNIT_PERCENT))
+    , m_xAngle(m_xBuilder->weld_metric_spin_button("Angle", FieldUnit::DEGREE))
+    , m_xTransparency(m_xBuilder->weld_metric_spin_button("Transparency", FieldUnit::PERCENT))
     , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button("Color"), m_xDialog.get()))
 {
     InitFields();
@@ -72,9 +72,9 @@ void SwWatermarkDialog::InitFields()
         const OUString& sText = pWatermark->GetText();
         m_xTextInput->set_text(sText);
         m_xFont->set_entry_text(pWatermark->GetFont());
-        m_xAngle->set_value(pWatermark->GetAngle(), FUNIT_DEGREE);
+        m_xAngle->set_value(pWatermark->GetAngle(), FieldUnit::DEGREE);
         m_xColor->SelectEntry( pWatermark->GetColor() );
-        m_xTransparency->set_value(pWatermark->GetTransparency(), FUNIT_PERCENT);
+        m_xTransparency->set_value(pWatermark->GetTransparency(), FieldUnit::PERCENT);
     }
 }
 
@@ -86,8 +86,8 @@ IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)
     {
         { "Text", css::uno::makeAny( sText ) },
         { "Font", css::uno::makeAny( m_xFont->get_active_text() ) },
-        { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_xAngle->get_value(FUNIT_DEGREE) ) ) },
-        { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_xTransparency->get_value(FUNIT_PERCENT) ) ) },
+        { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_xAngle->get_value(FieldUnit::DEGREE) ) ) },
+        { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_xTransparency->get_value(FieldUnit::PERCENT) ) ) },
         { "Color", css::uno::makeAny( static_cast<sal_uInt32>( m_xColor->GetSelectEntryColor().GetRGBColor() ) ) }
     } ) );
     comphelper::dispatchCommand( ".uno:Watermark", aPropertyValues );

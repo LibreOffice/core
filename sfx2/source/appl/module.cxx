@@ -211,7 +211,7 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
 
 FieldUnit SfxModule::GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame > const & i_frame )
 {
-    ENSURE_OR_RETURN( i_frame.is(), "SfxModule::GetModuleFieldUnit: invalid frame!", FUNIT_100TH_MM );
+    ENSURE_OR_RETURN( i_frame.is(), "SfxModule::GetModuleFieldUnit: invalid frame!", FieldUnit::MM_100TH );
 
     // find SfxViewFrame for the given XFrame
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
@@ -221,17 +221,22 @@ FieldUnit SfxModule::GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame
             break;
         pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
     }
-    ENSURE_OR_RETURN( pViewFrame != nullptr, "SfxModule::GetModuleFieldUnit: unable to find an SfxViewFrame for the given XFrame", FUNIT_100TH_MM );
+    ENSURE_OR_RETURN(
+        pViewFrame != nullptr,
+        "SfxModule::GetModuleFieldUnit: unable to find an SfxViewFrame for the given XFrame",
+        FieldUnit::MM_100TH);
 
     // find the module
     SfxModule const * pModule = GetActiveModule( pViewFrame );
-    ENSURE_OR_RETURN( pModule != nullptr, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
+    ENSURE_OR_RETURN(pModule != nullptr,
+                     "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!",
+                     FieldUnit::MM_100TH);
     return pModule->GetFieldUnit();
 }
 
 FieldUnit SfxModule::GetCurrentFieldUnit()
 {
-    FieldUnit eUnit = FUNIT_INCH;
+    FieldUnit eUnit = FieldUnit::INCH;
     SfxModule* pModule = GetActiveModule();
     if ( pModule )
     {
@@ -246,7 +251,7 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
 
 FieldUnit SfxModule::GetFieldUnit() const
 {
-    FieldUnit eUnit = FUNIT_INCH;
+    FieldUnit eUnit = FieldUnit::INCH;
     const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
     if ( pItem )
         eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());

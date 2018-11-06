@@ -81,16 +81,16 @@ SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInA
     , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("bitmapstyle"))
     , m_xSizeBox(m_xBuilder->weld_container("sizebox"))
     , m_xTsbScale(m_xBuilder->weld_check_button("scaletsb"))
-    , m_xBitmapWidth(m_xBuilder->weld_metric_spin_button("width", FUNIT_PERCENT))
-    , m_xBitmapHeight(m_xBuilder->weld_metric_spin_button("height", FUNIT_PERCENT))
+    , m_xBitmapWidth(m_xBuilder->weld_metric_spin_button("width", FieldUnit::PERCENT))
+    , m_xBitmapHeight(m_xBuilder->weld_metric_spin_button("height", FieldUnit::PERCENT))
     , m_xPositionBox(m_xBuilder->weld_container("posbox"))
     , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xPositionOffBox(m_xBuilder->weld_container("posoffbox"))
-    , m_xPositionOffX(m_xBuilder->weld_metric_spin_button("posoffx", FUNIT_PERCENT))
-    , m_xPositionOffY(m_xBuilder->weld_metric_spin_button("posoffy", FUNIT_PERCENT))
+    , m_xPositionOffX(m_xBuilder->weld_metric_spin_button("posoffx", FieldUnit::PERCENT))
+    , m_xPositionOffY(m_xBuilder->weld_metric_spin_button("posoffy", FieldUnit::PERCENT))
     , m_xTileOffBox(m_xBuilder->weld_container("tileoffbox"))
     , m_xTileOffLB(m_xBuilder->weld_combo_box("tileofflb"))
-    , m_xTileOffset(m_xBuilder->weld_metric_spin_button("tileoffmtr", FUNIT_PERCENT))
+    , m_xTileOffset(m_xBuilder->weld_metric_spin_button("tileoffmtr", FieldUnit::PERCENT))
     , m_xBtnImport(m_xBuilder->weld_button("BTN_IMPORT"))
     , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_BITMAP_PREVIEW", m_aCtlBitmapPreview))
     , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, "BITMAP", *m_xBitmapLB))
@@ -163,8 +163,8 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
     }
     else
     {
-        m_xBitmapWidth->set_value( 100, FUNIT_NONE );
-        m_xBitmapHeight->set_value( 100, FUNIT_NONE );
+        m_xBitmapWidth->set_value( 100, FieldUnit::NONE );
+        m_xBitmapHeight->set_value( 100, FieldUnit::NONE );
         const_cast<SfxItemSet&>(rSet).Put( XFillBmpSizeXItem( GetCoreValue( *m_xBitmapWidth, mePoolUnit ) ) );
         const_cast<SfxItemSet&>(rSet).Put( XFillBmpSizeYItem( GetCoreValue( *m_xBitmapHeight, mePoolUnit ) ) );
     }
@@ -208,8 +208,8 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
             case CUSTOM:
             case TILED:
             {
-                sal_Int64 nWidthPercent = m_xBitmapWidth->get_value(FUNIT_NONE);
-                sal_Int64 nHeightPercent = m_xBitmapHeight->get_value(FUNIT_NONE);
+                sal_Int64 nWidthPercent = m_xBitmapWidth->get_value(FieldUnit::NONE);
+                sal_Int64 nHeightPercent = m_xBitmapHeight->get_value(FieldUnit::NONE);
                 if (m_xTsbScale->get_sensitive() && m_xTsbScale->get_state() == TRISTATE_TRUE)
                 {
                     aSetBitmapSize.setWidth( -nWidthPercent );
@@ -240,13 +240,13 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
     if (m_xPositionLB->get_sensitive())
         rAttrs->Put( XFillBmpPosItem( static_cast<RectPoint>( m_xPositionLB->get_active() ) ) );
     if (m_xPositionOffX->get_sensitive())
-        rAttrs->Put( XFillBmpPosOffsetXItem(m_xPositionOffX->get_value(FUNIT_PERCENT)));
+        rAttrs->Put( XFillBmpPosOffsetXItem(m_xPositionOffX->get_value(FieldUnit::PERCENT)));
     if (m_xPositionOffY->get_sensitive())
-        rAttrs->Put( XFillBmpPosOffsetYItem(m_xPositionOffY->get_value(FUNIT_PERCENT)));
+        rAttrs->Put( XFillBmpPosOffsetYItem(m_xPositionOffY->get_value(FieldUnit::PERCENT)));
     if (m_xTileOffBox->get_sensitive())
     {
         TileOffset eValue = static_cast<TileOffset>(m_xTileOffLB->get_active());
-        sal_uInt16 nOffsetValue = static_cast<sal_uInt16>(m_xTileOffset->get_value(FUNIT_PERCENT));
+        sal_uInt16 nOffsetValue = static_cast<sal_uInt16>(m_xTileOffset->get_value(FieldUnit::PERCENT));
         sal_uInt16 nRowOff = (eValue == ROW) ? nOffsetValue : 0;
         sal_uInt16 nColOff = (eValue == COLUMN) ? nOffsetValue : 0;
         rAttrs->Put( XFillBmpTileOffsetXItem(nRowOff) );
@@ -364,8 +364,8 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     {
         if (eRelative == TRISTATE_TRUE)
         {
-            m_xBitmapWidth->set_value(nWidth, FUNIT_NONE);
-            m_xBitmapHeight->set_value(nHeight, FUNIT_NONE);
+            m_xBitmapWidth->set_value(nWidth, FieldUnit::NONE);
+            m_xBitmapHeight->set_value(nHeight, FieldUnit::NONE);
         }
         else
         {
@@ -383,7 +383,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETX ) != SfxItemState::DONTCARE )
     {
         sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_POSOFFSETX ).GetValue();
-        m_xPositionOffX->set_value(nValue, FUNIT_PERCENT);
+        m_xPositionOffX->set_value(nValue, FieldUnit::PERCENT);
     }
     else
         m_xPositionOffX->set_text("");
@@ -391,7 +391,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SfxItemState::DONTCARE )
     {
         sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_POSOFFSETY ).GetValue();
-        m_xPositionOffY->set_value(nValue, FUNIT_PERCENT);
+        m_xPositionOffY->set_value(nValue, FieldUnit::PERCENT);
     }
     else
         m_xPositionOffY->set_text("");
@@ -402,7 +402,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         if(nValue > 0)
         {
             m_xTileOffLB->set_active(static_cast<sal_Int32>(ROW));
-            m_xTileOffset->set_value(nValue, FUNIT_PERCENT);
+            m_xTileOffset->set_value(nValue, FieldUnit::PERCENT);
         }
     }
 
@@ -412,7 +412,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         if(nValue > 0)
         {
             m_xTileOffLB->set_active(static_cast<sal_Int32>(COLUMN));
-            m_xTileOffset->set_value(nValue, FUNIT_PERCENT);
+            m_xTileOffset->set_value(nValue, FieldUnit::PERCENT);
         }
     }
 
@@ -586,8 +586,8 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, weld::MetricSpinButton&,
     m_bLogicalSize = false;
     if (m_xTsbScale->get_state() != TRISTATE_TRUE && static_cast<BitmapStyle>(m_xBitmapStyleLB->get_active()) != TILED)
     {
-        sal_Int64 nWidthPercent = m_xBitmapWidth->denormalize(m_xBitmapWidth->get_value(FUNIT_NONE));
-        sal_Int64 nHeightPercent = m_xBitmapHeight->denormalize(m_xBitmapHeight->get_value(FUNIT_NONE));
+        sal_Int64 nWidthPercent = m_xBitmapWidth->denormalize(m_xBitmapWidth->get_value(FieldUnit::NONE));
+        sal_Int64 nHeightPercent = m_xBitmapHeight->denormalize(m_xBitmapHeight->get_value(FieldUnit::NONE));
         if (nWidthPercent == 100 && nHeightPercent == 100)
             m_xBitmapStyleLB->set_active(static_cast<sal_Int32>(CUSTOM));
     }
@@ -602,26 +602,26 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, weld::Button&, void )
     if (m_xTsbScale->get_state() == TRISTATE_TRUE)
     {
         m_xBitmapWidth->set_digits( 0 );
-        m_xBitmapWidth->set_unit(FUNIT_PERCENT);
-        m_xBitmapWidth->set_value(100, FUNIT_NONE);
-        m_xBitmapWidth->set_range(0, 100, FUNIT_NONE);
+        m_xBitmapWidth->set_unit(FieldUnit::PERCENT);
+        m_xBitmapWidth->set_value(100, FieldUnit::NONE);
+        m_xBitmapWidth->set_range(0, 100, FieldUnit::NONE);
 
         m_xBitmapHeight->set_digits( 0 );
-        m_xBitmapHeight->set_unit(FUNIT_PERCENT);
-        m_xBitmapHeight->set_value(100, FUNIT_NONE);
-        m_xBitmapHeight->set_range(0, 100, FUNIT_NONE);
+        m_xBitmapHeight->set_unit(FieldUnit::PERCENT);
+        m_xBitmapHeight->set_value(100, FieldUnit::NONE);
+        m_xBitmapHeight->set_range(0, 100, FieldUnit::NONE);
     }
     else
     {
         m_xBitmapWidth->set_digits( 2 );
         m_xBitmapWidth->set_unit(meFieldUnit);
-        m_xBitmapWidth->set_value(100, FUNIT_NONE);
-        m_xBitmapWidth->set_range(0, 999900, FUNIT_NONE);
+        m_xBitmapWidth->set_value(100, FieldUnit::NONE);
+        m_xBitmapWidth->set_range(0, 999900, FieldUnit::NONE);
 
         m_xBitmapHeight->set_digits( 2 );
         m_xBitmapHeight->set_unit(meFieldUnit);
-        m_xBitmapHeight->set_value(100, FUNIT_NONE);
-        m_xBitmapHeight->set_range(0, 999900, FUNIT_NONE);
+        m_xBitmapHeight->set_value(100, FieldUnit::NONE);
+        m_xBitmapHeight->set_range(0, 999900, FieldUnit::NONE);
     }
 
     ModifyBitmapStyleHdl( *m_xBitmapStyleLB );
@@ -651,8 +651,8 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
             {
                 if (m_xTsbScale->get_sensitive() && m_xTsbScale->get_state() == TRISTATE_TRUE)
                 {
-                    aSetBitmapSize.setWidth(-m_xBitmapWidth->get_value(FUNIT_NONE));
-                    aSetBitmapSize.setHeight(-m_xBitmapWidth->get_value(FUNIT_NONE));
+                    aSetBitmapSize.setWidth(-m_xBitmapWidth->get_value(FieldUnit::NONE));
+                    aSetBitmapSize.setHeight(-m_xBitmapWidth->get_value(FieldUnit::NONE));
                 }
                 else
                 {
@@ -685,10 +685,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, weld::ComboBox&, void
 IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyPositionOffsetHdl, weld::MetricSpinButton&, void)
 {
     if (m_xPositionOffX->get_sensitive())
-        m_rXFSet.Put( XFillBmpPosOffsetXItem( m_xPositionOffX->get_value(FUNIT_PERCENT) ) );
+        m_rXFSet.Put( XFillBmpPosOffsetXItem( m_xPositionOffX->get_value(FieldUnit::PERCENT) ) );
 
     if (m_xPositionOffY->get_sensitive())
-        m_rXFSet.Put( XFillBmpPosOffsetYItem( m_xPositionOffY->get_value(FUNIT_PERCENT) ) );
+        m_rXFSet.Put( XFillBmpPosOffsetYItem( m_xPositionOffY->get_value(FieldUnit::PERCENT) ) );
 
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlBitmapPreview.Invalidate();
@@ -700,10 +700,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, weld::MetricSpinButton&, 
     sal_uInt16 nTileYOff = 0;
 
     if(m_xTileOffLB->get_active() == static_cast<sal_Int32>(ROW))
-        nTileXOff = m_xTileOffset->get_value(FUNIT_PERCENT);
+        nTileXOff = m_xTileOffset->get_value(FieldUnit::PERCENT);
 
     if(m_xTileOffLB->get_active() == static_cast<sal_Int32>(COLUMN))
-        nTileYOff = m_xTileOffset->get_value(FUNIT_PERCENT);
+        nTileYOff = m_xTileOffset->get_value(FieldUnit::PERCENT);
 
     m_rXFSet.Put( XFillBmpTileOffsetXItem(nTileXOff) );
     m_rXFSet.Put( XFillBmpTileOffsetYItem(nTileYOff) );

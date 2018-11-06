@@ -350,7 +350,7 @@ namespace pcr
 
     sal_Int16 PropertyHandler::impl_getDocumentMeasurementUnit_throw() const
     {
-        FieldUnit eUnit = FUNIT_NONE;
+        FieldUnit eUnit = FieldUnit::NONE;
 
         Reference< XServiceInfo > xDocumentSI( impl_getContextDocument_nothrow(), UNO_QUERY );
         OSL_ENSURE( xDocumentSI.is(), "PropertyHandlerHelper::impl_getDocumentMeasurementUnit_throw: No context document - where do I live?" );
@@ -390,19 +390,19 @@ namespace pcr
             {
                 ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_xContext, sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
-                sal_Int32 nUnitAsInt = sal_Int32(FUNIT_NONE);
+                sal_Int32 nUnitAsInt = sal_Int32(FieldUnit::NONE);
                 aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
 
                 // if this denotes a valid (and accepted) unit, then use it
-                if  ( ( nUnitAsInt > FUNIT_NONE ) && ( nUnitAsInt <= FUNIT_100TH_MM ) )
+                if  ( ( nUnitAsInt > sal_Int32(FieldUnit::NONE) ) && ( nUnitAsInt <= sal_Int32(FieldUnit::MM_100TH) ) )
                     eUnit = static_cast< FieldUnit >( nUnitAsInt );
             }
         }
 
-        if ( FUNIT_NONE == eUnit )
+        if ( FieldUnit::NONE == eUnit )
         {
             MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-            eUnit = MeasurementSystem::Metric == eSystem ? FUNIT_CM : FUNIT_INCH;
+            eUnit = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
         }
 
         return VCLUnoHelper::ConvertToMeasurementUnit( eUnit, 1 );

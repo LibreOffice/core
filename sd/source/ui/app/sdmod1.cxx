@@ -128,11 +128,11 @@ void SdModule::Execute(SfxRequest& rReq)
                 FieldUnit eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                 switch( eUnit )
                 {
-                    case FUNIT_MM:      // only the units which are also in the dialog
-                    case FUNIT_CM:
-                    case FUNIT_INCH:
-                    case FUNIT_PICA:
-                    case FUNIT_POINT:
+                    case FieldUnit::MM:      // only the units which are also in the dialog
+                    case FieldUnit::CM:
+                    case FieldUnit::INCH:
+                    case FieldUnit::PICA:
+                    case FieldUnit::POINT:
                         {
                             ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
                             if(pDocSh)

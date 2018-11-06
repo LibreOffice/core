@@ -192,7 +192,7 @@ SdOptionsLayout::SdOptionsLayout(bool bImpress, bool bUseConfig) :
     bDragStripes( false ),
     bHandlesBezier( false ),
     bHelplines( true ),
-    nMetric(static_cast<sal_uInt16>(isMetricSystem() ? FUNIT_CM : FUNIT_INCH)),
+    nMetric(static_cast<sal_uInt16>(isMetricSystem() ? FieldUnit::CM : FieldUnit::INCH)),
     nDefTab( 1250 )
 {
     EnableModify( true );
