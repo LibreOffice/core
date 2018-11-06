@@ -363,7 +363,6 @@ struct ImplSVData
     std::unique_ptr<DockingManager> mpDockingManager;
     std::unique_ptr<BlendFrameCache> mpBlendFrameCache;
 
-    oslThreadIdentifier     mnMainThreadId = 0;
     rtl::Reference< vcl::DisplayConnectionDispatch > mxDisplayConnection;
 
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
