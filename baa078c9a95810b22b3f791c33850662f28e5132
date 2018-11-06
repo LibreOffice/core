@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f3283f1_c15330e2",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2640,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-11-06T14:53:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f3283f1_41f2a008",
+      "revId": "baa078c9a95810b22b3f791c33850662f28e5132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f3283f1_21f794f8",
         "filename": "sd/qa/unit/import-tests.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-06T14:20:03Z",
       "side": 1,
       "message": "And after doing that, you can replace this entire block with getTitleString convenience function from chart2/qa/extras/charttest.hxx",
+      "revId": "baa078c9a95810b22b3f791c33850662f28e5132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_815f68e4",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2657,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-11-06T14:53:17Z",
+      "side": 1,
+      "message": "Yep, things became much simpler and compact. Thx!",
+      "parentUuid": "3f3283f1_21f794f8",
       "revId": "baa078c9a95810b22b3f791c33850662f28e5132",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
