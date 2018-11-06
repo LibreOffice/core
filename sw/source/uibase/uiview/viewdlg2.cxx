@@ -111,6 +111,27 @@ bool SwView::isSignatureLineSelected()
     return pGraphic->isSignatureLine();
 }
 
+bool SwView::isSignatureLineSigned()
+{
+    SwWrtShell& rSh = GetWrtShell();
+    SdrView* pSdrView = rSh.GetDrawView();
+    if (!pSdrView)
+        return false;
+
+    if (pSdrView->GetMarkedObjectCount() != 1)
+        return false;
+
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    if (!pPickObj)
+        return false;
+
+    SdrGrafObj* pGraphic = dynamic_cast<SdrGrafObj*>(pPickObj);
+    if (!pGraphic)
+        return false;
+
+    return pGraphic->isSignatureLineSigned();
+}
+
 void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
