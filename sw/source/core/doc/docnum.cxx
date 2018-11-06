@@ -1437,8 +1437,10 @@ static bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
     return bRet;
 }
 
-static void
-lcl_GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
+namespace sw {
+
+void
+GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 {
    if (pLayout && pLayout->IsHideRedlines()
        && rIndex.GetNode().IsTextNode()
@@ -1453,8 +1455,8 @@ lcl_GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayou
     }
 }
 
-static void
-lcl_GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
+void
+GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 {
    if (pLayout && pLayout->IsHideRedlines()
        && rIndex.GetNode().IsTextNode()
@@ -1468,6 +1470,8 @@ lcl_GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayou
         rIndex = *sw::GetParaPropsNode(*pLayout, *rIndex.GetNode().GetTextNode());
     }
 }
+
+} // namespace sw
 
 static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower,
@@ -1489,7 +1493,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         // If NO_NUMLEVEL is switched on, we search the preceding Node with Numbering
         bool bError = false;
         do {
-            lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
+            sw::GotoPrevLayoutTextFrame(aIdx, pLayout);
             if( aIdx.GetNode().IsTextNode() )
             {
                 pNd = aIdx.GetNode().GetTextNode();
@@ -1521,12 +1525,12 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     const SwTextNode* pLast;
     if( bNext )
     {
-        lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
+        sw::GotoNextLayoutTextFrame(aIdx, pLayout);
         pLast = pNd;
     }
     else
     {
-        lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
+        sw::GotoPrevLayoutTextFrame(aIdx, pLayout);
         pLast = nullptr;
     }
 
@@ -1557,9 +1561,9 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
             break;
 
         if( bNext )
-            lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
+            sw::GotoNextLayoutTextFrame(aIdx, pLayout);
         else
-            lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
+            sw::GotoPrevLayoutTextFrame(aIdx, pLayout);
     }
 
     if( !bRet && !bOverUpper && pLast )     // do not iterate over higher numbers, but still to the end
@@ -1622,9 +1626,9 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
             if ( !bInvestigateStartNode )
             {
                 if (bForward)
-                    lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
+                    sw::GotoNextLayoutTextFrame(aIdx, pLayout);
                 else
-                    lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
+                    sw::GotoPrevLayoutTextFrame(aIdx, pLayout);
             }
 
             if (aIdx.GetNode().IsTextNode())
@@ -1660,9 +1664,9 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
             if ( bInvestigateStartNode )
             {
                 if (bForward)
-                    lcl_GotoNextLayoutTextFrame(aIdx, pLayout);
+                    sw::GotoNextLayoutTextFrame(aIdx, pLayout);
                 else
-                    lcl_GotoPrevLayoutTextFrame(aIdx, pLayout);
+                    sw::GotoPrevLayoutTextFrame(aIdx, pLayout);
             }
 
             pNode = &aIdx.GetNode();

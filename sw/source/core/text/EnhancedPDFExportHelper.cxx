@@ -226,7 +226,7 @@ void* lcl_GetKeyFromFrame( const SwFrame& rFrame )
     return pKey;
 }
 
-bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
+bool lcl_HasPreviousParaSameNumRule(SwTextFrame const& rTextFrame, const SwTextNode& rNode)
 {
     bool bRet = false;
     SwNodeIndex aIdx( rNode );
@@ -237,11 +237,12 @@ bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
 
     while (pNode != rNodes.DocumentSectionStartNode(const_cast<SwNode*>(static_cast<SwNode const *>(&rNode))) )
     {
-        --aIdx;
+        sw::GotoPrevLayoutTextFrame(aIdx, rTextFrame.getRootFrame());
 
         if (aIdx.GetNode().IsTextNode())
         {
-            const SwTextNode* pPrevTextNd = aIdx.GetNode().GetTextNode();
+            const SwTextNode *const pPrevTextNd = sw::GetParaPropsNode(
+                    *rTextFrame.getRootFrame(), *aIdx.GetNode().GetTextNode());
             const SwNumRule * pPrevNumRule = pPrevTextNd->GetNumRule();
 
             // We find the previous text node. Now check, if the previous text node
@@ -844,7 +845,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         return;
 
     const SwNumberTreeNode* pParent = pNodeNum->GetParent();
-    const bool bSameNumbering = lcl_HasPreviousParaSameNumRule(*pTextNd);
+    const bool bSameNumbering = lcl_HasPreviousParaSameNumRule(rTextFrame, *pTextNd);
 
     // Second condition: current numbering is not 'interrupted'
     if ( bSameNumbering )
