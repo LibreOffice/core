@@ -15,10 +15,11 @@
 namespace comphelper
 {
 
+volatile bool ProfileZone::g_bRecording(false);
+
 namespace ProfileRecording
 {
 
-static bool g_bRecording(false);              // true during recording
 static std::vector<OUString> g_aRecording;    // recorded data
 static long long g_aSumTime(0);  // overall zone time in microsec
 static int g_aNesting;           // level of overlapped zones
@@ -27,46 +28,49 @@ static ::osl::Mutex g_aMutex;
 
 void startRecording(bool bStartRecording)
 {
-    ::osl::MutexGuard aGuard( g_aMutex );
     if (bStartRecording)
     {
         TimeValue systemTime;
         osl_getSystemTime( &systemTime );
+        ::osl::MutexGuard aGuard( g_aMutex );
         g_aStartTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
         g_aNesting = 0;
     }
-    g_bRecording = bStartRecording;
+    ProfileZone::g_bRecording = bStartRecording;
 }
 
 long long addRecording(const char * aProfileId, long long aCreateTime)
 {
+    assert( ProfileZone::g_bRecording );
+
+    TimeValue systemTime;
+    osl_getSystemTime( &systemTime );
+    long long aTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
+
+    if (!aProfileId)
+        aProfileId = "(null)";
+    OUString aString(aProfileId, strlen(aProfileId), RTL_TEXTENCODING_UTF8);
+
+    OUString sRecordingData(OUString::number(osl_getThreadIdentifier(nullptr)) + " " +
+        OUString::number(aTime/1000000.0) + " " + aString + ": " +
+        (aCreateTime == 0 ? OUString("start") : OUString("stop")) +
+        (aCreateTime != 0 ? (" " + OUString::number((aTime - aCreateTime)/1000.0) + " ms") : OUString("")));
+
     ::osl::MutexGuard aGuard( g_aMutex );
-    if ( g_bRecording )
+
+    g_aRecording.emplace_back(sRecordingData);
+    if (aCreateTime == 0)
     {
-        TimeValue systemTime;
-        osl_getSystemTime( &systemTime );
-        long long aTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
-        if (!aProfileId)
-            aProfileId = "(null)";
-        OUString aString(aProfileId, strlen(aProfileId), RTL_TEXTENCODING_UTF8);
-        g_aRecording.emplace_back(OUString::number(osl_getThreadIdentifier(nullptr)) + " " +
-            OUString::number(aTime/1000000.0) + " " + aString + ": " +
-            (aCreateTime == 0 ? OUString("start") : OUString("stop")) +
-            (aCreateTime != 0 ? (" " + OUString::number((aTime - aCreateTime)/1000.0) + " ms") : OUString(""))
-        );
-        if (aCreateTime == 0)
-        {
-            g_aNesting++;
-            return aTime;
-        }
-        // neglect ProfileZones created before startRecording
-        else if (aCreateTime >= g_aStartTime)
-        {
-            if (g_aNesting > 0)
-                g_aNesting--;
-            if (g_aNesting == 0)
-                g_aSumTime += aTime - aCreateTime;
-        }
+        g_aNesting++;
+        return aTime;
+    }
+    // neglect ProfileZones created before startRecording
+    else if (aCreateTime >= g_aStartTime)
+    {
+        if (g_aNesting > 0)
+            g_aNesting--;
+        if (g_aNesting == 0)
+            g_aSumTime += aTime - aCreateTime;
     }
     return 0;
 }
@@ -77,7 +81,7 @@ css::uno::Sequence<OUString> getRecordingAndClear()
     std::vector<OUString> aRecording;
     {
         ::osl::MutexGuard aGuard( g_aMutex );
-        bRecording = g_bRecording;
+        bRecording = ProfileZone::g_bRecording;
         startRecording(false);
         aRecording.swap(g_aRecording);
         long long aSumTime = g_aSumTime;
@@ -90,17 +94,6 @@ css::uno::Sequence<OUString> getRecordingAndClear()
 
 } // namespace ProfileRecording
 
-
-ProfileZone::ProfileZone(const char * sProfileId) :
-    m_sProfileId(sProfileId),
-    m_aCreateTime(ProfileRecording::addRecording(sProfileId, 0))
-{
-}
-
-ProfileZone::~ProfileZone()
-{
-    ProfileRecording::addRecording(m_sProfileId, m_aCreateTime);
-}
 
 } // namespace comphelper
 
