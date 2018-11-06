@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -96,6 +98,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
         mxPlayer.clear();
     }
 
+#if HAVE_FEATURE_AVMEDIA
     if( mbLabelPlaying )
     {
         try
@@ -144,6 +147,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
             }
         }
     }
+#endif
 }
 
 IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
