@@ -734,7 +734,7 @@ bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
     return true;
 }
 
-// The following two methods try to put the Cursor into the next/succsessive
+// The following two methods try to put the Cursor into the next/successive
 // line. If we do not have a preceding/successive line we forward the call
 // to the base class.
 // The Cursor's horizontal justification is done afterwards by the CursorShell.
