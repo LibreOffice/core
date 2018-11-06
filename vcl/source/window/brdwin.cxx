@@ -1324,7 +1324,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             nState |= CTRL_STATE_FOCUSED;
         else if( mbNWFBorder )
         {
-            // FIXME: this is curently only on aqua, see if other platforms can profit
+            // FIXME: this is currently only on aqua, see if other platforms can profit
 
             // FIXME: for aqua focus rings all controls need to support GetNativeControlRegion
             // for the dropdown style

@@ -143,7 +143,7 @@ public:
     FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz
     FASTBOOL        bHadRecursion;          // Rekursion war aufgetreten
     FASTBOOL        bOwnDataChangedHdl;     // dont change colors in DataChanged
-    FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
+    FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop currently
     sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new conuter for DoHide/ShowCursor
 

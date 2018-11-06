@@ -660,7 +660,7 @@ void OEditModel::onDisconnectedDbColumn()
 //------------------------------------------------------------------------------
 sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
-    // if we act as rich text curently, we do not allow binding to a database column
+    // if we act as rich text currently, we do not allow binding to a database column
     if ( implActsAsRichText() )
         return sal_False;
 
