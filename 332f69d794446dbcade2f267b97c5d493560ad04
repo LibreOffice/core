@@ -46,6 +46,30 @@
       "revId": "332f69d794446dbcade2f267b97c5d493560ad04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_e6f402d2",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-06T08:16:46Z",
+      "side": 1,
+      "message": "Yes, I prefer you revert this part since the change isn\u0027t necessary.",
+      "parentUuid": "3f3283f1_3b458371",
+      "range": {
+        "startLine": 738,
+        "startChar": 49,
+        "endLine": 738,
+        "endChar": 58
+      },
+      "revId": "332f69d794446dbcade2f267b97c5d493560ad04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
