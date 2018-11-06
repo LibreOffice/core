@@ -979,7 +979,7 @@ void TableModel::optimize()
 
             if( bEmpty )
             {
-                if( nCol > 0 ) try
+                try
                 {
                     const OUString sWidth("Width");
                     sal_Int32 nWidth1 = 0, nWidth2 = 0;
@@ -1016,7 +1016,7 @@ void TableModel::optimize()
 
             if( bEmpty )
             {
-                if( nRow > 0 ) try
+                try
                 {
                     const OUString sHeight("Height");
                     sal_Int32 nHeight1 = 0, nHeight2 = 0;

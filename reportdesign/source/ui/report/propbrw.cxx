@@ -340,7 +340,7 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName("ReportComponent"), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
-            const char* pResId = nullptr;
+            const char* pResId;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
                 pResId = RID_STR_PROPTITLE_FIXEDTEXT;
@@ -384,10 +384,7 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
                 return aName;
             }
 
-            if (pResId)
-            {
-                aName += RptResId(pResId);
-            }
+            aName += RptResId(pResId);
         }
     }
     else    // multiselection

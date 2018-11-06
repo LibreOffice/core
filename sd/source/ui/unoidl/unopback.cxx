@@ -402,20 +402,17 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
         throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
     uno::Any aAny;
-    if( mpSet )
+    if (pEntry->nWID == OWN_ATTR_FILLBMP_MODE)
     {
-        if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
-        {
-            aAny <<= drawing::BitmapMode_REPEAT;
-        }
-        else
-        {
-            SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
-            aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
+        aAny <<= drawing::BitmapMode_REPEAT;
+    }
+    else
+    {
+        SfxItemPool& rPool = *mpSet->GetPool();
+        SfxItemSet aSet(rPool, { { pEntry->nWID, pEntry->nWID } });
+        aSet.Put(rPool.GetDefaultItem(pEntry->nWID));
 
-            aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
-        }
+        aAny = SvxItemPropertySet_getPropertyValue(pEntry, aSet);
     }
     return aAny;
 }

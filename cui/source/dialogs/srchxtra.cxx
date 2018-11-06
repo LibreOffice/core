@@ -82,8 +82,7 @@ void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
             pList = m_pFontList.get();
         }
 
-        if ( pList )
-            static_cast<SvxCharNamePage&>(rPage).
+        static_cast<SvxCharNamePage&>(rPage).
                 SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
         static_cast<SvxCharNamePage&>(rPage).EnableSearchMode();
     }

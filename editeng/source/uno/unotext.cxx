@@ -1124,7 +1124,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
         }
 
         if( bUnknownPropertyFound )
-            return !bUnknownPropertyFound;
+            return false;
 
         if( nWID != 0 )
             eItemState = pSet->GetItemState( nWID, false );
@@ -1145,7 +1145,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                     rState = beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }
-    return !bUnknownPropertyFound;
+    return true;
 }
 
 void SAL_CALL SvxUnoTextRangeBase::setPropertyToDefault( const OUString& PropertyName )

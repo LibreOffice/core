@@ -2174,10 +2174,10 @@ bool WW8PLCFspecial::SeekPos(long nP)
     }
 
     // Search from beginning?
-    if( (1 > nIdx) || (nP < pPLCF_PosArray[ nIdx-1 ]) )
+    if ((nIdx < 1) || (nP < pPLCF_PosArray[nIdx - 1]))
         nIdx = 1;
 
-    long nI   = nIdx ? nIdx : 1;
+    long nI   = nIdx;
     long nEnd = nIMax;
 
     for(int n = (1==nIdx ? 1 : 2); n; --n )
@@ -2447,10 +2447,10 @@ bool WW8PLCF::SeekPos(WW8_CP nPos)
     }
 
     // Search from beginning?
-    if( (1 > nIdx) || (nP < pPLCF_PosArray[ nIdx-1 ]) )
+    if ((nIdx < 1) || (nP < pPLCF_PosArray[nIdx - 1]))
         nIdx = 1;
 
-    sal_Int32 nI   = nIdx ? nIdx : 1;
+    sal_Int32 nI   = nIdx;
     sal_Int32 nEnd = nIMax;
 
     for(int n = (1==nIdx ? 1 : 2); n; --n )
@@ -2542,10 +2542,10 @@ bool WW8PLCFpcd_Iter::SeekPos(long nPos)
         return false;       // not found: nPos less than smallest entry
     }
     // Search from beginning?
-    if( (1 > nIdx) || (nP < rPLCF.pPLCF_PosArray[ nIdx-1 ]) )
+    if ((nIdx < 1) || (nP < rPLCF.pPLCF_PosArray[nIdx - 1]))
         nIdx = 1;
 
-    long nI   = nIdx ? nIdx : 1;
+    long nI   = nIdx;
     long nEnd = rPLCF.nIMax;
 
     for(int n = (1==nIdx ? 1 : 2); n; --n )
@@ -2654,13 +2654,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
         }
 
         unsigned int nOfs = maRawData[nRawDataOffset] * 2;
-
-        //clip to available data, corrupt fkp
-        if (nOfs >= 511)
-        {
-            mnIMax = mnIdx;
-            break;
-        }
+        // nOfs in [0..0xff*2=510]
 
         Entry aEntry(Get_Long(pStart));
 
@@ -2894,10 +2888,10 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
     }
 
     // Search from beginning?
-    if ((1 > mnIdx) || (nFc < maEntries[mnIdx-1].mnFC))
+    if ((mnIdx < 1) || (nFc < maEntries[mnIdx - 1].mnFC))
         mnIdx = 1;
 
-    sal_uInt8 nI   = mnIdx ? mnIdx : 1;
+    sal_uInt8 nI   = mnIdx;
     sal_uInt8 nEnd = mnIMax;
 
     for(sal_uInt8 n = (1==mnIdx ? 1 : 2); n; --n )
@@ -8314,9 +8308,7 @@ sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 
     if (ww::IsSevenMinus(meVersion))
     {
-        nId = *pSp;
-        if (0x0100 < nId)
-            nId = 0;
+        nId = *pSp; // [0..0xff]
     }
     else
     {

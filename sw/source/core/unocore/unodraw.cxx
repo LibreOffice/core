@@ -760,37 +760,32 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
             const SdrMarkList& rMarkList = pPage->PreGroup(xShapes);
             if ( rMarkList.GetMarkCount() > 1 )
             {
-                bool bFlyInCnt = false;
-                for ( size_t i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
+                for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
                     const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                     if (RndStdIds::FLY_AS_CHAR == ::FindFrameFormat(const_cast<SdrObject*>(
                                             pObj))->GetAnchor().GetAnchorId())
                     {
-                        bFlyInCnt = true;
+                        throw uno::RuntimeException(); // FlyInCnt!
                     }
                 }
-                if( bFlyInCnt )
-                    throw uno::RuntimeException();
-                if( !bFlyInCnt )
+
+                UnoActionContext aContext(pDoc);
+                pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+
+                SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
+                pDoc->ChgAnchor(
+                    pPage->GetDrawView()->GetMarkedObjectList(),
+                    RndStdIds::FLY_AT_PARA,
+                    true, false );
+
+                pPage->GetDrawView()->UnmarkAll();
+                if(pContact)
                 {
-                    UnoActionContext aContext(pDoc);
-                    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
-
-                    SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
-                    pDoc->ChgAnchor(
-                        pPage->GetDrawView()->GetMarkedObjectList(),
-                        RndStdIds::FLY_AT_PARA,
-                        true, false );
-
-                    pPage->GetDrawView()->UnmarkAll();
-                    if(pContact)
-                    {
-                        uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pContact->GetMaster() );
-                        xRet.set(xInt, uno::UNO_QUERY);
-                    }
-                    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+                    uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pContact->GetMaster() );
+                    xRet.set(xInt, uno::UNO_QUERY);
                 }
+                pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             }
             pPage->RemovePageView();
         }

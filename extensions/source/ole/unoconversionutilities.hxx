@@ -1927,7 +1927,6 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
 {
     try
     {
-        bool bFail = false;
         if( pvar->vt != VT_DISPATCH)
             throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
                                      "Conversion of dispatch object to Sequence failed!");
@@ -2038,10 +2037,6 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         anySeq.setValue( &p_uno_Seq, pDesc);
         uno_destructData( &p_uno_Seq, pDesc, cpp_release);
         typelib_typedescription_release( pDesc);
-
-        if (bFail)
-            throw BridgeRuntimeError(
-                "[automation bridge] Conversion of ValueObject failed ");
     }
     catch (const BridgeRuntimeError &)
     {

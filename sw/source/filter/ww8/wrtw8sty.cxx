@@ -1057,12 +1057,6 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
     if ( !pPd )
         pPd = &rDoc.GetPageDesc( 0 );
 
-    if ( !pPd )
-    {
-        OSL_ENSURE( pPd, "totally impossible" );
-        return 1;
-    }
-
     const SfxItemSet &rSet = pPd->GetMaster().GetAttrSet();
     SfxItemSet aSet( *rSet.GetPool(), svl::Items<RES_COL, RES_COL>{} );
     aSet.SetParent( &rSet );

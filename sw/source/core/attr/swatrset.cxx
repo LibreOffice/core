@@ -377,8 +377,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                                             RES_PAGEDESC, false, &pItem ) &&
                 nullptr != ( pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()) )
             {
-                if( !tmpSet )
-                    tmpSet.reset( new SfxItemSet( *this ));
+                tmpSet.reset(new SfxItemSet(*this));
 
                 SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
                 if( !pDstPgDesc )

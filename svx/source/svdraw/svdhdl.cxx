@@ -2098,11 +2098,7 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
                     pActual->Touch();
                 }
 
-                if(pNew)
-                {
-                    pNew->Touch();
-                }
-
+                pNew->Touch();
             }
         }
     }

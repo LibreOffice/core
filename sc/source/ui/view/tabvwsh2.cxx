@@ -184,18 +184,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     nDrawSfxId = nNewId;
     sDrawCustom.clear();    // value is set below for custom shapes
 
-    if ( nNewId != SID_DRAW_CHART )             // chart not with DrawShell
+    if (nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL
+        || nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT)
+        SetDrawTextShell(true);
+    else
     {
-        if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL ||
-                nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
-            SetDrawTextShell( true );
+        if (bEx || pView->GetMarkedObjectList().GetMarkCount() != 0)
+            SetDrawShellOrSub();
         else
-        {
-            if ( bEx || pView->GetMarkedObjectList().GetMarkCount() != 0 )
-                SetDrawShellOrSub();
-            else
-                SetDrawShell( false );
-        }
+            SetDrawShell(false);
     }
 
     if (pTabView->GetDrawFuncPtr())

@@ -2462,8 +2462,7 @@ class SwXHeadFootText::Impl
             : m_pHeadFootFormat(&rHeadFootFormat)
             , m_bIsHeader(bIsHeader)
         {
-            if(m_pHeadFootFormat)
-                StartListening(m_pHeadFootFormat->GetNotifier());
+            StartListening(m_pHeadFootFormat->GetNotifier());
         }
 
         SwFrameFormat* GetHeadFootFormat() const {

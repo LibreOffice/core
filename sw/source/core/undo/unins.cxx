@@ -843,7 +843,7 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
     {
         maNm = OUString();
         maFltr = OUString();
-        rGrfNd.GetFileFilterNms( maNm ? &*maNm : nullptr, maFltr ? &*maFltr : nullptr );
+        rGrfNd.GetFileFilterNms(&*maNm, &*maFltr);
         pGrf.reset();
     }
     else

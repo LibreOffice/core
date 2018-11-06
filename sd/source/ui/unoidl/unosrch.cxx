@@ -789,14 +789,11 @@ sal_Int32 SAL_CALL SdUnoFindAllAccess::getCount()
 
 uno::Any SAL_CALL SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
 {
-    uno::Any aAny;
-
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
-    const uno::Reference< uno::XInterface >  *pRefs = maSequence.getConstArray();
-    if(pRefs)
-        aAny <<= pRefs[ Index ];
+    uno::Any aAny;
+    aAny <<= maSequence[Index];
     return aAny;
 }
 

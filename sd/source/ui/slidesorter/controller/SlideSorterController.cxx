@@ -368,22 +368,18 @@ bool SlideSorterController::Command (
                 }
             }
 
-            if (pViewShell != nullptr)
+            if (SfxDispatcher* pDispatcher = pViewShell->GetDispatcher())
             {
-                SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
-                if (pDispatcher != nullptr)
-                {
-                    mbContextMenuOpen = true;
-                    if (!rEvent.IsMouseEvent())
-                        pDispatcher->ExecutePopup(aPopupId, pWindow, &aMenuLocation);
-                    else
-                        pDispatcher->ExecutePopup(aPopupId);
-                    mbContextMenuOpen = false;
-                    mrSlideSorter.GetView().UpdatePageUnderMouse();
-                    ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
-                    if (pFunction.is())
-                        pFunction->ResetMouseAnchor();
-                }
+                mbContextMenuOpen = true;
+                if (!rEvent.IsMouseEvent())
+                    pDispatcher->ExecutePopup(aPopupId, pWindow, &aMenuLocation);
+                else
+                    pDispatcher->ExecutePopup(aPopupId);
+                mbContextMenuOpen = false;
+                mrSlideSorter.GetView().UpdatePageUnderMouse();
+                ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
+                if (pFunction.is())
+                    pFunction->ResetMouseAnchor();
             }
             if (pPage == nullptr)
             {

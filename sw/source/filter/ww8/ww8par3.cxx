@@ -870,14 +870,12 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         lcl_CopyGreaterEight(sPrefix, sNumString, 0, nFirstNoIndex);
 
         //Next number appears at
-        if (nUpperLevel)
-        {
-            sal_uInt8 nOneBasedNextNoIndex = aOfsNumsXCH[nUpperLevel-1];
-            const sal_Int32 nNextNoIndex =
-                nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex : SAL_MAX_INT32;
-            if (sNumString.getLength() > nNextNoIndex)
-                lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
-        }
+        assert(nUpperLevel > 0);
+        sal_uInt8 nOneBasedNextNoIndex = aOfsNumsXCH[nUpperLevel-1];
+        const sal_Int32 nNextNoIndex =
+            nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex : SAL_MAX_INT32;
+        if (sNumString.getLength() > nNextNoIndex)
+            lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
 
         /*
          We use lcl_CopyGreaterEight because once if we have removed unused
@@ -2014,9 +2012,9 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
             m_nLFOPosition = USHRT_MAX;
         }
-        else
+        else // nData in (0..0x7FFF]
         {
-            m_nLFOPosition = static_cast<sal_uInt16>(nData)-1;
+            m_nLFOPosition = static_cast<sal_uInt16>(nData)-1; // m_nLFOPosition in [0..0x7FFF)
             /*
             If we are a ww8+ style with ww7- style lists then there is a
             bizarre broken word bug where when the list is removed from a para
@@ -2028,27 +2026,24 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 m_vColl[m_nCurrentColl].m_bHasBrokenWW6List = true;
 
             // here the stream data is 1-based, we subtract ONE
-            if (USHRT_MAX > m_nLFOPosition)
+            if (m_nLFOPosition != 2047-1) //Normal ww8+ list behaviour
             {
-                if (m_nLFOPosition != 2047-1) //Normal ww8+ list behaviour
+                if (WW8ListManager::nMaxLevel == m_nListLevel)
+                    m_nListLevel = 0;
+                if (WW8ListManager::nMaxLevel > m_nListLevel)
                 {
-                    if (WW8ListManager::nMaxLevel == m_nListLevel)
-                        m_nListLevel = 0;
-                    if (WW8ListManager::nMaxLevel > m_nListLevel)
-                    {
-                        RegisterNumFormat(m_nLFOPosition, m_nListLevel);
-                        m_nLFOPosition = USHRT_MAX;
-                        m_nListLevel = WW8ListManager::nMaxLevel;
-                    }
+                    RegisterNumFormat(m_nLFOPosition, m_nListLevel);
+                    m_nLFOPosition = USHRT_MAX;
+                    m_nListLevel = WW8ListManager::nMaxLevel;
                 }
-                else if (m_xPlcxMan && m_xPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
-                {
-                    /*
-                     #i8114# Horrific backwards compatible ww7- lists in ww8+
-                     docs
-                    */
-                    Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &m_nListLevel, 1);
-                }
+            }
+            else if (m_xPlcxMan && m_xPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
+            {
+                /*
+                 #i8114# Horrific backwards compatible ww7- lists in ww8+
+                 docs
+                */
+                Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &m_nListLevel, 1);
             }
         }
     }
