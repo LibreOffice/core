@@ -52,6 +52,24 @@
       "revId": "f96e284fbbf32db2b7a87c96a9defeaee93e3feb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_41406008",
+        "filename": "sdext/source/minimizer/optimizerdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-11-06T14:50:29Z",
+      "side": 1,
+      "message": "This was an invalid attempt to avoid same problems as I\u0027ve fixed in https://gerrit.libreoffice.org/#/c/58765/\n\nExceptions/errors were suppressed and no feedback to user about invalid situation was given. To avoid identical problems but other than I/O, I\u0027ve put \"catch all\". But you are right, this is not a good way, so it was replaced by just uno::Exception, which is enough here.",
+      "parentUuid": "3f3283f1_01c5b88e",
+      "revId": "f96e284fbbf32db2b7a87c96a9defeaee93e3feb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
