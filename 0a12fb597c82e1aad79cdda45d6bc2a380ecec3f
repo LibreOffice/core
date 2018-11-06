@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_a6ecbaf3",
+        "filename": "sw/source/uibase/docvw/frmsidebarwincontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-11-06T08:52:44Z",
+      "side": 1,
+      "message": "Minor suggestion: I think\n\nif (nIndex \u003c rSidebarWinContainer.size())\n{\n    auto aIter \u003d rSidebarWinContainer.begin();\n    ...\n}\n\nis more clear.",
+      "revId": "0a12fb597c82e1aad79cdda45d6bc2a380ecec3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
