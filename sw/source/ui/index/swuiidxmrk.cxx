@@ -86,7 +86,6 @@ SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, w
     , m_nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
     , m_bIsPhoneticReadingEnabled(false)
     , m_pSh(&rWrtShell)
-    , m_xFrame(rBuilder.weld_widget("frame"))
     , m_xTypeFT(rBuilder.weld_label("typeft"))
     , m_xTypeDCB(rBuilder.weld_combo_box("typecb"))
     , m_xNewBT(rBuilder.weld_button("new"))

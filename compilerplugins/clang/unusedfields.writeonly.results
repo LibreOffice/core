@@ -54,8 +54,6 @@ canvas/source/cairo/cairo_spritedevicehelper.hxx:77
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
 canvas/source/cairo/cairo_spritehelper.hxx:103
     cairocanvas::SpriteHelper mbTextureDirty _Bool
-canvas/source/opengl/ogl_spritedevicehelper.hxx:124
-    oglcanvas::SpriteDeviceHelper mpDevice css::rendering::XGraphicDevice *
 chart2/inc/ChartModel.hxx:470
     chart::ChartModel mnStart sal_Int32
 chart2/inc/ChartModel.hxx:471
@@ -140,9 +138,9 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cppuhelper/source/access_control.cxx:81
+cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
-cppuhelper/source/access_control.cxx:82
+cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
 cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
@@ -150,7 +148,9 @@ cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:288
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:178
+dbaccess/source/ui/inc/dbadmin.hxx:52
+    dbaui::ODbAdminDialog m_bUIEnabled _Bool
+desktop/qa/desktop_lib/test_desktop_lib.cxx:186
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
@@ -242,9 +242,9 @@ include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
 include/LibreOfficeKit/LibreOfficeKit.h:310
     _LibreOfficeKitDocumentClass getPartInfo char *(*)(LibreOfficeKitDocument *, int)
-include/opencl/openclwrapper.hxx:36
+include/opencl/openclwrapper.hxx:34
     openclwrapper::KernelEnv mpkProgram cl_program
-include/opencl/openclwrapper.hxx:52
+include/opencl/openclwrapper.hxx:50
     openclwrapper::GPUEnv mbNeedsTDRAvoidance _Bool
 include/opencl/platforminfo.hxx:29
     OpenCLDeviceInfo mnMemory size_t
@@ -266,8 +266,6 @@ include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
-include/svx/svdlayer.hxx:70
-    SdrLayer mbUserDefinedLayer _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
@@ -326,8 +324,6 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/attrib.hxx:229
-    ScDoubleItem nValue double
 sc/inc/compiler.hxx:256
     ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:257
@@ -337,12 +333,12 @@ sc/inc/compiler.hxx:259
 sc/inc/document.hxx:2526
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/lookupcache.hxx:62
-    ScLookupCache::QueryCriteria  union ScLookupCache::QueryCriteria::(anonymous at /media/noel/disk2/libo4/sc/inc/lookupcache.hxx:62:9)
+    ScLookupCache::QueryCriteria  union ScLookupCache::QueryCriteria::(anonymous at /media/noel/disk2/libo5/sc/inc/lookupcache.hxx:62:9)
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
     ScDPLabelData mbIsValue _Bool
-sc/inc/scmatrix.hxx:120
+sc/inc/scmatrix.hxx:118
     ScMatrix mbCloneIfConst _Bool
 sc/inc/tabopparams.hxx:38
     ScInterpreterTableOpParams bValid _Bool
@@ -414,9 +410,9 @@ sc/source/ui/inc/datastream.hxx:105
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/uiitems.hxx:48
+sc/source/ui/inc/uiitems.hxx:47
     ScInputStatusItem aStartPos const class ScAddress
-sc/source/ui/inc/uiitems.hxx:49
+sc/source/ui/inc/uiitems.hxx:48
     ScInputStatusItem aEndPos const class ScAddress
 sd/source/filter/eppt/eppt.hxx:142
     PPTWriter mnTxId sal_uInt32
@@ -527,7 +523,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo5/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -584,8 +580,6 @@ vcl/inc/unx/gtk/gtkframe.hxx:89
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:90
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/unx/gtk/gtkframe.hxx:215
-    GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
 vcl/opengl/salbmp.cxx:440
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:906
@@ -596,19 +590,19 @@ vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
 vcl/source/filter/jpeg/Exif.hxx:57
     Exif::ExifIFD count sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:200
+vcl/source/gdi/pdfwriter_impl.hxx:181
     vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
-vcl/source/gdi/pdfwriter_impl.hxx:201
+vcl/source/gdi/pdfwriter_impl.hxx:182
     vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/unx/generic/app/wmadaptor.cxx:1269
     _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
-vcl/unx/generic/gdi/cairotextrender.cxx:53
+vcl/unx/generic/gdi/cairotextrender.cxx:54
     (anonymous namespace)::CairoFontsCache::CacheId maFace (anonymous namespace)::FT_Face
-vcl/unx/generic/gdi/cairotextrender.cxx:55
-    (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
 vcl/unx/generic/gdi/cairotextrender.cxx:56
+    (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
+vcl/unx/generic/gdi/cairotextrender.cxx:57
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
@@ -624,3 +618,5 @@ vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:256
+    writerfilter::rtftok::RTFFrame m_nAnchorType sal_Int16

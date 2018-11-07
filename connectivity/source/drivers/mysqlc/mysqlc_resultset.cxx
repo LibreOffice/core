@@ -118,13 +118,12 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
                        rtl_TextEncoding _encoding)
     : OResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OResultSet_BASE::rBHelper)
-    , m_rConnection(rConn)
     , m_pMysql(rConn.getMysqlConnection())
     , m_aStatement(static_cast<OWeakObject*>(pStmt))
     , m_pResult(pResult)
     , m_encoding(_encoding)
 {
-    m_xMetaData = new OResultSetMetaData(m_rConnection, m_pResult);
+    m_xMetaData = new OResultSetMetaData(rConn, m_pResult);
 }
 
 void OResultSet::ensureResultFetched()

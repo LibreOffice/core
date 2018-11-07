@@ -112,7 +112,6 @@ protected:
         Size                maWinSize;
         vcl::Font           maWinFont;
         sal_Int32           mnAngle;
-        sal_Int32           mnInitialAngle;
         sal_Int32           mnOldAngle;
         long                mnCenterX;
         long                mnCenterY;

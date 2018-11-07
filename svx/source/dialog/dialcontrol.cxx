@@ -222,7 +222,6 @@ DialControl::DialControl_Impl::DialControl_Impl ( vcl::Window& rParent ) :
     mpLinkField( nullptr ),
     mnLinkedFieldValueMultiplyer( 0 ),
     mnAngle( 0 ),
-    mnInitialAngle( 0 ),
     mnOldAngle( 0 ),
     mnCenterX( 0 ),
     mnCenterY( 0 ),

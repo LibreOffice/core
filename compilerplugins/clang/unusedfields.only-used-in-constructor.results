@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dtrapezoid.cxx:202
@@ -40,6 +40,8 @@ connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
 connectivity/source/drivers/evoab2/NStatement.hxx:57
     connectivity::evoab::FieldSort bAscending _Bool
+connectivity/source/drivers/mysqlc/mysqlc_resultset.hxx:65
+    connectivity::mysqlc::OResultSet m_rConnection class connectivity::mysqlc::OConnection &
 connectivity/source/inc/component/CResultSet.hxx:44
     connectivity::component::OComponentResultSet m_bBookmarkable _Bool
 connectivity/source/inc/dbase/DResultSet.hxx:43
@@ -66,13 +68,13 @@ connectivity/source/inc/flat/EResultSet.hxx:42
     connectivity::flat::OFlatResultSet m_bBookmarkable _Bool
 connectivity/source/inc/java/lang/Object.hxx:45
     connectivity::SDBThreadAttach m_aGuard jvmaccess::class VirtualMachine::AttachGuard
-cppcanvas/source/mtfrenderer/textaction.cxx:832
+cppcanvas/source/mtfrenderer/textaction.cxx:809
     cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextLineInfo const tools::TextLineInfo
-cppcanvas/source/mtfrenderer/textaction.cxx:1674
+cppcanvas/source/mtfrenderer/textaction.cxx:1638
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextLineInfo const tools::TextLineInfo
 cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:63
+cppu/source/typelib/typelib.cxx:59
     AlignSize_Impl nInt16 sal_Int16
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
@@ -120,13 +122,13 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:712
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1421
+cui/source/factory/dlgfact.cxx:1381
     SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:190
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
-cui/source/inc/cuitabarea.hxx:234
+cui/source/inc/cuitabarea.hxx:233
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
-cui/source/inc/cuitabarea.hxx:242
+cui/source/inc/cuitabarea.hxx:241
     SvxAreaTabPage m_aXFillAttr class XFillAttrSetItem
 cui/source/inc/tabstpge.hxx:93
     SvxTabulatorTabPage m_aLeftWin class TabWin_Impl
@@ -158,10 +160,6 @@ dbaccess/source/core/dataaccess/connection.hxx:101
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/ui/dlg/admincontrols.hxx:52
     dbaui::MySQLNativeSettings m_aControlDependencies ::svt::ControlDependencyManager
-dbaccess/source/ui/dlg/advancedsettings.hxx:65
-    dbaui::SpecialSettingsPage m_aControlDependencies ::svt::ControlDependencyManager
-dbaccess/source/ui/dlg/advancedsettings.hxx:105
-    dbaui::GeneratedValuesPage m_aControlDependencies ::svt::ControlDependencyManager
 drawinglayer/source/tools/emfphelperdata.hxx:155
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:156
@@ -212,6 +210,8 @@ include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svx/ClassificationDialog.hxx:59
     svx::ClassificationDialog m_bPerParagraph const _Bool
+include/svx/dialcontrol.hxx:115
+    svx::DialControl::DialControl_Impl mnInitialAngle sal_Int32
 include/svx/itemwin.hxx:34
     SvxLineBox aDelayTimer class Timer
 include/vcl/font/Feature.hxx:102
@@ -256,7 +256,7 @@ lotuswordpro/source/filter/bento.hxx:352
     OpenStormBento::CBenNamedObject cNameListElmt class OpenStormBento::CBenNamedObjectListElmt
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:188
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:201
     oox::drawingml::ConditionAtom maIter struct oox::drawingml::IteratorAttr
 oox/source/drawingml/diagram/layoutnodecontext.cxx:84
     oox::drawingml::AlgorithmContext mnRevision sal_Int32
@@ -280,7 +280,7 @@ oox/source/ppt/timenodelistcontext.cxx:851
     oox::ppt::AnimMotionContext mnPathEditMode sal_Int32
 oox/source/ppt/timenodelistcontext.cxx:852
     oox::ppt::AnimMotionContext mnAngle sal_Int32
-opencl/source/openclwrapper.cxx:305
+opencl/source/openclwrapper.cxx:306
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 pyuno/source/module/pyuno_impl.hxx:224
     pyuno::(anonymous) ob_base PyObject
@@ -300,11 +300,11 @@ sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Lowest const int
 sal/osl/unx/thread.cxx:113
     osl_thread_global_st m_priority const struct osl_thread_priority_st
-sal/qa/osl/process/osl_process.cxx:155
+sal/qa/osl/process/osl_process.cxx:151
     Test_osl_executeProcess env_param_ const class rtl::OUString
 sal/textenc/textenc.cxx:406
     (anonymous namespace)::FullTextEncodingData module_ osl::Module
-sc/inc/column.hxx:128
+sc/inc/column.hxx:125
     ScColumn maCellsEvent const sc::CellStoreEvent
 sc/inc/compiler.hxx:256
     ScCompiler::AddInMap pODFF const char *
@@ -312,9 +312,9 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/interpretercontext.hxx:32
+sc/inc/interpretercontext.hxx:36
     ScInterpreterContext mrDoc const class ScDocument &
-sc/inc/token.hxx:406
+sc/inc/token.hxx:400
     SingleDoubleRefModifier aDub struct ScComplexRefData
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
@@ -334,7 +334,7 @@ sc/source/filter/inc/xetable.hxx:1002
     XclExpCellTable maArrayBfr class XclExpArrayBuffer
 sc/source/filter/inc/xetable.hxx:1003
     XclExpCellTable maShrfmlaBfr class XclExpShrfmlaBuffer
-sc/source/filter/inc/xiescher.hxx:1202
+sc/source/filter/inc/xiescher.hxx:1200
     XclImpDffPropSet maDummyStrm class SvMemoryStream
 sc/source/filter/inc/xihelper.hxx:328
     XclImpCachedValue mxTokArr XclImpCachedValue::ScTokenArrayPtr
@@ -356,27 +356,27 @@ sc/source/ui/inc/acredlin.hxx:51
     ScAcceptChgDlg aReOpenIdle class Idle
 sc/source/ui/inc/anyrefdg.hxx:112
     ScRefHandler m_aIdle class Idle
-sc/source/ui/inc/msgpool.hxx:37
+sc/source/ui/inc/msgpool.hxx:35
     ScMessagePool aGlobalStringItem class SfxStringItem
-sc/source/ui/inc/msgpool.hxx:38
+sc/source/ui/inc/msgpool.hxx:36
     ScMessagePool aGlobalSearchItem class SvxSearchItem
-sc/source/ui/inc/msgpool.hxx:39
+sc/source/ui/inc/msgpool.hxx:37
     ScMessagePool aGlobalSortItem class ScSortItem
-sc/source/ui/inc/msgpool.hxx:40
+sc/source/ui/inc/msgpool.hxx:38
     ScMessagePool aGlobalQueryItem class ScQueryItem
-sc/source/ui/inc/msgpool.hxx:41
+sc/source/ui/inc/msgpool.hxx:39
     ScMessagePool aGlobalSubTotalItem class ScSubTotalItem
-sc/source/ui/inc/msgpool.hxx:42
+sc/source/ui/inc/msgpool.hxx:40
     ScMessagePool aGlobalConsolidateItem class ScConsolidateItem
-sc/source/ui/inc/msgpool.hxx:43
+sc/source/ui/inc/msgpool.hxx:41
     ScMessagePool aGlobalPivotItem class ScPivotItem
-sc/source/ui/inc/msgpool.hxx:44
+sc/source/ui/inc/msgpool.hxx:42
     ScMessagePool aGlobalSolveItem class ScSolveItem
-sc/source/ui/inc/msgpool.hxx:45
+sc/source/ui/inc/msgpool.hxx:43
     ScMessagePool aGlobalUserListItem class ScUserListItem
-sc/source/ui/inc/msgpool.hxx:46
+sc/source/ui/inc/msgpool.hxx:44
     ScMessagePool aCondFormatDlgItem class ScCondFormatDlgItem
-sc/source/ui/inc/notemark.hxx:43
+sc/source/ui/inc/notemark.hxx:46
     ScNoteMarker m_aTimer class Timer
 sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
@@ -398,7 +398,7 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port const uint
 sd/source/ui/table/TableDesignPane.hxx:104
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1319
+sd/source/ui/view/DocumentRenderer.cxx:1313
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1211
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -470,7 +470,7 @@ svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1092
     (anonymous namespace)::ExpressionGrammar::definition modifierReference ::boost::spirit::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1093
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::rule<ScannerT>
-svx/source/dialog/framelinkarray.cxx:378
+svx/source/dialog/framelinkarray.cxx:379
     svx::frame::MergedCellIterator mnFirstRow size_t
 svx/source/dialog/imapwnd.hxx:78
     IMapWindow maItemInfos struct SfxItemInfo [1]
@@ -490,7 +490,7 @@ sw/inc/unosett.hxx:144
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:134
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4007
+sw/qa/extras/uiwriter/uiwriter.cxx:4006
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
@@ -570,13 +570,13 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1575
+vcl/source/app/salvtables.cxx:1613
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2403
+vcl/unx/gtk3/gtk3gtkinst.cxx:2495
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink
