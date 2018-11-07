@@ -76,6 +76,7 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* p
             m_pImage.reset(new QImage(nNewDX, nNewDY, Qt5_DefaultFormat32));
     }
 
+    m_pImage->fill(Qt::transparent);
     m_pImage->setDevicePixelRatio(m_fScale);
 
     // update device in existing graphics

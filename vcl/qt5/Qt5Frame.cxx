@@ -211,6 +211,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
         {
             m_pQt5Graphics.reset(new Qt5Graphics(this));
             m_pQImage.reset(new QImage(m_pQWidget->size(), Qt5_DefaultFormat32));
+            m_pQImage->fill(Qt::transparent);
             m_pQt5Graphics->ChangeQImage(m_pQImage.get());
         }
         return m_pQt5Graphics.get();
