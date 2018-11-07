@@ -252,7 +252,8 @@ void LongCurrencyFormatter::ImpInit()
     SetDecimalDigits( 0 );
 }
 
-LongCurrencyFormatter::LongCurrencyFormatter()
+LongCurrencyFormatter::LongCurrencyFormatter(Edit* pEdit)
+    : FormatterBase(pEdit)
 {
     ImpInit();
 }
@@ -399,10 +400,10 @@ void ImplNewLongCurrencyFieldValue(LongCurrencyField* pField, const BigInt& rNew
     pField->Modify();
 }
 
-LongCurrencyField::LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle )
+LongCurrencyField::LongCurrencyField(vcl::Window* pParent, WinBits nWinStyle)
+    : SpinField( pParent, nWinStyle )
+    , LongCurrencyFormatter(this)
 {
-    SetField( this );
     mnSpinSize   = 1;
     mnFirst      = mnMin;
     mnLast       = mnMax;
@@ -467,10 +468,10 @@ void LongCurrencyField::Last()
     SpinField::Last();
 }
 
-LongCurrencyBox::LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+LongCurrencyBox::LongCurrencyBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox(pParent, nWinStyle)
+    , LongCurrencyFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 

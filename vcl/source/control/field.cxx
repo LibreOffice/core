@@ -360,9 +360,9 @@ void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rNewDecSe
 
 } // namespace
 
-FormatterBase::FormatterBase()
+FormatterBase::FormatterBase(Edit* pField)
 {
-    mpField                     = nullptr;
+    mpField                     = pField;
     mpLocaleDataWrapper         = nullptr;
     mbReformat                  = false;
     mbStrictFormat              = false;
@@ -488,7 +488,8 @@ void NumericFormatter::ImplInit()
     SetDecimalDigits( 0 );
 }
 
-NumericFormatter::NumericFormatter()
+NumericFormatter::NumericFormatter(Edit* pEdit)
+    : FormatterBase(pEdit)
 {
     ImplInit();
 }
@@ -728,16 +729,16 @@ sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
     return nValue;
 }
 
-NumericField::NumericField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle )
+NumericField::NumericField(vcl::Window* pParent, WinBits nWinStyle)
+    : SpinField(pParent, nWinStyle)
+    , NumericFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void NumericField::dispose()
 {
-    NumericFormatter::SetField( nullptr );
+    ClearField();
     SpinField::dispose();
 }
 
@@ -863,10 +864,10 @@ Size NumericField::CalcMinimumSize() const
     return calcMinimumSize(*this, *this);
 }
 
-NumericBox::NumericBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+NumericBox::NumericBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox(pParent, nWinStyle)
+    , NumericFormatter(this)
 {
-    SetField( this );
     Reformat();
     if ( !(nWinStyle & WB_HIDE ) )
         Show();
@@ -874,7 +875,7 @@ NumericBox::NumericBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void NumericBox::dispose()
 {
-    NumericFormatter::SetField( nullptr );
+    ClearField();
     ComboBox::dispose();
 }
 
@@ -1328,7 +1329,8 @@ inline void MetricFormatter::ImplInit()
     meUnit = MetricField::GetDefaultUnit();
 }
 
-MetricFormatter::MetricFormatter()
+MetricFormatter::MetricFormatter(Edit* pEdit)
+    : NumericFormatter(pEdit)
 {
     ImplInit();
 }
@@ -1500,16 +1502,16 @@ sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
                                       meUnit, eOutUnit );
 }
 
-MetricField::MetricField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle )
+MetricField::MetricField(vcl::Window* pParent, WinBits nWinStyle)
+    : SpinField(pParent, nWinStyle)
+    , MetricFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void MetricField::dispose()
 {
-    MetricFormatter::SetField( nullptr );
+    ClearField();
     SpinField::dispose();
 }
 
@@ -1650,16 +1652,16 @@ void MetricField::CustomConvert()
     maCustomConvertLink.Call( *this );
 }
 
-MetricBox::MetricBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+MetricBox::MetricBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox(pParent, nWinStyle)
+    , MetricFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void MetricBox::dispose()
 {
-    MetricFormatter::SetField(nullptr);
+    ClearField();
     ComboBox::dispose();
 }
 
@@ -1780,7 +1782,8 @@ void CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rO
     rOutStr = CreateFieldText( nTempVal );
 }
 
-CurrencyFormatter::CurrencyFormatter()
+CurrencyFormatter::CurrencyFormatter(Edit* pField)
+    : NumericFormatter(pField)
 {
 }
 
@@ -1832,16 +1835,16 @@ void CurrencyFormatter::Reformat()
         SetValue( mnLastValue );
 }
 
-CurrencyField::CurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle )
+CurrencyField::CurrencyField(vcl::Window* pParent, WinBits nWinStyle)
+    : SpinField(pParent, nWinStyle)
+    , CurrencyFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void CurrencyField::dispose()
 {
-    CurrencyFormatter::SetField( nullptr );
+    ClearField();
     SpinField::dispose();
 }
 
@@ -1915,16 +1918,16 @@ void CurrencyField::Last()
     SpinField::Last();
 }
 
-CurrencyBox::CurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+CurrencyBox::CurrencyBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox(pParent, nWinStyle)
+    , CurrencyFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void CurrencyBox::dispose()
 {
-    CurrencyFormatter::SetField( nullptr );
+    ClearField();
     ComboBox::dispose();
 }
 
