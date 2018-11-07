@@ -6264,7 +6264,9 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     sal_uInt8 *pData = pDataPtr.get();
     memset( pData, 0, nUnencryptedHdr );
 
-    m_cbMac = rStrm.TellEnd();
+    const sal_uInt64 nPos = rStrm.Tell();
+    m_cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
+    rStrm.Seek(nPos);
 
     Set_UInt16( pData, m_wIdent );
     Set_UInt16( pData, m_nFib );

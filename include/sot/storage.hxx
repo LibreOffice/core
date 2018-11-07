@@ -56,7 +56,7 @@ public:
     void                CopyTo( SotStorageStream * pDestStm );
     bool                Commit();
     bool                SetProperty( const OUString& rName, const css::uno::Any& rValue );
-    virtual sal_uInt64 remainingSize() override;
+    virtual sal_uInt64  TellEnd() override;
 };
 
 class  BaseStorage;
