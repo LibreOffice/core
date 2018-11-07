@@ -54,6 +54,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
         typelib_TypeDescription* pQITD = nullptr;
         typelib_typedescriptionreference_getDescription(&pQITD,
                                                         pTXInterfaceDescr->ppAllMembers[0]);
+        // coverity[callee_ptr_arith] - not a bug
         TYPELIB_DANGER_RELEASE(&pTXInterfaceDescr->aBase);
         return pQITD;
     }();
