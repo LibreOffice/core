@@ -1162,11 +1162,9 @@ bool NormalModeHandler::ProcessMotionEvent (
         {
             if (maButtonDownLocation)
             {
-                const sal_Int32 nDistance (maButtonDownLocation
-                    ? ::std::max (
-                        std::abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
-                        std::abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
-                    : 0);
+                const sal_Int32 nDistance(std::max(
+                    std::abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
+                    std::abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y())));
                 if (nDistance > 3)
                     StartDrag(rDescriptor.maMousePosition);
             }
@@ -1499,7 +1497,7 @@ DragAndDropModeHandler::~DragAndDropModeHandler()
     if (mpDragAndDropContext)
     {
         // Disconnect the substitution handler from this selection function.
-        mpDragAndDropContext->SetTargetSlideSorter(Point(0,0));
+        mpDragAndDropContext->SetTargetSlideSorter();
         mpDragAndDropContext.reset();
     }
     mrSlideSorter.GetController().GetInsertionIndicatorHandler()->End(Animator::AM_Animated);
