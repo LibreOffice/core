@@ -520,7 +520,7 @@ comphelper::SolarMutex& Application::GetSolarMutex()
 
 bool Application::IsMainThread()
 {
-    return ImplGetSVData()->mpDefInst->IsMainThread();
+    return ImplGetSVData()->mnMainThreadId == osl::Thread::getCurrentIdentifier();
 }
 
 sal_uInt32 Application::ReleaseSolarMutex()
