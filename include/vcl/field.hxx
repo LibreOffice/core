@@ -46,7 +46,6 @@ private:
     bool                    mbStrictFormat;
     bool                    mbEmptyFieldValue;
     bool                    mbEmptyFieldValueEnabled;
-    bool                    mbDefaultLocale;
 
 protected:
     SAL_DLLPRIVATE void     ImplSetText( const OUString& rText, Selection const * pNewSel = nullptr );
@@ -55,7 +54,6 @@ protected:
     void                    SetEmptyFieldValueData( bool bValue ) { mbEmptyFieldValue = bValue; }
 
     SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
-    bool                    IsDefaultLocale() const { return mbDefaultLocale; }
 
 public:
     explicit                FormatterBase();
