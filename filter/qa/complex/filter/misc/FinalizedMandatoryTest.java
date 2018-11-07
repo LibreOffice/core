@@ -196,9 +196,9 @@ public class FinalizedMandatoryTest
             catch (WrappedTargetRuntimeException e)
             {
                 flushError = true;
-                assertTrue("Unexpected exception wihle flushing changed filter '" + filterName + "'", isFinalized);
+                assertTrue("Unexpected exception while flushing changed filter '" + filterName + "'", isFinalized);
             }
-            assertTrue("Expected exception was not thorwn while flushing changed filter '" + filterName + "' Finalized:" + isFinalized,
+            assertTrue("Expected exception was not thrown while flushing changed filter '" + filterName + "' Finalized:" + isFinalized,
                     !(flushError ^ isFinalized));
 
 
@@ -215,9 +215,9 @@ public class FinalizedMandatoryTest
             catch (WrappedTargetRuntimeException e)
             {
                 flushError = true;
-                assertTrue("Unexpected exception wihle flushing removed filter '" + filterName + "'", isMandatory);
+                assertTrue("Unexpected exception while flushing removed filter '" + filterName + "'", isMandatory);
             }
-            assertTrue("Expected exception was not thorwn while flushing removed filter '" + filterName + "' Mandatory:" + isMandatory,
+            assertTrue("Expected exception was not thrown while flushing removed filter '" + filterName + "' Mandatory:" + isMandatory,
                     !(flushError ^ isMandatory));
         }
         String preMsg = "Could not find filter with state ";

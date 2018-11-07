@@ -2405,7 +2405,7 @@ namespace
     }
 }
 
-// end of anonymouse namespace
+// end of anonymous namespace
 
 OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
