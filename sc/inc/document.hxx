@@ -275,9 +275,11 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 struct ScDocumentThreadSpecific
 {
     ScRecursionHelper*      pRecursionHelper;               // information for recursive and iterative cell formulas
+    ScInterpreterContext* pContext;  // references the context passed around for easier access
 
-    ScDocumentThreadSpecific() :
-        pRecursionHelper(nullptr)
+    ScDocumentThreadSpecific()
+        : pRecursionHelper(nullptr)
+        , pContext(nullptr)
     {
     }
 
@@ -581,6 +583,11 @@ public:
         // GetFormatTable() asserts that we are not in a threaded calculation
         maInterpreterContext.mpFormatter = GetFormatTable();
         return maInterpreterContext;
+    }
+    // Uses thread_local.
+    ScInterpreterContext& GetThreadedContext() const
+    {
+        return IsThreadedGroupCalcInProgress() ? *maThreadSpecific.pContext : GetNonThreadedContext();
     }
     void SetupFromNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
     void MergeBackIntoNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
