@@ -2902,8 +2902,11 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
     if (it->type != sc::element_type_formula)
+    {
         // This is not a formula block.
+        assert( false );
         return;
+    }
 
     size_t nBlockLen = it->size - aPos.second;
     if (nBlockLen < nLen)
@@ -2934,8 +2937,11 @@ void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, si
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
     if (it->type != sc::element_type_formula)
+    {
         // This is not a formula block.
+        assert( false );
         return;
+    }
 
     size_t nBlockLen = it->size - aPos.second;
     if (nBlockLen < nLen)
@@ -2962,8 +2968,11 @@ void ScColumn::HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen )
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
     if (it->type != sc::element_type_formula)
+    {
         // This is not a formula block.
+        assert( false );
         return;
+    }
 
     size_t nBlockLen = it->size - aPos.second;
     if (nBlockLen < nLen)

@@ -4523,6 +4523,21 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
+    if( forceType != ForceCalculationNone )
+    {
+        // ScConditionEntry::Interpret() creates a temporary cell and interprets it
+        // without it actually being in the document at the specified position.
+        // That would confuse opencl/threading code, as they refer to the cell group
+        // also using the position. This is normally not triggered (single cells
+        // are normally not in a cell group), but if forced, check for this explicitly.
+        if( pDocument->GetFormulaCell( aPos ) != this )
+        {
+            mxGroup->meCalcState = sc::GroupCalcDisabled;
+            aScope.addMessage("cell not in document");
+            return false;
+        }
+    }
+
     // Guard against endless recursion of Interpret() calls, for this to work
     // ScFormulaCell::InterpretFormulaGroup() must never be called through
     // anything else than ScFormulaCell::Interpret(), same as
