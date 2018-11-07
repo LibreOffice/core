@@ -83,17 +83,14 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 private:
     OUString m_sSetRefName;
     OUString m_sSetReferenceLanguage;
-    OUString m_sText;
+    OUString m_sText;         ///< result
+    OUString m_sTextRLHidden; ///< result for layout with redlines hidden
     sal_uInt16 m_nSubType;
+    /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
-
-    // #i81002#
-    static OUString MakeRefNumStr( const SwTextNode& rTextNodeOfField,
-                          const SwTextNode& rTextNodeOfReferencedItem,
-                          const sal_uInt32 nRefNumFormat );
 
 public:
     SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef, const OUString& rReferenceLanguage,
@@ -114,7 +111,7 @@ public:
        no update for these reference format types. */
     void                UpdateField( const SwTextField* pFieldTextAttr );
 
-    void                SetExpand( const OUString& rStr ) { m_sText = rStr; }
+    void                SetExpand( const OUString& rStr );
 
     /// Get/set sub type.
     virtual sal_uInt16      GetSubType() const override;

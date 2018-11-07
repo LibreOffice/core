@@ -30,6 +30,8 @@
 #include <pam.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
+#include <rootfrm.hxx>
+#include <modeltoviewhelper.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -69,6 +71,11 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
+
+static std::pair<OUString, bool> MakeRefNumStr(SwRootFrame const* pLayout,
+      const SwTextNode& rTextNodeOfField,
+      const SwTextNode& rTextNodeOfReferencedItem,
+      sal_uInt32 nRefNumFormat);
 
 static void lcl_GetLayTree( const SwFrame* pFrame, std::vector<const SwFrame*>& rArr )
 {
@@ -403,6 +410,12 @@ OUString SwGetRefField::GetExpandedTextOfReferencedTextNode() const
            : OUString();
 }
 
+void SwGetRefField::SetExpand( const OUString& rStr )
+{
+    m_sText = rStr;
+    m_sTextRLHidden = rStr;
+}
+
 OUString SwGetRefField::Expand() const
 {
     return m_sText;
@@ -418,10 +431,40 @@ OUString SwGetRefField::GetFieldName() const
     return Expand();
 }
 
+
+static void FilterText(OUString & rText, LanguageType const eLang,
+        OUString const& rSetReferenceLanguage)
+{
+    // remove all special characters (replace them with blanks)
+    if (!rText.isEmpty())
+    {
+        rText = rText.replaceAll(OUStringLiteral1(0xad), "");
+        OUStringBuffer aBuf(rText);
+        const sal_Int32 l = aBuf.getLength();
+        for (sal_Int32 i = 0; i < l; ++i)
+        {
+            if (aBuf[i] < ' ')
+            {
+                aBuf[i] = ' ';
+            }
+            else if (aBuf[i] == 0x2011)
+            {
+                aBuf[i] = '-';
+            }
+        }
+        rText = aBuf.makeStringAndClear();
+        if (!rSetReferenceLanguage.isEmpty())
+        {
+            lcl_formatReferenceLanguage(rText, false, eLang, rSetReferenceLanguage);
+        }
+    }
+}
+
 // #i81002# - parameter <pFieldTextAttr> added
 void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 {
     m_sText.clear();
+    m_sTextRLHidden.clear();
 
     SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
     // finding the reference target (the number)
@@ -434,8 +477,24 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     if ( !pTextNd )
     {
         m_sText = SwViewShell::GetShellRes()->aGetRefField_RefItemNotFound;
+        m_sTextRLHidden = m_sText;
         return ;
     }
+
+    SwRootFrame const* pLayout(nullptr);
+    SwRootFrame const* pLayoutRLHidden(nullptr);
+    for (SwRootFrame const*const pLay : pDoc->GetAllLayouts())
+    {
+        if (pLay->IsHideRedlines())
+        {
+            pLayoutRLHidden = pLay;
+        }
+        else
+        {
+            pLayout = pLay;
+        }
+    }
+
     // where is the category name (e.g. "Illustration")?
     const OUString aText = pTextNd->GetText();
     const sal_Int32 nCatStart = aText.indexOf(m_sSetRefName);
@@ -498,8 +557,10 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     nEnd = std::min(nStart + 1, nLen);
                     break;
 
-                // "Reference" (whole Text)
                 default:
+                    assert(false); // fall through to appease MSVC C4701
+                // "Reference" (whole Text)
+                case REF_CONTENT:
                     nStart = 0;
                     nEnd = nLen;
                     break;
@@ -525,15 +586,21 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     SwTextFootnote* const pFootnoteIdx = pDoc->GetFootnoteIdxs()[i];
                     if( m_nSeqNo == pFootnoteIdx->GetSeqRefNo() )
                     {
-                        m_sText = pFootnoteIdx->GetFootnote().GetViewNumStr(*pDoc, nullptr/*TODO?*/);
+                        m_sText = pFootnoteIdx->GetFootnote().GetViewNumStr(*pDoc, nullptr);
+                        m_sTextRLHidden = pFootnoteIdx->GetFootnote().GetViewNumStr(*pDoc, pLayoutRLHidden);
                         if (!m_sSetReferenceLanguage.isEmpty())
+                        {
                             lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
+                            lcl_formatReferenceLanguage(m_sTextRLHidden, false, GetLanguage(), m_sSetReferenceLanguage);
+                        }
                         break;
                     }
                 }
                 return;
 
             default:
+                assert(false); // fall through to appease MSVC C4701
+            case REF_SETREFATTR:
                 nStart = nNumStart;
                 nEnd = nNumEnd;
                 break;
@@ -542,28 +609,19 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
             if( nStart != nEnd ) // a section?
             {
                 m_sText = pTextNd->GetExpandText(nStart, nEnd - nStart, false, false, false);
-
-                // remove all special characters (replace them with blanks)
-                if( !m_sText.isEmpty() )
+                if (m_nSubType == REF_OUTLINE
+                    || (m_nSubType == REF_SEQUENCEFLD && REF_CONTENT == GetFormat()))
                 {
-                    m_sText = m_sText.replaceAll(OUStringLiteral1(0xad), "");
-                    OUStringBuffer aBuf(m_sText);
-                    const sal_Int32 l = aBuf.getLength();
-                    for (sal_Int32 i=0; i<l; ++i)
-                    {
-                        if (aBuf[i]<' ')
-                        {
-                            aBuf[i]=' ';
-                        }
-                        else if (aBuf[i]==0x2011)
-                        {
-                            aBuf[i]='-';
-                        }
-                    }
-                    m_sText = aBuf.makeStringAndClear();
-                    if (!m_sSetReferenceLanguage.isEmpty())
-                        lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
+                    m_sTextRLHidden = sw::GetExpandTextMerged(
+                        pLayoutRLHidden, *pTextNd, false, false, ExpandMode(0));
                 }
+                else
+                {
+                    m_sTextRLHidden = pTextNd->GetExpandText(
+                        nStart, nEnd - nStart, false, false, false, ExpandMode::HideDeletions);
+                }
+                FilterText(m_sText, GetLanguage(), m_sSetReferenceLanguage);
+                FilterText(m_sTextRLHidden, GetLanguage(), m_sSetReferenceLanguage);
             }
         }
         break;
@@ -571,8 +629,11 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTextFrame* pFrame = static_cast<SwTextFrame*>(pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr)),
-                        *pSave = pFrame;
+          auto const func =
+          [this, pTextNd, nNumStart](OUString & rText, SwRootFrame const*const pLay)
+          {
+            SwTextFrame const* pFrame = static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLay, nullptr, nullptr));
+            SwTextFrame const*const pSave = pFrame;
             if (pFrame)
             {
                 TextFrameIndex const nNumStartIndex(pFrame->MapModelToView(pTextNd, nNumStart));
@@ -587,31 +648,46 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 if( REF_PAGE_PGDESC == GetFormat() &&
                     nullptr != ( pPage = pFrame->FindPageFrame() ) &&
                     pPage->GetPageDesc() )
-                    m_sText = pPage->GetPageDesc()->GetNumType().GetNumStr( nPageNo );
+                {
+                    rText = pPage->GetPageDesc()->GetNumType().GetNumStr(nPageNo);
+                }
                 else
-                    m_sText = OUString::number(nPageNo);
+                {
+                    rText = OUString::number(nPageNo);
+                }
 
                 if (!m_sSetReferenceLanguage.isEmpty())
-                    lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
+                    lcl_formatReferenceLanguage(rText, false, GetLanguage(), m_sSetReferenceLanguage);
             }
+          };
+            // sw_redlinehide: currently only one of these layouts will exist,
+            // so the getLayoutFrame will use the same frame in both cases
+            func(m_sText, pLayout);
+            func(m_sTextRLHidden, pLayoutRLHidden);
         }
         break;
 
     case REF_CHAPTER:
         {
+          auto const func =
+          [this, pTextNd](OUString & rText, SwRootFrame const*const pLay)
+          {
             // a bit tricky: search any frame
-            const SwFrame* pFrame = pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+            SwFrame const*const pFrame = pTextNd->getLayoutFrame(pLay);
             if( pFrame )
             {
                 SwChapterFieldType aFieldTyp;
                 SwChapterField aField( &aFieldTyp, 0 );
                 aField.SetLevel( MAXLEVEL - 1 );
                 aField.ChangeExpansion( *pFrame, pTextNd, true );
-                m_sText = aField.GetNumber();
+                rText = aField.GetNumber(pLay);
 
                 if (!m_sSetReferenceLanguage.isEmpty())
-                    lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
+                    lcl_formatReferenceLanguage(rText, false, GetLanguage(), m_sSetReferenceLanguage);
             }
+          };
+            func(m_sText, pLayout);
+            func(m_sTextRLHidden, pLayoutRLHidden);
         }
         break;
 
@@ -631,6 +707,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 m_sText = nNumStart < pFieldTextAttr->GetStart()
                             ? aLocaleData.getAboveWord()
                             : aLocaleData.getBelowWord();
+                m_sTextRLHidden = m_sText;
                 break;
             }
 
@@ -641,6 +718,8 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
             if (!m_sSetReferenceLanguage.isEmpty())
                     lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
+
+            m_sTextRLHidden = m_sText;
         }
         break;
     // #i81002#
@@ -648,19 +727,26 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     case REF_NUMBER_NO_CONTEXT:
     case REF_NUMBER_FULL_CONTEXT:
         {
-            // for differentiation of Roman numbers and letters in Hungarian article handling
-            bool bClosingParenthesis = false;
-
             if ( pFieldTextAttr && pFieldTextAttr->GetpTextNode() )
             {
-                m_sText = MakeRefNumStr( pFieldTextAttr->GetTextNode(), *pTextNd, GetFormat() );
-                if ( !m_sText.isEmpty() && !m_sSetReferenceLanguage.isEmpty() )
-                    bClosingParenthesis = pTextNd->GetNumRule()->MakeNumString( *(pTextNd->GetNum()), true).endsWith(")");
+                auto result =
+                    MakeRefNumStr(pLayout, pFieldTextAttr->GetTextNode(), *pTextNd, GetFormat());
+                m_sText = result.first;
+                // for differentiation of Roman numbers and letters in Hungarian article handling
+                bool bClosingParenthesis = result.second;
+                if (!m_sSetReferenceLanguage.isEmpty())
+                {
+                    lcl_formatReferenceLanguage(m_sText, bClosingParenthesis, GetLanguage(), m_sSetReferenceLanguage);
+                }
+                result =
+                    MakeRefNumStr(pLayoutRLHidden, pFieldTextAttr->GetTextNode(), *pTextNd, GetFormat());
+                m_sTextRLHidden = result.first;
+                bClosingParenthesis = result.second;
+                if (!m_sSetReferenceLanguage.isEmpty())
+                {
+                    lcl_formatReferenceLanguage(m_sTextRLHidden, bClosingParenthesis, GetLanguage(), m_sSetReferenceLanguage);
+                }
             }
-
-            if (!m_sSetReferenceLanguage.isEmpty())
-                lcl_formatReferenceLanguage(m_sText, bClosingParenthesis, GetLanguage(), m_sSetReferenceLanguage);
-
         }
         break;
 
@@ -670,14 +756,22 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 }
 
 // #i81002#
-OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
-                                     const SwTextNode& rTextNodeOfReferencedItem,
-                                     const sal_uInt32 nRefNumFormat )
+static std::pair<OUString, bool> MakeRefNumStr(
+        SwRootFrame const*const pLayout,
+        const SwTextNode& i_rTextNodeOfField,
+        const SwTextNode& i_rTextNodeOfReferencedItem,
+        const sal_uInt32 nRefNumFormat)
 {
+    SwTextNode const& rTextNodeOfField(pLayout
+            ?   *sw::GetParaPropsNode(*pLayout, i_rTextNodeOfField)
+            :   i_rTextNodeOfField);
+    SwTextNode const& rTextNodeOfReferencedItem(pLayout
+            ?   *sw::GetParaPropsNode(*pLayout, i_rTextNodeOfReferencedItem)
+            :   i_rTextNodeOfReferencedItem);
     if ( rTextNodeOfReferencedItem.HasNumber() &&
          rTextNodeOfReferencedItem.IsCountedInList() )
     {
-        OSL_ENSURE( rTextNodeOfReferencedItem.GetNum(),
+        OSL_ENSURE( rTextNodeOfReferencedItem.GetNum(pLayout),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance!" );
 
         // Determine, up to which level the superior list labels have to be
@@ -701,17 +795,19 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
             if ( rTextNodeOfField.HasNumber() &&
                  rTextNodeOfField.GetNumRule() == rTextNodeOfReferencedItem.GetNumRule() )
             {
-                pNodeNumForTextNodeOfField = rTextNodeOfField.GetNum();
+                pNodeNumForTextNodeOfField = rTextNodeOfField.GetNum(pLayout);
             }
             else
             {
                 pNodeNumForTextNodeOfField =
-                    rTextNodeOfReferencedItem.GetNum()->GetPrecedingNodeNumOf( rTextNodeOfField );
+                    rTextNodeOfReferencedItem.GetNum(pLayout)->GetPrecedingNodeNumOf(rTextNodeOfField);
             }
             if ( pNodeNumForTextNodeOfField )
             {
-                const SwNumberTree::tNumberVector rFieldNumVec = pNodeNumForTextNodeOfField->GetNumberVector();
-                const SwNumberTree::tNumberVector rRefItemNumVec = rTextNodeOfReferencedItem.GetNum()->GetNumberVector();
+                const SwNumberTree::tNumberVector rFieldNumVec =
+                    pNodeNumForTextNodeOfField->GetNumberVector();
+                const SwNumberTree::tNumberVector rRefItemNumVec =
+                    rTextNodeOfReferencedItem.GetNum()->GetNumberVector();
                 std::size_t nLevel( 0 );
                 while ( nLevel < rFieldNumVec.size() && nLevel < rRefItemNumVec.size() )
                 {
@@ -735,13 +831,17 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
 
         OSL_ENSURE( rTextNodeOfReferencedItem.GetNumRule(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set!" );
-        return rTextNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
-                                            *(rTextNodeOfReferencedItem.GetNum()),
-                                            bInclSuperiorNumLabels,
-                                            nRestrictInclToThisLevel );
+        return std::make_pair(
+                rTextNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
+                    *(rTextNodeOfReferencedItem.GetNum(pLayout)),
+                    bInclSuperiorNumLabels,
+                    nRestrictInclToThisLevel ),
+                rTextNodeOfReferencedItem.GetNumRule()->MakeNumString(
+                    *(rTextNodeOfReferencedItem.GetNum(pLayout)),
+                    true).endsWith(")") );
     }
 
-    return OUString();
+    return std::make_pair(OUString(), false);
 }
 
 SwField* SwGetRefField::Copy() const
@@ -750,6 +850,7 @@ SwField* SwGetRefField::Copy() const
                                                 m_sSetRefName, m_sSetReferenceLanguage, m_nSubType,
                                                 m_nSeqNo, GetFormat() );
     pField->m_sText = m_sText;
+    pField->m_sTextRLHidden = m_sTextRLHidden;
     return pField;
 }
 
