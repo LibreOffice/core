@@ -37,7 +37,6 @@
 #include <unocrsr.hxx>
 #include <unotools.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -606,12 +605,12 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, Button*, void)
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
         const OUString& sGlosPath( aPathOpt.GetAutoTextPath() );
-        const sal_Int32 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
         bool bIsWritable = false;
-        for(sal_Int32 nPath = 0; nPath < nPaths; nPath++)
+        sal_Int32 nIdx {sGlosPath.isEmpty() ? -1 : 0};
+        while (nIdx>=0)
         {
             const OUString sPath = URIHelper::SmartRel2Abs(
-                INetURLObject(), sGlosPath.getToken(nPath, ';'),
+                INetURLObject(), sGlosPath.getToken(0, ';', nIdx),
                 URIHelper::GetMaybeFileHdl());
             try
             {
