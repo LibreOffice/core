@@ -1295,14 +1295,11 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     if ( !pCell && pUp->IsCellFrame() )
                         pCell = pUp;
                 }
-                if ( bMove )
+                if ( bMove && pUp->IsRootFrame() )
                 {
-                    if ( pUp->IsRootFrame() )
-                    {
-                        rRect  = pUp->getFramePrintArea();
-                        rRect += pUp->getFrameArea().Pos();
-                        pUp = nullptr;
-                    }
+                    rRect  = pUp->getFramePrintArea();
+                    rRect += pUp->getFrameArea().Pos();
+                    pUp = nullptr;
                 }
                 if ( pUp )
                 {

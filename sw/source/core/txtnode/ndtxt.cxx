@@ -1202,20 +1202,17 @@ void SwTextNode::Update(
                 }
 
                 sal_Int32 * const pEnd = pHint->GetEnd();
-                if (pEnd)
+                if (pEnd && *pEnd > nChangePos )
                 {
-                    if ( *pEnd > nChangePos )
+                    if( *pEnd > nChangeEnd )
                     {
-                        if( *pEnd > nChangeEnd )
-                        {
-                            *pEnd = *pEnd - nChangeLen;
-                        }
-                        else
-                        {
-                            *pEnd = nChangePos;
-                        }
-                        bTextAttrChanged = !bStartOfTextAttrChanged;
+                        *pEnd = *pEnd - nChangeLen;
                     }
+                    else
+                    {
+                        *pEnd = nChangePos;
+                    }
+                    bTextAttrChanged = !bStartOfTextAttrChanged;
                 }
 
                 if ( bTextAttrChanged

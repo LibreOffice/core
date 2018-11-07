@@ -1415,14 +1415,11 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
         pCMS->m_bPosCorr = true;
 
     // #i27615#
-    if (pCMS)
+    if (pCMS && pCMS->m_bInFrontOfLabel)
     {
-        if( pCMS->m_bInFrontOfLabel)
-        {
-            if (! (2 * nX < nWidth && pPor->InNumberGrp() &&
-                   !pPor->IsFootnoteNumPortion()))
-                pCMS->m_bInFrontOfLabel = false;
-        }
+        if (! (2 * nX < nWidth && pPor->InNumberGrp() &&
+               !pPor->IsFootnoteNumPortion()))
+            pCMS->m_bInFrontOfLabel = false;
     }
 
     // 7684: We are exactly ended up at their HyphPortion. It is our task to

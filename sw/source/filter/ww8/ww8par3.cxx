@@ -1603,25 +1603,22 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
                 pRet = pParentListInfo->pNumRule;
 
                 //did it not affect start at value ?
-                if (bFirstUse)
+                if (bFirstUse && rOverride.bStartAt)
                 {
-                    if (rOverride.bStartAt)
+                    const SwNumFormat &rFormat =
+                        pParentListInfo->pNumRule->Get(nLevel);
+                    if (
+                         rFormat.GetStart() ==
+                         rLFOInfo.maOverrides[nLevel].nStartAt
+                       )
                     {
-                        const SwNumFormat &rFormat =
-                            pParentListInfo->pNumRule->Get(nLevel);
-                        if (
-                             rFormat.GetStart() ==
-                             rLFOInfo.maOverrides[nLevel].nStartAt
-                           )
-                        {
-                            bRestart = true;
-                        }
-                        else
-                        {
-                            bNewstart = true;
-                            nStart = writer_cast<sal_uInt16>
-                                (rLFOInfo.maOverrides[nLevel].nStartAt);
-                        }
+                        bRestart = true;
+                    }
+                    else
+                    {
+                        bNewstart = true;
+                        nStart = writer_cast<sal_uInt16>
+                            (rLFOInfo.maOverrides[nLevel].nStartAt);
                     }
                 }
 

@@ -119,14 +119,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
     SdrView *pSdrView = rSh.GetDrawView();
 
-    if( bQuickBalloon )
+    if( bQuickBalloon && pSdrView )
     {
-        if( pSdrView )
-        {
-            SdrPageView* pPV = pSdrView->GetSdrPageView();
-            SwDPage* pPage = pPV ? static_cast<SwDPage*>(pPV->GetPage()) : nullptr;
-            bContinue = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
-        }
+        SdrPageView* pPV = pSdrView->GetSdrPageView();
+        SwDPage* pPage = pPV ? static_cast<SwDPage*>(pPV->GetPage()) : nullptr;
+        bContinue = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
     }
 
     if( bContinue && bQuickBalloon)

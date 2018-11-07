@@ -423,14 +423,11 @@ void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
     if( nFrameHeight )
         pParent->Grow( nFrameHeight );
 
-    if ( GetPrev() )
+    if ( GetPrev() && !IsFollow() )
     {
-        if ( !IsFollow() )
-        {
-            GetPrev()->InvalidateSize();
-            if ( GetPrev()->IsContentFrame() )
-                GetPrev()->InvalidatePage( pPage );
-        }
+        GetPrev()->InvalidateSize();
+        if ( GetPrev()->IsContentFrame() )
+            GetPrev()->InvalidatePage( pPage );
     }
 }
 
