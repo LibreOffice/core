@@ -627,3 +627,8 @@ cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 # view menu
 cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
+
+# writer text and table context menus
+cmd/sc_charactermenu.png cmd/sc_fontdialog.png
+cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png

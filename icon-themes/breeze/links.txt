@@ -123,6 +123,9 @@ cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
 cmd/sc_shapesmenu.png cmd/sc_polygon_diagonal_unfilled.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
+cmd/sc_charactermenu.png cmd/sc_fontdialog.png
+cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
