@@ -845,6 +845,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105444, "tdf105444.docx")
     assertXPath(pXmlComm, "/w:comments/w:comment/w:p", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
+{
+    // Paragraphs were not part of a numbering anymore after roundtrip.
+    uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara1.is());
+    CPPUNIT_ASSERT(xPara1->getPropertyValue("NumberingRules").hasValue());
+
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara2.is());
+    CPPUNIT_ASSERT(xPara2->getPropertyValue("NumberingRules").hasValue());
+
+    uno::Reference<beans::XPropertySet> xPara3(getParagraph(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara3.is());
+    CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
