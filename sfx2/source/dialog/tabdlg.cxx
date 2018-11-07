@@ -2000,12 +2000,11 @@ void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
 
 void SfxTabDialogController::AddTabPage(const OString &rName, /* Page ID */
                                         const OUString& rRiderText,
-                                        CreateTabPage pCreateFunc  /* Pointer to the Factory Method */,
-                                        GetTabPageRanges pRangesFunc /* Pointer to the Method for querying Ranges onDemand */)
+                                        CreateTabPage pCreateFunc  /* Pointer to the Factory Method */)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
     m_xTabCtrl->append_page(rName, rRiderText);
-    AddTabPage(rName, pCreateFunc, pRangesFunc);
+    AddTabPage(rName, pCreateFunc, nullptr);
 }
 
 void SfxTabDialogController::AddTabPage(const OString &rName, const OUString& rRiderText,

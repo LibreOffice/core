@@ -1111,11 +1111,11 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
     return nullptr;
 }
 
-bool Window::IsChild( const vcl::Window* pWindow, bool bSystemWindow ) const
+bool Window::IsChild( const vcl::Window* pWindow ) const
 {
     do
     {
-        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
+        if ( pWindow->ImplIsOverlapWindow() )
             break;
 
         pWindow = pWindow->ImplGetParent();

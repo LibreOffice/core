@@ -454,7 +454,7 @@ public:
     ScTokenArray* CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
     const ScAddress& GetPos() const { return aPos; }
 
-    void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
+    void MoveRelWrap();
     static void MoveRelWrap( const ScTokenArray& rArr, const ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
