@@ -2923,7 +2923,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
         if ( sFunction.isEmpty() )
             sFunction = pEntry->GetField();
 
-        if (comphelper::string::getTokenCount(sFunction, '(') > 1)
+        if (sFunction.indexOf('(')>=0) // sFunctions has at least 2 tokens
             sFunction = sFunction.getToken(0,'('); // this should be the name of the function
 
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunction,&rParser.getContext());
