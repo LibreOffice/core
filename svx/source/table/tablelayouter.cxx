@@ -825,7 +825,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
             }
         }
         if( bChanges )
-            nCurrentHeight += maRows[nRow].mnSize - nOldSize;
+            nCurrentHeight = o3tl::saturating_add(nCurrentHeight, maRows[nRow].mnSize - nOldSize);
     }
 
     // now scale if wanted and needed
