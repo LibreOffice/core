@@ -97,8 +97,8 @@ namespace sdr
                 //polygon chain to cover the length in applyLineDashing if this
                 //line is dashed
                 const SdrPage* pPage(GetPathObj().getSdrPageFromSdrObject());
-                sal_Int32 nPageWidth = pPage ? pPage->GetWidth() : 0;
-                sal_Int32 nPageHeight = pPage ? pPage->GetHeight() : 0;
+                long nPageWidth = pPage ? pPage->GetWidth() : 0;
+                long nPageHeight = pPage ? pPage->GetHeight() : 0;
 
                 //But, see tdf#101187, only do this if our generous clip region
                 //would not over flow into a tiny clip region
@@ -107,8 +107,8 @@ namespace sdr
                     //But, see tdf#97276 and tdf#98366. Don't clip too much if the
                     //underlying page dimension is unknown or a paste document
                     //where the page sizes use the odd default of 10x10
-                    nPageWidth = std::max<sal_Int32>(21000, nPageWidth);
-                    nPageHeight = std::max<sal_Int32>(29700, nPageHeight);
+                    nPageWidth = std::max<long>(21000, nPageWidth);
+                    nPageHeight = std::max<long>(29700, nPageHeight);
                     basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
                                                  nPageWidth*2, nPageHeight*2);
 
