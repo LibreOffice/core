@@ -592,7 +592,6 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
     const bool bNoLengthAttribute = nThisStart == nThisEnd;
 
     std::vector<SwTextAttr*> aInsDelHints;
-    std::vector<SwTextAttr*>::iterator aIter;
 
     assert( RES_TXTATR_CHARFMT == rNewHint.Which() ||
             RES_TXTATR_AUTOFMT == rNewHint.Which() );
