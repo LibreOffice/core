@@ -1118,6 +1118,8 @@ bool OutputDevice::ImplNewFont() const
                       (maFont.GetRelief() != FontRelief::NONE);
 
 
+    bool bRet = true;
+
     // #95414# fix for OLE objects which use scale factors very creatively
     if( mbMap && !aSize.Width() )
     {
@@ -1131,13 +1133,13 @@ bool OutputDevice::ImplNewFont() const
             const_cast<vcl::Font&>(maFont).SetFontSize( Size( nNewWidth, aSize.Height() ) );
             mbMap = false;
             mbNewFont = true;
-            ImplNewFont();  // recurse once using stretched width
+            bRet = ImplNewFont();  // recurse once using stretched width
             mbMap = true;
             const_cast<vcl::Font&>(maFont).SetFontSize( aOrigSize );
         }
     }
 
-    return true;
+    return bRet;
 }
 
 void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance ) const
