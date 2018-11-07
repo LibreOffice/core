@@ -49,11 +49,18 @@ class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
     friend class ToxTextGeneratorTest; // the unittest needs to mock the chapter fields.
-    sal_uInt8 m_nLevel;
-    OUString m_sTitle;
-    OUString m_sNumber;
-    OUString m_sPre;
-    OUString m_sPost;
+
+    struct State
+    {
+        sal_uInt8 nLevel;
+        OUString sTitle;
+        OUString sNumber;
+        OUString sPre;
+        OUString sPost;
+        State() : nLevel(0) {}
+    };
+    State m_State;
+    State m_StateRLHidden;
 
     virtual OUString Expand() const override;
     virtual SwField* Copy() const override;
@@ -67,19 +74,15 @@ public:
         bool bSrchNum = false);
     void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum, SwRootFrame const* pLayout = nullptr);
 
-    inline sal_uInt8 GetLevel() const;
-    inline void SetLevel(sal_uInt8);
+    sal_uInt8 GetLevel(SwRootFrame const* pLayout = nullptr) const;
+    void SetLevel(sal_uInt8);
 
-    inline const OUString& GetNumber() const;
-    inline const OUString& GetTitle() const;
+    const OUString& GetNumber(SwRootFrame const* pLayout = nullptr) const;
+    const OUString& GetTitle(SwRootFrame const* pLayout = nullptr) const;
+
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
-
-inline sal_uInt8 SwChapterField::GetLevel() const   { return m_nLevel; }
-inline void SwChapterField::SetLevel(sal_uInt8 nLev) { m_nLevel = nLev; }
-inline const OUString& SwChapterField::GetNumber() const { return m_sNumber; }
-inline const OUString& SwChapterField::GetTitle() const { return m_sTitle; }
 
 #endif // INCLUDED_SW_INC_CHPFLD_HXX
 

@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
         case TYP_CHAPTERFLD:
             m_pValueFT->SetText(SwResId(STR_LEVEL));
             if (IsFieldEdit())
-                m_pLevelED->SetText(OUString::number(static_cast<SwChapterField*>(GetCurField())->GetLevel() + 1));
+                m_pLevelED->SetText(OUString::number(static_cast<SwChapterField*>(GetCurField())->GetLevel(GetWrtShell()->GetLayout()) + 1));
             bLevel = true;
             break;
 

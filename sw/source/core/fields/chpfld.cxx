@@ -20,6 +20,7 @@
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
 #include <frame.hxx>
+#include <rootfrm.hxx>
 #include <txtfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -66,35 +67,58 @@ SwFieldType* SwChapterFieldType::Copy() const
 
 SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFormat)
     : SwField(pTyp, nFormat)
-    , m_nLevel(0)
-{}
+{
+}
+
+sal_uInt8 SwChapterField::GetLevel(SwRootFrame const*const pLayout) const
+{
+    State const& rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
+    return rState.nLevel;
+}
+
+// this is called from UI or from import filters, so override both states
+void SwChapterField::SetLevel(sal_uInt8 nLev)
+{
+    m_State.nLevel = nLev;
+    m_StateRLHidden.nLevel = nLev;
+}
+
+const OUString& SwChapterField::GetNumber(SwRootFrame const*const pLayout) const
+{
+    State const& rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
+    return rState.sNumber;
+}
+
+const OUString& SwChapterField::GetTitle(SwRootFrame const*const pLayout) const
+{
+    State const& rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
+    return rState.sTitle;
+}
 
 OUString SwChapterField::Expand() const
 {
+    State const& rState(m_State);
     switch( GetFormat() )
     {
         case CF_TITLE:
-            return m_sTitle;
+            return rState.sTitle;
         case CF_NUMBER:
-            return m_sPre + m_sNumber + m_sPost;
+            return rState.sPre + rState.sNumber + rState.sPost;
         case CF_NUM_TITLE:
-            return m_sPre + m_sNumber + m_sPost + m_sTitle;
+            return rState.sPre + rState.sNumber + rState.sPost + rState.sTitle;
         case CF_NUM_NOPREPST_TITLE:
-            return m_sNumber + m_sTitle;
+            return rState.sNumber + rState.sTitle;
     }
     // CF_NUMBER_NOPREPST
-    return m_sNumber;
+    return rState.sNumber;
 }
 
 SwField* SwChapterField::Copy() const
 {
     SwChapterField *pTmp =
         new SwChapterField(static_cast<SwChapterFieldType*>(GetTyp()), GetFormat());
-    pTmp->m_nLevel = m_nLevel;
-    pTmp->m_sTitle = m_sTitle;
-    pTmp->m_sNumber = m_sNumber;
-    pTmp->m_sPost = m_sPost;
-    pTmp->m_sPre = m_sPre;
+    pTmp->m_State = m_State;
+    pTmp->m_StateRLHidden = m_StateRLHidden;
 
     return pTmp;
 }
@@ -122,13 +146,14 @@ void SwChapterField::ChangeExpansion(const SwFrame & rFrame,
 void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
         SwRootFrame const*const pLayout)
 {
-    m_sNumber.clear();
-    m_sTitle.clear();
-    m_sPost.clear();
-    m_sPre.clear();
+    State & rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
+    rState.sNumber.clear();
+    rState.sTitle.clear();
+    rState.sPost.clear();
+    rState.sPre.clear();
 
     SwDoc* pDoc = const_cast<SwDoc*>(rTextNd.GetDoc());
-    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel(m_nLevel, pLayout);
+    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel(rState.nLevel, pLayout);
     if( pTextNd )
     {
         if( bSrchNum )
@@ -137,24 +162,24 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
             do {
                 if( pONd && pONd->GetTextColl() )
                 {
-                    sal_uInt8 nPrevLvl = m_nLevel;
+                    sal_uInt8 nPrevLvl = rState.nLevel;
 
                     OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect." );
-                    m_nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
+                    rState.nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
 
-                    if (nPrevLvl < m_nLevel)
-                        m_nLevel = nPrevLvl;
+                    if (nPrevLvl < rState.nLevel)
+                        rState.nLevel = nPrevLvl;
                     else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
-                            ->Get( m_nLevel ).GetNumberingType() )
+                            ->Get( rState.nLevel ).GetNumberingType() )
                     {
                         pTextNd = pONd;
                         break;
                     }
 
-                    if (!m_nLevel--)
+                    if (!rState.nLevel--)
                         break;
-                    pONd = pTextNd->FindOutlineNodeOfLevel(m_nLevel, pLayout);
+                    pONd = pTextNd->FindOutlineNodeOfLevel(rState.nLevel, pLayout);
                 }
                 else
                     break;
@@ -168,7 +193,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
-            m_sNumber = pTextNd->GetNumString(false, MAXLEVEL, pLayout);
+            rState.sNumber = pTextNd->GetNumString(false, MAXLEVEL, pLayout);
 
             SwNumRule* pRule( pTextNd->GetNumRule() );
             if ( pTextNd->IsCountedInList() && pRule )
@@ -180,16 +205,16 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
                     nListLevel = MAXLEVEL - 1;
 
                 const SwNumFormat& rNFormat = pRule->Get(nListLevel);
-                m_sPost = rNFormat.GetSuffix();
-                m_sPre = rNFormat.GetPrefix();
+                rState.sPost = rNFormat.GetSuffix();
+                rState.sPre = rNFormat.GetPrefix();
             }
         }
         else
         {
-            m_sNumber = "??";
+            rState.sNumber = "??";
         }
 
-        m_sTitle = removeControlChars(sw::GetExpandTextMerged(pLayout,
+        rState.sTitle = removeControlChars(sw::GetExpandTextMerged(pLayout,
                     *pTextNd, false, false, ExpandMode(0)));
     }
 }
@@ -199,7 +224,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
-        rAny <<= static_cast<sal_Int8>(m_nLevel);
+        rAny <<= static_cast<sal_Int8>(m_State.nLevel);
         break;
 
     case FIELD_PROP_USHORT1:
@@ -238,7 +263,10 @@ bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         sal_Int8 nTmp = 0;
         rAny >>= nTmp;
         if(nTmp >= 0 && nTmp < MAXLEVEL)
-            m_nLevel = nTmp;
+        {
+            m_State.nLevel = nTmp;
+            m_StateRLHidden.nLevel = nTmp;
+        }
         else
             bRet = false;
         break;
