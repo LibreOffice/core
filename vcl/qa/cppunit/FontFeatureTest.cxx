@@ -87,7 +87,7 @@ void FontFeatureTest::testGetFontFeatures()
 
     // Check C2SC feature
     {
-        // periodically fails on the Windows tb72 tinderboxen with
+        // periodically fails on the Windows tb72 tinderbox with
         // equality assertion failed
         //- Expected: 1664250723
         //- Actual  : 1684826471
