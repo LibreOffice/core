@@ -236,11 +236,6 @@ const Reference< XFrame >& FilterBase::getTargetFrame() const
     return mxImpl->mxTargetFrame;
 }
 
-const Reference< XShape >& FilterBase::getParentShape() const
-{
-    return mxImpl->mxParentShape;
-}
-
 const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
 {
     return mxImpl->mxStatusIndicator;

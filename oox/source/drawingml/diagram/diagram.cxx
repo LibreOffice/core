@@ -535,57 +535,6 @@ void loadDiagram( ShapePtr const & pShape,
     pDiagram->addTo(pShape);
 }
 
-void loadDiagram( const ShapePtr& pShape,
-                  core::XmlFilterBase& rFilter,
-                  const uno::Reference<xml::dom::XDocument>& rXDataModelDom,
-                  const uno::Reference<xml::dom::XDocument>& rXLayoutDom,
-                  const uno::Reference<xml::dom::XDocument>& rXQStyleDom,
-                  const uno::Reference<xml::dom::XDocument>& rXColorStyleDom )
-{
-    DiagramPtr pDiagram( new Diagram );
-
-    DiagramDataPtr pData( new DiagramData() );
-    pDiagram->setData( pData );
-
-    DiagramLayoutPtr pLayout( new DiagramLayout(*pDiagram) );
-    pDiagram->setLayout( pLayout );
-
-    // data
-    if( rXDataModelDom.is() )
-        importFragment(rFilter,
-                       rXDataModelDom,
-                       "OOXData",
-                       pDiagram,
-                       new DiagramDataFragmentHandler( rFilter, "", pData ));
-
-    // layout
-    if( rXLayoutDom.is() )
-        importFragment(rFilter,
-                       rXLayoutDom,
-                       "OOXLayout",
-                       pDiagram,
-                       new DiagramLayoutFragmentHandler( rFilter, "", pLayout ));
-
-    // style
-    if( rXQStyleDom.is() )
-        importFragment(rFilter,
-                       rXQStyleDom,
-                       "OOXStyle",
-                       pDiagram,
-                       new DiagramQStylesFragmentHandler( rFilter, "", pDiagram->getStyles() ));
-
-    // colors
-    if( rXColorStyleDom.is() )
-        importFragment(rFilter,
-                       rXColorStyleDom,
-                       "OOXColor",
-                       pDiagram,
-                       new ColorFragmentHandler( rFilter, "", pDiagram->getColors() ));
-
-    // diagram loaded. now lump together & attach to shape
-    pDiagram->addTo(pShape);
-}
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

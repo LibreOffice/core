@@ -181,14 +181,6 @@ public:
                             FillProperties& rShapeOrParentShapeFillProps,
                             ShapeIdMap* pShapeMap = nullptr );
 
-    void                addChildren(
-                            ::oox::core::XmlFilterBase& rFilterBase,
-                            const Theme* pTheme,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            basegfx::B2DHomMatrix const & aTransformation );
-
-    void                setXShape( const css::uno::Reference< css::drawing::XShape >& rXShape )
-                            { mxShape = rXShape; };
     const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
 

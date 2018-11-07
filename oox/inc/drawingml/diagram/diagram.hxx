@@ -42,12 +42,6 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations );
 
-void loadDiagram( const ShapePtr& pShape,
-                  core::XmlFilterBase& rFilter,
-                  const css::uno::Reference< css::xml::dom::XDocument>& rXDataModelDom,
-                  const css::uno::Reference< css::xml::dom::XDocument>& rXLayoutDom,
-                  const css::uno::Reference< css::xml::dom::XDocument>& rXQStyleDom,
-                  const css::uno::Reference< css::xml::dom::XDocument>& rXColorStyleDom );
 } }
 
 #endif

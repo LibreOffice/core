@@ -131,10 +131,6 @@ public:
     const css::uno::Reference< css::frame::XFrame >&
                         getTargetFrame() const;
 
-    /// Returns the parent shape to load into (if any)
-    const css::uno::Reference< css::drawing::XShape >&
-                        getParentShape() const;
-
     /** Returns the status indicator (may be null). */
     const css::uno::Reference< css::task::XStatusIndicator >&
                         getStatusIndicator() const;
