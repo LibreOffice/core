@@ -1206,11 +1206,8 @@ void SfxDispatcher::Update_Impl( bool bForce )
 
     bool bIsActive = false;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();
-    if ( !bIsActive )
-    {
-        if ( this == pActDispat )
-            bIsActive = true;
-    }
+    if ( !bIsActive && this == pActDispat )
+        bIsActive = true;
 
     Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pWorkWin );
     if ( (bUIActive || bIsActive) && !comphelper::LibreOfficeKit::isActive() )

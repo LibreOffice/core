@@ -255,11 +255,8 @@ bool SdrExchangeView::Paste(
     SdrPageView* pMarkPV=nullptr;
     SdrPageView* pPV = GetSdrPageView();
 
-    if(pPV)
-    {
-        if ( pPV->GetObjList() == pLst )
-            pMarkPV=pPV;
-    }
+    if(pPV && pPV->GetObjList() == pLst )
+        pMarkPV=pPV;
 
     ImpLimitToWorkArea( aPos );
     if (pLst==nullptr)
@@ -424,11 +421,8 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     SdrPageView* pMarkPV=nullptr;
     SdrPageView* pPV = GetSdrPageView();
 
-    if(pPV)
-    {
-        if (pPV->GetObjList()==&rLst)
-            pMarkPV=pPV;
-    }
+    if(pPV && pPV->GetObjList()==&rLst)
+        pMarkPV=pPV;
 
     bool bMark = pMarkPV!=nullptr && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
     if (bMark)

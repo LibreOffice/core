@@ -2559,11 +2559,8 @@ void FmXFormShell::UpdateForms_Lock(bool _bInvalidate)
     Reference< XIndexAccess > xForms;
 
     FmFormPage* pPage = m_pShell->GetCurPage();
-    if ( pPage )
-    {
-        if ( m_pShell->m_bDesignMode )
-            xForms.set(pPage->GetForms( false ), css::uno::UNO_QUERY);
-    }
+    if ( pPage && m_pShell->m_bDesignMode )
+        xForms.set(pPage->GetForms( false ), css::uno::UNO_QUERY);
 
     if ( m_xForms != xForms )
     {

@@ -1694,8 +1694,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
 
         case SID_GETEDITTEXT:
-            if (pWin)
-                if (!pWin->GetText().isEmpty()) GetDoc()->SetText( pWin->GetText() );
+            if (pWin && !pWin->GetText().isEmpty())
+                GetDoc()->SetText( pWin->GetText() );
             break;
 
         case SID_ATTR_ZOOM:

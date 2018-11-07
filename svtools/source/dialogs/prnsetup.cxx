@@ -332,11 +332,8 @@ short PrinterSetupDialog::run()
     short nRet = GenericDialogController::run();
 
     // update data if the dialog was terminated with OK
-    if ( nRet == RET_OK )
-    {
-        if ( mpTempPrinter )
-            mpPrinter->SetPrinterProps( mpTempPrinter );
-    }
+    if ( nRet == RET_OK && mpTempPrinter )
+        mpPrinter->SetPrinterProps( mpTempPrinter );
 
     maStatusTimer.Stop();
 
