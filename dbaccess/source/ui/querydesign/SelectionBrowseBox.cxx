@@ -185,7 +185,7 @@ void OSelectionBrowseBox::initialize()
             ,IParseContext::InternationalKeyCode::Intersection
         };
 
-        OUString sGroup = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);;
+        OUString sGroup = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
         m_aFunctionStrings = m_aFunctionStrings.getToken(0, ';');
 
         for (IParseContext::InternationalKeyCode eFunction : eFunctions)
