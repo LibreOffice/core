@@ -208,7 +208,7 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
             _rsHostname = sUrl.getToken(0,':');
         }
         if ( !_rsHostname.isEmpty() )
-            _rsHostname = _rsHostname.getToken(comphelper::string::getTokenCount(_rsHostname, '@') - 1, '@');
+            _rsHostname = _rsHostname.copy(_rsHostname.lastIndexOf('@')+1);
         _sDatabaseName = sUrl.getToken(nUrlTokens - 1, ':');
     }
     else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:address:ldap:") )
