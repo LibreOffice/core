@@ -38,6 +38,8 @@
 #include <oox/token/tokens.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/chart2/RelativePosition.hpp>
+
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -348,7 +350,12 @@ bool LayoutConverter::calcAbsRectangle( awt::Rectangle& orRect ) const
 {
     if( !mrModel.mbAutoLayout )
     {
-        const awt::Size& rChartSize = getChartSize();
+        awt::Size rChartSize=getChartSize();
+        if(rChartSize.Width<0  || rChartSize.Height <0)
+        {
+        rChartSize.Width=16000;
+        rChartSize.Height=9000;
+         }
         orRect.X = lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode );
         orRect.Y = lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode );
         if( (orRect.X >= 0) && (orRect.Y >= 0) )
