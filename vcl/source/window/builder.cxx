@@ -161,15 +161,13 @@ namespace weld
 {
     OUString MetricSpinButton::MetricToString(FieldUnit rUnit)
     {
-        FieldUnitStringList* pList = ImplGetFieldUnits();
-        if (pList)
-        {
-            // return unit's default string (ie, the first one )
-            auto it = std::find_if(pList->begin(), pList->end(),
-                [&rUnit](std::pair<OUString, FieldUnit>& rItem) { return rItem.second == rUnit; });
-            if (it != pList->end())
-                return it->first;
-        }
+        const FieldUnitStringList& rList = ImplGetFieldUnits();
+        // return unit's default string (ie, the first one )
+        auto it = std::find_if(
+            rList.begin(), rList.end(),
+            [&rUnit](const std::pair<OUString, FieldUnit>& rItem) { return rItem.second == rUnit; });
+        if (it != rList.end())
+            return it->first;
 
         return OUString();
     }

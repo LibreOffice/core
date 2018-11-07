@@ -291,7 +291,7 @@ OUString VclResId(const char* pId)
     return Translate::get(pId, ImplGetResLocale());
 }
 
-FieldUnitStringList* ImplGetFieldUnits()
+const FieldUnitStringList& ImplGetFieldUnits()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maCtrlData.maFieldUnitStrings.empty() )
@@ -304,30 +304,27 @@ FieldUnitStringList* ImplGetFieldUnits()
             pSVData->maCtrlData.maFieldUnitStrings.push_back( aElement );
         }
     }
-    return &pSVData->maCtrlData.maFieldUnitStrings;
+    return pSVData->maCtrlData.maFieldUnitStrings;
 }
 
-FieldUnitStringList* ImplGetCleanedFieldUnits()
+const FieldUnitStringList& ImplGetCleanedFieldUnits()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maCtrlData.maCleanUnitStrings.empty() )
     {
-        FieldUnitStringList* pUnits = ImplGetFieldUnits();
-        if( pUnits )
+        const FieldUnitStringList& rUnits = ImplGetFieldUnits();
+        size_t nUnits = rUnits.size();
+        pSVData->maCtrlData.maCleanUnitStrings.reserve(nUnits);
+        for (size_t i = 0; i < nUnits; ++i)
         {
-            size_t nUnits = pUnits->size();
-            pSVData->maCtrlData.maCleanUnitStrings.reserve( nUnits );
-            for( size_t i = 0; i < nUnits; ++i )
-            {
-                OUString aUnit( (*pUnits)[i].first );
-                aUnit = aUnit.replaceAll(" ", "");
-                aUnit = aUnit.toAsciiLowerCase();
-                std::pair< OUString, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
-                pSVData->maCtrlData.maCleanUnitStrings.push_back( aElement );
-            }
+            OUString aUnit(rUnits[i].first);
+            aUnit = aUnit.replaceAll(" ", "");
+            aUnit = aUnit.toAsciiLowerCase();
+            std::pair<OUString, FieldUnit> aElement(aUnit, rUnits[i].second);
+            pSVData->maCtrlData.maCleanUnitStrings.push_back(aElement);
         }
     }
-    return &pSVData->maCtrlData.maCleanUnitStrings;
+    return pSVData->maCtrlData.maCleanUnitStrings;
 }
 
 DockingManager* ImplGetDockingManager()
