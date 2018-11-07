@@ -42,6 +42,7 @@ public:
     void testBaseRtoL();
     void testVertialBoxList();
     void testVertialBracketList();
+    void testTableList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testBaseRtoL);
     CPPUNIT_TEST(testVertialBoxList);
     CPPUNIT_TEST(testVertialBracketList);
+    CPPUNIT_TEST(testTableList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -412,6 +414,38 @@ void SdImportTestSmartArt::testVertialBracketList()
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 2', i.e. one child shape (with its "A" text) was missing.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstChild->getCount());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTableList()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/table-list.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeGroup.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xShapeGroup->getCount());
+
+    uno::Reference<text::XText> xParentText(xShapeGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParentText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Parent"), xParentText->getString());
+    uno::Reference<drawing::XShape> xParent(xParentText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParent.is());
+    int nParentRight = xParent->getPosition().X + xParent->getSize().Width;
+
+    uno::Reference<drawing::XShapes> xChildren(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChildren.is());
+    uno::Reference<text::XText> xChild2Text(xChildren->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChild2Text.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Child 2"), xChild2Text->getString());
+    uno::Reference<drawing::XShape> xChild2(xChild2Text, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChild2.is());
+    int nChild2Right = xChild2->getPosition().X + xChild2->getSize().Width;
+
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected less than: 100, Actual  : 22014', i.e. the second child was
+    // shifted to the right too much.
+    CPPUNIT_ASSERT_LESS(100, abs(nChild2Right - nParentRight));
 
     xDocShRef->DoClose();
 }
