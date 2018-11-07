@@ -9,23 +9,6 @@
 
 $(eval $(call gb_JunitTest_JunitTest,dbaccess_unoapi))
 
-$(eval $(call gb_JunitTest_set_defs,dbaccess_unoapi,\
-    $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/dbaccess/qa/unoapi/dbaccess.sce \
-    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/dbaccess/qa/unoapi/knownissues.xcl \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/dbaccess/qa/unoapi/testdocuments \
-))
-
-$(eval $(call gb_JunitTest_use_jars,dbaccess_unoapi,\
-    OOoRunner \
-    jurt \
-    ridl \
-    test \
-    unoil \
-))
-
-$(eval $(call gb_JunitTest_add_classes,dbaccess_unoapi,\
-    org.openoffice.test.UnoApiTest \
-))
+$(eval $(call gb_JunitTest_set_unoapi_test_defaults,dbaccess_unoapi))
 
 # vim: set noet sw=4 ts=4:

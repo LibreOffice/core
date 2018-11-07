@@ -9,23 +9,6 @@
 
 $(eval $(call gb_JunitTest_JunitTest,sd_unoapi))
 
-$(eval $(call gb_JunitTest_set_defs,sd_unoapi,\
-    $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/sd/qa/unoapi/sd.sce \
-    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/sd/qa/unoapi/knownissues.xcl \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sd/qa/unoapi/testdocuments \
-))
-
-$(eval $(call gb_JunitTest_use_jars,sd_unoapi,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
-
-$(eval $(call gb_JunitTest_add_classes,sd_unoapi,\
-    org.openoffice.test.UnoApiTest \
-))
+$(eval $(call gb_JunitTest_set_unoapi_test_defaults,sd_unoapi))
 
 # vim: set noet sw=4 ts=4:

@@ -9,25 +9,15 @@
 
 $(eval $(call gb_JunitTest_JunitTest,connectivity_complex))
 
+$(eval $(call gb_JunitTest_set_unoapi_test_class_and_jars,connectivity_complex))
+
 $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 	$$(DEFS) \
 	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/connectivity/qa/scenarios.sce \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
-	jurt \
-	OOoRunner \
-	ridl \
-	test \
-	unoil \
-))
-
 $(eval $(call gb_JunitTest_use_externals,connectivity_complex,\
 	hsqldb \
-))
-
-$(eval $(call gb_JunitTest_add_classes,connectivity_complex,\
-	org.openoffice.test.UnoApiTest \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,connectivity_complex,\
