@@ -16,6 +16,23 @@
       "revId": "6483e3c46dcb7ec0d75bbca0f2e05f8bef6c925b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_d3f2e39a",
+        "filename": "sw/source/uibase/utlui/initui.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-07T09:38:03Z",
+      "side": 1,
+      "message": "same problem here",
+      "revId": "6483e3c46dcb7ec0d75bbca0f2e05f8bef6c925b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
