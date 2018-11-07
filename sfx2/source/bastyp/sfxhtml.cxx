@@ -324,10 +324,9 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
     (void)rFormatter.IsNumberFormat(aValStr, nParseForm, fVal);
     if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
     {
-        eNumLang = LanguageType(aNumStr.getToken( 1, ';' ).toInt32());
-        sal_Int32 nPos = aNumStr.indexOf( ';' );
-        nPos = aNumStr.indexOf( ';', nPos + 1 );
-        OUString aFormat( aNumStr.copy( nPos + 1 ) );
+        sal_Int32 nIdx {0};
+        eNumLang = LanguageType(aNumStr.getToken( 1, ';', nIdx ).toInt32());
+        OUString aFormat( aNumStr.copy( nIdx ) );
         sal_Int32 nCheckPos;
         SvNumFormatType nType;
         if ( eNumLang != LANGUAGE_SYSTEM )
