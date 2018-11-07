@@ -24,6 +24,7 @@
 class SwFrame;
 class SwContentNode;
 class SwTextNode;
+class SwRootFrame;
 
 enum SwChapterFormat
 {
@@ -64,7 +65,7 @@ public:
     void ChangeExpansion( const SwFrame&,
                           const SwContentNode*,
         bool bSrchNum = false);
-    void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum);
+    void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum, SwRootFrame const* pLayout = nullptr);
 
     inline sal_uInt8 GetLevel() const;
     inline void SetLevel(sal_uInt8);

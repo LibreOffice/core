@@ -20,6 +20,7 @@
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
 #include <frame.hxx>
+#include <txtfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <chpfld.hxx>
@@ -114,11 +115,12 @@ void SwChapterField::ChangeExpansion(const SwFrame & rFrame,
 
     if ( pTextNode )
     {
-        ChangeExpansion( *pTextNode, bSrchNum );
+        ChangeExpansion( *pTextNode, bSrchNum, rFrame.getRootFrame() );
     }
 }
 
-void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
+void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
+        SwRootFrame const*const pLayout)
 {
     m_sNumber.clear();
     m_sTitle.clear();
@@ -126,7 +128,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
     m_sPre.clear();
 
     SwDoc* pDoc = const_cast<SwDoc*>(rTextNd.GetDoc());
-    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel( m_nLevel );
+    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel(m_nLevel, pLayout);
     if( pTextNd )
     {
         if( bSrchNum )
@@ -152,7 +154,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
 
                     if (!m_nLevel--)
                         break;
-                    pONd = pTextNd->FindOutlineNodeOfLevel( m_nLevel );
+                    pONd = pTextNd->FindOutlineNodeOfLevel(m_nLevel, pLayout);
                 }
                 else
                     break;
@@ -166,7 +168,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
-            m_sNumber = pTextNd->GetNumString( false );
+            m_sNumber = pTextNd->GetNumString(false, MAXLEVEL, pLayout);
 
             SwNumRule* pRule( pTextNd->GetNumRule() );
             if ( pTextNd->IsCountedInList() && pRule )
@@ -187,8 +189,8 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
             m_sNumber = "??";
         }
 
-        m_sTitle = removeControlChars(pTextNd->GetExpandText(0, -1, false, false, false));
-
+        m_sTitle = removeControlChars(sw::GetExpandTextMerged(pLayout,
+                    *pTextNd, false, false, ExpandMode(0)));
     }
 }
 
