@@ -48,11 +48,11 @@ class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
     friend class ToxTextGeneratorTest; // the unittest needs to mock the chapter fields.
-    sal_uInt8 nLevel;
-    OUString sTitle;
-    OUString sNumber;
-    OUString sPre;
-    OUString sPost;
+    sal_uInt8 m_nLevel;
+    OUString m_sTitle;
+    OUString m_sNumber;
+    OUString m_sPre;
+    OUString m_sPost;
 
     virtual OUString Expand() const override;
     virtual SwField* Copy() const override;
@@ -75,10 +75,10 @@ public:
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
-inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
-inline const OUString& SwChapterField::GetNumber() const { return sNumber; }
-inline const OUString& SwChapterField::GetTitle() const { return sTitle; }
+inline sal_uInt8 SwChapterField::GetLevel() const   { return m_nLevel; }
+inline void SwChapterField::SetLevel(sal_uInt8 nLev) { m_nLevel = nLev; }
+inline const OUString& SwChapterField::GetNumber() const { return m_sNumber; }
+inline const OUString& SwChapterField::GetTitle() const { return m_sTitle; }
 
 #endif // INCLUDED_SW_INC_CHPFLD_HXX
 

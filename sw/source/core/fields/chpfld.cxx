@@ -64,7 +64,8 @@ SwFieldType* SwChapterFieldType::Copy() const
 // chapter field
 
 SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFormat)
-    : SwField(pTyp, nFormat), nLevel( 0 )
+    : SwField(pTyp, nFormat)
+    , m_nLevel(0)
 {}
 
 OUString SwChapterField::Expand() const
@@ -72,27 +73,27 @@ OUString SwChapterField::Expand() const
     switch( GetFormat() )
     {
         case CF_TITLE:
-            return sTitle;
+            return m_sTitle;
         case CF_NUMBER:
-            return sPre + sNumber + sPost;
+            return m_sPre + m_sNumber + m_sPost;
         case CF_NUM_TITLE:
-            return sPre + sNumber + sPost + sTitle;
+            return m_sPre + m_sNumber + m_sPost + m_sTitle;
         case CF_NUM_NOPREPST_TITLE:
-            return sNumber + sTitle;
+            return m_sNumber + m_sTitle;
     }
     // CF_NUMBER_NOPREPST
-    return sNumber;
+    return m_sNumber;
 }
 
 SwField* SwChapterField::Copy() const
 {
     SwChapterField *pTmp =
         new SwChapterField(static_cast<SwChapterFieldType*>(GetTyp()), GetFormat());
-    pTmp->nLevel = nLevel;
-    pTmp->sTitle = sTitle;
-    pTmp->sNumber = sNumber;
-    pTmp->sPost = sPost;
-    pTmp->sPre = sPre;
+    pTmp->m_nLevel = m_nLevel;
+    pTmp->m_sTitle = m_sTitle;
+    pTmp->m_sNumber = m_sNumber;
+    pTmp->m_sPost = m_sPost;
+    pTmp->m_sPre = m_sPre;
 
     return pTmp;
 }
@@ -119,13 +120,13 @@ void SwChapterField::ChangeExpansion(const SwFrame & rFrame,
 
 void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
 {
-    sNumber.clear();
-    sTitle.clear();
-    sPost.clear();
-    sPre.clear();
+    m_sNumber.clear();
+    m_sTitle.clear();
+    m_sPost.clear();
+    m_sPre.clear();
 
     SwDoc* pDoc = const_cast<SwDoc*>(rTextNd.GetDoc());
-    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel( nLevel );
+    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel( m_nLevel );
     if( pTextNd )
     {
         if( bSrchNum )
@@ -134,24 +135,24 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
             do {
                 if( pONd && pONd->GetTextColl() )
                 {
-                    sal_uInt8 nPrevLvl = nLevel;
+                    sal_uInt8 nPrevLvl = m_nLevel;
 
                     OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect." );
-                    nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
+                    m_nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
 
-                    if( nPrevLvl < nLevel )
-                        nLevel = nPrevLvl;
+                    if (nPrevLvl < m_nLevel)
+                        m_nLevel = nPrevLvl;
                     else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
-                            ->Get( nLevel ).GetNumberingType() )
+                            ->Get( m_nLevel ).GetNumberingType() )
                     {
                         pTextNd = pONd;
                         break;
                     }
 
-                    if( !nLevel-- )
+                    if (!m_nLevel--)
                         break;
-                    pONd = pTextNd->FindOutlineNodeOfLevel( nLevel );
+                    pONd = pTextNd->FindOutlineNodeOfLevel( m_nLevel );
                 }
                 else
                     break;
@@ -165,7 +166,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
-            sNumber = pTextNd->GetNumString( false );
+            m_sNumber = pTextNd->GetNumString( false );
 
             SwNumRule* pRule( pTextNd->GetNumRule() );
             if ( pTextNd->IsCountedInList() && pRule )
@@ -177,16 +178,16 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
                     nListLevel = MAXLEVEL - 1;
 
                 const SwNumFormat& rNFormat = pRule->Get(nListLevel);
-                sPost = rNFormat.GetSuffix();
-                sPre = rNFormat.GetPrefix();
+                m_sPost = rNFormat.GetSuffix();
+                m_sPre = rNFormat.GetPrefix();
             }
         }
         else
         {
-            sNumber = "??";
+            m_sNumber = "??";
         }
 
-        sTitle = removeControlChars(pTextNd->GetExpandText(0, -1, false, false, false));
+        m_sTitle = removeControlChars(pTextNd->GetExpandText(0, -1, false, false, false));
 
     }
 }
@@ -196,7 +197,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
-        rAny <<= static_cast<sal_Int8>(nLevel);
+        rAny <<= static_cast<sal_Int8>(m_nLevel);
         break;
 
     case FIELD_PROP_USHORT1:
@@ -235,7 +236,7 @@ bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         sal_Int8 nTmp = 0;
         rAny >>= nTmp;
         if(nTmp >= 0 && nTmp < MAXLEVEL)
-            nLevel = nTmp;
+            m_nLevel = nTmp;
         else
             bRet = false;
         break;
