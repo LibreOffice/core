@@ -56,11 +56,17 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:484
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:523
     _Bool lok::Document::getViewIds(int *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:671
+include/LibreOfficeKit/LibreOfficeKit.hxx:584
+    _Bool lok::Document::insertCertificate(const unsigned char *,const int,const unsigned char *,const int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:598
+    _Bool lok::Document::addCertificate(const unsigned char *,const int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:610
+    int lok::Document::getSignatureState()
+include/LibreOfficeKit/LibreOfficeKit.hxx:705
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:725
+include/LibreOfficeKit/LibreOfficeKit.hxx:759
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:739
+include/LibreOfficeKit/LibreOfficeKit.hxx:773
     _Bool lok::Office::runMacro(const char *)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -134,11 +140,11 @@ include/oox/ole/olehelper.hxx:180
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
 include/oox/ole/olehelper.hxx:191
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:206
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:207
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
 include/sax/fshelper.hxx:210
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
+include/sax/fshelper.hxx:211
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+include/sax/fshelper.hxx:214
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:64
     _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,unsigned short,enum SfxLinkUpdateMode,const class rtl::OUString *)
@@ -196,9 +202,9 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:348
+include/vcl/weld.hxx:355
     _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:1022
+include/vcl/weld.hxx:1033
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -216,7 +222,7 @@ sc/source/filter/inc/workbookhelper.hxx:259
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:179
     _Bool ScFormatRangeStyles::AddStyleName(const class rtl::OUString &,int &,const _Bool)
-sc/source/ui/inc/select.hxx:73
+sc/source/ui/inc/select.hxx:72
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
     class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
@@ -264,7 +270,7 @@ sw/inc/doc.hxx:1245
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:264
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
-sw/inc/editsh.hxx:635
+sw/inc/editsh.hxx:633
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
@@ -298,17 +304,17 @@ vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
 vcl/inc/salframe.hxx:222
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
-vcl/inc/salgdi.hxx:214
+vcl/inc/salgdi.hxx:211
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:397
+vcl/inc/salgdi.hxx:394
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:316
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/source/gdi/pdfwriter_impl.hxx:1252
+vcl/source/gdi/pdfwriter_impl.hxx:1230
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1253
+vcl/source/gdi/pdfwriter_impl.hxx:1231
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1254
+vcl/source/gdi/pdfwriter_impl.hxx:1232
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

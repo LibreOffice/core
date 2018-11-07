@@ -326,14 +326,6 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mbHidden = rReferencedShape.mbHidden;
 }
 
-void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
-                         const Theme* pTheme,
-                         const Reference< XShapes >& rxShapes,
-                         basegfx::B2DHomMatrix const & aTransformation )
-{
-    addChildren(rFilterBase, *this, pTheme, rxShapes, nullptr, aTransformation);
-}
-
 struct ActionLockGuard
 {
     explicit ActionLockGuard(Reference<drawing::XShape> const& xShape)

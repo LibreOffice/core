@@ -53,7 +53,6 @@ public:
     BuildinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     bool GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool) const override;
-    OString getNameObject() const;
 };
 
 class BuildinFontFace final : public PhysicalFontFace
