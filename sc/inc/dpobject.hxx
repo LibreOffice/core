@@ -392,7 +392,7 @@ public:
     OUString CreateNewName() const;
 
     void FreeTable(const ScDPObject* pDPObj);
-    SC_DLLPUBLIC void InsertNewTable(std::unique_ptr<ScDPObject> pDPObj);
+    SC_DLLPUBLIC ScDPObject* InsertNewTable(std::unique_ptr<ScDPObject> pDPObj);
     SC_DLLPUBLIC bool HasTable(const ScDPObject* pDPObj) const;
 
     SC_DLLPUBLIC SheetCaches& GetSheetCaches();

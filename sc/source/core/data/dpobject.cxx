@@ -3774,7 +3774,7 @@ void ScDPCollection::FreeTable(const ScDPObject* pDPObject)
     maTables.erase(std::remove_if(maTables.begin(), maTables.end(), funcRemoveCondition), maTables.end());
 }
 
-void ScDPCollection::InsertNewTable(std::unique_ptr<ScDPObject> pDPObj)
+ScDPObject* ScDPCollection::InsertNewTable(std::unique_ptr<ScDPObject> pDPObj)
 {
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
@@ -3782,6 +3782,7 @@ void ScDPCollection::InsertNewTable(std::unique_ptr<ScDPObject> pDPObj)
     mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 
     maTables.push_back(std::move(pDPObj));
+    return maTables.back().get();
 }
 
 bool ScDPCollection::HasTable(const ScDPObject* pDPObj) const

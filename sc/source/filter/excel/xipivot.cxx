@@ -1490,8 +1490,7 @@ void XclImpPivotTable::Convert()
     pDPObj->SetOutRange( aOutRange );
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
-    mpDPObj = pDPObj.get();
-    GetDoc().GetDPCollection()->InsertNewTable(std::move(pDPObj));
+    mpDPObj = GetDoc().GetDPCollection()->InsertNewTable(std::move(pDPObj));
 
     ApplyFieldInfo();
     ApplyMergeFlags(aOutRange, aSaveData);
