@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <comphelper/string.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -56,6 +55,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
@@ -396,7 +396,7 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
 
     const OUString aURLStr {rURLStr.copy(rURLStr.lastIndexOf(':')+1)};
 
-    if( comphelper::string::getTokenCount(aURLStr, '/') == 1 )
+    if( !aURLStr.isEmpty() && aURLStr.indexOf('/')<0 ) // just one token?
     {
         rPictureStorageName = XML_GRAPHICSTORAGE_NAME;
         rPictureStreamName = aURLStr;
