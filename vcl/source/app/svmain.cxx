@@ -302,6 +302,9 @@ bool InitVCL()
 
     ImplSVData* pSVData = ImplGetSVData();
 
+    // remember Main-Thread-Id
+    pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
+
     // Initialize Sal
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
