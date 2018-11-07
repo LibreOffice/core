@@ -187,7 +187,6 @@ void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
     cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(), &m_aDamageHandler,
                                 nullptr);
-    TriggerPaintEvent();
 }
 
 SalGraphics* Qt5Frame::AcquireGraphics()
@@ -213,7 +212,6 @@ SalGraphics* Qt5Frame::AcquireGraphics()
             m_pQt5Graphics.reset(new Qt5Graphics(this));
             m_pQImage.reset(new QImage(m_pQWidget->size(), Qt5_DefaultFormat32));
             m_pQt5Graphics->ChangeQImage(m_pQImage.get());
-            TriggerPaintEvent();
         }
         return m_pQt5Graphics.get();
     }
