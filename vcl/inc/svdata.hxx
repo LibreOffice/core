@@ -396,8 +396,8 @@ VCL_PLUGIN_PUBLIC void ImplHideSplash();
 bool ImplInitAccessBridge();
 #endif
 
-FieldUnitStringList* ImplGetFieldUnits();
-FieldUnitStringList* ImplGetCleanedFieldUnits();
+const FieldUnitStringList& ImplGetFieldUnits();
+const FieldUnitStringList& ImplGetCleanedFieldUnits();
 
 struct ImplSVEvent
 {

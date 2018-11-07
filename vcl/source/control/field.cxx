@@ -999,15 +999,11 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
 
 static const OUString ImplMetricToString( FieldUnit rUnit )
 {
-    FieldUnitStringList* pList = ImplGetFieldUnits();
-    if( pList )
+    // return unit's default string (ie, the first one )
+    for (auto const& elem : ImplGetFieldUnits())
     {
-        // return unit's default string (ie, the first one )
-        for (auto const& elem : *pList)
-        {
-            if ( elem.second == rUnit )
-                return elem.first;
-        }
+        if (elem.second == rUnit)
+            return elem.first;
     }
 
     return OUString();
@@ -1015,16 +1011,12 @@ static const OUString ImplMetricToString( FieldUnit rUnit )
 
 FieldUnit MetricFormatter::StringToMetric(const OUString &rMetricString)
 {
-    FieldUnitStringList* pList = ImplGetCleanedFieldUnits();
-    if( pList )
+    // return FieldUnit
+    OUString aStr = rMetricString.toAsciiLowerCase().replaceAll(" ", "");
+    for (auto const& elem : ImplGetCleanedFieldUnits())
     {
-        // return FieldUnit
-        OUString aStr = rMetricString.toAsciiLowerCase().replaceAll(" ", "");
-        for (auto const& elem : *pList)
-        {
-            if ( elem.first == aStr )
-                return elem.second;
-        }
+        if ( elem.first == aStr )
+            return elem.second;
     }
 
     return FieldUnit::NONE;
