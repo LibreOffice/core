@@ -679,7 +679,6 @@ void AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
         {
             pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
-            m_aSelectHdl.Call(nullptr);
         }
         Invalidate();
     }
@@ -722,7 +721,6 @@ bool AddressPreview::KeyInput( const KeyEvent& rKEvt )
                 pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
         {
             pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
-            m_aSelectHdl.Call(nullptr);
             Invalidate();
         }
     }

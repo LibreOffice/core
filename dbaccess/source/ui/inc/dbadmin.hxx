@@ -49,7 +49,6 @@ class ODbAdminDialog final : public SfxTabDialogController, public IItemSetHelpe
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
-    bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
     OString             m_sMainPageID;
 
 public:

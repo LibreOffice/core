@@ -1182,7 +1182,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_FLYANCHOR:
-            m_aStates.top().aFrame.m_nAnchorType = nParam;
             break;
         case RTF_WMETAFILE:
             m_aStates.top().aPicture.eWMetafile = nParam;

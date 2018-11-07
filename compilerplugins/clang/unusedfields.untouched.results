@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -42,7 +42,7 @@ connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:63
+cppu/source/typelib/typelib.cxx:59
     AlignSize_Impl nInt16 sal_Int16
 cui/source/dialogs/colorpicker.cxx:714
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
@@ -96,14 +96,20 @@ cui/source/inc/transfrm.hxx:193
     SvxAngleTabPage m_xCtlAngle std::unique_ptr<weld::CustomWeld>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-dbaccess/source/ui/dlg/advancedsettings.hxx:65
-    dbaui::SpecialSettingsPage m_aControlDependencies ::svt::ControlDependencyManager
-dbaccess/source/ui/dlg/advancedsettings.hxx:100
+dbaccess/source/ui/dlg/advancedsettings.hxx:98
     dbaui::GeneratedValuesPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/advancedsettings.hxx:102
+dbaccess/source/ui/dlg/advancedsettings.hxx:100
     dbaui::GeneratedValuesPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/advancedsettings.hxx:105
-    dbaui::GeneratedValuesPage m_aControlDependencies ::svt::ControlDependencyManager
+dbaccess/source/ui/dlg/detailpages.hxx:67
+    dbaui::OCommonBehaviourTabPage m_xAutoRetrievingEnabled std::unique_ptr<weld::CheckButton>
+dbaccess/source/ui/dlg/detailpages.hxx:68
+    dbaui::OCommonBehaviourTabPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
+dbaccess/source/ui/dlg/detailpages.hxx:69
+    dbaui::OCommonBehaviourTabPage m_xAutoIncrement std::unique_ptr<weld::Entry>
+dbaccess/source/ui/dlg/detailpages.hxx:70
+    dbaui::OCommonBehaviourTabPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
+dbaccess/source/ui/dlg/detailpages.hxx:71
+    dbaui::OCommonBehaviourTabPage m_xAutoRetrieving std::unique_ptr<weld::Entry>
 emfio/source/emfuno/xemfparser.cxx:60
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
@@ -146,6 +152,8 @@ include/svx/colorwindow.hxx:132
     ColorWindow mxColorSetWin std::unique_ptr<weld::CustomWeld>
 include/svx/colorwindow.hxx:133
     ColorWindow mxRecentColorSetWin std::unique_ptr<weld::CustomWeld>
+include/svx/dialcontrol.hxx:115
+    svx::DialControl::DialControl_Impl mnInitialAngle sal_Int32
 include/svx/hdft.hxx:86
     SvxHFPage m_xBspWin std::unique_ptr<weld::CustomWeld>
 include/vcl/font/Feature.hxx:102
@@ -184,7 +192,7 @@ libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
     GtvMainToolbarClass parentClass GtkBoxClass
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-opencl/source/openclwrapper.cxx:305
+opencl/source/openclwrapper.cxx:306
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 pyuno/source/module/pyuno_impl.hxx:224
     pyuno::(anonymous) ob_base PyObject
@@ -208,7 +216,7 @@ sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Lowest const int
 sal/osl/unx/thread.cxx:113
     osl_thread_global_st m_priority const struct osl_thread_priority_st
-sc/inc/interpretercontext.hxx:32
+sc/inc/interpretercontext.hxx:36
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
@@ -250,13 +258,13 @@ sd/source/ui/animations/CustomAnimationDialog.hxx:147
     sd::SdPropertySubControl mxContainer std::unique_ptr<weld::Container>
 sd/source/ui/dlg/PhotoAlbumDialog.hxx:60
     sd::SdPhotoAlbumDialog m_xImg std::unique_ptr<weld::CustomWeld>
-sd/source/ui/inc/custsdlg.hxx:43
+sd/source/ui/inc/custsdlg.hxx:42
     SdCustomShowDlg m_xBtnHelp std::unique_ptr<weld::Button>
-sd/source/ui/inc/custsdlg.hxx:45
+sd/source/ui/inc/custsdlg.hxx:44
     SdCustomShowDlg m_xBtnOK std::unique_ptr<weld::Button>
-sd/source/ui/inc/custsdlg.hxx:75
+sd/source/ui/inc/custsdlg.hxx:74
     SdDefineCustomShowDlg m_xBtnCancel std::unique_ptr<weld::Button>
-sd/source/ui/inc/custsdlg.hxx:76
+sd/source/ui/inc/custsdlg.hxx:75
     SdDefineCustomShowDlg m_xBtnHelp std::unique_ptr<weld::Button>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port const uint
@@ -264,7 +272,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:104
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1319
+sd/source/ui/view/DocumentRenderer.cxx:1313
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1211
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -274,7 +282,7 @@ sd/source/ui/view/viewshel.cxx:1213
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
 sd/source/ui/view/viewshel.cxx:1214
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:193
+sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
@@ -368,10 +376,14 @@ sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
 sw/source/uibase/inc/splittbl.hxx:31
     SwSplitTableDlg m_xContentCopyRB std::unique_ptr<weld::RadioButton>
+sw/source/uibase/inc/swuiidxmrk.hxx:72
+    SwIndexMarkPane m_xFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard const class SolarMutexGuard
+sw/source/uibase/inc/wordcountdialog.hxx:46
+    SwWordCountFloatDlg m_xClosePB std::unique_ptr<weld::Button>
 toolkit/source/awt/stylesettings.cxx:90
     toolkit::StyleMethodGuard m_aGuard const class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:672
@@ -396,7 +408,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2403
+vcl/unx/gtk3/gtk3gtkinst.cxx:2495
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink

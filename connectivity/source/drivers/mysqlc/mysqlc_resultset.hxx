@@ -62,8 +62,6 @@ class OResultSet final : public OBase_Mutex,
                          public ::cppu::OPropertySetHelper,
                          public OPropertyArrayUsageHelper<OResultSet>
 {
-    OConnection& m_rConnection;
-
     using DataFields = std::vector<OString>;
     std::vector<DataFields> m_aRows;
     std::vector<MYSQL_FIELD> m_aFields;

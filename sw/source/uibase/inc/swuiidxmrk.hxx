@@ -69,7 +69,6 @@ class SwIndexMarkPane
                     m_pTOXMgr;
     SwWrtShell*     m_pSh;
 
-    std::unique_ptr<weld::Widget> m_xFrame;
     std::unique_ptr<weld::Label> m_xTypeFT;
     std::unique_ptr<weld::ComboBox> m_xTypeDCB;
     std::unique_ptr<weld::Button> m_xNewBT;
