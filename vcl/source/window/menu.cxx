@@ -167,7 +167,7 @@ void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.Pop();
 }
 
-} // end anonymouse namespace
+} // end anonymous namespace
 
 
 Menu::Menu()

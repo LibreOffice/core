@@ -1410,7 +1410,7 @@ void CurrentPageSetter::operator() (bool)
     }
 }
 
-} // end of anonymouse namespace
+} // end of anonymous namespace
 
 //===== FocusForwardingWindow =================================================
 
@@ -1466,7 +1466,7 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
     }
 }
 
-} // end of anonymouse namespace
+} // end of anonymous namespace
 
 } // end of namespace sd
 
