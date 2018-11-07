@@ -1765,9 +1765,9 @@ def __l2p__(i, par, insub, inarray):
                 # add commas, except if already added, eg. with special RANGE
                 # (variable argument counts: RANGE 1 or RANGE 1 100 or RANGE 1 100 10)
                 if j > 0 and par["out"][-1] != ",":
-                    par["out"] = re.sub("( *)$",",\\1", par["out"])
+                    par["out"] = re.sub("( *),$",",\\1", par["out"] + ",")
                 __l2p__(i, par, True, False)
-            par["out"] = re.sub("( *)$", ")\\1", par["out"])
+            par["out"] = re.sub("( *)\\)$", ")\\1", par["out"] + ")")
         # operators
         elif pos in par["op"]:
             op = i[pos:par["op"][pos]]
