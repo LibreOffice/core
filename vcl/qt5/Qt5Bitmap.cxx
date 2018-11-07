@@ -63,6 +63,7 @@ bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPale
     else
     {
         m_pImage.reset(new QImage(toQSize(rSize), getBitFormat(nBitCount)));
+        m_pImage->fill(Qt::transparent);
         m_pBuffer.reset();
     }
     m_aPalette = rPal;
@@ -129,7 +130,7 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
         // convert 4bit indexed palette to 32bit ARGB
         m_pImage.reset(new QImage(pBitmap->m_aSize.Width(), pBitmap->m_aSize.Height(),
                                   getBitFormat(nNewBitCount)));
-        m_pImage->fill(0);
+        m_pImage->fill(Qt::transparent);
 
         // prepare a whole palette
         const BitmapPalette& rPal = pBitmap->m_aPalette;
