@@ -50,7 +50,6 @@ ODbAdminDialog::ODbAdminDialog(weld::Window* pParent,
                                SfxItemSet const * _pItems,
                                const Reference< XComponentContext >& _rxContext)
     : SfxTabDialogController(pParent, "dbaccess/ui/admindialog.ui", "AdminDialog", _pItems)
-    , m_bUIEnabled(true)
     , m_sMainPageID("advanced")
 {
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext, m_xDialog.get(), pParent, this));
@@ -70,7 +69,6 @@ ODbAdminDialog::~ODbAdminDialog()
 short ODbAdminDialog::Ok()
 {
     SfxTabDialogController::Ok();
-    m_bUIEnabled = false;
     return ( AR_LEAVE_MODIFIED == implApplyChanges() ) ? RET_OK : RET_CANCEL;
         // TODO : AR_ERROR is not handled correctly, we always close the dialog here
 }

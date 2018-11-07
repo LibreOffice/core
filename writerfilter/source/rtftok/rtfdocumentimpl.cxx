@@ -3465,7 +3465,6 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
     , m_nVertAlign(0)
     , m_nVertAnchor(0)
     , m_nHRule(NS_ooxml::LN_Value_doc_ST_HeightRule_auto)
-    , m_nAnchorType(0)
 {
 }
 

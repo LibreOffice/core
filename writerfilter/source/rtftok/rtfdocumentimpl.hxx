@@ -253,7 +253,6 @@ private:
 
 public:
     explicit RTFFrame(RTFParserState* pParserState);
-    sal_Int16 m_nAnchorType;
 
     /// Convert the stored properties to Sprms
     RTFSprms getSprms();

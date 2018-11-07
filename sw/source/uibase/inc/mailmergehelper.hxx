@@ -114,7 +114,6 @@ class SW_DLLPUBLIC AddressPreview : public weld::CustomWidgetController
 {
     std::unique_ptr<SwAddressPreview_Impl> pImpl;
     std::unique_ptr<weld::ScrolledWindow> m_xVScrollBar;
-    Link<LinkParamNone*,void> m_aSelectHdl;
 
     void DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
                        const Point& rTopLeft, const Size& rSize, bool bIsSelected);

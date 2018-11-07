@@ -111,7 +111,6 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     , m_xDocStandardizedPagesFT(m_xBuilder->weld_label("docstandardizedpages"))
     , m_xCjkcharsLabelFT(m_xBuilder->weld_label("cjkcharsft"))
     , m_xStandardizedPagesLabelFT(m_xBuilder->weld_label("standardizedpages"))
-    , m_xClosePB(m_xBuilder->weld_button("close"))
 {
     showCJK(SvtCJKOptions().IsAnyEnabled());
     showStandardizedPages(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
