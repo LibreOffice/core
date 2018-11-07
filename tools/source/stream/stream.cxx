@@ -1425,10 +1425,19 @@ bool checkSeek(SvStream &rSt, sal_uInt64 nOffset)
 sal_uInt64 SvStream::remainingSize()
 {
     sal_uInt64 const nCurr = Tell();
-    sal_uInt64 const nEnd = Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 const nEnd = TellEnd();
     sal_uInt64 nMaxAvailable = nEnd > nCurr ? (nEnd-nCurr) : 0;
     Seek(nCurr);
     return nMaxAvailable;
+}
+
+sal_uInt64 SvStream::TellEnd()
+{
+    FlushBuffer(true);
+    sal_uInt64 const nCurr = Tell();
+    sal_uInt64 const nEnd = Seek(STREAM_SEEK_TO_END);
+    Seek(nCurr);
+    return nEnd;
 }
 
 void SvStream::Flush()
@@ -1901,11 +1910,6 @@ void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
 
     long nDiff = static_cast<long>(nNewSize) - static_cast<long>(nSize);
     ReAllocateMemory( nDiff );
-}
-
-sal_uInt64 SvStream::TellEnd()
-{
-    return Tell() + remainingSize();
 }
 
 //Create a OString of nLen bytes from rStream
