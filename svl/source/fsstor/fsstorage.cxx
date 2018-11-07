@@ -362,11 +362,8 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
                 // TODO: test whether it really works for http and fwp
                 std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                                           StreamMode::STD_WRITE );
-                if ( pStream )
-                {
-                    if ( !pStream->GetError() )
-                        xResult.set( new ::utl::OStreamWrapper( std::move(pStream) ) );
-                }
+                if ( pStream && !pStream->GetError() )
+                    xResult.set( new ::utl::OStreamWrapper( std::move(pStream) ) );
             }
 
             if ( !xResult.is() )
@@ -1148,14 +1145,11 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
                 // TODO: test whether it really works for http and fwp
                 std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL,
                                                                           StreamMode::STD_WRITE );
-                if ( pStream )
+                if ( pStream && !pStream->GetError() )
                 {
-                    if ( !pStream->GetError() )
-                    {
-                        uno::Reference< io::XStream > xStream =
-                            uno::Reference < io::XStream >( new ::utl::OStreamWrapper( std::move(pStream) ) );
-                        xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
-                    }
+                    uno::Reference< io::XStream > xStream =
+                        uno::Reference < io::XStream >( new ::utl::OStreamWrapper( std::move(pStream) ) );
+                    xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
                 }
             }
 

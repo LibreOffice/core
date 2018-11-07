@@ -1387,21 +1387,18 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
             pObj->SendUserCall( SdrUserCallType::Resize, aBoundRect0 );
         }
 
-        if(bRet)
+        if(bRet && bUndo )
         {
-            if( bUndo )
+            getSdrDragView().AddUndoActions( std::move(vConnectorUndoActions) );
+
+            if ( pUndo )
             {
-                getSdrDragView().AddUndoActions( std::move(vConnectorUndoActions) );
+                getSdrDragView().AddUndo(std::move(pUndo));
+            }
 
-                if ( pUndo )
-                {
-                    getSdrDragView().AddUndo(std::move(pUndo));
-                }
-
-                if ( pUndo2 )
-                {
-                    getSdrDragView().AddUndo(std::move(pUndo2));
-                }
+            if ( pUndo2 )
+            {
+                getSdrDragView().AddUndo(std::move(pUndo2));
             }
         }
 
@@ -3436,20 +3433,17 @@ void SdrDragDistort::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
     {
         SdrPageView* pPV = getSdrDragView().GetSdrPageView();
 
-        if(pPV)
+        if(pPV && pPV->HasMarkedObjPageView())
         {
-            if (pPV->HasMarkedObjPageView())
-            {
-                basegfx::B2DPolyPolygon aDragPolygon(rTarget);
-                const basegfx::B2DRange aOriginalRange(aMarkRect.Left(), aMarkRect.Top(), aMarkRect.Right(), aMarkRect.Bottom());
-                const basegfx::B2DPoint aTopLeft(aDistortedRect[0].X(), aDistortedRect[0].Y());
-                const basegfx::B2DPoint aTopRight(aDistortedRect[1].X(), aDistortedRect[1].Y());
-                const basegfx::B2DPoint aBottomLeft(aDistortedRect[3].X(), aDistortedRect[3].Y());
-                const basegfx::B2DPoint aBottomRight(aDistortedRect[2].X(), aDistortedRect[2].Y());
+            basegfx::B2DPolyPolygon aDragPolygon(rTarget);
+            const basegfx::B2DRange aOriginalRange(aMarkRect.Left(), aMarkRect.Top(), aMarkRect.Right(), aMarkRect.Bottom());
+            const basegfx::B2DPoint aTopLeft(aDistortedRect[0].X(), aDistortedRect[0].Y());
+            const basegfx::B2DPoint aTopRight(aDistortedRect[1].X(), aDistortedRect[1].Y());
+            const basegfx::B2DPoint aBottomLeft(aDistortedRect[3].X(), aDistortedRect[3].Y());
+            const basegfx::B2DPoint aBottomRight(aDistortedRect[2].X(), aDistortedRect[2].Y());
 
-                aDragPolygon = basegfx::utils::distort(aDragPolygon, aOriginalRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
-                rTarget = aDragPolygon;
-            }
+            aDragPolygon = basegfx::utils::distort(aDragPolygon, aOriginalRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
+            rTarget = aDragPolygon;
         }
     }
 }

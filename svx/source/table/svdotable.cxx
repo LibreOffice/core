@@ -1062,13 +1062,10 @@ CellPos SdrTableObj::getPreviousRow( const CellPos& rPos, bool bEdgeTravel ) con
     if( mpImpl.is() )
     {
         CellRef xCell( mpImpl->getCell( aPos ) );
-        if( xCell.is() )
+        if( xCell.is() && xCell->isMerged() )
         {
-            if( xCell->isMerged() )
-            {
-                sal_Int32 nTemp = 0;
-                findMergeOrigin( mpImpl->mxTable, aPos.mnCol, aPos.mnRow, nTemp, aPos.mnRow );
-            }
+            sal_Int32 nTemp = 0;
+            findMergeOrigin( mpImpl->mxTable, aPos.mnCol, aPos.mnRow, nTemp, aPos.mnRow );
         }
 
         if( aPos.mnRow > 0 )

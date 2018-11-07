@@ -534,12 +534,9 @@ void SdrModel::SetUndoComment(const OUString& rComment)
     {
         OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
-    else if( IsUndoEnabled() )
+    else if( IsUndoEnabled() && nUndoLevel==1)
     {
-        if(nUndoLevel==1)
-        {
-            pCurrentUndoGroup->SetComment(rComment);
-        }
+        pCurrentUndoGroup->SetComment(rComment);
     }
 }
 

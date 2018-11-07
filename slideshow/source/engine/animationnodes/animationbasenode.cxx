@@ -305,10 +305,8 @@ void AnimationBaseNode::activate_st()
 
 void AnimationBaseNode::deactivate_st( NodeState eDestState )
 {
-    if (eDestState == FROZEN) {
-        if (mpActivity)
-            mpActivity->end();
-    }
+    if (eDestState == FROZEN && mpActivity)
+        mpActivity->end();
 
     if (isDependentSubsettedShape()) {
         // for dependent subsets, remove subset shape

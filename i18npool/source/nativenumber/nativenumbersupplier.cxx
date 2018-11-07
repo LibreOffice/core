@@ -216,13 +216,11 @@ static OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
                         if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
                                 newStr[count-1] == numberChar[0])
                             count--;
-                        if (bNotZero && _count == count) {
-                            if (end != len) {
-                                newStr[count] = number->multiplierChar[0];
-                                if (useOffset)
-                                    offset[count] = i - len;
-                                count++;
-                            }
+                        if (bNotZero && _count == count && end != len) {
+                            newStr[count] = number->multiplierChar[0];
+                            if (useOffset)
+                                offset[count] = i - len;
+                            count++;
                         }
                     }
                     if (! bNotZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {

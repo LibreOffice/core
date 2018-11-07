@@ -173,22 +173,19 @@ void OptimizerDialog::UpdateConfiguration()
     }
 
     aAny = getControlProperty( "CheckBox3Pg3", "State" );
-    if ( aAny >>= nInt16 )
+    if ( (aAny >>= nInt16) && nInt16 )
     {
-        if ( nInt16 )
+        aAny = getControlProperty( "ListBox0Pg3", "SelectedItems" );
+        if ( aAny >>= aSelectedItems )
         {
-            aAny = getControlProperty( "ListBox0Pg3", "SelectedItems" );
-            if ( aAny >>= aSelectedItems )
+            if ( aSelectedItems.getLength() )
             {
-                if ( aSelectedItems.getLength() )
+                sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
+                aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );
+                if ( aAny >>= aStringItemList )
                 {
-                    sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
-                    aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );
-                    if ( aAny >>= aStringItemList )
-                    {
-                        if ( aStringItemList.getLength() > nSelectedItem )
-                            SetConfigProperty( TK_CustomShowName, Any( aStringItemList[ nSelectedItem ] ) );
-                    }
+                    if ( aStringItemList.getLength() > nSelectedItem )
+                        SetConfigProperty( TK_CustomShowName, Any( aStringItemList[ nSelectedItem ] ) );
                 }
             }
         }
