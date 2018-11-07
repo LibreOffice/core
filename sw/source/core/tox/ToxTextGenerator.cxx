@@ -372,7 +372,7 @@ ToxTextGenerator::ObtainChapterField(SwChapterFieldType* chapterFieldType,
     SwChapterField retval(chapterFieldType, chapterToken->nChapterFormat);
     retval.SetLevel(static_cast<sal_uInt8>(chapterToken->nOutlineLevel - 1));
     // #i53420#
-    retval.ChangeExpansion(contentFrame, contentNode, true);
+    retval.ChangeExpansion(*contentFrame, contentNode, true);
     return retval;
 }
 } // end namespace sw

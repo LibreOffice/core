@@ -606,12 +606,11 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 SwChapterFieldType aFieldTyp;
                 SwChapterField aField( &aFieldTyp, 0 );
                 aField.SetLevel( MAXLEVEL - 1 );
-                aField.ChangeExpansion( pFrame, pTextNd, true );
+                aField.ChangeExpansion( *pFrame, pTextNd, true );
                 m_sText = aField.GetNumber();
 
                 if (!m_sSetReferenceLanguage.isEmpty())
                     lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
-
             }
         }
         break;
