@@ -162,8 +162,12 @@ bool
 UUIInteractionHelper::handleRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    if(!Application::IsMainThread() && GetpApp())
-    {
+    if(
+        Application::GetMainThreadIdentifier()
+        != osl::Thread::getCurrentIdentifier()
+        &&
+        GetpApp()
+    ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
         Link<void*,void> aLink(&aHD,handlerequest);
@@ -213,8 +217,12 @@ beans::Optional< OUString >
 UUIInteractionHelper::getStringFromRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    if(!Application::IsMainThread() && GetpApp())
-    {
+    if(
+        Application::GetMainThreadIdentifier()
+        != osl::Thread::getCurrentIdentifier()
+        &&
+        GetpApp()
+    ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
         Link<void*,void> aLink(&aHD,getstringfromrequest);

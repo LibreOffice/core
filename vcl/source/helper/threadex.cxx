@@ -45,7 +45,7 @@ IMPL_LINK_NOARG(SolarThreadExecutor, worker, void*, void)
 
 void SolarThreadExecutor::execute()
 {
-    if( Application::IsMainThread() )
+    if( ::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier() )
     {
         m_aStart.set();
         doIt();
