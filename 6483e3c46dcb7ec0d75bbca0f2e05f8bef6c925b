@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_3304877b",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-07T09:35:44Z",
+      "side": 1,
+      "message": "i\u0027m afraid this is going to crash on the first call because the members of m_StringCache are initialised to null pointers.\n\nuse unique_ptr::reset()",
+      "revId": "6483e3c46dcb7ec0d75bbca0f2e05f8bef6c925b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
