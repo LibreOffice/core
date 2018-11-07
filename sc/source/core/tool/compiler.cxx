@@ -4769,7 +4769,7 @@ bool ScCompiler::HandleRange()
                     AdjustSheetLocalNameRelReferences( nSheetTab - aPos.Tab());
 
                 SetRelNameReference();
-                MoveRelWrap(MAXCOL, MAXROW);
+                MoveRelWrap();
             }
             maArrIterator.Reset();
             if ( bAddPair )
@@ -4826,7 +4826,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             if (FormulaTokenArrayPlainIterator(*pNew).GetNextReference() != nullptr)
             {
                 SetRelNameReference();
-                MoveRelWrap(MAXCOL, MAXROW);
+                MoveRelWrap();
             }
             maArrIterator.Reset();
             return GetToken();
@@ -4874,14 +4874,14 @@ void ScCompiler::SetRelNameReference()
 
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
+void ScCompiler::MoveRelWrap()
 {
     for ( auto t: pArr->References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, *t->GetDoubleRef() );
     }
 }
 

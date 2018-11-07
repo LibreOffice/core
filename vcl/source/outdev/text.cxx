@@ -924,7 +924,6 @@ float OutputDevice::approximate_digit_width() const
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const long* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
-                                  vcl::TextLayoutCache const*const pLayoutCache,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
     assert(!is_double_buffered_window());
@@ -945,7 +944,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, pLayoutCache, pSalLayoutCache);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, nullptr, pSalLayoutCache);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );

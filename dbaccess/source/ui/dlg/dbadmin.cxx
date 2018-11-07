@@ -86,7 +86,7 @@ void ODbAdminDialog::PageCreated(const OString& rId, SfxTabPage& _rPage)
 
 void ODbAdminDialog::addDetailPage(const OString& rPageId, const char* pTextId, CreateTabPage pCreateFunc)
 {
-    AddTabPage(rPageId, DBA_RES(pTextId), pCreateFunc, nullptr);
+    AddTabPage(rPageId, DBA_RES(pTextId), pCreateFunc);
 }
 
 void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName)
@@ -145,7 +145,7 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
         case  ::dbaccess::DST_USERDEFINE10:
             {
                 OUString aTitle(DBA_RES(STR_PAGETITLE_ADVANCED));
-                AddTabPage("user" + OString(static_cast<int>(eType)), aTitle, ODriversSettings::CreateUser, nullptr);
+                AddTabPage("user" + OString(static_cast<int>(eType)), aTitle, ODriversSettings::CreateUser);
             }
             break;
         default:
@@ -186,7 +186,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     if ( pCollection->determineType(getDatasourceType( *m_xExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         OString sMySqlNative("mysqlnative");
-        AddTabPage(sMySqlNative, DBA_RES(STR_PAGETITLE_CONNECTION), ODriversSettings::CreateMySQLNATIVE, nullptr);
+        AddTabPage(sMySqlNative, DBA_RES(STR_PAGETITLE_CONNECTION), ODriversSettings::CreateMySQLNATIVE);
         RemoveTabPage("advanced");
         m_sMainPageID = sMySqlNative;
     }

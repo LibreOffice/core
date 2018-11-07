@@ -265,8 +265,7 @@ public:
 
     void                AddTabPage(const OString& rName,           // Name of the label for the new page to create
                                    const OUString& rLabel,         // UI Label for the new page to create
-                                   CreateTabPage pCreateFunc,      // != 0
-                                   GetTabPageRanges pRangesFunc);  // can be 0
+                                   CreateTabPage pCreateFunc);     // != 0
 
     void                AddTabPage(const OString& rName,           // Name of the label for the new page to create
                                    const OUString& rLabel,         // UI Label for the new page to create

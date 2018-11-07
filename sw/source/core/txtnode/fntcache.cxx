@@ -1815,7 +1815,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 aGlyphsKey = SwTextGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
                 pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
-                                             nTmpIdx , nLen, SalLayoutFlags::NONE, nullptr, pGlyphs );
+                                             nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
                 {
                     rInf.GetOut().Push();

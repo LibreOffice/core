@@ -1181,7 +1181,7 @@ public:
     sal_uInt16                          GetChildCount() const;
     vcl::Window*                        GetChild( sal_uInt16 nChild ) const;
     vcl::Window*                        GetWindow( GetWindowType nType ) const;
-    bool                                IsChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
+    bool                                IsChild( const vcl::Window* pWindow ) const;
     bool                                IsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false  ) const;
 
     /// Add all children to rAllChildren recursively.

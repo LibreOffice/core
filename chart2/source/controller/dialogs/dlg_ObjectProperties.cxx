@@ -346,7 +346,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
-            AddTabPage("alignment", SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::Create, nullptr);
+            AddTabPage("alignment", SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::Create);
             if( aCJKOptions.IsAsianTypographyEnabled() )
                 AddTabPage("asian", SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
             break;
@@ -357,7 +357,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
-            AddTabPage("legendpos", SchResId(STR_PAGE_POSITION), SchLegendPosTabPage::Create, nullptr);
+            AddTabPage("legendpos", SchResId(STR_PAGE_POSITION), SchLegendPosTabPage::Create);
             if (aCJKOptions.IsAsianTypographyEnabled())
                 AddTabPage("asian", SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
             break;
@@ -365,12 +365,12 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_POINT:
             if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
-                AddTabPage("options", SchResId(STR_PAGE_OPTIONS),SchOptionTabPage::Create, nullptr);
+                AddTabPage("options", SchResId(STR_PAGE_OPTIONS),SchOptionTabPage::Create);
             if( m_pParameter->ProvidesStartingAngle())
-                AddTabPage("polaroptions", SchResId(STR_PAGE_OPTIONS), PolarOptionsTabPage::Create, nullptr);
+                AddTabPage("polaroptions", SchResId(STR_PAGE_OPTIONS), PolarOptionsTabPage::Create);
 
             if( m_pParameter->HasGeometryProperties() )
-                AddTabPage("layout", SchResId(STR_PAGE_LAYOUT), SchLayoutTabPage::Create, nullptr);
+                AddTabPage("layout", SchResId(STR_PAGE_LAYOUT), SchLayoutTabPage::Create);
 
             if(m_pParameter->HasAreaProperties())
             {
@@ -383,7 +383,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
             AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
-            AddTabPage("datalabels", SchResId(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create, nullptr);
+            AddTabPage("datalabels", SchResId(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create);
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             if( aCJKOptions.IsAsianTypographyEnabled() )
@@ -394,12 +394,12 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_AXIS:
         {
             if( m_pParameter->HasScaleProperties() )
-                AddTabPage("scale", SchResId(STR_PAGE_SCALE), ScaleTabPage::Create, nullptr);
+                AddTabPage("scale", SchResId(STR_PAGE_SCALE), ScaleTabPage::Create);
 
             if( m_pParameter->HasScaleProperties() )//no positioning page for z axes so far as the tickmarks are not shown so far
-                AddTabPage("axispos", SchResId(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create, nullptr);
+                AddTabPage("axispos", SchResId(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create);
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
-            AddTabPage("axislabel", SchResId(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create, nullptr);
+            AddTabPage("axislabel", SchResId(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create);
             if( m_pParameter->HasNumberProperties() )
                 AddTabPage("numberformat", SchResId(STR_PAGE_NUMBERS), RID_SVXPAGE_NUMBERFORMAT);
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
@@ -410,12 +410,12 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         }
 
         case OBJECTTYPE_DATA_ERRORS_X:
-            AddTabPage("xerrorbar", SchResId(STR_PAGE_XERROR_BARS), ErrorBarsTabPage::Create, nullptr);
+            AddTabPage("xerrorbar", SchResId(STR_PAGE_XERROR_BARS), ErrorBarsTabPage::Create);
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
         case OBJECTTYPE_DATA_ERRORS_Y:
-            AddTabPage("yerrorbar", SchResId(STR_PAGE_YERROR_BARS), ErrorBarsTabPage::Create, nullptr);
+            AddTabPage("yerrorbar", SchResId(STR_PAGE_YERROR_BARS), ErrorBarsTabPage::Create);
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
@@ -430,7 +430,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             break;
 
         case OBJECTTYPE_DATA_CURVE:
-            AddTabPage("trendline", SchResId(STR_PAGE_TRENDLINE_TYPE), TrendlineTabPage::Create, nullptr);
+            AddTabPage("trendline", SchResId(STR_PAGE_TRENDLINE_TYPE), TrendlineTabPage::Create);
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
@@ -462,7 +462,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                 /*  When rotation is supported for equation text boxes, use
                     SchAlignmentTabPage::Create here. The special
                     SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
-                AddTabPage("alignment", SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation, nullptr);
+                AddTabPage("alignment", SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation);
             }
             break;
         default:

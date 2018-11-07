@@ -263,7 +263,7 @@ void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )
 {
     std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
     ScCompiler aComp(pDoc, rPos, *pTemp, formula::FormulaGrammar::GRAM_DEFAULT);
-    aComp.MoveRelWrap(MAXCOL, MAXROW);
+    aComp.MoveRelWrap();
     aComp.CreateStringFromTokenArray( rBuffer );
 }
 
