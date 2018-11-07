@@ -1160,7 +1160,7 @@ static bool lcl_IsOwnDocument( SwView& rView )
 
 void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 {
-    if ( comphelper::string::getTokenCount(rUserData, ';') > 1 &&
+    if ( rUserData.indexOf(';')>=0 && // more than one token
         // For document without layout only in the onlinelayout or
         // while forward/backward
          (!m_pWrtShell->IsNewLayout() || m_pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse) )
