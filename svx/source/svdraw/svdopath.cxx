@@ -2021,14 +2021,33 @@ void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
 
     if (nPntMax<=0)
         return;
-
     nPntMax--;
-    for (sal_uInt32 nPlusNum = 0; nPlusNum <= nPntMax; ++nPlusNum)
+    if (nPnt>nPntMax)
+        return;
+
+    // calculate the number of plus points
+    sal_uInt16 nCnt = 0;
+    if (rXPoly.GetFlags(nPnt)!=PolyFlags::Control)
     {
+        if (nPnt==0 && IsClosed())
+            nPnt=nPntMax;
+        if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control)
+            nCnt++;
+        if (nPnt==nPntMax && IsClosed())
+            nPnt=0;
+        if (nPnt<nPntMax && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control)
+            nCnt++;
+    }
+
+    // construct the plus points
+    for (sal_uInt32 nPlusNum = 0; nPlusNum < nCnt; ++nPlusNum)
+    {
+        nPnt = static_cast<sal_uInt16>(rHdl.GetPointNum());
         std::unique_ptr<SdrHdl> pHdl(new SdrHdlBezWgt(&rHdl));
         pHdl->SetPolyNum(rHdl.GetPolyNum());
 
-        if (nPnt==0 && IsClosed()) nPnt=nPntMax;
+        if (nPnt==0 && IsClosed())
+            nPnt=nPntMax;
         if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control && nPlusNum==0)
         {
             pHdl->SetPos(rXPoly[nPnt-1]);
@@ -2036,7 +2055,8 @@ void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
         }
         else
         {
-            if (nPnt==nPntMax && IsClosed()) nPnt=0;
+            if (nPnt==nPntMax && IsClosed())
+                nPnt=0;
             if (nPnt<rXPoly.GetPointCount()-1 && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control)
             {
                 pHdl->SetPos(rXPoly[nPnt+1]);
