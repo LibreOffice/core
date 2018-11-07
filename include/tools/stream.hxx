@@ -272,9 +272,9 @@ public:
     sal_uInt64      Seek( sal_uInt64 nPos );
     sal_uInt64      SeekRel( sal_Int64 nPos );
     sal_uInt64      Tell() const { return m_nBufFilePos + m_nBufActualPos;  }
-    sal_uInt64      TellEnd();
+    virtual sal_uInt64 TellEnd();
     // length between current (Tell()) pos and end of stream
-    virtual sal_uInt64 remainingSize();
+    sal_uInt64      remainingSize();
     void            Flush();
     // next Tell() <= nSize
     bool            SetStreamSize( sal_uInt64 nSize );
@@ -669,7 +669,7 @@ public:
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     void            SetResizeOffset( std::size_t nNewResize ) { nResize = nNewResize; }
-    virtual sal_uInt64 remainingSize() override { FlushBuffer(true); return GetEndOfData() - Tell(); }
+    virtual sal_uInt64 TellEnd() override { FlushBuffer(true); return nEndOfData; }
 };
 
 #endif

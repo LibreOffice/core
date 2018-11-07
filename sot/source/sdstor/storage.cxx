@@ -181,12 +181,12 @@ sal_uInt32 SotStorageStream::GetSize() const
     return nSize;
 }
 
-sal_uInt64 SotStorageStream::remainingSize()
+sal_uInt64 SotStorageStream::TellEnd()
 {
     if (pOwnStm)
-        return pOwnStm->GetSize() - Tell();
+        return pOwnStm->GetSize();
 
-    return SvStream::remainingSize();
+    return SvStream::TellEnd();
 }
 
 void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
