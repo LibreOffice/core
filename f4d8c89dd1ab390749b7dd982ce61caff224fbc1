@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_13886bc4",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-07T10:50:59Z",
+      "side": 1,
+      "message": "Two questions here:\n1. Is that the Tell() call that materializes the stream? then if it\u0027s enough to just do\n\n    (void)rStrm.Tell();\n    m_cbMac \u003d rStrm.TellEnd();\n\n2. Isn\u0027t a comment here required, to avoid someone later optimizing this back?",
+      "range": {
+        "startLine": 6267,
+        "startChar": 4,
+        "endLine": 6269,
+        "endChar": 21
+      },
+      "revId": "f4d8c89dd1ab390749b7dd982ce61caff224fbc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
