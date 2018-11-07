@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_73d7af25",
+        "filename": "offapi/com/sun/star/awt/FieldUnit.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-07T08:17:50Z",
+      "side": 1,
+      "message": "I\u0027m not sure I would add new entries here, merely because the corresponding FieldUnit enum has them.  Are you sure those additional values should be exposed to 3rd party code?\n\nInstead of changing the values of CUSTOM...100TH_MM here, would it be possible to change the values of the FieldUnit enum?",
+      "revId": "47d051a200ebc901ad96d268b5954d16394bdd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
