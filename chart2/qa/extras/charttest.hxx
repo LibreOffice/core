@@ -65,6 +65,9 @@
 #include <libxml/xmlwriter.h>
 #include <libxml/xpath.h>
 
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XVisualObject.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -84,6 +87,8 @@ public:
     uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
 
     uno::Reference<chart::XChartDocument> getChartDocFromWriter( sal_Int32 nShape );
+    awt::Size getPageSize( const Reference< chart2::XChartDocument > & xChartDoc );
+    awt::Size getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize);
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -588,6 +593,28 @@ sal_Int16 getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDo
     xNumPS->getPropertyValue("Type") >>= nType;
 
     return nType;
+}
+
+awt::Size ChartTest::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc )
+{
+    awt::Size aSize( 0, 0 );
+    uno::Reference< com::sun::star::embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xVisualObject.is() );
+    aSize = xVisualObject->getVisualAreaSize( com::sun::star::embed::Aspects::MSOLE_CONTENT );
+return aSize;
+}
+
+awt::Size ChartTest::getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize)
+{
+    Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
+    chart2::RelativeSize aRelativeSize;
+    xProp->getPropertyValue( "RelativeSize" ) >>= aRelativeSize;
+    double fX = aRelativeSize.Primary * rPageSize.Width;
+    double fY = aRelativeSize.Secondary * rPageSize.Height;
+    awt::Size aSize;
+    aSize.Width = static_cast< sal_Int32 >( ::rtl::math::round( fX ) );
+    aSize.Height = static_cast< sal_Int32 >( ::rtl::math::round( fY ) );
+    return aSize;
 }
 
 #endif // INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
