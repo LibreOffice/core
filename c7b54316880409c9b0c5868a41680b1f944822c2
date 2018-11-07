@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_b646254f",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-07T12:29:56Z",
+      "side": 1,
+      "message": "Wrong identations",
+      "revId": "c7b54316880409c9b0c5868a41680b1f944822c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_166979bd",
+        "filename": "oox/source/drawingml/chart/converterbase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-07T12:29:56Z",
+      "side": 1,
+      "message": "Please add spaces around \"\u003d\", like:\nrChartSize.Width \u003d 16000;",
+      "revId": "c7b54316880409c9b0c5868a41680b1f944822c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_7651dd0e",
+        "filename": "oox/source/drawingml/chart/converterbase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-07T12:29:56Z",
+      "side": 1,
+      "message": "Why we cannot set this values inside getChartSize()?\nCan we use ChartModelHelper::getDefaultPageSize() method to obtain Chart Size, instead of hardcoding these values?\nPlease correct indentations.",
+      "revId": "c7b54316880409c9b0c5868a41680b1f944822c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
