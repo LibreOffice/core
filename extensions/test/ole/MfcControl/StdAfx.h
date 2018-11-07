@@ -27,20 +27,20 @@
 #endif // _MSC_VER > 1000
 
 // stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// or project specific include files that are used frequently,
+// but are changed infrequently
 
 #define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
 
 #include <afxctl.h>         // MFC support for ActiveX Controls
 #include <afxext.h>         // MFC extensions
-#include <afxdtctl.h>       // MFC support for Internet Explorer 4 Comon Controls
+#include <afxdtctl.h>       // MFC support for Internet Explorer 4 Common Controls
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>         // MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 // Delete the two includes below if you do not wish to use the MFC
-//  database classes
+// database classes
 #include <afxdb.h>          // MFC database classes
 #include <afxdao.h>         // MFC DAO database classes
 
