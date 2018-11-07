@@ -82,7 +82,7 @@ static int XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 
 static int XIOErrorHdl( Display * )
 {
-    if ( Application::IsMainThread() )
+    if (::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier())
     {
         /*  #106197# hack: until a real shutdown procedure exists
          *  _exit ASAP

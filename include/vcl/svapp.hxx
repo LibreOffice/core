@@ -456,14 +456,14 @@ public:
     /** Run the main event processing loop until it is quit by Quit().
 
      @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 Execute();
 
     /** Quit the program
 
      @see Execute, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 Quit();
 
@@ -490,14 +490,14 @@ public:
      if an event was processed.
 
      @see Execute, Quit, Reschedule, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 Yield();
 
     /**
 
      @see Execute, Quit, Reschedule, Yield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 EndYield();
 
@@ -509,18 +509,18 @@ public:
      @returns SolarMutex reference
 
      @see Execute, Quit, Reschedule, Yield, EndYield,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static comphelper::SolarMutex& GetSolarMutex();
 
-    /** Queries whether we are in main thread.
+    /** Get the main thread ID.
 
-     @returns true if we are in main thread, false if not
+     @returns oslThreadIdentifier that contains the thread ID
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           ReleaseSolarMutex, AcquireSolarMutex,
     */
-    static bool                 IsMainThread();
+    static oslThreadIdentifier  GetMainThreadIdentifier();
 
     /** @brief Release Solar Mutex(es) for this thread
 
@@ -530,7 +530,7 @@ public:
      @returns The number of mutexes that were acquired by this thread.
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, AcquireSolarMutex,
+          GetMainThreadIdentifier, AcquireSolarMutex,
     */
     static sal_uInt32           ReleaseSolarMutex();
 
@@ -540,7 +540,7 @@ public:
      VCL concurrently.
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex,
     */
     static void                 AcquireSolarMutex( sal_uInt32 nCount );
 
