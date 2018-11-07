@@ -771,7 +771,8 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
     }
 }
 
-PatternFormatter::PatternFormatter()
+PatternFormatter::PatternFormatter(Edit* pEdit)
+    : FormatterBase(pEdit)
 {
     mbSameMask          = true;
     mbInPattKeyInput    = false;
@@ -816,16 +817,16 @@ void PatternFormatter::Reformat()
     }
 }
 
-PatternField::PatternField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle )
+PatternField::PatternField(vcl::Window* pParent, WinBits nWinStyle)
+    : SpinField(pParent, nWinStyle)
+    , PatternFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void PatternField::dispose()
 {
-    PatternFormatter::SetField( nullptr );
+    ClearField();
     SpinField::dispose();
 }
 
@@ -868,16 +869,16 @@ void PatternField::Modify()
     SpinField::Modify();
 }
 
-PatternBox::PatternBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+PatternBox::PatternBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox( pParent, nWinStyle )
+    , PatternFormatter(this)
 {
-    SetField( this );
     Reformat();
 }
 
 void PatternBox::dispose()
 {
-    PatternFormatter::SetField( nullptr );
+    ClearField();
     ComboBox::dispose();
 }
 
@@ -1409,7 +1410,8 @@ void DateFormatter::ImplInit()
     mnExtDateFormat     = ExtDateFieldFormat::SystemShort;
 }
 
-DateFormatter::DateFormatter() :
+DateFormatter::DateFormatter(Edit* pEdit) :
+    FormatterBase(pEdit),
     maFieldDate( 0 ),
     maLastDate( 0 ),
     maMin( 1, 1, 1900 ),
@@ -1702,10 +1704,10 @@ void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
 
 DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle ),
+    DateFormatter(this),
     maFirst( GetMin() ),
     maLast( GetMax() )
 {
-    SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
     ResetLastDate();
@@ -1713,7 +1715,7 @@ DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void DateField::dispose()
 {
-    DateFormatter::SetField( nullptr );
+    ClearField();
     SpinField::dispose();
 }
 
@@ -1808,17 +1810,17 @@ void DateField::Last()
     SpinField::Last();
 }
 
-DateBox::DateBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+DateBox::DateBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox( pParent, nWinStyle )
+    , DateFormatter(this)
 {
-    SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
 }
 
 void DateBox::dispose()
 {
-    DateFormatter::SetField( nullptr );
+    ClearField();
     ComboBox::dispose();
 }
 
@@ -2303,7 +2305,8 @@ void TimeFormatter::ImplInit()
     mnTimeFormat    = TimeFormat::Hour24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
 }
 
-TimeFormatter::TimeFormatter() :
+TimeFormatter::TimeFormatter(Edit* pEdit) :
+    FormatterBase(pEdit),
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 999999999 ),
@@ -2507,17 +2510,17 @@ void TimeFormatter::Reformat()
 
 TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle ),
+    TimeFormatter(this),
     maFirst( GetMin() ),
     maLast( GetMax() )
 {
-    SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false ) );
     Reformat();
 }
 
 void TimeField::dispose()
 {
-    TimeFormatter::SetField( nullptr );
+    ClearField();
     SpinField::dispose();
 }
 
@@ -2623,17 +2626,17 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
     ReformatAll();
 }
 
-TimeBox::TimeBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+TimeBox::TimeBox(vcl::Window* pParent, WinBits nWinStyle)
+    : ComboBox(pParent, nWinStyle)
+    , TimeFormatter(this)
 {
-    SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false ) );
     Reformat();
 }
 
 void TimeBox::dispose()
 {
-    TimeFormatter::SetField( nullptr );
+    ClearField();
     ComboBox::dispose();
 }
 

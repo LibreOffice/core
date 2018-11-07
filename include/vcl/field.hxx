@@ -55,11 +55,11 @@ protected:
 
     SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
 
-    void                    SetField( Edit* pField )    { mpField = pField; }
     Edit*                   GetField() const            { return mpField; }
+    void                    ClearField() { mpField.clear(); }
 
 public:
-    explicit                FormatterBase();
+    explicit                FormatterBase(Edit* pField);
     virtual                 ~FormatterBase();
 
     const LocaleDataWrapper& GetLocaleDataWrapper() const;
@@ -95,7 +95,7 @@ private:
     bool                   mbInPattKeyInput;
 
 protected:
-                            PatternFormatter();
+                            PatternFormatter(Edit* pEdit);
 
     SAL_DLLPRIVATE void ImplSetMask(const OString& rEditMask,
         const OUString& rLiteralMask);
@@ -174,7 +174,7 @@ protected:
     sal_Int64               mnFirst;
     sal_Int64               mnLast;
 
-                            NumericFormatter();
+                            NumericFormatter(Edit* pEdit);
 
     void                    FieldUp();
     void                    FieldDown();
@@ -244,7 +244,7 @@ protected:
     FieldUnit               meUnit;
     Link<MetricFormatter&,void> maCustomConvertLink;
 
-                            MetricFormatter();
+                            MetricFormatter(Edit* pEdit);
 
     SAL_DLLPRIVATE void     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
@@ -262,7 +262,7 @@ private:
 class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 {
 protected:
-                            CurrencyFormatter();
+                            CurrencyFormatter(Edit* pEdit);
     SAL_DLLPRIVATE void     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
     virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
 
@@ -292,7 +292,7 @@ private:
     SAL_DLLPRIVATE void     ImplInit();
 
 protected:
-                            DateFormatter();
+                            DateFormatter(Edit* pEdit);
 
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
     SAL_DLLPRIVATE void     ImplDateReformat( const OUString& rStr, OUString& rOutStr );
@@ -372,7 +372,7 @@ private:
 protected:
     tools::Time             maFieldTime;
 
-                            TimeFormatter();
+                            TimeFormatter(Edit* pEdit);
 
     SAL_DLLPRIVATE void     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const tools::Time& rTime );

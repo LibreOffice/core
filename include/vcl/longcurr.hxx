@@ -57,7 +57,7 @@ protected:
     BigInt                  mnMin;
     BigInt                  mnMax;
 
-                            LongCurrencyFormatter();
+                            LongCurrencyFormatter(Edit* pEdit);
 private:
     friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter const & );
     SAL_DLLPRIVATE void        ImpInit();
