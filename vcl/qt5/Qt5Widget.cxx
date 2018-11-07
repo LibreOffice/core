@@ -86,7 +86,17 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
     }
     else
     {
-        QImage* pImage = new QImage(size(), Qt5_DefaultFormat32);
+        QImage* pImage = nullptr;
+
+        if (m_pFrame->m_pQImage)
+            pImage = new QImage(
+                m_pFrame->m_pQImage->copy(0, 0, pEvent->size().width(), pEvent->size().height()));
+        else
+        {
+            pImage = new QImage(size(), Qt5_DefaultFormat32);
+            pImage->fill(Qt::transparent);
+        }
+
         m_pFrame->m_pQt5Graphics->ChangeQImage(pImage);
         m_pFrame->m_pQImage.reset(pImage);
     }
