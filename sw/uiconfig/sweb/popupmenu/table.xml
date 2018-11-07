@@ -71,7 +71,7 @@
       <menu:menuitem menu:id=".uno:AutoFormat"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:FontDialog">
+  <menu:menu menu:id=".uno:CharacterMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuseparator/>
@@ -84,7 +84,7 @@
       <menu:menuitem menu:id=".uno:EditStyle"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:ParagraphDialog">
+  <menu:menu menu:id=".uno:ParagraphMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuseparator/>
@@ -98,7 +98,7 @@
       <menu:menuitem menu:id=".uno:EditStyle"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:OutlineBullet">
+  <menu:menu menu:id=".uno:NumberingMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
       <menu:menuseparator/>

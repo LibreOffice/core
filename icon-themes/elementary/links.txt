@@ -205,6 +205,9 @@ cmd/sc_numericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
+cmd/sc_charactermenu.png cmd/sc_fontdialog.png
+cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 
 # Zoom
 cmd/32/adjust.png cmd/32/zoomoptimal.png
