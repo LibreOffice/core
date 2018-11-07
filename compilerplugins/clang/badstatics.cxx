@@ -197,6 +197,8 @@ public:
                 || name == "m_aUncommitedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
+                || (loplugin::DeclCheck(pVarDecl).Var("maThreadSpecific")
+                    .Class("ScDocument").GlobalNamespace()) // not owning
                 || name == "s_pLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                ) // these variables appear unproblematic

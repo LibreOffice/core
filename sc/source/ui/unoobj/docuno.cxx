@@ -425,7 +425,8 @@ uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
         osl_atomic_increment( &m_refCount );
         // we need a reference to SvNumberFormatsSupplierObj during queryInterface,
         // otherwise it'll be deleted
-        uno::Reference<util::XNumberFormatsSupplier> xFormatter(new SvNumberFormatsSupplierObj(pDocShell->GetDocument().GetFormatTable() ));
+        uno::Reference<util::XNumberFormatsSupplier> xFormatter(
+            new SvNumberFormatsSupplierObj(pDocShell->GetDocument().GetThreadedContext().GetFormatTable() ));
         {
             xNumberAgg.set(uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
             // extra block to force deletion of the temporary before setDelegator
