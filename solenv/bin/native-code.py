@@ -663,6 +663,7 @@ print ("""/*
 
 #include <config_features.h>
 #include <osl/detail/component-mapping.h>
+#include <string.h>
 
 """)
 if not options.pure_c:
