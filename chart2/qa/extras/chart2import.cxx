@@ -111,7 +111,10 @@ public:
     void testTdf115107_2(); // import complex data point labels in cobo charts with multiple data series
 
     void testTdf116163();
+
     void testTdf121205();
+
+    void testTdf114179();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -177,7 +180,10 @@ public:
     CPPUNIT_TEST(testTdf115107_2);
 
     CPPUNIT_TEST(testTdf116163);
+
     CPPUNIT_TEST(testTdf121205);
+
+    CPPUNIT_TEST(testTdf114179);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1598,6 +1604,41 @@ void Chart2ImportTest::testTdf121205()
     CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aTitle);
 }
 
+awt::Size getPageSize( const Reference< chart2::XChartDocument > & xChartDoc )
+{
+awt::Size aSize( 0, 0 );
+uno::Reference< com::sun::star::embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );
+CPPUNIT_ASSERT( xVisualObject.is() );
+aSize = xVisualObject->getVisualAreaSize( com::sun::star::embed::Aspects::MSOLE_CONTENT );
+return aSize;
+}
+
+awt::Size getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize)
+{
+Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
+chart2::RelativeSize aRelativeSize;
+xProp->getPropertyValue( "RelativeSize" ) >>= aRelativeSize;
+double fX = aRelativeSize.Primary * rPageSize.Width;
+double fY = aRelativeSize.Secondary * rPageSize.Height;
+awt::Size aSize;
+aSize.Width = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
+aSize.Height = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
+return aSize;
+}
+
+void Chart2ImportTest::testTdf114179()
+{
+load( "/chart2/qa/extras/data/docx/", "testTdf114179.docx" );
+uno::Reference< chart2::XChartDocument > xChartDoc (getChartDocFromWriter(0), uno::UNO_QUERY);
+CPPUNIT_ASSERT( xChartDoc.is() );
+css::uno::Reference<chart2::XDiagram> xDiagram;
+xDiagram.set(xChartDoc->getFirstDiagram());
+CPPUNIT_ASSERT_MESSAGE("There is a Diagram.",xDiagram.is());
+awt::Size aPage = getPageSize(xChartDoc);
+awt::Size aSize=getSize(xDiagram,aPage);
+CPPUNIT_ASSERT(aSize.Width>0);
+CPPUNIT_ASSERT(aSize.Height>0);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
 
