@@ -36,6 +36,27 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
+namespace
+{
+/// Looks up the value of the rInternalName -> nProperty key in rProperties.
+oox::OptValue<sal_Int32> findProperty(const oox::drawingml::LayoutPropertyMap& rProperties,
+                                      const OUString& rInternalName, sal_Int32 nProperty)
+{
+    oox::OptValue<sal_Int32> oRet;
+
+    auto it = rProperties.find(rInternalName);
+    if (it != rProperties.end())
+    {
+        const oox::drawingml::LayoutProperty& rProperty = it->second;
+        auto itProperty = rProperty.find(nProperty);
+        if (itProperty != rProperty.end())
+            oRet = itProperty->second;
+    }
+
+    return oRet;
+}
+}
+
 namespace oox { namespace drawingml {
 
 IteratorAttr::IteratorAttr( )
@@ -436,24 +457,48 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
             }
 
+            // See if children requested more than 100% space in total: scale
+            // down in that case.
+            sal_Int32 nTotalWidth = 0;
+            bool bSpaceFromConstraints = false;
             for (auto & aCurrShape : rShape->getChildren())
             {
-                // Extract properties relevant for this shape from constraints.
-                oox::OptValue<sal_Int32> oWidth;
-                auto it = aProperties.find(aCurrShape->getInternalName());
-                if (it != aProperties.end())
+                oox::OptValue<sal_Int32> oWidth
+                    = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+
+                awt::Size aSize = aChildSize;
+                if (oWidth.has())
                 {
-                    LayoutProperty& rProperty = it->second;
-                    auto itProperty = rProperty.find(XML_w);
-                    if (itProperty != rProperty.end())
-                        oWidth = itProperty->second;
+                    aSize.Width = oWidth.get();
+                    bSpaceFromConstraints = true;
                 }
+                if (nDir == XML_fromL || nDir == XML_fromR)
+                    nTotalWidth += aSize.Width;
+            }
+
+            double fWidthScale = 1.0;
+            if (nTotalWidth > rShape->getSize().Width && nTotalWidth)
+            {
+                fWidthScale = rShape->getSize().Width;
+                fWidthScale /= nTotalWidth;
+            }
+
+            // Don't add automatic space if we take space from constraints.
+            if (bSpaceFromConstraints)
+                fSpace = 0;
+
+            for (auto& aCurrShape : rShape->getChildren())
+            {
+                // Extract properties relevant for this shape from constraints.
+                oox::OptValue<sal_Int32> oWidth
+                    = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
 
                 aCurrShape->setPosition(aCurrPos);
 
                 awt::Size aSize = aChildSize;
                 if (oWidth.has())
                     aSize.Width = oWidth.get();
+                aSize.Width *= fWidthScale;
                 aCurrShape->setSize(aSize);
 
                 aCurrShape->setChildSize(aChildSize);
