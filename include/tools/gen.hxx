@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 
+#include <cassert>
 #include <limits.h>
 #include <algorithm>
 #include <ostream>
@@ -194,8 +195,16 @@ public:
 
     long            getWidth() const { return Width(); }
     long            getHeight() const { return Height(); }
-    void            setWidth(long nWidth)  { nA = nWidth; }
-    void            setHeight(long nHeight)  { nB = nHeight; }
+    void            setWidth(long nWidth)
+    {
+        assert((nWidth >= 0 || nWidth == -1) && "Wrong value for width");
+        nA = nWidth;
+    }
+    void            setHeight(long nHeight)
+    {
+        assert((nHeight >= 0 || nHeight == -1) && "Wrong value for height");
+        nB = nHeight;
+    }
 
     Pair const &    toPair() const { return *this; }
     Pair &          toPair() { return *this; }
