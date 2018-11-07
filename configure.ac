@@ -9587,7 +9587,7 @@ else
     if test "$COM" = "MSC"; then
         HUNSPELL_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/hunspell.lib"
     else
-        HUNSPELL_LIBS="-L${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs -lhunspell-1.6"
+        HUNSPELL_LIBS="-L${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs -lhunspell-1.7"
     fi
     BUILD_TYPE="$BUILD_TYPE HUNSPELL"
 fi
