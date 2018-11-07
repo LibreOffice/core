@@ -322,11 +322,8 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
             }
         }
 
-        if ( pPage )
-        {
-            if ( !bOldInvaContent )
-                pPage->ValidateContent();
-        }
+        if ( pPage  && !bOldInvaContent )
+            pPage->ValidateContent();
 
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( pOldUp == GetUpper(), "SwTextFrame::CalcFollow: heavy follow" );

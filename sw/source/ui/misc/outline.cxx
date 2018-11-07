@@ -351,25 +351,22 @@ short SwOutlineTabDialog::Ok()
         ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                          sHeadline );
         SwTextFormatColl* pColl = rWrtSh.FindTextFormatCollByName( sHeadline );
-        if( !pColl )
+        if( !pColl && aCollNames[i] != sHeadline)
         {
-            if(aCollNames[i] != sHeadline)
-            {
-                SwTextFormatColl* pTextColl = rWrtSh.GetTextCollFromPool(
-                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
-                pTextColl->DeleteAssignmentToListLevelOfOutlineStyle();
-                pTextColl->ResetFormatAttr(RES_PARATR_NUMRULE);
+            SwTextFormatColl* pTextColl = rWrtSh.GetTextCollFromPool(
+                static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
+            pTextColl->DeleteAssignmentToListLevelOfOutlineStyle();
+            pTextColl->ResetFormatAttr(RES_PARATR_NUMRULE);
 
-                if( !aCollNames[i].isEmpty() )
+            if( !aCollNames[i].isEmpty() )
+            {
+                pTextColl = rWrtSh.GetParaStyle(
+                            aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
+                if(pTextColl)
                 {
-                    pTextColl = rWrtSh.GetParaStyle(
-                                aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
-                    if(pTextColl)
-                    {
-                        pTextColl->AssignToListLevelOfOutlineStyle(i);
-                        SwNumRuleItem aItem(pOutlineRule->GetName());
-                        pTextColl->SetFormatAttr(aItem);
-                    }
+                    pTextColl->AssignToListLevelOfOutlineStyle(i);
+                    SwNumRuleItem aItem(pOutlineRule->GetName());
+                    pTextColl->SetFormatAttr(aItem);
                 }
             }
         }

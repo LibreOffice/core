@@ -2531,21 +2531,18 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
                 break;
             }
     }
-    if(bCreate)
+    if(bCreate && !pFound)
     {
-        if(!pFound)
+        pFound = new SwDSParam(rData);
+        m_DataSourceParams.push_back(std::unique_ptr<SwDSParam>(pFound));
+        try
         {
-            pFound = new SwDSParam(rData);
-            m_DataSourceParams.push_back(std::unique_ptr<SwDSParam>(pFound));
-            try
-            {
-                uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
-                if(xComponent.is())
-                    xComponent->addEventListener(pImpl->m_xDisposeListener.get());
-            }
-            catch(const uno::Exception&)
-            {
-            }
+            uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
+            if(xComponent.is())
+                xComponent->addEventListener(pImpl->m_xDisposeListener.get());
+        }
+        catch(const uno::Exception&)
+        {
         }
     }
     return pFound;

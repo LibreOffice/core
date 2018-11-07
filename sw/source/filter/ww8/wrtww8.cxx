@@ -1363,13 +1363,10 @@ WW8_WrPct::~WW8_WrPct()
 void WW8_WrPct::AppendPc(WW8_FC nStartFc)
 {
     WW8_CP nStartCp = nStartFc - nOldFc;    // subtract the beginning of the text
-    if ( !nStartCp )
+    if ( !nStartCp && !m_Pcts.empty())
     {
-        if (!m_Pcts.empty())
-        {
-            OSL_ENSURE(1 == m_Pcts.size(), "empty Piece!");
-            m_Pcts.pop_back();
-        }
+        OSL_ENSURE(1 == m_Pcts.size(), "empty Piece!");
+        m_Pcts.pop_back();
     }
 
     nOldFc = nStartFc;                      // remember StartFc as old

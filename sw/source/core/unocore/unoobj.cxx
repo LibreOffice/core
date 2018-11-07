@@ -540,12 +540,9 @@ SwUnoCursorHelper::SetCursorPropertyValue(
             else if (FN_UNO_IS_NUMBER == rEntry.nWID)
             {
                 bool bIsNumber(false);
-                if (rValue >>= bIsNumber)
+                if ((rValue >>= bIsNumber) && !bIsNumber)
                 {
-                    if (!bIsNumber)
-                    {
-                        pTextNd->SetCountedInList( false );
-                    }
+                    pTextNd->SetCountedInList( false );
                 }
             }
             //PROPERTY_MAYBEVOID!

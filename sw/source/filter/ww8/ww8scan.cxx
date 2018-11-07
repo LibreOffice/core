@@ -3184,11 +3184,8 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
 
 WW8_FC WW8PLCFx_Fc_FKP::Where()
 {
-    if( !pFkp )
-    {
-        if( !NewFkp() )
-            return WW8_FC_MAX;
-    }
+    if( !pFkp && !NewFkp() )
+        return WW8_FC_MAX;
     WW8_FC nP = pFkp ? pFkp->Where() : WW8_FC_MAX;
     if( nP != WW8_FC_MAX )
         return nP;
@@ -3216,11 +3213,8 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
 
 void WW8PLCFx_Fc_FKP::advance()
 {
-    if( !pFkp )
-    {
-        if( !NewFkp() )
-            return;
-    }
+    if( !pFkp && !NewFkp() )
+        return;
 
     if (!pFkp)
         return;
@@ -5107,14 +5101,11 @@ sal_uInt16 WW8PLCFMan::WhereIdx(bool *const pbStart, WW8_CP *const pPos) const
     for (sal_uInt16 i=m_nPLCF; i > 0; --i)
     {
         pD = &m_aD[i-1];
-        if (pD != m_pPcdA)
+        if (pD != m_pPcdA && pD->nStartPos < nNext )
         {
-            if( pD->nStartPos < nNext )
-            {
-                nNext = pD->nStartPos;
-                nNextIdx = i-1;
-                bStart = true;
-            }
+            nNext = pD->nStartPos;
+            nNextIdx = i-1;
+            bStart = true;
         }
     }
     if( pPos )

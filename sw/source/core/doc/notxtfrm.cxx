@@ -690,13 +690,10 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     else
         rRect.Intersection_( aFrameRect );
 
-    if ( pCMS )
+    if ( pCMS && pCMS->m_bRealHeight )
     {
-        if ( pCMS->m_bRealHeight )
-        {
-            pCMS->m_aRealHeight.setY(rRect.Height());
-            pCMS->m_aRealHeight.setX(0);
-        }
+        pCMS->m_aRealHeight.setY(rRect.Height());
+        pCMS->m_aRealHeight.setX(0);
     }
 
     return true;

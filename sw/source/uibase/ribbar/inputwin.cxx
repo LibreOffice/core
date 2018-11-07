@@ -223,42 +223,39 @@ void SwInputWindow::ShowWin()
         {
             sEdit += pMgr->GetCurFieldPar2();
         }
-        else if( bFirst )
+        else if( bFirst && bIsTable )
         {
-            if( bIsTable )
+            m_bResetUndo = true;
+            SAL_WARN_IF(
+                officecfg::Office::Common::Undo::Steps::get() <= 0,
+                "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
+
+            m_bDoesUndo = pWrtShell->DoesUndo();
+            if( !m_bDoesUndo )
             {
-                m_bResetUndo = true;
-                SAL_WARN_IF(
-                    officecfg::Office::Common::Undo::Steps::get() <= 0,
-                    "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
-
-                m_bDoesUndo = pWrtShell->DoesUndo();
-                if( !m_bDoesUndo )
-                {
-                    pWrtShell->DoUndo();
-                }
-
-                if( !pWrtShell->SwCursorShell::HasSelection() )
-                {
-                    pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
-                    pWrtShell->SetMark();
-                    pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
-                }
-                if( pWrtShell->SwCursorShell::HasSelection() )
-                {
-                    pWrtShell->StartUndo( SwUndoId::DELETE );
-                    pWrtShell->Delete();
-                    if( SwUndoId::EMPTY != pWrtShell->EndUndo( SwUndoId::DELETE ))
-                    {
-                        m_bCallUndo = true;
-                    }
-                }
-                pWrtShell->DoUndo(false);
-
-                SfxItemSet aSet( pWrtShell->GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
-                if( pWrtShell->GetTableBoxFormulaAttrs( aSet ))
-                    sEdit += aSet.Get( RES_BOXATR_FORMULA ).GetFormula();
+                pWrtShell->DoUndo();
             }
+
+            if( !pWrtShell->SwCursorShell::HasSelection() )
+            {
+                pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
+                pWrtShell->SetMark();
+                pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
+            }
+            if( pWrtShell->SwCursorShell::HasSelection() )
+            {
+                pWrtShell->StartUndo( SwUndoId::DELETE );
+                pWrtShell->Delete();
+                if( SwUndoId::EMPTY != pWrtShell->EndUndo( SwUndoId::DELETE ))
+                {
+                    m_bCallUndo = true;
+                }
+            }
+            pWrtShell->DoUndo(false);
+
+            SfxItemSet aSet( pWrtShell->GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
+            if( pWrtShell->GetTableBoxFormulaAttrs( aSet ))
+                sEdit += aSet.Get( RES_BOXATR_FORMULA ).GetFormula();
         }
 
         if( bFirst )

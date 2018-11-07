@@ -1146,28 +1146,25 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
             if( bDone )
             {
-                if( pFlyFormat )
+                if( pFlyFormat && pRecord )
                 {
-                    if( pRecord )
-                    {
-                        SfxItemSet aFlySet( m_rDoc.GetAttrPool(),
-                            svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                    SfxItemSet aFlySet( m_rDoc.GetAttrPool(),
+                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
 
-                        tools::Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                                                pRecord->nDyTextTop,
-                                                pRecord->nDxTextRight,
-                                                pRecord->nDyTextBottom  );
-                        MatchSdrItemsIntoFlySet( pTextObj,
-                                                 aFlySet,
-                                                 pRecord->eLineStyle,
-                                                 pRecord->eLineDashing,
-                                                 pRecord->eShapeType,
-                                                 aInnerDist );
+                    tools::Rectangle aInnerDist(   pRecord->nDxTextLeft,
+                                             pRecord->nDyTextTop,
+                                             pRecord->nDxTextRight,
+                                             pRecord->nDyTextBottom  );
+                    MatchSdrItemsIntoFlySet( pTextObj,
+                                             aFlySet,
+                                             pRecord->eLineStyle,
+                                             pRecord->eLineDashing,
+                                             pRecord->eShapeType,
+                                             aInnerDist );
 
-                        pFlyFormat->SetFormatAttr( aFlySet );
+                    pFlyFormat->SetFormatAttr( aFlySet );
 
-                        MapWrapIntoFlyFormat(pRecord, pFlyFormat);
-                    }
+                    MapWrapIntoFlyFormat(pRecord, pFlyFormat);
                 }
                 aString.clear();
                 rbEraseTextObj = (nullptr != pFlyFormat);
