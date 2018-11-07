@@ -123,7 +123,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         case SwFieldIds::Chapter:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
             {
-                static_cast<SwChapterField*>(pField)->ChangeExpansion( pFrame,
+                static_cast<SwChapterField*>(pField)->ChangeExpansion(*pFrame,
                     &static_txtattr_cast<SwTextField const*>(pHint)->GetTextNode());
             }
             {
