@@ -55,14 +55,14 @@ protected:
 
     SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
 
+    void                    SetField( Edit* pField )    { mpField = pField; }
+    Edit*                   GetField() const            { return mpField; }
+
 public:
     explicit                FormatterBase();
     virtual                 ~FormatterBase();
 
     const LocaleDataWrapper& GetLocaleDataWrapper() const;
-
-    void                    SetField( Edit* pField )    { mpField = pField; }
-    Edit*                   GetField() const            { return mpField; }
 
     bool                    MustBeReformatted() const   { return mbReformat; }
     void                    MarkToBeReformatted( bool b ) { mbReformat = b; }
