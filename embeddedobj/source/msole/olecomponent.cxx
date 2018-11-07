@@ -454,8 +454,9 @@ OleComponent::~OleComponent()
 
     if ( m_pOleWrapClientSite || m_pImplAdviseSink || m_pInterfaceContainer || m_bOleInitialized )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
         m_refCount++;
+        aGuard.clear();
         try {
             Dispose();
         } catch( const uno::Exception& ) {}
@@ -475,12 +476,15 @@ OleComponent::~OleComponent()
 
 void OleComponent::Dispose()
 {
-    // the mutex must be locked before this method is called
     if ( m_bDisposed )
         return;
 
+    // Call CloseObject() without m_aMutex locked, since it will call
+    // IOleObject::Close(), which can call event listeners, which can run on a
+    // different thread.
     CloseObject();
 
+    osl::MutexGuard aGuard(m_aMutex);
     if ( m_pOleWrapClientSite )
     {
         m_pOleWrapClientSite->disconnectOleComponent();
@@ -1414,7 +1418,7 @@ void OleComponent::OnClose_Impl()
 
 void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1459,6 +1463,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
             }
         }
     }
+    aGuard.clear();
 
     Dispose();
 }
