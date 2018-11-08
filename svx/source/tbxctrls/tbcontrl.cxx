@@ -1952,8 +1952,13 @@ bool BorderColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEve
     else
     {
         css::table::BorderLine2 aTable;
-        if ( rEvent.IsEnabled && ( rEvent.State >>= aTable ) )
-            aColor = Color(aTable.Color);
+        if ( rEvent.IsEnabled )
+            rEvent.State >>= aTable;
+
+        SvxBorderLine aLine;
+        SvxBoxItem::LineToSvxLine( aTable, aLine, false );
+        if ( !aLine.isEmpty() )
+            aColor = aLine.GetColor();
 
         if ( rEvent.FeatureURL.Complete == ".uno:BorderTLBR" )
         {
