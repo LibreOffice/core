@@ -280,6 +280,12 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         ret = DESKTOP_LXQT;
     else
     {
+        // tdf#121275 if we still can't tell, and WAYLAND_DISPLAY
+        // is set, default to gtk3
+        const char* pWaylandStr = getenv("WAYLAND_DISPLAY");
+        if (pWaylandStr && *pWaylandStr)
+            return DESKTOP_GNOME;
+
         // these guys can be slower, with X property fetches,
         // round-trips etc. and so are done later.
 
