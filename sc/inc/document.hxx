@@ -457,7 +457,6 @@ private:
     mutable ScInterpreterContext maInterpreterContext;
 
     osl::Mutex mScLookupMutex; // protection for thread-unsafe parts of handling ScLookup
-    std::vector<ScLookupCacheMap*> mThreadStoredScLookupCaches; // temporarily stored for computation threads
 
     static const sal_uInt16 nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;

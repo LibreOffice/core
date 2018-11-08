@@ -1163,9 +1163,8 @@ void ScDocument::ClearLookupCaches()
 {
     assert(!IsThreadedGroupCalcInProgress());
     DELETEZ(GetNonThreadedContext().mScLookupCache);
-    for( ScLookupCacheMap* cacheMap : mThreadStoredScLookupCaches )
-        delete cacheMap;
-    mThreadStoredScLookupCaches.clear();
+    // Clear lookup cache in all interpreter-contexts in the (threaded/non-threaded) pools.
+    ScInterpreterContextPool::ClearLookupCaches();
 }
 
 bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)

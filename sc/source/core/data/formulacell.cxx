@@ -1605,7 +1605,8 @@ void ScFormulaCell::Interpret()
             }
 
             ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, this);
-            InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
+            ScInterpreterContextGetterGuard aContextGetterGuard(*pDocument, pDocument->GetFormatTable());
+            InterpretTail( *aContextGetterGuard.GetInterpreterContext(), SCITP_NORMAL);
         }
 
         pDocument->DecInterpretLevel();
@@ -1679,8 +1680,9 @@ void ScFormulaCell::Interpret()
                             ((pLastCell = rRecursionHelper.GetList().back().pCell) != this))
                     {
                         pDocument->IncInterpretLevel();
+                        ScInterpreterContextGetterGuard aContextGetterGuard(*pDocument, pDocument->GetFormatTable());
                         pLastCell->InterpretTail(
-                                pDocument->GetNonThreadedContext(), SCITP_CLOSE_ITERATION_CIRCLE);
+                            *aContextGetterGuard.GetInterpreterContext(), SCITP_CLOSE_ITERATION_CIRCLE);
                         pDocument->DecInterpretLevel();
                     }
                     // Start at 1, init things.
@@ -1716,7 +1718,8 @@ void ScFormulaCell::Interpret()
                         {
                             (*aIter).aPreviousResult = pIterCell->aResult;
                             pDocument->IncInterpretLevel();
-                            pIterCell->InterpretTail( pDocument->GetNonThreadedContext(), SCITP_FROM_ITERATION);
+                            ScInterpreterContextGetterGuard aContextGetterGuard(*pDocument, pDocument->GetFormatTable());
+                            pIterCell->InterpretTail( *aContextGetterGuard.GetInterpreterContext(), SCITP_FROM_ITERATION);
                             pDocument->DecInterpretLevel();
                         }
                         if (bFirst)
@@ -1810,7 +1813,8 @@ void ScFormulaCell::Interpret()
                         if (pCell->IsDirtyOrInTableOpDirty())
                         {
                             pDocument->IncInterpretLevel();
-                            pCell->InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
+                            ScInterpreterContextGetterGuard aContextGetterGuard(*pDocument, pDocument->GetFormatTable());
+                            pCell->InterpretTail( *aContextGetterGuard.GetInterpreterContext(), SCITP_NORMAL);
                             pDocument->DecInterpretLevel();
                             if (!pCell->IsDirtyOrInTableOpDirty() && !pCell->IsIterCell())
                                 pCell->bRunning = (*aIter).bOldRunning;
@@ -4679,12 +4683,13 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
             // Start nThreadCount new threads
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
-            std::vector<ScInterpreterContext*> contexts(nThreadCount);
+            ScThreadedInterpreterContextGetterGuard aContextGetterGuard(nThreadCount, *pDocument, pNonThreadedFormatter);
+            ScInterpreterContext* context = nullptr;
             for (int i = 0; i < nThreadCount; ++i)
             {
-                contexts[i] = new ScInterpreterContext(*pDocument, pNonThreadedFormatter);
-                pDocument->SetupFromNonThreadedContext(*contexts[i], i);
-                rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
+                context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
+                pDocument->SetupFromNonThreadedContext(*context, i);
+                rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, context, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");
@@ -4694,9 +4699,9 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
             for (int i = 0; i < nThreadCount; ++i)
             {
+                context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
                 // This is intentionally done in this main thread in order to avoid locking.
-                pDocument->MergeBackIntoNonThreadedContext(*contexts[i], i);
-                delete contexts[i];
+                pDocument->MergeBackIntoNonThreadedContext(*context, i);
             }
 
             SAL_INFO("sc.threaded", "Done");
