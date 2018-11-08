@@ -2074,6 +2074,11 @@
           <desc>Specifies the URL used with the UNO command Donation (SID_DONATION).</desc>
         </info>
       </prop>
+      <prop oor:name="LicenseURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command License (SID_SHOWLICENSE).</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="History">
       <!-- OldLocation: soffice.ini -->

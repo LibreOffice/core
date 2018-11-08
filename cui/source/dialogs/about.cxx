@@ -74,6 +74,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aCopyrightTextStr = m_pCopyrightText->GetText();
     get(m_pWebsiteButton, "website");
     get(m_pCreditsButton, "credits");
+    get(m_pLicenseButton, "license");
     m_aCreditsLinkStr = get<FixedText>("link")->GetText();
     m_sBuildStr = get<FixedText>("buildid")->GetText();
     m_aVendorTextStr = get<FixedText>("vendor")->GetText();
@@ -97,6 +98,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     // Connect all handlers
     m_pCreditsButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     m_pWebsiteButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
+    m_pLicenseButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
 
     get<PushButton>("close")->GrabFocus();
 }
@@ -115,6 +117,7 @@ void AboutDialog::dispose()
     m_pLogoReplacement.clear();
     m_pCreditsButton.clear();
     m_pWebsiteButton.clear();
+    m_pLicenseButton.clear();
     m_pBuildIdLink.clear();
     SfxModalDialog::dispose();
 }
@@ -126,6 +129,9 @@ IMPL_LINK( AboutDialog, HandleClick, Button*, pButton, void )
     // Find which button was pressed and from this, get the URL to be opened
     if (pButton == m_pCreditsButton)
         sURL = m_aCreditsLinkStr;
+    else if (pButton == m_pLicenseButton)
+        //@todo: dispatch SID_SHOW_LICENSE
+        sURL = officecfg::Office::Common::Menus::LicenseURL::get();
     else if (pButton == m_pWebsiteButton)
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
