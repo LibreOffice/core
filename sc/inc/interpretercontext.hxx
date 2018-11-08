@@ -39,6 +39,7 @@ struct ScInterpreterContext
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
     ScLookupCacheMap* mScLookupCache; // cache for lookups like VLOOKUP and MATCH
+    std::vector<sal_uInt32>* pConditionsIterateParameterIfs;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
         : mrDoc(rDoc)
@@ -46,6 +47,7 @@ struct ScInterpreterContext
         , mnTokenCachePos(0)
         , maTokens(TOKEN_CACHE_SIZE, nullptr)
         , mScLookupCache(nullptr)
+        , pConditionsIterateParameterIfs(nullptr)
     {
     }
 
