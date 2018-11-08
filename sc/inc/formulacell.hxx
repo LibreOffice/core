@@ -108,6 +108,24 @@ class SC_DLLPUBLIC ScFormulaCell : public SvtListener
 {
 private:
     ScFormulaCellGroupRef mxGroup;       // Group of formulae we're part of
+    bool            bDirty         : 1; // Must be (re)calculated
+    bool            bTableOpDirty  : 1; // Dirty flag for TableOp
+    bool            bChanged       : 1; // Whether something changed regarding display/representation
+    bool            bRunning       : 1; // Already interpreting right now
+    bool            bCompile       : 1; // Must be (re)compiled
+    bool            bSubTotal      : 1; // Cell is part of or contains a SubTotal
+    bool            bIsIterCell    : 1; // Cell is part of a circular reference
+    bool            bInChangeTrack : 1; // Cell is in ChangeTrack
+    bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
+    bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
+    bool            mbAllowNumberFormatChange : 1; /* allow setting further calculated
+                                                      number formats as hard number format */
+    bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
+    bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
+    bool            mbSeenInPath     : 1; // For detecting cycle involving formula groups and singleton formulacells
+    ScMatrixMode    cMatrixFlag      : 8;
+    sal_uInt16      nSeenInIteration : 16;   // Iteration cycle in which the cell was last encountered
+    SvNumFormatType nFormatType      : 16;
     ScFormulaResult aResult;
     formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
     ScTokenArray*   pCode;              // The (new) token array
@@ -116,24 +134,6 @@ private:
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
-    sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
-    SvNumFormatType nFormatType;
-    ScMatrixMode    cMatrixFlag;
-    bool            bDirty         : 1; // Must be (re)calculated
-    bool            bChanged       : 1; // Whether something changed regarding display/representation
-    bool            bRunning       : 1; // Already interpreting right now
-    bool            bCompile       : 1; // Must be (re)compiled
-    bool            bSubTotal      : 1; // Cell is part of or contains a SubTotal
-    bool            bIsIterCell    : 1; // Cell is part of a circular reference
-    bool            bInChangeTrack : 1; // Cell is in ChangeTrack
-    bool            bTableOpDirty  : 1; // Dirty flag for TableOp
-    bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
-    bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
-    bool            mbAllowNumberFormatChange : 1; /* allow setting further calculated
-                                                      number formats as hard number format */
-    bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
-    bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
-    bool            mbSeenInPath     : 1; // For detecting cycle involving formula groups and singleton formulacells
 
     /**
      * Update reference in response to cell copy-n-paste.
