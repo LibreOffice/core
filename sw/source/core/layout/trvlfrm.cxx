@@ -172,7 +172,6 @@ bool SwLayoutFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                              SwCursorMoveState* pCMS, bool bTestBackground ) const
 {
-    bool bRet = false;
     Point aPoint( rPoint );
 
     // check, if we have to adjust the point
@@ -184,9 +183,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         aPoint.setY( std::min( aPoint.Y(), getFrameArea().Bottom() ) );
     }
 
-    bool bTextRet = false;
-    bool bBackRet = false;
-
+    bool bRet = false;
     //Could it be a free flying one?
     //If his content should be protected, we can't set the Cursor in it, thus
     //all changes should be impossible.
@@ -203,11 +200,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         //We fix the StartPoint if no Content below the page 'answers' and then
         //start all over again one page before the current one.
         //However we can't use Flys in such a case.
-        if ( SwLayoutFrame::GetCursorOfst( &aTextPos, aPoint, pCMS ) )
-        {
-            bTextRet = true;
-        }
-        else
+        if (!SwLayoutFrame::GetCursorOfst(&aTextPos, aPoint, pCMS))
         {
             if ( pCMS && (pCMS->m_bStop || pCMS->m_bExactOnly) )
             {
@@ -219,6 +212,8 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             // GetContentPos may have modified pCMS
             if ( pCMS && pCMS->m_bStop )
                 return false;
+
+            bool bTextRet = false;
 
             OSL_ENSURE( pCnt, "Cursor is gone to a Black hole" );
             if( pCMS && pCMS->m_pFill && pCnt->IsTextFrame() )
@@ -239,7 +234,6 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                     assert(pCnt->IsNoTextFrame());
                     aTextPos = SwPosition( *static_cast<SwNoTextFrame const*>(pCnt)->GetNode() );
                 }
-                bTextRet = true;
             }
         }
 
@@ -258,23 +252,22 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             }
         }
 
+        bool bBackRet = false;
         // Check objects in the background if nothing else matched
         if ( GetSortedObjs() )
         {
             bBackRet = lcl_GetCursorOfst_Objects( this, true, &aBackPos, rPoint, pCMS );
         }
 
-        if ( ( bConsiderBackground && bTestBackground && bBackRet ) || !bTextRet )
+        if (bConsiderBackground && bTestBackground && bBackRet)
         {
-            bRet = bBackRet;
             (*pPos) = aBackPos;
         }
-        else if (bTextRet && !bBackRet)
+        else if (!bBackRet)
         {
-            bRet = bTextRet;
             (*pPos) = aTextPos;
         }
-        else
+        else // bBackRet && !(bConsiderBackground && bTestBackground)
         {
             /* In order to provide a selection as accurate as possible when we have both
              * text and background object, then we compute the distance between both
@@ -349,21 +342,17 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
             if ( bValidTextDistance && bValidBackDistance && basegfx::fTools::more( nTextDistance, nBackDistance ) )
             {
-                bRet = bBackRet;
                 (*pPos) = aBackPos;
             }
             else
             {
-                bRet = bTextRet;
                 (*pPos) = aTextPos;
             }
         }
     }
 
-    if ( bRet )
-        rPoint = aPoint;
-
-    return bRet;
+    rPoint = aPoint;
+    return true;
 }
 
 bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
