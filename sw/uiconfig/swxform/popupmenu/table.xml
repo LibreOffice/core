@@ -52,9 +52,7 @@
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ResetAttributes"/>
-  <menu:menu menu:id=".uno:TableMenu">
+  <menu:menu menu:id=".uno:StyleMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HeadingRowsRepeat"/>
       <menu:menuitem menu:id=".uno:RowSplit"/>
@@ -71,6 +69,9 @@
       <menu:menuitem menu:id=".uno:AutoFormat"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
   <menu:menu menu:id=".uno:CharacterMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:FontDialog"/>
