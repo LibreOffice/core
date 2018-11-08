@@ -35,6 +35,8 @@ private:
     friend class VclPtr<MessageDialog>;
     MessageDialog(vcl::Window* pParent, WinBits nStyle);
 
+    virtual void StateChanged(StateChangedType nType) override;
+
 public:
     MessageDialog(vcl::Window* pParent, const OUString& rMessage, VclMessageType eMessageType,
                   VclButtonsType eButtonsType);
