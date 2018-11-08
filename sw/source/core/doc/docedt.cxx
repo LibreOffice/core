@@ -501,6 +501,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 > const &xSpeller,
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
                     bool bGrammarCheck,
+                    SwRootFrame const*const pLayout,
                     SwConversionArgs *pConvArgs  ) const
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
@@ -602,7 +603,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             {
                                 uno::Reference< lang::XComponent > xDoc( GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
-                                const ModelToViewHelper aConversionMap(*pNd->GetTextNode());
+                                const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
                                 const OUString& aExpandText = aConversionMap.getViewText();
 
                                 // get XFlatParagraph to use...

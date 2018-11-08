@@ -80,7 +80,8 @@ struct containsPos
     }
 };
 
-ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
+ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
+        SwRootFrame const*const pLayout, ExpandMode eMode)
 {
     const OUString& rNodeText = rNode.GetText();
     m_aRetText = rNodeText;
@@ -162,7 +163,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
                                 const SwDoc *pDoc = rNode.GetDoc();
                                 aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
-                                    : rFootnote.GetViewNumStr(*pDoc, nullptr/*TODO?*/);
+                                    : rFootnote.GetViewNumStr(*pDoc, pLayout);
                                 aFieldResult.m_eType = FieldResult::FOOTNOTE;
                             }
                             break;
