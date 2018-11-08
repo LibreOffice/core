@@ -2303,7 +2303,6 @@ void DesktopLOKTest::testGetSignatureState_NonSigned()
 
 void DesktopLOKTest::testInsertCertificate()
 {
-#if 0
     comphelper::LibreOfficeKit::setActive();
 
     // Load the document, save it into a temp file and load that file again
@@ -2371,7 +2370,6 @@ void DesktopLOKTest::testInsertCertificate()
     }
 
     comphelper::LibreOfficeKit::setActive(false);
-#endif
 }
 
 namespace {
