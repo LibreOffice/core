@@ -12,8 +12,17 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:Bold"/>
+  <menu:menuitem menu:id=".uno:Italic"/>
+  <menu:menuitem menu:id=".uno:Underline"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:SuperScript"/>
+  <menu:menuitem menu:id=".uno:SubScript"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertSymbol"/>
-  <menu:menu menu:id=".uno:InsertFieldMenu">
+  <menu:menu menu:id=".uno:FieldMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertCurrentDate"/>
       <menu:menuitem menu:id=".uno:InsertCurrentTime"/>
@@ -27,6 +36,4 @@
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ResetAttributes"/>
 </menu:menupopup>
