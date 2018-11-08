@@ -51,7 +51,7 @@ Dim oFactoryKey as Object
 		InitializeConverter(oLocale, 2)
 		ToggleGoOnButton()
 		oFactoryKey = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
-		DialogModel.chkTextDocuments.Enabled =  oFactoryKey.hasbyName(&quot;com.sun.star.text.TextDocument&quot;)
+		DialogModel.chkTextDocuments.Enabled = oFactoryKey.hasbyName(&quot;com.sun.star.text.TextDocument&quot;)
 		DialogModel.cmdGoOn.DefaultButton = True
 		DialogModel.lstCurrencies.TabIndex = 12
 		DialogConvert.GetControl(&quot;optWholeDir&quot;).SetFocus()
@@ -136,7 +136,7 @@ Dim sExtension as String
 				bIsReadOnly = False
 				RetrieveDocumentObjects()
 				sViewPath = CutPathView(SourceFile, 60)
-				DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+				DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot; (&quot; &amp; sViewPath &amp; &quot;)&quot;
 			End If
 			InitializeDocument() = Not bIsReadOnly
 		Else
@@ -235,7 +235,7 @@ Dim TextBoxText as String
 				TextBoxText = TextBoxText &amp; DeleteStr(sInclusiveSubDir,&quot;~&quot;) &amp; chr(13)
 			End If
 		Else
-			TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; ConvertFromUrl(Source) &amp; chr(13) 
+			TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; ConvertFromUrl(Source) &amp; chr(13)
 		End If
 		TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; ConvertFromUrl(TargetDir) &amp; chr(13)
 		If DialogModel.chkProtect.State = 1 Then
@@ -243,8 +243,8 @@ Dim TextBoxText as String
 		End If
 		DialogModel.txtConfig.Text = TextBoxText
 	 	ToggleProgressStep()
-		DialogModel.cmdGoOn.Enabled = False 	
-		InitializeThirdStep() = True	
+		DialogModel.cmdGoOn.Enabled = False
+		InitializeThirdStep() = True
 	Else
 		InitializeThirdStep() = False
 	End If
@@ -265,7 +265,7 @@ Dim LocStep as Integer
  	DialogConvert.GetControl(&quot;lstCurrencies&quot;).Visible = Not bMakeVisible
 	DialogConvert.GetControl(&quot;cmdBack&quot;).Visible = bMakeVisible
  	DialogConvert.GetControl(&quot;cmdGoOn&quot;).Visible = bMakeVisible
-	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	 	
+	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.png&quot;
 End Sub
 
 
@@ -319,8 +319,8 @@ Dim sNoDirMessage as String
 				If DialogModel.chkTextDocuments.State = 1 Then
 					If (Instr(1, sLocMimeType, &quot;text&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;) = 0) Then
 						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
-						bIsValid = False						
-					End If				
+						bIsValid = False
+					End If
 				Else
 					If (Instr(1, sLocMimeType, &quot;spreadsheet&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;)) = 0 Then
 						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
@@ -339,7 +339,7 @@ Dim sNoDirMessage as String
 			End If
 		End if
 	Else
-		Msgbox(HeaderString &amp; &quot; &apos;&quot; &amp; ConvertFromUrl(sPath) &amp; &quot;&apos; &quot; &amp;  sMsgNOTTHERE,48, sMsgDLGTITLE)
+		Msgbox(HeaderString &amp; &quot; &apos;&quot; &amp; ConvertFromUrl(sPath) &amp; &quot;&apos; &quot; &amp; sMsgNOTTHERE,48, sMsgDLGTITLE)
 	End If
 	If bIsValid Then
 		AssignFileName() = sPath
@@ -350,7 +350,7 @@ End Function
 
 
 Sub ToggleGoOnButton()
-Dim bDoEnable as Boolean	
+Dim bDoEnable as Boolean
 Dim sLocMimeType as String
 Dim sPath as String
 	bDoEnable = Ubound(DialogModel.lstCurrencies.SelectedItems()) &gt; -1
@@ -365,7 +365,7 @@ End Sub
 
 Sub CallFolderPicker()
 	GetFolderName(DialogModel.txtTarget)
-	ToggleGoOnButton()	
+	ToggleGoOnButton()
 End Sub
 
 
@@ -374,7 +374,7 @@ Sub CallFilePicker()
 		Dim oMasterKey as Object
 		Dim oTypes() as Object
 		Dim oUIKey() as Object
-		
+
 		oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.TypeDetection.Types&quot;)
 		oTypes() = oMasterKey.Types
 		oUIKey = GetRegistryKeyContent(&quot;org.openoffice.Office.UI/FilterClassification/LocalFilters&quot;)
@@ -409,7 +409,7 @@ End Sub
 
 Sub PreviousStep()
 	DialogModel.Step = 2
-	DialogModel.cmdGoOn.Label =  sGOON
+	DialogModel.cmdGoOn.Label = sGOON
 	DialogModel.cmdCancel.Label = sCANCEL
 End Sub
 </script:module>
