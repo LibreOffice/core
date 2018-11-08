@@ -4644,6 +4644,10 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
         if ( bHyperThreadingActive && nThreadCount >= 2 )
             nThreadCount /= 2;
 
+        std::vector<std::vector<sal_uInt32>>& rConditionsCollection = pDocument->aConditionsCollection;
+        if (rConditionsCollection.size() < static_cast<size_t>(nThreadCount))
+            rConditionsCollection.resize(nThreadCount);
+
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
         {
             assert(!pDocument->IsThreadedGroupCalcInProgress());
@@ -4657,6 +4661,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             for (int i = 0; i < nThreadCount; ++i)
             {
                 contexts[i] = new ScInterpreterContext(*pDocument, pNonThreadedFormatter);
+                contexts[i]->pConditionsIterateParameterIfs = &rConditionsCollection[i];
                 pDocument->SetupFromNonThreadedContext(*contexts[i], i);
                 rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }

@@ -541,6 +541,10 @@ private:
 
     size_t              mnMutationGuardFlags;
 
+    // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
+    // This is populated/used only when formula-group threading is enabled.
+    std::vector<std::vector<sal_uInt32>> aConditionsCollection;
+
 public:
     bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
     void                     GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
