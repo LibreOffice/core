@@ -10,35 +10,16 @@
 #include <memory>
 #include <test/screenshot_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
-#include <editeng/editids.hrc>
-#include <editeng/editview.hxx>
-#include <editeng/outliner.hxx>
-#include <osl/endian.h>
-#include <osl/conditn.hxx>
-#include <osl/file.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <svl/srchitem.hxx>
 #include <svx/numinf.hxx>
-#include <vcl/pngwrite.hxx>
-#include <vcl/weld.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
-#include <sharedocdlg.hxx>
-#include <protectiondlg.hxx>
-#include <docuno.hxx>
 #include <scabstdlg.hxx>
-#include <reffact.hxx>
 #include <scui_def.hxx>
-#include <impex.hxx>
 #include <patattr.hxx>
 
-#include <sc.hrc>
 #include <strings.hrc>
 #include <scresid.hxx>
 #include <scitems.hxx>

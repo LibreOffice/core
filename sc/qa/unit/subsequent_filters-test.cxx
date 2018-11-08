@@ -15,14 +15,12 @@
 #include <osl/file.hxx>
 #include <config_features.h>
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
-#include <svl/nfkeytab.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svxids.hrc>
 
 #include <drwlayer.hxx>
 #include <svx/svdpage.hxx>
@@ -57,7 +55,6 @@
 #include <editutil.hxx>
 #include <cellvalue.hxx>
 #include <attrib.hxx>
-#include <tabvwsh.hxx>
 #include <fillinfo.hxx>
 #include <scopetools.hxx>
 #include <columnspanset.hxx>
@@ -67,24 +64,19 @@
 #include <stlpool.hxx>
 #include <hints.hxx>
 
-#include <orcusfiltersimpl.hxx>
 #include <orcusfilters.hxx>
 #include <filter.hxx>
-#include <orcusinterface.hxx>
-#include <generalfunction.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
-#include <algorithm>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

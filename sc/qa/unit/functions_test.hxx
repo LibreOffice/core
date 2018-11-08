@@ -8,10 +8,12 @@
  */
 
 #include <sal/config.h>
+#include <sal/types.h>
 
 #include <unotest/filters-test.hxx>
-#include <scdll.hxx>
 #include "helper/qahelper.hxx"
+
+#include <com/sun/star/uno/Reference.hxx>
 
 class SCQAHELPER_DLLPUBLIC FunctionsTest : public ScBootstrapFixture, public test::FiltersTest
 {
@@ -30,7 +32,7 @@ public:
         unsigned int nFilterVersion) override;
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
+    css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

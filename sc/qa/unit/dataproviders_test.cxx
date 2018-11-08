@@ -10,9 +10,7 @@
 
 #include "helper/qahelper.hxx"
 #include <document.hxx>
-#include <stringutil.hxx>
 #include <address.hxx>
-#include <dataprovider.hxx>
 #include <dbdata.hxx>
 #include <datamapper.hxx>
 #include <scdll.hxx>

@@ -8,7 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <docsh.hxx>

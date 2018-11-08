@@ -10,10 +10,6 @@
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_DEBUGHELPER_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_DEBUGHELPER_HXX
 
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
-
 #ifdef _WIN32
 #if !defined NOMINMAX
 #define NOMINMAX
@@ -26,8 +22,6 @@
 
 #include <iostream>
 #include <vector>
-
-#include <svl/gridprinter.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
 #define CALC_TEST_PERF 0

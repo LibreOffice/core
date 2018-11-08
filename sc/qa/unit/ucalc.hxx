@@ -10,7 +10,8 @@
 #ifndef INCLUDED_SC_QA_UNIT_UCALC_HXX
 #define INCLUDED_SC_QA_UNIT_UCALC_HXX
 
-#include "helper/qahelper.hxx"
+#include <test/bootstrapfixture.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <stringutil.hxx>
 #include <memory>
