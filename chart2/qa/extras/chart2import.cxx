@@ -912,6 +912,7 @@ void Chart2ImportTest::testChartHatchFillXLSX()
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
+    // Check the chart background FillStyle is HATCH
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
     drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
@@ -919,6 +920,16 @@ void Chart2ImportTest::testChartHatchFillXLSX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Chart background fill in this xlsx should be loaded as hatch fill.",
         drawing::FillStyle_HATCH, eStyle);
 
+    // Check the FillBackground of chart background
+    bool bBackgroundFill = false;
+    xPropSet->getPropertyValue("FillBackground") >>= bBackgroundFill;
+    CPPUNIT_ASSERT(bBackgroundFill);
+
+    sal_Int32 nBackgroundColor;
+    xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFFFFFF), nBackgroundColor);
+
+    // Check the datapoint has HatchName value
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
 
@@ -926,6 +937,15 @@ void Chart2ImportTest::testChartHatchFillXLSX()
     OUString sHatchName;
     xPropertySet->getPropertyValue("HatchName") >>= sHatchName;
     CPPUNIT_ASSERT(!sHatchName.isEmpty());
+
+    // Check the FillBackground of datapoint
+    bool bBackgroundFillofDatapoint = false;
+    xPropertySet->getPropertyValue("FillBackground") >>= bBackgroundFillofDatapoint;
+    CPPUNIT_ASSERT(bBackgroundFillofDatapoint);
+
+    sal_Int32 nBackgroundColorofDatapoint;
+    xPropertySet->getPropertyValue("FillColor") >>= nBackgroundColorofDatapoint;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00B050), nBackgroundColorofDatapoint);
 }
 
 void Chart2ImportTest::testAxisTextRotationXLSX()

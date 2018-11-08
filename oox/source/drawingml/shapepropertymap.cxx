@@ -47,9 +47,9 @@ static const ShapePropertyIds spnDefaultShapeIds =
     PROP_FillBitmap, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
     PROP_FillHatch,
-    PROP_ShadowXDistance,
+    PROP_FillBackground,
     PROP_FillBitmapName,
-    PROP_FillBackground
+    PROP_ShadowXDistance
 };
 
 } // namespace
