@@ -141,7 +141,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                 case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_INPUTFIELD:
                     sOut = static_txtattr_cast<SwTextField const*>(pHt)
-                            ->GetFormatField().GetField()->ExpandField(true);
+                            ->GetFormatField().GetField()->ExpandField(true, nullptr);
                     break;
 
                 case RES_TXTATR_FTN:

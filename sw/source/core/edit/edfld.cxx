@@ -133,7 +133,7 @@ void SwEditShell::FieldToText( SwFieldType const * pType )
     Push();
     SwPaM* pPaM = GetCursor();
     // TODO: this is really hackish
-    SwFieldHint aHint( pPaM );
+    SwFieldHint aHint(pPaM, GetLayout());
     SwIterator<SwClient,SwFieldType> aIter(*pType);
     for( SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next() )
     {

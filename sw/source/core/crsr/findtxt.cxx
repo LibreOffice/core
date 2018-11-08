@@ -140,7 +140,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
                         const bool bEmpty = pHt->Which() != RES_TXTATR_FIELD
-                            || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true).isEmpty());
+                            || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true, nullptr).isEmpty());
                         if ( bEmpty && nStart == nCurrent )
                         {
                             rArr.push_back( nCurrent );

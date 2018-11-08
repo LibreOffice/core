@@ -887,7 +887,7 @@ lcl_ExportHints(
                     {
 
                         pUnoCursor->Right(
-                            pAttr->GetFormatField().GetField()->ExpandField( true ).getLength() + 2 );
+                            pAttr->GetFormatField().GetField()->ExpandField(true, nullptr).getLength() + 2 );
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
                         SwXTextPortion* pPortion =
