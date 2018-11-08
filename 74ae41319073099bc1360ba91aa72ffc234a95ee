@@ -16,6 +16,24 @@
       "revId": "74ae41319073099bc1360ba91aa72ffc234a95ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_0c972c93",
+        "filename": "sc/inc/formulacell.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-08T14:14:00Z",
+      "side": 1,
+      "message": "Indeed. For mass objects always consider size of individual member variables and their alignment. That\u0027s why usually objects go first, then pointers, then 32-bit values, then 16-bit values, then bool (or bit fields less then 16).\n\nActually I also see no benefit in reordering these. Clearly the instance is fully initialized when any member function is accessing things, so why move them around?",
+      "parentUuid": "3f3283f1_49e9a67e",
+      "revId": "74ae41319073099bc1360ba91aa72ffc234a95ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
