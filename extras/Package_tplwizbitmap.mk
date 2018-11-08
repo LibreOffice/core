@@ -14,9 +14,9 @@ $(eval $(call gb_Package_add_files,extras_tplwizbitmap,$(LIBO_SHARE_FOLDER)/temp
 	cancel_up.bmp \
 	down.bmp \
 	end.bmp \
-	euro_1.bmp \
-	euro_2.bmp \
-	euro_3.bmp \
+	euro_1.png \
+	euro_2.png \
+	euro_3.png \
 	ftpconnected.gif \
 	ftpconnecting.gif \
 	ftperror.gif \
