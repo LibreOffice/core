@@ -152,7 +152,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                                 aFieldResult.m_sExpand = ((eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP) : OUString("")) +
                                       static_txtattr_cast<SwTextField const*>(pAttr)->
-                                      GetFormatField().GetField()->ExpandField(true);
+                                      GetFormatField().GetField()->ExpandField(true, pLayout);
                                 aFieldResult.m_eType = FieldResult::FIELD;
                             }
                             break;

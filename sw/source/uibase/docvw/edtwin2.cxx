@@ -304,7 +304,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             sal_uInt16 nOldSubType = pField->GetSubType();
                             const_cast<SwField*>(pField)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sText = pField->ExpandField(true);
+                            sText = pField->ExpandField(true, rSh.GetLayout());
                             const_cast<SwField*>(pField)->SetSubType(nOldSubType);
                         }
                         break;

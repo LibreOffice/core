@@ -1707,7 +1707,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
 static OUString lcl_GetExpandedField(const SwField &rField)
 {
-    OUString sRet(rField.ExpandField(true));
+    OUString sRet(rField.ExpandField(true, nullptr));
 
     //replace LF 0x0A with VT 0x0B
     return sRet.replace(0x0A, 0x0B);

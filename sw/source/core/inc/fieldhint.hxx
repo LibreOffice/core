@@ -22,16 +22,20 @@
 
 #include <svl/hint.hxx>
 
+class SwPaM;
+class SwRootFrame;
+
 class SwFieldHint : public SfxHint
 {
-    SwPaM* pPaM;
-
 public:
-    SwFieldHint( SwPaM* p )
-        : pPaM(p)
+    SwPaM* const m_pPaM;
+    SwRootFrame const*const m_pLayout;
+
+    SwFieldHint(SwPaM *const pPaM, SwRootFrame const*const pLayout)
+        : m_pPaM(pPaM)
+        , m_pLayout(pLayout)
     {}
 
-    SwPaM* GetPaM() const { return pPaM; }
 };
 
 #endif

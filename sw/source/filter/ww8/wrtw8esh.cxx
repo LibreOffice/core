@@ -515,7 +515,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
 
     OutputField(nullptr, ww::eFORMTEXT, OUString(), FieldFlags::CmdEnd);
 
-    const OUString fieldStr( pField->ExpandField(true) );
+    const OUString fieldStr( pField->ExpandField(true, nullptr) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static sal_uInt8 aArr2[] = {

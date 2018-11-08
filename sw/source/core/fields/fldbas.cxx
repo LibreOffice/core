@@ -401,7 +401,8 @@ bool SwField::IsFixed() const
     return bRet;
 }
 
-OUString SwField::ExpandField(bool const bCached) const
+OUString
+SwField::ExpandField(bool const bCached, SwRootFrame const*const ) const
 {
     if ( m_bUseFieldValueCache )
     {

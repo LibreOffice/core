@@ -331,7 +331,7 @@ void RtfExport::DoComboBox(const OUString& /*rName*/, const OUString& /*rHelp*/,
 
 void RtfExport::DoFormText(const SwInputField* pField)
 {
-    OUString sResult = pField->ExpandField(true);
+    OUString sResult = pField->ExpandField(true, nullptr);
     const OUString& rHelp = pField->GetHelp();
     OUString sName = pField->GetPar2();
     const OUString& rStatus = pField->GetToolTip();

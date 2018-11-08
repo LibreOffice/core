@@ -690,7 +690,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
 
 static OUString lcl_GetText(SwFormatField const& rField)
 {
-    return rField.GetField()->ExpandField(true);
+    return rField.GetField()->ExpandField(true, nullptr);
 }
 
 TextAndReading SwTOXAuthority::GetText_Impl() const

@@ -1002,7 +1002,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
         {
             const_cast<SwDBSetNumberField*>(static_cast<const SwDBSetNumberField*>(pField))->Evaluate(&m_rDoc);
             aCalc.VarChange( sDBNumNm, static_cast<const SwDBSetNumberField*>(pField)->GetSetNumber());
-            pField->ExpandField(m_rDoc.IsClipBoard());
+            pField->ExpandField(m_rDoc.IsClipBoard(), nullptr);
         }
 #endif
         break;
@@ -1033,7 +1033,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
             // Entry present?
             sal_uInt16 nPos;
             HashStr* pFnd = aHashStrTable.Find( rName, &nPos );
-            OUString const value(pField->ExpandField(m_rDoc.IsClipBoard()));
+            OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
             if( pFnd )
             {
                 // Modify entry in the hash table
@@ -1547,7 +1547,7 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
                 // Entry present?
                 sal_uInt16 nPos;
                 HashStr* pFnd = rHashTable.Find( rName, &nPos );
-                OUString const value(pField->ExpandField(m_rDoc.IsClipBoard()));
+                OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
                 if( pFnd )
                 {
                     // modify entry in the hash table

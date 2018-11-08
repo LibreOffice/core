@@ -1385,7 +1385,7 @@ bool SwDoc::FieldHidesPara(const SwField& rField) const
             return static_cast<const SwHiddenParaField&>(rField).IsHidden();
         case SwFieldIds::Database:
             return FieldCanHideParaWeight(SwFieldIds::Database)
-                   && rField.ExpandField(true).isEmpty();
+                   && rField.ExpandField(true, nullptr).isEmpty();
         default:
             return false;
     }
@@ -1586,7 +1586,7 @@ bool SwDoc::RestoreInvisibleContent()
     return false;
 }
 
-bool SwDoc::ConvertFieldsToText()
+bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();
@@ -1635,7 +1635,7 @@ bool SwDoc::ConvertFieldsToText()
                         nWhich != SwFieldIds::RefPageGet&&
                         nWhich != SwFieldIds::RefPageSet))
                 {
-                    OUString sText = pField->ExpandField(true);
+                    OUString sText = pField->ExpandField(true, &rLayout);
 
                     // database fields should not convert their command into text
                     if( SwFieldIds::Database == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())

@@ -1140,7 +1140,8 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                     case RES_TXTATR_ANNOTATION :
                         {
                             SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
-                            const OUString aText = pField->ExpandField(true);
+                            const OUString aText = pField->ExpandField(true,
+                                    pSh ? pSh->GetLayout() : nullptr);
                             if( lcl_MinMaxString( aArg, aIter.GetFnt(), aText, 0,
                                 aText.getLength() ) )
                                 nAdd = 20;
@@ -1337,7 +1338,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
             case RES_TXTATR_ANNOTATION :
                 {
                     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
-                    OUString const aText = pField->ExpandField(true);
+                    OUString const aText = pField->ExpandField(true, pSh->GetLayout());
                     SwDrawTextInfo aDrawInf(pSh, *pOut, aText, 0, aText.getLength());
 
                     nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();

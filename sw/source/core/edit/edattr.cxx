@@ -618,7 +618,7 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
                 const SwField* const pField = pAttr->GetFormatField().GetField();
                 if (pField)
                 {
-                    sExp += pField->ExpandField(true);
+                    sExp += pField->ExpandField(true, &rLayout);
                 }
             }
         }

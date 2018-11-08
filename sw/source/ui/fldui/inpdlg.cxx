@@ -87,7 +87,7 @@ SwFieldInputDlg::SwFieldInputDlg(weld::Window *pParent, SwWrtShell &rS,
         CharClass aCC( LanguageTag( pSetField->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
         {
-            aStr = pSetField->ExpandField(true);
+            aStr = pSetField->ExpandField(true, rS.GetLayout());
         }
         else
             aStr = sFormula;

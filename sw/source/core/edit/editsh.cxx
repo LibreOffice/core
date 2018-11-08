@@ -738,7 +738,7 @@ SvNumberFormatter* SwEditShell::GetNumberFormatter()
 bool SwEditShell::ConvertFieldsToText()
 {
     StartAllAction();
-    bool bRet = GetDoc()->ConvertFieldsToText();
+    bool bRet = GetDoc()->ConvertFieldsToText(*GetLayout());
     EndAllAction();
     return bRet;
 }

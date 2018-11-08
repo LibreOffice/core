@@ -107,15 +107,15 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                 if( bName )
                     pRet = new SwFieldPortion( pField->GetFieldName() );
                 else
-                    pRet = new SwCombinedPortion( pField->ExpandField(bInClipboard) );
+                    pRet = new SwCombinedPortion( pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
             }
             break;
 
         case SwFieldIds::HiddenText:
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwHiddenPortion(aStr);
             }
             break;
@@ -128,8 +128,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             }
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
             break;
@@ -141,8 +141,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             }
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
             static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGECOOUNTFLD;
@@ -169,8 +169,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             }
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
             static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGENUMBERFLD;
@@ -197,8 +197,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             }
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
             break;
@@ -212,8 +212,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             }
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(aStr);
             }
             break;
@@ -226,8 +226,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             }
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(aStr);
             }
             break;
@@ -242,8 +242,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             subType = static_cast<SwGetRefField*>(pField)->GetSubType();
             {
                 OUString const str( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(str);
             }
             if( subType == REF_BOOKMARK  )
@@ -255,8 +255,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             subType = static_cast<SwDateTimeField*>(pField)->GetSubType();
             {
                 OUString const str( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(str);
             }
             if( subType & DATEFLD  )
@@ -267,8 +267,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         default:
             {
                 OUString const aStr( bName
-                        ? pField->GetFieldName()
-                        : pField->ExpandField(bInClipboard) );
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(aStr);
             }
     }
@@ -283,8 +283,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         }
         {
             OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard) );
+                ? pField->GetFieldName()
+                : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
             pRet = new SwFieldPortion(aStr, pTmpFnt, bPlaceHolder);
         }
     }

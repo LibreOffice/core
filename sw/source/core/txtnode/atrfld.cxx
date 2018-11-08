@@ -39,6 +39,7 @@
 #include <hints.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <fieldhint.hxx>
 
 
@@ -218,13 +219,13 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     if ( pHint )
     {
         // replace field content by text
-        SwPaM* pPaM = pHint->GetPaM();
+        SwPaM* pPaM = pHint->m_pPaM;
         SwDoc* pDoc = pPaM->GetDoc();
         const SwTextNode& rTextNode = mpTextField->GetTextNode();
         pPaM->GetPoint()->nNode = rTextNode;
         pPaM->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(&rTextNode), mpTextField->GetStart() );
 
-        OUString const aEntry( mpField->ExpandField( pDoc->IsClipBoard() ) );
+        OUString const aEntry(mpField->ExpandField(pDoc->IsClipBoard(), pHint->m_pLayout));
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
         pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
@@ -351,7 +352,7 @@ SwTextField::SwTextField(
     : SwTextAttr( rAttr, nStartPos )
 // fdo#39694 the ExpandField here may not give the correct result in all cases,
 // but is better than nothing
-    , m_aExpand( rAttr.GetField()->ExpandField(bInClipboard) )
+    , m_aExpand( rAttr.GetField()->ExpandField(bInClipboard, nullptr) )
     , m_pTextNode( nullptr )
 {
     rAttr.SetTextField( *this );
@@ -378,7 +379,9 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
     OSL_ENSURE( m_pTextNode, "SwTextField: where is my TextNode?" );
 
     const SwField* pField = GetFormatField().GetField();
-    const OUString aNewExpand( pField->ExpandField(m_pTextNode->GetDoc()->IsClipBoard()) );
+    const OUString aNewExpand( pField->ExpandField(m_pTextNode->GetDoc()->IsClipBoard(),
+        // can't do any better than this here...
+        m_pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) );
 
     const SwFieldIds nWhich = pField->GetTyp()->Which();
     const bool bSameExpandSimpleNotification
@@ -569,7 +572,7 @@ void SwTextInputField::NotifyContentChange( SwFormatField& rFormatField )
 
 const OUString SwTextInputField::GetFieldContent() const
 {
-    return GetFormatField().GetField()->ExpandField(false);
+    return GetFormatField().GetField()->ExpandField(false, nullptr/*ignored anyway*/);
 }
 
 void SwTextInputField::UpdateFieldContent()

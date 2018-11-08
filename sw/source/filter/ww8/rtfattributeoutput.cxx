@@ -1539,7 +1539,7 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
             m_aRunText->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
         }
         if (pField)
-            m_aRunText->append(msfilter::rtfutil::OutString(pField->ExpandField(true),
+            m_aRunText->append(msfilter::rtfutil::OutString(pField->ExpandField(true, nullptr),
                                                             m_rExport.m_eDefaultEncoding));
         if (bHasInstructions)
             m_aRunText->append("}}");

@@ -27,6 +27,7 @@
 #include <vector>
 
 class SwDoc;
+class SwRootFrame;
 class SvNumberFormatter;
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
@@ -309,9 +310,11 @@ public:
                     this is because various fields need special handing
                     (ChangeExpansion()) to return correct values, and only
                     SwTextFormatter::NewFieldPortion() sets things up properly.
+        @param  pLayout     the layout to use for expansion; there are a few
+                            fields that expand differently via layout mode.
         @return     the generated text (suitable for display)
       */
-    OUString            ExpandField(bool const bCached) const;
+    OUString            ExpandField(bool bCached, SwRootFrame const* pLayout) const;
 
     /// @return name or content.
     virtual OUString    GetFieldName() const;

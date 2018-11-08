@@ -306,7 +306,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     }
 
     // output content of the field
-    OUString const sExpand( pField->ExpandField(true) );
+    OUString const sExpand( pField->ExpandField(true, nullptr) );
     bool bNeedsCJKProcessing = false;
     if( !sExpand.isEmpty() )
     {

@@ -3504,7 +3504,7 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
                 case RES_TXTATR_ANNOTATION:
                     {
                         OUString const aExpand(
-                            static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true));
+                            static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true, pLayout));
                         if (!aExpand.isEmpty())
                         {
                             ++aDestIdx;     // insert behind
