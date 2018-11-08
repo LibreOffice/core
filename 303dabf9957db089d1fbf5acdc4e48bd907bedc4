@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_ec462022",
+        "filename": "sfx2/uiconfig/ui/licensedialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-11-08T14:42:58Z",
+      "side": 1,
+      "message": "Intentionally no \"translatable\" flag set.",
+      "range": {
+        "startLine": 85,
+        "startChar": 20,
+        "endLine": 85,
+        "endChar": 95
+      },
+      "revId": "303dabf9957db089d1fbf5acdc4e48bd907bedc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
