@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwChapterField : public SwField
     State m_State;
     State m_StateRLHidden;
 
-    virtual OUString Expand() const override;
+    virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField* Copy() const override;
 
 public:

@@ -156,7 +156,7 @@ public:
     void ChangeExpansion(sal_uInt16 const nPageNumber,
             sal_uInt16 const nMaxPage);
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     virtual OUString GetPar2() const override;
@@ -186,7 +186,7 @@ class SwAuthorField : public SwField
 public:
     SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat);
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
@@ -212,7 +212,7 @@ class SW_DLLPUBLIC SwFileNameField : public SwField
 public:
     SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat);
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
@@ -236,8 +236,9 @@ class SW_DLLPUBLIC SwTemplNameField : public SwField
 public:
     SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFormat);
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
+
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
@@ -266,7 +267,7 @@ public:
 
     void ChangeExpansion( const SwFrame* pFrame );
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     virtual sal_uInt16      GetSubType() const override;
@@ -300,7 +301,7 @@ class SW_DLLPUBLIC SwHiddenTextField : public SwField
     bool m_bIsHidden : 1; ///< Is it not visible?
     bool m_bValid : 1; ///< Is DB-field evaluated?
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
 public:
@@ -361,7 +362,7 @@ public:
     /// Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const OUString& rCond);
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     void                SetHidden(bool bHidden)     { m_bIsHidden = bHidden; }
@@ -390,7 +391,7 @@ class SW_DLLPUBLIC SwMacroField : public SwField
     OUString m_aText;
     bool      m_bIsScriptURL;
 
-    virtual OUString Expand() const override;
+    virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField* Copy() const override;
 
 public:
@@ -464,7 +465,7 @@ public:
 
     virtual ~SwPostItField() override;
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*        Copy() const override;
 
     const DateTime&         GetDateTime() const             { return m_aDateTime; }
@@ -510,7 +511,7 @@ class SW_DLLPUBLIC SwDocInfoField : public SwValueField
     OUString  m_aContent;
     OUString  m_aName;
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*        Copy() const override;
 
 public:
@@ -546,7 +547,7 @@ class SwExtUserField : public SwField
 public:
     SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     virtual sal_uInt16      GetSubType() const override;
@@ -580,7 +581,7 @@ class SwRefPageSetField : public SwField
 public:
     SwRefPageSetField( SwRefPageSetFieldType*, short nOff, bool bOn );
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     virtual OUString  GetPar2() const override;
@@ -618,7 +619,7 @@ class SwRefPageGetField : public SwField
 public:
     SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFormat );
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     void SetText( const OUString& rText )      { m_sText = rText; }
@@ -649,7 +650,7 @@ public:
     SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
                      const OUString& sText, const OUString& sHelp );
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     /// Placeholder-Text
@@ -689,7 +690,7 @@ public:
 
     virtual OUString        GetDescription() const override;
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*        Copy() const override;
 
     /// Type
@@ -724,7 +725,7 @@ class SW_DLLPUBLIC SwCombinedCharField : public SwField
 public:
     SwCombinedCharField( SwCombinedCharFieldType*, const OUString& rChars );
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*        Copy() const override;
 
     /// Characters

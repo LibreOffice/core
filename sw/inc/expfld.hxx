@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 
     bool            m_bLateInitialization; // #i82544#
 
-    virtual OUString            Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*            Copy() const override;
 
 public:
@@ -213,7 +213,7 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     sal_uInt16          nSubType;
     SwFormatField * mpFormatField; /// pool item to which the SwSetExpField belongs
 
-    virtual OUString            Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*            Copy() const override;
 
 public:
@@ -298,7 +298,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*        Copy() const override;
 
     // Accessing Input Field's content
@@ -384,7 +384,7 @@ class SwTableField : public SwValueField, public SwTableFormula
     OUString      sExpand;
     sal_uInt16      nSubType;
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
     /// Search TextNode containing the field.

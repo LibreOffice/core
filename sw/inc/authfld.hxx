@@ -147,7 +147,7 @@ class SwAuthorityField : public SwField
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
 public:

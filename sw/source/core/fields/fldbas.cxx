@@ -402,7 +402,7 @@ bool SwField::IsFixed() const
 }
 
 OUString
-SwField::ExpandField(bool const bCached, SwRootFrame const*const ) const
+SwField::ExpandField(bool const bCached, SwRootFrame const*const pLayout) const
 {
     if ( m_bUseFieldValueCache )
     {
@@ -414,12 +414,12 @@ SwField::ExpandField(bool const bCached, SwRootFrame const*const ) const
                 m_Cache = pAuthorityField->ConditionalExpandAuthIdentifier();
             }
             else
-                m_Cache = Expand();
+                m_Cache = ExpandImpl(pLayout);
         }
         return m_Cache;
     }
 
-    return Expand();
+    return ExpandImpl(pLayout);
 }
 
 SwField * SwField::CopyField() const

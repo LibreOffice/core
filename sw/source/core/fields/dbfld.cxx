@@ -206,7 +206,7 @@ void SwDBField::InitContent(const OUString& rExpansion)
     SetExpansion( rExpansion );
 }
 
-OUString SwDBField::Expand() const
+OUString SwDBField::ExpandImpl(SwRootFrame const*const) const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
         return lcl_DBTrennConv(aContent);
@@ -566,7 +566,7 @@ SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
     SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(true)
 {}
 
-OUString SwDBNextSetField::Expand() const
+OUString SwDBNextSetField::ExpandImpl(SwRootFrame const*const) const
 {
     return OUString();
 }
@@ -653,7 +653,7 @@ SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
     bCondValid(true)
 {}
 
-OUString SwDBNumSetField::Expand() const
+OUString SwDBNumSetField::ExpandImpl(SwRootFrame const*const) const
 {
     return OUString();
 }
@@ -765,7 +765,7 @@ SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData)
     : SwDBNameInfField(pTyp, rDBData, 0)
 {}
 
-OUString SwDBNameField::Expand() const
+OUString SwDBNameField::ExpandImpl(SwRootFrame const*const) const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
         return static_cast<SwDBNameFieldType*>(GetTyp())->Expand();
@@ -810,7 +810,7 @@ SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
     : SwDBNameInfField(pTyp, rDBData, nFormat), nNumber(0)
 {}
 
-OUString SwDBSetNumberField::Expand() const
+OUString SwDBSetNumberField::ExpandImpl(SwRootFrame const*const) const
 {
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
         return OUString();

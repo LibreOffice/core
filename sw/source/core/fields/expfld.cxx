@@ -291,7 +291,7 @@ SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
     SetFormula( rFormel );
 }
 
-OUString SwGetExpField::Expand() const
+OUString SwGetExpField::ExpandImpl(SwRootFrame const*const) const
 {
     if(m_nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
@@ -796,7 +796,7 @@ void SwSetExpField::SetFormatField(SwFormatField & rFormatField)
     mpFormatField = &rFormatField;
 }
 
-OUString SwSetExpField::Expand() const
+OUString SwSetExpField::ExpandImpl(SwRootFrame const*const) const
 {
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
@@ -1210,7 +1210,7 @@ SwField* SwInputField::Copy() const
     return pField;
 }
 
-OUString SwInputField::Expand() const
+OUString SwInputField::ExpandImpl(SwRootFrame const*const) const
 {
     if((mnSubType & 0x00ff) == INP_TXT)
     {

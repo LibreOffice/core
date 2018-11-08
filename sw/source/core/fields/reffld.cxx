@@ -417,7 +417,7 @@ void SwGetRefField::SetExpand( const OUString& rStr )
     m_sTextRLHidden = rStr;
 }
 
-OUString SwGetRefField::Expand() const
+OUString SwGetRefField::ExpandImpl(SwRootFrame const*const) const
 {
     return m_sText;
 }
@@ -429,7 +429,7 @@ OUString SwGetRefField::GetFieldName() const
     {
         return aName + " " + m_sSetRefName;
     }
-    return Expand();
+    return ExpandImpl(nullptr);
 }
 
 
@@ -869,7 +869,7 @@ void SwGetRefField::SetPar1( const OUString& rName )
 
 OUString SwGetRefField::GetPar2() const
 {
-    return Expand();
+    return ExpandImpl(nullptr);
 }
 
 bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -933,7 +933,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     break;
     case FIELD_PROP_PAR3:
-        rAny <<= Expand();
+        rAny <<= ExpandImpl(nullptr);
         break;
     case FIELD_PROP_PAR4:
         rAny <<= m_sSetReferenceLanguage;

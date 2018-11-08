@@ -87,7 +87,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     sal_uInt16  nSubType;
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*        Copy() const override;
 
 public:

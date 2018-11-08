@@ -90,7 +90,7 @@ private:
     /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
 public:

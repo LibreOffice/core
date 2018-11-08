@@ -341,7 +341,7 @@ SwDDEField::~SwDDEField()
         static_cast<SwDDEFieldType*>(GetTyp())->Disconnect();
 }
 
-OUString SwDDEField::Expand() const
+OUString SwDDEField::ExpandImpl(SwRootFrame const*const) const
 {
     OUString aStr = static_cast<SwDDEFieldType*>(GetTyp())->GetExpansion();
     aStr = aStr.replaceAll("\r", "");

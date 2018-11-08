@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwDateTimeField : public SwValueField
         sal_uInt16              nSubType;
         long                nOffset;    // Offset in minutes.
 
-        virtual OUString    Expand() const override;
+        virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
         virtual SwField*    Copy() const override;
 
 public:

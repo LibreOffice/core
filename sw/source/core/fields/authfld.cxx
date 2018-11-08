@@ -516,7 +516,7 @@ SwAuthorityField::~SwAuthorityField()
     static_cast<SwAuthorityFieldType* >(GetTyp())->RemoveField(m_nHandle);
 }
 
-OUString SwAuthorityField::Expand() const
+OUString SwAuthorityField::ExpandImpl(SwRootFrame const*const) const
 {
     return ConditionalExpandAuthIdentifier();
 }
