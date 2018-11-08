@@ -1016,12 +1016,16 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     // #i38135#
     bool bResetAnimationTimer(false);
 
+    const bool bLineStartWidthExplicitChange(SfxItemState::SET
+                                             == aAttr.GetItemState(XATTR_LINESTARTWIDTH));
+    const bool bLineEndWidthExplicitChange(SfxItemState::SET
+                                           == aAttr.GetItemState(XATTR_LINEENDWIDTH));
     // check if LineWidth is part of the change
-    const bool bLineWidthChange(SfxItemState::SET == aAttr.GetItemState(XATTR_LINEWIDTH));
+    const bool bAdaptStartEndWidths(!(bLineStartWidthExplicitChange && bLineEndWidthExplicitChange)
+                                     && SfxItemState::SET == aAttr.GetItemState(XATTR_LINEWIDTH));
     sal_Int32 nNewLineWidth(0);
-    sal_Int32 nOldLineWidth(0);
 
-    if(bLineWidthChange)
+    if(bAdaptStartEndWidths)
     {
         nNewLineWidth = aAttr.Get(XATTR_LINEWIDTH).GetValue();
     }
@@ -1067,7 +1071,8 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
         }
 
-        if(bLineWidthChange)
+        sal_Int32 nOldLineWidth(0);
+        if (bAdaptStartEndWidths)
         {
             nOldLineWidth = pObj->GetMergedItem(XATTR_LINEWIDTH).GetValue();
         }
@@ -1075,7 +1080,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         // set attributes at object
         pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
 
-        if(bLineWidthChange)
+        if(bAdaptStartEndWidths)
         {
             const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
