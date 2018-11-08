@@ -215,8 +215,8 @@ private:
     bool mbInUserDraw : 1;       ///< In UserDraw
     bool mbReadOnly : 1;         ///< ReadOnly
     bool mbMirroring : 1;        ///< pb: #106948# explicit mirroring for calc
-    bool mbRight : 1;            ///< right align Text output
     bool mbCenter : 1;           ///< center Text output
+    bool mbRight : 1;            ///< right align Text output
     bool mbEdgeBlending : 1;
 
     Link<ImplListBoxWindow*,void>  maScrollHdl;
