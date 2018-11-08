@@ -2517,11 +2517,6 @@ void ScFormulaCell::SetTableOpDirty()
     }
 }
 
-bool ScFormulaCell::IsDirtyOrInTableOpDirty() const
-{
-    return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
-}
-
 void ScFormulaCell::SetResultDouble( double n )
 {
     aResult.SetDouble(n);
@@ -2650,28 +2645,6 @@ bool ScFormulaCell::IsMultilineResult()
     if (!IsValue())
         return aResult.IsMultiline();
     return false;
-}
-
-bool ScFormulaCell::NeedsInterpret() const
-{
-    if (bIsIterCell)
-        // Shortcut to force return of current value and not enter Interpret()
-        // as we're looping over all iteration cells.
-        return false;
-
-    if (!IsDirtyOrInTableOpDirty())
-        return false;
-
-    return (pDocument->GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
-}
-
-void ScFormulaCell::MaybeInterpret()
-{
-    if (NeedsInterpret())
-    {
-        assert(!pDocument->IsThreadedGroupCalcInProgress());
-        Interpret();
-    }
 }
 
 bool ScFormulaCell::IsHyperLinkCell() const
