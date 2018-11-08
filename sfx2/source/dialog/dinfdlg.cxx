@@ -714,7 +714,7 @@ namespace
         const LocaleDataWrapper& rWrapper( Application::GetSettings().GetLocaleDataWrapper() );
 
         Date aDate( _nDate );
-        tools::Time aTime( _nTime );
+        tools::Time aTime( _nTime * tools::Time::nanoPerCenti );
         OUString aStr = rWrapper.getDate( aDate )
                       + ", "
                       + rWrapper.getTime( aTime );
