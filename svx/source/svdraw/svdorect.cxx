@@ -312,26 +312,26 @@ sal_uInt32 SdrRectObj::GetHdlCount() const
 
 void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    sal_Int32 nCount = IsTextFrame() ? 10 : 9;
-    for(sal_Int32 nHdlNum = 0; nHdlNum < nCount; ++nHdlNum)
+    // A text box has an additional (pseudo-)handle for the blinking frame.
+    if(IsTextFrame())
     {
-        std::unique_ptr<SdrHdl> pH;
+        OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
+        // hack for calc grid sync to ensure the hatched area
+        // for a textbox is displayed at correct position
+        std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(maRect + GetGridOffset()));
+        pH->SetObj(const_cast<SdrRectObj*>(this));
+        pH->SetRotationAngle(aGeo.nRotationAngle);
+        rHdlList.AddHdl(std::move(pH));
+    }
+
+    for(sal_Int32 nHdlNum = 1; nHdlNum <= 9; ++nHdlNum)
+    {
         Point aPnt;
         SdrHdlKind eKind = SdrHdlKind::Move;
 
         switch(nHdlNum)
         {
-            case 0:
-            {
-                OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
-                // hack for calc grid sync to ensure the hatched area
-                // for a textbox is displayed at correct position
-                pH.reset(new ImpTextframeHdl(maRect + GetGridOffset() ));
-                pH->SetObj(const_cast<SdrRectObj*>(this));
-                pH->SetRotationAngle(aGeo.nRotationAngle);
-                break;
-            }
-            case 1:
+            case 1: // Handle for changing the corner radius
             {
                 long a = GetEckenradius();
                 long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
@@ -352,22 +352,18 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
             case 9: aPnt=maRect.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
         }
 
-        if(!pH)
+        if(aGeo.nShearAngle)
         {
-            if(aGeo.nShearAngle)
-            {
-                ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
-            }
-
-            if(aGeo.nRotationAngle)
-            {
-                RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-            }
-
-            pH.reset(new SdrHdl(aPnt,eKind));
-            pH->SetObj(const_cast<SdrRectObj*>(this));
-            pH->SetRotationAngle(aGeo.nRotationAngle);
+            ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
         }
+        if(aGeo.nRotationAngle)
+        {
+            RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        }
+
+        std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
+        pH->SetObj(const_cast<SdrRectObj*>(this));
+        pH->SetRotationAngle(aGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
