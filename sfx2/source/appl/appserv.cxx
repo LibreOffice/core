@@ -323,7 +323,12 @@ namespace
         {
             short nRet = GenericDialogController::run();
             if (nRet == RET_OK)
-                showDocument("LICENSE");
+            {
+                OUString sURL(officecfg::Office::Common::Menus::LicenseURL::get() + //https://hub.libreoffice.org/license/
+                    "?LOlocale=" + utl::ConfigManager::getUILocale());
+                sfx2::openUriExternally(sURL, false);
+             }
+
             return nRet;
         }
     };
