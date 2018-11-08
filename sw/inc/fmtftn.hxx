@@ -85,7 +85,7 @@ public:
     const SwTextFootnote *GetTextFootnote() const   { return m_pTextAttr; }
           SwTextFootnote *GetTextFootnote()         { return m_pTextAttr; }
 
-    void GetFootnoteText( OUString& rStr ) const;
+    OUString GetFootnoteText(SwRootFrame const& rLayout) const;
 
     /// Returns string to be displayed of footnote / endnote.
     OUString GetViewNumStr(const SwDoc& rDoc, SwRootFrame const* pLayout,

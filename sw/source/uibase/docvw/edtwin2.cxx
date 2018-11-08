@@ -250,8 +250,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if( aContentAtPos.pFndTextAttr && aContentAtPos.aFnd.pAttr )
                 {
                     const SwFormatFootnote* pFootnote = static_cast<const SwFormatFootnote*>(aContentAtPos.aFnd.pAttr);
-                    OUString sTmp;
-                    pFootnote->GetFootnoteText( sTmp );
+                    OUString sTmp(pFootnote->GetFootnoteText(*rSh.GetLayout()));
                     sText = SwResId( pFootnote->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ) + sTmp;
                     bBalloon = true;

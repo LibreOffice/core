@@ -180,8 +180,9 @@ SwFormatFootnote::~SwFormatFootnote()
 {
 }
 
-void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
+OUString SwFormatFootnote::GetFootnoteText(SwRootFrame const& rLayout) const
 {
+    OUStringBuffer buf;
     if( m_pTextAttr->GetStartNode() )
     {
         SwNodeIndex aIdx( *m_pTextAttr->GetStartNode(), 1 );
@@ -190,16 +191,20 @@ void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
             pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
         if( pCNd->IsTextNode() ) {
-            rStr = static_cast<SwTextNode*>(pCNd)->GetExpandText(nullptr/*TODO*/);
+            buf.append(static_cast<SwTextNode*>(pCNd)->GetExpandText(&rLayout));
 
             ++aIdx;
             while ( !aIdx.GetNode().IsEndNode() ) {
                 if ( aIdx.GetNode().IsTextNode() )
-                    rStr += "  " + aIdx.GetNode().GetTextNode()->GetExpandText(nullptr/*TODO*/);
+                {
+                    buf.append("  ");
+                    buf.append(aIdx.GetNode().GetTextNode()->GetExpandText(&rLayout));
+                }
                 ++aIdx;
             }
         }
     }
+    return buf.makeStringAndClear();
 }
 
 /// return the view string of the foot/endnote
