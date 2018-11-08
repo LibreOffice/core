@@ -37,7 +37,6 @@ FuPoor::FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
     pWindow(pWin),
     pDrDoc(pDoc),
     aSfxRequest(rReq),
-    pDialog(nullptr),
     bIsInDragMode(false),
     // remember MouseButton state
     mnCode(0)
@@ -53,26 +52,16 @@ FuPoor::~FuPoor()
 {
     aDragTimer.Stop();
     aScrollTimer.Stop();
-    pDialog.disposeAndClear();
 }
 
 void FuPoor::Activate()
 {
-    if (pDialog)
-    {
-        pDialog->Show();
-    }
 }
 
 void FuPoor::Deactivate()
 {
     aDragTimer.Stop();
     aScrollTimer.Stop();
-
-    if (pDialog)
-    {
-        pDialog->Hide();
-    }
 }
 
 // Scroll when reached the window border; is called from MouseMove

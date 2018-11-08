@@ -218,7 +218,6 @@ public:
     sal_uInt16            nVarArgsStart;          /**< Start of variable arguments, for numbering */
     OString               sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
-    bool                  bHasSuppressedArgs  :1; /**< Whether there is any suppressed parameter. */
     bool                  mbHidden            :1; /**< Whether function is hidden */
 };
 

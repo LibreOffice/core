@@ -54,7 +54,6 @@ private:
 
     InsertDeleteFlags nShortCutInsContentsCmdBits;
     bool              bShortCutTranspose;
-    InsCellCmd        nShortCutMoveMode;
 
 
     std::unique_ptr<weld::CheckButton>        mxBtnInsAll;
