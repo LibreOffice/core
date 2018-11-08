@@ -3280,40 +3280,53 @@ Pointer SwXTextDocument::getPointer()
 
 OUString SwXTextDocument::getTrackedChanges()
 {
-    const SwRedlineTable& rRedlineTable = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     boost::property_tree::ptree aTrackedChanges;
-    for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
+
+    // Disable since usability is very low beyond some small number of changes.
+    static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
+    if (!bDisableRedlineComments)
     {
-        boost::property_tree::ptree aTrackedChange;
-        aTrackedChange.put("index", rRedlineTable[i]->GetId());
-        aTrackedChange.put("author", rRedlineTable[i]->GetAuthorString(1).toUtf8().getStr());
-        aTrackedChange.put("type", nsRedlineType_t::SwRedlineTypeToOUString(rRedlineTable[i]->GetRedlineData().GetType()).toUtf8().getStr());
-        aTrackedChange.put("comment", rRedlineTable[i]->GetRedlineData().GetComment().toUtf8().getStr());
-        aTrackedChange.put("description", rRedlineTable[i]->GetDescr().toUtf8().getStr());
-        OUString sDateTime = utl::toISO8601(rRedlineTable[i]->GetRedlineData().GetTimeStamp().GetUNODateTime());
-        aTrackedChange.put("dateTime", sDateTime.toUtf8().getStr());
-
-        SwContentNode* pContentNd = rRedlineTable[i]->GetContentNode();
-        SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
-        if (pView && pContentNd)
+        const SwRedlineTable& rRedlineTable
+            = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
         {
-            SwShellCursor aCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()));
-            aCursor.SetMark();
-            aCursor.GetMark()->nNode = *pContentNd;
-            aCursor.GetMark()->nContent.Assign(pContentNd, rRedlineTable[i]->End()->nContent.GetIndex());
+            boost::property_tree::ptree aTrackedChange;
+            aTrackedChange.put("index", rRedlineTable[i]->GetId());
+            aTrackedChange.put("author", rRedlineTable[i]->GetAuthorString(1).toUtf8().getStr());
+            aTrackedChange.put("type", nsRedlineType_t::SwRedlineTypeToOUString(
+                                           rRedlineTable[i]->GetRedlineData().GetType())
+                                           .toUtf8()
+                                           .getStr());
+            aTrackedChange.put("comment",
+                               rRedlineTable[i]->GetRedlineData().GetComment().toUtf8().getStr());
+            aTrackedChange.put("description", rRedlineTable[i]->GetDescr().toUtf8().getStr());
+            OUString sDateTime = utl::toISO8601(
+                rRedlineTable[i]->GetRedlineData().GetTimeStamp().GetUNODateTime());
+            aTrackedChange.put("dateTime", sDateTime.toUtf8().getStr());
 
-            aCursor.FillRects();
+            SwContentNode* pContentNd = rRedlineTable[i]->GetContentNode();
+            SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+            if (pView && pContentNd)
+            {
+                SwShellCursor aCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()));
+                aCursor.SetMark();
+                aCursor.GetMark()->nNode = *pContentNd;
+                aCursor.GetMark()->nContent.Assign(pContentNd,
+                                                   rRedlineTable[i]->End()->nContent.GetIndex());
 
-            SwRects* pRects(&aCursor);
-            std::vector<OString> aRects;
-            for(SwRect& rNextRect : *pRects)
-                aRects.push_back(rNextRect.SVRect().toString());
+                aCursor.FillRects();
 
-            const OString sRects = comphelper::string::join("; ", aRects);
-            aTrackedChange.put("textRange", sRects.getStr());
+                SwRects* pRects(&aCursor);
+                std::vector<OString> aRects;
+                for (SwRect& rNextRect : *pRects)
+                    aRects.push_back(rNextRect.SVRect().toString());
+
+                const OString sRects = comphelper::string::join("; ", aRects);
+                aTrackedChange.put("textRange", sRects.getStr());
+            }
+
+            aTrackedChanges.push_back(std::make_pair("", aTrackedChange));
         }
-
-        aTrackedChanges.push_back(std::make_pair("", aTrackedChange));
     }
 
     boost::property_tree::ptree aTree;
