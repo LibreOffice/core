@@ -666,7 +666,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 if(IsFieldEdit())
                     sOldSel.clear();
 
-                const size_t nCnt = pType->GetSeqFieldList( aArr );
+                const size_t nCnt = pType->GetSeqFieldList(aArr, pSh->GetLayout());
                 for( size_t n = 0; n < nCnt; ++n )
                 {
                     bool isSubstring = MatchSubstring(aArr[ n ]->sDlgEntry, filterString);
@@ -1084,7 +1084,8 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 nSubType = REF_SEQUENCEFLD;
                 aName = pType->GetName();
 
-                if (pType->GetSeqFieldList(aArr) && aArr.SeekEntry(aElem, &nPos))
+                if (pType->GetSeqFieldList(aArr, pSh->GetLayout())
+                    && aArr.SeekEntry(aElem, &nPos))
                 {
                     aVal = OUString::number( aArr[nPos]->nSeqNo );
 

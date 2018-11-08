@@ -617,9 +617,12 @@ void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     rField.SetSeqNumber( n );
 }
 
-size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
+size_t SwSetExpFieldType::GetSeqFieldList(SwSeqFieldList& rList,
+        SwRootFrame const*const pLayout)
 {
     rList.Clear();
+
+    IDocumentRedlineAccess const& rIDRA(GetDoc()->getIDocumentRedlineAccess());
 
     SwIterator<SwFormatField,SwFieldType> aIter( *this );
     for( SwFormatField* pF = aIter.First(); pF; pF = aIter.Next() )
@@ -627,10 +630,12 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
         const SwTextNode* pNd;
         if( pF->GetTextField() &&
             nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
-            pNd->GetNodes().IsDocNodes() )
+            pNd->GetNodes().IsDocNodes()
+            && (!pLayout || !pLayout->IsHideRedlines()
+                || !sw::IsFieldDeletedInModel(rIDRA, *pF->GetTextField())))
         {
             SeqFieldLstElem* pNew = new SeqFieldLstElem(
-                    pNd->GetExpandText(nullptr/*TODO*/),
+                    pNd->GetExpandText(pLayout),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }

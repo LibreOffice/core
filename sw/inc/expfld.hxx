@@ -29,6 +29,7 @@
 class SfxPoolItem;
 class SwTextNode;
 class SwFrame;
+class SwRootFrame;
 struct SwPosition;
 class SwTextField;
 class SwDoc;
@@ -176,7 +177,7 @@ public:
 
     void   SetSeqRefNo( SwSetExpField& rField );
 
-    size_t GetSeqFieldList( SwSeqFieldList& rList );
+    size_t GetSeqFieldList(SwSeqFieldList& rList, SwRootFrame const* pLayout);
 
     /// Number sequence fields chapterwise if required.
     const OUString& GetDelimiter() const      { return m_sDelim; }
