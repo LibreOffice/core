@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_2797a193",
+        "filename": "sw/uiconfig/sglobal/popupmenu/drawtext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-11-08T22:25:51Z",
+      "side": 1,
+      "message": "This doesn\u0027t work in Writer. That\u0027s why you removed it some time ago in https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d45a78e5c89e923a6f5e2a37aeeb8367099e6b094 ...",
+      "revId": "2152337083067dc71bf98b55af8a9e0901dd95ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
