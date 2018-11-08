@@ -357,7 +357,9 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
 /// Emits LOK notification about one addition / removal of a redline item.
 void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    // Disable since usability is very low beyond some small number of changes.
+    const bool bDisableRedlineComments = true;
+    if (!comphelper::LibreOfficeKit::isActive() || bDisableRedlineComments)
         return;
 
     boost::property_tree::ptree aRedline;
