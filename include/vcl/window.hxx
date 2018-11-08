@@ -443,6 +443,7 @@ class SystemWindow;
 class WorkWindow;
 class Dialog;
 class MessBox;
+class MessageDialog;
 class DockingWindow;
 class FloatingWindow;
 class GroupBox;
@@ -505,6 +506,7 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice
     friend class ::WorkWindow;
     friend class ::Dialog;
     friend class ::MessBox;
+    friend class ::MessageDialog;
     friend class ::DockingWindow;
     friend class ::FloatingWindow;
     friend class ::GroupBox;
