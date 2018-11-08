@@ -402,11 +402,12 @@ const SwTextNode* SwGetRefField::GetReferencedTextNode() const
 }
 
 // #i85090#
-OUString SwGetRefField::GetExpandedTextOfReferencedTextNode() const
+OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
+        SwRootFrame const& rLayout) const
 {
     const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
     return pReferencedTextNode
-           ? pReferencedTextNode->GetExpandText(nullptr/*TODO*/, 0, -1, true, true, false)
+           ? sw::GetExpandTextMerged(&rLayout, *pReferencedTextNode, true, false, ExpandMode(0))
            : OUString();
 }
 

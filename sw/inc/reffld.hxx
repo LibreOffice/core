@@ -25,6 +25,7 @@ class SfxPoolItem;
 class SwDoc;
 class SwTextNode;
 class SwTextField;
+class SwRootFrame;
 
 bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTextNode& rBehindNd, sal_Int32 nSttPos );
@@ -122,7 +123,7 @@ public:
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTextNode* GetReferencedTextNode() const;
     // #i85090#
-    OUString GetExpandedTextOfReferencedTextNode() const;
+    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }
