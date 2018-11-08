@@ -464,9 +464,9 @@ void SwTOXContent::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16
 {
     const sal_Int32* pEnd = pTextMark->End();
     if( pEnd && !pTextMark->GetTOXMark().IsAlternativeText() )
-        static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText( rNd, &rInsPos,
-                                    pTextMark->GetStart(),
-                                    *pEnd - pTextMark->GetStart() );
+        static_cast<const SwTextNode*>(aTOXSources[0].pNd)->CopyExpandText(
+                rNd, &rInsPos, pTextMark->GetStart(),
+                *pEnd - pTextMark->GetStart(), nullptr );
     else
     {
         rNd.InsertText( GetText().sText, rInsPos );
@@ -538,9 +538,9 @@ void SwTOXPara::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) 
     if( SwTOXElement::Template == eType || SwTOXElement::Sequence == eType  || SwTOXElement::OutlineLevel == eType)
     {
         const SwTextNode* pSrc = static_cast<const SwTextNode*>(aTOXSources[0].pNd);
-        pSrc->GetExpandText( rNd, &rInsPos, nStartIndex,
+        pSrc->CopyExpandText( rNd, &rInsPos, nStartIndex,
                 nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
-                false, false, true );
+                nullptr, false, false, true );
     }
     else
     {
