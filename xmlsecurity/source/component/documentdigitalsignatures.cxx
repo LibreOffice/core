@@ -548,7 +548,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             tools::Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds );
             rSigInfo.SignatureDate = aDate.GetDate();
-            rSigInfo.SignatureTime = aTime.GetTime();
+            rSigInfo.SignatureTime = aTime.GetTime() / tools::Time::nanoPerCenti;
 
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
