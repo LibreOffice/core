@@ -95,9 +95,9 @@ const OUString& SwChapterField::GetTitle(SwRootFrame const*const pLayout) const
     return rState.sTitle;
 }
 
-OUString SwChapterField::ExpandImpl(SwRootFrame const*const) const
+OUString SwChapterField::ExpandImpl(SwRootFrame const*const pLayout) const
 {
-    State const& rState(m_State);
+    State const& rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
     switch( GetFormat() )
     {
         case CF_TITLE:
