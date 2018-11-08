@@ -152,7 +152,7 @@ $(foreach dependency,$(2),$(call gb_JunitTest_use_customtarget,$(1),$(dependency
 
 endef
 
-define gb_JunitTest_set_unoapi_test_class_and_jars
+define gb_JunitTest_use_unoapi_jars
 $(eval $(call gb_JunitTest_use_jars,$(1),\
     OOoRunner \
     juh \
@@ -162,6 +162,9 @@ $(eval $(call gb_JunitTest_use_jars,$(1),\
     unoil \
 ))
 
+endef
+
+define gb_JunitTest_use_unoapi_test_class
 $(eval $(call gb_JunitTest_add_classes,$(1),\
     org.openoffice.test.UnoApiTest \
 ))
@@ -187,7 +190,8 @@ $(eval $(call gb_JunitTest_set_defs,$(1),\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/$(gb_JunitTest__unoapi_dir)/$(if $(5),$(5),testdocuments) \
 ))
 
-$(eval $(call gb_JunitTest_set_unoapi_test_class_and_jars,$(1)))
+$(eval $(call gb_JunitTest_use_unoapi_jars,$(1)))
+$(eval $(call gb_JunitTest_use_unoapi_test_class,$(1)))
 
 endef
 

@@ -9,13 +9,10 @@
 
 $(eval $(call gb_JunitTest_JunitTest,unotools_complex))
 
+$(eval $(call gb_JunitTest_use_unoapi_jars,unotools_complex))
+
 $(eval $(call gb_JunitTest_use_jars,unotools_complex,\
-    OOoRunner \
-    jurt \
-    ridl \
     test-tools \
-    test \
-    unoil \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,unotools_complex,\

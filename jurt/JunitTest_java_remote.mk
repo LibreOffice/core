@@ -10,7 +10,7 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_java_remote))
 
 $(eval $(call gb_JunitTest_use_jars,jurt_java_remote,\
-	OOoRunner \
+    OOoRunner \
     ridl \
 ))
 

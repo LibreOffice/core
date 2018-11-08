@@ -9,7 +9,8 @@
 
 $(eval $(call gb_JunitTest_JunitTest,connectivity_complex))
 
-$(eval $(call gb_JunitTest_set_unoapi_test_class_and_jars,connectivity_complex))
+$(eval $(call gb_JunitTest_use_unoapi_jars,connectivity_complex))
+$(eval $(call gb_JunitTest_use_unoapi_test_class,connectivity_complex))
 
 $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 	$$(DEFS) \

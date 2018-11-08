@@ -23,15 +23,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/indeterminateState/CheckIndeterminateState \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,sw_complex,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
-
-$(eval $(call gb_JunitTest_add_classes,sw_complex,\
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,sw_complex))
 
 # vim: set noet sw=4 ts=4:

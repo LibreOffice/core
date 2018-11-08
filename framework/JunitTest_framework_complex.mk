@@ -24,13 +24,7 @@ $(eval $(call gb_JunitTest_set_defs,framework_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/framework/qa/complex/broken_document/test_documents \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,framework_complex,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,framework_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/disposing/GetServiceWhileDisposingOffice \

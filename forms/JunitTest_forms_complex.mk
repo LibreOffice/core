@@ -9,13 +9,7 @@
 
 $(eval $(call gb_JunitTest_JunitTest,forms_complex))
 
-$(eval $(call gb_JunitTest_use_jars,forms_complex,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,forms_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,forms_complex,\
     forms/qa/complex/forms/CheckOGroupBoxModel \
