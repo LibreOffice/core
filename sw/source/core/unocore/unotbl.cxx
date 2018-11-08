@@ -3564,7 +3564,7 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 SwFormatColl *const pTmpFormat =
                     SwUnoCursorHelper::GetCurTextFormatColl(*m_pImpl->m_pTableCursor, false);
                 OUString sRet;
-                if(pFormat)
+                if (pTmpFormat)
                     sRet = pTmpFormat->GetName();
                 aRet <<= sRet;
             }
