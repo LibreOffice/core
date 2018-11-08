@@ -1102,7 +1102,9 @@ bool AquaSalGraphics::drawPolyPolygon(
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
-        const basegfx::B2DPolygon rPolygon = rPolyPolygon.getB2DPolygon( nPolyIdx );
+        // tdf#120252 Use the correct, already transformed PolyPolygon (as long as
+        // the transformation is not used here...)
+        const basegfx::B2DPolygon rPolygon = aPolyPolygon.getB2DPolygon( nPolyIdx );
         AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
 
