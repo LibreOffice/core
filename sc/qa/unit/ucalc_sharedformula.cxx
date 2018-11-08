@@ -9,11 +9,12 @@
 
 #include <memory>
 #include "ucalc.hxx"
+#include "helper/debughelper.hxx"
+#include "helper/qahelper.hxx"
 #include <editutil.hxx>
 #include <formulacell.hxx>
 #include <cellvalue.hxx>
 #include <docsh.hxx>
-#include <clipparam.hxx>
 #include <undoblk.hxx>
 #include <scopetools.hxx>
 #include <docfunc.hxx>
@@ -26,6 +27,7 @@
 #include <sharedformula.hxx>
 
 #include <svl/sharedstring.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <formula/grammar.hxx>
 

@@ -369,6 +369,12 @@ blacklist:
     sc/inc/unitconv.hxx:
     # base class has to be a complete type
     - map
+    sc/qa/unit/ucalc_formula.cxx:
+    # Needed in template
+    - docpool.hxx
+    sc/qa/unit/functions_test.hxx:
+    # Needed for css shortcut
+    - sal/types.h
     sc/source/core/inc/addinlis.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

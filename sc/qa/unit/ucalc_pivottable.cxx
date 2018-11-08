@@ -8,7 +8,9 @@
  */
 
 #include <memory>
+#include <sal/types.h>
 #include "ucalc.hxx"
+#include "helper/qahelper.hxx"
 #include <dpshttab.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
@@ -27,8 +29,8 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/sheet/GeneralFunction2.hpp>
+
+using namespace ::com::sun::star;
 
 namespace {
 

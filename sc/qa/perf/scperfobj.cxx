@@ -27,16 +27,11 @@
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeFormula.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/Border.hpp>
-#include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/SubTotalColumn.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>

@@ -8,15 +8,12 @@
  */
 
 #include <sal/config.h>
-#include <osl/file.hxx>
-#include <config_features.h>
 
 #include "helper/qahelper.hxx"
+#include "helper/debughelper.hxx"
 #include "helper/xpath.hxx"
-#include "helper/shared_test_impl.hxx"
 
 #include <patattr.hxx>
-#include <docpool.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
 #include <generalfunction.hxx>
