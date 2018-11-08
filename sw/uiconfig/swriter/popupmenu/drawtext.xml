@@ -18,12 +18,19 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:TextAttributes"/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:Bold"/>
+  <menu:menuitem menu:id=".uno:Italic"/>
+  <menu:menuitem menu:id=".uno:Underline"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:Grow"/>
+  <menu:menuitem menu:id=".uno:Shrink"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:TextAttributes"/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ResetAttributes"/>
 </menu:menupopup>

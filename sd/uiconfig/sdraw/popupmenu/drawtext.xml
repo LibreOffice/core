@@ -11,16 +11,26 @@
   <menu:menuitem menu:id=".uno:Cut"/>
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
-  <menu:menuitem menu:id=".uno:PasteUnformatted"/>
+  <menu:menu menu:id=".uno:PasteSpecialMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:PasteUnformatted"/>
+      <menu:menuitem menu:id=".uno:PasteSpecial"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:SetDefault"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:Bold"/>
+  <menu:menuitem menu:id=".uno:Italic"/>
+  <menu:menuitem menu:id=".uno:Underline"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:Grow"/>
+  <menu:menuitem menu:id=".uno:Shrink"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:SetDefault"/>
-  <menu:menuitem menu:id=".uno:EditStyle"/>
 </menu:menupopup>
