@@ -47,7 +47,7 @@ OUString SwScriptField::GetDescription() const
     return SwResId(STR_SCRIPT);
 }
 
-OUString SwScriptField::Expand() const
+OUString SwScriptField::ExpandImpl(SwRootFrame const*const) const
 {
     return OUString();
 }

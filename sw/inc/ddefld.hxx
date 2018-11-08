@@ -105,7 +105,7 @@ public:
 class SwDDEField : public SwField
 {
 private:
-    virtual OUString Expand() const override;
+    virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
