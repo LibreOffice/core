@@ -123,6 +123,7 @@ void MysqlTestDriver::testCreateAndDropTable()
 
     uno::Reference<XStatement> xStatement = xConnection->createStatement();
     CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
 
     auto nUpdateCount
         = xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY)");
@@ -143,6 +144,7 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
 
     Reference<XStatement> xStatement = xConnection->createStatement();
     CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
 
     auto nUpdateCount
         = xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY)");
@@ -171,6 +173,9 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
         CPPUNIT_ASSERT_MESSAGE("not enough result after query", hasRow);
         CPPUNIT_ASSERT_EQUAL(i, xRow->getLong(1)); // first and only column
     }
+    bool hasRow = xResultSet->next();
+    // no more rows
+    CPPUNIT_ASSERT_MESSAGE("next returns true after last row", !hasRow);
 
     nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
     CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
@@ -186,6 +191,7 @@ void MysqlTestDriver::testDBPositionChange()
 
     Reference<XStatement> xStatement = xConnection->createStatement();
     CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
 
     auto nUpdateCount
         = xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY)");
