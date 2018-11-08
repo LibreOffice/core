@@ -176,7 +176,7 @@ def processIWYUOutput(iwyuOutput, moduleRules):
                 if not ignoreRemoval(fwdDecl, toAdd, currentFileName, moduleRules):
                     toRemove.append("%s:%s: %s" % (currentFileName, lineno, fwdDecl))
 
-    for remove in toRemove:
+    for remove in sorted(toRemove):
         print("ERROR: %s: remove not needed include / forward declaration" % remove)
     return len(toRemove)
 
