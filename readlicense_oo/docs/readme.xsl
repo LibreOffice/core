@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -8,16 +8,16 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  ***********************************************************-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
@@ -33,7 +33,7 @@
 	<xsl:param name="type"/>
 	<xsl:param name="file"/>
 	<xsl:strip-space elements="*"/>
-	
+
 	<xsl:param name="platform">
 		<xsl:if test="$os1='LINUX'">
 			<xsl:value-of select="'LINUX'"/>
@@ -53,33 +53,33 @@
 			<xsl:value-of select="'MAC'"/>
 		</xsl:if>
 	</xsl:param>
-	
+
 	<xsl:param name="lf">
 		<xsl:choose>
 			<xsl:when test="$platform='WIN'"><xsl:text>&#xD;&#xA;</xsl:text></xsl:when>
 			<xsl:otherwise><xsl:text>&#xA;</xsl:text></xsl:otherwise>
 		</xsl:choose>
 	</xsl:param>
-	
+
 	<xsl:template match="/">
 		<xsl:choose>
 			<xsl:when test="$type='html'">
-			
+
 				<xsl:document method="html" href="{$file}" doctype-public="-//W3C//DTD HTML 3.2//EN">
 					<xsl:apply-templates mode="html"/>
 				</xsl:document>
-			
+
 			</xsl:when>
 			<xsl:when test="$type='text'">
-				
+
 				<xsl:document method="text" href="{$file}">
 					<xsl:call-template name="textout" />
 				</xsl:document>
-			
+
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-	
+
 	<xsl:template match="*" mode="html">
 		<xsl:choose>
 			<xsl:when test="(contains(@class,$platform) or not(@class) or (name(.)='p'))">
@@ -105,15 +105,15 @@
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
-			
+
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+
 	<xsl:template name="textout">
 		<xsl:apply-templates />
 	</xsl:template>
-	
+
 	<xsl:template match="*">
 		<xsl:if test="(@xml:lang=$lang1 or not(@xml:lang))"> <!-- check for correct language -->
 		<xsl:choose>
@@ -125,7 +125,7 @@
 			</xsl:when>
 			<xsl:when test="name(.)='hr'">
 				<xsl:text>
-			
+
 ----------------------------------------------------------------------------------------------------------
 
 </xsl:text>
@@ -161,11 +161,11 @@
 			</xsl:when>
 			<xsl:when test="name(.)='h1'">
 				<xsl:value-of select="$lf"/>
-				<xsl:text>==================================================================</xsl:text>
+				<xsl:text>===================================================================</xsl:text>
 				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
 				<xsl:value-of select="$lf"/>
-				<xsl:text>==================================================================</xsl:text>
+				<xsl:text>===================================================================</xsl:text>
 				<xsl:value-of select="$lf"/>
 			</xsl:when>
 			<xsl:when test="name(.)='h2'">
