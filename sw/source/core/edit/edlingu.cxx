@@ -302,7 +302,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         *pMySh->GetCursor()->GetPoint() = *GetCurr();
         *pMySh->GetCursor()->GetMark() = *GetEnd();
         pMySh->GetDoc()->Spell(*pMySh->GetCursor(),
-                    xSpeller, pPageCnt, pPageSt, false ) >>= xSpellRet;
+            xSpeller, pPageCnt, pPageSt, false, pMySh->GetLayout()) >>= xSpellRet;
         bGoOn = GetCursorCnt() > 1;
         if( xSpellRet.is() )
         {
@@ -368,7 +368,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         // call function to find next text portion to be converted
         uno::Reference< linguistic2::XSpellChecker1 > xEmpty;
         pMySh->GetDoc()->Spell( *pMySh->GetCursor(),
-                    xEmpty, pPageCnt, pPageSt, false, &rArgs ) >>= aConvText;
+            xEmpty, pPageCnt, pPageSt, false, pMySh->GetLayout(), &rArgs) >>= aConvText;
 
         bGoOn = GetCursorCnt() > 1;
         if( !aConvText.isEmpty() )
@@ -980,7 +980,7 @@ bool SwEditShell::GetGrammarCorrection(
                 uno::Reference< lang::XComponent > xDoc( mxDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
 
                 // Expand the string:
-                const ModelToViewHelper aConversionMap(*pNode);
+                const ModelToViewHelper aConversionMap(*pNode, GetLayout());
                 const OUString& aExpandText = aConversionMap.getViewText();
                 // get XFlatParagraph to use...
                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNode, aExpandText, aConversionMap );
@@ -1331,7 +1331,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         }
         uno::Any aSpellRet =
         pMySh->GetDoc()->Spell(*pCursor,
-                    xSpeller, nullptr, nullptr, bIsGrammarCheck );
+            xSpeller, nullptr, nullptr, bIsGrammarCheck, pMySh->GetLayout());
         aSpellRet >>= xSpellRet;
         aSpellRet >>= aGrammarResult;
         bGoOn = GetCursorCnt() > 1;
@@ -1399,7 +1399,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         pMySh->GoEndSentence();
         if( bGrammarErrorFound )
         {
-            const ModelToViewHelper aConversionMap(static_cast<SwTextNode&>(pCursor->GetNode()));
+            const ModelToViewHelper aConversionMap(static_cast<SwTextNode&>(pCursor->GetNode()), pMySh->GetLayout());
             const OUString& aExpandText = aConversionMap.getViewText();
             sal_Int32 nSentenceEnd =
                 aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
@@ -1431,7 +1431,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
                 xSpellRet = nullptr;
                 // don't search for grammar errors here anymore!
                 pMySh->GetDoc()->Spell(*pCursor,
-                            xSpeller, nullptr, nullptr, false ) >>= xSpellRet;
+                    xSpeller, nullptr, nullptr, false, pMySh->GetLayout()) >>= xSpellRet;
                 if ( *pCursor->GetPoint() > *pCursor->GetMark() )
                     pCursor->Exchange();
                 SetCurr( new SwPosition( *pCursor->GetPoint() ));

@@ -320,7 +320,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
 
         result.autoFormats.push_back(clone);
 
-        ModelToViewHelper aConversionMap( *pSrc, ExpandMode::ExpandFields );
+        ModelToViewHelper aConversionMap(*pSrc, nullptr, ExpandMode::ExpandFields);
         result.startPositions.push_back(
                 stripper.GetPositionInStrippedString(aConversionMap.ConvertToViewPosition(
                         hint->GetStart() )));

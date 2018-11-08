@@ -26,6 +26,7 @@
 #include <vector>
 
 class SwTextNode;
+class SwRootFrame;
 
 /** Some helpers for converting model strings to view strings.
 
@@ -125,7 +126,7 @@ public:
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    ModelToViewHelper(const SwTextNode &rNode,
+    ModelToViewHelper(const SwTextNode &rNode, SwRootFrame const* pLayout,
             // defaults are appropriate for spell/grammar checking
             ExpandMode eMode = ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     ModelToViewHelper() //pass through filter, view == model

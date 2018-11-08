@@ -486,7 +486,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     if ( pRet )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pRet);
+        const ModelToViewHelper aConversionMap(*pRet, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
         const OUString& aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
@@ -536,7 +536,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     if ( pNextTextNode )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pNextTextNode);
+        const ModelToViewHelper aConversionMap(*pNextTextNode, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
         const OUString& aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pNextTextNode, aExpandText, aConversionMap );
@@ -582,7 +582,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     if ( pPrevTextNode )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pPrevTextNode);
+        const ModelToViewHelper aConversionMap(*pPrevTextNode, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
         const OUString& aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pPrevTextNode, aExpandText, aConversionMap );

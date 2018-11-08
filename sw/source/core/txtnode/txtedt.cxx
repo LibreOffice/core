@@ -1513,7 +1513,7 @@ SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
     if ( nBegin < nEnd )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pNode /*TODO - replace or expand fields for smart tags?*/);
+        const ModelToViewHelper aConversionMap(*pNode, getRootFrame() /*TODO - replace or expand fields for smart tags?*/);
         const OUString& aExpandText = aConversionMap.getViewText();
 
         // Ownership ov ConversionMap is passed to SwXTextMarkup object!
@@ -2070,7 +2070,9 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
     }
 
     // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
-    const ModelToViewHelper aConversionMap(*this, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::HideInvisible | ExpandMode::HideDeletions);
+    const ModelToViewHelper aConversionMap(*this,
+        getIDocumentLayoutAccess().GetCurrentLayout(),
+        ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::HideInvisible | ExpandMode::HideDeletions);
     const OUString& aExpandText = aConversionMap.getViewText();
 
     if (aExpandText.isEmpty() && !bCountNumbering)

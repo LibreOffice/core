@@ -362,7 +362,7 @@ void SwDocTest::testModelToViewHelperPassthrough()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::PassThrough);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr, ExpandMode::PassThrough);
     OUString sViewText = aModelToViewHelper.getViewText();
     OUString sModelText = pTextNode->GetText();
     CPPUNIT_ASSERT_EQUAL(sModelText, sViewText);
@@ -372,7 +372,8 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
+            ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
@@ -382,7 +383,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
             ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -402,7 +403,7 @@ void SwDocTest::testModelToViewHelperExpandFields()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr, ExpandMode::ExpandFields);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
@@ -412,7 +413,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsReplaceMode()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
@@ -427,7 +428,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisible()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideInvisible);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr, ExpandMode::HideInvisible);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAAA CCCCC " + OUStringLiteral1(CH_TXTATR_BREAKWORD) + " DDDDD"),
@@ -438,7 +439,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideRedlined()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideDeletions);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr, ExpandMode::HideDeletions);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAABB " + OUStringLiteral1(CH_TXTATR_BREAKWORD) + " CCCCC " + OUStringLiteral1(CH_TXTATR_BREAKWORD) + " DDDDD"),
@@ -449,7 +450,8 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnote()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
+        ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
 }
@@ -458,7 +460,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteRepl
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -476,7 +478,8 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote(
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
+        ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
@@ -486,7 +489,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteR
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -506,7 +509,8 @@ void SwDocTest::testModelToViewHelperHideInvisibleHideRedlined()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideInvisible | ExpandMode::HideDeletions);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
+        ExpandMode::HideInvisible | ExpandMode::HideDeletions);
     OUString sViewText = aModelToViewHelper.getViewText();
     OUStringBuffer aBuffer;
     aBuffer.append("AAAACCCCC ");
@@ -519,7 +523,8 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpand
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
+        ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
 }
@@ -528,7 +533,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpand
 {
     SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(sViewText,
@@ -545,7 +550,8 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote2()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument2(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
+        ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
 }
@@ -554,7 +560,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2()
 {
     SwTextNode* pTextNode = getModelToViewTestDocument2(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTextNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
