@@ -21,23 +21,23 @@ $(eval $(call gb_Package_add_files,extras_tplwizbitmap,$(LIBO_SHARE_FOLDER)/temp
 	ftpconnecting.gif \
 	ftperror.gif \
 	ftpunknown.gif \
-	Import_1.bmp \
-	Import_3.bmp \
-	Import_4.bmp \
+	Import_1.png \
+	Import_3.png \
+	Import_4.png \
 	maximize.bmp \
 	minimize.bmp \
-	MS-Import_2-1.bmp \
-	MS-Import_2-2.bmp \
-	MS-Import_2-3.bmp \
+	MS-Import_2-1.png \
+	MS-Import_2-2.png \
+	MS-Import_2-3.png \
 	okay_down.bmp \
 	okay_up.bmp \
 	report.bmp \
 	tutorial_background.gif \
 	up.bmp \
-	XML-Import_2-1.bmp \
-	XML-Import_2-2.bmp \
-	XML-Import_2-3.bmp \
-	XML-Import_2-4.bmp \
+	XML-Import_2-1.png \
+	XML-Import_2-2.png \
+	XML-Import_2-3.png \
+	XML-Import_2-4.png \
 ))
 
 # vim: set noet sw=4 ts=4:
