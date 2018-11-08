@@ -981,7 +981,9 @@ bool AquaSalGraphics::drawPolyPolygon(
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
-    for(auto const& rPolygon : rPolyPolygon)
+    // tdf#120252 Use the correct, already transformed PolyPolygon (as long as
+    // the transformation is not used here...)
+    for(auto const& rPolygon : aPolyPolygon)
     {
         AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
