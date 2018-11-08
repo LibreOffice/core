@@ -534,8 +534,8 @@ OUString SwEditShell::Calculate()
         {
             const SwPosition *pStart = rCurrentPaM.Start(), *pEnd = rCurrentPaM.End();
             const sal_Int32 nStt = pStart->nContent.GetIndex();
-            OUString aStr = pTextNd->GetExpandText( nStt, pEnd->nContent.
-                                                GetIndex() - nStt );
+            OUString aStr = pTextNd->GetExpandText(GetLayout(),
+                                nStt, pEnd->nContent.GetIndex() - nStt);
 
             aStr = rCC.lowercase( aStr );
 
@@ -694,8 +694,8 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 pTextNd->GetNodes().IsDocNodes() )
             {
                 SwTextINetFormat& rAttr = *pFnd;
-                OUString sText( pTextNd->GetExpandText( rAttr.GetStart(),
-                                    *rAttr.GetEnd() - rAttr.GetStart() ) );
+                OUString sText( pTextNd->GetExpandText(GetLayout(),
+                        rAttr.GetStart(), *rAttr.GetEnd() - rAttr.GetStart()) );
 
                 sText = sText.replaceAll(OUStringLiteral1(0x0a), "");
                 sText = comphelper::string::strip(sText, ' ');

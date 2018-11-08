@@ -596,7 +596,7 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
             pNd->GetNodes().IsDocNodes() )
         {
             SeqFieldLstElem* pNew = new SeqFieldLstElem(
-                    pNd->GetExpandText(),
+                    pNd->GetExpandText(nullptr/*TODO*/),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }

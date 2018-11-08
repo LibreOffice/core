@@ -3385,7 +3385,8 @@ static void Replace0xFF(
 
 // Expand fields
 // #i83479# - handling of new parameters
-OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
+OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
+                                   const sal_Int32 nIdx,
                                    const sal_Int32 nLen,
                                    const bool bWithNum,
                                    const bool bAddSpaceAfterListLabelStr,
@@ -3395,7 +3396,7 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
 {
     ExpandMode eMode = ExpandMode::ExpandFields | eAdditionalMode;
 
-    ModelToViewHelper aConversionMap(*this, nullptr/*TODO*/, eMode);
+    ModelToViewHelper aConversionMap(*this, pLayout, eMode);
     const OUString aExpandText = aConversionMap.getViewText();
     const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nIdx );
     sal_Int32 nEnd = nLen == -1 ? GetText().getLength() : nIdx + nLen;
@@ -3408,14 +3409,14 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
 
     if( bWithNum )
     {
-        if ( !GetNumString().isEmpty() )
+        if (!GetNumString(true, MAXLEVEL, pLayout).isEmpty())
         {
             if ( bAddSpaceAfterListLabelStr )
             {
                 const sal_Unicode aSpace = ' ';
                 aText.insert(0, aSpace);
             }
-            aText.insert(0, GetNumString());
+            aText.insert(0, GetNumString(true, MAXLEVEL, pLayout));
         }
     }
 

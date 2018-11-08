@@ -406,7 +406,7 @@ OUString SwGetRefField::GetExpandedTextOfReferencedTextNode() const
 {
     const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
     return pReferencedTextNode
-           ? pReferencedTextNode->GetExpandText(0, -1, true, true, false)
+           ? pReferencedTextNode->GetExpandText(nullptr/*TODO*/, 0, -1, true, true, false)
            : OUString();
 }
 
@@ -608,7 +608,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
             if( nStart != nEnd ) // a section?
             {
-                m_sText = pTextNd->GetExpandText(nStart, nEnd - nStart, false, false, false);
+                m_sText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false, false);
                 if (m_nSubType == REF_OUTLINE
                     || (m_nSubType == REF_SEQUENCEFLD && REF_CONTENT == GetFormat()))
                 {
@@ -617,7 +617,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 }
                 else
                 {
-                    m_sTextRLHidden = pTextNd->GetExpandText(
+                    m_sTextRLHidden = pTextNd->GetExpandText(pLayoutRLHidden,
                         nStart, nEnd - nStart, false, false, false, ExpandMode::HideDeletions);
                 }
                 FilterText(m_sText, GetLanguage(), m_sSetReferenceLanguage);

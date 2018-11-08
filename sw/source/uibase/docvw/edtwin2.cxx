@@ -62,6 +62,7 @@
 #include <fmtfld.hxx>
 
 #include <IDocumentMarkAccess.hxx>
+#include <txtfrm.hxx>
 #include <ndtxt.hxx>
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
@@ -202,7 +203,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         SwTextNode* pTextNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTextNode();
                         if ( pTextNode )
                         {
-                            sText = pTextNode->GetExpandText( 0, pTextNode->Len(), true, true );
+                            sText = sw::GetExpandTextMerged(rSh.GetLayout(), *pTextNode, true, false, ExpandMode(0));
 
                             if( !sText.isEmpty() )
                             {

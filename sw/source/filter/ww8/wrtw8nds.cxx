@@ -1248,7 +1248,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
     const sal_Int32* pTextEnd = rTextTOXMark.End();
     if ( pTextEnd ) // has range?
     {
-        sText = rNode.GetExpandText( rTextTOXMark.GetStart(),
+        sText = rNode.GetExpandText(nullptr, rTextTOXMark.GetStart(),
                                    *pTextEnd - rTextTOXMark.GetStart() );
     }
     else

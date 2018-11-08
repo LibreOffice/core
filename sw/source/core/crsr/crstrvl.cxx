@@ -1482,7 +1482,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             const sal_Int32* pEnd = pTextAttr->GetEnd();
                             if( pEnd )
                                 rContentAtPos.sStr =
-                                    pTextNd->GetExpandText( pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart() );
+                                    pTextNd->GetExpandText(GetLayout(), pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart());
                             else if( RES_TXTATR_TOXMARK == pTextAttr->Which())
                                 rContentAtPos.sStr =
                                     pTextAttr->GetTOXMark().GetAlternativeText();
@@ -1528,7 +1528,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             const sal_Int32 nSt = pTextAttr->GetStart();
                             const sal_Int32 nEnd = *pTextAttr->End();
 
-                            rContentAtPos.sStr = pTextNd->GetExpandText(nSt, nEnd-nSt);
+                            rContentAtPos.sStr = pTextNd->GetExpandText(GetLayout(), nSt, nEnd-nSt);
 
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
                             rContentAtPos.eContentAtPos = IsAttrAtPos::InetAttr;
@@ -2384,7 +2384,8 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                         ? ( aPos < aCmpPos && aCurPos < aPos )
                         : ( aCmpPos < aPos && aPos < aCurPos ))
                     {
-                        OUString sText( pTextNd->GetExpandText( rAttr.GetStart(),
+                        OUString sText(pTextNd->GetExpandText(GetLayout(),
+                                        rAttr.GetStart(),
                                         *rAttr.GetEnd() - rAttr.GetStart() ) );
 
                         sText = sText.replaceAll(OUStringLiteral1(0x0a), "");

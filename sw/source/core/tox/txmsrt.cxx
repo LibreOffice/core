@@ -373,6 +373,7 @@ void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 )
             !(GetOptions() & SwTOIOptions::KeyAsEntry))
     {
         aRet.sText = static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
+                            nullptr,
                             pTextMark->GetStart(),
                             *pEnd - pTextMark->GetStart());
         if(SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
@@ -452,6 +453,7 @@ TextAndReading SwTOXContent::GetText_Impl() const
     {
         return TextAndReading(
             static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
+                                     nullptr,
                                      pTextMark->GetStart(),
                                      *pEnd - pTextMark->GetStart() ),
             pTextMark->GetTOXMark().GetTextReading());
@@ -503,6 +505,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
     case SwTOXElement::OutlineLevel:
         {
             return TextAndReading(static_cast<const SwTextNode*>(pNd)->GetExpandText(
+                    nullptr,
                     nStartIndex,
                     nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
                     false, false, false),

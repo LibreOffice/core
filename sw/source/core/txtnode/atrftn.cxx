@@ -190,12 +190,12 @@ void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
             pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
         if( pCNd->IsTextNode() ) {
-            rStr = static_cast<SwTextNode*>(pCNd)->GetExpandText();
+            rStr = static_cast<SwTextNode*>(pCNd)->GetExpandText(nullptr/*TODO*/);
 
             ++aIdx;
             while ( !aIdx.GetNode().IsEndNode() ) {
                 if ( aIdx.GetNode().IsTextNode() )
-                    rStr += "  " + aIdx.GetNode().GetTextNode()->GetExpandText();
+                    rStr += "  " + aIdx.GetNode().GetTextNode()->GetExpandText(nullptr/*TODO*/);
                 ++aIdx;
             }
         }

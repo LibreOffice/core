@@ -583,7 +583,7 @@ void SwTextInputField::UpdateFieldContent()
         const sal_Int32 nIdx = GetStart() + 1;
         // skip CH_TXT_ATR_INPUTFIELDEND character
         const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
-        const OUString aNewFieldContent = GetTextNode().GetExpandText( nIdx, nLen );
+        const OUString aNewFieldContent = GetTextNode().GetExpandText(nullptr, nIdx, nLen);
 
         const SwInputField* pInputField = dynamic_cast<const SwInputField*>(GetFormatField().GetField());
         assert(pInputField != nullptr);
