@@ -9,6 +9,7 @@
 
 #include "qahelper.hxx"
 #include "csv_handler.hxx"
+#include "debughelper.hxx"
 #include <drwlayer.hxx>
 #include <compiler.hxx>
 #include <conditio.hxx>
@@ -24,13 +25,16 @@
 #include <cppunit/AdditionalMessage.h>
 #include <sal/log.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/gridprinter.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
+#include <unotools/tempfile.hxx>
+#include <scitems.hxx>
 
 #include <orcus/csv_parser.hpp>
 
 #include <fstream>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>

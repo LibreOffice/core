@@ -10,8 +10,11 @@
 #include <sal/config.h>
 
 #include <unotest/filters-test.hxx>
-#include <scdll.hxx>
 #include "helper/qahelper.hxx"
+
+#include <com/sun/star/uno/Reference.hxx>
+
+using namespace ::com::sun::star;
 
 class SCQAHELPER_DLLPUBLIC FunctionsTest : public ScBootstrapFixture, public test::FiltersTest
 {

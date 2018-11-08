@@ -9,17 +9,15 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <sal/config.h>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
 #include <config_features.h>
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/docfilt.hxx>
 
+#include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include "helper/xpath.hxx"
 #include "helper/shared_test_impl.hxx"
@@ -30,23 +28,18 @@
 #include <docpool.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
-#include <cellform.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
 #include <editutil.hxx>
 #include <scopetools.hxx>
 #include <cellvalue.hxx>
-#include <docfunc.hxx>
-#include <generalfunction.hxx>
 #include <postit.hxx>
 #include <tokenstringcontext.hxx>
 #include <chgtrack.hxx>
 #include <validat.hxx>
-#include <attrib.hxx>
 #include <global.hxx>
 #include <scmod.hxx>
 
-#include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <tabprotection.hxx>
@@ -69,11 +62,8 @@
 #include <svl/zformat.hxx>
 
 #include <test/xmltesttools.hxx>
-#include <com/sun/star/table/BorderLineStyle.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <comphelper/storagehelper.hxx>
 

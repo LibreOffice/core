@@ -10,19 +10,14 @@
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_CSV_HANDLER_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_CSV_HANDLER_HXX
 
-#include <iostream>
+#include "qahelper.hxx"
 
-#include <docsh.hxx>
-#include <postit.hxx>
 #include <patattr.hxx>
-#include <scitems.hxx>
 #include <document.hxx>
 #include <cellform.hxx>
 #include <cellvalue.hxx>
 
 #include <rtl/strbuf.hxx>
-
-#include <test/bootstrapfixture.hxx>
 
 #define DEBUG_CSV_HANDLER 0
 

@@ -8,17 +8,16 @@
  */
 
 #include "ucalc.hxx"
+#include "helper/debughelper.hxx"
+#include "helper/qahelper.hxx"
 #include <markdata.hxx>
 #include <calcconfig.hxx>
 #include <clipparam.hxx>
-#include <interpre.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>
 #include <refdata.hxx>
 #include <scopetools.hxx>
 #include <formulacell.hxx>
-#include <formulagroup.hxx>
-#include <scmod.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
 #include <paramisc.hxx>
@@ -32,12 +31,14 @@
 #include <docpool.hxx>
 #include <docoptio.hxx>
 #include <formulaopt.hxx>
+#include <externalrefmgr.hxx>
+#include <svl/itemset.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <o3tl/make_unique.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <svl/broadcast.hxx>
 #include <svl/intitem.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <memory>
 #include <functional>

@@ -2,34 +2,12 @@
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-
-#include <scdll.hxx>
-#include <opencl/platforminfo.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/stritem.hxx>
 
 #include "helper/qahelper.hxx"
 
-#include <calcconfig.hxx>
-#include <interpre.hxx>
-
 #include <docsh.hxx>
-#include <postit.hxx>
-#include <patattr.hxx>
-#include <scitems.hxx>
 #include <document.hxx>
-#include <cellform.hxx>
-#include <drwlayer.hxx>
-#include <userdat.hxx>
-#include <formulacell.hxx>
 #include <formulagroup.hxx>
-
-#include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -11,15 +11,9 @@
 
 #include "helper/qahelper.hxx"
 #include <document.hxx>
-#include <stringutil.hxx>
-#include <address.hxx>
-#include <dataprovider.hxx>
 #include <datatransformation.hxx>
 #include <scdll.hxx>
-#include <vcl/scheduler.hxx>
-#include <tools/datetime.hxx>
 #include <tools/time.hxx>
-#include <memory>
 
 class ScDataTransformationTest : public ScBootstrapFixture
 {

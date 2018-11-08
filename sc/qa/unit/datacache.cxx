@@ -8,7 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
 #include <unotools/configmgr.hxx>
 #include "helper/qahelper.hxx"
 

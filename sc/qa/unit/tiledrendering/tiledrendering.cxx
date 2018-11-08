@@ -19,15 +19,9 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/string.hxx>
-#include <editeng/editids.hrc>
-#include <editeng/editview.hxx>
-#include <editeng/outliner.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/srchitem.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
