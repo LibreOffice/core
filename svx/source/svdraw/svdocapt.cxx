@@ -297,16 +297,14 @@ sal_uInt32 SdrCaptionObj::GetHdlCount() const
 void SdrCaptionObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     SdrRectObj::AddToHdlList(rHdlList);
-    const sal_uInt32 nRectHdlCnt(rHdlList.GetHdlCount());
-
-    sal_uInt32 nCnt = aTailPoly.GetSize();
-    for(sal_uInt32 i = 0; i<nCnt; ++i)
-    {
-        std::unique_ptr<SdrHdl> pHdl(new SdrHdl(aTailPoly.GetPoint(i), SdrHdlKind::Poly));
-        pHdl->SetPolyNum(1);
-        pHdl->SetPointNum(nRectHdlCnt + i);
-        rHdlList.AddHdl(std::move(pHdl));
-    }
+    // Currently only dragging the tail's end is implemented.
+    // assert, that there is indeed only one handle to add.
+    sal_uInt32 nTailDragHandleCount = GetHdlCount()-rHdlList.GetHdlCount();
+    assert( nTailDragHandleCount==1 && "New drag handle implemented?");
+    std::unique_ptr<SdrHdl> pHdl(new SdrHdl(aTailPoly.GetPoint(0), SdrHdlKind::Poly));
+    pHdl->SetPolyNum(1);
+    pHdl->SetPointNum(0);
+    rHdlList.AddHdl(std::move(pHdl));
 }
 
 bool SdrCaptionObj::hasSpecialDrag() const
