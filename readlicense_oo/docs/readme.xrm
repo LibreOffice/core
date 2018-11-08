@@ -177,7 +177,7 @@
 
 		<div id="ReportBugsIssues">
 			<h2 id="reportbugs" xml:lang="en-US">Reporting Bugs &amp; Issues</h2>
-			<p id="reportbugs1" xml:lang="en-US">Our system for reporting, tracking and solving bugs is currently Bugzilla, hosted at <a href="http://bugs.documentfoundation.org/">http://bugs.documentfoundation.org/</a>. We encourage all users to feel entitled and welcome to report bugs that may arise on your particular platform. Energetic reporting of bugs is one of the most important contributions that the user community can make to the ongoing development and improvement of ${PRODUCTNAME}.</p>
+			<p id="reportbugs1" xml:lang="en-US">Our system for reporting, tracking and solving bugs is currently Bugzilla, hosted at <a href="https://bugs.documentfoundation.org/">https://bugs.documentfoundation.org/</a>. We encourage all users to feel entitled and welcome to report bugs that may arise on your particular platform. Energetic reporting of bugs is one of the most important contributions that the user community can make to the ongoing development and improvement of ${PRODUCTNAME}.</p>
 		</div>
 
 		<div id="GettingInvolved">
