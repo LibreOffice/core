@@ -775,6 +775,13 @@ void ScTiledRenderingTest::testTextEditViews()
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     SfxLokHelper::setView(nView1);
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    // FIXME temporarily disabled
+    //CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void ScTiledRenderingTest::testTextEditViewInvalidations()
