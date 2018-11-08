@@ -1118,7 +1118,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // integer multiples of pixels.
     //
     // See also desktop/source/lib/init.cxx for details, where we have to set
-    // the stuff accorndingly for the VirtualDevice creation.
+    // the stuff accordingly for the VirtualDevice creation.
 
     // page break zoom, and aLogicMode in ScViewData - hardcode that to what
     // we mean as 100% (256px tiles meaning 3840 twips)
