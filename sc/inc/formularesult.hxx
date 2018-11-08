@@ -77,13 +77,13 @@ class ScFormulaResult
         double          mfValue;    // double result direct for performance and memory consumption
         const formula::FormulaToken*  mpToken;    // if not, result token obtained from interpreter
     };
-    FormulaError        mnError;    // error code
     bool                mbToken :1; // whether content of union is a token
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
-    Multiline           meMultiline :2; // result is multiline
     // If set it implies that the result is a simple double (in mfValue) and no error
     bool                mbValueCached :1;
+    Multiline           meMultiline :2; // result is multiline
+    FormulaError        mnError;    // error code
 
     /** Reset mnError, mbEmpty and mbEmptyDisplayedAsString to their defaults
         prior to assigning other types */

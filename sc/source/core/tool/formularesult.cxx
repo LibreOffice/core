@@ -23,17 +23,21 @@ FormulaResultValue::FormulaResultValue( FormulaError nErr ) : meType(Error), mfV
 }
 
 ScFormulaResult::ScFormulaResult() :
-    mpToken(nullptr), mnError(FormulaError::NONE), mbToken(true),
-    mbEmpty(false), mbEmptyDisplayedAsString(false),
+    mpToken(nullptr),
+    mbToken(true),
+    mbEmpty(false),
+    mbEmptyDisplayedAsString(false),
+    mbValueCached(false),
     meMultiline(MULTILINE_UNKNOWN),
-    mbValueCached(false) {}
+    mnError(FormulaError::NONE) {}
 
 ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
-    mnError( r.mnError), mbToken( r.mbToken),
+    mbToken( r.mbToken),
     mbEmpty( r.mbEmpty),
     mbEmptyDisplayedAsString( r.mbEmptyDisplayedAsString),
+    mbValueCached( r.mbValueCached),
     meMultiline( r.meMultiline),
-    mbValueCached( r.mbValueCached)
+    mnError( r.mnError)
 {
     if (mbToken)
     {
@@ -60,8 +64,12 @@ ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
 }
 
 ScFormulaResult::ScFormulaResult( const formula::FormulaToken* p ) :
-    mnError(FormulaError::NONE), mbToken(false), mbEmpty(false), mbEmptyDisplayedAsString(false),
-    meMultiline(MULTILINE_UNKNOWN), mbValueCached(false)
+    mbToken(false),
+    mbEmpty(false),
+    mbEmptyDisplayedAsString(false),
+    mbValueCached(false),
+    meMultiline(MULTILINE_UNKNOWN),
+    mnError(FormulaError::NONE)
 {
     SetToken( p);
 }
