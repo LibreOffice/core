@@ -1,6 +1,14 @@
-<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
- <rect fill="#c3c4c2" height="26" ry="0" width="10" x="11" y="3"/>
- <rect fill="#fcfcfc" height="18" ry="0" width="7" x="21" y="7"/>
- <rect fill="#fcfcfc" height="18" ry="0" width="7" x="4" y="7"/>
- <path d="m 2 5 v 22 h 8 v 3 h 12 v -3 h 8 V 5 H 22 V 2 H 10 v 3 z m 2 2 h 6 v 5 H 4 Z m 7 -4 h 10 v 8 H 11 Z m 11 4 h 6 v 5 H 22 Z M 4 13 h 6 v 6 H 4 Z m 7 -1 h 10 v 8 H 11 Z m 11 1 h 6 v 6 H 22 Z M 4 20 h 6 v 5 H 4 Z m 7 1 h 10 v 8 H 11 Z m 11 -1 h 6 v 5 h -6 z" fill="#555753"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+ <path
+     style="fill:#555753"
+     d="M 10 2 L 10 5 L 2 5 L 2 27 L 10 27 L 10 30 L 22 30 L 22 27 L 30 27 L 30 5 L 22 5 L 22 2 L 10 2 z M 11 3 L 21 3 L 21 11 L 11 11 L 11 3 z M 4 7 L 10 7 L 10 12 L 4 12 L 4 7 z M 22 7 L 28 7 L 28 12 L 22 12 L 22 7 z M 11 12 L 21 12 L 21 20 L 11 20 L 11 12 z M 4 13 L 10 13 L 10 19 L 4 19 L 4 13 z M 22 13 L 28 13 L 28 19 L 22 19 L 22 13 z M 4 20 L 10 20 L 10 25 L 4 25 L 4 20 z M 22 20 L 28 20 L 28 25 L 22 25 L 22 20 z M 11 21 L 21 21 L 21 29 L 11 29 L 11 21 z "
+     />
+ <path
+     style="fill:#555753;opacity:0.35"
+     d="M 11 3 L 11 29 L 21 29 L 21 3 L 11 3 z "
+     />
+ <path
+     style="fill:#ffffff"
+     d="M 4 7 L 4 12 L 10 12 L 10 7 L 4 7 z M 22 7 L 22 12 L 28 12 L 28 7 L 22 7 z M 4 13 L 4 19 L 10 19 L 10 13 L 4 13 z M 22 13 L 22 19 L 28 19 L 28 13 L 22 13 z M 4 20 L 4 25 L 10 25 L 10 20 L 4 20 z M 22 20 L 22 25 L 28 25 L 28 20 L 22 20 z "
+     />
+ </svg>
