@@ -2,6 +2,7 @@ cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='logo'] no-labelled-by
 cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='logoreplacement'] orphan-label
 cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='buildid'] orphan-label
 cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='locale'] orphan-label
+cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='uilocale'] orphan-label
 cui/uiconfig/ui/aboutdialog.ui://GtkTextView[@id='version'] no-labelled-by
 cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='description'] orphan-label
 cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='copyright'] orphan-label
