@@ -202,7 +202,7 @@ sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
 }
 
 /// Determines if rURL is safe to move or not.
-bool IsFileMovable(const OUString& rURL)
+bool IsFileMovable(const INetURLObject& rURL)
 {
 #ifdef MACOSX
     (void)rURL;
@@ -210,17 +210,20 @@ bool IsFileMovable(const OUString& rURL)
     return false;
 #else
 
-    if (!comphelper::isFileUrl(rURL))
+    if (rURL.GetProtocol() != INetProtocol::File)
         // Not a file:// URL.
         return false;
 
+    if (tools::IsMappedWebDAVPath(rURL))
+        return false;
+
 #ifdef UNX
-    OUString rPath;
-    if (osl::FileBase::getSystemPathFromFileURL(rURL, rPath) != osl::FileBase::E_None)
+    OUString sPath = rURL.getFSysPath(FSysStyle::Unix);
+    if (sPath.isEmpty())
         return false;
 
     struct stat buf;
-    if (lstat(rPath.toUtf8().getStr(), &buf) != 0)
+    if (lstat(sPath.toUtf8().getStr(), &buf) != 0)
         return false;
 
     // Hardlink or symlink: osl::File::move() doesn't play with these nicely.
@@ -1845,7 +1848,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
                 sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
-                if (IsFileMovable(aDestMainURL)
+                if (IsFileMovable(aDest)
                     && osl::File::replace(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
                 {
                     if (nAttributes)
