@@ -5835,7 +5835,12 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     sal_uInt8 nParamCount = GetByte();
     sal_uInt8 nQueryCount = nParamCount / 2;
 
-    std::vector<sal_uInt32> vConditions;
+    std::vector<sal_uInt32>& vConditions = mrContext.maConditions;
+    // vConditions is cached, although it is clear'ed after every cell is interpreted,
+    // if the SUMIFS/COUNTIFS are part of a matrix formula, then that is not enough because
+    // with a single InterpretTail() call it results in evaluation of all the cells in the
+    // matrix formula.
+    vConditions.clear();
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;

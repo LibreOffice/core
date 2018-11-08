@@ -11,6 +11,7 @@
 #define INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
 
 #include <vector>
+#include <memory>
 #include "types.hxx"
 
 namespace formula
@@ -31,17 +32,22 @@ struct DelayedSetNumberFormat
     sal_uInt32 mnNumberFormat;
 };
 
+class ScInterpreterContextPool;
+
 struct ScInterpreterContext
 {
-    const ScDocument& mrDoc;
+    const ScDocument* mpDoc;
     SvNumberFormatter* mpFormatter;
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
     ScLookupCacheMap* mScLookupCache; // cache for lookups like VLOOKUP and MATCH
+    // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
+    // This is populated/used only when formula-group threading is enabled.
+    std::vector<sal_uInt32> maConditions;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
-        : mrDoc(rDoc)
+        : mpDoc(&rDoc)
         , mpFormatter(pFormatter)
         , mnTokenCachePos(0)
         , maTokens(TOKEN_CACHE_SIZE, nullptr)
@@ -49,9 +55,94 @@ struct ScInterpreterContext
     {
     }
 
+    ScInterpreterContext() = delete;
+
     ~ScInterpreterContext();
 
     SvNumberFormatter* GetFormatTable() const { return mpFormatter; }
+
+private:
+    friend class ScInterpreterContextPool;
+    void ResetTokens();
+    void SetDocAndFormatter(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
+    void Cleanup();
+    void ClearLookupCache();
+};
+
+class ScThreadedInterpreterContextGetterGuard;
+class ScInterpreterContextGetterGuard;
+
+class ScInterpreterContextPool
+{
+    friend class ScThreadedInterpreterContextGetterGuard;
+    friend class ScInterpreterContextGetterGuard;
+
+    std::vector<std::unique_ptr<ScInterpreterContext>> maPool;
+    size_t mnNextFree;
+    bool mbThreaded;
+
+    ScInterpreterContextPool(bool bThreaded)
+        : mnNextFree(0)
+        , mbThreaded(bThreaded)
+    {
+    }
+
+    ~ScInterpreterContextPool() {}
+
+    static ScInterpreterContextPool aThreadedInterpreterPool;
+    static ScInterpreterContextPool aNonThreadedInterpreterPool;
+
+    // API for threaded case
+
+    // Ensures nNumThreads elements in pool.
+    void Init(size_t nNumThreads, const ScDocument& rDoc, SvNumberFormatter* pFormatter);
+
+    // Returns ScInterpreterContext* for thread index nThreadIdx
+    ScInterpreterContext* GetInterpreterContextForThreadIdx(size_t nThreadIdx) const;
+
+    // API for non-threaded
+
+    // Ensures there is one unused element in the pool.
+    void Init(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
+
+    // Returns ScInterpreterContext* for non-threaded use.
+    ScInterpreterContext* GetInterpreterContext() const;
+
+    // Common API for threaded/non-threaded
+
+    // Cleans up the contexts prepared by call to immediately previous Init() and
+    // marks them all as unused.
+    void ReturnToPool();
+
+public:
+    // Only to be used to clear lookup cache in all pool elements
+    static void ClearLookupCaches();
+};
+
+class ScThreadedInterpreterContextGetterGuard
+{
+    ScInterpreterContextPool& rPool;
+
+public:
+    ScThreadedInterpreterContextGetterGuard(size_t nNumThreads, const ScDocument& rDoc,
+                                            SvNumberFormatter* pFormatter);
+    ~ScThreadedInterpreterContextGetterGuard();
+
+    // Returns ScInterpreterContext* for thread index nThreadIdx
+    ScInterpreterContext* GetInterpreterContextForThreadIdx(size_t nThreadIdx) const;
+};
+
+class ScInterpreterContextGetterGuard
+{
+    ScInterpreterContextPool& rPool;
+    size_t nContextIdx;
+
+public:
+    ScInterpreterContextGetterGuard(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
+    ~ScInterpreterContextGetterGuard();
+
+    // Returns ScInterpreterContext* for non-threaded use.
+    ScInterpreterContext* GetInterpreterContext() const;
 };
 
 #endif // INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
