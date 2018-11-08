@@ -1951,109 +1951,102 @@ void Document::handleParagraphNotifications()
     }
 }
 
-::sal_Int32 Document::getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos)
+namespace
 {
-    if (m_nSelectionFirstPara == -1)
-        return -1;
-    ::sal_Int32 Osp = m_nSelectionFirstPara, Osl = m_nSelectionFirstPos, Oep = m_nSelectionLastPara, Oel = m_nSelectionLastPos;
-    ::sal_Int32 Nsp = nNewFirstPara, Nsl = nNewFirstPos, Nep = nNewLastPara, Nel = nNewLastPos;
-    TextPaM Ns(Nsp, Nsl);
-    TextPaM Ne(Nep, Nel);
-    TextPaM Os(Osp, Osl);
-    TextPaM Oe(Oep, Oel);
 
-    if (Os == Oe && Ns == Ne)
+enum class SelChangeType
+{
+    None, // no change, or invalid
+    CaretMove, // neither old nor new have selection, and they are different
+    NoSelToSel, // old has no selection but new has selection
+    SelToNoSel, // old has selection but new has no selection
+    // both old and new have selections
+    NoParaChange, // only end index changed inside end para
+    EndParaNoMoreBehind, // end para was behind start, but now is same or ahead
+    AddedFollowingPara, // selection extended to following paragraph(s)
+    ExcludedPreviousPara, // selection shrunk excluding previous paragraph(s)
+    ExcludedFollowingPara, // selection shrunk excluding following paragraph(s)
+    AddedPreviousPara, // selection extended to previous paragraph(s)
+    EndParaBecameBehind // end para was ahead of start, but now is behind
+};
+
+SelChangeType getSelChangeType(const TextPaM& Os, const TextPaM& Oe,
+                               const TextPaM& Ns, const TextPaM& Ne)
+{
+    if (Os == Oe) // no old selection
     {
-        //only caret moves.
-        return 1;
+        if (Ns == Ne) // no new selection: only caret moves
+            return Os != Ns ? SelChangeType::CaretMove : SelChangeType::None;
+        else // old has no selection but new has selection
+            return SelChangeType::NoSelToSel;
     }
-    else if (Os == Oe && Ns != Ne)
+    else if (Ns == Ne) // old has selection; no new selection
     {
-        //old has no selection but new has selection
-        return 2;
+        return SelChangeType::SelToNoSel;
     }
-    else if (Os != Oe && Ns == Ne)
+    else if (Os == Ns) // both old and new have selections, and their starts are same
     {
-        //old has selection but new has no selection.
-        return 3;
-    }
-    else if (Os != Oe && Ns != Ne && Osp == Nsp && Osl == Nsl)
-    {
-        //both old and new have selections.
-        if (Oep == Nep )
+        const sal_Int32 Osp = Os.GetPara(), Oep = Oe.GetPara();
+        const sal_Int32 Nsp = Ns.GetPara(), Nep = Ne.GetPara();
+        if (Oep == Nep) // end of selection stays in the same paragraph
         {
             //Send text_selection_change event on Nep
-
-            return 4;
+            return Oe.GetIndex() != Ne.GetIndex() ? SelChangeType::NoParaChange
+                                                  : SelChangeType::None;
         }
-        else if (Oep < Nep)
+        else if (Oep < Nep) // end of selection moved to a following paragraph
         {
             //all the following examples like 1,2->1,3 means that old start select para is 1, old end select para is 2,
             // then press shift up, the new start select para is 1, new end select para is 3;
             //for example, 1, 2 -> 1, 3; 4,1 -> 4, 7; 4,1 -> 4, 2; 4,4->4,5
-            if (Nep >= Nsp)
+            if (Nep >= Nsp) // new end para not behind start
             {
                 // 1, 2 -> 1, 3; 4, 1 -> 4, 7; 4,4->4,5;
-                if (Oep < Osp)
+                if (Oep < Osp) // old end was behind start
                 {
-                    // 4,1 -> 4,7;
-                    return 5;
+                    // 4,1 -> 4,7; 4,1 -> 4,4
+                    return SelChangeType::EndParaNoMoreBehind;
                 }
-                else
+                else // old end para wasn't behind start
                 {
                     // 1, 2 -> 1, 3; 4,4->4,5;
-                    return 6;
+                    return SelChangeType::AddedFollowingPara;
                 }
             }
-            else
+            else // new end para is still behind start
             {
                 // 4,1 -> 4,2,
-                if (Oep < Osp)
-                {
-                    // 4,1 -> 4,2,
-                    return 7;
-                }
-                else
-                {
-                    // no such condition. Oep > Osp = Nsp > Nep
-                }
+                return SelChangeType::ExcludedPreviousPara;
             }
         }
-        else if (Oep > Nep)
+        else // Oep > Nep => end of selection moved to a previous paragraph
         {
             // 3,2 -> 3,1; 4,7 -> 4,1; 4, 7 -> 4,6; 4,4 -> 4,3
-            if (Nep >= Nsp)
+            if (Nep >= Nsp) // new end para is still not behind of start
             {
-                // 4,7 -> 4,6
-                if (Oep <= Osp)
-                {
-                    //no such condition, Oep<Osp=Nsp <= Nep
-                }
-                else
-                {
-                    // 4,7 ->4,6
-                    return 8;
-                }
+                // 4,7 ->4,6
+                return SelChangeType::ExcludedFollowingPara;
             }
-            else
+            else // new end para is behind start
             {
                 // 3,2 -> 3,1, 4,7 -> 4,1; 4,4->4,3
-                if (Oep <= Osp)
+                if (Oep <= Osp) // it was not ahead already
                 {
                     // 3,2 -> 3,1; 4,4->4,3
-                    return 9;
+                    return SelChangeType::AddedPreviousPara;
                 }
-                else
+                else // it was ahead previously
                 {
                     // 4,7 -> 4,1
-                    return 10;
+                    return SelChangeType::EndParaBecameBehind;
                 }
             }
         }
     }
-    return -1;
+    return SelChangeType::None;
 }
 
+} // namespace
 
 void Document::sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId)
 {
@@ -2141,97 +2134,95 @@ void Document::handleSelectionChangeNotification()
     }
     m_aFocused = aIt;
 
-    ::sal_Int32 nMin;
-    ::sal_Int32 nMax;
-    ::sal_Int32 ret = getSelectionType(nNewFirstPara, nNewFirstPos, nNewLastPara, nNewLastPos);
-    switch (ret)
+    if (m_nSelectionFirstPara != -1)
     {
-        case -1:
-            {
+        sal_Int32 nMin;
+        sal_Int32 nMax;
+        SelChangeType ret = getSelChangeType(TextPaM(m_nSelectionFirstPara, m_nSelectionFirstPos),
+                                             TextPaM(m_nSelectionLastPara, m_nSelectionLastPos),
+                                             rSelection.GetStart(), rSelection.GetEnd());
+        switch (ret)
+        {
+            case SelChangeType::None:
                 //no event
-            }
-            break;
-        case 1:
-            {
+                break;
+            case SelChangeType::CaretMove:
                 //only caret moved, already handled in above
-            }
-            break;
-        case 2:
-            {
+                break;
+            case SelChangeType::NoSelToSel:
                 //old has no selection but new has selection
                 nMin = std::min(nNewFirstPara, nNewLastPara);
                 nMax = std::max(nNewFirstPara, nNewLastPara);
-                sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::SELECTION_CHANGED);
-                sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 3:
-            {
+                sendEvent(nMin, nMax, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nMin, nMax,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::SelToNoSel:
                 //old has selection but new has no selection.
                 nMin = std::min(m_nSelectionFirstPara, m_nSelectionLastPara);
                 nMax = std::max(m_nSelectionFirstPara, m_nSelectionLastPara);
-                sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::SELECTION_CHANGED);
-                sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 4:
-            {
+                sendEvent(nMin, nMax, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nMin, nMax,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::NoParaChange:
                 //Send text_selection_change event on Nep
-                sendEvent(nNewLastPara, nNewLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 5:
-            {
-                // 4, 1 -> 4, 7
-                sendEvent(m_nSelectionLastPara, m_nSelectionFirstPara-1, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
-                sendEvent(nNewFirstPara+1, nNewLastPara, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewLastPara, nNewLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::EndParaNoMoreBehind:
+                // 4, 1 -> 4, 7; 4,1 -> 4,4
+                sendEvent(m_nSelectionLastPara, m_nSelectionFirstPara - 1,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewFirstPara + 1, nNewLastPara,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
 
-                sendEvent(m_nSelectionLastPara, nNewLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 6:
-            {
+                sendEvent(m_nSelectionLastPara, nNewLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::AddedFollowingPara:
                 // 1, 2 -> 1, 4; 4,4->4,5;
-                sendEvent(m_nSelectionLastPara+1, nNewLastPara, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(m_nSelectionLastPara + 1, nNewLastPara,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
 
-                sendEvent(m_nSelectionLastPara, nNewLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 7:
-            {
+                sendEvent(m_nSelectionLastPara, nNewLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::ExcludedPreviousPara:
                 // 4,1 -> 4,3,
-                sendEvent(m_nSelectionLastPara +1, nNewLastPara , css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(m_nSelectionLastPara + 1, nNewLastPara,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
 
-                sendEvent(m_nSelectionLastPara, nNewLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 8:
-            {
+                sendEvent(m_nSelectionLastPara, nNewLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::ExcludedFollowingPara:
                 // 4,7 ->4,5;
-                sendEvent(nNewLastPara + 1, m_nSelectionLastPara, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewLastPara + 1, m_nSelectionLastPara,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
 
-                sendEvent(nNewLastPara, m_nSelectionLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 9:
-            {
+                sendEvent(nNewLastPara, m_nSelectionLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::AddedPreviousPara:
                 // 3,2 -> 3,1; 4,4->4,3
-                sendEvent(nNewLastPara, m_nSelectionLastPara - 1, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewLastPara, m_nSelectionLastPara - 1,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
 
-                sendEvent(nNewLastPara, m_nSelectionLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        case 10:
-            {
+                sendEvent(nNewLastPara, m_nSelectionLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+            case SelChangeType::EndParaBecameBehind:
                 // 4,7 -> 4,1
-                sendEvent(m_nSelectionFirstPara + 1, m_nSelectionLastPara, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
-                sendEvent(nNewLastPara, nNewFirstPara - 1, css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(m_nSelectionFirstPara + 1, m_nSelectionLastPara,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewLastPara, nNewFirstPara - 1,
+                          css::accessibility::AccessibleEventId::SELECTION_CHANGED);
 
-                sendEvent(nNewLastPara, m_nSelectionLastPara, css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
-            }
-            break;
-        default:
-            break;
+                sendEvent(nNewLastPara, m_nSelectionLastPara,
+                          css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+                break;
+        }
     }
 
     m_nSelectionFirstPara = nNewFirstPara;
