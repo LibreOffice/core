@@ -1750,10 +1750,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     /* prepare the cypher engine, can be done in CTOR, free in DTOR */
     m_aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
 
-    /* the size of the Codec default maximum */
-    /* is this 0x4000 required to be the same as MAX_SIGNATURE_CONTENT_LENGTH or just coincidentally the same at the moment? */
-    m_vEncryptionBuffer.reserve(0x4000);
-
     if( xEnc.is() )
         prepareEncryption( xEnc );
 
@@ -1992,7 +1988,6 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
         const sal_Unicode* pStr = rInString.getStr();
         sal_Int32 nLen = rInString.getLength();
         //prepare a unicode string, encrypt it
-        m_vEncryptionBuffer.reserve(nLen*2);
         enableStringEncryption( nInObjectNumber );
         sal_uInt8 *pCopy = m_vEncryptionBuffer.data();
         sal_Int32 nChars = 2;
@@ -2007,6 +2002,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             nChars += 2;
         }
         //encrypt in place
+        m_vEncryptionBuffer.resize(nChars);
         rtl_cipher_encodeARCFOUR( m_aCipher, m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars );
         //now append, hexadecimal (appendHex), the encrypted result
         for(int i = 0; i < nChars; i++)
@@ -2024,7 +2020,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer const & rIn
     //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
     if( m_aContext.Encryption.Encrypt() )
     {
-        m_vEncryptionBuffer.reserve( nChars );
+        m_vEncryptionBuffer.resize(nChars);
         //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
         rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_vEncryptionBuffer.data(), nChars );
@@ -2147,7 +2143,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         if( m_bEncryptThisStream )
         {
             /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
-            m_vEncryptionBuffer.reserve( nBytes );
+            m_vEncryptionBuffer.resize(nBytes);
             if( buffOK )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
                                           pBuffer, static_cast<sal_Size>(nBytes),
@@ -9518,7 +9514,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             {
                 enableStringEncryption( rObject.m_nObject );
                 //check encryption buffer size
-                m_vEncryptionBuffer.reserve( pAccess->GetPaletteEntryCount()*3 );
+                m_vEncryptionBuffer.resize(pAccess->GetPaletteEntryCount()*3);
                 int nChar = 0;
                 //fill the encryption buffer
                 for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
