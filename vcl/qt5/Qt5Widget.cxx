@@ -262,6 +262,7 @@ static sal_uInt16 GetKeyCode(int keyval)
                 nCode = KEY_PAGEDOWN;
                 break;
             case Qt::Key_Return:
+            case Qt::Key_Enter:
                 nCode = KEY_RETURN;
                 break;
             case Qt::Key_Escape:
