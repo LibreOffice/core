@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_49e9a67e",
+        "filename": "sc/inc/formulacell.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-08T11:37:59Z",
+      "side": 1,
+      "message": "I\u0027ve fairly sure you\u0027re going to end up with a big chunk of wasted space right here - you can check this in gdb with the pahole script.\nIn which case you might as well just move all of the bool bit fields to here.",
+      "revId": "74ae41319073099bc1360ba91aa72ffc234a95ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
