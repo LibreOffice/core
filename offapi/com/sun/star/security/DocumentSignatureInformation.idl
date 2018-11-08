@@ -39,6 +39,7 @@ struct DocumentSignatureInformation
 {
     XCertificate    Signer;
     long            SignatureDate;
+    /** Time of day, in 100th of seconds. */
     long            SignatureTime;
     boolean         SignatureIsValid;
     /* reflects the validity of the certificate.
