@@ -8,14 +8,14 @@
  */
 
 #include "ucalc.hxx"
+#include "helper/debughelper.hxx"
+#include "helper/qahelper.hxx"
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-#include <osl/time.h>
 #include <svl/asiancfg.hxx>
+#include <svl/gridprinter.hxx>
 
 #include <scdll.hxx>
 #include <formulacell.hxx>
@@ -37,18 +37,15 @@
 #include <reftokenhelper.hxx>
 #include <userdat.hxx>
 #include <clipcontext.hxx>
+#include <refdata.hxx>
 
 #include <docsh.hxx>
 #include <docfunc.hxx>
-#include <dbdocfun.hxx>
 #include <funcdesc.hxx>
-#include <externalrefmgr.hxx>
 
 #include <calcconfig.hxx>
-#include <interpre.hxx>
 #include <columniterator.hxx>
 #include <types.hxx>
-#include <fillinfo.hxx>
 #include <tokenarray.hxx>
 #include <scopetools.hxx>
 #include <dociter.hxx>
@@ -73,14 +70,12 @@
 
 #include <formula/IFunctionDescription.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 
-#include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
@@ -94,8 +89,6 @@
 
 #include <iostream>
 #include <memory>
-#include <sstream>
-#include <utility>
 #include <vector>
 
 struct TestImpl

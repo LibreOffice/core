@@ -10,16 +10,24 @@
 #include <sal/config.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <test/bootstrapfixture.hxx>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <test/calc_unoapi_test.hxx>
 
-#include <global.hxx>
-#include <document.hxx>
-
-#include "helper/qahelper.hxx"
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace lang
+{
+class XComponent;
+}
+}
+}
+}
 
 using namespace css;
 

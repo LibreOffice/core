@@ -9,6 +9,7 @@
 
 #include <memory>
 #include "ucalc.hxx"
+#include "helper/qahelper.hxx"
 
 #include <conditio.hxx>
 #include <colorscale.hxx>

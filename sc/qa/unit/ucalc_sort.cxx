@@ -9,6 +9,8 @@
 
 #include "ucalc.hxx"
 #include "helper/sorthelper.hxx"
+#include "helper/debughelper.hxx"
+#include "helper/qahelper.hxx"
 
 #include <postit.hxx>
 #include <sortparam.hxx>
@@ -21,16 +23,15 @@
 #include <docfunc.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
-#include <table.hxx>
 #include <drwlayer.hxx>
 #include <formulaopt.hxx>
 
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdpage.hxx>
-#include <test/bootstrapfixture.hxx>
 
 void Test::testSort()
 {

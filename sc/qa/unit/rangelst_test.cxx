@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
-#include "helper/qahelper.hxx"
-#include <document.hxx>
 #include <docsh.hxx>
 #include <scdll.hxx>
 

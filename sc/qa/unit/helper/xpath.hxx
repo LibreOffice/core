@@ -10,25 +10,24 @@
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_XPATH_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_XPATH_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <libxml/parser.h>
 
-#include <unotools/tempfile.hxx>
-
-#include <libxml/xpathInternals.h>
-#include <libxml/parserInternals.h>
-
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace utl { class TempFile; }
+class ScDocShell;
+class SvStream;
 
 #if defined(SCQAHELPER_DLLIMPLEMENTATION)
 #define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
 #define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
-
-#include <docsh.hxx>
 
 using namespace com::sun::star;
 
