@@ -29,7 +29,6 @@
 #include <osx/salframe.h>
 #else
 #include "headless/svpframe.hxx"
-#include "headless/svpgdi.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpvd.hxx"
 #endif

@@ -38,9 +38,10 @@
 #include <quartz/salbmp.h>
 #include <quartz/salgdi.h>
 #include <quartz/salvd.h>
+#else
+#include <headless/svpgdi.hxx>
 #endif
 #include <headless/svpbmp.hxx>
-#include <headless/svpgdi.hxx>
 
 #include <salframe.hxx>
 #include <svdata.hxx>

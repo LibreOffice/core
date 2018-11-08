@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
+#ifdef IOS
+#error This file is not for iOS
+#endif
+
 #include <osl/endian.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
@@ -27,14 +31,8 @@
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
-#ifndef IOS
 #include "svpcairotextrender.hxx"
-#endif
 #include <impfontmetricdata.hxx>
-
-#ifdef IOS
-#define SvpSalGraphics AquaSalGraphics
-#else
 
 #include <cairo.h>
 
@@ -275,8 +273,6 @@ public:
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void                    clipRegion(cairo_t* cr);
 };
-
-#endif
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 

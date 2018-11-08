@@ -18,7 +18,7 @@
  */
 #include <vcl/svapp.hxx>
 #include "salprn.hxx"
-#include "headless/svpgdi.hxx"
+#include "quartz/salgdi.h"
 #include "headless/svpinst.hxx"
 #include "unx/fontmanager.hxx"
 #include "unx/gendata.hxx"

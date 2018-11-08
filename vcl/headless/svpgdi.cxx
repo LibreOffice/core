@@ -18,7 +18,9 @@
  */
 
 #include <memory>
+#ifndef IOS
 #include <headless/svpgdi.hxx>
+#endif
 #include <headless/svpbmp.hxx>
 #include <headless/svpframe.hxx>
 #include <headless/svpcairotextrender.hxx>
