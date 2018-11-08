@@ -25,7 +25,9 @@
 
 #include <headless/svpframe.hxx>
 #include <headless/svpinst.hxx>
+#ifndef IOS
 #include <headless/svpgdi.hxx>
+#endif
 
 #include <basegfx/vector/b2ivector.hxx>
 
