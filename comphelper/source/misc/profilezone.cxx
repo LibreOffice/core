@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <atomic>
+
 #include <comphelper/sequence.hxx>
 #include <comphelper/profilezone.hxx>
 #include <osl/time.h>
@@ -15,7 +19,7 @@
 namespace comphelper
 {
 
-volatile bool ProfileZone::g_bRecording(false);
+std::atomic<bool> ProfileZone::g_bRecording(false);
 
 namespace ProfileRecording
 {
