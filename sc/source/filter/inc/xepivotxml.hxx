@@ -23,12 +23,9 @@ class ScDPObject;
 class XclExpXmlPivotCaches : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    enum EntryType { Worksheet, Name, Database };
-
     struct Entry
     {
         const ScDPCache* mpCache;
-        EntryType meType;
         ScRange maSrcRange;
     };
 

@@ -228,21 +228,18 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         XML_createdVersion, "3", // MS Excel 2007, tdf#112936: setting version number makes MSO to handle the pivot table differently
         FSEND);
 
-    if (rEntry.meType == Worksheet)
-    {
-        pDefStrm->startElement(XML_cacheSource,
-            XML_type, "worksheet",
-            FSEND);
+    pDefStrm->startElement(XML_cacheSource,
+        XML_type, "worksheet",
+        FSEND);
 
-        OUString aSheetName;
-        GetDoc().GetName(rEntry.maSrcRange.aStart.Tab(), aSheetName);
-        pDefStrm->singleElement(XML_worksheetSource,
-            XML_ref, XclXmlUtils::ToOString(rEntry.maSrcRange).getStr(),
-            XML_sheet, XclXmlUtils::ToOString(aSheetName).getStr(),
-            FSEND);
+    OUString aSheetName;
+    GetDoc().GetName(rEntry.maSrcRange.aStart.Tab(), aSheetName);
+    pDefStrm->singleElement(XML_worksheetSource,
+        XML_ref, XclXmlUtils::ToOString(rEntry.maSrcRange).getStr(),
+        XML_sheet, XclXmlUtils::ToOString(aSheetName).getStr(),
+        FSEND);
 
-        pDefStrm->endElement(XML_cacheSource);
-    }
+    pDefStrm->endElement(XML_cacheSource);
 
     size_t nCount = rCache.GetFieldCount();
     pDefStrm->startElement(XML_cacheFields,
@@ -449,7 +446,6 @@ void XclExpXmlPivotTableManager::Initialize()
             maCacheIdMap.emplace(*it, aCaches.size()+1);
 
         XclExpXmlPivotCaches::Entry aEntry;
-        aEntry.meType = XclExpXmlPivotCaches::Worksheet;
         aEntry.mpCache = pCache;
         aEntry.maSrcRange = rRange;
         aCaches.push_back(aEntry); // Cache ID equals position + 1.

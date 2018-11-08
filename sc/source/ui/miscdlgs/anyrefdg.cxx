@@ -754,11 +754,9 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
         m_rWindow( &rWindow ),
         m_bInRefMode( false ),
         m_aHelper(this,pB),
-        m_pMyBindings( pB ),
-        m_pActiveWin(nullptr)
+        m_pMyBindings( pB )
 {
     m_aHelper.SetWindow(m_rWindow.get());
-    m_aIdle.SetInvokeHandler(LINK( this, ScRefHandler, UpdateFocusHdl));
 
     if( bBindRef ) EnterRefMode();
 }
@@ -821,7 +819,6 @@ ScRefHandler::~ScRefHandler()
 void ScRefHandler::disposeRefHandler()
 {
     m_rWindow.clear();
-    m_pActiveWin.clear();
     LeaveRefMode();
     m_aHelper.dispose();
 }
@@ -930,14 +927,6 @@ void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* p
 void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     m_aHelper.ToggleCollapsed( pEdit, pButton );
-}
-
-IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl, Timer *, void)
-{
-    if (m_pActiveWin)
-    {
-        m_pActiveWin->GrabFocus();
-    }
 }
 
 bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc )

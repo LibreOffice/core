@@ -47,7 +47,6 @@ protected:
     SdrModel*       pDrDoc;
 
     SfxRequest const      aSfxRequest;
-    VclPtr<Dialog>          pDialog;
 
     Timer           aScrollTimer;           // for Autoscrolling
     DECL_LINK( ScrollHdl, Timer *, void );

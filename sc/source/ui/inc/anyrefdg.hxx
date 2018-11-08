@@ -108,11 +108,7 @@ private:
                         m_aHelper;
     SfxBindings* const  m_pMyBindings;
 
-    VclPtr<vcl::Window> m_pActiveWin;
-    Idle                m_aIdle;
     OUString            m_aDocName;               // document on which the dialog was opened
-
-    DECL_LINK( UpdateFocusHdl, Timer*, void );
 
 protected:
     void                disposeRefHandler();
