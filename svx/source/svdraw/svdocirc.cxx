@@ -408,11 +408,7 @@ sal_uInt32 SdrCircObj::GetHdlCount() const
 
 void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    sal_uInt32 nHdlCnt = 8;
-    if (meCircleKind==OBJ_CIRC)
-        nHdlCnt += 2;
-
-    for (sal_uInt32 nHdlNum=0; nHdlNum<nHdlCnt; ++nHdlNum)
+    for (sal_uInt32 nHdlNum=(OBJ_CIRC==meCircleKind)?2:0; nHdlNum<=9; ++nHdlNum)
     {
         Point aPnt;
         SdrHdlKind eLocalKind(SdrHdlKind::Move);
