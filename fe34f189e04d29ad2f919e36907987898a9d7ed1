@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_8cd1dc5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-11-08T14:21:21Z",
+      "side": 1,
+      "message": "Can you please change the first line in the commit message? It should already say what the fix does. No need to mention the bug title there.\n\nIn this case the sentence \"Prohibit resizing qt-based windows unless they\u0027re marked resizeable\" would be perfect for the first line commit message.\n\nSame for your other patches.",
+      "revId": "fe34f189e04d29ad2f919e36907987898a9d7ed1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
