@@ -6,7 +6,6 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="searchformatdialog|SearchFormatDialog">Text Format </property>
-    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
