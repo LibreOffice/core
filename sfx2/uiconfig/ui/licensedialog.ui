@@ -65,7 +65,7 @@
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="licensedialog|label">%PRODUCTNAME is made available subject to the terms of the Mozilla Public License, v. 2.0. A copy of the MPL can be obtained at http://mozilla.org/MPL/2.0/.
+            <property name="label" translatable="yes" context="licensedialog|label">%PRODUCTNAME is made available subject to the terms of the Mozilla Public License, v. 2.0. A copy of the MPL can be obtained at https://www.mozilla.org/en-US/MPL/2.0/.
 
 Third Party Code Additional copyright notices and license terms applicable to portions of the Software are set forth in the LICENSE.html file; choose Show License to see exact details in English.
 
@@ -73,7 +73,7 @@ All trademarks and registered trademarks mentioned herein are the property of th
 
 Copyright © 2000–2018 LibreOffice contributors. All rights reserved.
 
-This product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2011 Oracle and/or its affiliates. %OOOVENDOR acknowledges all community members, please see http://www.libreoffice.org/ for more details.</property>
+This product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2011 Oracle and/or its affiliates. %OOOVENDOR acknowledges all community members, please see https://www.libreoffice.org/ for more details.</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">80</property>
             <property name="xalign">0</property>
