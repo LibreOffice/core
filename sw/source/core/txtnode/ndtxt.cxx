@@ -3390,8 +3390,8 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
 {
     ExpandMode eMode = ExpandMode::ExpandFields | eAdditionalMode;
 
-    ModelToViewHelper aConversionMap(*this, eMode);
-    const OUString& aExpandText = aConversionMap.getViewText();
+    ModelToViewHelper aConversionMap(*this, nullptr/*TODO*/, eMode);
+    const OUString aExpandText = aConversionMap.getViewText();
     const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nIdx );
     sal_Int32 nEnd = nLen == -1 ? GetText().getLength() : nIdx + nLen;
     const sal_Int32 nExpandEnd = aConversionMap.ConvertToViewPosition( nEnd );
