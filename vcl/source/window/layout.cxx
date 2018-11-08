@@ -2479,6 +2479,20 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
     }
 }
 
+void MessageDialog::StateChanged(StateChangedType nType)
+{
+    if (nType == StateChangedType::InitShow)
+    {
+        // MessageBox should be at least as wide as to see the title
+        auto nTitleWidth = CalcTitleWidth();
+        // Extra-Width for Close button
+        nTitleWidth += mpWindowImpl->mnTopBorder;
+        if (get_preferred_size().Width() < nTitleWidth)
+            set_width_request(nTitleWidth);
+    }
+    Dialog::StateChanged(nType);
+}
+
 VclVPaned::VclVPaned(vcl::Window *pParent)
     : VclContainer(pParent, WB_HIDE | WB_CLIPCHILDREN)
     , m_pSplitter(VclPtr<Splitter>::Create(this, WB_VSCROLL))
