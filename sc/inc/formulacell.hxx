@@ -27,6 +27,7 @@
 
 #include "types.hxx"
 #include "interpretercontext.hxx"
+#include "document.hxx"
 #include "formulalogger.hxx"
 #include "formularesult.hxx"
 
@@ -222,7 +223,12 @@ public:
     void            SetDirtyAfterLoad();
     void ResetTableOpDirtyVar();
     void            SetTableOpDirty();
-    bool            IsDirtyOrInTableOpDirty() const;
+
+    bool IsDirtyOrInTableOpDirty() const
+    {
+        return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
+    }
+
     bool GetDirty() const { return bDirty; }
     void ResetDirty();
     bool NeedsListening() const { return bNeedListening; }
@@ -414,9 +420,27 @@ public:
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
 
-    bool NeedsInterpret() const;
+    bool NeedsInterpret() const
+    {
+        if (bIsIterCell)
+            // Shortcut to force return of current value and not enter Interpret()
+            // as we're looping over all iteration cells.
+            return false;
 
-    void            MaybeInterpret();
+        if (!IsDirtyOrInTableOpDirty())
+            return false;
+
+        return (pDocument->GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
+    }
+
+    void MaybeInterpret()
+    {
+        if (NeedsInterpret())
+        {
+            assert(!pDocument->IsThreadedGroupCalcInProgress());
+            Interpret();
+        }
+    }
 
     /**
      * Turn a non-grouped cell into the top of a grouped cell.
