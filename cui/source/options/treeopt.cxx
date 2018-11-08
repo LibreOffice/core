@@ -1009,53 +1009,15 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     {
         if(pGroupInfo->m_bLoadError)
             return;
-        else
-        {
-            if(pGroupInfo->m_pModule /*&& !pGroupInfo->pModule->IsLoaded()*/)
-            {
-                SfxModule* pOldModule = pGroupInfo->m_pModule;
-                bool bIdentical = pGroupInfo->m_pModule == pGroupInfo->m_pShell;
 
-                WaitObject aWait(this);
-                //pGroupInfo->pModule = pGroupInfo->pModule->Load();
-                if(!pGroupInfo->m_pModule)
-                {
-                    pGroupInfo->m_bLoadError = true;
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pBox->GetFrameWeld(),
-                                                                  VclMessageType::Info, VclButtonsType::Ok,
-                                                                  sNotLoadedError));
-                    xInfoBox->run();
-                    return;
-                }
-                if(bIdentical)
-                    pGroupInfo->m_pShell = pGroupInfo->m_pModule;
-                // now test whether there was the same module in other groups, too (e. g. Text+HTML)
-                SvTreeListEntry* pTemp = pTreeLB->First();
-                while(pTemp)
-                {
-                    if(!pTreeLB->GetParent(pTemp) && pTemp != pEntry)
-                    {
-                        OptionsGroupInfo* pTGInfo = static_cast<OptionsGroupInfo *>(pTemp->GetUserData());
-                        if(pTGInfo->m_pModule == pOldModule)
-                        {
-                            pTGInfo->m_pModule = pGroupInfo->m_pModule;
-                            if(bIdentical)
-                                pTGInfo->m_pShell = pGroupInfo->m_pModule;
-                        }
-                    }
-                    pTemp = pTreeLB->Next(pTemp);
-                }
-            }
-
-            if(!pGroupInfo->m_pInItemSet)
-                pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
-                    ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
-                    : CreateItemSet( pGroupInfo->m_nDialogId );
-            if(!pGroupInfo->m_pOutItemSet)
-                pGroupInfo->m_pOutItemSet = o3tl::make_unique<SfxItemSet>(
-                    *pGroupInfo->m_pInItemSet->GetPool(),
-                    pGroupInfo->m_pInItemSet->GetRanges());
-        }
+        if(!pGroupInfo->m_pInItemSet)
+            pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
+                ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
+                : CreateItemSet( pGroupInfo->m_nDialogId );
+        if(!pGroupInfo->m_pOutItemSet)
+            pGroupInfo->m_pOutItemSet = o3tl::make_unique<SfxItemSet>(
+                *pGroupInfo->m_pInItemSet->GetPool(),
+                pGroupInfo->m_pInItemSet->GetRanges());
 
         TabPageParent pPageParent(pTabBox);
 
