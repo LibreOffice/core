@@ -77,7 +77,7 @@
   <dlg:text dlg:id="lblRetrieval" dlg:tab-index="24" dlg:left="9" dlg:top="119" dlg:width="216" dlg:height="8" dlg:page="3" dlg:value="lblRetrieval"/>
   <dlg:text dlg:id="lblConfig" dlg:tab-index="25" dlg:left="6" dlg:top="39" dlg:width="94" dlg:height="8" dlg:page="3" dlg:value="lblConfig"/>
   <dlg:text dlg:id="lblCurDocument" dlg:tab-index="26" dlg:left="16" dlg:top="141" dlg:width="208" dlg:height="8" dlg:page="3"/>
-  <dlg:img dlg:id="imgPreview" dlg:tab-index="27" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26" dlg:src="file:///D:/office630np/share/template/german/wizard/bitmap/euro_2.bmp"/>
+  <dlg:img dlg:id="imgPreview" dlg:tab-index="27" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26" dlg:src="file:///D:/office630np/share/template/german/wizard/bitmap/euro_2.png"/>
   <dlg:fixedline dlg:id="hlnSelection" dlg:tab-index="28" dlg:left="7" dlg:top="72" dlg:width="258" dlg:height="8" dlg:page="1" dlg:value="hlnSelection"/>
   <dlg:fixedline dlg:id="hlnExtent" dlg:tab-index="29" dlg:left="6" dlg:top="39" dlg:width="156" dlg:height="8" dlg:page="2" dlg:value="hlnExtent"/>
   <dlg:fixedline dlg:id="hlnProgress" dlg:tab-index="30" dlg:left="6" dlg:top="108" dlg:width="258" dlg:height="8" dlg:page="3" dlg:value="hlnProgress"/>

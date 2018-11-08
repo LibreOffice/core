@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <!--***********************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -9,21 +9,19 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  ***********************************************************-->
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
-REM  *****  BASIC  *****
-
-
+REM ***** BASIC *****
 
 Public Const SBRANGEUBOUND = 20
 Public StyleRangeAssignmentList(SBRANGEUBOUND)as String
@@ -217,13 +215,13 @@ Dim LocWorkPath as String
 		sCurrSLOVAK = GetResText(1515)
 		sCurrUNKNOWN = GetResText(1516)
 		sCurrSYSUNKNOWN = GetResText(1517)
-		.cmdCancel.Label =  sCANCEL
-		.cmdHelp.Label =  sHELP
-		.cmdBack.Label =  GetResText(1002)
-		.cmdGoOn.Label =  sGOON
-		.lblHint.Label =  GetResText(1004)
+		.cmdCancel.Label = sCANCEL
+		.cmdHelp.Label = sHELP
+		.cmdBack.Label = GetResText(1002)
+		.cmdGoOn.Label = sGOON
+		.lblHint.Label = GetResText(1004)
 		.lblCurrencies.Label = GetResText(1006)
-		.cmdBack.Enabled = False		
+		.cmdBack.Enabled = False
 		If .Step = 1 Then
 			.chkComplete.Label = GetResText(1100)
 			.hlnSelection.Label = GetResText(1101)
@@ -236,10 +234,10 @@ Dim LocWorkPath as String
 		Else
 			.lblProgress.Label = sStsPROGRESS
 		 	.hlnExtent.Label = GetResText(1200)
-			.optSingleFile.Label = GetResText(1201) 
+			.optSingleFile.Label = GetResText(1201)
  			.optWholeDir.Label = GetResText(1202)
  			.chkProtect.Label = GetResText(1207)
- 			.chkTextDocuments.Label = GetResText(1210) 
+ 			.chkTextDocuments.Label = GetResText(1210)
 
 			sSOURCEFILE = GetResText(1203)
 			sSOURCEDIR = GetResText(1204)
@@ -247,8 +245,8 @@ Dim LocWorkPath as String
  			sInclusiveSubDir = GetResText(1205)
  			.chkRecursive.Label = sInclusiveSubDir
 			sTARGETDIR = GetResText(1206)
- 			.lblTarget.Label = STARGETDIR 
-			
+ 			.lblTarget.Label = STARGETDIR
+
 			LocWorkPath = GetPathSettings(&quot;Work&quot;)
 			If Not oUcb.Exists(LocWorkPath) Then
 				ShowNoOfficePathError()
@@ -256,7 +254,7 @@ Dim LocWorkPath as String
 			End If
 
 			.txtSource.Text = ConvertfromUrl(LocWorkPath)
-			
+
 			SubstDir = .txtSource.Text
 			.txtTarget.Text = .txtSource.Text
 			.hlnProgress.Label = GetResText(1600)
@@ -290,7 +288,7 @@ Sub InitializeLanguages()
 	LangIDValue(3,0,0) = &quot;es&quot;
 	LangIDValue(3,0,1) = &quot;&quot;
 	LangIDValue(3,0,2) = &quot;-40A&quot;
-	
+
 	&apos;Spanish modern
 	LangIDValue(3,1,0) = &quot;es&quot;
 	LangIDValue(3,1,1) = &quot;&quot;
@@ -333,7 +331,7 @@ Sub InitializeLanguages()
 	LangIDValue(8,0,0) = &quot;fr&quot;
 	LangIDValue(8,0,1) = &quot;LU&quot;
 	LangIDValue(8,0,2) = &quot;-140C&quot;
-	
+
 	LangIDValue(8,1,0) = &quot;de&quot;
 	LangIDValue(8,1,1) = &quot;LU&quot;
 	LangIDValue(8,1,2) = &quot;-1007&quot;
@@ -544,7 +542,7 @@ Sub InitializeControls()
 			EnableStep2DialogControls(True)
 		End If
 	End If
-End Sub	
+End Sub
 
 
 Sub InitializeConverter(oLocale, iDialogPage as Integer)
@@ -558,7 +556,7 @@ Dim Isthere as Boolean
 		If sDocType = &quot;sCalc&quot; Then
 			bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 		End If
-	    oStatusline = ThisComponent.GetCurrentController.GetFrame.CreateStatusIndicator()
+		oStatusline = ThisComponent.GetCurrentController.GetFrame.CreateStatusIndicator()
 	End If
 	DialogConvert = LoadDialog(&quot;Euro&quot;, &quot;DlgConvert&quot;)
 	DialogModel = DialogConvert.Model
@@ -575,9 +573,9 @@ Dim Isthere as Boolean
 		Stop
 	End If
 	FillUpCurrencyListbox()
-	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	
+	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.png&quot;
 	DialogConvert.Title = sMsgDLGTITLE
-	DialogModel.cmdGoOn.DefaultButton = True	
+	DialogModel.cmdGoOn.DefaultButton = True
 	If iDialogPage = 1 Then
 		ToggleWindow(True)
 	End If
@@ -592,7 +590,7 @@ Sub	InitializeCurrencyValues(CurrIndex)
 		CurrSymbolList(1) = CurrValue(CurrIndex,4)
 		CurrSymbolList(2) = CurrValue(CurrIndex,5)
 	End If
-End Sub		
+End Sub
 
 
 Function InitializeLocales(oLocale) as Boolean
