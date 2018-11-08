@@ -108,7 +108,7 @@ OUString SwTableField::GetCommand()
         : OUString();
 }
 
-OUString SwTableField::Expand() const
+OUString SwTableField::ExpandImpl(SwRootFrame const*const) const
 {
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {
@@ -160,7 +160,7 @@ bool SwTableField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_uInt16 nOldSubType = nSubType;
             SwTableField* pThis = const_cast<SwTableField*>(this);
             pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
-            rAny <<= Expand();
+            rAny <<= ExpandImpl(nullptr);
             pThis->nSubType = nOldSubType;
         }
         break;

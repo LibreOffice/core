@@ -185,7 +185,7 @@ void SwPageNumberField::ChangeExpansion(sal_uInt16 const nPageNumber,
     m_nMaxPage = nMaxPage;
 }
 
-OUString SwPageNumberField::Expand() const
+OUString SwPageNumberField::ExpandImpl(SwRootFrame const*const) const
 {
     OUString sRet;
     SwPageNumberFieldType* pFieldType = static_cast<SwPageNumberFieldType*>(GetTyp());
@@ -335,7 +335,7 @@ SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFormat)
     m_aContent = SwAuthorFieldType::Expand(GetFormat());
 }
 
-OUString SwAuthorField::Expand() const
+OUString SwAuthorField::ExpandImpl(SwRootFrame const*const) const
 {
     if (!IsFixed())
         const_cast<SwAuthorField*>(this)->m_aContent =
@@ -469,7 +469,7 @@ SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFormat)
     m_aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
 
-OUString SwFileNameField::Expand() const
+OUString SwFileNameField::ExpandImpl(SwRootFrame const*const) const
 {
     if (!IsFixed())
         const_cast<SwFileNameField*>(this)->m_aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
@@ -638,7 +638,7 @@ SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nForma
     : SwField(pTyp, nFormat)
 {}
 
-OUString SwTemplNameField::Expand() const
+OUString SwTemplNameField::ExpandImpl(SwRootFrame const*const) const
 {
     return static_cast<SwTemplNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
@@ -765,7 +765,7 @@ SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uI
     m_nSubType(nSub)
 {}
 
-OUString SwDocStatField::Expand() const
+OUString SwDocStatField::ExpandImpl(SwRootFrame const*const) const
 {
     return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(m_nSubType, static_cast<SvxNumType>(GetFormat()));
 }
@@ -1031,7 +1031,7 @@ static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
     return double( nDate - nNullDate );
 }
 
-OUString SwDocInfoField::Expand() const
+OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
 {
     if ( ( m_nSubType & 0xFF ) == DI_CUSTOM )
     {
@@ -1190,7 +1190,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= Expand();
+        rAny <<= ExpandImpl(nullptr);
         break;
     case FIELD_PROP_BOOL2:
         {
@@ -1310,7 +1310,7 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
     m_bCanToggle = !m_aCond.isEmpty();
 }
 
-OUString SwHiddenTextField::Expand() const
+OUString SwHiddenTextField::ExpandImpl(SwRootFrame const*const) const
 {
     // Type: !Hidden  -> show always
     //        Hide    -> evaluate condition
@@ -1661,7 +1661,7 @@ SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const OUString
     m_bIsHidden = false;
 }
 
-OUString SwHiddenParaField::Expand() const
+OUString SwHiddenParaField::ExpandImpl(SwRootFrame const*const) const
 {
     return OUString();
 }
@@ -1761,7 +1761,7 @@ SwPostItField::~SwPostItField()
     mpText.reset();
 }
 
-OUString SwPostItField::Expand() const
+OUString SwPostItField::ExpandImpl(SwRootFrame const*const) const
 {
     return OUString();
 }
@@ -1988,7 +1988,7 @@ SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal
     m_aContent = SwExtUserFieldType::Expand(m_nType);
 }
 
-OUString SwExtUserField::Expand() const
+OUString SwExtUserField::ExpandImpl(SwRootFrame const*const) const
 {
     if (!IsFixed())
         const_cast<SwExtUserField*>(this)->m_aContent = SwExtUserFieldType::Expand(m_nType);
@@ -2089,7 +2089,7 @@ SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
 {
 }
 
-OUString SwRefPageSetField::Expand() const
+OUString SwRefPageSetField::ExpandImpl(SwRootFrame const*const) const
 {
     return OUString();
 }
@@ -2283,7 +2283,7 @@ SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
 {
 }
 
-OUString SwRefPageGetField::Expand() const
+OUString SwRefPageGetField::ExpandImpl(SwRootFrame const*const) const
 {
     return m_sText;
 }
@@ -2417,7 +2417,7 @@ SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
 {
 }
 
-OUString SwJumpEditField::Expand() const
+OUString SwJumpEditField::ExpandImpl(SwRootFrame const*const) const
 {
     return "<" + m_sText + ">";
 }
@@ -2537,7 +2537,7 @@ SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
 {
 }
 
-OUString SwCombinedCharField::Expand() const
+OUString SwCombinedCharField::ExpandImpl(SwRootFrame const*const) const
 {
     return m_sCharacters;
 }

@@ -95,7 +95,7 @@ const OUString& SwChapterField::GetTitle(SwRootFrame const*const pLayout) const
     return rState.sTitle;
 }
 
-OUString SwChapterField::Expand() const
+OUString SwChapterField::ExpandImpl(SwRootFrame const*const) const
 {
     State const& rState(m_State);
     switch( GetFormat() )

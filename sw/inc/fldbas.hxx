@@ -274,7 +274,7 @@ inline void SwFieldType::UpdateFields() const
 
 /** Base class of all fields.
  Type of field is queried via Which.
- Expanded content of field is queried via Expand(). */
+ Expanded content of field is queried via ExpandField(). */
 class SW_DLLPUBLIC SwField
 {
 private:
@@ -285,7 +285,7 @@ private:
     sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
 
-    virtual OUString    Expand() const = 0;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const = 0;
     virtual std::unique_ptr<SwField> Copy() const = 0;
 
 protected:
