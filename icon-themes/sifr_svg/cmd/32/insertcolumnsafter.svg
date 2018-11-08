@@ -1,29 +1,14 @@
-<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
- <rect fill="#555753" height="2" width="8" x="12" y="15"/>
- <path d="m 11 5 v 6 v 3 h 3 v -3 h 4 v 3 h 3 V 8 L 18 5 Z" fill="#c3c4c2"/>
- <path d="m 11 18 v 3 v 6 h 10 v -6 v -3 h -3 v 3 h -4 v -3 z" fill="#c3c4c2"/>
- <rect fill="#555753" height="8" width="2" x="15" y="12"/>
- <path d="M 18 3 V 1 h 7 v 2 l -3 3 h -1 z" fill="#555753"/>
- <rect fill="#ffffff" fill-opacity=".992308" height="6" width="5" x="5" y="5"/>
- <path d="M 3 3 V 29 H 29 V 27 H 11 V 5 h 7 L 17 4 L 16 3 Z m 24 0 l -1 1 l -1 1 h 2 v 6 H 22 V 8 h -1 v 20 h 1 V 12 h 5 v 16 h 2 V 3 Z M 5 5 h 5 v 6 H 5 Z m 0 7 h 5 v 8 H 5 Z m 0 9 h 5 v 6 H 5 Z" fill="#555753"/>
- <path d="m 21 20 h 8 v 1 h -8 z" fill="#555753" fill-rule="evenodd"/>
- <g fill="#ffffff" fill-opacity=".992308">
-  <rect height="8" width="5" x="5" y="12"/>
-  <rect height="6" width="5" x="5" y="21"/>
-  <rect height="6" width="5" x="22" y="21"/>
-  <path d="m 25 5 h 2 v 6 H 22 V 8 Z"/>
-  <rect height="8" width="5" x="22" y="12"/>
-  <rect height="1" width="4" x="14" y="11"/>
-  <rect height="1" width="4" x="14" y="20"/>
-  <rect height="1" width="4" x="17" y="17"/>
-  <rect height="1" width="4" x="11" y="17"/>
-  <rect height="1" width="4" x="11" y="14"/>
-  <rect height="1" width="4" x="17" y="14"/>
-  <rect height="4" width="1" x="14" y="11"/>
-  <rect height="4" width="1" x="17" y="11"/>
-  <rect height="4" width="1" x="20" y="14"/>
-  <rect height="4" width="1" x="17" y="17"/>
-  <rect height="4" width="1" x="14" y="17"/>
-  <rect height="4" width="1" x="11" y="14"/>
- </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+ <path
+     style="fill:#555753"
+     d="M 18 1 L 18 3 L 21 6 L 22 6 L 25 3 L 25 1 L 18 1 z M 3 3 L 3 29 L 29 29 L 29 27 L 29 21 L 29 20 L 29 3 L 27 3 L 26 4 L 25 5 L 27 5 L 27 11 L 22 11 L 22 8 L 21 8 L 21 20 L 21 21 L 21 27 L 11 27 L 11 5 L 18 5 L 17 4 L 16 3 L 3 3 z M 5 5 L 10 5 L 10 11 L 5 11 L 5 5 z M 5 12 L 10 12 L 10 20 L 5 20 L 5 12 z M 15 12 L 15 15 L 12 15 L 12 17 L 15 17 L 15 20 L 17 20 L 17 17 L 20 17 L 20 15 L 17 15 L 17 12 L 15 12 z M 22 12 L 27 12 L 27 20 L 22 20 L 22 12 z M 5 21 L 10 21 L 10 27 L 5 27 L 5 21 z M 22 21 L 27 21 L 27 27 L 22 27 L 22 21 z "
+     />
+ <path
+     style="fill:#555753;opacity:0.35"
+     d="M 11 5 L 11 11 L 11 14 L 14 14 L 14 11 L 18 11 L 18 14 L 21 14 L 21 8 L 18 5 L 11 5 z M 11 18 L 11 21 L 11 27 L 21 27 L 21 21 L 21 18 L 18 18 L 18 21 L 14 21 L 14 18 L 11 18 z "
+     />
+ <path
+     style="fill:#ffffff"
+     d="M 5 5 L 5 11 L 10 11 L 10 5 L 5 5 z M 25 5 L 22 8 L 22 11 L 27 11 L 27 5 L 25 5 z M 14 11 L 14 12 L 14 14 L 12 14 L 11 14 L 11 15 L 11 17 L 11 18 L 12 18 L 14 18 L 14 21 L 18 21 L 18 20 L 18 18 L 21 18 L 21 17 L 21 14 L 18 14 L 18 11 L 14 11 z M 5 12 L 5 20 L 10 20 L 10 12 L 5 12 z M 15 12 L 17 12 L 17 15 L 20 15 L 20 17 L 17 17 L 17 18 L 17 20 L 15 20 L 15 17 L 12 17 L 12 15 L 15 15 L 15 14 L 15 12 z M 22 12 L 22 20 L 27 20 L 27 12 L 22 12 z M 5 21 L 5 27 L 10 27 L 10 21 L 5 21 z M 22 21 L 22 27 L 27 27 L 27 21 L 22 21 z "
+     />
+ </svg>
