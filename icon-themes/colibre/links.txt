@@ -1775,6 +1775,8 @@ cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
 cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
 
 cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
+cmd/sc_mirrormenu.png cmd/sc_rotateleft.png
+cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 
 # calc menubar icons
 # ===============================================
