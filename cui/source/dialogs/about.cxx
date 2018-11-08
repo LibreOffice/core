@@ -81,6 +81,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aBasedTextStr = get<FixedText>("libreoffice")->GetText();
     m_aBasedDerivedTextStr = get<FixedText>("derived")->GetText();
     m_aLocaleStr = get<FixedText>("locale")->GetText();
+    m_aUILocaleStr = get<FixedText>("uilocale")->GetText();
     m_buildIdLinkString = m_pBuildIdLink->GetText();
 
     m_pVersion->SetText(GetVersionString());
@@ -307,6 +308,7 @@ OUString AboutDialog::GetVersionString()
     OUString sBuildId = GetBuildId();
 
     OUString aLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() + " (" + GetLocaleString() + ")";
+    OUString aUILocaleStr = Application::GetSettings().GetUILanguageTag().getBcp47();
 
     if (!sBuildId.trim().isEmpty())
     {
@@ -328,16 +330,19 @@ OUString AboutDialog::GetVersionString()
         sVersion += "\n" EXTRA_BUILDID;
     }
 
-    if (!aLocaleStr.trim().isEmpty())
+    if (m_aLocaleStr.indexOf("$LOCALE") == -1)
     {
-        sVersion += "\n";
-        if (m_aLocaleStr.indexOf("$LOCALE") == -1)
-        {
-            SAL_WARN( "cui.dialogs", "translated locale string in translations doesn't contain $LOCALE placeholder" );
-            m_aLocaleStr += " $LOCALE";
-        }
-        sVersion += m_aLocaleStr.replaceAll("$LOCALE", aLocaleStr);
+        SAL_WARN( "cui.dialogs", "translated locale string in translations doesn't contain $LOCALE placeholder" );
+        m_aLocaleStr += " $LOCALE";
     }
+    sVersion += "\n" + m_aLocaleStr.replaceAll("$LOCALE", aLocaleStr);
+
+    if (m_aUILocaleStr.indexOf("$LOCALE") == -1)
+    {
+        SAL_WARN( "cui.dialogs", "translated uilocale string in translations doesn't contain $LOCALE placeholder" );
+        m_aUILocaleStr += " $LOCALE";
+    }
+    sVersion += "; " + m_aUILocaleStr.replaceAll("$LOCALE", aUILocaleStr);
 
     OUString aCalcMode = "Calc: "; // Calc calculation mode
 
@@ -359,7 +364,7 @@ OUString AboutDialog::GetVersionString()
         aCalcMode += "threaded";
     }
 
-    sVersion += "; " + aCalcMode;
+    sVersion += "\n" + aCalcMode;
 
     return sVersion;
 }

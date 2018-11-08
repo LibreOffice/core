@@ -52,6 +52,7 @@ private:
     OUString m_aCreditsLinkStr;
     OUString m_sBuildStr;
     OUString m_aLocaleStr;
+    OUString m_aUILocaleStr;
     OUString m_buildIdLinkString;
 
     void SetBuildIdLink();
