@@ -41,7 +41,7 @@
   <dlg:text dlg:id="LabelCurDocumentRetrieval" dlg:tab-index="13" dlg:left="15" dlg:top="91" dlg:width="249" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>
   <dlg:text dlg:id="LabelCurProgress" dlg:tab-index="14" dlg:left="10" dlg:top="106" dlg:width="255" dlg:height="8" dlg:page="4" dlg:value="LabelCurProgress"/>
   <dlg:text dlg:id="LabelCurDocument" dlg:tab-index="15" dlg:left="15" dlg:top="118" dlg:width="249" dlg:height="20" dlg:page="4" dlg:value="LabelCurDocument" dlg:multiline="true"/>
-  <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="5" dlg:top="6" dlg:width="258" dlg:height="26" dlg:scale-image="false"/>
+  <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26" dlg:scale-image="false"/>
   <dlg:button dlg:id="cmdBack" dlg:tab-index="17" dlg:left="155" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CMDPREV" dlg:value="cmdBack">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.Main.PrevStep?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
