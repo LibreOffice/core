@@ -11,6 +11,7 @@
 #define INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
 
 #include <vector>
+#include <memory>
 #include "types.hxx"
 
 namespace formula
@@ -33,25 +34,43 @@ struct DelayedSetNumberFormat
 
 struct ScInterpreterContext
 {
-    const ScDocument& mrDoc;
+    typedef std::vector<std::unique_ptr<ScInterpreterContext>> ContextPoolType;
+
+    const ScDocument* mpDoc;
     SvNumberFormatter* mpFormatter;
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
     ScLookupCacheMap* mScLookupCache; // cache for lookups like VLOOKUP and MATCH
+    sal_Int16 mnThreadIndex;
+    // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
+    // This is populated/used only when formula-group threading is enabled.
+    std::vector<sal_uInt32> maConditions;
 
-    ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
-        : mrDoc(rDoc)
+    ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter,
+                         sal_Int16 nThreadIdx = -1)
+        : mpDoc(&rDoc)
         , mpFormatter(pFormatter)
         , mnTokenCachePos(0)
         , maTokens(TOKEN_CACHE_SIZE, nullptr)
         , mScLookupCache(nullptr)
+        , mnThreadIndex(nThreadIdx)
     {
     }
+
+    ScInterpreterContext() = delete;
 
     ~ScInterpreterContext();
 
     SvNumberFormatter* GetFormatTable() const { return mpFormatter; }
+
+    static ContextPoolType& GetContexts(size_t nSize, const ScDocument& rDoc,
+                                        SvNumberFormatter* pFormatter);
+
+private:
+    void ResetTokens();
+    void Reset(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
+    static ContextPoolType aContextPool;
 };
 
 #endif // INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX

@@ -4636,12 +4636,11 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
             // Start nThreadCount new threads
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
-            std::vector<ScInterpreterContext*> contexts(nThreadCount);
+            ScInterpreterContext::ContextPoolType& contexts = ScInterpreterContext::GetContexts(nThreadCount, *pDocument, pNonThreadedFormatter);
             for (int i = 0; i < nThreadCount; ++i)
             {
-                contexts[i] = new ScInterpreterContext(*pDocument, pNonThreadedFormatter);
                 pDocument->SetupFromNonThreadedContext(*contexts[i], i);
-                rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
+                rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, contexts[i].get(), mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");
@@ -4649,12 +4648,9 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
             pDocument->SetThreadedGroupCalcInProgress(false);
 
+            // This is intentionally done in this main thread in order to avoid locking.
             for (int i = 0; i < nThreadCount; ++i)
-            {
-                // This is intentionally done in this main thread in order to avoid locking.
                 pDocument->MergeBackIntoNonThreadedContext(*contexts[i], i);
-                delete contexts[i];
-            }
 
             SAL_INFO("sc.threaded", "Done");
         }

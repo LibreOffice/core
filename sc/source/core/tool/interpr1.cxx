@@ -5832,7 +5832,14 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     sal_uInt8 nParamCount = GetByte();
     sal_uInt8 nQueryCount = nParamCount / 2;
 
-    std::vector<sal_uInt32> vConditions;
+    std::vector<sal_uInt32> aLocalConditions;
+    std::vector<sal_uInt32>& vConditions = mrContext.mnThreadIndex == -1 ? aLocalConditions : mrContext.maConditions;
+
+    // This flag indicates whether vConditions is empty as far as IterateParametersIfs() is concerned.
+    // Initially vConditions may be non-empty, but once it is resized in this function,
+    // bConditionsEmpty mirrors vConditions.empty()
+    bool bConditionsEmpty = true;
+
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
@@ -5946,7 +5953,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                             {
                                 if (vRefArrayConditions.empty())
                                     vRefArrayConditions.resize( nRefArrayRows);
-                                if (!vConditions.empty())
+                                if (!bConditionsEmpty)
                                 {
                                     // Similar to other reference list array
                                     // handling, add/op the current value to
@@ -6034,8 +6041,15 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
 
             // initialize temporary result matrix
-            if (vConditions.empty())
-                vConditions.resize( nDimensionCols * nDimensionRows, 0);
+            if (bConditionsEmpty)
+            {
+                size_t nOldSize = vConditions.size();
+                size_t nNewSize = nDimensionCols * nDimensionRows;
+                if (nOldSize) // Initialize necessary elements to 0.
+                    std::fill( vConditions.begin(), vConditions.begin() + std::min(nOldSize, nNewSize), 0 );
+                vConditions.resize(nNewSize, 0);
+                bConditionsEmpty = false;
+            }
 
             ScQueryParam rParam;
             rParam.nRow1       = nRow1;
@@ -6119,7 +6133,10 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 // When leaving an svRefList this has to be emptied not set to
                 // 0.0 because it's checked when entering an svRefList.
                 if (nRefInList == 0)
+                {
                     std::vector<sal_uInt32>().swap( vConditions);
+                    bConditionsEmpty = true;
+                }
                 else
                     std::for_each( vConditions.begin(), vConditions.end(), [](sal_uInt32 & r){ r = 0.0; } );
             }
@@ -6127,7 +6144,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         nParamCount -= 2;
     }
 
-    if (!vRefArrayConditions.empty() && !vConditions.empty())
+    if (!vRefArrayConditions.empty() && !bConditionsEmpty)
     {
         // Add/op the last current value to all array positions.
         for (auto & rVec : vRefArrayConditions)

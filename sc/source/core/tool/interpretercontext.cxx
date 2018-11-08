@@ -20,13 +20,51 @@
 #include <interpretercontext.hxx>
 #include <formula/token.hxx>
 #include <lookupcache.hxx>
+#include <algorithm>
+
+ScInterpreterContext::ContextPoolType ScInterpreterContext::aContextPool;
 
 ScInterpreterContext::~ScInterpreterContext()
+{
+    ResetTokens();
+    delete mScLookupCache;
+}
+
+void ScInterpreterContext::ResetTokens()
 {
     for (auto p : maTokens)
         if (p)
             p->DecRef();
+
+    mnTokenCachePos = 0;
+    std::fill(maTokens.begin(), maTokens.end(), nullptr);
+}
+
+void ScInterpreterContext::Reset(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
+{
+    mpDoc = &rDoc;
+    mpFormatter = pFormatter;
+    maDelayedSetNumberFormat.clear();
     delete mScLookupCache;
+    mScLookupCache = nullptr;
+    ResetTokens();
+}
+
+ScInterpreterContext::ContextPoolType&
+ScInterpreterContext::GetContexts(size_t nSize, const ScDocument& rDoc,
+                                  SvNumberFormatter* pFormatter)
+{
+    size_t nOldSize = aContextPool.size();
+    aContextPool.resize(nSize);
+    for (size_t nIdx = 0; nIdx < nSize; ++nIdx)
+    {
+        if (nIdx >= nOldSize)
+            aContextPool[nIdx].reset(new ScInterpreterContext(rDoc, pFormatter, nIdx));
+        else
+            aContextPool[nIdx]->Reset(rDoc, pFormatter);
+    }
+
+    return aContextPool;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
