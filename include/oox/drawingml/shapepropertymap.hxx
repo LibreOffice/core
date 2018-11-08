@@ -72,10 +72,10 @@ enum class ShapeProperty
     FillBitmapOffsetY,
     FillBitmapRectanglePoint,
     FillHatch,                    /// Explicit fill hatch or name of a fill hatch stored in a global container.
-    ShadowXDistance,
-    FillBitmapName,
     FillBackground,
-    LAST = FillBackground
+    FillBitmapName,
+    ShadowXDistance,
+    LAST = ShadowXDistance
 };
 
 typedef o3tl::enumarray<ShapeProperty, sal_Int32> ShapePropertyIds;
