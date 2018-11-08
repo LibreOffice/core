@@ -113,11 +113,6 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     VclPtr<vcl::Window>   mpWin;     ///< = 0 during printing or pdf export
     VclPtr<OutputDevice>  mpOut;     ///< Window, Printer, VirtDev, ...
-    VclPtr<OutputDevice>  mpTmpRef;  // Temporary reference device. Is used
-                                     // during (printer depending) prospect
-                                     // and page preview printing
-                                     // (because a scaling has to be set at
-                                     // the original printer)
 
     std::unique_ptr<SwViewOption> mpOpt;
     std::unique_ptr<SwAccessibilityOptions> mpAccOptions;

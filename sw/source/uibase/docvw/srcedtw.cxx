@@ -52,7 +52,6 @@ namespace
 
 struct TextPortion
 {
-    sal_uInt16 nLine;
     sal_uInt16 nStart, nEnd;
     svtools::ColorConfigEntry eType;
 };
@@ -91,7 +90,6 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
             // insert 'empty' portion
             if(nPortEnd < nActPos - 1 )
             {
-                aText.nLine = 0;
                 // don't move at the beginning
                 aText.nStart = nPortEnd;
                 if(nInsert)
@@ -185,7 +183,6 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                 if(bFound ||(eFoundType == svtools::HTMLCOMMENT))
                 {
                     TextPortion aTextPortion;
-                    aTextPortion.nLine = 0;
                     aTextPortion.nStart = nPortStart + 1;
                     aTextPortion.nEnd = nPortEnd;
                     aTextPortion.eType = eFoundType;
@@ -199,7 +196,6 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
     }
     if(nInsert && nPortEnd < nActPos - 1)
     {
-        aText.nLine = 0;
         aText.nStart = nPortEnd + 1;
         aText.nEnd = nActPos - 1;
         aText.eType = svtools::HTMLUNKNOWN;
@@ -694,9 +690,6 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
         for ( size_t i = 0; i < nCount; i++ )
         {
             TextPortion& r = aPortionList[i];
-            SAL_WARN_IF(
-                r.nLine != aPortionList[0].nLine, "sw.level2",
-                "multiple lines after all?");
             if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
                 continue;
 
@@ -722,8 +715,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor(SW_MOD()->GetColorConfig().GetColorValue(r.eType).nColor);
-        sal_uInt16 nLine = nLineOff+r.nLine;
-        m_pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
+        m_pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLineOff, r.nStart, r.nEnd+1 );
     }
 }
 

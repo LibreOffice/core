@@ -534,11 +534,8 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     m_bSetIdxDefault(true),
 
     m_bListHeightDefault    (false),
-    m_bSetListHeightDefault (false),
     m_bLabelHeightDefault   (false),
-    m_bSetLabelHeightDefault(false),
     m_bIndexHeightDefault     (false),
-    m_bSetIndexHeightDefault  (false),
 
     m_nFontGroup(FONT_GROUP_DEFAULT),
 
@@ -576,13 +573,6 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     m_pListBox    ->SetLoseFocusHdl( aFocusLink );
     m_pLabelBox   ->SetLoseFocusHdl( aFocusLink );
     m_pIdxBox     ->SetLoseFocusHdl( aFocusLink );
-
-    Link<Edit&,void> aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
-    m_pStandardHeightLB->SetModifyHdl( aModifyHeightLink );
-    m_pTitleHeightLB->   SetModifyHdl( aModifyHeightLink );
-    m_pListHeightLB->    SetModifyHdl( aModifyHeightLink );
-    m_pLabelHeightLB->   SetModifyHdl( aModifyHeightLink );
-    m_pIndexHeightLB->   SetModifyHdl( aModifyHeightLink );
 }
 
 SwStdFontTabPage::~SwStdFontTabPage()
@@ -648,9 +638,9 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 
     bool bStandardHeightChanged = m_pStandardHeightLB->IsValueChangedFromSaved();
     bool bTitleHeightChanged = m_pTitleHeightLB->IsValueChangedFromSaved();
-    bool bListHeightChanged = m_pListHeightLB->IsValueChangedFromSaved() && (!m_bListHeightDefault || !m_bSetListHeightDefault );
-    bool bLabelHeightChanged = m_pLabelHeightLB->IsValueChangedFromSaved() && (!m_bLabelHeightDefault || !m_bSetLabelHeightDefault );
-    bool bIndexHeightChanged = m_pIndexHeightLB->IsValueChangedFromSaved() && (!m_bIndexHeightDefault || !m_bSetIndexHeightDefault );
+    bool bListHeightChanged = m_pListHeightLB->IsValueChangedFromSaved() && !m_bListHeightDefault;
+    bool bLabelHeightChanged = m_pLabelHeightLB->IsValueChangedFromSaved() && !m_bLabelHeightDefault;
+    bool bIndexHeightChanged = m_pIndexHeightLB->IsValueChangedFromSaved() && !m_bIndexHeightDefault;
 
     m_pFontConfig->SetFontStandard(sStandard, m_nFontGroup);
     m_pFontConfig->SetFontOutline(sTitle, m_nFontGroup);
@@ -1003,32 +993,6 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )
     else if(&rBox == m_pIdxBox)
     {
         m_bSetIdxDefault = false;
-    }
-}
-
-IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
-{
-    if(&rBox == m_pStandardHeightLB)
-    {
-        sal_Int64 nValue = static_cast<FontSizeBox&>(rBox).GetValue(FieldUnit::TWIP);
-        if(m_bSetListHeightDefault && m_bListHeightDefault)
-            m_pListHeightLB->SetValue(nValue, FieldUnit::TWIP);
-        if(m_bSetLabelHeightDefault && m_bLabelHeightDefault)
-            m_pLabelHeightLB->SetValue(nValue, FieldUnit::TWIP);
-        if(m_bSetIndexHeightDefault && m_bIndexHeightDefault)
-            m_pIndexHeightLB->SetValue(nValue, FieldUnit::TWIP);
-    }
-    else if(&rBox == m_pListHeightLB)
-    {
-        m_bSetListHeightDefault = false;
-    }
-    else if(&rBox == m_pLabelHeightLB)
-    {
-        m_bSetLabelHeightDefault = false;
-    }
-    else if(&rBox == m_pIndexHeightLB)
-    {
-        m_bSetIndexHeightDefault = false;
     }
 }
 

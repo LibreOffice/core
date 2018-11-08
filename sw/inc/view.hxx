@@ -197,7 +197,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     VclPtr<SvxRuler>    m_pHRuler,
                         m_pVRuler;
-    VclPtr<ImageButton> m_pTogglePageBtn;
 
     std::unique_ptr<SwGlossaryHdl> m_pGlosHdl;          // handle text block
     std::unique_ptr<SwDrawBase>    m_pDrawActual;
