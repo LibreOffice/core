@@ -33,6 +33,7 @@
   <menu:menuitem menu:id=".uno:DeleteAllBreaks"/>
   <menu:menuitem menu:id=".uno:ResetPrintZoom"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
   <menu:menu menu:id=".uno:FormatStylesMenu">
     <menu:menupopup>
