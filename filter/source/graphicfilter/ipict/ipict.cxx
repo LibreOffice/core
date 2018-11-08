@@ -923,7 +923,7 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
 
         if (nRowBytes < 8 || nPackType == 1)
         {
-            if (nHeight > pPict->remainingSize() / (sizeof(sal_uInt16) * nWidth))
+            if (nHeight > pPict->remainingSize() / (sizeof(sal_uInt8) * nRowBytes))
                 return 0xffffffff;
         }
         else
