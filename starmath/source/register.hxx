@@ -32,14 +32,6 @@ OUString
 css::uno::Reference< css::uno::XInterface >
         SmDocument_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags);
 
-//MathML import
-css::uno::Sequence< OUString >
-        SmXMLImport_getSupportedServiceNames() throw();
-OUString
-        SmXMLImport_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-        SmXMLImport_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 css::uno::Sequence< OUString >
         SmXMLImportMeta_getSupportedServiceNames() throw();
 OUString

@@ -30,7 +30,8 @@
       constructor="Math_XMLExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLImporter">
+  <implementation name="com.sun.star.comp.Math.XMLImporter"
+      constructor="Math_XMLImporter_get_implementation">
     <service name="com.sun.star.xml.XMLImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Math.XMLMetaExporter"
