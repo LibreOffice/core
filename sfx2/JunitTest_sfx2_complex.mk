@@ -24,13 +24,10 @@ $(eval $(call gb_JunitTest_set_defs,sfx2_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sfx2/qa/complex/sfx2/testdocuments \
 ))
 
+$(eval $(call gb_JunitTest_use_unoapi_jars,sfx2_complex))
+
 $(eval $(call gb_JunitTest_use_jars,sfx2_complex,\
-    OOoRunner \
-    ridl \
-    test \
     test-tools \
-    unoil \
-    jurt \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\

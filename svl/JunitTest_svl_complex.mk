@@ -24,13 +24,9 @@ $(eval $(call gb_JunitTest_set_defs,svl_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/svl/qa/complex/broken_document/test_documents \
 ))
 
+$(eval $(call gb_JunitTest_use_unoapi_jars,svl_complex))
+
 $(eval $(call gb_JunitTest_use_jars,svl_complex,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-	juh \
     ConnectivityTools \
 ))
 

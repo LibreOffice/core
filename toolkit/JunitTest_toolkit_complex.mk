@@ -20,6 +20,7 @@ $(eval $(call gb_JunitTest_JunitTest,toolkit_complex))
 
 $(eval $(call gb_JunitTest_use_jars,toolkit_complex,\
     OOoRunner \
+    juh \
     ridl \
     test \
     unoil \

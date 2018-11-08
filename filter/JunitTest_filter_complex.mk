@@ -18,13 +18,7 @@
 
 $(eval $(call gb_JunitTest_JunitTest,filter_complex))
 
-$(eval $(call gb_JunitTest_use_jars,filter_complex,\
-	OOoRunner \
-	ridl \
-	test \
-	unoil \
-	jurt \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,filter_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,filter_complex,\
 	filter/qa/complex/filter/misc/FinalizedMandatoryTest \

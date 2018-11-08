@@ -30,13 +30,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,reportdesign_complex,\
 	reportdesign/qa/complex/reportdesign/FileURL \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,reportdesign_complex,\
-	OOoRunner \
-	ridl \
-	test \
-	unoil \
-	jurt \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,reportdesign_complex))
 
 $(eval $(call gb_JunitTest_add_classes,reportdesign_complex,\
 	complex.reportdesign.ReportDesignerTest \

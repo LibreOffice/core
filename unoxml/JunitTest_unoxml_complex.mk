@@ -24,13 +24,7 @@ $(eval $(call gb_JunitTest_set_defs,unoxml_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/unoxml/qa/complex/unoxml/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,unoxml_complex,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,unoxml_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,unoxml_complex,\
     unoxml/qa/complex/unoxml/DOMTest \

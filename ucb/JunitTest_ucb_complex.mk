@@ -14,13 +14,7 @@ $(eval $(call gb_JunitTest_set_defs,ucb_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/ucb/qa/complex/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,ucb_complex,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,ucb_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ucb_complex,\
 	ucb/qa/complex/ucb/UCB \

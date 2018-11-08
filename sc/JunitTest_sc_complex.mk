@@ -16,13 +16,7 @@ $(eval $(call gb_JunitTest_add_classes,sc_complex, \
     complex.sc.CalcRTL \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,sc_complex, \
-    OOoRunner \
-    jurt \
-    ridl \
-    test \
-    unoil \
-))
+$(eval $(call gb_JunitTest_use_unoapi_jars,sc_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sc_complex, \
     sc/qa/complex/dataPilot/_XDataPilotDescriptor \
