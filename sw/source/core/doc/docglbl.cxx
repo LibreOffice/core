@@ -291,7 +291,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     OUString sTitle( xDocProps->getTitle() );
                     if (!sTitle.isEmpty())
                         sTitle += ": ";
-                    sTitle += pStartNd->GetTextNode()->GetExpandText();
+                    sTitle += pStartNd->GetTextNode()->GetExpandText(nullptr);
                     xDocProps->setTitle( sTitle );
 
                     // Replace template

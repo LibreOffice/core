@@ -2436,6 +2436,7 @@ OUString SwCursorShell::GetSelText() const
                             ? pEnd->nContent.GetIndex()
                             : rNode.GetTextNode()->Len());
                     buf.append(rNode.GetTextNode()->GetExpandText(
+                                GetLayout(),
                                 nStart, nEnd - nStart, false, false, false,
                                 ExpandMode::HideDeletions));
 
@@ -2451,7 +2452,7 @@ OUString SwCursorShell::GetSelText() const
         if( pTextNd )
         {
             const sal_Int32 nStt = m_pCurrentCursor->Start()->nContent.GetIndex();
-            aText = pTextNd->GetExpandText( nStt,
+            aText = pTextNd->GetExpandText(GetLayout(), nStt,
                     m_pCurrentCursor->End()->nContent.GetIndex() - nStt );
         }
     }

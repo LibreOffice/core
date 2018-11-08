@@ -60,8 +60,8 @@ OUString GetExpandTextMerged(SwRootFrame const*const pLayout,
                 else
                 {
                     ExpandMode const mode(ExpandMode::HideDeletions | i_mode);
-                    OUStringBuffer ret(rNode.GetExpandText(0, -1, bWithNumber,
-                        bWithNumber, bWithSpacesForLevel, mode));
+                    OUStringBuffer ret(rNode.GetExpandText(pLayout, 0, -1,
+                        bWithNumber, bWithNumber, bWithSpacesForLevel, mode));
                     for (sal_uLong i = rNode.GetIndex() + 1;
                          i <= pMerged->pLastNode->GetIndex(); ++i)
                     {
@@ -69,7 +69,7 @@ OUString GetExpandTextMerged(SwRootFrame const*const pLayout,
                         if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
                         {
                             ret.append(pTmp->GetTextNode()->GetExpandText(
-                                        0, -1, false, false, false, mode));
+                                pLayout, 0, -1, false, false, false, mode));
                         }
                     }
                     return ret.makeStringAndClear();
@@ -77,7 +77,7 @@ OUString GetExpandTextMerged(SwRootFrame const*const pLayout,
             }
         }
     }
-    return rNode.GetExpandText( 0, -1, bWithNumber,
+    return rNode.GetExpandText(pLayout, 0, -1, bWithNumber,
                     bWithNumber, bWithSpacesForLevel, i_mode);
 }
 

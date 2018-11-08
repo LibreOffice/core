@@ -589,14 +589,14 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     return MoveParagraph( aPam, nOffs, true );
 }
 
-static SwTextNode* lcl_FindOutlineName( const SwOutlineNodes& rOutlNds, const OUString& rName,
-                            bool bExact )
+static SwTextNode* lcl_FindOutlineName(const SwOutlineNodes& rOutlNds,
+    SwRootFrame const*const pLayout, const OUString& rName, bool const bExact)
 {
     SwTextNode* pSavedNode = nullptr;
     for( auto pOutlNd : rOutlNds )
     {
         SwTextNode* pTextNd = pOutlNd->GetTextNode();
-        const OUString sText( pTextNd->GetExpandText() );
+        const OUString sText( pTextNd->GetExpandText(pLayout) );
         if (sText.startsWith(rName))
         {
             if (sText.getLength() == rName.getLength())
@@ -728,7 +728,7 @@ bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame con
         SwTextNode* pNd = ::lcl_FindOutlineNum(rOutlNds, sName, pLayout);
         if ( pNd )
         {
-            OUString sExpandedText = pNd->GetExpandText();
+            OUString sExpandedText = pNd->GetExpandText(pLayout);
             //#i4533# leading numbers followed by a dot have been remove while
             //searching for the outline position
             //to compensate this they must be removed from the paragraphs text content, too
@@ -744,7 +744,7 @@ bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame con
 
             if( sExpandedText != sName )
             {
-                SwTextNode *pTmpNd = ::lcl_FindOutlineName( rOutlNds, sName, true );
+                SwTextNode *pTmpNd = ::lcl_FindOutlineName(rOutlNds, pLayout, sName, true);
                 if ( pTmpNd )             // found via the Name
                 {
                     pNd = pTmpNd;
@@ -755,7 +755,7 @@ bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame con
             return true;
         }
 
-        pNd = ::lcl_FindOutlineName( rOutlNds, rName, false );
+        pNd = ::lcl_FindOutlineName(rOutlNds, pLayout, rName, false);
         if ( pNd )
         {
             rPos.nNode = *pNd;
@@ -766,7 +766,7 @@ bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame con
         // #i68289# additional search on hyperlink URL without its outline numbering part
         if ( sName != rName )
         {
-            pNd = ::lcl_FindOutlineName( rOutlNds, sName, false );
+            pNd = ::lcl_FindOutlineName(rOutlNds, pLayout, sName, false);
             if ( pNd )
             {
                 rPos.nNode = *pNd;
