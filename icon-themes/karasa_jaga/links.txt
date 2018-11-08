@@ -12,7 +12,7 @@ avmedia/res/avl02051.png cmd/lc_datastreamsstop.png
 avmedia/res/avl02052.png cmd/lc_mediarepeat.png
 avmedia/res/avl02053.png cmd/lc_ok.png
 avmedia/res/avl02054.png cmd/lc_mediamute.png
-cmd/32/acceptchanges.png cmd/32/accepttrackedchange.png
+cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
 cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
 cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
@@ -72,6 +72,7 @@ cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
 cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
 cmd/32/es/underlinesimple.png cmd/32/es/underline.png
 cmd/32/exitsearch.png cmd/32/closepreview.png
+cmd/32/exportasgraphic.png cmd/32/graphic.png
 cmd/32/fieldmenu.png cmd/32/insertfield.png
 cmd/32/fieldnames.png cmd/32/fields.png
 cmd/32/fillcolor.png cmd/32/formatarea.png
@@ -255,6 +256,8 @@ cmd/32/settabbgcolor.png cmd/32/backgroundcolor.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.rectangle.png
 cmd/32/sheetcommentmenu.png cmd/32/insertannotation.png
+cmd/32/sheetlefttoright.png cmd/32/paralefttoright.png
+cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
 cmd/32/showgraphics.png cmd/32/graphic.png
 cmd/32/shownote.png cmd/32/showannotations.png
 cmd/32/showpropbrowser.png cmd/32/showbrowser.png
@@ -338,7 +341,7 @@ cmd/sl/lc_underlinesimple.png cmd/sl/lc_underline.png
 cmd/sl/sc_underlinesimple.png cmd/sl/sc_underline.png
 cmd/tr/lc_underlinesimple.png cmd/tr/lc_underline.png
 cmd/tr/sc_underlinesimple.png cmd/tr/sc_underline.png
-cmd/lc_acceptchanges.png cmd/lc_accepttrackedchange.png
+cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
 cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
@@ -396,6 +399,7 @@ cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closepreview.png
+cmd/lc_exportasgraphic.png cmd/lc_graphic.png
 cmd/lc_fieldmenu.png cmd/lc_insertfield.png
 cmd/lc_fieldnames.png cmd/lc_fields.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
@@ -566,6 +570,8 @@ cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_sheetcommentmenu.png cmd/lc_insertannotation.png
+cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
+cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
 cmd/lc_showgraphics.png cmd/lc_graphic.png
 cmd/lc_shownote.png cmd/lc_showannotations.png
 cmd/lc_showpropbrowser.png cmd/lc_showbrowser.png
@@ -613,7 +619,7 @@ cmd/lc_zoomplus.png cmd/lc_zoomin.png
 cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
 cmd/nl/lc_underlinesimple.png cmd/nl/lc_underline.png
 cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
-cmd/sc_acceptchanges.png cmd/sc_accepttrackedchange.png
+cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
 cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
 cmd/sc_adddatefield.png cmd/sc_datefield.png
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
@@ -671,6 +677,7 @@ cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png
+cmd/sc_exportasgraphic.png cmd/sc_graphic.png
 cmd/sc_fieldmenu.png cmd/sc_insertfield.png
 cmd/sc_fieldnames.png cmd/sc_fields.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
@@ -841,6 +848,8 @@ cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
+cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
+cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
 cmd/sc_shownote.png cmd/sc_showannotations.png
 cmd/sc_showpropbrowser.png cmd/sc_showbrowser.png
@@ -886,9 +895,6 @@ cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 cmd/sc_zoomminus.png cmd/sc_zoomout.png
 cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
-cmd/sc_charactermenu.png cmd/sc_fontdialog.png
-cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
-cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 desktop/res/extension_16.png cmd/sc_addons.png
 desktop/res/extension_32.png cmd/32/addons.png
 extensions/source/scanner/minus.png res/minus.png
