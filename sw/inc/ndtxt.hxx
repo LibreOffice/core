@@ -680,8 +680,9 @@ public:
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
                             const ExpandMode eAdditionalMode = ExpandMode(0)) const;
-    bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
+    bool CopyExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
+                           SwRootFrame const* pLayout,
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 

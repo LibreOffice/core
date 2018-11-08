@@ -3432,8 +3432,9 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
     return aText.makeStringAndClear();
 }
 
-bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
-                        sal_Int32 nIdx, sal_Int32 nLen, bool bWithNum,
+bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
+                        sal_Int32 nIdx, sal_Int32 nLen,
+                        SwRootFrame const*const pLayout, bool bWithNum,
                         bool bWithFootnote, bool bReplaceTabsWithSpaces ) const
 {
     if( &rDestNd == this )
@@ -3524,14 +3525,17 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                         {
                             const SwFormatFootnote& rFootnote = pHt->GetFootnote();
                             OUString sExpand;
+                            auto const number(pLayout && pLayout->IsHideRedlines()
+                                    ? rFootnote.GetNumberRLHidden()
+                                    : rFootnote.GetNumber());
                             if( !rFootnote.GetNumStr().isEmpty() )
                                 sExpand = rFootnote.GetNumStr();
                             else if( rFootnote.IsEndNote() )
                                 sExpand = GetDoc()->GetEndNoteInfo().aFormat.
-                                GetNumStr( rFootnote.GetNumber() );
+                                            GetNumStr(number);
                             else
                                 sExpand = GetDoc()->GetFootnoteInfo().aFormat.
-                                                GetNumStr( rFootnote.GetNumber() );
+                                            GetNumStr(number);
                             if( !sExpand.isEmpty() )
                             {
                                 ++aDestIdx;     // insert behind
@@ -3563,7 +3567,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
     if( bWithNum )
     {
         aDestIdx = nDestStt;
-        rDestNd.InsertText( GetNumString(), aDestIdx );
+        rDestNd.InsertText( GetNumString(true, MAXLEVEL, pLayout), aDestIdx );
     }
 
     aDestIdx = 0;
