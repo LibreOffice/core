@@ -101,7 +101,6 @@ ScFuncDesc::ScFuncDesc() :
         nArgCount       (0),
         nVarArgsStart   (0),
         bIncomplete     (false),
-        bHasSuppressedArgs(false),
         mbHidden        (false)
 {}
 
@@ -134,7 +133,6 @@ void ScFuncDesc::Clear()
     nCategory = 0;
     sHelpId.clear();
     bIncomplete = false;
-    bHasSuppressedArgs = false;
     mbHidden = false;
 }
 
@@ -272,20 +270,7 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
 
 sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
 {
-    if (!bHasSuppressedArgs || !pDefArgFlags)
-        return nArgCount;
-
-    sal_uInt16 nArgs = nArgCount;
-    if (nArgs >= PAIRED_VAR_ARGS)
-        nArgs -= PAIRED_VAR_ARGS - 2;
-    else if (nArgs >= VAR_ARGS)
-        nArgs -= VAR_ARGS - 1;
-    sal_uInt16 nCount = nArgs;
-    if (nArgCount >= PAIRED_VAR_ARGS)
-        nCount += PAIRED_VAR_ARGS - 2;
-    else if (nArgCount >= VAR_ARGS)
-        nCount += VAR_ARGS - 1;
-    return nCount;
+    return nArgCount;
 }
 
 OUString ScFuncDesc::getFunctionName() const
@@ -316,15 +301,11 @@ sal_Int32 ScFuncDesc::getSuppressedArgumentCount() const
 
 void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
 {
-    if (!bHasSuppressedArgs || !pDefArgFlags)
-    {
-        _rArguments.resize( nArgCount);
-        sal_uInt16 value = 0;
-        for (auto & argument : _rArguments)
-            argument = value++;
-    }
+    _rArguments.resize( nArgCount);
+    sal_uInt16 value = 0;
+    for (auto & argument : _rArguments)
+        argument = value++;
 
-    _rArguments.reserve( nArgCount);
     sal_uInt16 nArgs = nArgCount;
     if (nArgs >= PAIRED_VAR_ARGS)
         nArgs -= PAIRED_VAR_ARGS - 2;
