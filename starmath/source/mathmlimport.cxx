@@ -434,23 +434,13 @@ const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
     return theSmXMLImportUnoTunnelId::get().getSeq();
 }
 
-OUString SmXMLImport_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
+                                    uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return OUString( "com.sun.star.comp.Math.XMLImporter" );
+    return cppu::acquire(
+        new SmXMLImport(pCtx, "com.sun.star.comp.Math.XMLImporter", SvXMLImportFlags::ALL));
 }
-
-uno::Sequence< OUString > SmXMLImport_getSupportedServiceNames()
-        throw()
-{
-    return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
-}
-
-uno::Reference< uno::XInterface > SmXMLImport_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), SvXMLImportFlags::ALL));
-}
-
 
 OUString SmXMLImportMeta_getImplementationName() throw()
 {
