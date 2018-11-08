@@ -208,10 +208,10 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     pNewControl->xControl->setContext       ( static_cast<OWeakObject*>(this)    );
     pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
 
-    // when container has a peer ...
+    // when container has a peer...
     if (getPeer().is())
     {
-        // .. then create a peer on child
+        // ... then create a peer on child
         pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
     }
 
