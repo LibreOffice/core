@@ -440,8 +440,9 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
             bFreeGraphics = true;
         }
         rSettings.SetStyleSettings(aStyleSettings);
+#ifndef IOS // For now...
         pGraphics->updateSettings(rSettings);
-
+#endif
         if (bFreeGraphics)
             ReleaseGraphics(pGraphics);
     }
