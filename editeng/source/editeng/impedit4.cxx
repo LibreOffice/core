@@ -1261,7 +1261,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             pPortion->MarkSelectionInvalid( nStartPos );
         }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         CharAttribList::DbgCheckAttribs(aPaM.GetNode()->GetCharAttribs());
 #endif
 

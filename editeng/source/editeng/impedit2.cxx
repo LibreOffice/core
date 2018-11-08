@@ -2207,7 +2207,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     if ( pRecalc4 )
         CalcHeight( pRecalc4 );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     ParaPortionList::DbgCheck(GetParaPortions(), aEditDoc);
 #endif
     return aSelection;

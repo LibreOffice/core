@@ -1661,7 +1661,7 @@ SwAccessibleMap::~SwAccessibleMap()
             static_cast<SwAccessibleDocumentBase *>(xAcc.get());
         pAcc->Dispose( true );
     }
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     if( mpFrameMap )
     {
         SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->begin();

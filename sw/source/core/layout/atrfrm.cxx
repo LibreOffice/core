@@ -3519,7 +3519,7 @@ bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat)
 
 void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     SwNodes const& rNodes(rDoc.GetNodes());
     sal_uLong const count(rNodes.Count());
     for (sal_uLong i = 0; i != count; ++i)
