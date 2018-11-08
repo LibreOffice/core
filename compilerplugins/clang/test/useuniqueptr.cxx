@@ -60,19 +60,19 @@ class Class5 {
     int* m_pbar[10]; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Class5()
     {
-        for (auto p : m_pbar)
-            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+        for (auto p : m_pbar) // expected-note {{var is here [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}} expected-error {{call to delete on a var, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
 class Class5a {
     int* m_pbar[10]; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Class5a()
     {
-        for (auto p : m_pbar)
+        for (auto p : m_pbar) // expected-note {{var is here [loplugin:useuniqueptr]}}
         {
             int x = 1;
             x = x + 2;
-            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}} expected-error {{call to delete on a var, should be using std::unique_ptr [loplugin:useuniqueptr]}}
         }
     }
 };
@@ -80,8 +80,8 @@ class Class6 {
     std::array<int*,10> m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Class6()
     {
-        for (auto p : m_pbar)
-            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+        for (auto p : m_pbar) // expected-note {{var is here [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}} expected-error {{call to delete on a var, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
 class Class7 {
@@ -150,9 +150,9 @@ class Foo11 {
     std::vector<XXX*> m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo11()
     {
-        for (const auto & p : m_pbar1)
+        for (const auto & p : m_pbar1) // expected-note {{var is here [loplugin:useuniqueptr]}}
         {
-            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}} expected-error {{call to delete on a var, should be using std::unique_ptr [loplugin:useuniqueptr]}}
         }
     }
 };

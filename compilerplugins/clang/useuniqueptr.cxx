@@ -149,6 +149,8 @@ private:
     void CheckLoopDelete(const FunctionDecl*, const Stmt* );
     void CheckLoopDelete(const FunctionDecl*, const CXXDeleteExpr* );
     void CheckDeleteExpr(const FunctionDecl*, const CXXDeleteExpr*);
+    void CheckDeleteLocalVar(const FunctionDecl*, const CXXDeleteExpr*, const VarDecl*);
+    void CheckDeleteParmVar(const CXXDeleteExpr*, const ParmVarDecl*);
     void CheckParenExpr(const FunctionDecl*, const ParenExpr*);
     void CheckMemberDeleteExpr(const FunctionDecl*, const CXXDeleteExpr*,
         const MemberExpr*, StringRef message);
@@ -280,152 +282,13 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
         // complicated
         if (fn == SRCDIR "/sc/source/filter/html/htmlpars.cxx")
             return;
+        // complicated pimpl stuff in SalLayoutGlyphs
+        if (fn == SRCDIR "/vcl/source/gdi/impglyphitem.cxx")
+            return;
 
         CheckMemberDeleteExpr(functionDecl, deleteExpr, memberExpr,
             "unconditional call to delete on a member, should be using std::unique_ptr");
         return;
-    }
-
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExprArg))
-    {
-        if (isa<ParmVarDecl>(declRefExpr->getDecl()))
-            ;// handled in VisitDeleteExpr
-        else if (auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl()))
-        {
-            // ignore globals for now
-            if (varDecl->hasGlobalStorage())
-                return;
-            // Ignore times when we are casting to init the var, normally indicates
-            // some complex memory management.
-            if (varDecl->getInit() && isa<ExplicitCastExpr>(varDecl->getInit()))
-                return;
-
-            if (startswith(fn, SRCDIR "/sal/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/comphelper/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/cppuhelper/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/libreofficekit/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/vcl/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/sc/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/sfx2/qa/"))
-                return;
-            if (startswith(fn, SRCDIR "/smoketest/"))
-                return;
-            if (startswith(fn, WORKDIR))
-                return;
-            // linked lists
-            if (fn == SRCDIR "/vcl/source/gdi/regband.cxx")
-                return;
-            // this thing relies on explicit delete
-            if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("VersionCompat").GlobalNamespace())
-                return;
-            if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("IMapCompat").GlobalNamespace())
-                return;
-            // passing data to gtk API and I can't figure out the types
-            if (fn == SRCDIR "/vcl/unx/gtk3/gtk3gtkdata.cxx"
-                || fn == SRCDIR "/vcl/unx/gtk/gtkdata.cxx")
-                return;
-            // sometimes this stuff is held by tools::SvRef, sometimes by std::unique_ptr .....
-            if (fn == SRCDIR "/sot/source/unoolestorage/xolesimplestorage.cxx")
-                return;
-            // don't feel like messing with this chunk of sfx2
-            if (fn == SRCDIR "/sfx2/source/appl/appinit.cxx")
-                return;
-            if (fn == SRCDIR "/svx/source/svdraw/svdobj.cxx")
-                return;
-            if (fn == SRCDIR "/svx/source/svdraw/svdmodel.cxx")
-                return;
-            // linked list
-            if (fn == SRCDIR "/basic/source/comp/parser.cxx")
-                return;
-            if (fn == SRCDIR "/basic/source/runtime/runtime.cxx")
-                return;
-            // just horrible
-            if (fn == SRCDIR "/svx/source/form/filtnav.cxx")
-                return;
-            // using clucene macros
-            if (fn == SRCDIR "/helpcompiler/source/HelpSearch.cxx")
-                return;
-            // linked list
-            if (fn == SRCDIR "/filter/source/graphicfilter/ios2met/ios2met.cxx")
-                return;
-            // no idea what this is trying to do
-            if (fn == SRCDIR "/cui/source/customize/SvxMenuConfigPage.cxx")
-                return;
-            // I cannot follow the ownership of OSQLParseNode's
-            if (fn == SRCDIR "/dbaccess/source/core/api/SingleSelectQueryComposer.cxx")
-                return;
-            if (fn == SRCDIR "/dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx")
-                return;
-            // linked list
-            if (fn == SRCDIR "/formula/source/core/api/FormulaCompiler.cxx")
-                return;
-            // smuggling data around via SvxFontListItem
-            if (fn == SRCDIR "/extensions/source/propctrlr/fontdialog.cxx")
-                return;
-            // atomics
-            if (fn == SRCDIR "/sc/source/ui/docshell/documentlinkmgr.cxx")
-                return;
-            // finicky
-            if (fn == SRCDIR "/sc/source/core/data/stlpool.cxx")
-                return;
-            // macros
-            if (fn == SRCDIR "/sc/source/core/tool/autoform.cxx")
-                return;
-            // unsure about ownership
-            if (fn == SRCDIR "/xmlsecurity/source/framework/saxeventkeeperimpl.cxx")
-                return;
-            // ScTokenArray ownership complicated between this and the group
-            if (fn == SRCDIR "/sc/source/core/data/formulacell.cxx")
-                return;
-            // macros
-            if (fn == SRCDIR "/sw/source/core/doc/tblafmt.cxx")
-                return;
-            // more ScTokenArray
-            if (fn == SRCDIR "/sc/source/ui/unoobj/tokenuno.cxx")
-                return;
-            // SwDoc::DelTextFormatColl
-            if (fn == SRCDIR "/sw/source/core/doc/docfmt.cxx")
-                return;
-            // SwRootFrame::CalcFrameRects
-            if (fn == SRCDIR "/sw/source/core/layout/trvlfrm.cxx")
-                return;
-            // crazy code
-            if (fn == SRCDIR "/sw/source/core/undo/SwUndoPageDesc.cxx")
-                return;
-            // unsure about the SwLinePortion ownership
-            if (fn == SRCDIR "/sw/source/core/text/itrform2.cxx")
-                return;
-            // can't follow the ownership
-            if (fn == SRCDIR "/sw/source/filter/html/htmlatr.cxx")
-                return;
-            // SwTextFormatter::BuildMultiPortion complicated
-            if (fn == SRCDIR "/sw/source/core/text/pormulti.cxx")
-                return;
-            // SwXMLExport::ExportTableLines
-            if (fn == SRCDIR "/sw/source/filter/xml/xmltble.cxx")
-                return;
-            // SwPagePreview::~SwPagePreview
-            if (fn == SRCDIR "/sw/source/uibase/uiview/pview.cxx")
-                return;
-
-            report(
-                DiagnosticsEngine::Warning,
-                "unconditional call to delete on a var, should be using std::unique_ptr",
-                compat::getBeginLoc(deleteExpr))
-                << deleteExpr->getSourceRange();
-            report(
-                DiagnosticsEngine::Note,
-                "var is here",
-                compat::getBeginLoc(varDecl))
-                << varDecl->getSourceRange();
-            return;
-        }
     }
 
     const ArraySubscriptExpr* arrayExpr = dyn_cast<ArraySubscriptExpr>(deleteExprArg);
@@ -436,6 +299,237 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
             CheckMemberDeleteExpr(functionDecl, deleteExpr, baseMemberExpr,
                 "unconditional call to delete on an array member, should be using std::unique_ptr");
     }
+}
+
+void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const CXXDeleteExpr* deleteExpr, const VarDecl* varDecl)
+{
+    // ignore globals for now
+    if (varDecl->hasGlobalStorage())
+        return;
+
+    // Ignore times when we are casting from void* to init the var, normally indicates
+    // some complex memory management.
+    if (varDecl->getInit())
+    {
+        if (auto explicitCast = dyn_cast<ExplicitCastExpr>(varDecl->getInit()))
+        {
+            if (loplugin::TypeCheck(explicitCast->getSubExpr()->getType()).Pointer().Void())
+                return;
+        }
+    }
+
+    if (startswith(fn, SRCDIR "/sal/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/comphelper/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/cppuhelper/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/libreofficekit/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/vcl/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/sc/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/sfx2/qa/"))
+        return;
+    if (startswith(fn, SRCDIR "/smoketest/"))
+        return;
+    if (startswith(fn, WORKDIR))
+        return;
+    // linked lists
+    if (fn == SRCDIR "/vcl/source/gdi/regband.cxx")
+        return;
+    // this thing relies on explicit delete
+    if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("VersionCompat").GlobalNamespace())
+        return;
+    if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("IMapCompat").GlobalNamespace())
+        return;
+    // passing data to gtk API and I can't figure out the types
+    if (fn == SRCDIR "/vcl/unx/gtk3/gtk3gtkdata.cxx"
+        || fn == SRCDIR "/vcl/unx/gtk/gtkdata.cxx")
+        return;
+    // sometimes this stuff is held by tools::SvRef, sometimes by std::unique_ptr .....
+    if (fn == SRCDIR "/sot/source/unoolestorage/xolesimplestorage.cxx")
+        return;
+    // don't feel like messing with this chunk of sfx2
+    if (fn == SRCDIR "/sfx2/source/appl/appinit.cxx")
+        return;
+    if (fn == SRCDIR "/svx/source/svdraw/svdobj.cxx")
+        return;
+    if (fn == SRCDIR "/svx/source/svdraw/svdmodel.cxx")
+        return;
+    // linked list
+    if (fn == SRCDIR "/basic/source/comp/parser.cxx")
+        return;
+    if (fn == SRCDIR "/basic/source/runtime/runtime.cxx")
+        return;
+    // just horrible
+    if (fn == SRCDIR "/svx/source/form/filtnav.cxx")
+        return;
+    // using clucene macros
+    if (fn == SRCDIR "/helpcompiler/source/HelpSearch.cxx")
+        return;
+    // linked list
+    if (fn == SRCDIR "/filter/source/graphicfilter/ios2met/ios2met.cxx")
+        return;
+    // no idea what this is trying to do
+    if (fn == SRCDIR "/cui/source/customize/SvxMenuConfigPage.cxx")
+        return;
+    // I cannot follow the ownership of OSQLParseNode's
+    if (fn == SRCDIR "/dbaccess/source/core/api/SingleSelectQueryComposer.cxx")
+        return;
+    if (fn == SRCDIR "/dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx")
+        return;
+    // linked list
+    if (fn == SRCDIR "/formula/source/core/api/FormulaCompiler.cxx")
+        return;
+    // smuggling data around via SvxFontListItem
+    if (fn == SRCDIR "/extensions/source/propctrlr/fontdialog.cxx")
+        return;
+    // atomics
+    if (fn == SRCDIR "/sc/source/ui/docshell/documentlinkmgr.cxx")
+        return;
+    // finicky
+    if (fn == SRCDIR "/sc/source/core/data/stlpool.cxx")
+        return;
+    // macros
+    if (fn == SRCDIR "/sc/source/core/tool/autoform.cxx")
+        return;
+    // unsure about ownership
+    if (fn == SRCDIR "/xmlsecurity/source/framework/saxeventkeeperimpl.cxx")
+        return;
+    // ScTokenArray ownership complicated between this and the group
+    if (fn == SRCDIR "/sc/source/core/data/formulacell.cxx")
+        return;
+    // macros
+    if (fn == SRCDIR "/sw/source/core/doc/tblafmt.cxx")
+        return;
+    // more ScTokenArray
+    if (fn == SRCDIR "/sc/source/ui/unoobj/tokenuno.cxx")
+        return;
+    // SwDoc::DelTextFormatColl
+    if (fn == SRCDIR "/sw/source/core/doc/docfmt.cxx")
+        return;
+    // SwRootFrame::CalcFrameRects
+    if (fn == SRCDIR "/sw/source/core/layout/trvlfrm.cxx")
+        return;
+    // crazy code
+    if (fn == SRCDIR "/sw/source/core/undo/SwUndoPageDesc.cxx")
+        return;
+    // unsure about the SwLinePortion ownership
+    if (fn == SRCDIR "/sw/source/core/text/itrform2.cxx")
+        return;
+    // can't follow the ownership
+    if (fn == SRCDIR "/sw/source/filter/html/htmlatr.cxx")
+        return;
+    // SwTextFormatter::BuildMultiPortion complicated
+    if (fn == SRCDIR "/sw/source/core/text/pormulti.cxx")
+        return;
+    // SwXMLExport::ExportTableLines
+    if (fn == SRCDIR "/sw/source/filter/xml/xmltble.cxx")
+        return;
+    // SwPagePreview::~SwPagePreview
+    if (fn == SRCDIR "/sw/source/uibase/uiview/pview.cxx")
+        return;
+    // alloc/free routines for the hand constructed virtual function table
+    if (fn == SRCDIR "/sal/textenc/convertisciidevangari.cxx")
+        return;
+    if (startswith(fn, SRCDIR "/bridges/"))
+        return;
+    // bootstrap_map
+    if (fn == SRCDIR "/sal/rtl/bootstrap.cxx")
+        return;
+    // too complicated for my small brain
+    if (startswith(fn, SRCDIR "/cppu/"))
+        return;
+    // linked list
+    if (fn == SRCDIR "/vcl/source/gdi/octree.cxx")
+        return;
+    // linked list
+    if (fn == SRCDIR "/vcl/source/filter/graphicfilter.cxx")
+        return;
+    // linked list
+    if (fn == SRCDIR "/svtools/source/control/ctrltool.cxx")
+        return;
+    // complicated
+    if (fn == SRCDIR "/sfx2/source/control/msgpool.cxx")
+        return;
+    // complicated
+    if (fn == SRCDIR "/svx/source/sdr/contact/objectcontact.cxx")
+        return;
+    // memory management in this module is a mess
+    if (fn == SRCDIR "/idlc/source/aststack.cxx")
+        return;
+    // complicated
+    if (fn == SRCDIR "/cui/source/customize/cfg.cxx")
+        return;
+    // linked list
+    if (fn == SRCDIR "/lotuswordpro/source/filter/lwpfribptr.cxx")
+        return;
+
+    llvm::StringRef parentName;
+    if (auto cxxMethodDecl = dyn_cast<CXXMethodDecl>(functionDecl))
+    {
+        parentName = cxxMethodDecl->getParent()->getName();
+    }
+
+    // no idea what is going on here
+    if (parentName == "ScChangeActionLinkEntry")
+        return;
+    // linked list
+    if (parentName == "ScFunctionList" || parentName == "SwNodes"
+        || parentName == "SwUnoCursor" || parentName == "SortedResultSet"
+        || parentName == "Atom")
+        return;
+    // manual ref counting
+    if (parentName == "ScBroadcastAreaSlot")
+        return;
+    // complicated
+    if (parentName == "SwFormatField" || parentName == "FontPropertyBox" || parentName == "SdFontPropertyBox"
+        || parentName == "SwHTMLParser")
+        return;
+
+    if (functionDecl->getIdentifier())
+    {
+        std::string name = functionDecl->getName();
+        if (!parentName.empty())
+            name = std::string(parentName) + "::" + name;
+
+        // custom deleters
+        if (name == "Proxy_free" || name == "s_free" || name == "binuno_proxy_free")
+            return;
+        if (name == "SvpSalFrame::ReleaseGraphics")
+            return;
+        // don't feel like changing the API functions in registry
+        if (name == "createRegistry" || name == "openRegistry" || name == "closeRegistry" || name == "destroyRegistry"
+            || name == "reg_openRegistry")
+            return;
+        // linked list
+        if (name == "TypeWriter::createBlop" || name == "ImplDeleteConfigData" || name == "Config::DeleteGroup"
+            || name == "Config::DeleteKey")
+            return;
+        // ok
+        if (name == "write_uInt16s_FromOUString" || name == "ProgressMonitor::removeText"
+            || name == "StgDirEntry::SetSize" || name == "UCBStorage::CopyStorageElement_Impl"
+            || parentName == "SfxItemSet" || parentName == "SfxItemPool"
+            || name == "OutputDevice::ImplDrawPolyPolygon" || name == "OutputDevice::ImplDrawPolyPolygon"
+            || name == "ImplListBox::InsertEntry" || "Edit::dispose")
+            return;
+        // very dodgy
+        if (name == "UCBStorage::OpenStorage_Impl")
+            return;
+    }
+
+    report(
+         DiagnosticsEngine::Warning,
+         "call to delete on a var, should be using std::unique_ptr",
+         compat::getBeginLoc(deleteExpr))
+         << deleteExpr->getSourceRange();
+    report(
+         DiagnosticsEngine::Note,
+         "var is here",
+         compat::getBeginLoc(varDecl))
+         << varDecl->getSourceRange();
 }
 
 /**
@@ -957,6 +1051,18 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
         return true;
     if (isInUnoIncludeFile(compat::getBeginLoc(mpCurrentFunctionDecl->getCanonicalDecl())))
         return true;
+    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
+    if (!declRefExpr)
+        return true;
+    if (auto parmVarDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl()))
+        CheckDeleteParmVar(deleteExpr, parmVarDecl);
+    else if (auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl()))
+        CheckDeleteLocalVar(mpCurrentFunctionDecl, deleteExpr, varDecl);
+    return true;
+}
+
+void UseUniquePtr::CheckDeleteParmVar(const CXXDeleteExpr* deleteExpr, const ParmVarDecl* )
+{
     if (mpCurrentFunctionDecl->getIdentifier())
     {
         auto name = mpCurrentFunctionDecl->getName();
@@ -973,152 +1079,149 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
             || name == "FreeParaList"
             || name == "DeleteSdrUndoAction" // TODO, sc
             || name == "lcl_MergeGCBox" || name == "lcl_MergeGCLine" || name == "lcl_DelHFFormat")
-            return true;
+            return;
     }
     if (auto cxxMethodDecl = dyn_cast<CXXMethodDecl>(mpCurrentFunctionDecl))
     {
+        auto parentName = cxxMethodDecl->getParent()->getName();
         // include/o3tl/deleter.hxx
-        if (cxxMethodDecl->getParent()->getName() == "default_delete")
-            return true;
+        if (parentName == "default_delete")
+            return;
         // TODO Bitmap::ReleaseAccess
         // Tricky because it reverberates through other code and requires that BitmapWriteAccess move into /include again
-        if (cxxMethodDecl->getParent()->getName() == "Bitmap")
-            return true;
+        if (parentName == "Bitmap")
+            return;
         // TODO virtual ones are much trickier, leave for later
         if (cxxMethodDecl->isVirtual())
-            return true;
+            return;
         // sw/inc/unobaseclass.hxx holds SolarMutex while deleting
-        if (cxxMethodDecl->getParent()->getName() == "UnoImplPtrDeleter")
-            return true;
+        if (parentName == "UnoImplPtrDeleter")
+            return;
     }
-
-    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
-    if (!declRefExpr)
-        return true;
-    auto varDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl());
-    if (!varDecl)
-        return true;
 
     // StgAvlNode::Remove
     if (fn == SRCDIR "/sot/source/sdstor/stgavl.cxx")
-        return true;
+        return;
     // SfxItemPool::ReleaseDefaults and SfxItemPool::Free
     if (fn == SRCDIR "/svl/source/items/itempool.cxx")
-        return true;
+        return;
     // SwContourCache
     if (fn == SRCDIR "/sw/source/core/text/txtfly.cxx")
-        return true;
+        return;
     // too messy to cope with the SQL parser
     if (fn == SRCDIR "/connectivity/source/parse/sqlnode.cxx")
-        return true;
+        return;
     // I can't figure out the ownership of the SfxMedium in the call site(s)
     if (fn == SRCDIR "/sfx2/source/doc/sfxbasemodel.cxx")
-        return true;
+        return;
     // pointer passed via IMPL_LINK
     if (fn == SRCDIR "/sfx2/source/control/dispatch.cxx")
-        return true;
+        return;
     // NavigatorTreeModel::Remove
     if (fn == SRCDIR "/svx/source/form/navigatortreemodel.cxx")
-        return true;
+        return;
     // SdrModel::AddUndo
     if (fn == SRCDIR "/svx/source/svdraw/svdmodel.cxx")
-        return true;
+        return;
     // undo callback
     if (fn == SRCDIR "/basctl/source/basicide/baside3.cxx")
-        return true;
+        return;
     // ActualizeProgress::TimeoutHdl
     if (fn == SRCDIR "/cui/source/dialogs/cuigaldlg.cxx")
-        return true;
+        return;
     // ToolbarSaveInData::RemoveToolbar
     if (fn == SRCDIR "/cui/source/customize/cfg.cxx")
-        return true;
+        return;
     // OStorage_Impl::RemoveElement very complicated ownership passing going on
     if (fn == SRCDIR "/package/source/xstor/xstorage.cxx")
-        return true;
+        return;
     // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/framework/tools/FrameworkHelper.cxx")
-        return true;
+        return;
     // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/presenter/CanvasUpdateRequester.cxx")
-        return true;
+        return;
     // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx")
-        return true;
+        return;
     // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/sidebar/MasterPageContainer.cxx")
-        return true;
+        return;
     // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/tools/TimerBasedTaskExecution.cxx")
-        return true;
+        return;
     // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/view/ViewShellImplementation.cxx")
-        return true;
+        return;
     // ScBroadcastAreaSlot::StartListeningArea manual ref-counting of ScBroadcastArea
     if (fn == SRCDIR "/sc/source/core/data/bcaslot.cxx")
-        return true;
+        return;
     // ScDrawLayer::AddCalcUndo undo stuff
     if (fn == SRCDIR "/sc/source/core/data/drwlayer.cxx")
-        return true;
+        return;
     // ScTable::SetFormulaCell
     if (fn == SRCDIR "/sc/source/core/data/table2.cxx")
-        return true;
+        return;
     // ScDocument::SetFormulaCell
     if (fn == SRCDIR "/sc/source/core/data/documen2.cxx")
-        return true;
+        return;
     // RemoveEditAttribsHandler, stored in mdds block
     if (fn == SRCDIR "/sc/source/core/data/column2.cxx")
-        return true;
+        return;
     // just turns into a mess
     if (fn == SRCDIR "/sc/source/ui/Accessibility/AccessibleDocument.cxx")
-        return true;
+        return;
     // SwCache::DeleteObj, linked list
     if (fn == SRCDIR "/sw/source/core/bastyp/swcache.cxx")
-        return true;
+        return;
     // SAXEventKeeperImpl::smashBufferNode
     if (fn == SRCDIR "/xmlsecurity/source/framework/saxeventkeeperimpl.cxx")
-        return true;
+        return;
     // SwDoc::DeleteExtTextInput
     if (fn == SRCDIR "/sw/source/core/doc/extinput.cxx")
-        return true;
+        return;
     // SwDoc::DelSectionFormat
     if (fn == SRCDIR "/sw/source/core/docnode/ndsect.cxx")
-        return true;
+        return;
     // SwFrame::DestroyFrame
     if (fn == SRCDIR "/sw/source/core/layout/ssfrm.cxx")
-        return true;
+        return;
     // SwGluePortion::Join
     if (fn == SRCDIR "/sw/source/core/text/porglue.cxx")
-        return true;
+        return;
     // SwDoc::DelFrameFormat
     if (fn == SRCDIR "/sw/source/core/doc/docfmt.cxx")
-        return true;
+        return;
     // SwTextAttr::Destroy
     if (fn == SRCDIR "/sw/source/core/txtnode/txatbase.cxx")
-        return true;
+        return;
     // IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
     if (fn == SRCDIR "/sw/source/core/undo/undraw.cxx")
-        return true;
+        return;
     // SwHTMLParser::EndAttr
     if (fn == SRCDIR "/sw/source/filter/html/swhtml.cxx")
-        return true;
+        return;
     // SwGlossaryHdl::Expand sometimes the pointer is owned, sometimes it is not
     if (fn == SRCDIR "/sw/source/uibase/dochdl/gloshdl.cxx")
-        return true;
+        return;
     // SwWrtShell::Insert only owned sometimes
     if (fn == SRCDIR "/sw/source/uibase/wrtsh/wrtsh1.cxx")
-        return true;
+        return;
     // NodeArrayDeleter
     if (fn == SRCDIR "/unoxml/source/rdf/librdf_repository.cxx")
-        return true;
+        return;
     // SmCursor::LineToList ran out of enthusiasm to rework the node handling
     if (fn == SRCDIR "/starmath/source/cursor.cxx")
-        return true;
+        return;
     // XMLEventOASISTransformerContext::FlushEventMap
     if (fn == SRCDIR "/xmloff/source/transform/EventOASISTContext.cxx")
-        return true;
+        return;
     // XMLEventOOoTransformerContext::FlushEventMap
     if (fn == SRCDIR "/xmloff/source/transform/EventOOoTContext.cxx")
-        return true;
+        return;
+    // SbiProcDef::Match
+    if (fn == SRCDIR "/basic/source/comp/symtbl.cxx")
+        return;
 
     /*
     Sometimes we can pass the param as std::unique_ptr<T>& or std::unique_ptr, sometimes the method
@@ -1129,7 +1232,6 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
         "calling delete on a pointer param, should be either whitelisted or simplified",
         compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
-    return true;
 }
 
 
