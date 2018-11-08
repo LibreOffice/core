@@ -1773,7 +1773,7 @@ void SubsetMap::InitList()
 
             }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
             if (eBlock != UBLOCK_NO_BLOCK &&
                 eBlock != UBLOCK_INVALID_CODE &&
                 eBlock != UBLOCK_COUNT &&

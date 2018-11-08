@@ -229,7 +229,7 @@ public:
     void Remove(const EditCharAttrib* p);
     void Remove(sal_Int32 nPos);
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     static void DbgCheckAttribs(CharAttribList const& rAttribs);
 #endif
 };
@@ -668,7 +668,7 @@ public:
     void Append(std::unique_ptr<ParaPortion> p);
     sal_Int32 Count() const;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     // temporary:
     static void DbgCheck(ParaPortionList const&, EditDoc const& rDoc);
 #endif
@@ -826,7 +826,9 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int3
     return (nAttr < static_cast<sal_Int32>(rAttribs.size())) ? rAttribs[nAttr].get() : nullptr;
 }
 
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs);
+#endif
 
 class EditEngineItemPool : public SfxItemPool
 {

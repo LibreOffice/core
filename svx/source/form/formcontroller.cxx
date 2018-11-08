@@ -1641,7 +1641,7 @@ void FormController::focusGained(const FocusEvent& e)
             )
         {
             // check the old control if the content is ok
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
             Reference< XBoundControl >  xLockingTest(m_xCurrentControl, UNO_QUERY);
             bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
             assert(!bControlIsLocked && "FormController::Gained: I'm modified and the current control is locked ? How this ?");
