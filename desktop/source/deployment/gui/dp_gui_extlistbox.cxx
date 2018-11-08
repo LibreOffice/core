@@ -183,7 +183,6 @@ ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
     m_nActive( 0 ),
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
-    m_nExtraHeight( 2 ),
     m_aSharedImage(BitmapEx(RID_BMP_SHARED)),
     m_aLockedImage(BitmapEx(RID_BMP_LOCKED)),
     m_aWarningImage(BitmapEx(RID_BMP_WARNING)),
@@ -314,10 +313,10 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     if ( aTextHeight < m_nStdHeight )
         aTextHeight = m_nStdHeight;
 
+    m_nActiveHeight = aTextHeight;
+
     if ( m_vEntries[ nPos ]->m_bHasButtons )
-        m_nActiveHeight = aTextHeight + m_nExtraHeight;
-    else
-        m_nActiveHeight = aTextHeight + 2;
+        m_nActiveHeight += 2;
 }
 
 tools::Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
@@ -530,7 +529,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         long nExtraHeight = 0;
 
         if (rEntry->m_bHasButtons)
-            nExtraHeight = m_nExtraHeight;
+            nExtraHeight = 2;
 
         rRenderContext.DrawText(tools::Rectangle(aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight),
                                 sDescription, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
