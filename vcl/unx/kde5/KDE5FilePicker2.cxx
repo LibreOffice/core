@@ -208,7 +208,7 @@ void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
         return Q_EMIT setMultiSelectionSignal(multiSelect);
     }
 
-    if (mbIsFolderPicker)
+    if (mbIsFolderPicker || _dialog->acceptMode() == QFileDialog::AcceptSave)
         return;
 
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
