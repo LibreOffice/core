@@ -417,9 +417,9 @@ void SwGetRefField::SetExpand( const OUString& rStr )
     m_sTextRLHidden = rStr;
 }
 
-OUString SwGetRefField::ExpandImpl(SwRootFrame const*const) const
+OUString SwGetRefField::ExpandImpl(SwRootFrame const*const pLayout) const
 {
-    return m_sText;
+    return pLayout && pLayout->IsHideRedlines() ? m_sTextRLHidden : m_sText;
 }
 
 OUString SwGetRefField::GetFieldName() const
