@@ -157,11 +157,8 @@ class SwStdFontTabPage : public SfxTabPage
     bool    m_bSetIdxDefault  :1;
 
     bool    m_bListHeightDefault    :1;
-    bool    m_bSetListHeightDefault :1;
     bool    m_bLabelHeightDefault   :1;
-    bool    m_bSetLabelHeightDefault :1;
     bool    m_bIndexHeightDefault     :1;
-    bool    m_bSetIndexHeightDefault  :1;
 
     sal_uInt8 m_nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
@@ -171,7 +168,6 @@ class SwStdFontTabPage : public SfxTabPage
 
     DECL_LINK(StandardHdl, Button*, void );
     DECL_LINK(ModifyHdl, Edit&, void );
-    DECL_LINK(ModifyHeightHdl, Edit&, void );
     DECL_LINK(LoseFocusHdl, Control&, void );
 
     SwStdFontTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
