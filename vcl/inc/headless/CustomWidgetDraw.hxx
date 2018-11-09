@@ -28,7 +28,7 @@ private:
 
 public:
     CustomWidgetDraw(SvpSalGraphics& rGraphics);
-    virtual ~CustomWidgetDraw();
+    ~CustomWidgetDraw() override;
 
     bool isNativeControlSupported(ControlType eType, ControlPart ePart) override;
 

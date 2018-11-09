@@ -144,7 +144,7 @@ void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
         ImplGetFrame()->UpdateSettings(aSettings); // Update theme colors.
         StyleSettings aStyle(aSettings.GetStyleSettings());
         Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
-        if (aHighlightTextColor != Color(COL_TRANSPARENT))
+        if (aHighlightTextColor != COL_TRANSPARENT)
         {
             aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
         }
