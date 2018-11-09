@@ -1043,7 +1043,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext)
             }
             else
             {
-                // For some mysterious reaon, in headless/svp rendering,
+                // For some mysterious reason, in headless/svp rendering,
                 // pBorder has bad clipping region (shows as 1x1@0,0),
                 // and therefore doesn't render anything at all.
                 // In the case that we know we're in headless/svp, we

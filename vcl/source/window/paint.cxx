@@ -1335,7 +1335,7 @@ void Window::Update()
 void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rPos )
 {
     // Special drawing when called through LOKit
-    // TODO: Move to it's own method
+    // TODO: Move to its own method
     if (comphelper::LibreOfficeKit::isActive())
     {
         VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev);
