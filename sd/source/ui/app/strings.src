@@ -275,7 +275,7 @@ String STR_DESC_LINEEND
 };
 String STR_WARN_NAME_DUPLICATE
 {
-    Text [ en-US ] = "The name chosen already exists. \nPlease enter another name." ;
+    Text [ en-US ] = "The name chosen already exists.\nPlease enter another name." ;
 };
 String STR_UNDO_ANIMATION
 {
@@ -283,7 +283,7 @@ String STR_UNDO_ANIMATION
 };
 String STR_EXPORT_HTML_NAME
 {
-    Text [ en-US ] = "Web Page";
+    Text [ en-US ] = "Web Page" ;
 };
 String STR_EXPORT_HTML_FILTER
 {
@@ -295,7 +295,7 @@ String STR_EXPORT_DIALOG_TITLE
 };
 String STR_HTMLEXP_DEFAULT_EXTENSION
 {
-    Text = ".html";
+    Text = ".html" ;
 };
 String STR_UNDO_COPYOBJECTS
 {
@@ -303,11 +303,11 @@ String STR_UNDO_COPYOBJECTS
 };
 String STR_TITLE_NAMEGROUP
 {
-    Text [ en-US ] = "Name Object";
+    Text [ en-US ] = "Name Object" ;
 };
 String STR_DESC_NAMEGROUP
 {
-    Text [ en-US ] = "Name";
+    Text [ en-US ] = "Name" ;
 };
 String STR_WARN_PAGE_EXISTS
 {
@@ -403,7 +403,7 @@ String STR_UNDO_INSERT_TEXTFRAME
 };
 String STR_ACTION_NOTPOSSIBLE
 {
-    Text [ en-US ] = "This function cannot be run \nwith the selected objects." ;
+    Text [ en-US ] = "This function cannot be run\nwith the selected objects." ;
 };
 String STR_DLG_INSERT_PAGES_FROM_FILE
 {
@@ -452,14 +452,14 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 175, 4 * 12 );
         WordBreak = TRUE;
-        Text [ en-US ] = "This action deletes the list of actions that can\nbe undone. Previous changes made to the document are still valid,\nbut cannot be undone. Do you want to continue and\nthus assign the new slide design?";
+        Text [ en-US ] = "This action deletes the list of actions that can\nbe undone. Previous changes made to the document are still valid,\nbut cannot be undone. Do you want to continue and\nthus assign the new slide design?" ;
     };
     CheckBox CB_UNDO_DELETE_DISABLE
     {
-        HelpID = "sd:CheckBox:RID_UNDO_DELETE_WARNING:CB_UNDO_DELETE_DISABLE";
+        HelpID = "sd:CheckBox:RID_UNDO_DELETE_WARNING:CB_UNDO_DELETE_DISABLE" ;
         Pos = MAP_APPFONT( 39, (4 * 12) + 9 );
         Size = MAP_APPFONT( 175, 12 );
-        Text [ en-US ] = "~Do not show this warning again";
+        Text [ en-US ] = "~Do not show this warning again" ;
     };
     OKButton BTN_UNDO_DELETE_YES
     {
@@ -472,7 +472,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
     };
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
 };
 
 String STR_DELETE_PAGES
@@ -485,7 +485,7 @@ String STR_WARN_PRINTFORMAT_FAILURE
 };
 String STR_REMOVE_LINK
 {
-    Text [ en-US ] = "This graphic is linked to a document. \nDo you want to unlink the graphic in order to edit it?" ;
+    Text [ en-US ] = "This graphic is linked to a document.\nDo you want to unlink the graphic in order to edit it?" ;
 };
 String STR_IMPORT_GRFILTER_OPENERROR
 {
@@ -657,11 +657,11 @@ String STR_CLICK_ACTION_STOPPRESENTATION
 };
 String STR_EFFECTDLG_JUMP
 {
-    Text [ en-US ] = "Target";
+    Text [ en-US ] = "Target" ;
 };
 String STR_EFFECTDLG_ACTION
 {
-    Text [ en-US ] = "Act~ion";
+    Text [ en-US ] = "Act~ion" ;
 };
 String STR_EFFECTDLG_SOUND
 {
@@ -876,117 +876,117 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
 };
 String STR_BREAK_METAFILE
 {
-    Text [ en-US ] = "Ungroup Metafile(s)...";
+    Text [ en-US ] = "Ungroup Metafile(s)..." ;
 };
 String STR_BREAK_FAIL
 {
-    Text [ en-US ] = "It was not possible to ungroup all drawing objects.";
+    Text [ en-US ] = "It was not possible to ungroup all drawing objects." ;
 };
 
 // HtmlExport
 String STR_PUBDLG_SAMENAME
 {
-    Text [ en-US ] = "A design already exists with this name.\nDo you want to replace it?";
+    Text [ en-US ] = "A design already exists with this name.\nDo you want to replace it?" ;
 };
 
 String STR_HTMLATTR_TEXT
 {
-    Text [ en-US ] = "Text";
+    Text [ en-US ] = "Text" ;
 };
 
 String STR_HTMLATTR_LINK
 {
-    Text [ en-US ] = "Hyperlink";
+    Text [ en-US ] = "Hyperlink" ;
 };
 
 String STR_HTMLATTR_VLINK
 {
-    Text [ en-US ] = "Visited link";
+    Text [ en-US ] = "Visited link" ;
 };
 
 String STR_HTMLATTR_ALINK
 {
-    Text [ en-US ] = "Active link";
+    Text [ en-US ] = "Active link" ;
 };
 
 String STR_HTMLEXP_NOTES
 {
-    Text [ en-US ] = "Notes";
+    Text [ en-US ] = "Notes" ;
 };
 
 String STR_HTMLEXP_CONTENTS
 {
-    Text [ en-US ] = "Table of contents";
+    Text [ en-US ] = "Table of contents" ;
 };
 
 String STR_HTMLEXP_CLICKSTART
 {
-    Text [ en-US ] = "Click here to start";
+    Text [ en-US ] = "Click here to start" ;
 };
 
 String STR_HTMLEXP_AUTHOR
 {
-    Text [ en-US ] = "Author";
+    Text [ en-US ] = "Author" ;
 };
 
 String STR_HTMLEXP_EMAIL
 {
-    Text [ en-US ] = "E-mail";
+    Text [ en-US ] = "E-mail" ;
 };
 
 String STR_HTMLEXP_HOMEPAGE
 {
-    Text [ en-US ] = "Homepage";
+    Text [ en-US ] = "Homepage" ;
 };
 
 String STR_HTMLEXP_INFO
 {
-    Text [ en-US ] = "Further information";
+    Text [ en-US ] = "Further information" ;
 };
 
 String STR_HTMLEXP_DOWNLOAD
 {
-    Text [ en-US ] = "Download presentation";
+    Text [ en-US ] = "Download presentation" ;
 };
 
 String STR_HTMLEXP_NOFRAMES
 {
-    Text [ en-US ] = "Unfortunately your browser does not support floating frames.";
+    Text [ en-US ] = "Unfortunately your browser does not support floating frames." ;
 };
 
 String STR_HTMLEXP_FIRSTPAGE
 {
-    Text [ en-US ] = "First page";
+    Text [ en-US ] = "First page" ;
 };
 
 String STR_HTMLEXP_LASTPAGE
 {
-    Text [ en-US ] = "Last page";
+    Text [ en-US ] = "Last page" ;
 };
 
 String STR_HTMLEXP_SETTEXT
 {
-    Text [ en-US ] = "Text";
+    Text [ en-US ] = "Text" ;
 };
 
 String STR_HTMLEXP_SETGRAPHIC
 {
-    Text [ en-US ] = "Graphics";
+    Text [ en-US ] = "Graphics" ;
 };
 
 String STR_HTMLEXP_OUTLINE
 {
-    Text [ en-US ] = "With contents";
+    Text [ en-US ] = "With contents" ;
 };
 
 String STR_HTMLEXP_NOOUTLINE
 {
-    Text [ en-US ] = "Without contents";
+    Text [ en-US ] = "Without contents" ;
 };
 
 String STR_WEBVIEW_SAVE
 {
-    Text [ en-US ] = "To given page";
+    Text [ en-US ] = "To given page" ;
 };
 
 String STR_UNDO_VECTORIZE
@@ -1006,12 +1006,12 @@ String STR_PRES_PAUSE
 
 STRING STR_WIZARD_ORIGINAL
 {
-    Text [ en-US ] = "<Original>";
+    Text [ en-US ] = "<Original>" ;
 };
 
 STRING STR_ISLOADING
 {
-    Text [ en-US ] = "Loading...";
+    Text [ en-US ] = "Loading..." ;
 };
 
 String STR_DRAW_GRAF_TOOLBOX
@@ -1021,7 +1021,7 @@ String STR_DRAW_GRAF_TOOLBOX
 
 String STR_UNDO_APPLY_3D_FAVOURITE
 {
-    Text [ en-US ] = "Apply 3D favorite";
+    Text [ en-US ] = "Apply 3D favorite" ;
 };
 
 String STR_UNDO_GRAFFILTER
@@ -1045,15 +1045,15 @@ String STR_UNDO_CONVERT_TO_BITMAP
 };
 String STR_HTMLEXP_ERROR_CREATE_FILE
 {
-    Text [ en-US ] = "Cannot create the file $(URL1).";
+    Text [ en-US ] = "Cannot create the file $(URL1)." ;
 };
 String STR_HTMLEXP_ERROR_OPEN_FILE
 {
-    Text [ en-US ] = "Could not open the file $(URL1).";
+    Text [ en-US ] = "Could not open the file $(URL1)." ;
 };
 String STR_HTMLEXP_ERROR_COPY_FILE
 {
-    Text [ en-US ] = "The file $(URL1) could not be copied to $(URL2)";
+    Text [ en-US ] = "The file $(URL1) could not be copied to $(URL2)" ;
 };
 String STR_PAGE_BACKGROUND_TITLE
 {
@@ -1065,15 +1065,15 @@ String STR_PAGE_BACKGROUND_TXT
 };
 String STR_TITLE_RENAMESLIDE
 {
-    Text [ en-US ] = "Rename Slide";
+    Text [ en-US ] = "Rename Slide" ;
 };
 String STR_TITLE_SAVE_AS_PICTURE
 {
-    Text [ en-US ] = "Save as Picture";
+    Text [ en-US ] = "Save as Picture" ;
 };
 String STR_DESC_RENAMESLIDE
 {
-    Text [ en-US ] = "Name";
+    Text [ en-US ] = "Name" ;
 };
 
 String STR_PLACEHOLDER_DESCRIPTION_TITLE
@@ -1136,97 +1136,97 @@ String STR_FIELD_PLACEHOLDER_COUNT
 
 String STR_PLACEHOLDER_DESCRIPTION_NOTES
 {
-    Text [ en-US ] = "Notes Area";
+    Text [ en-US ] = "Notes Area" ;
 };
 
 String STR_UNDO_HANGULHANJACONVERSION
 {
-    Text [ en-US ] = "Hangul/Hanja Conversion";
+    Text [ en-US ] = "Hangul/Hanja Conversion" ;
 };
 
 String STR_LEFT_PANE_IMPRESS_TITLE
 {
-    Text [ en-US ] = "Slides";
+    Text [ en-US ] = "Slides" ;
 };
 String STR_LEFT_PANE_DRAW_TITLE
 {
-    Text [ en-US ] = "Pages";
+    Text [ en-US ] = "Pages" ;
 };
 String STR_RIGHT_PANE_TITLE
 {
-    Text [ en-US ] = "Tasks";
+    Text [ en-US ] = "Tasks" ;
 };
 String STR_TASKPANEL_MASTER_PAGE_TITLE
 {
-    Text [ en-US ] = "Master Pages";
+    Text [ en-US ] = "Master Pages" ;
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_TITLE
 {
-    Text [ en-US ] = "View";
+    Text [ en-US ] = "View" ;
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
 {
-    Text [ en-US ] = "~Dock Task Pane";
+    Text [ en-US ] = "~Dock Task Pane" ;
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
 {
-    Text [ en-US ] = "~Undock Task Pane";
+    Text [ en-US ] = "~Undock Task Pane" ;
 };
 String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
 {
-    Text [ en-US ] = "Used in This Presentation";
+    Text [ en-US ] = "Used in This Presentation" ;
 };
 String STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE
 {
-    Text [ en-US ] = "Recently Used";
+    Text [ en-US ] = "Recently Used" ;
 };
 String STR_TASKPANEL_ALL_MASTER_PAGES_TITLE
 {
-    Text [ en-US ] = "Available for Use";
+    Text [ en-US ] = "Available for Use" ;
 };
 String STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION
 {
-    Text [ en-US ] = "Preview not available";
+    Text [ en-US ] = "Preview not available" ;
 };
 String STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION
 {
-    Text [ en-US ] = "Preparing preview";
+    Text [ en-US ] = "Preparing preview" ;
 };
 String STR_TASKPANEL_LAYOUT_MENU_TITLE
 {
-    Text [ en-US ] = "Layouts";
+    Text [ en-US ] = "Layouts" ;
 };
 String STR_GRAPHICS_STYLE_FAMILY
 {
-    Text [ en-US ] = "Graphics Styles";
+    Text [ en-US ] = "Graphics Styles" ;
 };
 String STR_CELL_STYLE_FAMILY
 {
-    Text [ en-US ] = "Cell Styles";
+    Text [ en-US ] = "Cell Styles" ;
 };
 String DLG_TABLEDESIGNPANE
 {
-    Text [ en-US ] = "Table Designs";
+    Text [ en-US ] = "Table Designs" ;
 };
 String STR_CUSTOMANIMATIONPANE
 {
-    Text [ en-US ] = "Custom Animation";
+    Text [ en-US ] = "Custom Animation" ;
 };
 String STR_SLIDE_TRANSITION_PANE
 {
-    Text [ en-US ] = "Slide Transition";
+    Text [ en-US ] = "Slide Transition" ;
 };
 String STR_NAVIGATOR_SHOW_NAMED_SHAPES
 {
-    Text [ en-US ] = "Named shapes";
+    Text [ en-US ] = "Named shapes" ;
 };
 String STR_NAVIGATOR_SHOW_ALL_SHAPES
 {
-    Text [ en-US ] = "All shapes";
+    Text [ en-US ] = "All shapes" ;
 };
 String STR_NAVIGATOR_SHAPE_BASE_NAME
 {
-    Text [ en-US ] = "Shape %1";
+    Text [ en-US ] = "Shape %1" ;
 };
 String STR_SET_BACKGROUND_PICTURE
 {
@@ -1240,32 +1240,32 @@ String STR_ACC_DIALOG_DESC
 
 String RID_ANNOTATIONS_START
 {
-     Text [ en-US ] = "Comments";
+    Text [ en-US ] = "Comments" ;
 };
 
 String STR_RESET_LAYOUT
 {
-    Text[ en-US ] = "Reset Slide Layout";
+    Text[ en-US ] = "Reset Slide Layout" ;
 };
 
 String STR_INSERT_TABLE
 {
-     Text [ en-US ] = "Insert Table";
+    Text [ en-US ] = "Insert Table" ;
 };
 
 String STR_INSERT_CHART
 {
-     Text [ en-US ] = "Insert Chart";
+    Text [ en-US ] = "Insert Chart" ;
 };
 
 String STR_INSERT_PICTURE
 {
-     Text [ en-US ] = "Insert Picture";
+    Text [ en-US ] = "Insert Picture" ;
 };
 
 String STR_INSERT_MOVIE
 {
-     Text [ en-US ] = "Insert Movie";
+    Text [ en-US ] = "Insert Movie" ;
 };
 
 String RID_DRAW_VIEWER_TOOLBOX
@@ -1285,31 +1285,30 @@ String RID_DRAW_MEDIA_TOOLBOX
 
 String RID_DRAW_TABLE_TOOLBOX
 {
-    TEXT [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
 };
 
 String STR_SAR_NOT_FOUND
 {
-    Text [ en-US ] = "Search key not found.";
+    Text [ en-US ] = "Search key not found." ;
 };
 
 String STR_SAR_WRAP_FORWARD
 {
-    Text [ en-US ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text [ en-US ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?" ;
 };
 
 String STR_SAR_WRAP_BACKWARD
 {
-    Text [ en-US ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text [ en-US ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?" ;
 };
 
 String STR_SAR_WRAP_FORWARD_DRAW
 {
-    Text [ en-US ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text [ en-US ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?" ;
 };
 
 String STR_SAR_WRAP_BACKWARD_DRAW
 {
-    Text [ en-US ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text [ en-US ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?" ;
 };
