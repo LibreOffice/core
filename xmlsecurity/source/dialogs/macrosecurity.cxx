@@ -32,16 +32,18 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <svtools/treelistentry.hxx>
+#include <unotools/datetime.hxx>
 
 #include <strings.hrc>
-#include <resourcemanager.hxx>
 
+using namespace comphelper;
 using namespace ::com::sun::star;
 
 
@@ -327,9 +329,9 @@ void MacroSecurityTrustedSourcesTP::FillCertLB()
             // create from RawData
             xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
-            SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
-            m_pTrustCertLB->SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
-            m_pTrustCertLB->SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
+            SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( xmlsec::GetContentPart( xCert->getSubjectName() ) );
+            m_pTrustCertLB->SetEntryText( xmlsec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
+            m_pTrustCertLB->SetEntryText( utl::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
             pLBEntry->SetUserData( reinterpret_cast<void*>(nEntry) );      // misuse user data as index
         }
     }
