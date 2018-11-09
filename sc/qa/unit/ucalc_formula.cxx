@@ -8734,6 +8734,20 @@ void Test::testFuncRefListArraySUBTOTAL()
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTBLANK for A1:A2,A4:A5,A5:A6 failed", 0.0, m_pDoc->GetValue(aPos));
 
+    // Restore these two cell values so we'd catch failures below.
+    m_pDoc->SetValue(0,1,0,  2.0);  // A2
+    m_pDoc->SetValue(0,2,0,  4.0);  // A3
+    // Hide rows 2 to 4.
+    m_pDoc->SetRowHidden(1,3,0, true);
+    // Matrix in K7, array of references as OFFSET result.
+    m_pDoc->InsertMatrixFormula(10, 6, 10, 6, aMark, "=SUM(SUBTOTAL(109;OFFSET(A1;ROW(A1:A7)-ROW(A1);;1)))");
+    aPos.Set(10,6,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUM SUBTOTAL failed", 49.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    // ForceArray in K8, array of references as OFFSET result.
+    m_pDoc->SetString( aPos, "=SUMPRODUCT(SUBTOTAL(109;OFFSET(A1;ROW(A1:A7)-ROW(A1);;1)))");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUMPRODUCT SUBTOTAL failed", 49.0, m_pDoc->GetValue(aPos));
+
     m_pDoc->DeleteTab(0);
 }
 
