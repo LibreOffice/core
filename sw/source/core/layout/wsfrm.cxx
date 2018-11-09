@@ -4515,6 +4515,19 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
             pFootnote->InvalidateNumberInLayout();
         }
     }
+    // update various fields to re-expand them with the new layout
+    IDocumentFieldsAccess & rIDFA(rDoc.getIDocumentFieldsAccess());
+    auto const pAuthType(rIDFA.GetFieldType(
+        SwFieldIds::TableOfAuthorities, OUString(), false));
+    if (pAuthType) // created on demand...
+    {   // calling DelSequenceArray() should be unnecessary here since the
+        // sequence doesn't depend on frames
+        pAuthType->UpdateFields();
+    }
+    rIDFA.GetFieldType(SwFieldIds::RefPageGet, OUString(), false)->UpdateFields();
+    rIDFA.GetSysFieldType(SwFieldIds::Chapter)->UpdateFields();
+    rIDFA.UpdateExpFields(nullptr, false);
+    rIDFA.UpdateRefFields();
 
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
 }
