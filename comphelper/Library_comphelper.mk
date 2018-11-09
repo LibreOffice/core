@@ -64,6 +64,8 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     sal \
     salhelper \
     ucbhelper \
+    utl \
+    tl \
 	i18nlangtag \
 ))
 
@@ -143,6 +145,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/types \
     comphelper/source/misc/weak \
     comphelper/source/misc/weakeventlistener \
+    comphelper/source/misc/xmlsechelper \
     comphelper/source/officeinstdir/officeinstallationdirectories \
     comphelper/source/processfactory/processfactory \
     comphelper/source/property/ChainablePropertySet \

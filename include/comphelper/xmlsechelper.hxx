@@ -17,14 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
+#ifndef INCLUDED_COMPHELPER_XMLSECHELPER_HXX
+#define INCLUDED_COMPHELPER_XMLSECHELPER_HXX
 
-#include <unotools/resmgr.hxx>
-#include <tools/datetime.hxx>
 #include <com/sun/star/security/CertificateKind.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/comphelperdllapi.h>
+#include <tools/datetime.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <vector>
 
@@ -32,28 +33,30 @@ class FixedImage;
 class Control;
 class LocaleDataWrapper;
 
-namespace XmlSec
+namespace comphelper
 {
-    const LocaleDataWrapper&    GetLocaleData();
-    DateTime        GetDateTime( const css::util::DateTime& _rDT );
-    OUString        GetDateTimeString( const css::util::DateTime& _rDT );
-    OUString        GetDateString( const css::util::DateTime& _rDT );
-    OUString        GetCertificateKind( const css::security::CertificateKind& rKind );
+namespace xmlsec
+{
+COMPHELPER_DLLPUBLIC const LocaleDataWrapper& GetLocaleData();
+COMPHELPER_DLLPUBLIC DateTime GetDateTime(const css::util::DateTime& _rDT);
+COMPHELPER_DLLPUBLIC OUString GetDateTimeString(const css::util::DateTime& _rDT);
+COMPHELPER_DLLPUBLIC OUString GetDateString(const css::util::DateTime& _rDT);
+COMPHELPER_DLLPUBLIC OUString GetCertificateKind(const css::security::CertificateKind& rKind);
 
-    std::vector< std::pair< OUString, OUString> >
-        parseDN(const OUString& rRawString);
-    std::pair< OUString, OUString> GetDNForCertDetailsView(
-        const OUString & rRawString);
-    OUString        GetContentPart( const OUString& _rRawString );
+COMPHELPER_DLLPUBLIC std::vector<std::pair<OUString, OUString>> parseDN(const OUString& rRawString);
+COMPHELPER_DLLPUBLIC std::pair<OUString, OUString>
+GetDNForCertDetailsView(const OUString& rRawString);
+COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString);
 
-    OUString        GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF );
+COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _rSeq,
+                                           const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);
 }
 
-inline OUString XsResId(const char* pId)
+COMPHELPER_DLLPUBLIC inline OUString XsResId(const char* pId)
 {
     return Translate::get(pId, Translate::Create("xsc"));
 }
-
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

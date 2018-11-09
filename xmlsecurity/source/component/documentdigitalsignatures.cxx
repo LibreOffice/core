@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <resourcemanager.hxx>
-
 #include <digitalsignaturesdialog.hxx>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
@@ -46,6 +44,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -416,7 +415,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  XsResId(RID_XMLSECWB_NO_MOZILLA_PROFILE)));
+                                                  comphelper::XsResId(RID_XMLSECWB_NO_MOZILLA_PROFILE)));
         xBox->run();
     }
 

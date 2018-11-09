@@ -18,11 +18,12 @@
  */
 
 
-#include <resourcemanager.hxx>
+#include <comphelper/xmlsechelper.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/solar.hrc>
+#include <tools/datetime.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustrbuf.h>
@@ -30,7 +31,9 @@
 
 using namespace std;
 
-namespace XmlSec
+namespace comphelper
+{
+namespace xmlsec
 {
     const LocaleDataWrapper&    GetLocaleData()
     {
@@ -353,6 +356,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
         return aStr.makeStringAndClear();
     }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
