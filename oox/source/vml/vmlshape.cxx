@@ -524,7 +524,8 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         // And no LineColor property; individual borders can have colors and widths
         boost::optional<sal_Int32> oLineWidth;
         if (maTypeModel.maStrokeModel.moWeight.has())
-            oLineWidth.reset(ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false));
+            oLineWidth = ConversionHelper::decodeMeasureToHmm(
+                rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false);
         if (aPropMap.hasProperty(PROP_LineColor))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
@@ -658,7 +659,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     boost::optional<sal_Int32> oRotation;
     bool bFlipX = false, bFlipY = false;
     if (!maTypeModel.maRotation.isEmpty())
-        oRotation.reset(ConversionHelper::decodeRotation(maTypeModel.maRotation));
+        oRotation = ConversionHelper::decodeRotation(maTypeModel.maRotation);
     if (!maTypeModel.maFlip.isEmpty())
     {
         if (maTypeModel.maFlip == "x")

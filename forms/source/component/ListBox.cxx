@@ -749,7 +749,7 @@ namespace frm
         {
             sal_Int16 nBoundColumn( 0 );
             m_aBoundColumn >>= nBoundColumn;
-            aBoundColumn.reset( nBoundColumn );
+            aBoundColumn = nBoundColumn;
         }
 
         ::utl::SharedUNOComponent< XResultSet > xListCursor;
@@ -782,7 +782,7 @@ namespace frm
                         Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex( *aBoundColumn ),UNO_QUERY);
                         assert(xFieldAsSet.is());
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aBoundFieldName;
-                        aBoundColumn.reset( 1 );
+                        aBoundColumn = 1;
 
                         xFieldAsSet.set(xFieldsByIndex->getByIndex(0),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aFieldName;

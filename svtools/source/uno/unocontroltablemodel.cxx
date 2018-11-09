@@ -548,7 +548,7 @@ namespace svt { namespace table
                 Color nColor = COL_TRANSPARENT;
                 if ( i_color >>= nColor )
                 {
-                    o_convertedColor.reset( nColor );
+                    o_convertedColor = nColor;
                 }
                 else
                 {
@@ -705,7 +705,7 @@ namespace svt { namespace table
             {
                 aColors[i] = Color(aAPIColors[i]);
             }
-            m_pImpl->m_aRowColors.reset( aColors );
+            m_pImpl->m_aRowColors = aColors;
         }
     }
 

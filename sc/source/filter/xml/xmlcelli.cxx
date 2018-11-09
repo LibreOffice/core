@@ -168,7 +168,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATION_NAME ):
                     OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
                     if (!it.isEmpty())
-                        maContentValidationName.reset(it.toString());
+                        maContentValidationName = it.toString();
                 break;
                 case XML_ELEMENT( TABLE, XML_NUMBER_ROWS_SPANNED ):
                     bIsMerged = true;
@@ -240,7 +240,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     if (!it.isEmpty())
                     {
                         OSL_ENSURE(!maStringValue, "here should be only one string value");
-                        maStringValue.reset(it.toString());
+                        maStringValue = it.toString();
                         bIsEmpty = false;
                     }
                 }
@@ -266,7 +266,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                         OSL_ENSURE(!maFormula, "here should be only one formula");
                         OUString aFormula, aFormulaNmsp;
                         rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, it.toString() );
-                        maFormula.reset( FormulaWithNamespace(aFormula, aFormulaNmsp) );
+                        maFormula = FormulaWithNamespace(aFormula, aFormulaNmsp);
                     }
                 }
                 break;
@@ -630,7 +630,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     }
     else if (mnCurParagraph == 0)
     {
-        maFirstParagraph.reset(maParagraph.makeStringAndClear());
+        maFirstParagraph = maParagraph.makeStringAndClear();
         mbEditEngineHasText = true;
     }
 
@@ -1336,7 +1336,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
     if( nCellType == util::NumberFormat::TEXT )
     {
         if( !bIsEmpty && !maStringValue && !mbEditEngineHasText && cellExists(rCellPos) && CellsAreRepeated() )
-            pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
+            pOUText = getOutputString(rXMLImport.GetDocument(), rCellPos);
 
         if (!mbEditEngineHasText && !pOUText && !maStringValue)
             bIsEmpty = true;
@@ -1525,7 +1525,7 @@ void SAL_CALL ScXMLTableRowCellContext::endFastElement(sal_Int32 /*nElement*/)
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
-        maStringValue.reset(GetFirstParagraph());
+        maStringValue = GetFirstParagraph();
     }
 
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();

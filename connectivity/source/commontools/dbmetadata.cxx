@@ -162,7 +162,7 @@ namespace dbtools
                 lcl_checkConnected( _metaData );
                 try
                 {
-                    _cachedSetting.reset( (_metaData.xConnectionMetaData.get()->*_getter)() );
+                    _cachedSetting = (_metaData.xConnectionMetaData.get()->*_getter)();
                 }
                 catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("connectivity.commontools"); }
             }

@@ -1531,7 +1531,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                         "setProperty(): User paint overrides invisible mouse" );
 
             // enable user paint
-            maUserPaintColor.reset( unoColor2RGBColor( nColor ) );
+            maUserPaintColor = unoColor2RGBColor(nColor);
             if( mpCurrentSlide && !mpCurrentSlide->isPaintOverlayActive() )
                 mpCurrentSlide->enablePaintOverlay();
 
@@ -1561,7 +1561,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                         "setProperty(): User paint overrides invisible mouse" );
 
             // enable user paint
-            maEraseAllInk.reset( bEraseAllInk );
+            maEraseAllInk = bEraseAllInk;
             maEventMultiplexer.notifyEraseAllInk( *maEraseAllInk );
         }
 
@@ -1578,7 +1578,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
             if(bSwitchPenMode){
             // Switch to Pen Mode
-            maSwitchPenMode.reset( bSwitchPenMode );
+            maSwitchPenMode = bSwitchPenMode;
             maEventMultiplexer.notifySwitchPenMode();
             }
         }
@@ -1594,7 +1594,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                         "setProperty(): User paint overrides invisible mouse" );
             if(bSwitchEraserMode){
             // switch to Eraser mode
-            maSwitchEraserMode.reset( bSwitchEraserMode );
+            maSwitchEraserMode = bSwitchEraserMode;
             maEventMultiplexer.notifySwitchEraserMode();
             }
         }
@@ -1611,7 +1611,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                         "setProperty(): User paint overrides invisible mouse" );
 
             // enable user paint
-            maEraseInk.reset( nEraseInk );
+            maEraseInk = nEraseInk;
             maEventMultiplexer.notifyEraseInkWidth( *maEraseInk );
         }
 

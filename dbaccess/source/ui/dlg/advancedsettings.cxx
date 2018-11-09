@@ -200,7 +200,7 @@ namespace dbaui
             const SfxPoolItem* pItem = _rSet.GetItem<SfxPoolItem>(booleanSetting.nItemId);
             if (const SfxBoolItem *pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
             {
-                aValue.reset( pBoolItem->GetValue() );
+                aValue = pBoolItem->GetValue();
             }
             else if (const OptionalBoolItem *pOptionalItem = dynamic_cast<const OptionalBoolItem*>( pItem) )
             {

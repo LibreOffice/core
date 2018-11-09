@@ -97,45 +97,14 @@ namespace dbaui
 {
     class ODataView;
 
-
-    // = optional
-
-    /** convenience wrapper around boost::optional, allowing typed assignments
-    */
-    template < typename T >
-    class optional : public ::boost::optional< T >
-    {
-        typedef ::boost::optional< T >  base_type;
-
-    public:
-                 optional ( ) : base_type( ) { }
-        explicit optional ( T const& val ) : base_type( val ) { }
-                 optional ( optional const& rhs ) : base_type( static_cast<base_type const&>(rhs) ) { }
-
-    public:
-        optional& operator= ( T const& rhs )
-        {
-            base_type::reset( rhs );
-            return *this;
-        }
-        optional& operator= ( optional< T > const& rhs )
-        {
-            if ( rhs.is_initialized() )
-                base_type::reset( rhs.get() );
-            else
-                base_type::reset();
-            return *this;
-        }
-    };
-
     template< typename T >
-    inline bool SAL_CALL operator >>= ( const css::uno::Any & _any, optional< T >& _value )
+    inline bool SAL_CALL operator >>= (const css::uno::Any& _any, boost::optional< T >& _value)
     {
         _value.reset();  // de-init the optional value
 
         T directValue = T();
         if ( _any >>= directValue )
-            _value.reset( directValue );
+            _value = directValue;
 
         return !!_value;
     }
@@ -153,10 +122,10 @@ namespace dbaui
     {
         bool                        bEnabled;
 
-        optional< bool >            bChecked;
-        optional< bool >            bInvisible;
+        boost::optional<bool> bChecked;
+        boost::optional<bool> bInvisible;
         css::uno::Any               aValue;
-        optional< OUString >        sTitle;
+        boost::optional<OUString> sTitle;
 
         FeatureState() : bEnabled(false) { }
     };

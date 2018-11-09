@@ -50,14 +50,14 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
 
     if ( bIsX11 )
     {
-        if ( pDisplay != boost::none )
+        if (pDisplay)
         {
             inhibitXScreenSaver( bInhibit, pDisplay.get() );
             inhibitXAutoLock( bInhibit, pDisplay.get() );
             inhibitDPMS( bInhibit, pDisplay.get() );
         }
 
-        if ( xid != boost::none )
+        if (xid)
         {
             inhibitGSM( bInhibit, appname, aReason.getStr(), xid.get() );
             inhibitMSM( bInhibit, appname, aReason.getStr(), xid.get() );
@@ -72,8 +72,8 @@ static void dbusInhibit( bool bInhibit,
                   const std::function<GVariant*( GDBusProxy*, const guint, GError*& )>& fUnInhibit,
                   boost::optional<guint>& rCookie )
 {
-    if ( ( !bInhibit && ( rCookie == boost::none ) ) ||
-         ( bInhibit && ( rCookie != boost::none ) ) )
+    if ( ( !bInhibit && !rCookie ) ||
+         (  bInhibit &&  rCookie ) )
     {
         return;
     }
@@ -130,7 +130,7 @@ static void dbusInhibit( bool bInhibit,
     else
     {
         res = fUnInhibit( proxy, rCookie.get(), error );
-        rCookie = boost::none;
+        rCookie.reset();
 
         if (res != nullptr)
         {
@@ -281,12 +281,12 @@ void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay
         XSetScreenSaver( pDisplay, 0, nInterval,
                          bPreferBlanking, bAllowExposures );
     }
-    else if ( !bInhibit && ( mnXScreenSaverTimeout != boost::none ) )
+    else if ( !bInhibit && mnXScreenSaverTimeout )
     {
         XSetScreenSaver( pDisplay, mnXScreenSaverTimeout.get(),
                          nInterval, bPreferBlanking,
                          bAllowExposures );
-        mnXScreenSaverTimeout = boost::none;
+        mnXScreenSaverTimeout.reset();
     }
 }
 
