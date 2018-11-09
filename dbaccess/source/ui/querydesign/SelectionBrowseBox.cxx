@@ -2607,11 +2607,14 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(1, ';', nIdx)); // 2nd token: COUNT
             else
             {
-                sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
-                if ( _pEntry->isNumeric() )
-                    --nCount;
-                for( sal_Int32 nTok = 1; nTok < nCount; ++nTok )
-                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
+                const bool bSkipLastToken {_pEntry->isNumeric()};
+                while (nIdx>0)
+                {
+                    const OUString sTok {m_aFunctionStrings.getToken(0, ';', nIdx)};
+                    if (bSkipLastToken && nIdx<0)
+                        break;
+                    m_pFunctionCell->InsertEntry(sTok);
+                }
             }
 
             if ( _pEntry->IsGroupBy() )
