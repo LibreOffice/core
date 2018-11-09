@@ -1,9 +1,15 @@
-basic/source/inc/scriptcont.hxx:35
-    basic::SfxScriptLibraryContainer maScriptLanguage
-    StarBasic
-basic/source/runtime/methods.cxx:3430
+basctl/source/basicide/baside2.hxx:87
+    basctl::EditorWindow aHighlighter
+    0
+basctl/source/inc/accessibledialogwindow.hxx:76
+    basctl::AccessibleDialogWindow m_pDlgEditor
+    0
+basic/source/runtime/methods.cxx:3427
     (anonymous namespace)::RandomNumberGenerator global_rng
     5489
+binaryurp/source/proxy.hxx:83
+    binaryurp::Proxy references_
+    1
 binaryurp/source/writerstate.hxx:41
     binaryurp::WriterState typeCache
     256
@@ -25,9 +31,15 @@ bridges/inc/unointerfaceproxy.hxx:86
 bridges/source/jni_uno/jni_bridge.h:53
     jni_uno::Bridge m_ref
     1
-canvas/source/opengl/ogl_spritedevicehelper.hxx:124
-    oglcanvas::SpriteDeviceHelper mpDevice
+bridges/source/jni_uno/jni_uno2java.cxx:389
+    jni_uno::UNO_proxy m_ref
+    1
+chart2/source/controller/inc/ChartController.hxx:377
+    chart::ChartController m_aLifeTimeManager
     0
+chart2/source/controller/inc/dlg_ObjectProperties.hxx:110
+    chart::SchAttribTabDlg nDlgType
+    1101
 chart2/source/controller/inc/TitleDialogData.hxx:34
     chart::TitleDialogData aPossibilityList
     7
@@ -76,48 +88,63 @@ connectivity/source/inc/OColumn.hxx:48
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol
     0
-cui/source/options/optgdlg.cxx:1096
+cui/source/inc/border.hxx:118
+    SvxBorderTabPage mbAllowPaddingWithoutBorders
+    1
+cui/source/inc/paragrph.hxx:56
+    SvxStdParagraphTabPage nAbst
+    5670
+cui/source/inc/tabstpge.hxx:91
+    SvxTabulatorTabPage eDefUnit
+    15
+cui/source/options/optgdlg.cxx:1102
     LanguageConfig_Impl aLanguageOptions
+    0
+cui/source/options/treeopt.cxx:456
+    OptionsPageInfo m_pPage
+    0
+cui/source/options/treeopt.cxx:474
+    OptionsGroupInfo m_pExtPage
+    0
+dbaccess/source/ui/inc/directsql.hxx:61
+    dbaui::DirectSQLDialog m_nHistoryLimit
+    20
+dbaccess/source/ui/inc/JoinTableView.hxx:104
+    dbaui::OJoinTableView m_bTrackingInitiallyMoved
     0
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
     0
-editeng/source/editeng/eertfpar.hxx:34
-    EditRTFParser aRTFMapMode
-    9
+desktop/source/deployment/gui/dp_gui_extlistbox.hxx:121
+    dp_gui::ExtensionBox_Impl m_nExtraHeight
+    2
+editeng/source/editeng/impedit.hxx:472
+    ImpEditEngine nBigTextObjectStart
+    20
+extensions/source/bibliography/framectr.hxx:68
+    BibFrameController_Impl bHierarchical
+    1
+extensions/source/propctrlr/browserline.hxx:60
+    pcr::OBrowserLine m_pBrowseButton
+    0
+extensions/source/propctrlr/browserline.hxx:61
+    pcr::OBrowserLine m_pAdditionalBrowseButton
+    0
 filter/source/msfilter/viscache.hxx:31
     Impl_OlePres nFormat
     3
+fpicker/source/office/commonpicker.hxx:66
+    svt::OCommonPicker m_pDlg
+    0
+framework/inc/uielement/toolbarsmenucontroller.hxx:96
+    framework::ToolbarsMenuController m_aPropUIName
+    UIName
+framework/inc/uielement/toolbarsmenucontroller.hxx:97
+    framework::ToolbarsMenuController m_aPropResourceURL
+    ResourceURL
 framework/source/uiconfiguration/imagemanagerimpl.hxx:182
     framework::ImageManagerImpl m_aResourceString
     private:resource/images/moduleimages
-framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx:213
-    (anonymous namespace)::ModuleUIConfigurationManager m_aPropResourceURL
-    ResourceURL
-framework/source/uiconfiguration/uiconfigurationmanager.cxx:191
-    (anonymous namespace)::UIConfigurationManager m_aPropResourceURL
-    ResourceURL
-framework/source/uielement/uicommanddescription.cxx:141
-    framework::ConfigurationAccess_UICommand m_aPropLabel
-    Label
-framework/source/uielement/uicommanddescription.cxx:142
-    framework::ConfigurationAccess_UICommand m_aPropName
-    Name
-framework/source/uielement/uicommanddescription.cxx:143
-    framework::ConfigurationAccess_UICommand m_aPropPopup
-    Popup
-framework/source/uielement/uicommanddescription.cxx:144
-    framework::ConfigurationAccess_UICommand m_aPropPopupLabel
-    PopupLabel
-framework/source/uielement/uicommanddescription.cxx:145
-    framework::ConfigurationAccess_UICommand m_aPropTooltipLabel
-    TooltipLabel
-framework/source/uielement/uicommanddescription.cxx:146
-    framework::ConfigurationAccess_UICommand m_aPropTargetURL
-    TargetURL
-framework/source/uielement/uicommanddescription.cxx:147
-    framework::ConfigurationAccess_UICommand m_aPropIsExperimental
-    IsExperimental
 helpcompiler/inc/BasCodeTagger.hxx:35
     BasicCodeTagger m_Highlighter
     0
@@ -130,14 +157,29 @@ include/basegfx/pixel/bpixel.hxx:44
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData
     0
+include/canvas/base/canvascustomspritehelper.hxx:207
+    canvas::CanvasCustomSpriteHelper mbAlphaDirty
+    1
+include/canvas/base/canvascustomspritehelper.hxx:210
+    canvas::CanvasCustomSpriteHelper mbPositionDirty
+    1
+include/canvas/base/canvascustomspritehelper.hxx:216
+    canvas::CanvasCustomSpriteHelper mbClipDirty
+    1
+include/canvas/base/canvascustomspritehelper.hxx:219
+    canvas::CanvasCustomSpriteHelper mbPrioDirty
+    1
+include/canvas/base/canvascustomspritehelper.hxx:222
+    canvas::CanvasCustomSpriteHelper mbVisibilityDirty
+    1
 include/canvas/rendering/irendermodule.hxx:40
     canvas::Vertex g
     1
 include/canvas/rendering/irendermodule.hxx:40
-    canvas::Vertex r
+    canvas::Vertex b
     1
 include/canvas/rendering/irendermodule.hxx:40
-    canvas::Vertex b
+    canvas::Vertex r
     1
 include/canvas/rendering/irendermodule.hxx:42
     canvas::Vertex z
@@ -172,8 +214,53 @@ include/oox/core/contexthandler2.hxx:220
 include/oox/dump/dumperbase.hxx:1683
     oox::dump::RecordObjectBase mbBinaryOnly
     0
-include/svtools/ctrlbox.hxx:448
-    FontSizeBox bRelative
+include/sfx2/msg.hxx:187
+    SfxSlot nGroupId
+    0
+include/sfx2/msg.hxx:191
+    SfxSlot nValue
+    0
+include/sfx2/msg.hxx:196
+    SfxSlot pType
+    0
+include/sfx2/msg.hxx:200
+    SfxSlot pFirstArgDef
+    0
+include/sfx2/msg.hxx:201
+    SfxSlot nArgDefCount
+    0
+include/sfx2/thumbnailview.hxx:303
+    ThumbnailView mnFineness
+    5
+include/sfx2/thumbnailview.hxx:308
+    ThumbnailView mbIsTransientChildrenDisabled
+    0
+include/svtools/calendar.hxx:171
+    Calendar mbDropPos
+    0
+include/svtools/calendar.hxx:174
+    Calendar mnDragScrollHitTest
+    0
+include/svtools/calendar.hxx:294
+    CalendarField maDefaultDate
+    0
+include/svtools/ruler.hxx:553
+    RulerLine nStyle
+    0
+include/svtools/ruler.hxx:631
+    Ruler mnUpdateEvtId
+    0
+include/svtools/scrwin.hxx:41
+    ScrollableWindow bHandleDragging
+    1
+include/svtools/scrwin.hxx:42
+    ScrollableWindow bHCenter
+    1
+include/svtools/scrwin.hxx:43
+    ScrollableWindow bVCenter
+    1
+include/svtools/svparser.hxx:56
+    SvParser pImplData
     0
 include/svtools/svparser.hxx:74
     SvParser::TokenStackType nTokenValue
@@ -181,6 +268,12 @@ include/svtools/svparser.hxx:74
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
     0
+include/svtools/tabbar.hxx:325
+    TabBar mnOffY
+    0
+include/svtools/valueset.hxx:446
+    SvtValueSet mbFullMode
+    1
 include/svx/ctredlin.hxx:122
     SvxRedlinTable aDaTiFirst
     0
@@ -214,20 +307,47 @@ include/svx/dialcontrol.hxx:110
 include/svx/dialcontrol.hxx:111
     svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer
     0
-include/svx/dialcontrol.hxx:115
-    svx::DialControl::DialControl_Impl mnInitialAngle
-    0
-include/svx/dialcontrol.hxx:119
+include/svx/dialcontrol.hxx:118
     svx::DialControl::DialControl_Impl mbNoRot
     0
+include/svx/dlgctrl.hxx:234
+    LineLB mbAddStandardFields
+    1
+include/svx/fillctrl.hxx:54
+    SvxFillToolBoxControl mpFillControl
+    0
+include/svx/float3d.hxx:174
+    Svx3DWin pVDev
+    0
+include/svx/svdcrtv.hxx:50
+    SdrCreateView nAutoCloseDistPix
+    5
+include/svx/svdcrtv.hxx:51
+    SdrCreateView nFreeHandMinDistPix
+    10
 include/svx/svdmark.hxx:144
     SdrMarkList mbPointNameOk
     0
 include/svx/svdmark.hxx:145
     SdrMarkList mbGluePointNameOk
     0
+include/svx/svdmrkv.hxx:116
+    SdrMarkView mnFrameHandlesLimit
+    50
+include/svx/view3d.hxx:50
+    E3dView eDragConstraint
+    7
 include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet maPropsToTest
+    1
+include/tools/stream.hxx:159
+    SvStream m_isConsistent
+    1
+include/vcl/cursor.hxx:50
+    vcl::Cursor mnSlant
+    0
+include/vcl/field.hxx:49
+    FormatterBase mbDefaultLocale
     1
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters
@@ -235,8 +355,17 @@ include/vcl/opengl/OpenGLContext.hxx:57
 include/vcl/slider.hxx:39
     Slider mnChannelPixOffset
     0
+include/vcl/tabctrl.hxx:56
+    TabControl mnMaxPageWidth
+    0
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
+    0
+lotuswordpro/inc/xfilter/xffontdecl.hxx:92
+    XFFontDecl m_bPitchFixed
+    0
+oox/source/core/contexthandler2.cxx:36
+    oox::core::ElementInfo maChars
     0
 opencl/source/opencl_device.cxx:54
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO inputSize
@@ -256,6 +385,9 @@ pyuno/source/module/pyuno_impl.hxx:312
 sal/osl/unx/signal.cxx:82
     (anonymous namespace)::SignalAction Action
     1
+sal/osl/unx/sockimpl.hxx:37
+    oslSocketImpl m_bIsInShutdown
+    1
 sal/qa/osl/process/osl_Thread.cxx:214
     myThread m_aFlag
     0
@@ -271,7 +403,13 @@ sal/qa/osl/process/osl_Thread.cxx:359
 sc/inc/compiler.hxx:111
     ScRawToken::(anonymous union)::(anonymous) eInForceArray
     0
-sc/inc/listenercontext.hxx:47
+sc/inc/dpfilteredcache.hxx:93
+    ScDPFilteredCache::Criterion mpFilter
+    0
+sc/inc/funcdesc.hxx:221
+    ScFuncDesc bHasSuppressedArgs
+    0
+sc/inc/listenercontext.hxx:46
     sc::EndListeningContext maSet
     0
 sc/inc/markmulti.hxx:79
@@ -286,20 +424,44 @@ sc/inc/table.hxx:178
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
-sc/source/core/data/column.cxx:3385
+sc/source/core/data/column.cxx:3377
     (anonymous namespace)::RemoveEmptyBroadcasterHandler maSet
     0
-sc/source/core/data/documentimport.cxx:599
+sc/source/core/data/documentimport.cxx:598
     (anonymous namespace)::CellStoreInitializer::Impl maAttrs
     1048576
+sc/source/core/inc/parclass.hxx:94
+    ScParameterClassification::RunData bHasForceArray
+    1
 sc/source/filter/inc/orcusinterface.hxx:179
     ScOrcusConditionalFormat meEntryType
+    0
+sc/source/filter/inc/xepivotxml.hxx:31
+    XclExpXmlPivotCaches::Entry meType
     0
 sc/source/filter/inc/xltracer.hxx:82
     XclTracer mbEnabled
     0
-sc/source/ui/sidebar/CellLineStyleValueSet.hxx:32
-    sc::sidebar::CellLineStyleValueSet pVDev
+sc/source/ui/inc/anyrefdg.hxx:111
+    ScRefHandler m_pActiveWin
+    0
+sc/source/ui/inc/checklistmenu.hxx:155
+    ScMenuFloatingWindow::MenuItemData mpAction
+    0
+sc/source/ui/inc/checklistmenu.hxx:156
+    ScMenuFloatingWindow::MenuItemData mpSubMenuWin
+    0
+sc/source/ui/inc/fupoor.hxx:50
+    FuPoor pDialog
+    0
+sc/source/ui/inc/inscodlg.hxx:57
+    ScInsertContentsDlg nShortCutMoveMode
+    4
+sc/source/ui/inc/retypepassdlg.hxx:91
+    ScRetypePassDlg mpDocItem
+    0
+sc/source/ui/inc/viewdata.hxx:288
+    ScViewData aLogicMode
     0
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
@@ -310,11 +472,14 @@ sd/source/filter/html/htmlex.hxx:113
 sd/source/ui/inc/DrawController.hxx:289
     sd::DrawController mpCurrentPage
     0
-sd/source/ui/inc/drawview.hxx:64
-    sd::DrawView mpVDev
-    0
+sd/source/ui/inc/pubdlg.hxx:151
+    SdPublishingDlg aAssistentFunc
+    6
 sd/source/ui/inc/ViewTabBar.hxx:144
     sd::ViewTabBar mpTabPage
+    0
+sd/source/ui/inc/Window.hxx:154
+    sd::Window mpShareWin
     0
 sd/source/ui/inc/WindowUpdater.hxx:96
     sd::WindowUpdater maCTLOptions
@@ -325,24 +490,33 @@ sd/source/ui/presenter/SlideRenderer.hxx:82
 sd/source/ui/sidebar/PanelBase.hxx:56
     sd::sidebar::PanelBase mpWrappedControl
     0
+sd/source/ui/slideshow/slideshowimpl.hxx:333
+    sd::SlideshowImpl mpTimeButton
+    0
 sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:46
     sd::slidesorter::cache::BitmapFactory maRenderer
     0
-sd/source/ui/slidesorter/inc/controller/SlsVisibleAreaManager.hxx:79
-    sd::slidesorter::controller::VisibleAreaManager mnScrollAnimationId
-    -1
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
     StringEmitContext m_aBuf
     256
+sfx2/source/appl/fileobj.hxx:45
+    SvFileObject bInNewData
+    0
 sfx2/source/appl/lnkbase2.cxx:76
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
 sfx2/source/appl/lnkbase2.cxx:81
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
-sfx2/source/view/impviewframe.hxx:38
-    SfxViewFrame_Impl pFocusWin
+sfx2/source/dialog/filedlgimpl.hxx:79
+    sfx2::FileDialogHelper_Impl mbIsGpgEnabled
+    1
+slideshow/source/engine/shapes/viewmediashape.hxx:151
+    slideshow::internal::ViewMediaShape mpEventHandlerParent
     0
+slideshow/source/engine/slideshowimpl.cxx:479
+    (anonymous namespace)::SlideShowImpl maFrameSynchronization
+    0.02
 soltools/cpp/cpp.h:120
     includelist deleted
     1
@@ -367,11 +541,20 @@ stoc/source/security/access_controller.cxx:306
 stoc/source/security/lru_cache.h:54
     stoc_sec::lru_cache m_block
     0
+svl/source/crypto/cryptosign.cxx:150
+    (anonymous namespace)::(anonymous) extensions
+    0
+svtools/source/contnr/fileview.cxx:336
+    SvtFileView_Impl mbReplaceNames
+    0
+svtools/source/contnr/imivctl.hxx:181
+    SvxIconChoiceCtrl_Impl nUserEventShowCursor
+    0
+svtools/source/contnr/imivctl.hxx:202
+    SvxIconChoiceCtrl_Impl bEntryEditingEnabled
+    0
 svtools/source/dialogs/roadmapwizard.cxx:54
     svt::RoadmapWizardImpl pRoadmap
-    0
-svx/source/sidebar/line/LineWidthValueSet.hxx:46
-    svx::sidebar::LineWidthValueSet pVDev
     0
 sw/inc/ftninfo.hxx:46
     SwEndNoteInfo aFormat
@@ -379,8 +562,23 @@ sw/inc/ftninfo.hxx:46
 sw/inc/hints.hxx:223
     SwAttrSetChg m_bDelSet
     0
+sw/inc/view.hxx:189
+    SwView m_pHScrollbar
+    0
+sw/inc/view.hxx:190
+    SwView m_pVScrollbar
+    0
+sw/inc/view.hxx:200
+    SwView m_pTogglePageBtn
+    0
 sw/inc/viewopt.hxx:189
     SwViewOption m_bTest10
+    0
+sw/inc/viewsh.hxx:116
+    SwViewShell mpTmpRef
+    0
+sw/source/core/bastyp/calc.cxx:95
+    CalcOp eOp
     0
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nID
@@ -388,12 +586,63 @@ sw/source/core/inc/UndoSort.hxx:38
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
+sw/source/filter/ww8/ww8par3.cxx:323
+    WW8LST bSimpleList
+    1
+sw/source/filter/ww8/ww8par3.cxx:324
+    WW8LST bRestartHdn
+    1
+sw/source/filter/ww8/ww8par3.cxx:356
+    WW8LVL bV6Prev
+    1
+sw/source/filter/ww8/ww8par3.cxx:357
+    WW8LVL bV6PrSp
+    1
+sw/source/filter/ww8/ww8par3.cxx:358
+    WW8LVL bV6
+    1
 sw/source/filter/ww8/ww8par.hxx:659
     WW8FormulaControl mfUnknown
     0
 sw/source/filter/ww8/ww8par.hxx:668
     WW8FormulaControl mhpsCheckBox
     20
+sw/source/filter/ww8/ww8par.hxx:1011
+    WW8TabBandDesc mbHasSpacing
+    1
+sw/source/filter/ww8/ww8scan.hxx:1166
+    WW8Fib m_fObfuscated
+    0
+sw/source/filter/ww8/ww8scan.hxx:1516
+    WW8Fib m_fcHplxsdr
+    16842754
+sw/source/filter/ww8/ww8scan.hxx:1517
+    WW8Fib m_lcbHplxsdr
+    0
+sw/source/filter/ww8/ww8struc.hxx:892
+    WW8_TablePos nSp37
+    2
+sw/source/uibase/docvw/srcedtw.cxx:55
+    (anonymous namespace)::TextPortion nLine
+    0
+sw/source/uibase/inc/instable.hxx:48
+    SwInsTableDlg minTableIndexInLb
+    1
+sw/source/uibase/inc/optpage.hxx:160
+    SwStdFontTabPage m_bSetListHeightDefault
+    0
+sw/source/uibase/inc/optpage.hxx:162
+    SwStdFontTabPage m_bSetLabelHeightDefault
+    0
+sw/source/uibase/inc/optpage.hxx:164
+    SwStdFontTabPage m_bSetIndexHeightDefault
+    0
+sw/source/uibase/inc/pview.hxx:178
+    SwPagePreview m_pHScrollbar
+    0
+sw/source/uibase/inc/pview.hxx:179
+    SwPagePreview m_pVScrollbar
+    0
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
     0
@@ -406,6 +655,9 @@ vcl/inc/salprn.hxx:42
 vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mnJobs
     4294967295
+vcl/inc/salwtype.hxx:154
+    SalWheelMouseEvent mbDeltaIsPixel
+    0
 vcl/inc/svdata.hxx:273
     ImplSVNWFData mnStatusBarLowerRightOffset
     0
@@ -424,6 +676,45 @@ vcl/inc/svdata.hxx:292
 vcl/inc/svdata.hxx:301
     ImplSVNWFData mbRolloverMenubar
     0
+vcl/source/app/settings.cxx:68
+    ImplMouseData mnStartDragCode
+    1
+vcl/source/app/settings.cxx:69
+    ImplMouseData mnContextMenuCode
+    4
+vcl/source/app/settings.cxx:70
+    ImplMouseData mnContextMenuClicks
+    1
+vcl/source/app/settings.cxx:71
+    ImplMouseData mnScrollRepeat
+    100
+vcl/source/app/settings.cxx:72
+    ImplMouseData mnButtonStartRepeat
+    370
+vcl/source/app/settings.cxx:74
+    ImplMouseData mnActionDelay
+    250
+vcl/source/app/settings.cxx:154
+    ImplStyleData mnBorderSize
+    1
+vcl/source/app/settings.cxx:158
+    ImplStyleData mnSplitSize
+    3
+vcl/source/app/settings.cxx:202
+    ImplStyleData mnColorValueSetMaximumRowCount
+    10
+vcl/source/app/settings.cxx:205
+    ImplStyleData mnListBoxPreviewDefaultLineWidth
+    1
+vcl/source/app/settings.cxx:226
+    ImplHelpData mnTipDelay
+    500
+vcl/source/app/settings.cxx:228
+    ImplHelpData mnBalloonDelay
+    1500
+vcl/source/app/settings.cxx:242
+    ImplAllSettingsData mnWindowUpdate
+    39
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
     0
@@ -441,9 +732,6 @@ vcl/source/filter/jpeg/transupp.h:147
     0
 vcl/source/filter/jpeg/transupp.h:149
     (anonymous) crop_yoffset
-    0
-vcl/source/filter/wmf/wmfwr.hxx:94
-    WMFWriter bDstIsClipping
     0
 vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
@@ -487,21 +775,21 @@ vcl/source/gdi/dibtools.cxx:117
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
-vcl/source/gdi/pdfwriter_impl.hxx:763
+vcl/source/gdi/pdfwriter_impl.hxx:741
     vcl::PDFWriterImpl m_DocDigest
-    0
-vcl/source/window/status.cxx:52
-    StatusBar::ImplData mnItemBorderWidth
     0
 writerfilter/source/dmapper/SettingsTable.cxx:239
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:620
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:619
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:621
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:620
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:624
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:623
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
+xmloff/source/draw/animexp.cxx:213
+    XMLEffectHint mnPathShapeId
+    -1

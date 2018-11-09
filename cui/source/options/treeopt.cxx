@@ -471,12 +471,11 @@ struct OptionsGroupInfo
     sal_uInt16          m_nDialogId;    // Id of the former dialog
     bool            m_bLoadError;   // load fails?
     OUString       m_sPageURL;
-    VclPtr<ExtensionsTabPage>  m_pExtPage;
 
     OptionsGroupInfo( SfxShell* pSh, SfxModule* pMod, sal_uInt16 nId ) :
         m_pShell( pSh ),
         m_pModule( pMod ), m_nDialogId( nId ), m_bLoadError( false ),
-        m_sPageURL( OUString() ), m_pExtPage( nullptr ) {}
+        m_sPageURL( OUString() ) {}
 };
 
 #define INI_LIST() \
@@ -597,8 +596,6 @@ void OfaTreeOptionsDialog::dispose()
         if(!pTreeLB->GetParent(pEntry))
         {
             OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
-            if ( pGroupInfo )
-                pGroupInfo->m_pExtPage.disposeAndClear();
             delete pGroupInfo;
         }
         pEntry = pTreeLB->Next(pEntry);
@@ -992,15 +989,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     {
         pOptPageInfo->m_pExtPage->Hide();
         pOptPageInfo->m_pExtPage->DeactivatePage();
-    }
-    else if ( pCurrentPageEntry && !pTreeLB->GetParent( pCurrentPageEntry ) )
-    {
-        OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pCurrentPageEntry->GetUserData());
-        if ( pGroupInfo && pGroupInfo->m_pExtPage )
-        {
-            pGroupInfo->m_pExtPage->Hide();
-            pGroupInfo->m_pExtPage->DeactivatePage();
-        }
     }
 
     OptionsPageInfo *pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());

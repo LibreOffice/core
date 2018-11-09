@@ -94,7 +94,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
-    aEditIdle( "svtools contnr SvxIconChoiceCtrl_Impl Edit" ),
     aAutoArrangeIdle ( "svtools contnr SvxIconChoiceCtrl_Impl AutoArrange" ),
     aDocRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged" ),
     aVisRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged" ),
@@ -111,7 +110,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pHead = nullptr;
     pCursor = nullptr;
     bUpdateMode = true;
-    bEntryEditingEnabled = false;
     bHighlightFramePressed = false;
     eSelectionMode = SelectionMode::Multiple;
     pView = pCurView;
@@ -119,7 +117,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     SetStyle( nWinStyle );
     nFlags = IconChoiceFlags::NONE;
     nUserEventAdjustScrBars = nullptr;
-    nUserEventShowCursor = nullptr;
     nMaxVirtWidth = DEFAULT_MAX_VIRT_WIDTH;
     nMaxVirtHeight = DEFAULT_MAX_VIRT_HEIGHT;
     pDDDev = nullptr;
@@ -134,10 +131,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     nHorSBarHeight = aHorSBar->GetSizePixel().Height();
     nVerSBarWidth = aVerSBar->GetSizePixel().Width();
-
-    aEditIdle.SetPriority( TaskPriority::LOWEST );
-    aEditIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
-    aEditIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aEditIdle" );
 
     aAutoArrangeIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aAutoArrangeIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
@@ -169,7 +162,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     pCurEditedEntry = nullptr;
     pEdit.disposeAndClear();
     Clear(false);
-    StopEditTimer();
     CancelUserEvents();
     pImpCursor.reset();
     pGridMap.reset();
@@ -189,7 +181,6 @@ void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
     StopEntryEditing();
     nSelectionCount = 0;
     pCurHighlightFrame = nullptr;
-    StopEditTimer();
     CancelUserEvents();
     ShowCursor( false );
     bBoundRectsDirty = false;
@@ -261,7 +252,6 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, v
 
 void SvxIconChoiceCtrl_Impl::FontModified()
 {
-    StopEditTimer();
     pDDDev.disposeAndClear();
     pDDBufDev.disposeAndClear();
     pDDTempDev.disposeAndClear();
@@ -273,7 +263,6 @@ void SvxIconChoiceCtrl_Impl::FontModified()
 
 void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t nPos)
 {
-    StopEditTimer();
     aEntries.insert( nPos, pEntry );
     if( (nFlags & IconChoiceFlags::EntryListPosValid) && nPos >= aEntries.size() - 1 )
         pEntry->nPos = aEntries.size() - 1;
@@ -423,7 +412,6 @@ void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool 
 
 void SvxIconChoiceCtrl_Impl::ResetVirtSize()
 {
-    StopEditTimer();
     aVirtOutputSize.setWidth( 0 );
     aVirtOutputSize.setHeight( 0 );
     const size_t nCount = aEntries.size();
@@ -563,7 +551,6 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
         bUpdateMode = false;
     aAutoArrangeIdle.Stop();
     nFlags |= IconChoiceFlags::Arranging;
-    StopEditTimer();
     ShowCursor( false );
     ResetVirtSize();
     if( !bKeepPredecessors )
@@ -711,7 +698,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
 {
     bool bHandled = true;
     bHighlightFramePressed = false;
-    StopEditTimer();
     bool bGotFocus = (!pView->HasFocus() && !(nWinBits & WB_NOPOINTERFOCUS));
     if( !(nWinBits & WB_NOPOINTERFOCUS) )
         pView->GrabFocus();
@@ -786,7 +772,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
         }
     }
     bool bSelected = pEntry->IsSelected();
-    bool bEditingEnabled = bEntryEditingEnabled;
 
     if( rMEvt.GetClicks() == 2 )
     {
@@ -800,21 +785,11 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
         // Inplace-Editing ?
         if( rMEvt.IsMod2() )  // Alt?
         {
-            if( bEntryEditingEnabled && pEntry &&
-                pEntry->IsSelected())
-            {
-                EditEntry( pEntry );
-            }
         }
         else if( eSelectionMode == SelectionMode::Single )
         {
             DeselectAllBut( pEntry );
             SetCursor( pEntry );
-            if( bEditingEnabled && bSelected && !rMEvt.GetModifier() &&
-                rMEvt.IsLeft() && IsTextHit( pEntry, aDocPos ) )
-            {
-                nFlags |= IconChoiceFlags::StartEditTimerInMouseUp;
-            }
         }
         else if( eSelectionMode == SelectionMode::NONE )
         {
@@ -839,11 +814,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
                 {
                     // deselect only in the Up, if the Move happened via D&D!
                     nFlags |= IconChoiceFlags::DownDeselect;
-                    if( bEditingEnabled && IsTextHit( pEntry, aDocPos ) &&
-                        rMEvt.IsLeft())
-                    {
-                        nFlags |= IconChoiceFlags::StartEditTimerInMouseUp;
-                    }
                 }
             }
             else if( rMEvt.IsMod1() )
@@ -887,7 +857,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
     if( nFlags & IconChoiceFlags::StartEditTimerInMouseUp )
     {
         bHandled = true;
-        StartEditTimer();
         nFlags &= ~IconChoiceFlags::StartEditTimerInMouseUp;
     }
 
@@ -977,8 +946,6 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
 
 bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-    StopEditTimer();
-
     bool bMod2 = rKEvt.GetKeyCode().IsMod2();
     sal_Unicode cChar = rKEvt.GetCharCode();
     sal_uLong nPos = sal_uLong(-1);
@@ -1094,9 +1061,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_F2:
-            if( !bMod1 && !bShift )
-                EditTimeoutHdl( nullptr );
-            else
+            if( bMod1 || bShift )
                 bKeyUsed = false;
             break;
 
@@ -1165,12 +1130,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_RETURN:
-            if( bMod1 )
-            {
-                if( pCursor && bEntryEditingEnabled )
-                    /*pView->*/EditEntry( pCursor );
-            }
-            else
+            if( !bMod1 )
                 bKeyUsed = false;
             break;
 
@@ -1346,7 +1306,6 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars()
 
 void SvxIconChoiceCtrl_Impl::Resize()
 {
-    StopEditTimer();
     InitScrollBarBox();
     aOutputSize = pView->GetOutputSizePixel();
     pImpCursor->Clear();
@@ -1469,7 +1428,6 @@ void SvxIconChoiceCtrl_Impl::GetFocus()
 
 void SvxIconChoiceCtrl_Impl::LoseFocus()
 {
-    StopEditTimer();
     if( pCursor )
         pCursor->ClearFlags( SvxIconViewFlags::FOCUSED );
     ShowCursor( false );
@@ -2651,16 +2609,6 @@ bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Po
     return aRect.IsInside( rDocPos );
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer *, void)
-{
-    SvxIconChoiceCtrlEntry* pEntry = GetCurEntry();
-    if( bEntryEditingEnabled && pEntry &&
-        pEntry->IsSelected())
-    {
-        EditEntry( pEntry );
-    }
-}
-
 #ifdef DBG_UTIL
 void SvxIconChoiceCtrl_Impl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
 {
@@ -2747,7 +2695,6 @@ IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId, void )
     }
     else if( nId == EVENTID_SHOW_CURSOR )
     {
-        nUserEventShowCursor = nullptr;
         ShowCursor( true );
     }
 }
@@ -2758,11 +2705,6 @@ void SvxIconChoiceCtrl_Impl::CancelUserEvents()
     {
         Application::RemoveUserEvent( nUserEventAdjustScrBars );
         nUserEventAdjustScrBars = nullptr;
-    }
-    if( nUserEventShowCursor )
-    {
-        Application::RemoveUserEvent( nUserEventShowCursor );
-        nUserEventShowCursor = nullptr;
     }
 }
 
