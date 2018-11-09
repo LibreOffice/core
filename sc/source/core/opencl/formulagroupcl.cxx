@@ -3187,11 +3187,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     mvSubArguments.push_back(
                         SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDuration_ADD));
                 }*/
-                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmordegrc")
+                /*else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmordegrc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAmordegrc, nResultSize));
-                }
+                }*/
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmorlinc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
