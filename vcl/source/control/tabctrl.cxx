@@ -93,7 +93,6 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     mnLastWidth                 = 0;
     mnLastHeight                = 0;
-    mnMaxPageWidth              = 0;
     mnActPageId                 = 0;
     mnCurPageId                 = 0;
     mbFormat                    = true;
@@ -383,8 +382,6 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     //aBreakIndexes will contain the indexes of the last tab on each row
     std::deque<size_t> aBreakIndexes(MinimumRaggednessWrap::GetEndOfLineIndexes(aWidths, nMaxWidth - nOffsetX - 2));
 
-    if ( (mnMaxPageWidth > 0) && (mnMaxPageWidth < nMaxWidth) )
-        nMaxWidth = mnMaxPageWidth;
     nMaxWidth -= GetItemsOffset().X();
 
     long nX = nOffsetX;
@@ -2373,8 +2370,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             aWidths.push_back(0);
     }
 
-    if ( (mnMaxPageWidth > 0) && (mnMaxPageWidth < nMaxWidth) )
-        nMaxWidth = mnMaxPageWidth;
     nMaxWidth -= GetItemsOffset().X();
 
     long nX = nOffsetX;

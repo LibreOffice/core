@@ -27,9 +27,6 @@ ScrollableWindow::ScrollableWindow( vcl::Window* pParent ) :
     aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG)) ),
     aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
 {
-    bHandleDragging = true;
-    bVCenter = true;
-    bHCenter = true;
     bScrolling = false;
 
     // set the handlers for the scrollbars
@@ -106,24 +103,8 @@ Size ScrollableWindow::GetOutputSizePixel() const
 }
 
 
-IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll, void )
+IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, /*pScroll*/, void )
 {
-    // notify the start of scrolling, if not already scrolling
-    if ( !bScrolling )
-        bScrolling = true;
-
-    // get the delta in logic coordinates
-    Size aDelta( PixelToLogic( Size( aHScroll->GetDelta(), aVScroll->GetDelta() ) ) );
-
-    // scroll the window, if this is not already done
-    if ( !bHandleDragging )
-    {
-        if ( pScroll == aHScroll.get() )
-            Scroll( aDelta.Width(), 0 );
-        else
-            Scroll( 0, aDelta.Height() );
-    }
-
     // notify the end of scrolling
     bScrolling = false;
 }
@@ -135,16 +116,13 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll, void )
     if ( !bScrolling )
         bScrolling = true;
 
-    if ( bHandleDragging )
-    {
-        // get the delta in logic coordinates
-        Size aDelta( PixelToLogic(
-            Size( aHScroll->GetDelta(), aVScroll->GetDelta() ) ) );
-        if ( pScroll == aHScroll.get() )
-            Scroll( aDelta.Width(), 0 );
-        else
-            Scroll( 0, aDelta.Height() );
-    }
+    // get the delta in logic coordinates
+    Size aDelta( PixelToLogic(
+        Size( aHScroll->GetDelta(), aVScroll->GetDelta() ) ) );
+    if ( pScroll == aHScroll.get() )
+        Scroll( aDelta.Width(), 0 );
+    else
+        Scroll( 0, aDelta.Height() );
 }
 
 
@@ -207,14 +185,10 @@ void ScrollableWindow::Resize()
         aPixOffset = Point(
                      bHVisible
                      ? aPixOffset.X()
-                     : ( bHCenter
-                            ? (aOutPixSz.Width()-aTotPixSz.Width()) / 2
-                            : 0 ),
+                     : (aOutPixSz.Width()-aTotPixSz.Width()) / 2,
                      bVVisible
                      ? aPixOffset.Y()
-                     : ( bVCenter
-                            ? (aOutPixSz.Height()-aTotPixSz.Height()) / 2
-                            : 0 ) );
+                     : (aOutPixSz.Height()-aTotPixSz.Height()) / 2 );
     }
     if ( bHVisible && !aHScroll->IsVisible() )
         aPixOffset.setX( 0 );

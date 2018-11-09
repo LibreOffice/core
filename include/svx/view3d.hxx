@@ -47,8 +47,6 @@ protected:
     Color                       aDefaultLightColor;             // The parameters for the last colors
     Color                       aDefaultAmbientColor;
 
-    E3dDragConstraint           eDragConstraint;
-
     // Migrate selections
     std::unique_ptr<Impl3DMirrorConstructOverlay> mpMirrorOverlay;
 

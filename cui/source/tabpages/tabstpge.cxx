@@ -32,6 +32,8 @@
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
+constexpr FieldUnit eDefUnit = FieldUnit::MM_100TH;
+
 const sal_uInt16 SvxTabulatorTabPage::pRanges[] =
 {
     SID_ATTR_TABSTOP,
@@ -69,7 +71,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet
     , aCurrentTab(0)
     , aNewTabs(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP))
     , nDefDist(0)
-    , eDefUnit(FieldUnit::MM_100TH)
     , m_xTabSpin(m_xBuilder->weld_metric_spin_button("SP_TABPOS", FieldUnit::CM))
     , m_xTabBox(m_xBuilder->weld_entry_tree_view("tabgrid", "ED_TABPOS", "LB_TABPOS"))
     , m_xCenterTab(m_xBuilder->weld_radio_button("radiobuttonBTN_TABTYPE_CENTER"))

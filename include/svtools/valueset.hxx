@@ -443,7 +443,6 @@ private:
     bool            mbBlackSel : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
-    bool            mbFullMode : 1;
     bool            mbEdgeBlending : 1;
     bool            mbHasVisibleItems : 1;
 

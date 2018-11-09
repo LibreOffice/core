@@ -65,13 +65,7 @@ struct ImplMouseData
     long                            mnDoubleClkHeight   = 2;
     long                            mnStartDragWidth    = 2 ;
     long                            mnStartDragHeight   = 2;
-    sal_uInt16                      mnStartDragCode     = MOUSE_LEFT;
-    sal_uInt16                      mnContextMenuCode   = MOUSE_RIGHT;
-    sal_uInt16                      mnContextMenuClicks = 1;
-    sal_uLong                       mnScrollRepeat      = 100;
-    sal_uLong                       mnButtonStartRepeat = 370;
     sal_uLong                       mnButtonRepeat      = 90;
-    sal_uLong                       mnActionDelay       = 250;
     sal_uLong                       mnMenuDelay         = 150;
     MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu | MouseFollowFlags::DDList;
     MouseMiddleButtonAction         mnMiddleButtonAction= MouseMiddleButtonAction::AutoScroll;
@@ -151,11 +145,9 @@ struct ImplStyleData
     vcl::Font                       maIconFont;
     vcl::Font                       maTabFont;
     vcl::Font                       maGroupFont;
-    long                            mnBorderSize;
     long                            mnTitleHeight;
     long                            mnFloatTitleHeight;
     long                            mnScrollBarSize;
-    long                            mnSplitSize;
     long                            mnSpinSize;
     long                            mnCursorSize;
     long                            mnAntialiasedMin;
@@ -199,10 +191,8 @@ struct ImplStyleData
     Color                           maEdgeBlendingBottomRightColor;
     sal_uInt16                      mnListBoxMaximumLineCount;
     sal_uInt16                      mnColorValueSetColumnCount;
-    sal_uInt16                      mnColorValueSetMaximumRowCount;
     Size                            maListBoxPreviewDefaultLogicSize;
     Size                            maListBoxPreviewDefaultPixelSize;
-    sal_uInt16                      mnListBoxPreviewDefaultLineWidth;
     bool                            mbPreviewUsesCheckeredBackground;
 
     OUString                        maPersonaHeaderFooter; ///< Cache the settings to detect changes.
@@ -223,9 +213,7 @@ struct ImplMiscData
 
 struct ImplHelpData
 {
-    sal_uLong                           mnTipDelay = 500;
     sal_uLong                           mnTipTimeout = 3000;
-    sal_uLong                           mnBalloonDelay = 1500;
 };
 
 struct ImplAllSettingsData
@@ -239,7 +227,6 @@ struct ImplAllSettingsData
     MiscSettings                            maMiscSettings;
     HelpSettings                            maHelpSettings;
     LanguageTag                             maLocale;
-    AllSettingsFlags                        mnWindowUpdate;
     LanguageTag                             maUILocale;
     std::unique_ptr<LocaleDataWrapper>      mpLocaleDataWrapper;
     std::unique_ptr<LocaleDataWrapper>      mpUILocaleDataWrapper;
@@ -329,31 +316,31 @@ MouseSettings::GetStartDragHeight() const
 sal_uInt16
 MouseSettings::GetStartDragCode() const
 {
-    return mxData->mnStartDragCode;
+    return MOUSE_LEFT;
 }
 
 sal_uInt16
 MouseSettings::GetContextMenuCode() const
 {
-    return mxData->mnContextMenuCode;
+    return MOUSE_RIGHT;
 }
 
 sal_uInt16
 MouseSettings::GetContextMenuClicks() const
 {
-    return mxData->mnContextMenuClicks;
+    return 1;
 }
 
 sal_uLong
 MouseSettings::GetScrollRepeat() const
 {
-    return mxData->mnScrollRepeat;
+    return 100;
 }
 
 sal_uLong
 MouseSettings::GetButtonStartRepeat() const
 {
-    return mxData->mnButtonStartRepeat;
+    return 370;
 }
 
 void
@@ -372,7 +359,7 @@ MouseSettings::GetButtonRepeat() const
 sal_uLong
 MouseSettings::GetActionDelay() const
 {
-    return mxData->mnActionDelay;
+    return 250;
 }
 
 void
@@ -459,14 +446,8 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mxData->mnDoubleClkHeight     == rSet.mxData->mnDoubleClkHeight)      &&
          (mxData->mnStartDragWidth      == rSet.mxData->mnStartDragWidth)       &&
          (mxData->mnStartDragHeight     == rSet.mxData->mnStartDragHeight)      &&
-         (mxData->mnStartDragCode       == rSet.mxData->mnStartDragCode)        &&
-         (mxData->mnContextMenuCode     == rSet.mxData->mnContextMenuCode)      &&
-         (mxData->mnContextMenuClicks   == rSet.mxData->mnContextMenuClicks)    &&
          (mxData->mnMiddleButtonAction  == rSet.mxData->mnMiddleButtonAction)   &&
-         (mxData->mnScrollRepeat        == rSet.mxData->mnScrollRepeat)         &&
-         (mxData->mnButtonStartRepeat   == rSet.mxData->mnButtonStartRepeat)    &&
          (mxData->mnButtonRepeat        == rSet.mxData->mnButtonRepeat)         &&
-         (mxData->mnActionDelay         == rSet.mxData->mnActionDelay)          &&
          (mxData->mnMenuDelay           == rSet.mxData->mnMenuDelay)            &&
          (mxData->mnFollow              == rSet.mxData->mnFollow)               &&
          (mxData->mnWheelBehavior       == rSet.mxData->mnWheelBehavior );
@@ -474,7 +455,6 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 
 ImplStyleData::ImplStyleData() :
     mnScrollBarSize(16),
-    mnSplitSize(3),
     mnSpinSize(16),
     mnCursorSize(2),
     mnAntialiasedMin(0),
@@ -494,10 +474,8 @@ ImplStyleData::ImplStyleData() :
     maEdgeBlendingBottomRightColor(Color(0x40, 0x40, 0x40)),
     mnListBoxMaximumLineCount(25),
     mnColorValueSetColumnCount(12),
-    mnColorValueSetMaximumRowCount(10),
     maListBoxPreviewDefaultLogicSize(Size(15, 7)),
     maListBoxPreviewDefaultPixelSize(Size(0, 0)), // on-demand calculated in GetListBoxPreviewDefaultPixelSize(),
-    mnListBoxPreviewDefaultLineWidth(1),
     mbPreviewUsesCheckeredBackground(true)
 {
     SetStandardStyles();
@@ -570,11 +548,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maIconFont( rData.maIconFont ),
     maTabFont( rData.maTabFont ),
     maGroupFont( rData.maGroupFont ),
-    mnBorderSize(rData.mnBorderSize),
     mnTitleHeight(rData.mnTitleHeight),
     mnFloatTitleHeight(rData.mnFloatTitleHeight),
     mnScrollBarSize(rData.mnScrollBarSize),
-    mnSplitSize(rData.mnSplitSize),
     mnSpinSize(rData.mnSpinSize),
     mnCursorSize(rData.mnCursorSize),
     mnAntialiasedMin(rData.mnAntialiasedMin),
@@ -608,10 +584,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maEdgeBlendingBottomRightColor(rData.maEdgeBlendingBottomRightColor),
     mnListBoxMaximumLineCount(rData.mnListBoxMaximumLineCount),
     mnColorValueSetColumnCount(rData.mnColorValueSetColumnCount),
-    mnColorValueSetMaximumRowCount(rData.mnColorValueSetMaximumRowCount),
     maListBoxPreviewDefaultLogicSize(rData.maListBoxPreviewDefaultLogicSize),
     maListBoxPreviewDefaultPixelSize(rData.maListBoxPreviewDefaultPixelSize),
-    mnListBoxPreviewDefaultLineWidth(rData.mnListBoxPreviewDefaultLineWidth),
     mbPreviewUsesCheckeredBackground(rData.mbPreviewUsesCheckeredBackground),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
     maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
@@ -698,7 +672,6 @@ void ImplStyleData::SetStandardStyles()
     maFontColor                 = COL_BLACK;
     maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
 
-    mnBorderSize                = 1;
     mnTitleHeight               = 18;
     mnFloatTitleHeight          = 13;
     mbHighContrast              = false;
@@ -1695,7 +1668,7 @@ StyleSettings::GetTabFont() const
 long
 StyleSettings::GetBorderSize() const
 {
-    return mxData->mnBorderSize;
+    return 1;
 }
 
 void
@@ -1766,7 +1739,7 @@ StyleSettings::GetSpinSize() const
 long
 StyleSettings::GetSplitSize() const
 {
-    return mxData->mnSplitSize;
+    return 3;
 }
 
 void
@@ -1980,13 +1953,13 @@ StyleSettings::GetColorValueSetColumnCount() const
 sal_uInt16
 StyleSettings::GetColorValueSetMaximumRowCount() const
 {
-    return mxData->mnColorValueSetMaximumRowCount;
+    return 10;
 }
 
 sal_uInt16
 StyleSettings::GetListBoxPreviewDefaultLineWidth() const
 {
-    return mxData->mnListBoxPreviewDefaultLineWidth;
+    return 1;
 }
 
 void
@@ -2250,12 +2223,10 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mnDisplayOptions          == rSet.mxData->mnDisplayOptions)           &&
          (mxData->mnCursorSize              == rSet.mxData->mnCursorSize)               &&
          (mxData->mnCursorBlinkTime         == rSet.mxData->mnCursorBlinkTime)          &&
-         (mxData->mnBorderSize              == rSet.mxData->mnBorderSize)               &&
          (mxData->mnTitleHeight             == rSet.mxData->mnTitleHeight)              &&
          (mxData->mnFloatTitleHeight        == rSet.mxData->mnFloatTitleHeight)         &&
          (mxData->mnScrollBarSize           == rSet.mxData->mnScrollBarSize)            &&
          (mxData->mnMinThumbSize            == rSet.mxData->mnMinThumbSize)             &&
-         (mxData->mnSplitSize               == rSet.mxData->mnSplitSize)                &&
          (mxData->mnSpinSize                == rSet.mxData->mnSpinSize)                 &&
          (mxData->mnAntialiasedMin          == rSet.mxData->mnAntialiasedMin)           &&
          (mxData->mbHighContrast            == rSet.mxData->mbHighContrast)             &&
@@ -2336,10 +2307,8 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maEdgeBlendingBottomRightColor    == rSet.mxData->maEdgeBlendingBottomRightColor)     &&
          (mxData->mnListBoxMaximumLineCount         == rSet.mxData->mnListBoxMaximumLineCount)          &&
          (mxData->mnColorValueSetColumnCount        == rSet.mxData->mnColorValueSetColumnCount)         &&
-         (mxData->mnColorValueSetMaximumRowCount    == rSet.mxData->mnColorValueSetMaximumRowCount)     &&
          (mxData->maListBoxPreviewDefaultLogicSize  == rSet.mxData->maListBoxPreviewDefaultLogicSize)   &&
          (mxData->maListBoxPreviewDefaultPixelSize  == rSet.mxData->maListBoxPreviewDefaultPixelSize)   &&
-         (mxData->mnListBoxPreviewDefaultLineWidth  == rSet.mxData->mnListBoxPreviewDefaultLineWidth)   &&
          (mxData->mbPreviewUsesCheckeredBackground == rSet.mxData->mbPreviewUsesCheckeredBackground);
 }
 
@@ -2544,15 +2513,13 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
     if ( mxData == rSet.mxData )
         return true;
 
-    return (mxData->mnTipDelay        == rSet.mxData->mnTipDelay ) &&
-         (mxData->mnTipTimeout      == rSet.mxData->mnTipTimeout ) &&
-         (mxData->mnBalloonDelay    == rSet.mxData->mnBalloonDelay );
+    return (mxData->mnTipTimeout      == rSet.mxData->mnTipTimeout );
 }
 
 sal_uLong
 HelpSettings::GetTipDelay() const
 {
-    return mxData->mnTipDelay;
+    return 500;
 }
 
 void
@@ -2575,7 +2542,7 @@ HelpSettings::GetTipTimeout() const
 sal_uLong
 HelpSettings::GetBalloonDelay() const
 {
-    return mxData->mnBalloonDelay;
+    return 1500;
 }
 
 bool
@@ -2587,8 +2554,6 @@ HelpSettings::operator !=( const HelpSettings& rSet ) const
 ImplAllSettingsData::ImplAllSettingsData()
     :
         maLocale( LANGUAGE_SYSTEM ),
-        mnWindowUpdate( AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
-                        AllSettingsFlags::MISC | AllSettingsFlags::LOCALE ),
         maUILocale( LANGUAGE_SYSTEM )
 {
     if (!utl::ConfigManager::IsFuzzing())
@@ -2601,7 +2566,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maMiscSettings( rData.maMiscSettings ),
     maHelpSettings( rData.maHelpSettings ),
     maLocale( rData.maLocale ),
-    mnWindowUpdate( rData.mnWindowUpdate ),
     maUILocale( rData.maUILocale )
 {
     // Create the cache objects new when their getter is called.
@@ -2703,8 +2667,7 @@ bool AllSettings::operator ==( const AllSettings& rSet ) const
          (mxData->maStyleSettings           == rSet.mxData->maStyleSettings)        &&
          (mxData->maMiscSettings            == rSet.mxData->maMiscSettings)         &&
          (mxData->maHelpSettings            == rSet.mxData->maHelpSettings)         &&
-         (mxData->maLocale                  == rSet.mxData->maLocale)               &&
-         (mxData->mnWindowUpdate            == rSet.mxData->mnWindowUpdate) )
+         (mxData->maLocale                  == rSet.mxData->maLocale) )
     {
         return true;
     }
@@ -3027,7 +2990,8 @@ AllSettings::GetHelpSettings() const
 AllSettingsFlags
 AllSettings::GetWindowUpdate() const
 {
-    return mxData->mnWindowUpdate;
+    return AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
+           AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
 }
 
 bool

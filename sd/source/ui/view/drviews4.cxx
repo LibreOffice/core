@@ -826,15 +826,11 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
         nCnt = 1;
         pHLines[0].nPos = rRect.Left() - nHOffs;
         pVLines[0].nPos = rRect.Top()  - nVOffs;
-        pHLines[0].nStyle = 0;
-        pVLines[0].nStyle = 0;
 
         if ( rRect.Right() != rRect.Left() || rRect.Bottom() != rRect.Top() )
         {
             pHLines[1].nPos = rRect.Right()  - nHOffs;
             pVLines[1].nPos = rRect.Bottom() - nVOffs;
-            pHLines[1].nStyle = 0;
-            pVLines[1].nStyle = 0;
             nCnt++;
         }
 

@@ -58,7 +58,6 @@ namespace dbaui
         StringQueue     m_aStatementHistory;    // previous statements
         StringQueue     m_aNormalizedHistory;   // previous statements, normalized to be used in the list box
 
-        sal_Int32       m_nHistoryLimit;
         sal_Int32       m_nStatusCount;
 
         css::uno::Reference< css::sdbc::XConnection >
