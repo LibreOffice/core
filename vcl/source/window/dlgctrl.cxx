@@ -187,6 +187,21 @@ static vcl::Window* ImplGetNextWindow( vcl::Window* pParent, sal_uInt16 n, sal_u
 
 namespace vcl {
 
+static bool lcl_ToolBoxTabStop( Window* pWindow )
+{
+    ToolBox* pToolBoxWindow = static_cast<ToolBox*>( pWindow );
+
+    sal_uInt16 nId;
+    for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < pToolBoxWindow->GetItemCount(); nPos++ )
+    {
+        nId = pToolBoxWindow->GetItemId( nPos );
+        if ( pToolBoxWindow->IsItemVisible( nId ) && pToolBoxWindow->IsItemEnabled( nId ) )
+            return true;
+    }
+
+    return false;
+}
+
 vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType,
                                   sal_uInt16 nFormStart, sal_uInt16 nFormEnd,
                                   sal_uInt16* pIndex )
@@ -212,7 +227,15 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
             if ( !pWindow )
                 break;
             if ( (i == nTemp) && (pWindow->GetStyle() & WB_TABSTOP) )
-                break;
+            {
+                if ( WindowType::TOOLBOX == pWindow->GetType() )
+                {
+                    if ( lcl_ToolBoxTabStop( pWindow ) )
+                        break;
+                }
+                else
+                    break;
+            }
         }
         while ( i != nIndex );
     }
@@ -245,7 +268,15 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
                 do
                 {
                     if ( pWindow->GetStyle() & WB_TABSTOP )
-                        break;
+                    {
+                        if ( WindowType::TOOLBOX == pWindow->GetType() )
+                        {
+                            if ( lcl_ToolBoxTabStop( pWindow ) )
+                                break;
+                        }
+                        else
+                            break;
+                    }
                     if( i == nOldIndex ) // only disabled controls ?
                     {
                         i = nStartIndex2;
