@@ -418,7 +418,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         {
             aPropSet.setProperty<sal_Int32>( PROP_ParaLeftMargin, 0);
             rioBulletMap.setProperty( PROP_LeftMargin, *noParaLeftMargin);
-            noParaLeftMargin = boost::none;
+            noParaLeftMargin.reset();
         }
         if ( noFirstLineIndentation )
         {
@@ -426,7 +426,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             // (non) bullet line if not set to zero explicitly :(
             aPropSet.setProperty<sal_Int32>( PROP_ParaFirstLineIndent, 0);
             rioBulletMap.setProperty( PROP_FirstLineOffset, *noFirstLineIndentation);
-            noFirstLineIndentation = boost::none;
+            noFirstLineIndentation.reset();
         }
         if ( nNumberingType != NumberingType::BITMAP && !rioBulletMap.hasProperty( PROP_BulletColor ) && pFilterBase )
             rioBulletMap.setProperty( PROP_BulletColor, maTextCharacterProperties.maFillProperties.getBestSolidColor().getColor( pFilterBase->getGraphicHelper()));

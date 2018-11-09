@@ -482,9 +482,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     {
                         OUString aPoint = aToken.getToken(0, ',', nI);
                         if (!oX)
-                            oX.reset(aPoint.toInt32());
+                            oX = aPoint.toInt32();
                         else
-                            oY.reset(aPoint.toInt32());
+                            oY = aPoint.toInt32();
                     } while (nI >= 0);
                     drawing::EnhancedCustomShapeParameterPair aPair;
                     aPair.First.Value <<= *oX;
@@ -693,21 +693,21 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             }
         }
         else if (rProperty.first == "groupLeft")
-            oGroupLeft.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oGroupLeft = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "groupTop")
-            oGroupTop.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oGroupTop = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "groupRight")
-            oGroupRight.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oGroupRight = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "groupBottom")
-            oGroupBottom.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oGroupBottom = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "relLeft")
-            oRelLeft.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oRelLeft = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "relTop")
-            oRelTop.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oRelTop = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "relRight")
-            oRelRight.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oRelRight = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "relBottom")
-            oRelBottom.reset(convertTwipToMm100(rProperty.second.toInt32()));
+            oRelBottom = convertTwipToMm100(rProperty.second.toInt32());
         else if (rProperty.first == "fBehindDocument")
             bOpaque = !rProperty.second.toInt32();
         else if (rProperty.first == "pctHoriz" || rProperty.first == "pctVert")
@@ -835,9 +835,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     {
                         OUString aPoint = aToken.getToken(0, ',', nI);
                         if (!oX)
-                            oX.reset(aPoint.toInt32());
+                            oX = aPoint.toInt32();
                         else
-                            oY.reset(aPoint.toInt32());
+                            oY = aPoint.toInt32();
                     } while (nI >= 0);
                     RTFSprms aPathAttributes;
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, new RTFValue(*oX));

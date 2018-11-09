@@ -1534,7 +1534,7 @@ boost::optional<SvxBrushItem> MSWordExportBase::getBackground()
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
         if (aBrush.GetColor() != COL_AUTO)
-            oRet.reset(aBrush);
+            oRet = aBrush;
     }
     return oRet;
 }

@@ -56,9 +56,9 @@ void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip )
     if(nBytesToSkip <= 0)
         return;
 
-    if(m_buf != boost::none)
+    if(m_buf)
     {
-        m_buf = boost::none;
+        m_buf.reset();
         --nBytesToSkip;
     }
 
@@ -69,14 +69,14 @@ void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip )
     {
         assert(nBytesToSkip % sizeof(jchar) == 1);
         Sequence< sal_Int8 > aData(1);
-        assert(m_buf == boost::none);
+        assert(m_buf);
         readBytes(aData, 1);
     }
 }
 
 sal_Int32 SAL_CALL java_io_Reader::available(  )
 {
-    if(m_buf != boost::none)
+    if(m_buf)
         return 1;
     jboolean out;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
@@ -90,7 +90,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  )
         out = t.pEnv->CallBooleanMethod( object, mID);
         ThrowRuntimeException(t.pEnv,*this);
     } //t.pEnv
-    return (m_buf != boost::none ? 1 : 0) + (out ? 1 : 0); // no way to tell *how much* is ready
+    return (m_buf ? 1 : 0) + (out ? 1 : 0); // no way to tell *how much* is ready
 }
 
 void SAL_CALL java_io_Reader::closeInput(  )
@@ -109,7 +109,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
     sal_Int8 *dst(aData.getArray());
     sal_Int32 nBytesWritten(0);
 
-    if(m_buf != boost::none)
+    if (m_buf)
     {
         if(aData.getLength() == 0)
         {
@@ -117,7 +117,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
             dst = aData.getArray();
         }
         *dst = *m_buf;
-        m_buf = boost::none;
+        m_buf.reset();
         ++nBytesWritten;
         ++dst;
         --nBytesToRead;
@@ -166,7 +166,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
             if(outBytes < outChars*jcs)
             {
                 assert(outChars*jcs - outBytes == 1);
-                assert(m_buf == boost::none);
+                assert(!m_buf);
                 m_buf = reinterpret_cast<char*>(outBuf)[outBytes];
             }
         }

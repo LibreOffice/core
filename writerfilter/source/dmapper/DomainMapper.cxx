@@ -1031,7 +1031,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Background_color:
             if (m_pImpl->GetSettingsTable()->GetDisplayBackgroundShape())
-                m_pImpl->m_oBackgroundColor.reset(nIntValue);
+                m_pImpl->m_oBackgroundColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_PageNumber_start:
             if (pSectionContext != nullptr)

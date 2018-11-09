@@ -52,7 +52,7 @@ short SwBreakDlg::run()
             if (nPos != 0 && nPos != -1)
             {
                 m_aTemplate = m_xPageCollBox->get_active_text();
-                oPgNum = boost::none;
+                oPgNum.reset();
                 if (m_xPageNumBox->get_active())
                 {
                     oPgNum = static_cast<sal_uInt16>(m_xPageNumEdit->get_value());

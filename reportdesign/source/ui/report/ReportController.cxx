@@ -592,7 +592,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_INSERT_DIAGRAM:
             aReturn.bEnabled = isEditable();
-            aReturn.bInvisible = optional< bool >(!m_bChartEnabled);
+            aReturn.bInvisible = !m_bChartEnabled;
             aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_OLE2;
             break;
         case SID_FM_FIXEDTEXT:

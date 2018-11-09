@@ -1072,7 +1072,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                 if (pLeavingSlide) {
                                     // only generate, if fade
                                     // effect really needs it.
-                                    leavingSlide.reset( pLeavingSlide );
+                                    leavingSlide = pLeavingSlide;
                                 }
                                 aFadeColor = rTransitionFadeColor;
                                 break;

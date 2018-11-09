@@ -390,7 +390,7 @@ AnimationBaseNode::fillCommonParameters() const
     boost::optional<double> aRepeats;
     double nRepeats = 0;
     if( mxAnimateNode->getRepeatCount() >>= nRepeats ) {
-        aRepeats.reset( nRepeats );
+        aRepeats = nRepeats;
     }
     else {
         if( mxAnimateNode->getRepeatDuration() >>= nRepeats ) {
@@ -402,9 +402,9 @@ AnimationBaseNode::fillCommonParameters() const
 
             // convert duration back to repeat counts
             if( bAutoReverse )
-                aRepeats.reset( nRepeats / (2.0 * nDuration) );
+                aRepeats = nRepeats / (2.0 * nDuration);
             else
-                aRepeats.reset( nRepeats / nDuration );
+                aRepeats = nRepeats / nDuration;
         }
         else
         {
@@ -419,7 +419,7 @@ AnimationBaseNode::fillCommonParameters() const
                 {
                     // no indefinite timing, no other values given -
                     // use simple run, i.e. repeat of 1.0
-                    aRepeats.reset( 1.0 );
+                    aRepeats = 1.0;
                 }
             }
         }

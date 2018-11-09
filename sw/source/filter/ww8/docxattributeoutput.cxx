@@ -8279,7 +8279,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
     if (!m_bIgnoreNextFill)
-        m_oFillStyle.reset(rFillStyle.GetValue());
+        m_oFillStyle = rFillStyle.GetValue();
     else
         m_bIgnoreNextFill = false;
 

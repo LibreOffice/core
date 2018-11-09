@@ -451,7 +451,7 @@ void DomainMapperTableManager::startLevel( )
     boost::optional<sal_Int32> oCurrentWidth;
     if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
     {
-        oCurrentWidth.reset(m_aCellWidths.back()->back());
+        oCurrentWidth = m_aCellWidths.back()->back();
         m_aCellWidths.back()->pop_back();
     }
 
@@ -491,7 +491,7 @@ void DomainMapperTableManager::endLevel( )
     // Do the same trick as in startLevel(): pop the value that was pushed too early.
     boost::optional<sal_Int32> oCurrentWidth;
     if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
-        oCurrentWidth.reset(m_aCellWidths.back()->back());
+        oCurrentWidth = m_aCellWidths.back()->back();
     m_aCellWidths.pop_back( );
     // And push it back to the right level.
     if (oCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())

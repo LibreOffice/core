@@ -2115,7 +2115,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
     rHeaderFooter = aOldValue;
     rHeaderFooterBitmap = BitmapEx();
-    rMenuBarTextColor = boost::none;
+    rMenuBarTextColor.reset();
 
     // now read the new values and setup bitmaps
     OUString aHeader, aFooter;

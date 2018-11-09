@@ -118,7 +118,7 @@ public:
                 if (!next(&url, false)) {
                     throw CommandLineArgs::Supplier::Exception();
                 }
-                m_cwdUrl.reset(url);
+                m_cwdUrl = url;
                 break;
             }
         case '2':
@@ -131,7 +131,7 @@ public:
                 if (osl::FileBase::getFileURLFromSystemPath(path, url) ==
                     osl::FileBase::E_None)
                 {
-                    m_cwdUrl.reset(url);
+                    m_cwdUrl = url;
                 }
                 break;
             }

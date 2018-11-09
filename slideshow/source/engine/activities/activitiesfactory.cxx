@@ -403,21 +403,21 @@ AnimationActivitySharedPtr createFromToByActivity(
         ENSURE_OR_THROW(
             extractValue( aTmpValue, rFromAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract from value" );
-        aFrom.reset(aTmpValue);
+        aFrom = aTmpValue;
     }
     if( rToAny.hasValue() )
     {
         ENSURE_OR_THROW(
             extractValue( aTmpValue, rToAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract to value" );
-        aTo.reset(aTmpValue);
+        aTo = aTmpValue;
     }
     if( rByAny.hasValue() )
     {
         ENSURE_OR_THROW(
             extractValue( aTmpValue, rByAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract by value" );
-        aBy.reset(aTmpValue);
+        aBy = aTmpValue;
     }
 
     return AnimationActivitySharedPtr(

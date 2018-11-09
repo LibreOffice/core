@@ -513,7 +513,7 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
 
 void SdrObject::SetRelativeWidth( double nValue )
 {
-    mpImpl->mnRelativeWidth.reset( nValue );
+    mpImpl->mnRelativeWidth = nValue;
 }
 
 void SdrObject::SetRelativeWidthRelation( sal_Int16 eValue )
@@ -523,7 +523,7 @@ void SdrObject::SetRelativeWidthRelation( sal_Int16 eValue )
 
 void SdrObject::SetRelativeHeight( double nValue )
 {
-    mpImpl->mnRelativeHeight.reset( nValue );
+    mpImpl->mnRelativeHeight = nValue;
 }
 
 void SdrObject::SetRelativeHeightRelation( sal_Int16 eValue )

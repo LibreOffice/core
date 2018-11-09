@@ -222,7 +222,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
     else
     {
         SbxVarEntry& rRef = reinterpret_cast<SbxVarEntry&>( GetRef( nIdx ) );
-        rRef.maAlias.reset(rAlias);
+        rRef.maAlias = rAlias;
     }
 }
 
@@ -327,7 +327,7 @@ void SbxArray::Merge( SbxArray* p )
             SbxVarEntry aNewEntry;
             aNewEntry.mpVar = rEntry1.mpVar;
             if (rEntry1.maAlias)
-                aNewEntry.maAlias.reset(*rEntry1.maAlias);
+                aNewEntry.maAlias = *rEntry1.maAlias;
             mVarEntries.push_back(aNewEntry);
         }
     }

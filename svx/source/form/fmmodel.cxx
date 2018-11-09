@@ -39,12 +39,10 @@ struct FmFormModelImplData
 {
     rtl::Reference<FmXUndoEnvironment>  mxUndoEnv;
     bool                bOpenInDesignIsDefaulted;
-    ::boost::optional< sal_Bool >
-                            aControlsUseRefDevice;
+    boost::optional<bool> aControlsUseRefDevice;
 
     FmFormModelImplData()
         :bOpenInDesignIsDefaulted( true )
-        ,aControlsUseRefDevice()
     {
     }
 };
@@ -161,7 +159,7 @@ bool FmFormModel::ControlsUseRefDevice() const
         DocumentType eDocType = eUnknownDocumentType;
         if ( m_pObjShell )
             eDocType = DocumentClassification::classifyHostDocument( m_pObjShell->GetModel() );
-        m_pImpl->aControlsUseRefDevice.reset( ControlLayouter::useDocumentReferenceDevice( eDocType ) );
+        m_pImpl->aControlsUseRefDevice = ControlLayouter::useDocumentReferenceDevice(eDocType);
     }
     return *m_pImpl->aControlsUseRefDevice;
 }

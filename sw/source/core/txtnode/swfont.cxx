@@ -79,7 +79,7 @@ void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
         m_aTopBorder = *pTopBorder;
     else
     {
-        m_aTopBorder = boost::none;
+        m_aTopBorder.reset();
         m_nTopBorderDist = 0;
     }
     m_bFontChg = true;
@@ -92,7 +92,7 @@ void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
         m_aBottomBorder = *pBottomBorder;
     else
     {
-        m_aBottomBorder = boost::none;
+        m_aBottomBorder.reset();
         m_nBottomBorderDist = 0;
     }
     m_bFontChg = true;
@@ -105,7 +105,7 @@ void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
         m_aRightBorder = *pRightBorder;
     else
     {
-        m_aRightBorder = boost::none;
+        m_aRightBorder.reset();
         m_nRightBorderDist = 0;
     }
     m_bFontChg = true;
@@ -118,7 +118,7 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
         m_aLeftBorder = *pLeftBorder;
     else
     {
-        m_aLeftBorder = boost::none;
+        m_aLeftBorder.reset();
         m_nLeftBorderDist = 0;
     }
     m_bFontChg = true;
