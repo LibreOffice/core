@@ -209,7 +209,7 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
         }
         if ( !_rsHostname.isEmpty() )
             _rsHostname = _rsHostname.copy(_rsHostname.lastIndexOf('@')+1);
-        _sDatabaseName = sUrl.getToken(nUrlTokens - 1, ':');
+        _sDatabaseName = sUrl.copy(sUrl.lastIndexOf(':')+1);
     }
     else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:address:ldap:") )
     {
@@ -223,7 +223,7 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
         const sal_Int32 nUrlTokens {comphelper::string::getTokenCount(sUrl, '/')};
         if ( _nPortNumber == -1 && _rsHostname.isEmpty() && nUrlTokens == 2 )
             _rsHostname = sUrl.getToken(0,'/');
-        _sDatabaseName = sUrl.getToken(nUrlTokens - 1, '/');
+        _sDatabaseName = sUrl.copy(sUrl.lastIndexOf('/')+1);
     }
     else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")
            || _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") )
