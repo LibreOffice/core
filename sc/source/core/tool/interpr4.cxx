@@ -1490,6 +1490,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 {
                     formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if ( eType != formula::ParamClass::Reference &&
+                            eType != formula::ParamClass::ReferenceOrRefArray &&
                             eType != formula::ParamClass::ReferenceOrForceArray &&
                             // For scalar Value: convert to Array/JumpMatrix
                             // only if in array formula context, else (function
@@ -1554,6 +1555,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 {
                     formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if ( eType != formula::ParamClass::Reference &&
+                            eType != formula::ParamClass::ReferenceOrRefArray &&
                             eType != formula::ParamClass::ReferenceOrForceArray &&
                             eType != formula::ParamClass::ForceArray)
                     {

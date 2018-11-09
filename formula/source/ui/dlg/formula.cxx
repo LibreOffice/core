@@ -753,6 +753,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                                     aUnforcedResult.clear();
                             break;
                             case ParamClass::Reference:
+                            case ParamClass::ReferenceOrRefArray:
                             case ParamClass::Array:
                             case ParamClass::ForceArray:
                             case ParamClass::ReferenceOrForceArray:

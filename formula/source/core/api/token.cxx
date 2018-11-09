@@ -150,7 +150,8 @@ bool FormulaToken::IsRef() const
 bool FormulaToken::IsInForceArray() const
 {
     ParamClass eParam = GetInForceArray();
-    return eParam == ParamClass::ForceArray || eParam == ParamClass::ReferenceOrForceArray;
+    return eParam == ParamClass::ForceArray || eParam == ParamClass::ReferenceOrForceArray
+        || eParam == ParamClass::ReferenceOrRefArray;
 }
 
 bool FormulaToken::operator==( const FormulaToken& rToken ) const
