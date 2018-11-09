@@ -7437,10 +7437,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-Shadowed">
+                                      <object class="GtkToolButton" id="Home-Strikeout">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:Shadowed</property>
+                                        <property name="action_name">.uno:Strikeout</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -7448,10 +7448,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-Strikeout">
+                                      <object class="GtkToolButton" id="Home-Shadowed">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:Strikeout</property>
+                                        <property name="action_name">.uno:Shadowed</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
