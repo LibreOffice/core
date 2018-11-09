@@ -2599,18 +2599,19 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
         // Aggregate functions in general only available with Core SQL
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
+            sal_Int32 nIdx {0};
             // if we have an asterisk, no other function than count is allowed
             m_pFunctionCell->Clear();
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';'));
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
             if ( isFieldNameAsterisk(_pEntry->GetField()) )
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(1, ';', nIdx)); // 2nd token: COUNT
             else
             {
                 sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
                 if ( _pEntry->isNumeric() )
                     --nCount;
-                for( sal_Int32 nIdx = 1; nIdx < nCount; nIdx++ )
-                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(nIdx, ';'));
+                for( sal_Int32 nTok = 1; nTok < nCount; ++nTok )
+                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
             }
 
             if ( _pEntry->IsGroupBy() )
