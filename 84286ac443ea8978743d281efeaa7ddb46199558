@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_82c2c3e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-09T13:22:33Z",
+      "side": 1,
+      "message": "...which is supposed to fix what?\n\nI assume what happens is that the absolute file URL manifest Class-Path references in jars like workdir/Jar/test.jar:meta-inf/manifest.mf (who\u0027s meta-inf/manifest.mf Class-Path contains\n\n  file:///.../instdir/program/classes/juh.jar\n\namong others) are broken in some OpenJDK versions (see the link to a Debian OpenJDK 10 with OpenJDK 11 security fix backports in Rene\u0027s 2018-10-23 comment at \u003chttps://gerrit.libreoffice.org/#/c/62203/\u003e \"add missing juh dependencies to JunitTests\").",
+      "revId": "84286ac443ea8978743d281efeaa7ddb46199558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
