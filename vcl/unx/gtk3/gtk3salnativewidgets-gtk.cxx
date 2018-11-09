@@ -3389,9 +3389,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpFrame( pFrame ),
       mpWindow( pWindow )
 {
-    /* Set Custom Widget Draw*/
-    m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
-
     if (style_loaded)
         return;
 

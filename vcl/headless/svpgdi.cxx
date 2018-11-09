@@ -41,6 +41,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <comphelper/lok.hxx>
 #include <unx/gendata.hxx>
 
 #if ENABLE_CAIRO_CANVAS
@@ -600,7 +601,8 @@ SvpSalGraphics::SvpSalGraphics()
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
 {
-    m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
 }
 
 SvpSalGraphics::~SvpSalGraphics()
