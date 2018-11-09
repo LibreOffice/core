@@ -1060,7 +1060,7 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     const sal_Int32 nLastBoxLen = pTableNmBox->getLength();
     const sal_Int32 nSeparator = pTableNmBox->indexOf('.');
     if ( nSeparator>=0 &&
-        // If there are dots in the name, than these appear in pairs (e.g. A1.1.1)!
+        // If there are dots in the name, then these appear in pairs (e.g. A1.1.1)!
         (comphelper::string::getTokenCount(*pTableNmBox, '.') - 1) & 1 )
     {
         sTableNm = pTableNmBox->copy( 0, nSeparator );
