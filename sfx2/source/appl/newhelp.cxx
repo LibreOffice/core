@@ -1034,8 +1034,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
         {
             sal_Int32 nIdx = 0;
             OUString aTitle = rRow.getToken( 0, '\t', nIdx );
-            nIdx = 0;
-            OUString* pURL = new OUString( rRow.getToken( 2, '\t', nIdx ) );
+            OUString* pURL = new OUString( rRow.getToken( 1, '\t', nIdx ) );
             const sal_Int32 nPos = m_pResultsLB->InsertEntry( aTitle );
             m_pResultsLB->SetEntryData( nPos, pURL );
         }
