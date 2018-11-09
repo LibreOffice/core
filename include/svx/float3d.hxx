@@ -171,7 +171,6 @@ private:
 
     // Model, Page, View etc. for favourites
     std::unique_ptr<FmFormModel>         pModel;
-    VclPtr<VirtualDevice> pVDev;
 
     SfxBindings* const                   pBindings;
     std::unique_ptr<Svx3DCtrlItem>       pControllerItem;

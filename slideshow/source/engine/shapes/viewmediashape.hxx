@@ -148,7 +148,6 @@ namespace slideshow
                                              const OUString& rMimeType );
             ViewLayerSharedPtr const              mpViewLayer;
             VclPtr< SystemChildWindow >           mpMediaWindow;
-            VclPtr< vcl::Window >                 mpEventHandlerParent;
             mutable css::awt::Point               maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 
