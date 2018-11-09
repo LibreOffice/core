@@ -312,9 +312,8 @@ void ContentListBox_Impl::dispose()
 
 void ContentListBox_Impl::InitRoot()
 {
-    OUString const aHelpTreeviewURL( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
     std::vector< OUString > aList =
-        SfxContentHelper::GetHelpTreeViewContents( aHelpTreeviewURL );
+        SfxContentHelper::GetHelpTreeViewContents( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
 
     for(const OUString & aRow : aList)
     {
@@ -350,9 +349,8 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
         {
             if ( pParent->GetUserData() )
             {
-                OUString aTmpURL( static_cast<ContentEntry_Impl*>(pParent->GetUserData())->aURL );
                 std::vector<OUString > aList =
-                    SfxContentHelper::GetHelpTreeViewContents( aTmpURL );
+                    SfxContentHelper::GetHelpTreeViewContents( static_cast<ContentEntry_Impl*>(pParent->GetUserData())->aURL );
 
                 for (const OUString & aRow : aList)
                 {
@@ -816,11 +814,10 @@ bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     if ( !sKeyword.isEmpty() )
     {
         sal_Int32 nEntries = m_pIndexCB->GetEntryCount();
-        OUString sIndexItem;
         const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
         for ( sal_Int32 n = 0; n < nEntries; n++)
         {
-            sIndexItem = m_pIndexCB->GetEntry( n );
+            const OUString sIndexItem {m_pIndexCB->GetEntry( n )};
             if (rI18nHelper.MatchString( sIndexItem, sKeyword ))
             {
                 sKeyword = sIndexItem;
@@ -1159,9 +1156,8 @@ void BookmarksBox_Impl::dispose()
     const sal_Int32 nCount = GetEntryCount();
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        OUString aTitle = GetEntry(i);
         OUString* pURL = static_cast<OUString*>(GetEntryData(i));
-        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, "", aTitle, boost::none);
+        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, "", GetEntry(i), boost::none);
         delete pURL;
     }
     ListBox::dispose();
@@ -1187,9 +1183,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                 {
                     OUString* pURL = static_cast<OUString*>(GetEntryData( nPos ));
                     RemoveEntry( nPos );
-                    OUString aImageURL = IMAGE_URL;
-                    aImageURL += INetURLObject( *pURL ).GetHost();
-                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
+                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( INetURLObject(IMAGE_URL+INetURLObject( *pURL ).GetHost()) ) );
                     SetEntryData( nPos, new OUString( *pURL ) );
                     SelectEntryPos( nPos );
                     delete pURL;
@@ -1336,8 +1330,7 @@ OUString BookmarksTabPage_Impl::GetSelectedEntry() const
 
 void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
-    OUString aImageURL = IMAGE_URL;
-    aImageURL += INetURLObject( rURL ).GetHost();
+    const OUString aImageURL {IMAGE_URL + INetURLObject( rURL ).GetHost()};
     const sal_Int32 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
     m_pBookmarksBox->SetEntryData( nPos, new OUString( rURL ) );
 }
@@ -1995,9 +1988,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
     sCurrentFactory = SfxHelp::GetCurrentModuleIdentifier();
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    OUString sPath( PATH_OFFICE_FACTORIES );
-    sPath += sCurrentFactory;
-    OUString sKey( KEY_HELP_ON_OPEN );
+    const OUString sPath { PATH_OFFICE_FACTORIES + sCurrentFactory };
 
     // Attention: This check boy knows two states:
     // 1) Reading of the config key fails with an exception or by getting an empty Any (!) => check box must be hidden
@@ -2011,7 +2002,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
             xContext, PACKAGE_SETUP, EConfigurationModes::Standard );
         if ( xConfiguration.is() )
         {
-            Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );
+            Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, KEY_HELP_ON_OPEN );
             if (aAny >>= bHelpAtStartup)
                 bHideBox = false;
         }
@@ -2031,10 +2022,9 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
         if ( xConfiguration.is() )
         {
             OUString sTemp;
-            sKey = KEY_UI_NAME;
             try
             {
-                Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );
+                Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, KEY_UI_NAME );
                 aAny >>= sTemp;
             }
             catch( Exception& )
@@ -2047,9 +2037,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
         if ( !sModuleName.isEmpty() )
         {
             // set module name in checkbox text
-            OUString sText( aOnStartupText );
-            sText = sText.replaceFirst( "%MODULENAME", sModuleName );
-            aOnStartupCB->SetText( sText );
+            aOnStartupCB->SetText( aOnStartupText.replaceFirst( "%MODULENAME", sModuleName ) );
             // and show it
             aOnStartupCB->Show();
             // set check state
@@ -2057,9 +2045,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
             aOnStartupCB->SaveValue();
 
             // calculate and set optimal width of the onstartup checkbox
-            OUString sCBText( "XXX" );
-            sCBText += aOnStartupCB->GetText();
-            long nTextWidth = aOnStartupCB->GetTextWidth( sCBText );
+            long nTextWidth = aOnStartupCB->GetTextWidth( "XXX" + aOnStartupCB->GetText() );
             Size aSize = aOnStartupCB->GetSizePixel();
             aSize.setWidth( nTextWidth );
             aOnStartupCB->SetSizePixel( aSize );
@@ -2167,8 +2153,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl, Timer *, void)
                 if ( bIsFullWordSearch )
                     xSrchDesc->setPropertyValue( "SearchWords", makeAny( true ) );
 
-                OUString sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
-                xSrchDesc->setSearchString( sSearchString );
+                xSrchDesc->setSearchString( sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false ) );
                 Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
 
                 // then select all found words
@@ -2205,7 +2190,6 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
     if ( bWrapAround )
         pDlg = m_xSrchDlg.get();
     DBG_ASSERT( pDlg, "invalid search dialog" );
-    OUString sSearchText = pDlg->GetSearchText();
     try
     {
         // select the words, which are equal to the search text of the search page
@@ -2221,7 +2205,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                 xSrchDesc->setPropertyValue( "SearchWords", makeAny(pDlg->IsOnlyWholeWords()) );
                 xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny(pDlg->IsMarchCase()) );
                 xSrchDesc->setPropertyValue( "SearchBackwards", makeAny(pDlg->IsSearchBackwards()) );
-                xSrchDesc->setSearchString( sSearchText );
+                xSrchDesc->setSearchString( pDlg->GetSearchText() );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();
 
@@ -2289,12 +2273,10 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
     if ( xConfiguration.is() )
     {
         bool bChecked = pBox->IsChecked();
-        OUString sPath( PATH_OFFICE_FACTORIES );
-        sPath += sCurrentFactory;
         try
         {
             ConfigurationHelper::writeRelativeKey(
-                xConfiguration, sPath, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
+                xConfiguration, PATH_OFFICE_FACTORIES + sCurrentFactory, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
             ConfigurationHelper::flush( xConfiguration );
         }
         catch( Exception& )
@@ -2716,12 +2698,10 @@ void SfxHelpWindow_Impl::LoadConfig()
     if ( aViewOpt.Exists() )
     {
         bIndex = aViewOpt.IsVisible();
-        OUString aUserData;
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
-        OUString aTemp;
-        if ( aUserItem >>= aTemp )
+        OUString aUserData;
+        if ( aUserItem >>= aUserData )
         {
-            aUserData = aTemp;
             DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
             sal_Int32 nIdx = 0;
             nIndexSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
@@ -2760,20 +2740,15 @@ void SfxHelpWindow_Impl::SaveConfig()
     }
 
     aViewOpt.SetVisible( bIndex );
-    OUString aUserData = OUString::number( nIndexSize );
-    aUserData += ";";
-    aUserData += OUString::number( nTextSize );
-    aUserData += ";";
-    aUserData += OUString::number( nW );
-    aUserData += ";";
-    aUserData += OUString::number( nH );
 
     VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow( xWindow );
     aWinPos = pScreenWin->GetWindowExtentsRelative( nullptr ).TopLeft();
-    aUserData += ";";
-    aUserData += OUString::number( aWinPos.X() );
-    aUserData += ";";
-    aUserData += OUString::number( aWinPos.Y() );
+    const OUString aUserData = OUString::number( nIndexSize )
+        + ";" + OUString::number( nTextSize )
+        + ";" + OUString::number( nW )
+        + ";" + OUString::number( nH )
+        + ";" + OUString::number( aWinPos.X() )
+        + ";" + OUString::number( aWinPos.Y() );
 
     aViewOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
 }
@@ -2781,10 +2756,7 @@ void SfxHelpWindow_Impl::SaveConfig()
 
 void SfxHelpWindow_Impl::ShowStartPage()
 {
-    OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
-                                                                "/start",
-                                                                OUString());
-    loadHelpContent(sHelpURL);
+    loadHelpContent(SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(), "/start", OUString()));
 }
 
 
@@ -2824,12 +2796,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
         else
             aId = aEntry;
 
-        aEntry  = "/";
-        aEntry += aId;
-
-        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
-                                                    aEntry,
-                                                    aAnchor);
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(), "/" + aId, aAnchor);
     }
 
     loadHelpContent(sHelpURL);
@@ -2843,11 +2810,9 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
     if ( sTitle.isEmpty() )
         sTitle = GetParent()->GetText();
 
-    OUString aNewTitle = sTitle + " - " + pIndexWin->GetActiveFactoryTitle();
-
     Reference< XTitle > xTitle(xFrame, UNO_QUERY);
     if (xTitle.is ())
-        xTitle->setTitle (aNewTitle);
+        xTitle->setTitle(sTitle + " - " + pIndexWin->GetActiveFactoryTitle());
 
     if ( pWin )
         ShowStartPage();
@@ -3090,13 +3055,11 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                         OUString aValue;
                         if ( aAny >>= aValue )
                         {
-                            OUString aTitle(aValue);
                             SfxAddHelpBookmarkDialog_Impl aDlg(GetFrameWeld(), false);
-                            aDlg.SetTitle(aTitle);
+                            aDlg.SetTitle(aValue);
                             if (aDlg.run() == RET_OK )
                             {
-                                aTitle = aDlg.GetTitle();
-                                pIndexWin->AddBookmarks( aTitle, aURL );
+                                pIndexWin->AddBookmarks( aDlg.GetTitle(), aURL );
                             }
                         }
                     }
