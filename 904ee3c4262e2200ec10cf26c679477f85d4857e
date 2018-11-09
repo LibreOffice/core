@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "3f3283f1_423f3bd6",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9796,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-11-09T14:55:04Z",
+      "side": 1,
+      "message": "Agreed.\n\nThe first implementation is not optimal.\n\nI will create a helper method inside ScLookupCache class. In this case I will have more possibilities to operate with entries without handling of transformed return value of the lookup() method.",
+      "parentUuid": "3f3283f1_4f9f71b4",
+      "range": {
+        "startLine": 9796,
+        "startChar": 16,
+        "endLine": 9796,
+        "endChar": 24
+      },
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f3283f1_2fa42508",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -53,6 +77,30 @@
       "writtenOn": "2018-11-02T19:56:06Z",
       "side": 1,
       "message": "Huh? Not found if FOUND?",
+      "range": {
+        "startLine": 9804,
+        "startChar": 16,
+        "endLine": 9804,
+        "endChar": 38
+      },
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_22242fc6",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9804,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-11-09T14:55:04Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "3f3283f1_2fa42508",
       "range": {
         "startLine": 9804,
         "startChar": 16,
@@ -82,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "3f3283f1_225f8f42",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9818,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-11-09T14:55:04Z",
+      "side": 1,
+      "message": "I\u0027m trying to collect all required checks in one place to make it obvious which conditions are required to re-use some entry inside the cache.\n\nBut in any case I agree: for micro optimization, it is better return 0 as soon as possible if some condition fails.",
+      "parentUuid": "3f3283f1_cc092f32",
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f3283f1_ac2dc3a9",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -93,6 +159,24 @@
       "writtenOn": "2018-11-02T19:56:06Z",
       "side": 1,
       "message": "This is executed for every NOT_CACHED case, which in all non-empty lookups now adds an unnecessary processing penalty.",
+      "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_424a9b80",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9862,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-11-09T14:55:04Z",
+      "side": 1,
+      "message": "Yes, it will be called for every NOT_CACHED, trying to find inside cache another entry which will be suitable for current call.\n\nI assume lcl_getPrevRowWithEmptyValueLookup() is faster than lcl_LookupQuery().\n\nMaybe it will be better to rename lcl_getPrevRowWithEmptyValueLookup() into lcl_getPrevRowWithSameValueLookup(). But in any case current implementation works only for empty values. In future we could extend it to cover more possible situation with cache reusage avoiding heavy lookup inside lcl_LookupQuery().",
+      "parentUuid": "3f3283f1_ac2dc3a9",
       "revId": "904ee3c4262e2200ec10cf26c679477f85d4857e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
