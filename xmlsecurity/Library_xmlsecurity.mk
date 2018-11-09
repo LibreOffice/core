@@ -51,7 +51,6 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/dialogs/certificateviewer \
 	xmlsecurity/source/dialogs/digitalsignaturesdialog \
 	xmlsecurity/source/dialogs/macrosecurity \
-	xmlsecurity/source/dialogs/resourcemanager \
 	xmlsecurity/source/framework/buffernode \
 	xmlsecurity/source/framework/elementcollector \
 	xmlsecurity/source/framework/elementmark \
