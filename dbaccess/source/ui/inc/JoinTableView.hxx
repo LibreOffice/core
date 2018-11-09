@@ -101,8 +101,6 @@ namespace dbaui
         VclPtr<OTableConnection>       m_pSelectedConn;
 
 
-        bool                    m_bTrackingInitiallyMoved;
-
         DECL_LINK(OnDragScrollTimer, Timer*, void);
 
     protected:

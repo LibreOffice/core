@@ -203,23 +203,8 @@ namespace canvas
          */
         mutable bool                                        mbIsContentFullyOpaque;
 
-        /// True, iff mfAlpha has changed
-        mutable bool                                        mbAlphaDirty;
-
-        /// True, iff maPosition has changed
-        mutable bool                                        mbPositionDirty;
-
         /// True, iff maTransform has changed
         mutable bool                                        mbTransformDirty;
-
-        /// True, iff mxClipPoly has changed
-        mutable bool                                        mbClipDirty;
-
-        /// True, iff mnPriority has changed
-        mutable bool                                        mbPrioDirty;
-
-        /// True, iff mbActive has changed
-        mutable bool                                        mbVisibilityDirty;
     };
 }
 

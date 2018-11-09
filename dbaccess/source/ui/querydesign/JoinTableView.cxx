@@ -164,7 +164,6 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
     ,m_pDragWin( nullptr )
     ,m_pSizingWin( nullptr )
     ,m_pSelectedConn( nullptr )
-    ,m_bTrackingInitiallyMoved(false)
     ,m_pLastFocusTabWin(nullptr)
     ,m_pView( pView )
     ,m_pAccessible(nullptr)
@@ -616,7 +615,6 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
     Point aMousePos = ScreenToOutputPixel( rMousePos );
     m_aDragOffset = aMousePos - pTabWin->GetPosPixel();
     m_pDragWin->SetZOrder(nullptr, ZOrderFlags::First);
-    m_bTrackingInitiallyMoved = false;
     StartTracking();
 }
 
@@ -999,7 +997,7 @@ void OJoinTableView::ScrollWhileDragging()
     Size aDragWinSize = m_pDragWin->GetSizePixel();
     Point aLowerRight(aDragWinPos.X() + aDragWinSize.Width(), aDragWinPos.Y() + aDragWinSize.Height());
 
-    if (!m_bTrackingInitiallyMoved && (aDragWinPos == m_pDragWin->GetPosPixel()))
+    if (aDragWinPos == m_pDragWin->GetPosPixel())
         return;
 
     // avoid illustration errors (when scrolling with active TrackingRect)

@@ -167,11 +167,8 @@ class SVT_DLLPUBLIC Calendar final : public Control
                     mbPrevIn:1,
                     mbNextIn:1,
                     mbTravelSelect:1,
-                    mbAllSel:1,
-                    mbDropPos:1;
+                    mbAllSel:1;
     Link<Calendar*,void>   maSelectHdl;
-    Timer                  maDragScrollTimer;
-    sal_uInt16             mnDragScrollHitTest;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -200,8 +197,6 @@ class SVT_DLLPUBLIC Calendar final : public Control
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( bool bCancel );
     SVT_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
-
-    DECL_LINK( ScrollHdl, Timer *, void );
 
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle );
@@ -291,7 +286,6 @@ private:
     VclPtr<Calendar>    mpCalendar;
     VclPtr<PushButton>  mpTodayBtn;
     VclPtr<PushButton>  mpNoneBtn;
-    Date const          maDefaultDate;
     bool                mbToday;
     bool                mbNone;
 

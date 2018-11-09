@@ -480,7 +480,6 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mpDoc(pDoc)
 , mpParentWindow(pParentWindow)
 , mpShowWindow(nullptr)
-, mpTimeButton(nullptr)
 , mnRestoreSlide(0)
 , maPresSize( -1, -1 )
 , meAnimationMode(ANIMATIONMODE_SHOW)
@@ -669,10 +668,6 @@ void SAL_CALL SlideshowImpl::disposing()
             mpViewShell->ShowUIControls(true);
         }
     }
-
-    if( mpTimeButton )
-        mpTimeButton->Hide();
-    mpTimeButton.disposeAndClear();
 
     if( mpShowWindow )
         mpShowWindow->Hide();

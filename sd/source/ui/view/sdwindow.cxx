@@ -61,7 +61,6 @@ namespace sd {
 Window::Window(vcl::Window* pParent)
     : vcl::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
-      mpShareWin(nullptr),
       maWinPos(0, 0),           // precautionary; but the values should be set
       maViewOrigin(0, 0),       // again from the owner of the window
       maViewSize(1000, 1000),
@@ -106,7 +105,6 @@ void Window::dispose()
         if (pWindowUpdater != nullptr)
             pWindowUpdater->UnregisterWindow (this);
     }
-    mpShareWin.clear();
     DropTargetHelper::dispose();
     vcl::Window::dispose();
 }
@@ -146,30 +144,23 @@ void Window::CalcMinZoom()
         // Get current zoom factor.
         long nZoom = GetZoom();
 
-        if ( mpShareWin )
-        {
-            mpShareWin->CalcMinZoom();
-            mnMinZoom = mpShareWin->mnMinZoom;
-        }
-        else
-        {
-            // Get the rectangle of the output area in logical coordinates
-            // and calculate the scaling factors that would lead to the view
-            // area (also called application area) to completely fill the
-            // window.
-            Size aWinSize = PixelToLogic(GetOutputSizePixel());
-            sal_uLong nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
-                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Width()));
-            sal_uLong nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
-                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Height()));
+        // Get the rectangle of the output area in logical coordinates
+        // and calculate the scaling factors that would lead to the view
+        // area (also called application area) to completely fill the
+        // window.
+        Size aWinSize = PixelToLogic(GetOutputSizePixel());
+        sal_uLong nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+            * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Width()));
+        sal_uLong nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+            * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Height()));
 
-            // Decide whether to take the larger or the smaller factor.
-            sal_uLong nFact = std::min(nX, nY);
+        // Decide whether to take the larger or the smaller factor.
+        sal_uLong nFact = std::min(nX, nY);
 
-            // The factor is transformed according to the current zoom factor.
-            nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
-            mnMinZoom = std::max(sal_uInt16(MIN_ZOOM), static_cast<sal_uInt16>(nFact));
-        }
+        // The factor is transformed according to the current zoom factor.
+        nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
+        mnMinZoom = std::max(sal_uInt16(MIN_ZOOM), static_cast<sal_uInt16>(nFact));
+
         // If the current zoom factor is smaller than the calculated minimal
         // zoom factor then set the new minimal factor as the current zoom
         // factor.

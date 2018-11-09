@@ -73,7 +73,6 @@ private:
 
     AccessibleChildren             m_aAccessibleChildren;
     VclPtr<basctl::DialogWindow>   m_pDialogWindow;
-    DlgEditor*                     m_pDlgEditor;
     DlgEdModel*                    m_pDlgEdModel;
 
     void                    UpdateFocused();
