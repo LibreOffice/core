@@ -42,7 +42,7 @@
 <paragraph role="paragraph" id="par_id9340495" xml-lang="en-US" l10n="NEW">Java Runtime Environment</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id7387615" xml-lang="en-US">A wiki account on a supported <link href="http://www.mediawiki.org/wiki/MediaWiki">MediaWiki</link> server</paragraph>
+<paragraph role="paragraph" id="par_id7387615" xml-lang="en-US">A wiki account on a supported <link href="https://www.mediawiki.org/wiki/MediaWiki">MediaWiki</link> server</paragraph>
 </listitem>
 </list>
 <paragraph role="heading" id="hd_id8047120" xml-lang="en-US" level="2" l10n="NEW">Installing Wiki Publisher</paragraph>
@@ -55,23 +55,23 @@
 <paragraph role="paragraph" id="par_id9533677" xml-lang="en-US" l10n="NEW">Open a Writer document, and choose <item type="menuitem">Tools - Options - Internet - MediaWiki</item>.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id368968" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisettings.xhp">Options</link> dialog, click Add.</paragraph>
+<paragraph role="paragraph" id="par_id368968" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisettings.xhp"><emph>Options</emph></link> dialog, click <emph>Add</emph>.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id6962187" xml-lang="en-US">In the <link href="com.sun.wiki-publisher/wikiaccount.xhp">MediaWiki</link> dialog, enter the account information for the wiki.</paragraph>
+<paragraph role="paragraph" id="par_id6962187" xml-lang="en-US">In the <link href="com.sun.wiki-publisher/wikiaccount.xhp"><emph>MediaWiki</emph></link> dialog, enter the account information for the wiki.</paragraph>
 </listitem>
 </list>
 <list type="ordered">
 <listitem>
-<paragraph role="paragraph" id="par_id5328836" xml-lang="en-US">In the URL text box, enter the address of a wiki that you want to connect to.</paragraph>
+  <paragraph role="paragraph" id="par_id5328836" xml-lang="en-US">In the <emph>URL</emph> text box, enter the address of a wiki that you want to connect to.</paragraph>
 <paragraph role="paragraph" id="par_id389416" xml-lang="en-US" l10n="NEW">You can copy the URL from a web browser and paste it into the textbox.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id5906552" xml-lang="en-US">In the Username box, enter your user ID for your wiki account.</paragraph>
+  <paragraph role="paragraph" id="par_id5906552" xml-lang="en-US">In the <emph>Username</emph> box, enter your user ID for your wiki account.</paragraph>
 <paragraph role="paragraph" id="par_id9297158" xml-lang="en-US">If the wiki allows anonymous write access, you can leave the Username and Password boxes empty.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id8869594" xml-lang="en-US">In the Password box, enter the password for your wiki account, then click OK.</paragraph>
+<paragraph role="paragraph" id="par_id8869594" xml-lang="en-US">In the Password box, enter the password for your wiki account, then click <emph>OK</emph>.</paragraph>
 </listitem>
 </list>
 <paragraph role="paragraph" id="par_id292062" xml-lang="en-US">Optionally enable “Save password” to save the password between sessions. A master password is used to maintain access to all saved passwords. Choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item> to enable the master password. “Save password” is unavailable when the master password is not enabled.</paragraph>
@@ -87,7 +87,7 @@
 <paragraph role="paragraph" id="par_id4566484" xml-lang="en-US" l10n="NEW">Choose <item type="menuitem">File - Send - To MediaWiki</item>.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id228278" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisend.xhp">Send to MediaWiki</link> dialog, specify the settings for your entry.</paragraph>
+<paragraph role="paragraph" id="par_id228278" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisend.xhp"><emph>Send to MediaWiki</emph></link> dialog, specify the settings for your entry.</paragraph>
 </listitem>
 </list>
 <paragraph role="paragraph" id="par_id2564165" xml-lang="en-US"><emph>MediaWiki server</emph>: Select the wiki.</paragraph>
