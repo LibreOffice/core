@@ -638,7 +638,8 @@ void IndexTabPage_Impl::InitializeIndex()
                             if ( (tmp = it->second++) != 0)
                                 m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
                             else
-                                m_pIndexCB->InsertEntry(aTempString);                        }
+                                m_pIndexCB->InsertEntry(aTempString);
+                        }
                     }
                     else
                         aIndex.clear();
