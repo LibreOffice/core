@@ -320,10 +320,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
         pAttrList->Clear();
         pAttrList->AddAttribute( "style:name", fontDecl.GetFontName() );
         pAttrList->AddAttribute( "fo:font-family", fontDecl.GetFontFamily() );
-        if( fontDecl.GetFontPitchFixed() )
-            pAttrList->AddAttribute( "style:font-pitch", "fixed" );
-        else
-            pAttrList->AddAttribute( "style:font-pitch", "variable" );
+        pAttrList->AddAttribute( "style:font-pitch", "variable" );
         pStrm->StartElement( "style:font-decl" );
         pStrm->EndElement( "style:font-decl" );
     }

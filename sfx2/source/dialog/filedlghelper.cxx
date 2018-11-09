@@ -894,7 +894,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbHasPassword           = false;
     m_bHaveFilterOptions    = false;
     mbIsPwdEnabled          = true;
-    mbIsGpgEnabled          = true;
     mbHasVersions           = false;
     mbHasPreview            = false;
     mbShowPreview           = false;
@@ -1527,7 +1526,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
             catch( const IllegalArgumentException& ){}
         }
         // check, whether or not we have to display a key selection box
-        if ( pCurrentFilter && mbHasPassword && mbIsGpgEnabled && xCtrlAccess.is() )
+        if ( pCurrentFilter && mbHasPassword && xCtrlAccess.is() )
         {
             try
             {

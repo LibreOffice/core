@@ -76,7 +76,6 @@ namespace slideshow
                                         const uno::Reference< drawing::XShape >&        rxShape,
                                         const uno::Reference< uno::XComponentContext >& rxContext ) :
             mpViewLayer( rViewLayer ),
-            mpEventHandlerParent(nullptr),
             maWindowOffset( 0, 0 ),
             maBounds(),
             mxShape( rxShape ),
@@ -137,7 +136,6 @@ namespace slideshow
             }
 
             mpMediaWindow.disposeAndClear();
-            mpEventHandlerParent.disposeAndClear();
 
             // shutdown player
             if( mxPlayer.is() )
@@ -257,15 +255,7 @@ namespace slideshow
 
             if( mpMediaWindow.get() )
             {
-                if( mpEventHandlerParent )
-                {
-                    mpEventHandlerParent->SetPosSizePixel( aPosPixel, aSizePixel );
-                    mpMediaWindow->SetPosSizePixel( Point(0,0), aSizePixel );
-                }
-                else
-                {
-                    mpMediaWindow->SetPosSizePixel( aPosPixel, aSizePixel );
-                }
+                mpMediaWindow->SetPosSizePixel( aPosPixel, aSizePixel );
                 mxPlayerWindow->setPosSize( 0, 0,
                                             aSizePixel.Width(), aSizePixel.Height(),
                                             0 );
@@ -483,7 +473,6 @@ namespace slideshow
                                 //if there was no playerwindow, then clear the mpMediaWindow too
                                 //so that we can draw a placeholder instead in that space
                                 mpMediaWindow.disposeAndClear();
-                                mpEventHandlerParent.disposeAndClear();
                             }
                         }
                     }

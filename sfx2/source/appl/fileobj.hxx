@@ -42,7 +42,6 @@ class SvFileObject : public sfx2::SvLinkSource
     bool bSynchron : 1;
     bool bLoadError : 1;
     bool bWaitForData : 1;
-    bool bInNewData : 1;
     bool bDataReady : 1;
     bool bClearMedium : 1;
     bool bStateChangeCalled : 1;
