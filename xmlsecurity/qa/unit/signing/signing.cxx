@@ -173,17 +173,17 @@ void SigningTest::setUp()
 
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir = m_directories.getURLFromWorkdir(
-                              "/CppunitTest/xmlsecurity_signing.test.user/");
+                              "CppunitTest/xmlsecurity_signing.test.user");
 
     // Set up cert8.db in workdir/CppunitTest/
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
+    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "/cert8.db");
+    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "/key3.db");
 
     // Make gpg use our own defined setup & keys
-    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "pubring.gpg");
-    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "random_seed");
-    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "secring.gpg");
-    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "trustdb.gpg");
+    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "/pubring.gpg");
+    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "/random_seed");
+    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "/secring.gpg");
+    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "/trustdb.gpg");
 
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
