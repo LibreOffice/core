@@ -543,6 +543,7 @@ void SfxWorkWindow::Lock_Impl( bool bLock )
     if ( m_nLock<0 )
     {
         OSL_FAIL("Lock count underflow!");
+        assert(m_nLock >= 0);
         m_nLock = 0;
     }
 

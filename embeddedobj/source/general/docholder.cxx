@@ -691,8 +691,8 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
         if ( xOwnLM.is() && xDocAreaAcc.is() )
         {
             // make sure that lock state of LM is correct even if an exception is thrown in between
-            bool bUnlock = false;
-            bool bLock = false;
+            bool bUnlockContainerLM = false;
+            bool bLockOwnLM = false;
             try
             {
                 // take over the control over the containers window
@@ -706,18 +706,14 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     // this must be done after merging menus as we won't get the container menu otherwise
                     xContainerLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
 
-                    bool bIsChart = false;
                     uno::Reference< lang::XServiceInfo> xServiceInfo(m_xComponent, uno::UNO_QUERY);
-                    if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
-                        bIsChart = true;
-                    // prevent further changes at this LM
-                    // TODO: moggi: why is this necessary?
-                    if (!bIsChart)
+                    if (!xServiceInfo.is() || !xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
                     {
-                        xContainerLM->setVisible( false );
+                        // prevent further changes at this LM
+                        xContainerLM->setVisible(false);
                         xContainerLM->lock();
+                        bUnlockContainerLM = true;
                     }
-                    bUnlock = true;
 
                     // by unlocking the LM each layout change will now resize the containers window; pending layouts will be processed now
                     xOwnLM->setVisible( true );
@@ -727,7 +723,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                         xSupp->setActiveFrame( m_xFrame );
 
                     xOwnLM->unlock();
-                    bLock = true;
+                    bLockOwnLM = true;
                     bResult = true;
 
                     // TODO/LATER: The following action should be done only if the window is not hidden
@@ -746,7 +742,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                         xSupp->setActiveFrame( nullptr );
 
                     // remove control about containers window from own LM
-                    if ( bLock )
+                    if (bLockOwnLM)
                         xOwnLM->lock();
                     xOwnLM->setVisible( false );
                     xOwnLM->setDockingAreaAcceptor( uno::Reference< css::ui::XDockingAreaAcceptor >() );
@@ -762,7 +758,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     // reestablish control of containers window
                     xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
                     xContainerLM->setVisible( true );
-                    if ( bUnlock )
+                    if (bUnlockContainerLM)
                         xContainerLM->unlock();
                 }
                 catch( const uno::Exception& ) {}
@@ -805,8 +801,12 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
                 xMerge->removeMergedMenuBar();
 
                 xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
-                xContainerLM->setVisible( true );
-                xContainerLM->unlock();
+                uno::Reference< lang::XServiceInfo> xServiceInfo(m_xComponent, uno::UNO_QUERY);
+                if (!xServiceInfo.is() || !xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
+                {
+                    xContainerLM->setVisible(true);
+                    xContainerLM->unlock();
+                }
 
                 xContainerLM->doLayout();
                 bResult = true;
