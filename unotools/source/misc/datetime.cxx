@@ -18,12 +18,14 @@
  */
 
 #include <unotools/datetime.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 #include <sstream>
 
 namespace
@@ -193,6 +195,27 @@ namespace
 
 namespace utl
 {
+const LocaleDataWrapper& GetLocaleData()
+{
+    static SvtSysLocale ourSysLocale;
+    return ourSysLocale.GetLocaleData();
+}
+
+DateTime GetDateTime(const css::util::DateTime& _rDT) { return DateTime(_rDT); }
+
+OUString GetDateTimeString(const css::util::DateTime& _rDT)
+{
+    // String with date and time information (#i20172#)
+    DateTime aDT(GetDateTime(_rDT));
+    const LocaleDataWrapper& rLoDa = GetLocaleData();
+
+    return rLoDa.getDate(aDT) + " " + rLoDa.getTime(aDT);
+}
+
+OUString GetDateString(const css::util::DateTime& _rDT)
+{
+    return GetLocaleData().getDate(GetDateTime(_rDT));
+}
 
 void typeConvert(const Date& _rDate, css::util::Date& _rOut)
 {

@@ -16,6 +16,7 @@
 #include <strings.hrc>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -40,6 +41,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
+using namespace comphelper;
 using namespace css;
 using namespace css::uno;
 using namespace css::beans;
@@ -138,7 +140,8 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     if (xSignCertificate.is())
     {
         m_xSelectedCertifate = xSignCertificate;
-        m_xBtnChooseCertificate->set_label(xSignCertificate->getIssuerName());
+        m_xBtnChooseCertificate->set_label(
+            xmlsec::GetContentPart(xSignCertificate->getIssuerName()));
     }
     ValidateFields();
 }
@@ -175,8 +178,9 @@ SignSignatureLineDialog::getSignedGraphic(bool bValid)
     aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
 
     aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", getCDataString(m_xEditName->get_text()));
-    OUString aIssuerLine = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
-                               .replaceFirst("%1", m_xSelectedCertifate->getIssuerName());
+    OUString aIssuerLine
+        = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
+              .replaceFirst("%1", xmlsec::GetContentPart(m_xSelectedCertifate->getIssuerName()));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
     if (bValid)
         aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
