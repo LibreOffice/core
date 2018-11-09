@@ -1019,7 +1019,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TextFieldEnumeration \
     qadevOOo/tests/java/mod/_sc/ScLabelRangesObj \
     qadevOOo/tests/java/mod/_sc/ScModelObj \
-    qadevOOo/tests/java/mod/_sc/ScNamedRangeObj \
     qadevOOo/tests/java/mod/_sc/ScNamedRangesObj \
     qadevOOo/tests/java/mod/_sc/ScScenariosObj \
     qadevOOo/tests/java/mod/_sc/ScShapeObj \

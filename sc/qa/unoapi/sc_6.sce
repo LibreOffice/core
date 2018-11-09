@@ -21,7 +21,6 @@
 -o sc.ScIndexEnumeration_TextFieldEnumeration
 -o sc.ScLabelRangesObj
 -o sc.ScModelObj
--o sc.ScNamedRangeObj
 -o sc.ScNamedRangesObj
 # -o sc.ScScenariosObj
 # -o sc.ScShapeObj
