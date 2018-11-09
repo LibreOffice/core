@@ -109,8 +109,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUStrin
 
                     // Database fields must contain at least 3 points!
                     OUString sDBName( sTmpText.copy( 1, sTmpText.getLength() - 2));
-                    sal_uInt16 nCnt = comphelper::string::getTokenCount(sDBName, '.');
-                    if (nCnt >= 3)
+                    if (comphelper::string::getTokenCount(sDBName, '.') >= 3)
                     {
                         sDBName = ::ReplacePoint(sDBName, true);
                         SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
