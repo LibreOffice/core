@@ -88,6 +88,9 @@ bool KDE5FilePicker::execute()
 
 void KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
 {
+    if (_dialog->acceptMode() == QFileDialog::AcceptSave)
+        return;
+
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
 }
 
