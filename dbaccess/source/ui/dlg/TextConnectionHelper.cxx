@@ -51,8 +51,26 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 
+namespace
+{
+
+OUString lcl_getListEntry(const OUString& rStr, sal_Int32& rIdx)
+{
+    const OUString sTkn {rStr.getToken( 0, '\t', rIdx )};
+    if (rIdx>=0)
+    {
+        rIdx = rStr.indexOf('\t', rIdx);
+        if (rIdx>=0 && ++rIdx>=rStr.getLength())
+            rIdx = -1;
+    }
+    return sTkn;
+}
+
+}
+
 namespace dbaui
 {
+
     OTextConnectionHelper::OTextConnectionHelper(weld::Widget* pParent, const short _nAvailableSections)
         : m_aFieldSeparatorList      (DBA_RES(STR_AUTOFIELDSEPARATORLIST))
         , m_aTextSeparatorList       (STR_AUTOTEXTSEPARATORLIST)
@@ -80,15 +98,11 @@ namespace dbaui
         , m_xCharSetLabel(m_xBuilder->weld_label("charsetlabel"))
         , m_xCharSet(new CharSetListBox(m_xBuilder->weld_combo_box("charset")))
     {
-        sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
-        sal_Int32 i;
+        for(sal_Int32 nIdx {0}; nIdx>=0;)
+            m_xFieldSeparator->append_text( lcl_getListEntry(m_aFieldSeparatorList, nIdx) );
 
-        for( i = 0 ; i < nCnt ; i += 2 )
-            m_xFieldSeparator->append_text( m_aFieldSeparatorList.getToken( i, '\t' ) );
-
-        nCnt = comphelper::string::getTokenCount(m_aTextSeparatorList, '\t');
-        for( i=0 ; i<nCnt ; i+=2 )
-            m_xTextSeparator->append_text( m_aTextSeparatorList.getToken( i, '\t' ) );
+        for(sal_Int32 nIdx {0}; nIdx>=0;)
+            m_xTextSeparator->append_text( lcl_getListEntry(m_aTextSeparatorList, nIdx) );
         m_xTextSeparator->append_text(m_aTextNone);
 
         m_xOwnExtension->connect_changed(LINK(this, OTextConnectionHelper, OnEditModified));
