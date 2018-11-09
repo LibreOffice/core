@@ -123,11 +123,12 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarsMenuController              
 
 DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
+static constexpr OUStringLiteral g_aPropUIName( "UIName" );
+static constexpr OUStringLiteral g_aPropResourceURL( "ResourceURL" );
+
 ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext ),
-    m_aPropUIName( "UIName" ),
-    m_aPropResourceURL( "ResourceURL" ),
     m_bResetActive( false ),
     m_aIntlWrapper(SvtSysLocale().GetUILanguageTag())
 {
@@ -261,8 +262,8 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
     }
 
     Sequence< css::beans::PropertyValue > aTbSeq( 2 );
-    aTbSeq[0].Name = m_aPropUIName;
-    aTbSeq[1].Name = m_aPropResourceURL;
+    aTbSeq[0].Name = g_aPropUIName;
+    aTbSeq[1].Name = g_aPropResourceURL;
 
     Sequence< Sequence< css::beans::PropertyValue > > aSeq( aToolBarArray.size() );
     const sal_uInt32 nCount = aToolBarArray.size();
