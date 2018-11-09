@@ -457,11 +457,11 @@ vcl_headless_code= \
     $(if $(filter-out iOS,$(OS)), \
         vcl/headless/svpbmp \
         vcl/headless/svpgdi \
-        vcl/headless/svpdata) \
+        vcl/headless/svpdata \
+        vcl/headless/CustomWidgetDraw) \
     vcl/headless/svpdummies \
     vcl/headless/svpinst \
     vcl/headless/svpvd \
-    vcl/headless/CustomWidgetDraw \
     vcl/unx/generic/app/gendisp \
     vcl/unx/generic/app/geninst \
     vcl/unx/generic/app/gensys \
