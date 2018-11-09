@@ -48,14 +48,17 @@
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <unotools/datetime.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <strings.hrc>
 #include <resourcemanager.hxx>
+#include <comphelper/xmlsechelper.hxx>
 
 #include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>
 
+using namespace comphelper;
 using namespace css::security;
 using namespace css::uno;
 using namespace css;
@@ -587,8 +590,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     bCertValid = false;
                 }
 
-                aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
-                aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
+                aSubject = xmlsec::GetContentPart( xCert->getSubjectName() );
+                aIssuer = xmlsec::GetContentPart( xCert->getIssuerName() );
             }
             else if (!rInfo.ouGpgCertificate.isEmpty())
             {
@@ -596,7 +599,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 aIssuer = rInfo.ouGpgOwner;
             }
 
-            aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
+            aDateTimeStr = utl::GetDateTimeString( rInfo.stDateTime );
             aDescription = rInfo.ouDescription;
 
             // Decide type string.

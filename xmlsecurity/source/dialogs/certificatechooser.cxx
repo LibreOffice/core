@@ -23,14 +23,16 @@
 #include <biginteger.hxx>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/xmlsechelper.hxx>
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
-#include <resourcemanager.hxx>
 #include <vcl/treelistentry.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/useroptions.hxx>
 
+using namespace comphelper;
 using namespace css;
 
 CertificateChooser::CertificateChooser(vcl::Window* _pParent,
@@ -229,11 +231,11 @@ void CertificateChooser::ImplInitialize()
             userData->xSecurityEnvironment = secEnvironment;
             mvUserData.push_back(userData);
 
-            OUString sIssuer = XmlSec::GetContentPart( xCerts[ nC ]->getIssuerName() );
-            SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( xCerts[ nC ]->getSubjectName() )
+            OUString sIssuer = xmlsec::GetContentPart( xCerts[ nC ]->getIssuerName() );
+            SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( xmlsec::GetContentPart( xCerts[ nC ]->getSubjectName() )
                 + "\t" + sIssuer
-                + "\t" + XmlSec::GetCertificateKind( xCerts[ nC ]->getCertificateKind() )
-                + "\t" + XmlSec::GetDateString( xCerts[ nC ]->getNotValidAfter() )
+                + "\t" + xmlsec::GetCertificateKind( xCerts[ nC ]->getCertificateKind() )
+                + "\t" + utl::GetDateString( xCerts[ nC ]->getNotValidAfter() )
                 + "\t" + UsageInClearText( xCerts[ nC ]->getCertificateUsage() ) );
             pEntry->SetUserData( userData.get() );
 

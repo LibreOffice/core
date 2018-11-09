@@ -31,11 +31,14 @@
 
 #include <strings.hrc>
 #include <resourcemanager.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <svtools/controldims.hxx>
+#include <tools/datetime.hxx>
 #include <bitmaps.hlst>
 
 #include <vcl/settings.hxx>
 
+using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -128,12 +131,12 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     // insert data
     css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
-    OUString sSubjectName(XmlSec::GetContentPart(xCert->getSubjectName()));
+    OUString sSubjectName(xmlsec::GetContentPart(xCert->getSubjectName()));
     if (!sSubjectName.isEmpty())
         m_pIssuedToFT->SetText(sSubjectName);
     else
         m_pIssuedToLabelFT->Hide();
-    OUString sIssuerName(XmlSec::GetContentPart(xCert->getIssuerName()));
+    OUString sIssuerName(xmlsec::GetContentPart(xCert->getIssuerName()));
     if (!sIssuerName.isEmpty())
         m_pIssuedByFT->SetText(sIssuerName);
     else
@@ -263,12 +266,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     aLBEntry = "V" + OUString::number( xCert->getVersion() + 1 );
     InsertElement( XsResId( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    aLBEntry = xmlsec::GetHexString( aSeq, pHexSep );
+    aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XsResId( STR_SERIALNUM ), aLBEntry, aDetails, true );
 
     std::pair< OUString, OUString> pairIssuer =
-        XmlSec::GetDNForCertDetailsView(xCert->getIssuerName());
+        xmlsec::GetDNForCertDetailsView(xCert->getIssuerName());
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
     InsertElement( XsResId( STR_ISSUER ), aLBEntry, aDetails );
@@ -286,7 +289,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     InsertElement( XsResId( STR_VALIDTO ), aLBEntry, aLBEntry );
 
     std::pair< OUString, OUString > pairSubject =
-        XmlSec::GetDNForCertDetailsView(xCert->getSubjectName());
+        xmlsec::GetDNForCertDetailsView(xCert->getSubjectName());
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
     InsertElement( XsResId( STR_SUBJECT ), aLBEntry, aDetails );
@@ -294,8 +297,8 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
     InsertElement( XsResId( STR_SUBJECT_PUBKEY_ALGO ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    aLBEntry = xmlsec::GetHexString( aSeq, pHexSep );
+    aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XsResId( STR_SUBJECT_PUBKEY_VAL ), aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
@@ -309,13 +312,13 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     }
 
     aSeq = xCert->getSHA1Thumbprint();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    aLBEntry = xmlsec::GetHexString( aSeq, pHexSep );
+    aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XsResId( STR_THUMBPRINT_SHA1 ), aLBEntry, aDetails, true );
 
     aSeq = xCert->getMD5Thumbprint();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    aLBEntry = xmlsec::GetHexString( aSeq, pHexSep );
+    aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XsResId( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
 
     m_pElementsLB->SetSelectHdl( LINK( this, CertificateViewerDetailsTP, ElementSelectHdl ) );
@@ -426,7 +429,7 @@ void CertificateViewerCertPathTP::ActivatePage()
         for (i = nCnt-1; i >= 0; i--)
         {
             const Reference< security::XCertificate > rCert = pCertPath[ i ];
-            OUString sName = XmlSec::GetContentPart( rCert->getSubjectName() );
+            OUString sName = xmlsec::GetContentPart( rCert->getSubjectName() );
             //Verify the certificate
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
                  Sequence<Reference<css::security::XCertificate> >());

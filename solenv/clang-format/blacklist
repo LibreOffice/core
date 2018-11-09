@@ -1651,6 +1651,7 @@ comphelper/source/misc/threadpool.cxx
 comphelper/source/misc/types.cxx
 comphelper/source/misc/weak.cxx
 comphelper/source/misc/weakeventlistener.cxx
+comphelper/source/misc/xmlsechelper.cxx
 comphelper/source/officeinstdir/officeinstallationdirectories.cxx
 comphelper/source/officeinstdir/officeinstallationdirectories.hxx
 comphelper/source/processfactory/processfactory.cxx
@@ -19444,7 +19445,6 @@ xmlsecurity/inc/pch/precompiled_xsec_gpg.cxx
 xmlsecurity/inc/pch/precompiled_xsec_gpg.hxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.cxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx
-xmlsecurity/inc/resourcemanager.hxx
 xmlsecurity/inc/xmlsec-wrapper.h
 xmlsecurity/inc/xmlsec/errorcallback.hxx
 xmlsecurity/inc/xmlsec/saxhelper.hxx
@@ -19469,7 +19469,6 @@ xmlsecurity/source/dialogs/certificatechooser.cxx
 xmlsecurity/source/dialogs/certificateviewer.cxx
 xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx
 xmlsecurity/source/dialogs/macrosecurity.cxx
-xmlsecurity/source/dialogs/resourcemanager.cxx
 xmlsecurity/source/framework/buffernode.cxx
 xmlsecurity/source/framework/buffernode.hxx
 xmlsecurity/source/framework/elementcollector.cxx
