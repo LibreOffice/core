@@ -156,9 +156,6 @@ private:
 
     // Error codes, conversion, compression, ...
     bool            m_isDirty;  ///< true: Stream != buffer content
-    bool            m_isConsistent; ///< false: Buffer contains data, which were
-                                ///< NOT allowed to be written by PutData
-                                ///< into the derived stream (cf. PutBack)
     bool            m_isSwap;
     bool            m_isEof;
     ErrCode         m_nError;
