@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,sw,\
 	UIConfig_swxform \
 ))
 
-ifneq ($(OS),iOS)
 $(eval $(call gb_Module_add_l10n_targets,sw,\
     AllLangMoTarget_sw \
 ))
@@ -48,6 +47,7 @@ $(eval $(call gb_Module_add_targets,sw,\
 
 endif
 
+ifneq ($(OS),iOS)
 $(eval $(call gb_Module_add_check_targets,sw,\
     CppunitTest_sw_uibase_unit \
 ))
