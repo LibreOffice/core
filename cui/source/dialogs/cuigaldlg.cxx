@@ -562,10 +562,10 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     if( pData->pTheme->IsReadOnly() )
         RemoveTabPage(nFilesPageId);
 
-    OUString aText = GetText() + pData->pTheme->GetName();
+    OUString aText = GetText().replaceFirst( "%1",  pData->pTheme->GetName() );
 
     if( pData->pTheme->IsReadOnly() )
-        aText +=  CuiResId( RID_SVXSTR_GALLERY_READONLY );
+        aText +=  " " + CuiResId( RID_SVXSTR_GALLERY_READONLY );
 
     SetText( aText );
 }
