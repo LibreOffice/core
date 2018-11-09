@@ -30,9 +30,14 @@
 class Date;
 namespace tools { class Time; }
 class DateTime;
+class LocaleDataWrapper;
 
 namespace utl
 {
+    UNOTOOLS_DLLPUBLIC const LocaleDataWrapper& GetLocaleData();
+    UNOTOOLS_DLLPUBLIC DateTime GetDateTime(const css::util::DateTime& _rDT);
+    UNOTOOLS_DLLPUBLIC OUString GetDateTimeString(const css::util::DateTime& _rDT);
+    UNOTOOLS_DLLPUBLIC OUString GetDateString(const css::util::DateTime& _rDT);
 
     UNOTOOLS_DLLPUBLIC void typeConvert(const Date& _rDate, css::util::Date& _rOut);
     UNOTOOLS_DLLPUBLIC void typeConvert(const css::util::Date& _rDate, Date& _rOut);
