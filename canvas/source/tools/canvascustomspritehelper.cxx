@@ -154,12 +154,7 @@ namespace canvas
         mbActive(false),
         mbIsCurrClipRectangle(true),
         mbIsContentFullyOpaque( false ),
-        mbAlphaDirty( true ),
-        mbPositionDirty( true ),
-        mbTransformDirty( true ),
-        mbClipDirty( true ),
-        mbPrioDirty( true ),
-        mbVisibilityDirty( true )
+        mbTransformDirty( true )
     {
     }
 
@@ -238,8 +233,6 @@ namespace canvas
                                               maPosition,
                                               getUpdateArea() );
             }
-
-            mbAlphaDirty = true;
         }
     }
 
@@ -277,7 +270,6 @@ namespace canvas
             }
 
             maPosition = aPoint;
-            mbPositionDirty = true;
         }
     }
 
@@ -330,8 +322,6 @@ namespace canvas
                                           maPosition,
                                           getUpdateArea() );
         }
-
-        mbClipDirty = true;
     }
 
     void CanvasCustomSpriteHelper::setPriority( const Sprite::Reference&    rSprite,
@@ -350,8 +340,6 @@ namespace canvas
                                               maPosition,
                                               getUpdateArea() );
             }
-
-            mbPrioDirty = true;
         }
     }
 
@@ -374,8 +362,6 @@ namespace canvas
                                               maPosition,
                                               getUpdateArea() );
             }
-
-            mbVisibilityDirty = true;
         }
     }
 
@@ -398,8 +384,6 @@ namespace canvas
                                               maPosition,
                                               getUpdateArea() );
             }
-
-            mbVisibilityDirty = true;
         }
     }
 

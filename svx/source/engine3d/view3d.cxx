@@ -1255,7 +1255,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                         }
 
                         // do not mask the allowed rotations
-                        eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
+                        eConstraint &= E3dDragConstraint::XYZ;
                         pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eConstraint, IsSolidDragging());
                     }
                     break;
@@ -1506,7 +1506,6 @@ void E3dView::ResetCreationActive ()
 
 void E3dView::InitView ()
 {
-    eDragConstraint          = E3dDragConstraint::XYZ;
     aDefaultLightColor       = COL_WHITE;
     aDefaultAmbientColor     = COL_BLACK;
     mpMirrorOverlay          = nullptr;

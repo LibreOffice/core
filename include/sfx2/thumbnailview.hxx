@@ -300,12 +300,9 @@ protected:
     long mnVisLines;
     long mnLines;
 
-    int mnFineness;
-
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;
     bool mbScroll : 1;
-    bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
     bool mbIsMultiSelectionEnabled: 1;

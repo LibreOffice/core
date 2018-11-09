@@ -92,7 +92,6 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , aImgLightOff(BitmapEx(RID_SVXBMP_LAMP_OFF))
     , bUpdate(false)
     , eViewType(ViewType3D::Geo)
-    , pVDev(nullptr)
     , pBindings(pInBindings)
     , mpImpl(new Svx3DWinImpl)
     , ePoolUnit(MapUnit::MapMM)
@@ -324,7 +323,6 @@ Svx3DWin::~Svx3DWin()
 
 void Svx3DWin::dispose()
 {
-    pVDev.disposeAndClear();
     pModel.reset();
 
     pControllerItem.reset();

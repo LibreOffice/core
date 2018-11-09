@@ -929,19 +929,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             if( !m_xLeftMF->get_text().isEmpty() || !m_xRightMF->get_text().isEmpty() ||
                 !m_xTopMF->get_text().isEmpty() || !m_xBottomMF->get_text().isEmpty() )
             {
-                const SvxBoxInfoItem* pOldBoxInfoItem = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER );
-                if (
-                    !pOldBoxItem ||
-                    m_xLeftMF->get_value_changed_from_saved() ||
-                    m_xRightMF->get_value_changed_from_saved() ||
-                    m_xTopMF->get_value_changed_from_saved() ||
-                    m_xBottomMF->get_value_changed_from_saved() ||
-                    nMinValue == m_xLeftMF->get_value(FieldUnit::NONE) ||
-                    nMinValue == m_xRightMF->get_value(FieldUnit::NONE) ||
-                    nMinValue == m_xTopMF->get_value(FieldUnit::NONE) ||
-                    nMinValue == m_xBottomMF->get_value(FieldUnit::NONE) ||
-                    (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
-                   )
+                if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
+                         (mbLeftModified || mbRightModified || mbTopModified || mbBottomModified) )
+                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
+                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
+                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
+                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Right ) != svx::FrameBorderState::Hide )
                 {
                     aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xLeftMF, eCoreUnit )), SvxBoxItemLine::LEFT  );
                     aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xRightMF, eCoreUnit )), SvxBoxItemLine::RIGHT );

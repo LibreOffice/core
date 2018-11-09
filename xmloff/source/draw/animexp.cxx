@@ -210,7 +210,6 @@ struct XMLEffectHint
     OUString        maSoundURL;
     bool        mbPlayFull;
     sal_Int32       mnPresId;
-    sal_Int32       mnPathShapeId;
 
     bool operator<(const XMLEffectHint& rComp) const { return mnPresId < rComp.mnPresId; }
 
@@ -218,7 +217,7 @@ struct XMLEffectHint
     :   meKind( XMLE_SHOW ), mbTextEffect( false ),
         meEffect( EK_none ), meDirection( ED_none ), mnStartScale( -1 ),
         meSpeed( AnimationSpeed_SLOW ), maDimColor(0), mbPlayFull( false ),
-        mnPresId( 0 ), mnPathShapeId( -1 )
+        mnPresId( 0 )
         {}
 };
 
@@ -366,7 +365,6 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
                     }
                     mpImpl->maEffects.push_back( aEffect );
 
-                    aEffect.mnPathShapeId = -1;
                     aEffect.maSoundURL.clear();
                 }
 
@@ -483,11 +481,6 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, rEffect.meSpeed, aXML_AnimationSpeed_EnumMap );
                     rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, sTmp.makeStringAndClear() );
-                }
-
-                if( rEffect.mnPathShapeId != -1 )
-                {
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PATH_ID, OUString::number( rEffect.mnPathShapeId ) );
                 }
 
                 enum XMLTokenEnum eLocalName;
