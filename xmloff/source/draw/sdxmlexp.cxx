@@ -992,9 +992,9 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         {
                             case 22 : nColCnt = 1; nRowCnt = 1; break;
                             case 23 : nColCnt = 1; nRowCnt = 2; break;
-                            case 24 : nColCnt = 2; nRowCnt = 3; break;
+                            case 24 : nColCnt = 1; nRowCnt = 3; break;
                             case 25 : nColCnt = 2; nRowCnt = 2; break;
-                            case 26 : nColCnt = 2; nRowCnt = 3; break;
+                            case 26 : nColCnt = 3; nRowCnt = 2; break;
                             case 31 : nColCnt = 3; nRowCnt = 3; break;
                             default:  nColCnt = 0; nRowCnt = 0; break;  // FIXME - What is correct values?
                         }
