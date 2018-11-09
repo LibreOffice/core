@@ -58,17 +58,6 @@ ifeq ($(OS),LINUX)
 $(call gb_CppunitTest_get_target,xmlsecurity_signing): \
     EXTRA_ENV_VARS := \
         LIBO_LD_PATH=$$LD_LIBRARY_PATH
-
-ifneq (,$(HAVE_GPGCONF_SOCKETDIR))
-# create socket dir below /run/user/ instead of in workdir
-.PHONY : gb_CppunitTest_run_gpgconf
-gb_CppunitTest_run_gpgconf:
-	GNUPGHOME=$(WORKDIR)/CppunitTest/xmlsecurity_signing.test.user \
-	$(GPGCONF) --create-socketdir
-
-$(call gb_CppunitTest_get_target,xmlsecurity_signing): \
-    gb_CppunitTest_run_gpgconf
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

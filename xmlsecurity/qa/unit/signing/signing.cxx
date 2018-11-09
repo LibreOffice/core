@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 
+#include <cstdlib>
 #include <type_traits>
 
 #include <test/bootstrapfixture.hxx>
@@ -58,6 +59,10 @@ class SigningTest : public test::BootstrapFixture, public unotest::MacrosTest, p
     uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
     uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
+
+#if HAVE_GPGCONF_SOCKETDIR
+    OString m_gpgconfCommandPrefix;
+#endif
 
 public:
     SigningTest();
@@ -188,6 +193,22 @@ void SigningTest::setUp()
     OUString gpgHomeVar("GNUPGHOME");
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
 
+#if HAVE_GPGCONF_SOCKETDIR
+    OString path;
+    bool ok = aTargetPath.convertToString(
+        &path, osl_getThreadTextEncoding(),
+        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTargetPath, RTL_TEXTENCODING_UTF8).getStr(), ok);
+        // if conversion fails, at least provide a best-effort conversion in the message here, for
+        // context
+    m_gpgconfCommandPrefix = "GNUPGHOME=" + path + " " GPGME_GPGCONF;
+    // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
+    // behavior will conform to POSIX, and (b) gpgconf --create-socketdir should return zero:
+    OString cmd = m_gpgconfCommandPrefix + " --create-socketdir";
+    int res = std::system(cmd.getStr());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
+#endif
+
     // Initialize crypto after setting up the environment variables.
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
@@ -199,6 +220,14 @@ void SigningTest::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
+
+#if HAVE_GPGCONF_SOCKETDIR
+    // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
+    // behavior will conform to POSIX, and (b) gpgconf --remove-socketdir should return zero:
+    OString cmd = m_gpgconfCommandPrefix + " --remove-socketdir";
+    int res = std::system(cmd.getStr());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
+#endif
 
     test::BootstrapFixture::tearDown();
 }
