@@ -185,9 +185,9 @@ void OpDollarde::GenSlidingWindowFunction(
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss<<"))\n\t\t";
     ss<<"fFrac = 0;\n\telse \n\t\t";
-    ss<<"fFrac = ";
+    ss<<"fFrac = (int)(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
+    ss<<");\n\t";
     ss << "tmp = modf( dollar , &fInt );\n\t";
     ss << "tmp /= fFrac;\n\t";
     ss << "tmp *= pow( 10.0 , ceil( log10(fFrac ) ) );\n\t";
@@ -236,9 +236,9 @@ void OpDollarfr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss<<"))\n\t\t";
     ss<<"fFrac = 0;\n\telse \n\t\t";
-    ss<<"fFrac = ";
+    ss<<"fFrac = (int)(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
+    ss<<");\n\t";
     ss << "tmp = modf( dollar , &fInt );\n\t";
     ss << "tmp *= fFrac;\n\t";
     ss << "tmp *= pow( 10.0 , -ceil( log10(fFrac ) ) );\n\t";
