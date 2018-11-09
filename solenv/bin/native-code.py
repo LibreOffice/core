@@ -640,7 +640,7 @@ print ('')
 for entry in sorted(custom_widgets):
     print ('void make' + entry + '();')
 print ('typedef void (*custom_widget_func)();')
-print ('#if !defined(ENABLE_FUZZERS)')
+print ('#if !ENABLE_FUZZERS')
 print ('static struct { const char *name; custom_widget_func func; } custom_widgets[] = {')
 for entry in sorted(custom_widgets):
     print ('    { "make' + entry + '", make' + entry + ' },')
@@ -650,7 +650,7 @@ print ('')
 print ("""
 custom_widget_func lo_get_custom_widget_func(const char* name)
 {
-#if defined(ENABLE_FUZZERS)
+#if ENABLE_FUZZERS
     (void)name;
     return nullptr;
 #else
