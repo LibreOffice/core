@@ -12,8 +12,8 @@
 #define INCLUDED_VCL_INC_CUSTOMWIDGETDRAW_HXX
 
 #include <vcl/dllapi.h>
-#include <WidgetDrawInterface.hxx>
-#include <WidgetThemeLibrary.hxx>
+#include "WidgetDrawInterface.hxx"
+#include "WidgetThemeLibrary.hxx"
 #include <headless/svpgdi.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
