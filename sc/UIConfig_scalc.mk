@@ -149,7 +149,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/leftheaderdialog \
 	sc/uiconfig/scalc/ui/namerangesdialog \
 	sc/uiconfig/scalc/ui/notebookbar \
-	sw/uiconfig/swriter/ui/notebookbar_compact \
+	sc/uiconfig/scalc/ui/notebookbar_compact \
 	sc/uiconfig/scalc/ui/notebookbar_groups \
 	sc/uiconfig/scalc/ui/notebookbar_groupedbar_full \
 	sc/uiconfig/scalc/ui/notebookbar_groupedbar_compact \
