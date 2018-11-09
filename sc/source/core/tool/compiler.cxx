@@ -5809,7 +5809,8 @@ bool ScCompiler::SkipImplicitIntersectionOptimization(const FormulaToken* token)
     formula::ParamClass paramClass = token->GetInForceArray();
     if (paramClass == formula::ForceArray
         || paramClass == formula::ReferenceOrForceArray
-        || paramClass == formula::SuppressedReferenceOrForceArray)
+        || paramClass == formula::SuppressedReferenceOrForceArray
+        || paramClass == formula::ReferenceOrRefArray)
     {
         return true;
     }
