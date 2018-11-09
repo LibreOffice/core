@@ -56,6 +56,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/program/types/oovbaapi.rdb    $(IOSRES)
 	cp $(INSTDIR)/program/services/services.rdb $(IOSRES)/services
 	cp $(INSTDIR)/program/services.rdb          $(IOSRES)
+	cp -R $(INSTDIR)/program/resource $(IOSRES)/program
 	mkdir -p $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
 	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/filter
@@ -75,7 +76,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
         && echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR' \
         && echo 'BRAND_INI_DIR=file:://$$APP_DATA_DIR' \
         && echo 'BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)' \
-        && echo '##BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
+        && echo 'BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
         && echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/registry ' \
 	        'res:$${BRAND_BASE_DIR}/registry' \
 	&& echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' \
