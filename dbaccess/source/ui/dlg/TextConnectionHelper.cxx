@@ -401,17 +401,14 @@ namespace dbaui
             if( sTVal == rVal )
             {
                 rBox.set_entry_text(rList.getToken(i, nTok));
-                break;
+                return;
             }
         }
 
-        if ( i >= nCnt )
-        {
-            if ( m_xTextSeparator.get() == &rBox && rVal.isEmpty() )
-                rBox.set_entry_text(m_aTextNone);
-            else
-                rBox.set_entry_text(rVal.copy(0, 1));
-        }
+        if ( m_xTextSeparator.get() == &rBox && rVal.isEmpty() )
+            rBox.set_entry_text(m_aTextNone);
+        else
+            rBox.set_entry_text(rVal.copy(0, 1));
     }
 }
 
