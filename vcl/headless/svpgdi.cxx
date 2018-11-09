@@ -35,6 +35,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <comphelper/lok.hxx>
 
 #include <cairo.h>
 
@@ -559,7 +560,8 @@ SvpSalGraphics::SvpSalGraphics()
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
 {
-    m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
 }
 
 SvpSalGraphics::~SvpSalGraphics()
