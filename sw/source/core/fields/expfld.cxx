@@ -490,7 +490,6 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
     m_sName( rName ),
-    m_pOutlChgNd( nullptr ),
     m_sDelim( "." ),
     m_nType(nTyp), m_nLevel( UCHAR_MAX ),
     m_bDeleted( false )

@@ -891,9 +891,6 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                                                                 aHashStrTable[nPos].release() ) );
                 }
                 break;
-            case SwFieldIds::SetExp:
-                const_cast<SwSetExpFieldType*>(static_cast<const SwSetExpFieldType*>(pFieldType))->SetOutlineChgNd( nullptr );
-                break;
             default: break;
             }
     }
@@ -930,6 +927,8 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
     }
 
     OUString aNew;
+    std::unordered_map<SwSetExpFieldType const*, SwTextNode const*> SetExpOutlineNodeMap;
+
     for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != mpUpdateFields->GetSortLst()->end(); ++it )
     {
         SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
@@ -1133,9 +1132,11 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
 
                             const SwTextNode* pOutlNd = pSeqNd->
                                     FindOutlineNodeOfLevel( nLvl );
-                            if( pSFieldTyp->GetOutlineChgNd() != pOutlNd )
+                            auto const iter(SetExpOutlineNodeMap.find(pSFieldTyp));
+                            if (iter == SetExpOutlineNodeMap.end()
+                                || iter->second != pOutlNd)
                             {
-                                pSFieldTyp->SetOutlineChgNd( pOutlNd );
+                                SetExpOutlineNodeMap[pSFieldTyp] = pOutlNd;
                                 aCalc.VarChange( aNew, 0 );
                             }
                         }
