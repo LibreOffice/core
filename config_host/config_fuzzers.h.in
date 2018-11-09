@@ -1,0 +1,10 @@
+/*
+Settings for fuzzers mode
+*/
+
+#ifndef CONFIG_FUZZERS_H
+#define CONFIG_FUZZERS_H
+
+#define ENABLE_FUZZERS 0
+
+#endif

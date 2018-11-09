@@ -13,6 +13,8 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include "commonfuzzer.hxx"
 
+extern "C" void* ScCreateDialogFactory() { return nullptr; }
+
 extern "C" bool TestImportXLS(SvStream& rStream);
 
 extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)

@@ -40,6 +40,11 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     return 0;
 }
 
+extern "C" void* lo_get_custom_widget_func(const char*)
+{
+    return nullptr;
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);

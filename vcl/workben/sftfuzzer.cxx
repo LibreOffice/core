@@ -27,6 +27,8 @@ const lib_to_constructor_mapping* lo_get_constructor_map(void)
     return map;
 }
 
+extern "C" void* lo_get_custom_widget_func(const char*) { return nullptr; }
+
 extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 {
     TypicalFuzzerInitialize(argc, argv);

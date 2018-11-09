@@ -61,6 +61,16 @@ lo_get_constructor_map(void)
     return map;
 }
 
+extern "C" void* lo_get_custom_widget_func(const char*)
+{
+    return nullptr;
+}
+
+extern "C" void* ScCreateDialogFactory()
+{
+    return nullptr;
+}
+
 extern "C" bool TestImportSLK(SvStream &rStream);
 
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)

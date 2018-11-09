@@ -609,6 +609,7 @@ print ("""/*
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 #include <config_gpgme.h>
 #include <osl/detail/component-mapping.h>
 #include <string.h>
@@ -639,18 +640,25 @@ print ('')
 for entry in sorted(custom_widgets):
     print ('void make' + entry + '();')
 print ('typedef void (*custom_widget_func)();')
+print ('#if !defined(ENABLE_FUZZERS)')
 print ('static struct { const char *name; custom_widget_func func; } custom_widgets[] = {')
 for entry in sorted(custom_widgets):
     print ('    { "make' + entry + '", make' + entry + ' },')
 print ('};')
+print ('#endif')
 print ('')
 print ("""
 custom_widget_func lo_get_custom_widget_func(const char* name)
 {
+#if defined(ENABLE_FUZZERS)
+    (void)name;
+    return nullptr;
+#else
     for (size_t i = 0; i < sizeof(custom_widgets) / sizeof(custom_widgets[0]); i++)
         if (strcmp(name, custom_widgets[i].name) == 0)
             return custom_widgets[i].func;
     return nullptr;
+#endif
 }
 """)
 

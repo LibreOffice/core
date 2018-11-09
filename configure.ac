@@ -9245,7 +9245,7 @@ if test "$enable_fuzzers" != yes; then
 else
     AC_MSG_RESULT([yes])
     ENABLE_FUZZERS="TRUE"
-    AC_DEFINE(ENABLE_FUZZERS)
+    AC_DEFINE([ENABLE_FUZZERS],1)
     BUILD_TYPE="$BUILD_TYPE FUZZERS"
 fi
 AC_SUBST(ENABLE_FUZZERS)
@@ -12863,6 +12863,7 @@ AC_CONFIG_HEADERS([config_host/config_dbus.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_firebird.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])
+AC_CONFIG_HEADERS([config_host/config_fuzzers.h])
 AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_gpgme.h])

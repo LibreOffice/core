@@ -11,6 +11,11 @@
 #include <vcl/FilterConfigItem.hxx>
 #include "commonfuzzer.hxx"
 
+extern "C" void* ScCreateDialogFactory()
+{
+    return nullptr;
+}
+
 extern "C" bool TestImportFODS(SvStream &rStream);
 
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
