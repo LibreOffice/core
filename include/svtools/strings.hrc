@@ -357,7 +357,7 @@
 
 #define STR_DESCRIPTION_HUNSPELL                NC_("STR_DESCRIPTION_HUNSPELL", "Hunspell SpellChecker")
 #define STR_DESCRIPTION_LIBHYPHEN               NC_("STR_DESCRIPTION_LIBHYPHEN", "Libhyphen Hyphenator")
-#define STR_DESCRIPTION_MYTHES                  NC_("STR_DESCRIPTION_MYTHES", "Mythes Thesaurus")
+#define STR_DESCRIPTION_MYTHES                  NC_("STR_DESCRIPTION_MYTHES", "MyThes Thesaurus")
 #define STR_DESCRIPTION_IGNOREALLLIST           NC_("STR_DESCRIPTION_IGNOREALLLIST", "List of Ignored Words")
 #endif
 
