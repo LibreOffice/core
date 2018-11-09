@@ -550,7 +550,6 @@ struct RulerTab
 struct RulerLine
 {
     long    nPos;
-    sal_uInt16  nStyle;
 };
 
 
@@ -628,7 +627,6 @@ private:
     long            mnBorderWidth;
     long            mnStartDragPos;
     long            mnDragPos;
-    ImplSVEvent *   mnUpdateEvtId;
     std::unique_ptr<ImplRulerData>  mpSaveData;
     ImplRulerData*  mpData;
     std::unique_ptr<ImplRulerData>  mpDragData;

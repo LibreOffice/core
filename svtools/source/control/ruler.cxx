@@ -198,7 +198,6 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnVirWidth      = 0;                    // width or height from VirtualDevice
     mnVirHeight     = 0;                    // height of width from VirtualDevice
     mnDragPos       = 0;                    // Drag-Position (Null point)
-    mnUpdateEvtId   = nullptr;                    // Update event was not sent yet
     mnDragAryPos    = 0;                    // Drag-Array-Index
     mnDragSize      = RulerDragSize::Move;  // Did size change at dragging
     mnDragModifier  = 0;                    // Modifier key at dragging
@@ -287,8 +286,6 @@ Ruler::~Ruler()
 
 void Ruler::dispose()
 {
-    if ( mnUpdateEvtId )
-        Application::RemoveUserEvent( mnUpdateEvtId );
     mpSaveData.reset();
     mpDragData.reset();
     mxAccContext.clear();
@@ -2516,8 +2513,7 @@ void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
         const RulerLine* pAry2 = pLineArray;
         while ( i )
         {
-            if ( (aItr1->nPos   != pAry2->nPos)   ||
-                 (aItr1->nStyle != pAry2->nStyle) )
+            if ( aItr1->nPos   != pAry2->nPos )
                 break;
             ++aItr1;
             ++pAry2;

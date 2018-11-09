@@ -211,97 +211,6 @@ public:
     virtual void        ExecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) override;
 };
 
-// provides a list of _unique_ Entries
-class NameTranslationList
-{   // contains a list of substitutes of strings for a given folder (as URL)
-    // explanation of the circumstances see in remarks for Init();
-protected:
-    INetURLObject               maTransFile;    // URL of file with translation entries
-    /// for future purposes when dealing with a set of cached NameTranslationLists
-    OUString const m_HashedURL;
-private:
-    std::unordered_map<OUString, OUString> m_Translation;
-    const OUString              maTransFileName;
-
-public:
-                                explicit NameTranslationList( const INetURLObject& rBaseURL );
-                                            // rBaseURL: path to folder for which the translation of the entries
-                                            //  should be done
-
-    const OUString*             Translate( const OUString& rName ) const;
-                                            // returns NULL, if rName can't be found
-
-    inline const OUString&      GetTransTableFileName() const;
-    OUString const& GetHashedURL() { return m_HashedURL; }
-                                            // returns the name for the file, which contains the translation strings
-};
-
-inline const OUString& NameTranslationList::GetTransTableFileName() const
-{
-    return maTransFileName;
-}
-
-NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
-    maTransFile( rBaseURL ),
-    m_HashedURL(rBaseURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)),
-    maTransFileName( OUString(".nametranslation.table") )
-{
-    maTransFile.insertName( maTransFileName );
-
-    // Tries to read the file ".nametranslation.table" in the base folder. Complete path/name is in maTransFile.
-    // Further on, the found entries in the section "TRANSLATIONNAMES" are used to replace names in the
-    // base folder by translated ones. The translation must be given in UTF8
-    // See examples of such a files in the samples-folder of an Office installation
-    try
-    {
-        ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-
-        if( aTestContent.isDocument() )
-        {
-            // ... also tests the existence of maTransFile by throwing an Exception
-            OUString        aFsysName( maTransFile.getFSysPath( FSysStyle::Detect ) );
-            Config          aConfig( aFsysName );
-
-            aConfig.SetGroup( OString("TRANSLATIONNAMES") );
-
-            sal_uInt16          nKeyCnt = aConfig.GetKeyCount();
-
-            for( sal_uInt16 nCnt = 0 ; nCnt < nKeyCnt ; ++nCnt )
-            {
-                m_Translation.insert(std::make_pair(
-                    OStringToOUString(aConfig.GetKeyName(nCnt), RTL_TEXTENCODING_ASCII_US),
-                    OStringToOUString(aConfig.ReadKey(nCnt), RTL_TEXTENCODING_UTF8)
-                    ));
-            }
-        }
-    }
-    catch( Exception const & ) {}
-}
-
-const OUString* NameTranslationList::Translate( const OUString& rName ) const
-{
-    auto const iter(m_Translation.find(rName));
-    return (iter != m_Translation.end()) ? &iter->second : nullptr;
-}
-
-// enables the user to get string substitutions (translations for the content) for a given folder
-// see more explanations above in the description for NameTranslationList
-class NameTranslator_Impl : public ::svt::IContentTitleTranslation
-{
-private:
-    std::unique_ptr<NameTranslationList> mpActFolder;
-public:
-                            explicit NameTranslator_Impl( const INetURLObject& rActualFolder );
-                            virtual ~NameTranslator_Impl();
-
-     // IContentTitleTranslation
-    virtual bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const override;
-
-    void                    SetActualFolder( const INetURLObject& rActualFolder );
-    const OUString*         GetTransTableFileName() const;
-                                            // returns the name for the file, which contains the translation strings
-};
-
 
 //= SvtFileView_Impl
 
@@ -329,11 +238,9 @@ public:
     VclPtr<SvTreeListBox>               mpCurView;
     VclPtr<ViewTabListBox_Impl>         mpView;
     VclPtr<IconView>                    mpIconView;
-    std::unique_ptr<NameTranslator_Impl> mpNameTrans;
     sal_uInt16              mnSortColumn;
     bool                    mbAscending     : 1;
     bool const              mbOnlyFolder    : 1;
-    bool                    mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
     sal_Int16               mnSuspendSelectCallback : 1;
     bool                    mbIsFirstResort : 1;
 
@@ -386,8 +293,6 @@ public:
                                              const OUString& rTitle,
                                              bool bWrapAround );
 
-    void                    SetActualFolder( const INetURLObject& rActualFolder );
-
     void                    SetSelectHandler( const Link<SvTreeListBox*,void>& _rHdl );
 
     void                    InitSelection();
@@ -408,8 +313,6 @@ protected:
 inline void SvtFileView_Impl::EnableDelete( bool bEnable )
 {
     mpView->EnableDelete( bEnable );
-    if( bEnable )
-        mbReplaceNames = false;
 }
 
 inline void SvtFileView_Impl::EndEditing()
@@ -1384,54 +1287,6 @@ void SvtFileView::StateChanged( StateChangedType nStateChange )
 }
 
 
-// class NameTranslator_Impl
-
-
-NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
-    : mpActFolder( new NameTranslationList( rActualFolder ) )
-{
-}
-
-NameTranslator_Impl::~NameTranslator_Impl()
-{
-}
-
-void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
-{
-    if( mpActFolder )
-    {
-        if (mpActFolder->GetHashedURL() != rActualFolder.GetMainURL(INetURLObject::DecodeMechanism::NONE))
-        {
-            mpActFolder.reset( new NameTranslationList( rActualFolder ) );
-        }
-    }
-    else
-        mpActFolder.reset( new NameTranslationList( rActualFolder ) );
-}
-
-bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rTrans ) const
-{
-    bool bRet = false;
-
-    if( mpActFolder )
-    {
-        const OUString* pTrans = mpActFolder->Translate( rOrg );
-        if( pTrans )
-        {
-            rTrans = *pTrans;
-            bRet = true;
-        }
-    }
-
-    return bRet;
-}
-
-const OUString* NameTranslator_Impl::GetTransTableFileName() const
-{
-    return mpActFolder? &mpActFolder->GetTransTableFileName() : nullptr;
-}
-
-
 // class SvtFileView_Impl
 
 
@@ -1444,7 +1299,6 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( true )
     ,mbOnlyFolder               ( bOnlyFolder )
-    ,mbReplaceNames             ( false )
     ,mnSuspendSelectCallback    ( 0 )
     ,mbIsFirstResort            ( true )
     ,aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
@@ -1475,7 +1329,6 @@ void SvtFileView_Impl::Clear()
     ::osl::MutexGuard aGuard( maMutex );
 
     maContent.clear();
-    mpNameTrans.reset();
 }
 
 
@@ -1487,9 +1340,6 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
     DBG_ASSERT( aFolderObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
-
-    // prepare name translation
-    SetActualFolder( aFolderObj );
 
     FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
@@ -1508,7 +1358,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     OSL_ENSURE( !m_xContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
     m_xContentEnumerator.set(new ::svt::FileViewContentEnumerator(
-        mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans.get() : nullptr));
+        mpView->GetCommandEnvironment(), maContent, maMutex, nullptr));
         // TODO: should we cache and re-use this thread?
 
     if ( !pAsyncDescriptor )
@@ -1600,23 +1450,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
-    bool bHideTransFile = mbReplaceNames && mpNameTrans;
-
-    OUString sHideEntry;
-    if( bHideTransFile )
-    {
-        const OUString* pTransTableFileName = mpNameTrans->GetTransTableFileName();
-        if( pTransTableFileName )
-        {
-            sHideEntry = *pTransTableFileName;
-            sHideEntry = sHideEntry.toAsciiUpperCase();
-        }
-        else
-            bHideTransFile = false;
-    }
-
-    if ( !bHideTransFile &&
-        ( rFilter.isEmpty() || ( rFilter == ALL_FILES_FILTER ) ) )
+    if ( rFilter.isEmpty() || ( rFilter == ALL_FILES_FILTER ) )
         // when replacing names, there is always something to filter (no view of ".nametranslation.table")
         return;
 
@@ -1652,13 +1486,8 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
             sCompareString = (*aContentLoop)->GetFileName(); // filter works on file name, not on title!
             bool bDelete;
 
-            if( bHideTransFile && sCompareString == sHideEntry )
-                bDelete = true;
-            else
-            {
-                bDelete = ::std::none_of( aFilters.begin(), aFilters.end(),
-                                          FilterMatch( sCompareString ) );
-            }
+            bDelete = ::std::none_of( aFilters.begin(), aFilters.end(),
+                                      FilterMatch( sCompareString ) );
 
             if( bDelete )
             {
@@ -2161,17 +1990,6 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
     return false;
 }
 
-
-void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
-{
-    if( mbReplaceNames )
-    {
-        if( mpNameTrans )
-            mpNameTrans->SetActualFolder( rActualFolder );
-        else
-            mpNameTrans.reset(new NameTranslator_Impl( rActualFolder ));
-    }
-}
 
 namespace svtools {
 

@@ -47,7 +47,6 @@ class VCL_DLLPUBLIC Cursor
 private:
     std::unique_ptr<ImplCursorData> mpData;
     VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
-    long            mnSlant;
     Size            maSize;
     Point           maPos;
     short           mnOrientation;

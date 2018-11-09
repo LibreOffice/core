@@ -84,12 +84,9 @@ public:
      */
     const OUString& GetFontFamily() { return m_strFontFamily;}
 
-    bool        GetFontPitchFixed() { return m_bPitchFixed;}
-
 private:
     OUString   m_strFontName;
     OUString   m_strFontFamily;
-    bool        m_bPitchFixed;
 };
 
 #endif

@@ -38,10 +38,11 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
+    constexpr sal_Int32 g_nHistoryLimit = 20;
+
     // DirectSQLDialog
     DirectSQLDialog::DirectSQLDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
-        ,m_nHistoryLimit(20)
         ,m_nStatusCount(1)
         ,m_xConnection(_rxConn)
     {
@@ -128,11 +129,11 @@ namespace dbaui
     {
         CHECK_INVARIANTS("DirectSQLDialog::implEnsureHistoryLimit");
 
-        if (getHistorySize() <= m_nHistoryLimit)
+        if (getHistorySize() <= g_nHistoryLimit)
             // nothing to do
             return;
 
-        sal_Int32 nRemoveEntries = getHistorySize() - m_nHistoryLimit;
+        sal_Int32 nRemoveEntries = getHistorySize() - g_nHistoryLimit;
         while (nRemoveEntries--)
         {
             m_aStatementHistory.pop_front();
