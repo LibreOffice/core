@@ -1077,7 +1077,7 @@ void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
 {
     const OUString aBasicName(rBasic + " " + xImp->m_sMacros);
     const sal_Int32 nCount = comphelper::string::getTokenCount(rMacro, '.');
-    const OUString aMethod( rMacro.getToken( nCount-1, '.' ) );
+    const OUString aMethod( rMacro.copy(rMacro.lastIndexOf('.')+1) );
     OUString aLib;
     OUString aModule;
     if ( nCount > 2 )
