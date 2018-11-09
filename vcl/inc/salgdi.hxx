@@ -26,7 +26,7 @@
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <WidgetDrawInterface.hxx>
+#include "WidgetDrawInterface.hxx"
 
 #include <config_cairo_canvas.h>
 

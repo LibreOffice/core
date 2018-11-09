@@ -93,7 +93,7 @@ struct ControlDrawParameters
     int64_t nValue;
 };
 
-typedef struct _WidgetThemeLibrary WidgetThemeLibrary;
+typedef struct WidgetThemeLibrary_t WidgetThemeLibrary;
 
 typedef struct _rectangle
 {
@@ -101,7 +101,7 @@ typedef struct _rectangle
     long width, height;
 } rectangle_t;
 
-struct _WidgetThemeLibrary
+struct WidgetThemeLibrary_t
 {
     uint32_t nSize;
 
