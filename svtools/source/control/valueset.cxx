@@ -1761,7 +1761,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     if ( !((mnSelItemId != nItemId) || mbNoSelection) )
         return;
 
-    sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
+    const sal_uInt16 nOldItem = mnSelItemId;
     mnSelItemId = nItemId;
     mbNoSelection = false;
 
@@ -2857,7 +2857,7 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
     if ( !((mnSelItemId != nItemId) || mbNoSelection) )
         return;
 
-    sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
+    const sal_uInt16 nOldItem = mnSelItemId;
     mnSelItemId = nItemId;
     mbNoSelection = false;
 
