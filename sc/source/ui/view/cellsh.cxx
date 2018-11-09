@@ -769,9 +769,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     nRow2 = aMarkRange.aEnd.Row();
                     if( nCol2 != nCol1 || nRow1 != nRow2 )
                     {
-                        OUString aStr = ScResId( STR_ROWCOL_SELCOUNT );
-                        aStr = aStr.replaceAll( "$1", OUString::number( nRow2 - nRow1 + 1 ));
-                        aStr = aStr.replaceAll( "$2", OUString::number( nCol2 - nCol1 + 1 ));
+                        const auto nRows = nRow2 - nRow1 + 1;
+                        OUString aRowArg = ScResId(STR_SELCOUNT_ROWARG, nRows).replaceAll("$1", OUString::number(nRows));
+                        const auto nCols = nCol2 - nCol1 + 1;
+                        OUString aColArg = ScResId(STR_SELCOUNT_COLARG, nCols).replaceAll("$1", OUString::number(nCols));
+                        OUString aStr = ScResId(STR_SELCOUNT);
+                        aStr = aStr.replaceAll("$1", aRowArg);
+                        aStr = aStr.replaceAll("$2", aColArg);
                         rSet.Put( SfxStringItem( nWhich, aStr ) );
                     }
                     else
