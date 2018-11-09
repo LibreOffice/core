@@ -329,7 +329,6 @@ SvStream::SvStream() :
    , m_isIoWrite(false)
 
    , m_isDirty(false)
-   , m_isConsistent(true)
    , m_isEof(false)
 
    , m_nCompressMode(SvStreamCompressFlags::NONE)
@@ -402,7 +401,7 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     sal_uInt64 const nActualFilePos = Tell();
     bool bDontSeek = (m_pRWBuf == nullptr);
 
-    if (m_isDirty && m_isConsistent && m_isWritable)  // due to Windows NT: Access denied
+    if (m_isDirty && m_isWritable)  // due to Windows NT: Access denied
         Flush();
 
     if (m_nBufSize)
@@ -417,7 +416,6 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     m_nBufSize      = nBufferSize;
     if (m_nBufSize)
         m_pRWBuf.reset(new sal_uInt8[ m_nBufSize ]);
-    m_isConsistent  = true;
     m_pBufPos       = m_pRWBuf.get();
     m_isIoRead = m_isIoWrite = false;
     if( !bDontSeek )
@@ -431,7 +429,6 @@ void SvStream::ClearBuffer()
     m_nBufFilePos   = 0;
     m_pBufPos       = m_pRWBuf.get();
     m_isDirty       = false;
-    m_isConsistent  = true;
     m_isIoRead = m_isIoWrite = false;
 
     m_isEof         = false;
@@ -893,8 +890,7 @@ SvStream& SvStream::ReadInt64(sal_Int64& r)
 
 SvStream& SvStream::ReadSChar( signed char& r )
 {
-    if ((m_isIoRead || !m_isConsistent) &&
-        sizeof(signed char) <= m_nBufFree)
+    if (m_isIoRead && sizeof(signed char) <= m_nBufFree)
     {
         r = *m_pBufPos;
         m_nBufActualPos += sizeof(signed char);
@@ -910,8 +906,7 @@ SvStream& SvStream::ReadSChar( signed char& r )
 
 SvStream& SvStream::ReadChar( char& r )
 {
-    if ((m_isIoRead || !m_isConsistent) &&
-        sizeof(char) <= m_nBufFree)
+    if (m_isIoRead && sizeof(char) <= m_nBufFree)
     {
         r = *m_pBufPos;
         m_nBufActualPos += sizeof(char);
@@ -925,8 +920,7 @@ SvStream& SvStream::ReadChar( char& r )
 
 SvStream& SvStream::ReadUChar( unsigned char& r )
 {
-    if ((m_isIoRead || !m_isConsistent) &&
-        sizeof(char) <= m_nBufFree)
+    if (m_isIoRead && sizeof(char) <= m_nBufFree)
     {
         r = *m_pBufPos;
         m_nBufActualPos += sizeof(char);
@@ -953,8 +947,7 @@ SvStream& SvStream::ReadUtf16(sal_Unicode& r)
 
 SvStream& SvStream::ReadCharAsBool( bool& r )
 {
-    if ((m_isIoRead || !m_isConsistent) &&
-        sizeof(char) <= m_nBufFree)
+    if (m_isIoRead && sizeof(char) <= m_nBufFree)
     {
         SAL_WARN_IF(
             *m_pBufPos > 1, "tools.stream", unsigned(*m_pBufPos) << " not 0/1");
@@ -1234,8 +1227,6 @@ void SvStream::FlushBuffer(bool isConsistent)
 std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
 {
     std::size_t nSaveCount = nCount;
-    if (!m_isConsistent)
-        RefreshBuffer();
 
     if (!m_pRWBuf)
     {
@@ -1321,8 +1312,6 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
         SetError( ERRCODE_IO_CANTWRITE );
         return 0;
     }
-    if (!m_isConsistent)
-        RefreshBuffer();   // Remove changes in buffer through PutBack
 
     if (!m_pRWBuf)
     {
@@ -1404,7 +1393,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
     }
     else
     {
-        FlushBuffer(m_isConsistent);
+        FlushBuffer(true);
         m_nBufActualLen = 0;
         m_nBufActualPos = 0;
         m_pBufPos     = m_pRWBuf.get();
@@ -1442,21 +1431,20 @@ sal_uInt64 SvStream::TellEnd()
 
 void SvStream::Flush()
 {
-    FlushBuffer(m_isConsistent);
+    FlushBuffer(true);
     if (m_isWritable)
         FlushData();
 }
 
 void SvStream::RefreshBuffer()
 {
-    FlushBuffer(m_isConsistent);
+    FlushBuffer(true);
     SeekPos(m_nBufFilePos);
     m_nBufActualLen = static_cast<sal_uInt16>(GetData( m_pRWBuf.get(), m_nBufSize ));
     if (m_nBufActualLen && m_nError == ERRCODE_IO_PENDING)
         m_nError = ERRCODE_NONE;
     if (m_nCryptMask)
         EncryptBuffer(m_pRWBuf.get(), static_cast<std::size_t>(m_nBufActualLen));
-    m_isConsistent = true;
     m_isIoRead = m_isIoWrite = false;
 }
 
