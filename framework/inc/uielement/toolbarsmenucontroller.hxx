@@ -93,8 +93,6 @@ namespace framework
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xDocCfgMgr;
             OUString                                                  m_aModuleIdentifier;
-            OUString                                                  m_aPropUIName;
-            OUString                                                  m_aPropResourceURL;
             bool                                                      m_bResetActive;
             std::vector< OUString >                                   m_aCommandVector;
             IntlWrapper                                               m_aIntlWrapper;

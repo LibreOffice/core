@@ -107,8 +107,6 @@ class ViewElementListProvider;
 class SchAttribTabDlg : public SfxTabDialogController
 {
 private:
-    sal_uInt16                   nDlgType;
-
     const ObjectPropertiesDialogParameter * const        m_pParameter;
     const ViewElementListProvider* const                 m_pViewElementListProvider;
     SvNumberFormatter* m_pNumberFormatter;

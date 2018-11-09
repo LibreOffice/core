@@ -330,7 +330,6 @@ private:
 
     VclPtr<vcl::Window>    mpParentWindow;
     VclPtr<sd::ShowWindow>     mpShowWindow;
-    VclPtr<PushButton>     mpTimeButton;
 
     std::shared_ptr< AnimationSlideController > mpSlideController;
 
