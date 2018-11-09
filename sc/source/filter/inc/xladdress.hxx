@@ -69,8 +69,14 @@ struct XclRange
     void         Set( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 )
                             { maFirst.Set( nCol1, nRow1 ); maLast.Set( nCol2, nRow2 ); }
 
-    sal_uInt16   GetColCount() const { return maLast.mnCol - maFirst.mnCol + 1; }
-    sal_uInt32   GetRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
+    sal_uInt16   GetColCount() const {
+        return maFirst.mnCol <= maLast.mnCol && maFirst.mnRow <= maLast.mnRow
+            ? maLast.mnCol - maFirst.mnCol + 1 : 0;
+    }
+    sal_uInt32   GetRowCount() const {
+        return maFirst.mnCol <= maLast.mnCol && maFirst.mnRow <= maLast.mnRow
+            ? maLast.mnRow - maFirst.mnRow + 1 : 0;
+    }
     bool                Contains( const XclAddress& rPos ) const;
 
     void                Read( XclImpStream& rStrm, bool bCol16Bit = true );
