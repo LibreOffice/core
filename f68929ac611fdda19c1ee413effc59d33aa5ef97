@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_473f4dd6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-09T09:55:58Z",
+      "side": 1,
+      "message": "that URL is \"xlibs: [XKB] suggested symbols file for Croatian (hr)\", without any mention of gpg; sure that\u0027s the right link?",
+      "revId": "f68929ac611fdda19c1ee413effc59d33aa5ef97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
