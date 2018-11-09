@@ -10563,6 +10563,7 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
           if $GPGCONF --dump-options | grep -q create-socketdir ; then
 	    AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_GPGCONF_SOCKETDIR])
+            AC_DEFINE_UNQUOTED([GPGME_GPGCONF], ["$GPGCONF"])
           else
             AC_MSG_RESULT([no])
           fi
@@ -10582,8 +10583,6 @@ AC_SUBST(LIBASSUAN_CFLAGS)
 AC_SUBST(LIBASSUAN_LIBS)
 AC_SUBST(GPGMEPP_CFLAGS)
 AC_SUBST(GPGMEPP_LIBS)
-AC_SUBST(GPGCONF)
-AC_SUBST(HAVE_GPGCONF_SOCKETDIR)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then

@@ -29,6 +29,8 @@
 // Defined if gpgme supports exporting minimal key.
 #define GPGME_CAN_EXPORT_MINIMAL_KEY 0
 
+#undef GPGME_GPGCONF
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
