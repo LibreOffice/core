@@ -389,19 +389,21 @@ namespace dbaui
 
     void OTextConnectionHelper::SetSeparator( weld::ComboBox& rBox, const OUString& rList, const OUString& rVal )
     {
-        for(sal_Int32 nIdx {0}; nIdx>=0;)
+        if (rVal.getLength()==1)
         {
-            sal_Int32 nPrevIdx {nIdx};
-            OUString sTVal {static_cast< sal_Unicode >( rList.getToken(1, '\t', nIdx).toInt32() )};
-
-            if( sTVal == rVal )
+            const sal_Unicode nVal {rVal[0]};
+            for(sal_Int32 nIdx {0}; nIdx>=0;)
             {
-                rBox.set_entry_text(rList.getToken(0, '\t', nPrevIdx));
-                return;
+                sal_Int32 nPrevIdx {nIdx};
+                if (static_cast<sal_Unicode>(rList.getToken(1, '\t', nIdx).toInt32()) == nVal)
+                {
+                    rBox.set_entry_text(rList.getToken(0, '\t', nPrevIdx));
+                    return;
+                }
             }
+            rBox.set_entry_text( rVal );
         }
-
-        if ( m_xTextSeparator.get() == &rBox && rVal.isEmpty() )
+        else if ( m_xTextSeparator.get() == &rBox && rVal.isEmpty() )
             rBox.set_entry_text(m_aTextNone);
         else
             rBox.set_entry_text(rVal.copy(0, 1));
