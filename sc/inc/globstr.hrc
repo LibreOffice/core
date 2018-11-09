@@ -156,7 +156,13 @@
 #define STR_PIVOT_TOTAL                         NC_("STR_PIVOT_TOTAL", "Total")
 #define STR_PIVOT_DATA                          NC_("STR_PIVOT_DATA", "Data")
 #define STR_PIVOT_GROUP                         NC_("STR_PIVOT_GROUP", "Group")
-#define STR_ROWCOL_SELCOUNT                     NC_("STR_ROWCOL_SELCOUNT", "$1 rows, $2 columns selected")
+/* To translators: $1 == will be replaced by STR_SELCOUNT_ROWARG, and $2 by STR_SELCOUNT_COLARG
+   e.g. Selected: 1 row, 2 columns */
+#define STR_SELCOUNT                            NC_("STR_SELCOUNT", "Selected: $1, $2")
+// To translators: STR_SELCOUNT_ROWARG is $1 of STR_SELCOUNT. $1 of STR_SELCOUNT_ROWARG is number of rows
+#define STR_SELCOUNT_ROWARG                     NNC_("STR_SELCOUNT_ROWARG", "$1 row", "$1 rows")
+// To translators: STR_SELCOUNT_COLARG is $1 of STR_SELCOUNT. $1 of STR_SELCOUNT_ROWARG is number of columns
+#define STR_SELCOUNT_COLARG                     NNC_("STR_SELCOUNT_COLARG", "$1 column", "$1 columns")
 #define STR_FILTER_SELCOUNT                     NC_("STR_FILTER_SELCOUNT", "$1 of $2 records found")
 #define STR_COLUMN                              NC_("STR_COLUMN", "Column")
 #define STR_ROW                                 NC_("STR_ROW", "Row")
