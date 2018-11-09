@@ -139,7 +139,6 @@ class SwSetExpField;
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     OUString const m_sName;
-    const SwNode* m_pOutlChgNd;
     OUString      m_sDelim;
     sal_uInt16      m_nType;
     sal_uInt8       m_nLevel;
@@ -176,11 +175,6 @@ public:
     sal_uInt8 GetOutlineLvl() const             { return m_nLevel; }
     void SetOutlineLvl( sal_uInt8 n )           { m_nLevel = n; }
     void SetChapter( SwSetExpField& rField, const SwNode& rNd );
-
-    /** Member only for SwDoc::UpdateExpField.
-     It is needed only at runtime of sequence field types! */
-    const SwNode* GetOutlineChgNd() const   { return m_pOutlChgNd; }
-    void SetOutlineChgNd( const SwNode* p ) { m_pOutlChgNd = p; }
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
