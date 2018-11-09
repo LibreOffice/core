@@ -33,6 +33,7 @@
 #include <svx/dlgutil.hxx>
 #include <labdlg.hxx>
 #include <transfrm.hxx>
+#include <bitmaps.hlst>
 
 // define ----------------------------------------------------------------
 
@@ -110,11 +111,10 @@ SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rI
     for (int i = 0; i < 3; ++i)
         aLineTypes.push_back(m_xLineTypes->get_text(i));
 
-    for(sal_uInt16 nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; ++nBitmap)
-    {
-        FixedImage *pImage = get<FixedImage>(OString("legtyp") + OString::number(nBitmap+1));
-        m_aBmpCapTypes[nBitmap] = pImage->GetImage();
-    }
+    static_assert(CAPTYPE_BITMAPS_COUNT == 3, "unexpected");
+    m_aBmpCapTypes[0] = Image(BitmapEx(RID_SVXBMP_LEGTYP1));
+    m_aBmpCapTypes[1] = Image(BitmapEx(RID_SVXBMP_LEGTYP2));
+    m_aBmpCapTypes[2] = Image(BitmapEx(RID_SVXBMP_LEGTYP3));
 
     //------------install ValueSet--------------------------
     m_xCT_CAPTTYPE->SetStyle( m_xCT_CAPTTYPE->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );

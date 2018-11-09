@@ -255,51 +255,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="grid1">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="halign">center</property>
-            <child>
-              <object class="GtkImage" id="legtyp1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">svx/res/legtyp1.png</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="legtyp2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">svx/res/legtyp2.png</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="legtyp3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">svx/res/legtyp3.png</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkComboBoxText" id="linetypes">
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
