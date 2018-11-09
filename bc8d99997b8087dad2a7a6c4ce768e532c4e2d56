@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_a7ef1186",
+        "filename": "sc/UIConfig_scalc.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-09T08:14:57Z",
+      "side": 1,
+      "message": "an sw/ file in an sc/*.mk looks suspicious?",
+      "revId": "bc8d99997b8087dad2a7a6c4ce768e532c4e2d56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
