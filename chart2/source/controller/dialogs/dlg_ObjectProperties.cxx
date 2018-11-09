@@ -324,7 +324,6 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                                  const ViewElementListProvider* pViewElementListProvider,
                                  const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier)
     : SfxTabDialogController(pParent, "modules/schart/ui/attributedialog.ui", "AttributeDialog", pAttr)
-    , nDlgType(nNoArrowNoShadowDlg)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
     , m_pNumberFormatter(nullptr)
@@ -488,7 +487,7 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aSet.Put (SvxDashListItem(m_pViewElementListProvider->GetDashList(),SID_DASH_LIST));
         aSet.Put (SvxLineEndListItem(m_pViewElementListProvider->GetLineEndList(),SID_LINEEND_LIST));
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
 
         if( m_pParameter->HasSymbolProperties() )
         {
@@ -508,13 +507,13 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aSet.Put(SvxBitmapListItem(m_pViewElementListProvider->GetBitmapList(),SID_BITMAP_LIST));
         aSet.Put(SvxPatternListItem(m_pViewElementListProvider->GetPatternList(),SID_PATTERN_LIST));
         aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,0));
-        aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
         rPage.PageCreated(aSet);
     }
     else if (rId == "transparent")
     {
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
         rPage.PageCreated(aSet);
     }
     else if (rId == "fontname")

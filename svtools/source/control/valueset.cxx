@@ -2286,7 +2286,6 @@ SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
-    mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
 
@@ -3165,18 +3164,10 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         // calculate offsets
         long nStartX;
         long nStartY;
-        if (mbFullMode)
-        {
-            long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
-            long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
-            nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
-            nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
-        }
-        else
-        {
-            nStartX = 0;
-            nStartY = 0;
-        }
+        long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
+        long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
+        nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
+        nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
 
         // calculate and draw items
         maVirDev->SetLineColor();
@@ -3211,15 +3202,6 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         maItemListRect.SetRight( x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1 );
         maItemListRect.SetBottom( y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1 );
 
-        if (!mbFullMode)
-        {
-            // If want also draw parts of items in the last line,
-            // then we add one more line if parts of these line are
-            // visible
-            if (y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height())
-                nLastItem += mnCols;
-            maItemListRect.SetBottom( aWinSize.Height() - y );
-        }
         for (size_t i = 0; i < nItemCount; i++)
         {
             SvtValueSetItem* pItem = mItemList[i].get();
