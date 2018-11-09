@@ -16,6 +16,24 @@
       "revId": "84286ac443ea8978743d281efeaa7ddb46199558",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f3283f1_626c7708",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-09T14:07:19Z",
+      "side": 1,
+      "message": "So that is presumably \u003chttps://docs.oracle.com/cd/E15289_01/JRRLN/newchanged.htm#GUID-CDE1F31D-EDEA-4FBF-B8CB-F555D09C084C\u003e \"New Features and Changes in Oracle JRockit JDK R28: Improved Validation of Class-Path Attribute in JAR File Manifest\" (though I have no idea what \"JRockit JDK R28\" is):\n\n\"The JAR file specification states that URLs in the Class-Path manifest attribute must be relative, though this has not been enforced. To better conform to the JAR specification, absolute URLs (those that include a scheme) are now ignored. For JAR files not loaded from the file system, Class-Path entries navigating to a parent directory (using \"../\") are also ignored.\n\n\"Applications depending on a JAR file loaded from an absolute URL element specified in Class-Path attribute may encounter a ClassNotFoundException. The historical behavior can be restored by setting a new system property, jdk.net.URLClassPath.disableClassPathURLCheck to true. Debugging info for Class-Path entries that are ignored can be printed to stderr by setting -Djdk.net.URLClassPath.disableClassPathURLCheck\u003ddebug.\"\n\nFor OpenJDK 11, that appears to be implemented with \u003chttp://hg.openjdk.java.net/jdk-updates/jdk11u/rev/1c1392d7c546\u003e \"8195874: Improve jar specification adherence\" (which is listed at \u003chttps://metadata.ftp-master.debian.org/changelogs//main/o/openjdk-10/openjdk-10_10.0.2+13-2_changelog\u003e referenced from Rene\u0027s 2018-10-23 comment at \u003chttps://gerrit.libreoffice.org/#/c/62203/\u003e \"add missing juh dependencies to JunitTests\") and follow-up \u003chttp://hg.openjdk.java.net/jdk-updates/jdk11u/rev/8513ac27b651\u003e \"8211731: Reconsider default option for ClassPathURLCheck change done in JDK-8195874\" (which is *not* listed there).\n\nJan-Marek, Rene, can you verify whether setting that Java \"system property, jdk.net.URLClassPath.disableClassPathURLCheck to true\" would be an alternative fix for your problems compared to the current fix of this change plus follow-up \u003chttps://gerrit.libreoffice.org/#/c/63119/\u003e \"Fix many Java subsequentcheck test by using JUH\"?",
+      "parentUuid": "3f3283f1_82c2c3e8",
+      "revId": "84286ac443ea8978743d281efeaa7ddb46199558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
