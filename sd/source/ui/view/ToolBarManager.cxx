@@ -60,11 +60,13 @@ class ToolBarRules;
 
 /** Lock of the frame::XLayoutManager.
 */
-struct LayouterLock
+class LayouterLock
 {
+    Reference<frame::XLayoutManager> mxLayouter;
+public:
     explicit LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter);
     ~LayouterLock();
-    Reference<frame::XLayoutManager> mxLayouter;
+    bool is() const { return mxLayouter.is(); }
 };
 
 /** Store a list of tool bars for each of the tool bar groups.  From
@@ -577,8 +579,8 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
                 aValue >>= mxLayouter;
                 // tdf#119997 if mpSynchronousLayouterLock was created before mxLayouter was
                 // set then update it now that its available
-                if (mpSynchronousLayouterLock && !mpSynchronousLayouterLock->mxLayouter)
-                    mpSynchronousLayouterLock->mxLayouter = mxLayouter;
+                if (mpSynchronousLayouterLock && !mpSynchronousLayouterLock->is())
+                    mpSynchronousLayouterLock.reset(new LayouterLock(mxLayouter));
             }
             catch (const RuntimeException&)
             {
