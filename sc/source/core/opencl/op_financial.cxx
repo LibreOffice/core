@@ -3543,7 +3543,7 @@ void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
     FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
     FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
     FormulaToken *tmpCur5 = vSubArguments[5]->GetFormulaToken();
-    FormulaToken *tmpCur6 = vSubArguments[6]->GetFormulaToken();
+    FormulaToken *tmpCur6 = vSubArguments.size() < 7 ? nullptr : vSubArguments[6]->GetFormulaToken();
     if(tmpCur0->GetType() == formula::svSingleVectorRef)
     {
     const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const
@@ -3610,17 +3610,24 @@ void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        fRate=";
     ss << vSubArguments[5]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    if(tmpCur6->GetType() == formula::svSingleVectorRef)
+    if(tmpCur6 == nullptr)
     {
-    const formula::SingleVectorRefToken*tmpCurDVR6= static_cast<const
-    formula::SingleVectorRefToken *>(tmpCur6);
-    ss <<"    if(isnan(" <<vSubArguments[6]->GenSlidingWindowDeclRef();
-    ss <<")||(gid0 >="<<tmpCurDVR6->GetArrayLength()<<"))\n";
-    ss <<"        nBase = 0;\n    else\n";
+        ss << "        nBase = 0;\n";
     }
-    ss << "        nBase = (int)";
-    ss << vSubArguments[6]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    else
+    {
+        if(tmpCur6->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR6=
+                static_cast<const formula::SingleVectorRefToken *>(tmpCur6);
+            ss <<"    if(isnan(" <<vSubArguments[6]->GenSlidingWindowDeclRef();
+            ss <<")||(gid0 >="<<tmpCurDVR6->GetArrayLength()<<"))\n";
+            ss <<"        nBase = 0;\n    else\n";
+        }
+        ss << "        nBase = (int)";
+        ss << vSubArguments[6]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
     ss <<"    uint nPer = convert_int( fPer );\n";
     ss <<"    double fUsePer = 1.0 *pow( fRate,-1);\n";
     ss <<"    double fAmorCoeff;\n";
@@ -3691,7 +3698,7 @@ void OpAmorlinc::GenSlidingWindowFunction(std::stringstream &ss,
     FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
     FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
     FormulaToken *tmpCur5 = vSubArguments[5]->GetFormulaToken();
-    FormulaToken *tmpCur6 = vSubArguments[6]->GetFormulaToken();
+    FormulaToken *tmpCur6 = vSubArguments.size() < 7 ? nullptr : vSubArguments[6]->GetFormulaToken();
     if(tmpCur0->GetType() == formula::svSingleVectorRef)
     {
     const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const
@@ -3758,17 +3765,24 @@ void OpAmorlinc::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        fRate=";
     ss << vSubArguments[5]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    if(tmpCur6->GetType() == formula::svSingleVectorRef)
+    if(tmpCur6 == nullptr)
     {
-    const formula::SingleVectorRefToken*tmpCurDVR6= static_cast<const
-    formula::SingleVectorRefToken *>(tmpCur6);
-    ss <<"    if(isnan(" <<vSubArguments[6]->GenSlidingWindowDeclRef();
-    ss <<")||(gid0 >="<<tmpCurDVR6->GetArrayLength()<<"))\n";
-    ss <<"        nBase = 0;\n    else\n";
+        ss << "        nBase = 0;\n";
     }
-    ss << "        nBase = (int)";
-    ss << vSubArguments[6]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    else
+    {
+        if(tmpCur6->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR6=
+                static_cast<const formula::SingleVectorRefToken *>(tmpCur6);
+            ss <<"    if(isnan(" <<vSubArguments[6]->GenSlidingWindowDeclRef();
+            ss <<")||(gid0 >="<<tmpCurDVR6->GetArrayLength()<<"))\n";
+            ss <<"        nBase = 0;\n    else\n";
+        }
+        ss << "        nBase = (int)";
+        ss << vSubArguments[6]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
     ss <<"    int  nPer = convert_int( fPer );\n";
     ss <<"    double fOneRate = fCost * fRate;\n";
     ss <<"    double fCostDelta = fCost - fRestVal;\n";
