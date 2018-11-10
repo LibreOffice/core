@@ -38,10 +38,8 @@ T* getHandle(JNIEnv* pEnv, jobject aObject)
 
 const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
 {
-    const char* pClone = NULL;
-
     const char* pTemp = pEnv->GetStringUTFChars(aJavaString, NULL);
-    pClone = strdup(pTemp);
+    const char* pClone = strdup(pTemp);
     pEnv->ReleaseStringUTFChars(aJavaString, pTemp);
 
     return pClone;
