@@ -510,10 +510,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         sal_Int32 nLineCountForSymbolsize = 0;
         sal_uInt32 nTextListLength = 3;
         sal_uInt32 nCustomLabelsCount = aCustomLabels.getLength();
-        bool bUseCustomLabel = false;
         Sequence< OUString > aTextList( nTextListLength );
 
-        bUseCustomLabel = nCustomLabelsCount > 0;
+        bool bUseCustomLabel = nCustomLabelsCount > 0;
         if( bUseCustomLabel )
         {
             nTextListLength = ( nCustomLabelsCount > 3 ) ? nCustomLabelsCount : 3;
