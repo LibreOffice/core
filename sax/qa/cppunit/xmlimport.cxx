@@ -295,7 +295,7 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
     }
     else //element or attribute
     {
-        sal_uInt32 nElementToken = nToken & 0xffff;
+        size_t nElementToken = nToken & 0xffff;
         if ( nElementToken < SAL_N_ELEMENTS(tokens) )
             aUtf8Token = tokens[ nElementToken ];
     }
@@ -313,7 +313,7 @@ sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& 
 sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
 {
     OString sToken( pToken, nLength );
-    for( sal_uInt16  i = 0; i < SAL_N_ELEMENTS(tokens); i++ )
+    for( size_t  i = 0; i < SAL_N_ELEMENTS(tokens); i++ )
     {
         if ( tokens[i] == sToken )
             return static_cast<sal_Int32>(i);
@@ -384,7 +384,7 @@ void XMLImportTest::parse()
                             "multiplens.xml", "multiplepfx.xml",
                             "nstoattributes.xml", "nestedns.xml", "testthreading.xml"};
 
-    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
     {
         InputSource source;
         source.sSystemId    = "internal";

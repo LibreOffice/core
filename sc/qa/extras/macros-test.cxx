@@ -298,7 +298,7 @@ void ScMacrosTest::testVba()
     sTempDir += OUStringLiteral1(SAL_PATHDELIMITER);
     OUString sTestFileName("My Test WorkBook.xls");
     Sequence< uno::Any > aParams;
-    for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
+    for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);

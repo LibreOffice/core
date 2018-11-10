@@ -195,7 +195,7 @@ namespace svx
                 { OUString("Selection"),          DataAccessDescriptorProperty::Selection,             }
             };
 
-            for (unsigned i=0; i<SAL_N_ELEMENTS(s_aDescriptorProperties); ++i)
+            for (size_t i=0; i<SAL_N_ELEMENTS(s_aDescriptorProperties); ++i)
                 s_aProperties[ s_aDescriptorProperties[i].maName ] = &s_aDescriptorProperties[i];
         }
 

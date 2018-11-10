@@ -637,7 +637,7 @@ void CanvasBitmapTest::runTest()
 
     // Testing VclCanvasBitmap wrapper
 
-    for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
+    for( size_t i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
     {
         const sal_Int8 nDepth( lcl_depths[i] );
         Bitmap aBitmap(Size(200,200),nDepth);

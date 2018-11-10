@@ -99,7 +99,7 @@ static sal_Int16 checkScriptType(sal_Unicode c)
     };
 
     UBlockCode block=ublock_getCode(static_cast<sal_uInt32>(c));
-    sal_uInt16 i;
+    size_t i;
     for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
         if (block <= scriptList[i].to) break;
     }

@@ -312,7 +312,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     m_pToolBox = VclPtr<SwScrollNaviToolBox>::Create(get<vcl::Window>("box"), this, 0);
     get(m_pInfoField, "label");
 
-    sal_uInt16 i;
+    size_t i;
 
     m_pToolBox->SetHelpId(HID_NAVI_VS);
     m_pToolBox->SetLineCount( 2 );
@@ -773,8 +773,7 @@ void NavElementBox_Impl::Select()
 void NavElementBox_Impl::Update()
 {
     sal_uInt16 nMoveType = SwView::GetMoveType();
-    sal_uInt16 i;
-    for ( i = 0; i < SAL_N_ELEMENTS( aNavigationInsertIds ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( aNavigationInsertIds ); ++i )
     {
         if ( nMoveType == aNavigationInsertIds[i] )
         {

@@ -526,7 +526,7 @@ IMPL_LINK( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {
@@ -547,7 +547,7 @@ IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {
@@ -569,7 +569,7 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {
@@ -598,7 +598,7 @@ IMPL_LINK( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {
