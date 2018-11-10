@@ -475,7 +475,7 @@ oslFileError FileHandle_Impl::readLineAt(
         if (curpos >= m_buflen)
         {
             /* buffer examined */
-            if ((curpos - bufpos) > 0)
+            if (curpos > bufpos) // actually, curpos can't become less than bufpos, so != could do
             {
                 /* flush buffer to sequence */
                 result = writeSequence_Impl(
