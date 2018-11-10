@@ -45,10 +45,8 @@ SvXMLImportContextRef XMLIndexBodyContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
-
     // return text content (if possible)
-    pContext = GetImport().GetTextImport()->CreateTextChildContext(
+    SvXMLImportContext* pContext = GetImport().GetTextImport()->CreateTextChildContext(
         GetImport(), nPrefix, rLocalName, xAttrList, XMLTextType::Section );
     if (nullptr == pContext)
     {
