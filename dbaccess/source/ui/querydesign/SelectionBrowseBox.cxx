@@ -662,9 +662,8 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
     ::connectivity::OSQLParser& rParser( rController.getParser() );
     {
         // automatically add parentheses around subqueries
-        OSQLParseNode *pParseNode = nullptr;
         OUString devnull;
-        pParseNode = rParser.parseTree( devnull, _sFieldName, true );
+        OSQLParseNode *pParseNode = rParser.parseTree( devnull, _sFieldName, true );
         if (pParseNode == nullptr)
             pParseNode = rParser.parseTree( devnull, _sFieldName );
         if (pParseNode != nullptr && SQL_ISRULE(pParseNode, select_statement))
