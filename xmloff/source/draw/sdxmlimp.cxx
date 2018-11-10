@@ -716,9 +716,7 @@ SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalNa
 SvXMLImportContext *SdXMLImport::CreateScriptContext(
                                        const OUString& rLocalName )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
+    SvXMLImportContext *pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
     return pContext;
 }
 
