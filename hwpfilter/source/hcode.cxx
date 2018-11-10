@@ -565,9 +565,7 @@ static int is_jaso(hchar hh)
 
 static hchar jaso2ks(hchar hh)
 {
-    unsigned int i;
-
-    for (i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
         if (hh == jaso_hh_code[i])
     {
         return sal::static_int_cast<hchar>(0xa4a1 + i);

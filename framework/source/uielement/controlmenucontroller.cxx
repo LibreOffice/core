@@ -176,7 +176,7 @@ ControlMenuController::ControlMenuController(const css::uno::Reference< css::uno
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         //ident is .uno:Command without .uno:
         OString sIdent = OString(aCommands[i]).copy(5);
@@ -226,7 +226,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     osl::ResettableMutexGuard aLock( m_aMutex );
 
     OString sIdent;
-    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
         {

@@ -1116,7 +1116,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::TIMESTAMP:
             {
                 const char* aIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
-                for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
                 {
                     m_pGroupOnLst->InsertEntry(RptResId(aIds[i]));
                     m_pGroupOnLst->SetEntryData(i+1,reinterpret_cast<void*>(i+2));
