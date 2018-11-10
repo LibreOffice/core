@@ -619,6 +619,15 @@ public:
         return mpDoc->pClass->getSignatureState(mpDoc);
     }
 
+    /**
+     * Gets an image of the selected shapes.
+     *
+     */
+    void renderShapeSelection(char*& pOutput, size_t& nOutputSize)
+    {
+        mpDoc->pClass->renderShapeSelection(mpDoc, pOutput, nOutputSize);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
