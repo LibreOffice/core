@@ -1962,7 +1962,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 
     uno::Any aHu = uno::makeAny(OUString("Hu"));
     uno::Any ahu = uno::makeAny(OUString("hu"));
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
@@ -2030,7 +2030,7 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);

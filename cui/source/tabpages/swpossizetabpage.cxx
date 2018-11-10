@@ -451,8 +451,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
-        sal_uInt16 nIndex;
-        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
+        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
         {
             if(aHoriIds[nIndex].eHori == eStringId)
             {
@@ -460,7 +459,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
                 return eStringId;
             }
         }
-        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
+        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
         {
             if(aVertIds[nIndex].eHori == eStringId)
             {
@@ -1651,7 +1650,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                 if (pMap[_nMapPos].eStrId == eStrId)
                 {
                     nLBRelations = pMap[_nMapPos].nLBRelations;
-                    for (sal_uInt16 nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aAsCharRelationMap); nRelPos++)
+                    for (size_t nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aAsCharRelationMap); nRelPos++)
                     {
                         if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
                         {
@@ -1707,7 +1706,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
             {
                 if (nLBRelations & static_cast<LB>(nBit))
                 {
-                    for (sal_uInt16 nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aRelationMap); nRelPos++)
+                    for (size_t nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aRelationMap); nRelPos++)
                     {
                         if (aRelationMap[nRelPos].nLBRelation == static_cast<LB>(nBit))
                         {

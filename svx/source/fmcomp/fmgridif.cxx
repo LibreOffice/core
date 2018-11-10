@@ -1596,7 +1596,7 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     // as not all properties have to be supported by all columns we have to check this
     // before adding a listener
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
-    for (unsigned i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
+    for (size_t i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
     {
         if ( xInfo->hasPropertyByName( aPropsListenedTo[i] ) )
         {
