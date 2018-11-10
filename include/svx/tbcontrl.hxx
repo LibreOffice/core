@@ -210,7 +210,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public cppu::ImplInheritanceHelper<
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
-    BorderColorStatus m_aBorderColorStatus;
+    ColorStatus m_aColorStatus;
     bool m_bSplitButton;
     sal_uInt16 m_nSlotId;
     ColorSelectFunction m_aColorSelectFunction;
