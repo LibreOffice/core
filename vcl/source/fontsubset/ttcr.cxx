@@ -1047,8 +1047,6 @@ TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
 int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     /* XXX do a binary search */
-    unsigned int i;
-
     assert(_this != nullptr);
     assert(ptr != nullptr);
     assert(len != nullptr);
@@ -1061,7 +1059,7 @@ int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt3
         _this->rawdata = nullptr;
     }
 
-    for(i=0; i < SAL_N_ELEMENTS(vtable2); i++) {
+    for(size_t i=0; i < SAL_N_ELEMENTS(vtable2); i++) {
         if (_this->tag == vtable2[i].tag) {
             return vtable2[i].f(_this, ptr, len, tag);
         }
@@ -1443,13 +1441,11 @@ extern "C"
     {
         vcl::TrueTypeTable *_this = static_cast<vcl::TrueTypeTable *>(arg);
         /* XXX do a binary search */
-        unsigned int i;
-
         assert(_this != nullptr);
 
         if (_this->rawdata) free(_this->rawdata);
 
-        for(i=0; i < SAL_N_ELEMENTS(vcl::vtable1); i++) {
+        for(size_t i=0; i < SAL_N_ELEMENTS(vcl::vtable1); i++) {
             if (_this->tag == vcl::vtable1[i].tag) {
                 vcl::vtable1[i].f(_this);
                 return;

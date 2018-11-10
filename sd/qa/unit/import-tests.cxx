@@ -1377,7 +1377,7 @@ void SdImportTest::testTdf99729()
 {
     const OUString filenames[] = { "/sd/qa/unit/data/odp/tdf99729-new.odp", "/sd/qa/unit/data/odp/tdf99729-legacy.odp" };
     int nonwhitecounts[] = { 0, 0 };
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
     {
         // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
         uno::Reference<lang::XComponent> xComponent

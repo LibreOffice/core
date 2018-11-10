@@ -869,7 +869,7 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             PROP_BOTTOM_BORDER_DISTANCE
         };
 
-        for( sal_uInt32 nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
+        for( size_t nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
         {
             OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
             beans::PropertyValue aValue;
@@ -3563,7 +3563,7 @@ void DomainMapper_Impl::handleAuthor
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo =  xUserDefinedProps->getPropertySetInfo();
     //search for a field mapping
     OUString sFieldServiceName;
-    sal_uInt16 nMap = 0;
+    size_t nMap = 0;
     for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
     {
         if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))

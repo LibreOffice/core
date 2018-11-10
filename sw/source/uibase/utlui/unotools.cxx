@@ -464,7 +464,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         aZoom >>= nZoom;
 
         VclPtrInstance<PopupMenu> aSubPop1;
-        for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(nZoomValues); ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(nZoomValues); ++i)
         {
             OUString sTemp = unicode::formatPercent(nZoomValues[i],
                 Application::GetSettings().GetUILanguageTag());
