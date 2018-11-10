@@ -335,6 +335,11 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getSignatureState().
     int (*getSignatureState) (LibreOfficeKitDocument* pThis);
 
+    /// @see lok::Document::renderShapeSelection
+    void (*renderShapeSelection) (LibreOfficeKitDocument* pThis,
+                                  char*& pOutput,
+                                  size_t& nOutputSize);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
