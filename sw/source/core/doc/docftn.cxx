@@ -138,39 +138,69 @@ void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)
     aDepends.StartListening(pTextFormatColl);
 }
 
-SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc &rDoc) const
+SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc& rDoc) const
 {
-    if (!pCharFormat)
+    auto pCharFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
+        m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
+    if (pCharFormat != pCharFormatFromDoc)
     {
-        pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
-            m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
-        aDepends.StartListening(pCharFormat);
+        aDepends.EndListening(pCharFormat);
+        aDepends.StartListening(pCharFormatFromDoc);
+        pCharFormat = pCharFormatFromDoc;
     }
     return pCharFormat;
 }
 
-void SwEndNoteInfo::SetCharFormat( SwCharFormat* pChFormat )
+namespace
 {
-    aDepends.EndListening(pCharFormat);
-    pCharFormat = pChFormat;
-    aDepends.StartListening(pCharFormat);
+    void lcl_ResetPoolIdForDocAndSync(const sal_uInt16 nId, SwCharFormat* pFormat, SwEndNoteInfo& rInfo)
+    {
+        auto pDoc = pFormat->GetDoc();
+        if(!pDoc)
+            return;
+        for(auto pDocFormat : *pDoc->GetCharFormats())
+        {
+            if(pDocFormat == pFormat)
+                pDocFormat->SetPoolFormatId(nId);
+            else if(pDocFormat->GetPoolFormatId() == nId)
+                pDocFormat->SetPoolFormatId(0);
+        }
+        rInfo.GetCharFormat(*pDoc);
+        rInfo.GetAnchorCharFormat(*pDoc);
+    }
+}
+
+void SwEndNoteInfo::SetCharFormat(SwCharFormat* pFormat)
+{
+    lcl_ResetPoolIdForDocAndSync(
+            static_cast<sal_uInt16>(m_bEndNote
+                    ? RES_POOLCHR_ENDNOTE
+                    : RES_POOLCHR_FOOTNOTE),
+            pFormat,
+            *this);
 }
 
 SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 {
-    if(!pAnchorFormat)
+    auto pAnchorFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
+        m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
+    if(pAnchorFormat != pAnchorFormatFromDoc)
     {
-        pAnchorFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
-            m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
-        aDepends.StartListening(pAnchorFormat);
+        aDepends.EndListening(pAnchorFormat);
+        aDepends.StartListening(pAnchorFormatFromDoc);
+        pAnchorFormat = pAnchorFormatFromDoc;
     }
     return pAnchorFormat;
 }
 
 void SwEndNoteInfo::SetAnchorCharFormat(SwCharFormat* pFormat)
 {
-    pAnchorFormat = pFormat;
-    aDepends.StartListening(pAnchorFormat);
+    lcl_ResetPoolIdForDocAndSync(
+            static_cast<sal_uInt16>(m_bEndNote
+                    ? RES_POOLCHR_ENDNOTE_ANCHOR
+                    : RES_POOLCHR_FOOTNOTE_ANCHOR),
+            pFormat,
+            *this);
 }
 
 SwCharFormat* SwEndNoteInfo::GetCurrentCharFormat(const bool bAnchor) const
@@ -187,7 +217,7 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         const sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0 ;
         if (RES_ATTRSET_CHG == nWhich || RES_FMT_CHG == nWhich)
         {
-            auto pFormat = GetCurrentCharFormat(pCharFormat != nullptr);
+            auto pFormat = GetCurrentCharFormat(pCharFormat == nullptr);
             if (!pFormat || !aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
                 return;
             SwDoc* pDoc = pFormat->GetDoc();
@@ -207,14 +237,15 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
+        auto pNew = const_cast<SwModify*>(pModifyChangedHint->m_pNew);
         if(pAnchorFormat == &rModify)
-            pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
+            pAnchorFormat = static_cast<SwCharFormat*>(pNew);
         else if(pCharFormat == &rModify)
-            pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
+            pCharFormat = static_cast<SwCharFormat*>(pNew);
         else if(pPageDesc == &rModify)
-            pPageDesc = const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>(pModifyChangedHint->m_pNew));
+            pPageDesc = static_cast<SwPageDesc*>(pNew);
         else if(pTextFormatColl == &rModify)
-            pTextFormatColl = const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(pModifyChangedHint->m_pNew));
+            pTextFormatColl = static_cast<SwTextFormatColl*>(pNew);
     }
 }
 
