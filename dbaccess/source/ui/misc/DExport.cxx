@@ -699,6 +699,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
         {
             switch(aWizard->getOperation())
             {
+                case CopyTableOperation::CopyDefinitionOnly:
                 case CopyTableOperation::CopyDefinitionAndData:
                 case CopyTableOperation::AppendData:
                     {
@@ -723,7 +724,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
         else
             bError = true;
 
-        if(!bError)
+        if(!bError && aWizard->getOperation() != CopyTableOperation::CopyDefinitionOnly)
             createRowSet();
     }
     catch( const SQLException&)
