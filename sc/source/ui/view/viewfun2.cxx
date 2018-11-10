@@ -3045,7 +3045,8 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
         ScMarkData::MarkedTabsType::const_iterator it;
         std::vector<SCTAB> undoTabs;
 
-        const ScMarkData::MarkedTabsType& selectedTabs = rMark.GetSelectedTabs();
+        // need to take a copy of selectedtabs since it is modified in the loop
+        const ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
         for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
         {
             nTab = *it;
