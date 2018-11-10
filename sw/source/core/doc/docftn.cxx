@@ -187,7 +187,7 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         const sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0 ;
         if (RES_ATTRSET_CHG == nWhich || RES_FMT_CHG == nWhich)
         {
-            auto pFormat = GetCurrentCharFormat(pCharFormat != nullptr);
+            auto pFormat = GetCurrentCharFormat(pCharFormat == nullptr);
             if (!pFormat || !aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
                 return;
             SwDoc* pDoc = pFormat->GetDoc();
@@ -207,14 +207,15 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
+        auto pNew = const_cast<SwModify*>(pModifyChangedHint->m_pNew);
         if(pAnchorFormat == &rModify)
-            pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
+            pAnchorFormat = static_cast<SwCharFormat*>(pNew);
         else if(pCharFormat == &rModify)
-            pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
+            pCharFormat = static_cast<SwCharFormat*>(pNew);
         else if(pPageDesc == &rModify)
-            pPageDesc = const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>(pModifyChangedHint->m_pNew));
+            pPageDesc = static_cast<SwPageDesc*>(pNew);
         else if(pTextFormatColl == &rModify)
-            pTextFormatColl = const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(pModifyChangedHint->m_pNew));
+            pTextFormatColl = static_cast<SwTextFormatColl*>(pNew);
     }
 }
 
