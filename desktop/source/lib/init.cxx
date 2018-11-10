@@ -4365,7 +4365,6 @@ static void lo_destroy(LibreOfficeKit* pThis)
 {
     SolarMutexClearableGuard aGuard;
 
-    bool bSuccess = false;
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     gImpl = nullptr;
 
@@ -4375,7 +4374,7 @@ static void lo_destroy(LibreOfficeKit* pThis)
     uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
     // FIXME: the terminate() call here is a no-op because it detects
     // that LibreOfficeKit::isActive() and then returns early!
-    bSuccess = xDesktop.is() && xDesktop->terminate();
+    bool bSuccess = xDesktop.is() && xDesktop->terminate();
 
     if (!bSuccess)
     {
