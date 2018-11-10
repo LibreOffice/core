@@ -341,6 +341,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             {
                 // #i124608# extract single selection wanted from dialog return values
                 rDescriptor[nInd].Value >>= bSelectionOnly;
+                bPageProvided = false;
             }
             else if (rDescriptor[nInd].Name == "PagePos")
             {

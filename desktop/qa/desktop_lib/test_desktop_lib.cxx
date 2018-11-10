@@ -2522,9 +2522,10 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(43), offsetof(struct _LibreOfficeKitDocumentClass, insertCertificate));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(44), offsetof(struct _LibreOfficeKitDocumentClass, addCertificate));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(45), offsetof(struct _LibreOfficeKitDocumentClass, getSignatureState));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(46), offsetof(struct _LibreOfficeKitDocumentClass, renderShapeSelection));
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(46), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(47), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

@@ -121,6 +121,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/streamwrap.hxx>
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -750,6 +751,8 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
 
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
 
+static void doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char*& pOutput, size_t& nOutputSize);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -814,6 +817,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->insertCertificate = doc_insertCertificate;
         m_pDocumentClass->addCertificate = doc_addCertificate;
         m_pDocumentClass->getSignatureState = doc_getSignatureState;
+
+        m_pDocumentClass->renderShapeSelection = doc_renderShapeSelection;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -2595,6 +2600,39 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
             assert(false);
             break;
     }
+}
+
+static void doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char*& pOutput, size_t& nOutputSize)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    std::cout << "doc_renderShapeSelection" << std::endl;
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+
+    SvMemoryStream aOutStream;
+    uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamWrapper( aOutStream );
+
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+    aMediaDescriptor["SelectionOnly"] <<= true;
+    aMediaDescriptor["OutputStream"] <<= xOut;
+
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+
+
+    size_t nStreamSize = aOutStream.GetEndOfData();
+    char* pTmp = pOutput;
+    pOutput = new char[nOutputSize + nStreamSize];
+    std::memcpy(pOutput, pTmp, nOutputSize);
+    std::memcpy(pOutput+nOutputSize, aOutStream.GetData(), nStreamSize);
+
+    nOutputSize += nStreamSize;
+    delete [] pTmp;
 }
 
 /** Class to react on finishing of a dispatched command.
