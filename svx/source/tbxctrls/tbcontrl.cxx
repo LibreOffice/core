@@ -1772,20 +1772,8 @@ void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent 
     }
     else
     {
-        Color aColor(COL_TRANSPARENT);
-
-        if (mrColorStatus.statusChanged(rEvent))
-        {
-            aColor = mrColorStatus.GetColor();
-        }
-        else if (rEvent.IsEnabled)
-        {
-            sal_Int32 nValue;
-            if (rEvent.State >>= nValue)
-                aColor = Color(nValue);
-        }
-
-        SelectEntry(aColor);
+        mrColorStatus.statusChanged(rEvent);
+        SelectEntry(mrColorStatus.GetColor());
     }
 }
 
@@ -1801,20 +1789,8 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     }
     else
     {
-        Color aColor(COL_TRANSPARENT);
-
-        if (mrColorStatus.statusChanged(rEvent))
-        {
-            aColor = mrColorStatus.GetColor();
-        }
-        else if (rEvent.IsEnabled)
-        {
-            sal_Int32 nValue;
-            if (rEvent.State >>= nValue)
-                aColor = Color(nValue);
-        }
-
-        SelectEntry(aColor);
+        mrColorStatus.statusChanged(rEvent);
+        SelectEntry(mrColorStatus.GetColor());
     }
 }
 
@@ -1937,83 +1913,48 @@ ColorStatus::~ColorStatus()
 {
 }
 
-bool ColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+void ColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     Color aColor( COL_TRANSPARENT );
+    css::table::BorderLine2 aTable;
 
-    if ( rEvent.FeatureURL.Complete == ".uno:FrameLineColor" )
+    if ( rEvent.State >>= aTable )
     {
-        if ( rEvent.IsEnabled )
-            rEvent.State >>= aColor;
-
-        maColor = aColor;
-        return true;
-    }
-    else
-    {
-        css::table::BorderLine2 aTable;
-        if ( rEvent.IsEnabled )
-            rEvent.State >>= aTable;
-
         SvxBorderLine aLine;
         SvxBoxItem::LineToSvxLine( aTable, aLine, false );
         if ( !aLine.isEmpty() )
             aColor = aLine.GetColor();
-
-        if ( rEvent.FeatureURL.Complete == ".uno:BorderTLBR" )
-        {
-            maTLBRColor = aColor;
-            return true;
-        }
-        else if ( rEvent.FeatureURL.Complete == ".uno:BorderBLTR" )
-        {
-            maBLTRColor = aColor;
-            return true;
-        }
     }
+    else
+        rEvent.State >>= aColor;
 
-    return false;
+    if ( rEvent.FeatureURL.Path == "BorderTLBR" )
+        maTLBRColor = aColor;
+    else if ( rEvent.FeatureURL.Path == "BorderBLTR" )
+        maBLTRColor = aColor;
+    else
+        maColor = aColor;
 }
 
 Color ColorStatus::GetColor()
 {
-    bool bHasColor = maColor != COL_TRANSPARENT;
-    bool bHasTLBRColor = maTLBRColor != COL_TRANSPARENT;
-    bool bHasBLTRColor = maBLTRColor != COL_TRANSPARENT;
+    Color aColor( maColor );
 
-    if ( !bHasColor && bHasTLBRColor && !bHasBLTRColor )
-        return maTLBRColor;
-    else if ( !bHasColor && !bHasTLBRColor && bHasBLTRColor )
-        return maBLTRColor;
-    else if ( bHasColor && bHasTLBRColor && !bHasBLTRColor )
+    if ( maTLBRColor != COL_TRANSPARENT )
     {
-        if ( maColor == maTLBRColor )
-            return maColor;
-        else
-            return maBLTRColor;
-    }
-    else if ( bHasColor && !bHasTLBRColor && bHasBLTRColor )
-    {
-        if ( maColor == maBLTRColor )
-            return maColor;
-        else
-            return maTLBRColor;
-    }
-    else if ( !bHasColor && bHasTLBRColor && bHasBLTRColor )
-    {
-        if ( maTLBRColor == maBLTRColor )
-            return maTLBRColor;
-        else
-            return maColor;
-    }
-    else if ( bHasColor && bHasTLBRColor && bHasBLTRColor )
-    {
-        if ( maColor == maTLBRColor && maColor == maBLTRColor )
-            return maColor;
-        else
+        if ( aColor != maTLBRColor && aColor != COL_TRANSPARENT )
             return COL_TRANSPARENT;
+        aColor = maTLBRColor;
     }
-    return maColor;
+
+    if ( maBLTRColor != COL_TRANSPARENT )
+    {
+        if ( aColor != maBLTRColor && aColor != COL_TRANSPARENT )
+            return COL_TRANSPARENT;
+        return maBLTRColor;
+    }
+
+    return aColor;
 }
 
 
@@ -3205,17 +3146,8 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     bool bValue;
     if ( !m_bSplitButton )
     {
-        Color aColor( COL_TRANSPARENT );
-
-        if ( m_aColorStatus.statusChanged( rEvent ) )
-        {
-            aColor = m_aColorStatus.GetColor();
-        }
-        else if ( rEvent.IsEnabled )
-        {
-            rEvent.State >>= aColor;
-        }
-        m_xBtnUpdater->Update( aColor );
+        m_aColorStatus.statusChanged( rEvent );
+        m_xBtnUpdater->Update( m_aColorStatus.GetColor() );
     }
     else if ( rEvent.State >>= bValue )
         pToolBox->CheckItem( nId, bValue );

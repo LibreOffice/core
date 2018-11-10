@@ -40,7 +40,7 @@ class SVX_DLLPUBLIC ColorStatus
 public:
     ColorStatus();
     ~ColorStatus();
-    bool statusChanged( const css::frame::FeatureStateEvent& rEvent );
+    void statusChanged( const css::frame::FeatureStateEvent& rEvent );
     Color GetColor();
 };
 
