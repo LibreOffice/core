@@ -550,12 +550,9 @@ void BarChart::createShapes()
             double fSlotX=0;
             for( auto& rXSlot : rZSlot )
             {
-                sal_Int32 nAttachedAxisIndex = 0;
-                BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
-
-                nAttachedAxisIndex = rXSlot.getAttachedAxisIndexForFirstSeries();
+                sal_Int32 nAttachedAxisIndex = rXSlot.getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
-                pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
+                BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
 
