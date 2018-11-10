@@ -450,7 +450,6 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
     if ( cByte == 0x0a )
     {
         nFormat = GraphicFileFormat::PCX;
-        bRet = true;
 
         sal_uInt16  nTemp16;
         sal_uInt16  nXmin;
