@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+1: Gabor Kelemen <kelemeng@ubuntu.com>
+Verified+1: Gabor Kelemen <kelemeng@ubuntu.com>
+Code-Review+2: Mike Kaganski <mike.kaganski@collabora.com>
+Submitted-by: Mike Kaganski <mike.kaganski@collabora.com>
+Submitted-at: Sat, 10 Nov 2018 14:18:18 +0100
+Reviewed-on: https://gerrit.libreoffice.org/63133
+Project: core
+Branch: refs/heads/master
