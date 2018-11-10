@@ -227,7 +227,7 @@ IMPL_LINK(Condition, DropdownClick, ToolBox*, pToolBox, void)
     m_pColorFloat = VclPtr<SvxColorWindow>::Create(
                            OUString() /*m_aCommandURL*/,
                            m_xPaletteManager,
-                           m_aBorderColorStatus,
+                           m_aColorStatus,
                            nSlotId,
                            nullptr,
                            pToolBox,
