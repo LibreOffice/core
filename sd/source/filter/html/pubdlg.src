@@ -99,9 +99,10 @@ ModalDialog DLG_PUBLISHING
     FixedBitmap PAGE2_BMP
     {
         OutputSize = TRUE ;
+        Border = TRUE ;
         Scale = TRUE ;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
         Fixed = Bitmap { File = "pubdlg1.png" ; } ;
     };
 
