@@ -32,14 +32,14 @@
 
 #include <functional>
 
-class SVX_DLLPUBLIC BorderColorStatus
+class SVX_DLLPUBLIC ColorStatus
 {
     Color maColor;
     Color maTLBRColor;
     Color maBLTRColor;
 public:
-    BorderColorStatus();
-    ~BorderColorStatus();
+    ColorStatus();
+    ~ColorStatus();
     bool statusChanged( const css::frame::FeatureStateEvent& rEvent );
     Color GetColor();
 };
@@ -66,7 +66,7 @@ private:
 
     VclPtr<vcl::Window> mxParentWindow;
     std::shared_ptr<PaletteManager> mxPaletteManager;
-    BorderColorStatus&  mrBorderColorStatus;
+    ColorStatus&  mrColorStatus;
 
     ColorSelectFunction const maColorSelectFunction;
     bool const mbReuseParentForPicker;
@@ -83,7 +83,7 @@ private:
 public:
     SvxColorWindow(const OUString& rCommand,
                    std::shared_ptr<PaletteManager> const & rPaletteManager,
-                   BorderColorStatus& rBorderColorStatus,
+                   ColorStatus& rColorStatus,
                    sal_uInt16 nSlotId,
                    const css::uno::Reference< css::frame::XFrame >& rFrame,
                    vcl::Window* pParentWindow,
@@ -118,7 +118,7 @@ private:
     weld::Window* const mpParentWindow;
     weld::MenuButton* mpMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
-    BorderColorStatus&  mrBorderColorStatus;
+    ColorStatus&  mrColorStatus;
     ColorSelectFunction const maColorSelectFunction;
 
     std::unique_ptr<ColorValueSet> mxColorSet;
@@ -144,7 +144,7 @@ private:
 
 public:
     ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager,
-                BorderColorStatus& rBorderColorStatus,
+                ColorStatus& rColorStatus,
                 sal_uInt16 nSlotId,
                 const css::uno::Reference< css::frame::XFrame >& rFrame,
                 weld::Window* pParentWindow, weld::MenuButton* pMenuButton,

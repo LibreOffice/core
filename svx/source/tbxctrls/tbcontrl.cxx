@@ -1255,7 +1255,7 @@ void SvxFontNameBox_Impl::Select()
 
 SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
                                std::shared_ptr<PaletteManager> const & rPaletteManager,
-                               BorderColorStatus&         rBorderColorStatus,
+                               ColorStatus&               rColorStatus,
                                sal_uInt16                 nSlotId,
                                const Reference< XFrame >& rFrame,
                                vcl::Window*               pParentWindow,
@@ -1267,7 +1267,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     maCommand( rCommand ),
     mxParentWindow(pParentWindow),
     mxPaletteManager( rPaletteManager ),
-    mrBorderColorStatus( rBorderColorStatus ),
+    mrColorStatus( rColorStatus ),
     maColorSelectFunction(aFunction),
     mbReuseParentForPicker(bReuseParentForPicker)
 {
@@ -1367,7 +1367,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
 }
 
 ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager,
-                         BorderColorStatus&         rBorderColorStatus,
+                         ColorStatus&               rColorStatus,
                          sal_uInt16                 nSlotId,
                          const Reference< XFrame >& rFrame,
                          weld::Window*              pParentWindow,
@@ -1381,7 +1381,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     , mpParentWindow(pParentWindow)
     , mpMenuButton(pMenuButton)
     , mxPaletteManager(rPaletteManager)
-    , mrBorderColorStatus(rBorderColorStatus)
+    , mrColorStatus(rColorStatus)
     , maColorSelectFunction(aFunction)
     , mxColorSet(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
     , mxRecentColorSet(new ColorValueSet(nullptr))
@@ -1774,9 +1774,9 @@ void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent 
     {
         Color aColor(COL_TRANSPARENT);
 
-        if (mrBorderColorStatus.statusChanged(rEvent))
+        if (mrColorStatus.statusChanged(rEvent))
         {
-            aColor = mrBorderColorStatus.GetColor();
+            aColor = mrColorStatus.GetColor();
         }
         else if (rEvent.IsEnabled)
         {
@@ -1803,9 +1803,9 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     {
         Color aColor(COL_TRANSPARENT);
 
-        if (mrBorderColorStatus.statusChanged(rEvent))
+        if (mrColorStatus.statusChanged(rEvent))
         {
-            aColor = mrBorderColorStatus.GetColor();
+            aColor = mrColorStatus.GetColor();
         }
         else if (rEvent.IsEnabled)
         {
@@ -1926,18 +1926,18 @@ void ColorWindow::SelectEntry(const Color& rColor)
     ColorWindow::SelectEntry(std::make_pair(rColor, sColorName));
 }
 
-BorderColorStatus::BorderColorStatus() :
+ColorStatus::ColorStatus() :
     maColor( COL_TRANSPARENT ),
     maTLBRColor( COL_TRANSPARENT ),
     maBLTRColor( COL_TRANSPARENT )
 {
 }
 
-BorderColorStatus::~BorderColorStatus()
+ColorStatus::~ColorStatus()
 {
 }
 
-bool BorderColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+bool ColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     Color aColor( COL_TRANSPARENT );
 
@@ -1975,7 +1975,7 @@ bool BorderColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEve
     return false;
 }
 
-Color BorderColorStatus::GetColor()
+Color ColorStatus::GetColor()
 {
     bool bHasColor = maColor != COL_TRANSPARENT;
     bool bHasTLBRColor = maTLBRColor != COL_TRANSPARENT;
@@ -3172,7 +3172,7 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
     VclPtrInstance<SvxColorWindow> pColorWin(
                             m_aCommandURL,
                             m_xPaletteManager,
-                            m_aBorderColorStatus,
+                            m_aColorStatus,
                             m_nSlotId,
                             m_xFrame,
                             pParent,
@@ -3207,9 +3207,9 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     {
         Color aColor( COL_TRANSPARENT );
 
-        if ( m_aBorderColorStatus.statusChanged( rEvent ) )
+        if ( m_aColorStatus.statusChanged( rEvent ) )
         {
-            aColor = m_aBorderColorStatus.GetColor();
+            aColor = m_aColorStatus.GetColor();
         }
         else if ( rEvent.IsEnabled )
         {
@@ -3710,7 +3710,7 @@ void SvxColorListBox::createColorWindow()
     m_xColorWindow = VclPtr<SvxColorWindow>::Create(
                             OUString() /*m_aCommandURL*/,
                             m_xPaletteManager,
-                            m_aBorderColorStatus,
+                            m_aColorStatus,
                             m_nSlotId,
                             xFrame,
                             this,
@@ -3810,7 +3810,7 @@ void ColorListBox::createColorWindow()
 
     m_xColorWindow.reset(new ColorWindow(
                             m_xPaletteManager,
-                            m_aBorderColorStatus,
+                            m_aColorStatus,
                             m_nSlotId,
                             xFrame,
                             m_pTopLevel,
