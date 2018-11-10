@@ -367,7 +367,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase( const sal_Unicode* pSt
         /* Check ASCII range */
         SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
                     "rtl_ustr_ascii_compareIgnoreAsciiCase - Found char > 127" );
-        /* If character between 'A' and 'Z', than convert it to lowercase */
+        /* If character between 'A' and 'Z', then convert it to lowercase */
         c1 = static_cast<sal_Int32>(*pStr1);
         c2 = static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
         if ( (c1 >= 65) && (c1 <= 90) )
@@ -406,7 +406,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_U
         if ( !nStr1Len )
             return *pStr2 == '\0' ? 0 : -1;
 
-        /* If character between 'A' and 'Z', than convert it to lowercase */
+        /* If character between 'A' and 'Z', then convert it to lowercase */
         c1 = static_cast<sal_Int32>(*pStr1);
         c2 = static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
         if ( (c1 >= 65) && (c1 <= 90) )
@@ -475,7 +475,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( co
         SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
                     "rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength - Found char > 127" );
 
-        /* If character between 'A' and 'Z', than convert it to lowercase */
+        /* If character between 'A' and 'Z', then convert it to lowercase */
         c1 = static_cast<sal_Int32>(*pStr1);
         c2 = static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
         if ( (c1 >= 65) && (c1 <= 90) )
