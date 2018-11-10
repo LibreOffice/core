@@ -174,7 +174,6 @@
             <items>
               <item translatable="yes" context="conditionalentry|colscalemin">Automatic</item>
               <item translatable="yes" context="conditionalentry|colscalemin">Min</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Max</item>
               <item translatable="yes" context="conditionalentry|colscalemin">Percentile</item>
               <item translatable="yes" context="conditionalentry|colscalemin">Value</item>
               <item translatable="yes" context="conditionalentry|colscalemin">Percent</item>
@@ -209,7 +208,6 @@
             <property name="can_focus">False</property>
             <items>
               <item translatable="yes" context="conditionalentry|colscalemax">Automatic</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Min</item>
               <item translatable="yes" context="conditionalentry|colscalemax">Max</item>
               <item translatable="yes" context="conditionalentry|colscalemax">Percentile</item>
               <item translatable="yes" context="conditionalentry|colscalemax">Value</item>
