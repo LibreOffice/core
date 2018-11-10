@@ -70,11 +70,10 @@ static sal_uInt16 aPageRg[] = {
 static OUString ConvertToUIName_Impl( SvxMacro const *pMacro )
 {
     OUString aName( pMacro->GetMacName() );
-    OUString aEntry;
     if ( pMacro->GetLanguage() != "JavaScript" )
     {
         const sal_Int32 nCount = comphelper::string::getTokenCount(aName, '.');
-        aEntry = aName.getToken( nCount-1, '.' );
+        OUString aEntry = aName.getToken( nCount-1, '.' );
         if ( nCount > 2 )
         {
             aEntry += "(" + aName.getToken( 0, '.' ) + "." + aName.getToken( nCount-2, '.' ) + ")";
