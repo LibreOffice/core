@@ -654,12 +654,77 @@ OUString convertNumberToString(double nVal, const ScDocument* pDoc)
     return aText;
 }
 
+const struct
+{
+    ScColorScaleEntryType eType;
+    const char* sId;
+} TypeIdMap[] = {
+    { COLORSCALE_AUTO,       "auto" },
+    { COLORSCALE_MIN,        "min" },
+    { COLORSCALE_MAX,        "max" },
+    { COLORSCALE_PERCENTILE, "percentil" },
+    { COLORSCALE_VALUE,      "value" },
+    { COLORSCALE_PERCENT,    "percent" },
+    { COLORSCALE_FORMULA,    "formula" },
+};
+
+ScColorScaleEntryType getTypeForId(const OUString& sId)
+{
+    for (auto& r : TypeIdMap)
+    {
+        if (sId.equalsAscii(r.sId))
+            return r.eType;
+    }
+    assert(false); // The id is not in TypeIdMap - something not in sync?
+    return COLORSCALE_AUTO; // invalid id - use default
+}
+
+// Item ids are imported from .ui into OUString* and are referenced by entry data.
+// See commit 83cefb5ceb4428d61a5b9fae80d1e673131e9bfe
+
+ScColorScaleEntryType getSelectedType(const ListBox& rListBox)
+{
+    const OUString* sId = static_cast<OUString*>(rListBox.GetSelectedEntryData());
+    assert(sId
+           && "The color scale type entries must have item ids in "
+              "sc/uiconfig/scalc/ui/conditionalentry.ui");
+    return getTypeForId(*sId);
+}
+
+sal_Int32 getEntryPos(const ListBox& rListBox, ScColorScaleEntryType eType)
+{
+    const sal_Int32 nSize = rListBox.GetEntryCount();
+    for (sal_Int32 i = 0; i < nSize; ++i)
+    {
+        const OUString* sId = static_cast<OUString*>(rListBox.GetEntryData(i));
+        assert(sId
+               && "The color scale type entries must have item ids in "
+                  "sc/uiconfig/scalc/ui/conditionalentry.ui");
+        if (getTypeForId(*sId) == eType)
+            return i;
+    }
+    return -1;
+}
+
+void selectType(ListBox& rListBox, ScColorScaleEntryType eType)
+{
+    const sal_Int32 nPos = getEntryPos(rListBox, eType);
+    if (nPos >= 0)
+        rListBox.SelectEntryPos(nPos);
+}
+
+void removeType(ListBox& rListBox, ScColorScaleEntryType eType)
+{
+    const sal_Int32 nPos = getEntryPos(rListBox, eType);
+    if (nPos >= 0)
+        rListBox.RemoveEntry(nPos);
+}
+
 void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, SvxColorListBox& rLbCol, const ScDocument* pDoc )
 {
     // entry Automatic is not available for color scales
-    sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());
-    assert(nIndex > 0);
-    rLbType.SelectEntryPos(nIndex - 1);
+    assert(rEntry.GetType() > COLORSCALE_AUTO);
+    selectType(rLbType, rEntry.GetType());
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
@@ -683,16 +748,13 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
     rLbCol.SelectEntry(rEntry.GetColor());
 }
 
-void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos, bool bDataBar )
+void SetColorScaleEntry(ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue,
+                        ScDocument* pDoc, const ScAddress& rPos)
 {
+    ScColorScaleEntryType eType = getSelectedType(rType);
 
-    // color scale does not have the automatic entry
-    sal_Int32 nPos = rType.GetSelectedEntryPos();
-    if(!bDataBar)
-        ++nPos;
-
-    pEntry->SetType(static_cast<ScColorScaleEntryType>(nPos));
-    switch(nPos)
+    pEntry->SetType(eType);
+    switch (eType)
     {
         case COLORSCALE_AUTO:
         case COLORSCALE_MIN:
@@ -721,7 +783,7 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const SvxColorLi
 {
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
-    SetColorScaleEntry( pEntry, rType, rValue, pDoc, rPos, false );
+    SetColorScaleEntry(pEntry, rType, rValue, pDoc, rPos);
     Color aColor = rColor.GetSelectEntryColor();
     pEntry->SetColor(aColor);
     return pEntry;
@@ -746,8 +808,11 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
     maFtMax->Show();
 
     // remove the automatic entry from color scales
-    maLbEntryTypeMin->RemoveEntry(0);
-    maLbEntryTypeMax->RemoveEntry(0);
+    removeType(*maLbEntryTypeMin, COLORSCALE_AUTO);
+    removeType(*maLbEntryTypeMax, COLORSCALE_AUTO);
+    // "min" selector doesn't need "max" entry, and vice versa
+    removeType(*maLbEntryTypeMin, COLORSCALE_MAX);
+    removeType(*maLbEntryTypeMax, COLORSCALE_MIN);
 
     maLbType->SelectEntryPos(0);
     maLbColorFormat->SelectEntryPos(0);
@@ -761,8 +826,8 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
     }
     else
     {
-        maLbEntryTypeMin->SelectEntryPos(0);
-        maLbEntryTypeMax->SelectEntryPos(1);
+        selectType(*maLbEntryTypeMin, COLORSCALE_MIN);
+        selectType(*maLbEntryTypeMax, COLORSCALE_MAX);
     }
 
     maLbColorFormat->SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
@@ -860,8 +925,7 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
         return;
 
     bool bEnableEdit = true;
-    sal_Int32 nPos = rBox.GetSelectedEntryPos();
-    if(nPos < 2)
+    if (getSelectedType(rBox) <= COLORSCALE_MAX)
     {
         bEnableEdit = false;
     }
@@ -892,9 +956,12 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
     maFtMax->Show();
 
     // remove the automatic entry from color scales
-    maLbEntryTypeMin->RemoveEntry(0);
-    maLbEntryTypeMiddle->RemoveEntry(0);
-    maLbEntryTypeMax->RemoveEntry(0);
+    removeType(*maLbEntryTypeMin, COLORSCALE_AUTO);
+    removeType(*maLbEntryTypeMiddle, COLORSCALE_AUTO);
+    removeType(*maLbEntryTypeMax, COLORSCALE_AUTO);
+    // "min" selector doesn't need "max" entry, and vice versa
+    removeType(*maLbEntryTypeMin, COLORSCALE_MAX);
+    removeType(*maLbEntryTypeMax, COLORSCALE_MIN);
     maLbColorFormat->SelectEntryPos(1);
 
     Init();
@@ -912,9 +979,9 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
     else
     {
         maLbColorFormat->SelectEntryPos(1);
-        maLbEntryTypeMin->SelectEntryPos(0);
-        maLbEntryTypeMiddle->SelectEntryPos(2);
-        maLbEntryTypeMax->SelectEntryPos(1);
+        selectType(*maLbEntryTypeMin, COLORSCALE_MIN);
+        selectType(*maLbEntryTypeMiddle, COLORSCALE_PERCENTILE);
+        selectType(*maLbEntryTypeMax, COLORSCALE_MAX);
         maEdMiddle->SetText(OUString::number(50));
     }
 
@@ -1027,8 +1094,7 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
         return;
 
     bool bEnableEdit = true;
-    sal_Int32 nPos = rBox.GetSelectedEntryPos();
-    if(nPos < 2)
+    if (getSelectedType(rBox) <= COLORSCALE_MAX)
     {
         bEnableEdit = false;
     }
@@ -1069,7 +1135,7 @@ namespace {
 
 void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, const ScDocument* pDoc )
 {
-    rLbType.SelectEntryPos(rEntry.GetType());
+    selectType(rLbType, rEntry.GetType());
     switch(rEntry.GetType())
     {
         case COLORSCALE_AUTO:
@@ -1107,6 +1173,10 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
     get(maFtMin, "Label_minimum");
     get(maFtMax, "Label_maximum");
 
+    // "min" selector doesn't need "max" entry, and vice versa
+    removeType(*maLbDataBarMinType, COLORSCALE_MAX);
+    removeType(*maLbDataBarMaxType, COLORSCALE_MIN);
+
     maFtMin->Show();
     maFtMax->Show();
 
@@ -1121,8 +1191,8 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
     }
     else
     {
-        maLbDataBarMinType->SelectEntryPos(0);
-        maLbDataBarMaxType->SelectEntryPos(0);
+        selectType(*maLbDataBarMinType, COLORSCALE_AUTO);
+        selectType(*maLbDataBarMaxType, COLORSCALE_AUTO);
         DataBarTypeSelectHdl(*maLbDataBarMinType.get());
     }
     Init();
@@ -1173,8 +1243,10 @@ void ScDataBarFrmtEntry::Init()
 
 ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
 {
-    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
-    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(),
+                       *maEdDataBarMin.get(), mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(),
+                       *maEdDataBarMax.get(), mpDoc, maPos);
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData));
     return pDataBar;
@@ -1213,14 +1285,12 @@ void ScDataBarFrmtEntry::SetInactive()
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl, ListBox&, void )
 {
-    sal_Int32 nSelectPos = maLbDataBarMinType->GetSelectedEntryPos();
-    if(nSelectPos <= COLORSCALE_MAX)
+    if (getSelectedType(*maLbDataBarMinType) <= COLORSCALE_MAX)
         maEdDataBarMin->Disable();
     else
         maEdDataBarMin->Enable();
 
-    nSelectPos = maLbDataBarMaxType->GetSelectedEntryPos();
-    if(nSelectPos <= COLORSCALE_MAX)
+    if (getSelectedType(*maLbDataBarMaxType) <= COLORSCALE_MAX)
         maEdDataBarMax->Disable();
     else
         maEdDataBarMax->Enable();
@@ -1228,8 +1298,10 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl, ListBox&, void )
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl, Button*, void )
 {
-    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
-    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(),
+                       *maEdDataBarMin.get(), mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(),
+                       *maEdDataBarMax.get(), mpDoc, maPos);
     ScopedVclPtrInstance<ScDataBarSettingsDlg> pDlg(this, *mpDataBarData, mpDoc, maPos);
     if( pDlg->Execute() == RET_OK)
     {
