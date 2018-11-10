@@ -172,13 +172,13 @@
           <object class="GtkComboBoxText" id="colscalemin">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes" context="conditionalentry|colscalemin">Automatic</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Min</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Max</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Percentile</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Value</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Percent</item>
-              <item translatable="yes" context="conditionalentry|colscalemin">Formula</item>
+              <item id="auto" translatable="yes" context="conditionalentry|colscalemin">Automatic</item>
+              <item id="min" translatable="yes" context="conditionalentry|colscalemin">Min</item>
+              <item id="max" translatable="yes" context="conditionalentry|colscalemin">Max</item>
+              <item id="percentil" translatable="yes" context="conditionalentry|colscalemin">Percentile</item>
+              <item id="value" translatable="yes" context="conditionalentry|colscalemin">Value</item>
+              <item id="percent" translatable="yes" context="conditionalentry|colscalemin">Percent</item>
+              <item id="formula" translatable="yes" context="conditionalentry|colscalemin">Formula</item>
             </items>
           </object>
           <packing>
@@ -190,13 +190,13 @@
           <object class="GtkComboBoxText" id="colscalemiddle">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Automatic</item>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Min</item>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Max</item>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Percentile</item>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Value</item>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Percent</item>
-              <item translatable="yes" context="conditionalentry|colscalemiddle">Formula</item>
+              <item id="auto" translatable="yes" context="conditionalentry|colscalemiddle">Automatic</item>
+              <item id="min" translatable="yes" context="conditionalentry|colscalemiddle">Min</item>
+              <item id="max" translatable="yes" context="conditionalentry|colscalemiddle">Max</item>
+              <item id="percentil" translatable="yes" context="conditionalentry|colscalemiddle">Percentile</item>
+              <item id="value" translatable="yes" context="conditionalentry|colscalemiddle">Value</item>
+              <item id="percent" translatable="yes" context="conditionalentry|colscalemiddle">Percent</item>
+              <item id="formula" translatable="yes" context="conditionalentry|colscalemiddle">Formula</item>
             </items>
           </object>
           <packing>
@@ -208,13 +208,13 @@
           <object class="GtkComboBoxText" id="colscalemax">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes" context="conditionalentry|colscalemax">Automatic</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Min</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Max</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Percentile</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Value</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Percent</item>
-              <item translatable="yes" context="conditionalentry|colscalemax">Formula</item>
+              <item id="auto" translatable="yes" context="conditionalentry|colscalemax">Automatic</item>
+              <item id="min" translatable="yes" context="conditionalentry|colscalemax">Min</item>
+              <item id="max" translatable="yes" context="conditionalentry|colscalemax">Max</item>
+              <item id="percentil" translatable="yes" context="conditionalentry|colscalemax">Percentile</item>
+              <item id="value" translatable="yes" context="conditionalentry|colscalemax">Value</item>
+              <item id="percent" translatable="yes" context="conditionalentry|colscalemax">Percent</item>
+              <item id="formula" translatable="yes" context="conditionalentry|colscalemax">Formula</item>
             </items>
           </object>
           <packing>
