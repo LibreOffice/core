@@ -1242,19 +1242,19 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         sw::MergedAttrIter iter(*pFrame);
         while (SwTextAttr const*const pHt = iter.NextAttr())
         {
+            if ((pHt->Which() == RES_TXTATR_FIELD
+                   || pHt->Which() == RES_TXTATR_ANNOTATION
+                   || pHt->Which() == RES_TXTATR_INPUTFIELD)
+                 && (nFieldIndex-- == 0))
             {
-                if ( ( pHt->Which() == RES_TXTATR_FIELD
-                       || pHt->Which() == RES_TXTATR_ANNOTATION
-                       || pHt->Which() == RES_TXTATR_INPUTFIELD )
+                pTextField = const_cast<SwTextField*>(
+                            static_txtattr_cast<SwTextField const*>(pHt));
+                break;
+            }
+            else if (pHt->Which() == RES_TXTATR_REFMARK
                      && (nFieldIndex-- == 0))
-                {
-                    pTextField = const_cast<SwTextField*>(
-                                static_txtattr_cast<SwTextField const*>(pHt));
-                    break;
-                }
-                else if (pHt->Which() == RES_TXTATR_REFMARK
-                         && (nFieldIndex-- == 0))
-                    strTypeName = "set reference";
+            {
+                strTypeName = "set reference";
             }
         }
     }
@@ -2898,35 +2898,31 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     {
         if( nTIndex == nLinkIndex )
         {   // found
-            {   // it's a hyperlink
+            if (!m_pHyperTextData)
+                m_pHyperTextData.reset( new SwAccessibleHyperTextData );
+            SwAccessibleHyperTextData::iterator aIter =
+                m_pHyperTextData ->find( pHt );
+            if (aIter != m_pHyperTextData->end())
+            {
+                xRet = (*aIter).second;
+            }
+            if (!xRet.is())
+            {
+                TextFrameIndex const nHintStart(pTextFrame->MapModelToView(pNode, pHt->GetStart()));
+                TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, *pHt->GetAnyEnd()));
+                const sal_Int32 nTmpHStt = GetPortionData().GetAccessiblePosition(
+                    max(aHIter.startIdx(), nHintStart));
+                const sal_Int32 nTmpHEnd = GetPortionData().GetAccessiblePosition(
+                    min(aHIter.endIdx(), nHintEnd));
+                xRet = new SwAccessibleHyperlink(*pHt,
+                    *this, nTmpHStt, nTmpHEnd );
+                if (aIter != m_pHyperTextData->end())
                 {
-                    if( !m_pHyperTextData )
-                        m_pHyperTextData.reset( new SwAccessibleHyperTextData );
-                    SwAccessibleHyperTextData::iterator aIter =
-                        m_pHyperTextData ->find( pHt );
-                    if( aIter != m_pHyperTextData->end() )
-                    {
-                        xRet = (*aIter).second;
-                    }
-                    if( !xRet.is() )
-                    {
-                        TextFrameIndex const nHintStart(pTextFrame->MapModelToView(pNode, pHt->GetStart()));
-                        TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, *pHt->GetAnyEnd()));
-                        const sal_Int32 nTmpHStt= GetPortionData().GetAccessiblePosition(
-                            max(aHIter.startIdx(), nHintStart));
-                        const sal_Int32 nTmpHEnd= GetPortionData().GetAccessiblePosition(
-                            min(aHIter.endIdx(), nHintEnd));
-                        xRet = new SwAccessibleHyperlink(*pHt,
-                            *this, nTmpHStt, nTmpHEnd );
-                        if( aIter != m_pHyperTextData->end() )
-                        {
-                            (*aIter).second = xRet;
-                        }
-                        else
-                        {
-                            m_pHyperTextData->emplace( pHt, xRet );
-                        }
-                    }
+                    (*aIter).second = xRet;
+                }
+                else
+                {
+                    m_pHyperTextData->emplace( pHt, xRet );
                 }
             }
             break;
