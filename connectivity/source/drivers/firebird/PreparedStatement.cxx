@@ -636,24 +636,25 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 
     openBlobForWriting(aBlobHandle, aBlobId);
 
-    // Max segment size is 2^16 == SAL_MAX_UINT16
-    // LEM TODO: SAL_MAX_UINT16 is 2^16-1; this mixup is probably innocuous; to be checked
-    sal_uInt64 nDataWritten = 0;
     ISC_STATUS aErr = 0;
-    while (xBlob->length() - nDataWritten > 0)
+    const sal_Int64 nBlobLen = xBlob->length();
+    if (nBlobLen > 0)
     {
-        sal_uInt64 nDataRemaining = xBlob->length() - nDataWritten;
-        sal_uInt16 nWriteSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
-        aErr = isc_put_segment(m_statusVector,
-                               &aBlobHandle,
-                               nWriteSize,
-                               reinterpret_cast<const char*>(xBlob->getBytes(nDataWritten, nWriteSize).getConstArray()));
-        nDataWritten += nWriteSize;
+        // Max write size is 0xFFFF == SAL_MAX_UINT16
+        sal_uInt64 nDataWritten = 0;
+        while (sal::static_int_cast<sal_uInt64>(nBlobLen) > nDataWritten)
+        {
+            sal_uInt64 nDataRemaining = nBlobLen - nDataWritten;
+            sal_uInt16 nWriteSize = std::min(nDataRemaining, sal_uInt64(SAL_MAX_UINT16));
+            aErr = isc_put_segment(m_statusVector,
+                                   &aBlobHandle,
+                                   nWriteSize,
+                                   reinterpret_cast<const char*>(xBlob->getBytes(nDataWritten, nWriteSize).getConstArray()));
+            nDataWritten += nWriteSize;
 
-
-        if (aErr)
-            break;
-
+            if (aErr)
+                break;
+        }
     }
 
     // We need to make sure we close the Blob even if their are errors, hence evaluate
@@ -802,21 +803,25 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
         openBlobForWriting(aBlobHandle, aBlobId);
 
-        // Max segment size is 2^16 == SAL_MAX_UINT16
-        sal_uInt64 nDataWritten = 0;
         ISC_STATUS aErr = 0;
-        while (xBytes.getLength() - nDataWritten > 0)
+        const sal_Int32 nBytesLen = xBytes.getLength();
+        if (nBytesLen > 0)
         {
-            sal_uInt64 nDataRemaining = xBytes.getLength() - nDataWritten;
-            sal_uInt16 nWriteSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
-            aErr = isc_put_segment(m_statusVector,
-                                   &aBlobHandle,
-                                   nWriteSize,
-                                   reinterpret_cast<const char*>(xBytes.getConstArray()) + nDataWritten);
-            nDataWritten += nWriteSize;
+            // Max write size is 0xFFFF == SAL_MAX_UINT16
+            sal_uInt32 nDataWritten = 0;
+            while (sal::static_int_cast<sal_uInt32>(nBytesLen) > nDataWritten)
+            {
+                sal_uInt32 nDataRemaining = nBytesLen - nDataWritten;
+                sal_uInt16 nWriteSize = std::min(nDataRemaining, sal_uInt32(SAL_MAX_UINT16));
+                aErr = isc_put_segment(m_statusVector,
+                                       &aBlobHandle,
+                                       nWriteSize,
+                                       reinterpret_cast<const char*>(xBytes.getConstArray()) + nDataWritten);
+                nDataWritten += nWriteSize;
 
-            if (aErr)
-                break;
+                if (aErr)
+                    break;
+            }
         }
 
         // We need to make sure we close the Blob even if their are errors, hence evaluate
