@@ -400,12 +400,12 @@ void ComponentContext::disposing()
     t_map::iterator const iEnd( m_map.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
-        ContextEntry& rEntry = iPos->second;
-
         // service manager disposed separately
         if (!m_xSMgr.is() ||
             !iPos->first.startsWith( SMGR_SINGLETON ))
         {
+            ContextEntry& rEntry = iPos->second;
+
             if (rEntry.lateInit)
             {
                 // late init
