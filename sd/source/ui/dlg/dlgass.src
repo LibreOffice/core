@@ -28,11 +28,11 @@ ModalDialog DLG_ASS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 272, 190 ) ;
-    Text[ en-US ] = "Presentation Wizard";
+    Text[ en-US ] = "Presentation Wizard" ;
 
     HelpId = HID_SD_AUTOPILOT_PAGE1 ;
     Moveable = TRUE ;
-    Closeable = FALSE;
+    Closeable = FALSE ;
 
     Control CT_PREVIEW
     {
@@ -44,19 +44,19 @@ ModalDialog DLG_ASS
 
     CheckBox CB_PREVIEW
     {
-        HelpID = "sd:CheckBox:DLG_ASS:CB_PREVIEW";
-        Pos = MAP_APPFONT ( 144, 140 );
-        Size = MAP_APPFONT ( 122, 10 );
-        TabStop = TRUE;
-        Text [ en-US ] = "Previe~w";
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PREVIEW" ;
+        Pos = MAP_APPFONT ( 144, 140 ) ;
+        Size = MAP_APPFONT ( 122, 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Previe~w" ;
     };
 
     CheckBox CB_STARTWITH
     {
-        HelpID = "sd:CheckBox:DLG_ASS:CB_STARTWITH";
-        Pos = MAP_APPFONT ( 144, 154 );
-        Size = MAP_APPFONT ( 122, 10 );
-        TabStop = TRUE;
+        HelpID = "sd:CheckBox:DLG_ASS:CB_STARTWITH" ;
+        Pos = MAP_APPFONT ( 144, 154 ) ;
+        Size = MAP_APPFONT ( 122, 10 ) ;
+        TabStop = TRUE ;
         Text [ en-US ] = "~Do not show this wizard again" ;
     };
 
@@ -64,48 +64,49 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE1
     {
         OutputSize = TRUE ;
-        Scale = TRUE;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
-        Fixed = Bitmap { File = "dlgass1.png" ; };
+        Scale = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
+        Fixed = Bitmap { File = "dlgass1.png" ; } ;
     };
 
     FixedLine FL_PAGE1_ARTGROUP
     {
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6, 37 );
-        Size =MAP_APPFONT ( 132, 8 );
-        Text [ en-US ] = "Type";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6, 37 ) ;
+        Size =MAP_APPFONT ( 132, 8 ) ;
+        Text [ en-US ] = "Type" ;
     };
 
     RadioButton RB_PAGE1_EMPTY
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_EMPTY";
-        Pos = MAP_APPFONT ( 12, 48 );
-        Size = MAP_APPFONT ( 130, 10 );
-        TabStop = TRUE;
-        Text [ en-US ] = "~Empty presentation";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_EMPTY" ;
+        Pos = MAP_APPFONT ( 12, 48 ) ;
+        Size = MAP_APPFONT ( 130, 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Empty presentation" ;
     };
 
     RadioButton RB_PAGE1_TEMPLATE
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_TEMPLATE";
-        Pos = MAP_APPFONT ( 12, 62 );
-        Size = MAP_APPFONT ( 130, 10 );
-        Text [ en-US ] = "~From template";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_TEMPLATE" ;
+        Pos = MAP_APPFONT ( 12, 62 ) ;
+        Size = MAP_APPFONT ( 130, 10 ) ;
+        Text [ en-US ] = "~From template" ;
     };
 
     RadioButton RB_PAGE1_OPEN
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_OPEN";
-        Pos = MAP_APPFONT ( 12, 76 );
-        Size = MAP_APPFONT ( 130, 10 );
-        Text [ en-US ] = "O~pen existing presentation";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_OPEN" ;
+        Pos = MAP_APPFONT ( 12, 76 ) ;
+        Size = MAP_APPFONT ( 130, 10 ) ;
+        Text [ en-US ] = "O~pen existing presentation" ;
     };
 
     PushButton PB_PAGE1_OPEN
     {
-        HelpID = "sd:PushButton:DLG_ASS:PB_PAGE1_OPEN";
+        HelpID = "sd:PushButton:DLG_ASS:PB_PAGE1_OPEN" ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 18, 89 ) ;
         Size = MAP_APPFONT ( 50, 18 ) ;
@@ -114,8 +115,8 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE1_REGION
     {
-        Pos = MAP_APPFONT ( 12, 90 );
-        Size = MAP_APPFONT ( 120, 12 );
+        Pos = MAP_APPFONT ( 12, 90 ) ;
+        Size = MAP_APPFONT ( 120, 12 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -132,22 +133,23 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE1_OPEN
     {
-        Pos = MAP_APPFONT ( 18, 110 );
-        Size = MAP_APPFONT ( 120, 55 );
-        TabStop = TRUE;
-        Border = TRUE;
+        Pos = MAP_APPFONT ( 18, 110 ) ;
+        Size = MAP_APPFONT ( 120, 55 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
         HelpId = HID_SD_AUTOPILOT_OPEN ;
-        AutoHScroll = TRUE;
+        AutoHScroll = TRUE ;
     };
 
     // Page 2
     FixedBitmap FB_PAGE2
     {
         OutputSize = TRUE ;
-        Scale = TRUE;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
-        Fixed = Bitmap { File = "dlgass2.png" ; };
+        Scale = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
+        Fixed = Bitmap { File = "dlgass2.png" ; } ;
     };
 
     FixedLine FL_PAGE2_LAYOUT
@@ -160,8 +162,8 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE2_REGION
     {
-        Pos = MAP_APPFONT ( 12, 48 );
-        Size = MAP_APPFONT ( 120, 12 );
+        Pos = MAP_APPFONT ( 12, 48 ) ;
+        Size = MAP_APPFONT ( 120, 12 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -170,7 +172,7 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE2_LAYOUT
     {
-        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE2_LAYOUT";
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE2_LAYOUT" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12, 64 ) ;
         Size = MAP_APPFONT ( 120, 40 ) ;
@@ -186,25 +188,25 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM5
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM5";
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12, 121 );
-        Size = MAP_APPFONT ( 59, 10 );
-        Text [ en-US ] = "~Original";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM5" ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12, 121 ) ;
+        Size = MAP_APPFONT ( 59, 10 ) ;
+        Text [ en-US ] = "~Original" ;
     };
 
     RadioButton RB_PAGE2_MEDIUM1
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM1";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM1" ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 75, 121 ) ;
         Size = MAP_APPFONT ( 59, 10 ) ;
-        Text [ en-US ] = "Sc~reen";
+        Text [ en-US ] = "Sc~reen" ;
     };
 
     RadioButton RB_PAGE2_MEDIUM2
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM2";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM2" ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 75, 135 ) ;
         Size = MAP_APPFONT ( 59, 10 ) ;
@@ -214,7 +216,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM3
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM3";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM3" ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12, 135 ) ;
         Size = MAP_APPFONT ( 59, 10 ) ;
@@ -224,7 +226,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM4
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM4";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM4" ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12, 149 ) ;
         Size = MAP_APPFONT ( 59, 10 ) ;
@@ -236,96 +238,97 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE3
     {
         OutputSize = TRUE ;
-        Scale = TRUE;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
-        Fixed = Bitmap { File = "dlgass3.png" ; };
+        Scale = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
+        Fixed = Bitmap { File = "dlgass3.png" ; } ;
     };
 
     FixedLine FL_PAGE3_EFFECT
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 37 );
-        Size = MAP_APPFONT ( 132, 8 );
-        Text [ en-US ] = "Select a slide transition";
+        Pos = MAP_APPFONT ( 6, 37 ) ;
+        Size = MAP_APPFONT ( 132, 8 ) ;
+        Text [ en-US ] = "Select a slide transition" ;
     };
 
     FixedText FT_PAGE3_EFFECT
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12, 49 );
-        Size = MAP_APPFONT ( 60, 10 );
-        Text [ en-US ] = "~Effect";
+        Pos = MAP_APPFONT ( 12, 49 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
+        Text [ en-US ] = "~Effect" ;
     };
 
     ListBox LB_PAGE3_EFFECT
     {
-        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_EFFECT";
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_EFFECT" ;
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 72, 48 );
-        Size = MAP_APPFONT ( 60, 12 );
-        TabStop = TRUE;
-        Border = TRUE;
-        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 72, 48 ) ;
+        Size = MAP_APPFONT ( 60, 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
     };
 
     FixedText FT_PAGE3_SPEED
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12, 65 );
-        Size = MAP_APPFONT ( 60, 10 );
-        Text [ en-US ] = "~Speed";
+        Pos = MAP_APPFONT ( 12, 65 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
+        Text [ en-US ] = "~Speed" ;
     };
 
     ListBox LB_PAGE3_SPEED
     {
-        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_SPEED";
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_SPEED" ;
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 72, 64 );
-        Size = MAP_APPFONT ( 60, 12 );
-        TabStop = TRUE;
-        Border = TRUE;
-        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 72, 64 ) ;
+        Size = MAP_APPFONT ( 60, 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
     };
 
     FixedLine FL_PAGE3_PRESTYPE
     {
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6, 83 );
-        Size = MAP_APPFONT ( 132, 8 );
-        Text [ en-US ] = "Select the presentation type";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6, 83 ) ;
+        Size = MAP_APPFONT ( 132, 8 ) ;
+        Text [ en-US ] = "Select the presentation type" ;
     };
 
     RadioButton RB_PAGE3_LIVE
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_LIVE";
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12, 94 );
-        Size = MAP_APPFONT ( 120, 10 );
-        Text [ en-US ] = "~Default";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_LIVE" ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12, 94 ) ;
+        Size = MAP_APPFONT ( 120, 10 ) ;
+        Text [ en-US ] = "~Default" ;
     };
 
     RadioButton RB_PAGE3_KIOSK
     {
-        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_KIOSK";
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12, 108 );
-        Size = MAP_APPFONT ( 120, 10 );
-        Text [ en-US ] = "~Automatic";
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_KIOSK" ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12, 108 ) ;
+        Size = MAP_APPFONT ( 120, 10 ) ;
+        Text [ en-US ] = "~Automatic" ;
     };
 
     FixedText FT_PAGE3_TIME
     {
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 21, 123 );
-        Size = MAP_APPFONT ( 55, 10 );
-        Text [ en-US ] = "D~uration of page";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 21, 123 ) ;
+        Size = MAP_APPFONT ( 55, 10 ) ;
+        Text [ en-US ] = "D~uration of page" ;
     };
 
     TimeField TMF_PAGE3_TIME
     {
-        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_TIME";
-        OutputSize = TRUE;
+        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_TIME" ;
+        OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 77, 122 ) ;
         Size = MAP_APPFONT ( 55, 12 ) ;
         Border = TRUE ;
@@ -350,16 +353,16 @@ ModalDialog DLG_ASS
 
     FixedText FT_PAGE3_BREAK
     {
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 21, 139 );
-        Size = MAP_APPFONT ( 55, 10 );
-        Text [ en-US ] = "Du~ration of pause";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 21, 139 ) ;
+        Size = MAP_APPFONT ( 55, 10 ) ;
+        Text [ en-US ] = "Du~ration of pause" ;
     };
 
     TimeField TMF_PAGE3_BREAK
     {
-        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_BREAK";
-        OutputSize = TRUE;
+        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_BREAK" ;
+        OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 77, 138 ) ;
         Size = MAP_APPFONT ( 55, 12 ) ;
         Border = TRUE ;
@@ -384,22 +387,23 @@ ModalDialog DLG_ASS
 
     CheckBox CB_PAGE3_LOGO
     {
-        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE3_LOGO";
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 21, 154 );
-        Size = MAP_APPFONT ( 111, 10 );
-        TabStop = TRUE;
-        Text [ en-US ] = "Sh~ow logo";
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE3_LOGO" ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 21, 154 ) ;
+        Size = MAP_APPFONT ( 111, 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Sh~ow logo" ;
     };
 
     // Page 4
     FixedBitmap FB_PAGE4
     {
         OutputSize = TRUE ;
-        Scale = TRUE;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
-        Fixed = Bitmap { File = "dlgass4.png" ; };
+        Scale = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
+        Fixed = Bitmap { File = "dlgass4.png" ; } ;
     };
 
     FixedLine FL_PAGE4_PERSONAL
@@ -420,7 +424,7 @@ ModalDialog DLG_ASS
     };
     Edit EDT_PAGE4_ASKNAME
     {
-        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKNAME";
+        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKNAME" ;
         OutputSize = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12, 59 ) ;
@@ -436,7 +440,7 @@ ModalDialog DLG_ASS
     };
     Edit EDT_PAGE4_ASKTOPIC
     {
-        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKTOPIC";
+        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKTOPIC" ;
         OutputSize = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12, 88 ) ;
@@ -452,7 +456,7 @@ ModalDialog DLG_ASS
     };
     MultiLineEdit EDT_PAGE4_ASKINFORMATION
     {
-        HelpID = "sd:MultiLineEdit:DLG_ASS:EDT_PAGE4_ASKINFORMATION";
+        HelpID = "sd:MultiLineEdit:DLG_ASS:EDT_PAGE4_ASKINFORMATION" ;
         OutputSize = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12, 117 ) ;
@@ -466,37 +470,38 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE5
     {
         OutputSize = TRUE ;
-        Scale = TRUE;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
-        Fixed = Bitmap { File = "dlgass5.png" ; };
+        Scale = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
+        Fixed = Bitmap { File = "dlgass5.png" ; } ;
     };
 
     FixedText FT_PAGE5_PAGELIST
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 39 );
-        Size = MAP_APPFONT ( 132, 8 );
-        Text [ en-US ] = "Ch~oose your pages";
+        Pos = MAP_APPFONT ( 6, 39 ) ;
+        Size = MAP_APPFONT ( 132, 8 ) ;
+        Text [ en-US ] = "Ch~oose your pages" ;
     };
 
     Control CT_PAGE5_PAGELIST
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 50 );
-        Size = MAP_APPFONT ( 132, 100 );
-        Border = TRUE;
+        Pos = MAP_APPFONT ( 6, 50 ) ;
+        Size = MAP_APPFONT ( 132, 100 ) ;
+        Border = TRUE ;
         TabStop = TRUE ;
     };
 
     CheckBox CB_PAGE5_SUMMARY
     {
-        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE5_SUMMARY";
-        OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6, 154 );
-        Size = MAP_APPFONT ( 132, 10 );
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE5_SUMMARY" ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6, 154 ) ;
+        Size = MAP_APPFONT ( 132, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "C~reate summary";
+        Text [ en-US ] = "C~reate summary" ;
     };
 
     // General
@@ -518,7 +523,7 @@ ModalDialog DLG_ASS
 
     PushButton BUT_LAST
     {
-        HelpID = "sd:PushButton:DLG_ASS:BUT_LAST";
+        HelpID = "sd:PushButton:DLG_ASS:BUT_LAST" ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112, 170 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
@@ -528,7 +533,7 @@ ModalDialog DLG_ASS
 
     PushButton BUT_NEXT
     {
-        HelpID = "sd:PushButton:DLG_ASS:BUT_NEXT";
+        HelpID = "sd:PushButton:DLG_ASS:BUT_NEXT" ;
         DefButton = TRUE ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 165, 170 ) ;
@@ -548,7 +553,7 @@ ModalDialog DLG_ASS
 
     String STR_OPEN
     {
-        Text [ en-US ] = "~Open";
+        Text [ en-US ] = "~Open" ;
     };
 
     String STR_CREATE
@@ -556,3 +561,5 @@ ModalDialog DLG_ASS
         Text [ en-US ] = "~Create" ;
     };
 };
+
+// ******************************************************************* EOF
