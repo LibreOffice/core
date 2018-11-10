@@ -42,7 +42,7 @@ private:
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
-    BorderColorStatus m_aBorderColorStatus;
+    ColorStatus m_aColorStatus;
 
     DECL_LINK(MenuActivateHdl, MenuButton *, void);
     void Selected(const NamedColor& rNamedColor);
@@ -104,7 +104,7 @@ private:
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
-    BorderColorStatus m_aBorderColorStatus;
+    ColorStatus m_aColorStatus;
 
     void Selected(const NamedColor& rNamedColor);
     void createColorWindow();
