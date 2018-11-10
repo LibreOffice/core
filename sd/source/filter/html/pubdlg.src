@@ -37,9 +37,10 @@ ModalDialog DLG_PUBLISHING
     FixedBitmap PAGE1_BMP
     {
         OutputSize = TRUE ;
-        Scale = TRUE;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
+        Border = TRUE ;
+        Scale = TRUE ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
         Fixed = Bitmap { File = "pubdlg1.png" ; } ;
     };
 
@@ -47,7 +48,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 38 ) ;
         Size = MAP_APPFONT ( 258, 8 ) ;
-        Text [ en-US ] = "Assign design";
+        Text [ en-US ] = "Assign design" ;
     };
 
     RadioButton PAGE1_NEW_DESIGN
@@ -108,7 +109,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 38 ) ;
         Size = MAP_APPFONT ( 124, 8 ) ;
-        Text [ en-US ] = "Publication type";
+        Text [ en-US ] = "Publication type" ;
     };
 
     RadioButton PAGE2_STANDARD
@@ -358,9 +359,10 @@ ModalDialog DLG_PUBLISHING
     FixedBitmap PAGE3_BMP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
+        Border = TRUE ;
         Scale = TRUE ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
         Fixed = Bitmap { File = "pubdlg2.png" ; } ;
     };
 
@@ -475,12 +477,14 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Export ~hidden slides" ;
     };
 
-    // Page 4: Information for titel page
+    // Page 4: Information for title page
     FixedBitmap PAGE4_BMP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
+        Border = TRUE ;
+        Scale = TRUE ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
         Fixed = Bitmap { File = "pubdlg3.png" ; } ;
     };
 
@@ -579,8 +583,10 @@ ModalDialog DLG_PUBLISHING
     FixedBitmap PAGE5_BMP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
+        Border = TRUE ;
+        Scale = TRUE ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
         Fixed = Bitmap { File = "pubdlg4.png" ; } ;
     };
 
@@ -611,8 +617,10 @@ ModalDialog DLG_PUBLISHING
     FixedBitmap PAGE6_BMP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6, 5 ) ;
-        Size = MAP_APPFONT ( 260, 29 ) ;
+        Border = TRUE ;
+        Scale = TRUE ;
+        Pos = MAP_APPFONT ( 6, 4 ) ;
+        Size = MAP_APPFONT ( 258, 29 ) ;
         Fixed = Bitmap { File = "pubdlg5.png" ; } ;
     };
 
@@ -784,3 +792,5 @@ ModalDialog DLG_DESIGNNAME
     };
         Text [ en-US ] = "Name HTML Design" ;
 };
+
+// ******************************************************************* EOF
