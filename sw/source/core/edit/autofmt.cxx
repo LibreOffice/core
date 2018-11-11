@@ -2417,7 +2417,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     BuildTextIndent();
                 eStat = READ_NEXT_PARA;
             }
-            else if( nLevel && pNxtNd && !m_bEnd &&
+            else if( nLevel && pNxtNd &&
                      !bNxtEmpty && !bNxtAlpha && !nNxtLevel &&
                      !IsEnumericChar( *pNxtNd ) )
             {
@@ -2443,7 +2443,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                         BuildText();
                     eStat = READ_NEXT_PARA;
                 }
-                else if( !nLevel && pNxtNd && !m_bEnd &&
+                else if( !nLevel && pNxtNd &&
                          !bNxtEmpty && !bNxtAlpha && nNxtLevel &&
                          !IsEnumericChar( *pNxtNd ) )
                 {

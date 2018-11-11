@@ -1408,7 +1408,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
             const SwFieldIds nWhich = pField->GetTyp()->Which();
             OUString sEntry;
-            sal_Int32 subType = 0;
+            sal_uInt32 subType = 0;
             switch (nWhich)
             {
             case SwFieldIds::DocStat:
@@ -1511,11 +1511,11 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             default: break;
             }
-            if (subType > 0 || (subType == 0 && (nWhich == SwFieldIds::DocInfo || nWhich == SwFieldIds::ExtUser || nWhich == SwFieldIds::DocStat)))
+            if (subType > 0 || nWhich == SwFieldIds::DocInfo || nWhich == SwFieldIds::ExtUser || nWhich == SwFieldIds::DocStat)
             {
                 std::vector<OUString> aLst;
                 aMgr.GetSubTypes(pField->GetTypeId(), aLst);
-                if (static_cast<size_t>(subType) < aLst.size())
+                if (subType < aLst.size())
                     sEntry = aLst[subType];
                 if (sEntry.getLength() > 0)
                 {

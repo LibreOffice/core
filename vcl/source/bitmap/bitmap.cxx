@@ -459,14 +459,14 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
             {
                 int nNextIndex = 0;
 
-                if( ( nSrcBitCount == 24 ) && ( nDstBitCount < 24 ) )
+                if (nSrcBitCount == 24)
                     Convert( BmpConversion::N24Bit );
-                else if( ( nSrcBitCount == 8 ) && ( nDstBitCount < 8 ) )
+                else if (nSrcBitCount == 8)
                 {
                     Convert( BmpConversion::N8BitColors );
                     nNextIndex = 16;
                 }
-                else if( ( nSrcBitCount == 4 ) && ( nDstBitCount < 4 ) )
+                else if (nSrcBitCount == 4)
                 {
                     Convert( BmpConversion::N4BitColors );
                     nNextIndex = 2;

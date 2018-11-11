@@ -330,7 +330,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                     aGraphic = MirrorGraphic( aGraphic, nBmpMirrorFlags );
                 }
 
-                if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GraphicType::NONE ) )
+                if (aGraphic.GetType() != GraphicType::NONE)
                 {
                     if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );

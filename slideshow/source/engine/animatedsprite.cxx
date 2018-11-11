@@ -136,7 +136,7 @@ namespace slideshow
                                   "AnimatedSprite::resize(): Could not create new sprite" );
 
                 // set attributes similar to previous sprite
-                if( mpSprite && mbSpriteVisible )
+                if (mbSpriteVisible)
                 {
                     mpSprite->show();
                     mpSprite->setAlpha( mnAlpha );
