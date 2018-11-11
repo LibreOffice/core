@@ -201,6 +201,8 @@ void SdTiledRenderingTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
+    comphelper::LibreOfficeKit::setActive(true);
+
     mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
@@ -213,6 +215,7 @@ void SdTiledRenderingTest::tearDown()
         xmlBufferFree(m_pXmlBuffer);
 
     comphelper::LibreOfficeKit::setActive(false);
+
     test::BootstrapFixture::tearDown();
 }
 
@@ -343,7 +346,6 @@ xmlDocPtr SdTiledRenderingTest::parseXmlDump()
 
 void SdTiledRenderingTest::testRegisterCallback()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -363,7 +365,6 @@ void SdTiledRenderingTest::testRegisterCallback()
 
 void SdTiledRenderingTest::testPostKeyEvent()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -392,7 +393,6 @@ void SdTiledRenderingTest::testPostKeyEvent()
 
 void SdTiledRenderingTest::testPostMouseEvent()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -426,7 +426,6 @@ void SdTiledRenderingTest::testPostMouseEvent()
 
 void SdTiledRenderingTest::testSetTextSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -455,7 +454,6 @@ void SdTiledRenderingTest::testSetTextSelection()
 
 void SdTiledRenderingTest::testGetTextSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -479,7 +477,6 @@ void SdTiledRenderingTest::testGetTextSelection()
 
 void SdTiledRenderingTest::testSetGraphicSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
@@ -515,7 +512,6 @@ void SdTiledRenderingTest::testSetGraphicSelection()
 
 void SdTiledRenderingTest::testUndoShells()
 {
-    comphelper::LibreOfficeKit::setActive();
     // Load a document and set the page size.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -537,7 +533,6 @@ void SdTiledRenderingTest::testUndoShells()
 
 void SdTiledRenderingTest::testResetSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -573,7 +568,6 @@ static void lcl_search(const OUString& rKey, bool bFindAll = false)
 
 void SdTiledRenderingTest::testSearch()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -607,7 +601,6 @@ void SdTiledRenderingTest::testSearch()
 
 void SdTiledRenderingTest::testSearchAll()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -626,7 +619,6 @@ void SdTiledRenderingTest::testSearchAll()
 
 void SdTiledRenderingTest::testSearchAllSelections()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -640,7 +632,6 @@ void SdTiledRenderingTest::testSearchAllSelections()
 
 void SdTiledRenderingTest::testSearchAllNotifications()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -654,7 +645,6 @@ void SdTiledRenderingTest::testSearchAllNotifications()
 
 void SdTiledRenderingTest::testSearchAllFollowedBySearch()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -669,7 +659,6 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
 
 void SdTiledRenderingTest::testDontSearchInMasterPages()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -701,7 +690,6 @@ std::vector<OUString> getCurrentParts(SdXImpressDocument* pDocument)
 
 void SdTiledRenderingTest::testInsertDeletePage()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -796,7 +784,6 @@ void SdTiledRenderingTest::testInsertDeletePage()
 
 void SdTiledRenderingTest::testInsertTable()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
@@ -823,7 +810,6 @@ void SdTiledRenderingTest::testInsertTable()
 
 void SdTiledRenderingTest::testPartHash()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pDoc = createDoc("dummy.odp");
 
     int nParts = pDoc->getParts();
@@ -839,7 +825,6 @@ void SdTiledRenderingTest::testPartHash()
 void SdTiledRenderingTest::testResizeTable()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -886,7 +871,6 @@ void SdTiledRenderingTest::testResizeTable()
 void SdTiledRenderingTest::testResizeTableColumn()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("table-column.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1042,8 +1026,6 @@ public:
 
 void SdTiledRenderingTest::testViewCursors()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
@@ -1070,8 +1052,6 @@ void SdTiledRenderingTest::testViewCursors()
 
 void SdTiledRenderingTest::testViewCursorParts()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
@@ -1110,8 +1090,6 @@ void SdTiledRenderingTest::testViewCursorParts()
 
 void SdTiledRenderingTest::testCursorViews()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     ViewCallback aView1;
@@ -1159,8 +1137,6 @@ void SdTiledRenderingTest::testCursorViews()
 
 void SdTiledRenderingTest::testViewLock()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
@@ -1189,8 +1165,6 @@ void SdTiledRenderingTest::testViewLock()
 
 void SdTiledRenderingTest::testUndoLimiting()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1232,8 +1206,6 @@ void SdTiledRenderingTest::testUndoLimiting()
 
 void SdTiledRenderingTest::testCreateViewGraphicSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
@@ -1271,8 +1243,6 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
 
 void SdTiledRenderingTest::testCreateViewTextCursor()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     ViewCallback aView1;
@@ -1328,7 +1298,6 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
 void SdTiledRenderingTest::testTdf102223()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf102223.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1369,7 +1338,6 @@ void SdTiledRenderingTest::testTdf102223()
 void SdTiledRenderingTest::testPostKeyEventInvalidation()
 {
     // Load a document and begin text edit on the first slide.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
     CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
     ViewCallback aView1;
@@ -1417,7 +1385,6 @@ void SdTiledRenderingTest::testPostKeyEventInvalidation()
 void SdTiledRenderingTest::testTdf103083()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf103083.fodp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1483,7 +1450,6 @@ void SdTiledRenderingTest::testTdf103083()
 void SdTiledRenderingTest::testTdf104405()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf104405.fodp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1535,7 +1501,6 @@ void SdTiledRenderingTest::testTdf104405()
 
 void SdTiledRenderingTest::testTdf81754()
 {
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf81754.pptx");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1570,7 +1535,6 @@ void SdTiledRenderingTest::testTdf81754()
 void SdTiledRenderingTest::testTdf105502()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf105502.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     sd::Window* pWindow = pViewShell->GetActiveWindow();
@@ -1626,7 +1590,6 @@ void SdTiledRenderingTest::testTdf105502()
 void SdTiledRenderingTest::testCommentCallbacks()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     // Set the tiled annotations off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
@@ -1741,7 +1704,6 @@ void SdTiledRenderingTest::testCommentCallbacks()
 void SdTiledRenderingTest::testMultiViewInsertDeletePage()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
@@ -1787,7 +1749,6 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
 void SdTiledRenderingTest::testDisableUndoRepair()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     SfxViewShell* pView1 = SfxViewShell::Current();
     int nView1 = SfxLokHelper::getView();
@@ -1841,8 +1802,6 @@ void SdTiledRenderingTest::testDisableUndoRepair()
 
 void SdTiledRenderingTest::testDocumentRepair()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -1893,7 +1852,6 @@ void SdTiledRenderingTest::testDocumentRepair()
 void SdTiledRenderingTest::testLanguageStatus()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     createDoc("dummy.odp");
     SfxViewShell* pView1 = SfxViewShell::Current();
     SfxLokHelper::createView();
@@ -1915,7 +1873,6 @@ void SdTiledRenderingTest::testLanguageStatus()
 void SdTiledRenderingTest::testLanguageAllText()
 {
     // Load the document, which has a single shape, with Hungarian text.
-    comphelper::LibreOfficeKit::setActive();
     createDoc("language-all-text.odp");
 
     // Set tha language to English for all text.
@@ -1942,8 +1899,6 @@ void SdTiledRenderingTest::testLanguageAllText()
 void SdTiledRenderingTest::testDefaultView()
 {
     // Load the document with notes view.
-    comphelper::LibreOfficeKit::setActive();
-
     SdXImpressDocument* pXImpressDocument = createDoc("notes-view.odp");
     sd::ViewShell* pView = pXImpressDocument->GetDocShell()->GetViewShell();
     {
@@ -1963,8 +1918,6 @@ void SdTiledRenderingTest::testDefaultView()
 void SdTiledRenderingTest::testIMESupport()
 {
     // Load the document with notes view.
-    comphelper::LibreOfficeKit::setActive();
-
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     VclPtr<vcl::Window> pDocWindow = pXImpressDocument->getDocWindow();
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -2002,7 +1955,6 @@ void SdTiledRenderingTest::testIMESupport()
 void SdTiledRenderingTest::testTdf115783()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115783.fodp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -2069,7 +2021,6 @@ void SdTiledRenderingTest::testTdf115783()
 void SdTiledRenderingTest::testPasteTextOnSlide()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
     CPPUNIT_ASSERT(pXImpressDocument);
 
@@ -2131,7 +2082,6 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
 
 void SdTiledRenderingTest::testTdf115873()
 {
-    comphelper::LibreOfficeKit::setActive();
     // Initialize the navigator.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -2167,7 +2117,6 @@ void SdTiledRenderingTest::testTdf115873()
 
 void SdTiledRenderingTest::testTdf115873Group()
 {
-    comphelper::LibreOfficeKit::setActive();
     // Initialize the navigator.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873-group.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -2184,7 +2133,6 @@ void SdTiledRenderingTest::testTdf115873Group()
 void SdTiledRenderingTest::testCutSelectionChange()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("cut_selection_change.odp");
     CPPUNIT_ASSERT(pXImpressDocument);
 
