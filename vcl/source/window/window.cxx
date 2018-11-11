@@ -3172,6 +3172,8 @@ void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool 
     // don't allow setting this twice
     assert(mpWindowImpl->mpLOKNotifier == nullptr);
     assert(pNotifier);
+    // never use this in the desktop case
+    assert(comphelper::LibreOfficeKit::isActive());
 
     if (!bParent)
     {
