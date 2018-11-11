@@ -8504,7 +8504,7 @@ SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
 
 
 SfxVoidItem TransformDialog SID_ATTR_TRANSFORM
-()
+(SfxUInt32Item TransformRotationAngle SID_ATTR_TRANSFORM_ANGLE,SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X,SfxUInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
