@@ -745,7 +745,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                         else
                             r.TokenType = KParseType::ASC_NUMBER;
                     }
-                    else if (current == cDecimalSep || (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSep)))
+                    else if (current == cDecimalSep || (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSepAlt)))
                     {
                         if (nextChar)
                             ++nDecSeps;
