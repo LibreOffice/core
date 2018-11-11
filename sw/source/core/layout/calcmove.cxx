@@ -1701,6 +1701,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             nullptr != GetNextCellLeaf() )
             bDontMoveMe = false;
 
+        assert(bMoveable);
+
         if ( bDontMoveMe && aRectFnSet.GetHeight(getFrameArea()) >
                             aRectFnSet.GetHeight(GetUpper()->getFramePrintArea()) )
         {
@@ -1725,7 +1727,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                  * Exception: If we sit in FormatWidthCols, we must not ignore
                  * the attributes.
                  */
-                else if ( !bFootnote && bMoveable &&
+                else if ( !bFootnote &&
                       ( !bFly || !FindFlyFrame()->IsColLocked() ) &&
                       ( !bSct || !FindSctFrame()->IsColLocked() ) )
                     bMoveOrFit = true;

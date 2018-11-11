@@ -1479,7 +1479,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                             aReturn.bEnabled = m_aCurrentFrame.isActive() && !bIsReadOnly;
                             if(aReturn.bEnabled)
                             {
-                                aReturn.bEnabled = aReturn.bEnabled && IsFormatSupported( m_aSystemClipboard.GetDataFlavorExVector(), SotClipboardFormatId::STRING );
+                                aReturn.bEnabled = IsFormatSupported( m_aSystemClipboard.GetDataFlavorExVector(), SotClipboardFormatId::STRING );
                             }
                             break;
                     }
