@@ -620,14 +620,19 @@ SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,
     switch (nElement)
     {
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_STYLES ):
+        case XML_ELEMENT( OFFICE_OO, XML_DOCUMENT_STYLES ):
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_CONTENT ):
+        case XML_ELEMENT( OFFICE_OO, XML_DOCUMENT_CONTENT ):
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_SETTINGS ):
+        case XML_ELEMENT( OFFICE_OO, XML_DOCUMENT_SETTINGS ):
             pContext = new SdXMLDocContext_Impl(*this);
         break;
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
+        case XML_ELEMENT( OFFICE_OO, XML_DOCUMENT_META ):
             pContext = CreateMetaContext(nElement, xAttrList);
         break;
         case XML_ELEMENT( OFFICE, XML_DOCUMENT ):
+        case XML_ELEMENT( OFFICE_OO, XML_DOCUMENT ):
         {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
