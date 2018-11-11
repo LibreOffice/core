@@ -1522,7 +1522,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
         aGuard.reset();
         m_nRow = nNewRow;
-        m_bAfterLast = !bValid && nNewRow > 0;
+        m_bAfterLast = !bValid; // only nNewRow > 0 possible here
         return bValid;
     }
 }

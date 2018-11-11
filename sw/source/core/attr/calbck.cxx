@@ -82,8 +82,9 @@ std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoo
     if( !pOld || pOld->Which() != RES_OBJECTDYING )
         return nullptr;
 
+    assert(dynamic_cast<const SwPtrMsgPoolItem*>(pOld));
     const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
-    if(!pDead || pDead->pObject != m_pRegisteredIn)
+    if(pDead->pObject != m_pRegisteredIn)
     {
         // we should only care received death notes from objects we are following
         return nullptr;
