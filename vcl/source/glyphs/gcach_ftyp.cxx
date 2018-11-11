@@ -1361,6 +1361,15 @@ void FreetypeServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) c
 
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
+    if( rc != FT_Err_Ok )
+    {
+        // we get here e.g. when a PS font lacks the default glyph
+        rGD.SetCharWidth( 0 );
+        rGD.SetDelta( 0, 0 );
+        rGD.SetOffset( 0, 0 );
+        rGD.SetSize( Size( 0, 0 ) );
+        return;
+    }
 
     ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
     if( mbArtBold && pFTEmbolden && (nFTVERSION < 2200) ) // #i71094# workaround staircase bug
