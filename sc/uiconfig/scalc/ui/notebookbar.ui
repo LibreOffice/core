@@ -4188,6 +4188,8 @@
                       <object class="sfxlo-OptionalBox" id="Home-Section-Condition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom37">
                             <property name="visible">True</property>
@@ -4924,6 +4926,8 @@
                       <object class="sfxlo-OptionalBox" id="Insert-Section-Field">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Insert-FieldButton:MenuField">
                             <property name="label" translatable="yes" context="CalcNotebookbar|FieldMenuButton">Fiel_d</property>
@@ -7229,6 +7233,8 @@
                       <object class="sfxlo-OptionalBox" id="Data-Section-Statistic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Data-StatisticsMenu:MenuStatistic">
                             <property name="label" translatable="yes" context="CalcNotebookbar|Statistics">_Statistics</property>
@@ -8975,6 +8981,19 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">1</property>
                             <child>
+                              <object class="GtkToolButton" id="Image-SaveGraphic">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
+                                <property name="action_name">.uno:SaveGraphic</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkToolButton" id="Image-FormatArea">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -9503,7 +9522,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-6"/>
                         </style>
                       </object>
                       <packing>
@@ -9634,7 +9653,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-2"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -9769,7 +9788,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-1"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -9809,7 +9828,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-7"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -9890,7 +9909,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-2"/>
                         </style>
                       </object>
                       <packing>
@@ -9972,7 +9991,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-1"/>
                         </style>
                       </object>
                       <packing>
@@ -10578,7 +10597,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -10713,7 +10732,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -12241,7 +12260,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-2"/>
                         </style>
                       </object>
                       <packing>
@@ -12361,7 +12380,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-1"/>
                         </style>
                       </object>
                       <packing>
