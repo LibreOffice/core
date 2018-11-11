@@ -280,7 +280,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     {
         if (nWW8BrushStyle || !m_bAutoFillColor)
             pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
-        else if ( m_bFillSpecified && m_bAutoFillColor )
+        else if (m_bFillSpecified) // m_bAutoFillColor == true
             pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_NONE));
 
         pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
