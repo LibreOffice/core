@@ -15,16 +15,13 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <test/testdllapi.hxx>
 
-using namespace css;
-using namespace css::uno;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XSubTotalCalculatable
 {
 public:
-    virtual uno::Reference< css::uno::XInterface > init() = 0;
-    virtual uno::Reference< css::uno::XInterface > getXSpreadsheet() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > getXSpreadsheet() = 0;
 
     void testCreateSubTotalDescriptor();
     void testApplyRemoveSubTotals();
