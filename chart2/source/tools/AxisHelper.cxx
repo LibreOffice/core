@@ -720,7 +720,7 @@ Reference< beans::XPropertySet > AxisHelper::getGridProperties(
         else
         {
             Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            if( nSubGridIndex >= 0 && nSubGridIndex < aSubGrids.getLength() )
+            if (nSubGridIndex < aSubGrids.getLength())
                 xRet.set( aSubGrids[nSubGridIndex] );
         }
     }

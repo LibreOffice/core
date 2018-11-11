@@ -3144,7 +3144,7 @@ bool SwAccessibleMap::ReplaceChild (
             if(pAccShape && ::accessibility::ShapeTypeHandler::Instance().GetTypeId (pAccShape->GetXShape()) == ::accessibility::DRAWING_CONTROL)
             {
                 ::accessibility::AccessibleControlShape *pCtlAccShape = static_cast < ::accessibility::AccessibleControlShape* >(pAccShape);
-                if (pCtlAccShape && pCtlAccShape->GetControlModel() == pSet)
+                if (pCtlAccShape->GetControlModel() == pSet)
                     return pCtlAccShape;
             }
             ++aIter;

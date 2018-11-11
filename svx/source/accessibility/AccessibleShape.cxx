@@ -164,7 +164,7 @@ void AccessibleShape::Init()
 
                 bool bOwnParaObj = pOutlinerParaObject != nullptr;
 
-                if( !pOutlinerParaObject && pSdrObject )
+                if (!pOutlinerParaObject)
                     pOutlinerParaObject = pSdrObject->GetOutlinerParaObject();
 
                 // create AccessibleTextHelper to handle this shape's text
