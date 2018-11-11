@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_6dbb51e5",
+        "filename": "include/xmloff/xmlnmspe.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-11T19:00:49Z",
+      "side": 1,
+      "message": "i don\u0027t like this \"OO\" suffix, it\u0027s too confusing with \"OOO\" above, particularly given the lack of any comment here... perhaps \"GALLERY\" would be more appropriate considering the highly specialised use",
+      "revId": "f57d2bd9b90b25d8a4a7ceb1f2d3f46a9a1e1984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_2ddc3945",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-11T19:00:49Z",
+      "side": 1,
+      "message": "the \"value: \" looks odd?",
+      "revId": "f57d2bd9b90b25d8a4a7ceb1f2d3f46a9a1e1984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_0de175ff",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-11T19:00:49Z",
+      "side": 1,
+      "message": "another \"value: \"",
+      "revId": "f57d2bd9b90b25d8a4a7ceb1f2d3f46a9a1e1984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
