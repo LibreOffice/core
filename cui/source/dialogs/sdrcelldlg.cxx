@@ -49,7 +49,7 @@ void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
         rAreaPage.SetGradientList( mpGradientList );
         rAreaPage.SetHatchingList( mpHatchingList );
         rAreaPage.SetBitmapList( mpBitmapList );
-        rAreaPage.SetPatternList( mpPatternList );;
+        rAreaPage.SetPatternList( mpPatternList );
         rAreaPage.ActivatePage( mrOutAttrs );
     }
     else if (rId == "border")

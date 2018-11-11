@@ -98,7 +98,7 @@ SwVbaDocument::AddSink( const uno::Reference< XSink >& xSink )
 {
     word::getDocShell( mxModel )->RegisterAutomationDocumentEventsCaller( uno::Reference< XSinkCaller >(this) );
     mvSinks.push_back(xSink);
-    return mvSinks.size();;
+    return mvSinks.size();
 }
 
 void

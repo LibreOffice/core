@@ -2411,16 +2411,16 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
     }
 
     if ( ( DISABLE_WORDLINE & nDisable ) == DISABLE_WORDLINE )
-        m_xIndividualWordsBtn->set_sensitive(false);;
+        m_xIndividualWordsBtn->set_sensitive(false);
 
     if ( ( DISABLE_BLINK & nDisable ) == DISABLE_BLINK )
-        m_xBlinkingBtn->set_sensitive(false);;
+        m_xBlinkingBtn->set_sensitive(false);
 
     if ( ( DISABLE_UNDERLINE_COLOR & nDisable ) == DISABLE_UNDERLINE_COLOR )
     {
         // disable the controls
-        m_xUnderlineColorFT->set_sensitive(false);;
-        m_xUnderlineColorLB->set_sensitive(false);;
+        m_xUnderlineColorFT->set_sensitive(false);
+        m_xUnderlineColorLB->set_sensitive(false);
         m_bUnderlineColorDisabled = true;
     }
 }

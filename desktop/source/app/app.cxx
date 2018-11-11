@@ -1400,7 +1400,7 @@ int Desktop::Main()
                 batch->commit();
 
                 // make sure the change is written to the configuration before we start the update
-                css::uno::Reference<css::util::XFlushable> xFlushable(css::configuration::theDefaultProvider::get(xContext), UNO_QUERY);;
+                css::uno::Reference<css::util::XFlushable> xFlushable(css::configuration::theDefaultProvider::get(xContext), UNO_QUERY);
                 xFlushable->flush();
                 // avoid the old oosplash staying around
                 CloseSplashScreen();
