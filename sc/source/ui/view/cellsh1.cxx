@@ -1370,7 +1370,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // if ChangeTrack MoveMode disable
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != nullptr );
                             // fdo#56098  disable shift if necessary
-                            if ( !bOtherDoc  && pOwnClip )
+                            if (!bOtherDoc)
                             {
                                 ScViewData* pData = GetViewData();
                                 if ( pData->GetMarkData().GetTableSelect( pData->GetTabNo() ) )
