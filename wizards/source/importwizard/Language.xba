@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <!--***********************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -9,16 +9,16 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  ***********************************************************-->
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">Option Explicit
 
@@ -39,7 +39,7 @@ Public SOApplicationName(5) As String
 Public sHelpButton As String, sCancelButton As String, sBackButton As String, sNextButton As String
 Public sSumInclusiveSubDir As String, sSumSaveDocuments As String
 Public sSummaryHeader As String
-Public sWelcometextLabel1 As String, sWelcometextLabel2 As String,  sWelcometextLabel3 As String
+Public sWelcometextLabel1 As String, sWelcometextLabel2 As String, sWelcometextLabel3 As String
 Public sBeginButton As String, sMsgDirNotThere As String
 Public sQueryForNewCreation As String, sPathError3 As String
 Public sNoDirCreation As String
@@ -76,7 +76,7 @@ Sub LoadLanguage()
 		sNextButton = GetResText(1003)
 		sBeginButton = GetResText(1004)
 		sCloseButton = GetResText(1005)
-		
+
 		sWelcometextLabel1 = ReplaceString(GetResText(1006), GetProductName(),&quot;%PRODUCTNAME&quot;)
 		sWelcometextLabel2 = GetResText(1007)
 		sWelcometextLabel3 = GetResText(1008)
@@ -90,19 +90,19 @@ Sub LoadLanguage()
 		&apos; DocumentCheckbox- Captions
 		GetApplResourceArray(2013, 5, sSODocumentCheckBox())
 
-		&apos;StarOffice Applicationnames
+		&apos; OpenOffice Applicationnames
 
 		sSOHelperDocuments(0,0) = GetResText(2017)
 		sSOHelperDocuments(0,1) = &quot;com.sun.star.text.GlobalDocument&quot;
 		sSOHelperDocuments(1,0) = GetResText(2018)
 		sSOHelperDocuments(1,1) = &quot;com.sun.star.formula.FormulaProperties&quot;
-		
-		GetApplResourceArray(2017,2, sSOHelperDocuments())		
-		
+
+		GetApplResourceArray(2017,2, sSOHelperDocuments())
+
 		sContainerName(0) = GetResText(1030)
 		&apos; Note: for the version 5.2 there was no Productname &quot;StarSuite&quot;
-		sContainerName(1) = &quot;StarOffice&quot;
-	
+		sContainerName(1) = &quot;OpenOffice&quot;
+
 		sSummaryHeader = GetResText(1031)
 
 		sTemplateGroupName = GetResText(1036)
@@ -120,7 +120,7 @@ Sub LoadLanguage()
 		sRTErrorHeader = GetResText(1058)
 		sOverwriteallFiles = GetResText(1070)
 		sReeditMacro = GetResText(1071)
-		scouldnotsaveDocument = GetResText(1072)		
+		scouldnotsaveDocument = GetResText(1072)
 		scouldnotopenDocument = GetResText(1073)
 		sPathDialogMessage = GetResText(1080)
 		sTitle = GetResText(1081)
@@ -136,7 +136,7 @@ Sub LoadLanguage()
 		sLogSummary = GetResText(2034)
 		sSumInclusiveSubDir = GetResText(3000)
 		sSumSaveDocuments = GetResText(3001)
-		&apos;StarOffice Applicationnames
+		&apos;OpenOffice Applicationnames
 		GetApplResourceArray(3100, 4, sSumSODocuments())
 		GetApplResourceArray(3110, 4, sSumSOTemplates())
 		GetApplResourceArray(3200, 3, sSumMSDocuments())
@@ -172,6 +172,6 @@ Dim a as Integer
 	For i = StartResIndex To StartResIndex + Count-1
 		BigArray(a) = GetResText(i)
 		a = a + 1
-	Next			
+	Next
 End Sub
 </script:module>
