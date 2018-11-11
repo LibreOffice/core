@@ -56,7 +56,7 @@
                 <property name="hexpand">True</property>
                 <child>
                   <object class="sfxlo-SidebarToolBox" id="selectcolor">
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <child>
                       <object class="GtkMenuToolButton" id="color">
                         <property name="width_request">105</property>
@@ -81,7 +81,7 @@
                 </child>
                 <child>
                   <object class="svxlo-SvxFillAttrBox" id="fillattr">
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|fillattr|tooltip_text">Select the effect to apply.</property>
                     <accessibility>
@@ -101,7 +101,7 @@
                 </child>
                 <child>
                   <object class="svxcorelo-SvxColorListBox" id="fillgrad1">
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|fillgrad1|tooltip_text">Fill gradient from.</property>
                   </object>
@@ -122,7 +122,7 @@
             <child>
               <object class="svxlo-SvxFillTypeBox" id="fillstyle">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|fillstyle|tooltip_text">Select the fill type to apply.</property>
                 <property name="entry_text_column">0</property>
@@ -145,7 +145,7 @@
             </child>
             <child>
               <object class="svxcorelo-SvxColorListBox" id="fillgrad2">
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|fillgrad2|tooltip_text">Fill gradient to.</property>
               </object>
@@ -163,7 +163,7 @@
                 <child>
                   <object class="GtkComboBoxText" id="gradientstyle">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|gradientstyle|tooltip_text">Select the gradient style.</property>
                     <items>
                       <item translatable="yes" context="sidebararea|gradientstyle">Linear</item>
@@ -244,7 +244,7 @@
             <child>
               <object class="GtkComboBoxText" id="transtype">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|transtype|tooltip_text">Select the type of transparency to apply.</property>
                 <items>
@@ -273,7 +273,7 @@
             <child>
               <object class="GtkToolbar" id="selectgradient">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="halign">start</property>
                 <child>
                   <object class="GtkMenuToolButton" id="gradient">
