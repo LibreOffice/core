@@ -205,6 +205,10 @@ void SidebarController::unregisterSidebarForFrame(SidebarController* pController
 void SidebarController::disposeDecks()
 {
     SolarMutexGuard aSolarMutexGuard;
+
+    if (comphelper::LibreOfficeKit::isActive())
+        mpParentWindow->ReleaseLOKNotifier();
+
     mpCurrentDeck.clear();
     maFocusManager.Clear();
     mpResourceManager->disposeDecks();
