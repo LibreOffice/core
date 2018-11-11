@@ -2186,7 +2186,6 @@ void SdTiledRenderingTest::testCutSelectionChange()
 void SdTiledRenderingTest::testInsertDeletePageInvalidation()
 {
     // Load the document.
-    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     ViewCallback aView1;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);

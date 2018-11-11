@@ -71,6 +71,7 @@ public:
         comphelper::LibreOfficeKit::setActive(true);
 
         UnoApiTest::setUp();
+
         mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
         SfxApplication::GetOrCreate();
     };
@@ -2208,7 +2209,6 @@ void DesktopLOKTest::readFileIntoByteVector(OUString const & sFilename, std::vec
 
 void DesktopLOKTest::testGetSignatureState_Signed()
 {
-    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("signed.odt");
     Scheduler::ProcessEventsToIdle();
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -2236,7 +2236,6 @@ void DesktopLOKTest::testGetSignatureState_Signed()
 
 void DesktopLOKTest::testGetSignatureState_NonSigned()
 {
-    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     Scheduler::ProcessEventsToIdle();
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -2246,8 +2245,6 @@ void DesktopLOKTest::testGetSignatureState_NonSigned()
 
 void DesktopLOKTest::testInsertCertificate_DER_ODT()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     utl::TempFile aTempFile;
@@ -2299,8 +2296,6 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
 
 void DesktopLOKTest::testInsertCertificate_PEM_ODT()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     utl::TempFile aTempFile;
@@ -2359,8 +2354,6 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
 
 void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.docx");
     utl::TempFile aTempFile;
@@ -2422,8 +2415,6 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     // FIXME: needs investigation ...
     return;
 
-    comphelper::LibreOfficeKit::setActive();
-
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     utl::TempFile aTempFile;
@@ -2480,8 +2471,6 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
 
 void DesktopLOKTest::testTextSelectionHandles()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
@@ -2521,7 +2510,6 @@ void DesktopLOKTest::testTextSelectionHandles()
 
 void DesktopLOKTest::testDialogPaste()
 {
-    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
@@ -2548,9 +2536,6 @@ void DesktopLOKTest::testDialogPaste()
 
 void DesktopLOKTest::testComplexSelection()
 {
-    // needed for SwTransferable to cope with the selection.
-    comphelper::LibreOfficeKit::setActive();
-
     // Start with a blank text file and add contents.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     // LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods");
