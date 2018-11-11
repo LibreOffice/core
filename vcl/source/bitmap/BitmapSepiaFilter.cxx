@@ -8,6 +8,9 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <o3tl/clamp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -23,7 +26,8 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
 
     if (pReadAcc)
     {
-        const long nSepia = 10000 - 100 * SAL_BOUND(mnSepiaPercent, 0, 100);
+        const long nSepia
+            = 10000 - 100 * o3tl::clamp(mnSepiaPercent, sal_uInt16(0), sal_uInt16(100));
         BitmapPalette aSepiaPal(256);
 
         for (sal_uInt16 i = 0; i < 256; i++)
