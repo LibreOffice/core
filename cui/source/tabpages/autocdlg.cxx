@@ -95,8 +95,8 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     {
         // remove smart tag tab page if no extensions are installed
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-        SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
-        if ( !pOpt || !pOpt->pSmartTagMgr || 0 == pOpt->pSmartTagMgr->NumberOfRecognizers() )
+        SvxSwAutoFormatFlags& rOpt = pAutoCorrect->GetSwFlags();
+        if (!rOpt.pSmartTagMgr || 0 == rOpt.pSmartTagMgr->NumberOfRecognizers())
             RemoveTabPage("smarttags");
 
         RemoveTabPage("options");

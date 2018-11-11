@@ -926,14 +926,10 @@ namespace accessibility
             sal_Int32 reeBegin = ree.aPosition.nIndex + nAllFieldLen;
             sal_Int32 reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
-            if (reeBegin > nIndex)
-            {
+            if (nIndex < reeBegin)
                 break;
-            }
-            if (nIndex >= reeBegin && nIndex < reeEnd)
-            {
+            if (nIndex < reeEnd)
                 return GetFieldTypeNameFromField(ree);
-            }
         }
         return OUString();
     }
@@ -1584,13 +1580,11 @@ namespace accessibility
             reeBegin = ree.aPosition.nIndex + nAllFieldLen;
             reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
-            if( reeBegin > nIndex )
-            {
+            if (nIndex < reeBegin)
                 break;
-            }
             if (!ree.pFieldItem)
                 continue;
-            if (nIndex >= reeBegin && nIndex < reeEnd)
+            if (nIndex < reeEnd)
             {
                 if (ree.pFieldItem->GetField()->GetClassId() != text::textfield::Type::URL)
                 {

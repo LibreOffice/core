@@ -520,7 +520,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                         ni++;
                         nInsert = ni;
                     }
-                    else if ( ni > 0 && mvData[ni-1].nEndRow == nStartRow - 1 )
+                    else if (mvData[ni - 1].nEndRow == nStartRow - 1)
                         nInsert = ni;
                 }
                 if ( ni > 0 && mvData[ni-1].pPattern == pPattern )
