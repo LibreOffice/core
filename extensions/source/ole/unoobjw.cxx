@@ -896,7 +896,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
         }
     }
     if (pBstrDocString)
-        *pBstrDocString = SysAllocString(L"");;
+        *pBstrDocString = SysAllocString(L"");
     if (pdwHelpContext)
         *pdwHelpContext = 0;
     if (pBstrHelpFile)

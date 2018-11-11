@@ -248,7 +248,7 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
     }
     else
     {
-        m_xBtnModify->set_sensitive(false);;
+        m_xBtnModify->set_sensitive(false);
     }
 }
 

@@ -151,7 +151,7 @@ ScVbaApplication::AddSink( const uno::Reference< XSink >& xSink )
     // No harm in potentially calling this several times
     SC_MOD()->RegisterAutomationApplicationEventsCaller( uno::Reference< XSinkCaller >(this) );
     mvSinks.push_back(xSink);
-    return mvSinks.size();;
+    return mvSinks.size();
 }
 
 void
