@@ -3431,7 +3431,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             aShadowAttribsGrabBag[0].Name = "dist";
             aShadowAttribsGrabBag[0].Value <<= lcl_CalculateDist(dX, dY);
             aShadowAttribsGrabBag[1].Name = "dir";
-            aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);;
+            aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);
 
             aShadowGrabBag[0].Name = "Attribs";
             aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
