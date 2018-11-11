@@ -48,10 +48,6 @@
 #    endif
 #endif
 
-#ifndef SAL_BOUND
-#    define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
-#endif
-
 #ifndef SAL_STRINGIFY
 #   define SAL_STRINGIFY_ARG(x) #x
 #   define SAL_STRINGIFY(x) SAL_STRINGIFY_ARG(x)
