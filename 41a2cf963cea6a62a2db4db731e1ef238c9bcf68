@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_8dd685f1",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-11T22:39:08Z",
+      "side": 1,
+      "message": "same glitch occurs doing re-parenting here",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_add94923",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-11T22:39:08Z",
+      "side": 1,
+      "message": "required?",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_cdcc7d63",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-11T22:39:08Z",
+      "side": 1,
+      "message": "more code style nit-picking - for loops in LO code place the closing paren \u0027)\u0027 after the increment statement and the opening body curly brace \u0027{\u0027 under the \u0027f\u0027.",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_adc4a941",
+        "filename": "sd/source/ui/animations/CustomAnimationList.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-11T22:39:08Z",
+      "side": 1,
+      "message": "unused",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_8dc1e531",
+        "filename": "sd/source/ui/animations/CustomAnimationList.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-11T22:39:08Z",
+      "side": 1,
+      "message": "unused",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
