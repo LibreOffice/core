@@ -34,6 +34,24 @@
       "revId": "84286ac443ea8978743d281efeaa7ddb46199558",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_0d2615b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-11T09:00:11Z",
+      "side": 1,
+      "message": "...or whether an alternative fix would be to use an OpenJDK version into which that \u003chttp://hg.openjdk.java.net/jdk-updates/jdk11u/rev/8513ac27b651\u003e \"8211731: Reconsider default option for ClassPathURLCheck change done in JDK-8195874\" has also been backported?  To me, it looks like that is upstream OpenJDK\u0027s intended approach to solve issues like our\u0027s again for now.",
+      "parentUuid": "3f3283f1_626c7708",
+      "revId": "84286ac443ea8978743d281efeaa7ddb46199558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
