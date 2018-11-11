@@ -110,7 +110,7 @@ void SidebarDockingWindow::NotifyResize()
 {
     if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && mbSidebarVisibleInLOK)
     {
-        if (!GetLOKNotifier())
+        if (mpSidebarController.is() && !GetLOKNotifier())
             SetLOKNotifier(SfxViewShell::Current());
 
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
