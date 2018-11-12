@@ -114,21 +114,21 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     break;
     case NS_ooxml::LN_CT_FontScheme_majorFont:
     case NS_ooxml::LN_CT_FontScheme_minorFont:
-        {
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         m_pImpl->m_currentFontThemeEntry = std::map<sal_uInt32, OUString>();
-            if( pProperties.get())
+        if( pProperties.get())
                 pProperties->resolve(*this);
-            m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
+        m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
     }
     break;
     case NS_ooxml::LN_CT_FontCollection_latin:
     case NS_ooxml::LN_CT_FontCollection_ea:
     case NS_ooxml::LN_CT_FontCollection_cs:
-        {
+    {
         m_pImpl->m_currentThemeFontId = nSprmId;
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
                 pProperties->resolve(*this);
     }
     break;
@@ -214,11 +214,11 @@ const OUString ThemeTable::getFontNameForTheme(const Id id) const
     case NS_ooxml::LN_Value_ST_Theme_majorHAnsi:
     case NS_ooxml::LN_Value_ST_Theme_minorAscii:
     case NS_ooxml::LN_Value_ST_Theme_minorHAnsi:
-    {
-         std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_latin);
-             if (Iter != tmpThemeFontMap.end())
-                  return Iter->second;
-             return OUString();
+        {
+            std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_latin);
+            if (Iter != tmpThemeFontMap.end())
+                      return Iter->second;
+            return OUString();
         }
     case NS_ooxml::LN_Value_ST_Theme_majorBidi:
     case NS_ooxml::LN_Value_ST_Theme_minorBidi:

@@ -58,9 +58,9 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
 
-            const DataFlavorExVector& rVector = aData.GetDataFlavorExVector();
-            if(OColumnTransferable::canExtractColumnDescriptor(rVector, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR))
-            {
+        const DataFlavorExVector& rVector = aData.GetDataFlavorExVector();
+        if(OColumnTransferable::canExtractColumnDescriptor(rVector, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR))
+        {
                 ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
                                                                     aData);
                 OUString sDBName;
@@ -82,7 +82,7 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
                 SetText( sDBName );
                 nRet = DND_ACTION_COPY;
-            }
+        }
     }
     return nRet;
 }

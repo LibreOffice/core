@@ -46,14 +46,14 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -173,14 +173,14 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -301,14 +301,14 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -428,14 +428,14 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -560,14 +560,14 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -742,14 +742,14 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -922,14 +922,14 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -1051,14 +1051,14 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -1233,14 +1233,14 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
        formula::svSingleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
-     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
-     formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
-     GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=0;\n";
+    const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
+    formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
+    GetFormulaToken());
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=0;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -1416,11 +1416,11 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
         formula::SingleVectorRefToken *>(vSubArguments[dataCol]
         ->GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;
@@ -1544,11 +1544,11 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
     const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
         formula::SingleVectorRefToken *>(vSubArguments[dataCol]
         ->GetFormulaToken());
-     ss << "    tmp"<<dataCol<<"=";
-     ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-     ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
-     ss << "tmp"<<dataCol<<"))\n";
-     ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
+    ss << "    tmp"<<dataCol<<"=";
+    ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
+    ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
+    ss << "tmp"<<dataCol<<"))\n";
+    ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
 
     int conditionCol = 0;
     int conditionRow = 0;

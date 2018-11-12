@@ -78,10 +78,10 @@ void SwHyphWrapper::SpellContinue()
         pWait.reset(new SwWait( *pView->GetDocShell(), true ));
     }
 
-        uno::Reference< uno::XInterface >  xHyphWord = bInSelection ?
+    uno::Reference< uno::XInterface >  xHyphWord = bInSelection ?
                 PSH->HyphContinue( nullptr, nullptr ) :
                 PSH->HyphContinue( &nPageCount, &nPageStart );
-        SetLast( xHyphWord );
+    SetLast( xHyphWord );
 
     // for automatic separation, make actions visible only at the end
     if( bAutomatic )

@@ -367,7 +367,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         mnSmplInPrd = nSmplInPrd;
     else
     {
-         mnSmplInPrd = CalcPeriodLen();
+        mnSmplInPrd = CalcPeriodLen();
         if ( mnSmplInPrd == 1 )
             bEDS = true; // period length 1 means no periodic data: EDS suffices
     }

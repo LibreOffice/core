@@ -248,7 +248,7 @@ wrapper::ItemConverter* createItemConverter(
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         eMapTo, pRefSize.get(), bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
                                         nNumberFormat, nPercentNumberFormat );
-                    break;
+                break;
             }
             case OBJECTTYPE_GRID:
             case OBJECTTYPE_SUBGRID:
@@ -284,7 +284,7 @@ wrapper::ItemConverter* createItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         pRefSize.get());
-                    break;
+                break;
             }
             case OBJECTTYPE_DATA_STOCK_RANGE:
                     break;

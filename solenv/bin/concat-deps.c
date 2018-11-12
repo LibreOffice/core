@@ -144,7 +144,7 @@ int result = 32;
 
 static unsigned int get_unaligned_uint(const unsigned char* cursor)
 {
-unsigned int   result;
+    unsigned int   result;
 
     memcpy(&result, cursor, sizeof(unsigned int));
     return result;
@@ -169,9 +169,9 @@ struct pool
 
 static void* pool_take_extent(struct pool* pool, int allocate)
 {
-unsigned int size = 0;
-void* extent;
-void* data = NULL;
+    unsigned int size = 0;
+    void* extent;
+    void* data = NULL;
 
     if(pool->extent)
     {
@@ -215,7 +215,7 @@ void* data = NULL;
  */
 static struct pool* pool_create(int size_elem, int primary, int secondary)
 {
-struct pool* pool;
+    struct pool* pool;
 
     assert(primary > 0);
     assert(secondary >= 0);
@@ -238,8 +238,8 @@ struct pool* pool;
 
 static void pool_destroy(struct pool* pool)
 {
-void* extent;
-void* next;
+    void* extent;
+    void* next;
 
     if(pool != NULL)
     {
@@ -256,7 +256,7 @@ void* next;
 
 static void* pool_alloc(struct pool* pool)
 {
-void* data;
+    void* data;
 
     data = pool->head_free;
     if(data == NULL)
@@ -443,7 +443,7 @@ static void hash_destroy(struct hash* hash)
 
 static struct hash* hash_create(unsigned int size)
 {
-struct hash* hash;
+    struct hash* hash;
 
     assert(size > 0);
     hash = calloc(1, sizeof(struct hash));
@@ -482,12 +482,12 @@ struct hash* hash;
 
 static void hash_resize(struct hash* hash)
 {
-unsigned int old_size = hash->size;
-unsigned int hashed;
-struct hash_elem* hash_elem;
-struct hash_elem* next;
-struct hash_elem** array;
-unsigned int i;
+    unsigned int old_size = hash->size;
+    unsigned int hashed;
+    struct hash_elem* hash_elem;
+    struct hash_elem* next;
+    struct hash_elem** array;
+    unsigned int i;
 
     hash->size = (old_size << 1) + 1;
     /* we really should avoid to get there... so print a message to alert of the condition */
@@ -539,9 +539,9 @@ static int compare_key(struct hash const * hash, const char* a, const char* b, i
  */
 static int hash_store(struct hash* hash, const char* key, int key_len)
 {
-unsigned int hashed;
-struct hash_elem* hash_elem;
-int cost = 0;
+    unsigned int hashed;
+    struct hash_elem* hash_elem;
+    int cost = 0;
 
     (void) cost;
     hashed = hash_compute(hash, key, key_len);
@@ -584,7 +584,7 @@ int cost = 0;
 
 static int file_stat(const char* name, struct stat* buffer_stat, int* rc)
 {
-int rc_local = 0;
+    int rc_local = 0;
 
     rc_local = stat(name, buffer_stat);
     if (rc_local  < 0)
@@ -596,8 +596,8 @@ int rc_local = 0;
 
 static off_t file_get_size(const char* name, int* rc)
 {
-struct stat buffer_stat;
-off_t       size = -1;
+    struct stat buffer_stat;
+    off_t       size = -1;
 
     if (!file_stat(name, &buffer_stat, rc))
     {
@@ -620,10 +620,10 @@ static size_t file_load_buffer_count = 0;
 
 static char* file_load(const char* name, off_t* size, int* return_rc)
 {
-off_t local_size = 0;
-int rc = 0;
-char* buffer = NULL;
-int fd;
+    off_t local_size = 0;
+    int rc = 0;
+    char* buffer = NULL;
+    int fd;
 
     assert(name != NULL);
 
@@ -658,7 +658,7 @@ int fd;
             }
             else
             {
-            ssize_t i;
+                ssize_t i;
 
               REDO:
                 i = read(fd, buffer, (size_t)(*size));
@@ -874,9 +874,9 @@ static char * eat_space_at_end(char * end)
 static char* phony_content_buffer;
 static char* generate_phony_line(char const * phony_target, char const * extension)
 {
-char const * src;
-char* dest;
-char* last_dot = NULL;
+    char const * src;
+    char* dest;
+    char* last_dot = NULL;
     //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
     for(dest = phony_content_buffer+work_dir_len+1, src = phony_target; *src != 0; ++src, ++dest)
     {
@@ -899,7 +899,7 @@ char* last_dot = NULL;
 
 static int generate_phony_file(char* fn, char const * content)
 {
-FILE* depfile;
+    FILE* depfile;
     depfile = fopen(fn, "w");
     if(!depfile)
     {
@@ -915,17 +915,17 @@ FILE* depfile;
 
 static int process(struct hash* dep_hash, char* fn)
 {
-int rc;
-char* buffer;
-char* end;
-char* cursor;
-char* cursor_out;
-char* base;
-char* created_line = NULL;
-char* src_relative;
-int continuation = 0;
-char last_ns = 0;
-off_t size;
+    int rc;
+    char* buffer;
+    char* end;
+    char* cursor;
+    char* cursor_out;
+    char* base;
+    char* created_line = NULL;
+    char* src_relative;
+    int continuation = 0;
+    char last_ns = 0;
+    off_t size;
 
     buffer = file_load(fn, &size, &rc);
     if(!rc)
@@ -1130,13 +1130,13 @@ static int get_var(char **var, const char *name)
 
 int main(int argc, char** argv)
 {
-int rc = 0;
-off_t in_list_size = 0;
-char* in_list;
-char* in_list_cursor;
-char* in_list_base;
-struct hash* dep_hash = NULL;
-const char *env_str;
+    int rc = 0;
+    off_t in_list_size = 0;
+    char* in_list;
+    char* in_list_cursor;
+    char* in_list_base;
+    struct hash* dep_hash = NULL;
+    const char *env_str;
 
     if(argc < 2)
     {

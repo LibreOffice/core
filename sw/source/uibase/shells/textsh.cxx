@@ -499,9 +499,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     //FN_INSERT_FRAME
                     sal_uInt16 nAnchor = static_cast<sal_uInt16>(aMgr.GetAnchor());
-                        rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
-                        rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
-                        rReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
+                    rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
+                    rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
+                    rReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
                     rReq.Done();
                 }
 

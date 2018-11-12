@@ -125,13 +125,13 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     //#i61007# order of captions
     ApplyCaptionOrder();
     SwWrtShell &rSh = rView.GetWrtShell();
-     uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
+    uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
     SelectionType eType = rSh.GetSelectionType();
     if ( eType & SelectionType::Ole )
     {
         eType = SelectionType::Graphic;
-         uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
+        uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
         xNameAccess = xObjs->getEmbeddedObjects();
     }
 
@@ -174,7 +174,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         //if not OLE
         if(!xNameAccess.is())
         {
-         uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
+            uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
             xNameAccess = xGraphics->getGraphicObjects();
         }
 
@@ -190,7 +190,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
         sString = rView.GetOldFrameCat();
-         uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+        uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
         xNameAccess = xFrames->getTextFrames();
     }
     else if( eType == SelectionType::Text )

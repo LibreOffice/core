@@ -169,8 +169,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             if( pPorIter->InTabGrp() )
             {
-               const SwTabPortion* pTabPor = static_cast<SwTabPortion*>(pPorIter);
-               const SwTwips nTabPos = nTmpLeft + pTabPor->GetTabPos();
+                const SwTabPortion* pTabPor = static_cast<SwTabPortion*>(pPorIter);
+                const SwTwips nTabPos = nTmpLeft + pTabPor->GetTabPos();
                 if( nMaxRight < nTabPos )
                 {
                     nMaxRight = rPaint.Right();

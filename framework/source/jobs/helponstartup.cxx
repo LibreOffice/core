@@ -267,8 +267,8 @@ bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
     // check given help url against all default ones
     const css::uno::Sequence< OUString > lModules = xConfig->getElementNames();
     const OUString*                      pModules = lModules.getConstArray();
-          ::sal_Int32                           c        = lModules.getLength();
-          ::sal_Int32                           i        = 0;
+    ::sal_Int32                          c        = lModules.getLength();
+    ::sal_Int32                          i        = 0;
 
     for (i=0; i<c; ++i)
     {

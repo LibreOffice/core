@@ -564,9 +564,9 @@ namespace abp
             try
             {
                 SQLException aException;
-                  aError >>= aException;
-                  if ( aException.Message.isEmpty() )
-                  {
+                aError >>= aException;
+                if ( aException.Message.isEmpty() )
+                {
                     // prepend some context info
                     SQLContext aDetailedError;
                     aDetailedError.Message = compmodule::ModuleRes(RID_STR_NOCONNECTION);
@@ -574,9 +574,9 @@ namespace abp
                     aDetailedError.NextException = aError;
                     // handle (aka display) the new context info
                     xInteractions->handle( new OInteractionRequest( makeAny( aDetailedError ) ) );
-                  }
-                  else
-                  {
+                }
+                else
+                {
                       // handle (aka display) the original error
                     xInteractions->handle( new OInteractionRequest( makeAny( aException ) ) );
                 }

@@ -61,7 +61,7 @@ SwVbaGlobals::getApplication()
     if ( !mxApplication.is() )
          mxApplication.set( new SwVbaApplication( mxContext) );
 
-       return mxApplication;
+    return mxApplication;
 }
 
 uno::Reference<word::XSystem > SAL_CALL
@@ -160,7 +160,7 @@ SwVbaGlobals::getAvailableServiceNames(  )
     static uno::Sequence< OUString > serviceNames( SwVbaGlobals_BASE::getAvailableServiceNames() );
     if ( !bInit )
     {
-         OUString names[] = {
+        OUString names[] = {
             OUString( "ooo.vba.word.Document" ),
 //            #FIXME #TODO make Application a proper service
 //            OUString( "ooo.vba.word.Application" ),

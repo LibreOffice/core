@@ -141,7 +141,7 @@ void PPTShapeGroupContext::importExtDrawings( )
                 if( pGraphicShape->getFontRefColorForNodes().isUsed() )
                     applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
             }
-            pGraphicShape = oox::drawingml::ShapePtr( nullptr );
+        pGraphicShape = oox::drawingml::ShapePtr( nullptr );
     }
 }
 

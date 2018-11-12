@@ -1480,7 +1480,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     // supporting full width for vertical text.
 //  if( SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
 //  {
-        rOutliner.SetMinAutoPaperSize(Size(aAnkRect.GetWidth(), 0));
+    rOutliner.SetMinAutoPaperSize(Size(aAnkRect.GetWidth(), 0));
 //  }
 //  else if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
 //  {
@@ -1651,7 +1651,7 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 
     aPaperMax=aMaxSiz;
 
-        aPaperMin.setWidth( aAnkSiz.Width() );
+    aPaperMin.setWidth( aAnkSiz.Width() );
 
     if (pViewMin!=nullptr)
     {
@@ -2241,7 +2241,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
 
         case SdrHdlKind::Move:
         {
-               NbcMove( Size( rDrag.GetDX(), rDrag.GetDY() ) );
+            NbcMove( Size( rDrag.GetDX(), rDrag.GetDY() ) );
             break;
         }
 

@@ -164,7 +164,7 @@ void XSecController::addStreamReference(
     bool isBinary,
     sal_Int32 nDigestID )
 {
-        SignatureReferenceType type = (isBinary?SignatureReferenceType::BINARYSTREAM:SignatureReferenceType::XMLSTREAM);
+    SignatureReferenceType type = (isBinary?SignatureReferenceType::BINARYSTREAM:SignatureReferenceType::XMLSTREAM);
 
     if (m_vInternalSignatureInformations.empty())
     {
@@ -178,7 +178,7 @@ void XSecController::addStreamReference(
             /*
              * get the input stream
              */
-            cssu::Reference< css::io::XInputStream > xObjectInputStream
+        cssu::Reference< css::io::XInputStream > xObjectInputStream
                 = getObjectInputStream( ouUri );
 
         if ( xObjectInputStream.is() )

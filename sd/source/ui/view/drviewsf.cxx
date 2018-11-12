@@ -617,7 +617,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                                 if ( pBullets )
                                 {
                                     sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(*pNumRule,nActNumLvl);
-                                     rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,nBulIndex));
+                                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,nBulIndex));
                                 }
                             }else
                             {
@@ -625,7 +625,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                                 if ( pNumbering )
                                 {
                                     sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(*pNumRule,nActNumLvl);
-                                     rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,nBulIndex));
+                                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,nBulIndex));
                                 }
                             }
                         }

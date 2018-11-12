@@ -207,7 +207,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                 nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
                 fireClickEvent();
-        m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
+                m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
                 return;
             }
         }

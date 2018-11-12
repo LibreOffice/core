@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 /*nC
 
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnType( sal_Int32 nColumnNum )
 {
-        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldType (nField);
 }
 

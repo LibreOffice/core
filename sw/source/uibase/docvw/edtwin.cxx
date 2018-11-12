@@ -5343,10 +5343,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     rSh.SetExtTextInputData( *pData );
                 }
             }
-                uno::Reference< frame::XDispatchRecorder > xRecorder =
+            uno::Reference< frame::XDispatchRecorder > xRecorder =
                         m_rView.GetViewFrame()->GetBindings().GetRecorder();
-                if(!xRecorder.is())
-                {
+            if(!xRecorder.is())
+            {
                     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
                     if( pACorr &&
@@ -5359,7 +5359,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         // ... request for auto completion help to be shown.
                         ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, true);
                     }
-                }
+            }
         }
     }
     break;

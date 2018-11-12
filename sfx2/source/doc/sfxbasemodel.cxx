@@ -1007,7 +1007,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
 
         for ( sal_Int32 nOrg = 0; nOrg < nOrgLength; nOrg++ )
         {
-             sal_Int32 nOldInd = 0;
+            sal_Int32 nOldInd = 0;
             while ( nOldInd < nOldLength )
             {
                 if ( m_pData->m_seqArguments[nOrg].Name == seqArgsOld[nOldInd].Name )

@@ -825,7 +825,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         try
         {
             Any aAny( xProp->getPropertyValue( "Alignment" ));
-                aAny >>= aLegendPos;
+            aAny >>= aLegendPos;
         }
         catch( beans::UnknownPropertyException & )
         {

@@ -52,12 +52,11 @@ bool LibXmlTreeWalker::end() const
 BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
     m_Highlighter(HighlighterLanguage::Basic)
 {
-      if ( rootDoc == nullptr )
-          throw NULL_DOCUMENT;
-      m_pDocument = rootDoc;
+    if ( rootDoc == nullptr )
+        throw NULL_DOCUMENT;
+    m_pDocument = rootDoc;
     m_pXmlTreeWalker = nullptr;
     m_bTaggingCompleted = false;
-
 }
 
 BasicCodeTagger::~BasicCodeTagger()
@@ -69,7 +68,7 @@ BasicCodeTagger::~BasicCodeTagger()
  */
 void BasicCodeTagger::getBasicCodeContainerNodes()
 {
-      xmlNodePtr currentNode;
+    xmlNodePtr currentNode;
 
     m_BasicCodeContainerTags.clear();
 
@@ -163,7 +162,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
  */
 void BasicCodeTagger::tagBasicCodes()
 {
-      if ( m_bTaggingCompleted )
+    if ( m_bTaggingCompleted )
         return;
     //gather <bascode> nodes
     try

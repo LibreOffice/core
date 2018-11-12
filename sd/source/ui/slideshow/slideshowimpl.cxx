@@ -301,7 +301,7 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
         }
         else
         {
-               Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier( xSlide, UNO_QUERY_THROW );
+            Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier( xSlide, UNO_QUERY_THROW );
             xAnimNode = xAnimNodeSupplier->getAnimationNode();
         }
 
@@ -2142,7 +2142,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
     else if (sMenuId == "erase")
     {
         setEraseAllInk(true);
-            mbWasPaused = false;
+        mbWasPaused = false;
     }
     else if (sMenuId == "pen")
     {

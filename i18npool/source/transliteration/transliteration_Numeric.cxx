@@ -84,7 +84,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
                 if (useOffset)
                     offset[j] = startPos;
                 out[j++] = NUMBER_ZERO;
-            } if (number > tableSize && !recycleSymbol) {
+            } else if (number > tableSize && !recycleSymbol) {
                 for (sal_Int32 k = startPos; k < i; k++) {
                     if (useOffset)
                         offset[j] = k;

@@ -35,10 +35,10 @@ extern "C"
         const sal_Char * pImplName, void *, void *)
     {
         SAL_INFO("vbahelper", "In component_getFactory for " << pImplName );
-    void* pRet = sdecl::component_getFactoryHelper(
+        void* pRet = sdecl::component_getFactoryHelper(
             pImplName, {&controlprovider::serviceDecl, &userform::serviceDecl} );
-    SAL_INFO("vbahelper", "Ret is 0x" << std::hex << pRet);
-    return pRet;
+        SAL_INFO("vbahelper", "Ret is 0x" << std::hex << pRet);
+        return pRet;
     }
 }
 

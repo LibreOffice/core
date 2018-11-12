@@ -266,7 +266,7 @@ sal_Bool SAL_CALL NestedKeyImpl::isReadOnly(  )
     if ( !m_localKey.is() || !m_localKey->isValid() )
         throw InvalidRegistryException();
 
-   return m_localKey->isReadOnly();
+    return m_localKey->isReadOnly();
 }
 
 

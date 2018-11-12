@@ -202,9 +202,9 @@ void ScPreview::TestLastPage()
             nTab = 0;
             nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
             aState.nPrintTab = 0;
-                        aState.nStartCol = aState.nEndCol = 0;
-                        aState.nStartRow = aState.nEndRow = 0;
-                        aState.nZoom = 0;
+            aState.nStartCol = aState.nEndCol = 0;
+            aState.nStartRow = aState.nEndRow = 0;
+            aState.nZoom = 0;
             aState.nPagesX = aState.nPagesY = 0;
             aState.nTabPages = aState.nTotalPages =
             aState.nPageStart = aState.nDocPages = 0;
@@ -1232,11 +1232,11 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     bHeaderRulerChange = false;
                     bFooterRulerChange = false;
                  }
-              }
-              bTopRulerMove = false;
-              bBottomRulerMove = false;
-              bHeaderRulerMove = false;
-              bFooterRulerMove = false;
+            }
+            bTopRulerMove = false;
+            bBottomRulerMove = false;
+            bHeaderRulerMove = false;
+            bFooterRulerMove = false;
         }
         if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSplit )
         {

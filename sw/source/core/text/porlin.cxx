@@ -156,7 +156,8 @@ void SwLinePortion::Truncate_()
 {
     SwLinePortion *pPos = pPortion;
     do
-    { OSL_ENSURE( pPos != this, "SwLinePortion::Truncate: loop" );
+    {
+        OSL_ENSURE( pPos != this, "SwLinePortion::Truncate: loop" );
         SwLinePortion *pLast = pPos;
         pPos = pPos->GetPortion();
         pLast->SetPortion( nullptr );

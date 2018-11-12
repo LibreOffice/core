@@ -221,7 +221,7 @@ std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
                 SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
                 SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS>{});
 
-            GetConfig()->ConfigToItemSet(*pRet);
+        GetConfig()->ConfigToItemSet(*pRet);
     }
     return pRet;
 }

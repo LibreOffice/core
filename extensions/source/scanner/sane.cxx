@@ -770,8 +770,8 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             }
             else if( eType == FrameStyle_Gray )
             {
-                 aConverter.Seek( 10 );
-                 aConverter.WriteUInt32( 1084 );
+                aConverter.Seek( 10 );
+                aConverter.WriteUInt32( 1084 );
                 aConverter.Seek( 28 );
                 aConverter.WriteUInt16( 8 );
                 aConverter.Seek( 54 );

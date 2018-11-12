@@ -1354,7 +1354,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         {
                         }
 #endif
-                    bAnimated = true;
+                        bAnimated = true;
                 }
                 break;
 
@@ -1387,7 +1387,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                                   { &aUrl, &aBrowsing });
                    }
 
-                    bAnimated = true;
+                   bAnimated = true;
                 }
                 break;
 

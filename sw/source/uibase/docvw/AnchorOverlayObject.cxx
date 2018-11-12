@@ -256,7 +256,7 @@ void AnchorOverlayObject::implEnsureGeometry()
         maLine.append(GetSixthPosition());
     }
 
-  if(!maLineTop.count())
+    if(!maLineTop.count())
     {
         maLineTop.append(GetSixthPosition());
         maLineTop.append(GetSeventhPosition());
@@ -321,7 +321,7 @@ void AnchorOverlayObject::SetSixthPosition(const basegfx::B2DPoint& rNew)
   if(rNew != maSixthPosition)
   {
       maSixthPosition = rNew;
-        implResetGeometry();
+      implResetGeometry();
       objectChange();
   }
 }
@@ -331,7 +331,7 @@ void AnchorOverlayObject::SetSeventhPosition(const basegfx::B2DPoint& rNew)
   if(rNew != maSeventhPosition)
   {
       maSeventhPosition = rNew;
-        implResetGeometry();
+      implResetGeometry();
       objectChange();
   }
 }

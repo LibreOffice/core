@@ -264,7 +264,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
                     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );        // no linestyle
-                        SdrObject* pObj = GetSdrObjectFromXShape( rObj.GetShapeRef() );
+                    SdrObject* pObj = GetSdrObjectFromXShape( rObj.GetShapeRef() );
                     if ( pObj )
                     {
                         tools::Rectangle aBound = pObj->GetCurrentBoundRect();
@@ -634,7 +634,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
 
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType() == "drawing.Caption" )

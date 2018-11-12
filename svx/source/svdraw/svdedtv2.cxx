@@ -1732,8 +1732,8 @@ void SdrEditView::GroupMarked()
                 --nm;
                 SdrMark* pM=GetSdrMarkByIndex(nm);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
-                    AddUndoActions( CreateConnectorUndo( *pObj ) );
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
+                AddUndoActions( CreateConnectorUndo( *pObj ) );
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
             }
         }
 

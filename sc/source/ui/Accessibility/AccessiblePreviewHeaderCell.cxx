@@ -135,7 +135,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::release()
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     double fValue(0.0);
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     double fValue(0.0);
@@ -178,7 +178,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         SolarMutexGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
 
         if(!mpTextHelper)
@@ -192,7 +192,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
 
 void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {

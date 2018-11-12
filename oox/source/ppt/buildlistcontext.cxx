@@ -68,7 +68,7 @@ namespace oox { namespace ppt {
 //      bool uiExpand = rAttribs.getBool( XML_uiExpand, true );
                 /* this is unsigned */
 //      sal_uInt32 nGroupId =  rAttribs.getUnsignedInteger( XML_grpId, 0 );
-        return this;
+            return this;
         }
         case A_TOKEN( bldDgm ):
         case A_TOKEN( bldOleChart ):

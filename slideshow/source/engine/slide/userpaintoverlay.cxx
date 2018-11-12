@@ -173,8 +173,8 @@ namespace slideshow
                     repaintWithoutPolygons();
                     maPolygons.clear();
                 }
-            mbIsEraseAllModeActivated=false;
-            return true;
+                mbIsEraseAllModeActivated=false;
+                return true;
             }
 
             bool eraseInkWidthChanged( sal_Int32 rEraseInkSize ) override
@@ -333,7 +333,7 @@ namespace slideshow
 
                     //The point is to redraw the LastPoint the way it was originally on the bitmap,
                     //of the slide
-            for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {

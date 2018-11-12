@@ -220,27 +220,27 @@ public:
 
     TableChgMode  GetTableMode() const { return m_aTableConfig.eTableChgMode;}
     void        SetTableMode( TableChgMode  eSet ) { m_aTableConfig.eTableChgMode = eSet;
-                                                m_aTableConfig.SetModified();}
+                                                     m_aTableConfig.SetModified();}
 
     sal_uInt16      GetTableHMove() const { return m_aTableConfig.nTableHMove;}
-    void        SetTableHMove( sal_uInt16 nSet ) {    m_aTableConfig.nTableHMove = nSet;
-                                                m_aTableConfig.SetModified();}
+    void        SetTableHMove( sal_uInt16 nSet ) {   m_aTableConfig.nTableHMove = nSet;
+                                                     m_aTableConfig.SetModified();}
 
     sal_uInt16      GetTableVMove() const { return m_aTableConfig.nTableVMove;}
-    void        SetTableVMove( sal_uInt16 nSet ) {    m_aTableConfig.nTableVMove = nSet;
-                                                m_aTableConfig.SetModified();}
+    void        SetTableVMove( sal_uInt16 nSet ) {   m_aTableConfig.nTableVMove = nSet;
+                                                     m_aTableConfig.SetModified();}
 
     sal_uInt16      GetTableHInsert() const {return m_aTableConfig.nTableHInsert;}
-    void        SetTableHInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableHInsert = nSet;
-                                                m_aTableConfig.SetModified();}
+    void        SetTableHInsert( sal_uInt16 nSet ) { m_aTableConfig.nTableHInsert = nSet;
+                                                     m_aTableConfig.SetModified();}
 
     sal_uInt16      GetTableVInsert() const {return m_aTableConfig.nTableVInsert;}
-    void        SetTableVInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableVInsert = nSet;
-                                                m_aTableConfig.SetModified();}
+    void        SetTableVInsert( sal_uInt16 nSet ) { m_aTableConfig.nTableVInsert = nSet;
+                                                     m_aTableConfig.SetModified();}
 
     const AuthorCharAttr    &GetInsertAuthorAttr() const { return m_aRevisionConfig.m_aInsertAttr; }
     void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.m_aInsertAttr = rAttr;
-                                                                     m_aRevisionConfig.SetModified();}
+                                                                      m_aRevisionConfig.SetModified();}
 
     const AuthorCharAttr    &GetDeletedAuthorAttr() const { return m_aRevisionConfig.m_aDeletedAttr; }
     void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { m_aRevisionConfig.m_aDeletedAttr = rAttr;
@@ -252,7 +252,7 @@ public:
 
     sal_uInt16          GetMarkAlignMode()  const               { return m_aRevisionConfig.m_nMarkAlign; }
     void            SetMarkAlignMode(sal_uInt16 nMode)          { m_aRevisionConfig.m_nMarkAlign = nMode;
-                                                              m_aRevisionConfig.SetModified();}
+                                                                  m_aRevisionConfig.SetModified();}
 
     const Color&    GetMarkAlignColor() const               { return m_aRevisionConfig.m_aMarkColor; }
     void            SetMarkAlignColor(const Color &rColor)  { m_aRevisionConfig.m_aMarkColor = rColor;
@@ -291,7 +291,7 @@ public:
                     { return bHTML ? m_aWebTableConfig.bInsTableAlignNum : m_aTableConfig.bInsTableAlignNum; }
     void        SetInsTableAlignNum( bool bHTML, bool b )
                     { bHTML ? (m_aWebTableConfig.bInsTableAlignNum = b) : (m_aTableConfig.bInsTableAlignNum = b);
-                        bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
+                      bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
 
     const SwInsertTableOptions& GetInsTableFlags(bool bHTML) const
                     { return bHTML ? m_aWebInsertConfig.m_aInsTableOpts : m_aInsertConfig.m_aInsTableOpts;}
@@ -308,7 +308,7 @@ public:
 
     MailTextFormats GetMailingFormats() const               { return m_aMiscConfig.m_nMailingFormats;}
     void           SetMailingFormats( MailTextFormats nSet ) { m_aMiscConfig.m_nMailingFormats = nSet;
-                                                            m_aMiscConfig.SetModified();}
+                                                               m_aMiscConfig.SetModified();}
 
     void        SetSinglePrintJob( bool b )     { m_aMiscConfig.m_bSinglePrintJob = b;
                                                   m_aMiscConfig.SetModified();}
@@ -328,11 +328,11 @@ public:
 
     const OUString& GetMailingPath() const          { return m_aMiscConfig.m_sMailingPath; }
     void        SetMailingPath(const OUString& sPath) { m_aMiscConfig.m_sMailingPath = sPath;
-                                                      m_aMiscConfig.SetModified();}
+                                                        m_aMiscConfig.SetModified();}
 
     const OUString& GetWordDelimiter() const        { return m_aMiscConfig.m_sWordDelimiter; }
     void        SetWordDelimiter(const OUString& sDelim)  { m_aMiscConfig.m_sWordDelimiter = sDelim;
-                                                          m_aMiscConfig.SetModified();}
+                                                            m_aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
     static OUString ConvertWordDelimiter(const OUString& rDelim, bool bFromUI);
@@ -340,7 +340,7 @@ public:
     bool    IsShowIndexPreview() const {return  m_aMiscConfig.m_bShowIndexPreview;}
     void        SetShowIndexPreview(bool bSet)
                     {m_aMiscConfig.m_bShowIndexPreview = bSet;
-                    m_aMiscConfig.SetModified();}
+                     m_aMiscConfig.SetModified();}
 
     void        SetDefaultFontInCurrDocOnly(bool bSet)
                     {
@@ -353,15 +353,15 @@ public:
 
     SwCompareMode  GetCompareMode() const { return m_aCompareConfig.m_eCmpMode; }
     void            SetCompareMode( SwCompareMode eMode ) { m_aCompareConfig.m_eCmpMode = eMode;
-                                                             m_aCompareConfig.SetModified(); }
+                                                            m_aCompareConfig.SetModified(); }
 
     bool    IsUseRsid() const { return m_aCompareConfig.m_bUseRsid; }
     void        SetUseRsid( bool b ) { m_aCompareConfig.m_bUseRsid = b;
-                                                            m_aCompareConfig.SetModified(); }
+                                       m_aCompareConfig.SetModified(); }
 
     bool    IsIgnorePieces() const { return m_aCompareConfig.m_bIgnorePieces; }
     void        SetIgnorePieces( bool b ) { m_aCompareConfig.m_bIgnorePieces = b;
-                                                m_aCompareConfig.SetModified(); }
+                                            m_aCompareConfig.SetModified(); }
 
     sal_uInt16  GetPieceLen() const { return m_aCompareConfig.m_nPieceLen; }
     void        SetPieceLen( sal_uInt16 nLen ) { m_aCompareConfig.m_nPieceLen = nLen;

@@ -429,11 +429,11 @@ void
                         int nlen = (int)(ntp->len + ntp->wslen);
 
                         memcpy(wbp, "if(", 3 );
-                         wbp += 4;
+                        wbp += 4;
                         memcpy(wbp, np, nlen );
-                         wbp += nlen;
+                        wbp += nlen;
                         memcpy(wbp, ")", 1 );
-                         wbp++;
+                        wbp++;
 
                         memcpy(wbp, p, len);
                     }

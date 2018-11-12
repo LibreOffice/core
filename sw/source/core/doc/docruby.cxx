@@ -181,7 +181,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
 {
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();
-       const SwTextNode* pTNd = pPos->nNode.GetNode().GetTextNode();
+    const SwTextNode* pTNd = pPos->nNode.GetNode().GetTextNode();
     OUString const& rText = pTNd->GetText();
     sal_Int32 nStart = pPos->nContent.GetIndex();
     sal_Int32 nEnd = rText.getLength();

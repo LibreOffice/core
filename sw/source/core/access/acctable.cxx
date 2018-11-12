@@ -752,7 +752,7 @@ uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
     if ( rType == cppu::UnoType<XAccessibleTable>::get() )
     {
         uno::Reference<XAccessibleTable> xThis( this );
-           aRet <<= xThis;
+        aRet <<= xThis;
     }
     else if ( rType == cppu::UnoType<XAccessibleSelection>::get() )
     {

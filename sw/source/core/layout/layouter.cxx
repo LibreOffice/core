@@ -91,7 +91,8 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
                 } while ( pCnt );
             }
             else
-            { OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrame(),
+            {
+                OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrame(),
                         "Endnote without content?" );
                 pNxt->Cut();
                 SwFrame::DestroyFrame(pNxt);

@@ -83,8 +83,10 @@ public:
     SwFont* GetFont() const { return m_pFnt.get(); }
     void IncLineNr() { ++m_nLineNr; }
     bool HasNumber() { return !( m_nLineNr % m_rLineInf.GetCountBy() ); }
-    bool HasDivider() { if( !m_nDivider ) return false;
-        return !(m_nLineNr % m_rLineInf.GetDividerCountBy()); }
+    bool HasDivider() {
+        if( !m_nDivider ) return false;
+        return !(m_nLineNr % m_rLineInf.GetDividerCountBy());
+    }
 
     void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );
     void PaintRedline( SwTwips nY, long nMax );

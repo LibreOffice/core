@@ -6061,10 +6061,10 @@ void SwUiWriterTest::testTdf113481()
 
 void SwUiWriterTest::testTdf115013()
 {
-   const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
+    const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
 
-   utl::TempFile aTempDir(nullptr, true);
-   const OUString aWorkDir = aTempDir.GetURL();
+    utl::TempFile aTempDir(nullptr, true);
+    const OUString aWorkDir = aTempDir.GetURL();
 
    //create new writer document
     SwDoc* pDoc = createDoc();

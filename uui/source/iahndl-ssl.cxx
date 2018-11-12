@@ -82,7 +82,7 @@ isDomainMatch(
               const OUString& hostName, const uno::Sequence< OUString >& certHostNames)
 {
     for ( int i = 0; i < certHostNames.getLength(); i++){
-        OUString element = certHostNames[i];
+       OUString element = certHostNames[i];
 
        if (element.isEmpty())
            continue;

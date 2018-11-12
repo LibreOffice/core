@@ -532,7 +532,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
 
     rOutStm.WriteChar( ',' ) << endl;
-       WriteTab( rOutStm, 4 );
+    WriteTab( rOutStm, 4 );
     if ( GetDisableFlags().isEmpty() )
         rOutStm.WriteCharPtr( "SfxDisableFlags::NONE" );
     else

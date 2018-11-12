@@ -869,7 +869,7 @@ void XMLFilterSettingsDialog::onSave()
     }
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg(
+    ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
         FileDialogFlags::NONE, GetFrameWeld());
 
@@ -914,7 +914,7 @@ void XMLFilterSettingsDialog::onOpen()
     XMLFilterVector aFilters;
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg(
+    ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
         FileDialogFlags::NONE, GetFrameWeld());
 

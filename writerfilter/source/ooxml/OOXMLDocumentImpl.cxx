@@ -628,9 +628,9 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
         std::vector< uno::Sequence<uno::Any> > aGlossaryDomList;
-         sal_Int32 counter = 0;
-         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
-         {
+        sal_Int32 counter = 0;
+        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        {
               OOXMLStream::Pointer_t gStream;
               uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
               //Follows following aSeq[0] is Id, aSeq[1] is Type, aSeq[2] is Target
@@ -707,9 +707,9 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                       counter++;
                   }
               }
-          }
-          mxGlossaryDomList = comphelper::containerToSequence(aGlossaryDomList);
-      }
+        }
+        mxGlossaryDomList = comphelper::containerToSequence(aGlossaryDomList);
+    }
 }
 
 void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream)

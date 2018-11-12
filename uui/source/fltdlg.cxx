@@ -199,7 +199,7 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
         {
             INetURLObject aBuilder   ( sName );
             Size          aSize      = m_xLbFilters->get_preferred_size();
-                          sShortName = aBuilder.getAbbreviated( xStringCalculator, aSize.Width(), INetURLObject::DecodeMechanism::Unambiguous );
+            sShortName = aBuilder.getAbbreviated( xStringCalculator, aSize.Width(), INetURLObject::DecodeMechanism::Unambiguous );
         }
     }
 

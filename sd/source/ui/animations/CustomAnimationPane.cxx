@@ -2157,10 +2157,10 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
                 pEffectSequence->remove( pEffect );
             }
 
-           createPath( ePathKind, aTargets, 0.0 );
-           updateMotionPathTags();
-           Window::EndSaveFocus(xSaveFocusId);
-           return;
+            createPath( ePathKind, aTargets, 0.0 );
+            updateMotionPathTags();
+            Window::EndSaveFocus(xSaveFocusId);
+            return;
         }
 
         CustomAnimationPresetPtr pDescriptor(*pPreset);

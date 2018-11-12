@@ -58,15 +58,15 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
         aValues = RegressionCalculationHelper::cleanup(
                     aXValues, aYValues,
                     RegressionCalculationHelper::isValidAndXPositiveAndYNegative());
-         nMax = aValues.first.size();
-         if( nMax <= 1 )
-         {
+        nMax = aValues.first.size();
+        if( nMax <= 1 )
+        {
             ::rtl::math::setNan( & m_fSlope );
             ::rtl::math::setNan( & m_fIntercept );
             ::rtl::math::setNan( & m_fCorrelationCoeffitient );
             return;
-         }
-         m_fSign = -1.0;
+        }
+        m_fSign = -1.0;
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;

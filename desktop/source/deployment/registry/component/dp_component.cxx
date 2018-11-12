@@ -765,16 +765,16 @@ void BackendImpl::unorc_verify_init(
                     {
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
-                         if (create_ucb_content(
+                        if (create_ucb_content(
                                 nullptr, expandUnoRcTerm(token), xCmdEnv,
                                 false /* no throw */ ))
-                         {
+                        {
                              //The RDB file may not exist anymore if a shared or bundled
                              //extension was removed, but it can still be in the unorc.
                              //After running XExtensionManager::synchronize, the unorc is
                              //cleaned up
                              m_rdb_typelibs.push_back( token );
-                         }
+                        }
                     }
                 }
                 while (index >= 0);

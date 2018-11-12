@@ -981,7 +981,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
         {
             xSimpleFileAccess->copy( aUserImageURL, aUserGalleryURL );
             INetURLObject gURL( aUserGalleryURL );
-                 std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
+            std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
                           gURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
             if ( pIn )
             {

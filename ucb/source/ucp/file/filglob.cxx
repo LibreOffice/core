@@ -749,7 +749,7 @@ namespace fileaccess {
                     {
                         ioErrorCode = IOErrorCode_GENERAL;
                         aMsg = "a general error during transfer command";
-                    break;
+                        break;
                     }
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;

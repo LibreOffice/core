@@ -68,7 +68,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     MapMode aMapMode (MapUnit::MapTwip);
     SetRefMapMode(aMapMode);
 
-     Size aSize( 1, 1 );
+    Size aSize( 1, 1 );
     SetPaperSize( aSize );
 
     pOutlView.reset( new OutlinerView( this, &(pView->GetEditWin()) ) );
@@ -79,7 +79,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
 
     InsertView( pOutlView.get() );
     Point aPoint( 0, 0 );
-     tools::Rectangle aRect( aPoint, aSize );
+    tools::Rectangle aRect( aPoint, aSize );
     pOutlView->SetOutputArea( aRect );
 //  SetText( NULL );
     ClearModifyFlag();

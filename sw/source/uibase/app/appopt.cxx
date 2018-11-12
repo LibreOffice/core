@@ -78,23 +78,23 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     bool bTextDialog = (nId == SID_SW_EDITOPTIONS);
 
     // the options for the Web- and Textdialog are put together here
-        SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
-        SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref : m_pWebUsrPref;
-        // no MakeUsrPref, because only options from textdoks can be used here
-        SwView* pAppView = GetView();
-        if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
-            pAppView = nullptr;
-        if(pAppView)
+    SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
+    SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref : m_pWebUsrPref;
+    // no MakeUsrPref, because only options from textdoks can be used here
+    SwView* pAppView = GetView();
+    if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
+        pAppView = nullptr;
+    if(pAppView)
+    {
+        bool bWebView = dynamic_cast<SwWebView*>( pAppView ) !=  nullptr;
+        // if Text then no WebView and vice versa
+        if (bWebView != bTextDialog)
         {
-            bool bWebView = dynamic_cast<SwWebView*>( pAppView ) !=  nullptr;
-            // if Text then no WebView and vice versa
-            if (bWebView != bTextDialog)
-            {
-                aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
-            }
-            else
-                pAppView = nullptr; // with View, there's nothing to win here
+            aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
         }
+        else
+            pAppView = nullptr; // with View, there's nothing to win here
+    }
 
     // Options/Edit
     auto pRet = o3tl::make_unique<SfxItemSet>(
@@ -192,7 +192,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         {
             const SvxTabStopItem& rDefTabs =
                     pAppView->GetWrtShell().GetDefault(RES_PARATR_TABSTOP);
-                pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(::GetTabDist(rDefTabs))));
+            pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(::GetTabDist(rDefTabs))));
         }
         else
             pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));

@@ -725,7 +725,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
 {
-   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
 
     if (!pXmlDoc)
        return;
@@ -751,7 +751,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
 {
-   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
 
     if (!pXmlDoc)
        return;
@@ -777,7 +777,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
 {
-   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
 
     if (!pXmlDoc)
        return;

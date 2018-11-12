@@ -342,24 +342,24 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
             mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
             mpImpl->mnMaxZoom > gnSliderCenter,
             "Looks like the zoom slider item is corrupted" );
-       const css::uno::Sequence < sal_Int32 >& rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
-       mpImpl->maSnappingPointOffsets.clear();
-       mpImpl->maSnappingPointZooms.clear();
+        const css::uno::Sequence < sal_Int32 >& rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
+        mpImpl->maSnappingPointOffsets.clear();
+        mpImpl->maSnappingPointZooms.clear();
 
-       // get all snapping points:
-       std::set< sal_uInt16 > aTmpSnappingPoints;
-       for ( sal_Int32 j = 0; j < rSnappingPoints.getLength(); ++j )
-       {
+        // get all snapping points:
+        std::set< sal_uInt16 > aTmpSnappingPoints;
+        for ( sal_Int32 j = 0; j < rSnappingPoints.getLength(); ++j )
+        {
            const sal_Int32 nSnappingPoint = rSnappingPoints[j];
            aTmpSnappingPoints.insert( static_cast<sal_uInt16>(nSnappingPoint) );
-       }
+        }
 
-       // remove snapping points that are to close to each other:
-       std::set< sal_uInt16 >::iterator aSnappingPointIter;
-       long nLastOffset = 0;
+        // remove snapping points that are to close to each other:
+        std::set< sal_uInt16 >::iterator aSnappingPointIter;
+        long nLastOffset = 0;
 
-       for ( aSnappingPointIter = aTmpSnappingPoints.begin(); aSnappingPointIter != aTmpSnappingPoints.end(); ++aSnappingPointIter )
-       {
+        for ( aSnappingPointIter = aTmpSnappingPoints.begin(); aSnappingPointIter != aTmpSnappingPoints.end(); ++aSnappingPointIter )
+        {
            const sal_uInt16 nCurrent = *aSnappingPointIter;
            const long nCurrentOffset = Zoom2Offset( nCurrent );
 
@@ -369,7 +369,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
                mpImpl->maSnappingPointZooms.push_back( nCurrent );
                nLastOffset = nCurrentOffset;
            }
-       }
+        }
     }
 
     Size aSliderWindowSize = GetOutputSizePixel();

@@ -157,7 +157,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
             // global symbol manager somewhat to chance.
         }
 
-    OSL_ENSURE( bAdded, "failed to add symbol" );
+        OSL_ENSURE( bAdded, "failed to add symbol" );
         if (bAdded)
             m_bModified = true;
         OSL_ENSURE( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );

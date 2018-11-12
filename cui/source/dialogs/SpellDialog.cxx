@@ -764,7 +764,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
             SpellContinue_Impl();
         }
 
-         m_pSentenceED->AddUndoAction(o3tl::make_unique<SpellUndoAction_Impl>(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
+        m_pSentenceED->AddUndoAction(o3tl::make_unique<SpellUndoAction_Impl>(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
     }
     SpellDialog::UpdateBoxes_Impl();
 }

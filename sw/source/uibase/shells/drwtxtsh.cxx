@@ -384,22 +384,22 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         }
         break;
         case SID_CHARMAP:
-    {  // Insert special character
-            InsertSymbol(rReq);
-            break;
-    }
-          case FN_INSERT_STRING:
-                {
+        {  // Insert special character
+                InsertSymbol(rReq);
+                break;
+        }
+        case FN_INSERT_STRING:
+        {
             const SfxItemSet *pNewAttrs = rReq.GetArgs();
-                        sal_uInt16 nSlot = rReq.GetSlot();
+            sal_uInt16 nSlot = rReq.GetSlot();
             const SfxPoolItem* pItem = nullptr;
-                        if(pNewAttrs)
+            if(pNewAttrs)
             {
-                                pNewAttrs->GetItemState(nSlot, false, &pItem );
-                             pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
+                pNewAttrs->GetItemState(nSlot, false, &pItem );
+                pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
             }
-                        break;
-                }
+            break;
+        }
 
         case SID_SELECTALL:
         {

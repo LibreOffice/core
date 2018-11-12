@@ -1814,7 +1814,7 @@ Any OOo2OasisTransformer::queryInterface( const Type& rType )
     if ( rType == cppu::UnoType<XImporter>::get())
     {
         Reference<XImporter> xThis( this );
-           aRet <<= xThis;
+        aRet <<= xThis;
     }
     else if ( rType == cppu::UnoType<XFilter>::get())
     {

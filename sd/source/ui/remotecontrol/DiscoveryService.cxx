@@ -70,7 +70,7 @@ DiscoveryService::~DiscoveryService()
 #endif
     }
 
-     if (zService)
+    if (zService)
          zService->clear();
 }
 

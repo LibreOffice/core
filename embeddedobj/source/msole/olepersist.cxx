@@ -130,22 +130,22 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
         }
         catch( const packages::WrongPasswordException& )
         {
-               KillFile_Impl( aResult, xFactory );
+            KillFile_Impl( aResult, xFactory );
             throw io::IOException(); //TODO:
         }
         catch( const io::IOException& )
         {
-               KillFile_Impl( aResult, xFactory );
+            KillFile_Impl( aResult, xFactory );
             throw;
         }
         catch( const uno::RuntimeException& )
         {
-               KillFile_Impl( aResult, xFactory );
+            KillFile_Impl( aResult, xFactory );
             throw;
         }
         catch( const uno::Exception& )
         {
-               KillFile_Impl( aResult, xFactory );
+            KillFile_Impl( aResult, xFactory );
             aResult.clear();
         }
     }

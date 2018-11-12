@@ -650,7 +650,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
         }
     }
 
-     return aRet;
+    return aRet;
 }
 
 

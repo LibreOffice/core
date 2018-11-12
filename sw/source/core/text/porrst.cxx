@@ -124,7 +124,7 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
     SetWhichPor( POR_KERN );
     if( nKern > 0 )
         Width( nKern );
-     rPortion.Insert( this );
+    rPortion.Insert( this );
 }
 
 SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :

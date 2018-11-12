@@ -454,7 +454,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78654 , "fdo78654.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testfdo78599,"fdo78599.docx")
 {
-     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
     //docx file after RT is getting corrupted.

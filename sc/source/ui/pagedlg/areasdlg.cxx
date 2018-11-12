@@ -385,7 +385,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
     {
         Edit* pEd = nullptr;
 
-             if ( !bPrintAreaOk ) pEd = pEdPrintArea;
+        if ( !bPrintAreaOk ) pEd = pEdPrintArea;
         else if ( !bRepeatRowOk ) pEd = pEdRepeatRow;
         else if ( !bRepeatColOk ) pEd = pEdRepeatCol;
 

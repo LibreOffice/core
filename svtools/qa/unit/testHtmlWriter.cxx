@@ -152,8 +152,8 @@ void Test::testNested()
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
     aHtml.start("abc");
-        aHtml.start("xyz");
-        aHtml.end();
+    aHtml.start("xyz");
+    aHtml.end();
     aHtml.end();
 
     OString aString = extractFromStream(aStream);

@@ -864,7 +864,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackShape(sal_Int32 nIndex) cons
     if (nIndex >= 0)
         throw lang::IndexOutOfBoundsException();
 
-   return xAccessible;
+    return xAccessible;
 }
 
 sal_Int32 ScShapeChildren::GetForeShapeCount() const
@@ -893,7 +893,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetForeShape(sal_Int32 nIndex) cons
     if (nIndex >= 0)
         throw lang::IndexOutOfBoundsException();
 
-   return xAccessible;
+    return xAccessible;
 }
 
 sal_Int32 ScShapeChildren::GetControlCount() const
@@ -922,7 +922,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetControl(sal_Int32 nIndex) const
     if (nIndex >= 0)
         throw lang::IndexOutOfBoundsException();
 
-   return xAccessible;
+    return xAccessible;
 }
 
 struct ScShapePointFound

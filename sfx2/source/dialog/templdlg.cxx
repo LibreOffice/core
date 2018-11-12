@@ -1330,10 +1330,10 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
         // nothing is allowed
         return;
 
-     SfxTemplateItem *pItem = nullptr;
-     // current region not within the allowed region or default
-     if(nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get() ) )
-     {
+    SfxTemplateItem *pItem = nullptr;
+    // current region not within the allowed region or default
+    if(nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get() ) )
+    {
          CheckItem(nActFamily, false);
          const size_t nFamilyCount = pStyleFamilies->size();
          size_t n;
@@ -1344,9 +1344,9 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          nAppFilter = pNewItem->GetValue();
          FamilySelect( StyleNrToInfoOffset(n) + 1 );
          pItem = pNewItem.get();
-     }
-     else if( bDocChanged )
-     {
+    }
+    else if( bDocChanged )
+    {
          // other DocShell -> all new
          CheckItem( nActFamily );
          nActFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pDocShell ) );
@@ -1360,9 +1360,9 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          }
          else
              FillTreeBox();
-     }
-     else
-     {
+    }
+    else
+    {
          // other filters for automatic
          CheckItem( nActFamily );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
@@ -1377,11 +1377,11 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          }
          else
              nAppFilter = pItem->GetValue();
-     }
-     const OUString aStyle(pItem->GetStyleName());
-     SelectStyle(aStyle);
-     EnableDelete();
-     EnableNew( bCanNew );
+    }
+    const OUString aStyle(pItem->GetStyleName());
+    SelectStyle(aStyle);
+    EnableDelete();
+    EnableNew( bCanNew );
 }
 
 IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, void )

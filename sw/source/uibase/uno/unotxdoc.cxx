@@ -1167,7 +1167,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, SfxInterfaceId(7) );
     SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SfxCallMode::SYNCHRON,
                                 pDocShell->GetDoc()->GetAttrPool());
-        aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
+    aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
 
     for ( int n = 0; n < xOptions.getLength(); ++n )
     {
@@ -2271,7 +2271,7 @@ void SwXTextDocument::updateLinks(  )
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
     SwDoc* pDoc = pDocShell->GetDoc();
-      sfx2::LinkManager& rLnkMan = pDoc->getIDocumentLinksAdministration().GetLinkManager();
+    sfx2::LinkManager& rLnkMan = pDoc->getIDocumentLinksAdministration().GetLinkManager();
     if( !rLnkMan.GetLinks().empty() )
     {
         UnoActionContext aAction(pDoc);

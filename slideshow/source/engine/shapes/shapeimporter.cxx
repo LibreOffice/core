@@ -476,7 +476,7 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
 
                 uno::Reference< drawing::XLayerManager > xLayerManager(xNameAccess, uno::UNO_QUERY);
 
-                   xDrawnInSlideshow = xLayerManager->getLayerForShape(xCurrShape);
+                xDrawnInSlideshow = xLayerManager->getLayerForShape(xCurrShape);
             }
 
             OUString const shapeType( xCurrShape->getShapeType());

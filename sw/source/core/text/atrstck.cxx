@@ -165,11 +165,11 @@ const SfxPoolItem* GetItem( const SwTextAttr& rAttr, sal_uInt16 nWhich )
         const SfxItemSet* pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( !pSet ) return nullptr;
 
-       bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
-       const SfxPoolItem* pItem;
-       bool bRet = SfxItemState::SET == pSet->GetItemState( nWhich, bInParent, &pItem );
+        bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
+        const SfxPoolItem* pItem;
+        bool bRet = SfxItemState::SET == pSet->GetItemState( nWhich, bInParent, &pItem );
 
-       return bRet ? pItem : nullptr;
+        return bRet ? pItem : nullptr;
     }
 
     return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : nullptr;

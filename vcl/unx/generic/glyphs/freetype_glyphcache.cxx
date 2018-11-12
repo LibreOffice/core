@@ -196,8 +196,8 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
             maFaceFT = nullptr;
     }
 
-   ++mnRefCount;
-   return maFaceFT;
+    ++mnRefCount;
+    return maFaceFT;
 }
 
 void FreetypeFontInfo::ReleaseFaceFT()

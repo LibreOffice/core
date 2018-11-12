@@ -573,7 +573,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             SwCTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
             if ( pCustTB )
             {
-                 uno::Reference< container::XIndexContainer > xMenuDesc = document::IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
+                uno::Reference< container::XIndexContainer > xMenuDesc = document::IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
                 if ( !pCustTB->ImportMenuTB( rWrapper,xMenuDesc, helper ) )
                     return false;
                 if ( !bIsMenuBar )
