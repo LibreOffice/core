@@ -146,7 +146,7 @@ namespace sw
 
 DocumentFieldsManager::DocumentFieldsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                   mbNewFieldLst(true),
-                                                                  mpUpdateFields( new SwDocUpdateField( &m_rDoc ) ),
+                                                                  mpUpdateFields(new SwDocUpdateField(m_rDoc)),
                                                                   mpFieldTypes( new SwFieldTypes ),
                                                                   mnLockExpField( 0 )
 {
@@ -849,7 +849,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
     mpUpdateFields->MakeFieldList( m_rDoc, true, GETFLD_ALL );
     mbNewFieldLst = false;
 
-    if( mpUpdateFields->GetSortLst()->empty() )
+    if (mpUpdateFields->GetSortList()->empty())
     {
         if( bUpdRefFields )
             UpdateRefFields();
@@ -927,9 +927,9 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
 
     std::unordered_map<SwSetExpFieldType const*, SwTextNode const*> SetExpOutlineNodeMap;
 
-    for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != mpUpdateFields->GetSortLst()->end(); ++it )
+    for (std::unique_ptr<SetGetExpField> const& it : *mpUpdateFields->GetSortList())
     {
-        SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
+        SwSection* pSect = const_cast<SwSection*>(it->GetSection());
         if( pSect )
         {
             SwSbxValue aValue = aCalc.Calculate(
@@ -960,7 +960,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
             continue;
         }
 
-        SwTextField* pTextField = const_cast<SwTextField*>((*it)->GetTextField());
+        SwTextField* pTextField = const_cast<SwTextField*>(it->GetTextField());
         if( !pTextField )
         {
             OSL_ENSURE( false, "what's wrong now'" );
@@ -1126,7 +1126,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                         if( MAXLEVEL > nLvl )
                         {
                             // test if the Number needs to be updated
-                            pSeqNd = m_rDoc.GetNodes()[ (*it)->GetNode() ];
+                            pSeqNd = m_rDoc.GetNodes()[ it->GetNode() ];
 
                             const SwTextNode* pOutlNd = pSeqNd->
                                     FindOutlineNodeOfLevel( nLvl );
@@ -1211,13 +1211,12 @@ sal_Int32 DocumentFieldsManager::GetRecordsPerDocument() const
     sal_Int32 nRecords = 1;
 
     mpUpdateFields->MakeFieldList( m_rDoc, true, GETFLD_ALL );
-    if( mpUpdateFields->GetSortLst()->empty() )
+    if (mpUpdateFields->GetSortList()->empty())
         return nRecords;
 
-    for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin();
-        it != mpUpdateFields->GetSortLst()->end(); ++it )
+    for (std::unique_ptr<SetGetExpField> const& it : *mpUpdateFields->GetSortList())
     {
-        const SwTextField *pTextField = (*it)->GetTextField();
+        const SwTextField *pTextField = it->GetTextField();
         if( !pTextField )
             continue;
 
@@ -1443,13 +1442,15 @@ void DocumentFieldsManager::FieldsToCalc( SwCalc& rCalc, const SetGetExpField& r
     pMgr->CloseAll(false);
 #endif
 
-    if( !mpUpdateFields->GetSortLst()->empty() )
+    if (!mpUpdateFields->GetSortList()->empty())
     {
         SetGetExpFields::const_iterator const itLast =
-            mpUpdateFields->GetSortLst()->upper_bound(
+            mpUpdateFields->GetSortList()->upper_bound(
                 &rToThisField);
-        for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != itLast; ++it )
+        for (auto it = mpUpdateFields->GetSortList()->begin(); it != itLast; ++it)
+        {
             lcl_CalcField( m_rDoc, rCalc, **it, pMgr );
+        }
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
     pMgr->CloseAll(false);
@@ -1469,8 +1470,8 @@ void DocumentFieldsManager::FieldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_
     pMgr->CloseAll(false);
 #endif
 
-    for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin();
-        it != mpUpdateFields->GetSortLst()->end() &&
+    for(auto it = mpUpdateFields->GetSortList()->begin();
+        it != mpUpdateFields->GetSortList()->end() &&
         ( (*it)->GetNode() < nLastNd ||
           ( (*it)->GetNode() == nLastNd && (*it)->GetContent() <= nLastCnt )
         );
@@ -1493,13 +1494,13 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
 
     // Hash table for all string replacements is filled on-the-fly.
     // Try to fabricate an uneven number.
-    sal_uInt16 nTableSize = (( mpUpdateFields->GetSortLst()->size() / 7 ) + 1 ) * 7;
+    sal_uInt16 nTableSize = ((mpUpdateFields->GetSortList()->size() / 7) + 1) * 7;
     rHashTable.resize(nTableSize);
 
     SetGetExpFields::const_iterator const itLast =
-        mpUpdateFields->GetSortLst()->upper_bound(&rToThisField);
+        mpUpdateFields->GetSortList()->upper_bound(&rToThisField);
 
-    for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != itLast; ++it )
+    for (auto it = mpUpdateFields->GetSortList()->begin(); it != itLast; ++it)
     {
         const SwTextField* pTextField = (*it)->GetTextField();
         if( !pTextField )
