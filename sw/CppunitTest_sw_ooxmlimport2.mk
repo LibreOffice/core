@@ -108,4 +108,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport2,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlimport2))
 
+# At least testTdf115094::Import (sw/qa/extras/ooxmlimport/ooxmlimport2.cxx) depends on TIFFReader
+# from Library_gie, which is loaded dynamically in vcl/source/filter/graphicfilter.cxx:
+$(call gb_CppunitTest_get_target,sw_ooxmlimport2): $(call gb_Library_get_target,gie)
+
 # vim: set noet sw=4 ts=4:
