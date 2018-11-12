@@ -1182,6 +1182,7 @@ private:
     bool m_bTakeOwnership;
     gulong m_nFocusInSignalId;
     gulong m_nFocusOutSignalId;
+    gulong m_nKeyPressSignalId;
 
     static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
@@ -1197,6 +1198,17 @@ private:
         pThis->signal_focus_out();
     }
 
+    static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer)
+    {
+        // #i1820# use locale specific decimal separator
+        if (pEvent->keyval == GDK_KEY_KP_Decimal)
+        {
+            OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
+            pEvent->keyval = aSep[0];
+        }
+        return false;
+    }
+
 public:
     GtkInstanceWidget(GtkWidget* pWidget, bool bTakeOwnership)
         : m_pWidget(pWidget)
@@ -1204,6 +1216,11 @@ public:
         , m_nFocusInSignalId(0)
         , m_nFocusOutSignalId(0)
     {
+        GdkEventMask eEventMask(static_cast<GdkEventMask>(gtk_widget_get_events(pWidget)));
+        if (eEventMask & GDK_BUTTON_PRESS_MASK)
+            m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
+        else
+            m_nKeyPressSignalId = 0;
     }
 
     virtual void set_sensitive(bool sensitive) override
@@ -1474,6 +1491,8 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
+        if (m_nKeyPressSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
         if (m_nFocusOutSignalId)
