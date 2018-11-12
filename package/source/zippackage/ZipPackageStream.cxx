@@ -621,7 +621,7 @@ bool ZipPackageStream::saveChild(
                 // at position zero...otherwise, assert and skip this stream...
                 if ( IsPackageMember() )
                 {
-                    // if the password has been changed than the stream should not be package member any more
+                    // if the password has been changed then the stream should not be package member any more
                     if ( m_bIsEncrypted && m_bToBeEncrypted )
                     {
                         // Should be handled close to the raw stream handling
