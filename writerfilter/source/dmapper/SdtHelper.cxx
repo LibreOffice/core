@@ -24,6 +24,26 @@
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
 
+namespace
+{
+/// Maps OOXML <w:dateFormat> values to UNO date format values.
+sal_Int16 getUNODateFormat(const OUString& rDateFormat)
+{
+    // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly
+    // there are no constants.
+    sal_Int16 nDateFormat = -1;
+
+    if (rDateFormat == "M/d/yyyy" || rDateFormat == "M.d.yyyy")
+        // MMDDYYYY
+        nDateFormat = 8;
+    else if (rDateFormat == "dd/MM/yyyy")
+        // DDMMYYYY
+        nDateFormat = 7;
+
+    return nDateFormat;
+}
+}
+
 namespace writerfilter
 {
 namespace dmapper
@@ -92,6 +112,14 @@ void SdtHelper::createDropDownControl()
     m_aDropDownItems.clear();
 }
 
+bool SdtHelper::validateDateFormat()
+{
+    bool bRet = !m_sDate.isEmpty() || getUNODateFormat(m_sDateFormat.toString()) != -1;
+    if (!bRet)
+        m_sDateFormat.setLength(0);
+    return bRet;
+}
+
 void SdtHelper::createDateControl(OUString const& rContentText, const beans::PropertyValue& rCharFormat)
 {
     uno::Reference<awt::XControlModel> xControlModel;
@@ -114,14 +142,17 @@ void SdtHelper::createDateControl(OUString const& rContentText, const beans::Pro
     xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
 
     // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants
-    sal_Int16 nDateFormat = 0;
     OUString sDateFormat = m_sDateFormat.makeStringAndClear();
-    if (sDateFormat == "M/d/yyyy" || sDateFormat == "M.d.yyyy")
-        // Approximate with MM.dd.yyy
-        nDateFormat = 8;
-    else
+    sal_Int16 nDateFormat = getUNODateFormat(sDateFormat);
+    if (nDateFormat == -1)
+    {
         // Set default format, so at least the date picker is created.
         SAL_WARN("writerfilter", "unhandled w:dateFormat value");
+        if (m_sDate.isEmpty())
+            return;
+        else
+            nDateFormat = 0;
+    }
     xPropertySet->setPropertyValue("DateFormat", uno::makeAny(nDateFormat));
 
     util::Date aDate;
