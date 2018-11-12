@@ -1562,7 +1562,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // corner radius
-    if (bEdgeRadiusAllowed && SfxItemState::SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem)) {
+    if (m_bEdgeRadiusAllowed && SfxItemState::SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem)) {
         long nRadius=static_cast<const SdrMetricItem*>(pPoolItem)->GetValue();
         aSetAttr.Put(makeSdrEckenradiusItem(nRadius));
         bSetAttr=true;
@@ -1577,7 +1577,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // change size and height
-    if (bChgSiz && (bResizeFreeAllowed || bResizePropAllowed)) {
+    if (bChgSiz && (m_bResizeFreeAllowed || m_bResizePropAllowed)) {
         Fraction aWdt(nSizX,aRect.Right()-aRect.Left());
         Fraction aHgt(nSizY,aRect.Bottom()-aRect.Top());
         Point aRef(ImpGetPoint(aRect,eSizePoint));
@@ -1591,7 +1591,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // rotate
-    if (bRotate && (bRotateFreeAllowed || bRotate90Allowed)) {
+    if (bRotate && (m_bRotateFreeAllowed || m_bRotate90Allowed)) {
         Point aRef(nRotateX,nRotateY);
 
         if(GetSdrPageView())
@@ -1616,7 +1616,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // shear
-    if (bShear && bShearAllowed) {
+    if (bShear && m_bShearAllowed) {
         Point aRef(nShearX,nShearY);
 
         if(GetSdrPageView())
@@ -1635,7 +1635,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // change position
-    if (bChgPos && bMoveAllowed) {
+    if (bChgPos && m_bMoveAllowed) {
         MoveMarkedObj(Size(nPosDX,nPosDY));
     }
 
@@ -1663,11 +1663,11 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
         if(bChanged)
         {
-            bMoveProtect = bProtPos;
+            m_bMoveProtect = bProtPos;
 
             if(bProtPos)
             {
-                bResizeProtect = true;
+                m_bResizeProtect = true;
             }
 
             // #i77187# there is no simple method to get the toolbars updated
@@ -1678,7 +1678,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         }
     }
 
-    if(!bMoveProtect)
+    if(!m_bMoveProtect)
     {
         // protect size
         if(SfxItemState::SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, true, &pPoolItem))
@@ -1699,7 +1699,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
             if(bChanged)
             {
-                bResizeProtect = bProtSize;
+                m_bResizeProtect = bProtSize;
 
                 // #i77187# see above
                 MarkListHasChanged();
@@ -1716,8 +1716,8 @@ bool SdrEditView::IsAlignPossible() const
     ForcePossibilities();
     const size_t nCount=GetMarkedObjectCount();
     if (nCount==0) return false;         // nothing selected!
-    if (nCount==1) return bMoveAllowed;  // align single object to page
-    return bOneOrMoreMovable;          // otherwise: MarkCount>=2
+    if (nCount==1) return m_bMoveAllowed;  // align single object to page
+    return m_bOneOrMoreMovable;          // otherwise: MarkCount>=2
 }
 
 void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)

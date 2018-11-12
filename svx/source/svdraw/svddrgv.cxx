@@ -854,7 +854,7 @@ bool SdrDragView::IsOrthoDesired() const
     if( dynamic_cast< const SdrDragObjOwn* >( mpCurrentSdrDragMethod.get() )
        || dynamic_cast< const SdrDragResize* >(mpCurrentSdrDragMethod.get() ))
     {
-        return bOrthoDesiredOnMarked;
+        return m_bOrthoDesiredOnMarked;
     }
 
     return false;

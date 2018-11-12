@@ -1590,7 +1590,7 @@ void E3dView::CheckPossibilities()
     SdrView::CheckPossibilities();
 
     // Set other flags
-    if(bGroupPossible || bUnGroupPossible || bGrpEnterPossible)
+    if(m_bGroupPossible || m_bUnGroupPossible || m_bGrpEnterPossible)
     {
         const size_t nMarkCnt = GetMarkedObjectCount();
         bool bCoumpound = false;
@@ -1606,14 +1606,14 @@ void E3dView::CheckPossibilities()
 
         // So far: there are two or more of any objects selected. See if
         // compound objects are involved. If yes, ban grouping.
-        if(bGroupPossible && bCoumpound)
-            bGroupPossible = false;
+        if(m_bGroupPossible && bCoumpound)
+            m_bGroupPossible = false;
 
-        if(bUnGroupPossible && b3DObject)
-            bUnGroupPossible = false;
+        if(m_bUnGroupPossible && b3DObject)
+            m_bUnGroupPossible = false;
 
-        if(bGrpEnterPossible && bCoumpound)
-            bGrpEnterPossible = false;
+        if(m_bGrpEnterPossible && bCoumpound)
+            m_bGrpEnterPossible = false;
     }
 }
 
