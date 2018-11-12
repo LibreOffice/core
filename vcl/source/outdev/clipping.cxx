@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <osl/diagnose.h>
 
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

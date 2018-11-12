@@ -35,6 +35,7 @@
 
 #include <fmtlsplt.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <osl/diagnose.h>
 
 using ::editeng::SvxBorderLine;
 using namespace ::xmloff::token;

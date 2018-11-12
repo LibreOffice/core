@@ -32,6 +32,7 @@
 #include <calbck.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <editeng/svxacorr.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/acorrcfg.hxx>
 #include <sfx2/docfile.hxx>

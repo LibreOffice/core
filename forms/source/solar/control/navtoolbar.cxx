@@ -31,6 +31,7 @@
 #include <vcl/commandinfoprovider.hxx>
 
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #define LID_RECORD_LABEL    1000
 #define LID_RECORD_FILLER   1001

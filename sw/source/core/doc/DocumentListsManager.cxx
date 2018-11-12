@@ -22,6 +22,7 @@
 #include <numrule.hxx>
 
 #include <comphelper/random.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 

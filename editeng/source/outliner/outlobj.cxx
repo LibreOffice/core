@@ -31,6 +31,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <o3tl/cow_wrapper.hxx>
 #include <libxml/xmlwriter.h>

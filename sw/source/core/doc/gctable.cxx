@@ -22,6 +22,7 @@
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 #include <algorithm>
+#include <osl/diagnose.h>
 
 using namespace ::editeng;
 

@@ -35,6 +35,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <oox/helper/graphichelper.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/graph.hxx>

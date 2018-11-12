@@ -28,6 +28,7 @@
 #include <editeng/numitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
+#include <osl/diagnose.h>
 
 #include <unomid.h>
 

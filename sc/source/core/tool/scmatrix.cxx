@@ -34,6 +34,7 @@
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <math.h>
 

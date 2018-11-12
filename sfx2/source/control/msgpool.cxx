@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <svl/style.hxx>
 

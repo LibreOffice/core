@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 

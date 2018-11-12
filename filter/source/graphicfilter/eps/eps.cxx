@@ -40,6 +40,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
 #include <strings.hrc>
+#include <osl/diagnose.h>
 
 #include <math.h>
 #include <memory>
