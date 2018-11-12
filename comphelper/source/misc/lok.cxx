@@ -9,6 +9,7 @@
 
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <sal/log.hxx>
 
 #include <iostream>
 #include <sstream>
@@ -133,7 +134,10 @@ bool isLocalRendering()
 void setLanguageTag(const LanguageTag& languageTag)
 {
     if (g_aLanguageTag != languageTag)
+    {
+        SAL_INFO("comphelper.lok", "setLanguageTag: from " << g_aLanguageTag.getBcp47() << " to " << languageTag.getBcp47());
         g_aLanguageTag = languageTag;
+    }
 }
 
 const LanguageTag& getLanguageTag()
