@@ -71,10 +71,8 @@ class sampling(UITestCase):
         xperiodspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xperiodspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         xperiodspin.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
-        sleep(5)
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        sleep(5)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 5, 0).getValue(), 12)
         self.assertEqual(get_cell_by_position(document, 0, 5, 1).getValue() , 14)

@@ -21,7 +21,6 @@ class exponentialSmoothing(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #fill data
-        sleep(30)
         enter_text_to_cell(gridwin, "A1", "1")
         enter_text_to_cell(gridwin, "A2", "0")
         enter_text_to_cell(gridwin, "A3", "0")
