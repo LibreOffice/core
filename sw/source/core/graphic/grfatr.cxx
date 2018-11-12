@@ -23,6 +23,7 @@
 #include <swtypes.hxx>
 #include <grfatr.hxx>
 #include <swunohelper.hxx>
+#include <osl/diagnose.h>
 
 #include <cmdid.h>
 #include <unomid.h>

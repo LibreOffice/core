@@ -43,6 +43,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/fltcall.hxx>
 #include <osl/file.hxx>
+#include <osl/module.hxx>
 
 #include "../source/filter/igif/gifread.hxx"
 #include "../source/filter/ixbm/xbmread.hxx"

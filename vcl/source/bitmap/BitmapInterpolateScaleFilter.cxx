@@ -18,6 +18,7 @@
  */
 
 #include <tools/helpers.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>

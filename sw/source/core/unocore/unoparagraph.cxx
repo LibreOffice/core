@@ -22,6 +22,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 #include <cmdid.h>
 #include <unomid.h>

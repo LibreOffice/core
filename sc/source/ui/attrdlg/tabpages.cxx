@@ -25,6 +25,7 @@
 #include <sc.hrc>
 
 #include <tabpages.hxx>
+#include <osl/diagnose.h>
 
 const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 {

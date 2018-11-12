@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_BUILDER_HXX
 
 #include <typeinfo>
-#include <osl/module.hxx>
 #include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fldunit.hxx>
@@ -23,16 +22,11 @@
 
 #include <memory>
 #include <map>
-#include <set>
-#include <stack>
 #include <vector>
 #ifdef check
 #  //some problem with MacOSX and a check define
 #  undef check
 #endif
-
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 class Button;
 class ComboBox;
@@ -51,6 +45,7 @@ class TimeField;
 class VclExpander;
 class VclMultiLineEdit;
 namespace xmlreader { class XmlReader; }
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
 struct ComboBoxTextItem
 {

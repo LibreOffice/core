@@ -32,6 +32,7 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <IShellCursorSupplier.hxx>
+#include <osl/diagnose.h>
 
 // SPLITNODE
 

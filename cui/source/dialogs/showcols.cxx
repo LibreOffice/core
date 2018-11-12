@@ -19,6 +19,7 @@
 
 #include <showcols.hxx>
 
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/types.hxx>

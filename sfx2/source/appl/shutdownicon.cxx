@@ -58,6 +58,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/security.hxx>
 #include <osl/file.hxx>
+#include <osl/module.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>

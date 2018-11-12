@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <unoredlines.hxx>
 #include <unoredline.hxx>
