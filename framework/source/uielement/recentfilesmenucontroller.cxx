@@ -294,7 +294,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
         {
             SvtHistoryOptions().Clear( ePICKLIST );
             dispatchCommand(
-                "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
+                CMD_CLEAR_LIST,
                 css::uno::Sequence< css::beans::PropertyValue >() );
         }
         else if ( aCommand == CMD_OPEN_REMOTE )
