@@ -856,7 +856,7 @@ void SwDrawView::CheckPossibilities()
                                     && RndStdIds::FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
                                     && pDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
                             if (bProtectMathPos)
-                                bMoveProtect = true;
+                                m_bMoveProtect = true;
                         }
                     }
                     else if(pGrfNd)
@@ -891,12 +891,12 @@ void SwDrawView::CheckPossibilities()
             }
         }
     }
-    bMoveProtect    |= bProtect;
-    bResizeProtect  |= bProtect || bSzProtect;
+    m_bMoveProtect    |= bProtect;
+    m_bResizeProtect  |= bProtect || bSzProtect;
 
     // RotGrfFlyFrame: allow rotation when SwGrfNode is selected and not size protected
-    bRotateFreeAllowed |= bRotate && !bProtect;
-    bRotate90Allowed |= bRotateFreeAllowed;
+    m_bRotateFreeAllowed |= bRotate && !bProtect;
+    m_bRotate90Allowed |= m_bRotateFreeAllowed;
 }
 
 /// replace marked <SwDrawVirtObj>-objects by its reference object for delete marked objects.

@@ -207,12 +207,12 @@ public:
         const bool bHandleBullets,
         const SvxNumRule* pNumRule);
 
-    void SetPossibilitiesDirty() { bPossibilitiesDirty = true; }
-    void SetMoveAllowed( bool bSet ) { bMoveAllowed = bSet; }
-    void SetMoveProtected( bool bSet ) { bMoveProtect = bSet; }
-    void SetResizeFreeAllowed( bool bSet ) { bResizeFreeAllowed = bSet; }
-    void SetResizePropAllowed( bool bSet ) { bResizePropAllowed = bSet; }
-    void SetResizeProtected( bool bSet ) { bResizeProtect = bSet; }
+    void SetPossibilitiesDirty() { m_bPossibilitiesDirty = true; }
+    void SetMoveAllowed( bool bSet ) { m_bMoveAllowed = bSet; }
+    void SetMoveProtected( bool bSet ) { m_bMoveProtect = bSet; }
+    void SetResizeFreeAllowed( bool bSet ) { m_bResizeFreeAllowed = bSet; }
+    void SetResizePropAllowed( bool bSet ) { m_bResizePropAllowed = bSet; }
+    void SetResizeProtected( bool bSet ) { m_bResizeProtect = bSet; }
 
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
     SdPage* GetPage();
