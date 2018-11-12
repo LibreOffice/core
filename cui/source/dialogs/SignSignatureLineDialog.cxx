@@ -141,7 +141,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     {
         m_xSelectedCertifate = xSignCertificate;
         m_xBtnChooseCertificate->set_label(
-            xmlsec::GetContentPart(xSignCertificate->getIssuerName()));
+            xmlsec::GetContentPart(xSignCertificate->getSubjectName()));
     }
     ValidateFields();
 }
@@ -180,7 +180,7 @@ SignSignatureLineDialog::getSignedGraphic(bool bValid)
     aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", getCDataString(m_xEditName->get_text()));
     OUString aIssuerLine
         = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
-              .replaceFirst("%1", xmlsec::GetContentPart(m_xSelectedCertifate->getIssuerName()));
+              .replaceFirst("%1", xmlsec::GetContentPart(m_xSelectedCertifate->getSubjectName()));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
     if (bValid)
         aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
