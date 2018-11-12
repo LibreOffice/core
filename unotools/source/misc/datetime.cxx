@@ -212,6 +212,15 @@ OUString GetDateTimeString(const css::util::DateTime& _rDT)
     return rLoDa.getDate(aDT) + " " + rLoDa.getTime(aDT);
 }
 
+OUString GetDateTimeString(sal_Int32 _nDate, sal_Int32 _nTime)
+{
+    const LocaleDataWrapper& rLoDa = GetLocaleData();
+
+    Date aDate(_nDate);
+    tools::Time aTime(_nTime * tools::Time::nanoPerCenti);
+    return rLoDa.getDate(aDate) + ", " + rLoDa.getTime(aTime);
+}
+
 OUString GetDateString(const css::util::DateTime& _rDT)
 {
     return GetLocaleData().getDate(GetDateTime(_rDT));
