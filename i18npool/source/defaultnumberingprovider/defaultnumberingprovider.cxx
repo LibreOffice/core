@@ -622,13 +622,13 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      // start empty
      OUString result;
 
-      // append prefix
-      if( !should_ignore(prefix) ) result += prefix;
+     // append prefix
+     if( !should_ignore(prefix) ) result += prefix;
 
-      // append formatted number
-      using namespace style::NumberingType;
-      switch( numType )
-      {
+     // append formatted number
+     using namespace style::NumberingType;
+     switch( numType )
+     {
           case CHARS_UPPER_LETTER:
                lcl_formatChars( upperLetter, 26, number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>AB, ...
                break;
@@ -905,23 +905,23 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           default:
                OSL_ASSERT(false);
                throw IllegalArgumentException();
-      }
+     }
 
-        if (natNum) {
+     if (natNum) {
             rtl::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
             result += xNatNum->getNativeNumberStringParams(OUString::number(number), locale,
                                                                  natNum, sNatNumParams);
-        } else if (tableSize) {
+     } else if (tableSize) {
             if ( number > tableSize && !bRecycleSymbol)
                 result += OUString::number( number);
             else
                 result += OUString(&table[--number % tableSize], 1);
-        }
+     }
 
-        // append suffix
-        if( !should_ignore(suffix) ) result += suffix;
+     // append suffix
+     if( !should_ignore(suffix) ) result += suffix;
 
-        return result;
+     return result;
 }
 
 #define LANG_ALL        (1 << 0)

@@ -68,7 +68,7 @@ void SAL_CALL OInstanceLocker::dispose()
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     if ( m_pListenersContainer )
         m_pListenersContainer->disposeAndClear( aSource );
 

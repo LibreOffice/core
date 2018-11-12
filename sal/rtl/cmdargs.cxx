@@ -86,7 +86,7 @@ oslProcessError SAL_CALL rtl_getAppCommandArg (
     oslProcessError result = osl_Process_E_NotFound;
     if( nArg < g_nCommandArgCount )
     {
-         rtl_uString_assign( ppCommandArg, g_ppCommandArgs[nArg] );
+        rtl_uString_assign( ppCommandArg, g_ppCommandArgs[nArg] );
         result = osl_Process_E_None;
     }
     return result;

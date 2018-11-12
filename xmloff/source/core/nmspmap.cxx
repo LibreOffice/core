@@ -302,7 +302,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
     }
     else
     {
-    rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
+        rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
 
         sal_Int32 nColonPos = rAttrName.indexOf( ':' );
         if( -1 == nColonPos )

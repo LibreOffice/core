@@ -186,7 +186,7 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DContainer OverlaySelection::getOverlayObjectPrimitive2DSequence() const
         {
             // get current values
-               const OverlayType aNewOverlayType(impCheckPossibleOverlayType(meOverlayType));
+            const OverlayType aNewOverlayType(impCheckPossibleOverlayType(meOverlayType));
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const sal_uInt16 nNewTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent());
 

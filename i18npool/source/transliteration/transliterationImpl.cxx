@@ -180,7 +180,7 @@ static TransliterationModules operator|(TransliterationModules lhs, Transliterat
 void SAL_CALL
 TransliterationImpl::loadModule( TransliterationModules modType, const Locale& rLocale )
 {
-        clear();
+    clear();
     if (bool(modType & TransliterationModules_IGNORE_MASK) &&
         bool(modType & TransliterationModules_NON_IGNORE_MASK))
     {

@@ -300,7 +300,7 @@ bool AccessibleShape::GetState (sal_Int16 aState)
 // OverWrite the parent's getAccessibleName method
 OUString SAL_CALL AccessibleShape::getAccessibleName()
 {
-        ThrowIfDisposed ();
+    ThrowIfDisposed ();
     if (m_pShape && !m_pShape->GetTitle().isEmpty())
         return CreateAccessibleName() + " " + m_pShape->GetTitle();
     else

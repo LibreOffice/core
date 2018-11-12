@@ -51,7 +51,7 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
 
 void HelpInterceptor_Impl::addURL( const OUString& rURL )
 {
-  if ( !m_pHistory )
+    if ( !m_pHistory )
         m_pHistory.reset( new std::vector<std::unique_ptr<HelpHistoryEntry_Impl>> );
 
     size_t nCount = m_pHistory->size();

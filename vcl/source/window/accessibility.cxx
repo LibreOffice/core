@@ -421,7 +421,7 @@ sal_uInt16 Window::GetAccessibleRole() const
 
 void Window::SetAccessibleName( const OUString& rName )
 {
-   if ( !mpWindowImpl->mpAccessibleInfos )
+    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
     OUString oldName = GetAccessibleName();
@@ -506,7 +506,7 @@ OUString Window::getDefaultAccessibleName() const
 
 void Window::SetAccessibleDescription( const OUString& rDescription )
 {
-   if ( ! mpWindowImpl->mpAccessibleInfos )
+    if ( ! mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
     SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "vcl", "AccessibleDescription already set!" );

@@ -295,35 +295,35 @@ OUString SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) cons
     if ( _nRow >= 0 && _nRow < static_cast<sal_Int32>(aList.size()) )
     {
         auto& pEntry = aList[_nRow];
-            if ( pEntry->bComment )
+        if ( pEntry->bComment )
+        {
+            if (_nColId == ITEMBROWSER_NAMECOL_ID)
+                sRet = pEntry->aName;
+        }
+        else
+        {
+            sRet = "???";
+            switch (_nColId)
             {
-                if (_nColId == ITEMBROWSER_NAMECOL_ID)
-                    sRet = pEntry->aName;
-            }
-            else
-            {
-                sRet = "???";
-                switch (_nColId)
+                case ITEMBROWSER_WHICHCOL_ID:
+                    sRet = OUString::number( pEntry->nWhichId ); break;
+                case ITEMBROWSER_STATECOL_ID:
                 {
-                    case ITEMBROWSER_WHICHCOL_ID:
-                        sRet = OUString::number( pEntry->nWhichId ); break;
-                    case ITEMBROWSER_STATECOL_ID:
+                    switch (pEntry->eState)
                     {
-                        switch (pEntry->eState)
-                        {
-                            case SfxItemState::UNKNOWN : sRet = "Unknown";  break;
-                            case SfxItemState::DISABLED: sRet = "Disabled"; break;
-                            case SfxItemState::DONTCARE: sRet = "DontCare"; break;
-                            case SfxItemState::SET     : sRet = "Set";      break;
-                            case SfxItemState::DEFAULT : sRet = "Default";  break;
-                            case SfxItemState::READONLY: sRet = "ReadOnly";  break;
-                        } // switch
-                    } break;
-                    case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;
-                    case ITEMBROWSER_NAMECOL_ID: sRet = pEntry->aName; break;
-                    case ITEMBROWSER_VALUECOL_ID: sRet = pEntry->aValue; break;
-                } // switch
-            }
+                        case SfxItemState::UNKNOWN : sRet = "Unknown";  break;
+                        case SfxItemState::DISABLED: sRet = "Disabled"; break;
+                        case SfxItemState::DONTCARE: sRet = "DontCare"; break;
+                        case SfxItemState::SET     : sRet = "Set";      break;
+                        case SfxItemState::DEFAULT : sRet = "Default";  break;
+                        case SfxItemState::READONLY: sRet = "ReadOnly";  break;
+                    } // switch
+                } break;
+                case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;
+                case ITEMBROWSER_NAMECOL_ID: sRet = pEntry->aName; break;
+                case ITEMBROWSER_VALUECOL_ID: sRet = pEntry->aValue; break;
+            } // switch
+        }
     }
     return sRet;
 }

@@ -181,7 +181,7 @@ void XMLTextNumRuleInfo::Set(
         sal_Int32 nCount = aProps.getLength();
         for( sal_Int32 i=0; i<nCount; i++ )
         {
-          const PropertyValue& rProp = pPropArray[i];
+            const PropertyValue& rProp = pPropArray[i];
 
             if ( rProp.Name == "StartWith" )
             {

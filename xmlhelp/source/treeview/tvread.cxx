@@ -440,30 +440,30 @@ void TVChildTarget::Check(TVDom* tvDom)
         return;
     }
 
-        unsigned i = 0;
-        bool h = false;
+    unsigned i = 0;
+    bool h = false;
 
-        while((i<tvDom->children.size()-1) && (!h))
+    while((i<tvDom->children.size()-1) && (!h))
+    {
+        if (((tvDom->children[i])->application == (tvDom->children[tvDom->children.size()-1])->application) &&
+            ((tvDom->children[i])->id == (tvDom->children[tvDom->children.size()-1])->id))
         {
-            if (((tvDom->children[i])->application == (tvDom->children[tvDom->children.size()-1])->application) &&
-                ((tvDom->children[i])->id == (tvDom->children[tvDom->children.size()-1])->id))
+            TVDom* p = tvDom->children.back().get();
+
+            for(auto & k : p->children)
             {
-                TVDom* p = tvDom->children.back().get();
-
-                for(auto & k : p->children)
+                std::unique_ptr<TVDom> tmp(SearchAndInsert(std::move(k), tvDom->children[i].get()));
+                if (tmp)
                 {
-                    std::unique_ptr<TVDom> tmp(SearchAndInsert(std::move(k), tvDom->children[i].get()));
-                    if (tmp)
-                    {
-                        tvDom->children[i]->newChild(std::move(tmp));
-                    }
+                    tvDom->children[i]->newChild(std::move(tmp));
                 }
-
-                tvDom->children.pop_back();
-                h = true;
             }
-            ++i;
+
+            tvDom->children.pop_back();
+            h = true;
         }
+        ++i;
+    }
 }
 
 std::unique_ptr<TVDom>
@@ -733,7 +733,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     configData.m_vReplacement[1] = productVersion;
     // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
 
-       configData.system = system;
+    configData.system = system;
     configData.locale = locale;
     configData.appendix =
         "?Language=" +

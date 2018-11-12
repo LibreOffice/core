@@ -145,8 +145,8 @@ void OConnectionPool::clear(bool _bDispose)
     if (xProp.is())
         xProp->removePropertyChangeListener(TIMEOUT_NODENAME, this);
 
-m_xDriverNode.clear();
-m_xDriver.clear();
+    m_xDriverNode.clear();
+    m_xDriver.clear();
 }
 
 Reference< XConnection > OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )

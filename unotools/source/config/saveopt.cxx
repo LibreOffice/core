@@ -744,8 +744,8 @@ SvtSaveOptions::SvtSaveOptions()
         pOptions.reset(new SvtLoadSaveOptions_Impl);
         pOptions->pSaveOpt.reset(new SvtSaveOptions_Impl);
         pOptions->pLoadOpt.reset( new SvtLoadOptions_Impl);
-   }
-   ++nRefCount;
+    }
+    ++nRefCount;
     pImp = pOptions.get();
 }
 

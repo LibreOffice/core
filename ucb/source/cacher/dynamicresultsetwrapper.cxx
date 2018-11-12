@@ -240,7 +240,7 @@ void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
                         aWelcome.Old = m_xMyResultOne;
                         aWelcome.New = m_xMyResultTwo;
 
-                         rAction.ActionInfo <<= aWelcome;
+                        rAction.ActionInfo <<= aWelcome;
                     }
                     else
                     {

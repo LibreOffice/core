@@ -110,7 +110,7 @@ bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& 
 bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
-      OUStringBuffer aOut(30);
+    OUStringBuffer aOut(30);
     GraphicCrop aCrop;
 
     if( rValue >>= aCrop )

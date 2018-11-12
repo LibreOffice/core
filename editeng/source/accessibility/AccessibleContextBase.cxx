@@ -229,11 +229,11 @@ sal_Int32 SAL_CALL
                 }
             }
         }
-   }
+    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
-   return -1;
+    //   Return -1 to indicate that this object's parent does not know about the
+    //   object.
+    return -1;
 }
 
 

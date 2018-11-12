@@ -1334,7 +1334,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         bSuccess = rTypes.hasElements();
         if( bHaveText && ! bHaveUTF16 )
         {
-               int i = 0;
+            int i = 0;
 
             int nNewFlavors = rTypes.getLength()+1;
             Sequence< DataFlavor > aTemp( nNewFlavors );

@@ -335,7 +335,8 @@ namespace canvas
         const SpriteConnectedRanges::ComponentListType::const_iterator aFirst(
             rUpdateArea.maComponentList.begin() );
         SpriteConnectedRanges::ComponentListType::const_iterator aSecond(
-            aFirst ); ++aSecond;
+            aFirst );
+        ++aSecond;
 
         if( !aFirst->second.isPureMove() ||
             !aSecond->second.isPureMove() ||

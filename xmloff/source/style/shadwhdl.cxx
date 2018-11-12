@@ -121,7 +121,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
-      OUStringBuffer aOut;
+    OUStringBuffer aOut;
     table::ShadowFormat aShadow;
 
     if( rValue >>= aShadow )

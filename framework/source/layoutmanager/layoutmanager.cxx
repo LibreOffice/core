@@ -2864,11 +2864,11 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
 
     if ( xFrame.is() )
     {
-       OUString aElementType;
-       OUString aElementName;
-       bool            bRefreshLayout(false);
+        OUString aElementType;
+        OUString aElementName;
+        bool            bRefreshLayout(false);
 
-       parseResourceURL( Event.ResourceURL, aElementType, aElementName );
+        parseResourceURL( Event.ResourceURL, aElementType, aElementName );
         if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
         {
             if ( xToolbarManager.is() )
@@ -2913,7 +2913,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                 }
 
                 // No settings anymore, element must be destroyed
-                    if ( xContainerWindow.is() && bNoSettings )
+                if ( xContainerWindow.is() && bNoSettings )
                 {
                     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
                          aElementName.equalsIgnoreAsciiCase("menubar") )

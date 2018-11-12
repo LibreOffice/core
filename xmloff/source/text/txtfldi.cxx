@@ -2076,10 +2076,10 @@ void XMLFileNameImportContext::PrepareField(
     Reference<XPropertySetInfo> xPropertySetInfo(
         xPropertySet->getPropertySetInfo());
 
-     if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
-     {
+    if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
+    {
          xPropertySet->setPropertyValue(sPropertyFixed, Any(bFixed));
-     }
+    }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyFileFormat))
     {

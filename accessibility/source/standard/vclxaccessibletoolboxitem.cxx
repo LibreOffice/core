@@ -153,7 +153,7 @@ void VCLXAccessibleToolBoxItem::SetFocus( bool _bFocus )
         else
             aNewValue <<= AccessibleStateType::FOCUSED;
         m_bHasFocus = _bFocus;
-         NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+        NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
 
@@ -437,14 +437,14 @@ sal_Unicode VCLXAccessibleToolBoxItem::getCharacter( sal_Int32 nIndex )
 {
      OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::implGetCharacter( GetText(), nIndex );
+     return OCommonAccessibleText::implGetCharacter( GetText(), nIndex );
 }
 
 OUString VCLXAccessibleToolBoxItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
      OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::implGetTextRange( GetText(), nStartIndex, nEndIndex );
+     return OCommonAccessibleText::implGetTextRange( GetText(), nStartIndex, nEndIndex );
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getCaretPosition()

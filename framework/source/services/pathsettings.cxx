@@ -1055,7 +1055,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
     for (auto const& path : m_lPaths)
     {
         const PathSettings::PathInfo& rPath = path.second;
-              css::beans::Property*   pProp = nullptr;
+        css::beans::Property*   pProp = nullptr;
 
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName;
@@ -1284,8 +1284,8 @@ PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
         return nullptr;
 
     const css::beans::Property&            rProp = m_lPropDesc[nHandle];
-          OUString                  sProp = impl_extractBaseFromPropName(rProp.Name);
-          PathSettings::PathHash::iterator rPath = m_lPaths.find(sProp);
+    OUString                  sProp = impl_extractBaseFromPropName(rProp.Name);
+    PathSettings::PathHash::iterator rPath = m_lPaths.find(sProp);
 
     if (rPath != m_lPaths.end())
        return &(rPath->second);
@@ -1302,9 +1302,9 @@ const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nH
     if (nHandle > (m_lPropDesc.getLength()-1))
         return nullptr;
 
-    const css::beans::Property&                  rProp = m_lPropDesc[nHandle];
-          OUString                        sProp = impl_extractBaseFromPropName(rProp.Name);
-          PathSettings::PathHash::const_iterator rPath = m_lPaths.find(sProp);
+    const css::beans::Property&     rProp = m_lPropDesc[nHandle];
+    OUString                        sProp = impl_extractBaseFromPropName(rProp.Name);
+    PathSettings::PathHash::const_iterator rPath = m_lPaths.find(sProp);
 
     if (rPath != m_lPaths.end())
        return &(rPath->second);

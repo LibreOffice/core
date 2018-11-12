@@ -313,7 +313,7 @@ AstDeclaration* AstScope::lookupForAdd(AstDeclaration const * pDecl) const
 
     AstDeclaration* pRetDecl = lookupByNameLocal(pDecl->getLocalName());
 
-   return pRetDecl;
+    return pRetDecl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

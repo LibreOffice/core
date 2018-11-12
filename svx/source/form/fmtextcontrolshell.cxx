@@ -561,15 +561,16 @@ namespace svx
             )
         {
             SfxSlotId nSlotId( aFeature->first );
+
             #if OSL_DEBUG_LEVEL > 0
-                OUString sUnoSlotName;
-                if ( SfxGetpApp() )
-                    sUnoSlotName = lcl_getUnoSlotName( nSlotId );
-                else
-                    sUnoSlotName = "<unknown>";
-                OString sUnoSlotNameAscii( "\"" );
-                sUnoSlotNameAscii += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                sUnoSlotNameAscii += "\"";
+            OUString sUnoSlotName;
+            if ( SfxGetpApp() )
+                sUnoSlotName = lcl_getUnoSlotName( nSlotId );
+            else
+                sUnoSlotName = "<unknown>";
+            OString sUnoSlotNameAscii( "\"" );
+            sUnoSlotNameAscii += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
+            sUnoSlotNameAscii += "\"";
             #endif
 
             if ( _bTranslateLatin )
@@ -599,13 +600,13 @@ namespace svx
             bool bIsInPool = rPool.IsInRange( nWhich );
             if ( bIsInPool )
             {
-                #if OSL_DEBUG_LEVEL > 0
-                    bool bFeatureIsEnabled = aFeature->second->isFeatureEnabled();
-                    OString sMessage =  "found a feature state for "  + sUnoSlotNameAscii;
-                    if ( !bFeatureIsEnabled )
-                        sMessage += " (disabled)";
-                    SAL_INFO("svx.form", sMessage );
-                #endif
+            #if OSL_DEBUG_LEVEL > 0
+                bool bFeatureIsEnabled = aFeature->second->isFeatureEnabled();
+                OString sMessage =  "found a feature state for "  + sUnoSlotNameAscii;
+                if ( !bFeatureIsEnabled )
+                    sMessage += " (disabled)";
+                SAL_INFO("svx.form", sMessage );
+            #endif
 
                 lcl_translateUnoStateToItem( nSlotId, aFeature->second->getFeatureState(), _rSet );
             }

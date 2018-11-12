@@ -72,9 +72,9 @@ Reference< xml::input::XElement > Frame::startChildElement(
 
 void Frame::endElement()
 {
-        if ( !m_xContainer.is() )
+    if ( !m_xContainer.is() )
             m_xContainer.set( m_xImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
-        Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
+    Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
         // m_xImport is what we need to add to ( e.g. the dialog in this case )
     ControlImportContext ctx( m_xImport.get(), xProps,   getControlId( _xAttributes ) );
 
@@ -118,7 +118,7 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
         // Create new DialogImport for this container
 
         DialogImport* pMultiPageImport = new DialogImport( *m_xImport );
-                pMultiPageImport->_xDialogModel = m_xContainer;
+        pMultiPageImport->_xDialogModel = m_xContainer;
         return new BulletinBoardElement( rLocalName, xAttributes, this,  pMultiPageImport );
     }
     else
@@ -130,7 +130,7 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
 
 void MultiPage::endElement()
 {
-        Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
+    Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
         // m_xImport is what we need to add to ( e.g. the dialog in this case )
     ControlImportContext ctx( m_xImport.get(), xProps, getControlId( _xAttributes ));
 
@@ -148,7 +148,7 @@ void MultiPage::endElement()
 
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
     ctx.importLongProperty("MultiPageValue" , "value",  _xAttributes );
-        ctx.importBooleanProperty( "Decoration", "withtabs",  _xAttributes) ;
+    ctx.importBooleanProperty( "Decoration", "withtabs",  _xAttributes) ;
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -171,7 +171,7 @@ Reference< xml::input::XElement > Page::startChildElement(
     {
 
         DialogImport* pPageImport = new DialogImport( *m_xImport );
-                pPageImport->_xDialogModel = m_xContainer;
+        pPageImport->_xDialogModel = m_xContainer;
         return new BulletinBoardElement( rLocalName, xAttributes, this,  pPageImport );
     }
     else
@@ -183,7 +183,7 @@ Reference< xml::input::XElement > Page::startChildElement(
 
 void Page::endElement()
 {
-        Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
+    Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
 
     ControlImportContext ctx( m_xImport.get(), xProps, getControlId( _xAttributes ));
 

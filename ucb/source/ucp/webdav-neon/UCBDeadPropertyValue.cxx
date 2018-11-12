@@ -494,7 +494,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     // Encode value! It must not contain XML reserved chars!
     aStringValue = encodeValue( aStringValue );
 
-        rOutData =  aXMLPre;
+    rOutData =  aXMLPre;
     rOutData += aStringType;
     rOutData += aXMLMid;
     rOutData += aStringValue;
