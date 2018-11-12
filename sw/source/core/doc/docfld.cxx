@@ -802,7 +802,8 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
 
 void SwDocUpdateField::MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode )
 {
-    if (!m_pFieldSortList || bAll || !(eGetMode & m_nFieldListGetMode)
+    if (!m_pFieldSortList || bAll
+        || ((eGetMode & m_nFieldListGetMode) != eGetMode)
         || rDoc.GetNodes().Count() != m_nNodes)
     {
         MakeFieldList_( rDoc, eGetMode );
