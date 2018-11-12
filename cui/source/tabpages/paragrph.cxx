@@ -670,7 +670,6 @@ DeactivateRC SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 SvxStdParagraphTabPage::SvxStdParagraphTabPage(TabPageParent pParent,  const SfxItemSet& rAttr)
     : SfxTabPage(pParent, "cui/ui/paraindentspacing.ui", "ParaIndentSpacing", &rAttr)
-    , nAbst(MAX_DURCH)
     , nWidth(11905 /*567 * 50*/)
     , nMinFixDist(0)
     , bRelativeMode(false)
@@ -883,9 +882,9 @@ void SvxStdParagraphTabPage::Init_Impl()
     DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
-    m_xTopDist->set_max( m_xTopDist->normalize( nAbst ), eUnit );
-    m_xBottomDist->set_max( m_xBottomDist->normalize( nAbst ), eUnit );
-    m_xLineDistAtMetricBox->set_max( m_xLineDistAtMetricBox->normalize( nAbst ), eUnit );
+    m_xTopDist->set_max( m_xTopDist->normalize( MAX_DURCH ), eUnit );
+    m_xBottomDist->set_max( m_xBottomDist->normalize( MAX_DURCH ), eUnit );
+    m_xLineDistAtMetricBox->set_max( m_xLineDistAtMetricBox->normalize( MAX_DURCH ), eUnit );
 }
 
 void SvxStdParagraphTabPage::UpdateExample_Impl()

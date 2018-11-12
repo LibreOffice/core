@@ -153,7 +153,6 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     ,m_xDatMan( pDataManager )
 {
     bDisposing=false;
-    bHierarchical=true;
     mxImpl = new BibFrameCtrl_Impl;
     mxImpl->pController = this;
 }
@@ -617,8 +616,7 @@ void BibFrameController_Impl::addStatusListener(
     else if ( aURL.Path == "Bib/hierarchical" )
     {
         aEvent.IsEnabled  = true;
-        const char*  pHier = bHierarchical? "" : "*" ;
-        aEvent.State <<= OUString::createFromAscii(pHier);
+        aEvent.State <<= OUString();
     }
     else if(aURL.Path == "Bib/MenuFilter")
     {

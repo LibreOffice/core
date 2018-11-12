@@ -231,7 +231,6 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , mbTLBREnabled(false)
     , mbBLTREnabled(false)
     , mbUseMarginItem(false)
-    , mbAllowPaddingWithoutBorders(true)
     , mbLeftModified(false)
     , mbRightModified(false)
     , mbTopModified(false)
@@ -930,44 +929,33 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             if( !m_xLeftMF->get_text().isEmpty() || !m_xRightMF->get_text().isEmpty() ||
                 !m_xTopMF->get_text().isEmpty() || !m_xBottomMF->get_text().isEmpty() )
             {
-                if ( mbAllowPaddingWithoutBorders
-                     || ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
-                         (mbLeftModified || mbRightModified || mbTopModified || mbBottomModified) )
-                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
-                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
-                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
-                     || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Right ) != svx::FrameBorderState::Hide )
+                const SvxBoxInfoItem* pOldBoxInfoItem = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER );
+                if (
+                    !pOldBoxItem ||
+                    m_xLeftMF->get_value_changed_from_saved() ||
+                    m_xRightMF->get_value_changed_from_saved() ||
+                    m_xTopMF->get_value_changed_from_saved() ||
+                    m_xBottomMF->get_value_changed_from_saved() ||
+                    nMinValue == m_xLeftMF->get_value(FieldUnit::NONE) ||
+                    nMinValue == m_xRightMF->get_value(FieldUnit::NONE) ||
+                    nMinValue == m_xTopMF->get_value(FieldUnit::NONE) ||
+                    nMinValue == m_xBottomMF->get_value(FieldUnit::NONE) ||
+                    (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
+                   )
                 {
-                    const SvxBoxInfoItem* pOldBoxInfoItem = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER );
-                    if (
-                        !pOldBoxItem ||
-                        m_xLeftMF->get_value_changed_from_saved() ||
-                        m_xRightMF->get_value_changed_from_saved() ||
-                        m_xTopMF->get_value_changed_from_saved() ||
-                        m_xBottomMF->get_value_changed_from_saved() ||
-                        nMinValue == m_xLeftMF->get_value(FieldUnit::NONE) ||
-                        nMinValue == m_xRightMF->get_value(FieldUnit::NONE) ||
-                        nMinValue == m_xTopMF->get_value(FieldUnit::NONE) ||
-                        nMinValue == m_xBottomMF->get_value(FieldUnit::NONE) ||
-                        (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
-                       )
-                    {
-                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xLeftMF, eCoreUnit )), SvxBoxItemLine::LEFT  );
-                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xRightMF, eCoreUnit )), SvxBoxItemLine::RIGHT );
-                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xTopMF, eCoreUnit )), SvxBoxItemLine::TOP   );
-                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xBottomMF, eCoreUnit )), SvxBoxItemLine::BOTTOM);
-                    }
-                    else
-                    {
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::LEFT ), SvxBoxItemLine::LEFT);
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::RIGHT),  SvxBoxItemLine::RIGHT);
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::TOP  ), SvxBoxItemLine::TOP);
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM);
-                    }
-                    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
+                    aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xLeftMF, eCoreUnit )), SvxBoxItemLine::LEFT  );
+                    aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xRightMF, eCoreUnit )), SvxBoxItemLine::RIGHT );
+                    aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xTopMF, eCoreUnit )), SvxBoxItemLine::TOP   );
+                    aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_xBottomMF, eCoreUnit )), SvxBoxItemLine::BOTTOM);
                 }
                 else
-                    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );
+                {
+                    aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::LEFT ), SvxBoxItemLine::LEFT);
+                    aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::RIGHT),  SvxBoxItemLine::RIGHT);
+                    aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::TOP  ), SvxBoxItemLine::TOP);
+                    aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM);
+                }
+                aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
             }
         }
     }
@@ -1366,30 +1354,10 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
             m_xRightMF->set_min(0, FieldUnit::NONE);
             m_xTopMF->set_min(0, FieldUnit::NONE);
             m_xBottomMF->set_min(0, FieldUnit::NONE);
-            if(!bSpaceModified && !mbAllowPaddingWithoutBorders)
-            {
-                m_xLeftMF->set_value(0, FieldUnit::NONE);
-                m_xRightMF->set_value(0, FieldUnit::NONE);
-                m_xTopMF->set_value(0, FieldUnit::NONE);
-                m_xBottomMF->set_value(0, FieldUnit::NONE);
-            }
         }
         // for tables everything is allowed
         SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::TOP|SvxBoxInfoItemValidFlags::BOTTOM|SvxBoxInfoItemValidFlags::LEFT|SvxBoxInfoItemValidFlags::RIGHT;
 
-        // for other objects (paragraph, page, frame, character) the edit is disabled, if there's no border set
-        if(!(nSWMode & SwBorderModes::TABLE) && !mbAllowPaddingWithoutBorders)
-        {
-            if(bLineSet)
-            {
-                nValid  = (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Top)    == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Bottom) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Left)   == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Right ) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
-            }
-            else
-                nValid = SvxBoxInfoItemValidFlags::NONE;
-        }
         m_xLeftFT->set_sensitive( bool(nValid & SvxBoxInfoItemValidFlags::LEFT) );
         m_xRightFT->set_sensitive( bool(nValid & SvxBoxInfoItemValidFlags::RIGHT) );
         m_xTopFT->set_sensitive( bool(nValid & SvxBoxInfoItemValidFlags::TOP) );
