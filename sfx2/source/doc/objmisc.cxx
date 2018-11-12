@@ -374,7 +374,7 @@ void SfxObjectShell::SetReadOnly()
     // medium open mode is adjusted accordingly, and the write lock
     // on the file is removed.
 
-     if ( !pMedium || IsReadOnlyMedium() )
+    if ( !pMedium || IsReadOnlyMedium() )
         return;
 
     bool bWasROUI = IsReadOnly();
