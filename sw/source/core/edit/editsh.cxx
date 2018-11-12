@@ -815,7 +815,7 @@ void SwEditShell::SetNumberingRestart()
                                 if (nListLevel >= MAXLEVEL)
                                     nListLevel = MAXLEVEL - 1;
 
-                                 bIsNodeNum = pTextNd->GetNum()->GetNumber() ==
+                                bIsNodeNum = pTextNd->GetNum()->GetNumber() ==
                                     pNumRule->Get( static_cast<sal_uInt16>(nListLevel) ).GetStart();
                             }
                             if (bIsNodeNum)

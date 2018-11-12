@@ -357,11 +357,11 @@ Point PictReader::ReadPoint()
 
     pPict->ReadInt16( ny ).ReadInt16( nx );
 
-   Point aPoint( static_cast<long>(nx) - aBoundingRect.Left(),
+    Point aPoint( static_cast<long>(nx) - aBoundingRect.Left(),
                  static_cast<long>(ny) - aBoundingRect.Top() );
 
-   SAL_INFO("filter.pict", "ReadPoint: " << aPoint);
-   return aPoint;
+    SAL_INFO("filter.pict", "ReadPoint: " << aPoint);
+    return aPoint;
 }
 
 Point PictReader::ReadDeltaH(Point aBase)
@@ -490,13 +490,13 @@ sal_uLong PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 
     pPict->ReadUInt16( nPatType );
     if (nPatType==1) {
-            pattern.read(*pPict);
+        pattern.read(*pPict);
         nDataSize=ReadPixMapEtc(aBMP,false,true,nullptr,nullptr,false,false);
         // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
     }
     else if (nPatType==2) {
-            pattern.read(*pPict);
+        pattern.read(*pPict);
         // RGBColor
         sal_uInt16 nR, nG, nB;
         pPict->ReadUInt16( nR ).ReadUInt16( nG ).ReadUInt16( nB );

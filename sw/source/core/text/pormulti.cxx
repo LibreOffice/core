@@ -2164,7 +2164,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
     m_pCurr = pOldCurr;
     m_nStart = nOldStart;
-      SetPropFont( 0 );
+    SetPropFont( 0 );
 
     rMulti.SetLen( rMulti.GetRoot().GetLen() + ( rMulti.GetRoot().GetNext() ?
         rMulti.GetRoot().GetNext()->GetLen() : TextFrameIndex(0) ) );

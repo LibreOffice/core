@@ -728,7 +728,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                                 aState.mnX += displacement;
                                 aState.mnY += displacement;
                             }
-                        pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
+                            pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
                         }
                     }
                     pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;

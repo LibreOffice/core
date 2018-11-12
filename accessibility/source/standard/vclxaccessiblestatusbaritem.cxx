@@ -461,7 +461,7 @@ sal_Unicode VCLXAccessibleStatusBarItem::getCharacter( sal_Int32 nIndex )
 {
      OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::implGetCharacter( GetItemText(), nIndex );
+     return OCommonAccessibleText::implGetCharacter( GetItemText(), nIndex );
 }
 
 sal_Int32 VCLXAccessibleStatusBarItem::getCaretPosition()

@@ -1002,7 +1002,7 @@ void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
             ToolbarSaveInData* pToolbarSaveInData = static_cast<ToolbarSaveInData*>(
                 pPage->GetSaveInData() );
 
-               pToolbarSaveInData->ApplyToolbar( pToolbar );
+            pToolbarSaveInData->ApplyToolbar( pToolbar );
 
             SetCheckButtonState( pEntry, pEntryData->IsVisible() ?
                 SvButtonState::Checked : SvButtonState::Unchecked );

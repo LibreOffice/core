@@ -465,7 +465,7 @@ SwVbaDocument::getControlShape( const OUString& sName )
         uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY );
         if( xControlShape.is() )
         {
-             uno::Reference< container::XNamed > xNamed( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNamed > xNamed( xControlShape->getControl(), uno::UNO_QUERY_THROW );
             if( sName == xNamed->getName() )
             {
                 return aUnoObj;
@@ -527,7 +527,7 @@ SwVbaDocument::getFormControls()
     {
         uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
         uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-            uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
         // get the www-standard container ( maybe we should access the
         // 'www-standard' by name rather than index, this seems an
         // implementation detail

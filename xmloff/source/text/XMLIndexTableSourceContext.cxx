@@ -103,11 +103,11 @@ void XMLIndexTableSourceContext::ProcessAttribute(
              sal_uInt16 nTmp;
              if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
                                                  lcl_aReferenceTypeTokenMap))
-            {
+             {
                  nDisplayFormat = nTmp;
                  bDisplayFormatOK = true;
              }
-            break;
+             break;
         }
 
         default:

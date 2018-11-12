@@ -292,17 +292,17 @@ void ColorFieldControl::UpdateBitmap()
     sal_uInt8* pRGB_Vert = maRGB_Vert.data();
     sal_uInt16* pPercent_Vert = maPercent_Vert.data();
 
-        Color aBitmapColor(maColor);
+    Color aBitmapColor(maColor);
 
-        sal_uInt16 nHue, nSat, nBri;
-        maColor.RGBtoHSB(nHue, nSat, nBri);
+    sal_uInt16 nHue, nSat, nBri;
+    maColor.RGBtoHSB(nHue, nSat, nBri);
 
         // this has been unlooped for performance reason, please do not merge back!
 
-        sal_uInt16 y = nHeight,x;
+    sal_uInt16 y = nHeight,x;
 
-        switch(meMode)
-        {
+    switch(meMode)
+    {
         case HUE:
             while (y--)
             {
@@ -375,7 +375,7 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
-        }
+    }
 }
 
 void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )

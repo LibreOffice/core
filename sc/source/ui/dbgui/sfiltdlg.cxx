@@ -66,27 +66,27 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
         pRefInputEdit   ( nullptr ),
         bRefInputMode   ( false )
 {
-        get(pLbFilterArea,"lbfilterarea");
-        get(pEdFilterArea,"edfilterarea");
-        pEdFilterArea->SetReferences(this, get<VclFrame>("filterframe")->get_label_widget());
-        get(pRbFilterArea,"rbfilterarea");
-        pRbFilterArea->SetReferences(this, pEdFilterArea);
-        get(pBtnCase,"case");
-        get(pBtnRegExp,"regexp");
-        get(pBtnHeader,"header");
-        get(pBtnUnique,"unique");
-        get(pBtnCopyResult,"copyresult");
-        get(pLbCopyArea,"lbcopyarea");
-        get(pEdCopyArea,"edcopyarea");
-        pEdCopyArea->SetReferences(this, pBtnCopyResult);
-        get(pRbCopyArea,"rbcopyarea");
-        pRbCopyArea->SetReferences(this, pEdCopyArea);
-        get(pBtnDestPers,"destpers");
-        get(pFtDbAreaLabel,"dbarealabel");
-        get(pFtDbArea,"dbarea");
-        get(pBtnOk,"ok");
-        get(pBtnCancel,"cancel");
-        get(pExpander,"more");
+    get(pLbFilterArea,"lbfilterarea");
+    get(pEdFilterArea,"edfilterarea");
+    pEdFilterArea->SetReferences(this, get<VclFrame>("filterframe")->get_label_widget());
+    get(pRbFilterArea,"rbfilterarea");
+    pRbFilterArea->SetReferences(this, pEdFilterArea);
+    get(pBtnCase,"case");
+    get(pBtnRegExp,"regexp");
+    get(pBtnHeader,"header");
+    get(pBtnUnique,"unique");
+    get(pBtnCopyResult,"copyresult");
+    get(pLbCopyArea,"lbcopyarea");
+    get(pEdCopyArea,"edcopyarea");
+    pEdCopyArea->SetReferences(this, pBtnCopyResult);
+    get(pRbCopyArea,"rbcopyarea");
+    pRbCopyArea->SetReferences(this, pEdCopyArea);
+    get(pBtnDestPers,"destpers");
+    get(pFtDbAreaLabel,"dbarealabel");
+    get(pFtDbArea,"dbarea");
+    get(pBtnOk,"ok");
+    get(pBtnCancel,"cancel");
+    get(pExpander,"more");
 
     Init( rArgSet );
     pEdFilterArea->GrabFocus();

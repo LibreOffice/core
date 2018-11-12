@@ -242,7 +242,7 @@ namespace comphelper
 #if OSL_DEBUG_LEVEL > 0
         if ( m_aChildrenMap.end() == aDisposedPos )
         {
-               OSL_FAIL( "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
+            OSL_FAIL( "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
             // helper for diagnostics
             Reference< XAccessible > xOwningAccessible( m_aOwningAccessible );
             Reference< XAccessibleContext > xContext;

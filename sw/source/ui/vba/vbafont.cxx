@@ -144,7 +144,7 @@ SwVbaFont::setColorIndex( const uno::Any& _colorindex )
 uno::Any SAL_CALL
 SwVbaFont::getColorIndex()
 {
-        sal_Int32 nColor = 0;
+    sal_Int32 nColor = 0;
 
     XLRGBToOORGB( getColor() ) >>= nColor;
     sal_Int32 nElems = mxPalette->getCount();

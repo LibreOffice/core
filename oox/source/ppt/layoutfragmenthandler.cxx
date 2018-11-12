@@ -64,7 +64,7 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
             if( aShowMasterShapes.has() && !aShowMasterShapes.get() ) {
                 mpSlidePersistPtr->hideShapesAsMasterShapes();
             }
-        break;
+            break;
         }
         case PPT_TOKEN( hf ):               // CT_HeaderFooter
             return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );

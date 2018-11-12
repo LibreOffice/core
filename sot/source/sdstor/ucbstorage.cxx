@@ -1681,7 +1681,7 @@ void UCBStorage_Impl::CreateContent()
 
 void UCBStorage_Impl::ReadContent()
 {
-   if ( m_bListCreated )
+    if ( m_bListCreated )
         return;
 
     m_bListCreated = true;
@@ -2506,7 +2506,7 @@ bool UCBStorage::CopyTo( const OUString& rElemName, BaseStorage* pDest, const OU
     else
     {
         // for copying no optimization is useful, because in every case the stream data must be copied
-            UCBStorageElement_Impl* pElement = FindElement_Impl( rElemName );
+        UCBStorageElement_Impl* pElement = FindElement_Impl( rElemName );
         if ( pElement )
             return CopyStorageElement_Impl( *pElement, pDest, rNew );
         else

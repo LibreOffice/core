@@ -111,21 +111,21 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
-        css::uno::Reference< uno::XInterface > xChild;
+            css::uno::Reference< uno::XInterface > xChild;
 
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
             for( sal_Int32 nChild = 0; nChild < nChildCount; ++nChild )
             {
-            xChild.set(xParentContext->getAccessibleChild( nChild ), css::uno::UNO_QUERY);
-            if ( xMeMyselfAndI.get() == xChild.get() )
-            {
-                nRet = nChild;
-                break;
+                xChild.set(xParentContext->getAccessibleChild( nChild ), css::uno::UNO_QUERY);
+                if ( xMeMyselfAndI.get() == xChild.get() )
+                {
+                    nRet = nChild;
+                    break;
+                }
             }
         }
-        }
-   }
-   return nRet;
+    }
+    return nRet;
 }
 
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
@@ -229,16 +229,16 @@ void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
         SolarMutexGuard g;
 
         sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        AccessibleEventNotifier::TClientId nId( getClientId( ) );
-        setClientId( 0 );
-        AccessibleEventNotifier::revokeClient( nId );
-    }
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            AccessibleEventNotifier::TClientId nId( getClientId( ) );
+            setClientId( 0 );
+            AccessibleEventNotifier::revokeClient( nId );
+        }
     }
 }
 

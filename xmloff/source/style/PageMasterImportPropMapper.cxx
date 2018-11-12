@@ -251,7 +251,7 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
         {
             table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
-             if( pBorderWidths[i] )
+            if( pBorderWidths[i] )
             {
                 table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
@@ -274,7 +274,7 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
         {
             table::BorderLine2 aBorderLine;
             pHeaderBorders[i]->maValue >>= aBorderLine;
-             if( pHeaderBorderWidths[i] )
+            if( pHeaderBorderWidths[i] )
             {
                 table::BorderLine2 aBorderLineWidth;
                 pHeaderBorderWidths[i]->maValue >>= aBorderLineWidth;
@@ -297,7 +297,7 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
         {
             table::BorderLine2 aBorderLine;
             pFooterBorders[i]->maValue >>= aBorderLine;
-             if( pFooterBorderWidths[i] )
+            if( pFooterBorderWidths[i] )
             {
                 table::BorderLine2 aBorderLineWidth;
                 pFooterBorderWidths[i]->maValue >>= aBorderLineWidth;

@@ -569,8 +569,8 @@ DECLARE_OOXMLEXPORT_TEST(fdo77719, "fdo77719.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testNestedAlternateContent, "nestedAlternateContent.docx")
 {
-     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-     if (!pXmlDoc)
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
         return;
     // We check alternateContent  could not contains alternateContent (i.e. nested alternateContent)
     assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
@@ -676,11 +676,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76101, "fdo76101.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testSdtAndShapeOverlapping,"ShapeOverlappingWithSdt.docx")
 {
-     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-     if (!pXmlDoc)
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
          return;
-      assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
-      assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]/w:t[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]/w:t[1]");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testLockedCanvas, "fdo78658.docx")

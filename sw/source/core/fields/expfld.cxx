@@ -1176,7 +1176,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_SUBTYPE:
         {
             sal_Int16 nRet = 0;
-                nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
+            nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
             rAny <<= nRet;
         }
         break;

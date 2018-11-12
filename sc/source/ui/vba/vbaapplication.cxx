@@ -298,28 +298,28 @@ ScVbaApplication::getSelection()
     // if ScVbaShape::getType( xShape ) == office::MsoShapeType::msoAutoShape
     // and the uno object implements the com.sun.star.drawing.Text service
     // return a textboxshape object
-    sal_Int32 nType = ScVbaShape::getType( xShape );
-    if ( nType == office::MsoShapeType::msoAutoShape )
-    {
-        // TODO Oval with text box
-        if( ScVbaShape::getAutoShapeType( xShape ) == office::MsoAutoShapeType::msoShapeOval )
+        sal_Int32 nType = ScVbaShape::getType( xShape );
+        if ( nType == office::MsoShapeType::msoAutoShape )
         {
-            return uno::makeAny( uno::Reference< msforms::XOval >(new ScVbaOvalShape( mxContext, xShape, xShapes, xModel ) ) );
-        }
+            // TODO Oval with text box
+            if( ScVbaShape::getAutoShapeType( xShape ) == office::MsoAutoShapeType::msoShapeOval )
+            {
+                return uno::makeAny( uno::Reference< msforms::XOval >(new ScVbaOvalShape( mxContext, xShape, xShapes, xModel ) ) );
+            }
 
 
-        uno::Reference< lang::XServiceInfo > xShapeServiceInfo( xShape, uno::UNO_QUERY_THROW );
-        if ( xShapeServiceInfo->supportsService("com.sun.star.drawing.Text")  )
-        {
-                return uno::makeAny( uno::Reference< msforms::XTextBoxShape >(
-                            new ScVbaTextBoxShape( mxContext, xShape, xShapes, xModel ) ) );
+            uno::Reference< lang::XServiceInfo > xShapeServiceInfo( xShape, uno::UNO_QUERY_THROW );
+            if ( xShapeServiceInfo->supportsService("com.sun.star.drawing.Text")  )
+            {
+                    return uno::makeAny( uno::Reference< msforms::XTextBoxShape >(
+                                new ScVbaTextBoxShape( mxContext, xShape, xShapes, xModel ) ) );
+            }
         }
-    }
-    else if ( nType == office::MsoShapeType::msoLine )
-    {
-        return uno::makeAny( uno::Reference< msforms::XLine >( new ScVbaLineShape(
-                        mxContext, xShape, xShapes, xModel ) ) );
-    }
+        else if ( nType == office::MsoShapeType::msoLine )
+        {
+            return uno::makeAny( uno::Reference< msforms::XLine >( new ScVbaLineShape(
+                            mxContext, xShape, xShapes, xModel ) ) );
+        }
         return uno::makeAny( uno::Reference< msforms::XShape >(new ScVbaShape( this, mxContext, xShape, xShapes, xModel, ScVbaShape::getType( xShape ) ) ) );
     }
     else if( xServiceInfo->supportsService("com.sun.star.sheet.SheetCellRange") ||
@@ -715,7 +715,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
 {
     try
     {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
         switch( _cursor )
         {
             case excel::XlMousePointer::xlNorthwestArrow:
@@ -928,7 +928,7 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType )
     try
     {
         OUString sUrl;
-         xProps->getPropertyValue( _sPathType ) >>= sUrl;
+        xProps->getPropertyValue( _sPathType ) >>= sUrl;
 
         // if it's a list of paths then use the last one
         sal_Int32 nIndex =  sUrl.lastIndexOf( ';' ) ;

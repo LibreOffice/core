@@ -337,12 +337,12 @@ OUString createDesiredName(
         }
 
         // query, fragment present?
-    sal_Int32  nPos = aName.indexOf( '?' );
-    if ( nPos == -1 )
-      nPos = aName.indexOf( '#' );
+        sal_Int32  nPos = aName.indexOf( '?' );
+        if ( nPos == -1 )
+          nPos = aName.indexOf( '#' );
 
-    if ( nPos != -1 )
-      aName = aName.copy( 0, nPos );
+        if ( nPos != -1 )
+          aName = aName.copy( 0, nPos );
     }
     return aName;
 }

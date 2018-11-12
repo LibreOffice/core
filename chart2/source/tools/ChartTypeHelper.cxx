@@ -175,7 +175,7 @@ bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartTyp
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-         if(nDimensionCount==3)
+        if(nDimensionCount==3)
             return false;
 
         OUString aChartTypeName = xChartType->getChartType();
@@ -197,7 +197,7 @@ bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-         if(nDimensionCount==3)
+        if(nDimensionCount==3)
             return false;
 
         OUString aChartTypeName = xChartType->getChartType();

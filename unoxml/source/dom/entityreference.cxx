@@ -53,7 +53,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-       OUString aName;
+        OUString aName;
         if (m_aNodePtr != nullptr)
         {
             const xmlChar* pName = m_aNodePtr->name;

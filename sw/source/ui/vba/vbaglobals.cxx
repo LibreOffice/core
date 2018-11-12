@@ -61,7 +61,7 @@ SwVbaGlobals::getApplication()
     if ( !mxApplication.is() )
          mxApplication.set( new SwVbaApplication( mxContext) );
 
-       return mxApplication;
+    return mxApplication;
 }
 
 uno::Reference<word::XSystem > SAL_CALL

@@ -233,7 +233,7 @@ namespace connectivity
                 g_free(pFields[i]);
             }
         }
-       if(pFields)
+        if(pFields)
         {
             g_free(pFields);
             pFields=nullptr;

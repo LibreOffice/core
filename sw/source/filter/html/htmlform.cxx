@@ -495,7 +495,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
         uno::Reference< beans::XPropertySet > xPropSet( xShape, UNO_QUERY );
         uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
-                SwXShape *pSwShape = xTunnel.is() ?
+        SwXShape *pSwShape = xTunnel.is() ?
                     reinterpret_cast< SwXShape * >( sal::static_int_cast< sal_IntPtr>(
                     xTunnel->getSomething(SwXShape::getUnoTunnelId()) ))
                 : nullptr;
@@ -1687,7 +1687,7 @@ void SwHTMLParser::InsertInput()
     case HTMLInputType::Submit:
     case HTMLInputType::Reset:
         {
-             FormButtonType eButtonType;
+            FormButtonType eButtonType;
             switch( eType )
             {
             case HTMLInputType::Button:

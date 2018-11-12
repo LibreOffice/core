@@ -3573,11 +3573,11 @@ bool ScDPCollection::GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDime
                 if (!pRefDesc->HasRangeName())
                     continue;
 
-               if (pDesc->GetRangeName() == pRefDesc->GetRangeName())
-               {
+                if (pDesc->GetRangeName() == pRefDesc->GetRangeName())
+                {
                     *pGroups = rRefObj.GetSaveData()->GetExistingDimensionData();
                     return true;
-               }
+                }
             }
             else
             {

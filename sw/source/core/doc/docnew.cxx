@@ -426,8 +426,8 @@ SwDoc::~SwDoc()
 
     // Release the BaseLinks
     {
-       ::sfx2::SvLinkSources aTemp(getIDocumentLinksAdministration().GetLinkManager().GetServers());
-       for( const auto& rpLinkSrc : aTemp )
+        ::sfx2::SvLinkSources aTemp(getIDocumentLinksAdministration().GetLinkManager().GetServers());
+        for( const auto& rpLinkSrc : aTemp )
             rpLinkSrc->Closed();
 
         if( !getIDocumentLinksAdministration().GetLinkManager().GetLinks().empty() )
@@ -1147,12 +1147,12 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 
             aIndexBefore--;
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "CopyRange In: " << CNTNT_DOC( this ) );
+            SAL_INFO( "sw.docappend", "CopyRange In: " << CNTNT_DOC( this ) );
 #endif
             rSource.getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, /*bCopyAll=*/true, /*bCheckPos=*/true );
             // Note: aCpyPam is invalid now
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "CopyRange Out: " << CNTNT_DOC( this ) );
+            SAL_INFO( "sw.docappend", "CopyRange Out: " << CNTNT_DOC( this ) );
 #endif
 
             ++aIndexBefore;
@@ -1204,16 +1204,16 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 }
 
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "Idx Del " << CNTNT_IDX( aDelIdx ) );
-    SAL_INFO( "sw.docappend", "Idx Fix " << CNTNT_IDX( aFixupIdx ) );
+                SAL_INFO( "sw.docappend", "Idx Del " << CNTNT_IDX( aDelIdx ) );
+                SAL_INFO( "sw.docappend", "Idx Fix " << CNTNT_IDX( aFixupIdx ) );
 #endif
                 // just update the original instead of overwriting
                 SwFormatPageDesc *aDesc = static_cast< SwFormatPageDesc* >( pNewItem.get() );
 #ifdef DBG_UTIL
-if ( aDesc->GetPageDesc() )
-    SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName() );
-else
-    SAL_INFO( "sw.docappend", "PD New" );
+                if ( aDesc->GetPageDesc() )
+                    SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName() );
+                else
+                    SAL_INFO( "sw.docappend", "PD New" );
 #endif
                 if ( nStartPageNumber )
                     aDesc->SetNumOffset( nStartPageNumber );
@@ -1225,7 +1225,7 @@ else
                     pFormat->SetFormatAttr( *aDesc );
 
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "Idx " << CNTNT_IDX( aDelIdx ) );
+                SAL_INFO( "sw.docappend", "Idx " << CNTNT_IDX( aDelIdx ) );
 #endif
                 iDelNodes++;
             }
@@ -1241,7 +1241,7 @@ else
                     pTargetShell->SttEndDoc( false );
                 aDelIdx -= iDelNodes - 1;
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "iDelNodes: " << iDelNodes
+                SAL_INFO( "sw.docappend", "iDelNodes: " << iDelNodes
                               << "  Idx: " << aDelIdx.GetNode().GetIndex()
                               << "  EOE: " << GetNodes().GetEndOfExtras().GetIndex() );
 #endif

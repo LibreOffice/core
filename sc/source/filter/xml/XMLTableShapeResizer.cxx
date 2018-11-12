@@ -82,7 +82,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
         return;
 
     unique_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
-        const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         *pRefTokens, aRangeStr, pDoc, cSep, pDoc->GetGrammar());
     if (!pRefTokens->empty())

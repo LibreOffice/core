@@ -1643,7 +1643,7 @@ void SchXMLExportHelper_Impl::exportTable()
                     {
                         bExportString = false;
 
-                            ::sax::Converter::convertDouble(
+                        ::sax::Converter::convertDouble(
                                 msStringBuffer, fValue);
                         msString = msStringBuffer.makeStringAndClear();
                         mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
@@ -1698,7 +1698,7 @@ void SchXMLExportHelper_Impl::exportTable()
                         {
                             bExportString = false;
 
-                        ::sax::Converter::convertDouble(msStringBuffer, fValue);
+                            ::sax::Converter::convertDouble(msStringBuffer, fValue);
                             msString = msStringBuffer.makeStringAndClear();
                             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );

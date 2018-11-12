@@ -540,7 +540,7 @@ sal_Unicode VCLXAccessibleTabPage::getCharacter( sal_Int32 nIndex )
 {
      OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::implGetCharacter( GetPageText(), nIndex );
+     return OCommonAccessibleText::implGetCharacter( GetPageText(), nIndex );
 }
 
 sal_Int32 VCLXAccessibleTabPage::getCharacterCount()

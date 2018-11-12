@@ -2093,7 +2093,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
     Reference< XClipboard > xSelection;
-       TransferableDataHelper   aRet;
+    TransferableDataHelper   aRet;
 
     if( pWindow )
         xSelection = pWindow->GetPrimarySelection();

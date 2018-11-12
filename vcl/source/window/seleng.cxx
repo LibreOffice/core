@@ -158,7 +158,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                     pFunctionSet->DeselectAll();
                 else
                     pFunctionSet->DestroyAnchor();
-                   nFlags &= ~SelectionEngineFlags::HAS_ANCH; // bHasAnchor = false;
+                nFlags &= ~SelectionEngineFlags::HAS_ANCH; // bHasAnchor = false;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             // special case Single-Selection, to enable simple Select+Drag

@@ -133,7 +133,7 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
 
     if (aValidateIt != mChildren.end())
     {
-       OSL_ENSURE((*aValidateIt)->mpParent == this, "wrong parent");
+        OSL_ENSURE((*aValidateIt)->mpParent == this, "wrong parent");
 
         tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
 
@@ -406,7 +406,7 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
         mItLastValid = mChildren.end();
     }
 
-   OSL_ENSURE(mChildren.empty(), "MoveChildren failed!");
+    OSL_ENSURE(mChildren.empty(), "MoveChildren failed!");
 
 #ifdef DBG_UTIL
     IsSane(false);

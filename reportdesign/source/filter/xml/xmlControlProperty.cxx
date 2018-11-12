@@ -70,7 +70,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-     OUString sLocalName;
+        OUString sLocalName;
         const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         const OUString sValue = _xAttrList->getValueByIndex( i );

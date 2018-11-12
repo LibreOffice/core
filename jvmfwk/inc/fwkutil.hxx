@@ -55,9 +55,9 @@ struct Bootstrap :
             buf.append(SAL_CONFIGFILE("/jvmfwk3"));
             OUString sIni = buf.makeStringAndClear();
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
-        SAL_INFO("jfw.level2", "Using configuration file " << sIni);
-        return bootstrap;
-    }
+            SAL_INFO("jfw.level2", "Using configuration file " << sIni);
+            return bootstrap;
+        }
 };
 
 struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};

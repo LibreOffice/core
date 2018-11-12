@@ -406,8 +406,8 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     }
     else
     {
-            const SwFrame *pAnch = pFly->GetAnchorFrame();
-            Point aOrient( pAnch->getFrameArea().Pos() );
+        const SwFrame *pAnch = pFly->GetAnchorFrame();
+        Point aOrient( pAnch->getFrameArea().Pos() );
 
         if ( pFly->IsFlyInContentFrame() )
             aOrient.setX(rAbsPos.getX());
@@ -892,12 +892,14 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     SwFlyFrameFormat* pFormat = nullptr;
     SET_CURR_SHELL( this );
     StartAllAction();
+    {
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             pFormat = GetDoc()->getIDocumentContentOperations().InsertEmbObject(
                             rPaM, xObj, pFlyAttrSet );
             OSL_ENSURE(pFormat, "IDocumentContentOperations::InsertEmbObject failed.");
         }
+    }
     EndAllAction();
 
     if( pFormat )
@@ -1301,7 +1303,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     // SwWrtShell::CalcAndSetScale()
     if ( rRect.SSize() != pFly->getFramePrintArea().SSize() && !bSizeProt )
     {
-         Size aSz( rRect.SSize() );
+        Size aSz( rRect.SSize() );
 
         //JP 28.02.2001: Task 74707 - ask for fly in fly with automatic size
 

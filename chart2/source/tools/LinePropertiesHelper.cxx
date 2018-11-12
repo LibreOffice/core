@@ -42,7 +42,7 @@ void LinePropertiesHelper::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-     rOutProperties.emplace_back( "LineDash",
+    rOutProperties.emplace_back( "LineDash",
                    PROP_LINE_DASH,
                    cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND

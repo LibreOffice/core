@@ -433,8 +433,7 @@ start:
                 nRes = 0;
             else
             {
-                   ::OString aOStr = OUStringToOString
-                    ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
+                ::OString aOStr = OUStringToOString( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
                 nRes = aOStr.toInt64();
                 if( nRes == 0 )
                 {
@@ -544,8 +543,7 @@ start:
                 p->pOUString = new OUString;
 
             ::OString  aOStr  = OString::number( n );
-               (*p->pOUString) = ::OStringToOUString
-                ( aOStr, RTL_TEXTENCODING_ASCII_US );
+            (*p->pOUString) = ::OStringToOUString( aOStr, RTL_TEXTENCODING_ASCII_US );
             break;
         }
         case SbxOBJECT:
@@ -695,7 +693,7 @@ start:
                 nRes = 0;
             else
             {
-                   ::OString aOStr = OUStringToOString
+                ::OString aOStr = OUStringToOString
                     ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
                 sal_Int64 n64 = aOStr.toInt64();
                 if( n64 == 0 )
@@ -823,8 +821,7 @@ start:
             else
             {
                 ::OString  aOStr  = OString::number( n );
-                   (*p->pOUString) = ::OStringToOUString
-                    ( aOStr, RTL_TEXTENCODING_ASCII_US );
+                (*p->pOUString) = ::OStringToOUString( aOStr, RTL_TEXTENCODING_ASCII_US );
             }
             break;
         case SbxOBJECT:

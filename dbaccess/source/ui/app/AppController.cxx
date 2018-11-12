@@ -2159,7 +2159,7 @@ void OApplicationController::onSelectionChanged()
     if ( pView->getSelectionCount() == 1 )
     {
         const ElementType eType = pView->getElementType();
-          if ( pView->isALeafSelected() )
+        if ( pView->isALeafSelected() )
         {
             const OUString sName = pView->getQualifiedName( nullptr /* means 'first selected' */ );
             showPreviewFor( eType, sName );

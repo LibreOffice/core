@@ -43,7 +43,7 @@ public:
         sal_Int32 nLen = xIndexAccess->getCount();
         for ( sal_Int32 index = 0; index < nLen; ++index )
         {
-                uno::Reference< drawing::XControlShape > xControlShape( xIndexAccess->getByIndex( index), uno::UNO_QUERY);
+            uno::Reference< drawing::XControlShape > xControlShape( xIndexAccess->getByIndex( index), uno::UNO_QUERY);
             if ( xControlShape.is() )
                 vObjects.push_back( xControlShape );
         }
@@ -94,12 +94,12 @@ public:
 
         virtual uno::Any SAL_CALL nextElement(  ) override
         {
-                if ( nIndex < m_xIndexAccess->getCount() )
-        {
-            uno::Reference< drawing::XControlShape > xControlShape (  m_xIndexAccess->getByIndex( nIndex++ ), uno::UNO_QUERY_THROW );
+            if ( nIndex < m_xIndexAccess->getCount() )
+            {
+                uno::Reference< drawing::XControlShape > xControlShape (  m_xIndexAccess->getByIndex( nIndex++ ), uno::UNO_QUERY_THROW );
                 return uno::makeAny( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
-        }
-                throw container::NoSuchElementException();
+            }
+            throw container::NoSuchElementException();
         }
 };
 

@@ -943,7 +943,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                 {
                     if ( nVersion < 2 )
                     {
-                         if ( !pFD )
+                        if ( !pFD )
                         {
                             pFD.reset(new css::awt::FontDescriptor);
                             if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
@@ -1331,7 +1331,7 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
                 // will implicitly call property listeners, and this should not happen with
                 // our mutex locked
                 // #i23451#
-             setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
+            setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
         }
         else
             aGuard.clear();

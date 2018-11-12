@@ -378,7 +378,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         }
                         nFound = FUNC_Search( aOpts );
                         // create it just to overwrite it with stack cursor
-                         m_pWrtShell->CreateCursor();
+                        m_pWrtShell->CreateCursor();
                         // i#8288 restore the original cursor position
                         m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
                         m_pWrtShell->EndAllAction();

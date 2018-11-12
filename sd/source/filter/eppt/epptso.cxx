@@ -637,9 +637,9 @@ bool PropStateValue::ImplGetPropertyValue( const OUString& rString, bool bGetPro
     ePropState = css::beans::PropertyState_AMBIGUOUS_VALUE;
     bool bRetValue = true;
 #ifdef UNX
-        css::uno::Reference< css::beans::XPropertySetInfo >
+    css::uno::Reference< css::beans::XPropertySetInfo >
             aXPropSetInfo( mXPropSet->getPropertySetInfo() );
-        if ( !aXPropSetInfo.is() )
+    if ( !aXPropSetInfo.is() )
             return false;
 #endif
     try

@@ -1442,7 +1442,7 @@ sal_uInt32 EditEngine::CalcTextWidth()
         pImpEditEngine->FormatDoc();
 
     sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true ) : pImpEditEngine->GetTextHeight();
-     return nWidth;
+    return nWidth;
 }
 
 void EditEngine::SetUpdateMode( bool bUpdate )

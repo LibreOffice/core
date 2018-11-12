@@ -359,10 +359,10 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
     xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
-       uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-       xSrc->setOutputStream(xOut);
+    uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
+    xSrc->setOutputStream(xOut);
 
-       uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
+    uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
         uno::UNO_QUERY);
 
     rtl::Reference<SwXMLTextBlockExport> xExp( new SwXMLTextBlockExport( xContext, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler) );

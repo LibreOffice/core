@@ -492,9 +492,9 @@ void ControllerCommandDispatch::initialize()
         if( xModifyBroadcaster.is())
             xModifyBroadcaster->addModifyListener( this );
 
-                // Listen selection modifications (Arrangement feature - issue 63017).
-                if( m_xSelectionSupplier.is() )
-                        m_xSelectionSupplier->addSelectionChangeListener( this );
+        // Listen selection modifications (Arrangement feature - issue 63017).
+        if( m_xSelectionSupplier.is() )
+            m_xSelectionSupplier->addSelectionChangeListener( this );
 
         if( m_apModelState.get() && xModel.is())
             m_apModelState->update( xModel );

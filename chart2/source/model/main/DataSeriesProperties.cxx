@@ -78,7 +78,7 @@ void DataSeriesProperties::AddDefaultsToMap(
     // PROP_DATASERIES_ATTRIBUTED_DATA_POINTS has no default
 
     // add properties of service DataPointProperties
-     DataPointProperties::AddDefaultsToMap( rOutMap );
+    DataPointProperties::AddDefaultsToMap( rOutMap );
 }
 
 }  // namespace chart

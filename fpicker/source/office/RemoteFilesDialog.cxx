@@ -783,7 +783,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl, Button*, void )
             m_bIsUpdated = true;
 
             EnableControls();
-      break;
+            break;
         }
         case RET_CANCEL :
         default :

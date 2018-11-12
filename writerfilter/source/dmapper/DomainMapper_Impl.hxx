@@ -670,7 +670,7 @@ public:
     {
         if(!m_pFontTable)
             m_pFontTable = new FontTable();
-         return m_pFontTable;
+        return m_pFontTable;
     }
     StyleSheetTablePtr const & GetStyleSheetTable()
     {

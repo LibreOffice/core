@@ -250,11 +250,11 @@ void HWPFile::ReadParaList(std::vector< std::unique_ptr<HWPPara> > &aplist, unsi
     unsigned char prev_etcflag = 0;
     while (spNode->Read(*this, flag))
     {
-         if( !(spNode->etcflag & 0x04) ){
+        if( !(spNode->etcflag & 0x04) ){
           tmp_etcflag = spNode->etcflag;
           spNode->etcflag = prev_etcflag;
           prev_etcflag = tmp_etcflag;
-         }
+        }
         if (spNode->nch && spNode->reuse_shape)
         {
             if (!aplist.empty()){

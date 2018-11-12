@@ -136,7 +136,7 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
 void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 {
-   const SfxPoolItem* pPoolItem = nullptr;
+    const SfxPoolItem* pPoolItem = nullptr;
 
     // show description
     SfxItemState aState = rInAttrs->GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );

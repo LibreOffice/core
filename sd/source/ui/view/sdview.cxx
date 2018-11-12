@@ -854,7 +854,7 @@ void View::SetMarkedOriginalSize()
                 {
                     // TODO/LEAN: working with VisualArea can switch object to running state
 
-                       sal_Int64 nAspect = static_cast<SdrOle2Obj*>(pObj)->GetAspect();
+                    sal_Int64 nAspect = static_cast<SdrOle2Obj*>(pObj)->GetAspect();
                     Size aOleSize;
 
                     if ( nAspect == embed::Aspects::MSOLE_ICON )

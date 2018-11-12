@@ -288,7 +288,7 @@ void ShapeController::executeDispatch_FormatArea()
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr< AbstractSvxAreaTabDialog > pDlg(
+            ScopedVclPtr< AbstractSvxAreaTabDialog > pDlg(
                     pFact->CreateSvxAreaTabDialog(pChartWindow->GetFrameWeld(), &aAttr, &pDrawModelWrapper->getSdrModel(), true));
             if ( pDlg->Execute() == RET_OK )
             {

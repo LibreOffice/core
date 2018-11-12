@@ -705,12 +705,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor2Item( aAmbientSpot2Color ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection2Item( aSpotLight2 ) );
 
-                sal_uInt8 nSpotLight3 = 70;
-                basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
-                pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
-                Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
-                pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
-                pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
+            sal_uInt8 nSpotLight3 = 70;
+            basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
+            Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
 
             double fSpecular = GetDouble( rGeometryItem, "Specularity", 0 ) / 100;
             bool bMetal = GetBool( rGeometryItem, "Metal", false );

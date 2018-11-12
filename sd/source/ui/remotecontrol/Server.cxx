@@ -285,7 +285,7 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
         Reference<XSingleServiceFactory> xChildFactory (
             xConfig, UNO_QUERY);
         Reference<XNameReplace> xChild( xChildFactory->createInstance(), UNO_QUERY);
-                Any aValue;
+        Any aValue;
         if (xChild.is())
         {
             // Check whether the client is already saved

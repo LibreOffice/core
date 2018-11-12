@@ -64,7 +64,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
                     xRow->getString(5),
                     "",
                     "");
-                    xRet = pRet;
+            xRet = pRet;
         }
     }
 
@@ -80,7 +80,7 @@ void OEvoabTables::impl_refresh(  )
 
 void OEvoabTables::disposing()
 {
-m_xMetaData.clear();
+    m_xMetaData.clear();
     OCollection::disposing();
 }
 

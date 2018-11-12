@@ -155,7 +155,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         SolarMutexGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
 
         CreateTextHelper();

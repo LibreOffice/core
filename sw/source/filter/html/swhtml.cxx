@@ -725,23 +725,23 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
 #if OSL_DEBUG_LEVEL > 0
 // !!! shouldn't be possible, or ??
-OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound().nNode.GetIndex(),
-            "Pam.Bound1 is still in the node" );
-OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound( false ).nNode.GetIndex(),
-            "Pam.Bound2 is still in the node" );
+                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound().nNode.GetIndex(),
+                    "Pam.Bound1 is still in the node" );
+                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound( false ).nNode.GetIndex(),
+                    "Pam.Bound2 is still in the node" );
 
-if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().nNode.GetIndex() )
-{
-    const sal_Int32 nCntPos = m_pPam->GetBound().nContent.GetIndex();
-    m_pPam->GetBound().nContent.Assign( pTextNode,
-                    pTextNode->GetText().getLength() + nCntPos );
-}
-if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
-{
-    const sal_Int32 nCntPos = m_pPam->GetBound( false ).nContent.GetIndex();
-    m_pPam->GetBound( false ).nContent.Assign( pTextNode,
-                    pTextNode->GetText().getLength() + nCntPos );
-}
+                if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().nNode.GetIndex() )
+                {
+                    const sal_Int32 nCntPos = m_pPam->GetBound().nContent.GetIndex();
+                    m_pPam->GetBound().nContent.Assign( pTextNode,
+                                    pTextNode->GetText().getLength() + nCntPos );
+                }
+                if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
+                {
+                    const sal_Int32 nCntPos = m_pPam->GetBound( false ).nContent.GetIndex();
+                    m_pPam->GetBound( false ).nContent.Assign( pTextNode,
+                                    pTextNode->GetText().getLength() + nCntPos );
+                }
 #endif
                 // Keep character attribute!
                 SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
@@ -2215,7 +2215,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     bool bScript = false;
                     sal_uInt16 nScriptItem;
                     bool bInsert = true;
-                       lcl_swhtml_getItemInfo( *pAttr, bScript,
+                    lcl_swhtml_getItemInfo( *pAttr, bScript,
                                             nScriptItem );
                         // set previous part
                     if( bScript )
@@ -4730,9 +4730,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 
     // if applicable correct the paragraph indent
     const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
-    bool bSetLRSpace;
-
-           bSetLRSpace = nLeftMargin != rLRItem.GetTextLeft() ||
+    bool bSetLRSpace = nLeftMargin != rLRItem.GetTextLeft() ||
                       nFirstLineIndent != rLRItem.GetTextFirstLineOfst() ||
                       nRightMargin != rLRItem.GetRight();
 

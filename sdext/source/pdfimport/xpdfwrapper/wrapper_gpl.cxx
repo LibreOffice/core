@@ -64,7 +64,7 @@ int main(int argc, char **argv)
             for (int j = k; j < argc; ++j)
                 argv[j] = argv[j+2];
         }
-    ++k;
+        ++k;
     }
 
     // read config file

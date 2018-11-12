@@ -84,7 +84,7 @@ bool SfxGlobalNameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 // virtual
 bool SfxGlobalNameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-       css::uno::Sequence< sal_Int8 > aSeq( 16 );
+    css::uno::Sequence< sal_Int8 > aSeq( 16 );
     void const * pData = &m_aName.GetCLSID();
     memcpy( aSeq.getArray(), pData, 16 );
     rVal <<= aSeq;

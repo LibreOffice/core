@@ -141,7 +141,7 @@ PageSizeControl::PageSizeControl( sal_uInt16 nId, vcl::Window* pParent )
                 Swap( aPaperSize );
             }
 
-                maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FieldUnit::TWIP );
+            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FieldUnit::TWIP );
             aWidthStr = localeDataWrapper.getNum(
                 maWidthHeightField->GetValue(),
                 maWidthHeightField->GetDecimalDigits(),

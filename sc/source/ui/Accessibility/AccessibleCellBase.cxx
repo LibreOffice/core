@@ -74,7 +74,7 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 
 bool ScAccessibleCellBase::isVisible()
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     // test whether the cell is hidden (column/row - hidden/filtered)
     bool bVisible(true);

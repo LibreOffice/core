@@ -268,9 +268,9 @@ sal_Int32 SAL_CALL
                     nIndex = i;
             }
         }
-   }
+    }
 
-   return nIndex;
+    return nIndex;
 }
 
 sal_Int16 SAL_CALL

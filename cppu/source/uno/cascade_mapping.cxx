@@ -271,14 +271,14 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         OUString     envDcp = uno_envType;
 
         envDcp += from_envPurpose;
-         uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
+        uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
     }
     else if (from_envType == uno_envType && to_envType != uno_envType) // UNO -> <ANY>?
         // mediate via uno(context)
     {
         OUString     envDcp = uno_envType;
 
-         envDcp += to_envPurpose;
+        envDcp += to_envPurpose;
         uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
     }
     else // everything else

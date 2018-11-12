@@ -934,7 +934,7 @@ bool SwTextFrame::CalcPreps()
                         const SwCharRange aFollowRg(GetFollow()->GetOfst(), TextFrameIndex(1));
                         pPara->GetReformat() += aFollowRg;
                         // We should continue!
-                    bRet = false;
+                        bRet = false;
                     }
                 }
             }

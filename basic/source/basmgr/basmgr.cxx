@@ -1443,7 +1443,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
 
             if ( nBigModules )
             {
-                 _out_rModuleNames.swap(aBigModules);
+                _out_rModuleNames.swap(aBigModules);
                 return true;
             }
         }

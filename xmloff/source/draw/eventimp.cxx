@@ -269,124 +269,124 @@ void SdXMLEventContext::EndElement()
         OUString sAPIEventName;
         uno::Sequence< beans::PropertyValue > aProperties;
 
-            sAPIEventName = "OnClick";
+        sAPIEventName = "OnClick";
 
-            if( mbScript )
-                meClickAction = ClickAction_MACRO;
+        if( mbScript )
+            meClickAction = ClickAction_MACRO;
 
-            sal_Int32 nPropertyCount = 2;
-            switch( meClickAction )
-            {
-                case ClickAction_NONE:
-                case ClickAction_PREVPAGE:
-                case ClickAction_NEXTPAGE:
-                case ClickAction_FIRSTPAGE:
-                case ClickAction_LASTPAGE:
-                case ClickAction_INVISIBLE:
-                case ClickAction_STOPPRESENTATION:
-                    break;
-                case ClickAction_PROGRAM:
-                case ClickAction_VERB:
-                case ClickAction_BOOKMARK:
-                case ClickAction_DOCUMENT:
-                    nPropertyCount += 1;
-                    break;
-                case ClickAction_MACRO:
-                    if ( msLanguage.equalsIgnoreAsciiCase("starbasic") )
-                        nPropertyCount += 1;
-                    break;
-
-                case ClickAction_SOUND:
-                    nPropertyCount += 2;
-                    break;
-
-                case ClickAction_VANISH:
-                    nPropertyCount += 4;
-                    break;
-                default:
-                    break;
-            }
-
-            aProperties.realloc( nPropertyCount );
-            beans::PropertyValue* pProperties = aProperties.getArray();
-
-            if( ClickAction_MACRO == meClickAction )
-            {
+        sal_Int32 nPropertyCount = 2;
+        switch( meClickAction )
+        {
+            case ClickAction_NONE:
+            case ClickAction_PREVPAGE:
+            case ClickAction_NEXTPAGE:
+            case ClickAction_FIRSTPAGE:
+            case ClickAction_LASTPAGE:
+            case ClickAction_INVISIBLE:
+            case ClickAction_STOPPRESENTATION:
+                break;
+            case ClickAction_PROGRAM:
+            case ClickAction_VERB:
+            case ClickAction_BOOKMARK:
+            case ClickAction_DOCUMENT:
+                nPropertyCount += 1;
+                break;
+            case ClickAction_MACRO:
                 if ( msLanguage.equalsIgnoreAsciiCase("starbasic") )
+                    nPropertyCount += 1;
+                break;
+
+            case ClickAction_SOUND:
+                nPropertyCount += 2;
+                break;
+
+            case ClickAction_VANISH:
+                nPropertyCount += 4;
+                break;
+            default:
+                break;
+        }
+
+        aProperties.realloc( nPropertyCount );
+        beans::PropertyValue* pProperties = aProperties.getArray();
+
+        if( ClickAction_MACRO == meClickAction )
+        {
+            if ( msLanguage.equalsIgnoreAsciiCase("starbasic") )
+            {
+                OUString sLibrary;
+                const OUString& rApp = GetXMLToken( XML_APPLICATION );
+                const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
+                if( msMacroName.getLength() > rApp.getLength()+1 &&
+                    msMacroName.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
+                    ':' == msMacroName[rApp.getLength()] )
                 {
-                    OUString sLibrary;
-                    const OUString& rApp = GetXMLToken( XML_APPLICATION );
-                    const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
-                    if( msMacroName.getLength() > rApp.getLength()+1 &&
-                        msMacroName.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
-                        ':' == msMacroName[rApp.getLength()] )
-                    {
-                        sLibrary = "StarOffice";
-                        msMacroName = msMacroName.copy( rApp.getLength()+1 );
-                    }
-                    else if( msMacroName.getLength() > rDoc.getLength()+1 &&
-                        msMacroName.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
-                        ':' == msMacroName[rDoc.getLength()] )
-                    {
-                        sLibrary = rDoc;
-                        msMacroName = msMacroName.copy( rDoc.getLength()+1 );
-                    }
-
-                    pProperties->Name = "EventType";
-                    pProperties->Handle = -1;
-                    pProperties->Value <<= OUString( "StarBasic" );
-                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                    pProperties++;
-
-                    pProperties->Name = "MacroName";
-                    pProperties->Handle = -1;
-                    pProperties->Value <<= msMacroName;
-                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                    pProperties++;
-
-                    pProperties->Name = "Library";
-                    pProperties->Handle = -1;
-                    pProperties->Value <<= sLibrary;
-                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    sLibrary = "StarOffice";
+                    msMacroName = msMacroName.copy( rApp.getLength()+1 );
                 }
-                else
+                else if( msMacroName.getLength() > rDoc.getLength()+1 &&
+                    msMacroName.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
+                    ':' == msMacroName[rDoc.getLength()] )
                 {
-                    pProperties->Name = "EventType";
-                    pProperties->Handle = -1;
-                    pProperties->Value <<= OUString( "Script" );
-                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                    pProperties++;
-
-                    pProperties->Name = "Script";
-                    pProperties->Handle = -1;
-                    pProperties->Value <<= msMacroName;
-                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    sLibrary = rDoc;
+                    msMacroName = msMacroName.copy( rDoc.getLength()+1 );
                 }
+
+                pProperties->Name = "EventType";
+                pProperties->Handle = -1;
+                pProperties->Value <<= OUString( "StarBasic" );
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
+
+                pProperties->Name = "MacroName";
+                pProperties->Handle = -1;
+                pProperties->Value <<= msMacroName;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
+
+                pProperties->Name = "Library";
+                pProperties->Handle = -1;
+                pProperties->Value <<= sLibrary;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
             }
             else
             {
                 pProperties->Name = "EventType";
                 pProperties->Handle = -1;
-                pProperties->Value <<= OUString( "Presentation" );
+                pProperties->Value <<= OUString( "Script" );
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
-                // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same xml event
-                // so check here if its really a bookmark or maybe a document
-                if( meClickAction == ClickAction_BOOKMARK )
-                {
-                    if( !msBookmark.startsWith( "#" ) )
-                        meClickAction = ClickAction_DOCUMENT;
-                }
-
-                pProperties->Name = "ClickAction";
+                pProperties->Name = "Script";
                 pProperties->Handle = -1;
-                pProperties->Value <<= meClickAction;
+                pProperties->Value <<= msMacroName;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                pProperties++;
+            }
+        }
+        else
+        {
+            pProperties->Name = "EventType";
+            pProperties->Handle = -1;
+            pProperties->Value <<= OUString( "Presentation" );
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
 
-                switch( meClickAction )
-                {
+            // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same xml event
+            // so check here if its really a bookmark or maybe a document
+            if( meClickAction == ClickAction_BOOKMARK )
+            {
+                if( !msBookmark.startsWith( "#" ) )
+                    meClickAction = ClickAction_DOCUMENT;
+            }
+
+            pProperties->Name = "ClickAction";
+            pProperties->Handle = -1;
+            pProperties->Value <<= meClickAction;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
+
+            switch( meClickAction )
+            {
                 case ClickAction_NONE:
                 case ClickAction_PREVPAGE:
                 case ClickAction_NEXTPAGE:
@@ -448,8 +448,8 @@ void SdXMLEventContext::EndElement()
                     break;
                 default:
                     break;
-                }
             }
+        }
         xEvents->replaceByName( sAPIEventName, uno::Any( aProperties ) );
 
     } while(false);

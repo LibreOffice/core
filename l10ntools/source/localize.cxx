@@ -230,7 +230,7 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                             cerr
                                 << "Error: Cannot remove entryless pot file: "
                                 << sOutPath << "\n";
-                                throw false; //TODO
+                            throw false; //TODO
                         }
                     }
                 }

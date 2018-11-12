@@ -2255,7 +2255,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
         Any aSelection = xSelSupplier->getSelection();
         DBG_ASSERT(aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
         Reference< XPropertySet >  xSelection;
-         aSelection >>= xSelection;
+        aSelection >>= xSelection;
         if (xSelection.is())
         {
             Reference< XPropertySet > xCol;

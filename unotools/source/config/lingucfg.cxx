@@ -634,19 +634,20 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                     { rOpt.bROIsAutoReplaceUniqueEntries = pROStates[i]; rVal >>= rOpt.bIsAutoReplaceUniqueEntries;  } break;
 
                 case UPH_IS_DIRECTION_TO_SIMPLIFIED :
-                    { rOpt.bROIsDirectionToSimplified = pROStates[i];
-                            if( ! (rVal >>= rOpt.bIsDirectionToSimplified) )
+                    {
+                        rOpt.bROIsDirectionToSimplified = pROStates[i];
+                        if( ! (rVal >>= rOpt.bIsDirectionToSimplified) )
+                        {
+                            //default is locale dependent:
+                            if (MsLangId::isTraditionalChinese(rOpt.nDefaultLanguage_CJK))
                             {
-                                //default is locale dependent:
-                                if (MsLangId::isTraditionalChinese(rOpt.nDefaultLanguage_CJK))
-                                {
-                                    rOpt.bIsDirectionToSimplified = false;
-                                }
-                                else
-                                {
-                                    rOpt.bIsDirectionToSimplified = true;
-                                }
+                                rOpt.bIsDirectionToSimplified = false;
                             }
+                            else
+                            {
+                                rOpt.bIsDirectionToSimplified = true;
+                            }
+                        }
                     } break;
                 case UPH_IS_USE_CHARACTER_VARIANTS :
                     { rOpt.bROIsUseCharacterVariants = pROStates[i]; rVal >>= rOpt.bIsUseCharacterVariants;  } break;

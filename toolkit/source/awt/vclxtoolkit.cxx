@@ -1194,7 +1194,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     *ppNewComp = new VCLXFrame;
                     // Frame control needs to receive
                     // Mouse events
-                pGroupBox->SetMouseTransparent( false );
+                    pGroupBox->SetMouseTransparent( false );
                 }
             break;
             case WindowType::HELPBUTTON:

@@ -629,8 +629,8 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
             if( !pSrcFrame )
             {
                 SwFootnoteFrame *pNew = new SwFootnoteFrame(pDoc->GetDfltFrameFormat(),this,this,pFootnote);
-                 SwNodeIndex aIdx( *pFootnote->GetStartNode(), 1 );
-                 ::InsertCnt_( pNew, pDoc, aIdx.GetIndex() );
+                SwNodeIndex aIdx( *pFootnote->GetStartNode(), 1 );
+                ::InsertCnt_( pNew, pDoc, aIdx.GetIndex() );
                 pDoc->getIDocumentLayoutAccess().GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrame != this )

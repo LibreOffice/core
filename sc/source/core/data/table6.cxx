@@ -130,7 +130,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     {
         if ( bDoBack )
         {
-           sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+            sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
             bFound = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
             // change results to definition before 614:
             --nEnd;

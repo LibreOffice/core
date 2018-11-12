@@ -123,7 +123,7 @@ class DemoRenderer
                                             0, 1 );
             rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );
             uno::Sequence< beans::PropertyValue > aExtraFontProperties;
-             mxDefaultFont = xCanvas->createFont( aFontRequest, aExtraFontProperties, aFontMatrix );
+            mxDefaultFont = xCanvas->createFont( aFontRequest, aExtraFontProperties, aFontMatrix );
             if( !mxDefaultFont.is() )
                 fprintf( stderr, "Failed to create font\n" );
         }

@@ -169,7 +169,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pVDev = VclPtr<VirtualDevice>::Create(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
-         pVDev->SetOutputSize( aRectSize );
+        pVDev->SetOutputSize( aRectSize );
         aOrgRect = aRect;
         pVDev->SetFillColor( aBackColor );
         pVDev->SetLineColor(COL_LIGHTGRAY);
@@ -544,7 +544,7 @@ void NumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pVDev = VclPtr<VirtualDevice>::Create(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
-         pVDev->SetOutputSize( aRectSize );
+        pVDev->SetOutputSize( aRectSize );
         aOrgRect = aRect;
         pVDev->SetFillColor( aBackColor );
         pVDev->SetLineColor(COL_LIGHTGRAY);

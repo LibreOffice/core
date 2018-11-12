@@ -2351,7 +2351,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
         {
             // We need the original size from the portion
             sal_Int32 nTxtPortionStart = pPortion->GetTextPortions().GetStartPos( nSplitPortion );
-               SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
+            SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
             aTmpFont.SetPhysFont( GetRefDevice() );
             GetRefDevice()->Push( PushFlags::TEXTLANGUAGE );

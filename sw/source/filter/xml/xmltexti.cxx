@@ -557,7 +557,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
     // We'll need a (valid) URL. If we don't have do not insert the link and return early.
     // Copy URL into URL object on the way.
-       INetURLObject aURLObj;
+    INetURLObject aURLObj;
     bool bValidURL = !rHRef.isEmpty() &&
                      aURLObj.SetURL( URIHelper::SmartRel2Abs(
                                 INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
@@ -694,7 +694,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     // We'll need a (valid) URL, or we need a MIME type. If we don't have
     // either, do not insert plugin and return early. Copy URL into URL object
     // on the way.
-       INetURLObject aURLObj;
+    INetURLObject aURLObj;
 
     bool bValidURL = !rHRef.isEmpty() &&
                      aURLObj.SetURL( URIHelper::SmartRel2Abs( INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );

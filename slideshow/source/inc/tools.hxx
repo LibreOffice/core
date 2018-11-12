@@ -389,7 +389,7 @@ namespace slideshow
                                       css::uno::UNO_QUERY_THROW );
                 rFunctor( xChildNode );
             }
-                                                                                                                                                                                                                           return true;
+            return true;
         }
         catch( css::uno::Exception& )
         {

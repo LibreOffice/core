@@ -933,7 +933,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             }
         }
 
-            rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
+        rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
 
         if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(

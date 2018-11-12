@@ -461,7 +461,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     if (nRet <= 0)
         SAL_WARN("sal.osl.pipe", "send() failed: " << UnixErrnoString(errno));
 
-     return nRet;
+    return nRet;
 }
 
 oslPipeError SAL_CALL osl_getLastPipeError(SAL_UNUSED_PARAMETER oslPipe)

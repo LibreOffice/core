@@ -79,7 +79,7 @@ void HViews::impl_refresh(  )
 
 void HViews::disposing()
 {
-m_xMetaData.clear();
+    m_xMetaData.clear();
     OCollection::disposing();
 }
 

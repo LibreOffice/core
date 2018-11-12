@@ -71,7 +71,7 @@ OUString SAL_CALL OEvoabResultSet::getImplementationName(  )
 
  Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  )
 {
-     Sequence< OUString > aSupported { "com.sun.star.sdbc.ResultSet" };
+    Sequence< OUString > aSupported { "com.sun.star.sdbc.ResultSet" };
     return aSupported;
 }
 
@@ -1031,7 +1031,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-css::uno::WeakReferenceHelper      aStatement(static_cast<OWeakObject*>(m_pStatement));
+    css::uno::WeakReferenceHelper      aStatement(static_cast<OWeakObject*>(m_pStatement));
     return aStatement.get();
 }
 

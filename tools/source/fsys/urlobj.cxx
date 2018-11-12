@@ -3246,7 +3246,7 @@ bool INetURLObject::insertName(OUString const & rTheName,
         bool bSkip = pPrefixEnd < pEnd && *pPrefixEnd == '/';
         bInsertSlash = false;
         pSuffixBegin = pPathEnd;
-         while (nIndex-- > 0)
+        while (nIndex-- > 0)
             for (;;)
             {
                 if (bSkip)

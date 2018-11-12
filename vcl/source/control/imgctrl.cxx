@@ -154,7 +154,7 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = pDev->LogicToPixel( rSize );
-          tools::Rectangle aRect( aPos, aSize );
+    tools::Rectangle aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();

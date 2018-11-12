@@ -59,7 +59,7 @@ OUString SAL_CALL Meaning::getMeaning()
 Sequence< OUString > SAL_CALL Meaning::querySynonyms()
 {
     MutexGuard  aGuard( GetLinguMutex() );
-        return aSyn;
+    return aSyn;
 }
 
 void Meaning::SetSynonyms( const Sequence< OUString > &rSyn )

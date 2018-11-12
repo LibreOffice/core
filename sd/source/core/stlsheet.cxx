@@ -361,10 +361,10 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
                 aRealStyle = pSheet->GetName();
         }
 
-            if( aRealStyle.indexOf(aSep) >= 0)
-            {
-                aRealStyle = aRealStyle.copy(0,(aRealStyle.indexOf(aSep) + aSep.getLength()));
-            }
+        if( aRealStyle.indexOf(aSep) >= 0)
+        {
+            aRealStyle = aRealStyle.copy(0,(aRealStyle.indexOf(aSep) + aSep.getLength()));
+        }
     }
 
     /* now map from the name (specified for country language) to the internal

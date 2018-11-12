@@ -627,8 +627,8 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     // Bring my Format (may be void) to a persistent Format.
     // The Supplier together with the Key is already persistent, but that doesn't mean
     // we have to save the Supplier (which would be quite some overhead)
-        Reference<XNumberFormatsSupplier>  xSupplier;
-        Any aFmtKey;
+    Reference<XNumberFormatsSupplier>  xSupplier;
+    Any aFmtKey;
     bool bVoidKey = true;
     if (m_xAggregateSet.is())
     {

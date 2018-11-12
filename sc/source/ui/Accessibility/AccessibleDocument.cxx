@@ -495,16 +495,16 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
     for (sal_Int32 index=0;index<count;index++)
     {
         ScAccessibleShapeData* pShape = maZOrderedShapes[index];
-                if (pShape)
+        if (pShape)
+        {
+            rtl::Reference< ::accessibility::AccessibleShape > pAccShape(pShape->pAccShape);
+            if (pAccShape.is() && ::accessibility::ShapeTypeHandler::Instance().GetTypeId (pAccShape->GetXShape()) == ::accessibility::DRAWING_CONTROL)
             {
-                rtl::Reference< ::accessibility::AccessibleShape > pAccShape(pShape->pAccShape);
-                if (pAccShape.is() && ::accessibility::ShapeTypeHandler::Instance().GetTypeId (pAccShape->GetXShape()) == ::accessibility::DRAWING_CONTROL)
-                {
                 ::accessibility::AccessibleControlShape *pCtlAccShape = static_cast < ::accessibility::AccessibleControlShape* >(pAccShape.get());
                 if (pCtlAccShape && pCtlAccShape->GetControlModel() == pSet)
                     return pCtlAccShape;
-              }
-                }
+            }
+        }
     }
     return nullptr;
 }
@@ -516,12 +516,12 @@ ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing
     for (sal_Int32 index=0;index<count;index++)
     {
         ScAccessibleShapeData* pShape = maZOrderedShapes[index];
-            if (pShape && pShape->xShape == xShape )
-            {
-                css::uno::Reference< css::accessibility::XAccessible > xNewChild(  pShape->pAccShape.get() );
-                if(xNewChild.get())
+        if (pShape && pShape->xShape == xShape )
+        {
+            css::uno::Reference< css::accessibility::XAccessible > xNewChild(  pShape->pAccShape.get() );
+            if(xNewChild.get())
                 return xNewChild;
-            }
+        }
     }
     return nullptr;
 }
@@ -2164,7 +2164,7 @@ void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, boo
         if( bFireEvent )
         {
             AccessibleEventObject aEvent;
-                        aEvent.Source = uno::Reference<XAccessibleContext>(this);
+            aEvent.Source = uno::Reference<XAccessibleContext>(this);
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.NewValue <<= mxTempAcc;
             CommitChange( aEvent );
@@ -2181,7 +2181,7 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
         if( bFireEvent )
         {
             AccessibleEventObject aEvent;
-                        aEvent.Source = uno::Reference<XAccessibleContext>(this);
+            aEvent.Source = uno::Reference<XAccessibleContext>(this);
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.OldValue <<= mxTempAcc;
             CommitChange( aEvent );

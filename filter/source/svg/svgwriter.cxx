@@ -1834,7 +1834,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
         }
     }
 
-     return aPathData.makeStringAndClear();
+    return aPathData.makeStringAndClear();
 }
 
 
@@ -1917,48 +1917,48 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
         sal_Int32 nStrokeWidth = ImplMap( rAttrs.GetWidth() );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth,
                                OUString::number( nStrokeWidth ) );
-    // support for LineJoint
-    switch(rAttrs.GetLineJoin())
-    {
-        case basegfx::B2DLineJoin::NONE:
-        case basegfx::B2DLineJoin::Miter:
+        // support for LineJoint
+        switch(rAttrs.GetLineJoin())
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
-            break;
+            case basegfx::B2DLineJoin::NONE:
+            case basegfx::B2DLineJoin::Miter:
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
+                break;
+            }
+            case basegfx::B2DLineJoin::Bevel:
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
+                break;
+            }
+            case basegfx::B2DLineJoin::Round:
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
+                break;
+            }
         }
-        case basegfx::B2DLineJoin::Bevel:
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
-            break;
-        }
-        case basegfx::B2DLineJoin::Round:
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
-            break;
-        }
-    }
 
-    // support for LineCap
-    switch(rAttrs.GetLineCap())
-    {
-        default: /* css::drawing::LineCap_BUTT */
+        // support for LineCap
+        switch(rAttrs.GetLineCap())
         {
-            // butt is Svg default, so no need to write until the exporter might write styles.
-            // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
-            break;
+            default: /* css::drawing::LineCap_BUTT */
+            {
+                // butt is Svg default, so no need to write until the exporter might write styles.
+                // If this happens, activate here
+                // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
+                break;
+            }
+            case css::drawing::LineCap_ROUND:
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
+                break;
+            }
+            case css::drawing::LineCap_SQUARE:
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
+                break;
+            }
         }
-        case css::drawing::LineCap_ROUND:
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
-            break;
-        }
-        case css::drawing::LineCap_SQUARE:
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
-            break;
-        }
-    }
 
     }
 
