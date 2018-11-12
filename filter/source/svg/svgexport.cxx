@@ -793,6 +793,7 @@ bool SVGFilter::implExportDocument()
         }
         // Create a ClipPath element applied to the leaving slide in order
         // to avoid that slide borders are visible during transition
+        if(!mbExportShapeSelection)
         {
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation_clip_path_shrink" );
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
@@ -811,7 +812,7 @@ bool SVGFilter::implExportDocument()
 
     if( implLookForFirstVisiblePage() )  // OK! We found at least one visible page.
     {
-        if( mbPresentation )
+        if( mbPresentation && !mbExportShapeSelection )
         {
             implGenerateMetaData();
             implExportAnimations();
@@ -1254,6 +1255,9 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
  */
 void SVGFilter::implExportTextEmbeddedBitmaps()
 {
+    if (mEmbeddedBitmapActionSet.empty())
+        return;
+
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "TextEmbeddedBitmaps" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
@@ -1456,7 +1460,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< XDrawPage > >
                 "SVGFilter::implExportDrawPages: nFirstPage > nLastPage" );
 
     // dummy slide - used as leaving slide for transition on the first slide
-    if( mbPresentation )
+    if( mbPresentation && !mbExportShapeSelection)
     {
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "DummySlide" );
         SvXMLElementExport aDummySlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
