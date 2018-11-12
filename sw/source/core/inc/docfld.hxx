@@ -133,25 +133,25 @@ const int GETFLD_EXPAND     = 2;
 
 class SwDocUpdateField
 {
-    std::unique_ptr<SetGetExpFields> pFieldSortLst;    // current field list for calculation
-    SwHashTable<SwCalcFieldType> aFieldTypeTable;
+    std::unique_ptr<SetGetExpFields> m_pFieldSortList; ///< current field list for calculation
+    SwHashTable<SwCalcFieldType> m_FieldTypeTable;
 
-    sal_uLong nNodes;               // if the node count is different
-    sal_uInt8 nFieldLstGetMode;
-    SwDoc* pDocument;
+    sal_uLong m_nNodes; ///< to check if the node count changed
+    int m_nFieldListGetMode;
+    SwDoc& m_rDoc;
 
-    bool bInUpdateFields : 1;     // currently there is an UpdateFields
-    bool bFieldsDirty : 1;        // some fields are invalid
+    bool m_bInUpdateFields : 1; ///< currently in an UpdateFields call
+    bool m_bFieldsDirty : 1;    ///< some fields are invalid
 
     void MakeFieldList_( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTextField& , SwFieldIds nFieldWhich );
     void GetBodyNode( const SwSectionNode&);
 
 public:
-    SwDocUpdateField(SwDoc* pDocument);
+    SwDocUpdateField(SwDoc& rDocument);
     ~SwDocUpdateField();
 
-    const SetGetExpFields* GetSortLst() const { return pFieldSortLst.get(); }
+    const SetGetExpFields* GetSortList() const { return m_pFieldSortList.get(); }
 
     void MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode );
 
@@ -160,21 +160,21 @@ public:
     void InsertFieldType( const SwFieldType& rType );
     void RemoveFieldType( const SwFieldType& rType );
 
-    bool IsInUpdateFields() const         { return bInUpdateFields; }
-    void SetInUpdateFields( bool b )      { bInUpdateFields = b; }
+    bool IsInUpdateFields() const         { return m_bInUpdateFields; }
+    void SetInUpdateFields( bool b )      { m_bInUpdateFields = b; }
 
-    bool IsFieldsDirty() const          { return bFieldsDirty; }
+    bool IsFieldsDirty() const          { return m_bFieldsDirty; }
     void SetFieldsDirty( bool b )
     {
-        bFieldsDirty = b;
+        m_bFieldsDirty = b;
 
         if (b)
         {
-            pDocument->getIDocumentTimerAccess().StartIdling();
+            m_rDoc.getIDocumentTimerAccess().StartIdling();
         }
     }
 
-    SwHashTable<SwCalcFieldType> const & GetFieldTypeTable() const { return aFieldTypeTable; }
+    SwHashTable<SwCalcFieldType> const& GetFieldTypeTable() const { return m_FieldTypeTable; }
 };
 
 #endif

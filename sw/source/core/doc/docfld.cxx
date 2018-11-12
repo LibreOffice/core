@@ -775,11 +775,11 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
     }
 
     SetFieldsDirty( true );
-    if( !pFieldSortLst )
+    if (!m_pFieldSortList)
     {
         if( !bIns )             // if list is present and deleted
             return;             // don't do a thing
-        pFieldSortLst.reset(new SetGetExpFields);
+        m_pFieldSortList.reset(new SetGetExpFields);
     }
 
     if( bIns )      // insert anew:
@@ -788,27 +788,31 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
     {
         // look up via the pTextField pointer. It is a sorted list, but it's sorted by node
         // position. Until this is found, the search for the pointer is already done.
-        for( SetGetExpFields::size_type n = 0; n < pFieldSortLst->size(); ++n )
-            if( &rField == (*pFieldSortLst)[ n ]->GetPointer() )
+        for (SetGetExpFields::size_type n = 0; n < m_pFieldSortList->size(); ++n)
+        {
+            if (&rField == (*m_pFieldSortList)[n]->GetPointer())
             {
-                delete (*pFieldSortLst)[n];
-                pFieldSortLst->erase(n);
+                delete (*m_pFieldSortList)[n];
+                m_pFieldSortList->erase(n);
                 n--; // one field can occur multiple times
             }
+        }
     }
 }
 
 void SwDocUpdateField::MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode )
 {
-    if( !pFieldSortLst || bAll || !( eGetMode & nFieldLstGetMode ) ||
-        rDoc.GetNodes().Count() != nNodes )
+    if (!m_pFieldSortList || bAll || !(eGetMode & m_nFieldListGetMode)
+        || rDoc.GetNodes().Count() != m_nNodes)
+    {
         MakeFieldList_( rDoc, eGetMode );
+    }
 }
 
 void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
-    pFieldSortLst.reset(new SetGetExpFields);
+    m_pFieldSortList.reset(new SetGetExpFields);
 
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
@@ -821,7 +825,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     //         the hide conditions of section have to be updated.
     //         For correct updating the hide condition of a section, its position
     //         have to be known in order to insert the hide condition as a new
-    //         expression field into the sorted field list (<pFieldSortLst>).
+    //         expression field into the sorted field list (<m_pFieldSortList>).
     if ( eGetMode == GETFLD_ALL )
     // Collect the sections first. Supply sections that are hidden by condition
     // with frames so that the contained fields are sorted properly.
@@ -986,8 +990,8 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
             GetBodyNode( *pTextField, nWhich );
         }
     }
-    nFieldLstGetMode = static_cast<sal_uInt8>( eGetMode );
-    nNodes = rDoc.GetNodes().Count();
+    m_nFieldListGetMode = eGetMode;
+    m_nNodes = rDoc.GetNodes().Count();
 }
 
 void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFieldWhich )
@@ -1040,7 +1044,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
     }
 #endif
     if( pNew != nullptr )
-        if( !pFieldSortLst->insert( pNew ).second )
+        if (!m_pFieldSortList->insert(pNew).second)
             delete pNew;
 }
 
@@ -1080,7 +1084,7 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
     if( !pNew )
         pNew = new SetGetExpField( rSectNd );
 
-    if( !pFieldSortLst->insert( pNew ).second )
+    if (!m_pFieldSortList->insert(pNew).second)
         delete pNew;
 }
 
@@ -1111,8 +1115,8 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
         if( !pFnd )
         {
             SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
-            pNew->pNext.reset( aFieldTypeTable[ n ].release() );
-            aFieldTypeTable[ n ].reset(pNew);
+            pNew->pNext.reset( m_FieldTypeTable[n].release() );
+            m_FieldTypeTable[n].reset(pNew);
         }
     }
 }
@@ -1141,13 +1145,13 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
         SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
         if( pFnd )
         {
-            if( aFieldTypeTable[ n ].get() == pFnd )
+            if (m_FieldTypeTable[n].get() == pFnd)
             {
-                aFieldTypeTable[ n ].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
+                m_FieldTypeTable[n].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
             }
             else
             {
-                SwHash* pPrev = aFieldTypeTable[ n ].get();
+                SwHash* pPrev = m_FieldTypeTable[n].get();
                 while( pPrev->pNext.get() != pFnd )
                     pPrev = pPrev->pNext.get();
                 pPrev->pNext = std::move(pFnd->pNext);
@@ -1157,13 +1161,13 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
     }
 }
 
-SwDocUpdateField::SwDocUpdateField(SwDoc* pDoc)
-    : aFieldTypeTable(TBLSZ)
-    , nNodes(0)
-    , nFieldLstGetMode(0)
-    , pDocument(pDoc)
-    , bInUpdateFields(false)
-    , bFieldsDirty(false)
+SwDocUpdateField::SwDocUpdateField(SwDoc& rDoc)
+    : m_FieldTypeTable(TBLSZ)
+    , m_nNodes(0)
+    , m_nFieldListGetMode(0)
+    , m_rDoc(rDoc)
+    , m_bInUpdateFields(false)
+    , m_bFieldsDirty(false)
 {
 }
 
