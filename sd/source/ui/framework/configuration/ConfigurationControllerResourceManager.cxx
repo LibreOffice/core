@@ -69,12 +69,8 @@ void ConfigurationControllerResourceManager::ActivateResources (
     // Iterate in normal order over the resources that are to be
     // activated so that resources on which others depend are activated
     // before the depending resources are activated.
-    ::std::for_each(
-        rResources.begin(),
-        rResources.end(),
-        [&] (Reference<XResourceId> const& xResource) {
-            return ActivateResource(xResource, rxConfiguration);
-        } );
+    for (const Reference<XResourceId>& xResource : rResources)
+        ActivateResource(xResource, rxConfiguration);
 }
 
 void ConfigurationControllerResourceManager::DeactivateResources (
