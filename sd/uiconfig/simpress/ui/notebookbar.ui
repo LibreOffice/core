@@ -11474,7 +11474,7 @@
                 <style>
                   <class name="context-Draw"/>
                   <class name="context-DrawLine"/>
-                  <class name="context-ThreeDObject"/>
+                  <class name="context-3DObject"/>
                 </style>
               </object>
               <packing>
