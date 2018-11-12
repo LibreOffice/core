@@ -1122,6 +1122,7 @@ public:
         const ww8::Frame &rFrameFormat);
 
     void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
+    void InsInt16(sal_Int16 n) { InsUInt16(sal_uInt16(n)); }
     void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
     void WriteStringAsPara( const OUString& rText );
 
