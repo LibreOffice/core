@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>

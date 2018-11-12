@@ -34,6 +34,7 @@
 #include <unotools/confignode.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 
 namespace abp

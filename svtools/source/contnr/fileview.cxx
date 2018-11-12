@@ -21,6 +21,7 @@
 #include <svtools/iconview.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <vcl/treelistentry.hxx>
 #include <svtools/fileview.hxx>
 #include <svtools/svtresid.hxx>

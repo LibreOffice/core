@@ -28,6 +28,7 @@
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/builderfactory.hxx>
+#include <osl/diagnose.h>
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 

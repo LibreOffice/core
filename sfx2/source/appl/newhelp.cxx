@@ -31,6 +31,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>

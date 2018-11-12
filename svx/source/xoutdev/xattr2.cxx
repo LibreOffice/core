@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <osl/diagnose.h>
 #include <i18nutil/unicode.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>

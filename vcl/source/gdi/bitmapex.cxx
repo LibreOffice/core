@@ -20,9 +20,11 @@
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <vcl/ImageTree.hxx>

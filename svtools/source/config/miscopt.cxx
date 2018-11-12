@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/link.hxx>
+#include <osl/diagnose.h>
 
 #include <rtl/instance.hxx>
 #include "itemholder2.hxx"

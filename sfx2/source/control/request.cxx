@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <svl/itemiter.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/itempool.hxx>
 #include <itemdel.hxx>
