@@ -83,7 +83,7 @@ private:
 
     static bool             DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 );
     ScConflictsListEntry*   GetIntersectingEntry( const ScChangeAction* pAction ) const;
-    ScConflictsListEntry*   GetEntry( sal_uLong nSharedAction, const std::vector<sal_uLong>& rOwnActions );
+    ScConflictsListEntry&   GetEntry(sal_uLong nSharedAction, const std::vector<sal_uLong>& rOwnActions);
 
 public:
                             ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
