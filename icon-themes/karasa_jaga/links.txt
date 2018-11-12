@@ -55,6 +55,7 @@ cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
 cmd/32/config.png cmd/32/choosecontrols.png
 cmd/32/connect.png cmd/32/polygon.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
+cmd/32/convertmenu.png cmd/32/bezierconvert.png
 cmd/32/currentfootnotedialog.png cmd/32/footnotedialog.png
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
@@ -80,6 +81,7 @@ cmd/32/fillmoderemovepredescessor.png cmd/32/cleararrowprecedents.png
 cmd/32/fillmoderemovesuccessor.png cmd/32/cleararrowdependents.png
 cmd/32/fillmodetracepredescessor.png cmd/32/showprecedents.png
 cmd/32/fillmodetracesuccessor.png cmd/32/showdependents.png
+cmd/32/flipmenu.png cmd/32/flipvertical.png
 cmd/32/flowchartshapes.png cmd/32/flowchartshapes.flowchart-internal-storage.png
 cmd/32/flowchartshapes.flowchart-alternate-process.png cmd/32/basicshapes.round-quadrat.png
 cmd/32/flowchartshapes.flowchart-connector.png cmd/32/basicshapes.circle.png
@@ -187,8 +189,10 @@ cmd/32/mailmergewizard.png cmd/32/dsbformletter.png
 cmd/32/measureattributes.png cmd/32/measureline.png
 cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/mirrorhorz.png cmd/32/fliphorizontal.png
+cmd/32/mirrormenu.png cmd/32/fliphorizontal.png
 cmd/32/mirrorvert.png cmd/32/flipvertical.png
 cmd/32/nl/underlinesimple.png cmd/32/nl/underline.png
+cmd/32/namegroup.png cmd/32/renameobject.png
 cmd/32/no.png cmd/32/cancel.png
 cmd/32/numberformatcurrency.png cmd/32/currencyfield.png
 cmd/32/numberformatcurrencysimple.png cmd/32/currencyfield.png
@@ -232,6 +236,7 @@ cmd/32/removefilter.png cmd/32/removefiltersort.png
 cmd/32/renametable.png cmd/32/name.png
 cmd/32/repaginate.png cmd/32/insertpagenumberfield.png
 cmd/32/rightpara.png cmd/32/alignright.png
+cmd/32/rotateflipmenu.png cmd/32/rotateleft.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
 cmd/32/rulermenu.png cmd/32/ruler.png
 cmd/32/rulerrows.png cmd/32/extrusiontiltleft.png
@@ -383,6 +388,7 @@ cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
 cmd/lc_config.png cmd/lc_choosecontrols.png
 cmd/lc_connect.png cmd/lc_polygon.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
+cmd/lc_convertmenu.png cmd/lc_bezierconvert.png
 cmd/lc_currentfootnotedialog.png cmd/lc_footnotedialog.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
@@ -407,6 +413,7 @@ cmd/lc_fillmoderemovepredescessor.png cmd/lc_cleararrowprecedents.png
 cmd/lc_fillmoderemovesuccessor.png cmd/lc_cleararrowdependents.png
 cmd/lc_fillmodetracepredescessor.png cmd/lc_showprecedents.png
 cmd/lc_fillmodetracesuccessor.png cmd/lc_showdependents.png
+cmd/lc_flipmenu.png cmd/lc_flipvertical.png
 cmd/lc_flowchartshapes.png cmd/lc_flowchartshapes.flowchart-internal-storage.png
 cmd/lc_flowchartshapes.flowchart-alternate-process.png cmd/lc_basicshapes.round-quadrat.png
 cmd/lc_flowchartshapes.flowchart-connector.png cmd/lc_basicshapes.circle.png
@@ -505,7 +512,9 @@ cmd/lc_mailmergewizard.png cmd/lc_dsbformletter.png
 cmd/lc_measureattributes.png cmd/lc_measureline.png
 cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_mirrorhorz.png cmd/lc_fliphorizontal.png
+cmd/lc_mirrormenu.png cmd/lc_fliphorizontal.png
 cmd/lc_mirrorvert.png cmd/lc_flipvertical.png
+cmd/lc_namegroup.png cmd/lc_renameobject.png
 cmd/lc_no.png cmd/lc_cancel.png
 cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
 cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
@@ -546,6 +555,7 @@ cmd/lc_removefilter.png cmd/lc_removefiltersort.png
 cmd/lc_renametable.png cmd/lc_name.png
 cmd/lc_repaginate.png cmd/lc_insertpagenumberfield.png
 cmd/lc_rightpara.png cmd/lc_alignright.png
+cmd/lc_rotateflipmenu.png cmd/lc_rotateleft.png
 cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/lc_rulermenu.png cmd/lc_ruler.png
 cmd/lc_rulerrows.png cmd/lc_extrusiontiltleft.png
@@ -661,6 +671,7 @@ cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
 cmd/sc_config.png cmd/sc_choosecontrols.png
 cmd/sc_connect.png cmd/sc_polygon.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
+cmd/sc_convertmenu.png cmd/sc_bezierconvert.pngs
 cmd/sc_currentfootnotedialog.png cmd/sc_footnotedialog.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
@@ -685,6 +696,7 @@ cmd/sc_fillmoderemovepredescessor.png cmd/sc_cleararrowprecedents.png
 cmd/sc_fillmoderemovesuccessor.png cmd/sc_cleararrowdependents.png
 cmd/sc_fillmodetracepredescessor.png cmd/sc_showprecedents.png
 cmd/sc_fillmodetracesuccessor.png cmd/sc_showdependents.png
+cmd/sc_flipmenu.png cmd/sc_flipvertical.png
 cmd/sc_flowchartshapes.png cmd/sc_flowchartshapes.flowchart-internal-storage.png
 cmd/sc_flowchartshapes.flowchart-alternate-process.png cmd/sc_basicshapes.round-quadrat.png
 cmd/sc_flowchartshapes.flowchart-connector.png cmd/sc_basicshapes.circle.png
@@ -783,7 +795,9 @@ cmd/sc_mailmergewizard.png cmd/sc_dsbformletter.png
 cmd/sc_measureattributes.png cmd/sc_measureline.png
 cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
+cmd/sc_mirrormenu.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
+cmd/sc_namegroup.png cmd/sc_renameobject.png
 cmd/sc_no.png cmd/sc_cancel.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
@@ -824,6 +838,7 @@ cmd/sc_removefilter.png cmd/sc_removefiltersort.png
 cmd/sc_renametable.png cmd/sc_name.png
 cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
 cmd/sc_rightpara.png cmd/sc_alignright.png
+cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
 cmd/sc_rulermenu.png cmd/sc_ruler.png
 cmd/sc_rulerrows.png cmd/sc_extrusiontiltleft.png
