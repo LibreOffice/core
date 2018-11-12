@@ -26,6 +26,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
+#include <osl/diagnose.h>
 
 
 namespace svt { namespace table

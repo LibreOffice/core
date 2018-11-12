@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <osl/diagnose.h>
 #include <osx/saldata.hxx>
 #include <osx/salnsmenu.h>
 #include <osx/salinst.h>

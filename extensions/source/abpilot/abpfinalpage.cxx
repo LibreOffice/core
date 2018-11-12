@@ -20,6 +20,7 @@
 #include "abpfinalpage.hxx"
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>

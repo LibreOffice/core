@@ -46,6 +46,7 @@
 #include <charfmt.hxx>
 #include <docary.hxx>
 #include <svx/svxids.hrc>
+#include <osl/diagnose.h>
 
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>

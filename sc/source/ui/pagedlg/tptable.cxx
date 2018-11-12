@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 #include <tptable.hxx>
 #include <global.hxx>

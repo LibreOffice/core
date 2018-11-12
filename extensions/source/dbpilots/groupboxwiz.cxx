@@ -24,6 +24,7 @@
 #include "optiongrouplayouter.hxx"
 #include <helpids.h>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #define GBW_STATE_OPTIONLIST        0
 #define GBW_STATE_DEFAULTOPTION     1

@@ -53,6 +53,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/weld.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/mailmodelapi.hxx>
 #include <sfxtypes.hxx>

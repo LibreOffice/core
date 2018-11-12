@@ -19,6 +19,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

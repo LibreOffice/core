@@ -24,14 +24,14 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <tools/color.hxx>
-#include <basegfx/color/bcolormodifier.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace rendering {
     class XBitmapCanvas;
 } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace basegfx { class BColorModifierStack; }
 
 enum class TransparentType
 {

@@ -27,6 +27,7 @@
 #include <deque>
 #include <sfx2/docfac.hxx>
 #include <vcl/treelistentry.hxx>
+#include <osl/diagnose.h>
 
 namespace basctl
 {

@@ -35,6 +35,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <svtools/svmedit.hxx>
 #include <rtl/ref.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 

@@ -44,6 +44,7 @@
 #include <comphelper/lok.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {

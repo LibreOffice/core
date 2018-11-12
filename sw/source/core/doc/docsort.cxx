@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>

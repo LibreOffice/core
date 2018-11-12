@@ -35,6 +35,7 @@
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <svdata.hxx>
 #include <window.h>

@@ -19,6 +19,7 @@
 
 #include <svx/XPropertyTable.hxx>
 
+#include <osl/diagnose.h>
 #include <vcl/virdev.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>

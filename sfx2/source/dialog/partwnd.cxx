@@ -31,6 +31,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

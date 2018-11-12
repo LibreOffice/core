@@ -23,6 +23,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
+#include <osl/diagnose.h>
 #include <fmtfld.hxx>
 #include <doc.hxx>
 #include <breakit.hxx>

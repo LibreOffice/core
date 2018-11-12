@@ -26,6 +26,7 @@
 #include <math.h>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unohelp.hxx>

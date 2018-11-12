@@ -35,6 +35,7 @@
 #include <tools/helpers.hxx>
 #include <osl/mutex.hxx>
 #include <osl/module.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/sysdata.hxx>

@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 
 #include <vcl/builderfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <scresid.hxx>
 #include <dpobject.hxx>

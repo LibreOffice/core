@@ -22,6 +22,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, WinBits nWinStyle)
 :   ValueSet(_pParent, nWinStyle)

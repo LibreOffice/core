@@ -47,6 +47,7 @@
 #include <sfx2/opengrf.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <osl/diagnose.h>
 
 
 using namespace ::com::sun::star;

@@ -28,6 +28,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <osl/diagnose.h>
 
 #include <hintids.hxx>
 #include <fmtornt.hxx>

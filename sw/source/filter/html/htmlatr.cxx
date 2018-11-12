@@ -78,6 +78,8 @@
 #include <numrule.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
+#include <osl/diagnose.h>
+#include <deque>
 
 #include <svtools/HtmlWriter.hxx>
 

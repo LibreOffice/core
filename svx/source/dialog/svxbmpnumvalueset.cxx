@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <i18nlangtag/mslangid.hxx>

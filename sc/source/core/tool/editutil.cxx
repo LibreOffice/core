@@ -35,6 +35,7 @@
 #include <svl/inethist.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/objsh.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

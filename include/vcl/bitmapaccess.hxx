@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BMPACC_HXX
 #define INCLUDED_VCL_BMPACC_HXX
 
-#include <memory>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/salbtype.hxx>

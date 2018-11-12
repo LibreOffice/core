@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
+#include <osl/diagnose.h>
 
 // helpers
 

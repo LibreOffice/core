@@ -49,6 +49,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/tenccvt.hxx>
+#include <osl/diagnose.h>
 
 #include <rtl/tencinfo.h>
 

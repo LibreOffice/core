@@ -19,6 +19,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <osl/diagnose.h>
 
 #include <navcitem.hxx>
 #include <global.hxx>

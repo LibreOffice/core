@@ -24,6 +24,7 @@
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
 #include <docary.hxx>
+#include <osl/diagnose.h>
 
 bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) const
 {

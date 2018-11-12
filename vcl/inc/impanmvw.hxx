@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
 
 #include <vcl/animate.hxx>
+#include <vcl/vclptr.hxx>
 
 class Animation;
 class OutputDevice;

@@ -21,6 +21,7 @@
 #include <vcl/imgctrl.hxx>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
+#include <osl/diagnose.h>
 
 namespace ImageScaleMode = css::awt::ImageScaleMode;
 

@@ -22,6 +22,7 @@
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <osl/module.hxx>
 
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>

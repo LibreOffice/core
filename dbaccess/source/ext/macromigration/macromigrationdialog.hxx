@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONDIALOG_HXX
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <svtools/roadmapwizard.hxx>
 
