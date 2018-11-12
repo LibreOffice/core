@@ -663,10 +663,10 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     lcl_formatReferenceLanguage(rText, false, GetLanguage(), m_sSetReferenceLanguage);
             }
           };
-            // sw_redlinehide: currently only one of these layouts will exist,
-            // so the getLayoutFrame will use the same frame in both cases
-            func(m_sText, pLayout);
-            func(m_sTextRLHidden, pLayoutRLHidden);
+          // sw_redlinehide: currently only one of these layouts will exist,
+          // so the getLayoutFrame will use the same frame in both cases
+          func(m_sText, pLayout);
+          func(m_sTextRLHidden, pLayoutRLHidden);
         }
         break;
 
@@ -689,8 +689,8 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     lcl_formatReferenceLanguage(rText, false, GetLanguage(), m_sSetReferenceLanguage);
             }
           };
-            func(m_sText, pLayout);
-            func(m_sTextRLHidden, pLayoutRLHidden);
+          func(m_sText, pLayout);
+          func(m_sTextRLHidden, pLayoutRLHidden);
         }
         break;
 

@@ -286,24 +286,24 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 #if OSL_DEBUG_LEVEL > 0
 static void lclDumpAnyValue( const Any& value)
 {
-        OUString strValue;
-        Sequence< OUString > strArray;
-        Sequence< Any > anyArray;
-        Sequence< PropertyValue > propArray;
-        Sequence< Sequence< PropertyValue > > propArrayArray;
-        Sequence< EnhancedCustomShapeAdjustmentValue > adjArray;
-        Sequence< EnhancedCustomShapeSegment > segArray;
-        Sequence< EnhancedCustomShapeParameterPair > ppArray;
-        EnhancedCustomShapeSegment segment;
-        EnhancedCustomShapeParameterPair pp;
-        EnhancedCustomShapeParameter par;
-        HomogenMatrix3 aMatrix;
-        sal_Int32 intValue = 0;
-        sal_uInt32 uintValue = 0;
-        sal_Int16 int16Value = 0;
-        sal_uInt16 uint16Value = 0;
-        float floatValue = 0;
-        bool boolValue = false;
+    OUString strValue;
+    Sequence< OUString > strArray;
+    Sequence< Any > anyArray;
+    Sequence< PropertyValue > propArray;
+    Sequence< Sequence< PropertyValue > > propArrayArray;
+    Sequence< EnhancedCustomShapeAdjustmentValue > adjArray;
+    Sequence< EnhancedCustomShapeSegment > segArray;
+    Sequence< EnhancedCustomShapeParameterPair > ppArray;
+    EnhancedCustomShapeSegment segment;
+    EnhancedCustomShapeParameterPair pp;
+    EnhancedCustomShapeParameter par;
+    HomogenMatrix3 aMatrix;
+    sal_Int32 intValue = 0;
+    sal_uInt32 uintValue = 0;
+    sal_Int16 int16Value = 0;
+    sal_uInt16 uint16Value = 0;
+    float floatValue = 0;
+    bool boolValue = false;
     LineSpacing spacing;
 //         RectanglePoint pointValue;
     WritingMode aWritingMode;
@@ -311,73 +311,73 @@ static void lclDumpAnyValue( const Any& value)
     TextHorizontalAdjust aTextHorizAdj;
     Reference< XIndexReplace > xNumRule;
 
-        if( value >>= strValue )
+    if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
-        else if( value >>= strArray ) {
+    else if( value >>= strArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<strArray.getLength(); i++ )
                 fprintf (stderr,"\t\t\t[%3d] \"%s\"\n", i, USS( strArray[i] ) );
-        } else if( value >>= propArray ) {
+    } else if( value >>= propArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<propArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] %s (%s) ", i, USS( propArray[i].Name ), USS(propArray[i].Value.getValueTypeName()) );
                 lclDumpAnyValue( propArray[i].Value );
             }
-        } else if( value >>= propArrayArray ) {
+    } else if( value >>= propArrayArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<propArrayArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] ", i);
                 lclDumpAnyValue( makeAny (propArrayArray[i]) );
             }
-        } else if( value >>= anyArray ) {
+    } else if( value >>= anyArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<anyArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
                 lclDumpAnyValue( anyArray[i] );
             }
-        } else if( value >>= adjArray ) {
+    } else if( value >>= adjArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<adjArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(adjArray[i].Value.getValueTypeName()) );
                 lclDumpAnyValue( adjArray[i].Value );
             }
-        } else if( value >>= segArray ) {
+    } else if( value >>= segArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<segArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] ", i );
                 lclDumpAnyValue( makeAny( segArray[i] ) );
             }
-        } else if( value >>= ppArray ) {
+    } else if( value >>= ppArray ) {
             fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
             for( int i=0; i<ppArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] ", i );
                 lclDumpAnyValue( makeAny( ppArray[i] ) );
             }
-        } else if( value >>= segment ) {
+    } else if( value >>= segment ) {
             fprintf (stderr,"Command: %d Count: %d\n", segment.Command, segment.Count);
-        } else if( value >>= pp ) {
+    } else if( value >>= pp ) {
             fprintf (stderr,"First: ");
             lclDumpAnyValue( makeAny (pp.First) );
             fprintf (stderr,"\t\t\t      Second: ");
             lclDumpAnyValue( makeAny (pp.Second) );
-        } else if( value >>= par ) {
+    } else if( value >>= par ) {
             fprintf (stderr,"Parameter (%s): ", USS(par.Value.getValueTypeName()));
             lclDumpAnyValue( par.Value );
-        } else if( value >>= aMatrix ) {
+    } else if( value >>= aMatrix ) {
             fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
-        } else if( value >>= intValue )
+    } else if( value >>= intValue )
             fprintf (stderr,"%-10" SAL_PRIdINT32 "  (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
-        else if( value >>= uintValue )
+    else if( value >>= uintValue )
             fprintf (stderr,"%-10" SAL_PRIuUINT32 "  (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
-        else if( value >>= int16Value )
+    else if( value >>= int16Value )
             fprintf (stderr,"%-10d  (hex: %x)\n", int16Value, int16Value);
-        else if( value >>= uint16Value )
+    else if( value >>= uint16Value )
             fprintf (stderr,"%-10d  (hex: %x)\n", uint16Value, uint16Value);
-        else if( value >>= floatValue )
+    else if( value >>= floatValue )
             fprintf (stderr,"%f\n", floatValue);
-        else if( value >>= boolValue )
+    else if( value >>= boolValue )
             fprintf (stderr,"%-10d  (bool)\n", boolValue);
-        else if( value >>= xNumRule ) {
+    else if( value >>= xNumRule ) {
             fprintf (stderr, "XIndexReplace\n");
             if (xNumRule.is()) {
                 for (int k=0; k<xNumRule->getCount(); k++) {
@@ -393,9 +393,9 @@ static void lclDumpAnyValue( const Any& value)
             } else {
                 fprintf (stderr, "empty reference\n");
             }
-        } else if( value >>= aWritingMode )
+    } else if( value >>= aWritingMode )
             fprintf(stderr, "%d writing mode\n", static_cast<int>(aWritingMode));
-        else if( value >>= aTextVertAdj ) {
+    else if( value >>= aTextVertAdj ) {
             const char* s = "unknown";
             switch( aTextVertAdj ) {
             case TextVerticalAdjust_TOP:
@@ -413,8 +413,8 @@ static void lclDumpAnyValue( const Any& value)
             case TextVerticalAdjust::TextVerticalAdjust_MAKE_FIXED_SIZE:
                 s = "make_fixed_size";
                 break;
-        }
-        fprintf (stderr, "%s\n", s);
+            }
+            fprintf (stderr, "%s\n", s);
     } else if( value >>= aTextHorizAdj ) {
         const char* s = "unknown";
         switch( aTextHorizAdj ) {

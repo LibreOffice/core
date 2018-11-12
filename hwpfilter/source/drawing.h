@@ -275,9 +275,9 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
             return false;
         common_size += 278;
     }
-     if( ( size >= common_size + 3 ) && ( hdo->property.flag & HWPDO_FLAG_WATERMARK ) )
+    if( ( size >= common_size + 3 ) && ( hdo->property.flag & HWPDO_FLAG_WATERMARK ) )
      //if( ( size >= common_size ) && ( hdo->property.flag >> 20 & 0x01 ) )
-     {
+    {
         if (size - common_size >= 5)
             hmem->skipBlock(2);
         unsigned char tmp8;
@@ -311,9 +311,9 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
             return false;
      }
 
-     if (size <= common_size)
+    if (size <= common_size)
           return true;
-     return hmem->skipBlock(size - common_size ) != 0;
+    return hmem->skipBlock(size - common_size ) != 0;
 }
 
 static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(void)

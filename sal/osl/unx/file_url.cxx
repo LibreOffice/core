@@ -126,7 +126,8 @@ oslFileError getSystemPathFromFileUrl(
                 }
                 i = j + 1;
                 break;
-            } if (!rtl::isAsciiAlphanumeric(c) && c != '+' && c != '-'
+            }
+            if (!rtl::isAsciiAlphanumeric(c) && c != '+' && c != '-'
                        && c != '.')
             {
                 break;
@@ -408,7 +409,7 @@ namespace
             if (*p == '/')
             {
                 p++;
-               *p = '\0';
+                *p = '\0';
             }
             else
             {

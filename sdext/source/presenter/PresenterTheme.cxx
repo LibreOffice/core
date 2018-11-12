@@ -745,8 +745,8 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
     std::shared_ptr<PresenterTheme::Theme> pTheme;
 
     OUString sCurrentThemeName (rsThemeName);
-     if (sCurrentThemeName.isEmpty())
-     {
+    if (sCurrentThemeName.isEmpty())
+    {
          // No theme name given.  Look up the CurrentTheme property.
          rConfiguration.GetConfigurationNode("Presenter/CurrentTheme") >>= sCurrentThemeName;
          if (sCurrentThemeName.isEmpty())
@@ -754,7 +754,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
              // Still no name.  Use "DefaultTheme".
              sCurrentThemeName = "DefaultTheme";
          }
-     }
+    }
 
     Reference<container::XNameAccess> xThemes (
         rConfiguration.GetConfigurationNode("Presenter/Themes"),
@@ -765,7 +765,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
         Sequence<OUString> aKeys (xThemes->getElementNames());
         for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
         {
-             const OUString& rsKey (aKeys[nItemIndex]);
+            const OUString& rsKey (aKeys[nItemIndex]);
             Reference<container::XHierarchicalNameAccess> xTheme (
                 xThemes->getByName(rsKey), UNO_QUERY);
             if (xTheme.is())

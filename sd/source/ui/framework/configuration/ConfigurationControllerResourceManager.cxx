@@ -105,11 +105,11 @@ void ConfigurationControllerResourceManager::ActivateResource (
     const Reference<XResourceId>& rxResourceId,
     const Reference<XConfiguration>& rxConfiguration)
 {
-   if ( ! rxResourceId.is())
-   {
+    if ( ! rxResourceId.is())
+    {
        OSL_ASSERT(rxResourceId.is());
        return;
-   }
+    }
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": activating resource " <<
         FrameworkHelper::ResourceIdToString(rxResourceId));

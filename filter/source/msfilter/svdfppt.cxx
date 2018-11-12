@@ -1111,40 +1111,40 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_AUTOFIT) );
                 }
 
-            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-            {
-                 pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
-                pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
-            }
-            else
-            {
-                pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
-                pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
-            }
+                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                {
+                    pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+                    pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+                }
+                else
+                {
+                    pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
+                    pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
+                }
 
-            pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
-            pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
+                pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
+                pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
 
-            if ( nMinFrameHeight < 0 )
-                nMinFrameHeight = 0;
-            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
+                if ( nMinFrameHeight < 0 )
+                    nMinFrameHeight = 0;
+                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                    pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
 
-            if ( nMinFrameWidth < 0 )
-                nMinFrameWidth = 0;
-            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
+                if ( nMinFrameWidth < 0 )
+                    nMinFrameWidth = 0;
+                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                    pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
-            // set margins at the borders of the textbox
-            pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
-            pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
-            pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
-            pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
-            pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
+                // set margins at the borders of the textbox
+                pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
+                pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
+                pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
+                pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
+                pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
-            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                pTObj->SetSnapRect( rTextRect );
-            pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
+                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                    pTObj->SetSnapRect( rTextRect );
+                pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
 
                 if ( pTObj )
                 {
@@ -2993,7 +2993,7 @@ sal_uInt32 SdrPowerPointImport::GetMasterPageId( sal_uInt16 nPageNum, PptPageKin
     PptSlidePersistList* pPageList = GetPageList( ePageKind );
     if ( pPageList && nPageNum < pPageList->size() )
         return (*pPageList)[ nPageNum ].aSlideAtom.nMasterId;
-   return 0;
+    return 0;
 }
 
 sal_uInt32 SdrPowerPointImport::GetNotesPageId( sal_uInt16 nPageNum ) const
@@ -3001,7 +3001,7 @@ sal_uInt32 SdrPowerPointImport::GetNotesPageId( sal_uInt16 nPageNum ) const
     PptSlidePersistList* pPageList=GetPageList( PPT_SLIDEPAGE );
     if ( pPageList && nPageNum < pPageList->size() )
         return (*pPageList)[ nPageNum ].aSlideAtom.nNotesId;
-   return 0;
+    return 0;
 }
 
 bool SdrPowerPointImport::HasMasterPage( sal_uInt16 nPageNum, PptPageKind ePageKind ) const

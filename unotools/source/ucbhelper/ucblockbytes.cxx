@@ -647,7 +647,7 @@ void SAL_CALL Moderator::onTerminated()
     {
         salhelper::ConditionWaiter aWaiter(m_aRep);
     }
-     delete this;
+    delete this;
 }
 
 /**
@@ -1350,7 +1350,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {
         OSL_FAIL("No InputStream, but no error set!" );
-           xLockBytes->SetError( ERRCODE_IO_GENERAL );
+        xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 
     return xLockBytes;

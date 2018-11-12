@@ -206,7 +206,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 // #107782# OJ use korean language if latin was used
                 if ( i == 0 )
                 {
-                        LanguageType eUiLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
+                    LanguageType eUiLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
                     if (MsLangId::isKorean(eUiLanguage))
                         eLanguage = eUiLanguage;
                 }

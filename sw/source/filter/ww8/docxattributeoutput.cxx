@@ -236,17 +236,17 @@ public:
                             const OUString& rHint,
                             bool bChecked )
     {
-       writeCommonStart( rName, rEntryMacro, rExitMacro, rHelp, rHint );
-       // Checkbox specific bits
-       m_pSerializer->startElementNS( XML_w, XML_checkBox, FSEND );
-       // currently hardcoding autosize
-       // #TODO check if this defaulted
-       m_pSerializer->startElementNS( XML_w, XML_sizeAuto, FSEND );
-       m_pSerializer->endElementNS( XML_w, XML_sizeAuto );
-       if ( bChecked )
+        writeCommonStart( rName, rEntryMacro, rExitMacro, rHelp, rHint );
+        // Checkbox specific bits
+        m_pSerializer->startElementNS( XML_w, XML_checkBox, FSEND );
+        // currently hardcoding autosize
+        // #TODO check if this defaulted
+        m_pSerializer->startElementNS( XML_w, XML_sizeAuto, FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_sizeAuto );
+        if ( bChecked )
             m_pSerializer->singleElementNS( XML_w, XML_checked, FSEND );
         m_pSerializer->endElementNS( XML_w, XML_checkBox );
-       writeFinish();
+        writeFinish();
     }
     void WriteFormText(  const OUString& rName,
                          const OUString& rEntryMacro,
@@ -281,7 +281,7 @@ public:
                 FSEND );
         m_pSerializer->endElementNS( XML_w, XML_textInput );
 
-       writeFinish();
+        writeFinish();
     }
 };
 
@@ -6930,7 +6930,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_rExport.m_bFontSizeWritten )
         {
             OString sSize = OString::number( ( nHeight * nProp + 500 ) / 1000 );
-                m_pSerializer->singleElementNS( XML_w, XML_sz,
+            m_pSerializer->singleElementNS( XML_w, XML_sz,
                     FSNS( XML_w, XML_val ), sSize.getStr( ), FSEND );
         }
     }

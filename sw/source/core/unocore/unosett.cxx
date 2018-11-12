@@ -1422,7 +1422,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             //BulletFont
             if(pFont)
             {
-                 awt::FontDescriptor aDesc;
+                awt::FontDescriptor aDesc;
                 SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
                 aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_BULLET_FONT, aDesc));
             }
@@ -2369,7 +2369,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns)
         throw uno::RuntimeException();
     m_bIsAutomaticWidth = true;
     m_aTextColumns.realloc(nColumns);
-     TextColumn* pCols = m_aTextColumns.getArray();
+    TextColumn* pCols = m_aTextColumns.getArray();
     m_nReference = USHRT_MAX;
     sal_Int32 nWidth = m_nReference / nColumns;
     sal_Int32 nDiff = m_nReference - nWidth * nColumns;

@@ -96,7 +96,7 @@ ScVbaComment::getAnnotationIndex()
     }
     SAL_INFO("sc.ui", "returning index is " << aIndex);
 
-       return aIndex;
+    return aIndex;
 }
 
 uno::Reference< excel::XComment >

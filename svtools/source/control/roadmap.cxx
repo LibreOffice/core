@@ -779,7 +779,7 @@ void RoadmapItem::ImplUpdatePosSize()
 
     // position and size both controls
     Size aIDSize( nIDWidth, aDescriptionSize.Height() );
-     mpID->SetSizePixel( aIDSize );
+    mpID->SetSizePixel( aIDSize );
 
     Point aIDPos = mpID->GetPosPixel();
     mpDescription->SetPosPixel( Point( aIDPos.X() + nIDWidth, aIDPos.Y() ) );

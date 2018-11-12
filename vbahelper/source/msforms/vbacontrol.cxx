@@ -79,7 +79,7 @@ ScVbaControl::getWindowPeer()
         // would seem to be a Userform control
         uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY_THROW );
         xWinPeer =  xControl->getPeer();
-    return xWinPeer;
+        return xWinPeer;
     }
     // form control
     xControlModel.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
@@ -153,10 +153,10 @@ ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, c
 ScVbaControl::~ScVbaControl()
 {
     if( m_xControl.is() )
-{
+    {
         uno::Reference< lang::XComponent > xComponent( m_xControl, uno::UNO_QUERY_THROW );
-    xComponent->removeEventListener( m_xEventListener );
-}
+        xComponent->removeEventListener( m_xEventListener );
+    }
 }
 
 void
@@ -305,7 +305,7 @@ ScVbaControl::getControlSource()
             table::CellAddress aAddress;
             xProps->getPropertyValue( "BoundCell" ) >>= aAddress;
             xConvertor->setPropertyValue( "Address" , uno::makeAny( aAddress ) );
-                    xConvertor->getPropertyValue( "XLA1Representation" ) >>= sControlSource;
+            xConvertor->getPropertyValue( "XLA1Representation" ) >>= sControlSource;
         }
         catch(const uno::Exception&)
         {
@@ -321,7 +321,7 @@ ScVbaControl::setControlSource( const OUString& _controlsource )
     // reference tab in case no Sheet is specified in "_controlsource"
     // Can't use the active sheet either, code may of course access
     uno::Reference< drawing::XDrawPagesSupplier > xSupplier( m_xModel, uno::UNO_QUERY_THROW );
- uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
     sal_Int32 nLen = xIndex->getCount();
     bool bMatched = false;
     sal_Int16 nRefTab = 0;
@@ -527,7 +527,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
         lang::EventObject aEvt;
 
         uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
-       uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY ) ;
+        uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY ) ;
 
         if ( xControlShape.is() )
         {

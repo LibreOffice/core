@@ -257,7 +257,7 @@ void ScConsolidateDlg::FillAreaLists()
             pLbDataArea->InsertEntry( pAreaData[i].aStrName, i+1 );
 
 //          if ( !pAreaData[i].bIsDbArea )
-                pLbDestArea->InsertEntry( pAreaData[i].aStrName, i+1 );
+            pLbDestArea->InsertEntry( pAreaData[i].aStrName, i+1 );
         }
     }
 }

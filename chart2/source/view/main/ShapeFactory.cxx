@@ -1919,7 +1919,7 @@ uno::Reference< drawing::XShape >
     {
         try
         {
-             uno::Sequence<OUString> aPropertyNames {
+            uno::Sequence<OUString> aPropertyNames {
                 UNO_NAME_3D_POLYPOLYGON3D,
                 UNO_NAME_3D_LINEONLY
             };

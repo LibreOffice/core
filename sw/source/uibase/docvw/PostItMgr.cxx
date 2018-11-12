@@ -2260,7 +2260,7 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const i18nuti
 void SwPostItMgr::AssureStdModeAtShell()
 {
         // deselect any drawing or frame and leave editing mode
-          SdrView* pSdrView = mpWrtShell->GetDrawView();
+        SdrView* pSdrView = mpWrtShell->GetDrawView();
         if ( pSdrView && pSdrView->IsTextEdit() )
         {
             bool bLockView = mpWrtShell->IsViewLocked();

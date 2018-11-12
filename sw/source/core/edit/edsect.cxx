@@ -409,7 +409,7 @@ void SwEditShell::DoSpecialInsert()
         SwPosition aInsertPos( aInsertIndex );
 
         // insert a new text node, and set the cursor
-         GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
+        GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
         *pCursorPos = aInsertPos;
 
         // call AttrChangeNotify for the UI

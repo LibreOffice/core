@@ -1232,25 +1232,25 @@ bool XmlScPropHdl_HoriJustify::importXML(
     {
         if (IsXMLToken(rStrImpValue, XML_START))
         {
-             nValue = table::CellHoriJustify_LEFT;
+            nValue = table::CellHoriJustify_LEFT;
             rValue <<= nValue;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_END))
         {
-             nValue = table::CellHoriJustify_RIGHT;
+            nValue = table::CellHoriJustify_RIGHT;
             rValue <<= nValue;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_CENTER))
         {
-             nValue = table::CellHoriJustify_CENTER;
+            nValue = table::CellHoriJustify_CENTER;
             rValue <<= nValue;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_JUSTIFY))
         {
-             nValue = table::CellHoriJustify_BLOCK;
+            nValue = table::CellHoriJustify_BLOCK;
             rValue <<= nValue;
             bRetval = true;
         }

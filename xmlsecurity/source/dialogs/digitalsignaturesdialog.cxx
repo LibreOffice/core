@@ -608,7 +608,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             if ( bSigValid )
             {
-                 bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
+                bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
                       aElementsToBeVerified, rInfo, mode);
 
                 if( bSigValid )

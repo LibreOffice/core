@@ -157,7 +157,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
                         if( pShell )
                         {
                             pShell->ParkCursor( aIdx );
-                                aIdx = nEnd-1;
+                            aIdx = nEnd-1;
                         }
                     }
                     ++aIdx;
@@ -2375,7 +2375,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_GRID_STANDARD_MODE:
         {
             bool bStandard = *o3tl::doAccess<bool>(rVal);
-               SetSquaredMode( !bStandard );
+            SetSquaredMode( !bStandard );
             break;
         }
         default:

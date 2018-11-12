@@ -232,7 +232,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     ResourceActivationMode eMode)
 {
     ::osl::MutexGuard aGuard (maMutex);
-       ThrowIfDisposed();
+    ThrowIfDisposed();
 
     // Check whether we are being disposed.  This is handled differently
     // then being completely disposed because the first thing disposing()

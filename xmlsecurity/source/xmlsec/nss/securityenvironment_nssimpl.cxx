@@ -554,17 +554,17 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                                            nullptr     /* nickname */,
                                            PR_FALSE /* isPerm */,
                                            PR_TRUE  /* copyDER */);
-             if (!certTmp)
-             {
+            if (!certTmp)
+            {
                  SAL_INFO("xmlsecurity.xmlsec", "Failed to add a temporary certificate: " << intermediateCerts[i]->getIssuerName());
 
-             }
-             else
-             {
+            }
+            else
+            {
                  SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " <<
                           (certTmp->subjectName ? certTmp->subjectName : ""));
                  vecTmpNSSCertificates.push_back(certTmp);
-             }
+            }
         }
 
 

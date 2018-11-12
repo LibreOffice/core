@@ -824,7 +824,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         XMLTransformerContext* pFirstContext = m_vContexts[0].get();
                         OUString aFirstContextLocalName;
                         /* sal_uInt16 nFirstContextPrefix = */
-                            GetNamespaceMap().GetKeyByAttrName( pFirstContext->GetQName(),
+                        GetNamespaceMap().GetKeyByAttrName( pFirstContext->GetQName(),
                                                                 &aFirstContextLocalName );
                         bool bIsDocumentStyle(
                             ::xmloff::token::IsXMLToken( aFirstContextLocalName,

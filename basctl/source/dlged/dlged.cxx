@@ -378,7 +378,7 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
             Reference< css::beans::XPropertySet > xPSet;
-               aCtrl >>= xPSet;
+            aCtrl >>= xPSet;
             if ( xPSet.is() )
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
@@ -680,8 +680,8 @@ void DlgEditor::Copy()
     Reference< container::XNameAccess > xNAcc( xClipDialogModel, UNO_QUERY );
     if ( xNAcc.is() )
     {
-           Sequence< OUString > aNames = xNAcc->getElementNames();
-           const OUString* pNames = aNames.getConstArray();
+        Sequence< OUString > aNames = xNAcc->getElementNames();
+        const OUString* pNames = aNames.getConstArray();
         sal_uInt32 nCtrls = aNames.getLength();
 
         for ( sal_uInt32 n = 0; n < nCtrls; n++ )
@@ -713,7 +713,7 @@ void DlgEditor::Copy()
 
                 // clone control model
                 Reference< util::XCloneable > xCtrl;
-                   aCtrl >>= xCtrl;
+                aCtrl >>= xCtrl;
                 Reference< util::XCloneable > xNewCtrl = xCtrl->createClone();
                 Any aNewCtrl;
                 aNewCtrl <<= xNewCtrl;
@@ -907,8 +907,8 @@ void DlgEditor::Paste()
                 Reference< css::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
                 if ( xNameAcc.is() )
                 {
-                       Sequence< OUString > aNames = xNameAcc->getElementNames();
-                       const OUString* pNames = aNames.getConstArray();
+                    Sequence< OUString > aNames = xNameAcc->getElementNames();
+                    const OUString* pNames = aNames.getConstArray();
                     sal_uInt32 nCtrls = aNames.getLength();
 
                     Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
@@ -919,9 +919,9 @@ void DlgEditor::Paste()
                     }
                     for( sal_uInt32 n = 0; n < nCtrls; n++ )
                     {
-                           Any aA = xNameAcc->getByName( pNames[n] );
+                        Any aA = xNameAcc->getByName( pNames[n] );
                         Reference< css::awt::XControlModel > xCM;
-                           aA >>= xCM;
+                        aA >>= xCM;
 
                         // clone the control model
                         Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
@@ -939,7 +939,7 @@ void DlgEditor::Paste()
 
                         // set tabindex
                         Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
-                           Sequence< OUString > aNames_ = xNA->getElementNames();
+                        Sequence< OUString > aNames_ = xNA->getElementNames();
                         xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames_.getLength())) );
 
                         if( bLocalized )

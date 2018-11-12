@@ -621,7 +621,7 @@ unsigned char T602ImportFilter::Setformat602(const char *cmd)
 
     ch = Readchar602();
 
-         if (cmd[0]=='M' && cmd[1]=='T') format602.mt = readnum(&ch,false);
+    if (cmd[0]=='M' && cmd[1]=='T') format602.mt = readnum(&ch,false);
     else if (cmd[0]=='M' && cmd[1]=='B') format602.mb = readnum(&ch,false);
     // else if (cmd[0]=='T' && cmd[1]=='B') {}
     // else if (cmd[0]=='H' && cmd[1]=='E') {}
@@ -666,7 +666,7 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
     // warning: uChar -> char
     pcmd[1] = static_cast<char>(rtl::toAsciiUpperCase(*ch)); inschr(*ch);
 
-         if (pcmd[0]=='P' && pcmd[1]=='A') { if (pst.pars) pst.willbeeop = true; }
+    if (pcmd[0]=='P' && pcmd[1]=='A') { if (pst.pars) pst.willbeeop = true; }
     else if (pcmd[0]=='C' && pcmd[1]=='P') { if (pst.pars) pst.willbeeop = true; }
     else if (pcmd[0]=='P' && pcmd[1]=='I') {
         while (*ch && (*ch != '\n') && (*ch != ','))

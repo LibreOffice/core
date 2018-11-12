@@ -437,7 +437,7 @@ private:
 //before the two letters
 void Test::testAutocorrect()
 {
-   SvxAutoCorrect aAutoCorrect((OUString()), (OUString()));
+    SvxAutoCorrect aAutoCorrect((OUString()), (OUString()));
 
     {
         OUString sInput("TEst-TEst");

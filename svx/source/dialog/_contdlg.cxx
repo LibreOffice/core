@@ -267,7 +267,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
     const Size      aTbxSize( m_pTbx1->CalcWindowSizePixel() );
     Point           aPos( m_pTbx1->GetPosPixel() );
-      SvtMiscOptions  aMiscOptions;
+    SvtMiscOptions  aMiscOptions;
 
     aMiscOptions.AddListenerLink( LINK( this, SvxSuperContourDlg, MiscHdl ) );
 

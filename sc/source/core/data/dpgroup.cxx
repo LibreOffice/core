@@ -1012,8 +1012,8 @@ long ScDPGroupTableData::GetSourceDim( long nDim )
         return nSourceCount;
     if (  nDim >= nSourceCount && nDim < nSourceCount +static_cast<long>(aGroups.size())  )
     {
-         const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
-            return  rGroupDim.GetSourceDim();
+        const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
+        return  rGroupDim.GetSourceDim();
     }
     return nDim;
 }

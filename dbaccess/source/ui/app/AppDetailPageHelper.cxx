@@ -651,7 +651,7 @@ void OAppDetailPageHelper::setDetailPage(vcl::Window* _pWindow)
     m_aFL->Show();
     {
         bHasFocus = pCurrent != nullptr && pCurrent->HasChildPathFocus();
-    _pWindow->Show();
+        _pWindow->Show();
     }
     m_aTBPreview->Show();
     m_aBorder->Show();

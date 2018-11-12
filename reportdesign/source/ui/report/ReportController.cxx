@@ -4257,11 +4257,11 @@ void OReportController::openZoomDialog()
 void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-        bool bChanged =
+    bool bChanged =
             (m_aVisualAreaSize.Width != _aSize.Width ||
              m_aVisualAreaSize.Height != _aSize.Height);
-        m_aVisualAreaSize = _aSize;
-        if( bChanged )
+    m_aVisualAreaSize = _aSize;
+    if( bChanged )
             setModified( true );
     m_nAspect = _nAspect;
 }

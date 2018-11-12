@@ -275,7 +275,7 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Recta
     }
 
     // FIXME: draw bluetooth or wifi icon
-     Point aPos(rRect.TopLeft());
+    Point aPos(rRect.TopLeft());
 
     // Setup fonts
     vcl::Font aStdFont(rRenderContext.GetFont());

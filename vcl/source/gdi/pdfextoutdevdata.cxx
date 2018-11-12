@@ -149,7 +149,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
         {
             case PDFExtOutDevDataSync::CreateNamedDest : //i56629
             {
-                 rWriter.Push( PushFlags::MAPMODE );
+                rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
                 mParaMapModes.pop_front();
                 mParaIds.push_back( rWriter.CreateNamedDest( mParaOUStrings.front(), mParaRects.front(), mParaInts.front(), mParaDestAreaTypes.front() ) );

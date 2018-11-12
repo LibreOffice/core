@@ -2259,8 +2259,8 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
     else
     {
         pMatX = GetNewMat(nCY, nRY);
-            nCX = nCY;
-            nRX = nRY;
+        nCX = nCY;
+        nRX = nRY;
         if (!pMatX)
         {
             PushIllegalArgument();

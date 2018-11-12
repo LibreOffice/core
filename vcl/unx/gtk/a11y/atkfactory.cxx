@@ -70,8 +70,8 @@ atk_noop_object_wrapper_get_type()
         } ;
 
         type = g_type_register_static (ATK_TYPE_OBJECT, "OOoAtkNoOpObj", &typeInfo, GTypeFlags(0)) ;
-  }
-  return type;
+    }
+    return type;
 }
 
 static AtkObject*
@@ -139,7 +139,7 @@ wrapper_factory_create_accessible( GObject *obj )
 
         if( pWindow )
         {
-             uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible();
+            uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible();
             if( xAccessible.is() )
             {
                 AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );

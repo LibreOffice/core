@@ -1203,8 +1203,8 @@ BrokenRecoveryDialog::~BrokenRecoveryDialog()
 
 void BrokenRecoveryDialog::impl_refresh()
 {
-                             m_bExecutionNeeded = false;
-    TURLList&                rURLList           = m_pCore->getURLListAccess();
+    m_bExecutionNeeded = false;
+    TURLList& rURLList = m_pCore->getURLListAccess();
     for (const TURLInfo& rInfo : rURLList)
     {
         if (m_bBeforeRecovery)

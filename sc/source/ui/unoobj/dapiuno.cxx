@@ -1334,7 +1334,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
 {
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
-     aSaveData.SetColumnGrand( true );
+    aSaveData.SetColumnGrand( true );
     aSaveData.SetRowGrand( true );
     aSaveData.SetIgnoreEmptyRows( false );
     aSaveData.SetRepeatIfEmpty( false );
@@ -2975,7 +2975,7 @@ ScFieldGroup& ScDataPilotFieldGroupsObj::getFieldGroup( const OUString& rName )
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
         throw RuntimeException("Field Group with name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
-     return *aIt;
+    return *aIt;
 }
 
 void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, const OUString& rNewName )

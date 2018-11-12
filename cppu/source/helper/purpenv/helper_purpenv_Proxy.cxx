@@ -184,7 +184,7 @@ static void s_acquireAndRegister_v(va_list * pParam)
     uno_ExtEnvironment               * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
 
     pUnoI->acquire(pUnoI);
-     pEnv->registerInterface(pEnv, reinterpret_cast<void **>(&pUnoI), pOid, pTypeDescr);
+    pEnv->registerInterface(pEnv, reinterpret_cast<void **>(&pUnoI), pOid, pTypeDescr);
 }
 }
 

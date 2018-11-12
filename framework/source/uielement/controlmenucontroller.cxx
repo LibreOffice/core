@@ -271,7 +271,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
                     break;
             }
 
-          if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
+            if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
                 nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
 

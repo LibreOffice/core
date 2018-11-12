@@ -245,7 +245,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
 
     if ( !xExtensionManager.is() )
     {
-       SAL_WARN( "desktop.app", "Could not get the Extension Manager!" );
+        SAL_WARN( "desktop.app", "Could not get the Extension Manager!" );
         return true;
     }
 

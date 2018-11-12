@@ -185,14 +185,14 @@ void OXMLFixedContent::EndElement()
             uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
             Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
             xControl->setDataField("rpt:" + m_sPageText);
-             OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
+            OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
             m_pInP->m_xReportComponent = xControl.get();
             m_xReportComponent = xControl.get();
         }
         else
         {
             Reference< XFixedText > xControl(xFactor->createInstance(SERVICE_FIXEDTEXT),uno::UNO_QUERY);
-             OSL_ENSURE(xControl.is(),"Could not create FixedContent!");
+            OSL_ENSURE(xControl.is(),"Could not create FixedContent!");
             m_pInP->m_xReportComponent = xControl.get();
             m_xReportComponent = xControl.get();
             xControl->setLabel(m_sLabel);

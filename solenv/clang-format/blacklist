@@ -1824,6 +1824,7 @@ compilerplugins/clang/test/externvar.hxx
 compilerplugins/clang/test/faileddyncast.cxx
 compilerplugins/clang/test/finalprotected.cxx
 compilerplugins/clang/test/flatten.cxx
+compilerplugins/clang/test/indentation.cxx
 compilerplugins/clang/test/loopvartoosmall.cxx
 compilerplugins/clang/test/oncevar.cxx
 compilerplugins/clang/test/oslendian-1.cxx

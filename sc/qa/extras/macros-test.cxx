@@ -141,7 +141,7 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
     // far big method tdf#94617
 
-        SfxObjectShell::CallXScript(
+    SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);

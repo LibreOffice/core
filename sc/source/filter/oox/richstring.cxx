@@ -435,7 +435,7 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
     maTextPortions.clear();
     if( !rText.isEmpty() )
     {
-         sal_Int32 nStrLen = rText.getLength();
+        sal_Int32 nStrLen = rText.getLength();
         // add leading and trailing string position to ease the following loop
         if( rPortions.empty() || (rPortions.front().mnPos > 0) )
             rPortions.insert( rPortions.begin(), FontPortionModel( 0 ) );

@@ -56,7 +56,7 @@ ScVbaFormatCondition::Delete(  )
 {
     ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
     pFormatConditions->removeFormatCondition(msStyleName, true);
-        notifyRange();
+    notifyRange();
 }
 
 void SAL_CALL

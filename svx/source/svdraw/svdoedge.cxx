@@ -901,8 +901,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         if (bUnt2) aXP[2].setY(aBewareRect2.Bottom() ); //+=500;
         if (pnQuality!=nullptr) {
             long nQ=std::abs(aXP[1].X()-aXP[0].X())+std::abs(aXP[1].Y()-aXP[0].Y());
-                nQ+=std::abs(aXP[2].X()-aXP[1].X())+std::abs(aXP[2].Y()-aXP[1].Y());
-                nQ+=std::abs(aXP[3].X()-aXP[2].X())+std::abs(aXP[3].Y()-aXP[2].Y());
+            nQ+=std::abs(aXP[2].X()-aXP[1].X())+std::abs(aXP[2].Y()-aXP[1].Y());
+            nQ+=std::abs(aXP[3].X()-aXP[2].X())+std::abs(aXP[3].Y()-aXP[2].Y());
             *pnQuality=nQ;
         }
         if (bInfo) {
@@ -1979,7 +1979,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         rDragStat.GetView()->HideConnectMarker();
     }
 
-       return true;
+    return true;
 }
 
 OUString SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const

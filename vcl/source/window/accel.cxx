@@ -173,7 +173,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyC
         sal_uInt16 nCode1;
         sal_uInt16 nCode2;
         sal_uInt16 nCode3;
-                sal_uInt16 nCode4;
+        sal_uInt16 nCode4;
         ImplGetKeyCode( rKeyCode.GetFunction(), nCode1, nCode2, nCode3, nCode4 );
         if ( nCode1 )
             ImplInsertAccel( nItemId, vcl::KeyCode( nCode1, nCode1 ), bEnable, pAutoAccel );

@@ -125,12 +125,12 @@ public:
     void    Set( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
                      sal_Int32 nCol2, sal_Int32 nRow2, sal_Int32 nTab2 )
                 { aStart.Set( nCol1, nRow1, nTab1 );
-                    aEnd.Set( nCol2, nRow2, nTab2 ); }
+                  aEnd.Set( nCol2, nRow2, nTab2 ); }
 
     void    GetVars( sal_Int32& nCol1, sal_Int32& nRow1, sal_Int32& nTab1,
                      sal_Int32& nCol2, sal_Int32& nRow2, sal_Int32& nTab2 ) const
                 { aStart.GetVars( nCol1, nRow1, nTab1 );
-                    aEnd.GetVars( nCol2, nRow2, nTab2 ); }
+                  aEnd.GetVars( nCol2, nRow2, nTab2 ); }
 
     bool    IsValid( const ScDocument* pDoc ) const
                 { return aStart.IsValid( pDoc ) && aEnd.IsValid( pDoc ); }

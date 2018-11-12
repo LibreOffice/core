@@ -318,15 +318,11 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
             pSectStyle->SetMarginRight(fRight);
         }
 
-        //if(bSectionColumns)
-        //{
-            //set columns
-            XFColumns* pColumns = m_pLayout->GetXFColumns();
-            if(pColumns)
-            {
-                pSectStyle->SetColumns(pColumns);
-            }
-        //}
+        XFColumns* pColumns = m_pLayout->GetXFColumns();
+        if(pColumns)
+        {
+            pSectStyle->SetColumns(pColumns);
+        }
         m_SectionStyleName = pXFStyleManager->AddStyle(std::move(pSectStyle)).m_pStyle->GetStyleName();
     }
 }

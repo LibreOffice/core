@@ -387,12 +387,12 @@ void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
     else
         *pImpl->pBookmk = rBkmk;
 
-     AddFormat( SotClipboardFormatId::STRING );
-     AddFormat( SotClipboardFormatId::SOLK );
-     AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
-     AddFormat( SotClipboardFormatId::FILECONTENT );
-     AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
-     AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+    AddFormat( SotClipboardFormatId::STRING );
+    AddFormat( SotClipboardFormatId::SOLK );
+    AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+    AddFormat( SotClipboardFormatId::FILECONTENT );
+    AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+    AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
 }
 
 
@@ -408,7 +408,7 @@ void TransferDataContainer::CopyAnyData( SotClipboardFormatId nFormatId,
         memcpy( aSeq.getArray(), pData, nLen );
         aEntry.aAny <<= aSeq;
         pImpl->aFmtList.push_back( aEntry );
-         AddFormat( nFormatId );
+        AddFormat( nFormatId );
     }
 }
 
@@ -428,7 +428,7 @@ void TransferDataContainer::CopyString( SotClipboardFormatId nFmt, const OUStrin
         aEntry.nId = nFmt;
         aEntry.aAny <<= rStr;
         pImpl->aFmtList.push_back( aEntry );
-         AddFormat( aEntry.nId );
+        AddFormat( aEntry.nId );
     }
 }
 

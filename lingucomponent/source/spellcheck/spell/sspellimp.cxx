@@ -382,7 +382,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-     if (rLocale == Locale()  ||  rWord.isEmpty())
+    if (rLocale == Locale()  ||  rWord.isEmpty())
         return true;
 
     if (!hasLocale( rLocale ))
@@ -507,7 +507,7 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-     if (rLocale == Locale()  ||  rWord.isEmpty())
+    if (rLocale == Locale()  ||  rWord.isEmpty())
         return nullptr;
 
     if (!hasLocale( rLocale ))

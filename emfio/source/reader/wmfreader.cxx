@@ -1106,8 +1106,8 @@ namespace emfio
                                                     aMemoryStream.ReadInt32( nTmpX )
                                                                  .ReadInt32( nTmpY )
                                                                  .ReadUInt32( nStringLen );
-                                                     aPt.setX( nTmpX );
-                                                     aPt.setY( nTmpY );
+                                                    aPt.setX( nTmpX );
+                                                    aPt.setY( nTmpY );
 
                                                     if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
                                                     {

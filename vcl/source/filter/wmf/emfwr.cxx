@@ -595,13 +595,13 @@ void EMFWriter::ImplWriteExtent( long nExtent )
 void EMFWriter::ImplWritePoint( const Point& rPoint )
 {
     const Point aPoint( OutputDevice::LogicToLogic( rPoint, maVDev->GetMapMode(), maDestMapMode ));
-     m_rStm.WriteInt32( aPoint.X() ).WriteInt32( aPoint.Y() );
+    m_rStm.WriteInt32( aPoint.X() ).WriteInt32( aPoint.Y() );
 }
 
 void EMFWriter::ImplWriteSize( const Size& rSize)
 {
     const Size aSize( OutputDevice::LogicToLogic( rSize, maVDev->GetMapMode(), maDestMapMode ));
-     m_rStm.WriteInt32( aSize.Width() ).WriteInt32( aSize.Height() );
+    m_rStm.WriteInt32( aSize.Width() ).WriteInt32( aSize.Height() );
 }
 
 void EMFWriter::ImplWriteRect( const tools::Rectangle& rRect )

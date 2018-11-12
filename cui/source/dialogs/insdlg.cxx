@@ -276,8 +276,8 @@ short SvInsertOleDlg::run()
                 uno::Reference< task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(xContext, nullptr) );
 
-               aMedium[1].Name = "InteractionHandler";
-               aMedium[1].Value <<= xInteraction;
+                aMedium[1].Name = "InteractionHandler";
+                aMedium[1].Value <<= xInteraction;
 
                 // create object from media descriptor
                 if ( bLink )

@@ -1016,7 +1016,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
                     namedValue.Value >>= sStandardDir;
 
                     // Set the directory for the "back to the default dir" button
-                        if ( !sStandardDir.isEmpty() )
+                    if ( !sStandardDir.isEmpty() )
                     {
                         m_aStandardDir = sStandardDir;
                     }

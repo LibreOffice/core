@@ -357,7 +357,7 @@ OUString SAL_CALL OFormattedField::getShapeType(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )
         return m_aProps.aComponent.m_xShape->getShapeType();
-   return OUString("com.sun.star.drawing.ControlShape");
+    return OUString("com.sun.star.drawing.ControlShape");
 }
 
 

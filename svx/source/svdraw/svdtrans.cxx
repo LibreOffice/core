@@ -282,7 +282,8 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
         double a=static_cast<double>(y0-nTop)/nHgt;
         a*=dy;
         rPnt.setY(y0+FRound(a) );
-    } return 0.0;
+    }
+    return 0.0;
 }
 
 

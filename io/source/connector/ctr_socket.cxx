@@ -33,7 +33,7 @@ namespace stoc_connector {
     template<class T>
     static void notifyListeners(SocketConnection * pCon, bool * notified, T t)
     {
-          XStreamListener_hash_set listeners;
+        XStreamListener_hash_set listeners;
 
         {
             ::osl::MutexGuard guard(pCon->_mutex);

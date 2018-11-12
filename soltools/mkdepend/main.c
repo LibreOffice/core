@@ -227,7 +227,7 @@ int main(int argc, char    **argv)
         argc = 1;
         for (p = args; argc < nargc; p += strlen(p) + 1)
             if (*p) nargv[argc++] = p;
-                argv = nargv;
+        argv = nargv;
     }
     for(argc--, argv++; argc; argc--, argv++) {
             /* if looking for endmarker then check before parsing */

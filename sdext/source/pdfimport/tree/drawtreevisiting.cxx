@@ -615,8 +615,8 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
 
 
         // move element to current paragraph
-       if (! pCurPara )  // new paragraph, insert one
-       {
+        if (! pCurPara )  // new paragraph, insert one
+        {
             pCurPara = ElementFactory::createParagraphElement( nullptr );
             // set parent
             pCurPara->Parent = &elem;
@@ -627,7 +627,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
             // update next_element which is now invalid
             next_page_element = page_element;
             ++ next_page_element;
-       }
+        }
         Element* pCurEle = page_element->get();
         Element::setParent( page_element, pCurPara );
         OSL_ENSURE( !pText || pCurEle == pText || pCurEle == pLink, "paragraph child list in disorder" );
@@ -709,9 +709,9 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                 {
                     pCur->updateGeometryWith( pNext );
                     // append text to current element
-                        pCur->Text.append( pNext->Text );
+                    pCur->Text.append( pNext->Text );
 
-                        str = pCur->Text.getStr();
+                    str = pCur->Text.getStr();
                     for(int i=0; i< str.getLength(); i++)
                     {
                         sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );

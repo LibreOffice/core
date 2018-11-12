@@ -4810,7 +4810,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbUnoProperty* pProp = dynamic_cast<SbUnoProperty*>( pVar );
         if( pProp )
         {
-             StructFieldInfo::iterator it =  maFields.find(  pProp->GetName() );
+            StructFieldInfo::iterator it =  maFields.find(  pProp->GetName() );
             // handle get/set of members of struct
             if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {

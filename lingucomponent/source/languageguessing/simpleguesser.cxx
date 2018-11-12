@@ -65,7 +65,7 @@ static int startsAsciiCaseInsensitive(const std::string &s1, const std::string &
                         -  rtl::toAsciiUpperCase(static_cast<unsigned char>(s2[i]));
                     if(s1[i] == '.' || s2[i] == '.') {ret = 0;}    //. is a neutral character
             }
-        return ret;
+            return ret;
  }
 
 /**

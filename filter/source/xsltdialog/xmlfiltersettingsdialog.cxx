@@ -871,7 +871,7 @@ void XMLFilterSettingsDialog::onSave()
     }
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg(
+    ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
         FileDialogFlags::NONE, GetFrameWeld());
 
@@ -916,9 +916,9 @@ void XMLFilterSettingsDialog::onOpen()
     std::vector< std::unique_ptr<filter_info_impl> > aFilters;
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-        FileDialogFlags::NONE, GetFrameWeld());
+    ::sfx2::FileDialogHelper aDlg(
+    css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+    FileDialogFlags::NONE, GetFrameWeld());
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));

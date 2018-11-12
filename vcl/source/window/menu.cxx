@@ -1529,8 +1529,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             // SubMenu?
             if (!IsMenuBar() && pData->pSubMenu)
             {
-                    if ( nFontHeight > nWidth )
-                        nWidth += nFontHeight;
+                if ( nFontHeight > nWidth )
+                    nWidth += nFontHeight;
 
                 pData->aSz.setHeight( std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
             }

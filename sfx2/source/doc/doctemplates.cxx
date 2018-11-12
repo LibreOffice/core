@@ -808,8 +808,8 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
 
     Content aParent;
     uno::Reference< XCommandEnvironment > aQuietEnv;
-       if ( Content::create( aDirPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
-       {
+    if ( Content::create( aDirPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
+    {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
             OUString aTryName = aPrefix;
@@ -864,7 +864,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
     OUString aNewFileURL;
     INetURLObject aDirPath( aPath );
 
-       Content aParent;
+    Content aParent;
 
     uno::Reference< XCommandEnvironment > aQuietEnv;
     if ( Content::create( aDirPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
@@ -1591,9 +1591,9 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     // create the group url
     Content         aGroup;
     INetURLObject   aGroupObj( maRootURL );
-                    aGroupObj.insertName( rNewName, false,
-                                          INetURLObject::LAST_SEGMENT,
-                                          INetURLObject::EncodeMechanism::All );
+    aGroupObj.insertName( rNewName, false,
+                          INetURLObject::LAST_SEGMENT,
+                          INetURLObject::EncodeMechanism::All );
     OUString        aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     // Check, if there is a group with the new name, return false

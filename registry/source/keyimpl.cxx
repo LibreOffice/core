@@ -257,21 +257,15 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
     readUINT32(pBuffer.get()+VALUE_TYPEOFFSET, size);
 
     *pValueType = static_cast<RegValueType>(type);
-//    if (*pValueType == RegValueType::UNICODE)
-//    {
-//        *pValueSize = (size / 2) * sizeof(sal_Unicode);
-//    } else
-//    {
-        if (*pValueType > RegValueType::BINARY)
-        {
-            pBuffer.reset(new sal_uInt8[4]);
-            rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), 4, readBytes);
+    if (*pValueType > RegValueType::BINARY)
+    {
+        pBuffer.reset(new sal_uInt8[4]);
+        rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), 4, readBytes);
 
-            readUINT32(pBuffer.get(), size);
-        }
+        readUINT32(pBuffer.get(), size);
+    }
 
-        *pValueSize = size;
-//    }
+    *pValueSize = size;
 
     return RegError::NO_ERROR;
 }

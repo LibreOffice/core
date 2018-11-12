@@ -733,8 +733,8 @@ void SwDocShell::Edit(
                 {
                     SwCharFormat* pCFormat = m_pWrtShell->GetCurCharFormat();
                     pDStyle->GetCharFormat()->SetDerivedFrom( pCFormat );
-                        if( pCFormat )
-                            pDStyle->PresetParent( pCFormat->GetName() );
+                    if( pCFormat )
+                        pDStyle->PresetParent( pCFormat->GetName() );
                 }
             }
             break;

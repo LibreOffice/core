@@ -503,7 +503,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
             else
                 aNewAttr.Put(*pArgs);
-        break;
+            break;
         }
         case SID_PARA_DLG:
         {

@@ -487,7 +487,7 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
         if( mpParent->mrParent.GetSelectIndexId() == mpParent->mnId )
         {
             pStateSet->AddState( css::accessibility::AccessibleStateType::SELECTED );
-               pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSED );
+            pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSED );
         }
         if ( mpParent->mnId >= mpParent->mrParent.FirstInView() && mpParent->mnId <= mpParent->mrParent.LastInView() )
         {

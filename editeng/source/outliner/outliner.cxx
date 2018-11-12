@@ -162,8 +162,8 @@ void Outliner::ParagraphDeleted( sal_Int32 nPara )
         return;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (!pPara)
-            return;
+    if (!pPara)
+        return;
 
     sal_Int16 nDepth = pPara->GetDepth();
 
@@ -711,8 +711,8 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
     DBG_ASSERT( ( nDepth >= gnMinDepth ) && ( nDepth <= nMaxDepth ), "ImplInitDepth - Depth is invalid!" );
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (!pPara)
-            return;
+    if (!pPara)
+        return;
     sal_Int16 nOldDepth = pPara->GetDepth();
     pPara->SetDepth( nDepth );
 
@@ -1103,7 +1103,7 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat
     bFirstParaIsEmpty = false;
 
     sal_Int32 nParas = pEditEngine->GetParagraphCount();
-     pParaList->Clear();
+    pParaList->Clear();
     for ( sal_Int32 n = 0; n < nParas; n++ )
     {
         std::unique_ptr<Paragraph> pPara(new Paragraph( 0 ));
@@ -1130,8 +1130,8 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
     for( sal_Int32 nPara = nFirstPara; nPara <= nLastPara; nPara++ )
     {
         Paragraph* pPara = pParaList->GetParagraph( nPara );
-                if (pPara)
-                {
+        if (pPara)
+        {
                     if( ImpConvertEdtToOut( nPara ) )
                     {
                             pLastConverted = pPara;
@@ -1393,8 +1393,8 @@ const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
 Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (!pPara)
-            return Size();
+    if (!pPara)
+        return Size();
 
     if( pPara->aBulSize.Width() == -1 )
     {
@@ -2025,12 +2025,12 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         return nullptr;
     }
 
-     if (nCount < 0)
-     {
+    if (nCount < 0)
+    {
         SAL_INFO("editeng.chaining",
                  "[Overflowing] No Overflowing text but GetNonOverflowinText called?!");
         return nullptr;
-     }
+    }
 
     // NOTE: We want the selection of the overflowing text from here
     //       At the same time we may want to consider the beginning of such text
@@ -2104,7 +2104,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         bool bLastParaInterrupted =
             pEditEngine->GetOverflowingLineNum() > 0;
 
-       return new NonOverflowingText(aOverflowingTextSelection, bLastParaInterrupted);
+        return new NonOverflowingText(aOverflowingTextSelection, bLastParaInterrupted);
     }
 }
 

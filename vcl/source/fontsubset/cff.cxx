@@ -1109,10 +1109,10 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     writeType1Val( 0); // TODO: aSubsetterContext.getLeftSideBearing();
     writeType1Val( 1000/*###getCharWidth()###*/);
     writeTypeOp( TYPE1OP::HSBW);
-mbNeedClose = false;
-mbIgnoreHints = false;
-mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
-mnCntrMask = 0;
+    mbNeedClose = false;
+    mbIgnoreHints = false;
+    mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
+    mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
 //  if( bActivePath)
@@ -1496,7 +1496,7 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
         return -1;
 
     // get the SID/CID from the Charset table
-     const U8* pReadPtr = mpBasePtr + mnCharsetBase;
+    const U8* pReadPtr = mpBasePtr + mnCharsetBase;
     const U8 nCSetFormat = *(pReadPtr++);
     int nGlyphsToSkip = nGlyphIndex - 1;
     switch( nCSetFormat) {
@@ -1566,7 +1566,7 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
              sprintf( aDefaultGlyphName, "bad%03d", nSID);
     }
 
-     return pGlyphName;
+    return pGlyphName;
 }
 
 class Type1Emitter
@@ -1984,10 +1984,10 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rEmitter.emitAllCrypted();
 
     // mark stop of eexec encryption
-     if( rEmitter.mbPfbSubset) {
+    if( rEmitter.mbPfbSubset) {
         const int nEExecLen = rEmitter.tellPos() - nEExecSegTell;
         rEmitter.updateLen( nEExecSegTell-4, nEExecLen);
-     }
+    }
 
     // create PFB footer
     static const char aPfxFooter[] = "\x80\x01\x14\x02\x00\x00\n" // TODO: check segment len

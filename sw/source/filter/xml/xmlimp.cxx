@@ -506,7 +506,7 @@ void SwXMLImport::startDocument()
 
     Reference< XPropertySet > xImportInfo( getImportInfo() );
     Reference< XPropertySetInfo > xPropertySetInfo;
-       if( xImportInfo.is() )
+    if( xImportInfo.is() )
         xPropertySetInfo = xImportInfo->getPropertySetInfo();
     if( xPropertySetInfo.is() )
     {

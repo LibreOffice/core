@@ -179,7 +179,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
 
         OUString aDocumentUrl, aTitle, aImageId, aTargetName;
 
-           for ( int e = 0; e < rDynamicMenuEntry.getLength(); e++ )
+        for ( int e = 0; e < rDynamicMenuEntry.getLength(); e++ )
         {
             if ( rDynamicMenuEntry[ e ].Name == DYNAMICMENU_PROPERTYNAME_URL )
                 rDynamicMenuEntry[ e ].Value >>= aDocumentUrl;

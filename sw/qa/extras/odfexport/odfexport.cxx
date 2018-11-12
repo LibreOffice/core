@@ -254,7 +254,7 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
 {
    //Counting the Number of Frames and checking with the expected count
-   uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16), xIndexAccess->getCount());
     uno::Reference<drawing::XShape> xTextFrame;

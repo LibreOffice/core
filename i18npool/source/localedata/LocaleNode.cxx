@@ -109,10 +109,10 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
         return new LCSearchNode (name,attr);
     if ( name == "LC_MISC" )
         return new LCMiscNode (name,attr);
-      if ( name == "LC_NumberingLevel" )
-                return new LCNumberingLevelNode (name, attr);
-      if ( name == "LC_OutLineNumberingLevel" )
-                return new LCOutlineNumberingLevelNode (name, attr);
+    if ( name == "LC_NumberingLevel" )
+        return new LCNumberingLevelNode (name, attr);
+    if ( name == "LC_OutLineNumberingLevel" )
+        return new LCOutlineNumberingLevelNode (name, attr);
 
     return new LocaleNode(name,attr);
 }

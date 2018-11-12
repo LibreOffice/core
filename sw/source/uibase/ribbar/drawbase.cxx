@@ -272,15 +272,15 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
             if (OBJ_NONE == nDrawMode)   // Text border inserted
             {
-               uno::Reference< frame::XDispatchRecorder > xRecorder =
+                uno::Reference< frame::XDispatchRecorder > xRecorder =
                     m_pSh->GetView().GetViewFrame()->GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
                     SfxRequest aReq(m_pSh->GetView().GetViewFrame(),FN_INSERT_FRAME);
-                        aReq.AppendItem(SfxUInt16Item( FN_INSERT_FRAME,
+                    aReq .AppendItem(SfxUInt16Item( FN_INSERT_FRAME,
                                 static_cast<sal_uInt16>(RndStdIds::FLY_AT_PARA) ));
-                        aReq.AppendItem(SfxPointItem( FN_PARAM_1, m_pSh->GetAnchorObjDiff()));
-                        aReq.AppendItem(SvxSizeItem( FN_PARAM_2, m_pSh->GetObjSize()));
+                    aReq.AppendItem(SfxPointItem( FN_PARAM_1, m_pSh->GetAnchorObjDiff()));
+                    aReq.AppendItem(SvxSizeItem( FN_PARAM_2, m_pSh->GetObjSize()));
                     aReq.Done();
                 }
                 bAutoCap = true;
@@ -473,7 +473,7 @@ void SwDrawBase::BreakCreate()
 void SwDrawBase::SetDrawPointer()
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
-        Point aPnt(m_pWin->OutputToScreenPixel(m_pWin->GetPointerPosPixel()));
+    Point aPnt(m_pWin->OutputToScreenPixel(m_pWin->GetPointerPosPixel()));
     aPnt = m_pWin->PixelToLogic(m_pWin->ScreenToOutputPixel(aPnt));
     const Pointer aPointTyp = pSdrView->GetPreferredPointer(aPnt, m_pSh->GetOut());
     const Pointer aDrawPt(aPointTyp);

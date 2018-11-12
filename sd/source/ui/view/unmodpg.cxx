@@ -78,7 +78,7 @@ void ModifyPageUndoAction::Undo()
 {
     // invalidate Selection, there could be objects deleted in this UNDO
     // which are no longer allowed to be selected then.
-      SdrViewIter aIter(mpPage);
+    SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
 
     while(pView)
@@ -121,7 +121,7 @@ void ModifyPageUndoAction::Redo()
 {
     // invalidate Selection, there could be objects deleted in this UNDO
     // which are no longer allowed to be selected then.
-      SdrViewIter aIter(mpPage);
+    SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
 
     while(pView)

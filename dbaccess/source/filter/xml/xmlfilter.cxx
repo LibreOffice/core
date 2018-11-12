@@ -161,7 +161,7 @@ static ErrCode ReadThroughComponent(
         {
             bool bEncrypted = false;
             // open stream (and set parser input)
-        OUString sStreamName = OUString::createFromAscii(pStreamName);
+            OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
                 // stream name not found! Then try the compatibility name.

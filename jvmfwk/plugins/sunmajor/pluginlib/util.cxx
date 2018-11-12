@@ -173,7 +173,7 @@ bool getAndAddJREInfoByPath(
    {
        OUString const & operator()()
        {
-           static OUString sIni;
+            static OUString sIni;
             OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
 #ifdef MACOSX

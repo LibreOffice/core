@@ -193,7 +193,7 @@ bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
 {
     bool bRet = false;
     sal_Int32 nValue;
-      OUStringBuffer aOut;
+    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
@@ -309,7 +309,7 @@ bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
 {
     bool bRet = false;
     sal_Int32 nValue;
-      OUStringBuffer aOut;
+    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
@@ -387,7 +387,7 @@ bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 {
     bool bRet = false;
     sal_Int32 nValue;
-      OUStringBuffer aOut;
+    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
@@ -418,7 +418,7 @@ bool XMLMeasurePxPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 {
     bool bRet = false;
     sal_Int32 nValue;
-      OUStringBuffer aOut;
+    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {

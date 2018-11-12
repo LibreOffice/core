@@ -429,8 +429,8 @@ Time tools::Time::GetUTCOffset()
          gmtime_r( &nTime, &aTM );
          nUTC = mktime( &aTM );
 #endif
-         nCacheTicks = nTicks;
-         nCacheSecOffset = (nLocalTime-nUTC) / 60;
+        nCacheTicks = nTicks;
+        nCacheSecOffset = (nLocalTime-nUTC) / 60;
     }
 
     nTempTime = abs( nCacheSecOffset );

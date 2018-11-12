@@ -161,56 +161,56 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
     {
         case G_IO_ERROR_FAILED:
             { io::IOException aExcept(sMessage, rContext);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_MOUNTED:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING_PATH, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_FOUND:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_EXISTS:
             { ucb::NameClashException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, sName);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_INVALID_ARGUMENT:
             { lang::IllegalArgumentException aExcept(sMessage, rContext, -1 );
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_PERMISSION_DENIED:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_ACCESS_DENIED, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_IS_DIRECTORY:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_REGULAR_FILE:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_DIRECTORY:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_DIRECTORY, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_FILENAME_TOO_LONG:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NAME_TOO_LONG, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_PENDING:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_PENDING, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_CLOSED:
         case G_IO_ERROR_CANCELLED:
@@ -218,45 +218,45 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
         case G_IO_ERROR_WRONG_ETAG:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_GENERAL, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_SUPPORTED:
         case G_IO_ERROR_CANT_CREATE_BACKUP:
         case G_IO_ERROR_WOULD_MERGE:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_SUPPORTED, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NO_SPACE:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_OUT_OF_DISK_SPACE, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_INVALID_FILENAME:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_INVALID_CHARACTER, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_READ_ONLY:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_WRITE_PROTECTED, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_TIMED_OUT:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_DEVICE_NOT_READY, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_WOULD_RECURSE:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_RECURSIVE, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_BUSY:
         case G_IO_ERROR_WOULD_BLOCK:
             { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 task::InteractionClassification_ERROR, ucb::IOErrorCode_LOCKING_VIOLATION, aArgs);
-            EXCEPT(aExcept); }
+              EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_HOST_NOT_FOUND:
             { ucb::InteractiveNetworkResolveNameException aExcept(sMessage, rContext,

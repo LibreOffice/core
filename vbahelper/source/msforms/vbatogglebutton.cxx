@@ -55,8 +55,8 @@ uno::Any SAL_CALL
 ScVbaToggleButton::getValue()
 {
     sal_Int16 nState = 0;
-        m_xProps->getPropertyValue( "State" ) >>= nState;
-     return uno::makeAny( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
+    m_xProps->getPropertyValue( "State" ) >>= nState;
+    return uno::makeAny( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
 }
 
 

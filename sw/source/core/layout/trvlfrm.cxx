@@ -782,7 +782,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                 nX = nPrtLeft;
             else
             {
-                   const long nPrtRight = bRTL ?
+                const long nPrtRight = bRTL ?
                                     aRectFnSet.GetPrtLeft(*pTable) :
                                     aRectFnSet.GetPrtRight(*pTable);
                 if ( bRTL != (nX > nPrtRight) )
@@ -866,7 +866,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                         //The flow leads from one table to the next. The X-value
                         //needs to be corrected by the amount of the offset of
                         //the tables
-                         if ( pTable &&
+                        if ( pTable &&
                               !pTab->GetUpper()->IsInTab() &&
                             !pTable->GetUpper()->IsInTab() )
                             nX += pTab->getFrameArea().Left() - pTable->getFrameArea().Left();
@@ -2581,8 +2581,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                     else
                     {
                         SwNodeIndex idx( nodes.GetEndOfContent());
-                     if( SwContentNode* last = SwNodes::GoPrevious( &idx ))
-                        inSelection = *pEndPos == SwPosition( *last, last->Len());
+                        if( SwContentNode* last = SwNodes::GoPrevious( &idx ))
+                            inSelection = *pEndPos == SwPosition( *last, last->Len());
                     }
                 }
                 if( inSelection )

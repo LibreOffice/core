@@ -2564,7 +2564,7 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
                 break;
             }
 
-        pChildAtom = Atom::findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
 
         }
     }

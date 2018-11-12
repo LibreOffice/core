@@ -875,7 +875,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             // #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
-                 *pValue <<= pDocSh->IsLoadReadonly();
+                *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
             // #i972#

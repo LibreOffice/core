@@ -78,7 +78,7 @@ VclPtr<SfxTabPage> SvxOpenCLTabPage::Create( TabPageParent pParent, const SfxIte
 
 bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 {
- bool bModified = false;
+    bool bModified = false;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     if (mpUseOpenCL->IsValueChangedFromSaved())

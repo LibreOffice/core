@@ -1110,7 +1110,7 @@ RndStdIds SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
          else
              *pbHasChanged = false;
     }
-   return nRet;
+    return nRet;
 }
 
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, weld::ToggleButton&, void)

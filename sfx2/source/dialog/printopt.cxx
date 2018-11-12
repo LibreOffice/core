@@ -265,7 +265,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     if (bOrigBackEnd != m_pPDFCB->IsChecked())
     {
         pCurrentOptions->SetPDFAsStandardPrintJobFormat( m_pPDFCB->IsChecked() );
-            svtools::executeRestartDialog(
+        svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,
                 svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT);
     }

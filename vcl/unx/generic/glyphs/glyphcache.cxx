@@ -128,10 +128,10 @@ bool GlyphCache::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance
     if( nAWidth != nBWidth )
         return false;
 
-   if (rA.meLanguage != rB.meLanguage)
+    if (rA.meLanguage != rB.meLanguage)
         return false;
    // check for features
-   if ((rA.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
+    if ((rA.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
         != -1 ||
         rB.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
         != -1) && rA.maTargetName != rB.maTargetName)

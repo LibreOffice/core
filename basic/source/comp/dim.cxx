@@ -216,7 +216,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     }
     // behavior in VBA is that a module scope variable's lifetime is
     // tied to the document. e.g. a module scope variable is global
-       if(  GetBasic()->IsDocBasic() && bVBASupportOn && !pProc )
+    if(  GetBasic()->IsDocBasic() && bVBASupportOn && !pProc )
         bPersistentGlobal = true;
     // PRIVATE is a synonymous for DIM
     // _CONST_?

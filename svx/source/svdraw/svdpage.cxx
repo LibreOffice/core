@@ -1506,7 +1506,7 @@ void SdrPage::SetInserted( bool bIns )
         // #i120437# go over whole hierarchy, not only over object level null (seen from grouping)
         SdrObjListIter aIter(this, SdrIterMode::DeepNoGroups);
 
-         while ( aIter.IsMore() )
+        while ( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
             if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr )

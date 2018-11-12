@@ -122,7 +122,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
                     mpProxyList->SetInvalid( 0, COMPLETE_STRING );
                 }
             }
-           mbFinished = false;
+            mbFinished = false;
         }
         pRet = mpProxyList.get();
     }
