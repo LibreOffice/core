@@ -139,7 +139,7 @@ void vcl::Cursor::ImplDraw()
         vcl::Window* pWindow         = mpData->mpWindow;
         mpData->maPixPos        = pWindow->LogicToPixel( maPos );
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
-        mpData->mnPixSlant      = pWindow->LogicToPixel( Size( mnSlant, 0 ) ).Width();
+        mpData->mnPixSlant      = 0;
         mpData->mnOrientation   = mnOrientation;
         mpData->mnDirection     = mnDirection;
 
@@ -309,7 +309,6 @@ vcl::Cursor::Cursor()
 {
     mpData          = nullptr;
     mpWindow        = nullptr;
-    mnSlant         = 0;
     mnOrientation   = 0;
     mnDirection     = CursorDirection::NONE;
     mnStyle         = 0;
@@ -322,7 +321,6 @@ vcl::Cursor::Cursor( const Cursor& rCursor ) :
 {
     mpData          = nullptr;
     mpWindow        = nullptr;
-    mnSlant         = rCursor.mnSlant;
     mnOrientation   = rCursor.mnOrientation;
     mnDirection     = rCursor.mnDirection;
     mnStyle         = 0;
@@ -420,7 +418,6 @@ vcl::Cursor& vcl::Cursor::operator=( const vcl::Cursor& rCursor )
 {
     maPos           = rCursor.maPos;
     maSize          = rCursor.maSize;
-    mnSlant         = rCursor.mnSlant;
     mnOrientation   = rCursor.mnOrientation;
     mnDirection     = rCursor.mnDirection;
     mbVisible       = rCursor.mbVisible;
@@ -434,7 +431,6 @@ bool vcl::Cursor::operator==( const vcl::Cursor& rCursor ) const
     return
         ((maPos         == rCursor.maPos)           &&
          (maSize        == rCursor.maSize)          &&
-         (mnSlant       == rCursor.mnSlant)         &&
          (mnOrientation == rCursor.mnOrientation)   &&
          (mnDirection   == rCursor.mnDirection)     &&
          (mbVisible     == rCursor.mbVisible))

@@ -53,7 +53,6 @@ protected:
     std::unique_ptr<ImplTabCtrlData> mpTabCtrlData;
     long                mnLastWidth;
     long                mnLastHeight;
-    long                mnMaxPageWidth;
     sal_uInt16          mnActPageId;
     sal_uInt16          mnCurPageId;
     bool                mbFormat;
