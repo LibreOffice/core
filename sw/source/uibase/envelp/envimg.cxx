@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/paperinf.hxx>

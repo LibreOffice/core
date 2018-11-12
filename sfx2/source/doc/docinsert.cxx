@@ -39,6 +39,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <memory>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

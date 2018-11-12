@@ -20,6 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <osl/diagnose.h>
 #include <o3tl/any.hxx>
 #include <svx/rubydialog.hxx>
 #include <sfx2/app.hxx>

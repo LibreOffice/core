@@ -36,6 +36,7 @@
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <unicode/uchar.h>
 #include <unicode/regex.h>
 #include <i18nlangtag/mslangid.hxx>

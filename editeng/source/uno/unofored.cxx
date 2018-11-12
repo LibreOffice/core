@@ -19,6 +19,7 @@
 
 
 #include <algorithm>
+#include <osl/diagnose.h>
 #include <editeng/eeitem.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 

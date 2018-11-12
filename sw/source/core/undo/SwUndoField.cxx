@@ -30,6 +30,7 @@
 #include <dbfld.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
 

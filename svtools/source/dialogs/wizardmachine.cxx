@@ -24,6 +24,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <vcl/svapp.hxx>
+#include <stack>
 
 namespace svt
 {

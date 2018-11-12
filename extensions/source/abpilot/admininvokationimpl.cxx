@@ -30,6 +30,7 @@
 #include <componentmodule.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
+#include <osl/diagnose.h>
 
 
 namespace abp

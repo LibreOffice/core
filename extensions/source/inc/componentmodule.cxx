@@ -25,6 +25,7 @@
 #include <svl/solar.hrc>
 #include <tools/debug.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 namespace compmodule
 {

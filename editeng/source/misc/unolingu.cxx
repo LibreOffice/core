@@ -52,6 +52,7 @@
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::comphelper;
 using namespace ::linguistic;

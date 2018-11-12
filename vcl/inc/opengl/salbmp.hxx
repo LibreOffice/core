@@ -32,6 +32,10 @@
 
 struct  BitmapBuffer;
 class   BitmapPalette;
+namespace vcl
+{
+    class Kernel;
+}
 
 class VCL_PLUGIN_PUBLIC OpenGLSalBitmap : public SalBitmap
 {

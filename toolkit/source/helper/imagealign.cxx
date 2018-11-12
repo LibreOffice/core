@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/ImageAlign.hpp>
 
 #include <helper/imagealign.hxx>
+#include <osl/diagnose.h>
 
 namespace toolkit
 {

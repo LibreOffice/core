@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace svt
 {

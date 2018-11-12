@@ -24,17 +24,14 @@
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclptr.hxx>
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
+namespace com { namespace sun { namespace star { namespace frame { struct FeatureStateEvent; } } } }
+template <class T> class VclPtr;
 
 class Color;
-class UserDrawEvent;
 class ImplCommonButtonData;
 enum class DrawButtonFlags;
 

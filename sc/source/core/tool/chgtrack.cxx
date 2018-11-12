@@ -37,6 +37,7 @@
 #include <refupdatecontext.hxx>
 #include <refupdat.hxx>
 
+#include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
 #include <svl/itemset.hxx>
 #include <svl/isethint.hxx>

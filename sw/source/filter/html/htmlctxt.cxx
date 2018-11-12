@@ -26,6 +26,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <svtools/htmltokn.h>
 #include <editeng/boxitem.hxx>
+#include <osl/diagnose.h>
 
 #include <doc.hxx>
 #include <pam.hxx>
