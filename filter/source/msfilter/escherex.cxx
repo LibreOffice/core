@@ -19,6 +19,7 @@
 
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
+#include <o3tl/clamp.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdomedia.hxx>
@@ -2926,9 +2927,15 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             for (auto const& equation : aEquations)
                             {
                                 aMemStrm.WriteUInt16( equation.nOperation )
-                                    .WriteInt16( equation.nPara[ 0 ] )
+                                    .WriteInt16(
+                                        o3tl::clamp(
+                                            equation.nPara[ 0 ], sal_Int32(SAL_MIN_INT16),
+                                            sal_Int32(SAL_MAX_INT16)) )
                                     .WriteInt16( equation.nPara[ 1 ] )
-                                    .WriteInt16( equation.nPara[ 2 ] );
+                                    .WriteInt16(
+                                        o3tl::clamp(
+                                            equation.nPara[ 2 ], sal_Int32(SAL_MIN_INT16),
+                                            sal_Int32(SAL_MAX_INT16)) );
                             }
 
                             AddOpt(DFF_Prop_pFormulas, true, 6, aMemStrm);
