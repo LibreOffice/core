@@ -2350,7 +2350,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();
     const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
 
-    sal_uInt16 nTableOffset = 0;
+    SwTwips nTableOffset = 0;
 
     if (
         (text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() ||
@@ -2384,7 +2384,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         }
     }
 
-     m_rWW8Export.InsUInt16( nTableOffset );
+     m_rWW8Export.InsInt16( nTableOffset );
 
     ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
     for ( const auto nCol : *pGridCols )
