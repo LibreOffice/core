@@ -210,7 +210,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
             throw RuntimeException() ;
     }
 
-     setErrorRecorder();
+    setErrorRecorder();
 
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
     sal_Int32 i;
