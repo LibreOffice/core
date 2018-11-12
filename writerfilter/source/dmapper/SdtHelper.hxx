@@ -86,6 +86,10 @@ public:
     {
         return m_sDateFormat;
     }
+
+    /// Decides if we have enough information to create a date control.
+    bool validateDateFormat();
+
     OUStringBuffer& getLocale()
     {
         return m_sLocale;
