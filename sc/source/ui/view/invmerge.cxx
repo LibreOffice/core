@@ -18,6 +18,7 @@
  */
 
 #include <vcl/window.hxx>
+#include <osl/diagnose.h>
 
 #include <invmerge.hxx>
 

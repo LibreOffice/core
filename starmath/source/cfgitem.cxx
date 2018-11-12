@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"

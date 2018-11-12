@@ -34,6 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <formula/funcvarargs.h>
+#include <osl/diagnose.h>
 
 #include <memory>
 

@@ -20,6 +20,7 @@
 #include <extended/listboxaccessible.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 namespace accessibility
 {

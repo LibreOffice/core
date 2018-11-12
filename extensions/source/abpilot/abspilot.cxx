@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
+#include <osl/diagnose.h>
 #include "abpfinalpage.hxx"
 #include "fieldmappingpage.hxx"
 #include "fieldmappingimpl.hxx"

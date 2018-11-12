@@ -21,6 +21,7 @@
 
 #include <cstddef>
 
+#include <osl/diagnose.h>
 #include <swtypes.hxx>
 #include "createaddresslistdialog.hxx"
 #include "customizeaddresslistdialog.hxx"

@@ -33,6 +33,7 @@
 
 #include <rtl/ustring.h>
 
+#include <osl/diagnose.h>
 #include <osl/module.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 

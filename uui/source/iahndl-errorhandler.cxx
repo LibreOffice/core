@@ -30,6 +30,7 @@
 #include <svx/svxerr.hxx>
 #include <svx/dialogs.hrc>
 #include <unotools/resmgr.hxx>
+#include <osl/diagnose.h>
 
 #include <ids.hxx>
 #include <ids.hrc>

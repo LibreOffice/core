@@ -24,6 +24,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <sfx2/objface.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/msg.hxx>
 #include <cmdid.h>

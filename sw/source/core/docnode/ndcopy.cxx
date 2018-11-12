@@ -30,6 +30,7 @@
 #include <vcl/fmtfield.hxx>
 #include <ndindex.hxx>
 #include <vector>
+#include <osl/diagnose.h>
 
 
 #ifdef DBG_UTIL

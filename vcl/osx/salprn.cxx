@@ -21,6 +21,7 @@
 
 #include <vcl/print.hxx>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #include <osx/salinst.h>
 #include <osx/salprn.h>

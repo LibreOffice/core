@@ -21,6 +21,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 #include <hintids.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>

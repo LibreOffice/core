@@ -32,6 +32,7 @@
 #include <svx/flagsdef.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/app.hxx>
+#include <osl/diagnose.h>
 
 ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
     : SfxTabDialogController(pParent, "modules/scalc/ui/formatcellsdialog.ui",

@@ -34,6 +34,7 @@
 #include <frmfmt.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <osl/diagnose.h>
 
 using namespace css;
 

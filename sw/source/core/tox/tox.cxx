@@ -35,6 +35,7 @@
 
 #include <boost/optional.hpp>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 

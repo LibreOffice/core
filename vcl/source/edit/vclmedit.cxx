@@ -31,6 +31,7 @@
 #include <strings.hrc>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 class ImpVclMEdit : public SfxListener
 {

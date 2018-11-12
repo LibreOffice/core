@@ -34,6 +34,7 @@
 #include <svtools/imagemgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 

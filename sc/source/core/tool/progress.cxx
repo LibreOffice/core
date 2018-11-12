@@ -24,6 +24,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
+#include <osl/diagnose.h>
 
 #define SC_PROGRESS_CXX
 #include <progress.hxx>

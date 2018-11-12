@@ -53,6 +53,7 @@
 #include <vcl/wrkwin.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"
