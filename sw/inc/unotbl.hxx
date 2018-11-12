@@ -34,6 +34,8 @@
 
 #include <comphelper/uno3.hxx>
 
+#include <svl/listener.hxx>
+
 #include "calbck.hxx"
 #include "TextCursorHelper.hxx"
 #include "unotext.hxx"
@@ -57,7 +59,7 @@ cppu::WeakImplHelper
 SwXCellBaseClass;
 class SwXCell final : public SwXCellBaseClass,
     public SwXText,
-    public SwClient
+    public SvtListener
 {
     friend void   sw_setString( SwXCell &rCell, const OUString &rText,
                                 bool bKeepNumberFormat );
@@ -66,6 +68,7 @@ class SwXCell final : public SwXCellBaseClass,
     const SfxItemPropertySet*   m_pPropSet;
     SwTableBox*                 pBox;       // only set in non-XML import
     const SwStartNode*      pStartNode; // only set in XML import
+    SwFrameFormat* m_pTableFormat;
 
     // table position where pBox was found last
     size_t nFndPos;
@@ -80,9 +83,7 @@ class SwXCell final : public SwXCellBaseClass,
 
     virtual ~SwXCell() override;
 
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    virtual void Notify(const SfxHint&) override;
 
 public:
     SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, size_t nPos);
@@ -142,7 +143,7 @@ public:
     SwTableBox* GetTableBox() const { return pBox; }
     static SwXCell* CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
     SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
-    SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SwFrameFormat* GetFrameFormat() const { return m_pTableFormat; }
     double GetForcedNumericalValue() const;
     css::uno::Any GetAny() const;
 };
