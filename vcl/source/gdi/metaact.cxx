@@ -1458,7 +1458,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
     }

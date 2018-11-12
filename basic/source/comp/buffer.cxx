@@ -132,7 +132,7 @@ void SbiBuffer::Chain( sal_uInt32 off )
         {
             ip = reinterpret_cast<sal_uInt8*>(pBuf.get()) + i;
             sal_uInt8* pTmp = ip;
-                     i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
+            i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
 
             if( i >= nOff )
             {

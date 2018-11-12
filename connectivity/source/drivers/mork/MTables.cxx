@@ -60,7 +60,7 @@ void OTables::impl_refresh(  )
 
 void OTables::disposing()
 {
-m_xMetaData.clear();
+    m_xMetaData.clear();
     OCollection::disposing();
 }
 

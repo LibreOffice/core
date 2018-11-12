@@ -1380,7 +1380,7 @@ void SAXWriter::allowLineBreak( )
         throw SAXException();
     }
 
-     m_bAllowLineBreak = true;
+    m_bAllowLineBreak = true;
 }
 
 void SAXWriter::unknown(const OUString& sString)

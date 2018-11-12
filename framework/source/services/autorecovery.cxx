@@ -1801,8 +1801,8 @@ void AutoRecovery::implts_readConfig()
     const OUString sRECOVERY_ITEM_BASE_IDENTIFIER(RECOVERY_ITEM_BASE_IDENTIFIER);
     const css::uno::Sequence< OUString > lItems = xRecoveryList->getElementNames();
     const OUString*                      pItems = lItems.getConstArray();
-          sal_Int32                             c      = lItems.getLength();
-          sal_Int32                             i      = 0;
+    sal_Int32                            c      = lItems.getLength();
+    sal_Int32                            i      = 0;
 
     // REENTRANT -> --------------------------
     aCacheLock.lock(LOCK_FOR_CACHE_ADD_REMOVE);

@@ -92,7 +92,7 @@ namespace dbtools
 
     void ParameterManager::clearAllParameterInformation()
     {
-       m_xInnerParamColumns.clear();
+        m_xInnerParamColumns.clear();
         if ( m_pOuterParameters.is() )
             m_pOuterParameters->dispose();
         m_pOuterParameters   = nullptr;

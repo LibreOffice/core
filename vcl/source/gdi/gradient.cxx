@@ -145,8 +145,8 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
                           fHeight * fabs( sin( fAngle ) );
         double  fDY     = fHeight * fabs( cos( fAngle ) ) +
                           fWidth  * fabs( sin( fAngle ) );
-                fDX     = (fDX - fWidth)  * 0.5 + 0.5;
-                fDY     = (fDY - fHeight) * 0.5 + 0.5;
+        fDX     = (fDX - fWidth)  * 0.5 + 0.5;
+        fDY     = (fDY - fHeight) * 0.5 + 0.5;
         aRect.AdjustLeft( -static_cast<long>(fDX) );
         aRect.AdjustRight(static_cast<long>(fDX) );
         aRect.AdjustTop( -static_cast<long>(fDY) );

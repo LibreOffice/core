@@ -397,7 +397,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelper::getContainer( co
     ::osl::MutexGuard aGuard( rMutex );
 
     t_type2ptr * pMap = static_cast<t_type2ptr *>(m_pMap);
-     t_type2ptr::iterator iter = findType( pMap, rKey );
+    t_type2ptr::iterator iter = findType( pMap, rKey );
     if( iter != pMap->end() )
             return static_cast<OInterfaceContainerHelper*>((*iter).second);
     return nullptr;
@@ -566,7 +566,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperInt32::getContaine
     if (!m_pMap)
         return nullptr;
     t_long2ptr * pMap = static_cast<t_long2ptr *>(m_pMap);
-     t_long2ptr::iterator iter = findLong( pMap, rKey );
+    t_long2ptr::iterator iter = findLong( pMap, rKey );
     if( iter != pMap->end() )
             return static_cast<OInterfaceContainerHelper*>((*iter).second);
     return nullptr;
@@ -580,7 +580,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::addInterface(
         m_pMap = new t_long2ptr;
     t_long2ptr * pMap = static_cast<t_long2ptr *>(m_pMap);
     t_long2ptr::iterator iter = findLong( pMap, rKey );
-     if( iter == pMap->end() )
+    if( iter == pMap->end() )
     {
         OInterfaceContainerHelper * pLC = new OInterfaceContainerHelper( rMutex );
         pMap->push_back(std::pair< sal_Int32, void* >(rKey, pLC));

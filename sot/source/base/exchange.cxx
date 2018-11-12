@@ -206,7 +206,7 @@ namespace
             /*145 SotClipboardFormatId::RICHTEXT*/ { "text/richtext", "Richtext Format", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*146 SotClipboardFormatId::STRING_TSVC*/            { "application/x-libreoffice-tsvc", "Text TSV-Calc", &cppu::UnoType<OUString>::get() }
             };
-        return &aInstance[0];
+            return &aInstance[0];
         }
     };
 

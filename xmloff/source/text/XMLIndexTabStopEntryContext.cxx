@@ -149,7 +149,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     }
 
     // tab character #i21237#
-     pValues[nNextEntry].Name = "WithTab";
+    pValues[nNextEntry].Name = "WithTab";
     pValues[nNextEntry].Value <<= bWithTab;
     nNextEntry++;
 

@@ -196,7 +196,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
-
+    {
         TDeadItemList                     lDeadItems;
         TNumberedItemHash::const_iterator pComponent;
 
@@ -226,7 +226,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 
         // b) return first free number
         return *(lPossibleNumbers.begin ());
-
+    }
     // <- SYNCHRONIZED
 }
 

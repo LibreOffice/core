@@ -1159,7 +1159,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                         // Create library
                         Reference< XNameContainer > xLib = createLibrary( aLibName );
-                           SfxLibrary* pNewLib = static_cast< SfxLibrary* >( xLib.get() );
+                        SfxLibrary* pNewLib = static_cast< SfxLibrary* >( xLib.get() );
                         pNewLib->mbLoaded = false;
                         pNewLib->implSetModified( false );
                         checkStorageURL( aLibFolder, pNewLib->maLibInfoFileURL,

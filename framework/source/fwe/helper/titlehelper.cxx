@@ -61,11 +61,11 @@ TitleHelper::~TitleHelper()
 void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         m_xOwner = xOwner;
-
-    aLock.clear ();
+    }
     // <- SYNCHRONIZED
 
     css::uno::Reference< css::frame::XModel > xModel(xOwner, css::uno::UNO_QUERY);
@@ -95,21 +95,20 @@ OUString SAL_CALL TitleHelper::getTitle()
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        // An external title will win always and disable all internal logic about
-        // creating/using a title value.
-        // Even an empty string will be accepted as valid title !
-        if (m_bExternalTitle)
-            return m_sTitle;
-
-        // Title seems to be up-to-date. Return it directly.
-        if (!m_sTitle.isEmpty())
-            return m_sTitle;
-
-        // Title seems to be unused till now ... do bootstraping
-        impl_updateTitle (true);
-
+    // An external title will win always and disable all internal logic about
+    // creating/using a title value.
+    // Even an empty string will be accepted as valid title !
+    if (m_bExternalTitle)
         return m_sTitle;
 
+    // Title seems to be up-to-date. Return it directly.
+    if (!m_sTitle.isEmpty())
+        return m_sTitle;
+
+    // Title seems to be unused till now ... do bootstraping
+    impl_updateTitle (true);
+
+    return m_sTitle;
     // <- SYNCHRONIZED
 }
 
@@ -118,20 +117,19 @@ void TitleHelper::connectWithUntitledNumbers (const css::uno::Reference< css::fr
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        m_xUntitledNumbers = xNumbers;
-
+    m_xUntitledNumbers = xNumbers;
     // <- SYNCHRONIZED
 }
 
 void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         m_bExternalTitle = true;
         m_sTitle         = sTitle;
-
-    aLock.clear ();
+    }
     // <- SYNCHRONIZED
 
     impl_sendTitleChangedEvent ();
@@ -151,12 +149,13 @@ void SAL_CALL TitleHelper::removeTitleChangeListener(const css::uno::Reference< 
 
 void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEvent)
 {
+    css::uno::Reference< css::frame::XTitle > xSubTitle;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::uno::Reference< css::frame::XTitle > xSubTitle(m_xSubTitle.get (), css::uno::UNO_QUERY);
-
-    aLock.clear ();
+        xSubTitle.set(m_xSubTitle.get (), css::uno::UNO_QUERY);
+    }
     // <- SYNCHRONIZED
 
     if (aEvent.Source != xSubTitle)
@@ -172,12 +171,13 @@ void SAL_CALL TitleHelper::documentEventOccured(const css::document::DocumentEve
       && ! aEvent.EventName.equalsIgnoreAsciiCase("OnTitleChanged"))
         return;
 
+    css::uno::Reference< css::frame::XModel > xOwner;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::uno::Reference< css::frame::XModel > xOwner(m_xOwner.get (), css::uno::UNO_QUERY);
-
-    aLock.clear ();
+        xOwner.set(m_xOwner.get (), css::uno::UNO_QUERY);
+    }
     // <- SYNCHRONIZED
 
     if (aEvent.Source != xOwner
@@ -193,12 +193,13 @@ void SAL_CALL TitleHelper::documentEventOccured(const css::document::DocumentEve
 
 void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
+    css::uno::Reference< css::frame::XFrame > xOwner;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::uno::Reference< css::frame::XFrame > xOwner(m_xOwner.get (), css::uno::UNO_QUERY);
-
-    aLock.clear ();
+        xOwner.set(m_xOwner.get (), css::uno::UNO_QUERY);
+    }
     // <- SYNCHRONIZED
 
     if (aEvent.Source != xOwner)
@@ -219,12 +220,17 @@ void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEven
 
 void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
 {
+    css::uno::Reference< css::uno::XInterface >         xOwner;
+    css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
+    ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-        css::uno::Reference< css::uno::XInterface >         xOwner        (m_xOwner.get()          , css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XUntitledNumbers > xNumbers      (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
-        ::sal_Int32                                         nLeasedNumber = m_nLeasedNumber;
-    aLock.clear ();
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
+
+        xOwner.set(m_xOwner.get()          , css::uno::UNO_QUERY);
+        xNumbers.set(m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
+        nLeasedNumber = m_nLeasedNumber;
+    }
     // <- SYNCHRONIZED
 
     if ( ! xOwner.is ())
@@ -240,26 +246,28 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
        xNumbers->releaseNumber (nLeasedNumber);
 
     // SYNCHRONIZED ->
-    aLock.reset ();
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-         m_xOwner        = nullptr;
-         m_sTitle        = OUString ();
-         m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
-
-    aLock.clear ();
+        m_xOwner        = nullptr;
+        m_sTitle        = OUString ();
+        m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
+    }
     // <- SYNCHRONIZED
-
 }
 
 void TitleHelper::impl_sendTitleChangedEvent ()
 {
+    css::uno::Reference<css::uno::XInterface> xOwner;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::frame::TitleChangedEvent aEvent(m_xOwner.get (), m_sTitle);
-
-    aLock.clear ();
+        xOwner = m_xOwner;
+    }
     // <- SYNCHRONIZED
+
+    css::frame::TitleChangedEvent aEvent(xOwner, m_sTitle);
 
     if( ! aEvent.Source.is() )
         return;
@@ -284,14 +292,17 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 
 void TitleHelper::impl_updateTitle (bool init)
 {
+    css::uno::Reference< css::frame::XModel >      xModel;
+    css::uno::Reference< css::frame::XController > xController;
+    css::uno::Reference< css::frame::XFrame >      xFrame;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::uno::Reference< css::frame::XModel >      xModel     (m_xOwner.get(), css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XController > xController(m_xOwner.get(), css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XFrame >      xFrame     (m_xOwner.get(), css::uno::UNO_QUERY);
-
-    aLock.clear ();
+        xModel.set     (m_xOwner.get(), css::uno::UNO_QUERY);
+        xController.set(m_xOwner.get(), css::uno::UNO_QUERY);
+        xFrame.set     (m_xOwner.get(), css::uno::UNO_QUERY);
+    }
     // <- SYNCHRONIZED
 
     if (xModel.is ())
@@ -310,19 +321,22 @@ void TitleHelper::impl_updateTitle (bool init)
 
 void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel, bool init)
 {
+    css::uno::Reference< css::uno::XInterface >         xOwner;
+    css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
+    ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         // external title won't be updated internally!
         // It has to be set from outside new.
         if (m_bExternalTitle)
             return;
 
-        css::uno::Reference< css::uno::XInterface >         xOwner        (m_xOwner.get()          , css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XUntitledNumbers > xNumbers      (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
-        ::sal_Int32                                         nLeasedNumber = m_nLeasedNumber;
-
-    aLock.clear ();
+        xOwner.set     (m_xOwner.get()          , css::uno::UNO_QUERY);
+        xNumbers.set   (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
+        nLeasedNumber = m_nLeasedNumber;
+    }
     // <- SYNCHRONIZED
 
     if (
@@ -361,17 +375,18 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         sTitle = sNewTitle.makeStringAndClear ();
     }
 
+    bool     bChanged;
     // SYNCHRONIZED ->
-    aLock.reset ();
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-    // WORKAROUND: the notification is currently sent always,
-    //             can be changed after shared mode is supported per UNO API
-    bool     bChanged        = !init; // && m_sTitle != sTitle
+        // WORKAROUND: the notification is currently sent always,
+        //             can be changed after shared mode is supported per UNO API
+        bChanged        = !init; // && m_sTitle != sTitle
 
-             m_sTitle        = sTitle;
-             m_nLeasedNumber = nLeasedNumber;
-
-    aLock.clear ();
+        m_sTitle        = sTitle;
+        m_nLeasedNumber = nLeasedNumber;
+    }
     // <- SYNCHRONIZED
 
     if (bChanged)
@@ -380,19 +395,22 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
 
 void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init)
 {
+    css::uno::Reference< css::uno::XInterface >         xOwner;
+    css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
+    ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         // external title won't be updated internally!
         // It has to be set from outside new.
         if (m_bExternalTitle)
             return;
 
-        css::uno::Reference< css::uno::XInterface >         xOwner        (m_xOwner.get()          , css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XUntitledNumbers > xNumbers      (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
-        ::sal_Int32                                         nLeasedNumber = m_nLeasedNumber;
-
-    aLock.clear ();
+        xOwner.set      (m_xOwner.get()          , css::uno::UNO_QUERY);
+        xNumbers.set    (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
+        nLeasedNumber = m_nLeasedNumber;
+    }
     // <- SYNCHRONIZED
 
     if (
@@ -439,15 +457,16 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         }
     }
 
+    bool     bChanged;
     // SYNCHRONIZED ->
-    aLock.reset ();
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         OUString sNewTitle       = sTitle.makeStringAndClear ();
-        bool     bChanged        = !init && m_sTitle != sNewTitle;
-                 m_sTitle        = sNewTitle;
-                 m_nLeasedNumber = nLeasedNumber;
-
-    aLock.clear ();
+        bChanged        = !init && m_sTitle != sNewTitle;
+        m_sTitle        = sNewTitle;
+        m_nLeasedNumber = nLeasedNumber;
+    }
     // <- SYNCHRONIZED
 
     if (bChanged)
@@ -460,14 +479,14 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
         return;
 
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         // external title won't be updated internally!
         // It has to be set from outside new.
         if (m_bExternalTitle)
             return;
-
-    aLock.clear ();
+    }
     // <- SYNCHRONIZED
 
     css::uno::Reference< css::uno::XInterface > xComponent;
@@ -486,14 +505,16 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     impl_appendDebugVersion     (sTitle);
 #endif
     impl_appendSafeMode         (sTitle);
+
+    bool     bChanged;
     // SYNCHRONIZED ->
-    aLock.reset ();
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         OUString sNewTitle = sTitle.makeStringAndClear ();
-        bool     bChanged  = !init && m_sTitle != sNewTitle;
-                 m_sTitle  = sNewTitle;
-
-    aLock.clear ();
+        bChanged  = !init && m_sTitle != sNewTitle;
+        m_sTitle  = sNewTitle;
+    }
     // <- SYNCHRONIZED
 
     if (bChanged)
@@ -523,13 +544,15 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 
 void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 {
+    css::uno::Reference< css::uno::XInterface >        xOwner;
+    css::uno::Reference< css::uno::XComponentContext > xContext;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::uno::Reference< css::uno::XInterface >        xOwner   = m_xOwner.get();
-        css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-
-    aLock.clear ();
+        xOwner   = m_xOwner.get();
+        xContext = m_xContext;
+    }
     // <- SYNCHRONIZED
 
     try
@@ -538,7 +561,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
             css::frame::ModuleManager::create(xContext);
 
         const OUString                 sID     = xModuleManager->identify(xOwner);
-              ::comphelper::SequenceAsHashMap lProps  = xModuleManager->getByName (sID);
+        ::comphelper::SequenceAsHashMap lProps  = xModuleManager->getByName (sID);
         const OUString                 sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ASCII_UINAME, OUString());
 
         // An UIname property is an optional value !
@@ -610,17 +633,18 @@ void TitleHelper::impl_updateListeningForFrame (const css::uno::Reference< css::
 
 void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle)
 {
+    css::uno::Reference< css::frame::XTitle > xOldSubTitle;
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    {
+        ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         // ignore duplicate calls. Makes outside using of this helper more easy :-)
-        css::uno::Reference< css::frame::XTitle > xOldSubTitle(m_xSubTitle.get(), css::uno::UNO_QUERY);
+        xOldSubTitle.set(m_xSubTitle.get(), css::uno::UNO_QUERY);
         if (xOldSubTitle == xSubTitle)
             return;
 
         m_xSubTitle = xSubTitle;
-
-    aLock.clear ();
+    }
     // <- SYNCHRONIZED
 
     css::uno::Reference< css::frame::XTitleChangeBroadcaster > xOldBroadcaster(xOldSubTitle                                          , css::uno::UNO_QUERY      );

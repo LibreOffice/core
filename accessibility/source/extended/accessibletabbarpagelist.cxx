@@ -174,7 +174,7 @@ namespace accessibility
          {
             case VclEventId::WindowEnabled:
             {
-               Any aNewValue;
+                Any aNewValue;
                 aNewValue <<= AccessibleStateType::SENSITIVE;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), aNewValue );
                 aNewValue <<= AccessibleStateType::ENABLED;
@@ -183,7 +183,7 @@ namespace accessibility
             break;
             case VclEventId::WindowDisabled:
             {
-               Any aOldValue;
+                Any aOldValue;
                 aOldValue <<= AccessibleStateType::ENABLED;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, Any() );
                 aOldValue <<= AccessibleStateType::SENSITIVE;

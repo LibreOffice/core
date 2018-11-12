@@ -47,7 +47,7 @@ void SAL_CALL OPooledConnection::disposing()
     MutexGuard aGuard(m_aMutex);
     if (m_xComponent.is())
         m_xComponent->removeEventListener(this);
-m_xComponent.clear();
+    m_xComponent.clear();
     ::comphelper::disposeComponent(m_xRealConnection);
 }
 

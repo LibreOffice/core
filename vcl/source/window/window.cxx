@@ -3658,8 +3658,8 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
 
         }
         else
-        {
 #endif
+        {
             xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
                              bSpriteCanvas ?
                              OUString( "com.sun.star.rendering.SpriteCanvas" ) :
@@ -3668,9 +3668,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
                              xContext ),
                          UNO_QUERY );
 
-#ifdef _WIN32
         }
-#endif
         mpWindowImpl->mxCanvas = xCanvas;
     }
 
