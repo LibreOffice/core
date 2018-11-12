@@ -1578,7 +1578,7 @@ void DocumentFieldsManager::SetNewFieldLst(bool bFlag)
 
 void DocumentFieldsManager::InsDelFieldInFieldLst( bool bIns, const SwTextField& rField )
 {
-    if( !mbNewFieldLst || !m_rDoc.IsInDtor() )
+    if (!mbNewFieldLst && !m_rDoc.IsInDtor())
         mpUpdateFields->InsDelFieldInFieldLst( bIns, rField );
 }
 
