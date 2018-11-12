@@ -3202,7 +3202,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         }
     }
     // Form controls are not allowed in headers / footers; see sw::DocumentContentOperationsManager::InsertDrawObj()
-    else if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty() && !IsInHeaderFooter())
+    else if (m_pImpl->m_pSdtHelper->validateDateFormat() && !IsInHeaderFooter())
     {
         /*
          * Here we assume w:sdt only contains a single text token. We need to
