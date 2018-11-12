@@ -24,6 +24,8 @@ public:
 private:
     std::unique_ptr<weld::Entry> m_xEditName;
     std::unique_ptr<weld::TextView> m_xEditComment;
+    std::unique_ptr<weld::Button> m_xBtnLoadImage;
+    std::unique_ptr<weld::Button> m_xBtnClearImage;
     std::unique_ptr<weld::Button> m_xBtnChooseCertificate;
     std::unique_ptr<weld::Button> m_xBtnSign;
     std::unique_ptr<weld::Label> m_xLabelHint;
@@ -32,15 +34,19 @@ private:
 
     css::uno::Reference<css::beans::XPropertySet> m_xShapeProperties;
     css::uno::Reference<css::security::XCertificate> m_xSelectedCertifate;
+    css::uno::Reference<css::graphic::XGraphic> m_xSignatureImage;
     OUString m_aSignatureLineId;
     OUString m_aSuggestedSignerName;
     OUString m_aSuggestedSignerTitle;
     bool m_bShowSignDate;
+    OUString m_sOriginalImageBtnLabel;
 
     void ValidateFields();
     const css::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
     virtual void Apply() override;
 
+    DECL_LINK(clearImage, weld::Button&, void);
+    DECL_LINK(loadImage, weld::Button&, void);
     DECL_LINK(chooseCertificate, weld::Button&, void);
     DECL_LINK(entryChanged, weld::Entry&, void);
 };

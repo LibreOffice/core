@@ -134,6 +134,7 @@ cui/uiconfig/ui/shadowtabpage.ui://GtkLabel[@id='FT_DISTANCE'] orphan-label
 cui/uiconfig/ui/shadowtabpage.ui://GtkLabel[@id='FT_TRANSPARENT'] orphan-label
 cui/uiconfig/ui/shadowtabpage.ui://GtkLabel[@id='FT_SHADOW_COLOR'] orphan-label
 cui/uiconfig/ui/signsignatureline.ui://GtkTextView[@id='edit_comment'] duplicate-mnemonic
+cui/uiconfig/ui/signsignatureline.ui://GtkLabel[@id='label_or'] orphan-label
 cui/uiconfig/ui/thesaurus.ui://GtkButton[@id='left'] button-no-label
 cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='maxentries'] duplicate-mnemonic
 cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='minwordlen'] no-labelled-by
