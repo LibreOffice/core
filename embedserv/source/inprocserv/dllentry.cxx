@@ -52,7 +52,7 @@ namespace {
             char nSign = ( nValue / ( 1 << ( ( nLen - nInd - 1 ) * 4 ) ) ) % 16;
             if ( nSign >= 0 && nSign <= 9 )
                 pBuf[nInd] = nSign + L'0';
-            else if ( nSign >= 10 && nSign <= 15 )
+            else if (nSign >= 10)
                 pBuf[nInd] = nSign - 10 + L'a';
 
             nInd++;

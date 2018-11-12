@@ -446,7 +446,7 @@ namespace
                     bRet = false;
                     break;
                 }
-            } while ( pTextNd && pTextNd != pEndTextNd );
+            } while (pTextNd != pEndTextNd);
         }
 
         return bRet;

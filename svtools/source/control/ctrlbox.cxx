@@ -155,14 +155,14 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
     double nWidth1 = lcl_getGuessedWidth( nLine1, m_nRate1, bLine1Change );
     if ( bLine1Change )
         aToCompare.push_back( nWidth1 );
-    else if ( !bLine1Change && nWidth1 < 0 )
+    else if (nWidth1 < 0)
         bInvalid = true;
 
     bool bLine2Change = bool( m_nFlags & BorderWidthImplFlags::CHANGE_LINE2 );
     double nWidth2 = lcl_getGuessedWidth( nLine2, m_nRate2, bLine2Change );
     if ( bLine2Change )
         aToCompare.push_back( nWidth2 );
-    else if ( !bLine2Change && nWidth2 < 0 )
+    else if (nWidth2 < 0)
         bInvalid = true;
 
     bool bGapChange = bool( m_nFlags & BorderWidthImplFlags::CHANGE_DIST );

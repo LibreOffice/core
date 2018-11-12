@@ -1314,8 +1314,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         {
             if( !aTmpState.m_bPosCorr )
             {
-                if ( !bRet
-                     && IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos
+                if ( IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
                     const SwWrongList* pSmartTagList = pTextNd->GetSmartTags();
@@ -1427,7 +1426,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 {
                     IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
                     sw::mark::IFieldmark* pFieldBookmark = pMarksAccess->getFieldmarkFor( aPos );
-                    if( bCursorFoundExact && pTextNd && pFieldBookmark) {
+                    if (bCursorFoundExact && pFieldBookmark)
+                    {
                         rContentAtPos.eContentAtPos = IsAttrAtPos::FormControl;
                         rContentAtPos.aFnd.pFieldmark = pFieldBookmark;
                         bRet=true;

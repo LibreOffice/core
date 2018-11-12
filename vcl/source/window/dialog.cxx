@@ -148,7 +148,7 @@ vcl::Window * nextLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::
         pChild = pParent->GetWindow(GetWindowType::Next);
     }
 
-    if (pChild && isContainerWindow(*pChild))
+    if (isContainerWindow(*pChild))
         pChild = nextLogicalChildOfParent(pTopLevel, pChild);
 
     return const_cast<vcl::Window *>(pChild);
@@ -176,7 +176,7 @@ vcl::Window * prevLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::
         pChild = pParent->GetWindow(GetWindowType::Prev);
     }
 
-    if (pChild && isContainerWindow(*pChild))
+    if (isContainerWindow(*pChild))
         pChild = prevLogicalChildOfParent(pTopLevel, pChild);
 
     return const_cast<vcl::Window *>(pChild);

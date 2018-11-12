@@ -490,14 +490,12 @@ bool SfxClassificationHelper::IsClassified(const uno::Reference<document::XDocum
 SfxClassificationCheckPasteResult SfxClassificationHelper::CheckPaste(const uno::Reference<document::XDocumentProperties>& xSource,
         const uno::Reference<document::XDocumentProperties>& xDestination)
 {
-    bool bSourceClassified = SfxClassificationHelper::IsClassified(xSource);
-    if (!bSourceClassified)
+    if (!SfxClassificationHelper::IsClassified(xSource))
         // No classification on the source side. Return early, regardless the
         // state of the destination side.
         return SfxClassificationCheckPasteResult::None;
 
-    bool bDestinationClassified = SfxClassificationHelper::IsClassified(xDestination);
-    if (bSourceClassified && !bDestinationClassified)
+    if (!SfxClassificationHelper::IsClassified(xDestination))
     {
         // Paste from a classified document to a non-classified one -> deny.
         return SfxClassificationCheckPasteResult::TargetDocNotClassified;

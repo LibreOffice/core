@@ -1442,7 +1442,7 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
         SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
         for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
         {
-            if( pFormatField && pFormatField->GetTextField() )
+            if (pFormatField->GetTextField())
             {
                 bool bChgd = false;
                 switch( aType )

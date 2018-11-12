@@ -1402,12 +1402,11 @@ bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
     bool bRes = false;
 
     const SfxAllItemSet aSet( GetPool() );
-    const SfxItemSet*   pArgs = &aSet;
     const SfxPoolItem*  pItem = nullptr;
 
     IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
     const Sequence< sal_Int8 >& aPasswdHash( rIDRA.GetRedlinePassword() );
-    if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
+    if (SfxItemState::SET == aSet.GetItemState(FN_REDLINE_PROTECT, false, &pItem)
         && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswdHash.getLength() != 0))
         return false;
     rPasswordHash = aPasswdHash;

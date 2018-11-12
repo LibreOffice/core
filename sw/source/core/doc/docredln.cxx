@@ -1453,7 +1453,7 @@ void SwRangeRedline::CopyToSection()
 
     if( pCSttNd )
     {
-        SwTextFormatColl* pColl = (pCSttNd && pCSttNd->IsTextNode() )
+        SwTextFormatColl* pColl = pCSttNd->IsTextNode()
                                 ? pCSttNd->GetTextNode()->GetTextColl()
                                 : pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
 
