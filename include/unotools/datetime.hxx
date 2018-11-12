@@ -38,6 +38,7 @@ namespace utl
     UNOTOOLS_DLLPUBLIC const LocaleDataWrapper& GetLocaleData();
     UNOTOOLS_DLLPUBLIC DateTime GetDateTime(const css::util::DateTime& _rDT);
     UNOTOOLS_DLLPUBLIC OUString GetDateTimeString(const css::util::DateTime& _rDT);
+    UNOTOOLS_DLLPUBLIC OUString GetDateTimeString(sal_Int32 _nDate, sal_Int32 _nTime);
     UNOTOOLS_DLLPUBLIC OUString GetDateString(const css::util::DateTime& _rDT);
 
     UNOTOOLS_DLLPUBLIC void typeConvert(const Date& _rDate, css::util::Date& _rOut);
