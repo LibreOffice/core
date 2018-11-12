@@ -36,6 +36,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 #include <sc.hrc>
 #include <attrib.hxx>

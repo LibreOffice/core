@@ -22,6 +22,7 @@
 #include "linedescriptor.hxx"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 namespace pcr

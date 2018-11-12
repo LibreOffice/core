@@ -55,6 +55,7 @@
 
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>

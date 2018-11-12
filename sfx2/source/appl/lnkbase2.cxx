@@ -33,6 +33,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/debug.hxx>
 #include <svl/svdde.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

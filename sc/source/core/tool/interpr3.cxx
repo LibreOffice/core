@@ -37,6 +37,7 @@
 #include <vector>
 #include <algorithm>
 #include <comphelper/random.hxx>
+#include <osl/diagnose.h>
 
 using ::std::vector;
 using namespace formula;

@@ -25,6 +25,7 @@
 #include <unomid.h>
 #include <fchrfmt.hxx>
 
+#include <osl/diagnose.h>
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/svapp.hxx>

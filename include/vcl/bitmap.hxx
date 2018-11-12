@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BITMAP_HXX
 #define INCLUDED_VCL_BITMAP_HXX
 
-#include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
@@ -31,6 +30,8 @@
 #include <memory>
 
 class Color;
+
+template <typename Arg, typename Ret> class Link;
 
 enum class BmpMirrorFlags
 {
@@ -94,15 +95,10 @@ class   BitmapInfoAccess;
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
 class   BitmapPalette;
-class   Color;
 class   GDIMetaFile;
 class   AlphaMask;
 class   OutputDevice;
 class   SalBitmap;
-namespace vcl
-{
-    class Kernel;
-}
 
 struct BitmapSystemData
 {

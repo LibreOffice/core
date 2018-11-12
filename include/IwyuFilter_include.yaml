@@ -294,3 +294,11 @@ blacklist:
     include/svl/urihelper.hxx:
     # base class has to be a complete type
     - tools/link.hxx
+    include/vcl/bitmap.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/vcl/builderfactory.hxx:
+    # Needed for macros
+    - vcl/builder.hxx
+    - vcl/vclptr.hxx
+

@@ -38,6 +38,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/charrotateitem.hxx>
+#include <osl/diagnose.h>
 #include <i18nutil/unicode.hxx>
 #include <svl/solar.hrc>
 #include <tools/bigint.hxx>

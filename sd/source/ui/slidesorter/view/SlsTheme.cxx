@@ -27,6 +27,7 @@
 #include <vcl/settings.hxx>
 
 #include <svtools/colorcfg.hxx>
+#include <osl/diagnose.h>
 
 namespace sd { namespace slidesorter { namespace view {
 

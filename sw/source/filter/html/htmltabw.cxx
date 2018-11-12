@@ -50,6 +50,7 @@
 #endif
 #include <rtl/strbuf.hxx>
 #include <sal/types.h>
+#include <osl/diagnose.h>
 
 #define MAX_DEPTH (3)
 

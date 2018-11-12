@@ -27,6 +27,7 @@
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
+#include <osl/diagnose.h>
 
 SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwNumRule& rNewRule,
