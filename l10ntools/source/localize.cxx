@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <map>
 #include <vector>
 #include <algorithm>
 
@@ -319,10 +320,9 @@ bool includeProject(const OString& rProject) {
 ///
 /// @param rUrl the absolute file URL of this directory
 ///
-/// @param nLevel 0 if this is either the root directory that contains the
-/// projects or one of the clone/* or src/* directories that contain the
-/// additional projects; -1 if this is the clone directory; 1 if this
-/// is a project directory; 2 if this is a directory inside a project
+/// @param nLevel 0 if this is the root directory (core repository)
+/// that contains the individual modules. 1 if it is a toplevel module and
+/// larger values for the subdirectories.
 ///
 /// @param rProject the name of the project (empty and ignored if nLevel <= 0)
 /// @param rPotDir the path of pot directory
@@ -337,6 +337,7 @@ void handleDirectory(
         throw false; //TODO
     }
     std::vector<OUString> aFileNames;
+    std::map<OUString, std::map<OString, OString>> aSubDirs;
     for (;;) {
         osl::DirectoryItem item;
         osl::FileBase::RC e = dir.getNextItem(item);
@@ -356,36 +357,18 @@ void handleDirectory(
         }
         const OString sDirName =
             OUStringToOString(stat.getFileName(),RTL_TEXTENCODING_UTF8);
-        switch (nLevel) {
-        case -1: // the clone or src directory
-            if (stat.getFileType() == osl::FileStatus::Directory) {
-                handleDirectory(
-                    stat.getFileURL(), 0, OString(), rPotDir);
-            }
-            break;
-        case 0: // a root directory
-            if (stat.getFileType() == osl::FileStatus::Directory) {
-                if (includeProject(sDirName)) {
-                    handleDirectory(
-                        stat.getFileURL(), 1, sDirName, rPotDir.concat("/").concat(sDirName));
-                } else if ( sDirName == "clone" ||
-                            sDirName == "src" )
-                {
-                    handleDirectory( stat.getFileURL(), -1, OString(), rPotDir);
-                }
-            }
-            break;
-        default:
-            if (stat.getFileType() == osl::FileStatus::Directory)
-            {
-                handleDirectory(
-                    stat.getFileURL(), 2, rProject, rPotDir.concat("/").concat(sDirName));
-            }
-            else
-            {
-                aFileNames.push_back(stat.getFileURL());
-            }
-            break;
+        switch (nLevel)
+        {
+            case 0: // a root directory
+                if (stat.getFileType() == osl::FileStatus::Directory && includeProject(sDirName))
+                    aSubDirs[stat.getFileURL()][sDirName] = rPotDir.concat("/").concat(sDirName);
+                break;
+            default:
+                if (stat.getFileType() == osl::FileStatus::Directory)
+                    aSubDirs[stat.getFileURL()][rProject] = rPotDir.concat("/").concat(sDirName);
+                else
+                    aFileNames.push_back(stat.getFileURL());
+                break;
         }
     }
 
@@ -408,6 +391,10 @@ void handleDirectory(
         cerr << "Error: Cannot close directory\n";
         throw false; //TODO
     }
+
+    for (auto const& elem : aSubDirs)
+        handleDirectory(elem.first, nLevel + 1, elem.second.begin()->first,
+                        elem.second.begin()->second);
 
     //Remove empty pot directory
     OUString sPoPath =
