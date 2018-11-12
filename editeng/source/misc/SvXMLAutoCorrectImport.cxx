@@ -81,7 +81,7 @@ SvXMLWordContext::SvXMLWordContext(
     if ( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::NAME ) )
         sRight = xAttrList->getValue( SvXMLAutoCorrectToken::NAME );
 
-   if ( sWrong.isEmpty() || sRight.isEmpty())
+    if ( sWrong.isEmpty() || sRight.isEmpty())
         return;
 
     bool bOnlyTxt = sRight != sWrong;

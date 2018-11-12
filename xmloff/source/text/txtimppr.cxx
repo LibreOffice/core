@@ -200,11 +200,11 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         {
             aAny <<= OUString();
     #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 1 );
-                assert(nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL);
+            assert(nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL);
     #endif
-                *ppNewFontStyleName = new XMLPropertyState( pFontFamilyName->mnIndex + 1,
+            *ppNewFontStyleName = new XMLPropertyState( pFontFamilyName->mnIndex + 1,
                                                        aAny );
         }
 
@@ -213,11 +213,11 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
             aAny <<= sal_Int16(css::awt::FontFamily::DONTKNOW);
 
     #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 2 );
-                assert(nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL);
+            assert(nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL);
     #endif
-                *ppNewFontFamily = new XMLPropertyState( pFontFamilyName->mnIndex + 2,
+            *ppNewFontFamily = new XMLPropertyState( pFontFamilyName->mnIndex + 2,
                                                        aAny );
         }
 
@@ -225,11 +225,11 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         {
             aAny <<= sal_Int16(css::awt::FontPitch::DONTKNOW);
     #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 3 );
-                assert(nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL);
+            assert(nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL);
     #endif
-                *ppNewFontPitch = new XMLPropertyState( pFontFamilyName->mnIndex + 3,
+            *ppNewFontPitch = new XMLPropertyState( pFontFamilyName->mnIndex + 3,
                                                        aAny );
         }
 
@@ -237,11 +237,11 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         {
             aAny <<= static_cast<sal_Int16>(osl_getThreadTextEncoding());
     #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 4 );
-                assert(nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL);
+            assert(nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL);
     #endif
-                *ppNewFontCharSet = new XMLPropertyState( pFontFamilyName->mnIndex + 4,
+            *ppNewFontCharSet = new XMLPropertyState( pFontFamilyName->mnIndex + 4,
                                                        aAny );
         }
     }

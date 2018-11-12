@@ -175,7 +175,7 @@ void AxBinaryPropertyWriter::finalizeExport()
         {
             if (!ensureValid())
                 break;
-           streamProp->writeProperty( maOutStrm );
+            streamProp->writeProperty( maOutStrm );
         }
     }
 

@@ -270,14 +270,14 @@ void DocumentHelper::ProvideStyles (
     if( !aCreatedStyles.empty() )
     {
         SfxUndoManager* pUndoManager = rTargetDocument.GetDocSh()->GetUndoManager();
-       if (pUndoManager != nullptr)
-       {
+        if (pUndoManager != nullptr)
+        {
            pUndoManager->AddUndoAction (
                o3tl::make_unique<SdMoveStyleSheetsUndoAction>(
                    &rTargetDocument,
                    aCreatedStyles,
                    true));
-       }
+        }
     }
 }
 
@@ -312,7 +312,7 @@ void DocumentHelper::AssignMasterPageToPageList (
             aCleanedList.push_back(*iPage);
         }
     }
-        if (aCleanedList.empty() )
+    if (aCleanedList.empty() )
         return;
 
     SfxUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();

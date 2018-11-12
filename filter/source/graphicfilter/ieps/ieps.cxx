@@ -235,7 +235,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     oslFileHandle pIn = nullptr;
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
-        oslProcessError eErr = runProcessWithPathSearch(
+    oslProcessError eErr = runProcessWithPathSearch(
             "pstoedit" EXESUFFIX,
             args, SAL_N_ELEMENTS(args),
             &aProcess, &pIn, &pOut, &pErr);
@@ -303,7 +303,7 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     oslFileHandle pIn = nullptr;
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
-        oslProcessError eErr = runProcessWithPathSearch(rProgName,
+    oslProcessError eErr = runProcessWithPathSearch(rProgName,
             pArgs, nArgs,
             &aProcess, &pIn, &pOut, &pErr);
     if (eErr!=osl_Process_E_None)

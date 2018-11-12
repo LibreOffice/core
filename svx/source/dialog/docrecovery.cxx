@@ -1236,7 +1236,7 @@ BrokenRecoveryDialog::~BrokenRecoveryDialog()
 
 void BrokenRecoveryDialog::impl_refresh()
 {
-                             m_bExecutionNeeded = false;
+    m_bExecutionNeeded = false;
     TURLList&                rURLList           = m_pCore->getURLListAccess();
     TURLList::const_iterator pIt;
     for (  pIt  = rURLList.begin();

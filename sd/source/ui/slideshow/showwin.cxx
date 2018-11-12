@@ -420,7 +420,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() ) );
 
-         if( xSlideShow.is() )
+        if( xSlideShow.is() )
         {
             AddWindowToPaintView();
 

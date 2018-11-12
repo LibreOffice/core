@@ -280,7 +280,7 @@ void XMLFilterTestDialog::onExportBrowse()
     try
     {
         // Open Fileopen-Dialog
-           ::sfx2::FileDialogHelper aDlg(
+        ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, m_xDialog.get());
 
@@ -517,7 +517,7 @@ void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 void XMLFilterTestDialog::onImportBrowse()
 {
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg(
+    ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
         FileDialogFlags::NONE, m_xDialog.get());
     OUString aFilterName( m_xFilterInfo->maInterfaceName );

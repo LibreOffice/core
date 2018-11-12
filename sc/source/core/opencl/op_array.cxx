@@ -40,23 +40,23 @@ void OpSumX2MY2::GenSlidingWindowFunction(std::stringstream &ss,
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
         pCurDVR->GetRefRowSize() ;
-         ss << "    int i ;\n";
-         ss << "    for (i = ";
-         if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "    int i ;\n";
+        ss << "    for (i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
             ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-         } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
             ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-         } else {
+        } else {
             ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-         }
-         ss << "    {\n";
-         if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-         {
+        }
+        ss << "    {\n";
+        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
             ss << "    int doubleIndex =i+gid0;\n";
-         }else
-         {
+        }else
+        {
             ss << "    int doubleIndex =i;\n";
-         }
+        }
 
         CheckSubArgumentIsNan(ss,vSubArguments,0);
         CheckSubArgumentIsNan(ss,vSubArguments,1);
@@ -97,23 +97,23 @@ void OpSumX2PY2::GenSlidingWindowFunction(std::stringstream &ss,
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
         pCurDVR->GetRefRowSize() ;
-         ss << "    int i ;\n";
-         ss << "    for (i = ";
-         if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "    int i ;\n";
+        ss << "    for (i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
             ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-         } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
             ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-         } else {
+        } else {
             ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-         }
-         ss << "    {\n";
-         if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-         {
+        }
+        ss << "    {\n";
+        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
             ss << "    int doubleIndex =i+gid0;\n";
-         }else
-         {
+        }else
+        {
             ss << "    int doubleIndex =i;\n";
-         }
+        }
 
         CheckSubArgumentIsNan(ss,vSubArguments,0);
         CheckSubArgumentIsNan(ss,vSubArguments,1);
@@ -153,23 +153,23 @@ void OpSumXMY2::GenSlidingWindowFunction(std::stringstream &ss,
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
         pCurDVR->GetRefRowSize() ;
-         ss << "    int i ;\n";
-         ss << "    for (i = ";
-         if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "    int i ;\n";
+        ss << "    for (i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
             ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-         } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
             ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-         } else {
+        } else {
             ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-         }
-         ss << "    {\n";
-         if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-         {
+        }
+        ss << "    {\n";
+        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
             ss << "    int doubleIndex =i+gid0;\n";
-         }else
-         {
+        }else
+        {
             ss << "    int doubleIndex =i;\n";
-         }
+        }
 
         CheckSubArgumentIsNan(ss,vSubArguments,0);
         CheckSubArgumentIsNan(ss,vSubArguments,1);

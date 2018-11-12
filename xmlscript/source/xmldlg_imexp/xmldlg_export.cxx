@@ -928,7 +928,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
         try
         {
             Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellAddressConversion" ), uno::UNO_QUERY );
-        Reference< beans::XPropertySet > xBindable( xBinding->getValueBinding(), UNO_QUERY );
+            Reference< beans::XPropertySet > xBindable( xBinding->getValueBinding(), UNO_QUERY );
             if ( xBindable.is() )
             {
                 table::CellAddress aAddress;

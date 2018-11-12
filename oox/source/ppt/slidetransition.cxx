@@ -147,7 +147,7 @@ namespace oox { namespace ppt {
 
     sal_Int16 SlideTransition::ooxToOdpEightDirections( ::sal_Int32 nOoxType )
     {
-    sal_Int16 nOdpDirection;
+        sal_Int16 nOdpDirection;
         nOdpDirection = ooxToOdpBorderDirections( nOoxType );
         if( nOdpDirection == 0 )
         {
@@ -158,7 +158,7 @@ namespace oox { namespace ppt {
 
     sal_Int16 SlideTransition::ooxToOdpBorderDirections( ::sal_Int32 nOoxType )
     {
-    sal_Int16 nOdpDirection;
+        sal_Int16 nOdpDirection;
         switch( nOoxType )
         {
         case XML_d:
@@ -182,7 +182,7 @@ namespace oox { namespace ppt {
 
     sal_Int16 SlideTransition::ooxToOdpSideDirections( ::sal_Int32 nOoxType )
     {
-    sal_Int16 nOdpDirection;
+        sal_Int16 nOdpDirection;
         switch( nOoxType )
         {
         case XML_d:
@@ -215,7 +215,7 @@ namespace oox { namespace ppt {
 
     sal_Int16 SlideTransition::ooxToOdpCornerDirections( ::sal_Int32 nOoxType )
     {
-    sal_Int16 nOdpDirection;
+        sal_Int16 nOdpDirection;
         switch( nOoxType )
         {
         case XML_lu:
@@ -239,7 +239,7 @@ namespace oox { namespace ppt {
 
     sal_Int16 SlideTransition::ooxToOdpDirection( ::sal_Int32 nOoxType )
     {
-    sal_Int16 nOdpDir;
+        sal_Int16 nOdpDir;
         switch( nOoxType )
         {
         case XML_vert:

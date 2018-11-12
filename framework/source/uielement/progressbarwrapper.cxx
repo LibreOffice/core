@@ -304,9 +304,9 @@ uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface(
                     uno::Reference< lang::XComponent >(
                         static_cast< cppu::OWeakObject* >( this ),
                         uno::UNO_QUERY ));
-             xComp.set(static_cast< cppu::OWeakObject* >( pWrapper ),
+            xComp.set(static_cast< cppu::OWeakObject* >( pWrapper ),
                         uno::UNO_QUERY );
-             m_xProgressBarIfacWrapper = xComp;
+            m_xProgressBarIfacWrapper = xComp;
         }
 
         return xComp;

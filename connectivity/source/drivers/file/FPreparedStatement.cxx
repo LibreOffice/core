@@ -119,9 +119,9 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
 {
-        ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
-                                        cppu::UnoType<XParameters>::get(),
-                                        cppu::UnoType<XResultSetMetaDataSupplier>::get());
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
+                                    cppu::UnoType<XParameters>::get(),
+                                    cppu::UnoType<XResultSetMetaDataSupplier>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }

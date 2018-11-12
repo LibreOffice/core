@@ -332,7 +332,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     else
                     {
                         xInplaceClient->deactivatedUI();
-                       throw embed::WrongStateException(); //TODO: can't activate UI
+                        throw embed::WrongStateException(); //TODO: can't activate UI
                     }
                 }
             }

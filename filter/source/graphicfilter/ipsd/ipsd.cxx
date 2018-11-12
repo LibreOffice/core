@@ -639,8 +639,8 @@ bool PSDReader::ImplReadBody()
                             {
                                 nX = 0;
                                 nY++;
-                            if ( nY == mpFileHeader->nRows )
-                                break;
+                                if ( nY == mpFileHeader->nRows )
+                                    break;
                             }
                         }
                     }

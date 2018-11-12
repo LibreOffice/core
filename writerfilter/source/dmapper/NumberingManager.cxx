@@ -632,12 +632,12 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         catch( const lang::IllegalArgumentException& e )
         {
             SAL_WARN( "writerfilter", e );
-             assert( !"Incorrect argument to UNO call" );
+            assert( !"Incorrect argument to UNO call" );
         }
         catch( const uno::RuntimeException& e )
         {
             SAL_WARN( "writerfilter", e );
-             assert( !"Incorrect argument to UNO call" );
+            assert( !"Incorrect argument to UNO call" );
         }
         catch( const uno::Exception& e )
         {
@@ -1011,7 +1011,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     {
                         pLevel->Insert(
                             PROP_ADJUST, uno::makeAny( nValue ) );
-                            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     }
                 }
             }

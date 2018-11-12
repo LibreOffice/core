@@ -1016,8 +1016,8 @@ namespace emfio
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
                             mpInputStream->ReadUInt32( offBmi ).ReadUInt32( cbBmi ).ReadUInt32( offBits ).ReadUInt32( cbBits ). ReadUInt32( nStyle ).ReadUInt32( nWidth ).ReadUInt32( nBrushStyle );
-                             aColorRef = ReadColor();
-                             mpInputStream->ReadInt32( elpHatch ).ReadUInt32( elpNumEntries );
+                            aColorRef = ReadColor();
+                            mpInputStream->ReadInt32( elpHatch ).ReadUInt32( elpNumEntries );
 
                             LineInfo    aLineInfo;
                             if ( nWidth )

@@ -173,7 +173,7 @@ static void glxtest()
   XSetErrorHandler(x_error_handler);
 
   ///// Get a visual /////
-   int attribs[] = {
+  int attribs[] = {
       GLX_RGBA,
       GLX_RED_SIZE, 1,
       GLX_GREEN_SIZE, 1,

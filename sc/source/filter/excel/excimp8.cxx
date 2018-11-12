@@ -153,7 +153,7 @@ public:
         uno::Reference< container::XIndexContainer > xElement;
         if ( ! ( aElement >>= xElement ) )
             throw lang::IllegalArgumentException();
-       IdToOleNameHash[ aName ] = xElement;
+        IdToOleNameHash[ aName ] = xElement;
     }
     virtual void SAL_CALL removeByName( const OUString& aName ) override
     {

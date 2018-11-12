@@ -556,7 +556,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
                 sal_Int16 nTabIndex = -1;
                 Any aCtrl = xNameAcc->getByName( aName );
                 Reference< beans::XPropertySet > xPSet;
-                   aCtrl >>= xPSet;
+                aCtrl >>= xPSet;
                 if ( xPSet.is() && xPSet == Reference< beans::XPropertySet >( evt.Source, UNO_QUERY ) )
                     evt.OldValue >>= nTabIndex;
                 else if ( xPSet.is() )
@@ -594,7 +594,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
             {
                 Any aCtrl = xNameAcc->getByName( aNameList[i] );
                 Reference< beans::XPropertySet > xPSet;
-                   aCtrl >>= xPSet;
+                aCtrl >>= xPSet;
                 if ( xPSet.is() )
                 {
                     assert(i >= SAL_MIN_INT16);
@@ -873,7 +873,7 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
         if ( xCont.is() )
         {
             // set tabindex
-               Sequence< OUString > aNames = xCont->getElementNames();
+            Sequence< OUString > aNames = xCont->getElementNames();
             xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames.getLength())) );
 
             // insert control model in dialog model
@@ -1013,7 +1013,7 @@ void DlgEdObj::SetDefaults()
             if ( xCont.is() )
             {
                 // set tabindex
-                   Sequence< OUString > aNames = xCont->getElementNames();
+                Sequence< OUString > aNames = xCont->getElementNames();
                 uno::Any aTabIndex;
                 aTabIndex <<= static_cast<sal_Int16>(aNames.getLength());
                 xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
@@ -1436,7 +1436,7 @@ void DlgEdForm::UpdateTabIndices()
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
             Reference< css::beans::XPropertySet > xPSet;
-               aCtrl >>= xPSet;
+            aCtrl >>= xPSet;
             if ( xPSet.is() )
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
@@ -1450,7 +1450,7 @@ void DlgEdForm::UpdateTabIndices()
         {
             Any aCtrl = xNameAcc->getByName( indexToName.second );
             Reference< beans::XPropertySet > xPSet;
-               aCtrl >>= xPSet;
+            aCtrl >>= xPSet;
             if ( xPSet.is() )
             {
                 xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(nNewTabIndex) );

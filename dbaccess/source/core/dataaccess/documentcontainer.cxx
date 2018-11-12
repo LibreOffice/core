@@ -384,7 +384,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
     {
         // open command for a folder content
         OpenCommandArgument2 aOpenCommand;
-          if ( !( aCommand.Argument >>= aOpenCommand ) )
+        if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
@@ -428,9 +428,9 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         // insert
 
         InsertCommandArgument arg;
-          if ( !( aCommand.Argument >>= arg ) )
+        if ( !( aCommand.Argument >>= arg ) )
         {
-              OSL_FAIL( "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     OUString(),

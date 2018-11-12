@@ -614,7 +614,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
                 pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
-           OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
+        OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
                     "A freshly create object should be running always!" );
 
         // possible optimization: store later!
@@ -646,7 +646,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
-           OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
+        OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
                     "A freshly create object should be running always!" );
 
         // possible optimization: store later!
@@ -791,7 +791,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     }
                 }
 
-                   if ( xResult.is() )
+                if ( xResult.is() )
                     AddEmbeddedObject( xResult, rName );
             }
             catch (const uno::Exception&)

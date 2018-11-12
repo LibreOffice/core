@@ -398,18 +398,19 @@ bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const std::shared_ptr<
 
     if( mxFilterCFG.is() && _pFilter )
     {
-        try {
-               Sequence < PropertyValue > aProps;
-               Any aAny = mxFilterCFG->getByName( _pFilter->GetName() );
-               if ( aAny >>= aProps )
-               {
-                   OUString aServiceName;
-                   sal_Int32 nPropertyCount = aProps.getLength();
-                   for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+        try
+        {
+            Sequence < PropertyValue > aProps;
+            Any aAny = mxFilterCFG->getByName( _pFilter->GetName() );
+            if ( aAny >>= aProps )
+            {
+                OUString aServiceName;
+                sal_Int32 nPropertyCount = aProps.getLength();
+                for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
                 {
-                       if( aProps[nProperty].Name == "UIComponent" )
-                       {
-                           aProps[nProperty].Value >>= aServiceName;
+                    if( aProps[nProperty].Name == "UIComponent" )
+                    {
+                        aProps[nProperty].Value >>= aServiceName;
                         if( !aServiceName.isEmpty() )
                             bResult = true;
                     }

@@ -74,7 +74,7 @@ Sequence< Type > SAL_CALL OUser::getTypes(  )
 
 ::cppu::IPropertyArrayHelper* OUser::createArrayHelper( ) const
 {
-        Sequence< Property > aProps;
+    Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 

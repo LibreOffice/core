@@ -2228,7 +2228,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
             pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>( *pObj ) );
         }
 
-            pObj->AdjustToMaxRect(rRect);
+        pObj->AdjustToMaxRect(rRect);
 
         pObj->SetUserCall(this);
 
@@ -2816,7 +2816,7 @@ bool SdPage::checkVisibility(
 
     if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
     {
-           const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->getSdrPageFromSdrObject());
+        const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->getSdrPageFromSdrObject());
 
         if( pCheckPage )
         {

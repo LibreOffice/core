@@ -128,7 +128,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::Propert
 {
     clear();
 
-          sal_Int32                  c       = lSource.getLength();
+    sal_Int32                        c       = lSource.getLength();
     const css::beans::PropertyValue* pSource = lSource.getConstArray();
 
     for (sal_Int32 i=0; i<c; ++i)
@@ -139,7 +139,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedVa
 {
     clear();
 
-          sal_Int32               c       = lSource.getLength();
+    sal_Int32                     c       = lSource.getLength();
     const css::beans::NamedValue* pSource = lSource.getConstArray();
 
     for (sal_Int32 i=0; i<c; ++i)
@@ -210,7 +210,7 @@ bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
     {
         const OUString& sCheckName  = elem.first;
         const css::uno::Any&   aCheckValue = elem.second;
-              const_iterator   pFound      = find(sCheckName);
+        const_iterator         pFound      = find(sCheckName);
 
         if (pFound == end())
             return false;

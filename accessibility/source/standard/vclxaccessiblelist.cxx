@@ -200,7 +200,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-            Reference< XAccessible > xNewAcc;
+        Reference< XAccessible > xNewAcc;
         if ( m_pListBoxHelper )
         {
             sal_Int32 i=0;

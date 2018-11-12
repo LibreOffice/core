@@ -415,7 +415,7 @@ cssu::Reference< css::io::XInputStream >
  *  xInputStream - the XInputStream interface
  ******************************************************************************/
 {
-        cssu::Reference< css::io::XInputStream > xObjectInputStream;
+    cssu::Reference< css::io::XInputStream > xObjectInputStream;
 
     SAL_WARN_IF( !m_xUriBinding.is(), "xmlsecurity.helper", "Need XUriBinding!" );
 

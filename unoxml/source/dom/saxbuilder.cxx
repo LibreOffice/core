@@ -359,12 +359,12 @@ namespace DOM
         ::osl::MutexGuard g(m_Mutex);
 
         //  append text node to the current top element
-         if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
+        if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
 
-         Reference< XText > aText = m_aDocument->createTextNode(rChars);
-         m_aNodeStack.top()->appendChild(aText);
+        Reference< XText > aText = m_aDocument->createTextNode(rChars);
+        m_aNodeStack.top()->appendChild(aText);
     }
 }
 

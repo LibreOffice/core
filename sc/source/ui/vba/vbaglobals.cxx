@@ -229,7 +229,7 @@ ScVbaGlobals::getAvailableServiceNames(  )
     static uno::Sequence< OUString > serviceNames( ScVbaGlobals_BASE::getAvailableServiceNames() );
     if ( !bInit )
     {
-         const OUString names[] = {
+        const OUString names[] = {
             OUString(  "ooo.vba.excel.Range"  ),
             OUString(  "ooo.vba.excel.Workbook"  ),
             OUString(  "ooo.vba.excel.Window"  ),

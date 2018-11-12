@@ -1983,7 +1983,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
                                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                                    SdResId(STR_WARN_NAME_DUPLICATE)));
-                             xWarn->run();
+                            xWarn->run();
                         }
                         else
                             bLoop = false;

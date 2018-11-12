@@ -100,7 +100,7 @@ bool FieldCode::Read(HWPFile & hwpf)
 
     hwpf.SkipBlock(binlen);
 
-     if( type[0] == 3 && type[1] == 2 ){ /* It must create a format as created date. */
+    if( type[0] == 3 && type[1] == 2 ){ /* It must create a format as created date. */
           DateCode *pDate = new DateCode;
           for (int i = 0 ; i < static_cast<int>(len3_); i++) {
                 if(str3[i] == 0 ) break;
@@ -109,7 +109,7 @@ bool FieldCode::Read(HWPFile & hwpf)
           }
           hwpf.AddDateFormat(pDate);
           m_pDate.reset( pDate );
-     }
+    }
 
     return true;
 }
@@ -225,7 +225,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(&dummy2, 1);
 
     style.boxnum = fboxnum++;
-     zorder = zindex++;
+    zorder = zindex++;
     hwpf.Read1b(style.anchor_type);
     hwpf.Read1b(style.txtflow);
     hwpf.Read2b(&style.xpos, 1);
@@ -249,7 +249,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(&pgx, 1);
     hwpf.Read2b(&pgy, 1);
     hwpf.Read2b(&pgno, 1);
-     if( ( pgno +1 ) != hwpf.getCurrentPage() )
+    if( ( pgno +1 ) != hwpf.getCurrentPage() )
           pgno = sal::static_int_cast<short>(hwpf.getCurrentPage() -1) ;
 
     hwpf.Read2b(&showpg, 1);
@@ -380,7 +380,7 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.Read2b(&dummy2, 1);
 
     style.boxnum = fboxnum++;
-     zorder = zindex++;
+    zorder = zindex++;
     hwpf.Read1b(style.anchor_type);               /* Reference position */
     hwpf.Read1b(style.txtflow);                   /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
     hwpf.Read2b(&style.xpos, 1);                  /* Horizontal position: 1=left, 2=right, 3=center, and others=any */
@@ -515,7 +515,7 @@ bool Line::Read(HWPFile & hwpf)
     hwpf.AddBox(this);
 
     style.boxnum = fboxnum++;
-     zorder = zindex++;
+    zorder = zindex++;
     style.boxtype = 'L';
     hwpf.ReadBlock(&reserved2, 8);
     hwpf.Read1b(style.anchor_type);
@@ -603,9 +603,9 @@ bool HeaderFooter::Read(HWPFile & hwpf)
     lnnumber = 0;
     hwpf.ReadParaList(plist, CH_HEADER_FOOTER);
     linenumber = sal::static_int_cast<unsigned char>(lnnumber);
-     m_nPageNumber = hwpf.getCurrentPage();
-     hwpf.setMaxSettedPage();
-     hwpf.AddHeaderFooter(this);
+    m_nPageNumber = hwpf.getCurrentPage();
+    hwpf.setMaxSettedPage();
+    hwpf.AddHeaderFooter(this);
 
     return !hwpf.State();
 }
@@ -704,8 +704,8 @@ bool ShowPageNum::Read(HWPFile & hwpf)
     if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
-     m_nPageNumber = hwpf.getCurrentPage();
-     hwpf.setMaxSettedPage();
+    m_nPageNumber = hwpf.getCurrentPage();
+    hwpf.setMaxSettedPage();
     hwpf.AddPageNumber(this);
     return !hwpf.State();
 }

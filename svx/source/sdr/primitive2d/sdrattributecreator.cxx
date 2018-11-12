@@ -501,7 +501,7 @@ namespace drawinglayer
                 attribute::FillGradientAttribute aGradient;
                 attribute::FillHatchAttribute aHatch;
                 attribute::SdrFillGraphicAttribute aFillGraphic;
-                    return attribute::SdrFillAttribute(
+                return attribute::SdrFillAttribute(
                         1,
                         basegfx::BColor( 0, 0, 0 ),
                         aGradient,

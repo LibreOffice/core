@@ -2397,8 +2397,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr +="\\u " ;
                     }
 
-                        if( SwTOXElement::Template & pTOX->GetCreateType() )
-                        {
+                    if( SwTOXElement::Template & pTOX->GetCreateType() )
+                    {
                             // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                             for( n = 0; n < MAXLEVEL; ++n )
                             {
@@ -2426,7 +2426,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                     } while( -1 != nPos );
                                 }
                             }
-                        }
+                    }
 
                     // No 'else' branch; why the below snippet is a block I have no idea.
                     {
@@ -2486,8 +2486,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr += sEntryEnd;
                     }
 
-                        if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                            sStr += "\\h";
+                    if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
+                        sStr += "\\h";
                     break;
                 }
             }

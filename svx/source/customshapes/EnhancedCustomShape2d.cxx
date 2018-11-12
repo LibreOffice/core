@@ -893,7 +893,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
             {
                 SAL_WARN("svx", "EnhancedCustomShape2d::GetEquationValueAsDouble failed");
             }
-        nLevel --;
+            nLevel --;
         }
         SAL_INFO(
             "svx",

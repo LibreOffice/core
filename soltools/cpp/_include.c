@@ -117,7 +117,7 @@ void
             error(FATAL, "#%s too deeply nested", import ? "import" : "include");
         if (Xflag)
             genimport(fname, angled, iname, import);
-         if (Iflag)
+        if (Iflag)
             error(INFO, "Open %s file [%s]", import ? "import" : "include", iname );
 
         for (i = NINCLUDE - 1; i >= 0; i--)

@@ -248,7 +248,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
 
             m_nMacroId = AddTabPage("macros", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
 
-        break;
+            break;
         }
         // page styles
         case SfxStyleFamily::Page:

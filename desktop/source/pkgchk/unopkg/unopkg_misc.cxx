@@ -233,7 +233,7 @@ void printf_space( sal_Int32 space )
 void printf_line(
     OUString const & name, OUString const & value, sal_Int32 level )
 {
-   printf_space( level );
+    printf_space( level );
     dp_misc::writeConsole(name + ": " + value + "\n");
 }
 

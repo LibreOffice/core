@@ -96,7 +96,7 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
     }
     else if (m_bMustInitBuffer)
     {
-         m_aBuffer.realloc ( static_cast < sal_Int32 > ( m_nBufferSize ) );
+        m_aBuffer.realloc ( static_cast < sal_Int32 > ( m_nBufferSize ) );
         m_bMustInitBuffer = false;
     }
     memcpy( m_aBuffer.getArray() + m_nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));

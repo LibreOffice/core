@@ -1574,8 +1574,8 @@ void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 
 void SwTOXEdit::AdjustSize()
 {
-     Size aSize(GetSizePixel());
-     Size aTextSize(GetTextWidth(GetText()), GetTextHeight());
+    Size aSize(GetSizePixel());
+    Size aTextSize(GetTextWidth(GetText()), GetTextHeight());
     aTextSize = LogicToPixel(aTextSize);
     aSize.setWidth( aTextSize.Width() + EDIT_MINWIDTH );
     SetSizePixel(aSize);
@@ -1735,7 +1735,7 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
-     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
+        Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
@@ -1752,13 +1752,13 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                     aPos = GetEntryPosition( pEntry );
 
                     aPos.setX( GetTabPos( pEntry, pTab ) );
-                 Size aSize( pItem->GetSize( this, pEntry ) );
+                    Size aSize( pItem->GetSize( this, pEntry ) );
 
                     if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
                         aSize.setWidth( GetSizePixel().Width() - aPos.X() );
 
                     aPos = OutputToScreenPixel(aPos);
-                     tools::Rectangle aItemRect( aPos, aSize );
+                    tools::Rectangle aItemRect( aPos, aSize );
                     Help::ShowQuickHelp( this, aItemRect, sEntry,
                             QuickHelpFlags::Left|QuickHelpFlags::VCenter );
                 }

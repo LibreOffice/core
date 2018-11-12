@@ -206,7 +206,7 @@ public:
        m_pSerializer->endElementNS( XML_w, XML_sizeAuto );
        if ( bChecked )
             m_pSerializer->singleElementNS( XML_w, XML_checked, FSEND );
-        m_pSerializer->endElementNS( XML_w, XML_checkBox );
+       m_pSerializer->endElementNS( XML_w, XML_checkBox );
        writeFinish();
     }
     void WriteFormText(  const OUString& rName )
@@ -6697,7 +6697,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         if( ( 100 != nProp || sIss.match( OString( "baseline" ) ) ) && !m_rExport.m_bFontSizeWritten )
         {
             OString sSize = OString::number( ( nHeight * nProp + 500 ) / 1000 );
-                m_pSerializer->singleElementNS( XML_w, XML_sz,
+            m_pSerializer->singleElementNS( XML_w, XML_sz,
                     FSNS( XML_w, XML_val ), sSize.getStr( ), FSEND );
         }
     }

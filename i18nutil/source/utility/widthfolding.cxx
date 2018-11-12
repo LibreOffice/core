@@ -70,13 +70,13 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
       int i = int(c - 0x3040);
       sal_Unicode first = decomposition_table[i].decomposited_character_1;
       if (first != 0x0000) {
-    *dst ++ = first;
-    *dst ++ = decomposition_table[i].decomposited_character_2; // second
+        *dst ++ = first;
+        *dst ++ = decomposition_table[i].decomposited_character_2; // second
         if (useOffset) {
             *p ++ = position;
             *p ++ = position ++;
         }
-    continue;
+        continue;
       }
     }
     *dst ++ = c;
@@ -113,7 +113,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   sal_Unicode* dst = newStr->buffer;
 
   // This conversion algorithm requires at least one character.
- if (nCount > 0) {
+  if (nCount > 0) {
 
   // .. .. KA         VOICE .. ..
   //       ^          ^
@@ -169,10 +169,10 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
             position ++;
             *p ++ = position ++;
         }
-    *dst ++ =  composition_table[i][j];
-    previousChar = *src ++;
-    nCount --;
-    continue;
+        *dst ++ =  composition_table[i][j];
+        previousChar = *src ++;
+        nCount --;
+        continue;
       }
     }
     if (useOffset)

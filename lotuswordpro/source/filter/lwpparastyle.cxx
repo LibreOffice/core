@@ -511,8 +511,8 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
         break;
     case LwpSpacingCommonOverride::SPACING_CUSTOM:
     {
-    xftype = enumLHHeight;
-    height =  LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(sal_Int32(float(multiple)/65536L*amount)));
+        xftype = enumLHHeight;
+        height =  LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(sal_Int32(float(multiple)/65536L*amount)));
         pParaStyle->SetLineHeight(xftype,height);
     }
         break;

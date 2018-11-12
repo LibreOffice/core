@@ -71,9 +71,9 @@ public:
     void getAppCommandArg_001()
     {
 #if defined(_WIN32)
-    const OUString EXECUTABLE_NAME("child_process.exe");
+        const OUString EXECUTABLE_NAME("child_process.exe");
 #else
-    const OUString EXECUTABLE_NAME("child_process");
+        const OUString EXECUTABLE_NAME("child_process");
 #endif
         OUString suCWD = getModulePath();
         // OUString suCWD2 = getExecutableDirectory();
@@ -116,19 +116,19 @@ public:
         //     "osl_joinProcess returned with failure",
         //     osl_Process_E_None == osl_error
         // );
-    std::unique_ptr<oslProcessInfo> pInfo( new oslProcessInfo );
-    //please pay attention to initial the Size to sizeof(oslProcessInfo), or else
-    //you will get unknown error when call osl_getProcessInfo
-    pInfo->Size = sizeof(oslProcessInfo);
-    osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo.get() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_getProcessInfo returned with failure",
-             osl_Process_E_None, osl_error
-        );
+        std::unique_ptr<oslProcessInfo> pInfo( new oslProcessInfo );
+        //please pay attention to initial the Size to sizeof(oslProcessInfo), or else
+        //you will get unknown error when call osl_getProcessInfo
+        pInfo->Size = sizeof(oslProcessInfo);
+        osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo.get() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "osl_getProcessInfo returned with failure",
+                 osl_Process_E_None, osl_error
+            );
 
-    printf("the exit code is %" SAL_PRIuUINT32 ".\n", pInfo->Code );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", static_cast<oslProcessExitCode>(2), pInfo->Code);
+        printf("the exit code is %" SAL_PRIuUINT32 ".\n", pInfo->Code );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", static_cast<oslProcessExitCode>(2), pInfo->Code);
     }
 
     CPPUNIT_TEST_SUITE(getAppCommandArg);
@@ -190,47 +190,47 @@ public:
         sal_uInt8 pTargetUUID2[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
         rtl_getGlobalProcessId( pTargetUUID2 );
-    CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", !memcmp( pTargetUUID1 , pTargetUUID2 , 16 ) );
+        CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", !memcmp( pTargetUUID1 , pTargetUUID2 , 16 ) );
     }
     //different processes different pids
     void getGlobalProcessId_002()
     {
 #if defined(_WIN32)
-    const OUString EXEC_NAME("child_process_id.exe");
+        const OUString EXEC_NAME("child_process_id.exe");
 #else
-    const OUString EXEC_NAME("child_process_id");
+        const OUString EXEC_NAME("child_process_id");
 #endif
         sal_uInt8 pTargetUUID1[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
         printUuid( pTargetUUID1 );
         sal_Char pUUID1[32];
-          printUuidtoBuffer( pTargetUUID1, pUUID1 );
-    printf("# UUID to String is %s\n", pUUID1);
+        printUuidtoBuffer( pTargetUUID1, pUUID1 );
+        printf("# UUID to String is %s\n", pUUID1);
 
-    OUString suCWD = getModulePath();
+        OUString suCWD = getModulePath();
         oslProcess hProcess = nullptr;
-       OUString suFileURL = suCWD + "/" + EXEC_NAME;
-    oslFileHandle* pChildOutputRead = new oslFileHandle();
+        OUString suFileURL = suCWD + "/" + EXEC_NAME;
+        oslFileHandle* pChildOutputRead = new oslFileHandle();
         oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(
-            suFileURL.pData,
+                suFileURL.pData,
+                nullptr,
+                0,
+                osl_Process_WAIT,
+                nullptr,
+                suCWD.pData,
+                nullptr,
+                0,
+                &hProcess,
             nullptr,
-            0,
-            osl_Process_WAIT,
-            nullptr,
-            suCWD.pData,
-            nullptr,
-            0,
-            &hProcess,
-        nullptr,
-        pChildOutputRead,
-        nullptr);
+            pChildOutputRead,
+            nullptr);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
             osl_Process_E_None, osl_error
         );
-    //we could get return value only after the process terminated
+        //we could get return value only after the process terminated
         osl_joinProcess(hProcess);
 
         sal_Char pUUID2[33];

@@ -120,11 +120,11 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
     Flush();
 
 #ifdef DBG_UTIL
-        if( pShell->GetViewOptions()->IsTest3() )
-        {
-            ++nCount;
-            return;
-        }
+    if( pShell->GetViewOptions()->IsTest3() )
+    {
+        ++nCount;
+        return;
+    }
 #endif
 
     bOn = bOn && !nCount && rRect.HasArea() && pShell->GetWin();

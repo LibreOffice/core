@@ -234,7 +234,7 @@ DomainMapper::~DomainMapper()
     catch( const uno::Exception& ) {}
 
 #ifdef DEBUG_WRITERFILTER
-        TagLogger::getInstance().endDocument();
+    TagLogger::getInstance().endDocument();
 #endif
 }
 
@@ -248,8 +248,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
     OUString sStringValue = val.getString();
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
-        switch( nName )
-        {
+    switch( nName )
+    {
         case NS_ooxml::LN_CT_Lvl_start:
             break;
         case NS_ooxml::LN_CT_Lvl_numFmt:
@@ -1160,7 +1160,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
-        }
+    }
 }
 
 void DomainMapper::lcl_sprm(Sprm & rSprm)

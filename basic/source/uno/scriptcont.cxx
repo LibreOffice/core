@@ -625,7 +625,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     sal_Int8* pData = aBinSeq.getArray();
                     memcpy( pData, aMemStream.GetData(), nSize );
 
-                       Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
+                    Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
                     if ( !xOut.is() )
                     {
                         throw io::IOException(); // access denied because the stream is readonly

@@ -181,7 +181,7 @@ static void SetCharFormatAttrs( SwCharFormat *pCharFormat, SfxItemSet& rItemSet 
     const SfxPoolItem *pItem;
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
-       for(sal_uInt16 i : aWhichIds)
+    for(sal_uInt16 i : aWhichIds)
     {
         if( SfxItemState::SET == rItemSet.GetItemState( i, false,
                                                    &pItem ) &&
@@ -312,7 +312,7 @@ static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
 
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
-       for(sal_uInt16 i : aWhichIds)
+    for(sal_uInt16 i : aWhichIds)
     {
         if( SfxItemState::SET == rItemSet.GetItemState( i, false,
                                                    &pItem ) &&
@@ -963,8 +963,8 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         }
         break;
 
-        default:
-            ;
+    default:
+        ;
     }
 
     if( nPoolCollId )

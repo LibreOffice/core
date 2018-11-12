@@ -739,7 +739,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int32 nCh
 
 void SAL_CALL AccessibleTableShape::clearAccessibleSelection()
 {
-   SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
 
     SvxTableController* pController = getTableController();
     if( pController )
@@ -749,7 +749,7 @@ void SAL_CALL AccessibleTableShape::clearAccessibleSelection()
 
 void SAL_CALL AccessibleTableShape::selectAllAccessibleChildren()
 {
-   SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
 
    // todo: force selection of shape?
     SvxTableController* pController = getTableController();
@@ -800,7 +800,7 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChi
 
 void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int32 nChildIndex )
 {
-   SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     CellPos aPos;
     mxImpl->getColumnAndRow( nChildIndex, aPos.mnCol, aPos.mnRow );
 

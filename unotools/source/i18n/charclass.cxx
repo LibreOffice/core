@@ -313,7 +313,7 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         SAL_WARN( "unotools.i18n", "lowercase: Exception caught!" );
     }
-        return rStr.copy( nPos, nCount );
+    return rStr.copy( nPos, nCount );
 }
 
 sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const

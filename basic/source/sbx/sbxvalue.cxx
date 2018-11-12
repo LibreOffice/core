@@ -573,7 +573,7 @@ bool SbxValue::PutBool( bool b )
 bool SbxValue::PutEmpty()
 {
     bool bRet = SetType( SbxEMPTY );
-        SetModified( true );
+    SetModified( true );
     return bRet;
 }
 
@@ -1549,60 +1549,60 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                     write_uInt16_lenPrefixed_uInt8s_FromOUString(r, OUString(), RTL_TEXTENCODING_ASCII_US);
             }
             break;
-        case SbxERROR:
-        case SbxUSHORT:
-            r.WriteUInt16( aData.nUShort ); break;
-        case SbxOBJECT:
-            // to save itself as Objectptr does not work!
-            if( aData.pObj )
-            {
-                if( dynamic_cast<SbxValue*>( aData.pObj) != this  )
+            case SbxERROR:
+            case SbxUSHORT:
+                r.WriteUInt16( aData.nUShort ); break;
+            case SbxOBJECT:
+                // to save itself as Objectptr does not work!
+                if( aData.pObj )
                 {
-                    r.WriteUChar( 1 );
-                    return aData.pObj->Store( r );
+                    if( dynamic_cast<SbxValue*>( aData.pObj) != this  )
+                    {
+                        r.WriteUChar( 1 );
+                        return aData.pObj->Store( r );
+                    }
+                    else
+                        r.WriteUChar( 2 );
                 }
                 else
-                    r.WriteUChar( 2 );
+                    r.WriteUChar( 0 );
+                break;
+            case SbxCHAR:
+            {
+                char c = sal::static_int_cast< char >(aData.nChar);
+                r.WriteChar( c );
+                break;
             }
-            else
-                r.WriteUChar( 0 );
-            break;
-        case SbxCHAR:
-        {
-            char c = sal::static_int_cast< char >(aData.nChar);
-            r.WriteChar( c );
-            break;
+            case SbxBYTE:
+                r.WriteUChar( aData.nByte ); break;
+            case SbxULONG:
+                r.WriteUInt32( aData.nULong ); break;
+            case SbxINT:
+            {
+                r.WriteUChar( SAL_TYPES_SIZEOFINT ).WriteInt32( aData.nInt );
+                break;
+            }
+            case SbxUINT:
+            {
+                r.WriteUChar( SAL_TYPES_SIZEOFINT ).WriteUInt32( aData.nUInt );
+                break;
+            }
+            case SbxEMPTY:
+            case SbxNULL:
+            case SbxVOID:
+                break;
+            case SbxDATAOBJECT:
+                r.WriteInt32( aData.nLong );
+                break;
+            // #78919 For backwards compatibility
+            case SbxWSTRING:
+            case SbxWCHAR:
+                break;
+            default:
+                SAL_WARN( "basic.sbx", "Saving a non-supported data type" );
+                return false;
         }
-        case SbxBYTE:
-            r.WriteUChar( aData.nByte ); break;
-        case SbxULONG:
-            r.WriteUInt32( aData.nULong ); break;
-        case SbxINT:
-        {
-            r.WriteUChar( SAL_TYPES_SIZEOFINT ).WriteInt32( aData.nInt );
-            break;
-        }
-        case SbxUINT:
-        {
-            r.WriteUChar( SAL_TYPES_SIZEOFINT ).WriteUInt32( aData.nUInt );
-            break;
-        }
-        case SbxEMPTY:
-        case SbxNULL:
-        case SbxVOID:
-            break;
-        case SbxDATAOBJECT:
-            r.WriteInt32( aData.nLong );
-            break;
-        // #78919 For backwards compatibility
-        case SbxWSTRING:
-        case SbxWCHAR:
-            break;
-        default:
-            SAL_WARN( "basic.sbx", "Saving a non-supported data type" );
-            return false;
+        return true;
     }
-    return true;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

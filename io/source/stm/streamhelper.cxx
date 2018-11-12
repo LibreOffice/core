@@ -75,7 +75,7 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
     }
 
     if( nNewLen != m_nBufferLen ) {
-       if (auto p = static_cast<sal_Int8*>(std::realloc(m_p, nNewLen)))
+        if (auto p = static_cast<sal_Int8*>(std::realloc(m_p, nNewLen)))
             m_p = p;
         else
         {

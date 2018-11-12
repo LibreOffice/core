@@ -65,19 +65,19 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
     osl_atomic_increment( &m_refCount );
     SAL_INFO("connectivity.evoab2", "OEvoabConnection::construct()::url = " << url );
 
-     OUString sPassword;
-        const char pPwd[] = "password";
+    OUString sPassword;
+    const char pPwd[] = "password";
 
-        const PropertyValue *pIter      = info.getConstArray();
-        const PropertyValue *pEnd       = pIter + info.getLength();
-        for(;pIter != pEnd;++pIter)
-        {
-                if(pIter->Name == pPwd)
-                {
-                        pIter->Value >>= sPassword;
-                        break;
-                }
-        }
+    const PropertyValue *pIter      = info.getConstArray();
+    const PropertyValue *pEnd       = pIter + info.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+            if(pIter->Name == pPwd)
+            {
+                    pIter->Value >>= sPassword;
+                    break;
+            }
+    }
 
     if ( url == "sdbc:address:evolution:groupwise" )
         setSDBCAddressType(SDBCAddress::EVO_GWISE);
@@ -115,14 +115,14 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  )
 css::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-     Reference< XTablesSupplier > xTab = m_xCatalog;
-     if(!xTab.is())
-     {
+    Reference< XTablesSupplier > xTab = m_xCatalog;
+    if(!xTab.is())
+    {
          OEvoabCatalog *pCat = new OEvoabCatalog(this);
          xTab = pCat;
          m_xCatalog = xTab;
-     }
-     return xTab;
+    }
+    return xTab;
 }
 
 Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  )

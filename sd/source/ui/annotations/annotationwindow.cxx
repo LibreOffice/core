@@ -534,7 +534,7 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
             if( !sMeta.isEmpty() )
                 sMeta += "\n";
 
-           sMeta += sDateTime;
+            sMeta += sDateTime;
         }
         mpMeta->SetText(sMeta);
     }

@@ -1592,10 +1592,10 @@ namespace
                 aInfo4.StructSize = 8;
                 bool bRes4 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo4 );
                 bool bRes41 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo4);
-               CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes4 && bRes41);
+                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes4 && bRes41);
 // && aInfo2.MinimumCharSize >=1 );
 
-        aInfo5.StructSize = sizeof aInfo5;
+                aInfo5.StructSize = sizeof aInfo5;
                 bool bRes5 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo5 );
                 CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", !bRes5 && aInfo5.Flags == 0);
 

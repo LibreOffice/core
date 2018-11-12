@@ -2561,7 +2561,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
-     const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
+    const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
         xRec->displayPropertyPage( nSmartTagIdx, aLocale );
 }

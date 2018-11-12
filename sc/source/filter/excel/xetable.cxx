@@ -732,13 +732,13 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     else
         nXclFont = mxText->GetLeadingFont();
 
-   // create cell format
-   if( GetXFId() == EXC_XFID_NOTFOUND )
-   {
+    // create cell format
+    if( GetXFId() == EXC_XFID_NOTFOUND )
+    {
        OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
        bool bForceLineBreak = mxText->IsWrapped();
        SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
-   }
+    }
 
     // get auto-wrap attribute from cell format
     const XclExpXF* pXF = rRoot.GetXFBuffer().GetXFById( GetXFId() );

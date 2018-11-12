@@ -498,7 +498,7 @@ IMAGE_SETEVENT:
         {
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             aGraphic = rFilter.ImportUnloadedGraphic(*pStream);
-                sGrfNm.clear();
+            sGrfNm.clear();
 
             if (!sGrfNm.isEmpty())
             {

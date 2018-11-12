@@ -861,8 +861,8 @@ namespace sw
             }
 
             // Force to NatNum when finding one of 'oOA'
-            bool bForceNatNum  = replaceUnquoted( rParams, "o", "m");
-                 bForceNatNum |= replaceUnquoted( rParams, "O", "M");
+            bool bForceNatNum  = replaceUnquoted( rParams, "o", "m")
+                                 || replaceUnquoted( rParams, "O", "M");
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'A' case here

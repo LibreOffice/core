@@ -49,10 +49,11 @@ namespace basegfx
                                                    const Rect&  rR )
         {
             // maxY | minY | maxX | minX
-            sal_uInt32 clip  = (rP.getX() < rR.getMinX()) << 0;
-                       clip |= (rP.getX() > rR.getMaxX()) << 1;
-                       clip |= (rP.getY() < rR.getMinY()) << 2;
-                       clip |= (rP.getY() > rR.getMaxY()) << 3;
+            sal_uInt32 clip;
+            clip = (rP.getX() < rR.getMinX()) << 0;
+            clip |= (rP.getX() > rR.getMaxX()) << 1;
+            clip |= (rP.getY() < rR.getMinY()) << 2;
+            clip |= (rP.getY() > rR.getMaxY()) << 3;
             return clip;
         }
 
@@ -62,10 +63,11 @@ namespace basegfx
                                                    const B2IBox& rB )
         {
             // maxY | minY | maxX | minX
-            sal_uInt32 clip  = (rP.getX() <  rB.getMinX()) << 0;
-                       clip |= (rP.getX() >= rB.getMaxX()) << 1;
-                       clip |= (rP.getY() <  rB.getMinY()) << 2;
-                       clip |= (rP.getY() >= rB.getMaxY()) << 3;
+            sal_uInt32 clip;
+            clip = (rP.getX() <  rB.getMinX()) << 0;
+            clip |= (rP.getX() >= rB.getMaxX()) << 1;
+            clip |= (rP.getY() <  rB.getMinY()) << 2;
+            clip |= (rP.getY() >= rB.getMaxY()) << 3;
             return clip;
         }
 

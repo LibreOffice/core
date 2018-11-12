@@ -135,7 +135,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
-     setErrorRecorder();
+    setErrorRecorder();
 
     std::unique_ptr<xmlSecKeysMngr> pMngr(pSecEnv->createKeysManager());
     if( !pMngr ) {
@@ -210,7 +210,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
             throw RuntimeException() ;
     }
 
-     setErrorRecorder();
+    setErrorRecorder();
 
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
     sal_Int32 i;

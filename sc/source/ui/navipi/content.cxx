@@ -530,11 +530,11 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                             while( pBeginEntry )
                             {
                                 OUString aTempText( GetEntryText( pBeginEntry ) );
-                                 if( pScDrawView->GetObjectIsMarked( pScDrawView->GetObjectByName( aTempText ) ) )
-                                 {
+                                if( pScDrawView->GetObjectIsMarked( pScDrawView->GetObjectByName( aTempText ) ) )
+                                {
                                     bHasMakredObject = true;
                                     break;
-                                  }
+                                }
                                 pBeginEntry =  Next( pBeginEntry );
                             }
                             if(  !bHasMakredObject && pScTabViewShell)
@@ -770,8 +770,8 @@ void ScContentTree::ObjectFresh( ScContentId nType, const SvTreeListEntry* pEntr
 {
     if ( bHiddenDoc && !pHiddenDocument )
         return;     // other document displayed
-      if(nType ==ScContentId::GRAPHIC||nType ==ScContentId::OLEOBJECT||nType ==ScContentId::DRAWING)
-        {
+    if(nType ==ScContentId::GRAPHIC||nType ==ScContentId::OLEOBJECT||nType ==ScContentId::DRAWING)
+    {
         SetUpdateMode(false);
         ClearType( nType );
         GetDrawNames( nType/*, nId*/ );
@@ -801,7 +801,7 @@ void ScContentTree::ObjectFresh( ScContentId nType, const SvTreeListEntry* pEntr
                 Select( pOldEntry );
             }
         }
-        }
+    }
 }
 
 void ScContentTree::Refresh( ScContentId nType )

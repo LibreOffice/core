@@ -608,7 +608,7 @@ Sequence< Reference< XDispatch > > OGenericUnoController::queryDispatches(const 
     if ( nLen )
     {
         aReturn.realloc( nLen );
-                Reference< XDispatch >* pReturn     = aReturn.getArray();
+        Reference< XDispatch >* pReturn     = aReturn.getArray();
         const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
         const   DispatchDescriptor*     pDescripts  = aDescripts.getConstArray();
 

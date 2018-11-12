@@ -154,26 +154,26 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-   rOutProperties.emplace_back( "3DRelativeHeight",
+    rOutProperties.emplace_back( "3DRelativeHeight",
                   PROP_DIAGRAM_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
-   rOutProperties.emplace_back( "DataTableHBorder",
+    rOutProperties.emplace_back( "DataTableHBorder",
                PROP_DIAGRAM_DATATABLEHBORDER,
                  cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
                  | beans::PropertyAttribute::MAYBEDEFAULT );
-   rOutProperties.emplace_back( "DataTableVBorder",
+    rOutProperties.emplace_back( "DataTableVBorder",
                PROP_DIAGRAM_DATATABLEVBORDER,
                  cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
                  | beans::PropertyAttribute::MAYBEDEFAULT );
-   rOutProperties.emplace_back( "DataTableOutline",
+    rOutProperties.emplace_back( "DataTableOutline",
                PROP_DIAGRAM_DATATABLEOUTLINE,
                  cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
                  | beans::PropertyAttribute::MAYBEDEFAULT );
-   rOutProperties.emplace_back( "ExternalData",
+    rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
@@ -201,7 +201,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
-         ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
+        ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
     }
 };
 

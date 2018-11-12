@@ -699,7 +699,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                     case CTF_SC_MAP :
                     {
                         uno::Reference<container::XIndexAccess> xIndex( i->maValue, uno::UNO_QUERY );
-                           if ( xIndex.is() )
+                        if ( xIndex.is() )
                         {
                             sal_Int32 nConditionCount(xIndex->getCount());
                             for (sal_Int32 nCondition = 0; nCondition < nConditionCount; ++nCondition)
@@ -1244,25 +1244,25 @@ bool XmlScPropHdl_HoriJustify::importXML(
     {
         if (IsXMLToken(rStrImpValue, XML_START))
         {
-             nValue = table::CellHoriJustify_LEFT;
+            nValue = table::CellHoriJustify_LEFT;
             rValue <<= nValue;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_END))
         {
-             nValue = table::CellHoriJustify_RIGHT;
+            nValue = table::CellHoriJustify_RIGHT;
             rValue <<= nValue;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_CENTER))
         {
-             nValue = table::CellHoriJustify_CENTER;
+            nValue = table::CellHoriJustify_CENTER;
             rValue <<= nValue;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_JUSTIFY))
         {
-             nValue = table::CellHoriJustify_BLOCK;
+            nValue = table::CellHoriJustify_BLOCK;
             rValue <<= nValue;
             bRetval = true;
         }

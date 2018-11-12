@@ -1414,9 +1414,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         {
                 const SwNodeIndex aTmpIdx( aCellIter->aStart, 0 );
 
-               SwNodeIndex aCellEndIdx(aCellIter->aEnd);
-               ++aCellEndIdx;
-               SwStartNode* pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
+                SwNodeIndex aCellEndIdx(aCellIter->aEnd);
+                ++aCellEndIdx;
+                SwStartNode* pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
                                             SwTableBoxStartNode );
 
                 // Quotation of http://nabble.documentfoundation.org/Some-strange-lines-by-taking-a-look-at-the-bt-of-fdo-51916-tp3994561p3994639.html
@@ -2865,7 +2865,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
             o3tl::make_unique<SwUndoAttrTable>( *rTab.GetTableNode(), true ));
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
-      ::ClearFEShellTabCols(*this, nullptr);
+    ::ClearFEShellTabCols(*this, nullptr);
     SwClearFntCacheTextGlyphs();
     getIDocumentState().SetModified();
 }

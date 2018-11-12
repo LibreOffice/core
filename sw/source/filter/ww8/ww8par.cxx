@@ -2736,8 +2736,8 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             WW8PLCFxSave1 aSave;
             m_xPlcxMan->GetPap()->Save( aSave );
 
-           // Numbering for cell borders causes a crash -> no Anls in Tables
-           if (m_bAnl)
+            // Numbering for cell borders causes a crash -> no Anls in Tables
+            if (m_bAnl)
                StopAllAnl();
 
             if(m_nInTable < nCellLevel)
@@ -3950,7 +3950,7 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, 
      * is false.
      * Due to this we need to set the template here as a kind of special treatment.
      */
-    if (!m_bCpxStyle && m_nCurrentColl < m_vColl.size())
+        if (!m_bCpxStyle && m_nCurrentColl < m_vColl.size())
             SetTextFormatCollAndListLevel(*m_pPaM, m_vColl[m_nCurrentColl]);
         rbStartLine = false;
     }

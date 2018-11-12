@@ -544,7 +544,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
         }
         else
         {
-           assert((nOtherStart < nNewStart) || (nNewEnd < nOtherEnd));
+            assert((nOtherStart < nNewStart) || (nNewEnd < nOtherEnd));
         // scenario: there is a RUBY, and contained within that a META;
         // now a RUBY is inserted within the META => the existing RUBY is split:
         // here it is not possible to simply insert the left/right fragment
@@ -929,7 +929,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         {
             Insert( pNewAttr );
 //            if ( bDestroyHint )
-                NoteInHistory( pNewAttr, true );
+            NoteInHistory( pNewAttr, true );
         }
 
         if ( !bNoLengthAttribute )
@@ -1454,7 +1454,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             }
             break;
 
-            case RES_TXTATR_FIELD:
+        case RES_TXTATR_FIELD:
                 {
                     // trigger notification for relevant fields, like HiddenParaFields
                     if (FieldCanHideParaWeight(

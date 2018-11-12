@@ -96,11 +96,11 @@ CertificateContainer::addCertificate( const OUString & url, const OUString & cer
 {
     certMap.emplace( url, certificate_name );
 
-        //remember that the cert is trusted
-        if (trust)
-            certTrustMap.emplace( url, certificate_name );
+    //remember that the cert is trusted
+    if (trust)
+        certTrustMap.emplace( url, certificate_name );
 
-        return true;
+    return true;
 }
 
 ::security::CertificateContainerStatus

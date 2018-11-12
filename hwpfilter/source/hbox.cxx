@@ -540,7 +540,7 @@ enum
 hchar_string Outline::GetUnicode() const
 {
     const hchar *p;
-     hchar buffer[255];
+    hchar buffer[255];
 
     buffer[0] = 0;
     if (kind == OUTLINE_NUM)
@@ -583,12 +583,12 @@ hchar_string Outline::GetUnicode() const
                 p = GetOutlineStyleChars(shape);
                 buffer[0] = p[level];
                 buffer[1] = 0;
-                     return hstr2ucsstr(buffer);
+                return hstr2ucsstr(buffer);
                 }
             case OLSTY_USER:
             case OLSTY_BULUSER:
                 {
-                        char dest[80];
+                    char dest[80];
                     int l = 0;
                     int i = level;
                     if( deco[i][0] ){
@@ -660,7 +660,7 @@ hchar_string Outline::GetUnicode() const
                              }
                              str2hstr(buf, buffer + l);
                              l += strlen(buf);
-                            break;
+                             break;
                         }
                         default:
                             buffer[l++] = user_shape[i];

@@ -209,7 +209,7 @@ static void LogProbe(
         SAL_INFO("cppu.log", "{ LogBridge () " << sTemp );
         if ( nParams )
         {
-           SAL_INFO("cppu.log", "\n| : ( LogBridge ");
+            SAL_INFO("cppu.log", "\n| : ( LogBridge ");
             for(sal_Int32 i = 0;i < nParams;++i)
             {
                 if ( i > 0 )
@@ -217,9 +217,9 @@ static void LogProbe(
                 traceValue(pParams[i].pTypeRef,pArgs[i]);
 
             }
-           SAL_INFO("cppu.log", ")");
+            SAL_INFO("cppu.log", ")");
         } // if ( nParams )
-       SAL_INFO("cppu.log", "\n");
+        SAL_INFO("cppu.log", "\n");
     }
     else if ( !pre )
     {
@@ -234,11 +234,11 @@ static void LogProbe(
         }
         else if ( pReturnTypeRef )
         {
-           SAL_INFO("cppu.log", " return : ");
+            SAL_INFO("cppu.log", " return : ");
             traceValue(pReturnTypeRef,pReturn);
         } // if ( pReturn && pReturnTypeRef )
 
-       SAL_INFO("cppu.log", "\n");
+        SAL_INFO("cppu.log", "\n");
     }
 }
 

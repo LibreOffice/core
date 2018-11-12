@@ -335,19 +335,19 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
          rSharedPool.pushTask( o3tl::make_unique<WorkerThread>( pTag, rWorkbookHandler, it->second,
                                            /* ref */ nSheetsLeft ) );
          nSheetsLeft++;
-     }
+    }
 
      // coverity[loop_top] - this isn't an infinite loop where nSheetsLeft gets decremented by the above threads
-     while( nSheetsLeft > 0)
-     {
+    while( nSheetsLeft > 0)
+    {
          // This is a much more controlled re-enterancy hazard than
          // allowing a yield deeper inside the filter code for progress
          // bar updating.
          Application::Yield();
-     }
-     rSharedPool.waitUntilDone(pTag);
+    }
+    rSharedPool.waitUntilDone(pTag);
 
-     // threads joined in ThreadPool destructor
+    // threads joined in ThreadPool destructor
 }
 
 }

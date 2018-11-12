@@ -749,7 +749,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         {
             if (rEntry.MakeRegion(pDoc, aRegion, true))
             {
-              pDoc->getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::On
+                pDoc->getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::On
                                               | RedlineFlags::ShowInsert
                                               | RedlineFlags::ShowDelete );
                 SwFltRedline& rFltRedline = *static_cast<SwFltRedline*>(rEntry.pAttr.get());

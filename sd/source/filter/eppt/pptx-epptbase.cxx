@@ -1013,9 +1013,9 @@ bool PPTWriterBase::ContainsOtherShapeThanPlaceholders()
                 }
                 else
                     bOtherThanPlaceHolders = true;
+            }
+            SAL_INFO("sd.eppt", "mType == " << mType);
         }
-        SAL_INFO("sd.eppt", "mType == " << mType);
-    }
 
     return bOtherThanPlaceHolders;
 }

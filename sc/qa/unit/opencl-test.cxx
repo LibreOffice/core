@@ -1911,7 +1911,7 @@ void ScOpenCLTest::testFinacialXNPVFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
-     for (SCROW i = 16; i <= 26; ++i)
+    for (SCROW i = 16; i <= 26; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));

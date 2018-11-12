@@ -169,8 +169,8 @@ void LwpFribPtr::XFConvert()
             }
         }
 
-            switch(nFribType)
-            {
+        switch(nFribType)
+        {
         case FRIB_TAG_TEXT:
         {
             LwpFribText* textFrib= static_cast<LwpFribText*>(pFrib);

@@ -455,7 +455,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         if( m_pWrtShell->IsFrameSelected() )
         {
-             SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
+            SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
             m_pWrtShell->GetFlyFrameAttr( aSet );
             const SwFormatURL& rURL = aSet.Get( RES_URL );
             if( rURL.GetMap() )
@@ -589,7 +589,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             bOK = SetObject( &m_aDocShellRef, SWTRANSFER_OBJECTTYPE_SWOLE,
                             rFlavor );
             break;
-         default: break;
+        default: break;
         }
     }
     return bOK;
@@ -1822,7 +1822,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         uno::Reference< embed::XStorage > xTmpStor;
         uno::Reference < embed::XEmbeddedObject > xObj;
         OUString aName;
-           comphelper::EmbeddedObjectContainer aCnt;
+        comphelper::EmbeddedObjectContainer aCnt;
 
         if ( xStrm.is() )
         {

@@ -293,7 +293,7 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
 
 void SdExportTest::testTransparentBackground()
 {
-   ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/transparent_background.odp"), ODP);
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/transparent_background.odp"), ODP);
     xDocShRef = saveAndReload( xDocShRef.get(), ODP );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );

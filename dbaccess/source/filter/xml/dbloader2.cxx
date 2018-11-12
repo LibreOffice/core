@@ -386,7 +386,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     // not touch it.
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
-        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
+       Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
        aMediaDesc.put( "InteractionHandler", xHandler );
     }
 

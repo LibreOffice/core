@@ -1127,7 +1127,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     }
 
         // 10. Decimal tab portion at the beginning of each line in table cells
-        if ( !pPor && !m_pCurr->GetPortion() &&
+    if ( !pPor && !m_pCurr->GetPortion() &&
              GetTextFrame()->IsInTab() &&
              GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT))
         {
@@ -1135,7 +1135,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         }
 
         // 11. suffix of meta-field
-        if (!pPor)
+    if (!pPor)
         {
             pPor = TryNewNoLengthPortion(rInf);
         }

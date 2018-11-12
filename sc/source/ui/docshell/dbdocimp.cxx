@@ -130,7 +130,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                           rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-         OSL_FAIL( "DoImport: no DBData" );
+        OSL_FAIL( "DoImport: no DBData" );
         return false;
     }
 

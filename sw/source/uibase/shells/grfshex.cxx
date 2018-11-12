@@ -94,7 +94,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                 rSh.MakeDrawView();
 
             Size            aDocSz( rSh.GetDocSize() );
-               const SwRect&    rVisArea = rSh.VisArea();
+            const SwRect&   rVisArea = rSh.VisArea();
             Point           aPos( rVisArea.Center() );
             Size            aSize;
 

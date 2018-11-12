@@ -831,7 +831,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             if(nPageCount != nActivePageCount)
                 aPageStr = aPageStr.replaceFirst("%3", OUString::number(nActivePageCount));
         }
-      rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
+        rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     }
     //Set layout
     if (nSelectedPages == 1 && pPage != nullptr)

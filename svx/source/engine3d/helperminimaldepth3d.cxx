@@ -86,7 +86,7 @@ namespace drawinglayer
                 {
                     // PolygonHairlinePrimitive3D
                     const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(rCandidate);
-                       const basegfx::B3DPolygon& rPolygon = rPrimitive.getB3DPolygon();
+                    const basegfx::B3DPolygon& rPolygon = rPrimitive.getB3DPolygon();
                     const sal_uInt32 nCount(rPolygon.count());
 
                     for(sal_uInt32 a(0); a < nCount; a++)
@@ -105,7 +105,7 @@ namespace drawinglayer
                 {
                     // PolyPolygonMaterialPrimitive3D
                     const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(rCandidate);
-                       const basegfx::B3DPolyPolygon& rPolyPolygon = rPrimitive.getB3DPolyPolygon();
+                    const basegfx::B3DPolyPolygon& rPolyPolygon = rPrimitive.getB3DPolyPolygon();
                     const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
                     for(sal_uInt32 a(0); a < nPolyCount; a++)

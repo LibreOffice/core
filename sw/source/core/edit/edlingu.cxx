@@ -451,7 +451,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         return aHyphRet;
 
     const bool bAuto = IsAuto();
-     uno::Reference< XHyphenatedWord >  xHyphWord;
+    uno::Reference< XHyphenatedWord >  xHyphWord;
     bool bGoOn = false;
     do {
         SwPaM *pCursor;
@@ -884,13 +884,13 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
 uno::Reference< XSpellAlternatives >
     SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
 {
-     uno::Reference< XSpellAlternatives >  xSpellAlt;
+    uno::Reference< XSpellAlternatives >  xSpellAlt;
 
     if( IsTableMode() )
         return nullptr;
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
-     Point aPt( *pPt );
+    Point aPt( *pPt );
     SwCursorMoveState eTmpState( MV_SETONLYTEXT );
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;

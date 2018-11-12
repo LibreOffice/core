@@ -455,7 +455,7 @@ void PropBrw::Resize()
     // adjust size
     if (m_xBrowserComponentWindow.is())
     {
-           Size  aSize = GetOutputSizePixel();
+        Size  aSize = GetOutputSizePixel();
         m_xBrowserComponentWindow->setPosSize(0, 0, aSize.Width(), aSize.Height(),
             awt::PosSize::WIDTH | awt::PosSize::HEIGHT);
     }

@@ -162,8 +162,8 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
     // fill DeletedRowList
     std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pOwner->GetRowList();
     sal_Int32 nIndex = pOwner->FirstSelectedRow();
-     std::shared_ptr<OTableRow>  pOriginalRow;
-     std::shared_ptr<OTableRow>  pNewRow;
+    std::shared_ptr<OTableRow>  pOriginalRow;
+    std::shared_ptr<OTableRow>  pNewRow;
 
     while( nIndex != SFX_ENDOFSELECTION )
     {

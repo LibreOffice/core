@@ -1313,12 +1313,12 @@ void Window::Update()
 
         // trigger an update also for system windows on top of us,
         // otherwise holes would remain
-         vcl::Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
-         while ( pUpdateOverlapWindow )
-         {
+        vcl::Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
+        while ( pUpdateOverlapWindow )
+        {
              pUpdateOverlapWindow->Update();
              pUpdateOverlapWindow = pUpdateOverlapWindow->mpWindowImpl->mpNext;
-         }
+        }
 
         pUpdateWindow->ImplCallPaint(nullptr, pUpdateWindow->mpWindowImpl->mnPaintFlags);
         pUpdateWindow->LogicInvalidate(nullptr);

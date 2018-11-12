@@ -392,7 +392,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
             }
         }
 
-       for (SCCOLROW i=nThisStart; i<=nThisEnd; i++)
+        for (SCCOLROW i=nThisStart; i<=nThisEnd; i++)
         {
             if ( bColumns )
                 rDoc.ShowCol( static_cast<SCCOL>(i), nTab, bShow );

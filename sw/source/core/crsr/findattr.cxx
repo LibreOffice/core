@@ -571,12 +571,12 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                         {
                             *pCmp = *pArrPtr;
                             nFound++;
+                        }
+                        pArrPtr->nWhich = 0;
+                        if( !--nStackCnt )
+                            break;
                     }
-                    pArrPtr->nWhich = 0;
-                    if( !--nStackCnt )
-                        break;
                 }
-            }
 
             bool bContinue = false;
             if( SfxItemState::DONTCARE == eState  )

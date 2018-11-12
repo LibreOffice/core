@@ -86,7 +86,7 @@ const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId ) co
     for (auto const& shape : maShapes)
         if( const ShapeType* pType = shape->getChildTypeById( rShapeId ) )
             return pType;
-   return nullptr;
+    return nullptr;
 }
 
 const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId ) const
@@ -98,7 +98,7 @@ const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId ) const
     for (auto const& shape : maShapes)
         if( const ShapeBase* pShape = shape->getChildById( rShapeId ) )
             return pShape;
-   return nullptr;
+    return nullptr;
 }
 
 std::shared_ptr< ShapeBase > ShapeContainer::takeLastShape()

@@ -260,7 +260,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
         }
 
         // create an XProperty set to configure the exporter for pretty printing
-         PropertyMapEntry aImportInfoMap[] =
+        PropertyMapEntry aImportInfoMap[] =
          {
              { OUString("UsePrettyPrinting"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
              { OUString("ExportTextNumberElement"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
@@ -268,13 +268,13 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
              { OUString(), 0, css::uno::Type(), 0, 0 }
          };
 
-         Reference< XPropertySet > xInfoSet(
+        Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-         xInfoSet->setPropertyValue("UsePrettyPrinting", makeAny( bPrettyPrint ));
+        xInfoSet->setPropertyValue("UsePrettyPrinting", makeAny( bPrettyPrint ));
         xInfoSet->setPropertyValue(
                         "ExportTextNumberElement",
                         makeAny( bExportTextNumberElementForListItems ));
-         xInfoSet->setPropertyValue("BaseURI", makeAny( aBaseURI ));
+        xInfoSet->setPropertyValue("BaseURI", makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
 
         Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(

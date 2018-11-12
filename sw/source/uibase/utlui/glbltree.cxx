@@ -941,7 +941,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
 
-             const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
+            const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
                             rDispatch.ExecuteList(SID_NEWDOCDIRECT,
                                 SfxCallMode::SYNCHRON, { &aFactory }));
 

@@ -220,10 +220,10 @@ ScVbaChart::getChartType()
 void SAL_CALL
 ScVbaChart::setChartType( ::sal_Int32 _nChartType )
 {
-try
-{
-    switch (_nChartType)
+    try
     {
+        switch (_nChartType)
+        {
         case xlColumnClustered:
         case xlColumnStacked:
         case xlColumnStacked100:
@@ -337,10 +337,10 @@ try
             break;
         default:
             throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_CONVERSION), OUString() );
-    }
+        }
 
-    switch (_nChartType)
-    {
+        switch (_nChartType)
+        {
         case xlLineMarkers:
         case xlLineMarkersStacked:
         case xlLineMarkersStacked100:
@@ -358,10 +358,10 @@ try
                 mxDiagramPropertySet->setPropertyValue(SYMBOLTYPE, uno::makeAny(chart::ChartSymbolType::NONE));
             }
             break;
-    }
+        }
 
-    switch (_nChartType)
-    {
+        switch (_nChartType)
+        {
         case xlConeCol:
         case xlPyramidCol:
         case xlCylinderCol:

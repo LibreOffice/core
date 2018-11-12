@@ -327,7 +327,7 @@ void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
             patchIt = insIt;
     }
     //Patch the places we've changed stuff
-                        PatchLineList(pLineList.get(), patchIt);
+    PatchLineList(pLineList.get(), patchIt);
     SmCaretPos PosAfterInsert = PatchLineList(pLineList.get(), it);
     //Release list, we've taken the nodes
     pNewNodes.reset();

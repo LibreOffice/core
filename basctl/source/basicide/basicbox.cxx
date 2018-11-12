@@ -156,9 +156,7 @@ void LibBox::dispose()
 
 void LibBox::Update( const SfxStringItem* pItem )
 {
-
-//  if ( !pItem  || !pItem->GetValue().Len() )
-        FillBox();
+    FillBox();
 
     if ( pItem )
     {

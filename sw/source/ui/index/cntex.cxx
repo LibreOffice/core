@@ -98,16 +98,16 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
 {
     try
     {
-         uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
+        uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
         uno::Reference< lang::XUnoTunnel > xDocTunnel(xModel, uno::UNO_QUERY);
         SwXTextDocument* pDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
 
         if( pDoc )
             pDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );
 
-         uno::Reference< text::XTextSectionsSupplier >  xSectionSupplier(
+        uno::Reference< text::XTextSectionsSupplier >  xSectionSupplier(
                                                  xModel, uno::UNO_QUERY);
-         uno::Reference< container::XNameAccess >  xSections =
+        uno::Reference< container::XNameAccess >  xSections =
                                         xSectionSupplier->getTextSections();
 
         for(int i = 0; i < 7; ++i )
@@ -115,9 +115,9 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
             OUString sTmp = "IndexSection_" + OUString::number(i);
             uno::Any aSection = xSections->getByName( sTmp );
             aSection >>= m_vTypeData[i].m_pxIndexSections->xContainerSection;
-         }
-         uno::Reference< text::XDocumentIndexesSupplier >  xIdxSupp(xModel, uno::UNO_QUERY);
-         uno::Reference< container::XIndexAccess >  xIdxs = xIdxSupp->getDocumentIndexes();
+        }
+        uno::Reference< text::XDocumentIndexesSupplier >  xIdxSupp(xModel, uno::UNO_QUERY);
+        uno::Reference< container::XIndexAccess >  xIdxs = xIdxSupp->getDocumentIndexes();
         int n = xIdxs->getCount();
         while(n)
         {
@@ -154,13 +154,13 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             "com.sun.star.text.Bibliography"
         };
 
-         OSL_ENSURE(m_vTypeData[nTOXIndex].m_pxIndexSections &&
+        OSL_ENSURE(m_vTypeData[nTOXIndex].m_pxIndexSections &&
                         m_vTypeData[nTOXIndex].m_pxIndexSections->xContainerSection.is(),
                             "Section not created");
-         uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
-         bool bInitialCreate = true;
-         if(!m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex.is())
-         {
+        uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
+        bool bInitialCreate = true;
+        if(!m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex.is())
+        {
              bInitialCreate = true;
              if(!m_vTypeData[nTOXIndex].m_pxIndexSections->xContainerSection.is())
                  throw uno::RuntimeException();
@@ -176,22 +176,22 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
              uno::Reference< text::XTextContent >  xContent(m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex, uno::UNO_QUERY);
              uno::Reference< text::XTextRange >  xRg(xCursor, uno::UNO_QUERY);
              xCursor->getText()->insertTextContent(xRg, xContent, false);
-         }
-         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
-         {
+        }
+        for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
+        {
             uno::Reference< beans::XPropertySet >  xSectPr(m_vTypeData[i].m_pxIndexSections->xContainerSection, uno::UNO_QUERY);
             if(xSectPr.is())
             {
                 xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, makeAny(i == nTOXIndex));
             }
-         }
-         // set properties
-         uno::Reference< beans::XPropertySet >  xIdxProps(m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex, uno::UNO_QUERY);
-         uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
-         SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
-         SwTOIOptions nIdxOptions = rDesc.GetIndexOptions();
-         if(bInitialCreate || !nPage || nPage == TOX_PAGE_SELECT)
-         {
+        }
+        // set properties
+        uno::Reference< beans::XPropertySet >  xIdxProps(m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
+        SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
+        SwTOIOptions nIdxOptions = rDesc.GetIndexOptions();
+        if(bInitialCreate || !nPage || nPage == TOX_PAGE_SELECT)
+        {
             //title
             if(rDesc.GetTitle())
                 lcl_SetProp(xInfo, xIdxProps, UNO_NAME_TITLE, *rDesc.GetTitle());
@@ -264,10 +264,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   bool(SwTOOElements::Calc &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_DRAW,   bool(SwTOOElements::DrawImpress&nOLEOptions));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, bool(SwTOOElements::Other & nOLEOptions));
-         }
-         const SwForm* pForm = GetForm(m_eCurrentTOXType);
-         if(bInitialCreate || !nPage || nPage == TOX_PAGE_ENTRY)
-         {
+        }
+        const SwForm* pForm = GetForm(m_eCurrentTOXType);
+        if(bInitialCreate || !nPage || nPage == TOX_PAGE_ENTRY)
+        {
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_COMMA_SEPARATED, pForm->IsCommaSeparated());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, bool(nIdxOptions&SwTOIOptions::AlphaDelimiter));
             const bool bUseCurrent = nCurrentLevel < pForm->GetFormMax();
