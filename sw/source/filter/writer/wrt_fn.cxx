@@ -19,6 +19,7 @@
 
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
+#include <osl/diagnose.h>
 
 // tdf#94088 SdrAllFillAttributesHelper needed
 #include <svx/unobrushitemhelper.hxx>

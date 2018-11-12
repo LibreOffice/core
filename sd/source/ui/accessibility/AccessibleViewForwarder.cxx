@@ -21,6 +21,7 @@
 #include <svx/svdpntv.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <osl/diagnose.h>
 
 namespace accessibility {
 

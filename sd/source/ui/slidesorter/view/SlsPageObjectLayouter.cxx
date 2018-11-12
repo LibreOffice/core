@@ -26,6 +26,7 @@
 #include <Window.hxx>
 
 #include <bitmaps.hlst>
+#include <osl/diagnose.h>
 
 namespace sd { namespace slidesorter { namespace view {
 

@@ -24,6 +24,7 @@
 #include <tools/svlibrary.h>
 
 #include <osl/module.h>
+#include <osl/diagnose.h>
 
 namespace svt
 {

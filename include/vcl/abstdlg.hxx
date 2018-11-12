@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
@@ -29,12 +28,12 @@
 #include <functional>
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/frame/XModel.hpp>
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace vcl { class Window; }
 class Dialog;
-class Bitmap;
 class BitmapEx;
 namespace weld
 {

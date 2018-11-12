@@ -29,6 +29,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>

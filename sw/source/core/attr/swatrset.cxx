@@ -38,6 +38,7 @@
 #include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
+#include <osl/diagnose.h>
 #include <svl/whiter.hxx>
 #include <svx/xtable.hxx>
 

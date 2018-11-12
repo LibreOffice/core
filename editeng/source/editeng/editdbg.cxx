@@ -54,6 +54,7 @@
 #include "editdbg.hxx"
 
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 #if defined( DBG_UTIL ) || ( OSL_DEBUG_LEVEL > 1 )
 
