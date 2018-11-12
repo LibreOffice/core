@@ -110,6 +110,8 @@ namespace basprov
 
     BasicProviderImpl::~BasicProviderImpl()
     {
+        SolarMutexGuard aGuard;
+        EndListeningAll();
     }
 
 
