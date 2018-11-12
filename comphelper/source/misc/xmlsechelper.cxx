@@ -26,6 +26,7 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustrbuf.h>
+#include <osl/diagnose.h>
 #include <vector>
 
 using namespace std;

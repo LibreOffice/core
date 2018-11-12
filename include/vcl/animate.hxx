@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/vclptr.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 

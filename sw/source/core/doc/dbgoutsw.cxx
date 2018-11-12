@@ -19,6 +19,7 @@
 
 #ifdef DBG_UTIL
 
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemiter.hxx>

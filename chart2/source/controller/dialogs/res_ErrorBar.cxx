@@ -27,6 +27,7 @@
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <svl/stritem.hxx>
 
 #define CHART_LB_FUNCTION_STD_ERROR     0

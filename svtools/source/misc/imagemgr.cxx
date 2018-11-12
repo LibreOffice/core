@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <ucbhelper/content.hxx>
 #include <unotools/configmgr.hxx>
 #include <svtools/strings.hrc>

@@ -46,6 +46,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::awt;

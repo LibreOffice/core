@@ -20,6 +20,8 @@
 #include "QTableConnectionData.hxx"
 #include "QTableWindow.hxx"
 
+#include <osl/diagnose.h>
+
 using namespace dbaui;
 
 // class OQueryTableConnectionData

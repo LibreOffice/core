@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <svtools/brwbox.hxx>
 #include "datwin.hxx"

@@ -25,6 +25,7 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

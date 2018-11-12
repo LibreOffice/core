@@ -10,6 +10,7 @@
 #include "wordexportbase.hxx"
 #include <node.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 SmWordExportBase::SmWordExportBase(const SmNode* pIn)
     : m_pTree(pIn)
