@@ -142,7 +142,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="top_attach">2</property>
                           </packing>
                         </child>
                         <child>
@@ -154,8 +154,77 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">4</property>
                           </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_or">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="signsignatureline|label_name" comments="Name of the signer">or</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btn_load_image">
+                            <property name="label" translatable="yes" context="signsignatureline|btn_load_image">Use Signature Image</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label_image_dimensions"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btn_clear_image">
+                            <property name="label" translatable="yes" context="signsignatureline|btn_clear_image">Clear</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_image_dimensions">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="margin_bottom">6</property>
+                            <property name="label" translatable="yes" context="signsignatureline|label_image_dimensions">Best image size: 600 x 100 px</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="btn_load_image"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -293,9 +362,9 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-5">ok</action-widget>
-      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
 </interface>
