@@ -292,9 +292,8 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
-        bool bUpdateImages      = (bShowMenuImages != m_bShowMenuImages);
 
-        if ( bUpdateImages )
+        if (bShowMenuImages != m_bShowMenuImages)
         {
             m_bShowMenuImages   = bShowMenuImages;
 
@@ -302,7 +301,7 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
             if ( pPopupMenu )
             {
                 PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-                if ( pVCLPopupMenu && bUpdateImages )
+                if (pVCLPopupMenu)
                     updateImagesPopupMenu( pVCLPopupMenu );
             }
         }

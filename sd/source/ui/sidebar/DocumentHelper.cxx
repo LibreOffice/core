@@ -95,8 +95,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         for (sal_uInt16 nMaster=0; nMaster<nMasterPageCount; nMaster++)
         {
             SdPage* pCandidate = rTargetDocument.GetMasterSdPage (nMaster, PageKind::Standard);
-            if (pMasterPage!=nullptr
-                && pCandidate->GetName() == pMasterPage->GetName())
+            if (pCandidate->GetName() == pMasterPage->GetName())
             {
                 bPageExists = true;
                 pNewMasterPage = pCandidate;

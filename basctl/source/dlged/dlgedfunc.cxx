@@ -256,43 +256,39 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                         }
                     }
                 }
-                else
+                else if (nX || nY)
                 {
-                    // move the handle
-                    if ( pHdl && ( nX || nY ) )
+                    Point aStartPoint(pHdl->GetPos());
+                    Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
+                    const SdrDragStat& rDragStat = rView.GetDragStat();
+
+                    // start dragging
+                    rView.BegDragObj(aStartPoint, nullptr, pHdl, 0);
+
+                    if (rView.IsDragObj())
                     {
-                        Point aStartPoint( pHdl->GetPos() );
-                        Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );
-                        const SdrDragStat& rDragStat = rView.GetDragStat();
+                        bool const bWasNoSnap = rDragStat.IsNoSnap();
+                        bool const bWasSnapEnabled = rView.IsSnapEnabled();
 
-                        // start dragging
-                        rView.BegDragObj( aStartPoint, nullptr, pHdl, 0 );
+                        // switch snapping off
+                        if (!bWasNoSnap)
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
+                        if (bWasSnapEnabled)
+                            rView.SetSnapEnabled(false);
 
-                        if ( rView.IsDragObj() )
-                        {
-                            bool const bWasNoSnap = rDragStat.IsNoSnap();
-                            bool const bWasSnapEnabled = rView.IsSnapEnabled();
+                        rView.MovAction(aEndPoint);
+                        rView.EndDragObj();
 
-                            // switch snapping off
-                            if ( !bWasNoSnap )
-                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
-                            if ( bWasSnapEnabled )
-                                rView.SetSnapEnabled(false);
-
-                            rView.MovAction( aEndPoint );
-                            rView.EndDragObj();
-
-                            // restore snap
-                            if ( !bWasNoSnap )
-                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap( bWasNoSnap );
-                            if ( bWasSnapEnabled )
-                                rView.SetSnapEnabled( bWasSnapEnabled );
-                        }
-
-                        // make moved handle visible
-                        tools::Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
-                        rView.MakeVisible( aVisRect, rWindow );
+                        // restore snap
+                        if (!bWasNoSnap)
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
+                        if (bWasSnapEnabled)
+                            rView.SetSnapEnabled(bWasSnapEnabled);
                     }
+
+                    // make moved handle visible
+                    tools::Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
+                    rView.MakeVisible(aVisRect, rWindow);
                 }
             }
             else

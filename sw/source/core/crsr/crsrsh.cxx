@@ -1714,7 +1714,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                 m_pVisibleCursor->Show(); // show again
             }
             m_eMvState = MV_NONE;  // state for cursor travelling - GetCursorOfst
-            if( pTableFrame && Imp()->IsAccessible() )
+            if (Imp()->IsAccessible())
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
             return;
         }
@@ -1957,6 +1957,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
     } while( eFlags & SwCursorShell::SCROLLWIN );
 
+    assert(pFrame);
+
     if( m_pBlockCursor )
         RefreshBlockCursor();
 
@@ -1984,7 +1986,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
     m_eMvState = MV_NONE; // state for cursor travelling - GetCursorOfst
 
-    if( pFrame && Imp()->IsAccessible() )
+    if (Imp()->IsAccessible())
         Imp()->InvalidateAccessibleCursorPosition( pFrame );
 
     // switch from blinking cursor to read-only-text-selection cursor

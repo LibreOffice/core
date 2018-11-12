@@ -783,12 +783,12 @@ AccessibleControlShape * ChildrenManagerImpl::GetAccControlShapeFromModel(css::b
     for (sal_Int32 index=0;index<count;index++)
     {
         AccessibleShape* pAccShape = maVisibleChildren[index].GetAccessibleShape();
-            if (pAccShape  && ::accessibility::ShapeTypeHandler::Instance().GetTypeId (pAccShape->GetXShape()) == DRAWING_CONTROL)
-            {
-            ::accessibility::AccessibleControlShape *pCtlAccShape = static_cast < ::accessibility::AccessibleControlShape* >(pAccShape);
-            if (pCtlAccShape && pCtlAccShape->GetControlModel() == pSet)
+        if (pAccShape && ::accessibility::ShapeTypeHandler::Instance().GetTypeId(pAccShape->GetXShape()) == DRAWING_CONTROL)
+        {
+            auto* pCtlAccShape = static_cast<::accessibility::AccessibleControlShape*>(pAccShape);
+            if (pCtlAccShape->GetControlModel() == pSet)
                 return pCtlAccShape;
-                }
+        }
     }
     return nullptr;
 }
