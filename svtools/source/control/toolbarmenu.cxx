@@ -965,7 +965,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
         else
         {
             // if we have a currently selected entry and
-            // cursor keys are used than check if this entry
+            // cursor keys are used then check if this entry
             // has a control that can use those cursor keys
             ToolbarMenuEntry* pData = mpImpl->maEntryVector[n].get();
             if( pData && pData->mpControl && !pData->mbHasText )

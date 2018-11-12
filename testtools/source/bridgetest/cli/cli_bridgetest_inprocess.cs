@@ -88,7 +88,7 @@ public class BridgeTest
 						"\n\ncli_bridgetest_inprocess [bootstrap file] \n\n"
 						+ "bootstrap file \n"
 						+ "\t contains the entries UNO_TYPES and UNO_SERVICES.\n"
-						+ "\t If a file is not provided than it is assumed that a\n" 
+						+ "\t If a file is not provided then it is assumed that a\n" 
 						+ "\t cli_bridgetest_inprocess.ini file can be found in the\n " 
 						+ "\t current working directory.\n"
 						);

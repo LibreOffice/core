@@ -631,7 +631,7 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
 
     // #now load up the pointer to the saved fpr registers
     //  addi    r6,r1,-2016
-    // if no dedicated floating point registers are used than we have NULL
+    // if no dedicated floating point registers are used then we have NULL
     // pointer there
     //  li      r6, 0
 

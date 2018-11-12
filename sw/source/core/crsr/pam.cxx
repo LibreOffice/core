@@ -737,7 +737,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
 
 /// This function returns the next node in direction of search. If there is no
 /// left or the next is out of the area, then a null-pointer is returned.
-/// @param rbFirst If <true> than first time request. If so than the position of
+/// @param rbFirst If <true> then first time request. If so than the position of
 ///        the PaM must not be changed!
 SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & fnMove,
                       bool bInReadOnly )

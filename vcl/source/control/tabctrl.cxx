@@ -1683,7 +1683,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
             mpTabCtrlData->mpListBox->SetDropDownLineCount( mpTabCtrlData->mpListBox->GetEntryCount() );
         }
 
-        // If current page is removed, than first page gets the current page
+        // If current page is removed, then first page gets the current page
         if ( bIsCurrentPage  )
         {
             mnCurPageId = 0;

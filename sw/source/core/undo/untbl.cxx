@@ -2226,7 +2226,7 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
         return;
 
     SwTextNode* pTextNd = rDoc.GetNodes()[ m_nNodePos ]->GetTextNode();
-    // If more than one node was deleted than all "node" attributes were also
+    // If more than one node was deleted then all "node" attributes were also
     // saved
     if( pTextNd->HasSwAttrSet() )
         pTextNd->ResetAllAttr();
@@ -2687,7 +2687,7 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
 {
     UndoTableCpyTable_Entry *const pEntry = m_vArr.back().get();
 
-    // If the content was deleted than remove also the temporarily created node
+    // If the content was deleted then remove also the temporarily created node
     if( bDelContent )
     {
         SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();

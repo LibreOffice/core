@@ -53,7 +53,7 @@ namespace accessibility {
 
     <p>The different view modes of the Draw and Impress applications
     are made accessible by derived classes.  When the view mode is
-    changed than the object representing the document view is
+    changed then the object representing the document view is
     disposed and replaced by a new instance of the then appropriate
     derived class.</p>
 

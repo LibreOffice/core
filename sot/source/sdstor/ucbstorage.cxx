@@ -733,7 +733,7 @@ bool UCBStorageStream_Impl::Init()
         }
         else
         {
-            // if the new file is edited than no source exist
+            // if the new file is edited then no source exist
             m_bSourceRead = false;
                 //SetError( SVSTREAM_CANNOT_MAKE );
         }
