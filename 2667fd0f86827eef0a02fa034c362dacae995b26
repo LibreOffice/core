@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_d02094b3",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-12T22:01:37Z",
+      "side": 1,
+      "message": "make this const sal_Int32 - int made be different bit sizes, and then cause warning when passing down function calls etc",
+      "revId": "2667fd0f86827eef0a02fa034c362dacae995b26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_b02d20aa",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-12T22:01:37Z",
+      "side": 1,
+      "message": "that idx check is redundant (you\u0027re already testing 2 lines up)",
+      "revId": "2667fd0f86827eef0a02fa034c362dacae995b26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_902a1c8e",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-12T22:01:37Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "2667fd0f86827eef0a02fa034c362dacae995b26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7019e886",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-12T22:01:37Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "2667fd0f86827eef0a02fa034c362dacae995b26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
