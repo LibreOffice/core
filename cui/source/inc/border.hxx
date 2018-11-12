@@ -115,7 +115,6 @@ private:
     bool                mbTLBREnabled;      ///< true = Top-left to bottom-right border enabled.
     bool                mbBLTREnabled;      ///< true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
-    bool                mbAllowPaddingWithoutBorders;
     bool                mbLeftModified;
     bool                mbRightModified;
     bool                mbTopModified;

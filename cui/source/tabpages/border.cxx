@@ -231,7 +231,6 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , mbTLBREnabled(false)
     , mbBLTREnabled(false)
     , mbUseMarginItem(false)
-    , mbAllowPaddingWithoutBorders(true)
     , mbLeftModified(false)
     , mbRightModified(false)
     , mbTopModified(false)
@@ -930,8 +929,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             if( !m_xLeftMF->get_text().isEmpty() || !m_xRightMF->get_text().isEmpty() ||
                 !m_xTopMF->get_text().isEmpty() || !m_xBottomMF->get_text().isEmpty() )
             {
-                if ( mbAllowPaddingWithoutBorders
-                     || ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
+                if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
                          (mbLeftModified || mbRightModified || mbTopModified || mbBottomModified) )
                      || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
                      || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
@@ -1366,30 +1364,10 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
             m_xRightMF->set_min(0, FieldUnit::NONE);
             m_xTopMF->set_min(0, FieldUnit::NONE);
             m_xBottomMF->set_min(0, FieldUnit::NONE);
-            if(!bSpaceModified && !mbAllowPaddingWithoutBorders)
-            {
-                m_xLeftMF->set_value(0, FieldUnit::NONE);
-                m_xRightMF->set_value(0, FieldUnit::NONE);
-                m_xTopMF->set_value(0, FieldUnit::NONE);
-                m_xBottomMF->set_value(0, FieldUnit::NONE);
-            }
         }
         // for tables everything is allowed
         SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::TOP|SvxBoxInfoItemValidFlags::BOTTOM|SvxBoxInfoItemValidFlags::LEFT|SvxBoxInfoItemValidFlags::RIGHT;
 
-        // for other objects (paragraph, page, frame, character) the edit is disabled, if there's no border set
-        if(!(nSWMode & SwBorderModes::TABLE) && !mbAllowPaddingWithoutBorders)
-        {
-            if(bLineSet)
-            {
-                nValid  = (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Top)    == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Bottom) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Left)   == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Right ) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
-            }
-            else
-                nValid = SvxBoxInfoItemValidFlags::NONE;
-        }
         m_xLeftFT->set_sensitive( bool(nValid & SvxBoxInfoItemValidFlags::LEFT) );
         m_xRightFT->set_sensitive( bool(nValid & SvxBoxInfoItemValidFlags::RIGHT) );
         m_xTopFT->set_sensitive( bool(nValid & SvxBoxInfoItemValidFlags::TOP) );

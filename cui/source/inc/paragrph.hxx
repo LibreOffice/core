@@ -53,7 +53,6 @@ class SvxStdParagraphTabPage: public SfxTabPage
 private:
     SvxStdParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
-    long                    nAbst;
     long                    nWidth;
     long                    nMinFixDist;
     bool                    bRelativeMode;
