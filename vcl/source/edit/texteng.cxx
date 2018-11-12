@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

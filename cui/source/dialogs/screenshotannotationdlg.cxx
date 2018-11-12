@@ -41,6 +41,7 @@
 #include <vcl/button.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <set>
 
 using namespace com::sun::star;
 

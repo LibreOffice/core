@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/objsh.hxx>

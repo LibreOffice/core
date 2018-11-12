@@ -22,6 +22,7 @@
 #include "editundo.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <osl/diagnose.h>
 
 
 static void lcl_DoSetSelection( EditView const * pView, sal_uInt16 nPara )

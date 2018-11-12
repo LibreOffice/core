@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>

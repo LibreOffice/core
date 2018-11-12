@@ -29,6 +29,7 @@
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <svtools/miscopt.hxx>
+#include <osl/diagnose.h>
 
 namespace
 {

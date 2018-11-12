@@ -20,6 +20,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <osl/diagnose.h>
 
 #include <unomid.h>
 

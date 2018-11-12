@@ -23,6 +23,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
+#include <osl/diagnose.h>
 
 Color SvxDefaultColorOptPage::GetSelectEntryColor() const
 {

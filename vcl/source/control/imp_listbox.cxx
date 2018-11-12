@@ -40,6 +40,7 @@
 
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 

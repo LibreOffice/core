@@ -30,6 +30,8 @@
 #include <svtaccessiblefactory.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 

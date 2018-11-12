@@ -20,6 +20,7 @@
 
 #include "impedit.hxx"
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <edtspell.hxx>

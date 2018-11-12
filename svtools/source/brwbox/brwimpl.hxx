@@ -21,6 +21,7 @@
 
 #include <svtaccessiblefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <osl/diagnose.h>
 
 #include <map>
 

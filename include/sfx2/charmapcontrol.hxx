@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/charwin.hxx>
 #include <vcl/button.hxx>
+#include <deque>
 
 class SvxCharViewControl;
 
