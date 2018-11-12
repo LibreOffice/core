@@ -757,22 +757,24 @@ void sw_setValue( SwXCell &rCell, double nVal )
 
 SwXCell::SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBx, size_t const nPos) :
     SwXText(pTableFormat->GetDoc(), CursorType::TableText),
-    SwClient(pTableFormat),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(pBx),
     pStartNode(nullptr),
+    m_pTableFormat(pTableFormat),
     nFndPos(nPos)
 {
+    StartListening(pTableFormat->GetNotifier());
 }
 
 SwXCell::SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode) :
     SwXText(pTableFormat->GetDoc(), CursorType::TableText),
-    SwClient(pTableFormat),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(nullptr),
     pStartNode(&rStartNode),
+    m_pTableFormat(pTableFormat),
     nFndPos(NOTFOUND)
 {
+    StartListening(pTableFormat->GetNotifier());
 }
 
 SwXCell::~SwXCell()
@@ -1172,20 +1174,17 @@ sal_Bool SwXCell::hasElements()
     return true;
 }
 
-void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXCell::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-}
-
-void SwXCell::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>*>(&rHint))
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pTableFormat = nullptr;
+    }
+    else if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>*>(&rHint))
     {
         if(!pFindHint->m_pResult && pFindHint->m_pCore == GetTableBox())
             pFindHint->m_pResult = this;
     }
-    else
-        SwClient::SwClientNotify(rModify, rHint);
 }
 
 SwXCell* SwXCell::CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable )
@@ -1199,7 +1198,7 @@ SwXCell* SwXCell::CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwT
         return nullptr;
     size_t const nPos = it - pTable->GetTabSortBoxes().begin();
     FindUnoInstanceHint<SwTableBox, SwXCell> aHint{pBox};
-    pTableFormat->CallSwClientNotify(aHint);
+    pTableFormat->GetNotifier().Broadcast(aHint);
     return aHint.m_pResult ? aHint.m_pResult : new SwXCell(pTableFormat, pBox, nPos);
 }
 
