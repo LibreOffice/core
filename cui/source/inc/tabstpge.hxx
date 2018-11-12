@@ -88,7 +88,6 @@ private:
     SvxTabStop      aCurrentTab;
     SvxTabStopItem  aNewTabs;
     long            nDefDist;
-    FieldUnit       eDefUnit;
 
     TabWin_Impl    m_aLeftWin;
     TabWin_Impl    m_aRightWin;
