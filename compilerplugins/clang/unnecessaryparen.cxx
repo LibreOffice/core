@@ -15,6 +15,9 @@
 #include <unordered_set>
 
 #include <clang/AST/CXXInheritance.h>
+
+#include "config_clang.h"
+
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -52,6 +55,11 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
                 expr = ce->getImplicitObjectArgument();
             }
         }
+#if CLANG_VERSION >= 80000
+        else if (auto const e = dyn_cast<ConstantExpr>(expr)) {
+            expr = e->getSubExpr();
+        }
+#endif
         if (expr == oldExpr)
             return expr;
     }
