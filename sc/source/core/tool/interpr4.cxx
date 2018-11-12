@@ -3961,11 +3961,11 @@ StackVar ScInterpreter::Interpret()
                     eOp = ocNone;       // JumpMatrix created
                     nStackBase = sp;
                 }
-                else
+                else if (sp >= pCur->GetParamCount())
                     nStackBase = sp - pCur->GetParamCount();
+                else
+                    nStackBase = sp;    // underflow?!?
             }
-            if ( nStackBase > sp )
-                nStackBase = sp;        // underflow?!?
 
             switch( eOp )
             {
