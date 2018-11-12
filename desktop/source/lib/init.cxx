@@ -2608,8 +2608,6 @@ static void doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char*& pOutp
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
-    std::cout << "doc_renderShapeSelection" << std::endl;
-
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
