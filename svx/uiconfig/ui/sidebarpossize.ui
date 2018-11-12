@@ -263,7 +263,7 @@
                     <child>
                       <object class="VclComboBoxNumeric" id="rotation:0.00degrees">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarpossize|rotation|tooltip_text">Select the angle for rotation.</property>
                         <property name="hexpand">True</property>
@@ -299,7 +299,7 @@
                         <child>
                           <object class="GtkToolbar" id="selectrotationtype">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="halign">end</property>
                             <accessibility>
                               <relation type="labelled-by" target="fliplabel"/>
