@@ -648,7 +648,7 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             bRet = (rVal >>= nInt);
             if (bRet)
                 m_aSearchOpt.transliterateFlags = static_cast<TransliterationFlags>(nInt);
-             break;
+            break;
         }
         case MID_SEARCH_LOCALE:
         {

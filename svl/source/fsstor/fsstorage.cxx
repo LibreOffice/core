@@ -123,7 +123,7 @@ bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
     ::ucbhelper::Content aParent;
     ::ucbhelper::Content aResultContent;
 
-       if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+    if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                  uno::Reference< ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext(),
                                  aParent ) )
@@ -319,7 +319,7 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -412,7 +412,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -502,7 +502,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -565,7 +565,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -703,7 +703,7 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -777,7 +777,7 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -1199,7 +1199,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     }
     catch( uno::Exception& )
     {
-          uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException("Can't copy raw stream",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );

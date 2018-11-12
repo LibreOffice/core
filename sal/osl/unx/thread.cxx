@@ -584,16 +584,16 @@ static oslThreadIdentifier lookupThreadId (pthread_t hThread)
 
     pthread_mutex_lock(&HashLock);
 
-        pEntry = HashTable[HASHID(hThread)];
-        while (pEntry != nullptr)
+    pEntry = HashTable[HASHID(hThread)];
+    while (pEntry != nullptr)
+    {
+        if (pthread_equal(pEntry->Handle, hThread))
         {
-            if (pthread_equal(pEntry->Handle, hThread))
-            {
-                pthread_mutex_unlock(&HashLock);
-                return pEntry->Ident;
-            }
-            pEntry = pEntry->Next;
+            pthread_mutex_unlock(&HashLock);
+            return pEntry->Ident;
         }
+        pEntry = pEntry->Next;
+    }
 
     pthread_mutex_unlock(&HashLock);
 

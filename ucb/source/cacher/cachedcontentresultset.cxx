@@ -1492,7 +1492,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         return true;
 
     sal_Int32 nNewRow = m_nRow + rows;
-        if( nNewRow < 0 )
+    if( nNewRow < 0 )
             nNewRow = 0;
 
     if( impl_isKnownValidPosition( nNewRow ) )

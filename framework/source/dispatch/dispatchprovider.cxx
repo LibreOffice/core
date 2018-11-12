@@ -217,8 +217,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
 
     else
     {
-        sal_Int32 nRightFlags  = nSearchFlags;
-                  nRightFlags &= ~css::frame::FrameSearchFlag::CREATE;
+        sal_Int32 nRightFlags  = nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
 
         // try to find any existing target and ask him for his dispatcher
         css::uno::Reference< css::frame::XFrame > xFoundFrame = xDesktop->findFrame(sTargetFrameName, nRightFlags);
@@ -385,8 +384,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     else
     {
-        sal_Int32 nRightFlags  = nSearchFlags;
-                  nRightFlags &= ~css::frame::FrameSearchFlag::CREATE;
+        sal_Int32 nRightFlags  = nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
 
         // try to find any existing target and ask him for his dispatcher
         css::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetFrameName, nRightFlags);

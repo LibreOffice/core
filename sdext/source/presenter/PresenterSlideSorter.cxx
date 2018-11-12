@@ -921,7 +921,7 @@ void PresenterSlideSorter::PaintPreview (
                     nullptr,
                     Sequence<double>(4),
                     rendering::CompositeOperation::SOURCE);
-                    rxCanvas->drawBitmap(xAnimationIcon, aViewState, aAnimationRenderState);
+                rxCanvas->drawBitmap(xAnimationIcon, aViewState, aAnimationRenderState);
             }
             if( bTransition )
             {
@@ -935,7 +935,7 @@ void PresenterSlideSorter::PaintPreview (
                     nullptr,
                     Sequence<double>(4),
                     rendering::CompositeOperation::SOURCE);
-                    rxCanvas->drawBitmap(xTransitionIcon, aViewState, aTransitionRenderState);
+                rxCanvas->drawBitmap(xTransitionIcon, aViewState, aTransitionRenderState);
             }
         }
     }

@@ -517,7 +517,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                         aFileOpenDialog.setDefaultName( aName );
                     }
                 }
-                 bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
+                bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
                 if ( bDialogExecuted )
                 {
                     aSaveAsURL = aFileOpenDialog.getURL();

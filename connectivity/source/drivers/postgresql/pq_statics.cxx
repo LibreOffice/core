@@ -239,7 +239,7 @@ Statics & getStatics()
             statics.refl.columnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.ColumnDescriptor";
             statics.refl.columnDescriptor.serviceNames = Sequence< OUString > ( 1 );
-             statics.refl.columnDescriptor.serviceNames[0] =
+            statics.refl.columnDescriptor.serviceNames[0] =
                 "com.sun.star.sdbcx.ColumnDescriptor";
             PropertyDef columnDescDef[] =
                 {

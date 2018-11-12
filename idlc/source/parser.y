@@ -491,7 +491,7 @@ interface_decl :
     identifier
     {
         idlc()->setParseState(PS_InterfaceIDSeen);
-       checkIdentifier($3);
+        checkIdentifier($3);
         $$ = $3;
     }
     ;
@@ -823,7 +823,7 @@ opt_attrflag :
     }
     | error ']'
     {
-       yyerror("unknown property|attribute flag");
+        yyerror("unknown property|attribute flag");
         yyerrok;
     }
     ;
@@ -920,7 +920,7 @@ operation :
     identifier
     {
         idlc()->setParseState(PS_OpIDSeen);
-       checkIdentifier($3);
+        checkIdentifier($3);
 
         AstInterface * pScope = static_cast< AstInterface * >(
             idlc()->scopes()->top());

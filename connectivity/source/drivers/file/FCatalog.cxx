@@ -42,7 +42,7 @@ void SAL_CALL OFileCatalog::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     typedef connectivity::sdbcx::OCatalog OFileCatalog_BASE;
-m_xMetaData.clear();
+    m_xMetaData.clear();
     OFileCatalog_BASE::disposing();
 }
 

@@ -106,7 +106,7 @@ LanguageType EditView::CheckLanguage(
     }
     else    // check single word
     {
-            if (!xSpell.is())
+        if (!xSpell.is())
             return nLang;
 
 

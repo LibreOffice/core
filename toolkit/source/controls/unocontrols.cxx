@@ -318,7 +318,7 @@ void UnoEditControl::setText( const OUString& aText )
     {
         maText = aText;
         mbSetTextInPeer = true;
-            uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+        uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         if ( xText.is() )
             xText->setText( maText );
         }
@@ -387,7 +387,7 @@ OUString UnoEditControl::getText()
 OUString UnoEditControl::getSelectedText()
 {
     OUString sSelected;
-        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+    uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
     if ( xText.is() )
         sSelected = xText->getSelectedText();
 
@@ -396,7 +396,7 @@ OUString UnoEditControl::getSelectedText()
 
 void UnoEditControl::setSelection( const awt::Selection& aSelection )
 {
-        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+    uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
     if ( xText.is() )
         xText->setSelection( aSelection );
 }
@@ -404,7 +404,7 @@ void UnoEditControl::setSelection( const awt::Selection& aSelection )
 awt::Selection UnoEditControl::getSelection()
 {
     awt::Selection aSel;
-        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+    uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
     if ( xText.is() )
         aSel = xText->getSelection();
     return aSel;
@@ -440,7 +440,7 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen )
     {
         mnMaxTextLen = nLen;
         mbSetMaxTextLenInPeer = true;
-            uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+        uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         if ( xText.is() )
             xText->setMaxTextLen( mnMaxTextLen );
     }

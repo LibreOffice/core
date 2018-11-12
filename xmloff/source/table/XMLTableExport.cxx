@@ -210,7 +210,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
  void XMLTableExport::collectTableAutoStyles(const Reference < XColumnRowRange >& xColumnRowRange)
  {
-     if( !mbExportTables )
+    if( !mbExportTables )
          return;
 
     std::shared_ptr< XMLTableInfo > xTableInfo( new XMLTableInfo );
@@ -220,9 +220,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     {
         Reference< XIndexAccess > xIndexAccessCols( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
         const sal_Int32 nColumnCount = xIndexAccessCols->getCount();
-         for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn ) try
+        for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn ) try
         {
-             Reference< XPropertySet > xPropSet( xIndexAccessCols->getByIndex(nColumn) , UNO_QUERY_THROW );
+            Reference< XPropertySet > xPropSet( xIndexAccessCols->getByIndex(nColumn) , UNO_QUERY_THROW );
             std::vector< XMLPropertyState > aPropStates( mxColumnExportPropertySetMapper->Filter( xPropSet ) );
 
             if( has_states( aPropStates ) )
@@ -243,9 +243,10 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
         StringStatisticHelper aStringStatistic;
 
-         for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow ) try
+        for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
+        try
         {
-             Reference< XPropertySet > xPropSet( xIndexAccessRows->getByIndex(nRow) , UNO_QUERY_THROW );
+            Reference< XPropertySet > xPropSet( xIndexAccessRows->getByIndex(nRow) , UNO_QUERY_THROW );
             std::vector< XMLPropertyState > aRowPropStates( mxRowExportPropertySetMapper->Filter( xPropSet ) );
 
             if( has_states( aRowPropStates ) )
@@ -380,7 +381,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
  void XMLTableExport::ExportTableColumns( const Reference < XIndexAccess >& xtableColumnsIndexAccess, const std::shared_ptr< XMLTableInfo >& rTableInfo )
  {
     const sal_Int32 nColumnCount = xtableColumnsIndexAccess->getCount();
-     for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
+    for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
     {
          Reference< XPropertySet > xColumnProperties( xtableColumnsIndexAccess->getByIndex(nColumn) , UNO_QUERY );
          if ( xColumnProperties.is() )
@@ -394,10 +395,10 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
             }
 
-             // TODO: All columns first have to be checked if some ones
-             // have identical properties. If yes, attr table:number-columns-repeated
-             // has to be written.
-             SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true );
+            // TODO: All columns first have to be checked if some ones
+            // have identical properties. If yes, attr table:number-columns-repeated
+            // has to be written.
+            SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true );
          }
      }
  }
@@ -466,7 +467,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
 void XMLTableExport::exportTableStyles()
 {
-     if( !mbExportTables )
+    if( !mbExportTables )
          return;
 
     rtl::Reference<XMLStyleExport> aStEx;
@@ -492,7 +493,7 @@ void XMLTableExport::exportTableStyles()
 
 void XMLTableExport::exportAutoStyles()
 {
-     if( !mbExportTables )
+    if( !mbExportTables )
          return;
 
     mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_COLUMN );
@@ -552,7 +553,7 @@ static const TableStyleElement* getWriterSpecificTableStyleAttributes()
 
 void XMLTableExport::exportTableTemplates()
 {
-     if( !mbExportTables )
+    if( !mbExportTables )
          return;
 
     try
@@ -609,7 +610,7 @@ void XMLTableExport::exportTableTemplates()
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName(xTableStyle->getName()));
             }
 
-             SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
+            SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
 
             Reference< XNameAccess > xStyleNames( xTableStyle, UNO_QUERY_THROW );
             pElements = getTableStyleMap();
@@ -621,7 +622,7 @@ void XMLTableExport::exportTableTemplates()
                     if( xStyle.is() )
                     {
                         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, GetExport().EncodeStyleName( xStyle->getName() ) );
-                         SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, true, true );
+                        SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, true, true );
                     }
                 }
                 catch(const Exception&)

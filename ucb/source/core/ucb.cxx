@@ -303,7 +303,7 @@ void SAL_CALL UniversalContentBroker::dispose()
         m_pDisposeEventListeners->disposeAndClear( aEvt );
     }
 
-     if ( m_xNotifier.is() )
+    if ( m_xNotifier.is() )
         m_xNotifier->removeChangesListener( this );
 }
 

@@ -535,10 +535,10 @@ short SvRTFParser::_inSkipGroup=0;
 
 void SvRTFParser::SkipGroup()
 {
-short nBrackets=1;
-if (_inSkipGroup>0)
-    return;
-_inSkipGroup++;
+    short nBrackets=1;
+    if (_inSkipGroup>0)
+        return;
+    _inSkipGroup++;
 //#i16185# fecking \bin keyword
     do
     {
