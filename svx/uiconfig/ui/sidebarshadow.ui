@@ -77,7 +77,7 @@
                 <child>
                   <object class="VclComboBoxNumeric" id="LB_ANGLE:0degrees">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
@@ -89,7 +89,7 @@
                 <child>
                   <object class="VclComboBoxNumeric" id="LB_DISTANCE:0pt">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -187,7 +187,7 @@
                 <child>
                   <object class="svxcorelo-SvxColorListBox" id="LB_SHADOW_COLOR">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="halign">end</property>
                   </object>
                   <packing>
