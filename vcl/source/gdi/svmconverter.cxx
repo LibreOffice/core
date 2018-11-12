@@ -30,6 +30,7 @@
 #include <vcl/lineinfo.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <svmconverter.hxx>
 

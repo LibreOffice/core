@@ -22,6 +22,7 @@
 #include "iodlg.hxx"
 #include <svtools/fileview.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 

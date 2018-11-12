@@ -56,6 +56,7 @@
 #include <osl/module.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;

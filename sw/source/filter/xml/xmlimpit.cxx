@@ -30,6 +30,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/memberids.h>
+#include <osl/diagnose.h>
 
 #include <hintids.hxx>
 #include <unomid.h>

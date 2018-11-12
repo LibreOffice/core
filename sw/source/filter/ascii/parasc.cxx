@@ -46,6 +46,7 @@
 #include <iodetect.hxx>
 
 #include <vcl/metric.hxx>
+#include <osl/diagnose.h>
 
 #define ASC_BUFFLEN 4096
 

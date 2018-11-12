@@ -46,6 +46,7 @@
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <osl/diagnose.h>
 #include <i18nutil/unicode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>

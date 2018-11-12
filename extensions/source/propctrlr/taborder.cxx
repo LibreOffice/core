@@ -31,6 +31,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>
+#include <osl/diagnose.h>
 
 namespace pcr
 {

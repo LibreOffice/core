@@ -26,6 +26,7 @@
 #include <editeng/shaditem.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/rtftoken.h>
+#include <osl/diagnose.h>
 
 #include <rtfparse.hxx>
 #include <global.hxx>

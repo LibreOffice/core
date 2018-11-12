@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 #include "typedetectionexport.hxx"
 #include "xmlfiltersettingsdialog.hxx"

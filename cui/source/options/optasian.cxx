@@ -20,6 +20,7 @@
 #include <memory>
 #include <map>
 #include <optasian.hxx>
+#include <osl/diagnose.h>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <o3tl/any.hxx>
