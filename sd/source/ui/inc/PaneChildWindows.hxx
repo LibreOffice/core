@@ -24,6 +24,7 @@
 
 namespace sd {
 
+/// Base class of Impress and Draw left sidebars/panes.
 class PaneChildWindow
     : public SfxChildWindow
 {
@@ -37,20 +38,24 @@ public:
     virtual ~PaneChildWindow() override;
 };
 
+/// The slide-sorter sidebar (on the left) in Impress.
 class LeftPaneImpressChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneImpressChildWindow (vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneImpressChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings,
+                               SfxChildWinInfo* pInfo);
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneImpressChildWindow);
 };
 
+/// The pages sidebar (on the left) in Draw.
 class LeftPaneDrawChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneDrawChildWindow (vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneDrawChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings,
+                            SfxChildWinInfo* pInfo);
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneDrawChildWindow);
 };
