@@ -38,6 +38,7 @@
 #include <editeng/memberids.h>
 #include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/unoapi.hxx>
 #include <svl/style.hxx>

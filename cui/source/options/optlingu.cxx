@@ -52,6 +52,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>
 #include <editeng/optitems.hxx>

@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <osl/process.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>

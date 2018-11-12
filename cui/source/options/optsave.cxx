@@ -36,6 +36,7 @@
 #include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/fcontnr.hxx>
 

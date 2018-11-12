@@ -21,6 +21,7 @@
 
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>

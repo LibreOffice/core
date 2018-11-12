@@ -33,6 +33,7 @@
 #include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
 #include <svtools/controldims.hxx>
+#include <osl/diagnose.h>
 
 namespace chart
 {

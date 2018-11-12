@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 
 namespace svx

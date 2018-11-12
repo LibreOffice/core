@@ -20,6 +20,7 @@
 #include <svx/SpellDialogChildWindow.hxx>
 
 #include <svx/svxdlg.hxx>
+#include <osl/diagnose.h>
 
 namespace svx {
 

@@ -19,6 +19,7 @@
 
 #include <algorithm>
 
+#include <osl/diagnose.h>
 #include <sfx2/docfilt.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>

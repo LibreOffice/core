@@ -26,6 +26,7 @@
 #include <rtl/bootstrap.hxx>
 #include <unotools/configpaths.hxx>
 #include <xmlreader/xmlreader.hxx>
+#include <osl/diagnose.h>
 
 #include <unomid.h>
 

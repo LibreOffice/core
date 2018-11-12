@@ -79,6 +79,7 @@
 #include <defaultobjectnamecheck.hxx>
 #include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
+#include <set>
 
 namespace dbaui
 {

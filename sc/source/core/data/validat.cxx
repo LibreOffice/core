@@ -33,6 +33,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 #include <document.hxx>
 #include <formulacell.hxx>
