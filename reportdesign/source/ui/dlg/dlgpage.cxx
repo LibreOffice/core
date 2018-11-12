@@ -27,6 +27,7 @@
 #include <svl/intitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/aeitem.hxx>
+#include <osl/diagnose.h>
 
 namespace rptui
 {

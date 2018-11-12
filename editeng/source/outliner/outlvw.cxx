@@ -45,6 +45,7 @@
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;

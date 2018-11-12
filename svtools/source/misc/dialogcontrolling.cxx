@@ -19,6 +19,7 @@
 
 #include <svtools/dialogcontrolling.hxx>
 #include <vcl/window.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 

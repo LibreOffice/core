@@ -23,6 +23,7 @@
 #include <svtools/svtresid.hxx>
 #include <roadmap.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 #include <map>

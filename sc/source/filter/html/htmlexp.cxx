@@ -48,6 +48,7 @@
 #include <svtools/parhtml.hxx>
 #include <vcl/outdev.hxx>
 #include <stdio.h>
+#include <osl/diagnose.h>
 
 #include <htmlexp.hxx>
 #include <filter.hxx>

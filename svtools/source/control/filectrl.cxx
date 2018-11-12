@@ -23,6 +23,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
+#include <osl/diagnose.h>
 #include <svtools/svtresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/stdtext.hxx>

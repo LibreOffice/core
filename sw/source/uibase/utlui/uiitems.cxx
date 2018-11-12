@@ -19,6 +19,7 @@
 
 #include <editeng/itemtype.hxx>
 #include <unosett.hxx>
+#include <osl/diagnose.h>
 
 #include <swtypes.hxx>
 #include <cmdid.h>

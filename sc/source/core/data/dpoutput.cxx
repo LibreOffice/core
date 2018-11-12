@@ -22,6 +22,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/itemset.hxx>
+#include <osl/diagnose.h>
 
 #include <dpoutput.hxx>
 #include <document.hxx>

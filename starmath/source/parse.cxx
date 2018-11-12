@@ -28,6 +28,7 @@
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <parse.hxx>
 #include <strings.hrc>
