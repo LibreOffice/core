@@ -24,9 +24,11 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <svtools/controldims.hxx>
 #include <svtools/imagemgr.hxx>
@@ -703,42 +705,6 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     }
 }
 
-namespace
-{
-    OUString GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
-    {
-        const LocaleDataWrapper& rWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-
-        Date aDate( _nDate );
-        tools::Time aTime( _nTime * tools::Time::nanoPerCenti );
-        OUString aStr = rWrapper.getDate( aDate )
-                      + ", "
-                      + rWrapper.getTime( aTime );
-        return aStr;
-    }
-
-    // copy from xmlsecurity/source/dialog/resourcemanager.cxx
-    OUString GetContentPart( const OUString& _rRawString, const OUString& _rPartId )
-    {
-        OUString s;
-
-        sal_Int32  nContStart = _rRawString.indexOf( _rPartId );
-        if ( nContStart != -1 )
-        {
-            nContStart = nContStart + _rPartId.getLength();
-            ++nContStart; // now its start of content, directly after Id
-
-            sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
-            if (nContEnd != -1)
-                s = _rRawString.copy( nContStart, nContEnd - nContStart );
-            else
-                s = _rRawString.copy(nContStart);
-        }
-
-        return s;
-    }
-}
-
 SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSet)
     : SfxTabPage(pParent, "DocumentInfoPage", "sfx/ui/documentinfopage.ui", &rItemSet)
     , bEnableUseUserData( false )
@@ -888,9 +854,9 @@ void SfxDocumentPage::ImplUpdateSignatures()
             else if ( aInfos.getLength() == 1 )
             {
                 const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
-                s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
+                s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
                 s += ", ";
-                s += GetContentPart( rInfo.Signer->getSubjectName(), "CN" );
+                s += comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
             }
             m_pSignedValFt->SetText( s );
         }
