@@ -32,6 +32,7 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -2511,6 +2512,15 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     // causing 'Save' being disabled; so let's always save to the original
     // format
     SvtSaveOptions().SetWarnAlienFormat(false);
+
+    // Create the SlideSorter which is used for multiselection and reordering.
+    const OUString aCommand(".uno:LeftPaneImpress");
+    std::vector<beans::PropertyValue> aPropertyValuesVector;
+    beans::PropertyValue aSynchronMode;
+    aSynchronMode.Name = "SynchronMode";
+    aSynchronMode.Value <<= false;
+    aPropertyValuesVector.push_back(aSynchronMode);
+    comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
 }
 
 void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
