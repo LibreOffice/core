@@ -20,6 +20,7 @@
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <osl/diagnose.h>
 
 namespace sd { namespace slidesorter { namespace view {
 

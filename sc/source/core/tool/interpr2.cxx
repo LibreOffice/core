@@ -28,6 +28,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <sc.hrc>

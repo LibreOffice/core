@@ -29,6 +29,7 @@
 #include <svx/stddlg.hxx>
 
 #include <memory>
+#include <stack>
 
 class SvxThesaurusDialog;
 

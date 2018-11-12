@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <osl/diagnose.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlmetae.hxx>

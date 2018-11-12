@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <osl/diagnose.h>
 #include <svl/style.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dialoghelper.hxx>

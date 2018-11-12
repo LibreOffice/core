@@ -49,6 +49,7 @@
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <oox/export/drawingml.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>

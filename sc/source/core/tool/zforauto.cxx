@@ -21,6 +21,7 @@
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 #include <zforauto.hxx>
 #include <global.hxx>

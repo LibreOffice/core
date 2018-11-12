@@ -21,6 +21,7 @@
 
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <unotools/useroptions.hxx>

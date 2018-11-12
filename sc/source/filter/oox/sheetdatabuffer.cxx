@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/eitem.hxx>

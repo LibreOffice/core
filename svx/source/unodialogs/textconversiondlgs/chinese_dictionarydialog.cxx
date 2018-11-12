@@ -35,6 +35,7 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 
 namespace textconversiondlgs

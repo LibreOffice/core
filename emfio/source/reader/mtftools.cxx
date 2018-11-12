@@ -32,6 +32,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <vcl/virdev.hxx>
 #include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>

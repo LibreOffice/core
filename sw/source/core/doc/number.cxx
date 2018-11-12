@@ -51,6 +51,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <unotools/saveopt.hxx>
+#include <osl/diagnose.h>
 
 #include <IDocumentListsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>

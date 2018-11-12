@@ -19,6 +19,7 @@
 
 #include "xmlexpit.hxx"
 
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/itempool.hxx>

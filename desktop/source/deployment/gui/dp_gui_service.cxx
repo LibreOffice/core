@@ -21,6 +21,7 @@
 #include <memory>
 #include "dp_gui.h"
 #include "dp_gui_theextmgr.hxx"
+#include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <unotools/configmgr.hxx>

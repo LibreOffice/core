@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <accel.h>

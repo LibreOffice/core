@@ -27,6 +27,7 @@
 #include <strings.hrc>
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
+#include <osl/diagnose.h>
 
 SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,

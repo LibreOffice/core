@@ -27,6 +27,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
 #include "textconv.hxx"
+#include <osl/diagnose.h>
 
 
 using namespace com::sun::star;

@@ -22,6 +22,7 @@
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <osl/file.h>
 

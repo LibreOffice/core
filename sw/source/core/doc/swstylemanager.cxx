@@ -26,6 +26,7 @@
 #include <istyleaccess.hxx>
 #include <unordered_map>
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 
 typedef std::unordered_map< OUString,
                             std::shared_ptr<SfxItemSet> > SwStyleNameCache;

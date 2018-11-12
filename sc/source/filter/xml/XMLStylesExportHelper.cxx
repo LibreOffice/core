@@ -37,6 +37,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/app.hxx>
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 

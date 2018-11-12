@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <SwXTextDefaults.hxx>
 #include <SwStyleNameMapper.hxx>

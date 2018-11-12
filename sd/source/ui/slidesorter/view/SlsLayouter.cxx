@@ -25,6 +25,7 @@
 #include <Window.hxx>
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <osl/diagnose.h>
 
 namespace sd { namespace slidesorter { namespace view {
 

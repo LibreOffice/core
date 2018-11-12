@@ -31,6 +31,7 @@
 #include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <osl/thread.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <avmedia/mediawindow.hxx>

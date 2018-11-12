@@ -34,6 +34,7 @@
 #include <svl/hint.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

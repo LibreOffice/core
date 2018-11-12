@@ -21,6 +21,7 @@
 #include <vcl/unohelp.hxx>
 
 #include <svdata.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>

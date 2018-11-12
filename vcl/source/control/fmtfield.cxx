@@ -38,6 +38,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;

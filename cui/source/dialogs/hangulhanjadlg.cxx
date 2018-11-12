@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <vcl/controllayout.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>

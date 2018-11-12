@@ -30,6 +30,7 @@
 #include "controlwizard.hxx"
 #include "groupboxwiz.hxx"
 #include "dbptools.hxx"
+#include <osl/diagnose.h>
 
 
 namespace dbp

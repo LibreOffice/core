@@ -21,6 +21,7 @@
 
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

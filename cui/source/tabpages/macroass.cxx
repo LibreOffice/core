@@ -19,6 +19,7 @@
 
 #include <macroass.hxx>
 
+#include <osl/diagnose.h>
 #include <basic/basmgr.hxx>
 #include <comphelper/string.hxx>
 #include <svl/macitem.hxx>

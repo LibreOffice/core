@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/charclass.hxx>

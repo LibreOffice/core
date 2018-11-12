@@ -46,6 +46,7 @@
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/processfactory.hxx>
 

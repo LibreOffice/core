@@ -52,6 +52,7 @@
 #include <svl/itempool.hxx>
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 
 // calculate if it's RTL or not

@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <osl/diagnose.h>
 #include <sot/exchange.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <tools/mapunit.hxx>

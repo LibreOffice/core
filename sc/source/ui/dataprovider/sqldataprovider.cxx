@@ -30,6 +30,7 @@
 #include <datamapper.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 using namespace css;
 using namespace ::com::sun::star::beans;

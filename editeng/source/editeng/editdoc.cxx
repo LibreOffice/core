@@ -52,6 +52,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/grabbagitem.hxx>
 #include <tools/stream.hxx>

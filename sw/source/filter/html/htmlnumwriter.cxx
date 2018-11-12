@@ -40,6 +40,7 @@
 
 #include <SwNodeNum.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 using namespace css;
 

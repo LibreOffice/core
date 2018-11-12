@@ -26,6 +26,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <set>
 
