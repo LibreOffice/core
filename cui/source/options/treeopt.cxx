@@ -482,7 +482,6 @@ struct OptionsGroupInfo
     m_pParent           ( pParent ),\
     pCurrentPageEntry   ( nullptr ),\
     sTitle              ( GetText() ),\
-    sNotLoadedError     (       CuiResId( RID_SVXSTR_LOAD_ERROR ) ),\
     bForgetSelection    ( false ),\
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false ), \

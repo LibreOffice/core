@@ -133,7 +133,6 @@ private:
     SvTreeListEntry*       pCurrentPageEntry;
 
     OUString               sTitle;
-    OUString               sNotLoadedError;
 
     bool                   bForgetSelection;
     bool                   bIsFromExtensionManager;

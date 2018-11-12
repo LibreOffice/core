@@ -362,7 +362,6 @@
 #define RID_SVXSTR_DEL_SPACES_BETWEEN_LINES         NC_("RID_SVXSTR_DEL_SPACES_BETWEEN_LINES", "Delete spaces and tabs at end and start of line")
 #define RID_SVXSTR_CONNECTOR                        NC_("RID_SVXSTR_CONNECTOR", "Connector")
 #define RID_SVXSTR_DIMENSION_LINE                   NC_("RID_SVXSTR_DIMENSION_LINE", "Dimension line")
-#define RID_SVXSTR_LOAD_ERROR                       NC_("RID_SVXSTR_LOAD_ERROR", "The selected module could not be loaded.")
 #define RID_SVXSTR_STARTQUOTE                       NC_("RID_SVXSTR_STARTQUOTE", "Start Quote")
 #define RID_SVXSTR_ENDQUOTE                         NC_("RID_SVXSTR_ENDQUOTE", "End Quote")
 
