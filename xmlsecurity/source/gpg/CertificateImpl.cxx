@@ -61,8 +61,8 @@ OUString SAL_CALL CertificateImpl::getIssuerName()
 
 OUString SAL_CALL CertificateImpl::getSubjectName()
 {
-    // Empty for gpg
-    return OUString();
+    // Samue as issuer name (user ID)
+    return getIssuerName();
 }
 
 namespace {
