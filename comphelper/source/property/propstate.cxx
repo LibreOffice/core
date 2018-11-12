@@ -146,7 +146,8 @@ namespace comphelper
     {
         // simply compare the current and the default value
         Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
-        Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
+        Any aDefaultValue;
+        getFastPropertyValue( aDefaultValue, _nHandle );
 
         bool bEqual = uno_type_equalData(
                 const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),

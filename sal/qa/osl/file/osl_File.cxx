@@ -4569,9 +4569,9 @@ namespace osl_Directory
             {
                 // get file system name
                 OUString aFileSysName(aNullURL);
-                        aFileSysName = _aVolumeInfo.getFileSystemName();
+                aFileSysName = _aVolumeInfo.getFileSystemName();
 
-                        bool bRes2 = compareFileName(aFileSysName, aNullURL);
+                bool bRes2 = compareFileName(aFileSysName, aNullURL);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getVolumeInfo function: getVolumeInfo of root directory.",
                                         osl::FileBase::E_None, nError1);
                 CPPUNIT_ASSERT_MESSAGE("test for getVolumeInfo function: getVolumeInfo of root directory.",

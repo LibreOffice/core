@@ -610,7 +610,7 @@ oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
     {
         for (i = 0; ((i + 1) < MAX_ENVS) &&  (pszEnvironments[i] != nullptr); i++)
             Data.m_pszEnv[i] = strdup(pszEnvironments[i]);
-         Data.m_pszEnv[i+1] = nullptr;
+        Data.m_pszEnv[i+1] = nullptr;
     }
     else
          Data.m_pszEnv[0] = nullptr;
@@ -657,14 +657,14 @@ oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
 
     if (Data.m_pProcImpl->m_pid != 0)
     {
-         assert(hThread != nullptr);
+        assert(hThread != nullptr);
 
         *pProcess = Data.m_pProcImpl;
 
-         if (Options & osl_Process_WAIT)
+        if (Options & osl_Process_WAIT)
             osl_joinProcess(*pProcess);
 
-         return osl_Process_E_None;
+        return osl_Process_E_None;
     }
 
     osl_destroyCondition(Data.m_pProcImpl->m_terminated);
@@ -1072,7 +1072,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
                 userseconds = procstat.utime/hz;
                 systemseconds = procstat.stime/hz;
 
-                 pInfo->UserTime.Seconds   = userseconds;
+                pInfo->UserTime.Seconds   = userseconds;
                 pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * hz);
                 pInfo->SystemTime.Seconds = systemseconds;
                 pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * hz);

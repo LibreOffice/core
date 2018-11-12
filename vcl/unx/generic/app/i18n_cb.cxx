@@ -41,7 +41,7 @@
 int
 PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 {
-      preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
+    preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
     if ( pPreeditData->eState == PreeditStatus::ActivationRequired )
     {
         pPreeditData->eState = PreeditStatus::Active;
@@ -109,8 +109,8 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
           ptext->nLength = from;
     }
 
-      // NULL-terminate the string
-      ptext->pUnicodeBuffer[ptext->nLength] = u'\0';
+    // NULL-terminate the string
+    ptext->pUnicodeBuffer[ptext->nLength] = u'\0';
 }
 
 // reallocate the textbuffer with sufficiently large size 2^x
@@ -148,9 +148,9 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     if (pInsertText->encoding_is_wchar)
     {
         wchar_t *pWCString = pInsertText->string.wide_char;
-          size_t nBytes = wcstombs ( nullptr, pWCString, 1024 /* don't care */);
-          pMBString = static_cast<char*>(alloca( nBytes + 1 ));
-          nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
+        size_t nBytes = wcstombs ( nullptr, pWCString, 1024 /* don't care */);
+        pMBString = static_cast<char*>(alloca( nBytes + 1 ));
+        nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
     }
     else
     {
@@ -163,17 +163,17 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
 
     if (nEncoding != RTL_TEXTENCODING_UNICODE)
     {
-          rtl_TextToUnicodeConverter aConverter =
+        rtl_TextToUnicodeConverter aConverter =
                 rtl_createTextToUnicodeConverter( nEncoding );
-          rtl_TextToUnicodeContext aContext =
+        rtl_TextToUnicodeContext aContext =
                 rtl_createTextToUnicodeContext(aConverter);
 
-          sal_Size nBufferSize = nInsertTextLength * 2;
+        sal_Size nBufferSize = nInsertTextLength * 2;
 
-          pInsertTextString = static_cast<sal_Unicode*>(alloca(nBufferSize));
+        pInsertTextString = static_cast<sal_Unicode*>(alloca(nBufferSize));
 
-          sal_uInt32  nConversionInfo;
-          sal_Size    nConvertedChars;
+        sal_uInt32  nConversionInfo;
+        sal_Size    nConvertedChars;
 
         rtl_convertTextToUnicode( aConverter, aContext,
                 pMBString, nMBLength,
@@ -182,8 +182,8 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
                 &nConversionInfo, &nConvertedChars );
 
-          rtl_destroyTextToUnicodeContext(aConverter, aContext);
-          rtl_destroyTextToUnicodeConverter(aConverter);
+        rtl_destroyTextToUnicodeContext(aConverter, aContext);
+        rtl_destroyTextToUnicodeConverter(aConverter);
 
     }
     else
@@ -291,9 +291,9 @@ Preedit_FeedbackToSAL ( const XIMFeedback* pfeedback, int nlength, std::vector<E
         // copy in list
         psalattr[npos] = nval;
         noldval = nval;
-      }
-      // return list of sal attributes
-     return psalattr;
+    }
+    // return list of sal attributes
+    return psalattr;
 }
 
 void

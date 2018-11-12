@@ -196,7 +196,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
             setLabel( LISTBOX_##elem##_LABEL, aLabel ); \
             break
 
-          switch( i )
+        switch( i )
         {
             LABEL_LIST( VERSION );
             LABEL_LIST( TEMPLATE );

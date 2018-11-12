@@ -848,7 +848,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     fprintf(stderr, "lo_get_javavm returns %p", *ppVm);
 #endif
 
-   return errorcode;
+    return errorcode;
 }
 
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)

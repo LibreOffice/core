@@ -300,7 +300,7 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
         BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
 
         Point aPos(nDestX - nSourceX, nDestY - nSourceY);
-          Size aSz = aBmpEx.GetSizePixel();
+        Size aSz = aBmpEx.GetSizePixel();
 
         if(nDestWidth != nSourceWidth)
         {

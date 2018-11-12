@@ -302,7 +302,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 
             for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
             {
-                 lOutNames [nDestinationCounter] = sNodeName + lProperties[nPropertyCounter].Name;
+                lOutNames [nDestinationCounter] = sNodeName + lProperties[nPropertyCounter].Name;
                 lOutValues[nDestinationCounter] = lProperties[nPropertyCounter].Value;
                 ++nDestinationCounter;
             }

@@ -2110,9 +2110,9 @@ void Document::handleSelectionChangeNotification()
         ::rtl::Reference< Paragraph > xParagraph(getParagraph(aIt));
         if (xParagraph.is())
         {
-        //disable the first event when user types in empty field.
-        ::sal_Int32 count = getAccessibleChildCount();
-        bool bEmpty = count > 1;
+            //disable the first event when user types in empty field.
+            ::sal_Int32 count = getAccessibleChildCount();
+            bool bEmpty = count > 1;
             //if (aIt != m_aFocused)
             if (aIt != m_aFocused && bEmpty)
                 xParagraph->notifyEvent(

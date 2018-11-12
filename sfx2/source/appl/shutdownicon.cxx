@@ -716,7 +716,7 @@ css::uno::Any SAL_CALL ShutdownIcon::getFastPropertyValue( ::sal_Int32 nHandle )
         case PROPHANDLE_TERMINATEVETOSTATE :
              {
                 bool bState   = (m_bListenForTermination && m_bVeto);
-                     aValue <<= bState;
+                aValue <<= bState;
              }
              break;
 

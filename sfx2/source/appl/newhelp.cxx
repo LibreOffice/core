@@ -2695,7 +2695,7 @@ void SfxHelpWindow_Impl::InitSizes()
 
 void SfxHelpWindow_Impl::LoadConfig()
 {
-     SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
+    SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
     if ( aViewOpt.Exists() )
     {
         bIndex = aViewOpt.IsVisible();

@@ -121,7 +121,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessib
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleColumnHeaders()
 {
-   SolarMethodGuard aGuard(getMutex());
+    SolarMethodGuard aGuard(getMutex());
 
     ensureIsAlive();
     return nullptr;        // no headers in headers

@@ -434,7 +434,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         else
         {
             long nTempHeight = aTxtSize.Height();
-                nTempHeight += aImageSize.Height();
+            nTempHeight += aImageSize.Height();
             nTxtPosY = aRect.Top()+((aRect.GetHeight()-nTempHeight)/2);
             if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
                 nTxtPosY += aImageSize.Height();

@@ -808,7 +808,7 @@ bool java_sql_Connection::construct(const OUString& url,
 
             m_aConnectionInfo = info;
         } //mID
-    } //t.pEnv
+     } //t.pEnv
      return object != nullptr;
 }
 

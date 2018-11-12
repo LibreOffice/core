@@ -642,7 +642,7 @@ void PresenterWindowManager::LayoutStandardMode()
             aNextSlideOuterBox.Height);
     }
 
-   LayoutToolBar();
+    LayoutToolBar();
 }
 
 void PresenterWindowManager::LayoutNotesMode()

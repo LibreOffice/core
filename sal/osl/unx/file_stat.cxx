@@ -134,7 +134,7 @@ namespace
     {
         pStat->aAccessTime.Seconds  = file_stat.st_atime;
         pStat->aAccessTime.Nanosec  = 0;
-           pStat->uValidFields        |= osl_FileStatus_Mask_AccessTime;
+        pStat->uValidFields        |= osl_FileStatus_Mask_AccessTime;
     }
 
     void set_file_modify_time(const struct stat& file_stat, oslFileStatus* pStat)
@@ -148,7 +148,7 @@ namespace
     {
         if (S_ISREG(file_stat.st_mode))
            {
-            pStat->uFileSize     = file_stat.st_size;
+               pStat->uFileSize     = file_stat.st_size;
                pStat->uValidFields |= osl_FileStatus_Mask_FileSize;
            }
     }
@@ -260,7 +260,7 @@ static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_
     oslFileError osl_error = osl_File_E_None;
     mode_t       nNewMode  = 0;
 
-     OSL_ENSURE(!(osl_File_Attribute_Hidden & uAttributes), "osl_File_Attribute_Hidden doesn't work under Unix");
+    OSL_ENSURE(!(osl_File_Attribute_Hidden & uAttributes), "osl_File_Attribute_Hidden doesn't work under Unix");
 
     if (uAttributes & osl_File_Attribute_OwnRead)
         nNewMode |= S_IRUSR;

@@ -1880,10 +1880,10 @@ void X11SalFrame::SetSize( const Size &rSize )
 {
     if( rSize.Width() > 0 && rSize.Height() > 0 )
     {
-         if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
+        if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
             && ! IsChildWindow()
             && ( nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
-         {
+        {
             XSizeHints* pHints = XAllocSizeHints();
             long nSupplied = 0;
             XGetWMNormalHints( GetXDisplay(),
@@ -1900,7 +1900,7 @@ void X11SalFrame::SetSize( const Size &rSize )
                                GetShellWindow(),
                                pHints );
             XFree( pHints );
-         }
+        }
         XResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), rSize.Width(), rSize.Height() );
         if( GetWindow() != GetShellWindow() )
         {
@@ -1930,20 +1930,20 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
     if( !values.width || !values.height )
         return;
 
-     if( mpParent && ! IsSysChildWindow() )
-     {
+    if( mpParent && ! IsSysChildWindow() )
+    {
         if( AllSettings::GetLayoutRTL() )
             values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
 
-         ::Window aChild;
-         // coordinates are relative to parent, so translate to root coordinates
-         XTranslateCoordinates( GetDisplay()->GetDisplay(),
+        ::Window aChild;
+        // coordinates are relative to parent, so translate to root coordinates
+        XTranslateCoordinates( GetDisplay()->GetDisplay(),
                                 mpParent->GetWindow(),
                                 GetDisplay()->GetRootWindow( m_nXScreen ),
                                 values.x, values.y,
                                 &values.x, &values.y,
                                 & aChild );
-     }
+    }
 
     bool bMoved = false;
     bool bSized = false;
@@ -2358,7 +2358,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
         mpInputContext.reset( new SalI18N_InputContext( this ) );
         if (mpInputContext->UseContext())
         {
-              mpInputContext->ExtendEventMask( GetShellWindow() );
+            mpInputContext->ExtendEventMask( GetShellWindow() );
             if (mbInputFocus)
                 mpInputContext->SetICFocus( this );
         }
@@ -3254,7 +3254,7 @@ bool X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     else if (nLen > 0 /* nEncoding == RTL_TEXTENCODING_UNICODE */)
     {
         pString = reinterpret_cast<sal_Unicode*>(pPrintable);
-          nSize = nLen;
+        nSize = nLen;
     }
     else
     {

@@ -53,7 +53,7 @@ OUString SAL_CALL ODbaseResultSet::getImplementationName(  )
 
 Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  )
 {
-     Sequence< OUString > aSupported(2);
+    Sequence< OUString > aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
@@ -79,7 +79,7 @@ Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType )
 // XRowLocate
 Any SAL_CALL ODbaseResultSet::getBookmark(  )
 {
-     ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getBookmark called for deleted row");
 
