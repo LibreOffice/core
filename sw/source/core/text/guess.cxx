@@ -40,7 +40,14 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define CH_FULL_BLANK 0x3000
+namespace{
+
+const sal_Unicode CH_FULL_BLANK = 0x3000;
+const sal_Unicode CH_NB_SPACE = 0xA0;
+
+bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_NB_SPACE; }
+
+}
 
 // provides information for line break calculation
 // returns true if no line break has to be performed
@@ -243,7 +250,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     sal_Unicode cCutChar = nCutPos < TextFrameIndex(rInf.GetText().getLength())
         ? rInf.GetText()[sal_Int32(nCutPos)]
         : 0;
-    if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
+    if (IsBlank(cCutChar))
     {
         nBreakPos = nCutPos;
         TextFrameIndex nX = nBreakPos;
@@ -253,23 +260,20 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             // we step back until a non blank character has been found
             // or there is only one more character left
             while (nX && TextFrameIndex(rInf.GetText().getLength()) < nBreakPos &&
-                   ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
-                     CH_FULL_BLANK == cCutChar ) )
+                   IsBlank(rInf.GetChar(--nX)))
                 --nBreakPos;
         }
         else // #i20878#
         {
             while (nX && nBreakPos > rInf.GetLineStart() + TextFrameIndex(1) &&
-                   ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
-                     CH_FULL_BLANK == cCutChar ) )
+                   IsBlank(rInf.GetChar(--nX)))
                 --nBreakPos;
         }
 
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
         while (++nCutPos < TextFrameIndex(rInf.GetText().getLength()) &&
-               ( CH_BLANK == ( cCutChar = rInf.GetChar( nCutPos ) ) ||
-                 CH_FULL_BLANK == cCutChar ) )
+               IsBlank(rInf.GetChar(nCutPos)))
             ; // nothing
 
         nBreakStart = nCutPos;

@@ -910,5 +910,10 @@ DECLARE_ODFIMPORT_TEST(testTdf116195, "tdf116195.odt")
     );
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf120677, "tdf120677.fodt")
+{
+    // The document used to hang the layout, consuming memory until OOM
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
