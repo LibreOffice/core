@@ -714,7 +714,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
     {
         m_pDocumentClass.reset(new LibreOfficeKitDocumentClass);
 
-        m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocument);
+        m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocumentClass);
 
         m_pDocumentClass->destroy = doc_destroy;
         m_pDocumentClass->saveAs = doc_saveAs;
