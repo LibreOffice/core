@@ -37,10 +37,7 @@ private:
     VclPtr<ScrollBar>    aVScroll;      // the scrollbars
     VclPtr<ScrollBar>    aHScroll;
     VclPtr<ScrollBarBox> aCornerWin;    // window in the bottom right corner
-    bool            bScrolling:1,       // user controlled scrolling
-                    bHandleDragging:1,  // scroll window while dragging
-                    bHCenter:1,
-                    bVCenter:1;
+    bool            bScrolling:1;       // user controlled scrolling
 
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar *, void );
     DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar *, void );
