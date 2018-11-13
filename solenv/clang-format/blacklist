@@ -19459,7 +19459,6 @@ xmlsecurity/inc/xsecfwdllapi.h
 xmlsecurity/inc/xsecgpgdllapi.h
 xmlsecurity/inc/xsecxmlsecdllapi.h
 xmlsecurity/qa/certext/SanCertExt.cxx
-xmlsecurity/qa/unit/signing/signing.cxx
 xmlsecurity/qa/unit/xmlsecurity-dialogs-test.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
 xmlsecurity/source/component/certificatecontainer.hxx
