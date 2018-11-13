@@ -3051,7 +3051,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
         }
 
-        double fSerial = static_cast<double>(GetDayDiff( aDate ));
+        double fSerial = aDate.IsEmpty() ? 0 : static_cast<double>(GetDayDiff( aDate ));
         long nSeconds = aTime.GetHour();
         nSeconds *= 3600;
         nSeconds += aTime.GetMin() * 60;
