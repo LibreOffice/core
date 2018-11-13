@@ -3035,43 +3035,70 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
         }
         else
         {
-            DirectoryItem aItem;
-            DirectoryItem::get( getFullPath( aPath ), aItem );
-            FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
-            aItem.getFileStatus( aFileStatus );
-            TimeValue aTimeVal = aFileStatus.getModifyTime();
-            oslDateTime aDT;
-            osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
+            bool bSuccess = false;
+            do
+            {
+                DirectoryItem aItem;
+                if (DirectoryItem::get( getFullPath( aPath ), aItem ) != FileBase::E_None)
+                    break;
 
-            aTime = tools::Time( aDT.Hours, aDT.Minutes, aDT.Seconds, aDT.NanoSeconds );
-            aDate = Date( aDT.Day, aDT.Month, aDT.Year );
+                FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
+                if (aItem.getFileStatus( aFileStatus ) != FileBase::E_None)
+                    break;
+
+                TimeValue aTimeVal = aFileStatus.getModifyTime();
+                oslDateTime aDT;
+                if (!osl_getDateTimeFromTimeValue( &aTimeVal, &aDT ))
+                    // Strictly spoken this is not an i/o error but some other failure.
+                    break;
+
+                aTime = tools::Time( aDT.Hours, aDT.Minutes, aDT.Seconds, aDT.NanoSeconds );
+                aDate = Date( aDT.Day, aDT.Month, aDT.Year );
+                bSuccess = true;
+            }
+            while(false);
+
+            if (!bSuccess)
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
         }
 
-        double fSerial = aDate.IsEmpty() ? 0 : static_cast<double>(GetDayDiff( aDate ));
-        long nSeconds = aTime.GetHour();
-        nSeconds *= 3600;
-        nSeconds += aTime.GetMin() * 60;
-        nSeconds += aTime.GetSec();
-        double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
-        fSerial += nDays;
-
-        Color* pCol;
-
-        std::shared_ptr<SvNumberFormatter> pFormatter;
-        sal_uInt32 nIndex;
-        if( GetSbData()->pInst )
+        // An empty date shall not result in a formatted null-date (1899-12-30
+        // or 1900-01-01) or even worse -0001-12-03 or some such due to how
+        // GetDayDiff() treats things. There should be an error set in this
+        // case anyway because of a missing file or other error above, but.. so
+        // do not even bother to use the number formatter.
+        OUString aRes;
+        if (aDate.IsEmpty())
         {
-            pFormatter = GetSbData()->pInst->GetNumberFormatter();
-            nIndex = GetSbData()->pInst->GetStdDateTimeIdx();
+            aRes = "0000-00-00 00:00:00";
         }
         else
         {
-            sal_uInt32 n;
-            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, nIndex );
-        }
+            double fSerial = static_cast<double>(GetDayDiff( aDate ));
+            long nSeconds = aTime.GetHour();
+            nSeconds *= 3600;
+            nSeconds += aTime.GetMin() * 60;
+            nSeconds += aTime.GetSec();
+            double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
+            fSerial += nDays;
 
-        OUString aRes;
-        pFormatter->GetOutputString( fSerial, nIndex, aRes, &pCol );
+            Color* pCol;
+
+            std::shared_ptr<SvNumberFormatter> pFormatter;
+            sal_uInt32 nIndex;
+            if( GetSbData()->pInst )
+            {
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+                nIndex = GetSbData()->pInst->GetStdDateTimeIdx();
+            }
+            else
+            {
+                sal_uInt32 n;
+                pFormatter = SbiInstance::PrepareNumberFormatter( n, n, nIndex );
+            }
+
+            pFormatter->GetOutputString( fSerial, nIndex, aRes, &pCol );
+        }
         rPar.Get(0)->PutString( aRes );
     }
 }
