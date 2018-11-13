@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_be6cd19c",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-13T22:55:39Z",
+      "side": 1,
+      "message": "to keep with code style, bDraggingUp please, and maybe const as well.",
+      "revId": "af1639477a7eb7489063238e85095e17c98853a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9e690d8d",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-13T22:55:39Z",
+      "side": 1,
+      "message": "is this required here?",
+      "revId": "af1639477a7eb7489063238e85095e17c98853a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
