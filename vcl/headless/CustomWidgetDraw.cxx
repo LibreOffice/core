@@ -10,7 +10,6 @@
 
 #include <cairo.h>
 #include <headless/CustomWidgetDraw.hxx>
-#include <sal/main.h>
 #include <sal/config.h>
 #include <rtl/bootstrap.hxx>
 #include <tools/svlibrary.h>
