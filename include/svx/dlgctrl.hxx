@@ -229,15 +229,10 @@ public:
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC LineLB : public ListBox
 {
-private:
-    /// defines if standard fields (none, solid) are added, default is true
-    bool        mbAddStandardFields : 1;
-
 public:
     LineLB(vcl::Window* pParent);
 
     void Fill(const XDashListRef &pList);
-    bool getAddStandardFields() const { return mbAddStandardFields; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineLB
