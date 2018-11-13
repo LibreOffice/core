@@ -544,7 +544,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    GFileInfo *pInfo = getGFileInfo(xEnv);
+    GError * err = nullptr;
+    GFileInfo *pInfo = getGFileInfo(xEnv, &err);
+    if (pInfo == nullptr && !mbTransient) {
+        ucbhelper::cancelCommandExecution(mapGIOError(err), xEnv);
+    }
+    assert(err == nullptr);
     return getPropertyValuesFromGFileInfo(pInfo, m_xContext, xEnv, rProperties);
 }
 
