@@ -82,7 +82,6 @@ job82=sc.ScCellFieldsObj
 job83=sc.ScCellFormatsEnumeration
 job84=sc.ScCellFormatsObj
 job85=sc.ScCellSearchObj
-job86=sc.ScCellsEnumeration
 job87=sc.ScCellsObj
 job88=sc.ScDatabaseRangeObj
 job89=sc.ScDatabaseRangesObj
