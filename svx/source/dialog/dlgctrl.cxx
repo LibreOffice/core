@@ -923,8 +923,7 @@ void FillTypeLB::Fill()
 }
 
 LineLB::LineLB(vcl::Window* pParent)
-:   ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL),
-    mbAddStandardFields(true)
+:   ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL)
 {
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
@@ -938,15 +937,12 @@ void LineLB::Fill( const XDashListRef &pList )
     if( !pList.is() )
         return;
 
-    if(getAddStandardFields())
-    {
-        // entry for 'none'
-        InsertEntry(pList->GetStringForUiNoLine());
+    // entry for 'none'
+    InsertEntry(pList->GetStringForUiNoLine());
 
-        // entry for solid line
-        InsertEntry(pList->GetStringForUiSolidLine(),
-                Image(pList->GetBitmapForUISolidLine()));
-    }
+    // entry for solid line
+    InsertEntry(pList->GetStringForUiSolidLine(),
+            Image(pList->GetBitmapForUISolidLine()));
 
     // entries for dashed lines
 
