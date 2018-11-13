@@ -1396,7 +1396,7 @@ eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
     }
     SwSetExpField aField( static_cast<SwSetExpFieldType*>(m_pNumFieldType), OUString(),
                         GetNumberPara( rStr ) );
-    aField.SetValue( ++m_nFieldNum );
+    aField.SetValue( ++m_nFieldNum, nullptr );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     return eF_ResT::OK;
 }

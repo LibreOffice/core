@@ -163,7 +163,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
             switch ( pField->GetTyp()->Which() )
             {
             case SwFieldIds::SetExp:
-                nRet = static_cast<const SwSetExpField*>(pField)->GetValue();
+                nRet = static_cast<const SwSetExpField*>(pField)->GetValue(rCalcPara.m_pLayout);
                 break;
             case SwFieldIds::User:
                 nRet = static_cast<const SwUserField*>(pField)->GetValue();
@@ -251,10 +251,15 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
 // structure needed for calculation of tables
 
-SwTableCalcPara::SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable )
-    : m_pLastTableBox( nullptr ), m_nStackCount( 0 ), m_nMaxSize( cMAXSTACKSIZE ),
-    m_pBoxStack( new SwTableSortBoxes ),
-    m_rCalc( rCalculator ), m_pTable( &rTable )
+SwTableCalcPara::SwTableCalcPara(SwCalc& rCalculator, const SwTable& rTable,
+        SwRootFrame const*const pLayout)
+    : m_pLastTableBox(nullptr)
+    , m_nStackCount( 0 )
+    , m_nMaxSize( cMAXSTACKSIZE )
+    , m_pLayout(pLayout)
+    , m_pBoxStack( new SwTableSortBoxes )
+    , m_rCalc( rCalculator )
+    , m_pTable( &rTable )
 {
 }
 
