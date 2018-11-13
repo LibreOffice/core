@@ -4065,13 +4065,16 @@ void SwXTableRows::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
 
 // SwXTableColumns
 
-class SwXTableColumns::Impl : public SwClient
+class SwXTableColumns::Impl : public SvtListener
 {
-public:
-    explicit Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    SwFrameFormat* m_pFrameFormat;
+    public:
+        explicit Impl(SwFrameFormat& rFrameFormat) : m_pFrameFormat(&rFrameFormat)
+        {
+            StartListening(rFrameFormat.GetNotifier());
+        }
+        SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
+        virtual void Notify(const SfxHint&) override;
 };
 
 OUString SwXTableColumns::getImplementationName()
@@ -4093,7 +4096,7 @@ SwXTableColumns::~SwXTableColumns()
 
 SwFrameFormat* SwXTableColumns::GetFrameFormat() const
 {
-    return static_cast<SwFrameFormat*>(m_pImpl->GetRegisteredIn());
+    return m_pImpl->GetFrameFormat();
 }
 
 sal_Int32 SwXTableColumns::getCount()
@@ -4211,7 +4214,10 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 }
 
-void SwXTableColumns::Impl::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-    { ClientModify(this, pOld, pNew); }
+void SwXTableColumns::Impl::Notify(const SfxHint& rHint)
+{
+    if(rHint.GetId() == SfxHintId::Dying)
+        m_pFrameFormat = nullptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
