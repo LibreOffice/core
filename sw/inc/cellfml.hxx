@@ -31,6 +31,7 @@ class SwCalc;
 class SwTableBox;
 class SwTableFormulaUpdate;
 class SwDoc;
+class SwRootFrame;
 
 class SwTableCalcPara
 {
@@ -38,11 +39,12 @@ class SwTableCalcPara
     sal_uInt16 m_nStackCount, m_nMaxSize;
 
 public:
+    SwRootFrame const*const m_pLayout; ///< layout to access text field results
     std::unique_ptr<SwTableSortBoxes> m_pBoxStack;  ///< stack for recognizing recursion
     SwCalc& m_rCalc;              ///< current Calculator
     const SwTable* m_pTable;        ///< current table
 
-    SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable );
+    SwTableCalcPara(SwCalc& rCalculator, const SwTable& rTable, SwRootFrame const* pLayout);
     ~SwTableCalcPara();
 
     bool CalcWithStackOverflow();
