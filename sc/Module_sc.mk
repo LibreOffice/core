@@ -101,65 +101,65 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_5 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
-	CppunitTest_sc_opencl_test \
-	CppunitTest_sc_parallelism \
 	CppunitTest_sc_anchor_test \
-	CppunitTest_sc_annotationshapeobj \
-	CppunitTest_sc_outlineobj \
-	CppunitTest_sc_styleloaderobj \
-	CppunitTest_sc_recordchanges \
 	CppunitTest_sc_annotationobj \
+	CppunitTest_sc_annotationshapeobj \
 	CppunitTest_sc_annotationsobj \
+	CppunitTest_sc_arealinkobj \
+	CppunitTest_sc_arealinksobj \
+	CppunitTest_sc_autoformatobj \
+	CppunitTest_sc_cellcursorobj \
+	CppunitTest_sc_cellobj \
 	CppunitTest_sc_cellrangeobj \
-	$(if $(filter-out $(OS),iOS), \
-		CppunitTest_sc_databaserangeobj) \
-	CppunitTest_sc_datapilottableobj \
-	CppunitTest_sc_datapilotfieldobj \
-	CppunitTest_sc_macros_test \
-	CppunitTest_sc_namedrangeobj \
-	CppunitTest_sc_namedrangesobj \
-	CppunitTest_sc_tablesheetobj \
-	CppunitTest_sc_tablesheetsobj \
-	CppunitTest_sc_editfieldobj_cell \
-	CppunitTest_sc_editfieldobj_header \
-	CppunitTest_sc_modelobj \
-	CppunitTest_sc_check_xcell_ranges_query \
+	CppunitTest_sc_cellrangesobj \
+	CppunitTest_sc_chart2dataprovider \
 	CppunitTest_sc_check_data_pilot_field \
 	CppunitTest_sc_check_data_pilot_table \
-	CppunitTest_sc_viewpaneobj \
-	CppunitTest_sc_cellobj \
-	CppunitTest_sc_cellcursorobj \
-	CppunitTest_sc_tabviewobj \
-	CppunitTest_sc_arealinkobj \
-	CppunitTest_sc_subtotaldescriptorbaseobj \
-	CppunitTest_sc_datapilotitemobj \
-	CppunitTest_sc_subtotalfieldobj \
-	CppunitTest_sc_arealinksobj \
-	CppunitTest_sc_cellrangesobj \
-	CppunitTest_sc_filterdescriptorbaseobj \
-	CppunitTest_sc_tablevalidationobj \
-	CppunitTest_sc_tableconditionalentryobj \
-	CppunitTest_sc_tableconditionalformatobj \
-	CppunitTest_sc_scenariosobj \
-	CppunitTest_sc_labelrangesobj \
-	CppunitTest_sc_labelrangeobj \
-	CppunitTest_sc_headerfootercontentobj \
-	CppunitTest_sc_recentfunctionsobj \
-	CppunitTest_sc_functionlistobj \
-	CppunitTest_sc_datapilottablesobj \
-	CppunitTest_sc_databaserangesobj \
+	CppunitTest_sc_check_xcell_ranges_query \
 	CppunitTest_sc_consolidationdescriptorobj \
-	CppunitTest_sc_chart2dataprovider \
-	CppunitTest_sc_autoformatobj \
-	CppunitTest_sc_importdescriptorbaseobj \
+	$(if $(filter-out $(OS),iOS), \
+		CppunitTest_sc_databaserangeobj) \
+	CppunitTest_sc_databaserangesobj \
+	CppunitTest_sc_datapilotfieldobj \
+	CppunitTest_sc_datapilotitemobj \
+	CppunitTest_sc_datapilottableobj \
+	CppunitTest_sc_datapilottablesobj \
+	CppunitTest_sc_ddelinkobj \
 	CppunitTest_sc_documentconfigurationobj \
-	CppunitTest_sc_spreadsheetsettings \
+	CppunitTest_sc_editfieldobj_cell \
+	CppunitTest_sc_editfieldobj_header \
+	CppunitTest_sc_filterdescriptorbaseobj \
+	CppunitTest_sc_functiondescriptionobj \
+	CppunitTest_sc_functionlistobj \
+	CppunitTest_sc_headerfootercontentobj \
+	CppunitTest_sc_importdescriptorbaseobj \
+	CppunitTest_sc_labelrangeobj \
+	CppunitTest_sc_labelrangesobj \
+	CppunitTest_sc_macros_test \
+	CppunitTest_sc_modelobj \
+	CppunitTest_sc_namedrangeobj \
+	CppunitTest_sc_namedrangesobj \
+	CppunitTest_sc_opencl_test \
+	CppunitTest_sc_outlineobj \
+	CppunitTest_sc_parallelism \
+	CppunitTest_sc_recentfunctionsobj \
+	CppunitTest_sc_recordchanges \
+	CppunitTest_sc_scenariosobj \
 	CppunitTest_sc_shapeobj \
 	CppunitTest_sc_sheetlinkobj \
-	CppunitTest_sc_spreadsheetsettingsobj \
-	CppunitTest_sc_ddelinkobj \
-	CppunitTest_sc_functiondescriptionobj \
 	CppunitTest_sc_sortdescriptorbaseobj \
+	CppunitTest_sc_spreadsheetsettings \
+	CppunitTest_sc_spreadsheetsettingsobj \
+	CppunitTest_sc_styleloaderobj \
+	CppunitTest_sc_subtotaldescriptorbaseobj \
+	CppunitTest_sc_subtotalfieldobj \
+	CppunitTest_sc_tableconditionalentryobj \
+	CppunitTest_sc_tableconditionalformatobj \
+	CppunitTest_sc_tablesheetobj \
+	CppunitTest_sc_tablesheetsobj \
+	CppunitTest_sc_tablevalidationobj \
+	CppunitTest_sc_tabviewobj \
+	CppunitTest_sc_viewpaneobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
