@@ -58,6 +58,21 @@
 
 using namespace ::com::sun::star::uno;
 
+namespace sw
+{
+    bool IsFieldDeletedInModel(IDocumentRedlineAccess const& rIDRA,
+            SwTextField const& rTextField)
+    {
+        SwRedlineTable::size_type tmp;
+        SwPosition const pos(rTextField.GetTextNode(),
+                rTextField.GetStart());
+        SwRangeRedline const*const pRedline(rIDRA.GetRedline(pos, &tmp));
+        return (pRedline
+            && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+            && *pRedline->GetPoint() != *pRedline->GetMark());
+    }
+}
+
 namespace
 {
     #if HAVE_FEATURE_DBCONNECTIVITY
@@ -93,13 +108,7 @@ namespace
             // for *any* layout...
             return true;
         }
-        SwRedlineTable::size_type tmp;
-        SwPosition const pos(const_cast<SwTextNode&>(rTextField.GetTextNode()),
-                rTextField.GetStart());
-        SwRangeRedline const*const pRedline(rIDRA.GetRedline(pos, &tmp));
-        return (pRedline
-            && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
-            && *pRedline->GetPoint() != *pRedline->GetMark());
+        return sw::IsFieldDeletedInModel(rIDRA, rTextField);
     }
 
     void lcl_CalcField( SwDoc& rDoc, SwCalc& rCalc, const SetGetExpField& rSGEField,

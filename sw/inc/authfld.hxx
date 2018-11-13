@@ -62,6 +62,7 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     SwDoc*                  m_pDoc;
     SwAuthDataArr           m_DataArr;
     std::vector<sal_IntPtr> m_SequArr;
+    std::vector<sal_IntPtr> m_SequArrRLHidden; ///< hidden redlines
     SortKeyArr              m_SortKeyArr;
     sal_Unicode             m_cPrefix;
     sal_Unicode             m_cSuffix;
@@ -90,6 +91,7 @@ public:
     void                DelSequenceArray()
                         {
                             m_SequArr.clear();
+                            m_SequArrRLHidden.clear();
                         }
 
     const SwAuthEntry*  GetEntryByHandle(sal_IntPtr nHandle) const;
@@ -102,7 +104,7 @@ public:
     sal_uInt16          AppendField(const SwAuthEntry& rInsert);
     sal_IntPtr          GetHandle(sal_uInt16 nPos);
 
-    sal_uInt16          GetSequencePos(sal_IntPtr nHandle);
+    sal_uInt16          GetSequencePos(sal_IntPtr nHandle, SwRootFrame const* pLayout);
 
     bool            IsSequence() const      {return m_bIsSequence;}
     void                SetSequence(bool bSet)
@@ -142,20 +144,29 @@ public:
 
 };
 
+/** invariant for SwAuthorityField is that it is always registered at its
+    SwAuthorityFieldType via AddField()/RemoveField() & therefore has m_nHandle
+    set - but it's possible that multiple SwAuthorityField have the same
+    m_nHandle & so the number of instances is an upper bound on
+    SwAuthorityField::m_DataArr.size() - it's not clear to me if more than one
+    one of the instances with the same m_nHandle is actually in the document,
+    they're all cloned via CopyField()...
+ */
 class SwAuthorityField : public SwField
 {
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;
+    mutable sal_IntPtr  m_nTempSequencePosRLHidden; ///< hidden redlines
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
 public:
     /// For internal use only, in general continue using ExpandField() instead.
-    OUString ConditionalExpandAuthIdentifier() const;
+    OUString ConditionalExpandAuthIdentifier(SwRootFrame const* pLayout) const;
 
     //To handle Citation
-    SW_DLLPUBLIC OUString ExpandCitation(ToxAuthorityField eField) const;
+    SW_DLLPUBLIC OUString ExpandCitation(ToxAuthorityField eField, SwRootFrame const* pLayout) const;
 
     SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);

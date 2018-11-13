@@ -3001,7 +3001,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::TableOfAuthorities:
     {
         OUString sRet(static_cast<SwAuthorityField const*>(pField)
-                        ->ExpandCitation(AUTH_FIELD_IDENTIFIER));
+                        ->ExpandCitation(AUTH_FIELD_IDENTIFIER, nullptr));
         // FIXME: DomainMapper_Impl::CloseFieldCommand() stuffs fully formed
         // field instructions in here, but if the field doesn't originate
         // from those filters it won't have that

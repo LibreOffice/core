@@ -1937,7 +1937,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         if(rInfos.eType == ww::eCITATION)
         {
             sExpand = static_cast<SwAuthorityField const*>(rInfos.pField.get())
-                        ->ExpandCitation(AUTH_FIELD_TITLE);
+                        ->ExpandCitation(AUTH_FIELD_TITLE, nullptr);
         }
         else
         {
