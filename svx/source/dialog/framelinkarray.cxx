@@ -1220,6 +1220,36 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                     }
                 }
             }
+            else
+            {
+                // get needed local values
+                basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
+                const bool bOverlapX(rCell.mbOverlapX);
+                const bool bFirstCol(nCol == nFirstCol);
+
+                // handle rotation: If cell is rotated, handle lower/right edge inside
+                // this local geometry due to the created CoordinateSystem already representing
+                // the needed transformations.
+                const bool bRotated(rCell.IsRotated());
+
+                // Additionally avoid double-handling by suppressing handling when self not rotated,
+                // but above/left is rotated and thus already handled. Two directly connected
+                // rotated will paint/create both edges, they might be rotated differently.
+                const bool bSupressLeft(!bRotated && nCol > nFirstCol && CELL(nCol - 1, nRow).IsRotated());
+
+                // create left line for this Cell
+                if ((!bOverlapX         // true for first column in merged cells or cells
+                    || bFirstCol)       // true for non_Calc usages of this tooling
+                    && !bSupressLeft)   // true when left is not rotated, so edge is already handled (see bRotated)
+                {
+                    const Style& rLeft(GetCellStyleLeft(nCol, nRow));
+
+                    if (rLeft.IsUsed())
+                    {
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData.get(), true, pForceColor);
+                    }
+                }
+            }
         }
     }
 
