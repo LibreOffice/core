@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+' cf. examples at <https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/
+' statements/mid-statement>:
 Function doUnitTest as Integer
     s = "The fox jumps"
     Mid(s, 5, 3, "duck")
