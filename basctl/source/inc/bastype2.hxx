@@ -49,6 +49,7 @@ namespace o3tl {
 
 namespace basctl
 {
+using namespace ::com::sun::star::uno;
 
 enum EntryType
 {
@@ -149,16 +150,12 @@ public:
         EntryType eType
     );
 
-    ScriptDocument const&   GetDocument() const { return m_aDocument; }
+    ScriptDocument const&   GetDocument()   const { return m_aDocument; }
+    LibraryLocation         GetLocation()   const { return m_eLocation; }
 
-    LibraryLocation         GetLocation() const { return m_eLocation; }
-
-    const OUString&         GetLibName() const { return m_aLibName; }
-
+    const OUString&         GetLibName()    const { return m_aLibName; }
     const OUString&         GetLibSubName() const { return m_aLibSubName; }
-
-    const OUString&         GetName() const { return m_aName; }
-
+    const OUString&         GetName()       const { return m_aName; }
     const OUString&         GetMethodName() const { return m_aMethodName; }
     void                    SetMethodName( const OUString& aMethodName ) { m_aMethodName = aMethodName; }
 
@@ -235,6 +232,8 @@ public:
     static ItemType ConvertType (EntryType eType);
     bool            IsValidEntry( SvTreeListEntry* pEntry );
 
+    void FillTreeListBox( SvTreeListEntry* pRootEntry, const Sequence< OUString >& rNames,
+                          const EntryType& eType, const OUString& aBmpMacro );
     SvTreeListEntry*    AddEntry(
         const OUString& rText, const Image& rImage,
         SvTreeListEntry* pParent, bool bChildrenOnDemand,
