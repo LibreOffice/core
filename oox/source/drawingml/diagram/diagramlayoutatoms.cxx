@@ -54,6 +54,50 @@ oox::OptValue<sal_Int32> findProperty(const oox::drawingml::LayoutPropertyMap& r
 
     return oRet;
 }
+
+/**
+ * Determines if nUnit is a font unit (measured in points) or not (measured in
+ * millimeters).
+ */
+bool isFontUnit(sal_Int32 nUnit)
+{
+    return nUnit == oox::XML_primFontSz || nUnit == oox::XML_secFontSz;
+}
+
+/// Determines the connector shape type from a linear alg.
+sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
+{
+    sal_Int32 nType = oox::XML_rightArrow;
+
+    if (!pNode)
+        return nType;
+
+    for (const auto& pChild : pNode->getChildren())
+    {
+        auto pAlgAtom = dynamic_cast<oox::drawingml::AlgAtom*>(pChild.get());
+        if (!pAlgAtom)
+            continue;
+
+        if (pAlgAtom->getType() != oox::XML_lin)
+            continue;
+
+        sal_Int32 nDir = oox::XML_fromL;
+        if (pAlgAtom->getMap().count(oox::XML_linDir))
+            nDir = pAlgAtom->getMap().find(oox::XML_linDir)->second;
+
+        switch (nDir)
+        {
+            case oox::XML_fromL:
+                nType = oox::XML_rightArrow;
+                break;
+            case oox::XML_fromR:
+                nType = oox::XML_leftArrow;
+                break;
+        }
+    }
+
+    return nType;
+}
 }
 
 namespace oox { namespace drawingml {
@@ -269,13 +313,15 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints) const
+void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
+                                     bool bRequireForName) const
 {
+    if (bRequireForName && maConstraint.msForName.isEmpty())
+        return;
+
     // accepting only basic equality constraints
-    if (!maConstraint.msForName.isEmpty() &&
-        (maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ) &&
-        maConstraint.mnType != XML_none &&
-        maConstraint.mfValue == 0)
+    if ((maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ)
+        && maConstraint.mnType != XML_none)
     {
         rConstraints.push_back(maConstraint);
     }
@@ -290,7 +336,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const std::vector<Constraint>& rOwnConstraints ) const
 {
     // Algorithm result may depend on the parent constraints as well.
-    std::vector<Constraint> aParentConstraints;
+    std::vector<Constraint> aMergedConstraints;
     const LayoutNode* pParent = getLayoutNode().getParentLayoutNode();
     if (pParent)
     {
@@ -298,10 +344,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         {
             auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
             if (pConstraintAtom)
-                pConstraintAtom->parseConstraint(aParentConstraints);
+                pConstraintAtom->parseConstraint(aMergedConstraints, /*bRequireForName=*/true);
         }
     }
-    const std::vector<Constraint>& rConstraints = rOwnConstraints.empty() ? aParentConstraints : rOwnConstraints;
+    aMergedConstraints.insert(aMergedConstraints.end(), rOwnConstraints.begin(),
+                              rOwnConstraints.end());
+    const std::vector<Constraint>& rConstraints = aMergedConstraints;
 
     switch(mnType)
     {
@@ -327,7 +375,19 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if (aRefType != aRef->second.end())
                         aProperties[rConstr.msForName][rConstr.mnType] = aRefType->second * rConstr.mfFactor;
                     else
-                        aProperties[rConstr.msForName][rConstr.mnType] = 0; // TODO: val
+                    {
+                        // Values are never in EMU, while oox::drawingml::Shape
+                        // position and size are always in EMU.
+                        double fUnitFactor = 0;
+                        if (isFontUnit(rConstr.mnRefType))
+                            // Points -> EMU.
+                            fUnitFactor = EMU_PER_PT;
+                        else
+                            // Millimeters -> EMU.
+                            fUnitFactor = EMU_PER_HMM * 100;
+                        aProperties[rConstr.msForName][rConstr.mnType]
+                            = rConstr.mfValue * fUnitFactor;
+                    }
                 }
             }
 
@@ -376,7 +436,54 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         }
 
         case XML_conn:
+        {
+            if (rShape->getSubType() == XML_conn)
+            {
+                // There is no shape type "conn", replace it by an arrow based
+                // on the direction of the parent linear layout.
+                sal_Int32 nType = getConnectorType(pParent);
+
+                rShape->setSubType(nType);
+                rShape->getCustomShapeProperties()->setShapePresetType(nType);
+            }
+
+            // Parse constraints to adjust the size.
+            std::vector<Constraint> aDirectConstraints;
+            const LayoutNode& rLayoutNode = getLayoutNode();
+            for (const auto& pChild : rLayoutNode.getChildren())
+            {
+                auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
+                if (pConstraintAtom)
+                    pConstraintAtom->parseConstraint(aDirectConstraints, /*bRequireForName=*/false);
+            }
+
+            LayoutPropertyMap aProperties;
+            LayoutProperty& rParent = aProperties[""];
+            rParent[XML_w] = rShape->getSize().Width;
+            rParent[XML_h] = rShape->getSize().Height;
+            rParent[XML_l] = 0;
+            rParent[XML_t] = 0;
+            rParent[XML_r] = rShape->getSize().Width;
+            rParent[XML_b] = rShape->getSize().Height;
+            for (const auto& rConstr : aDirectConstraints)
+            {
+                const LayoutPropertyMap::const_iterator aRef
+                    = aProperties.find(rConstr.msRefForName);
+                if (aRef != aProperties.end())
+                {
+                    const LayoutProperty::const_iterator aRefType
+                        = aRef->second.find(rConstr.mnRefType);
+                    if (aRefType != aRef->second.end())
+                        aProperties[rConstr.msForName][rConstr.mnType]
+                            = aRefType->second * rConstr.mfFactor;
+                }
+            }
+            awt::Size aSize;
+            aSize.Width = rParent[XML_w];
+            aSize.Height = rParent[XML_h];
+            rShape->setSize(aSize);
             break;
+        }
 
         case XML_cycle:
         {
@@ -428,9 +535,24 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const sal_Int32 nIncX = nDir==XML_fromL ? 1 : (nDir==XML_fromR ? -1 : 0);
             const sal_Int32 nIncY = nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
 
-            // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
             double fSpace = 0.3;
+
+            // Find out which contraint is relevant for which (internal) name.
+            LayoutPropertyMap aProperties;
+            for (const auto& rConstraint : rConstraints)
+            {
+                if (rConstraint.msForName.isEmpty())
+                    continue;
+
+                LayoutProperty& rProperty = aProperties[rConstraint.msForName];
+                if (rConstraint.mnType == XML_w)
+                    rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
+
+                // TODO: get values from differently named constraints as well
+                if (rConstraint.msForName == "sibTrans" && rConstraint.mnType == XML_w)
+                    fSpace = rConstraint.mfFactor;
+            }
 
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromL || nDir == XML_fromR)
@@ -443,18 +565,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
-
-            // Find out which contraint is relevant for which (internal) name.
-            LayoutPropertyMap aProperties;
-            for (const auto& rConstraint : rConstraints)
-            {
-                if (rConstraint.msForName.isEmpty())
-                    continue;
-
-                LayoutProperty& rProperty = aProperties[rConstraint.msForName];
-                if (rConstraint.mnType == XML_w)
-                    rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
-            }
 
             // See if children requested more than 100% space in total: scale
             // down in that case.
@@ -500,7 +610,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aSize.Width *= fWidthScale;
                 aCurrShape->setSize(aSize);
 
-                aCurrShape->setChildSize(aChildSize);
+                aCurrShape->setChildSize(aSize);
                 aCurrPos.X += nIncX * (aSize.Width + fSpace*aSize.Width);
                 aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
             }
@@ -711,13 +821,27 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             ParamMap::const_iterator aBulletLvl = maMap.find(XML_stBulletLvl);
+            int nStartBulletsAtLevel = 0;
             if (aBulletLvl != maMap.end())
+            {
                 nBaseLevel -= aBulletLvl->second;
+                nStartBulletsAtLevel = aBulletLvl->second;
+            }
 
             for (auto & aParagraph : pTextBody->getParagraphs())
             {
                 sal_Int32 nLevel = aParagraph->getProperties().getLevel();
                 aParagraph->getProperties().setLevel(nLevel - nBaseLevel);
+                if (nStartBulletsAtLevel > 0 && nLevel >= nStartBulletsAtLevel)
+                {
+                    // It is not possible to change the bullet style for text.
+                    sal_Int32 nLeftMargin = 285750 * (nLevel - nStartBulletsAtLevel) / EMU_PER_HMM;
+                    aParagraph->getProperties().getParaLeftMargin() = nLeftMargin;
+                    aParagraph->getProperties().getFirstLineIndentation() = -285750 / EMU_PER_HMM;
+                    OUString aBulletChar = OUString::fromUtf8(u8"•");
+                    aParagraph->getProperties().getBulletList().setBulletChar(aBulletChar);
+                    aParagraph->getProperties().getBulletList().setSuffixNone();
+                }
             }
 
             // explicit alignment
@@ -821,8 +945,10 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 if( aVecIter->second != -1 )
                     rPara.getProperties().setLevel(aVecIter->second);
 
-                rPara.addRun(
-                    aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().front());
+                std::shared_ptr<TextParagraph> pSourceParagraph
+                    = aDataNode2->second->mpShape->getTextBody()->getParagraphs().front();
+                for (const auto& pRun : pSourceParagraph->getRuns())
+                    rPara.addRun(pRun);
                 rPara.getProperties().apply(
                     aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getProperties());
             }

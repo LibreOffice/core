@@ -209,6 +209,8 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
 
         pShape->setDiagramRotation(rAttribs.getInteger(XML_rot, 0) * PER_DEGREE);
 
+        pShape->setZOrderOff(rAttribs.getInteger(XML_zOrderOff, 0));
+
         ShapeAtomPtr pAtom( new ShapeAtom(mpNode->getLayoutNode(), pShape) );
         LayoutAtom::connect(mpNode, pAtom);
         return new ShapeContext( *this, ShapePtr(), pShape );

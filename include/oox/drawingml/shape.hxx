@@ -214,6 +214,14 @@ public:
     const LinkedTxbxAttr&     getLinkedTxbxAttributes() { return maLinkedTxbxAttr; };
     bool                isLinkedTxbx() { return mbHasLinkedTxbx; };
 
+    void setZOrder(sal_Int32 nZOrder) { mnZOrder = nZOrder; }
+
+    sal_Int32 getZOrder() const { return mnZOrder; }
+
+    void setZOrderOff(sal_Int32 nZOrderOff) { mnZOrderOff = nZOrderOff; }
+
+    sal_Int32 getZOrderOff() const { return mnZOrderOff; }
+
 protected:
 
     css::uno::Reference< css::drawing::XShape > const &
@@ -327,6 +335,12 @@ private:
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
 
     css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
+
+    /// Z-Order.
+    sal_Int32 mnZOrder = 0;
+
+    /// Z-Order offset.
+    sal_Int32 mnZOrderOff = 0;
 };
 
 } }
