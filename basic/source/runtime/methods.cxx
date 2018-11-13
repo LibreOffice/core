@@ -1159,26 +1159,22 @@ void SbRtl_Mid(StarBASIC *, SbxArray & rPar, bool bWrite)
                 sal_Int32 nReplaceLen;
                 if( bWriteNoLenParam )
                 {
-                    nReplaceLen = nReplaceStrLen;
+                    nReplaceLen = nArgLen - nStartPos;
                 }
                 else
                 {
                     nReplaceLen = nLen;
-                    if( nReplaceLen < 0 || nReplaceLen > nReplaceStrLen )
+                    if( nReplaceLen < 0 || nReplaceLen > nArgLen - nStartPos )
                     {
-                        nReplaceLen = nReplaceStrLen;
+                        nReplaceLen = nArgLen - nStartPos;
                     }
                 }
 
-                sal_Int32 nReplaceEndPos = nStartPos + nReplaceLen;
-                if( nReplaceEndPos > nArgLen )
-                {
-                    nReplaceLen -= (nReplaceEndPos - nArgLen);
-                }
                 OUStringBuffer aResultStr = aArgStr;
                 sal_Int32 nErase = nReplaceLen;
                 aResultStr.remove( nStartPos, nErase );
-                aResultStr.insert( nStartPos, aReplaceStr.getStr(), nReplaceLen);
+                aResultStr.insert(
+                    nStartPos, aReplaceStr.getStr(), std::min(nReplaceLen, nReplaceStrLen));
 
                 rPar.Get(1)->PutString( aResultStr.makeStringAndClear() );
             }
