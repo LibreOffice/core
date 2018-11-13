@@ -387,10 +387,8 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
         }
 
         // move 'repeated' ones of 'child' objects
-        for ( std::vector<SdrObject*>::const_iterator aObjIter = _rMovedChildObjs.begin();
-              aObjIter != _rMovedChildObjs.end(); ++aObjIter )
+        for ( SdrObject* pChildObj : _rMovedChildObjs )
         {
-            SdrObject* pChildObj = (*aObjIter);
             {
                 const SwContact* pContact = ::GetUserCall( pChildObj );
                 assert(pContact && "SwDrawView::MoveRepeatedObjs(..) - missing contact object -> crash.");
@@ -977,8 +975,8 @@ void SwDrawView::DeleteMarked()
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
 
         // Only delete these now: earlier deletion would clear the mark list as well.
-        for (std::vector<SwFrameFormat*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
-            pDoc->getIDocumentLayoutAccess().DelLayoutFormat(*i);
+        for (auto& rpTextBox : aTextBoxesToDelete)
+            pDoc->getIDocumentLayoutAccess().DelLayoutFormat(rpTextBox);
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
     if( pTmpRoot )

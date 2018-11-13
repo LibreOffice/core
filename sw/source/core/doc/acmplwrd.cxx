@@ -152,26 +152,18 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
 
 void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 {
-    SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
-    {
-        if(&aIt->GetDoc() == &rDoc)
-            return;
-    }
+    if (std::any_of(aClientVector.begin(), aClientVector.end(),
+            [&rDoc](SwAutoCompleteClient& rClient) { return &rClient.GetDoc() == &rDoc; }))
+        return;
     aClientVector.emplace_back(rAutoCompleteWord, rDoc);
 }
 
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 {
-    SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
-    {
-        if(&aIt->GetDoc() == &rDoc)
-        {
-            aClientVector.erase(aIt);
-            return;
-        }
-    }
+    auto aIt = std::find_if(aClientVector.begin(), aClientVector.end(),
+        [&rDoc](SwAutoCompleteClient& rClient) { return &rClient.GetDoc() == &rDoc; });
+    if (aIt != aClientVector.end())
+        aClientVector.erase(aIt);
 }
 
 SwAutoCompleteString::SwAutoCompleteString(
@@ -194,23 +186,19 @@ SwAutoCompleteString::~SwAutoCompleteString()
 
 void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 {
-    for(SwDocPtrVector::iterator aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
-    {
-        if( *aIt == &rDoc )
-            return;
-    }
+    auto aIt = std::find(aSourceDocs.begin(), aSourceDocs.end(), &rDoc);
+    if (aIt != aSourceDocs.end())
+        return;
     aSourceDocs.push_back(&rDoc);
 }
 
 bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 {
-    for(SwDocPtrVector::iterator aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
+    auto aIt = std::find(aSourceDocs.begin(), aSourceDocs.end(), &rDoc);
+    if (aIt != aSourceDocs.end())
     {
-        if( *aIt == &rDoc )
-        {
-            aSourceDocs.erase(aIt);
-            return aSourceDocs.empty();
-        }
+        aSourceDocs.erase(aIt);
+        return aSourceDocs.empty();
     }
     return false;
 }

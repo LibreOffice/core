@@ -425,9 +425,8 @@ SwDoc::~SwDoc()
     // Release the BaseLinks
     {
        ::sfx2::SvLinkSources aTemp(getIDocumentLinksAdministration().GetLinkManager().GetServers());
-       for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin();
-            it != aTemp.end(); ++it )
-            (*it)->Closed();
+       for( const auto& rpLinkSrc : aTemp )
+            rpLinkSrc->Closed();
 
         if( !getIDocumentLinksAdministration().GetLinkManager().GetLinks().empty() )
             getIDocumentLinksAdministration().GetLinkManager().Remove( 0, getIDocumentLinksAdministration().GetLinkManager().GetLinks().size() );

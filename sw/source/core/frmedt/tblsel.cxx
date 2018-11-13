@@ -2083,9 +2083,8 @@ static void FndLineCopyCol( SwTableLine* pLine, FndPara* pFndPara )
 {
     std::unique_ptr<FndLine_> pFndLine(new FndLine_(pLine, pFndPara->pFndBox));
     FndPara aPara(*pFndPara, pFndLine.get());
-    for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
-             it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
-        FndBoxCopyCol(*it, &aPara );
+    for( auto& rpBox : pFndLine->GetLine()->GetTabBoxes() )
+        FndBoxCopyCol(rpBox, &aPara );
     if( !pFndLine->GetBoxes().empty() )
     {
         pFndPara->pFndBox->GetLines().push_back( std::move(pFndLine) );

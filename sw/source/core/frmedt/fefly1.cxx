@@ -1887,18 +1887,16 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
         /* number of page rFormat resides on */
         sal_uInt16 nPageNum = SwFormatGetPageNum(static_cast<SwFlyFrameFormat *>(&rFormat));
 
-        std::vector< const SwFrameFormat * >::const_iterator aIt;
-
-        for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); ++aIt)
+        for (const auto& rpFormat : aTmpSpzArray)
         {
-            const OUString aString = (*aIt)->GetName();
+            const OUString aString = rpFormat->GetName();
 
             /* rFormat is not a valid successor or predecessor of
                itself */
             if (aString != rReference && aString != rFormat.GetName())
             {
                 sal_uInt16 nNum1 =
-                    SwFormatGetPageNum(static_cast<const SwFlyFrameFormat *>(*aIt));
+                    SwFormatGetPageNum(static_cast<const SwFlyFrameFormat *>(rpFormat));
 
                 if (nNum1 == nPageNum -1)
                     aPrevPageVec.push_back(aString);

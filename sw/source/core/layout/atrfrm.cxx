@@ -3528,9 +3528,9 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
         std::vector<SwFrameFormat*> const*const pFlys(pNode->GetAnchoredFlys());
         if (pFlys)
         {
-            for (auto it = pFlys->begin(); it != pFlys->end(); ++it)
+            for (const auto& rpFly : *pFlys)
             {
-                SwFormatAnchor const& rAnchor((**it).GetAnchor(false));
+                SwFormatAnchor const& rAnchor((*rpFly).GetAnchor(false));
                 assert(&rAnchor.GetContentAnchor()->nNode.GetNode() == pNode);
             }
         }

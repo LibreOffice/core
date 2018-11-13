@@ -1605,11 +1605,9 @@ bool SwDoc::ConvertFieldsToText()
         for( SwFormatField* pCurFieldFormat = aIter.First(); pCurFieldFormat; pCurFieldFormat = aIter.Next() )
             aFieldFormats.push_back(pCurFieldFormat);
 
-        std::vector<const SwFormatField*>::iterator aBegin = aFieldFormats.begin();
-        std::vector<const SwFormatField*>::iterator aEnd = aFieldFormats.end();
-        while(aBegin != aEnd)
+        for(const auto& rpFieldFormat : aFieldFormats)
         {
-            const SwTextField *pTextField = (*aBegin)->GetTextField();
+            const SwTextField *pTextField = rpFieldFormat->GetTextField();
             // skip fields that are currently not in the document
             // e.g. fields in undo or redo array
 
@@ -1677,7 +1675,6 @@ bool SwDoc::ConvertFieldsToText()
                     bRet = true;
                 }
             }
-            ++aBegin;
         }
     }
 

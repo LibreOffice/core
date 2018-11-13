@@ -319,9 +319,8 @@ void SwRootFrame::DeRegisterShell( SwViewShell *pSh )
         mpWaitingCurrShell = nullptr;
 
     // Remove references
-    for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
+    for ( CurrShell *pC : *mpCurrShells )
     {
-        CurrShell *pC = *it;
         if (pC->pPrev == pSh)
             pC->pPrev = nullptr;
     }
@@ -484,8 +483,8 @@ void SwRootFrame::DestroyImpl()
     mpDestroy.reset();
 
     // Remove references
-    for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
-        (*it)->pRoot = nullptr;
+    for ( auto& rpCurrShell : *mpCurrShells )
+        rpCurrShell->pRoot = nullptr;
 
     mpCurrShells.reset();
 

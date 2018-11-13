@@ -506,15 +506,15 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         sal_uInt16 nSize = std::accumulate( vIndexes.begin(), vIndexes.end(), 0, lcl_AccumulateIndexCount );
 
         NameToIdHash *pHash = new NameToIdHash( nSize );
-        for ( std::vector<NameArrayIndexTuple_t>::iterator entry = vIndexes.begin(); entry != vIndexes.end(); ++entry )
+        for ( const auto& rEntry : vIndexes )
         {
             // Get a pointer to the function which will populate pStrings
-            const std::vector<OUString>& (*pStringsFetchFunc)() = std::get<2>( *entry );
+            const std::vector<OUString>& (*pStringsFetchFunc)() = std::get<2>( rEntry );
             if ( pStringsFetchFunc )
             {
                 const std::vector<OUString>& rStrings = pStringsFetchFunc();
                 sal_uInt16 nIndex, nId;
-                for ( nIndex = 0, nId = std::get<0>( *entry ) ; nId < std::get<1>( *entry ) ; nId++, nIndex++ )
+                for ( nIndex = 0, nId = std::get<0>( rEntry ) ; nId < std::get<1>( rEntry ) ; nId++, nIndex++ )
                     (*pHash)[rStrings[nIndex]] = nId;
             }
         }

@@ -121,10 +121,8 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     // changed outline style
     SwNumRule::tTextNodeList aTextNodeList;
     mpOutlineRule->GetTextNodeList( aTextNodeList );
-    for ( SwNumRule::tTextNodeList::iterator aIter = aTextNodeList.begin();
-          aIter != aTextNodeList.end(); ++aIter )
+    for ( SwTextNode* pTextNd : aTextNodeList )
     {
-        SwTextNode* pTextNd = *aIter;
         pTextNd->NumRuleChgd();
 
         // assure that list level corresponds to outline level
@@ -793,10 +791,8 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     SwNumRule::tTextNodeList aTextNodeList;
     pOld->GetTextNodeList( aTextNodeList );
     sal_uInt8 nLvl( 0 );
-    for ( SwNumRule::tTextNodeList::iterator aIter = aTextNodeList.begin();
-          aIter != aTextNodeList.end(); ++aIter )
+    for ( SwTextNode* pTextNd : aTextNodeList )
     {
-        SwTextNode* pTextNd = *aIter;
         nLvl = static_cast<sal_uInt8>(pTextNd->GetActualListLevel());
 
         if( nLvl < MAXLEVEL )
@@ -1084,10 +1080,8 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
 
         SwNumRuleItem aItem(rNewName);
 
-        for ( SwNumRule::tTextNodeList::iterator aIter = aTextNodeList.begin();
-              aIter != aTextNodeList.end(); ++aIter )
+        for ( SwTextNode* pTextNd : aTextNodeList )
         {
-            SwTextNode * pTextNd = *aIter;
             pTextNd->SetAttr(aItem);
         }
 
@@ -1107,10 +1101,8 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
     {
         SwNumRule::tTextNodeList aTextNodeList;
         GetNumRuleTable()[ --n ]->GetTextNodeList( aTextNodeList );
-        for ( SwNumRule::tTextNodeList::iterator aTextNodeIter = aTextNodeList.begin();
-              aTextNodeIter != aTextNodeList.end(); ++aTextNodeIter )
+        for ( SwTextNode* pTNd : aTextNodeList )
         {
-            SwTextNode* pTNd = *aTextNodeIter;
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTNd);
             for(SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
                 if (pFrame->HasAnimation() &&
@@ -1157,11 +1149,8 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
             const SwTextNode* pGivenTextNode = rPos.nNode.GetNode().GetTextNode();
             SwNumRuleItem aRule( rNewRule );
-            for ( SwNumRule::tTextNodeList::iterator aIter = aTextNodeList.begin();
-                  aIter != aTextNodeList.end(); ++aIter )
+            for ( SwTextNode* pTextNd : aTextNodeList )
             {
-                SwTextNode* pTextNd = *aIter;
-
                 if ( pGivenTextNode &&
                      pGivenTextNode->GetListId() == pTextNd->GetListId() )
                 {

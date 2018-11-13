@@ -1201,16 +1201,16 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         SwNodeIndex const prev(rTableNodes.begin()->begin()->aStart, -1);
         SwNodeIndex const* pPrev(&prev);
         // pPrev could point to non-textnode now
-        for (auto row = rTableNodes.begin(); row != rTableNodes.end(); ++row)
+        for (const auto& rRow : rTableNodes)
         {
-            for (auto cell = row->begin(); cell != row->end(); ++cell)
+            for (const auto& rCell : rRow)
             {
-                assert(SwNodeIndex(*pPrev, +1) == cell->aStart);
-                SwPaM pam(cell->aStart, 0, *pPrev,
+                assert(SwNodeIndex(*pPrev, +1) == rCell.aStart);
+                SwPaM pam(rCell.aStart, 0, *pPrev,
                         (pPrev->GetNode().IsContentNode())
                             ? pPrev->GetNode().GetContentNode()->Len() : 0);
                 rIDRA.SplitRedline(pam);
-                pPrev = &cell->aEnd;
+                pPrev = &rCell.aEnd;
             }
         }
         // another one to break between last cell and node after table
@@ -1386,7 +1386,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     SwDoc* pDoc = GetDoc();
     SwTable& rTable = pTableNd->GetTable();
     SwTableBox* pBox;
-    sal_uInt16 nBoxes, nLines, nMaxBoxes = 0;
+    sal_uInt16 nLines, nMaxBoxes = 0;
 
     SwNodeIndex aNodeIndex = rTableNodes.begin()->begin()->aStart;
     // delete frames of all contained content nodes
@@ -1400,46 +1400,45 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         }
     }
 
-    std::vector<std::vector < SwNodeRange > >::const_iterator aRowIter = rTableNodes.begin();
-    for( nLines = 0, nBoxes = 0;
-        aRowIter != rTableNodes.end();
-        ++aRowIter, nLines++, nBoxes = 0 )
+    nLines = 0;
+    for( const auto& rRow : rTableNodes )
     {
+        sal_uInt16 nBoxes = 0;
         SwTableLine* pLine = new SwTableLine( pLineFormat, 1, nullptr );
         rTable.GetTabLines().insert(rTable.GetTabLines().begin() + nLines, pLine);
 
-        std::vector< SwNodeRange >::const_iterator aCellIter = aRowIter->begin();
-
-        for( ; aCellIter != aRowIter->end(); ++aCellIter )
+        for( const auto& rCell : rRow )
         {
-                const SwNodeIndex aTmpIdx( aCellIter->aStart, 0 );
+            const SwNodeIndex aTmpIdx( rCell.aStart, 0 );
 
-               SwNodeIndex aCellEndIdx(aCellIter->aEnd);
-               ++aCellEndIdx;
-               SwStartNode* pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
-                                            SwTableBoxStartNode );
+            SwNodeIndex aCellEndIdx(rCell.aEnd);
+            ++aCellEndIdx;
+            SwStartNode* pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
+                                        SwTableBoxStartNode );
 
-                // Quotation of http://nabble.documentfoundation.org/Some-strange-lines-by-taking-a-look-at-the-bt-of-fdo-51916-tp3994561p3994639.html
-                // SwNode's constructor adds itself to the same SwNodes array as the other node (pSttNd).
-                // So this statement is only executed for the side-effect.
-                new SwEndNode( aCellEndIdx, *pSttNd );
+            // Quotation of http://nabble.documentfoundation.org/Some-strange-lines-by-taking-a-look-at-the-bt-of-fdo-51916-tp3994561p3994639.html
+            // SwNode's constructor adds itself to the same SwNodes array as the other node (pSttNd).
+            // So this statement is only executed for the side-effect.
+            new SwEndNode( aCellEndIdx, *pSttNd );
 
-                //set the start node on all node of the current cell
-                SwNodeIndex aCellNodeIdx = aCellIter->aStart;
-                for(;aCellNodeIdx <= aCellIter->aEnd; ++aCellNodeIdx )
-                {
-                    aCellNodeIdx.GetNode().m_pStartOfSection = pSttNd;
-                    //skip start/end node pairs
-                    if( aCellNodeIdx.GetNode().IsStartNode() )
-                        aCellNodeIdx.Assign(*aCellNodeIdx.GetNode().EndOfSectionNode());
-                }
+            //set the start node on all node of the current cell
+            SwNodeIndex aCellNodeIdx = rCell.aStart;
+            for(;aCellNodeIdx <= rCell.aEnd; ++aCellNodeIdx )
+            {
+                aCellNodeIdx.GetNode().m_pStartOfSection = pSttNd;
+                //skip start/end node pairs
+                if( aCellNodeIdx.GetNode().IsStartNode() )
+                    aCellNodeIdx.Assign(*aCellNodeIdx.GetNode().EndOfSectionNode());
+            }
 
-                // assign Section to the Box
-                pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
-                pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
+            // assign Section to the Box
+            pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
+            pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
         }
         if( nMaxBoxes < nBoxes )
             nMaxBoxes = nBoxes;
+
+        nLines++;
     }
 
     lcl_SetTableBoxWidths2(rTable, nMaxBoxes, *pBoxFormat, *pDoc);
@@ -1514,9 +1513,8 @@ static void lcl_DelLine( SwTableLine* pLine, DelTabPara* pPara )
 {
     assert(pPara && "The parameters are missing!");
     DelTabPara aPara( *pPara );
-    for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
-             it != pLine->GetTabBoxes().end(); ++it)
-        lcl_DelBox(*it, &aPara );
+    for( auto& rpBox : pLine->GetTabBoxes() )
+        lcl_DelBox(rpBox, &aPara );
     if( pLine->GetUpper() ) // Is there a parent Box?
         // Return the last TextNode
         pPara->pLastNd = aPara.pLastNd;
@@ -2645,15 +2643,15 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
 
     // transfer calculated values from BoundaryMap and HiddenMap into rFill:
     size_t nIdx = 0;
-    for ( aIter = aBoundaries.begin(); aIter != aBoundaries.end(); ++aIter )
+    for ( const auto& rEntry : aBoundaries )
     {
         const long nTabTop = aRectFnSet.GetPrtTop(*pTab);
-        const long nKey = aRectFnSet.YDiff( (*aIter).first, nTabTop );
-        const std::pair< long, long > aTmpPair = (*aIter).second;
+        const long nKey = aRectFnSet.YDiff( rEntry.first, nTabTop );
+        const std::pair< long, long > aTmpPair = rEntry.second;
         const long nFirst = aRectFnSet.YDiff( aTmpPair.first, nTabTop );
         const long nSecond = aTmpPair.second;
 
-        aHiddenIter = aHidden.find( (*aIter).first );
+        aHiddenIter = aHidden.find( rEntry.first );
         const bool bHidden = aHiddenIter != aHidden.end() && (*aHiddenIter).second;
         rFill.Insert( nKey, nFirst, nSecond, bHidden, nIdx++ );
     }
@@ -2970,13 +2968,11 @@ bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
 {
     SwCollectTableLineBoxes* pSplPara = static_cast<SwCollectTableLineBoxes*>(pPara);
     if( pSplPara->IsGetValues() )
-        for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
-                 it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)
-            sw_Box_CollectBox(*it, pSplPara );
+        for( const auto& rpBox : const_cast<SwTableLine*>(rpLine)->GetTabBoxes() )
+            sw_Box_CollectBox(rpBox, pSplPara );
     else
-        for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
-                 it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)
-            sw_BoxSetSplitBoxFormats(*it, pSplPara );
+        for( auto& rpBox : const_cast<SwTableLine*>(rpLine)->GetTabBoxes() )
+            sw_BoxSetSplitBoxFormats(rpBox, pSplPara );
     return true;
 }
 
@@ -3148,15 +3144,13 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
                 SwCollectTableLineBoxes aPara( false, eHdlnMode );
                 SwTableLine* pLn = rTable.GetTabLines()[
                             rTable.GetTabLines().size() - 1 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_Box_CollectBox(*it, &aPara );
+                for( const auto& rpBox : pLn->GetTabBoxes() )
+                    sw_Box_CollectBox(rpBox, &aPara );
 
                 aPara.SetValues( true );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFormats(*it, &aPara );
+                for( auto& rpBox : pLn->GetTabBoxes() )
+                    sw_BoxSetSplitBoxFormats(rpBox, &aPara );
 
                 // Switch off repeating Header
                 pNew->GetTable().SetRowsToRepeat( 0 );
@@ -3173,15 +3167,13 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
 
                 SwCollectTableLineBoxes aPara( true, eHdlnMode, pHst );
                 SwTableLine* pLn = rTable.GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_Box_CollectBox(*it, &aPara );
+                for( const auto& rpBox : pLn->GetTabBoxes() )
+                    sw_Box_CollectBox(rpBox, &aPara );
 
                 aPara.SetValues( true );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFormats(*it, &aPara );
+                for( auto& rpBox : pLn->GetTabBoxes() )
+                    sw_BoxSetSplitBoxFormats(rpBox, &aPara );
             }
             break;
 
@@ -3295,9 +3287,8 @@ static void lcl_SplitTable_CpyLine( SwTableLine* pLn, SplitTable_Para* pPara )
     else
         pLn->ChgFrameFormat( pDestFormat );
 
-    for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-             it != pLn->GetTabBoxes().end(); ++it)
-        lcl_SplitTable_CpyBox(*it, pPara );
+    for( auto& rpBox : pLn->GetTabBoxes() )
+        lcl_SplitTable_CpyBox(rpBox, pPara );
 }
 
 static void lcl_SplitTable_CpyBox( SwTableBox* pBox, SplitTable_Para* pPara )

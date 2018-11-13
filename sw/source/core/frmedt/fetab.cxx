@@ -2279,12 +2279,8 @@ static bool lcl_IsFormulaSelBoxes( const SwTable& rTable, const SwTableBoxFormul
     for (size_t nSelBoxes = aBoxes.size(); nSelBoxes; )
     {
         SwTableBox* pBox = aBoxes[ --nSelBoxes ];
-        SwCellFrames::iterator iC;
-        for( iC = rCells.begin(); iC != rCells.end(); ++iC )
-            if( (*iC)->GetTabBox() == pBox )
-                break;      // found
 
-        if( iC == rCells.end() )
+        if( std::none_of(rCells.begin(), rCells.end(), [&pBox](SwCellFrame* pFrame) { return pFrame->GetTabBox() == pBox; }) )
             return false;
     }
 
