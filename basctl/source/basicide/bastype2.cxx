@@ -316,23 +316,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         if ( nMode & BrowseMode::Subs )
                         {
                             Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
-                            sal_Int32 nCount = aNames.getLength();
-                            const OUString* pNames = aNames.getConstArray();
-
-                            for ( sal_Int32 j = 0 ; j < nCount ; j++ )
-                            {
-                                OUString aName = pNames[ j ];
-                                SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
-                                if ( !pEntry )
-                                {
-                                    AddEntry(
-                                        aName,
-                                        Image(BitmapEx(RID_BMP_MACRO)),
-                                        pModuleEntry, false,
-                                        o3tl::make_unique<Entry>(
-                                            OBJ_TYPE_METHOD));
-                                }
-                            }
+                            FillTreeListBox( pModuleEntry, aNames, OBJ_TYPE_METHOD, RID_BMP_MACRO );
                         }
                     }
                 }
@@ -355,22 +339,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
             {
                 // get a sorted list of dialog names
                 Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
-                sal_Int32 nDlgCount = aDlgNames.getLength();
-                const OUString* pDlgNames = aDlgNames.getConstArray();
-
-                for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
-                {
-                    OUString aDlgName = pDlgNames[ i ];
-                    SvTreeListEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
-                    if ( !pDialogEntry )
-                    {
-                        AddEntry(
-                            aDlgName,
-                            Image(BitmapEx(RID_BMP_DIALOG)),
-                            pLibRootEntry, false,
-                            o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
-                    }
-                }
+                FillTreeListBox( pLibRootEntry, aDlgNames, OBJ_TYPE_DIALOG, RID_BMP_DIALOG );
             }
             catch (const container::NoSuchElementException& )
             {
@@ -472,22 +441,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             if ( nMode & BrowseMode::Subs )
             {
                 Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
-                sal_Int32 nCount = aNames.getLength();
-                const OUString* pNames = aNames.getConstArray();
-
-                for ( sal_Int32 j = 0 ; j < nCount ; j++ )
-                {
-                    OUString aName = pNames[ j ];
-                    SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
-                    if ( !pEntry )
-                    {
-                        AddEntry(
-                            aName,
-                            Image(BitmapEx(RID_BMP_MACRO)),
-                            pModuleEntry, false,
-                            o3tl::make_unique<Entry>(OBJ_TYPE_METHOD));
-                    }
-                }
+                FillTreeListBox( pModuleEntry, aNames, OBJ_TYPE_METHOD, RID_BMP_MACRO );
             }
         }
     }
@@ -689,6 +643,29 @@ bool TreeListBox::IsEntryProtected( SvTreeListEntry* pEntry )
         }
     }
     return bProtected;
+}
+
+//Fills up treelist for macros and dialogs
+void TreeListBox::FillTreeListBox( SvTreeListEntry* pRootEntry, const Sequence< OUString >& rNames,
+                            const EntryType& eType, const OUString& aBmpMacro )
+{
+    sal_Int32 nCount = rNames.getLength();
+    const OUString* pNames = rNames.getConstArray();
+
+    for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+    {
+        OUString aName = pNames[ j ];
+        SvTreeListEntry* pEntry = FindEntry( pRootEntry, aName, eType );
+
+        if ( !pEntry )
+        {
+            AddEntry(
+                aName,
+                Image(BitmapEx( aBmpMacro )),
+                pRootEntry, false,
+                o3tl::make_unique<Entry>( eType ));
+        }
+    }
 }
 
 SvTreeListEntry* TreeListBox::AddEntry(
