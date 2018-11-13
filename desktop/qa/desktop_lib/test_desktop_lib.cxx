@@ -2459,6 +2459,7 @@ void DesktopLOKTest::testInsertCertificatePEM()
 
     comphelper::LibreOfficeKit::setActive(false);
 }
+
 namespace {
 
 size_t documentClassOffset(int i)
