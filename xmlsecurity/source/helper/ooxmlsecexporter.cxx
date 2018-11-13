@@ -32,12 +32,14 @@ using namespace css::xml::sax;
 
 struct OOXMLSecExporter::Impl
 {
+private:
     const uno::Reference<uno::XComponentContext>& m_xComponentContext;
     const uno::Reference<embed::XStorage>& m_xRootStorage;
     const uno::Reference<xml::sax::XDocumentHandler>& m_xDocumentHandler;
     const SignatureInformation& m_rInformation;
     OUString m_aSignatureTimeValue;
 
+public:
     Impl(const uno::Reference<uno::XComponentContext>& xComponentContext,
          const uno::Reference<embed::XStorage>& xRootStorage,
          const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
@@ -53,6 +55,11 @@ struct OOXMLSecExporter::Impl
     static bool isOOXMLBlacklist(const OUString& rStreamName);
     /// Should we intentionally not sign this relation type?
     static bool isOOXMLRelationBlacklist(const OUString& rRelationName);
+
+    const uno::Reference<xml::sax::XDocumentHandler>& getDocumentHandler() const
+    {
+        return m_xDocumentHandler;
+    }
 
     void writeSignedInfo();
     void writeCanonicalizationMethod();
@@ -467,7 +474,7 @@ void OOXMLSecExporter::writeSignature()
     rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
     pAttributeList->AddAttribute("xmlns", NS_XMLDSIG);
     pAttributeList->AddAttribute("Id", "idPackageSignature");
-    m_pImpl->m_xDocumentHandler->startElement("Signature", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    m_pImpl->getDocumentHandler()->startElement("Signature", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
 
     m_pImpl->writeSignedInfo();
     m_pImpl->writeSignatureValue();
@@ -477,7 +484,7 @@ void OOXMLSecExporter::writeSignature()
     m_pImpl->writePackageSignature();
     m_pImpl->writeSignatureLineImages();
 
-    m_pImpl->m_xDocumentHandler->endElement("Signature");
+    m_pImpl->getDocumentHandler()->endElement("Signature");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
