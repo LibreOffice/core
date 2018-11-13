@@ -1175,8 +1175,8 @@ void RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
         GetFieldIdsFromDoc( rDoc, aDstIds );
 
         // Map all the new src fields to the next available unused id
-        for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
-            AddId( GetFirstUnusedId(aIds), *pIt );
+        for (const auto& rId : aDstIds)
+            AddId( GetFirstUnusedId(aIds), rId );
 
         // Change the Sequence number of all SetExp fields in the source document
         SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, aName, false );
@@ -1198,8 +1198,8 @@ void RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
         GetNoteIdsFromDoc( rDestDoc, aIds );
         GetNoteIdsFromDoc( rDoc, aDstIds );
 
-        for (std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt)
-            AddId( GetFirstUnusedId(aIds), *pIt );
+        for (const auto& rId : aDstIds)
+            AddId( GetFirstUnusedId(aIds), rId );
 
         // Change the footnotes/endnotes in the source doc to the new ID
         for ( const auto pFootnoteIdx : rDoc.GetFootnoteIdxs() )
@@ -1217,11 +1217,10 @@ void RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
 sal_uInt16 RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
 {
     sal_uInt16 num(0);
-    std::set<sal_uInt16>::iterator it;
 
-    for( it = rIds.begin(); it != rIds.end(); ++it )
+    for( const auto& rId : rIds )
     {
-        if( num != *it )
+        if( num != rId )
         {
             return num;
         }

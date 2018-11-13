@@ -1636,9 +1636,8 @@ bool SwContentNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
 
-        std::vector<sal_uInt16>::const_iterator it;
-        for ( it = rWhichArr.begin(); it != rWhichArr.end(); ++it )
-            if( AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, *it, &aOld, &aNew ))
+        for ( const auto& rWhich : rWhichArr )
+            if( AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, rWhich, &aOld, &aNew ))
                 ++nDel;
 
         if( nDel )
@@ -1708,11 +1707,9 @@ sal_uInt16 SwContentNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& 
 
     OSL_ENSURE( GetpSwAttrSet(), "no item set" );
     SwAttrSet aNewAttrSet( *GetpSwAttrSet() );
-    for ( std::vector<sal_uInt16>::const_iterator aIter = rWhichIds.begin();
-          aIter != rWhichIds.end();
-          ++aIter )
+    for ( const auto& rWhichId : rWhichIds )
     {
-        nRet = nRet + aNewAttrSet.ClearItem( *aIter );
+        nRet = nRet + aNewAttrSet.ClearItem( rWhichId );
     }
     if ( nRet )
         AttrSetHandleHelper::GetNewAutoStyle( mpAttrSet, *this, aNewAttrSet );

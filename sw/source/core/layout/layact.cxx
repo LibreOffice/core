@@ -175,8 +175,8 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
     }
 
     bool bRetPaint = false;
-    for ( SwRects::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it )
-        bRetPaint |= m_pImp->GetShell()->AddPaintRect( *it );
+    for ( const auto& rRegionRect : aTmp )
+        bRetPaint |= m_pImp->GetShell()->AddPaintRect( rRegionRect );
     return bRetPaint;
 }
 

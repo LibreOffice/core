@@ -1647,9 +1647,8 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     // Clean up this Line's structure once again, generally all of them
     GCLines();
 
-    for( SwTableBoxes::iterator it = GetTabLines()[0]->GetTabBoxes().begin();
-             it != GetTabLines()[0]->GetTabBoxes().end(); ++it)
-        lcl_BoxSetHeadCondColl(*it);
+    for( const auto& rpBox : GetTabLines()[0]->GetTabBoxes() )
+        lcl_BoxSetHeadCondColl(rpBox);
 
     aFndBox.MakeFrames( *this );
 
@@ -2135,18 +2134,16 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             SwCollectTableLineBoxes aLnPara( false, SplitTable_HeadlineOption::BorderCopy );
 
             pLn = GetTabLines()[ nLnPos - 1 ];
-            for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                     it != pLn->GetTabBoxes().end(); ++it)
-                sw_Box_CollectBox( *it, &aLnPara );
+            for( const auto& rpBox : pLn->GetTabBoxes() )
+                sw_Box_CollectBox( rpBox, &aLnPara );
 
             if( aLnPara.Resize( lcl_GetBoxOffset( aFndBox ),
                                 lcl_GetLineWidth( *pFndLn )) )
             {
                 aLnPara.SetValues( true );
                 pLn = pNewTable->GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFormats(*it, &aLnPara );
+                for( const auto& rpBox : pLn->GetTabBoxes() )
+                    sw_BoxSetSplitBoxFormats(rpBox, &aLnPara );
             }
         }
 
@@ -2160,18 +2157,16 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             SwCollectTableLineBoxes aLnPara( true, SplitTable_HeadlineOption::BorderCopy );
 
             pLn = GetTabLines()[ nLnPos + 1 ];
-            for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                     it != pLn->GetTabBoxes().end(); ++it)
-                sw_Box_CollectBox( *it, &aLnPara );
+            for( const auto& rpBox : pLn->GetTabBoxes() )
+                sw_Box_CollectBox( rpBox, &aLnPara );
 
             if( aLnPara.Resize( lcl_GetBoxOffset( aFndBox ),
                                 lcl_GetLineWidth( *pFndLn )) )
             {
                 aLnPara.SetValues( false );
                 pLn = pNewTable->GetTabLines().back();
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFormats(*it, &aLnPara );
+                for( const auto& rpBox : pLn->GetTabBoxes() )
+                    sw_BoxSetSplitBoxFormats(rpBox, &aLnPara );
             }
         }
     }
@@ -3305,9 +3300,8 @@ void CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 
     SwTwips nCurrentSize = 0;
     // See if the tables have a correct width
-    for (SwTableBoxes::const_iterator i(rBoxes.begin()); i != rBoxes.end(); ++i)
+    for (const SwTableBox* pBox : rBoxes)
     {
-        const SwTableBox* pBox = *i;
         const SwTwips nBoxW = pBox->GetFrameFormat()->GetFrameSize().GetWidth();
         nCurrentSize += nBoxW;
 

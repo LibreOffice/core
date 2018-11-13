@@ -1013,14 +1013,11 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
 
         if ( aFlyCacheSet.size() == aFlySet.size() )
         {
-            std::set< const SwFlyCache*, FlyCacheCompare >::iterator aFlyCacheSetIt =
-                    aFlyCacheSet.begin();
             std::set< const SdrObject*, SdrObjectCompare >::iterator aFlySetIt =
                     aFlySet.begin();
 
-            while ( aFlyCacheSetIt != aFlyCacheSet.end() )
+            for ( const SwFlyCache* pFlyCache : aFlyCacheSet )
             {
-                const SwFlyCache* pFlyCache = *aFlyCacheSetIt;
                 SwFlyFrame* pFly = const_cast<SwVirtFlyDrawObj*>(static_cast<const SwVirtFlyDrawObj*>(*aFlySetIt))->GetFlyFrame();
 
                 if ( pFly->getFrameArea().Left() == FAR_AWAY )
@@ -1037,7 +1034,6 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
                     }
                 }
 
-                ++aFlyCacheSetIt;
                 ++aFlySetIt;
             }
         }

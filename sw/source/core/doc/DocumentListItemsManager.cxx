@@ -79,11 +79,8 @@ void DocumentListItemsManager::getNumItems( tSortedNodeNumList& orNodeNumList ) 
     orNodeNumList.clear();
     orNodeNumList.reserve( mpListItemsList->size() );
 
-    tImplSortedNodeNumList::iterator aIter;
-    tImplSortedNodeNumList::iterator aEndIter = mpListItemsList->end();
-    for ( aIter = mpListItemsList->begin(); aIter != aEndIter; ++aIter )
+    for ( const SwNodeNum* pNodeNum : *mpListItemsList )
     {
-        const SwNodeNum* pNodeNum = (*aIter);
         if ( pNodeNum->IsCounted() &&
              pNodeNum->GetTextNode() && pNodeNum->GetTextNode()->HasNumber() )
         {

@@ -1052,10 +1052,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 pOut->SetDrawMode( DrawModeFlags::Default );
             }
 
-            for (SwSubsRects::iterator it = aLineRects.begin(); it != aLineRects.end();
-                 ++it)
+            for (SwLineRect& rLRect : aLineRects)
             {
-                SwLineRect &rLRect = (*it);
                 // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
                 if ( !rLRect.IsPainted() &&
                      !rLRect.IsLocked() )
@@ -2399,11 +2397,9 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             break;
 
         const SwLineEntrySet& rEntrySet = (*aIter).second;
-        for (SwLineEntrySet::const_iterator aSetIter = rEntrySet.begin();
-                 aSetIter != rEntrySet.end(); ++aSetIter)
+        for (const SwLineEntry& rEntry : rEntrySet)
         {
-            const SwLineEntry& rEntry = *aSetIter;
-            const svx::frame::Style& rEntryStyle( (*aSetIter).maAttribute );
+            const svx::frame::Style& rEntryStyle( rEntry.maAttribute );
 
             Point aStart, aEnd;
             if ( bHori )
@@ -2607,11 +2603,9 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
     SwLineEntryMap::const_iterator aMapIter = maVertLines.find( rStartPoint.X() );
     OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
     const SwLineEntrySet& rVertSet = (*aMapIter).second;
-    SwLineEntrySet::const_iterator aIter = rVertSet.begin();
 
-    while ( aIter != rVertSet.end() )
+    for ( const SwLineEntry& rEntry : rVertSet )
     {
-        const SwLineEntry& rEntry = *aIter;
         if ( bHori )
         {
             if ( rStartPoint.Y() == rEntry.mnStartPos )
@@ -2626,17 +2620,14 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
             else if ( rEndPoint.Y() == rEntry.mnStartPos )
                 pStyles[ 5 ] = rEntry.maAttribute;
         }
-        ++aIter;
     }
 
     aMapIter = maHoriLines.find( rStartPoint.Y() );
     OSL_ENSURE( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" );
     const SwLineEntrySet& rHoriSet = (*aMapIter).second;
-    aIter = rHoriSet.begin();
 
-    while ( aIter != rHoriSet.end() )
+    for ( const SwLineEntry& rEntry : rHoriSet )
     {
-        const SwLineEntry& rEntry = *aIter;
         if ( bHori )
         {
             if ( rStartPoint.X() == rEntry.mnEndPos )
@@ -2651,7 +2642,6 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
             else if ( rStartPoint.X() == rEntry.mnStartPos )
                 pStyles[ 3 ] = rEntry.maAttribute;
         }
-        ++aIter;
     }
 
     if ( bHori )
@@ -2659,16 +2649,13 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
         aMapIter = maVertLines.find( rEndPoint.X() );
         OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
         const SwLineEntrySet& rVertSet2 = (*aMapIter).second;
-        aIter = rVertSet2.begin();
 
-        while ( aIter != rVertSet2.end() )
+        for ( const SwLineEntry& rEntry : rVertSet2 )
         {
-            const SwLineEntry& rEntry = *aIter;
             if ( rEndPoint.Y() == rEntry.mnStartPos )
                 pStyles[ 6 ] = rEntry.maAttribute;
             else if ( rEndPoint.Y() == rEntry.mnEndPos )
                 pStyles[ 4 ] = rEntry.maAttribute;
-            ++aIter;
         }
     }
     else
@@ -2676,16 +2663,13 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
         aMapIter = maHoriLines.find( rEndPoint.Y() );
         OSL_ENSURE( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" );
         const SwLineEntrySet& rHoriSet2 = (*aMapIter).second;
-        aIter = rHoriSet2.begin();
 
-        while ( aIter != rHoriSet2.end() )
+        for ( const SwLineEntry& rEntry : rHoriSet2 )
         {
-            const SwLineEntry& rEntry = *aIter;
             if ( rEndPoint.X() == rEntry.mnEndPos )
                 pStyles[ 4 ] = rEntry.maAttribute;
             else if ( rEndPoint.X() == rEntry.mnStartPos )
                 pStyles[ 6 ] = rEntry.maAttribute;
-            ++aIter;
         }
     }
 }

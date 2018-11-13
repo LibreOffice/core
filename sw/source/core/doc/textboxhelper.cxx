@@ -604,21 +604,23 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
                                    SavedLink& rSavedLinks, SavedContent& rResetContent)
 {
     std::size_t i = 0;
-    for (auto aSetIt = rOld.begin(); aSetIt != rOld.end(); ++aSetIt, ++i)
+    for (const auto& rIt : rOld)
     {
-        auto aTextBoxIt = rSavedLinks.find(aSetIt->GetFormat());
+        auto aTextBoxIt = rSavedLinks.find(rIt.GetFormat());
         if (aTextBoxIt != rSavedLinks.end())
         {
             std::size_t j = 0;
-            for (auto aSetJt = rOld.begin(); aSetJt != rOld.end(); ++aSetJt, ++j)
+            for (const auto& rJt : rOld)
             {
-                if (aSetJt->GetFormat() == aTextBoxIt->second)
+                if (rJt.GetFormat() == aTextBoxIt->second)
                     rNew[i]->SetFormatAttr(rNew[j]->GetContent());
+                ++j;
             }
         }
-        if (rResetContent.find(aSetIt->GetFormat()) != rResetContent.end())
-            const_cast<SwFrameFormat*>(aSetIt->GetFormat())
-                ->SetFormatAttr(rResetContent[aSetIt->GetFormat()]);
+        if (rResetContent.find(rIt.GetFormat()) != rResetContent.end())
+            const_cast<SwFrameFormat*>(rIt.GetFormat())
+                ->SetFormatAttr(rResetContent[rIt.GetFormat()]);
+        ++i;
     }
 }
 

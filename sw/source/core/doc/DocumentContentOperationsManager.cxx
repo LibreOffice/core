@@ -258,11 +258,8 @@ namespace
         // We have to count the "non-copied" nodes..
         sal_uLong nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
-        for(mark_vector_t::const_iterator ppMark = vMarksToCopy.begin();
-            ppMark != vMarksToCopy.end();
-            ++ppMark)
+        for(const sw::mark::IMark* const pMark : vMarksToCopy)
         {
-            const ::sw::mark::IMark* const pMark = *ppMark;
             SwPaM aTmpPam(*pCpyStt);
             lcl_NonCopyCount(rPam, aCorrIdx, pMark->GetMarkPos().nNode.GetIndex(), nDelCount);
             lcl_SetCpyPos( pMark->GetMarkPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount);
@@ -302,10 +299,9 @@ namespace
                 pNewFieldmark->SetFieldHelptext(pOldFieldmark->GetFieldHelptext());
                 ::sw::mark::IFieldmark::parameter_map_t* pNewParams = pNewFieldmark->GetParameters();
                 const ::sw::mark::IFieldmark::parameter_map_t* pOldParams = pOldFieldmark->GetParameters();
-                ::sw::mark::IFieldmark::parameter_map_t::const_iterator pIt = pOldParams->begin();
-                for (; pIt != pOldParams->end(); ++pIt )
+                for (const auto& rEntry : *pOldParams )
                 {
-                    pNewParams->insert( *pIt );
+                    pNewParams->insert( rEntry );
                 }
             }
 
@@ -2164,11 +2160,8 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 
     // Insert the Bookmarks back into the Document.
     *rPaM.GetMark() = *aSavePam.Start();
-    for(
-        std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
-        pBkmk != aSaveBkmks.end();
-        ++pBkmk)
-        pBkmk->SetInDoc(
+    for(auto& rBkmk : aSaveBkmks)
+        rBkmk.SetInDoc(
             &m_rDoc,
             rPaM.GetMark()->nNode,
             &rPaM.GetMark()->nContent);
@@ -2284,11 +2277,8 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
         RestFlyInRange( aSaveFlyArr, aIdx, nullptr );
 
     // Add the Bookmarks back to the Document
-    for(
-        std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
-        pBkmk != aSaveBkmks.end();
-        ++pBkmk)
-        pBkmk->SetInDoc(&m_rDoc, aIdx);
+    for(auto& rBkmk : aSaveBkmks)
+        rBkmk.SetInDoc(&m_rDoc, aIdx);
 
     if( !aSavRedlInsPosArr.empty() )
     {
@@ -3494,16 +3484,16 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     if ( aSet.size() == aVecSwFrameFormat.size() )
     {
         size_t n = 0;
-        for (std::set< ZSortFly >::const_iterator nIt=aSet.begin() ; nIt != aSet.end(); ++nIt, ++n )
+        for (const auto& rFlyN : aSet)
         {
-            const SwFrameFormat *pFormatN = (*nIt).GetFormat();
+            const SwFrameFormat *pFormatN = rFlyN.GetFormat();
             const SwFormatChain &rChain = pFormatN->GetChain();
             int nCnt = int(nullptr != rChain.GetPrev());
             nCnt += rChain.GetNext() ? 1: 0;
             size_t k = 0;
-            for (std::set< ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )
+            for (const auto& rFlyK : aSet)
             {
-                const SwFrameFormat *pFormatK = (*kIt).GetFormat();
+                const SwFrameFormat *pFormatK = rFlyK.GetFormat();
                 if ( rChain.GetPrev() == pFormatK )
                 {
                     ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]),
@@ -3516,7 +3506,9 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                                      static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]) );
                     --nCnt;
                 }
+                ++k;
             }
+            ++n;
         }
 
         // Re-create content property of draw formats, knowing how old shapes

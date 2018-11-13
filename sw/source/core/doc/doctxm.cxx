@@ -1022,9 +1022,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     aN2L.RestoreUpperFrames( pDoc->GetNodes(), nIdx, nIdx + 1 );
     std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
-    for ( std::set<SwRootFrame*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); ++pLayoutIter)
+    for ( const auto& rpLayout : aAllLayouts )
     {
-        SwFrame::CheckPageDescs( static_cast<SwPageFrame*>((*pLayoutIter)->Lower()) );
+        SwFrame::CheckPageDescs( static_cast<SwPageFrame*>(rpLayout->Lower()) );
     }
 
     SetProtect( SwTOXBase::IsProtected() );

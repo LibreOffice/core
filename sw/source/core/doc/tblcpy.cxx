@@ -46,6 +46,7 @@
 #include <fmtfsize.hxx>
 #include <deque>
 #include <memory>
+#include <numeric>
 #include <o3tl/make_unique.hxx>
 
 static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
@@ -116,15 +117,12 @@ namespace
             if( nSize < rBox.GetTabLines().size() )
             {
                 SubLine aSubLine;
-                SubLine::iterator pBox = pStartLn->begin();
-                SubLine::iterator pEnd = pStartLn->end();
-                while( pBox != pEnd )
+                for( const auto& rSubBox : *pStartLn )
                 {
                     SubBox aSub;
-                    aSub.mpBox = pBox->mpBox;
+                    aSub.mpBox = rSubBox.mpBox;
                     aSub.mbCovered = true;
                     aSubLine.push_back( aSub );
-                    ++pBox;
                 }
                 do
                 {
@@ -230,16 +228,9 @@ namespace
             }
             if( bNoSelection && mnStartCol < USHRT_MAX )
             {
-                BoxStructure::iterator pC = maLines[0].begin();
-                BoxStructure::iterator pEnd = maLines[0].end();
-                sal_uInt16 nIdx = mnStartCol;
-                mnStartCol = 0;
-                while( nIdx && pC != pEnd )
-                {
-                    mnStartCol += pC->mnColSpan;
-                    --nIdx;
-                    ++pC;
-                }
+                sal_uInt16 nIdx = std::min(mnStartCol, static_cast<sal_uInt16>(maLines[0].size()));
+                mnStartCol = std::accumulate(maLines[0].begin(), maLines[0].begin() + nIdx, sal_uInt16(0),
+                    [](sal_uInt16 sum, const BoxSpanInfo& rInfo) { return sum + rInfo.mnColSpan; });
             }
             else
                 mnStartCol = USHRT_MAX;
@@ -274,13 +265,10 @@ namespace
                     maLines[rLine].reserve( pStartLn->size() );
                     BoxStructure::iterator pSel = maLines[rLine].end();
                     ColumnStructure::iterator pCol = maCols.begin();
-                    SubLine::iterator pBox = pStartLn->begin();
-                    SubLine::iterator pEnd = pStartLn->end();
-                    while( pBox != pEnd )
+                    for( const auto& rBox : *pStartLn )
                     {
-                        addBox( rLine, pSelBoxes, pBox->mpBox, nBorder, nCol,
-                            pCol, pSel, bSelected, pBox->mbCovered );
-                        ++pBox;
+                        addBox( rLine, pSelBoxes, rBox.mpBox, nBorder, nCol,
+                            pCol, pSel, bSelected, rBox.mbCovered );
                     }
                     ++rLine;
                     ++pStartLn;
@@ -1050,9 +1038,8 @@ SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
 
     // Delete all old ones
     rBoxes.clear();
-    for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
-             it != pLine->GetTabBoxes().end(); ++it)
-        FndContentBox(*it, &rBoxes );
+    for( const auto& rpBox : pLine->GetTabBoxes() )
+        FndContentBox(rpBox, &rBoxes );
     return rBoxes;
 }
 

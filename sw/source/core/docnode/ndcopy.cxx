@@ -140,8 +140,8 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT );
 static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
 {
     SwTableBoxFormat * pBoxFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
-    for (MapTableFrameFormats::const_iterator it = pCT->m_rMapArr.begin(); it != pCT->m_rMapArr.end(); ++it)
-        if ( !lcl_SrchNew( *it, reinterpret_cast<SwFrameFormat**>(&pBoxFormat) ) )
+    for (const auto& rMap : pCT->m_rMapArr)
+        if ( !lcl_SrchNew( rMap, reinterpret_cast<SwFrameFormat**>(&pBoxFormat) ) )
             break;
 
     if (pBoxFormat == pBox->GetFrameFormat()) // Create a new one?
@@ -205,8 +205,8 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
 static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
 {
     SwTableLineFormat * pLineFormat = static_cast<SwTableLineFormat*>(pLine->GetFrameFormat());
-    for (MapTableFrameFormats::const_iterator it = pCT->m_rMapArr.begin(); it != pCT->m_rMapArr.end(); ++it)
-        if ( !lcl_SrchNew( *it, reinterpret_cast<SwFrameFormat**>(&pLineFormat) ) )
+    for (const auto& rMap : pCT->m_rMapArr)
+        if ( !lcl_SrchNew( rMap, reinterpret_cast<SwFrameFormat**>(&pLineFormat) ) )
             break;
 
     if( pLineFormat == pLine->GetFrameFormat() ) // Create a new one?
@@ -228,9 +228,8 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
     }
 
     pCT->m_pInsLine = pNewLine;
-    for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(pLine)->GetTabBoxes().begin();
-             it != const_cast<SwTableLine*>(pLine)->GetTabBoxes().end(); ++it)
-        lcl_CopyTableBox(*it, pCT );
+    for( auto& rpBox : const_cast<SwTableLine*>(pLine)->GetTabBoxes() )
+        lcl_CopyTableBox(rpBox, pCT);
 }
 
 SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const

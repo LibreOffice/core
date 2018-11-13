@@ -326,10 +326,9 @@ void SwNumFormat::UpdateNumNodes( SwDoc* pDoc )
             {
                 SwNumRule::tTextNodeList aTextNodeList;
                 pRule->GetTextNodeList( aTextNodeList );
-                for ( SwNumRule::tTextNodeList::iterator aIter = aTextNodeList.begin();
-                      aIter != aTextNodeList.end(); ++aIter )
+                for ( auto& rpTextNode : aTextNodeList )
                 {
-                    lcl_SetRuleChgd( *(*aIter), i );
+                    lcl_SetRuleChgd( *rpTextNode, i );
                 }
                 bFnd = true;
                 break;
@@ -859,10 +858,8 @@ void SwNumRule::SetInvalidRule(bool bFlag)
     if (bFlag)
     {
         std::set< SwList* > aLists;
-        tTextNodeList::iterator aIter;
-        for ( aIter = maTextNodeList.begin(); aIter != maTextNodeList.end(); ++aIter )
+        for ( const SwTextNode* pTextNode : maTextNodeList )
         {
-            const SwTextNode* pTextNode = *aIter;
             // #i111681# - applying patch from cmc
             SwList* pList = pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() );
             OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue.");
@@ -973,10 +970,8 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
 void SwNumRule::Validate()
 {
     std::set< SwList* > aLists;
-    tTextNodeList::iterator aIter;
-    for ( aIter = maTextNodeList.begin(); aIter != maTextNodeList.end(); ++aIter )
+    for ( const SwTextNode* pTextNode : maTextNodeList )
     {
-        const SwTextNode* pTextNode = *aIter;
         aLists.insert( pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );
     }
     for ( auto aList : aLists )

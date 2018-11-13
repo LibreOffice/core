@@ -397,11 +397,10 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     GetIDocumentUndoRedo().DoUndo(false);
 
     size_t n = 0;
-    for (SwSortTextElements::const_iterator it = aSortSet.begin();
-            it != aSortSet.end(); ++it, ++n)
+    for (const auto& rElem : aSortSet)
     {
         aStart      = nBeg + n;
-        aRg.aStart  = it->aPos.GetIndex();
+        aRg.aStart  = rElem.aPos.GetIndex();
         aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
         // Move Nodes
@@ -411,8 +410,9 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         // Insert Move in Undo
         if(pUndoSort)
         {
-            pUndoSort->Insert(it->nOrg, nBeg + n);
+            pUndoSort->Insert(rElem.nOrg, nBeg + n);
         }
+        ++n;
     }
     // Delete all elements from the SortArray
     aSortSet.clear();
@@ -569,17 +569,17 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // Move after Sorting
     SwMovedBoxes aMovedList;
     sal_uInt16 i = 0;
-    for (SwSortBoxElements::const_iterator it = aSortList.begin();
-            it != aSortList.end(); ++i, ++it)
+    for (const auto& rElem : aSortList)
     {
         if(rOpt.eDirection == SRT_ROWS)
         {
-            MoveRow(this, aFlatBox, it->nRow, i+nStart, aMovedList, pUndoSort);
+            MoveRow(this, aFlatBox, rElem.nRow, i+nStart, aMovedList, pUndoSort);
         }
         else
         {
-            MoveCol(this, aFlatBox, it->nRow, i+nStart, aMovedList, pUndoSort);
+            MoveCol(this, aFlatBox, rElem.nRow, i+nStart, aMovedList, pUndoSort);
         }
+        ++i;
     }
 
     // Restore table frames:

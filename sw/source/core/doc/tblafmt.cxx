@@ -1186,14 +1186,12 @@ void SwTableAutoFormatTable::EraseAutoFormat(size_t const i)
 
 void SwTableAutoFormatTable::EraseAutoFormat(const OUString& rName)
 {
-    for (auto iter = m_pImpl->m_AutoFormats.begin();
-         iter != m_pImpl->m_AutoFormats.end(); ++iter)
+    auto iter = std::find_if(m_pImpl->m_AutoFormats.begin(), m_pImpl->m_AutoFormats.end(),
+        [&rName](const std::unique_ptr<SwTableAutoFormat>& rpFormat) { return rpFormat->GetName() == rName; });
+    if (iter != m_pImpl->m_AutoFormats.end())
     {
-        if ((*iter)->GetName() == rName)
-        {
-            m_pImpl->m_AutoFormats.erase(iter);
-            return;
-        }
+        m_pImpl->m_AutoFormats.erase(iter);
+        return;
     }
     SAL_INFO("sw.core", "SwTableAutoFormatTable::EraseAutoFormat, SwTableAutoFormat with given name not found");
 }
@@ -1209,15 +1207,12 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(siz
 std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(const OUString& rName)
 {
     std::unique_ptr<SwTableAutoFormat> pRet;
-    for (auto iter = m_pImpl->m_AutoFormats.begin();
-         iter != m_pImpl->m_AutoFormats.end(); ++iter)
+    auto iter = std::find_if(m_pImpl->m_AutoFormats.begin(), m_pImpl->m_AutoFormats.end(),
+        [&rName](const std::unique_ptr<SwTableAutoFormat>& rpFormat) { return rpFormat->GetName() == rName; });
+    if (iter != m_pImpl->m_AutoFormats.end())
     {
-        if ((*iter)->GetName() == rName)
-        {
-            pRet = std::move(*iter);
-            m_pImpl->m_AutoFormats.erase(iter);
-            break;
-        }
+        pRet = std::move(*iter);
+        m_pImpl->m_AutoFormats.erase(iter);
     }
     return pRet;
 }
@@ -1427,13 +1422,12 @@ void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUS
 
 void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
 {
-    for (auto iter = m_aCellStyles.begin(); iter != m_aCellStyles.end(); ++iter)
+    auto iter = std::find_if(m_aCellStyles.begin(), m_aCellStyles.end(),
+        [&sName](const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& rStyle) { return rStyle.first == sName; });
+    if (iter != m_aCellStyles.end())
     {
-        if (iter->first == sName)
-        {
-            m_aCellStyles.erase(iter);
-            return;
-        }
+        m_aCellStyles.erase(iter);
+        return;
     }
     SAL_INFO("sw.core", "SwCellStyleTable::RemoveBoxFormat, format with given name doesn't exists");
 }

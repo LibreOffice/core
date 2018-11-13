@@ -866,10 +866,9 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
 
     // Actually we need to reset the Attribute here!
-    std::vector<sal_uInt16>::const_iterator it;
-    for( it = m_aWhichIds.begin(); it != m_aWhichIds.end(); ++it )
+    for( const auto& rWhichId : m_aWhichIds )
     {
-        pDoc->getIDocumentContentOperations().InsertPoolItem( rPam, *GetDfltAttr( *it ),
+        pDoc->getIDocumentContentOperations().InsertPoolItem( rPam, *GetDfltAttr( rWhichId ),
             SetAttrMode::DONTEXPAND );
     }
 
