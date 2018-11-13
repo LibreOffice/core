@@ -621,11 +621,12 @@ public:
 
     /**
      * Gets an image of the selected shapes.
-     *
+     * @param pOutput contains the result; use free to deallocate.
+     * @return the size ouf *pOutput in bytes.
      */
-    void renderShapeSelection(char*& pOutput, size_t& nOutputSize)
+    size_t renderShapeSelection(char** pOutput)
     {
-        mpDoc->pClass->renderShapeSelection(mpDoc, pOutput, nOutputSize);
+        return mpDoc->pClass->renderShapeSelection(mpDoc, pOutput);
     }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
