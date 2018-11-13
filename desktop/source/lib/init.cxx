@@ -751,7 +751,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
 
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
 
-static void doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char*& pOutput, size_t& nOutputSize);
+static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -2602,35 +2602,47 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
     }
 }
 
-static void doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char*& pOutput, size_t& nOutputSize)
+static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput)
 {
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    try
+    {
+        LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
 
-    SvMemoryStream aOutStream;
-    uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamWrapper( aOutStream );
+        SvMemoryStream aOutStream;
+        uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aOutStream);
 
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
-    aMediaDescriptor["SelectionOnly"] <<= true;
-    aMediaDescriptor["OutputStream"] <<= xOut;
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+        aMediaDescriptor["SelectionOnly"] <<= true;
+        aMediaDescriptor["OutputStream"] <<= xOut;
 
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
 
+        if (pOutput)
+        {
+            const size_t nOutputSize = aOutStream.GetEndOfData();
+            *pOutput = static_cast<char*>(malloc(nOutputSize));
+            if (*pOutput)
+            {
+                std::memcpy(*pOutput, aOutStream.GetData(), nOutputSize);
+                return nOutputSize;
+            }
+        }
+    }
+    catch (const uno::Exception& exception)
+    {
+        if (gImpl)
+            gImpl->maLastExceptionMsg = exception.Message;
+        SAL_WARN("lok", "Failed to render shape selection: " << exception);
+    }
 
-    size_t nStreamSize = aOutStream.GetEndOfData();
-    char* pTmp = pOutput;
-    pOutput = new char[nOutputSize + nStreamSize];
-    std::memcpy(pOutput, pTmp, nOutputSize);
-    std::memcpy(pOutput+nOutputSize, aOutStream.GetData(), nStreamSize);
-
-    nOutputSize += nStreamSize;
-    delete [] pTmp;
+    return 0;
 }
 
 /** Class to react on finishing of a dispatched command.
