@@ -105,8 +105,9 @@ public:
     void testXAdES();
     /// Works with an existing good XAdES signature.
     void testXAdESGood();
-    /// Test importing of signature line images
-    void testSignatureLineImages();
+    /// Test importing of signature line
+    void testSignatureLineOOXML();
+    void testSignatureLineODF();
 #if HAVE_FEATURE_GPGVERIFY
     /// Test a typical ODF where all streams are GPG-signed.
     void testODFGoodGPG();
@@ -145,7 +146,8 @@ public:
     CPPUNIT_TEST(test96097Doc);
     CPPUNIT_TEST(testXAdES);
     CPPUNIT_TEST(testXAdESGood);
-    CPPUNIT_TEST(testSignatureLineImages);
+    CPPUNIT_TEST(testSignatureLineOOXML);
+    CPPUNIT_TEST(testSignatureLineODF);
 #if HAVE_FEATURE_GPGVERIFY
     CPPUNIT_TEST(testODFGoodGPG);
     CPPUNIT_TEST(testODFUntrustedGoodGPG);
@@ -850,7 +852,7 @@ void SigningTest::testXAdESGood()
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
-void SigningTest::testSignatureLineImages()
+void SigningTest::testSignatureLineOOXML()
 {
     // Given: A document (docx) with a signature line and a valid signature
     uno::Reference<security::XDocumentDigitalSignatures> xSignatures(
@@ -871,6 +873,24 @@ void SigningTest::testSignatureLineImages()
     // The signature should have a valid signature, and signature line with two valid images
     CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
     CPPUNIT_ASSERT_EQUAL(OUString("{DEE0514B-13E8-4674-A831-46E3CDB18BB4}"),
+                         xSignatureInfo[0].SignatureLineId);
+    CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
+    CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
+}
+
+void SigningTest::testSignatureLineODF()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+
+    uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
+        = pObjectShell->GetDocumentSignatureInformation(false);
+
+    CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
+    CPPUNIT_ASSERT_EQUAL(OUString("{41CF56EE-331B-4125-97D8-2F5669DD3AAC}"),
                          xSignatureInfo[0].SignatureLineId);
     CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());

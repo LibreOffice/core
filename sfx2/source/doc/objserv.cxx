@@ -1328,7 +1328,7 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
     return xNameAccess->hasByName("_xmlsignatures");
 }
 
-uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnalyzeSignature( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
+uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocumentSignatureInformation( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
 {
     uno::Sequence< security::DocumentSignatureInformation > aResult;
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
@@ -1394,7 +1394,7 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     {
         *pState = SignatureState::NOSIGNATURES;
 
-        uno::Sequence< security::DocumentSignatureInformation > aInfos = ImplAnalyzeSignature( bScriptingContent );
+        uno::Sequence< security::DocumentSignatureInformation > aInfos = GetDocumentSignatureInformation( bScriptingContent );
         *pState = ImplCheckSignaturesInformation( aInfos );
     }
 
