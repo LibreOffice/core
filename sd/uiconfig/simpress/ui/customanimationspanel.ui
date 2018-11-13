@@ -85,7 +85,7 @@
             <child>
               <object class="GtkButton" id="add_effect">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|add_effect|tooltip_text">Add Effect</property>
@@ -100,7 +100,7 @@
             <child>
               <object class="GtkButton" id="remove_effect">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|remove_effect|tooltip_text">Remove Effect</property>
@@ -115,7 +115,7 @@
             <child>
               <object class="GtkButton" id="move_up">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_up|tooltip_text">Move Up</property>
@@ -130,7 +130,7 @@
             <child>
               <object class="GtkButton" id="move_down">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_down|tooltip_text">Move Down</property>
@@ -187,7 +187,7 @@
             <child>
               <object class="GtkComboBoxText" id="categorylb">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="popup_fixed_width">False</property>
                 <items>
                   <item translatable="yes" context="customanimationspanel|categorylb">Entrance</item>
@@ -279,7 +279,7 @@
                 <child>
                   <object class="GtkComboBoxText" id="start_effect_list">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <items>
                       <item translatable="yes" context="customanimationspanel|start_effect_list">On click</item>
@@ -301,7 +301,7 @@
                     <child>
                       <object class="sdlo-PropertyControl" id="effect_property_list">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>
@@ -333,7 +333,7 @@
                 <child>
                   <object class="VclComboBoxNumeric" id="anim_duration:0.00sec">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="hexpand">True</property>
                   </object>
@@ -446,7 +446,7 @@
                   <object class="GtkButton" id="play">
                     <property name="label" translatable="yes" context="customanimationspanel|play">Play</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="customanimationspanel|play|tooltip_text">Preview Effect</property>
