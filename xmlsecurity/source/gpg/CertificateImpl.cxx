@@ -61,7 +61,7 @@ OUString SAL_CALL CertificateImpl::getIssuerName()
 
 OUString SAL_CALL CertificateImpl::getSubjectName()
 {
-    // Samue as issuer name (user ID)
+    // Same as issuer name (user ID)
     return getIssuerName();
 }
 

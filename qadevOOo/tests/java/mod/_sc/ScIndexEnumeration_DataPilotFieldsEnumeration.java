@@ -84,7 +84,7 @@ public class ScIndexEnumeration_DataPilotFieldsEnumeration extends TestCase {
         oSheet = (XSpreadsheet) AnyConverter.toObject(
                 new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
 
-        log.println("Filing a table");
+        log.println("Filling a table");
         for (int i = 1; i < 4; i++) {
             oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
             oSheet.getCellByPosition(0, i).setFormula("Row" + i);
