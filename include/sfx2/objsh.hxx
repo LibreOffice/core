@@ -362,6 +362,10 @@ public:
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent(weld::Window* pDialogParent);
+    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformation(
+        bool bScriptingContent,
+        const css::uno::Reference<css::security::XDocumentDigitalSignatures>& xSigner
+        = css::uno::Reference<css::security::XDocumentDigitalSignatures>());
 
     bool SignDocumentContentUsingCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
 
@@ -744,12 +748,6 @@ public:
 
     // configuration items
     SAL_DLLPRIVATE SignatureState ImplGetSignatureState( bool bScriptingContent = false );
-
-    SAL_DLLPRIVATE css::uno::Sequence< css::security::DocumentSignatureInformation >
-        ImplAnalyzeSignature(
-            bool bScriptingContent,
-            const css::uno::Reference< css::security::XDocumentDigitalSignatures >& xSigner
-                = css::uno::Reference< css::security::XDocumentDigitalSignatures >() );
 
     SAL_DLLPRIVATE bool QuerySaveSizeExceededModules_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
     SAL_DLLPRIVATE bool QueryAllowExoticFormat_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
