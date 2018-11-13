@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/beans/xpropertyset \
 	test/source/container/xchild \
 	test/source/container/xelementaccess \
+	test/source/container/xenumeration \
 	test/source/container/xenumerationaccess \
 	test/source/container/xindexaccess \
 	test/source/container/xnamecontainer \
