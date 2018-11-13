@@ -39,6 +39,7 @@ enum class SwFieldIds : sal_uInt16;
 template <class T> class SwHashTable;
 struct HashStr;
 class SwRootFrame;
+class IDocumentRedlineAccess;
 
 namespace rtl { class OUString; }
 using rtl::OUString;
@@ -138,6 +139,11 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 protected:
     virtual ~IDocumentFieldsAccess() {};
  };
+
+namespace sw {
+bool IsFieldDeletedInModel(IDocumentRedlineAccess const& rIDRA,
+        SwTextField const& rTextField);
+}
 
 #endif // INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
 
