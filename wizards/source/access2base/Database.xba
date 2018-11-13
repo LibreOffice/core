@@ -34,7 +34,7 @@ Private _ColumnTypesAlias()		As Variant				&apos;	To what should a field whose o
 Private _BinaryStream			As Boolean				&apos;	False = binary fields must NOT be streamed f.i. via ReadAllBytes or WriteAllBytes
 Private	Form					As Object				&apos;	com.sun.star.form.XForm
 Private FormName				As String
-Private RecordsetMax			As Integer
+Private RecordsetMax			As Long					&apos;	To make unique names in Collection below (See bug # 121342)
 Private	RecordsetsColl			As Object				&apos;	Collection of active recordsets
 
 REM -----------------------------------------------------------------------------------------------------------------------
