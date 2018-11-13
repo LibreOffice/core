@@ -43,6 +43,7 @@ public:
     void testVertialBoxList();
     void testVertialBracketList();
     void testTableList();
+    void testAccentProcess();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testVertialBoxList);
     CPPUNIT_TEST(testVertialBracketList);
     CPPUNIT_TEST(testTableList);
+    CPPUNIT_TEST(testAccentProcess);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -446,6 +448,44 @@ void SdImportTestSmartArt::testTableList()
     // 'Expected less than: 100, Actual  : 22014', i.e. the second child was
     // shifted to the right too much.
     CPPUNIT_ASSERT_LESS(100, abs(nChild2Right - nParentRight));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testAccentProcess()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-accent-process.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xGroup->getCount());
+    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroupShape.is());
+
+    // The pair if a parent (text + shape) and a child, so 3 shapes in total.
+    uno::Reference<drawing::XShapes> xFirstPair(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstPair.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstPair->getCount());
+
+    uno::Reference<text::XText> xFirstParentText(xFirstPair->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstParentText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xFirstParentText->getString());
+    uno::Reference<drawing::XShape> xFirstParent(xFirstParentText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstParentText.is());
+    int nFirstParentTop = xFirstParent->getPosition().Y;
+
+    uno::Reference<text::XText> xFirstChildText(xFirstPair->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstChildText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xFirstChildText->getString());
+    uno::Reference<drawing::XShape> xFirstChild(xFirstChildText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstChildText.is());
+    int nFirstChildTop = xFirstChild->getPosition().Y;
+
+    // First child is below the first parent.
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected less than: 3881, Actual  : 3881', i.e. xFirstChild was not
+    // below xFirstParent (a good position is 9081).
+    CPPUNIT_ASSERT_LESS(nFirstChildTop, nFirstParentTop);
 
     xDocShRef->DoClose();
 }

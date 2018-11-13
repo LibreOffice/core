@@ -55,6 +55,15 @@ oox::OptValue<sal_Int32> findProperty(const oox::drawingml::LayoutPropertyMap& r
 
     return oRet;
 }
+
+/**
+ * Determines if nUnit is a font unit (measured in points) or not (measured in
+ * millimeters).
+ */
+bool isFontUnit(sal_Int32 nUnit)
+{
+    return nUnit == oox::XML_primFontSz || nUnit == oox::XML_secFontSz;
+}
 }
 
 namespace oox { namespace drawingml {
@@ -273,10 +282,9 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
 void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints) const
 {
     // accepting only basic equality constraints
-    if (!maConstraint.msForName.isEmpty() &&
-        (maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ) &&
-        maConstraint.mnType != XML_none &&
-        maConstraint.mfValue == 0)
+    if (!maConstraint.msForName.isEmpty()
+        && (maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ)
+        && maConstraint.mnType != XML_none)
     {
         rConstraints.push_back(maConstraint);
     }
@@ -291,7 +299,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const std::vector<Constraint>& rOwnConstraints ) const
 {
     // Algorithm result may depend on the parent constraints as well.
-    std::vector<Constraint> aParentConstraints;
+    std::vector<Constraint> aMergedConstraints;
     const LayoutNode* pParent = getLayoutNode().getParentLayoutNode();
     if (pParent)
     {
@@ -299,10 +307,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         {
             auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
             if (pConstraintAtom)
-                pConstraintAtom->parseConstraint(aParentConstraints);
+                pConstraintAtom->parseConstraint(aMergedConstraints);
         }
     }
-    const std::vector<Constraint>& rConstraints = rOwnConstraints.empty() ? aParentConstraints : rOwnConstraints;
+    aMergedConstraints.insert(aMergedConstraints.end(), rOwnConstraints.begin(),
+                              rOwnConstraints.end());
+    const std::vector<Constraint>& rConstraints = aMergedConstraints;
 
     switch(mnType)
     {
@@ -328,7 +338,19 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if (aRefType != aRef->second.end())
                         aProperties[rConstr.msForName][rConstr.mnType] = aRefType->second * rConstr.mfFactor;
                     else
-                        aProperties[rConstr.msForName][rConstr.mnType] = 0; // TODO: val
+                    {
+                        // Values are never in EMU, while oox::drawingml::Shape
+                        // position and size are always in EMU.
+                        double fUnitFactor = 0;
+                        if (isFontUnit(rConstr.mnRefType))
+                            // Points -> EMU.
+                            fUnitFactor = EMU_PER_PT;
+                        else
+                            // Millimeters -> EMU.
+                            fUnitFactor = EMU_PER_HMM * 100;
+                        aProperties[rConstr.msForName][rConstr.mnType]
+                            = rConstr.mfValue * fUnitFactor;
+                    }
                 }
             }
 
