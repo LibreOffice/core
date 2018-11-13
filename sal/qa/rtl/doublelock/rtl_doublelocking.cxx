@@ -80,6 +80,7 @@ namespace ThreadHelper
  */
 class OGetThread : public osl::Thread
 {
+    osl::Mutex m_mutex;
     sal_Int32 m_nOK;
     sal_Int32 m_nFails;
 
@@ -92,8 +93,8 @@ public:
             m_sConstStr = CONST_TEST_STRING;
         }
 
-    sal_Int32 getOK() { return m_nOK; }
-    sal_Int32 getFails() {return m_nFails;}
+    sal_Int32 getOK() { osl::MutexGuard g(m_mutex); return m_nOK; }
+    sal_Int32 getFails() {osl::MutexGuard g(m_mutex); return m_nFails;}
 
 protected:
 
@@ -108,10 +109,12 @@ protected:
                 OUString aStr = Gregorian::get();
                 if (aStr == m_sConstStr)
                 {
+                    osl::MutexGuard g(m_mutex);
                     m_nOK++;
                 }
                 else
                 {
+                    osl::MutexGuard g(m_mutex);
                     m_nFails++;
                 }
                 ThreadHelper::thread_sleep_tenth_sec(1);
