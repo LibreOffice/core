@@ -49,12 +49,13 @@ using namespace basegfx::utils;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
+constexpr int gnFineness = 5;
+
 ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
     : Control( pParent, nWinStyle )
     , mpItemAttrs(new ThumbnailItemAttributes)
 {
     ImplInit();
-    mbIsTransientChildrenDisabled = false;
 }
 
 ThumbnailView::~ThumbnailView()
@@ -130,7 +131,6 @@ void ThumbnailView::ImplInit()
     mnItemPadding = 0;
     mnVisLines = 0;
     mnLines = 0;
-    mnFineness = 5;
     mnFirstLine = 0;
     mnCols = 0;
     mbScroll = false;
@@ -174,7 +174,7 @@ void ThumbnailView::ImplDeleteItems()
         {
             css::uno::Any aOldAny, aNewAny;
 
-            aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+            aOldAny <<= pItem->GetAccessible( false );
             ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
         }
 
@@ -224,7 +224,7 @@ void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
 
 css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAccessible()
 {
-    return new ThumbnailViewAcc( this, mbIsTransientChildrenDisabled );
+    return new ThumbnailViewAcc( this, false );
 }
 
 void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
@@ -345,7 +345,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    aNewAny <<= pItem->GetAccessible( false );
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
@@ -373,7 +373,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    aOldAny <<= pItem->GetAccessible( false );
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
@@ -400,10 +400,10 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         Size aSize( nScrBarWidth, aWinSize.Height() );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
-        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*mnFineness/mnCols);
+        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*gnFineness/mnCols);
         mpScrBar->SetVisibleSize( mnVisLines );
         if (!bScrollBarUsed)
-            mpScrBar->SetThumbPos( static_cast<long>(mnFirstLine)*mnFineness );
+            mpScrBar->SetThumbPos( static_cast<long>(mnFirstLine)*gnFineness );
         long nPageSize = mnVisLines;
         if ( nPageSize < 1 )
             nPageSize = 1;
@@ -1100,22 +1100,14 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         if( ImplHasAccessibleListeners() )
         {
             // focus event (select)
-            ThumbnailViewItemAcc* pItemAcc = ThumbnailViewItemAcc::getImplementation( pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
+            ThumbnailViewItemAcc* pItemAcc = ThumbnailViewItemAcc::getImplementation( pItem->GetAccessible( false ) );
 
             if( pItemAcc )
             {
                 css::uno::Any aOldAny, aNewAny;
-                if( !mbIsTransientChildrenDisabled )
-                {
-                    aNewAny <<= css::uno::Reference< css::uno::XInterface >(
-                        static_cast< ::cppu::OWeakObject* >( pItemAcc ));
-                    ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-                }
-                else
-                {
-                    aNewAny <<= css::accessibility::AccessibleStateType::FOCUSED;
-                    pItemAcc->FireAccessibleEvent( css::accessibility::AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
-                }
+                aNewAny <<= css::uno::Reference< css::uno::XInterface >(
+                    static_cast< ::cppu::OWeakObject* >( pItemAcc ));
+                ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
             }
 
             // selection event
@@ -1194,7 +1186,7 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    aOldAny <<= pItem->GetAccessible( false );
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
