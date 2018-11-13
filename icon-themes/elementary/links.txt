@@ -45,7 +45,6 @@ cmd/32/insertavmedia.png cmd/32/avmediaplayer.png
 cmd/32/insertauthorfield.png cmd/32/dbviewaliases.png
 cmd/32/insertcell.png cmd/32/insertcellsright.png
 cmd/32/insertcolumnsbefore.png cmd/32/insertcolumns.png
-cmd/32/insertctrl.png cmd/32/inserttable.png
 cmd/32/insertcurrentdate.png cmd/32/datefield.png
 cmd/32/insertcurrenttime.png cmd/32/timefield.png
 cmd/32/insertdatefield.png cmd/32/datefield.png
@@ -102,7 +101,6 @@ cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/lc_insertauthorfield.png cmd/lc_dbviewaliases.png
 cmd/lc_insertcell.png cmd/lc_insertcellsright.png
 cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
-cmd/lc_insertctrl.png cmd/lc_inserttable.png
 cmd/lc_insertcurrentdate.png cmd/lc_datefield.png
 cmd/lc_insertcurrenttime.png cmd/lc_timefield.png
 cmd/lc_insertdatefield.png cmd/lc_datefield.png
@@ -161,7 +159,6 @@ cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/sc_insertauthorfield.png cmd/sc_dbviewaliases.png
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
 cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
-cmd/sc_insertctrl.png cmd/sc_inserttable.png
 cmd/sc_insertcurrentdate.png cmd/sc_datefield.png
 cmd/sc_insertcurrenttime.png cmd/sc_timefield.png
 cmd/sc_insertdatefield.png cmd/sc_datefield.png
@@ -1167,13 +1164,10 @@ cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Grid
-cmd/32/grid.png cmd/32/inserttable.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
 
-cmd/lc_grid.png cmd/lc_inserttable.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
 
-cmd/sc_grid.png cmd/sc_inserttable.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
 
 # Crop
@@ -1394,7 +1388,6 @@ cmd/sc_pluginsactive.png cmd/sc_insertplugin.png
 # Table
 cmd/32/cellprotection.png cmd/32/protect.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
-cmd/32/inscellsctrl.png cmd/32/inserttable.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
 cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
 cmd/32/setcolumnwidth.png cmd/32/columnwidth.png
@@ -1403,7 +1396,6 @@ cmd/32/starchartdialog.png cmd/32/drawchart.png
 
 cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
-cmd/lc_inscellsctrl.png cmd/lc_inserttable.png
 cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_setcolumnwidth.png cmd/lc_columnwidth.png
@@ -1412,7 +1404,6 @@ cmd/lc_starchartdialog.png cmd/lc_drawchart.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
-cmd/sc_inscellsctrl.png cmd/sc_inserttable.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_setcolumnwidth.png cmd/sc_columnwidth.png
@@ -1732,7 +1723,7 @@ sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
 sc/res/paste_values_formats.png cmd/lc_formatpaintbrush.png
 sc/res/paste_values_only.png cmd/lc_numberformatstandard.png
-sc/res/table.png cmd/sc_inserttable.png
+sc/res/table.png sw/res/nc20001.png
 sc/res/text.png cmd/sc_text.png
 sc/res/time.png cmd/sc_timefield.png
 
@@ -1920,7 +1911,6 @@ svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 sw/res/lc20556.png cmd/lc_dbviewfunctions.png
 sw/res/lc20557.png cmd/lc_cancel.png
 sw/res/lc20558.png cmd/lc_ok.png
-sw/res/nc20001.png cmd/sc_inserttable.png
 sw/res/nc20002.png cmd/sc_text.png
 sw/res/nc20003.png cmd/sc_gallery.png
 sw/res/nc20004.png sc/res/nc05.png
@@ -1962,7 +1952,7 @@ sw/res/sf06.png cmd/sc_autoformat.png
 
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
-sw/res/sr20002.png cmd/sc_inserttable.png
+sw/res/sr20002.png sw/res/nc20001.png
 sw/res/sr20003.png cmd/sc_text.png
 sw/res/sr20004.png cmd/sc_showsinglepage.png
 sw/res/sr20005.png cmd/sc_insertdraw.png
