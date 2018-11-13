@@ -1061,27 +1061,29 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
             basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
             basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
 
+            // get needed local values
+            basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
+            const bool bOverlapX(rCell.mbOverlapX);
+            const bool bFirstCol(nCol == nFirstCol);
+
+            // handle rotation: If cell is rotated, handle lower/right edge inside
+            // this local geometry due to the created CoordinateSystem already representing
+            // the needed transformations.
+            const bool bRotated(rCell.IsRotated());
+
+            // Additionally avoid double-handling by suppressing handling when self not rotated,
+            // but above/left is rotated and thus already handled. Two directly connected
+            // rotated will paint/create both edges, they might be rotated differently.
+            const bool bSupressLeft(!bRotated && nCol > nFirstCol && CELL(nCol - 1, nRow).IsRotated());
+            const bool bSuppressAbove(!bRotated && nRow > nFirstRow && CELL(nCol, nRow - 1).IsRotated());
+
             if(!aX.equalZero() && !aY.equalZero())
             {
-                // get needed local values
-                basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
-                const bool bOverlapX(rCell.mbOverlapX);
+                // additionally needed local values
                 const bool bOverlapY(rCell.mbOverlapY);
-                const bool bFirstCol(nCol == nFirstCol);
                 const bool bLastCol(nCol == nLastCol);
                 const bool bFirstRow(nRow == nFirstRow);
                 const bool bLastRow(nRow == nLastRow);
-
-                // handle rotation: If cell is rotated, handle lower/right edge inside
-                // this local geometry due to the created CoordinateSystem already representing
-                // the needed transformations.
-                const bool bRotated(rCell.IsRotated());
-
-                // Additionally avoid double-handling by suppressing handling when self not rotated,
-                // but above/left is rotated and thus already handled. Two directly connected
-                // rotated will paint/create both edges, they might be rotated differently.
-                const bool bSuppressAbove(!bRotated && nRow > nFirstRow && CELL(nCol, nRow - 1).IsRotated());
-                const bool bSupressLeft(!bRotated && nCol > nFirstCol && CELL(nCol - 1, nRow).IsRotated());
 
                 // create upper line for this Cell
                 if ((!bOverlapY         // true for first line in merged cells or cells
@@ -1218,6 +1220,21 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                             rInstance.addSdrConnectStyleData(false, rTRFromLeft, -aX, true);
                             rInstance.addSdrConnectStyleData(false, rTRFromBottom, aY, false);
                         }
+                    }
+                }
+            }
+            else
+            {
+                // create left line for this Cell
+                if ((!bOverlapX         // true for first column in merged cells or cells
+                    || bFirstCol)       // true for non_Calc usages of this tooling
+                    && !bSupressLeft)   // true when left is not rotated, so edge is already handled (see bRotated)
+                {
+                    const Style& rLeft(GetCellStyleLeft(nCol, nRow));
+
+                    if (rLeft.IsUsed())
+                    {
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData.get(), true, pForceColor);
                     }
                 }
             }
