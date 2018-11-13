@@ -1894,8 +1894,6 @@ void DesktopLOKTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
-
-    mxComponent.clear();
 }
 
 void DesktopLOKTest::testWriterCommentInsertCursor()
@@ -1935,9 +1933,6 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
-    mxComponent.clear();
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 #if HAVE_MORE_FONTS
