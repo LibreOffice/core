@@ -1221,8 +1221,12 @@ public:
         , m_bFrozen(false)
         , m_nFocusInSignalId(0)
         , m_nFocusOutSignalId(0)
-        , m_nKeyPressSignalId(g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this))
     {
+        GdkEventMask eEventMask(static_cast<GdkEventMask>(gtk_widget_get_events(pWidget)));
+        if (eEventMask & GDK_BUTTON_PRESS_MASK)
+            m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
+        else
+            m_nKeyPressSignalId = 0;
     }
 
     virtual void set_sensitive(bool sensitive) override
@@ -1522,7 +1526,8 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
-        g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
+        if (m_nKeyPressSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
         if (m_nFocusOutSignalId)
