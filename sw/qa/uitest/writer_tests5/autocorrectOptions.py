@@ -53,7 +53,7 @@ class autocorrectOptions(UITestCase):
         self.assertEqual(get_state_as_dict(xtabview)["VisibleCount"], nrRows)   #we have default nr of rules
 
         select_pos(xTabs, "1")     #tab Exceptions
-        #abbrevations
+        #abbreviations
         abbrev = xDialog.getChild("abbrev")
         newabbrev = xDialog.getChild("newabbrev")
         delabbrev = xDialog.getChild("delabbrev")
