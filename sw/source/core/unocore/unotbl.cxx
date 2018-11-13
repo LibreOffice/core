@@ -3901,13 +3901,18 @@ void SwXCellRange::Impl::Modify(
     }
 }
 
-class SwXTableRows::Impl : public SwClient
+class SwXTableRows::Impl : public SvtListener
 {
+private:
+    SwFrameFormat* m_pFrameFormat;
+
 public:
-    explicit Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    explicit Impl(SwFrameFormat& rFrameFormat) : m_pFrameFormat(&rFrameFormat)
+    {
+        StartListening(rFrameFormat.GetNotifier());
+    }
+    SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
+    virtual void Notify(const SfxHint&) override;
 };
 
 //  SwXTableRows
@@ -3931,7 +3936,7 @@ SwXTableRows::~SwXTableRows()
 
 SwFrameFormat* SwXTableRows::GetFrameFormat()
 {
-    return static_cast<SwFrameFormat*>(m_pImpl->GetRegisteredIn());
+    return m_pImpl->GetFrameFormat();
 }
 
 sal_Int32 SwXTableRows::getCount()
@@ -4060,8 +4065,11 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 }
 
-void SwXTableRows::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-    { ClientModify(this, pOld, pNew); }
+void SwXTableRows::Impl::Notify( const SfxHint& rHint)
+{
+    if(rHint.GetId() == SfxHintId::Dying)
+        m_pFrameFormat = nullptr;
+}
 
 // SwXTableColumns
 
