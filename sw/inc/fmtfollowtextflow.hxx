@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_FMTFOLLOWTEXTFLOW_HXX
 #define INCLUDED_SW_INC_FMTFOLLOWTEXTFLOW_HXX
 
+#include <sal/log.hxx>
 #include <svl/eitem.hxx>
 #include "hintids.hxx"
 #include "format.hxx"
@@ -28,9 +29,19 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatFollowTextFlow : public SfxBoolItem
 {
+private:
+    bool mbLayoutInCell = false;
+
 public:
+
     SwFormatFollowTextFlow( bool bFlag = false )
-        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
+        {}
+
+    SwFormatFollowTextFlow( bool bFlag, bool _bLayoutInCell  )
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
+        , mbLayoutInCell( _bLayoutInCell )
+        {}
 
 
     /// "pure virtual methods" of SfxPoolItem
@@ -40,6 +51,11 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
+
+    bool GetLayoutInCell() const { return mbLayoutInCell; }
+
+
+    bool PutValue(const css::uno::Any& rVal, sal_uInt8 aInt) override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
