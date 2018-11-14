@@ -207,7 +207,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
 
     css::uno::Reference< css::uno::XInterface > m_xParent;
 
-    /// If it is allowed to modify entires in the stream of the OLE storage.
+    /// If it is allowed to modify entries in the stream of the OLE storage.
     bool m_bStreamReadOnly = false;
 
 protected:
