@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_792793b8",
+        "filename": "oox/source/drawingml/chart/converterbase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-14T13:49:25Z",
+      "side": 1,
+      "message": "Why do you need that include?",
+      "revId": "bfc8e0683da25214b0c428d72c640164f51255ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_592ccf98",
+        "filename": "oox/source/drawingml/chart/converterbase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-14T13:49:25Z",
+      "side": 1,
+      "message": "Indentation exatly the same as the rest of file, in this case:\n\n        if( (rChartSize.Width \u003c 0) || (rChartSize.Height \u003c 0) )\n        {\n            rChartSize.Width \u003d 16000;\n            rChartSize.Height \u003d 9000;\n        }",
+      "revId": "bfc8e0683da25214b0c428d72c640164f51255ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
