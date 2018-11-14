@@ -601,14 +601,16 @@ class SwRefPageGetFieldType : public SwFieldType
     SwDoc*          m_pDoc;
     sal_Int16       m_nNumberingType;
 
-    void UpdateField( SwTextField const * pTextField, SetGetExpFields const & rSetList );
+    void UpdateField(SwTextField const * pTextField,
+            SetGetExpFields const & rSetList, SwRootFrame const* pLayout);
+
 protected:
     /// overwritten to update all RefPageGet fields
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const override;
-    bool MakeSetList( SetGetExpFields& rTmpLst );
+    bool MakeSetList(SetGetExpFields& rTmpLst, SwRootFrame const* pLayout);
     SwDoc*  GetDoc() const                  { return m_pDoc; }
 };
 
@@ -616,15 +618,17 @@ public:
 class SwRefPageGetField : public SwField
 {
     OUString m_sText;
+    OUString m_sTextRLHidden; ///< hidden redlines
+
 public:
     SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFormat );
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual SwField*    Copy() const override;
 
-    void SetText( const OUString& rText )      { m_sText = rText; }
+    void SetText(const OUString& rText, SwRootFrame const* pLayout);
 
-    void ChangeExpansion( const SwFrame* pFrame, const SwTextField* pField );
+    void ChangeExpansion(const SwFrame& rFrame, const SwTextField* pField);
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };

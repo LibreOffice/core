@@ -1585,7 +1585,7 @@ void SAL_CALL SwXTextField::attach(
                     static_cast<SwRefPageGetFieldType*>(pFieldType),
                     m_pImpl->m_pProps->nUSHORT1 );
             xField.reset(pRGField);
-            pRGField->SetText(m_pImpl->m_pProps->sPar1);
+            pRGField->SetText(m_pImpl->m_pProps->sPar1, nullptr);
         }
         break;
         case SwServiceType::FieldTypePageNum:
