@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_3998fb68",
+        "filename": "extras/source/labels/labels.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2018-11-14T17:18:56Z",
+      "side": 1,
+      "message": "-1 \nThere I think the label is used to file (archive) something",
+      "revId": "2b45cac482a7b9973075bcaf21c028d118903f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_199d3759",
+        "filename": "qadevOOo/tests/java/mod/_sc/ScDataPilotTablesObj.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2018-11-14T17:18:56Z",
+      "side": 1,
+      "message": "+ 1\n\nHere the logic seems to indicate adding contents to a table",
+      "revId": "2b45cac482a7b9973075bcaf21c028d118903f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_f9a14397",
+        "filename": "qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DataPilotFieldsEnumeration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2018-11-14T17:18:56Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2b45cac482a7b9973075bcaf21c028d118903f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
