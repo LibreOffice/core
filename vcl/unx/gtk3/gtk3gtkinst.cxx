@@ -4540,7 +4540,7 @@ private:
         }
         else
         {
-            m_pFormatter->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+            m_pFormatter->GetInputLineString(dVal, m_nFormatKey, sNewText);
         }
         set_text(sNewText);
         return true;
@@ -4656,6 +4656,16 @@ public:
         else
             m_nFormatKey = 0;
         signal_output();
+    }
+
+    virtual sal_Int32 get_format_key() const override
+    {
+        return m_nFormatKey;
+    }
+
+    virtual void set_format_key(sal_Int32 nFormatKey) override
+    {
+        m_nFormatKey = nFormatKey;
     }
 
     virtual ~GtkInstanceFormattedSpinButton() override
