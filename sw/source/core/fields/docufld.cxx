@@ -2157,18 +2157,42 @@ SwFieldType* SwRefPageGetFieldType::Copy() const
 
 void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // update all GetReference fields
-    if( !pNew && !pOld && HasWriterListeners() )
+    auto const ModifyImpl = [this](SwRootFrame const*const pLayout)
     {
         // first collect all SetPageRefFields
         SetGetExpFields aTmpLst;
-        if( MakeSetList( aTmpLst ) )
+        if (MakeSetList(aTmpLst, pLayout))
         {
             SwIterator<SwFormatField,SwFieldType> aIter( *this );
             for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+            {
                     // update only the GetRef fields
                     if( pFormatField->GetTextField() )
-                        UpdateField( pFormatField->GetTextField(), aTmpLst );
+                        UpdateField(pFormatField->GetTextField(), aTmpLst, pLayout);
+            }
+        }
+    };
+
+    // update all GetReference fields
+    if( !pNew && !pOld && HasWriterListeners() )
+    {
+        SwRootFrame const* pLayout(nullptr);
+        SwRootFrame const* pLayoutRLHidden(nullptr);
+        for (SwRootFrame const*const pLay : m_pDoc->GetAllLayouts())
+        {
+            if (pLay->IsHideRedlines())
+            {
+                pLayoutRLHidden = pLay;
+            }
+            else
+            {
+                pLayout = pLay;
+            }
+        }
+        ModifyImpl(pLayout);
+        if (pLayoutRLHidden)
+        {
+            ModifyImpl(pLayoutRLHidden);
         }
     }
 
@@ -2176,14 +2200,19 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     NotifyClients( pOld, pNew );
 }
 
-bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
+bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
+        SwRootFrame const*const pLayout)
 {
+    IDocumentRedlineAccess const& rIDRA(m_pDoc->getIDocumentRedlineAccess());
     SwIterator<SwFormatField,SwFieldType> aIter(*m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::RefPageSet));
     for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
     {
-            // update only the GetRef fields
-            const SwTextField* pTField = pFormatField->GetTextField();
-            if( pTField )
+        // update only the GetRef fields
+        const SwTextField* pTField = pFormatField->GetTextField();
+        if( pTField )
+        {
+            if (!pLayout || !pLayout->IsHideRedlines()
+                || !sw::IsFieldDeletedInModel(rIDRA, *pTField))
             {
                 const SwTextNode& rTextNd = pTField->GetTextNode();
 
@@ -2191,8 +2220,7 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
                 Point aPt;
                 std::pair<Point, bool> const tmp(aPt, false);
                 const SwContentFrame *const pFrame = rTextNd.getLayoutFrame(
-                    rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                    nullptr, &tmp);
+                    pLayout, nullptr, &tmp);
 
                 std::unique_ptr<SetGetExpField> pNew;
 
@@ -2218,16 +2246,18 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
 
                 rTmpLst.insert( std::move(pNew) );
             }
+        }
     }
 
     return !rTmpLst.empty();
 }
 
 void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
-                                        SetGetExpFields const & rSetList )
+                                        SetGetExpFields const & rSetList,
+                                        SwRootFrame const*const pLayout)
 {
     SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pTextField->GetFormatField().GetField()));
-    pGetField->SetText( OUString() );
+    pGetField->SetText( OUString(), pLayout );
 
     // then search the correct RefPageSet field
     SwTextNode* pTextNode = &pTextField->GetTextNode();
@@ -2251,10 +2281,9 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
                 Point aPt;
                 std::pair<Point, bool> const tmp(aPt, false);
                 const SwContentFrame *const pFrame = pTextNode->getLayoutFrame(
-                    pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
+                    pLayout, nullptr, &tmp);
                 const SwContentFrame *const pRefFrame = pRefTextField->GetTextNode().getLayoutFrame(
-                    pRefTextField->GetTextNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                    nullptr, &tmp);
+                    pLayout, nullptr, &tmp);
                 const SwPageFrame* pPgFrame = nullptr;
                 const short nDiff = ( pFrame && pRefFrame )
                         ?   (pPgFrame = pFrame->FindPageFrame())->GetPhyPageNum() -
@@ -2267,7 +2296,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
                                 : pPgFrame->GetPageDesc()->GetNumType().GetNumberingType() )
                         : static_cast<SvxNumType>(pGetField->GetFormat());
                 const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
-                pGetField->SetText( FormatNumber( nPageNum, nTmpFormat ) );
+                pGetField->SetText(FormatNumber(nPageNum, nTmpFormat), pLayout);
             }
         }
     }
@@ -2283,20 +2312,34 @@ SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
 {
 }
 
-OUString SwRefPageGetField::ExpandImpl(SwRootFrame const*const) const
+void SwRefPageGetField::SetText(const OUString& rText,
+        SwRootFrame const*const pLayout)
 {
-    return m_sText;
+    if (!pLayout || !pLayout->IsHideRedlines())
+    {
+        m_sText = rText;
+    }
+    if (!pLayout || pLayout->IsHideRedlines())
+    {
+        m_sTextRLHidden = rText;
+    }
+}
+
+OUString SwRefPageGetField::ExpandImpl(SwRootFrame const*const pLayout) const
+{
+    return pLayout && pLayout->IsHideRedlines() ? m_sTextRLHidden : m_sText;
 }
 
 std::unique_ptr<SwField> SwRefPageGetField::Copy() const
 {
     std::unique_ptr<SwRefPageGetField> pCpy(new SwRefPageGetField(
                         static_cast<SwRefPageGetFieldType*>(GetTyp()), GetFormat() ));
-    pCpy->SetText( m_sText );
+    pCpy->m_sText = m_sText;
+    pCpy->m_sTextRLHidden = m_sTextRLHidden;
     return std::unique_ptr<SwField>(pCpy.release());
 }
 
-void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
+void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
                                         const SwTextField* pField )
 {
     // only fields in Footer, Header, FootNote, Flys
@@ -2306,18 +2349,20 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
         return;
 
-    m_sText.clear();
+    SwRootFrame const& rLayout(*rFrame.getRootFrame());
+    OUString & rText(rLayout.IsHideRedlines() ? m_sTextRLHidden : m_sText);
+    rText.clear();
 
-    OSL_ENSURE( !pFrame->IsInDocBody(), "Flag incorrect, frame is in DocBody" );
+    OSL_ENSURE(!rFrame.IsInDocBody(), "Flag incorrect, frame is in DocBody");
 
     // collect all SetPageRefFields
     SetGetExpFields aTmpLst;
-    if( !pGetType->MakeSetList( aTmpLst ) )
+    if (!pGetType->MakeSetList(aTmpLst, &rLayout))
         return ;
 
     //  create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( pDoc->GetNodes() ) );
-    SwTextNode* pTextNode = const_cast<SwTextNode*>(GetBodyTextNode( *pDoc, aPos, *pFrame ));
+    SwTextNode* pTextNode = const_cast<SwTextNode*>(GetBodyTextNode(*pDoc, aPos, rFrame));
 
     // If no layout exists, ChangeExpansion is called for header and
     // footer lines via layout formatting without existing TextNode.
@@ -2338,11 +2383,11 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, false);
     const SwContentFrame *const pRefFrame = pRefTextField->GetTextNode().getLayoutFrame(
-            pFrame->getRootFrame(), nullptr, &tmp);
+            &rLayout, nullptr, &tmp);
     if( pSetField->IsOn() && pRefFrame )
     {
         // determine the correct offset
-        const SwPageFrame* pPgFrame = pFrame->FindPageFrame();
+        const SwPageFrame* pPgFrame = rFrame.FindPageFrame();
         const short nDiff = pPgFrame->GetPhyPageNum() -
                             pRefFrame->FindPageFrame()->GetPhyPageNum() + 1;
 
@@ -2351,7 +2396,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
                             ? pPgFrame->GetPageDesc()->GetNumType().GetNumberingType()
                             : static_cast<SvxNumType>(pGetField->GetFormat());
         const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
-        pGetField->SetText( FormatNumber( nPageNum, nTmpFormat ) );
+        pGetField->SetText(FormatNumber(nPageNum, nTmpFormat), &rLayout);
     }
 }
 
@@ -2385,6 +2430,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
         case FIELD_PROP_PAR1:
             rAny >>= m_sText;
+            m_sTextRLHidden = m_sText;
         break;
     default:
         assert(false);

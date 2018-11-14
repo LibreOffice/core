@@ -221,7 +221,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         case SwFieldIds::RefPageGet:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
             {
-                static_cast<SwRefPageGetField*>(pField)->ChangeExpansion(pFrame,
+                static_cast<SwRefPageGetField*>(pField)->ChangeExpansion(*pFrame,
                         static_txtattr_cast<SwTextField const*>(pHint));
             }
             {
