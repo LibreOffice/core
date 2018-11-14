@@ -16,6 +16,24 @@
       "revId": "e3290499009492e39e5ddd870d314bb5df494199",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_fe548956",
+        "filename": "compilerplugins/clang/singlevalfields.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-14T10:16:38Z",
+      "side": 1,
+      "message": "oh yes, thanks, this is a global-analysis plugin.\n\nyou probably want to wipe workdir/loplugin.* to save disk space",
+      "parentUuid": "ff5d4b2f_5e0a758a",
+      "revId": "e3290499009492e39e5ddd870d314bb5df494199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
