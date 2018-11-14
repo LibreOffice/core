@@ -1530,8 +1530,14 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // rotation
-    if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,true,&pPoolItem)) {
-        nRotateAngle=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue()-nOldRotateAngle;
+    if (SfxItemState::SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_DELTA_ANGLE, true, &pPoolItem)) {
+        nRotateAngle = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() + nOldRotateAngle;
+        bRotate = (nRotateAngle != 0);
+    }
+
+    // rotation
+    if (SfxItemState::SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE, true, &pPoolItem)) {
+        nRotateAngle = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - nOldRotateAngle;
         bRotate = (nRotateAngle != 0);
     }
 
