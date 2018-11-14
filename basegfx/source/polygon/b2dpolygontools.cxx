@@ -1768,9 +1768,9 @@ namespace basegfx
             }
         }
 
-        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY )
+        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, sal_uInt32 nStartQuadrant)
         {
-            B2DPolygon aRetval(createPolygonFromUnitCircle());
+            B2DPolygon aRetval(createPolygonFromUnitCircle(nStartQuadrant));
             const B2DHomMatrix aMatrix(createScaleTranslateB2DHomMatrix(fRadiusX, fRadiusY, rCenter.getX(), rCenter.getY()));
 
             aRetval.transform(aMatrix);

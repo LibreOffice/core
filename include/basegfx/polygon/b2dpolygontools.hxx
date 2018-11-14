@@ -231,7 +231,7 @@ namespace basegfx
         /** Create a circle polygon with given radius.
 
             This method creates a circle approximation consisting of
-            four cubic bezier segments, which approximate the given
+            12 cubic bezier segments, which approximate the given
             circle with an error of less than 0.5 percent.
 
             @param rCenter
@@ -260,7 +260,7 @@ namespace basegfx
         /** Create an ellipse polygon with given radii.
 
             This method creates an ellipse approximation consisting of
-            four cubic bezier segments, which approximate the given
+            12 cubic bezier segments, which approximate the given
             ellipse with an error of less than 0.5 percent.
 
             @param rCenter
@@ -271,8 +271,11 @@ namespace basegfx
 
             @param fRadiusY
             Radius of the ellipse in Y direction
+
+            @param nStartQuadrant
+            With Y down on screens, 0 = 3 o'clock, 1 = 6 o'clock, 2 = 9 o'clock, 3 = 12 o'clock
          */
-        BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
+        BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, sal_uInt32 nStartQuadrant = 0);
 
         /** Create an unit ellipse polygon with the given angles, from start to end
          */
