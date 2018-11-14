@@ -7046,7 +7046,6 @@ include/svtools/filechangedchecker.hxx
 include/svtools/filectrl.hxx
 include/svtools/fileurlbox.hxx
 include/svtools/fileview.hxx
-include/svtools/fmtfield.hxx
 include/svtools/foldertree.hxx
 include/svtools/fontsubstconfig.hxx
 include/svtools/framestatuslistener.hxx
@@ -7939,6 +7938,7 @@ include/vcl/fixed.hxx
 include/vcl/fixedhyper.hxx
 include/vcl/floatwin.hxx
 include/vcl/fltcall.hxx
+include/vcl/fmtfield.hxx
 include/vcl/fntstyle.hxx
 include/vcl/font.hxx
 include/vcl/fontcapabilities.hxx
@@ -13895,7 +13895,6 @@ svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
 svtools/source/control/filectrl.cxx
 svtools/source/control/fileurlbox.cxx
-svtools/source/control/fmtfield.cxx
 svtools/source/control/headbar.cxx
 svtools/source/control/hyperlabel.cxx
 svtools/source/control/indexentryres.cxx
@@ -17973,6 +17972,7 @@ vcl/source/control/field.cxx
 vcl/source/control/field2.cxx
 vcl/source/control/fixed.cxx
 vcl/source/control/fixedhyper.cxx
+vcl/source/control/fmtfield.cxx
 vcl/source/control/imgctrl.cxx
 vcl/source/control/imp_listbox.cxx
 vcl/source/control/listbox.cxx
