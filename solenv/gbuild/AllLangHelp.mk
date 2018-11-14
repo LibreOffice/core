@@ -87,13 +87,14 @@ endef
 
 # Add one or more help files.
 #
-# gb_AllLangHelp_add_helpfiles module file(s)
+# gb_AllLangHelp_add_helpfiles module file(s) [optional bookmark token]
 define gb_AllLangHelp_add_helpfiles
 $(foreach lang,$(gb_HELP_LANGS),\
 	$(call gb_HelpTarget_add_helpfiles,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
 )
 ifneq ($(ENABLE_HTMLHELP),)
 gb_AllLangHelp_$(1)_HELPFILES += $(addsuffix .xhp,$(2))
+gb_AllLangHelp_$(or $(3),$(1))_BOOKMARK_HELPFILES += $(addsuffix .xhp,$(2))
 $(call gb_AllLangHelp_get_helpfiles_target,$(1)): $(addprefix $(SRCDIR)/,$(addsuffix .xhp,$(2)))
 endif
 
