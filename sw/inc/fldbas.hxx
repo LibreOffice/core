@@ -131,7 +131,7 @@ enum SwFieldTypesEnum {
     TYP_PARAGRAPHSIGFLD,
     TYP_END
 };
-enum SwAttrFieldTYpe {
+enum SwAttrFieldType {
     ATTR_NONE,
     ATTR_DATEFLD,
     ATTR_TIMEFLD,
@@ -192,7 +192,6 @@ namespace nsSwGetSetExpType
 {
 const SwGetSetExpType GSE_STRING  = 0x0001; ///< String
 const SwGetSetExpType GSE_EXPR    = 0x0002; ///< Expression
-const SwGetSetExpType GSE_INP     = 0x0004; ///< InputField
 const SwGetSetExpType GSE_SEQ     = 0x0008; ///< Sequence
 const SwGetSetExpType GSE_FORMULA = 0x0010; ///< Formula
 }
