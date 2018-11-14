@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_999a476c",
+        "filename": "sw/inc/fmtfollowtextflow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-14T17:06:46Z",
+      "side": 1,
+      "message": "bool mbLayoutinCell \u003d false;\n\nmaybe this, so you can\u0027t forget initializing it to a value in all the ctors?",
+      "revId": "7005365ff3940a1231e6275b6ca8f0ef5dbbdf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7989d324",
+        "filename": "sw/inc/fmtfollowtextflow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-14T17:06:46Z",
+      "side": 1,
+      "message": "And then this can go.",
+      "revId": "7005365ff3940a1231e6275b6ca8f0ef5dbbdf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_598e0f2f",
+        "filename": "sw/inc/fmtfollowtextflow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-14T17:06:46Z",
+      "side": 1,
+      "message": "Please put the PutValue() implementation into a .cxx file, not inline.",
+      "revId": "7005365ff3940a1231e6275b6ca8f0ef5dbbdf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_39835b07",
+        "filename": "sw/inc/fmtfollowtextflow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-14T17:06:46Z",
+      "side": 1,
+      "message": "Could you please use the defines from unomid.h here? Thanks!",
+      "revId": "7005365ff3940a1231e6275b6ca8f0ef5dbbdf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_1988971d",
+        "filename": "sw/source/core/inc/anchoredobjectposition.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-14T17:06:46Z",
+      "side": 1,
+      "message": "Same here, best to put the initialization directly here, so you can\u0027t forget it.",
+      "revId": "7005365ff3940a1231e6275b6ca8f0ef5dbbdf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_f97ca321",
+        "filename": "sw/source/core/inc/environmentofanchoredobject.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-14T17:06:46Z",
+      "side": 1,
+      "message": "Same here, I would prefer inline initialization here.",
+      "revId": "7005365ff3940a1231e6275b6ca8f0ef5dbbdf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
