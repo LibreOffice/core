@@ -472,7 +472,7 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     return "?";
 }
 
-loplugin::Plugin::Registration< SingleValFields > X("singlevalfields", true);
+loplugin::Plugin::Registration< SingleValFields > X("singlevalfields", false);
 
 }
 
