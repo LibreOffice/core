@@ -38,6 +38,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/fmtfield.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
@@ -1963,19 +1964,29 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
 {
 private:
-    VclPtr<NumericField> m_xButton;
+    VclPtr<FormattedField> m_xButton;
 
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);
     DECL_LINK(OutputHdl, Edit&, bool);
     DECL_LINK(InputHdl, sal_Int64*, TriState);
 
+    double toField(int nValue) const
+    {
+        return static_cast<double>(nValue) / Power10(get_digits());
+    }
+
+    int fromField(double fValue) const
+    {
+        return FRound(fValue * Power10(get_digits()));
+    }
+
 public:
-    SalInstanceSpinButton(NumericField* pButton, bool bTakeOwnership)
+    SalInstanceSpinButton(FormattedField* pButton, bool bTakeOwnership)
         : SalInstanceEntry(pButton, bTakeOwnership)
         , m_xButton(pButton)
     {
-        m_xButton->SetUseThousandSep(false);  //off by default, MetricSpinButton enables it
+        m_xButton->SetThousandsSep(false);  //off by default, MetricSpinButton enables it
         m_xButton->SetUpHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
         m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
         m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
@@ -1985,37 +1996,35 @@ public:
 
     virtual int get_value() const override
     {
-        return m_xButton->GetValue();
+        return fromField(m_xButton->GetValue());
     }
 
     virtual void set_value(int value) override
     {
-        m_xButton->SetValue(value);
+        m_xButton->SetValue(toField(value));
     }
 
     virtual void set_range(int min, int max) override
     {
-        m_xButton->SetMin(min);
-        m_xButton->SetFirst(min);
-        m_xButton->SetMax(max);
-        m_xButton->SetLast(max);
+        m_xButton->SetMinValue(toField(min));
+        m_xButton->SetMaxValue(toField(max));
     }
 
     virtual void get_range(int& min, int& max) const override
     {
-        min = m_xButton->GetMin();
-        max = m_xButton->GetMax();
+        min = fromField(m_xButton->GetMinValue());
+        max = fromField(m_xButton->GetMaxValue());
     }
 
     virtual void set_increments(int step, int /*page*/) override
     {
-        m_xButton->SetSpinSize(step);
+        m_xButton->SetSpinSize(toField(step));
     }
 
     virtual void get_increments(int& step, int& page) const override
     {
-        step = m_xButton->GetSpinSize();
-        page = m_xButton->GetSpinSize();
+        step = fromField(m_xButton->GetSpinSize());
+        page = fromField(m_xButton->GetSpinSize());
     }
 
     virtual void set_digits(unsigned int digits) override
@@ -2032,7 +2041,7 @@ public:
     //off by default for direct SpinButtons, MetricSpinButton enables it
     void SetUseThousandSep()
     {
-        m_xButton->SetUseThousandSep(true);
+        m_xButton->SetThousandsSep(true);
     }
 
     virtual unsigned int get_digits() const override
@@ -2915,7 +2924,7 @@ public:
 
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id, bool bTakeOwnership) override
     {
-        NumericField* pSpinButton = m_xBuilder->get<NumericField>(id);
+        FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
         return pSpinButton ? o3tl::make_unique<SalInstanceSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
     }
 

@@ -25,6 +25,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fmtfield.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/IPrioritable.hxx>
@@ -541,6 +542,16 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<vcl::Window>(elem.m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget, "vcl", "missing NumericFormatter element of spinbutton/adjustment");
+        SAL_WARN_IF(!pAdjustment, "vcl", "missing Adjustment element of spinbutton/adjustment");
+        if (pTarget && pAdjustment)
+            mungeAdjustment(*pTarget, *pAdjustment);
+    }
+
+    for (auto const& elem : m_pParserState->m_aFormattedFormatterAdjustmentMaps)
+    {
+        FormattedField *pTarget = dynamic_cast<FormattedField*>(get<vcl::Window>(elem.m_sID));
+        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
+        SAL_WARN_IF(!pTarget, "vcl", "missing FormattedField element of spinbutton/adjustment");
         SAL_WARN_IF(!pAdjustment, "vcl", "missing Adjustment element of spinbutton/adjustment");
         if (pTarget && pAdjustment)
             mungeAdjustment(*pTarget, *pAdjustment);
@@ -1312,6 +1323,12 @@ void VclBuilder::connectNumericFormatterAdjustment(const OString &id, const OUSt
         m_pParserState->m_aNumericFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
 }
 
+void VclBuilder::connectFormattedFormatterAdjustment(const OString &id, const OUString &rAdjustment)
+{
+    if (!rAdjustment.isEmpty())
+        m_pParserState->m_aFormattedFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
+}
+
 void VclBuilder::connectTimeFormatterAdjustment(const OString &id, const OUString &rAdjustment)
 {
     if (!rAdjustment.isEmpty())
@@ -1721,9 +1738,19 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
         if (sPattern.isEmpty())
         {
-            connectNumericFormatterAdjustment(id, sAdjustment);
             SAL_INFO("vcl.layout", "making numeric field for " << name << " " << sUnit);
-            xWindow = VclPtr<NumericField>::Create(pParent, nBits);
+            if (m_bLegacy)
+            {
+                connectNumericFormatterAdjustment(id, sAdjustment);
+                xWindow = VclPtr<NumericField>::Create(pParent, nBits);
+            }
+            else
+            {
+                connectFormattedFormatterAdjustment(id, sAdjustment);
+                VclPtrInstance<FormattedField> xField(pParent, nBits);
+                xField->SetMinValue(0);
+                xWindow = xField;
+            }
         }
         else
         {
@@ -4075,7 +4102,6 @@ void VclBuilder::mungeModel(SvTreeListBox &rTarget, const ListStore &rStore, sal
     }
 }
 
-
 void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
@@ -4106,6 +4132,36 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
         {
             sal_Int64 nSpinSize = rValue.toDouble() * nMul;
             rTarget.SetSpinSize(nSpinSize);
+        }
+        else
+        {
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
+        }
+    }
+}
+
+void VclBuilder::mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment)
+{
+    for (auto const& elem : rAdjustment)
+    {
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
+
+        if (rKey == "upper")
+        {
+            rTarget.SetMaxValue(rValue.toDouble());
+        }
+        else if (rKey == "lower")
+        {
+            rTarget.SetMinValue(rValue.toDouble());
+        }
+        else if (rKey == "value")
+        {
+            rTarget.SetValue(rValue.toDouble());
+        }
+        else if (rKey == "step-increment")
+        {
+            rTarget.SetSpinSize(rValue.toDouble());
         }
         else
         {

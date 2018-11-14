@@ -146,8 +146,6 @@ public:
     void                    SetShowTrailingZeros( bool bShowTrailingZeros );
     bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
 
-    void                    DisableRemainderFactor();
-
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     sal_Int64               GetValue() const;
@@ -157,8 +155,6 @@ public:
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
-    void  SetInputHdl(const Link<sal_Int64*,TriState>& rLink) { m_aInputHdl = rLink; }
-    void  SetOutputHdl(const Link<Edit&, bool>& rLink) { m_aOutputHdl = rLink; }
 protected:
     sal_Int64               mnFieldValue;
     sal_Int64               mnLastValue;
@@ -166,7 +162,6 @@ protected:
     sal_Int64               mnMax;
     bool                    mbWrapOnLimits;
     bool                    mbFormatting;
-    bool                    mbDisableRemainderFactor;
 
     // the members below are used in all derivatives of NumericFormatter
     // not in NumericFormatter itself.
@@ -191,8 +186,6 @@ protected:
 private:
     SAL_DLLPRIVATE void     ImplInit();
 
-    Link<sal_Int64*, TriState> m_aInputHdl;
-    Link<Edit&, bool>       m_aOutputHdl;
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
     bool                    mbShowTrailingZeros;

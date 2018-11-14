@@ -454,8 +454,7 @@ bool FormatterBase::IsEmptyFieldValue() const
 void NumericFormatter::FormatValue(Selection const * pNewSelection)
 {
     mbFormatting = true;
-    if (!m_aOutputHdl.IsSet() || !m_aOutputHdl.Call(*GetField()))
-        ImplSetText(CreateFieldText(mnLastValue), pNewSelection);
+    ImplSetText(CreateFieldText(mnLastValue), pNewSelection);
     mbFormatting = false;
 }
 
@@ -478,7 +477,6 @@ void NumericFormatter::ImplInit()
     mbShowTrailingZeros = true;
     mbWrapOnLimits      = false;
     mbFormatting       = false;
-    mbDisableRemainderFactor = false;
 
     // for fields
     mnSpinSize          = 1;
@@ -578,19 +576,6 @@ sal_Int64 NumericFormatter::GetValue() const
     if (mbFormatting) //don't parse the entry if we're currently formatting what to put in it
         return mnLastValue;
 
-    if (m_aInputHdl.IsSet())
-    {
-        sal_Int64 nResult;
-        TriState eState = m_aInputHdl.Call(&nResult);
-        if (eState != TRISTATE_INDET)
-        {
-            if (eState == TRISTATE_TRUE)
-                return ClipAgainstMinMax(nResult);
-            else
-                return mnLastValue;
-        }
-    }
-
     return GetField() ? GetValueFromString(GetField()->GetText()) : 0;
 }
 
@@ -642,15 +627,10 @@ void NumericFormatter::Reformat()
     ImplNumericReformat();
 }
 
-void NumericFormatter::DisableRemainderFactor()
-{
-    mbDisableRemainderFactor = true;
-}
-
 void NumericFormatter::FieldUp()
 {
     sal_Int64 nValue = GetValue();
-    sal_Int64 nRemainder = mbDisableRemainderFactor ? 0 : (nValue % mnSpinSize);
+    sal_Int64 nRemainder = nValue % mnSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue + mnSpinSize : nValue + mnSpinSize - nRemainder;
     else
@@ -664,7 +644,7 @@ void NumericFormatter::FieldUp()
 void NumericFormatter::FieldDown()
 {
     sal_Int64 nValue = GetValue();
-    sal_Int64 nRemainder = mbDisableRemainderFactor ? 0 : (nValue % mnSpinSize);
+    sal_Int64 nRemainder = nValue % mnSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue - mnSpinSize : nValue - nRemainder;
     else
