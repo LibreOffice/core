@@ -25,8 +25,10 @@
 using namespace objectpositioning;
 
 SwEnvironmentOfAnchoredObject::SwEnvironmentOfAnchoredObject(
-                                                const bool   _bFollowTextFlow )
+                                                const bool   _bFollowTextFlow,
+                                                const bool   _bLayoutInCell )
     : mbFollowTextFlow( _bFollowTextFlow )
+    , mbLayoutInCell( _bLayoutInCell )
 {}
 
 SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
@@ -68,7 +70,7 @@ const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFram
 {
     const SwFrame* pVertEnvironmentLayFrame = &_rVertOrientFrame;
 
-    if ( !mbFollowTextFlow )
+    if ( !mbFollowTextFlow && !mbLayoutInCell)
     {
         // No exception any more for page alignment.
         // the page frame determines the vertical layout environment.
