@@ -130,7 +130,9 @@ vcl::Window * nextLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::
 {
     const vcl::Window *pLastChild = pChild;
 
-    if (isContainerWindow(*pChild))
+    if (pChild->GetType() == WindowType::SCROLLWINDOW)
+        pChild = static_cast<const VclScrolledWindow*>(pChild)->get_child();
+    else if (isContainerWindow(*pChild))
         pChild = pChild->GetWindow(GetWindowType::FirstChild);
     else
         pChild = pChild->GetWindow(GetWindowType::Next);
@@ -156,7 +158,9 @@ vcl::Window * prevLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::
 {
     const vcl::Window *pLastChild = pChild;
 
-    if (isContainerWindow(*pChild))
+    if (pChild->GetType() == WindowType::SCROLLWINDOW)
+        pChild = static_cast<const VclScrolledWindow*>(pChild)->get_child();
+    else if (isContainerWindow(*pChild))
         pChild = pChild->GetWindow(GetWindowType::LastChild);
     else
         pChild = pChild->GetWindow(GetWindowType::Prev);
