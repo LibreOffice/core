@@ -652,7 +652,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
                 if (m_xTsbScale->get_sensitive() && m_xTsbScale->get_state() == TRISTATE_TRUE)
                 {
                     aSetBitmapSize.setWidth(-m_xBitmapWidth->get_value(FieldUnit::NONE));
-                    aSetBitmapSize.setHeight(-m_xBitmapWidth->get_value(FieldUnit::NONE));
+                    aSetBitmapSize.setHeight(-m_xBitmapHeight->get_value(FieldUnit::NONE));
                 }
                 else
                 {
