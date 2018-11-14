@@ -1028,6 +1028,11 @@ globalCallback (gpointer pData)
         reportError(pCallback->m_pDocView, pCallback->m_aPayload);
     }
     break;
+    case LOK_CALLBACK_SIGNATURE_STATUS:
+    {
+        // TODO
+    }
+    break;
     default:
         g_assert(false);
         break;
