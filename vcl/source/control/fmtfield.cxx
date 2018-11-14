@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/fmtfield.hxx>
+#include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
@@ -304,6 +305,7 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
     ,m_bEnableEmptyField(true)
     ,m_bAutoColor(false)
     ,m_bEnableNaN(false)
+    ,m_bDisableRemainderFactor(false)
     ,m_ValueState(valueDirty)
     ,m_dCurrentValue(0)
     ,m_dDefaultValue(0)
@@ -859,35 +861,37 @@ void FormattedField::ImplSetValue(double dVal, bool bForce)
     m_ValueState = valueDouble;
     m_dCurrentValue = dVal;
 
-    OUString sNewText;
-    if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
+    if (!m_aOutputHdl.IsSet() || !m_aOutputHdl.Call(*this))
     {
-        // first convert the number as string in standard format
-        OUString sTemp;
-        ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
-        // then encode the string in the corresponding text format
-        ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
-    }
-    else
-    {
-        if( IsUsingInputStringForFormatting())
+        OUString sNewText;
+        if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
         {
-            ImplGetFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
+            // first convert the number as string in standard format
+            OUString sTemp;
+            ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
+            // then encode the string in the corresponding text format
+            ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
         }
         else
         {
-            ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+            if( IsUsingInputStringForFormatting())
+            {
+                ImplGetFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
+            }
+            else
+            {
+                ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+            }
         }
+        ImplSetTextImpl(sNewText, nullptr);
+        DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
     }
 
-    ImplSetTextImpl(sNewText, nullptr);
     m_ValueState = valueDouble;
-    DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 }
 
 bool FormattedField::ImplGetValue(double& dNewVal)
 {
-
     dNewVal = m_dCurrentValue;
     if (m_ValueState == valueDouble)
         return true;
@@ -897,34 +901,55 @@ bool FormattedField::ImplGetValue(double& dNewVal)
     if (sText.isEmpty())
         return true;
 
-    DBG_ASSERT(ImplGetFormatter() != nullptr, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
-
-    sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
-
-    if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
-        // for detection of values like "1,1" in fields that are formatted as text
-        nFormatKey = 0;
-
-    // special treatment for percentage formatting
-    if (ImplGetFormatter()->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
+    bool bUseExternalFormatterValue = false;
+    if (m_aInputHdl.IsSet())
     {
-        // the language of our format
-        LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
-        // the default number format for this language
-        sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(SvNumFormatType::NUMBER, eLanguage);
-
-        sal_uInt32 nTempFormat = nStandardNumericFormat;
-        double dTemp;
-        if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
-            SvNumFormatType::NUMBER == m_pFormatter->GetType(nTempFormat))
-            // the string is equivalent to a number formatted one (has no % sign) -> append it
-            sText += "%";
-        // (with this, a input of '3' becomes '3%', which then by the formatter is translated
-        // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
-        // which equals 300 percent.
+        sal_Int64 nResult;
+        auto eState = m_aInputHdl.Call(&nResult);
+        bUseExternalFormatterValue = eState != TRISTATE_INDET;
+        if (bUseExternalFormatterValue)
+        {
+            if (eState == TRISTATE_TRUE)
+            {
+                dNewVal = nResult;
+                dNewVal /= weld::SpinButton::Power10(GetDecimalDigits());
+            }
+            else
+                dNewVal = m_dCurrentValue;
+        }
     }
-    if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
-        return false;
+
+    if (!bUseExternalFormatterValue)
+    {
+        DBG_ASSERT(ImplGetFormatter() != nullptr, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
+
+        sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
+
+        if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
+            // for detection of values like "1,1" in fields that are formatted as text
+            nFormatKey = 0;
+
+        // special treatment for percentage formatting
+        if (ImplGetFormatter()->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
+        {
+            // the language of our format
+            LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
+            // the default number format for this language
+            sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(SvNumFormatType::NUMBER, eLanguage);
+
+            sal_uInt32 nTempFormat = nStandardNumericFormat;
+            double dTemp;
+            if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
+                SvNumFormatType::NUMBER == m_pFormatter->GetType(nTempFormat))
+                // the string is equivalent to a number formatted one (has no % sign) -> append it
+                sText += "%";
+            // (with this, a input of '3' becomes '3%', which then by the formatter is translated
+            // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
+            // which equals 300 percent.
+        }
+        if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
+            return false;
+    }
 
     if (m_bHasMin && (dNewVal<m_dMinValue))
         dNewVal = m_dMinValue;
@@ -953,10 +978,34 @@ double FormattedField::GetValue()
     return m_dCurrentValue;
 }
 
+void FormattedField::DisableRemainderFactor()
+{
+    m_bDisableRemainderFactor = true;
+}
+
+bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
+{
+    if (rKey == "digits")
+        SetDecimalDigits(rValue.toInt32());
+    else
+        return SpinField::set_property(rKey, rValue);
+    return true;
+}
+
 void FormattedField::Up()
 {
+    auto nScale = weld::SpinButton::Power10(GetDecimalDigits());
+
+    sal_Int64 nValue = std::round(GetValue() * nScale);
+    sal_Int64 nSpinSize = std::round(m_dSpinSize * nScale);
+    sal_Int64 nRemainder = m_bDisableRemainderFactor ? 0 : nValue % nSpinSize;
+    if (nValue >= 0)
+        nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue + nSpinSize - nRemainder;
+    else
+        nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue - nRemainder;
+
     // setValue handles under- and overflows (min/max) automatically
-    SetValue(GetValue() + m_dSpinSize);
+    SetValue(static_cast<double>(nValue) / nScale);
     SetModifyFlag();
     Modify();
 
@@ -965,7 +1014,18 @@ void FormattedField::Up()
 
 void FormattedField::Down()
 {
-    SetValue(GetValue() - m_dSpinSize);
+    auto nScale = weld::SpinButton::Power10(GetDecimalDigits());
+
+    sal_Int64 nValue = std::round(GetValue() * nScale);
+    sal_Int64 nSpinSize = std::round(m_dSpinSize * nScale);
+    sal_Int64 nRemainder = m_bDisableRemainderFactor ? 0 : nValue % nSpinSize;
+    if (nValue >= 0)
+        nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nRemainder;
+    else
+        nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nSpinSize - nRemainder;
+
+    // setValue handles under- and overflows (min/max) automatically
+    SetValue(static_cast<double>(nValue) / nScale);
     SetModifyFlag();
     Modify();
 
@@ -1000,7 +1060,6 @@ void FormattedField::UseInputStringForFormatting()
 {
     m_bUseInputStringForFormatting = true;
 }
-
 
 DoubleNumericField::DoubleNumericField(vcl::Window* pParent, WinBits nStyle)
     : FormattedField(pParent, nStyle)

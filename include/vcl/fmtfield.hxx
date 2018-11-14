@@ -70,6 +70,7 @@ protected:
     bool                m_bEnableEmptyField : 1;
     bool                m_bAutoColor : 1;
     bool                m_bEnableNaN : 1;
+    bool                m_bDisableRemainderFactor : 1;
     enum valueState { valueDirty, valueString, valueDouble };
     valueState          m_ValueState;
     double              m_dCurrentValue;
@@ -138,6 +139,8 @@ public:
     void    SetThousandsSep(bool _bUseSeparator);
         // the is no check if the current format is numeric, so be cautious when calling these functions
 
+    void    DisableRemainderFactor();
+
     sal_uInt16  GetDecimalDigits() const;
     void    SetDecimalDigits(sal_uInt16 _nPrecision);
         // There is no check if the current format is numeric, so be cautious when calling these functions
@@ -162,6 +165,8 @@ public:
     virtual void Last() override;
     // Default Implementation: Current double is set to the first or last value
 
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+
     void    SetSpinSize(double dStep)   { m_dSpinSize = dStep; }
     double  GetSpinSize() const         { return m_dSpinSize; }
 
@@ -174,6 +179,8 @@ public:
     bool    TreatingAsNumber() const    { return m_bTreatAsNumber; }
     void    TreatAsNumber(bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
+    void    SetOutputHdl(const Link<Edit&, bool>& rLink) { m_aOutputHdl = rLink; }
+    void    SetInputHdl(const Link<sal_Int64*,TriState>& rLink) { m_aInputHdl = rLink; }
 public:
     virtual void SetText( const OUString& rStr ) override;
     virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override;
@@ -250,8 +257,10 @@ protected:
     bool PreNotify(NotifyEvent& rNEvt) override;
 
     void ReFormat();
+private:
+    Link<Edit&, bool>       m_aOutputHdl;
+    Link<sal_Int64*, TriState> m_aInputHdl;
 };
-
 
 class VCL_DLLPUBLIC DoubleNumericField final : public FormattedField
 {

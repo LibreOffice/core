@@ -36,6 +36,7 @@
 
 class Button;
 class ComboBox;
+class FormattedField;
 class ListBox;
 class MessageDialog;
 class NumericFormatter;
@@ -232,6 +233,7 @@ private:
     const Adjustment* get_adjustment_by_name(const OString& sID) const;
 
     static void     mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
+    static void     mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
@@ -268,6 +270,7 @@ private:
         std::map<OString, TextBuffer> m_aTextBuffers;
 
         std::vector<WidgetAdjustmentMap> m_aNumericFormatterAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aFormattedFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aTimeFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aDateFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
@@ -339,6 +342,7 @@ private:
                     stringmap &rVec);
 
     void        connectNumericFormatterAdjustment(const OString &id, const OUString &rAdjustment);
+    void        connectFormattedFormatterAdjustment(const OString &id, const OUString &rAdjustment);
     void        connectTimeFormatterAdjustment(const OString &id, const OUString &rAdjustment);
     void        connectDateFormatterAdjustment(const OString &id, const OUString &rAdjustment);
 
