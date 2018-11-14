@@ -32,7 +32,9 @@
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 
-static bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
+namespace sw {
+
+bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
         SwTextFootnote const& rTextFootnote)
 {
     SwRedlineTable::size_type tmp;
@@ -43,6 +45,10 @@ static bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
         && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
         && *pRedline->GetPoint() != *pRedline->GetMark());
 }
+
+}
+
+using sw::IsFootnoteDeleted;
 
 bool CompareSwFootnoteIdxs::operator()(SwTextFootnote* const& lhs, SwTextFootnote* const& rhs) const
 {

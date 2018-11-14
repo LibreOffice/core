@@ -67,6 +67,13 @@ public:
             IDocumentRedlineAccess const&, const SwTextFootnote& rTextFootnote);
 };
 
+namespace sw {
+
+bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
+        SwTextFootnote const& rTextFootnote);
+
+}
+
 #endif // INCLUDED_SW_INC_FTNIDX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

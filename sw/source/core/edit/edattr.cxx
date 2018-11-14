@@ -446,6 +446,8 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
+    IDocumentRedlineAccess & rIDRA(mxDoc->getIDocumentRedlineAccess());
+
     const size_t nFootnoteCnt = mxDoc->GetFootnoteIdxs().size();
     SwTextFootnote* pTextFootnote;
     for( size_t n = 0; n < nFootnoteCnt; ++n )
@@ -465,6 +467,12 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 
             if( pTextNd )
             {
+                if (GetLayout()->IsHideRedlines()
+                    && sw::IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                {
+                    continue;
+                }
+
                 OUString sText(rFootnote.GetViewNumStr(*mxDoc, GetLayout()));
                 if( !sText.isEmpty() )
                     sText += " ";
