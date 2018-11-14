@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5ef4b55b",
+        "filename": "sc/inc/interpretercontext.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-11-14T10:46:42Z",
+      "side": 1,
+      "message": "This looks good. I wonder though if we could hide the ScInterpreterContextPool as an impl. detail inside the interpretercontext.cxx in a follow-up commit \u003d)",
+      "revId": "1ac7da4919018f907f1120dfb195fd64210db8c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
