@@ -205,6 +205,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_textCase \
 	UITest_signatureLine \
 	UITest_inputLine \
+	UITest_hideShowSheet \
 ))
 endif
 
