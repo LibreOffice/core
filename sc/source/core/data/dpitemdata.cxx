@@ -23,7 +23,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/math.hxx>
-#include <unotools/collatorwrapper.hxx>
 
 const sal_Int32 ScDPItemData::DateFirst = -1;
 const sal_Int32 ScDPItemData::DateLast  = 10000;
