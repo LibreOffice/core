@@ -162,7 +162,7 @@ struct ScMyAreaLink
     ScMyAreaLink() : nRefresh( 0 ) {}
 
     sal_Int32            GetColCount() const { return aDestRange.aEnd.Col() - aDestRange.aStart.Col() + 1; }
-    sal_Int32            GetRowCount() const { return aDestRange.aEnd.Row() - aDestRange.aStart.Col() + 1; }
+    sal_Int32            GetRowCount() const { return aDestRange.aEnd.Row() - aDestRange.aStart.Row() + 1; }
 
     bool                        Compare( const ScMyAreaLink& rAreaLink ) const;
     bool                        operator<(const ScMyAreaLink& rAreaLink ) const;
