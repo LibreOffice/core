@@ -19,7 +19,7 @@ Apache OpenOffice (AOO)
         FreeBSD
         OS/2
 
-    OpenOffice is used by millions of users worldwide and with more than 250 million
+    OpenOffice is used by millions of users worldwide and with more than 260 million
     downloads it is one of the most successful open source projects.
 
 Getting the latest sources via Subversion
@@ -55,7 +55,7 @@ Building Apache OpenOffice
     Note that building OpenOffice can take several hours.
 
     The default build will produce a setup version (e.g. setup program on Windows, dmg on macOS,
-    rpm and deb packages on Linux, pkg packages on Solaris) and an archived version. The output
-    can be found in the <output> directory in instsetoo_native/<output_dir>/Apache_OpenOffice/...
+    rpm and deb packages on Linux) and an archived version. The output can be found in the
+    <output> directory in instsetoo_native/<output_dir>/Apache_OpenOffice/...
 
 $HeadURL$
