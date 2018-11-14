@@ -918,11 +918,22 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
     // #i18732#
     const ::uno::Any* pFollowTextFlow = nullptr;
-    GetProperty(RES_FOLLOW_TEXT_FLOW, 0, pFollowTextFlow);
-    if ( pFollowTextFlow )
+    const ::uno::Any* pLayOutinCell = nullptr;
+    GetProperty(RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW, pFollowTextFlow);
+    GetProperty(RES_FOLLOW_TEXT_FLOW, MID_FTF_LAYOUT_IN_CELL, pLayOutinCell);
+
+    if ( pFollowTextFlow || pLayOutinCell)
     {
         SwFormatFollowTextFlow aFormatFollowTextFlow;
-        aFormatFollowTextFlow.PutValue(*pFollowTextFlow, 0);
+        if( pFollowTextFlow )
+        {
+            aFormatFollowTextFlow.PutValue(*pFollowTextFlow, MID_FOLLOW_TEXT_FLOW);
+        }
+
+        if ( pLayOutinCell )
+        {
+            aFormatFollowTextFlow.PutValue(*pLayOutinCell, MID_FTF_LAYOUT_IN_CELL);
+        }
         rToSet.Put(aFormatFollowTextFlow);
     }
 

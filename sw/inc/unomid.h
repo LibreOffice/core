@@ -147,6 +147,10 @@
 // SwFormatWrapInfluenceOnObjPos
 #define MID_WRAP_INFLUENCE      0
 
+// SwFormatFollowTextFlow
+#define MID_FOLLOW_TEXT_FLOW    0
+#define MID_FTF_LAYOUT_IN_CELL  1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

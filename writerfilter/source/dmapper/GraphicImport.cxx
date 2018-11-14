@@ -1263,6 +1263,11 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGH )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));
+                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell )
+                {
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_LAYOUT_IN_CELL ),
+                        uno::makeAny(true));
+                }
 
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
