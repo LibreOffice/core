@@ -24,6 +24,8 @@
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
+class SvNumberFormatter;
+
 namespace vcl
 {
 class ILibreOfficeKitNotifier;
@@ -692,6 +694,34 @@ public:
     static unsigned int Power10(unsigned int n);
 };
 
+class VCL_DLLPUBLIC FormattedSpinButton : virtual public Entry
+{
+protected:
+    Link<FormattedSpinButton&, void> m_aValueChangedHdl;
+
+    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
+
+public:
+    virtual void set_value(double value) = 0;
+    virtual double get_value() const = 0;
+    virtual void set_range(double min, double max) = 0;
+    virtual void get_range(double& min, double& max) const = 0;
+
+    void set_max(double max)
+    {
+        double min, dummy;
+        get_range(min, dummy);
+        set_range(min, max);
+    }
+
+    virtual void set_formatter(SvNumberFormatter* pFormatter) = 0;
+
+    void connect_value_changed(const Link<FormattedSpinButton&, void>& rLink)
+    {
+        m_aValueChangedHdl = rLink;
+    }
+};
+
 class VCL_DLLPUBLIC Image : virtual public Widget
 {
 public:
@@ -1200,6 +1230,8 @@ public:
         = 0;
     virtual std::unique_ptr<MetricSpinButton>
     weld_metric_spin_button(const OString& id, FieldUnit eUnit, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<FormattedSpinButton>
+    weld_formatted_spin_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<TimeSpinButton>
     weld_time_spin_button(const OString& id, TimeFieldFormat eFormat, bool bTakeOwnership = false)
         = 0;
