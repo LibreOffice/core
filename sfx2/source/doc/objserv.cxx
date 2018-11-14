@@ -1905,7 +1905,6 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
 
     // we have to store to the original document, the original medium should be closed for this time
     bool bResult = ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium);
-    printf("ConnectTmpStorage_Impl %d\n", bResult);
 
     if (!bResult)
         return false;
