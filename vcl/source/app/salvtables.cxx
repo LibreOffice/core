@@ -2063,6 +2063,56 @@ IMPL_LINK(SalInstanceSpinButton, InputHdl, sal_Int64*, pResult, TriState)
     return eRet;
 }
 
+class SalInstanceFormattedSpinButton : public SalInstanceEntry, public virtual weld::FormattedSpinButton
+{
+private:
+    VclPtr<FormattedField> m_xButton;
+
+    DECL_LINK(UpDownHdl, SpinField&, void);
+    DECL_LINK(LoseFocusHdl, Control&, void);
+    DECL_LINK(OutputHdl, Edit&, bool);
+    DECL_LINK(InputHdl, sal_Int64*, TriState);
+
+public:
+    SalInstanceFormattedSpinButton(FormattedField* pButton, bool bTakeOwnership)
+        : SalInstanceEntry(pButton, bTakeOwnership)
+        , m_xButton(pButton)
+    {
+    }
+
+    virtual double get_value() const override
+    {
+        return m_xButton->GetValue();
+    }
+
+    virtual void set_value(double value) override
+    {
+        m_xButton->SetValue(value);
+    }
+
+    virtual void set_range(double min, double max) override
+    {
+        m_xButton->SetMinValue(min);
+        m_xButton->SetMaxValue(max);
+    }
+
+    virtual void get_range(double& min, double& max) const override
+    {
+        min = m_xButton->GetMinValue();
+        max = m_xButton->GetMaxValue();
+    }
+
+    virtual void set_formatter(SvNumberFormatter* pFormatter) override
+    {
+        m_xButton->SetFormatter(pFormatter);
+    }
+
+    virtual ~SalInstanceFormattedSpinButton() override
+    {
+    }
+};
+
+
 class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
 {
 private:
@@ -2919,6 +2969,13 @@ public:
             rButton.SetUseThousandSep();
         }
         return o3tl::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
+    }
+
+    virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString& id,
+                                                                                  bool bTakeOwnership) override
+    {
+        FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
+        return pSpinButton ? o3tl::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
