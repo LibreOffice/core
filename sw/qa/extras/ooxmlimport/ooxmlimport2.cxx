@@ -269,6 +269,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
     CPPUNIT_ASSERT_EQUAL(xText1.get(), xText2.get());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf115094v2, "tdf115094v2.docx")
+{
+    // Introduce new attribute "layoutInCell"
+
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 18"), "IsLayoutInCell"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsLayoutInCell"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
