@@ -1210,7 +1210,8 @@ void OleEmbeddedObject::StoreToLocation_Impl(
             if ( !xCachedVisualRepresentation.is() )
                 xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
 
-            RemoveVisualCache_Impl( xTargetStream );
+            if (!m_bStreamReadOnly)
+                RemoveVisualCache_Impl(xTargetStream);
         }
     }
 
