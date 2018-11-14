@@ -28,9 +28,25 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatFollowTextFlow : public SfxBoolItem
 {
+private:
+    bool mbLayoutInCell;
+
 public:
+
     SwFormatFollowTextFlow( bool bFlag = false )
-        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
+        , mbLayoutInCell( false )
+        {}
+
+    SwFormatFollowTextFlow( bool bFlag, bool _bLayoutInCell  )
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
+        , mbLayoutInCell( _bLayoutInCell )
+        {}
+
+    SwFormatFollowTextFlow( const SwFormatFollowTextFlow& other)
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, other.GetValue() )
+        , mbLayoutInCell( other.GetLayoutInCell() )
+        {}
 
 
     /// "pure virtual methods" of SfxPoolItem
@@ -40,6 +56,38 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
+
+    bool GetLayoutInCell() const { return mbLayoutInCell; }
+
+
+    bool PutValue(const css::uno::Any& rVal, sal_uInt8 aInt) override
+    {
+        switch( aInt )
+        {
+            case 0 : // put follow text flow attribute
+            {
+                bool bTheValue = bool();
+                if (rVal >>= bTheValue)
+                {
+                    SetValue( bTheValue );
+                    return true;
+                }
+                break;
+            }
+            case 1 : // put layout in cell attribute
+            {
+                bool bTheValue = bool();
+                if (rVal >>= bTheValue)
+                {
+                    mbLayoutInCell = bTheValue;
+                    return true;
+                }
+                break;
+            }
+        }
+        SAL_WARN("svl.items", "SfxBoolItem::PutValue(): Wrong type");
+        return false;
+    }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

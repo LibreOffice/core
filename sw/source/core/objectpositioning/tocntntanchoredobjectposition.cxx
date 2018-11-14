@@ -165,7 +165,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     const bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGH;
 
     // new class <SwEnvironmentOfAnchoredObject>
-    SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow() );
+    SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow(), DoesObjLayoutInCell() );
 
     // #i18732# - grow only, if object has to follow the text flow
     const bool bGrow = DoesObjFollowsTextFlow() &&
