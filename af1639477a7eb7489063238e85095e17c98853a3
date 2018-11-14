@@ -51,6 +51,24 @@
       "revId": "af1639477a7eb7489063238e85095e17c98853a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_3eb581ef",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-11-14T05:25:17Z",
+      "side": 1,
+      "message": "Right, I didn\u0027t test canceling the drag so didn\u0027t see that it was required. I like simple so would leave as is.",
+      "parentUuid": "ff5d4b2f_1ee19dff",
+      "revId": "af1639477a7eb7489063238e85095e17c98853a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
