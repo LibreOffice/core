@@ -409,10 +409,12 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*GetOut(), aRect);
-                            if (!comphelper::LibreOfficeKit::isActive())
-                                pCurrentLayout->PaintSwFrame( *mpOut, aRect );
-                            else
-                                pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
+
+                            pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
+                            //if (!comphelper::LibreOfficeKit::isActive())
+                            //    pCurrentLayout->PaintSwFrame( *mpOut, aRect );
+                            //else
+                            //    pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
 
                             // #i75172# end DrawingLayer paint
                             DLPostPaint2(true);
