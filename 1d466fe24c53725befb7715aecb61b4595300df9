@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_b9abcb73",
+        "filename": "framework/inc/classes/framecontainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2018-11-14T17:22:54Z",
+      "side": 1,
+      "message": "Inactive?",
+      "revId": "1d466fe24c53725befb7715aecb61b4595300df9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
