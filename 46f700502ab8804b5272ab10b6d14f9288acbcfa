@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_3908fb26",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-14T13:07:33Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/#/c/63365/\u003e \"Database files should appear with app:\"BASE\" in instdir/help/*/bookmarks.js\"",
+      "revId": "46f700502ab8804b5272ab10b6d14f9288acbcfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
