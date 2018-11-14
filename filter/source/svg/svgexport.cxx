@@ -785,6 +785,7 @@ bool SVGFilter::implExportDocument()
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", true, true );
 
     // Create a ClipPath element that will be used for cutting bitmaps and other elements that could exceed the page margins.
+    if(!mbExportShapeSelection)
     {
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "ClipPathGroup" );
         SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
@@ -803,7 +804,6 @@ bool SVGFilter::implExportDocument()
         }
         // Create a ClipPath element applied to the leaving slide in order
         // to avoid that slide borders are visible during transition
-        if(!mbExportShapeSelection)
         {
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation_clip_path_shrink" );
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
@@ -1189,6 +1189,9 @@ void SVGFilter::implExportAnimations()
 
 void SVGFilter::implExportTextShapeIndex()
 {
+    if(mbExportShapeSelection)
+        return;
+
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "TextShapeIndex" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
@@ -1487,66 +1490,77 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
         }
     }
 
-    // We wrap all slide in a group element with class name "SlideGroup".
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
-    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
-
-    for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
+    if(!mbExportShapeSelection)
     {
-        Reference< css::drawing::XShapes > xShapes;
+        // We wrap all slide in a group element with class name "SlideGroup".
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
+        SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-        if (mbExportShapeSelection)
+        for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
         {
-            // #i124608# export a given object selection
-            xShapes = maShapeSelection;
-        }
-        else
-        {
-            xShapes.set( rxPages[i], UNO_QUERY );
-        }
+            Reference< css::drawing::XShapes > xShapes;
 
-        if( xShapes.is() )
-        {
-            // Insert the <g> open tag related to the svg element for
-            // handling a slide visibility.
-            // In case the exported slides are more than one the initial
-            // visibility of each slide is set to 'hidden'.
-            if( mbPresentation )
+            if (mbExportShapeSelection)
             {
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+                // #i124608# export a given object selection
+                xShapes = maShapeSelection;
             }
-            SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
-
-
+            else
             {
-                // Insert a further inner the <g> open tag for handling elements
-                // inserted before or after a slide: that is used for some
-                // when switching from the last to the first slide.
-                const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
-                OUString sContainerId = "container-";
-                sContainerId += sPageId;
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sContainerId );
-                SvXMLElementExport aContainerExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+                xShapes.set( rxPages[i], UNO_QUERY );
+            }
+
+            if( xShapes.is() )
+            {
+                // Insert the <g> open tag related to the svg element for
+                // handling a slide visibility.
+                // In case the exported slides are more than one the initial
+                // visibility of each slide is set to 'hidden'.
+                if( mbPresentation )
+                {
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+                }
+                SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+
 
                 {
-                    // add id attribute
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
+                    // Insert a further inner the <g> open tag for handling elements
+                    // inserted before or after a slide: that is used for some
+                    // when switching from the last to the first slide.
+                    const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
+                    OUString sContainerId = "container-";
+                    sContainerId += sPageId;
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sContainerId );
+                    SvXMLElementExport aContainerExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Slide" );
+                    {
+                        // add id attribute
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
-                    // Adding a clip path to each exported slide , so in case
-                    // bitmaps or other elements exceed the slide margins, they are
-                    // trimmed, even when they are shown inside a thumbnail view.
-                    OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Slide" );
 
-                    SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+                        // Adding a clip path to each exported slide , so in case
+                        // bitmaps or other elements exceed the slide margins, they are
+                        // trimmed, even when they are shown inside a thumbnail view.
+                        OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
 
-                    implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ );
-                }
-            } // append the </g> closing tag related to inserted elements
-        } // append the </g> closing tag related to the svg element handling the slide visibility
+                        SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+
+                        implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ );
+                    }
+                } // append the </g> closing tag related to inserted elements
+            } // append the </g> closing tag related to the svg element handling the slide visibility
+        }
     }
+    else
+    {
+        assert(maShapeSelection.is());
+        assert(rxPages.size() == 1);
+
+        const OUString & sPageId = implGetValidIDFromInterface( rxPages[0] );
+        implExportPage( sPageId, rxPages[0], maShapeSelection, false /* is not a master page */ );
+     }
 }
 
 
