@@ -743,6 +743,7 @@
 #define UNO_NAME_IS_SPLIT_ALLOWED "IsSplitAllowed"
 #define UNO_NAME_CHAR_HIDDEN "CharHidden"
 #define UNO_NAME_IS_FOLLOWING_TEXT_FLOW "IsFollowingTextFlow"
+#define UNO_NAME_IS_LAYOUT_IN_CELL "IsLayoutInCell"
 #define UNO_NAME_WIDTH_TYPE "WidthType"
 #define UNO_NAME_SCRIPT_URL "ScriptURL"
 #define UNO_NAME_RUNTIME_UID "RuntimeUID"
