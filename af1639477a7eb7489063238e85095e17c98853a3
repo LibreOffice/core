@@ -33,6 +33,24 @@
       "revId": "af1639477a7eb7489063238e85095e17c98853a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_1ee19dff",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-14T02:50:13Z",
+      "side": 1,
+      "message": "This is done to reset all parent-child relationships because user is dragging the parent of an expanded list of effects, we initially re-parented all children to the 1st child. This must be undone in the case of the user cancelling the drag, so a simple minded solution is to just rebuild the list when drag finishes.\n\nRather than doing a mpMainSequence-\u003erebuild(), I could iterate through all effects and correct any incorrect parent relationships. This would likely execute faster, but add extra code Impress. \n\nWould it be better to write a routine that does just what we need, or stick with fully regenerating the list of effects?",
+      "parentUuid": "ff5d4b2f_9e690d8d",
+      "revId": "af1639477a7eb7489063238e85095e17c98853a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
