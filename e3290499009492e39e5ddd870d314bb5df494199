@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5e0a758a",
+        "filename": "compilerplugins/clang/singlevalfields.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-14T09:05:36Z",
+      "side": 1,
+      "message": "I assume \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/638d619866784510dcbf0cadb6eb251208489a73%5E%21/\u003e \"\u0027oh dear, what can the matter be?\u0027\" is as intended",
+      "revId": "e3290499009492e39e5ddd870d314bb5df494199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
