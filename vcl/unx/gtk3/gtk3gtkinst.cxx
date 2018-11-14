@@ -30,6 +30,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
@@ -4401,18 +4403,18 @@ private:
         return pThis->signal_output();
     }
 
-    static gboolean signalInput(GtkSpinButton*, gdouble* new_value, gpointer widget)
+    static gint signalInput(GtkSpinButton*, gdouble* new_value, gpointer widget)
     {
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
         SolarMutexGuard aGuard;
         int result;
         TriState eHandled = pThis->signal_input(&result);
         if (eHandled == TRISTATE_INDET)
-            return false;
+            return 0;
         if (eHandled == TRISTATE_TRUE)
         {
             *new_value = pThis->toGtk(result);
-            return true;
+            return 1;
         }
         return GTK_INPUT_ERROR;
     }
@@ -4504,6 +4506,159 @@ public:
     }
 
     virtual ~GtkInstanceSpinButton() override
+    {
+        g_signal_handler_disconnect(m_pButton, m_nInputSignalId);
+        g_signal_handler_disconnect(m_pButton, m_nOutputSignalId);
+        g_signal_handler_disconnect(m_pButton, m_nValueChangedSignalId);
+    }
+};
+
+class GtkInstanceFormattedSpinButton : public GtkInstanceEntry, public virtual weld::FormattedSpinButton
+{
+private:
+    GtkSpinButton* m_pButton;
+    SvNumberFormatter* m_pFormatter;
+    Color* m_pLastOutputColor;
+    sal_uInt32 m_nFormatKey;
+    gulong m_nValueChangedSignalId;
+    gulong m_nOutputSignalId;
+    gulong m_nInputSignalId;
+
+    bool signal_output()
+    {
+        if (!m_pFormatter)
+            return false;
+        double dVal = get_value();
+        OUString sNewText;
+        if (m_pFormatter->IsTextFormat(m_nFormatKey))
+        {
+            // first convert the number as string in standard format
+            OUString sTemp;
+            m_pFormatter->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
+            // then encode the string in the corresponding text format
+            m_pFormatter->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
+        }
+        else
+        {
+            m_pFormatter->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+        }
+        set_text(sNewText);
+        return true;
+    }
+
+    static gboolean signalOutput(GtkSpinButton*, gpointer widget)
+    {
+        GtkInstanceFormattedSpinButton* pThis = static_cast<GtkInstanceFormattedSpinButton*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_output();
+    }
+
+    gint signal_input(double* value)
+    {
+        if (!m_pFormatter)
+            return 0;
+
+        sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
+
+        if (m_pFormatter->IsTextFormat(nFormatKey))
+            // for detection of values like "1,1" in fields that are formatted as text
+            nFormatKey = 0;
+
+        OUString sText(get_text());
+
+        // special treatment for percentage formatting
+        if (m_pFormatter->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
+        {
+            // the language of our format
+            LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
+            // the default number format for this language
+            sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(SvNumFormatType::NUMBER, eLanguage);
+
+            sal_uInt32 nTempFormat = nStandardNumericFormat;
+            double dTemp;
+            if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
+                SvNumFormatType::NUMBER == m_pFormatter->GetType(nTempFormat))
+                // the string is equivalent to a number formatted one (has no % sign) -> append it
+                sText += "%";
+            // (with this, a input of '3' becomes '3%', which then by the formatter is translated
+            // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
+            // which equals 300 percent.
+        }
+        if (!m_pFormatter->IsNumberFormat(sText, nFormatKey, *value))
+            return GTK_INPUT_ERROR;
+
+        return 1;
+    }
+
+    static gint signalInput(GtkSpinButton*, gdouble* new_value, gpointer widget)
+    {
+        GtkInstanceFormattedSpinButton* pThis = static_cast<GtkInstanceFormattedSpinButton*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_input(new_value);
+    }
+
+    static void signalValueChanged(GtkSpinButton*, gpointer widget)
+    {
+        GtkInstanceFormattedSpinButton* pThis = static_cast<GtkInstanceFormattedSpinButton*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_value_changed();
+    }
+
+public:
+    GtkInstanceFormattedSpinButton(GtkSpinButton* pButton, bool bTakeOwnership)
+        : GtkInstanceEntry(GTK_ENTRY(pButton), bTakeOwnership)
+        , m_pButton(pButton)
+        , m_pFormatter(nullptr)
+        , m_pLastOutputColor(nullptr)
+        , m_nFormatKey(0)
+        , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
+        , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
+        , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
+    {
+    }
+
+    virtual double get_value() const override
+    {
+        return gtk_spin_button_get_value(m_pButton);
+    }
+
+    virtual void set_value(double value) override
+    {
+        disable_notify_events();
+        gtk_spin_button_set_value(m_pButton, value);
+        enable_notify_events();
+    }
+
+    virtual void set_range(double min, double max) override
+    {
+        disable_notify_events();
+        gtk_spin_button_set_range(m_pButton, min, max);
+        enable_notify_events();
+    }
+
+    virtual void get_range(double& min, double& max) const override
+    {
+        gtk_spin_button_get_range(m_pButton, &min, &max);
+    }
+
+    virtual void set_formatter(SvNumberFormatter* pFormatter) override
+    {
+        m_pFormatter = pFormatter;
+
+        // calc the default format key from the Office's UI locale
+        if (m_pFormatter)
+        {
+            // get the Office's locale and translate
+            LanguageType eSysLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType( false);
+            // get the standard numeric format for this language
+            m_nFormatKey = m_pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, eSysLanguage );
+        }
+        else
+            m_nFormatKey = 0;
+        signal_output();
+    }
+
+    virtual ~GtkInstanceFormattedSpinButton() override
     {
         g_signal_handler_disconnect(m_pButton, m_nInputSignalId);
         g_signal_handler_disconnect(m_pButton, m_nOutputSignalId);
@@ -6222,6 +6377,15 @@ public:
                                                                       bool bTakeOwnership) override
     {
         return o3tl::make_unique<weld::MetricSpinButton>(weld_spin_button(id, bTakeOwnership), eUnit);
+    }
+
+    virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString &id, bool bTakeOwnership) override
+    {
+        GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pSpinButton)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
+        return o3tl::make_unique<GtkInstanceFormattedSpinButton>(pSpinButton, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
