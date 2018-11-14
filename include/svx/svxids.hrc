@@ -252,6 +252,7 @@
 #define SID_ATTR_TRANSFORM_ROT_X                        ( SID_SVX_START + 93 )
 #define SID_ATTR_TRANSFORM_ROT_Y                        ( SID_SVX_START + 94 )
 #define SID_ATTR_TRANSFORM_ANGLE                        ( SID_SVX_START + 95 )
+#define SID_ATTR_TRANSFORM_DELTA_ANGLE                  ( SID_SVX_START + 96 )
 #define SID_SIZE_ALL                                    ( SID_SVX_START + 101 )
 #define SID_DRAW_LINE                                   ( SID_SVX_START + 102 )
 #define SID_DRAW_XLINE                                  ( SID_SVX_START + 103 )
