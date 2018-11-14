@@ -567,10 +567,10 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 // The user data contains the options for the ascii import/export filter.
 // The format is:
 //      1. CharSet - as ascii chars
-//      2. LineEnd - as CR/LR/CRLF
+//      2. LineEnd - as CR/LF/CRLF
 //      3. Fontname
 //      4. Language
-//      5. Whether to include byte-order-mark
+//      5. Whether to include byte-order-mark - as true/false
 // the delimiter character is ","
 
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
