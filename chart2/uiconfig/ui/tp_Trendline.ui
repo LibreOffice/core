@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentDegree">
@@ -7,7 +8,19 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustmentForwardBacward">
+  <object class="GtkAdjustment" id="adjustmentForwardBackward">
+    <property name="lower">-10000</property>
+    <property name="upper">10000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentForwardBackward1">
+    <property name="lower">-10000</property>
+    <property name="upper">10000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentForwardBackward2">
     <property name="lower">-10000</property>
     <property name="upper">10000</property>
     <property name="step_increment">1</property>
@@ -57,13 +70,10 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">logarithmic</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -76,13 +86,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">exponential</property>
+                    <property name="group">linear</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -95,13 +103,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">power</property>
+                    <property name="group">linear</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -114,13 +120,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">polynomial</property>
+                    <property name="group">linear</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -133,13 +137,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">movingAverage</property>
+                    <property name="group">linear</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -157,8 +159,6 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -171,33 +171,30 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="tp_Trendline|label3">Degree</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">degree</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="degree">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDegree</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -210,33 +207,30 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="tp_Trendline|label4">Period</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">period</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="period">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPeriod</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -248,8 +242,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -261,8 +253,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -274,8 +264,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -287,8 +275,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -300,8 +286,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -313,8 +297,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -367,58 +349,55 @@
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tp_Trendline|label7">Extrapolate Forward</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">extrapolateForward</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tp_Trendline|label8">Extrapolate Backward</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">extrapolateBackward</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-FormattedField" id="extrapolateForward">
+                  <object class="GtkSpinButton" id="extrapolateForward">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="caps_lock_warning">False</property>
-                    <property name="input_purpose">number</property>
+                    <property name="adjustment">adjustmentForwardBackward</property>
+                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-FormattedField" id="extrapolateBackward">
+                  <object class="GtkSpinButton" id="extrapolateBackward">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustmentForwardBackward1</property>
+                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -430,12 +409,13 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="interceptValue"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -452,7 +432,6 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">4</property>
                     <property name="width">2</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -469,106 +448,100 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">5</property>
                     <property name="width">2</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tp_Trendline|label5">Trendline _Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_name</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry_name">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-FormattedField" id="interceptValue">
+                  <object class="GtkSpinButton" id="interceptValue">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="activates_default">True</property>
+                    <property name="text">0</property>
                     <property name="caps_lock_warning">False</property>
                     <property name="input_purpose">number</property>
+                    <property name="adjustment">adjustmentForwardBackward2</property>
+                    <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="setIntercept"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tp_Trendline|label6">_X Variable Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_Xname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">6</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry_Xname">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                </object>
+                    <property name="activates_default">True</property>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">6</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tp_Trendline|label9">_Y Variable Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_Yname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">7</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry_Yname">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                </object>
+                    <property name="activates_default">True</property>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">7</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -592,5 +565,11 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="label3"/>
+      <widget name="label4"/>
+    </widgets>
   </object>
 </interface>
