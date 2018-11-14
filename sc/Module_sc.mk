@@ -109,6 +109,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_arealinksobj \
 	CppunitTest_sc_autoformatobj \
 	CppunitTest_sc_cellcursorobj \
+	CppunitTest_sc_cellformatsenumeration \
 	CppunitTest_sc_cellobj \
 	CppunitTest_sc_cellrangeobj \
 	CppunitTest_sc_cellrangesobj \
