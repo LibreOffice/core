@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_be2051f9",
+        "filename": "basctl/source/inc/bastype2.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-14T09:49:09Z",
+      "side": 1,
+      "message": "I strongly prefer using explicit css:uno:: prefix before Sequence\u003c\u003e, instead of the `using` syntax. Also, I\u0027ve seen some commits recently replacing `using`s with explicit namespace use.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 38
+      },
+      "revId": "ddcd36d9d6191bfba7dea179067767a9ee192608",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
