@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,hunspell))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,hunspell,$(HUNSPELL_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,hunspell))
+
 ifeq ($(COM),MSC)
 $(eval $(call gb_UnpackedTarball_set_post_action,hunspell,\
 	touch src/hunspell/config.h \
