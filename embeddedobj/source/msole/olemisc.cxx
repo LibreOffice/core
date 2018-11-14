@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <oleembobj.hxx>
 #include "olepersist.hxx"
@@ -674,6 +675,19 @@ void OleEmbeddedObject::setStream(const css::uno::Reference<css::io::XStream>& x
 css::uno::Reference<css::io::XStream> OleEmbeddedObject::getStream()
 {
     return m_xObjectStream;
+}
+
+void OleEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
+{
+    if (!rArguments.hasElements())
+        return;
+
+    comphelper::SequenceAsHashMap aValues(rArguments[0]);
+    for (const auto& rValue : aValues)
+    {
+        if (rValue.first == "StreamReadOnly")
+            rValue.second >>= m_bStreamReadOnly;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -117,7 +118,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
                         , css::embed::XLinkageSupport
                         , css::embed::XInplaceObject
                         , css::container::XChild
-                        , css::io::XActiveDataStreamer >
+                        , css::io::XActiveDataStreamer
+                        , css::lang::XInitialization >
 {
     friend class OleComponent;
 
@@ -204,6 +206,9 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     OUString m_aFilterName; // if m_bTriedConversion, then the filter detected by that
 
     css::uno::Reference< css::uno::XInterface > m_xParent;
+
+    /// If it is allowed to modify entires in the stream of the OLE storage.
+    bool m_bStreamReadOnly = false;
 
 protected:
     /// @throws css::uno::Exception
@@ -441,6 +446,9 @@ public:
     // XActiveDataStreamer
     void SAL_CALL setStream(const css::uno::Reference<css::io::XStream>& xStream) override;
     css::uno::Reference<css::io::XStream> SAL_CALL getStream() override;
+
+    // XInitialization
+    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
 
 #endif

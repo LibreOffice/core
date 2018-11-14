@@ -65,6 +65,7 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/XEmbedPersist2.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
@@ -76,6 +77,7 @@
 #include <filter/msfilter/msoleexp.hxx>
 #include <comphelper/fileurl.hxx>
 #include <osl/file.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
 
@@ -632,10 +634,27 @@ bool SwHTMLParser::InsertEmbed()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // and insert into the document
+    uno::Reference<lang::XInitialization> xObjInitialization(xObj, uno::UNO_QUERY);
+    if (xObjInitialization.is())
+    {
+        // Request that the native data of the embedded object is not modified
+        // during parsing.
+        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue("StreamReadOnly",
+                                                                                   true) };
+        uno::Sequence<uno::Any> aArguments{ uno::makeAny(aValues) };
+        xObjInitialization->initialize(aArguments);
+    }
     SwFrameFormat* pFlyFormat =
         m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
                 ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
                 &aFrameSet);
+    if (xObjInitialization.is())
+    {
+        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue("StreamReadOnly",
+                                                                                   false) };
+        uno::Sequence<uno::Any> aArguments{ uno::makeAny(aValues) };
+        xObjInitialization->initialize(aArguments);
+    }
 
     // set name at FrameFormat
     if( !aName.isEmpty() )

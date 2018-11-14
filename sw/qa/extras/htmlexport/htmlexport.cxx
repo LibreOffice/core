@@ -555,7 +555,12 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
     uno::Reference<io::XSeekable> xStream(xEmbeddedObject->getStream(), uno::UNO_QUERY);
     // This was 80913, the RTF hexdump -> OLE1 binary -> OLE2 conversion was
     // missing.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(38912), xStream->getLength());
+    // Also, this was 38912 when we re-generated the OLE2 preview, which is
+    // wrong, the OLE2 data is 38375 bytes in the ole2.ole (referenced by
+    // reqif-ole2.xhtml). To see that this is the correct value, convert the
+    // hexdump in ole2.ole to binary, remove the ole1 header and check the byte
+    // size.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(38375), xStream->getLength());
     // Finally the export also failed as it tried to open the stream from the
     // document storage, but the embedded object already opened it, so an
     // exception of type com.sun.star.io.IOException was thrown.
