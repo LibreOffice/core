@@ -39,46 +39,29 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-AxisPositionsTabPage::AxisPositionsTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs)
-    : SfxTabPage(pWindow
-                ,"tp_AxisPositions"
-                ,"modules/schart/ui/tp_AxisPositions.ui"
-                , &rInAttrs)
+AxisPositionsTabPage::AxisPositionsTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
+    : SfxTabPage(pWindow ,"modules/schart/ui/tp_AxisPositions.ui" ,"tp_AxisPositions" , &rInAttrs)
     , m_pNumFormatter(nullptr)
     , m_bCrossingAxisIsCategoryAxis(false)
     , m_aCategories()
     , m_bSupportAxisPositioning(false)
+    , m_xFL_AxisLine(m_xBuilder->weld_frame("FL_AXIS_LINE"))
+    , m_xLB_CrossesAt(m_xBuilder->weld_combo_box("LB_CROSSES_OTHER_AXIS_AT"))
+    , m_xED_CrossesAt(m_xBuilder->weld_formatted_spin_button("EDT_CROSSES_OTHER_AXIS_AT"))
+    , m_xED_CrossesAtCategory(m_xBuilder->weld_combo_box( "EDT_CROSSES_OTHER_AXIS_AT_CATEGORY"))
+    , m_xCB_AxisBetweenCategories(m_xBuilder->weld_check_button("CB_AXIS_BETWEEN_CATEGORIES"))
+    , m_xFL_Labels(m_xBuilder->weld_frame("FL_LABELS"))
+    , m_xLB_PlaceLabels(m_xBuilder->weld_combo_box("LB_PLACE_LABELS"))
+    , m_xED_LabelDistance(m_xBuilder->weld_formatted_spin_button("EDT_AXIS_LABEL_DISTANCE"))
+    , m_xCB_TicksInner(m_xBuilder->weld_check_button("CB_TICKS_INNER"))
+    , m_xCB_TicksOuter(m_xBuilder->weld_check_button("CB_TICKS_OUTER"))
+    , m_xCB_MinorInner(m_xBuilder->weld_check_button("CB_MINOR_INNER"))
+    , m_xCB_MinorOuter(m_xBuilder->weld_check_button("CB_MINOR_OUTER"))
+    , m_xBxPlaceTicks(m_xBuilder->weld_widget("boxPLACE_TICKS"))
+    , m_xLB_PlaceTicks(m_xBuilder->weld_combo_box("LB_PLACE_TICKS"))
 {
-    get(m_pFL_AxisLine, "FL_AXIS_LINE");
-    get(m_pLB_CrossesAt,"LB_CROSSES_OTHER_AXIS_AT");
-    get(m_pED_CrossesAt,"EDT_CROSSES_OTHER_AXIS_AT");
-    get(m_pED_CrossesAtCategory, "EDT_CROSSES_OTHER_AXIS_AT_CATEGORY");
-    get(m_pCB_AxisBetweenCategories, "CB_AXIS_BETWEEN_CATEGORIES");
-
-    get(m_pFL_Labels, "FL_LABELS");
-    get(m_pLB_PlaceLabels,"LB_PLACE_LABELS");
-    get(m_pED_LabelDistance,"EDT_AXIS_LABEL_DISTANCE");
-
-    get(m_pCB_TicksInner, "CB_TICKS_INNER");
-    get(m_pCB_TicksOuter, "CB_TICKS_OUTER");
-    get(m_pCB_MinorInner, "CB_MINOR_INNER");
-    get(m_pCB_MinorOuter, "CB_MINOR_OUTER");
-
-    get(m_pBxPlaceTicks, "boxPLACE_TICKS");
-    get(m_pLB_PlaceTicks, "LB_PLACE_TICKS");
-
-    // these are not used/implemented
-//     get(m_pCB_MajorGrid, "CB_MAJOR_GRID");
-//     get(m_pPB_MajorGrid, "PB_MAJOR_GRID");
-//     get(m_pCB_MinorGrid, "CB_MINOR_GRID");
-//     get(m_pPB_MinorGrid, "PB_MINOR_GRID");
-
-    m_pLB_CrossesAt->SetSelectHdl( LINK( this, AxisPositionsTabPage, CrossesAtSelectHdl ) );
-    m_pLB_CrossesAt->SetDropDownLineCount( m_pLB_CrossesAt->GetEntryCount() );
-
-    m_pLB_PlaceLabels->SetSelectHdl( LINK( this, AxisPositionsTabPage, PlaceLabelsSelectHdl ) );
-    m_pLB_PlaceLabels->SetDropDownLineCount( m_pLB_PlaceLabels->GetEntryCount() );
-    m_pLB_PlaceTicks->SetDropDownLineCount( m_pLB_PlaceTicks->GetEntryCount() );
+    m_xLB_CrossesAt->connect_changed(LINK(this, AxisPositionsTabPage, CrossesAtSelectHdl));
+    m_xLB_PlaceLabels->connect_changed(LINK(this, AxisPositionsTabPage, PlaceLabelsSelectHdl));
 }
 
 AxisPositionsTabPage::~AxisPositionsTabPage()
@@ -86,66 +69,47 @@ AxisPositionsTabPage::~AxisPositionsTabPage()
     disposeOnce();
 }
 
-void AxisPositionsTabPage::dispose()
+VclPtr<SfxTabPage> AxisPositionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    m_pFL_AxisLine.clear();
-    m_pLB_CrossesAt.clear();
-    m_pED_CrossesAt.clear();
-    m_pED_CrossesAtCategory.clear();
-    m_pCB_AxisBetweenCategories.clear();
-    m_pFL_Labels.clear();
-    m_pLB_PlaceLabels.clear();
-    m_pED_LabelDistance.clear();
-    m_pCB_TicksInner.clear();
-    m_pCB_TicksOuter.clear();
-    m_pCB_MinorInner.clear();
-    m_pCB_MinorOuter.clear();
-    m_pBxPlaceTicks.clear();
-    m_pLB_PlaceTicks.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> AxisPositionsTabPage::Create(TabPageParent pWindow,const SfxItemSet* rOutAttrs)
-{
-    return VclPtr<AxisPositionsTabPage>::Create(pWindow.pParent, *rOutAttrs);
+    return VclPtr<AxisPositionsTabPage>::Create(pParent, *rOutAttrs);
 }
 
 bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     // axis line
-    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectedEntryPos();
+    sal_Int32 nPos = m_xLB_CrossesAt->get_active();
     rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( nPos==2 )
     {
-        double fCrossover = m_pED_CrossesAt->GetValue();
+        double fCrossover = m_xED_CrossesAt->get_value();
         if( m_bCrossingAxisIsCategoryAxis )
-            fCrossover = m_pED_CrossesAtCategory->GetSelectedEntryPos()+1;
+            fCrossover = m_xED_CrossesAtCategory->get_active()+1;
         rOutAttrs->Put(SvxDoubleItem(fCrossover,SCHATTR_AXIS_POSITION_VALUE));
     }
 
     // labels
-    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectedEntryPos();
-    if( nLabelPos != LISTBOX_ENTRY_NOTFOUND )
+    sal_Int32 nLabelPos = m_xLB_PlaceLabels->get_active();
+    if (nLabelPos != -1)
         rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
     // tick marks
     long nTicks=0;
     long nMinorTicks=0;
 
-    if(m_pCB_MinorInner->IsChecked())
+    if(m_xCB_MinorInner->get_active())
         nMinorTicks|=CHAXIS_MARK_INNER;
-    if(m_pCB_MinorOuter->IsChecked())
+    if(m_xCB_MinorOuter->get_active())
         nMinorTicks|=CHAXIS_MARK_OUTER;
-    if(m_pCB_TicksInner->IsChecked())
+    if(m_xCB_TicksInner->get_active())
         nTicks|=CHAXIS_MARK_INNER;
-    if(m_pCB_TicksOuter->IsChecked())
+    if(m_xCB_TicksOuter->get_active())
         nTicks|=CHAXIS_MARK_OUTER;
 
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
 
-    sal_Int32 nMarkPos = m_pLB_PlaceTicks->GetSelectedEntryPos();
-    if( nMarkPos != LISTBOX_ENTRY_NOTFOUND )
+    sal_Int32 nMarkPos = m_xLB_PlaceTicks->get_active();
+    if (nMarkPos != -1)
         rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
 
     return true;
@@ -154,26 +118,24 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     //init and enable controls
-    m_pED_CrossesAt->Show( !m_bCrossingAxisIsCategoryAxis );
-    m_pED_CrossesAtCategory->Show( m_bCrossingAxisIsCategoryAxis );
-    const sal_Int32 nMaxCount = LISTBOX_ENTRY_NOTFOUND;
-    if( m_bCrossingAxisIsCategoryAxis )
+    m_xED_CrossesAt->show( !m_bCrossingAxisIsCategoryAxis );
+    m_xED_CrossesAtCategory->show( m_bCrossingAxisIsCategoryAxis );
+    if (m_bCrossingAxisIsCategoryAxis)
     {
-        for( sal_Int32 nN=0; nN<m_aCategories.getLength() && nN<nMaxCount; nN++ )
-            m_pED_CrossesAtCategory->InsertEntry( m_aCategories[nN] );
+        for( sal_Int32 nN=0; nN<m_aCategories.getLength(); nN++ )
+            m_xED_CrossesAtCategory->append_text(m_aCategories[nN]);
 
-        sal_Int32 nCount = m_pED_CrossesAtCategory->GetEntryCount();
+        sal_Int32 nCount = m_xED_CrossesAtCategory->get_count();
         if( nCount>30 )
             nCount=30;
-        m_pED_CrossesAtCategory->SetDropDownLineCount( nCount );
     }
 
-    if( m_pLB_CrossesAt->GetEntryCount() > 3 )
+    if( m_xLB_CrossesAt->get_count() > 3 )
     {
         if( m_bCrossingAxisIsCategoryAxis )
-            m_pLB_CrossesAt->RemoveEntry(2);
+            m_xLB_CrossesAt->remove(2);
         else
-            m_pLB_CrossesAt->RemoveEntry(3);
+            m_xLB_CrossesAt->remove(3);
     }
 
     //fill controls
@@ -193,9 +155,9 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
         else
             nPos--;
 
-        if( nPos < m_pLB_CrossesAt->GetEntryCount() )
-            m_pLB_CrossesAt->SelectEntryPos( nPos );
-        CrossesAtSelectHdl( *m_pLB_CrossesAt );
+        if( nPos < m_xLB_CrossesAt->get_count() )
+            m_xLB_CrossesAt->set_active( nPos );
+        CrossesAtSelectHdl( *m_xLB_CrossesAt );
 
         if( rInAttrs->GetItemState(SCHATTR_AXIS_POSITION_VALUE,true, &pPoolItem)== SfxItemState::SET || bZero )
         {
@@ -203,71 +165,71 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
             if( !bZero )
                 fCrossover = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue();
             if( m_bCrossingAxisIsCategoryAxis )
-                m_pED_CrossesAtCategory->SelectEntryPos( static_cast<sal_uInt16>(::rtl::math::round(fCrossover-1.0)) );
+                m_xED_CrossesAtCategory->set_active( static_cast<sal_uInt16>(::rtl::math::round(fCrossover-1.0)) );
             else
-                m_pED_CrossesAt->SetValue(fCrossover);
+                m_xED_CrossesAt->set_value(fCrossover);
         }
         else
         {
-            m_pED_CrossesAtCategory->SetNoSelection();
-            m_pED_CrossesAt->SetTextValue("");
+            m_xED_CrossesAtCategory->set_active(-1);
+            m_xED_CrossesAt->set_text("");
         }
     }
     else
     {
-        m_pLB_CrossesAt->SetNoSelection();
-        m_pED_CrossesAt->Enable( false );
+        m_xLB_CrossesAt->set_active(-1);
+        m_xED_CrossesAt->set_sensitive( false );
     }
 
     // Labels
     if( rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_POSITION, false, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nPos = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
-        if( nPos < m_pLB_PlaceLabels->GetEntryCount() )
-            m_pLB_PlaceLabels->SelectEntryPos( nPos );
+        if( nPos < m_xLB_PlaceLabels->get_count() )
+            m_xLB_PlaceLabels->set_active( nPos );
     }
     else
-        m_pLB_PlaceLabels->SetNoSelection();
-    PlaceLabelsSelectHdl( *m_pLB_PlaceLabels );
+        m_xLB_PlaceLabels->set_active(-1);
+    PlaceLabelsSelectHdl( *m_xLB_PlaceLabels );
 
     // Tick marks
     long nTicks = 0, nMinorTicks = 0;
-    if(rInAttrs->GetItemState(SCHATTR_AXIS_TICKS,true, &pPoolItem)== SfxItemState::SET)
+    if (rInAttrs->GetItemState(SCHATTR_AXIS_TICKS,true, &pPoolItem)== SfxItemState::SET)
         nTicks = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
-    if(rInAttrs->GetItemState(SCHATTR_AXIS_HELPTICKS,true, &pPoolItem)== SfxItemState::SET)
+    if (rInAttrs->GetItemState(SCHATTR_AXIS_HELPTICKS,true, &pPoolItem)== SfxItemState::SET)
         nMinorTicks = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
 
-    m_pCB_TicksInner->Check(bool(nTicks&CHAXIS_MARK_INNER));
-    m_pCB_TicksOuter->Check(bool(nTicks&CHAXIS_MARK_OUTER));
-    m_pCB_MinorInner->Check(bool(nMinorTicks&CHAXIS_MARK_INNER));
-    m_pCB_MinorOuter->Check(bool(nMinorTicks&CHAXIS_MARK_OUTER));
+    m_xCB_TicksInner->set_active(bool(nTicks&CHAXIS_MARK_INNER));
+    m_xCB_TicksOuter->set_active(bool(nTicks&CHAXIS_MARK_OUTER));
+    m_xCB_MinorInner->set_active(bool(nMinorTicks&CHAXIS_MARK_INNER));
+    m_xCB_MinorOuter->set_active(bool(nMinorTicks&CHAXIS_MARK_OUTER));
 
     // Tick position
     if( rInAttrs->GetItemState( SCHATTR_AXIS_MARK_POSITION, false, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nPos = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
-        if( nPos < m_pLB_PlaceTicks->GetEntryCount() )
-            m_pLB_PlaceTicks->SelectEntryPos( nPos );
+        if( nPos < m_xLB_PlaceTicks->get_count() )
+            m_xLB_PlaceTicks->set_active( nPos );
     }
     else
-        m_pLB_PlaceTicks->SetNoSelection();
+        m_xLB_PlaceTicks->set_active(-1);
 
     if( !m_bSupportAxisPositioning )
     {
-        m_pFL_AxisLine->Show(false);
+        m_xFL_AxisLine->show(false);
 
-        m_pFL_Labels->Show(false);
+        m_xFL_Labels->show(false);
 
-        m_pBxPlaceTicks->Show(false);
+        m_xBxPlaceTicks->show(false);
     }
     else if( !AxisHelper::isAxisPositioningEnabled() )
     {
 
-        m_pFL_AxisLine->Enable(false);
+        m_xFL_AxisLine->set_sensitive(false);
 
-        m_pFL_Labels->Enable(false);
+        m_xFL_Labels->set_sensitive(false);
 
-        m_pBxPlaceTicks->Enable(false);
+        m_xBxPlaceTicks->set_sensitive(false);
 
         //todo: maybe set a special help id to all those controls
     }
@@ -284,14 +246,13 @@ DeactivateRC AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
 void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     m_pNumFormatter = pFormatter;
-    m_pED_CrossesAt->SetFormatter( m_pNumFormatter );
-    m_pED_CrossesAt->UseInputStringForFormatting();
+    m_xED_CrossesAt->set_formatter(m_pNumFormatter);
 
     const SfxPoolItem *pPoolItem = nullptr;
     if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_uLong nFmt = static_cast<sal_uLong>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
-        m_pED_CrossesAt->SetFormatKey( nFmt );
+        m_xED_CrossesAt->set_format_key( nFmt );
     }
 }
 
@@ -310,32 +271,32 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
     m_bSupportAxisPositioning = bSupportAxisPositioning;
 }
 
-IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, weld::ComboBox&, void)
 {
-    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectedEntryPos();
-    m_pED_CrossesAt->Show( (nPos==2) && !m_bCrossingAxisIsCategoryAxis );
-    m_pED_CrossesAtCategory->Show( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
+    sal_Int32 nPos = m_xLB_CrossesAt->get_active();
+    m_xED_CrossesAt->show( (nPos==2) && !m_bCrossingAxisIsCategoryAxis );
+    m_xED_CrossesAtCategory->show( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
 
-    if( m_pED_CrossesAt->GetText().isEmpty() )
-        m_pED_CrossesAt->SetValue(0.0);
-    if( m_pED_CrossesAtCategory->GetSelectedEntryCount() == 0 )
-        m_pED_CrossesAtCategory->SelectEntryPos(0);
+    if (m_xED_CrossesAt->get_text().isEmpty())
+        m_xED_CrossesAt->set_value(0.0);
+    if (m_xED_CrossesAtCategory->get_active() == -1)
+        m_xED_CrossesAtCategory->set_active(0);
 
-    PlaceLabelsSelectHdl( *m_pLB_PlaceLabels );
+    PlaceLabelsSelectHdl(*m_xLB_PlaceLabels);
 }
 
-IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl, weld::ComboBox&, void)
 {
-    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectedEntryPos();
+    sal_Int32 nLabelPos = m_xLB_PlaceLabels->get_active();
 
     bool bEnableTickmarkPlacement = (nLabelPos>1);
     if( bEnableTickmarkPlacement )
     {
-        sal_Int32 nAxisPos = m_pLB_CrossesAt->GetSelectedEntryPos();
+        sal_Int32 nAxisPos = m_xLB_CrossesAt->get_active();
         if( nLabelPos-2 == nAxisPos )
             bEnableTickmarkPlacement=false;
     }
-    m_pBxPlaceTicks->Enable(bEnableTickmarkPlacement);
+    m_xBxPlaceTicks->set_sensitive(bEnableTickmarkPlacement);
 }
 
 } //namespace chart
