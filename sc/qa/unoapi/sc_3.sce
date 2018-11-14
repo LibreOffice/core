@@ -24,4 +24,3 @@
 -o sc.ScChartsObj
 -o sc.ScDDELinkObj
 -o sc.ScDDELinksObj
--o sc.ScIndexEnumeration_DDELinksEnumeration

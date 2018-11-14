@@ -998,7 +998,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DataPilotFieldsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DataPilotItemsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DataPilotTablesEnumeration \
-    qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DDELinksEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_FunctionDescriptionEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_LabelRangesEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_NamedRangesEnumeration \
