@@ -29,7 +29,7 @@ namespace chart
 class TrendlineTabPage : public SfxTabPage
 {
 public:
-    TrendlineTabPage ( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    TrendlineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
 
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;

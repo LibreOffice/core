@@ -905,7 +905,7 @@ bool FormattedField::ImplGetValue(double& dNewVal)
     if (m_aInputHdl.IsSet())
     {
         sal_Int64 nResult;
-        TriState eState = m_aInputHdl.Call(&nResult);
+        auto eState = m_aInputHdl.Call(&nResult);
         bUseExternalFormatterValue = eState != TRISTATE_INDET;
         if (bUseExternalFormatterValue)
         {
