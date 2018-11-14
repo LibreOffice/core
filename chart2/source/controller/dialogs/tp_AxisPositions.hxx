@@ -20,9 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_AXISPOSITIONS_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fmtfield.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 
 namespace chart
 {
@@ -30,9 +27,8 @@ namespace chart
 class AxisPositionsTabPage : public SfxTabPage
 {
 public:
-    AxisPositionsTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    AxisPositionsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~AxisPositionsTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
@@ -48,41 +44,35 @@ public:
     void SupportAxisPositioning( bool bSupportAxisPositioning );
 
 private: //methods:
-    DECL_LINK( CrossesAtSelectHdl, ListBox&, void );
-    DECL_LINK( PlaceLabelsSelectHdl, ListBox&, void );
+    DECL_LINK(CrossesAtSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(PlaceLabelsSelectHdl, weld::ComboBox&, void);
 
 private: //member:
-    VclPtr<VclFrame>       m_pFL_AxisLine;
-    VclPtr<ListBox>        m_pLB_CrossesAt;
-    VclPtr<FormattedField> m_pED_CrossesAt;
-    VclPtr<ComboBox>       m_pED_CrossesAtCategory;
-    VclPtr<CheckBox>       m_pCB_AxisBetweenCategories;
-
-    VclPtr<VclFrame>       m_pFL_Labels;
-    VclPtr<ListBox>        m_pLB_PlaceLabels;
-    VclPtr<FormattedField> m_pED_LabelDistance;
-
-    VclPtr<CheckBox>       m_pCB_TicksInner;
-    VclPtr<CheckBox>       m_pCB_TicksOuter;
-
-    VclPtr<CheckBox>       m_pCB_MinorInner;
-    VclPtr<CheckBox>       m_pCB_MinorOuter;
-
-    VclPtr<VclBox>         m_pBxPlaceTicks;
-    VclPtr<ListBox>        m_pLB_PlaceTicks;
-
-//     Not implemented
-//     VclPtr<CheckBox>       m_pCB_MajorGrid;
-//     VclPtr<PushButton>     m_pPB_MajorGrid;
-//     VclPtr<CheckBox>       m_pCB_MinorGrid;
-//     VclPtr<PushButton>     m_pPB_MinorGrid;
-
     SvNumberFormatter*  m_pNumFormatter;
 
     bool    m_bCrossingAxisIsCategoryAxis;
     css::uno::Sequence< OUString > m_aCategories;
 
     bool    m_bSupportAxisPositioning;
+
+    std::unique_ptr<weld::Frame> m_xFL_AxisLine;
+    std::unique_ptr<weld::ComboBox> m_xLB_CrossesAt;
+    std::unique_ptr<weld::FormattedSpinButton> m_xED_CrossesAt;
+    std::unique_ptr<weld::ComboBox> m_xED_CrossesAtCategory;
+    std::unique_ptr<weld::CheckButton> m_xCB_AxisBetweenCategories;
+
+    std::unique_ptr<weld::Frame> m_xFL_Labels;
+    std::unique_ptr<weld::ComboBox> m_xLB_PlaceLabels;
+    std::unique_ptr<weld::FormattedSpinButton> m_xED_LabelDistance;
+
+    std::unique_ptr<weld::CheckButton> m_xCB_TicksInner;
+    std::unique_ptr<weld::CheckButton> m_xCB_TicksOuter;
+
+    std::unique_ptr<weld::CheckButton> m_xCB_MinorInner;
+    std::unique_ptr<weld::CheckButton> m_xCB_MinorOuter;
+
+    std::unique_ptr<weld::Widget> m_xBxPlaceTicks;
+    std::unique_ptr<weld::ComboBox> m_xLB_PlaceTicks;
 };
 
 } //namespace chart

@@ -2093,6 +2093,11 @@ public:
         : SalInstanceEntry(pButton, bTakeOwnership)
         , m_xButton(pButton)
     {
+        // #i6278# allow more decimal places than the output format.  As
+        // the numbers shown in the edit fields are used for input, it makes more
+        // sense to display the values in the input format rather than the output
+        // format.
+        m_xButton->UseInputStringForFormatting();
     }
 
     virtual double get_value() const override
@@ -2120,6 +2125,16 @@ public:
     virtual void set_formatter(SvNumberFormatter* pFormatter) override
     {
         m_xButton->SetFormatter(pFormatter);
+    }
+
+    virtual sal_Int32 get_format_key() const override
+    {
+        return m_xButton->GetFormatKey();
+    }
+
+    virtual void set_format_key(sal_Int32 nFormatKey) override
+    {
+        m_xButton->SetFormatKey(nFormatKey);
     }
 };
 

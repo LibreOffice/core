@@ -715,6 +715,8 @@ public:
     }
 
     virtual void set_formatter(SvNumberFormatter* pFormatter) = 0;
+    virtual sal_Int32 get_format_key() const = 0;
+    virtual void set_format_key(sal_Int32 nFormatKey) = 0;
 
     void connect_value_changed(const Link<FormattedSpinButton&, void>& rLink)
     {

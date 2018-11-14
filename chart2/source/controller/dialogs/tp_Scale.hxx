@@ -32,9 +32,8 @@ namespace chart
 class ScaleTabPage : public SfxTabPage
 {
 public:
-    ScaleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    ScaleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~ScaleTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
@@ -48,39 +47,6 @@ public:
     void ShowAxisOrigin( bool bShowOrigin );
 
 private:
-    VclPtr<CheckBox>            m_pCbxReverse;
-    VclPtr<CheckBox>            m_pCbxLogarithm;
-
-    VclPtr<VclBox>              m_pBxType;
-    VclPtr<ListBox>             m_pLB_AxisType;
-
-    VclPtr<VclGrid>              m_pBxMinMax;
-    VclPtr<FormattedField>      m_pFmtFldMin;
-    VclPtr<CheckBox>            m_pCbxAutoMin;
-
-    VclPtr<FormattedField>      m_pFmtFldMax;
-    VclPtr<CheckBox>            m_pCbxAutoMax;
-
-    VclPtr<VclBox>              m_pBxResolution;
-    VclPtr<ListBox>             m_pLB_TimeResolution;
-    VclPtr<CheckBox>            m_pCbx_AutoTimeResolution;
-
-    VclPtr<FixedText>           m_pTxtMain;
-    VclPtr<FormattedField>      m_pFmtFldStepMain;
-    VclPtr<MetricField>         m_pMt_MainDateStep;
-    VclPtr<ListBox>             m_pLB_MainTimeUnit;
-    VclPtr<CheckBox>            m_pCbxAutoStepMain;
-
-    VclPtr<FixedText>           m_pTxtHelpCount;
-    VclPtr<FixedText>           m_pTxtHelp;
-    VclPtr<MetricField>         m_pMtStepHelp;
-    VclPtr<ListBox>             m_pLB_HelpTimeUnit;
-    VclPtr<CheckBox>            m_pCbxAutoStepHelp;
-
-    VclPtr<FormattedField>      m_pFmtFldOrigin;
-    VclPtr<CheckBox>            m_pCbxAutoOrigin;
-    VclPtr<VclBox>              m_pBxOrigin;
-
     double              fMin;
     double              fMax;
     double              fStepMain;
@@ -95,11 +61,36 @@ private:
 
     bool                m_bShowAxisOrigin;
 
+    std::unique_ptr<weld::CheckButton> m_xCbxReverse;
+    std::unique_ptr<weld::CheckButton> m_xCbxLogarithm;
+    std::unique_ptr<weld::Widget> m_xBxType;
+    std::unique_ptr<weld::ComboBox> m_xLB_AxisType;
+    std::unique_ptr<weld::Widget> m_xBxMinMax;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldMin;
+    std::unique_ptr<weld::CheckButton> m_xCbxAutoMin;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldMax;
+    std::unique_ptr<weld::CheckButton> m_xCbxAutoMax;
+    std::unique_ptr<weld::Widget> m_xBxResolution;
+    std::unique_ptr<weld::ComboBox> m_xLB_TimeResolution;
+    std::unique_ptr<weld::CheckButton> m_xCbx_AutoTimeResolution;
+    std::unique_ptr<weld::Label> m_xTxtMain;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldStepMain;
+    std::unique_ptr<weld::SpinButton> m_xMt_MainDateStep;
+    std::unique_ptr<weld::ComboBox> m_xLB_MainTimeUnit;
+    std::unique_ptr<weld::CheckButton> m_xCbxAutoStepMain;
+    std::unique_ptr<weld::Label> m_xTxtHelpCount;
+    std::unique_ptr<weld::Label> m_xTxtHelp;
+    std::unique_ptr<weld::SpinButton> m_xMtStepHelp;
+    std::unique_ptr<weld::ComboBox> m_xLB_HelpTimeUnit;
+    std::unique_ptr<weld::CheckButton> m_xCbxAutoStepHelp;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldOrigin;
+    std::unique_ptr<weld::CheckButton> m_xCbxAutoOrigin;
+    std::unique_ptr<weld::Widget> m_xBxOrigin;
+
     void EnableControls();
 
-    DECL_LINK( SelectAxisTypeHdl, ListBox&, void );
-    DECL_LINK( EnableValueHdl, Button*, void );
-    DECL_STATIC_LINK( ScaleTabPage, FmtFieldModifiedHdl, Edit&, void);
+    DECL_LINK(SelectAxisTypeHdl, weld::ComboBox&, void);
+    DECL_LINK(EnableValueHdl, weld::ToggleButton&, void);
 
     /** shows a warning window due to an invalid input.
 
@@ -114,7 +105,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning(const char* pResIdMessage, Control* pControl);
+    bool ShowWarning(const char* pResIdMessage, weld::Widget* pControl);
 
     void HideAllControls();
 };
