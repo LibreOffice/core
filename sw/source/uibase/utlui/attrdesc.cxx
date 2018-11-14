@@ -56,6 +56,7 @@
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <libxml/xmlwriter.h>
+#include <unomid.h>
 
 using namespace com::sun::star;
 
@@ -839,11 +840,41 @@ bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
     return true;
 }
 
+bool SwFormatFollowTextFlow::PutValue(const css::uno::Any& rVal, sal_uInt8 aInt)
+{
+    switch( aInt )
+    {
+        case MID_FOLLOW_TEXT_FLOW :
+        {
+            bool bTheValue = bool();
+            if (rVal >>= bTheValue)
+            {
+                SetValue( bTheValue );
+                return true;
+            }
+            break;
+        }
+        case MID_FTF_LAYOUT_IN_CELL :
+        {
+            bool bTheValue = bool();
+            if (rVal >>= bTheValue)
+            {
+                mbLayoutInCell = bTheValue;
+                return true;
+            }
+            break;
+        }
+    }
+    SAL_WARN("svl.items", "SfxBoolItem::PutValue(): Wrong type");
+    return false;
+}
+
 void SwFormatFollowTextFlow::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFollowTextFlow"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("layoutInCell"), BAD_CAST(OString::boolean(GetLayoutInCell()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
