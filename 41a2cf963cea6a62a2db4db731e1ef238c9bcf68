@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "ff5d4b2f_4d664d54",
+        "filename": "sd/source/ui/animations/CustomAnimationList.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-14T02:50:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff5d4b2f_adc4a941",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5d4b2f_8dc1e531",
         "filename": "sd/source/ui/animations/CustomAnimationList.hxx",
         "patchSetId": 12
@@ -81,6 +99,24 @@
       "writtenOn": "2018-11-11T22:39:08Z",
       "side": 1,
       "message": "unused",
+      "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_2d5b1988",
+        "filename": "sd/source/ui/animations/CustomAnimationList.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-11-14T02:50:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff5d4b2f_8dc1e531",
       "revId": "41a2cf963cea6a62a2db4db731e1ef238c9bcf68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
