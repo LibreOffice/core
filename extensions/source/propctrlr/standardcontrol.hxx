@@ -33,7 +33,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/calendar.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 #include <svx/colorbox.hxx>
 
 #include <set>

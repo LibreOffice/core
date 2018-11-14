@@ -27,7 +27,7 @@
 #include <docary.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 #include <ndindex.hxx>
 #include <vector>
 

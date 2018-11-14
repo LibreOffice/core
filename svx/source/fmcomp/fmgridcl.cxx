@@ -60,7 +60,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>

@@ -59,7 +59,7 @@
 
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svtools/svmedit.hxx>
 #include <svx/dialmgr.hxx>

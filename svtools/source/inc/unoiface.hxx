@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <svtools/svmedit.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 
 
 #include <cppuhelper/implbase.hxx>

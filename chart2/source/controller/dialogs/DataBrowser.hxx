@@ -21,7 +21,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 
 #include <svtools/editbrowsebox.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 
 #include <memory>
 #include <vector>
