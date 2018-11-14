@@ -483,16 +483,14 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection const * pNe
         if ((nNewLen > nCurrentLen) && (aSel.Max() == nCurrentLen))
         {   // new text is longer and the cursor is behind the last char
             if (aSel.Min() == 0)
-            {   // the whole text was selected -> select the new text on the whole, too
-                aSel.Max() = nNewLen;
+            {
                 if (!nCurrentLen)
-                {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                    SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
-                    if (nSelOptions & SelectionOptions::ShowFirst)
-                    {   // selection should be from right to left -> swap min and max
-                        aSel.Min() = aSel.Max();
-                        aSel.Max() = 0;
-                    }
+                {   // there wasn't really a previous selection (as there was no previous text)
+                    aSel.Max() = 0;
+                }
+                else
+                {   // the whole text was selected -> select the new text on the whole, too
+                    aSel.Max() = nNewLen;
                 }
             }
             else if (aSel.Max() == aSel.Min())
