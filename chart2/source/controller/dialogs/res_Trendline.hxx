@@ -19,12 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/weld.hxx>
 
 class SvNumberFormatter;
 
@@ -34,7 +31,7 @@ namespace chart
 class TrendlineResources final
 {
 public:
-    TrendlineResources( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    TrendlineResources(weld::Builder& rParent, const SfxItemSet& rInAttrs);
     ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
@@ -46,32 +43,6 @@ public:
     void SetNbPoints( sal_Int32 nNbPoints );
 
 private:
-    VclPtr<RadioButton> m_pRB_Linear;
-    VclPtr<RadioButton> m_pRB_Logarithmic;
-    VclPtr<RadioButton> m_pRB_Exponential;
-    VclPtr<RadioButton> m_pRB_Power;
-    VclPtr<RadioButton> m_pRB_Polynomial;
-    VclPtr<RadioButton> m_pRB_MovingAverage;
-
-    VclPtr<FixedImage>  m_pFI_Linear;
-    VclPtr<FixedImage>  m_pFI_Logarithmic;
-    VclPtr<FixedImage>  m_pFI_Exponential;
-    VclPtr<FixedImage>  m_pFI_Power;
-    VclPtr<FixedImage>  m_pFI_Polynomial;
-    VclPtr<FixedImage>  m_pFI_MovingAverage;
-
-    VclPtr<NumericField>    m_pNF_Degree;
-    VclPtr<NumericField>    m_pNF_Period;
-    VclPtr<Edit>            m_pEE_Name;
-    VclPtr<FormattedField>  m_pFmtFld_ExtrapolateForward;
-    VclPtr<FormattedField>  m_pFmtFld_ExtrapolateBackward;
-    VclPtr<CheckBox>        m_pCB_SetIntercept;
-    VclPtr<FormattedField>  m_pFmtFld_InterceptValue;
-    VclPtr<CheckBox>        m_pCB_ShowEquation;
-    VclPtr<Edit>            m_pEE_XName;
-    VclPtr<Edit>            m_pEE_YName;
-    VclPtr<CheckBox>        m_pCB_ShowCorrelationCoeff;
-
     SvxChartRegress     m_eTrendLineType;
 
     bool                m_bTrendLineUnique;
@@ -79,10 +50,37 @@ private:
     SvNumberFormatter*  m_pNumFormatter;
     sal_Int32           m_nNbPoints;
 
+    std::unique_ptr<weld::RadioButton> m_xRB_Linear;
+    std::unique_ptr<weld::RadioButton> m_xRB_Logarithmic;
+    std::unique_ptr<weld::RadioButton> m_xRB_Exponential;
+    std::unique_ptr<weld::RadioButton> m_xRB_Power;
+    std::unique_ptr<weld::RadioButton> m_xRB_Polynomial;
+    std::unique_ptr<weld::RadioButton> m_xRB_MovingAverage;
+
+    std::unique_ptr<weld::Image> m_xFI_Linear;
+    std::unique_ptr<weld::Image> m_xFI_Logarithmic;
+    std::unique_ptr<weld::Image> m_xFI_Exponential;
+    std::unique_ptr<weld::Image> m_xFI_Power;
+    std::unique_ptr<weld::Image> m_xFI_Polynomial;
+    std::unique_ptr<weld::Image> m_xFI_MovingAverage;
+
+    std::unique_ptr<weld::SpinButton> m_xNF_Degree;
+    std::unique_ptr<weld::SpinButton> m_xNF_Period;
+    std::unique_ptr<weld::Entry> m_xEE_Name;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFld_ExtrapolateForward;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFld_ExtrapolateBackward;
+    std::unique_ptr<weld::CheckButton> m_xCB_SetIntercept;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFld_InterceptValue;
+    std::unique_ptr<weld::CheckButton> m_xCB_ShowEquation;
+    std::unique_ptr<weld::Entry> m_xEE_XName;
+    std::unique_ptr<weld::Entry> m_xEE_YName;
+    std::unique_ptr<weld::CheckButton> m_xCB_ShowCorrelationCoeff;
+
     void UpdateControlStates();
-    DECL_LINK( SelectTrendLine, Button*, void );
-    DECL_LINK( ChangeValue, Edit&, void);
-    DECL_LINK( ShowEquation, CheckBox&, void);
+    DECL_LINK(SelectTrendLine, weld::ToggleButton&, void);
+    DECL_LINK(ChangeSpinValue, weld::SpinButton&, void);
+    DECL_LINK(ChangeFormattedValue, weld::FormattedSpinButton&, void);
+    DECL_LINK(ShowEquation, weld::ToggleButton&, void);
 };
 
 } //  namespace chart
