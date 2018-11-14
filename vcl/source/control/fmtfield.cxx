@@ -25,7 +25,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <svl/zformat.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>

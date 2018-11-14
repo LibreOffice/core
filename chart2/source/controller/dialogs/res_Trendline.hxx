@@ -24,7 +24,7 @@
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include <vcl/field.hxx>
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 
 class SvNumberFormatter;
 

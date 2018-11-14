@@ -21,7 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_USERCONTROL_HXX
 
 #include "commoncontrol.hxx"
-#include <svtools/fmtfield.hxx>
+#include <vcl/fmtfield.hxx>
 #include <svtools/fileurlbox.hxx>
 #include "standardcontrol.hxx"
 

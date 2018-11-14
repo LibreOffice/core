@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_FMTFIELD_HXX
-#define INCLUDED_SVTOOLS_FMTFIELD_HXX
+#ifndef INCLUDED_VCL_FMTFIELD_HXX
+#define INCLUDED_VCL_FMTFIELD_HXX
 
 #include <svtools/svtdllapi.h>
 #include <vcl/spinfld.hxx>
@@ -38,7 +38,7 @@ enum class FORMAT_CHANGE_TYPE
 };
 
 
-class SVT_DLLPUBLIC FormattedField : public SpinField
+class VCL_DLLPUBLIC FormattedField : public SpinField
 {
 private:
     // A SvNumberFormatter is very expensive (regarding time and space), it is a Singleton
@@ -51,7 +51,7 @@ private:
         ~StaticFormatter();
 
         operator SvNumberFormatter* () { return GetFormatter(); }
-        SVT_DLLPUBLIC static SvNumberFormatter* GetFormatter();
+        VCL_DLLPUBLIC static SvNumberFormatter* GetFormatter();
     };
 
 protected:
@@ -253,7 +253,7 @@ protected:
 };
 
 
-class SVT_DLLPUBLIC DoubleNumericField final : public FormattedField
+class VCL_DLLPUBLIC DoubleNumericField final : public FormattedField
 {
 public:
     DoubleNumericField(vcl::Window* pParent, WinBits nStyle);
@@ -270,7 +270,7 @@ private:
 };
 
 
-class DoubleCurrencyField final : public FormattedField
+class VCL_DLLPUBLIC DoubleCurrencyField final : public FormattedField
 {
 public:
     DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle);
@@ -291,6 +291,6 @@ private:
     bool       m_bChangingFormat;
 };
 
-#endif // INCLUDED_SVTOOLS_FMTFIELD_HXX
+#endif // INCLUDED_VCL_FMTFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

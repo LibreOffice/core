@@ -182,6 +182,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/field \
     vcl/source/control/fixed \
     vcl/source/control/fixedhyper \
+    vcl/source/control/fmtfield \
     vcl/source/control/imgctrl \
     vcl/source/control/listctrl \
     vcl/source/control/longcurr \
