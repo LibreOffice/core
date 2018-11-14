@@ -3142,7 +3142,7 @@ bool checkCompileColRowName(
         }
         break;
         case URM_MOVE:
-        {   // Recomplie for Move/D&D when ColRowName was moved or this Cell
+        {   // Recompile for Move/D&D when ColRowName was moved or this Cell
             // points to one and was moved.
             bool bMoved = (aPos != aOldPos);
             if (bMoved)
