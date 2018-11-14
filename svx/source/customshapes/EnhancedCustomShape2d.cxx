@@ -1688,41 +1688,11 @@ void EnhancedCustomShape2d::CreateSubPath(
                                 aNewB2DPolygon.append(CreateArc( aRect, Point( static_cast<sal_Int32>(fx1), static_cast<sal_Int32>(fy1) ), Point( static_cast<sal_Int32>(fx2), static_cast<sal_Int32>(fy2) ), false));
                             }
                             else
-                            {   /* SJ: TODO: this block should be replaced sometimes, because the current point
-                                   is not set correct, it also does not use the correct moveto
-                                   point if ANGLEELLIPSETO was used, but the method CreateArc
-                                   is at the moment not able to draw full circles (if startangle is 0
-                                   and endangle 360 nothing is painted :-( */
-                                sal_Int32 nXControl = static_cast<sal_Int32>(static_cast<double>(aRect.GetWidth()) * 0.2835 );
-                                sal_Int32 nYControl = static_cast<sal_Int32>(static_cast<double>(aRect.GetHeight()) * 0.2835 );
-                                Point aCenter( aRect.Center() );
-
-                                // append start point
-                                aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.X(), aRect.Top()));
-
-                                // append four bezier segments
-                                aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Top()),
-                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y() - nYControl),
-                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y()));
-
-                                aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y() + nYControl),
-                                    basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Bottom()),
-                                    basegfx::B2DPoint(aCenter.X(), aRect.Bottom()));
-
-                                aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Bottom()),
-                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y() + nYControl),
-                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y()));
-
-                                aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y() - nYControl),
-                                    basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Top()),
-                                    basegfx::B2DPoint(aCenter.X(), aRect.Top()));
-
-                                // close, rescue last controlpoint, remove double last point
-                                basegfx::utils::closeWithGeometryChange(aNewB2DPolygon);
+                            {
+                                basegfx::B2DPoint aEllipseCenter(aRect.Center().X(),aRect.Center().Y());
+                                double fRadiusX(aRect.GetWidth()/2.0);
+                                double fRadiusY(aRect.GetHeight()/2.0);
+                                aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipse(aEllipseCenter,fRadiusX,fRadiusY, 3));
                             }
                         }
                         rSrcPt += 3;
