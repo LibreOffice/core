@@ -61,6 +61,7 @@ public:
     void testTdf120287b();
     void testTdf120287c();
     void testTdf116989();
+    void testTdf115094();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -94,6 +95,7 @@ public:
     CPPUNIT_TEST(testTdf120287b);
     CPPUNIT_TEST(testTdf120287c);
     CPPUNIT_TEST(testTdf116989);
+    CPPUNIT_TEST(testTdf115094);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2605,6 +2607,15 @@ void SwLayoutWriter::testTdf116989()
         CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
                                nTxtBottom <= nTblTop);
     }
+}
+
+void SwLayoutWriter::testTdf115094()
+{
+    createDoc("tdf115094.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/tab/row[1]/cell[4]/txt[2]/anchored/fly/infos/bounds","top", "3423");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/tab/row[2]/cell[2]/txt[1]/anchored/fly/infos/bounds", "top", "3315");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
