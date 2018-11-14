@@ -38,6 +38,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	cp $(INSTDIR)/program/types/oovbaapi.rdb    $(IOSRES)
 	cp $(INSTDIR)/program/services/services.rdb $(IOSRES)/services
 	cp $(INSTDIR)/program/services.rdb          $(IOSRES)
+	cp -R $(INSTDIR)/program/resource $(IOSRES)/program
 	mkdir -p $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
 	cp $(WORKDIR)/CustomTarget/i18npool/breakiterator/dict_*.data $(IOSRES)/share
@@ -59,6 +60,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/'            >> $(IOSRES)/fundamentalrc
 	echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR'             >> $(IOSRES)/fundamentalrc
 	echo 'BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)'          >> $(IOSRES)/fundamentalrc
+	echo 'BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' >> $(IOSRES)/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/registry ' \
 	     'res:$${BRAND_BASE_DIR}/registry' >> $(IOSRES)/fundamentalrc
 	echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb ' \
