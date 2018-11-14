@@ -1578,9 +1578,9 @@ vcl::Window *VclFrame::get_label_widget()
 
 const vcl::Window *VclFrame::get_child() const
 {
-    assert(GetChildCount() == 2);
     //The child widget is the normally the last (of two) children
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    assert(GetChildCount() == 2 || pWindowImpl->mbInDispose);
     if (!m_pLabel)
         return pWindowImpl->mpLastChild;
     if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //only label exists
@@ -1858,8 +1858,8 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl, ScrollBar*, void)
 
 const vcl::Window *VclScrolledWindow::get_child() const
 {
-    assert(GetChildCount() == 4);
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    assert(GetChildCount() == 4 || pWindowImpl->mbInDispose);
     return pWindowImpl->mpLastChild;
 }
 
