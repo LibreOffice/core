@@ -1752,6 +1752,8 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
 private:
+    // owner for UserData
+    std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<SvTreeListBox> m_xTreeView;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
@@ -1769,7 +1771,14 @@ public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
-        void* pUserData = pId ?  new OUString(*pId) : nullptr;
+        void* pUserData;
+        if (pId)
+        {
+            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+            pUserData = m_aUserData.back().get();
+        }
+        else
+            pUserData = nullptr;
 
         if (!pIconName && !pImageSurface)
             m_xTreeView->InsertEntry(rStr, nullptr, false, nInsertPos, pUserData);
@@ -1829,6 +1838,7 @@ public:
     virtual void clear() override
     {
         m_xTreeView->Clear();
+        m_aUserData.clear();
     }
 
     virtual int n_children() const override
@@ -2343,6 +2353,8 @@ template <class vcl_type>
 class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::ComboBox
 {
 protected:
+    // owner for ListBox/ComboBox UserData
+    std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<vcl_type> m_xComboBox;
 
 public:
@@ -2449,12 +2461,8 @@ public:
 
     virtual void clear() override
     {
-        for (int i = 0; i < get_count(); ++i)
-        {
-            const OUString* pId = getEntryData(i);
-            delete pId;
-        }
-        return m_xComboBox->Clear();
+        m_xComboBox->Clear();
+        m_aUserData.clear();
     }
 
     virtual void make_sorted() override
@@ -2465,11 +2473,6 @@ public:
     virtual bool get_popup_shown() const override
     {
         return m_xComboBox->IsInDropDown();
-    }
-
-    virtual ~SalInstanceComboBox() override
-    {
-        clear();
     }
 };
 
@@ -2506,7 +2509,10 @@ public:
         else
             nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
         if (pId)
-            m_xComboBox->SetEntryData(nInsertedAt, new OUString(*pId));
+        {
+            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+            m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
+        }
     }
 
     virtual void insert_separator(int pos) override
@@ -2609,7 +2615,10 @@ public:
         else
             nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
         if (pId)
-            m_xComboBox->SetEntryData(nInsertedAt, new OUString(*pId));
+        {
+            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+            m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
+        }
     }
 
     virtual void insert_separator(int pos) override

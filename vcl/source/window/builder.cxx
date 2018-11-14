@@ -3323,7 +3323,9 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
 
 /// Insert items to a ComboBox or a ListBox.
 /// They have no common ancestor that would have 'InsertEntry()', so use a template.
-template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap, const std::vector<ComboBoxTextItem> &rItems)
+template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap,
+                                             std::vector<std::unique_ptr<OUString>>& rUserData,
+                                             const std::vector<ComboBoxTextItem> &rItems)
 {
     T *pContainer = dynamic_cast<T*>(pWindow);
     if (!pContainer)
@@ -3334,7 +3336,10 @@ template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::s
     {
         sal_Int32 nPos = pContainer->InsertEntry(item.m_sItem);
         if (!item.m_sId.isEmpty())
-            pContainer->SetEntryData(nPos, new OUString(OUString::fromUtf8(item.m_sId)));
+        {
+            rUserData.emplace_back(o3tl::make_unique<OUString>(OUString::fromUtf8(item.m_sId)));
+            pContainer->SetEntryData(nPos, rUserData.back().get());
+        }
     }
     if (nActiveId < rItems.size())
         pContainer->SelectEntryPos(nActiveId);
@@ -3487,8 +3492,8 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     if (!aItems.empty())
     {
         // try to fill-in the items
-        if (!insertItems<ComboBox>(pCurrentChild, aProperties, aItems))
-            insertItems<ListBox>(pCurrentChild, aProperties, aItems);
+        if (!insertItems<ComboBox>(pCurrentChild, aProperties, m_aUserData, aItems))
+            insertItems<ListBox>(pCurrentChild, aProperties, m_aUserData, aItems);
     }
 
     return pCurrentChild;
@@ -3980,7 +3985,10 @@ void VclBuilder::mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt
             else
             {
                 if (!rRow[1].isEmpty())
-                    rTarget.SetEntryData(nEntry, new OUString(rRow[1]));
+                {
+                    m_aUserData.emplace_back(o3tl::make_unique<OUString>(rRow[1]));
+                    rTarget.SetEntryData(nEntry, m_aUserData.back().get());
+                }
             }
         }
     }
@@ -4004,7 +4012,10 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
             else
             {
                 if (!rRow[1].isEmpty())
-                    rTarget.SetEntryData(nEntry, new OUString(rRow[1]));
+                {
+                    m_aUserData.emplace_back(o3tl::make_unique<OUString>(rRow[1]));
+                    rTarget.SetEntryData(nEntry, m_aUserData.back().get());
+                }
             }
         }
     }
@@ -4028,7 +4039,10 @@ void VclBuilder::mungeModel(SvTreeListBox &rTarget, const ListStore &rStore, sal
             else
             {
                 if (!rRow[1].isEmpty())
-                    pEntry->SetUserData(new OUString(rRow[1]));
+                {
+                    m_aUserData.emplace_back(o3tl::make_unique<OUString>(rRow[1]));
+                    pEntry->SetUserData(m_aUserData.back().get());
+                }
             }
         }
     }
