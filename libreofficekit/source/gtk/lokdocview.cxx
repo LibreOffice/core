@@ -363,7 +363,7 @@ payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
 static const char*
 callbackTypeToString (int nType)
 {
-    switch (nType)
+    switch (static_cast<LibreOfficeKitCallbackType>(nType))
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
         return "LOK_CALLBACK_INVALIDATE_TILES";
@@ -439,6 +439,14 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_RULER_UPDATE";
     case LOK_CALLBACK_WINDOW:
         return "LOK_CALLBACK_WINDOW";
+    case LOK_CALLBACK_VALIDITY_LIST_BUTTON:
+        return "LOK_CALLBACK_VALIDITY_LIST_BUTTON";
+    case LOK_CALLBACK_CLIPBOARD_CHANGED:
+        return "LOK_CALLBACK_CLIPBOARD_CHANGED";
+    case LOK_CALLBACK_CONTEXT_CHANGED:
+        return "LOK_CALLBACK_CONTEXT_CHANGED";
+    case LOK_CALLBACK_SIGNATURE_STATUS:
+        return "LOK_CALLBACK_SIGNATURE_STATUS";
     }
     g_assert(false);
     return nullptr;
