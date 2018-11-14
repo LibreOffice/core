@@ -214,7 +214,7 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
     case SwFieldIds::SetExp:
             //JP 29.01.96: SequenceFields start at INIT_FLDTYPES - 3!!
             //             Or we get doubble number circles!!
-            //MIB 14.03.95: From now on also the SW3-Reader relies on &m_rDoc, when
+            //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
             //constructing string pools and when reading SetExp fields
             if( nsSwGetSetExpType::GSE_SEQ & static_cast<const SwSetExpFieldType&>(rFieldTyp).GetType() )
                 i -= INIT_SEQ_FLDTYPES;
@@ -301,7 +301,7 @@ SwFieldType* DocumentFieldsManager::GetFieldType(
     case SwFieldIds::SetExp:
             //JP 29.01.96: SequenceFields start at INIT_FLDTYPES - 3!!
             //             Or we get doubble number circles!!
-            //MIB 14.03.95: From now on also the SW3-Reader relies on &m_rDoc, when
+            //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
             //constructing string pools and when reading SetExp fields
         i = INIT_FLDTYPES - INIT_SEQ_FLDTYPES;
         break;
@@ -438,7 +438,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
 void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
 {
     // The FieldType was marked as deleted and removed from the array.
-    // One has to look &m_rDoc up again, now.
+    // One has to look this up again, now.
     // - If it's not present, it can be re-inserted.
     // - If the same type is found, the deleted one has to be renamed.
 
@@ -621,7 +621,7 @@ void DocumentFieldsManager::UpdateRefFields()
 void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 {
     OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
-            "What MessageItem is &m_rDoc?" );
+            "What MessageItem is this?" );
 
     SwFieldType* pFieldType(nullptr);
 
@@ -642,7 +642,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
                     if( pUpdateField )
                     {
-                        // table where &m_rDoc field is located
+                        // table where this field is located
                         const SwTableNode* pTableNd;
                         const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
                         if(!rTextNd.GetNodes().IsDocNodes())
@@ -663,7 +663,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                                 pField->ChgValid( false );
                             break;
                         case TBL_BOXNAME:
-                            // is &m_rDoc the wanted table?
+                            // is this the wanted table?
                             if( &pTableNd->GetTable() == pUpdateField->m_pTable )
                                 // to the external representation
                                 pField->PtrToBoxNm( pUpdateField->m_pTable );
@@ -675,7 +675,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                             pField->BoxNmToPtr( pUpdateField->m_pTable );
                             break;
                         case TBL_RELBOXNAME:
-                            // is &m_rDoc the wanted table?
+                            // is this the wanted table?
                             if( &pTableNd->GetTable() == pUpdateField->m_pTable )
                                 // to the relative representation
                                 pField->ToRelBoxNm( pUpdateField->m_pTable );
@@ -728,7 +728,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 // start calculation at the end
                 // new fields are inserted at the beginning of the modify chain
                 // that gives faster calculation on import
-                // mba: do we really need &m_rDoc "optimization"? Is it still valid?
+                // mba: do we really need this "optimization"? Is it still valid?
                 if (!pFormatField->GetTextField())
                     continue;
                 SwTableField *const pField(static_cast<SwTableField*>(pFormatField->GetField()));
@@ -738,7 +738,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 // needs to be recalculated
                 if( !pField->IsValid() )
                 {
-                    // table where &m_rDoc field is located
+                    // table where this field is located
                     const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
                     if( !rTextNd.GetNodes().IsDocNodes() )
                         continue;
@@ -746,7 +746,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     if( !pTableNd )
                         continue;
 
-                    // if &m_rDoc field is not in the to-be-updated table, skip it
+                    // if this field is not in the to-be-updated table, skip it
                     if( pHt && &pTableNd->GetTable() !=
                                             static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
                         continue;
@@ -1248,7 +1248,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
 
         pFormatField->ModifyNotification( nullptr, nullptr );        // trigger formatting
 
-        if( pUpdateField == pTextField )       // if only &m_rDoc one is updated
+        if (pUpdateField == pTextField) // if only this one is updated
         {
             if( SwFieldIds::GetExp == nWhich ||      // only GetField or
                 SwFieldIds::HiddenText == nWhich ||   // HiddenText?
@@ -1763,7 +1763,7 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     mpFieldTypes->push_back( new SwDropDownFieldType );
 
     // Types have to be at the end!
-    // We expect &m_rDoc in the InsertFieldType!
+    // We expect this in the InsertFieldType!
     // MIB 14.04.95: In Sw3StringPool::Setup (sw3imp.cxx) and
     //               lcl_sw3io_InSetExpField (sw3field.cxx) now also
     mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
