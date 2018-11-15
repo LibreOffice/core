@@ -7021,6 +7021,7 @@ include/svtools/asynclink.hxx
 include/svtools/autocmpledit.hxx
 include/svtools/bindablecontrolhelper.hxx
 include/svtools/borderhelper.hxx
+include/svtools/borderline.hxx
 include/svtools/breadcrumb.hxx
 include/svtools/brwbox.hxx
 include/svtools/brwhead.hxx
