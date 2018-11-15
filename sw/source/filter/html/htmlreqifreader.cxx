@@ -18,6 +18,8 @@
 #include <svtools/rtftoken.h>
 #include <tools/stream.hxx>
 #include <filter/msfilter/msdffimp.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <ndole.hxx>
 
 namespace
 {
@@ -132,6 +134,42 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
 
     return aClassName;
 }
+
+/// Writes rGraphic with size from rOLENode to rRtf as an RTF hexdump.
+void WrapOleGraphicInRtf(SvStream& rRtf, SwOLENode& rOLENode, const Graphic& rGraphic)
+{
+    // Start result.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
+
+    // Start pict.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
+
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_WMETAFILE "8");
+    Size aSize(rOLENode.GetTwipSize());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICW);
+    rRtf.WriteCharPtr(OString::number(aSize.getWidth()).getStr());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICH);
+    rRtf.WriteCharPtr(OString::number(aSize.getHeight()).getStr());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
+    rRtf.WriteCharPtr(OString::number(aSize.getWidth()).getStr());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
+    rRtf.WriteCharPtr(OString::number(aSize.getHeight()).getStr());
+    SvMemoryStream aGraphicStream;
+    if (GraphicConverter::Export(aGraphicStream, rGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
+    {
+        const sal_uInt8* pGraphicAry = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
+        sal_uInt64 nSize = aGraphicStream.TellEnd();
+        msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
+        rRtf.WriteCharPtr(SAL_NEWLINE_STRING);
+        msfilter::rtfutil::WriteHex(pGraphicAry, nSize, &rRtf);
+    }
+
+    // End pict.
+    rRtf.WriteCharPtr("}");
+
+    // End result.
+    rRtf.WriteCharPtr("}");
+}
 }
 
 namespace SwReqIfReader
@@ -177,7 +215,7 @@ bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat)
     return true;
 }
 
-bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
+bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
 {
     sal_uInt64 nPos = rOle2.Tell();
     comphelper::ScopeGuard g([&rOle2, nPos] { rOle2.Seek(nPos); });
@@ -196,6 +234,13 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
     // End objclass.
     rRtf.WriteCharPtr("}");
 
+    // Object size.
+    Size aSize(rOLENode.GetTwipSize());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJW);
+    rRtf.WriteCharPtr(OString::number(aSize.getWidth()).getStr());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJH);
+    rRtf.WriteCharPtr(OString::number(aSize.getHeight()).getStr());
+
     // Start objdata.
     rRtf.WriteCharPtr(
         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJDATA SAL_NEWLINE_STRING);
@@ -203,6 +248,10 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
                                 &rRtf);
     // End objdata.
     rRtf.WriteCharPtr("}");
+
+    if (const Graphic* pGraphic = rOLENode.GetGraphic())
+        WrapOleGraphicInRtf(rRtf, rOLENode, *pGraphic);
+
     // End object.
     rRtf.WriteCharPtr("}");
 
