@@ -161,7 +161,9 @@ ScThreadedInterpreterContextGetterGuard::GetInterpreterContextForThreadIdx(size_
 ScInterpreterContextGetterGuard::ScInterpreterContextGetterGuard(const ScDocument& rDoc,
                                                                  SvNumberFormatter* pFormatter)
     : rPool(ScInterpreterContextPool::aNonThreadedInterpreterPool)
+#if !defined NDEBUG
     , nContextIdx(rPool.mnNextFree)
+#endif
 {
     rPool.Init(rDoc, pFormatter);
 }

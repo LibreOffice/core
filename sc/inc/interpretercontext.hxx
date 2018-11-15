@@ -135,7 +135,9 @@ public:
 class ScInterpreterContextGetterGuard
 {
     ScInterpreterContextPool& rPool;
+#if !defined NDEBUG
     size_t nContextIdx;
+#endif
 
 public:
     ScInterpreterContextGetterGuard(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
