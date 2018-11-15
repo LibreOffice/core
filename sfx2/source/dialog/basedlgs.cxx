@@ -130,7 +130,7 @@ SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const 
     GetDialogData_Impl();
 }
 
-IMPL_LINK_NOARG(SfxModalDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(SfxModalDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
 {
     return SfxViewShell::Current();
 }
@@ -274,7 +274,7 @@ SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
     Init(pBindinx, pCW);
 }
 
-IMPL_LINK_NOARG(SfxModelessDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(SfxModelessDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
 {
     return SfxViewShell::Current();
 }
@@ -840,7 +840,7 @@ SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& 
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
 }
 
-IMPL_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
 {
     return SfxViewShell::Current();
 }

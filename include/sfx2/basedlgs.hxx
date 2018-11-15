@@ -55,7 +55,7 @@ private:
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();
-    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxModalDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
 protected:
     SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
@@ -86,7 +86,7 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
-    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxModelessDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
         vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
@@ -110,7 +110,7 @@ public:
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
 private:
-    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 public:
     SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
 };

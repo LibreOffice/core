@@ -55,7 +55,7 @@ public:
     void                    Suspend();
     bool                    IsSuspended() const { return bSuspended; }
 
-    void                    Reschedule();
+    static void             Reschedule();
 
     void                    Stop();
 

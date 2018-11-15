@@ -82,7 +82,7 @@ tools::Rectangle DeckTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBo
         rTitleBarBox.Bottom());
 }
 
-tools::Rectangle DeckTitleBar::GetDragArea() const
+tools::Rectangle DeckTitleBar::GetDragArea()
 {
     Image aGripImage (Theme::GetImage(Theme::Image_Grip));
     return tools::Rectangle(0,0,
