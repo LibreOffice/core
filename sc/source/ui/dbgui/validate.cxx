@@ -299,14 +299,13 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringLis
     @return  true = Conversion successful. */
 bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaStr, sal_Unicode cFmlaSep )
 {
-    OUString aQuotes( "\"\"" );
-    sal_Int32 nTokenCnt = ScStringUtil::GetQuotedTokenCount(rFmlaStr, aQuotes, cFmlaSep );
+    const OUString aQuotes( "\"\"" );
 
     rStringList.clear();
-    bool bIsStringList = (nTokenCnt > 0);
+    bool bIsStringList = !rFmlaStr.isEmpty();
     bool bTokenAdded = false;
 
-    for( sal_Int32 nToken = 0, nStringIx = 0; bIsStringList && (nToken < nTokenCnt); ++nToken )
+    for ( sal_Int32 nStringIx = 0; bIsStringList && nStringIx>=0; )
     {
         OUString aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
         aToken = comphelper::string::strip(aToken, ' ');

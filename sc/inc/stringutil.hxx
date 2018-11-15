@@ -151,7 +151,6 @@ public:
     static bool parseSimpleNumber(
         const char* p, size_t n, char dsep, char gsep, double& rVal);
 
-    static sal_Int32 SC_DLLPUBLIC GetQuotedTokenCount(const OUString &rIn, const OUString& rQuotedPairs, sal_Unicode cTok );
     static OUString  SC_DLLPUBLIC GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,
                                         sal_Unicode cTok,  sal_Int32& rIndex );
 
