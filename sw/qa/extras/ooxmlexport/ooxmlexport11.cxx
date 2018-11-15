@@ -747,6 +747,20 @@ DECLARE_OOXMLEXPORT_TEST(testChart_BorderLine_Style, "Chart_BorderLine_Style.doc
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash", "val", "dash");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot_BorderLine_Style.docx")
+{
+    /* DOCX containing Chart wall (plot area) and Chart Page with BorderLine Style as Dash Type
+     * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:prstDash", "val", "lgDashDot");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:prstDash", "val", "sysDash");
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedEmptyParagraph, "testTrackChangesDeletedEmptyParagraph.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
