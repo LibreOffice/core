@@ -1389,7 +1389,7 @@ tools::Rectangle SidebarController::GetDeckDragArea() const
 
         if(pTitleBar)
         {
-            aRect = pTitleBar->GetDragArea();
+            aRect = DeckTitleBar::GetDragArea();
         }
     }
 
