@@ -11,8 +11,6 @@
 #ifndef INCLUDED_INCLUDE_VCL_BITMAPCOLORQUANTIZATIONFILTER_HXX
 #define INCLUDED_INCLUDE_VCL_BITMAPCOLORQUANTIZATIONFILTER_HXX
 
-#include <tools/color.hxx>
-
 #include <vcl/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapColorQuantizationFilter : public BitmapFilter

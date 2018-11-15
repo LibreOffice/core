@@ -25,6 +25,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <tools/multisel.hxx>
 #include <tools/fract.hxx>

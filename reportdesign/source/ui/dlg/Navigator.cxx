@@ -41,6 +41,7 @@
 #include <comphelper/SelectionMultiplex.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/commandevent.hxx>
 #include <svl/solar.hrc>
 #include <ReportVisitor.hxx>
 #include <core_resource.hxx>

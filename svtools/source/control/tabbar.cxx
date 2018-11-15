@@ -29,6 +29,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 #include <svtaccessiblefactory.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>

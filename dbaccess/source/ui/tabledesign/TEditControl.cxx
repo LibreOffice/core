@@ -45,6 +45,7 @@
 #include <UITools.hxx>
 #include "TableFieldControl.hxx"
 #include <dsntypes.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <dbaccess_slotid.hrc>
 
