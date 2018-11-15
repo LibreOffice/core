@@ -21,6 +21,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <osl/diagnose.h>
 #include <svl/itemset.hxx>
 
 #include <dpoutput.hxx>
