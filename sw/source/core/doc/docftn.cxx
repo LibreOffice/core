@@ -36,6 +36,7 @@
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
+#include <o3tl/make_unique.hxx>
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {

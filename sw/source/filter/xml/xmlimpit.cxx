@@ -51,6 +51,7 @@
 #include <xmloff/xmlprhdl.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
+#include <osl/diagnose.h>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

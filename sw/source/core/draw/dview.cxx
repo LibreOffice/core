@@ -60,6 +60,7 @@
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 #include <UndoManager.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 

@@ -30,6 +30,7 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include <htmltbl.hxx>
+#include <osl/diagnose.h>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

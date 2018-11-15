@@ -45,6 +45,7 @@
 #include <dview.hxx>
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
+#include <o3tl/make_unique.hxx>
 
 struct SwUndoGroupObjImpl
 {

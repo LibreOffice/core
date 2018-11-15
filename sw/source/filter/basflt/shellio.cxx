@@ -59,6 +59,7 @@
 #include <swerror.h>
 #include <paratr.hxx>
 #include <pausethreadstarting.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 

@@ -27,6 +27,7 @@
 
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>
+#include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 
 #ifdef _WIN32

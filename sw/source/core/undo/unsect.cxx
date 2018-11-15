@@ -40,6 +40,7 @@
 /// OD 04.10.2002 #102894#
 /// class Calc needed for calculation of the hidden condition of a section.
 #include <calc.hxx>
+#include <o3tl/make_unique.hxx>
 
 static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
