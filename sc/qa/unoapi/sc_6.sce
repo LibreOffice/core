@@ -17,7 +17,6 @@
 #
 -o sc.ScIndexEnumeration_TableColumnsEnumeration
 -o sc.ScIndexEnumeration_TableConditionalEntryEnumeration
-# fdo#45337 -o sc.ScIndexEnumeration_TableRowsEnumeration
 -o sc.ScIndexEnumeration_TextFieldEnumeration
 -o sc.ScLabelRangesObj
 -o sc.ScModelObj
