@@ -1211,6 +1211,7 @@ void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 void SfxDocumentInfoDialog::AddFontTabPage()
 {
     AddTabPage( FONT_PAGE_ID, SfxResId( STR_FONT_TABPAGE ), SfxDocumentFontsPage::Create, nullptr);
+    SetPageName(FONT_PAGE_ID , "font");
 }
 
 // class CustomPropertiesYesNoButton -------------------------------------
