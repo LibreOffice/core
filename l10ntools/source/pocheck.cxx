@@ -90,7 +90,8 @@ static void checkStyleNames(const OString& aLanguage)
                 "\nSee STR_POOLNUMRULE_*\n\n";
         }
     }
-    aPoInput.open(aPoPath);
+    OString sPoHdrMsg;
+    aPoInput.open(aPoPath, sPoHdrMsg);
     if( !aPoInput.isOpen() )
     {
         std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
@@ -98,7 +99,7 @@ static void checkStyleNames(const OString& aLanguage)
     }
     PoOfstream aPoOutput;
     aPoOutput.open(aPoPath+".new");
-    PoHeader aTmp("sw/inc");
+    PoHeader aTmp("sw/inc", sPoHdrMsg);
     aPoOutput.writeHeader(aTmp);
     bool bAnyError = false;
 
