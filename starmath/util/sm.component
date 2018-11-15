@@ -42,7 +42,8 @@
       constructor="Math_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLOasisMetaImporter">
+  <implementation name="com.sun.star.comp.Math.XMLOasisMetaImporter"
+      constructor="Math_XMLOasisMetaImporter_get_implementation">
     <service name="com.sun.star.xml.XMLImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Math.XMLOasisSettingsExporter"
