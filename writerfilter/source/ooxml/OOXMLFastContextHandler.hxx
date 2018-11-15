@@ -147,7 +147,7 @@ public:
     void fieldSeparator();
     void endField();
     void lockField();
-    void ftnednref();
+    static void ftnednref();
     void ftnedncont();
     void ftnednsep();
     void pgNum();

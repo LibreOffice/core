@@ -103,7 +103,7 @@ private:
 
     RegError    deleteSubkeysAndValues(ORegKey* pKey);
 
-    RegError    loadAndSaveValue(ORegKey* pTargetKey,
+    static RegError loadAndSaveValue(ORegKey* pTargetKey,
                                  ORegKey const * pSourceKey,
                                  const OUString& valueName,
                                  sal_uInt32 nCut,

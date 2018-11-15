@@ -486,7 +486,7 @@ namespace fileaccess
 
         void insertDefaultProperties( const OUString& aUnqPath );
 
-        css::uno::Sequence< css::ucb::ContentInfo >
+        static css::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo();
 
 
@@ -614,7 +614,7 @@ namespace fileaccess
          *  osl::DirectoryItem::getFileStatus fills the required fields.
          */
 
-        void
+        static void
         getMaskFromProperties(
             sal_Int32& n_Mask,
             const css::uno::Sequence< css::beans::Property >& seq );

@@ -30,7 +30,7 @@ public:
 
 protected:
     ~XSheetCellRangeContainer() {}
-    css::uno::Sequence<com::sun::star::table::CellRangeAddress> createCellRangeAddresses();
+    static css::uno::Sequence<com::sun::star::table::CellRangeAddress> createCellRangeAddresses();
 };
 }
 

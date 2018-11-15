@@ -4758,9 +4758,9 @@ void HwpReader::makeShowPageNum()
  * mail merge operation using hwp addressbook and hwp data form.
  * not support operation in OO writer.
  */
-void HwpReader::makeMailMerge(MailMerge * hbox)
+void HwpReader::makeMailMerge(MailMerge *)
 {
-    hchar_string const boxstr = hbox->GetString();
+    hchar_string const boxstr = MailMerge::GetString();
     rchars(reinterpret_cast<sal_Unicode const *>(hconv(boxstr.c_str())));
 }
 

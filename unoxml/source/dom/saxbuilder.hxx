@@ -68,7 +68,7 @@ namespace DOM
         static css::uno::Reference< XInterface > _getInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr);
 
         explicit CSAXDocumentBuilder(const css::uno::Reference< css::lang::XMultiServiceFactory >& mgr);
-        void setElementFastAttributes(const css::uno::Reference< css::xml::dom::XElement >& aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs);
+        static void setElementFastAttributes(const css::uno::Reference< css::xml::dom::XElement >& aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs);
 
 
         // XServiceInfo

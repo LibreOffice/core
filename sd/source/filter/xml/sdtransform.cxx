@@ -57,12 +57,12 @@ public:
     void transformTextShape( SdrTextObj& rTextShape );
 
     bool getBulletState( const SfxItemSet& rSet, SfxStyleSheetBase* pSheet, bool& rState );
-    bool getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState );
+    static bool getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState );
 
     static bool transformItemSet( SfxItemSet& rSet, bool bNumbering );
 
-    bool removeAlienAttributes( SfxItemSet& rSet );
-    bool removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich );
+    static bool removeAlienAttributes( SfxItemSet& rSet );
+    static bool removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich );
 
     SdDrawDocument& mrDocument;
     SdrOutliner& mrOutliner;

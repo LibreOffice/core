@@ -479,7 +479,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
 
     // FIXME: until hyperlinks and font effects are adjusted for
     // geometrical search handle them before sorting
-    m_rProcessor.sortElements( &elem );
+    PDFIProcessor::sortElements( &elem );
 
     // find paragraphs in text
     ParagraphElement* pCurPara = nullptr;

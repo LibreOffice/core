@@ -550,7 +550,7 @@ BaseContent::removeProperty( const OUString& Name )
 Sequence< ContentInfo > SAL_CALL
 BaseContent::queryCreatableContentsInfo()
 {
-    return m_pMyShell->queryCreatableContentsInfo();
+    return TaskManager::queryCreatableContentsInfo();
 }
 
 

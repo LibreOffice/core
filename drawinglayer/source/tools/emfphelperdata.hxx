@@ -209,7 +209,7 @@ namespace emfplushelper
         // readers
         static void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
         static bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
-        ::basegfx::B2DPolyPolygon const combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon);
+        static ::basegfx::B2DPolyPolygon const combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon);
 
         static float getUnitToPixelMultiplier(const UnitType aUnitType);
     };

@@ -833,7 +833,7 @@ struct MailMerge: public HBox
     MailMerge();
 
     virtual bool Read(HWPFile &hwpf) override;
-    hchar_string GetString();
+    static hchar_string GetString();
 };
 
 // char composition(23)

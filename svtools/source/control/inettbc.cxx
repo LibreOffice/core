@@ -2104,6 +2104,7 @@ IMPL_LINK_NOARG(URLBox, ChangedHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(URLBox, FocusInHdl, weld::Widget&, void)
 {
+    (void)this; // loplugin:staticmethod
 #ifndef UNX
     // pb: don't select automatically on unix #93251#
     m_xWidget->select_entry_region(0, -1);

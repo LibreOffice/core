@@ -512,7 +512,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     // prepare animation information if needed
     if( mxAnimationsExporter.is() )
-        mxAnimationsExporter->prepare( xShape );
+        XMLAnimationsExporter::prepare( xShape );
 
     // check for special shapes
 

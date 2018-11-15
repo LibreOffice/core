@@ -36,7 +36,7 @@ public:
     XMLAnimationsExporter( XMLShapeExport* pShapeExp );
     virtual ~XMLAnimationsExporter() override;
 
-    void prepare( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static void prepare( const css::uno::Reference< css::drawing::XShape >& xShape );
     void collect( const css::uno::Reference< css::drawing::XShape >& xShape, SvXMLExport& rExport );
     void exportAnimations( SvXMLExport& rExport );
 };
