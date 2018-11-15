@@ -346,58 +346,6 @@ bool ScStringUtil::parseSimpleNumber(
     return true;
 }
 
-sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString& rQuotedPairs, sal_Unicode cTok )
-{
-    assert( !(rQuotedPairs.getLength()%2) );
-    assert( rQuotedPairs.indexOf(cTok) == -1 );
-
-    // empty string: TokenCount is 0 per definition
-    if ( rIn.isEmpty() )
-        return 0;
-
-    sal_Int32      nTokCount       = 1;
-    sal_Int32      nLen            = rIn.getLength();
-    sal_Int32      nQuotedLen      = rQuotedPairs.getLength();
-    sal_Unicode         cQuotedEndChar  = 0;
-    const sal_Unicode*  pQuotedStr      = rQuotedPairs.getStr();
-    const sal_Unicode*  pStr            = rIn.getStr();
-    sal_Int32       nIndex         = 0;
-    while ( nIndex < nLen )
-    {
-        sal_Unicode c = *pStr;
-        if ( cQuotedEndChar )
-        {
-            // reached end of the quote?
-            if ( c == cQuotedEndChar )
-                cQuotedEndChar = 0;
-        }
-        else
-        {
-            // Is the char a quote-begin char?
-            sal_Int32 nQuoteIndex = 0;
-            while ( nQuoteIndex < nQuotedLen )
-            {
-                if ( pQuotedStr[nQuoteIndex] == c )
-                {
-                    cQuotedEndChar = pQuotedStr[nQuoteIndex+1];
-                    break;
-                }
-                else
-                    nQuoteIndex += 2;
-            }
-
-            // If the token-char matches then increase TokCount
-            if ( c == cTok )
-                ++nTokCount;
-        }
-
-        ++pStr;
-        ++nIndex;
-    }
-
-    return nTokCount;
-}
-
 OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,
                                sal_Unicode cTok, sal_Int32& rIndex )
 {
