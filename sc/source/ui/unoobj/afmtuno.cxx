@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 #include <editeng/memberids.h>
+#include <osl/diagnose.h>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
