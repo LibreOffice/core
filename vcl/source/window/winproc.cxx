@@ -832,7 +832,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 
     pChild = pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
 
-    // no child - than no input
+    // no child - then no input
     if ( !pChild )
         return nullptr;
 

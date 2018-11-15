@@ -2549,7 +2549,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
     EnableInput( bEnable );
 
     // pExecuteWindow is the first Overlap-Frame --> if this
-    // shouldn't be the case, than this must be changed in dialog.cxx
+    // shouldn't be the case, then this must be changed in dialog.cxx
     if( pExcludeWindow )
         pExcludeWindow = pExcludeWindow->ImplGetFirstOverlapWindow();
     vcl::Window* pSysWin = mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mpFirstOverlap;
@@ -2559,7 +2559,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
         if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pSysWin, true ) )
         {
             // Is Window not in the exclude window path or not the
-            // exclude window, than change the status
+            // exclude window, then change the status
             if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pSysWin, true ) )
                 pSysWin->EnableInput( bEnable );
         }
@@ -2576,7 +2576,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
             if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pFrameWin, true ) )
             {
                 // Is Window not in the exclude window path or not the
-                // exclude window, than change the status
+                // exclude window, then change the status
                 if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, true ) )
                     pFrameWin->EnableInput( bEnable );
             }
@@ -2594,7 +2594,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
             if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( elem, true ) )
             {
                 // Is Window not in the exclude window path or not the
-                // exclude window, than change the status
+                // exclude window, then change the status
                 if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( elem, true ) )
                     elem->EnableInput( bEnable );
             }

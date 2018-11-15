@@ -208,7 +208,7 @@ void SigningTest::setUp()
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTargetPath, RTL_TEXTENCODING_UTF8).getStr(), ok);
     m_gpgconfCommandPrefix += "GNUPGHOME=" + path + " " GPGME_GPGCONF;
     // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
-    // behavior will conform to POSIX (and the relevant env var to setis named LD_LIBRARY_PATH), and
+    // behavior will conform to POSIX (and the relevant env var to set is named LD_LIBRARY_PATH), and
     // (b) gpgconf --create-socketdir should return zero:
     OString cmd = m_gpgconfCommandPrefix + " --create-socketdir";
     int res = std::system(cmd.getStr());
