@@ -576,37 +576,24 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
 {
     sal_Int32 nToken = 0;
-    int nCnt = 0;
-    do {
-        const OUString sToken = rStr.getToken( 0, ',', nToken );
-        if (!sToken.isEmpty())
-        {
-            switch( nCnt )
-            {
-            case 0:         // CharSet
-                eCharSet = CharSetFromName(sToken);
-                break;
-            case 1:         // LineEnd
-                if (sToken.equalsIgnoreAsciiCase("CRLF"))
-                    eCRLF_Flag = LINEEND_CRLF;
-                else if (sToken.equalsIgnoreAsciiCase("LF"))
-                    eCRLF_Flag = LINEEND_LF;
-                else
-                    eCRLF_Flag = LINEEND_CR;
-                break;
-            case 2:         // fontname
-                sFont = sToken;
-                break;
-            case 3:         // Language
-                nLanguage = LanguageTag::convertToLanguageTypeWithFallback( sToken );
-                break;
-            case 4:
-                bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
-                break;
-            }
-        }
-        ++nCnt;
-    } while( -1 != nToken );
+    OUString sToken = rStr.getToken(0, ',', nToken); // 1. Charset name
+    if (!sToken.isEmpty())
+        eCharSet = CharSetFromName(sToken);
+    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 2. Line ending type
+    {
+        if (sToken.equalsIgnoreAsciiCase("CRLF"))
+            eCRLF_Flag = LINEEND_CRLF;
+        else if (sToken.equalsIgnoreAsciiCase("LF"))
+            eCRLF_Flag = LINEEND_LF;
+        else
+            eCRLF_Flag = LINEEND_CR;
+    }
+    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 3. Font name
+        sFont = sToken;
+    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 4. Language tag
+        nLanguage = LanguageTag::convertToLanguageTypeWithFallback(sToken);
+    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 5. Include BOM?
+        bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
 }
 
 void SwAsciiOptions::WriteUserData(OUString& rStr)
