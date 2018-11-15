@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC HexColorControl
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
 
-    DECL_LINK(ImplProcessInputHdl, OUString&, bool);
+    DECL_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, bool);
 public:
     HexColorControl(std::unique_ptr<weld::Entry> pEdit);
 

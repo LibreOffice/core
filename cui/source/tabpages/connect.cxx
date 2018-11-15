@@ -415,7 +415,7 @@ void SvxConnectionPage::FillTypeLB()
     const sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
-        OUString aStr = pEdgeKindItem->GetValueTextByPos(i);
+        OUString aStr = SdrEdgeKindItem::GetValueTextByPos(i);
         m_xLbType->append_text(aStr);
     }
 }
