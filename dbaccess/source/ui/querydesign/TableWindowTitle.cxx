@@ -24,6 +24,7 @@
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 #include <stringconstants.hxx>
 #include <TableWindowListBox.hxx>
 #include <TableConnection.hxx>

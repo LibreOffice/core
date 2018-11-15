@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandevent.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 

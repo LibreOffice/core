@@ -38,6 +38,7 @@
 #include <vcl/vclptr.hxx>
 #include <tools/fract.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <vcl/dndhelp.hxx>
 #include <svl/ondemand.hxx>

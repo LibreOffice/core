@@ -20,13 +20,13 @@
 #ifndef INCLUDED_VCL_DOCKWIN_HXX
 #define INCLUDED_VCL_DOCKWIN_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
-#include <o3tl/deleter.hxx>
 #include <memory>
 #include <vector>
+
+namespace o3tl { template <typename T> struct default_delete; }
 
 // data to be sent with docking events
 struct DockingData

@@ -30,6 +30,7 @@
 
 #include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/commandevent.hxx>
 #include <tools/svborder.hxx>
 #include <sal/log.hxx>
 

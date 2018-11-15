@@ -11,8 +11,6 @@
 #ifndef INCLUDED_INCLUDE_VCL_BITMAPMONOCHROMEFILTER_HXX
 #define INCLUDED_INCLUDE_VCL_BITMAPMONOCHROMEFILTER_HXX
 
-#include <tools/color.hxx>
-
 #include <vcl/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapMonochromeFilter : public BitmapFilter

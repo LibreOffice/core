@@ -20,6 +20,7 @@
 
 #include <comphelper/xmlsechelper.hxx>
 
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/solar.hrc>

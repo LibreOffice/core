@@ -21,14 +21,12 @@
 #define INCLUDED_VCL_CTRL_HXX
 
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <memory>
 
 // forward
-namespace vcl { struct ImplControlData; struct ControlLayoutData; }
+namespace vcl { struct ImplControlData; }
 class StyleSettings;
 
 
