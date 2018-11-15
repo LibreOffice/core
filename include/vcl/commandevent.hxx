@@ -24,9 +24,9 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/keycod.hxx>
-#include <vcl/font.hxx>
+#include <vcl/keycodes.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustring.hxx>
 
 class CommandExtTextInputData;
 class CommandWheelData;

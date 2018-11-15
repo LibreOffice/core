@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <vcl/commandevent.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>

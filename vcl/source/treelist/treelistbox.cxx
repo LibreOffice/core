@@ -30,6 +30,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

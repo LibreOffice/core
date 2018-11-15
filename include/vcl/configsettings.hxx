@@ -20,11 +20,12 @@
 #define INCLUDED_VCL_CONFIGSETTINGS_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/configitem.hxx>
 #include <vcl/dllapi.h>
 
 #include <unordered_map>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 namespace vcl
 {

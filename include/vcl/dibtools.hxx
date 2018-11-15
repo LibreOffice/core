@@ -20,9 +20,6 @@
 #define INCLUDED_VCL_DIBTOOLS_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/mapmod.hxx>
-#include <vcl/region.hxx>
-#include <vcl/alpha.hxx>
 #include <vcl/salbtype.hxx>
 
 // predefines
@@ -30,6 +27,7 @@
 class SvStream;
 class BitmapEx;
 class Bitmap;
+class AlphaMask;
 
 // - Compression defines
 

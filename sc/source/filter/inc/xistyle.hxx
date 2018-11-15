@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 
+#include <tools/solar.h>
 #include <vector>
 #include <memory>
 #include <rangelst.hxx>

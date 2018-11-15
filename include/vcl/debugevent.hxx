@@ -15,7 +15,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <sal/types.h>
-#include <vcl/window.hxx>
+
+namespace vcl { class Window; }
 
 class VCL_DLLPUBLIC DebugEventInjector : private Timer {
   sal_uInt32 mnEventsLeft;

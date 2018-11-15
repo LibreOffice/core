@@ -23,8 +23,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vector>
-
 
 namespace vcl {
 

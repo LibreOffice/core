@@ -21,6 +21,7 @@
 #include <cassert>
 
 #include <osl/diagnose.h>
+#include <tools/solar.h>
 #include <xlstyle.hxx>
 #include <xestyle.hxx>
 #include <xestream.hxx>

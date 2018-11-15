@@ -21,6 +21,7 @@
 
 #include "pam.hxx"
 #include <i18nlangtag/lang.h>
+#include <vcl/commandevent.hxx>
 #include <vector>
 
 class CommandExtTextInputData;

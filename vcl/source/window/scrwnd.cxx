@@ -26,6 +26,7 @@
 #include <scrwnd.hxx>
 
 #include <vcl/timer.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 

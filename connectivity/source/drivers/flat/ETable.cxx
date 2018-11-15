@@ -28,6 +28,7 @@
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <tools/solar.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>

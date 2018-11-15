@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/spinfld.hxx>

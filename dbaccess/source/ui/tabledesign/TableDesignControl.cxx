@@ -24,6 +24,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/builder.hxx>
+#include <vcl/commandevent.hxx>
 #include <helpids.h>
 
 using namespace ::dbaui;
