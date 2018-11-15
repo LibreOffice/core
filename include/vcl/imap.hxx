@@ -23,6 +23,7 @@
 #include <vcl/imapobj.hxx>
 #include <vcl/dllapi.h>
 #include <tools/stream.hxx>
+#include <tools/solar.h>
 #include <memory>
 #include <vector>
 

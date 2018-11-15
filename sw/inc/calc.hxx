@@ -25,6 +25,7 @@
 #include <basic/sbxvar.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/solar.h>
 #include "swdllapi.h"
 
 class CharClass;

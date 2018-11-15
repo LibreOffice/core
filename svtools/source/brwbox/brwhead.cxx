@@ -20,6 +20,7 @@
 
 #include <svtools/brwhead.hxx>
 #include <svtools/brwbox.hxx>
+#include <vcl/commandevent.hxx>
 
 
 BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )

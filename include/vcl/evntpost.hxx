@@ -20,7 +20,6 @@
 #define INCLUDED_VCL_EVNTPOST_HXX
 
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 struct ImplSVEvent;

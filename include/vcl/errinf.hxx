@@ -30,12 +30,10 @@
 
 #include <limits.h>
 
-namespace vcl { class Window; }
 namespace weld { class Window; }
 
 class ErrorHandler;
 class ErrorContext;
-class ErrorStringFactory;
 class ErrorInfo;
 class DynamicErrorInfo;
 class ImplDynamicErrorInfo;

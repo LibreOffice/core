@@ -25,6 +25,7 @@
 #include <set>
 #include <memory>
 #include <vector>
+#include <tools/solar.h>
 
 class SfxPoolItem;
 class SwTextNode;

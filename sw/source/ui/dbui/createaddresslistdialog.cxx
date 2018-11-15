@@ -28,6 +28,7 @@
 #include <mmconfigitem.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandevent.hxx>
 #include <svtools/controldims.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>

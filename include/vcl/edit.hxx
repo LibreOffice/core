@@ -22,7 +22,6 @@
 
 #include <vcl/ctrl.hxx>
 
-#include <functional>
 #include <memory>
 
 #include <o3tl/deleter.hxx>

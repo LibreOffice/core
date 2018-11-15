@@ -22,6 +22,7 @@
 
 #include <resltn.hxx>
 #include <tools/color.hxx>
+#include <tools/solar.h>
 #include <vcl/errinf.hxx>
 
 #include "htmlpublishmode.hxx"

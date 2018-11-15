@@ -23,7 +23,6 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 #define BITMAP_CHECKSUM_SIZE 8

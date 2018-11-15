@@ -19,6 +19,7 @@
 
 #include <svtools/scrwin.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 
 
 ScrollableWindow::ScrollableWindow( vcl::Window* pParent ) :

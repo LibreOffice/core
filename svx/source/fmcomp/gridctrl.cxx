@@ -46,6 +46,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <svx/strings.hrc>
 

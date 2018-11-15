@@ -31,6 +31,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <svtools/framestatuslistener.hxx>
 #include <svtools/valueset.hxx>

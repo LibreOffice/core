@@ -22,7 +22,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
 namespace vcl { namespace CommandInfoProvider {
 

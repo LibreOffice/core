@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/weld.hxx>

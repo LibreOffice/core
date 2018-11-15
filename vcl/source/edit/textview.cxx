@@ -27,6 +27,7 @@
 #include <vcl/textdata.hxx>
 #include <vcl/xtextedt.hxx>
 #include "textdat2.hxx"
+#include <vcl/commandevent.hxx>
 
 #include <svl/undo.hxx>
 #include <vcl/cursor.hxx>

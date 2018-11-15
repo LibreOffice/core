@@ -14,16 +14,16 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>
-#include <tools/stream.hxx>
 #if ENABLE_CAIRO_CANVAS
 #include <vcl/cairo.hxx>
 #endif
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
-#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <o3tl/safeint.hxx>
 #include <array>
+
+class SvStream;
+namespace basegfx { class B2DHomMatrix; }
+namespace com { namespace sun { namespace star { namespace geometry { struct IntegerRectangle2D; } } } }
 
 namespace vcl {
 namespace bitmap {

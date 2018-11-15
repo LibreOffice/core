@@ -14,6 +14,7 @@
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <tools/gen.hxx>
 #include <svx/ruler.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/pointr.hxx>
