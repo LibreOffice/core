@@ -196,6 +196,9 @@ void SigningTest::setUp()
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
 
 #if HAVE_GPGCONF_SOCKETDIR
+    auto const ldPath = std::getenv("LIBO_LD_PATH");
+    m_gpgconfCommandPrefix
+        = ldPath == nullptr ? OString() : OStringLiteral("LD_LIBRARY_PATH=") + ldPath + " ";
     OString path;
     bool ok = aTargetPath.convertToString(&path, osl_getThreadTextEncoding(),
                                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
@@ -203,9 +206,10 @@ void SigningTest::setUp()
     // if conversion fails, at least provide a best-effort conversion in the message here, for
     // context
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTargetPath, RTL_TEXTENCODING_UTF8).getStr(), ok);
-    m_gpgconfCommandPrefix = "GNUPGHOME=" + path + " " GPGME_GPGCONF;
+    m_gpgconfCommandPrefix += "GNUPGHOME=" + path + " " GPGME_GPGCONF;
     // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
-    // behavior will conform to POSIX, and (b) gpgconf --create-socketdir should return zero:
+    // behavior will conform to POSIX (and the relevant env var to setis named LD_LIBRARY_PATH), and
+    // (b) gpgconf --create-socketdir should return zero:
     OString cmd = m_gpgconfCommandPrefix + " --create-socketdir";
     int res = std::system(cmd.getStr());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
