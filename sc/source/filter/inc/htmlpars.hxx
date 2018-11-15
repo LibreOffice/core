@@ -601,7 +601,7 @@ private:
     /** Closes the current table, regardless on opening tag. */
     void                CloseTable( const HtmlImportInfo& rInfo );
 
-    void                ParseStyle(const OUString& rStrm);
+    static void         ParseStyle(const OUString& rStrm);
 
     DECL_LINK( HTMLImportHdl, HtmlImportInfo&, void );
 

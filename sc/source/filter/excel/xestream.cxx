@@ -462,7 +462,7 @@ XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
     Sequence< NamedValue > aEncryptionData = rRoot.GetEncryptionData();
     if( !aEncryptionData.hasElements() )
         // Empty password.  Get the default biff8 password.
-        aEncryptionData = rRoot.GenerateDefaultEncryptionData();
+        aEncryptionData = XclExpRoot::GenerateDefaultEncryptionData();
     Init( aEncryptionData );
 }
 

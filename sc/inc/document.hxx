@@ -284,10 +284,10 @@ struct ScDocumentThreadSpecific
     }
 
     // To be called in the thread at start
-    void SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData);
+    static void SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData);
 
     // To be called in the main thread after the thread has finished
-    void MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData);
+    static void MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData);
 };
 
 /// Enumeration to determine which pieces of the code should not be mutated when set.
@@ -588,7 +588,7 @@ public:
     {
         return IsThreadedGroupCalcInProgress() ? *maThreadSpecific.pContext : GetNonThreadedContext();
     }
-    void SetupFromNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
+    static void SetupFromNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
     void MergeBackIntoNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
     void SetThreadedGroupCalcInProgress( bool set ) { (void)this; ScGlobal::bThreadedGroupCalcInProgress = set; }
     bool IsThreadedGroupCalcInProgress() const { (void)this; return ScGlobal::bThreadedGroupCalcInProgress; }

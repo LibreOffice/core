@@ -4072,7 +4072,7 @@ void ScXMLExport::WriteExternalDataMapping()
         {
             AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, itr.getURL());
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_PROVIDER, itr.getProvider());
-            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATA_FREQUENCY, OUString::number(itr.getUpdateFrequency()));
+            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATA_FREQUENCY, OUString::number(sc::ExternalDataSource::getUpdateFrequency()));
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_ID, itr.getID());
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATABASE_NAME, itr.getDBName());
 
