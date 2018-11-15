@@ -27,6 +27,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 
 #include <htmlimp.hxx>

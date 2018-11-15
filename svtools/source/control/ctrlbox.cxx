@@ -33,6 +33,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/fontoptions.hxx>
 
+#include <svtools/borderline.hxx>
 #include <svtools/sampletext.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>

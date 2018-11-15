@@ -30,6 +30,7 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
+#include <o3tl/make_unique.hxx>
 
 bool SwEditShell::IsGlobalDoc() const
 {

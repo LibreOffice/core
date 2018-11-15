@@ -32,9 +32,9 @@
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
-#include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
+class BorderWidthImpl;
 class FontList;
 class ImpLineListData;
 enum class SvxBorderLineStyle : sal_Int16;
@@ -130,58 +130,6 @@ See also
 FontList; FontNameBox; FontStyleBox; FontSizeMenu
 
 *************************************************************************/
-
-/**
-    Class computing border widths shared between Line style listbox and the
-    SvxBorderLine implementation.
-
-    This class doesn't know anything about units: it all depends on the different
-    values set. A border is composed of 2 lines separated by a gap. The computed
-    widths are the ones of each line and the gap and they can either be fix or vary.
-
-    The #m_nflags member will define which widths will vary (value 0 means that all
-    widths are fixed). The available flags are:
-     - CHANGE_LINE1
-     - CHANGE_LINE2
-     - CHANGE_DIST
-
-    For each line, the rate member is used as a multiplication factor is the width
-    isn't fixed. Otherwise it is the width in the unit expected by the client code.
- */
-enum class BorderWidthImplFlags
-{
-    FIXED           = 0,
-    CHANGE_LINE1    = 1,
-    CHANGE_LINE2    = 2,
-    CHANGE_DIST     = 4,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<BorderWidthImplFlags> : is_typed_flags<BorderWidthImplFlags, 0x07> {};
-}
-class SVT_DLLPUBLIC BorderWidthImpl
-{
-    BorderWidthImplFlags m_nFlags;
-    double m_nRate1;
-    double m_nRate2;
-    double m_nRateGap;
-
-public:
-
-    BorderWidthImpl( BorderWidthImplFlags nFlags = BorderWidthImplFlags::CHANGE_LINE1, double nRate1 = 0.0,
-            double nRate2 = 0.0, double nRateGap = 0.0 );
-
-    bool operator== ( const BorderWidthImpl& r ) const;
-
-    long GetLine1 ( long nWidth ) const;
-    long GetLine2( long nWidth ) const;
-    long GetGap( long nWidth ) const;
-
-    long GuessWidth( long nLine1, long nLine2, long nGap );
-
-    bool IsEmpty( ) const { return (0 == m_nRate1) && (0 == m_nRate2); }
-    bool IsDouble( ) const { return (0 != m_nRate1) && (0 != m_nRate2);  }
-};
 
 inline Color sameColor( Color rMain )
 {

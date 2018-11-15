@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
+#include <osl/diagnose.h>
 
 #include <frmmgr.hxx>
 #include <frmfmt.hxx>

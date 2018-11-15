@@ -66,6 +66,7 @@
 #include "htmlatr.hxx"
 #include "htmlfly.hxx"
 #include "htmlreqifreader.hxx"
+#include <o3tl/make_unique.hxx>
 
 using namespace css;
 

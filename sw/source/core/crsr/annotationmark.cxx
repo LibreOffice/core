@@ -31,6 +31,7 @@
 #include <UndoBookmark.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace sw { namespace mark
 {

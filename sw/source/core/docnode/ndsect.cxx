@@ -58,6 +58,7 @@
 #include <hints.hxx>
 #include <memory>
 #include "ndsect.hxx"
+#include <o3tl/make_unique.hxx>
 #include <tools/datetimeutils.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTableBox(..)>.

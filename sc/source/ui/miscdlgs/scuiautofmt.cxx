@@ -32,6 +32,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/zforlist.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/strings.hrc>
