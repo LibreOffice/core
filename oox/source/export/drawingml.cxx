@@ -671,15 +671,26 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                         aAny >>= aLineDash;
                     }
                 }
-                bDashSet = true;
-                if (aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE)
-                {
-                    cap = "rnd";
-                }
-
-                SAL_INFO("oox.shape", "dash dots: " << aLineDash.Dots << " dashes: " << aLineDash.Dashes
-                        << " dotlen: " << aLineDash.DotLen << " dashlen: " << aLineDash.DashLen <<  " distance: " <<  aLineDash.Distance);
             }
+            else
+            {
+                //export the linestyle of chart wall (plot area) and chart page
+                OUString aLineDashName;
+                GET(aLineDashName, LineDashName);
+                if (!aLineDashName.isEmpty() && xModel) {
+                    css::uno::Any aAny = getLineDash(xModel, aLineDashName);
+                    aAny >>= aLineDash;
+                }
+            }
+            bDashSet = true;
+            if (aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE)
+            {
+                cap = "rnd";
+            }
+
+            SAL_INFO("oox.shape", "dash dots: " << aLineDash.Dots << " dashes: " << aLineDash.Dashes
+                    << " dotlen: " << aLineDash.DotLen << " dashlen: " << aLineDash.DashLen << " distance: " <<  aLineDash.Distance);
+
             SAL_FALLTHROUGH;
         case drawing::LineStyle_SOLID:
         default:
