@@ -1546,30 +1546,34 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
     if (pParent && pParent->GetType() == WindowType::TABCONTROL)
     {
-        //We have to add a page
-
-        //make default pageid == position
-        TabControl *pTabControl = static_cast<TabControl*>(pParent);
-        sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
-        sal_uInt16 nNewPageId = nNewPageCount;
-        pTabControl->InsertPage(nNewPageId, OUString());
-        pTabControl->SetCurPageId(nNewPageId);
-        SAL_WARN_IF(bIsPlaceHolder, "vcl.layout", "we should have no placeholders for tabpages");
-        if (!bIsPlaceHolder)
+        bool bTopLevel(name == "GtkDialog" || name == "GtkMessageDialog" ||
+                       name == "GtkWindow" || name == "GtkPopover");
+        if (!bTopLevel)
         {
-            VclPtrInstance<TabPage> pPage(pTabControl);
-            pPage->Show();
+            //We have to add a page
+            //make default pageid == position
+            TabControl *pTabControl = static_cast<TabControl*>(pParent);
+            sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
+            sal_uInt16 nNewPageId = nNewPageCount;
+            pTabControl->InsertPage(nNewPageId, OUString());
+            pTabControl->SetCurPageId(nNewPageId);
+            SAL_WARN_IF(bIsPlaceHolder, "vcl.layout", "we should have no placeholders for tabpages");
+            if (!bIsPlaceHolder)
+            {
+                VclPtrInstance<TabPage> pPage(pTabControl);
+                pPage->Show();
 
-            //Make up a name for it
-            OString sTabPageId = get_by_window(pParent) +
-                OString("-page") +
-                OString::number(nNewPageCount);
-            m_aChildren.emplace_back(sTabPageId, pPage, false);
-            pPage->SetHelpId(m_sHelpRoot + sTabPageId);
+                //Make up a name for it
+                OString sTabPageId = get_by_window(pParent) +
+                    OString("-page") +
+                    OString::number(nNewPageCount);
+                m_aChildren.emplace_back(sTabPageId, pPage, false);
+                pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
-            pParent = pPage;
+                pParent = pPage;
 
-            pTabControl->SetTabPage(nNewPageId, pPage);
+                pTabControl->SetTabPage(nNewPageId, pPage);
+            }
         }
     }
 
