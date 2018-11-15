@@ -314,31 +314,31 @@ MouseSettings::GetStartDragHeight() const
 }
 
 sal_uInt16
-MouseSettings::GetStartDragCode() const
+MouseSettings::GetStartDragCode()
 {
     return MOUSE_LEFT;
 }
 
 sal_uInt16
-MouseSettings::GetContextMenuCode() const
+MouseSettings::GetContextMenuCode()
 {
     return MOUSE_RIGHT;
 }
 
 sal_uInt16
-MouseSettings::GetContextMenuClicks() const
+MouseSettings::GetContextMenuClicks()
 {
     return 1;
 }
 
 sal_uLong
-MouseSettings::GetScrollRepeat() const
+MouseSettings::GetScrollRepeat()
 {
     return 100;
 }
 
 sal_uLong
-MouseSettings::GetButtonStartRepeat() const
+MouseSettings::GetButtonStartRepeat()
 {
     return 370;
 }
@@ -357,7 +357,7 @@ MouseSettings::GetButtonRepeat() const
 }
 
 sal_uLong
-MouseSettings::GetActionDelay() const
+MouseSettings::GetActionDelay()
 {
     return 250;
 }
@@ -1666,7 +1666,7 @@ StyleSettings::GetTabFont() const
 }
 
 long
-StyleSettings::GetBorderSize() const
+StyleSettings::GetBorderSize()
 {
     return 1;
 }
@@ -1737,7 +1737,7 @@ StyleSettings::GetSpinSize() const
 }
 
 long
-StyleSettings::GetSplitSize() const
+StyleSettings::GetSplitSize()
 {
     return 3;
 }
@@ -1951,13 +1951,13 @@ StyleSettings::GetColorValueSetColumnCount() const
 }
 
 sal_uInt16
-StyleSettings::GetColorValueSetMaximumRowCount() const
+StyleSettings::GetColorValueSetMaximumRowCount()
 {
     return 10;
 }
 
 sal_uInt16
-StyleSettings::GetListBoxPreviewDefaultLineWidth() const
+StyleSettings::GetListBoxPreviewDefaultLineWidth()
 {
     return 1;
 }
@@ -2517,7 +2517,7 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 }
 
 sal_uLong
-HelpSettings::GetTipDelay() const
+HelpSettings::GetTipDelay()
 {
     return 500;
 }
@@ -2540,7 +2540,7 @@ HelpSettings::GetTipTimeout() const
 }
 
 sal_uLong
-HelpSettings::GetBalloonDelay() const
+HelpSettings::GetBalloonDelay()
 {
     return 1500;
 }
@@ -2985,13 +2985,6 @@ const HelpSettings&
 AllSettings::GetHelpSettings() const
 {
     return mxData->maHelpSettings;
-}
-
-AllSettingsFlags
-AllSettings::GetWindowUpdate() const
-{
-    return AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
-           AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
 }
 
 bool

@@ -143,7 +143,7 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile)
 {
-    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+    return SalInstance::CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
@@ -314,14 +314,14 @@ namespace weld
         m_xSpinButton->set_width_chars(chars);
     }
 
-    tools::Time TimeSpinButton::ConvertValue(int nValue) const
+    tools::Time TimeSpinButton::ConvertValue(int nValue)
     {
         tools::Time aTime(0);
         aTime.MakeTimeFromMS(nValue);
         return aTime;
     }
 
-    int TimeSpinButton::ConvertValue(const tools::Time& rTime) const
+    int TimeSpinButton::ConvertValue(const tools::Time& rTime)
     {
         return rTime.GetMSFromTime();
     }

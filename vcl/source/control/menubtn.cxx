@@ -158,7 +158,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
                 mpMenuTimer->SetInvokeHandler( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
             }
 
-            mpMenuTimer->SetTimeout( GetSettings().GetMouseSettings().GetActionDelay() );
+            mpMenuTimer->SetTimeout( MouseSettings::GetActionDelay() );
             mpMenuTimer->Start();
 
             PushButton::MouseButtonDown( rMEvt );
