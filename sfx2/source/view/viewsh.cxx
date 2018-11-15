@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1495,8 +1495,17 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
 
 void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
 {
+    LanguageTag aTag = LanguageTag(rBcp47LanguageTag, true);
+
     css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
-    maLOKLanguageTag = LanguageTag(getInstalledLocaleForSystemUILanguage(inst, /* bRequestInstallIfMissing */ false, rBcp47LanguageTag), true).makeFallback();
+    LanguageTag aFallbackTag = LanguageTag(getInstalledLocaleForSystemUILanguage(inst, /* bRequestInstallIfMissing */ false, rBcp47LanguageTag), true).makeFallback();
+
+    // If we want de-CH, and the de localisation is available, we don't want to use de-DE as then
+    // the magic in Translate::get() won't turn ess-zet into double s. Possibly other similar cases?
+    if (comphelper::LibreOfficeKit::isActive() && aTag.getLanguage() == aFallbackTag.getLanguage())
+        maLOKLanguageTag = aTag;
+    else
+        maLOKLanguageTag = aFallbackTag;
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
