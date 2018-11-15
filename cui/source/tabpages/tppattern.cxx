@@ -178,16 +178,17 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 
         XFillBitmapItem aItem( rSet.Get( XATTR_FILLBITMAP ) );
 
-        sal_Int32 nPos( 0 );
         if ( aItem.isPattern() )
         {
-            nPos = SearchPatternList( aItem.GetName() );
-            if ( nPos == LISTBOX_ENTRY_NOTFOUND )
-                nPos = 0;
+            sal_Int32 nPos = SearchPatternList( aItem.GetName() );
+            if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            {
+                sal_uInt16 nId = m_xPatternLB->GetItemId( static_cast<size_t>( nPos ) );
+                m_xPatternLB->SelectItem( nId );
+            }
         }
-
-        sal_uInt16 nId = m_xPatternLB->GetItemId( static_cast<size_t>( nPos ) );
-        m_xPatternLB->SelectItem( nId );
+        else
+            m_xPatternLB->SelectItem( m_xPatternLB->GetItemId( static_cast<size_t>( 0 ) ) );
     }
 }
 
