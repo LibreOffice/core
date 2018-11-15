@@ -88,7 +88,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FontPrevWindow : public weld::CustomWidgetCo
 private:
     std::unique_ptr<FontPrevWin_Impl> pImpl;
 
-    SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext);
+    SVX_DLLPRIVATE static void ApplySettings(vcl::RenderContext& rRenderContext);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     SVX_DLLPRIVATE static void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE static void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
