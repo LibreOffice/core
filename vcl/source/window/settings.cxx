@@ -92,7 +92,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     }
 
     AllSettings aOldSettings(*mxSettings);
-    AllSettingsFlags nChangeFlags = mxSettings->Update( mxSettings->GetWindowUpdate(), rSettings );
+    AllSettingsFlags nChangeFlags = mxSettings->Update( AllSettings::GetWindowUpdate(), rSettings );
 
     // recalculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();

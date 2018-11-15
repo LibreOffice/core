@@ -1084,7 +1084,7 @@ void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
         if ( ImplScroll( rPos ) && mbSelection )
         {
             maTimer.SetInvokeHandler( LINK( this, ValueSet, ImplTimerHdl ) );
-            maTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
+            maTimer.SetTimeout( MouseSettings::GetScrollRepeat() );
             maTimer.Start();
         }
     }

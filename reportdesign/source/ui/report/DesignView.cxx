@@ -231,7 +231,7 @@ void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
         if ( m_aSplitWin->IsItemValid(TASKPANE_ID) )
         {
             // normalize the split pos
-            const long nSplitterWidth = GetSettings().GetStyleSettings().GetSplitSize();
+            const long nSplitterWidth = StyleSettings::GetSplitSize();
             Point aTaskPanePos(nSplitPos + nSplitterWidth, _rPlayground.Top());
             if (m_pTaskPane && m_pTaskPane->IsVisible() && m_pPropWin)
             {

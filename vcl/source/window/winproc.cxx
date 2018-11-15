@@ -448,7 +448,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             // change immediately to the copy mode
             const MouseSettings& rMSettings = pMouseDownWin->GetSettings().GetMouseSettings();
             if ( (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
-                 (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) )
+                 (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) )
             {
                 if ( !pMouseDownWin->ImplGetFrameData()->mbStartDragCalled )
                 {
@@ -586,7 +586,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                     pChild->ImplGetFrameData()->mnFirstMouseY      = nMouseY;
                     pChild->ImplGetFrameData()->mnFirstMouseCode   = nCode;
                     pChild->ImplGetFrameData()->mbStartDragCalled  = (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
-                                                                     (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE));
+                                                                     (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE));
                 }
                 pChild->ImplGetFrameData()->mnMouseDownTime = nMsgTime;
             }
@@ -763,9 +763,8 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         else
         {
             // ContextMenu
-            const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
-            if ( (nCode == rMSettings.GetContextMenuCode()) &&
-                 (nClicks == rMSettings.GetContextMenuClicks()) )
+            if ( (nCode == MouseSettings::GetContextMenuCode()) &&
+                 (nClicks == MouseSettings::GetContextMenuClicks()) )
             {
                 bool bContextMenu = (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN);
                 if ( bContextMenu )

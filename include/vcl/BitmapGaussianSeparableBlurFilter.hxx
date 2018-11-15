@@ -36,9 +36,9 @@ public:
 private:
     double const mfRadius;
 
-    bool convolutionPass(Bitmap& rBitmap, Bitmap& aNewBitmap, BitmapReadAccess const* pReadAcc,
-                         int aNumberOfContributions, const double* pWeights, int const* pPixels,
-                         const int* pCount) const;
+    static bool convolutionPass(Bitmap& rBitmap, Bitmap& aNewBitmap,
+                                BitmapReadAccess const* pReadAcc, int aNumberOfContributions,
+                                const double* pWeights, int const* pPixels, const int* pCount);
 
     static std::vector<double> makeBlurKernel(const double radius, int& rows);
     static void blurContributions(const int aSize, const int aNumberOfContributions,
