@@ -250,6 +250,18 @@ namespace weld
         m_xSpinButton->set_digits(digits);
         set_increments(step, page, m_eSrcUnit);
         set_value(value, m_eSrcUnit);
+        update_width_chars();
+    }
+
+    void MetricSpinButton::set_unit(FieldUnit eUnit)
+    {
+        int step, page;
+        get_increments(step, page, m_eSrcUnit);
+        int value = get_value(m_eSrcUnit);
+        m_eSrcUnit = eUnit;
+        set_increments(step, page, m_eSrcUnit);
+        set_value(value, m_eSrcUnit);
+        update_width_chars();
     }
 
     int MetricSpinButton::ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
