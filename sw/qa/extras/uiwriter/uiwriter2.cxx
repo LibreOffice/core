@@ -19,7 +19,6 @@
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <redline.hxx>
-#include <ndtxt.hxx>
 
 namespace
 {
