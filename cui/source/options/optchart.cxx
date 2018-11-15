@@ -267,7 +267,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor, Button*, void)
     {
         Color const black( 0x00, 0x00, 0x00 );
 
-        pColorConfig->GetColorList().append (XColorEntry ( black, pColorConfig->GetColorList().getDefaultName(pColorConfig->GetColorList().size())));
+        pColorConfig->GetColorList().append (XColorEntry ( black, SvxChartColorTable::getDefaultName(pColorConfig->GetColorList().size())));
 
         FillBoxChartColorLB();
 

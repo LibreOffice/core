@@ -94,18 +94,18 @@ private:
     void dump( sal_uInt32 nLen, bool bNewLine = true );
 #endif
 
-    void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
-    void dump_atom( const Atom* pAtom, bool bNewLine = true );
-    void dump_target( css::uno::Any& rAny );
-    void dump( css::uno::Any& rAny );
-    void dump( const PropertySet& rSet );
-    void dump( const AnimationNode& rNode );
-    void dump( const char * pText );
-    void dump( const char * pText, sal_Int32 nInt );
+    static void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
+    static void dump_atom( const Atom* pAtom, bool bNewLine = true );
+    static void dump_target( css::uno::Any& rAny );
+    static void dump( css::uno::Any& rAny );
+    static void dump( const PropertySet& rSet );
+    static void dump( const AnimationNode& rNode );
+    static void dump( const char * pText );
+    static void dump( const char * pText, sal_Int32 nInt );
     void dump( const char * pText, sal_Int64 nInt );
-    void dump( const char * pText, double fDouble );
-    void dump( const char * pText, const char * pText2 );
-    void dump( const char * pText, const OUString& rString );
+    static void dump( const char * pText, double fDouble );
+    static void dump( const char * pText, const char * pText2 );
+    static void dump( const char * pText, const OUString& rString );
 };
 
 } // namespace ppt

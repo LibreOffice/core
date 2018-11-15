@@ -84,7 +84,7 @@ private:
 
     // tdf#115529 check and evtl. correct value, it is in 10th
     // degrees and *has* to be in the range [0 .. 3600[
-    sal_Int16 checkAndCorrectValue(sal_Int16 nValue);
+    static sal_Int16 checkAndCorrectValue(sal_Int16 nValue);
 
 public:
     SwRotationGrf()

@@ -135,12 +135,12 @@ private:
 
         void updateSlots();
 
-        X509Certificate_NssImpl* createAndAddCertificateFromPackage(
+        static X509Certificate_NssImpl* createAndAddCertificateFromPackage(
                                     const css::uno::Sequence<sal_Int8>& raDerCertificate,
                                     OUString const & raString);
-        SECKEYPrivateKey* insertPrivateKey(css::uno::Sequence<sal_Int8> const & raPrivateKey);
+        static SECKEYPrivateKey* insertPrivateKey(css::uno::Sequence<sal_Int8> const & raPrivateKey);
 
-        X509Certificate_NssImpl* createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& raDerCertificate);
+        static X509Certificate_NssImpl* createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& raDerCertificate);
 
           /// @throws css::uno::Exception
           /// @throws css::uno::RuntimeException

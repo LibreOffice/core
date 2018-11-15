@@ -554,7 +554,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     if( bDirect && !pEntry->m_bDirect )
         bDirect = false;
 
-    StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
+    StgDirEntry* p = StgDirStrm::Find( *pEntry, rName );
     if( !p )
     {
         if( !( m & StreamMode::NOCREATE ) )
@@ -605,7 +605,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
 {
     if( !Validate() || !ValidateMode( m ) )
         return new StorageStream( pIo, nullptr, m );
-    StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
+    StgDirEntry* p = StgDirStrm::Find( *pEntry, rName );
     bool bTemp = false;
     if( !p )
     {
@@ -650,7 +650,7 @@ void Storage::Remove( const OUString& rName )
 {
     if( !Validate( true ) )
         return;
-    StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
+    StgDirEntry* p = StgDirStrm::Find( *pEntry, rName );
     if( p )
     {
         p->Invalidate( true );
@@ -667,7 +667,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
 {
     if( !Validate() || !pDest || !pDest->Validate( true ) )
         return false;
-    StgDirEntry* pElem = pIo->m_pTOC->Find( *pEntry, rElem );
+    StgDirEntry* pElem = StgDirStrm::Find( *pEntry, rElem );
     if( pElem )
     {
         if( pElem->m_aEntry.GetType() == STG_STORAGE )
@@ -755,7 +755,7 @@ bool Storage::IsStorage( const OUString& rName ) const
 {
     if( Validate() )
     {
-        StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
+        StgDirEntry* p = StgDirStrm::Find( *pEntry, rName );
         if( p )
             return p->m_aEntry.GetType() == STG_STORAGE;
     }
@@ -766,7 +766,7 @@ bool Storage::IsStream( const OUString& rName ) const
 {
     if( Validate() )
     {
-        StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
+        StgDirEntry* p = StgDirStrm::Find( *pEntry, rName );
         if( p )
             return p->m_aEntry.GetType() == STG_STREAM;
     }
@@ -776,7 +776,7 @@ bool Storage::IsStream( const OUString& rName ) const
 bool Storage::IsContained( const OUString& rName ) const
 {
     if( Validate() )
-        return pIo->m_pTOC->Find( *pEntry, rName ) != nullptr;
+        return StgDirStrm::Find( *pEntry, rName ) != nullptr;
     else
         return false;
 }

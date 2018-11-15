@@ -41,7 +41,7 @@ DetailsContainer::DetailsContainer(PlaceEditDialog* pDialog)
 }
 
 //format without thousand separator
-IMPL_LINK(DetailsContainer, FormatPortHdl, weld::SpinButton&, rSpinButton, void)
+IMPL_STATIC_LINK(DetailsContainer, FormatPortHdl, weld::SpinButton&, rSpinButton, void)
 {
     rSpinButton.set_text(OUString::number(rSpinButton.get_value()));
 }

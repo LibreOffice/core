@@ -83,9 +83,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (isInUnoIncludeFile(pCXXMethodDecl)) {
         return true;
     }
-    if ( pCXXMethodDecl != pCXXMethodDecl->getCanonicalDecl() ) {
+    if (pCXXMethodDecl->getTemplateSpecializationKind() == TSK_ExplicitSpecialization)
         return true;
-    }
 
     // the CppUnit stuff uses macros and methods that can't be changed
     if (isDerivedFromTestFixture(pCXXMethodDecl->getParent())) {

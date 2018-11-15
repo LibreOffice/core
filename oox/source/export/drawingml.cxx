@@ -2173,7 +2173,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     }
 }
 
-bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape ) const
+bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape )
 {
     bool bRet = false;
     if ( rXShape.is() )

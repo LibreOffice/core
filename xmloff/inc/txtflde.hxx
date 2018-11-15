@@ -203,10 +203,10 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
     static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(const OUString& sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
-    enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const css::uno::Reference< css::beans::XPropertySet> & xPropSet,
+    static enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const css::uno::Reference< css::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset
-    enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
-    enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
+    static enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
+    static enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
 
 private:
 
@@ -376,26 +376,26 @@ private:
     GetMasterPropertySet(const css::uno::Reference < css::text::XTextField > & rTextField);
 
     /// get PropertySet of (any) DependentTextField for this FieldMaster
-    bool GetDependentFieldPropertySet(
+    static bool GetDependentFieldPropertySet(
         const css::uno::Reference< css::beans::XPropertySet> & xmaster,
         css::uno::Reference< css::beans::XPropertySet> & xField);
 
 
     /// get field ID from XTextField (and it's Property-Set)
-    enum FieldIdEnum GetFieldID(const css::uno::Reference < css::text::XTextField > & rTextField,
+    static enum FieldIdEnum GetFieldID(const css::uno::Reference < css::text::XTextField > & rTextField,
                           const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
     /// get field ID from XTextField service name (and it's PropertySet)
-    enum FieldIdEnum MapFieldName(const OUString& sFieldName,
+    static enum FieldIdEnum MapFieldName(const OUString& sFieldName,
                             const css::uno::Reference < css::beans::XPropertySet> & xPropSet);
 
     /// determine, whether field has string or numeric content
-    bool IsStringField(FieldIdEnum nFieldType,  /// field ID
+    static bool IsStringField(FieldIdEnum nFieldType,  /// field ID
                            const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
 
     /// explode a field master name into field type and field name
-    void ExplodeFieldMasterName(
+    static void ExplodeFieldMasterName(
         const OUString& sMasterName, /// name as returned by SO API
         OUString& sFieldType,        /// out: field type
         OUString& sVarName);         /// out: variable name

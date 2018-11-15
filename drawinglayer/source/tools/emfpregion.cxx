@@ -60,7 +60,7 @@ namespace emfplushelper
         {
             ::basegfx::B2DPolyPolygon leftPolygon = ReadRegionNode(s, rR);
             ::basegfx::B2DPolyPolygon rightPolygon = ReadRegionNode(s, rR);
-            polygon = rR.combineClip(leftPolygon, dataType, rightPolygon);
+            polygon = EmfPlusHelperData::combineClip(leftPolygon, dataType, rightPolygon);
             break;
         }
         case RegionNodeDataTypeRect:

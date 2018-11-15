@@ -271,7 +271,7 @@ public:
          getOrCreateChartRootShape( const css::uno::Reference<
             css::drawing::XDrawPage>& xPage );
 
-    void setPageSize(const css::uno::Reference<css::drawing::XShapes>& xChartShapes,
+    static void setPageSize(const css::uno::Reference<css::drawing::XShapes>& xChartShapes,
                      const css::awt::Size& rSize);
 
     static css::uno::Reference< css::drawing::XShapes >

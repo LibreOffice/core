@@ -2508,7 +2508,7 @@ void ChartView::createShapes()
     {
         OSL_FAIL("could not set page size correctly");
     }
-    pShapeFactory->setPageSize(mxRootShape, aPageSize);
+    ShapeFactory::setPageSize(mxRootShape, aPageSize);
 
     createShapes2D(aPageSize);
 

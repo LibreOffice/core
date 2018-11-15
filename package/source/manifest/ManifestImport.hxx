@@ -91,12 +91,8 @@ private:
     void doKeyDerivation(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
     void doStartKeyAlg(StringHashMap &rConvertedAttribs);
-    void doKeyInfoEntry(StringHashMap &);
     void doEncryptedKey(StringHashMap &);
     void doEncryptionMethod(StringHashMap &, const OUString &);
-    void doEncryptedKeyInfo(StringHashMap &);
-    void doEncryptedCipherData(StringHashMap &);
-    void doEncryptedPgpData(StringHashMap &);
     void doEncryptedCipherValue();
     void doEncryptedKeyId();
     void doEncryptedKeyPacket();

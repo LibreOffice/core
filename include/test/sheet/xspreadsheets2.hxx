@@ -49,7 +49,7 @@ private:
     css::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&, css::uno::Reference< css::lang::XComponent >&);
     static css::uno::Reference< css::sheet::XNamedRanges> getNamedRanges(css::uno::Reference< css::sheet::XSpreadsheetDocument > const &);
     void importSheetToCopy();
-    bool isExternalReference(const OUString& aDestContent, const OUString& aSrcContent );
+    static bool isExternalReference(const OUString& aDestContent, const OUString& aSrcContent );
 
     css::uno::Reference< css::sheet::XSpreadsheetDocument> xDestDoc;
     css::uno::Reference< css::sheet::XSpreadsheet > xDestSheet;

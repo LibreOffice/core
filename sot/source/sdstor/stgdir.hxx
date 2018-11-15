@@ -96,7 +96,7 @@ public:
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool );// get an entry
     StgDirEntry* GetRoot() { return m_pRoot; }
-    StgDirEntry* Find( StgDirEntry&, const OUString& );
+    static StgDirEntry* Find( StgDirEntry&, const OUString& );
     StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
 };
 
