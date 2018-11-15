@@ -43,6 +43,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

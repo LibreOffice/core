@@ -26,6 +26,7 @@
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
+#include <tools/solar.h>
 #include <ucbhelper/interactionrequest.hxx>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>

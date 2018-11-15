@@ -21,11 +21,9 @@
 #define INCLUDED_VCL_DIALOG_HXX
 
 #include <memory>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/IDialogRenderable.hxx>
 #include <vcl/abstdlg.hxx>
 
 struct DialogImpl;

@@ -22,6 +22,7 @@
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/commandevent.hxx>
 #include <set>
 
 class VCL_DLLPUBLIC VclContainer : public vcl::Window,

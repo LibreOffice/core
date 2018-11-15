@@ -36,6 +36,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandevent.hxx>
 #include <algorithm>
 
 #define USER_PACKAGE_MANAGER    "user"

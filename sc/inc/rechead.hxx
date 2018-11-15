@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_RECHEAD_HXX
 #define INCLUDED_SC_INC_RECHEAD_HXX
 
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <memory>
 

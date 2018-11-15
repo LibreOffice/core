@@ -55,6 +55,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/profilezone.hxx>

@@ -25,7 +25,6 @@
 #include <vcl/salctype.hxx>
 
 
-struct  ConvertData;
 class   Graphic;
 
 class VCL_DLLPUBLIC GraphicConverter

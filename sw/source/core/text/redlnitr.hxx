@@ -25,6 +25,8 @@
 
 #include <swfont.hxx>
 
+#include <vcl/commandevent.hxx>
+
 #include <cstddef>
 #include <memory>
 #include <vector>

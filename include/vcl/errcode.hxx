@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_ERRCODE_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <ostream>
 

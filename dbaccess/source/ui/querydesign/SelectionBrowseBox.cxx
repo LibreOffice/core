@@ -42,6 +42,7 @@
 #include <UITools.hxx>
 #include <osl/diagnose.h>
 #include <vcl/treelistentry.hxx>
+#include <vcl/commandevent.hxx>
 
 using namespace ::svt;
 using namespace ::dbaui;

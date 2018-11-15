@@ -55,6 +55,7 @@
 
 #include <connectivity/dbtools.hxx>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/lineinfo.hxx>
 #include <ColorChanger.hxx>
 

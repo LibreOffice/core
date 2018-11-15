@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
@@ -31,11 +30,6 @@
 class Point;
 class Size;
 namespace tools { class Rectangle; }
-namespace tools {
-    class Polygon;
-    class PolyPolygon;
-}
-class Bitmap;
 class BitmapEx;
 class Color;
 
@@ -58,11 +52,11 @@ namespace com { namespace sun { namespace star { namespace geometry
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
-    class  XGraphicDevice;
     class  XBitmap;
-    class  XIntegerBitmap;
     class  XIntegerReadOnlyBitmap;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace rendering { class XColorSpace; } } } }
 
 namespace vcl
 {

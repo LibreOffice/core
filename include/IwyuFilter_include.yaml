@@ -301,4 +301,15 @@ blacklist:
     # Needed for macros
     - vcl/builder.hxx
     - vcl/vclptr.hxx
-
+    include/vcl/devicecoordinate.hxx:
+    # Needed for #if configure switch
+    - basegfx/point/b2ipoint.hxx
+    include/vcl/errinf.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/vcl/edit.hxx:
+    # Needed for template
+    - o3tl/deleter.hxx
+    include/vcl/event.hxx:
+    # Needed for enum type 
+    - vcl/window.hxx

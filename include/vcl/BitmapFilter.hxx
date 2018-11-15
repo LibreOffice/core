@@ -12,7 +12,7 @@
 #define INCLUDED_VCL_BITMAPFILTER_HXX
 
 #include <vcl/bitmapex.hxx>
-#include <vcl/animate.hxx>
+class Animation;
 
 class VCL_DLLPUBLIC BitmapFilter
 {

@@ -16,6 +16,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontshelper.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
 
 #include <fontsubset.hxx>
 #include <outdev.h>

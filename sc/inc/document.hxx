@@ -40,6 +40,7 @@
 #include <svl/typedwhich.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/gen.hxx>
+#include <tools/solar.h>
 
 #include <cassert>
 #include <memory>

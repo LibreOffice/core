@@ -24,6 +24,7 @@
 #include <vcl/controllayout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 
 using namespace ::com::sun::star::accessibility;
 
