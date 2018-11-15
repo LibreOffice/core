@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_bf472bbd",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9763,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-15T22:48:02Z",
+      "side": 1,
+      "message": "To me it doesn\u0027t make sense to repeat the function definition here.",
+      "range": {
+        "startLine": 9760,
+        "startChar": 0,
+        "endLine": 9763,
+        "endChar": 125
+      },
+      "revId": "99624661367a9cf517ed6ba3ea66dbc258abaaa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5f2f0ff6",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9782,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-15T22:48:02Z",
+      "side": 1,
+      "message": "Should be\n\n const ScLookupCache\u0026 rCache, const ScLookupCache::QueryCriteria\u0026 rCriteria, ...",
+      "range": {
+        "startLine": 9782,
+        "startChar": 48,
+        "endLine": 9782,
+        "endChar": 110
+      },
+      "revId": "99624661367a9cf517ed6ba3ea66dbc258abaaa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_bff28b99",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9796,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-15T22:48:02Z",
+      "side": 1,
+      "message": "0 can be a valid row result. This ScLookupCache::lookup() returns -1 if not found, the not-found conditions above should return -1 as well.",
+      "revId": "99624661367a9cf517ed6ba3ea66dbc258abaaa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9f4467b9",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9829,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-15T22:48:02Z",
+      "side": 1,
+      "message": "Should be \u003e\u003d 0 then.",
+      "range": {
+        "startLine": 9829,
+        "startChar": 45,
+        "endLine": 9829,
+        "endChar": 48
+      },
+      "revId": "99624661367a9cf517ed6ba3ea66dbc258abaaa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7f13f3b9",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9836,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-15T22:48:02Z",
+      "side": 1,
+      "message": "Why do another lookup if lcl_getPrevRowWithEmptyValueLookup() already returned a valid row? This should just set o_rResultPos and eCacheResult.",
+      "range": {
+        "startLine": 9836,
+        "startChar": 0,
+        "endLine": 9836,
+        "endChar": 82
+      },
+      "revId": "99624661367a9cf517ed6ba3ea66dbc258abaaa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_bf204bf9",
+        "filename": "sc/source/core/tool/lookupcache.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-15T22:48:02Z",
+      "side": 1,
+      "message": "I think instead of having that fuzzy handling in ScInterpreter::LookupQueryWithCache() and here iterating through the entire map for each empty lookup and if successful doing yet another lookup(ScAddress\u0026,...) in ScInterpreter::LookupQueryWithCache(), the result address for an empty lookup should be stored (in insert() below) as a separate element not in this map but a dedicated \"empty query\" map that can be immediately returned in the already existing lookup() function if rCriteria.isEmptyStringQuery().",
+      "revId": "99624661367a9cf517ed6ba3ea66dbc258abaaa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
