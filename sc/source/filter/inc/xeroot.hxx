@@ -177,7 +177,7 @@ public:
 
     static css::uno::Sequence< css::beans::NamedValue > GenerateEncryptionData( const OUString& aPass );
     css::uno::Sequence< css::beans::NamedValue > GetEncryptionData() const;
-    css::uno::Sequence< css::beans::NamedValue > GenerateDefaultEncryptionData() const;
+    static css::uno::Sequence< css::beans::NamedValue > GenerateDefaultEncryptionData();
 
 private:
 

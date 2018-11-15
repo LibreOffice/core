@@ -4660,8 +4660,8 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
             virtual void doWork() override
             {
-                auto aNonThreadedData = mpDocument->CalculateInColumnInThread(*mpContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
-                aNonThreadedData.MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
+                mpDocument->CalculateInColumnInThread(*mpContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
+                ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }
 
         };
@@ -4688,7 +4688,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             for (int i = 0; i < nThreadCount; ++i)
             {
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
-                pDocument->SetupFromNonThreadedContext(*context, i);
+                ScDocument::SetupFromNonThreadedContext(*context, i);
                 rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, context, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 

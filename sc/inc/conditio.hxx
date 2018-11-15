@@ -323,7 +323,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     bool                bFirstRun;
     std::unique_ptr<ScFormulaListener> mpListener;
 
-    void    SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& rFormula,
+    static void SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& rFormula,
                                      double& rVal,
                                      bool& rIsStr,
                                      OUString& rStrVal );

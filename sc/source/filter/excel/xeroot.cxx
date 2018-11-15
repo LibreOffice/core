@@ -354,7 +354,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
     return aEncryptionData;
 }
 
-uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData() const
+uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData()
 {
     return GenerateEncryptionData( GetDefaultPassword() );
 }

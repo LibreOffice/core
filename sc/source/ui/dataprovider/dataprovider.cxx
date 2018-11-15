@@ -137,7 +137,7 @@ void ExternalDataSource::setDBData(const OUString& rDBName)
     }
 }
 
-double ExternalDataSource::getUpdateFrequency() const
+double ExternalDataSource::getUpdateFrequency()
 {
     return 0;
 }

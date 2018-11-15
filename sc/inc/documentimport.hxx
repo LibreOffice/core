@@ -133,7 +133,7 @@ public:
 
 private:
     void initColumn(ScColumn& rCol);
-    void broadcastRecalcAfterImportColumn(ScColumn& rCol);
+    static void broadcastRecalcAfterImportColumn(ScColumn& rCol);
 };
 
 #endif
