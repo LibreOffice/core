@@ -2035,7 +2035,7 @@ long Window::CalcTitleWidth() const
         long nTitleWidth = GetTextWidth( GetText() );
         const_cast<vcl::Window*>(this)->SetFont( aFont );
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
-        nTitleWidth += rStyleSettings.GetBorderSize() * 2;
+        nTitleWidth += StyleSettings::GetBorderSize() * 2;
         nTitleWidth += 10;
         return nTitleWidth;
     }

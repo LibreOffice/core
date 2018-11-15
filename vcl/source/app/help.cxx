@@ -427,11 +427,10 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
             nTimeout = 15;
         else
         {
-            const HelpSettings& rHelpSettings = GetSettings().GetHelpSettings();
             if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
-                nTimeout = rHelpSettings.GetTipDelay();
+                nTimeout = HelpSettings::GetTipDelay();
             else
-                nTimeout = rHelpSettings.GetBalloonDelay();
+                nTimeout = HelpSettings::GetBalloonDelay();
         }
 
         if ( nDelayMode == HELPDELAY_SHORT )
@@ -540,7 +539,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         return;
 
     sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
-    if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+    if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < HelpSettings::GetTipDelay() )
         ||  ( nStyle & QuickHelpFlags::NoDelay )
         )
         nDelayMode = HELPDELAY_NONE;

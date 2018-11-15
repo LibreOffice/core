@@ -84,7 +84,7 @@ protected:
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
     // Takes ownership of pHbFace.
-    hb_font_t* InitHbFont(hb_face_t* pHbFace) const;
+    static hb_font_t* InitHbFont(hb_face_t* pHbFace);
     virtual hb_font_t* ImplInitHbFont() { assert(false); return nullptr; }
     inline void ReleaseHbFont();
 

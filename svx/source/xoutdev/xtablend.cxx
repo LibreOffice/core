@@ -100,7 +100,7 @@ BitmapEx XLineEndList::CreateBitmapForUI( long nIndex )
 
         // prepare LineAttribute
         const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
-        const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * 1.1);
+        const double fLineWidth(StyleSettings::GetListBoxPreviewDefaultLineWidth() * 1.1);
         const drawinglayer::attribute::LineAttribute aLineAttribute(
             aLineColor,
             fLineWidth);

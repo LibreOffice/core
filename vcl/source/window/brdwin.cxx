@@ -1289,7 +1289,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     else if ( pData->mnTitleType == BorderWindowTitleType::Tearoff )
         pData->mnBorderSize = 0;
     else
-        pData->mnBorderSize = rStyleSettings.GetBorderSize();
+        pData->mnBorderSize = StyleSettings::GetBorderSize();
     pData->mnLeftBorder     = aCalcRect.Left();
     pData->mnTopBorder      = aCalcRect.Top();
     pData->mnRightBorder    = aRect.Right()-aCalcRect.Right();
