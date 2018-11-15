@@ -410,10 +410,16 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     if( xParser.is() )
     {
         Reference< XPropertySet > xParserProps( xParser, uno::UNO_QUERY );
-        if( xParserProps.is() )
-        {
-            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(css::sheet::AddressConvention::OOO) );
-        }
+        // rRange is the result of a
+        // css::chart2::data::XDataSequence::getSourceRangeRepresentation()
+        // call that returns the range in the document's current UI notation.
+        // Creating a FormulaParser defaults to the same notation, for
+        // parseFormula() do not attempt to override the FormulaConvention
+        // property with css::sheet::AddressConvention::OOO or some such.
+        /* TODO: it would be much better to introduce a
+         * getSourceRangeRepresentation(css::sheet::AddressConvention) to
+         * return the ranges in a specific convention than converting them with
+         * the overhead of creating an XFormulaParser for each.. */
         uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {
