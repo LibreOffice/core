@@ -30,7 +30,6 @@
 #include <fmtcntnt.hxx>
 #include <fmtcnct.hxx>
 #include <ndole.hxx>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <fmtanchr.hxx>
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
@@ -41,6 +40,8 @@
 #include <textboxhelper.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <o3tl/make_unique.hxx>
+#include <com/sun/star/embed/EmbedStates.hpp>
 
 using namespace ::com::sun::star;
 

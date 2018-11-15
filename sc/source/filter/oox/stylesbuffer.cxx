@@ -57,6 +57,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>

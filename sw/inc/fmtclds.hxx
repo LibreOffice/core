@@ -21,6 +21,7 @@
 
 #include <editeng/borderline.hxx>
 #include <tools/color.hxx>
+#include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "hintids.hxx"
