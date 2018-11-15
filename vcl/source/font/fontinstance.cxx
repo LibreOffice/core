@@ -65,7 +65,7 @@ LogicalFontInstance::~LogicalFontInstance()
         hb_font_destroy(m_pHbFont);
 }
 
-hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace) const
+hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace)
 {
     assert(pHbFace);
     hb_font_t* pHbFont = hb_font_create(pHbFace);

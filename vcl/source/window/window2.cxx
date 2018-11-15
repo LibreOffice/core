@@ -261,9 +261,9 @@ void Window::StartTracking( StartTrackingFlags nFlags )
         pSVData->maWinData.mpTrackTimer = new AutoTimer;
 
         if ( nFlags & StartTrackingFlags::ScrollRepeat )
-            pSVData->maWinData.mpTrackTimer->SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
+            pSVData->maWinData.mpTrackTimer->SetTimeout( MouseSettings::GetScrollRepeat() );
         else
-            pSVData->maWinData.mpTrackTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
+            pSVData->maWinData.mpTrackTimer->SetTimeout( MouseSettings::GetButtonStartRepeat() );
         pSVData->maWinData.mpTrackTimer->SetInvokeHandler( LINK( this, Window, ImplTrackTimerHdl ) );
         pSVData->maWinData.mpTrackTimer->SetDebugName( "vcl::Window pSVData->maWinData.mpTrackTimer" );
         pSVData->maWinData.mpTrackTimer->Start();

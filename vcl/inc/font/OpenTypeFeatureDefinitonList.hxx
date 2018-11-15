@@ -31,7 +31,7 @@ private:
     void init();
 
     static bool isSpecialFeatureCode(sal_uInt32 nFeatureCode);
-    FeatureDefinition handleSpecialFeatureCode(sal_uInt32 nFeatureCode);
+    static FeatureDefinition handleSpecialFeatureCode(sal_uInt32 nFeatureCode);
 
 public:
     OpenTypeFeatureDefinitonListPrivate();
