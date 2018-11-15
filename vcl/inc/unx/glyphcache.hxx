@@ -70,7 +70,7 @@ public:
     void                    ClearFontOptions();
 
 private:
-    void                    InitFreetype();
+    static void             InitFreetype();
     void                    GarbageCollect();
     FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
 
