@@ -20,6 +20,7 @@
 
 #include "datwin.hxx"
 #include <o3tl/numeric.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>

@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 

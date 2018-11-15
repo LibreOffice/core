@@ -29,6 +29,7 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <sdresid.hxx>
 #include <strings.hrc>

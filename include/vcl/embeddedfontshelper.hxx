@@ -12,11 +12,12 @@
 
 #include <vcl/dllapi.h>
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 /**
  Helper functions for handling embedded fonts in documents.

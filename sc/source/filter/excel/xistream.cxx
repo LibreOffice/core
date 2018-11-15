@@ -22,6 +22,7 @@
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/solar.h>
 #include <ftools.hxx>
 #include <xistream.hxx>
 #include <xlstring.hxx>

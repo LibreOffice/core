@@ -25,6 +25,7 @@
 
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandevent.hxx>
 
 namespace svt { namespace table
 {
