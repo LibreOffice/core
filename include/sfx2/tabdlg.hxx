@@ -121,6 +121,7 @@ protected:
      */
     void SavePosAndId();
 
+    void SetPageName(sal_uInt16 nPageId, const OString& rName) const;
 public:
     SfxTabDialog(vcl::Window* pParent,
                  const OUString& rID, const OUString& rUIXMLDescription,

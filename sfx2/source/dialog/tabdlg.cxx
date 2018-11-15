@@ -1363,6 +1363,10 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     return m_pRanges.get();
 }
 
+void SfxTabDialog::SetPageName(sal_uInt16 nPageId, const OString& rName) const
+{
+    m_pTabCtrl->SetPageName(nPageId, rName);
+}
 
 void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 
