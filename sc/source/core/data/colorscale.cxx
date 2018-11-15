@@ -19,6 +19,7 @@
 
 #include <formula/token.hxx>
 #include <o3tl/make_unique.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include <algorithm>
 #include <cassert>

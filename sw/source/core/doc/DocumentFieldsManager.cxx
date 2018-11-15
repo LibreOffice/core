@@ -54,6 +54,7 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/make_unique.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/uno/Any.hxx>
 

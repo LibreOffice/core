@@ -57,6 +57,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
 #include <tools/datetimeutils.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <cstdlib>
 #include <map>

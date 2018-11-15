@@ -18,10 +18,11 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/boxitem.hxx>
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 #include <algorithm>
+#include <editeng/boxitem.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::editeng;
 
