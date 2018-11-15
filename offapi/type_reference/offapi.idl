@@ -2812,7 +2812,7 @@ module com {
      [property] boolean FillBackground;
      [property] string FillBitmapName;
      [property, optional] ::com::sun::star::awt::XBitmap FillBitmap;
-     [property, optional] string FillBitmapURL;
+     /** @deprecated */ [property, optional] string FillBitmapURL;
      [property] short FillBitmapPositionOffsetX;
      [property] short FillBitmapPositionOffsetY;
      [property] short FillBitmapOffsetX;
@@ -2995,7 +2995,7 @@ module com {
      [property, optional] string RubyText;
      [property, optional] short RubyAdjust;
      [property, optional] string RubyCharStyleName;
-     [property, optional] boolean RubyIsAbove;
+     /** @deprecated */ [property, optional] boolean RubyIsAbove;
      [property, optional] short CharRotation;
      [property, optional] boolean CharRotationIsFitToLine;
      [property, optional] short CharScaleWidth;
@@ -3023,6 +3023,7 @@ module com {
      [property, optional] ::com::sun::star::table::ShadowFormat CharShadowFormat;
      [property, optional] ::com::sun::star::util::Color CharHighlight;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > CharInteropGrabBag;
+     [property, optional] short RubyPosition;
     };
    };
    module chart {
@@ -3130,6 +3131,11 @@ module com {
      double LowError;
     };
     /** @deprecated */ published typedef sequence< ::com::sun::star::chart::ChartDataValue > ChartDataPoint;
+   };
+   module graphic {
+    published interface XGraphic;
+   };
+   module chart {
     published service ChartDataPointProperties {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::style::CharacterProperties;
@@ -3143,9 +3149,10 @@ module com {
      [property, optional] long PercentageNumberFormat;
      [property, optional] long LabelPlacement;
      [property, optional] long SymbolType;
-     [property, optional] string SymbolBitmapURL;
+     /** @deprecated */ [property, optional] string SymbolBitmapURL;
      [property, optional] long SegmentOffset;
      [property, optional] boolean TextWordWrap;
+     [property, optional] ::com::sun::star::graphic::XGraphic SymbolBitmap;
     };
     /** @deprecated */ published struct ChartDataRow {
      string Name;
@@ -3368,6 +3375,11 @@ module com {
      service ::com::sun::star::chart::ChartAxisYSupplier;
      service ::com::sun::star::chart::StackableDiagram;
     };
+   };
+   module graphic {
+    published interface XGraphic;
+   };
+   module chart {
     published service LineDiagram {
      service ::com::sun::star::chart::Diagram;
      service ::com::sun::star::chart::ChartStatistics;
@@ -3383,6 +3395,7 @@ module com {
      [property] long SplineType;
      [property, optional] long SplineOrder;
      [property, optional] long SplineResolution;
+     /** @deprecated */ [property, optional] ::com::sun::star::graphic::XGraphic SymbolBitmap;
     };
     published constants MissingValueTreatment {
      const long CONTINUE = 2;
@@ -3584,12 +3597,17 @@ module com {
      char DecimalChar;
      char FillChar;
     };
+   };
+   module graphic {
+    published interface XGraphic;
+   };
+   module style {
     published service ParagraphProperties {
      [property] ::com::sun::star::style::ParagraphAdjust ParaAdjust;
      [property, optional] ::com::sun::star::style::LineSpacing ParaLineSpacing;
      [property, optional] ::com::sun::star::util::Color ParaBackColor;
      [property, optional] boolean ParaBackTransparent;
-     [property, optional] string ParaBackGraphicURL;
+     /** @deprecated */ [property, optional] string ParaBackGraphicURL;
      [property, optional] string ParaBackGraphicFilter;
      [property, optional] ::com::sun::star::style::GraphicLocation ParaBackGraphicLocation;
      [property] short ParaLastLineAdjust;
@@ -3643,6 +3661,7 @@ module com {
      [property, maybevoid, optional] boolean ParaIsConnectBorder;
      [property, optional] string ListId;
      [property, optional] short OutlineLevel;
+     [property, optional] ::com::sun::star::graphic::XGraphic ParaBackGraphic;
     };
    };
    module util {
@@ -4624,10 +4643,6 @@ module com {
      ::com::sun::star::frame::XModel rModel;
      sequence< ::com::sun::star::beans::PropertyValue > rProperties;
     };
-    published interface XGraphicObjectResolver {
-     interface ::com::sun::star::uno::XInterface;
-     string resolveGraphicObjectURL([in] string aURL);
-    };
     published service HeaderFooterSettings {
      interface ::com::sun::star::beans::XPropertySet;
      [property, optional] boolean IsPrintPageName;
@@ -4907,6 +4922,10 @@ module com {
     /** @deprecated */ published interface XEventListener {
      interface ::com::sun::star::lang::XEventListener;
      void notifyEvent([in] ::com::sun::star::document::EventObject Event);
+    };
+    /** @deprecated */ published interface XGraphicObjectResolver {
+     interface ::com::sun::star::uno::XInterface;
+     /** @deprecated */ string resolveGraphicObjectURL([in] string aURL);
     };
     published interface XInteractionFilterOptions {
      interface ::com::sun::star::task::XInteractionContinuation;
@@ -5603,9 +5622,9 @@ module com {
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
      service ::com::sun::star::drawing::RotationDescriptor;
-     [property] string GraphicURL;
+     /** @deprecated */ [property] string GraphicURL;
      [property] string GraphicStreamURL;
-     [property, optional] ::com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
+     /** @deprecated */ [property, optional] ::com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
      [property] short AdjustLuminance;
      [property] short AdjustContrast;
      [property] short AdjustRed;
@@ -5616,6 +5635,15 @@ module com {
      [property] ::com::sun::star::drawing::ColorMode GraphicColorMode;
      [property, optional] ::com::sun::star::container::XIndexContainer ImageMap;
      [property, optional] ::com::sun::star::graphic::XGraphic Graphic;
+     [property, optional] boolean IsSignatureLine;
+     [property, optional] string SignatureLineId;
+     [property, optional] string SignatureLineSuggestedSignerName;
+     [property, optional] string SignatureLineSuggestedSignerTitle;
+     [property, optional] string SignatureLineSuggestedSignerEmail;
+     [property, optional] string SignatureLineSigningInstructions;
+     [property, optional] boolean SignatureLineShowSignDate;
+     [property, optional] boolean SignatureLineCanAddComment;
+     [property, optional] ::com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
     };
     /** @deprecated */ published interface XShapeGroup {
      interface ::com::sun::star::drawing::XShape;
@@ -7796,6 +7824,8 @@ module com {
      [property, optional] boolean Transparent;
      [property, optional] boolean Alpha;
      [property, optional] boolean Animated;
+     [property, optional] boolean Linked;
+     [property, optional] string OriginURL;
     };
     published interface XGraphic {
      interface ::com::sun::star::uno::XInterface;
@@ -8347,6 +8377,7 @@ module com {
      const short NATNUM1 = 1;
      const short NATNUM10 = 10;
      const short NATNUM11 = 11;
+     const short NATNUM12 = 12;
      const short NATNUM2 = 2;
      const short NATNUM3 = 3;
      const short NATNUM4 = 4;
@@ -9641,6 +9672,7 @@ module com {
      [property, optional] boolean IsDateTimeFixed;
      [property, optional] string DateTimeText;
      [property, optional] long DateTimeFormat;
+     [property, optional] double TransitionDuration;
     };
     published service GraphicObjectShape {
      service ::com::sun::star::presentation::Shape;
@@ -12330,6 +12362,8 @@ module com {
      [property] ::com::sun::star::beans::XPropertySet Validation;
      [property, optional] ::com::sun::star::beans::XPropertySet ValidationLocal;
      [property, optional, readonly] string AbsoluteName;
+     [property, optional, readonly] ::com::sun::star::table::CellContentType CellContentType;
+     [property, optional, readonly] long FormulaResultType2;
     };
     published interface XArrayFormulaRange {
      interface ::com::sun::star::uno::XInterface;
@@ -12866,7 +12900,7 @@ module com {
      [property] short ShowObjects;
      [property] short ShowCharts;
      [property] short ShowDrawing;
-     [property] boolean HideSpellMarks;
+     /** @deprecated */ [property] boolean HideSpellMarks;
      [property] short ZoomType;
      [property] short ZoomValue;
     };
@@ -13133,7 +13167,7 @@ module com {
    module style {
     published service PageProperties {
      [property] ::com::sun::star::util::Color BackColor;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] boolean BackTransparent;
@@ -13162,7 +13196,7 @@ module com {
      [property, optional] ::com::sun::star::text::XTextColumns TextColumns;
      [property] ::com::sun::star::container::XNameContainer UserDefinedAttributes;
      [property, maybevoid] ::com::sun::star::util::Color HeaderBackColor;
-     [property, maybevoid] string HeaderBackGraphicURL;
+     /** @deprecated */ [property, maybevoid] string HeaderBackGraphicURL;
      [property, maybevoid] string HeaderBackGraphicFilter;
      [property, maybevoid] ::com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
      [property, maybevoid] long HeaderLeftMargin;
@@ -13187,7 +13221,7 @@ module com {
      [property, maybevoid, optional] ::com::sun::star::text::XText HeaderTextLeft;
      [property, maybevoid, optional] ::com::sun::star::text::XText HeaderTextRight;
      [property, maybevoid] ::com::sun::star::util::Color FooterBackColor;
-     [property, maybevoid] string FooterBackGraphicURL;
+     /** @deprecated */ [property, maybevoid] string FooterBackGraphicURL;
      [property, maybevoid] string FooterBackGraphicFilter;
      [property, maybevoid] ::com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
      [property, maybevoid] long FooterLeftMargin;
@@ -13232,6 +13266,9 @@ module com {
      [property] long BorderDistance;
      [property, maybevoid] long FooterBorderDistance;
      [property, maybevoid] long HeaderBorderDistance;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
+     [property, maybevoid, optional] ::com::sun::star::graphic::XGraphic HeaderBackGraphic;
+     [property, maybevoid, optional] ::com::sun::star::graphic::XGraphic FooterBackGraphic;
     };
     published service PageStyle {
      service ::com::sun::star::style::Style;
@@ -13390,8 +13427,9 @@ module com {
      [property] string CharStyleName;
      [property] short BulletId;
      [property] string BulletFontName;
-     [property] string GraphicURL;
+     /** @deprecated */ [property] string GraphicURL;
      [property] short StartWith;
+     [property, optional] ::com::sun::star::awt::XBitmap GraphicBitmap;
     };
     published service NumberingRule {
      service ::com::sun::star::style::NumberingAlignment;
@@ -13442,8 +13480,11 @@ module com {
      const short IROHA_FULLWIDTH_JA = 23;
      const short IROHA_HALFWIDTH_JA = 24;
      const short NATIVE_NUMBERING = 12;
+     const short NUMBER_ARABIC_INDIC = 57;
+     const short NUMBER_EAST_ARABIC_INDIC = 58;
      const short NUMBER_HANGUL_KO = 26;
      const short NUMBER_HEBREW = 56;
+     const short NUMBER_INDIC_DEVANAGARI = 59;
      const short NUMBER_LOWER_ZH = 15;
      const short NUMBER_NONE = 5;
      const short NUMBER_TRADITIONAL_JA = 20;
@@ -13453,6 +13494,9 @@ module com {
      const short PAGE_DESCRIPTOR = 7;
      const short ROMAN_LOWER = 3;
      const short ROMAN_UPPER = 2;
+     const short TEXT_CARDINAL = 61;
+     const short TEXT_NUMBER = 60;
+     const short TEXT_ORDINAL = 62;
      const short TIAN_GAN_ZH = 18;
      const short TRANSLITERATION = 11;
     };
@@ -13835,7 +13879,7 @@ module com {
      [property] short AnchorPageNo;
      [property] ::com::sun::star::text::XTextFrame AnchorFrame;
      [property] ::com::sun::star::util::Color BackColor;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] ::com::sun::star::table::BorderLine LeftBorder;
@@ -13889,6 +13933,7 @@ module com {
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > FrameInteropGrabBag;
      [property, optional] short RelativeHeightRelation;
      [property, optional] short RelativeWidthRelation;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
@@ -13923,7 +13968,7 @@ module com {
      [property, optional] string ParaStyleLevel10;
      [property, optional] string ParaStyleSeparator;
      [property] ::com::sun::star::text::XTextColumns TextColumns;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] ::com::sun::star::util::Color BackColor;
@@ -13932,6 +13977,7 @@ module com {
      [property, optional] boolean CreateFromChapter;
      [property] ::com::sun::star::text::XTextSection ContentSection;
      [property] ::com::sun::star::text::XTextSection HeaderSection;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published service BaseIndexMark {
      service ::com::sun::star::text::TextContent;
@@ -14013,7 +14059,7 @@ module com {
      interface ::com::sun::star::beans::XPropertySet;
      [property] string CellName;
      [property] ::com::sun::star::util::Color BackColor;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] long NumberFormat;
@@ -14029,6 +14075,7 @@ module com {
      [property, readonly] ::com::sun::star::text::XTextSection TextSection;
      [property] boolean IsProtected;
      [property] short VertOrient;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published service CellRange {
      service ::com::sun::star::style::CharacterProperties;
@@ -14043,11 +14090,12 @@ module com {
      [property] ::com::sun::star::util::Color BackColor;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] boolean BackTransparent;
      [property] boolean ChartColumnAsLabel;
      [property] boolean ChartRowAsLabel;
      [property] long NumberFormat;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published interface XTextFrame {
      interface ::com::sun::star::text::XTextContent;
@@ -14437,6 +14485,7 @@ module com {
     };
     published constants LabelFollow {
      const short LISTTAB = 0;
+     const short NEWLINE = 3;
      const short NOTHING = 2;
      const short SPACE = 1;
     };
@@ -14514,7 +14563,7 @@ module com {
      [property] string BulletChar;
      [property] string BulletFontName;
      [property, optional] ::com::sun::star::awt::FontDescriptor BulletFont;
-     [property] string GraphicURL;
+     /** @deprecated */ [property] string GraphicURL;
      [property, optional] ::com::sun::star::awt::XBitmap GraphicBitmap;
      [property, optional] ::com::sun::star::awt::Size GraphicSize;
      [property, optional] short VertOrient;
@@ -14629,12 +14678,13 @@ module com {
      [property] sequence< ::com::sun::star::text::TableColumnSeparator > TableColumnSeparators;
      [property] short TableColumnRelativeSum;
      [property] ::com::sun::star::util::Color BackColor;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property, optional] boolean CollapsingBorders;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > TableInteropGrabBag;
      [property, optional] string TableTemplateName;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published service Paragraph {
      service ::com::sun::star::text::TextContent;
@@ -14956,7 +15006,7 @@ module com {
      [property] boolean HoriMirroredOnEvenPages;
      [property] boolean HoriMirroredOnOddPages;
      [property] boolean VertMirrored;
-     [property] string GraphicURL;
+     /** @deprecated */ [property] string GraphicURL;
      [property] string GraphicFilter;
      [property] ::com::sun::star::awt::Size ActualSize;
      [property] short AdjustLuminance;
@@ -15040,7 +15090,7 @@ module com {
      [property] string DDECommandType;
      [property] string DDECommandFile;
      [property] string DDECommandElement;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] boolean FootnoteIsCollectAtTextEnd;
@@ -15061,6 +15111,7 @@ module com {
      [property] ::com::sun::star::text::XTextColumns TextColumns;
      [property, optional] long SectionLeftMargin;
      [property, optional] long SectionRightMargin;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published service TextSections {
      interface ::com::sun::star::container::XIndexAccess;
@@ -15114,7 +15165,7 @@ module com {
      interface ::com::sun::star::beans::XPropertySet;
      [property] ::com::sun::star::util::Color BackColor;
      [property] boolean BackTransparent;
-     [property] string BackGraphicURL;
+     /** @deprecated */ [property] string BackGraphicURL;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] sequence< ::com::sun::star::text::TableColumnSeparator > TableColumnSeparators;
@@ -15122,6 +15173,7 @@ module com {
      [property] boolean IsAutoHeight;
      [property, maybevoid, optional] boolean IsSplitAllowed;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > RowInteropGrabBag;
+     [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
     };
     published service TextTables {
      interface ::com::sun::star::container::XIndexAccess;
@@ -15260,6 +15312,7 @@ module com {
      [property, optional] boolean ShowContentTips;
      [property, optional] boolean ShowScrollBarTips;
      [property, optional] boolean HideWhitespace;
+     [property, optional] boolean ShowInlineTooltips;
     };
     published constants WritingMode2 {
      const short CONTEXT = 4;
@@ -15520,6 +15573,7 @@ module com {
       [property] string SourceName;
       [property] short ReferenceFieldPart;
       [property] short SequenceNumber;
+      [property, optional] string ReferenceFieldLanguage;
      };
      published service GraphicObjectCount {
       service ::com::sun::star::text::TextField;
@@ -16866,6 +16920,8 @@ module com {
       const short CHECKBOX_READONLY = 103;
       const short CHECKBOX_SELECTION = 110;
       const short LISTBOX_FILTER_SELECTOR = 210;
+      const short LISTBOX_IMAGE_ANCHOR = 212;
+      const short LISTBOX_IMAGE_ANCHOR_LABEL = 213;
       const short LISTBOX_IMAGE_TEMPLATE = 109;
       const short LISTBOX_IMAGE_TEMPLATE_LABEL = 209;
       const short LISTBOX_TEMPLATE = 108;
@@ -16954,6 +17010,7 @@ module com {
      published constants TemplateDescription {
       const short FILEOPEN_LINK_PLAY = 12;
       const short FILEOPEN_LINK_PREVIEW = 9;
+      const short FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR = 13;
       const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = 6;
       const short FILEOPEN_PLAY = 7;
       const short FILEOPEN_PREVIEW = 11;
