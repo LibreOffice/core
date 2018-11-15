@@ -97,7 +97,7 @@ public:
     {
         return m_pCategory;
     }
-    sfx::ClassificationCreationOrigin getExistingClassificationOrigin();
+    static sfx::ClassificationCreationOrigin getExistingClassificationOrigin();
     void toggleInteractivityOnOrigin();
     void setCategoryStateFromPolicy(SfxClassificationHelper & rHelper);
 };
@@ -175,7 +175,7 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, vo
 {
     m_pClassification->toggleInteractivityOnOrigin();
 
-    if (m_pClassification->getExistingClassificationOrigin() == sfx::ClassificationCreationOrigin::MANUAL)
+    if (ClassificationControl::getExistingClassificationOrigin() == sfx::ClassificationCreationOrigin::MANUAL)
     {
         SfxObjectShell* pObjectShell = SfxObjectShell::Current();
         if (!pObjectShell)
@@ -211,7 +211,7 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     m_pClassification->toggleInteractivityOnOrigin();
 
     // check if classification was set via the advanced dialog
-    if (m_pClassification->getExistingClassificationOrigin() != sfx::ClassificationCreationOrigin::MANUAL)
+    if (ClassificationControl::getExistingClassificationOrigin() != sfx::ClassificationCreationOrigin::MANUAL)
     {
         VclPtr<ListBox> pCategories = m_pClassification->getCategory();
         if (pCategories->GetEntryCount() == 0)
