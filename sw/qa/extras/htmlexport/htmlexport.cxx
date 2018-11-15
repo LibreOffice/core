@@ -23,6 +23,8 @@
 #include <usrpref.hxx>
 
 #include <test/htmltesttools.hxx>
+#include <tools/urlobj.hxx>
+#include <svtools/rtfkeywd.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -564,6 +566,32 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
     // Finally the export also failed as it tried to open the stream from the
     // document storage, but the embedded object already opened it, so an
     // exception of type com.sun.star.io.IOException was thrown.
+
+    if (mbExported)
+    {
+        // Check that the replacement graphic is exported at RTF level.
+        SvMemoryStream aStream;
+        wrapFragment(aStream);
+        xmlDocPtr pDoc = parseXmlStream(&aStream);
+        CPPUNIT_ASSERT(pDoc);
+        // Get the path of the RTF data.
+        OUString aOlePath = getXPath(
+            pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
+        OUString aOleSuffix(".ole");
+        CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
+        INetURLObject aUrl(maTempFile.GetURL());
+        aUrl.setBase(aOlePath.copy(0, aOlePath.getLength() - aOleSuffix.getLength()));
+        aUrl.setExtension("ole");
+        OUString aOleUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+        // Search for \result in the RTF data.
+        SvFileStream aOleStream(aOleUrl, StreamMode::READ);
+        CPPUNIT_ASSERT(aOleStream.IsOpen());
+        OString aOleString(read_uInt8s_ToOString(aOleStream, aOleStream.TellEnd()));
+        // Without the accompanying fix in place, this test would have failed,
+        // replacement graphic was missing at RTF level.
+        CPPUNIT_ASSERT(aOleString.indexOf(OOO_STRING_SVTOOLS_RTF_RESULT) != -1);
+    }
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2Odg, "reqif-ole-odg.xhtml")
