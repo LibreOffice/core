@@ -30,6 +30,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/eitem.hxx>
+#include <osl/diagnose.h>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
