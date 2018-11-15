@@ -3691,11 +3691,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                     if ( pInputWin )
                         pInputWin->SetTextString(aString);
-                    else if (comphelper::LibreOfficeKit::isActive())
-                    {
-                        if (pActiveViewSh)
-                            pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
-                    }
+
+                    if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
+                        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
                 }
 
                 if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
@@ -3733,10 +3731,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
                         pInputWin->SetSumAssignMode();
                     }
-                    else if (pActiveViewSh)
-                    {
+
+                    if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8().getStr());
-                    }
                 }
 
                 if (bStopEditing)
