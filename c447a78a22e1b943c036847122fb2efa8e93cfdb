@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_c41a1216",
+        "filename": "sc/qa/unit/functions_test.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-15T09:36:50Z",
+      "side": 1,
+      "message": "No \"using namespace\" in .hxx files, please. You can use the \"css::\" alias, though.",
+      "revId": "c447a78a22e1b943c036847122fb2efa8e93cfdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
