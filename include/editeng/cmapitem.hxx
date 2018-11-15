@@ -47,7 +47,7 @@ public:
                                     OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    OUString                GetValueTextByPos( sal_uInt16 nPos ) const;
+    static OUString         GetValueTextByPos( sal_uInt16 nPos );
     virtual sal_uInt16      GetValueCount() const override;
 
     // enum cast

@@ -2729,7 +2729,7 @@ bool SvxFormatBreakItem::GetPresentation
     return true;
 }
 
-OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     static const char* RID_SVXITEMS_BREAK[] =
     {

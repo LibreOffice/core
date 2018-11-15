@@ -372,7 +372,7 @@ sal_uInt16 SvxAdjustItem::GetValueCount() const
     return sal_uInt16(SvxAdjust::End);  // SvxAdjust::BlockLine + 1
 }
 
-OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     static const char* RID_SVXITEMS_ADJUST[] =
     {
