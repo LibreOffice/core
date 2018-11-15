@@ -312,16 +312,13 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
             case E_MS_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = "writer_MS_Word_97";
+                    sType = "writer_MS_Word_2007";
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = "calc_MS_Excel_97";
-                else
-                if ( sModule == "com.sun.star.drawing.DrawingDocument" )
-                    sType = "impress_MS_PowerPoint_97";
+                    sType = "MS Excel 2007 XML";
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = "impress_MS_PowerPoint_97";
+                    sType = "MS PowerPoint 2007 XML";
             }
             break;
 
