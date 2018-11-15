@@ -969,8 +969,8 @@ protected:
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
-    tools::Time ConvertValue(int nValue) const;
-    int ConvertValue(const tools::Time& rTime) const;
+    static tools::Time ConvertValue(int nValue);
+    static int ConvertValue(const tools::Time& rTime);
     OUString format_number(int nValue) const;
     void update_width_chars();
 

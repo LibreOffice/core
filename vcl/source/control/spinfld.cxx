@@ -328,7 +328,7 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
         SetSubEdit(mpEdit);
 
         maRepeatTimer.SetInvokeHandler(LINK( this, SpinField, ImplTimeout));
-        maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
+        maRepeatTimer.SetTimeout(MouseSettings::GetButtonStartRepeat());
         if (nWinStyle & WB_REPEAT)
             mbRepeat = true;
 
@@ -421,7 +421,7 @@ void SpinField::MouseButtonUp(const MouseEvent& rMEvt)
     ReleaseMouse();
     mbInitialUp = mbInitialDown = false;
     maRepeatTimer.Stop();
-    maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
+    maRepeatTimer.SetTimeout(MouseSettings::GetButtonStartRepeat());
 
     if (mbUpperIn)
     {
@@ -943,7 +943,7 @@ Size SpinField::CalcSize(sal_Int32 nChars) const
 
 IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer, void )
 {
-    if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
+    if ( pTimer->GetTimeout() == MouseSettings::GetButtonStartRepeat() )
     {
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
         pTimer->Start();

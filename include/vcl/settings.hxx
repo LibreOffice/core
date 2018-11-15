@@ -114,20 +114,20 @@ public:
     void                            SetStartDragHeight( long nDragHeight );
     long                            GetStartDragHeight() const;
 
-    sal_uInt16                      GetStartDragCode() const;
+    static sal_uInt16               GetStartDragCode();
 
-    sal_uInt16                      GetContextMenuCode() const;
+    static sal_uInt16               GetContextMenuCode();
 
-    sal_uInt16                      GetContextMenuClicks() const;
+    static sal_uInt16               GetContextMenuClicks();
 
-    sal_uLong                       GetScrollRepeat() const;
+    static sal_uLong                GetScrollRepeat();
 
-    sal_uLong                       GetButtonStartRepeat() const;
+    static sal_uLong                GetButtonStartRepeat();
 
     void                            SetButtonRepeat( sal_uLong nRepeat );
     sal_uLong                       GetButtonRepeat() const;
 
-    sal_uLong                       GetActionDelay() const;
+    static sal_uLong                GetActionDelay();
 
     void                            SetMenuDelay( sal_uLong nDelay );
     sal_uLong                       GetMenuDelay() const;
@@ -478,7 +478,7 @@ public:
     void                            SetTabFont( const vcl::Font& rFont );
     const vcl::Font&                GetTabFont() const;
 
-    long                            GetBorderSize() const;
+    static long                     GetBorderSize();
 
     void                            SetTitleHeight( long nSize );
     long                            GetTitleHeight() const;
@@ -495,7 +495,7 @@ public:
     void                            SetSpinSize( long nSize );
     long                            GetSpinSize() const;
 
-    long                            GetSplitSize() const;
+    static long                     GetSplitSize();
 
     void                            SetCursorSize( long nSize );
     long                            GetCursorSize() const;
@@ -592,12 +592,12 @@ public:
 
     // maximum row/line count for the ColorValueSet control. If more lines would be needed, a scrollbar will
     // be used.
-    sal_uInt16                      GetColorValueSetMaximumRowCount() const;
+    static sal_uInt16               GetColorValueSetMaximumRowCount();
 
     const Size&                     GetListBoxPreviewDefaultPixelSize() const;
 
     // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
-    sal_uInt16                      GetListBoxPreviewDefaultLineWidth() const;
+    static sal_uInt16               GetListBoxPreviewDefaultLineWidth();
 
     // defines if previews which contain potentially transparent objects (e.g. the dash/line/LineStartEnd previews and others)
     // use the default transparent visualization background (checkered background) as it has got standard in graphic programs nowadays
@@ -645,10 +645,10 @@ class VCL_DLLPUBLIC HelpSettings
 public:
                                     HelpSettings();
 
-    sal_uLong                       GetTipDelay() const;
+    static sal_uLong                GetTipDelay();
     void                            SetTipTimeout( sal_uLong nTipTimeout );
     sal_uLong                       GetTipTimeout() const;
-    sal_uLong                       GetBalloonDelay() const;
+    static sal_uLong                GetBalloonDelay();
 
     bool                            operator ==( const HelpSettings& rSet ) const;
     bool                            operator !=( const HelpSettings& rSet ) const;
@@ -699,7 +699,8 @@ public:
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
     const vcl::I18nHelper&                  GetUILocaleI18nHelper() const;
 
-    AllSettingsFlags                        GetWindowUpdate() const;
+    static AllSettingsFlags                 GetWindowUpdate()
+    { return AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE | AllSettingsFlags::MISC | AllSettingsFlags::LOCALE; }
 
     AllSettingsFlags                        Update( AllSettingsFlags nFlags, const AllSettings& rSettings );
     AllSettingsFlags                        GetChangeFlags( const AllSettings& rSettings ) const;

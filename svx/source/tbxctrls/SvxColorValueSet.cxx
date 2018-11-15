@@ -39,9 +39,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxColorValueSet, WB_TABSTOP)
 
 sal_uInt32 SvxColorValueSet::getMaxRowCount()
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-    return rStyleSettings.GetColorValueSetMaximumRowCount();
+    return StyleSettings::GetColorValueSetMaximumRowCount();
 }
 
 sal_uInt32 SvxColorValueSet::getEntryEdgeLength()
