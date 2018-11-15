@@ -115,13 +115,10 @@ SwListImpl::SwListImpl( const OUString& sListId,
 
 SwListImpl::~SwListImpl() COVERITY_NOEXCEPT_FALSE
 {
-    tListTrees::iterator aNumberTreeIter;
-    for ( aNumberTreeIter = maListTrees.begin();
-          aNumberTreeIter != maListTrees.end();
-          ++aNumberTreeIter )
+    for ( auto& rNumberTree : maListTrees )
     {
-        SwNodeNum::HandleNumberTreeRootNodeDelete(*((*aNumberTreeIter).pRoot));
-        SwNodeNum::HandleNumberTreeRootNodeDelete(*((*aNumberTreeIter).pRootRLHidden));
+        SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRoot));
+        SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRootRLHidden));
     }
 }
 
@@ -131,21 +128,18 @@ void SwListImpl::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedline
     const SwPosition aPosOfNodeNum( rNodeNum.GetPosition() );
     const SwNodes* pNodesOfNodeNum = &(aPosOfNodeNum.nNode.GetNode().GetNodes());
 
-    tListTrees::const_iterator aNumberTreeIter;
-    for ( aNumberTreeIter = maListTrees.begin();
-          aNumberTreeIter != maListTrees.end();
-          ++aNumberTreeIter )
+    for ( const auto& rNumberTree : maListTrees )
     {
-        const SwPosition* pStart = (*aNumberTreeIter).pSection->Start();
-        const SwPosition* pEnd = (*aNumberTreeIter).pSection->End();
+        const SwPosition* pStart = rNumberTree.pSection->Start();
+        const SwPosition* pEnd = rNumberTree.pSection->End();
         const SwNodes* pRangeNodes = &(pStart->nNode.GetNode().GetNodes());
 
         if ( pRangeNodes == pNodesOfNodeNum &&
              *pStart <= aPosOfNodeNum && aPosOfNodeNum <= *pEnd)
         {
             auto const& pRoot(isHiddenRedlines
-                    ? (*aNumberTreeIter).pRootRLHidden
-                    : (*aNumberTreeIter).pRoot);
+                    ? rNumberTree.pRootRLHidden
+                    : rNumberTree.pRoot);
             pRoot->AddChild(&rNodeNum, nLevel);
             break;
         }
@@ -159,25 +153,19 @@ void SwListImpl::RemoveListItem( SwNodeNum& rNodeNum )
 
 void SwListImpl::InvalidateListTree()
 {
-    tListTrees::iterator aNumberTreeIter;
-    for ( aNumberTreeIter = maListTrees.begin();
-          aNumberTreeIter != maListTrees.end();
-          ++aNumberTreeIter )
+    for ( auto& rNumberTree : maListTrees )
     {
-        (*aNumberTreeIter).pRoot->InvalidateTree();
-        (*aNumberTreeIter).pRootRLHidden->InvalidateTree();
+        rNumberTree.pRoot->InvalidateTree();
+        rNumberTree.pRootRLHidden->InvalidateTree();
     }
 }
 
 void SwListImpl::ValidateListTree()
 {
-    tListTrees::iterator aNumberTreeIter;
-    for ( aNumberTreeIter = maListTrees.begin();
-          aNumberTreeIter != maListTrees.end();
-          ++aNumberTreeIter )
+    for ( auto& rNumberTree : maListTrees )
     {
-        (*aNumberTreeIter).pRoot->NotifyInvalidChildren();
-        (*aNumberTreeIter).pRootRLHidden->NotifyInvalidChildren();
+        rNumberTree.pRoot->NotifyInvalidChildren();
+        rNumberTree.pRootRLHidden->NotifyInvalidChildren();
     }
 }
 
@@ -219,13 +207,10 @@ bool SwListImpl::IsListLevelMarked( const int nListLevel ) const
 
 void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
 {
-    tListTrees::iterator aNumberTreeIter;
-    for ( aNumberTreeIter = maListTrees.begin();
-          aNumberTreeIter != maListTrees.end();
-          ++aNumberTreeIter )
+    for ( auto& rNumberTree : maListTrees )
     {
-        (*aNumberTreeIter).pRoot->NotifyNodesOnListLevel( nLevel );
-        (*aNumberTreeIter).pRootRLHidden->NotifyNodesOnListLevel( nLevel );
+        rNumberTree.pRoot->NotifyNodesOnListLevel( nLevel );
+        rNumberTree.pRootRLHidden->NotifyNodesOnListLevel( nLevel );
     }
 }
 
