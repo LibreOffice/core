@@ -88,6 +88,7 @@ public:
     friend class PoIfstream;
 
                     PoHeader( const OString& rExtSrc ); ///< Template Constructor
+                    PoHeader( const OString& rExtSrc, const OString& rPoHeaderMsgStr );
                     ~PoHeader();
                     PoHeader(const PoHeader&) = delete;
     PoHeader&       operator=(const PoHeader&) = delete;
@@ -139,6 +140,7 @@ public:
     bool    eof() const     { return m_bEof; }
 
     void    open(const OString& rFileName);
+    void    open(const OString& rFileName, OString& sPoHeader);
     void    close();
     void    readEntry(PoEntry& rPo);
 };
