@@ -560,6 +560,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
                 default:
                     assert(false); // fall through to appease MSVC C4701
+                    SAL_FALLTHROUGH;
                 // "Reference" (whole Text)
                 case REF_CONTENT:
                     nStart = 0;
@@ -601,6 +602,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
             default:
                 assert(false); // fall through to appease MSVC C4701
+                SAL_FALLTHROUGH;
             case REF_SETREFATTR:
                 nStart = nNumStart;
                 nEnd = nNumEnd;
