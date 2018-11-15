@@ -697,7 +697,7 @@ IMPL_LINK_NOARG(ClassificationDialog, EditWindowModifiedHdl, LinkParamNone*, voi
     toggleWidgetsDependingOnCategory();
 }
 
-IMPL_LINK(ClassificationDialog, ExpandedHdl, VclExpander&, rExpander, void)
+IMPL_STATIC_LINK(ClassificationDialog, ExpandedHdl, VclExpander&, rExpander, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> aConfigurationChanges(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::set(rExpander.get_expanded(), aConfigurationChanges);

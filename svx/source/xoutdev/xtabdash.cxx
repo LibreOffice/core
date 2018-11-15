@@ -90,7 +90,7 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     // prepare LineAttribute
     const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
-    const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * (nFactor * 1.1));
+    const double fLineWidth(StyleSettings::GetListBoxPreviewDefaultLineWidth() * (nFactor * 1.1));
     const drawinglayer::attribute::LineAttribute aLineAttribute(
         aLineColor,
         fLineWidth);

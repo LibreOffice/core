@@ -94,7 +94,7 @@ public:
     virtual void                        SelectIndex( int index, bool bFocus = false );
     void                        OutputIndex( int index );
     void                        DeSelect();
-    void                        CopyToClipboard(const OUString& str);
+    static void                 CopyToClipboard(const OUString& str);
     bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
     sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
     static sal_uInt16           GetRowPos(sal_uInt16 _nPos);

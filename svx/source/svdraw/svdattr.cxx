@@ -884,7 +884,7 @@ SfxPoolItem* SdrCaptionTypeItem::Clone(SfxItemPool* /*pPool*/) const            
 
 sal_uInt16 SdrCaptionTypeItem::GetValueCount() const { return 4; }
 
-OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALCAPTIONTYPES[] =
     {
@@ -915,7 +915,7 @@ SfxPoolItem* SdrCaptionEscDirItem::Clone(SfxItemPool* /*pPool*/) const          
 
 sal_uInt16 SdrCaptionEscDirItem::GetValueCount() const { return 3; }
 
-OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALCAPTIONTYPES[] =
     {
@@ -952,7 +952,7 @@ SfxPoolItem* SdrTextFitToSizeTypeItem::Clone(SfxItemPool* /*pPool*/) const      
 
 sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
-OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALFITTISIZETYPES[] =
     {
@@ -1017,7 +1017,7 @@ SfxPoolItem* SdrTextVertAdjustItem::Clone(SfxItemPool* /*pPool*/) const         
 
 sal_uInt16 SdrTextVertAdjustItem::GetValueCount() const { return 5; }
 
-OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALTEXTVADJTYPES[] =
     {
@@ -1079,7 +1079,7 @@ SfxPoolItem* SdrTextHorzAdjustItem::Clone(SfxItemPool* /*pPool*/) const         
 
 sal_uInt16 SdrTextHorzAdjustItem::GetValueCount() const { return 5; }
 
-OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALTEXTHADJTYPES[] =
     {
@@ -1134,7 +1134,7 @@ SfxPoolItem* SdrTextAniKindItem::Clone(SfxItemPool* /*pPool*/) const            
 
 sal_uInt16 SdrTextAniKindItem::GetValueCount() const { return 5; }
 
-OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALTEXTANITYPES[] =
     {
@@ -1188,7 +1188,7 @@ SfxPoolItem* SdrTextAniDirectionItem::Clone(SfxItemPool* /*pPool*/) const       
 
 sal_uInt16 SdrTextAniDirectionItem::GetValueCount() const { return 4; }
 
-OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALTEXTANITYPES[] =
     {
@@ -1357,7 +1357,7 @@ SfxPoolItem* SdrEdgeKindItem::Clone(SfxItemPool* /*pPool*/) const            { r
 
 sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
 
-OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALEDGES[] =
     {
@@ -1528,7 +1528,7 @@ SfxPoolItem* SdrMeasureKindItem::Clone(SfxItemPool* /*pPool*/) const            
 
 sal_uInt16 SdrMeasureKindItem::GetValueCount() const { return 2; }
 
-OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALMEASURETYPES[] =
     {
@@ -1579,7 +1579,7 @@ SfxPoolItem* SdrMeasureTextHPosItem::Clone(SfxItemPool* /*pPool*/) const        
 
 sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
-OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALMEASURETEXTTYPES[] =
     {
@@ -1632,7 +1632,7 @@ SfxPoolItem* SdrMeasureTextVPosItem::Clone(SfxItemPool* /*pPool*/) const        
 
 sal_uInt16 SdrMeasureTextVPosItem::GetValueCount() const { return 5; }
 
-OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALMEASURETEXTTYPES[] =
     {
@@ -1685,7 +1685,7 @@ SfxPoolItem* SdrMeasureUnitItem::Clone(SfxItemPool* /*pPool*/) const            
 
 sal_uInt16 SdrMeasureUnitItem::GetValueCount() const { return 14; }
 
-OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     OUString aRetval;
 
@@ -1731,7 +1731,7 @@ SfxPoolItem* SdrCircKindItem::Clone(SfxItemPool* /*pPool*/) const          { ret
 
 sal_uInt16 SdrCircKindItem::GetValueCount() const { return 4; }
 
-OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static const char* ITEMVALCIRCTYPES[] =
     {
@@ -1881,7 +1881,7 @@ sal_uInt16 SdrGrafModeItem::GetValueCount() const
     return 4;
 }
 
-OUString SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     OUString aStr;
 
