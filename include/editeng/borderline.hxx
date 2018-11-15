@@ -25,7 +25,7 @@
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
-#include <svtools/ctrlbox.hxx>
+#include <svtools/borderline.hxx>
 
 // Line defaults in twips (former Writer defaults):
 

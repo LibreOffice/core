@@ -62,6 +62,7 @@
 #include <undoflystrattr.hxx>
 #include <calbck.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xlndsit.hxx>

@@ -31,6 +31,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/outdev.hxx>
 
 #include <memory>
 
