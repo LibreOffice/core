@@ -22,7 +22,6 @@
 -o sc.ScIndexEnumeration_FunctionDescriptionEnumeration
 -o sc.ScIndexEnumeration_LabelRangesEnumeration
 -o sc.ScIndexEnumeration_NamedRangesEnumeration
--o sc.ScIndexEnumeration_ScenariosEnumeration
 -o sc.ScIndexEnumeration_SheetCellRangesEnumeration
 -o sc.ScIndexEnumeration_SheetLinksEnumeration
 -o sc.ScIndexEnumeration_SpreadsheetViewPanesEnumeration

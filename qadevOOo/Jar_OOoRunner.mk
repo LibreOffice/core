@@ -1001,7 +1001,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_FunctionDescriptionEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_LabelRangesEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_NamedRangesEnumeration \
-    qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_ScenariosEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SheetCellRangesEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SheetLinksEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SpreadsheetsEnumeration \
