@@ -824,11 +824,7 @@ public:
 
     FieldUnit get_unit() const { return m_eSrcUnit; }
 
-    void set_unit(FieldUnit eUnit)
-    {
-        m_eSrcUnit = eUnit;
-        update_width_chars();
-    }
+    void set_unit(FieldUnit eUnit);
 
     int convert_value_to(int nValue, FieldUnit eValueUnit) const
     {
