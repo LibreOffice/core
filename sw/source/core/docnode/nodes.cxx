@@ -1250,7 +1250,7 @@ void SwNodes::GoStartOfSection(SwNodeIndex *pIdx)
     // after the next start node
     SwNodeIndex aTmp( *pIdx->GetNode().StartOfSectionNode(), +1 );
 
-    // If index points to no ContentNode, than go to one.
+    // If index points to no ContentNode, then go to one.
     // If there is no further available, do not change the index' position!
     while( !aTmp.GetNode().IsContentNode() )
     {   // go from this StartNode (can only be one) to its end
@@ -1455,7 +1455,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     if( pSrcNd )
     {
-        // if the first node is a TextNode, than there must
+        // if the first node is a TextNode, then there must
         // be also a TextNode in the NodesArray to store the content
         if( !pDestNd )
         {
