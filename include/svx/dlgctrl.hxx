@@ -79,7 +79,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetContro
 private:
     VclPtr<SvxTabPage> m_pPage;
 
-    SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
+    SVX_DLLPRIVATE static void      InitSettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
     SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl(const Size& rSize);

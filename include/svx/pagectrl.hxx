@@ -71,7 +71,7 @@ protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext, const Point& rPoint,
                           const bool bSecond, const bool bEnabled);
 
-    void drawFillAttributes(vcl::RenderContext& rRenderContext,
+    static void drawFillAttributes(vcl::RenderContext& rRenderContext,
                             const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
                             const tools::Rectangle& rPaintRange, const tools::Rectangle& rDefineRange);
 
