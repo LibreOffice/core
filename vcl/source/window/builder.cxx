@@ -242,6 +242,16 @@ namespace weld
         return aStr;
     }
 
+    void MetricSpinButton::set_digits(unsigned int digits)
+    {
+        int step, page;
+        get_increments(step, page, m_eSrcUnit);
+        int value = get_value(m_eSrcUnit);
+        m_xSpinButton->set_digits(digits);
+        set_increments(step, page, m_eSrcUnit);
+        set_value(value, m_eSrcUnit);
+    }
+
     int MetricSpinButton::ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
     {
         return MetricField::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
