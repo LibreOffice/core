@@ -469,7 +469,7 @@ bool SvxPostureItem::GetPresentation
 }
 
 
-OUString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     DBG_ASSERT( nPos <= sal_uInt16(ITALIC_NORMAL), "enum overflow!" );
 
@@ -615,7 +615,7 @@ bool SvxWeightItem::GetPresentation
     return true;
 }
 
-OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     static const char* RID_SVXITEMS_WEIGHTS[] =
     {
@@ -1393,7 +1393,7 @@ bool SvxCrossedOutItem::GetPresentation
     return true;
 }
 
-OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     static const char* RID_SVXITEMS_STRIKEOUT[] =
     {
@@ -1864,7 +1864,7 @@ bool SvxCaseMapItem::GetPresentation
     return true;
 }
 
-OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     static const char* RID_SVXITEMS_CASEMAP[] =
     {
@@ -1988,7 +1988,7 @@ bool SvxEscapementItem::GetPresentation
     return true;
 }
 
-OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos )
 {
     static const char* RID_SVXITEMS_ESCAPEMENT[] =
     {
@@ -2725,7 +2725,7 @@ static const char* RID_SVXITEMS_RELIEF[] =
     RID_SVXITEMS_RELIEF_ENGRAVED
 };
 
-OUString SvxCharReliefItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SvxCharReliefItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     assert(nPos < SAL_N_ELEMENTS(RID_SVXITEMS_RELIEF) && "enum overflow");
     return EditResId(RID_SVXITEMS_RELIEF[nPos]);

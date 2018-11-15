@@ -63,7 +63,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
     virtual sal_uInt16       GetValueCount() const override;
-    OUString                 GetValueTextByPos( sal_uInt16 nPos ) const;
+    static OUString          GetValueTextByPos( sal_uInt16 nPos );
     virtual sal_uInt16       GetEnumValue() const override;
     virtual void             SetEnumValue( sal_uInt16 nNewVal ) override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;

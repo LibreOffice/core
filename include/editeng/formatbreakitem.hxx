@@ -52,7 +52,7 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-    OUString                 GetValueTextByPos( sal_uInt16 nPos ) const;
+    static OUString          GetValueTextByPos( sal_uInt16 nPos );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const override;
