@@ -69,6 +69,7 @@ public:
 
     virtual bool Notify( NotifyEvent& rNEvt ) override;
 
+    virtual void SetPos(const ScAddress& rPos) { maPos = rPos; };
     bool IsSelected() const { return mbActive;}
     void SetIndex(sal_Int32 nIndex);
     void SetHeight();
