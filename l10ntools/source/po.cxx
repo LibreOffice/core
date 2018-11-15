@@ -446,6 +446,16 @@ namespace
     }
 }
 
+// when updating existing files (pocheck), reuse provided po-header
+PoHeader::PoHeader( const OString& rExtSrc, const OString& rPoHeaderMsgStr )
+    : m_pGenPo( new GenPoEntry() )
+    , m_bIsInitialized( false )
+{
+    m_pGenPo->setExtractCom("extracted from " + rExtSrc);
+    m_pGenPo->setMsgStr(rPoHeaderMsgStr);
+    m_bIsInitialized = true;
+}
+
 PoHeader::PoHeader( const OString& rExtSrc )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
@@ -462,8 +472,8 @@ PoHeader::PoHeader( const OString& rExtSrc )
         "MIME-Version: 1.0\n"
         "Content-Type: text/plain; charset=UTF-8\n"
         "Content-Transfer-Encoding: 8bit\n"
-        "X-Generator: LibreOffice\n"
-        "X-Accelerator-Marker: ~\n"));
+        "X-Accelerator-Marker: ~\n"
+        "X-Generator: LibreOffice\n"));
     m_bIsInitialized = true;
 }
 
@@ -560,6 +570,28 @@ PoIfstream::~PoIfstream()
     {
        close();
     }
+}
+
+void PoIfstream::open( const OString& rFileName, OString& rPoHeader )
+{
+    assert( !isOpen() );
+    m_aInPut.open( rFileName.getStr(), std::ios_base::in );
+
+    // capture header, updating timestamp and generator
+    std::string sTemp;
+    std::getline(m_aInPut,sTemp);
+    while( !sTemp.empty() && !m_aInPut.eof() )
+    {
+        std::getline(m_aInPut,sTemp);
+        OString sLine = OString(sTemp.data(),sTemp.length());
+        if (sLine.startsWith("\"PO-Revision-Date"))
+            rPoHeader += "PO-Revision-Date: " + lcl_GetTime() + "\n";
+        else if (sLine.startsWith("\"X-Generator"))
+            rPoHeader += "X-Generator: LibreOffice\n";
+        else if (sLine.startsWith("\""))
+            rPoHeader += lcl_GenNormString(sLine);
+    }
+    m_bEof = false;
 }
 
 void PoIfstream::open( const OString& rFileName )
