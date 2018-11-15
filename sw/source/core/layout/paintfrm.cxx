@@ -3331,7 +3331,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
         if( aShortCut.Stop( aPaintRect ) )
             break;
         if ( bCnt && gProp.pSProgress )
-            gProp.pSProgress->Reschedule();
+           SfxProgress::Reschedule();
 
         //We need to retouch if a frame explicitly requests it.
         //First do the retouch, because this could flatten the borders.
@@ -4092,7 +4092,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     rRenderContext.Pop();
 
     if ( gProp.pSProgress && pNoText )
-        gProp.pSProgress->Reschedule();
+        SfxProgress::Reschedule();
 }
 
 void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
@@ -6292,7 +6292,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
         SwShortCut aShortCut( *pFrame, aBorderRect );
         do
         {   if ( gProp.pSProgress )
-                gProp.pSProgress->Reschedule();
+                SfxProgress::Reschedule();
 
             aFrameRect = pFrame->GetPaintArea();
             if ( aFrameRect.IsOver( aBorderRect ) )

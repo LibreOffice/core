@@ -132,7 +132,7 @@ void RescheduleProgress( SwDocShell const *pDocShell )
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )
-            pProgress->pProgress->Reschedule();
+            SfxProgress::Reschedule();
     }
 }
 
