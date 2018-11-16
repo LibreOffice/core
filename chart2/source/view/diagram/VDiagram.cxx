@@ -126,11 +126,11 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
         //do not change aspect ratio
         awt::Size  aAspectRatio( static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME),
                                  static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME ));
-        m_aCurrentSizeWithoutAxes = awt::Size( ShapeFactory::calculateNewSizeRespectingAspectRatio(
-                        rAvailableSize, aAspectRatio ) );
+        m_aCurrentSizeWithoutAxes = ShapeFactory::calculateNewSizeRespectingAspectRatio(
+                        rAvailableSize, aAspectRatio );
         //center diagram position
-        m_aCurrentPosWithoutAxes = awt::Point( ShapeFactory::calculateTopLeftPositionToCenterObject(
-            rPos, rAvailableSize, m_aCurrentSizeWithoutAxes ) );
+        m_aCurrentPosWithoutAxes = ShapeFactory::calculateTopLeftPositionToCenterObject(
+            rPos, rAvailableSize, m_aCurrentSizeWithoutAxes );
 
     }
 

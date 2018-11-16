@@ -887,7 +887,7 @@ public:
 
             // An offset background for alpha rendering
             rDev.SetFillColor(COL_BLUE);
-            tools::Rectangle aSurround(r.Center(), Size(aPageShadowMask.GetSizePixel()));
+            tools::Rectangle aSurround(r.Center(), aPageShadowMask.GetSizePixel());
             rDev.DrawRect(aSurround);
             rDev.DrawBitmapEx(aRenderPt, aWhole);
         }

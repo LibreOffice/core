@@ -1612,7 +1612,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeight") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
     xCell1Style->getPropertyValue("CharPosture") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, eCharPosture);
     xCell1Style->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
     xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
@@ -1627,7 +1627,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeightAsian") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
     xCell1Style->getPropertyValue("CharPostureAsian") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, eCharPosture);
     xCell1Style->getPropertyValue("CharFontNameAsian") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
     xCell1Style->getPropertyValue("CharFontStyleNameAsian") >>= sString;
@@ -1642,7 +1642,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeightComplex") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
     xCell1Style->getPropertyValue("CharPostureComplex") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, eCharPosture);
     xCell1Style->getPropertyValue("CharFontNameComplex") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
     xCell1Style->getPropertyValue("CharFontStyleNameComplex") >>= sString;
@@ -1673,7 +1673,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeight") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(150.), fFloat);
     xCell1Style->getPropertyValue("CharPosture") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, eCharPosture);
     xCell1Style->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
     xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
@@ -1688,7 +1688,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeightAsian") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(150.), fFloat);
     xCell1Style->getPropertyValue("CharPostureAsian") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, eCharPosture);
     xCell1Style->getPropertyValue("CharFontNameAsian") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
     xCell1Style->getPropertyValue("CharFontStyleNameAsian") >>= sString;
@@ -1703,7 +1703,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeightComplex") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(150.), fFloat);
     xCell1Style->getPropertyValue("CharPostureComplex") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, eCharPosture);
     xCell1Style->getPropertyValue("CharFontNameComplex") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
     xCell1Style->getPropertyValue("CharFontStyleNameComplex") >>= sString;
@@ -1734,7 +1734,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeight") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
     xCell1Style->getPropertyValue("CharPosture") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_ITALIC), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, eCharPosture);
     xCell1Style->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
     xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
@@ -1749,7 +1749,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeightAsian") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
     xCell1Style->getPropertyValue("CharPostureAsian") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_ITALIC), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, eCharPosture);
     xCell1Style->getPropertyValue("CharFontNameAsian") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
     xCell1Style->getPropertyValue("CharFontStyleNameAsian") >>= sString;
@@ -1764,7 +1764,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharWeightComplex") >>= fFloat;
     CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
     xCell1Style->getPropertyValue("CharPostureComplex") >>= eCharPosture;
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_ITALIC), eCharPosture);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, eCharPosture);
     xCell1Style->getPropertyValue("CharFontNameComplex") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
     xCell1Style->getPropertyValue("CharFontStyleNameComplex") >>= sString;
