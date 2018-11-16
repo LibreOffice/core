@@ -143,7 +143,8 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
                     static_cast<SwTextNode*>(pNd)->GetParaAttr(*pSet, nStt, nEnd,
                                                 false, true,
-                                                bMergeIndentValuesOfNumRule );
+                                                bMergeIndentValuesOfNumRule,
+                                                GetLayout());
                 }
                 break;
             case SwNodeType::Grf:
