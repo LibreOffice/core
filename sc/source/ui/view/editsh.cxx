@@ -41,6 +41,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/cjkoptions.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -87,6 +88,7 @@ SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 void ScEditShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("celledit");
+    GetStaticInterface()->RegisterChildWindow(SID_RUBY_DIALOG);
 }
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
@@ -186,6 +188,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
+        case SID_RUBY_DIALOG:
+        {
+            SfxRequest aReq(nSlot, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
+            pViewData->GetViewShell()->GetViewFrame()->ExecuteSlot(aReq);
+            rReq.Ignore();
+        }
+        break;
+
         case SID_ATTR_INSERT:
         case FID_INS_CELL_CONTENTS: // Insert taste, while defined as Acc
             bIsInsertMode = !pTableView->IsInsertMode();
@@ -756,6 +766,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_KATAGANA:
             case SID_INSERT_RLM:
             case SID_INSERT_LRM:
+            case SID_RUBY_DIALOG:
                 ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
             break;
 

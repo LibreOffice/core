@@ -71,6 +71,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <formatsh.hxx>
 #include <sfx2/app.hxx>
+#include <inputhdl.hxx>
 
 using namespace com::sun::star;
 
@@ -477,6 +478,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( container::XIndexAccess )
     SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
     SC_QUERYINTERFACE( view::XSelectionSupplier )
+    SC_QUERYINTERFACE( text::XRubySelection )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( sheet::XViewSplitable )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
@@ -1677,6 +1679,39 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
         }
     }
 }
+
+
+uno::Sequence<uno::Sequence<beans::PropertyValue>> SAL_CALL ScTabViewObj::getRubyList(sal_Bool /*bAutomatic*/)
+{
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aRetval(1);
+    uno::Sequence<beans::PropertyValue>* pRet = aRetval.getArray();
+
+    if (pRet)
+    {
+        pRet->realloc(2);
+        beans::PropertyValue* pValues = pRet[0].getArray();
+        pValues[0].Name = "RubyBaseText";
+        pValues[0].Value <<= GetViewShell()->GetInputHandler()->GetEditString();
+        pValues[1].Name = "RubyText";
+        pValues[1].Value <<= OUString("");
+#if 0
+        pValues[2].Name = "RubyAdjust";
+        pValues[3].Name = "RubyPosition";
+        pValues[4].Name = "RubyCharStyleName";
+#endif
+    }
+
+
+    return aRetval;
+}
+
+void SAL_CALL ScTabViewObj::setRubyList(
+        const uno::Sequence<uno::Sequence<beans::PropertyValue>>& /*RubyList*/,
+        sal_Bool /*bAutomatic*/)
+{
+
+}
+
 
 void ScTabViewObj::SelectionChanged()
 {
