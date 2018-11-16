@@ -302,7 +302,7 @@ public:
        the requested item set as a LR-SPACE item, if <bOnlyTextAttr> == false,
        corresponding node has not its own indent attributes and the
        position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT. */
-    bool GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
+    bool GetParaAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                   const bool bOnlyTextAttr  = false,
                   const bool bGetFromChrFormat = true,
                   const bool bMergeIndentValuesOfNumRule = false ) const;
