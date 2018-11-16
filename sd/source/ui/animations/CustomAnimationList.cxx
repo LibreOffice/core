@@ -509,7 +509,7 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
         }
 
         // Return DND_ACTION_MOVE on internal drag'n'drops so that ExecuteDrop() is called.
-        // Return MOVE even if we are over othe dragged effect because dragged effect moves.
+        // Return MOVE even if we are over other dragged effect because dragged effect moves.
         ret = DND_ACTION_MOVE;
     }
 
