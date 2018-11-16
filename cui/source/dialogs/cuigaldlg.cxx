@@ -826,11 +826,9 @@ void TPGalleryThemeProperties::FillFilterList()
 
             std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
             pFilterEntry->aFilterName = aFilter.second.getToken( 0, ';', nIndex );
+            aFilterWildcard += pFilterEntry->aFilterName;
             nFirstExtFilterPos = m_pCbbFileType->InsertEntry(
-                addExtension(
-                    aFilter.first,
-                    aFilterWildcard += pFilterEntry->aFilterName
-                )
+                addExtension( aFilter.first, aFilterWildcard )
             );
             if ( nFirstExtFilterPos < aFilterEntryList.size() ) {
                 aFilterEntryList.insert(
