@@ -2815,11 +2815,6 @@ bool EditEngine::IsPageOverflow() {
     return pImpEditEngine->IsPageOverflow();
 }
 
-void EditEngine::SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled)
-{
-    pImpEditEngine->SetHoriAlignIgnoreTrailingWhitespace(bEnabled);
-}
-
 EFieldInfo::EFieldInfo()
 {
 }

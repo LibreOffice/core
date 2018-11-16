@@ -345,7 +345,6 @@ std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrMode
     pOutl->SetAsianCompressionMode(rModel.GetCharCompressType());
     pOutl->SetKernAsianPunctuation(rModel.IsKernAsianPunctuation());
     pOutl->SetAddExtLeading(rModel.IsAddExtLeading());
-    pOutl->SetHoriAlignIgnoreTrailingWhitespace(rModel.IsHoriAlignIgnoreTrailingWhitespace());
     return pOutl;
 }
 
