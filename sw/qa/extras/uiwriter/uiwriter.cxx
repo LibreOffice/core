@@ -2416,6 +2416,7 @@ void SwUiWriterTest::testTdf72788()
     pTextNode->RstTextAttr(aSt, nEnd - aSt.GetIndex());
     //In case of Regression RstTextAttr() call will result to infinite recursion
     //Check that bold is removed in first paragraph
+    aSet.ClearItem();
     pTextNode->GetAttr(aSet, 5, 12);
     SfxPoolItem const * pPoolItem2 = aSet.GetItem(RES_CHRATR_WEIGHT);
     CPPUNIT_ASSERT_EQUAL((*pPoolItem2 != aWeightItem), true);

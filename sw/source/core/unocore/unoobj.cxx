@@ -1830,7 +1830,10 @@ void SwUnoCursorHelper::SetPropertyValues(
 
             // we need to get up-to-date item set from nodes
             if (i == 0 || bPreviousPropertyCausesSideEffectsInNodes)
+            {
+                aItemSet.ClearItem();
                 SwUnoCursorHelper::GetCursorAttr(rPaM, aItemSet);
+            }
 
             const uno::Any &rValue = rPropertyValues[i].Value;
             // this can set some attributes in nodes' mpAttrSet

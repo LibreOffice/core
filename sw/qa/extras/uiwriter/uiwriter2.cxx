@@ -56,6 +56,7 @@ void SwUiWriterTest2::testTdf101534()
     pWrtShell->EndPara(/*bSelect=*/false);
     TransferableDataHelper aHelper(pTransfer.get());
     SwTransferable::Paste(*pWrtShell, aHelper);
+    aSet.ClearItem();
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
