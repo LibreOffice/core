@@ -2052,6 +2052,8 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                          const bool bOnlyTextAttr, const bool bGetFromChrFormat,
                          const bool bMergeIndentValuesOfNumRule ) const
 {
+    assert(!rSet.Count()); // handled inconsistently, typically an error?
+
     if( HasHints() )
     {
         // First, check which text attributes are valid in the range.
