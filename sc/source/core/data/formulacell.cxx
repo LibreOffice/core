@@ -4757,6 +4757,10 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
         return false;
     }
 
+    // TableOp does tricks with using a cell with different values, just bail out.
+    if(pDocument->IsInInterpreterTableOp())
+        return false;
+
     if (bDependencyCheckFailed)
         return false;
 
