@@ -785,7 +785,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                             behaviour is reversed. This means that in this case
                             a focus of 0% swaps the gradient. */
                         if( fFocus < -0.5 || fFocus > 0.5 )
-                            (nVmlAngle += 180) %= 360;
+                            nVmlAngle = (nVmlAngle + 180) % 360;
                         // set the start and stop colors
                         lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, aColor1 );
                         lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, aColor2 );

@@ -158,15 +158,15 @@ namespace emfplushelper
         {
             case EmfPlusObjectTypeBrush:
             {
-                EMFPBrush *brush;
-                maEMFPObjects[index].reset(brush = new EMFPBrush());
+                EMFPBrush *brush = new EMFPBrush();
+                maEMFPObjects[index].reset(brush);
                 brush->Read(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypePen:
             {
-                EMFPPen *pen;
-                maEMFPObjects[index].reset(pen = new EMFPPen());
+                EMFPPen *pen = new EMFPPen();
+                maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
                 break;
             }
@@ -178,22 +178,22 @@ namespace emfplushelper
                 rObjectStream.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
                 SAL_INFO("drawinglayer", "EMF+\tpath");
                 SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
-                EMFPPath *path;
-                maEMFPObjects[index].reset(path = new EMFPPath(points));
+                EMFPPath *path = new EMFPPath(points);
+                maEMFPObjects[index].reset(path);
                 path->Read(rObjectStream, pathFlags);
                 break;
             }
             case EmfPlusObjectTypeRegion:
             {
-                EMFPRegion *region;
-                maEMFPObjects[index].reset(region = new EMFPRegion());
+                EMFPRegion *region = new EMFPRegion();
+                maEMFPObjects[index].reset(region);
                 region->ReadRegion(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypeImage:
             {
-                EMFPImage *image;
-                maEMFPObjects[index].reset(image = new EMFPImage);
+                EMFPImage *image = new EMFPImage;
+                maEMFPObjects[index].reset(image);
                 image->type = 0;
                 image->width = 0;
                 image->height = 0;
@@ -204,8 +204,8 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypeFont:
             {
-                EMFPFont *font;
-                maEMFPObjects[index].reset(font = new EMFPFont);
+                EMFPFont *font = new EMFPFont;
+                maEMFPObjects[index].reset(font);
                 font->emSize = 0;
                 font->sizeUnit = 0;
                 font->fontFlags = 0;
@@ -214,8 +214,8 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypeStringFormat:
             {
-                EMFPStringFormat *stringFormat;
-                maEMFPObjects[index].reset(stringFormat = new EMFPStringFormat());
+                EMFPStringFormat *stringFormat = new EMFPStringFormat();
+                maEMFPObjects[index].reset(stringFormat);
                 stringFormat->Read(rObjectStream);
                 break;
             }
