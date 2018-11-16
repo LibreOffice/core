@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_31e12f00",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-16T12:18:17Z",
+      "side": 1,
+      "message": "Typo. Should be just tdf.",
+      "revId": "42a37dc16862de7bd0cac6bd22e7dd465a22b64a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
