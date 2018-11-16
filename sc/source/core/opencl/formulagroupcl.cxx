@@ -4053,6 +4053,13 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
         delete pDynamicKernel;
         return nullptr;
     }
+    catch (const InvalidParameterCount& ipc)
+    {
+        SAL_INFO("sc.opencl", "Dynamic formula compiler: InvalidParameterCount " << ipc.mParameterCount
+            << " at " << ipc.mFile << ":" << ipc.mLineNumber);
+        delete pDynamicKernel;
+        return nullptr;
+    }
     catch (const OpenCLError& oce)
     {
         // I think OpenCLError exceptions are actually exceptional (unexpected), so do use SAL_WARN
