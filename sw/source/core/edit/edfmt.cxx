@@ -93,7 +93,7 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
 
         SfxItemSet aSet( mxDoc->GetAttrPool(),
                             pCharFormat->GetAttrSet().GetRanges() );
-        pTextNode->GetAttr( aSet, nStt, nEnd );
+        pTextNode->GetParaAttr( aSet, nStt, nEnd );
         pCharFormat->SetFormatAttr( aSet );
     }
     else if( pCNd->HasSwAttrSet() )

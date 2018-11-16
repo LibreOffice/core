@@ -3414,7 +3414,7 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
 
             pCFormat = pInfo->GetCharFormat( *m_pDoc );
 
-            pTextFootnote->GetTextNode().GetAttr(aSet,
+            pTextFootnote->GetTextNode().GetParaAttr(aSet,
                 pTextFootnote->GetStart(), pTextFootnote->GetStart() + 1, true);
             if (aSet.Count())
             {
