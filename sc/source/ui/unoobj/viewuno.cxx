@@ -23,8 +23,13 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/Boundary.hpp>
 
+#include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmark.hxx>
@@ -51,6 +56,7 @@
 #include <editsh.hxx>
 #include <viewuno.hxx>
 #include <cellsuno.hxx>
+#include <cellvalue.hxx>
 #include <miscuno.hxx>
 #include <tabvwsh.hxx>
 #include <prevwsh.hxx>
@@ -71,6 +77,8 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <formatsh.hxx>
 #include <sfx2/app.hxx>
+#include <inputhdl.hxx>
+#include <algorithm>
 
 using namespace com::sun::star;
 
@@ -477,6 +485,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( container::XIndexAccess )
     SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
     SC_QUERYINTERFACE( view::XSelectionSupplier )
+    SC_QUERYINTERFACE( text::XRubySelection )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( sheet::XViewSplitable )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
@@ -1677,6 +1686,118 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
         }
     }
 }
+
+
+uno::Sequence<uno::Sequence<beans::PropertyValue>> SAL_CALL ScTabViewObj::getRubyList(sal_Bool /*bAutomatic*/)
+{
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aRetval(30);
+    uno::Sequence<beans::PropertyValue>* pRet = aRetval.getArray();
+    sal_Int32 nCount = 0;
+    ScTabViewShell* pViewSh = GetViewShell();
+
+    if (pViewSh)
+    {
+        // TODO: should make sure ScEditShell active?
+        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
+        ScInputHandler *pHandler = pViewSh->GetInputHandler();
+        if (pDoc && pHandler)
+        {
+            // TODO: limit to the selected string or the paragraph that the cursor resides.
+            // Note: RubyDialog requires ScTabViewObj supports XSelectionSupplier -
+            // that's true, but it doesn't support text selection change - possibly via
+            // editeng::EditViewCallbacks::EditViewSelectionChanged().
+            const OUString& rText = pHandler->GetEditString();
+
+            if (pRet)
+            {
+                const uno::Reference<i18n::XBreakIterator>& xBreakIter = pDoc->GetBreakIterator();
+                sal_Int32 nStart = 0;
+                while (nCount < 30)
+                {
+                    // TODO: match existing attributes boundary?
+                    i18n::Boundary aBoundary = xBreakIter->getWordBoundary(rText, nStart,
+                            *ScGlobal::GetLocale(), // TODO: handle this correctly.
+                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+
+                    if (aBoundary.endPos <= nStart)
+                        break;
+
+                    pRet[nCount].realloc(2);
+
+                    beans::PropertyValue* pValues = pRet[nCount].getArray();
+
+                    pValues[0].Name = "RubyBaseText";
+                    pValues[0].Value <<= rText.copy(nStart, aBoundary.endPos - nStart);
+                    pValues[1].Name = "RubyText";
+                    pValues[1].Value <<= OUString("");
+/*
+                    pValues[0].Name = UNO_NAME_RUBY_BASE_TEXT;
+                    pValues[1].Name = UNO_NAME_RUBY_TEXT;
+                    pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
+                    pValues[3].Name = UNO_NAME_RUBY_ADJUST;
+                    pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
+                    pValues[5].Name = UNO_NAME_RUBY_POSITION;
+*/
+                    ++nCount;
+                    nStart = aBoundary.endPos;
+                }
+            }
+        }
+    }
+
+    if (nCount < 30)
+        aRetval.realloc(nCount);
+
+
+    return aRetval;
+}
+
+void SAL_CALL ScTabViewObj::setRubyList(
+        const uno::Sequence<uno::Sequence<beans::PropertyValue>>& rRubyList,
+        sal_Bool /*bAutomatic*/)
+{
+        SolarMutexGuard aGuard;
+        ScTabViewShell* pViewSh = GetViewShell();
+        ScViewData& rViewData = pViewSh->GetViewData();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        //ScDocument& rDoc = pDocSh->GetDocument();
+
+        const ScMarkData& rMark = rViewData.GetMarkData();
+        SCTAB nTabs = rMark.GetSelectCount();
+
+        ScRange aRange;
+        ScMarkType eMarkType = rViewData.GetSimpleArea(aRange);
+        if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE) && aRange.aStart == aRange.aEnd)
+        {
+            ScCellObj aCell(pDocSh, aRange.aStart);
+            uno::Reference<text::XTextCursor> aTextCursor = aCell.createTextCursorByRange(aCell.getStart());
+
+            for(const uno::Sequence<beans::PropertyValue> &rValues: rRubyList)
+            {
+                const auto pNamedValue = std::find_if(
+                        rValues.begin(), rValues.end(),
+                        [](const auto& rNamedValue) { return rNamedValue.Name == "RubyBaseText"; });
+
+                if (pNamedValue != rValues.end())
+                {
+                    OUString aRubyBaseText;
+                    pNamedValue->Value >>= aRubyBaseText;
+                    std::cout<<__FUNCTION__<< ":"<<aRubyBaseText<<std::endl;
+
+                    if (!aTextCursor->goRight(aRubyBaseText.getLength(), false))
+                        break;
+
+                    uno::Reference<beans::XPropertySet> xProp(aTextCursor, uno::UNO_QUERY);
+                    if (xProp.is())
+                    {
+                        xProp->setPropertyValue("CharColor", uno::makeAny(static_cast<sal_uInt32>(255)));
+                        aTextCursor->collapseToEnd();
+                    }
+                }
+            }
+        }
+}
+
 
 void ScTabViewObj::SelectionChanged()
 {
