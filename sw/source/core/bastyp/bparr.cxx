@@ -207,7 +207,8 @@ void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
     if( !m_nSize )
     {
         // special case: insert first element
-        p = InsBlock( cur = 0 );
+        cur = 0;
+        p = InsBlock( cur );
     }
     else if( pos == m_nSize )
     {
@@ -238,7 +239,10 @@ void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
                 auto pFrom = q->mvData.begin() + nCount;
                 auto pTo   = pFrom + 1;
                 while( nCount-- )
-                    ++( *--pTo = *--pFrom )->m_nOffset;
+                {
+                    *--pTo = *--pFrom;
+                    ++((*pTo)->m_nOffset);
+                }
             }
             q->nStart--;
             q->nEnd--;
@@ -281,7 +285,10 @@ void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
         auto pFrom = p->mvData.begin() + p->nElem;
         auto pTo   = pFrom + 1;
         while( nCount-- )
-            ++( *--pTo = *--pFrom )->m_nOffset;
+        {
+            *--pTo = *--pFrom;
+            ++( *pTo )->m_nOffset;
+        }
     }
     // insert element and update indices
     pElem->m_nOffset = sal_uInt16(pos);

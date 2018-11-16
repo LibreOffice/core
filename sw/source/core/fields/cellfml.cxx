@@ -930,7 +930,8 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
     const SwLayoutFrame *pStt, *pEnd;
     const SwFrame* pFrame = lcl_GetBoxFrame( rSttBox );
     pStt = pFrame ? pFrame->GetUpper() : nullptr;
-    pEnd = ( nullptr != (pFrame = lcl_GetBoxFrame( rEndBox ))) ? pFrame->GetUpper() : nullptr;
+    pFrame = lcl_GetBoxFrame( rEndBox );
+    pEnd = pFrame ? pFrame->GetUpper() : nullptr;
     if( !pStt || !pEnd )
         return ;                        // no valid selection
 

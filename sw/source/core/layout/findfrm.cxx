@@ -313,18 +313,25 @@ const SwLayoutFrame *SwFrame::ImplGetNextLayoutLeaf( bool bFwd ) const
 
          bool bGoingFwdOrBwd = false;
 
-         bool bGoingDown = ( !bGoingUp && ( nullptr != (p = lcl_GetLower( pFrame, bFwd ) ) ) );
+         bool bGoingDown = !bGoingUp;
+         if (bGoingDown)
+         {
+            p = lcl_GetLower( pFrame, bFwd );
+            bGoingDown = nullptr != p;
+         }
          if ( !bGoingDown )
          {
              // I cannot go down, because either I'm currently going up or
              // because the is no lower.
              // I'll try to go forward:
-             bGoingFwdOrBwd = (nullptr != (p = lcl_FindLayoutFrame( pFrame, bFwd ) ) );
+             p = lcl_FindLayoutFrame( pFrame, bFwd );
+             bGoingFwdOrBwd = nullptr != p;
              if ( !bGoingFwdOrBwd )
              {
                  // I cannot go forward, because there is no next frame.
                  // I'll try to go up:
-                 bGoingUp = (nullptr != (p = pFrame->GetUpper() ) );
+                 p = pFrame->GetUpper();
+                 bGoingUp = nullptr != p;
                  if ( !bGoingUp )
                  {
                     // I cannot go up, because there is no upper frame.
@@ -366,13 +373,20 @@ const SwContentFrame* SwContentFrame::ImplGetNextContentFrame( bool bFwd ) const
         const SwFrame *p = nullptr;
         bool bGoingFwdOrBwd = false;
 
-        bool bGoingDown = ( !bGoingUp && ( nullptr != ( p = lcl_GetLower( pFrame, true ) ) ) );
+        bool bGoingDown = !bGoingUp;
+        if (bGoingDown)
+        {
+            p = lcl_GetLower( pFrame, true ) ;
+            bGoingDown = nullptr != p;
+        }
         if ( !bGoingDown )
         {
-            bGoingFwdOrBwd = ( nullptr != ( p = lcl_FindLayoutFrame( pFrame, bFwd ) ) );
+            p = lcl_FindLayoutFrame( pFrame, bFwd );
+            bGoingFwdOrBwd = nullptr != p;
             if ( !bGoingFwdOrBwd )
             {
-                bGoingUp = ( nullptr != ( p = pFrame->GetUpper() ) );
+                p = pFrame->GetUpper();
+                bGoingUp = nullptr != p;
                 if ( !bGoingUp )
                 {
                     return nullptr;
@@ -713,14 +727,20 @@ static SwFrame* lcl_NextFrame( SwFrame* pFrame )
         SwFrame *p = nullptr;
 
         bool bGoingFwd = false;
-        bool bGoingDown = (!bGoingUp && ( nullptr != (p = pFrame->IsLayoutFrame() ? static_cast<SwLayoutFrame*>(pFrame)->Lower() : nullptr)));
-
+        bool bGoingDown = !bGoingUp && pFrame->IsLayoutFrame();
+        if (bGoingDown)
+        {
+            p = static_cast<SwLayoutFrame*>(pFrame)->Lower();
+            bGoingDown = nullptr != p;
+        }
         if( !bGoingDown )
         {
-            bGoingFwd = (nullptr != (p = ( pFrame->IsFlyFrame() ? static_cast<SwFlyFrame*>(pFrame)->GetNextLink() : pFrame->GetNext())));
+            p = pFrame->IsFlyFrame() ? static_cast<SwFlyFrame*>(pFrame)->GetNextLink() : pFrame->GetNext();
+            bGoingFwd = nullptr != p;
             if ( !bGoingFwd )
             {
-                bGoingUp = (nullptr != (p = pFrame->GetUpper()));
+                p = pFrame->GetUpper();
+                bGoingUp = nullptr != p;
                 if ( !bGoingUp )
                 {
                     return nullptr;

@@ -1445,8 +1445,8 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     bool bWatchMidHyph = false;
 
     const SwAttrSet& rAttrSet = GetTextNodeForParaProps()->GetSwAttrSet();
-    bool bMaxHyph = ( 0 !=
-        ( rInf.MaxHyph() = rAttrSet.GetHyphenZone().GetMaxHyphens() ) );
+    rInf.MaxHyph() = rAttrSet.GetHyphenZone().GetMaxHyphens();
+    bool bMaxHyph = 0 != rInf.MaxHyph();
     if ( bMaxHyph )
         rLine.InitCntHyph();
 
