@@ -60,7 +60,7 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
         @param aGroup
             moves all Shapes from this GroupShape
             to the parent XShapes of the GroupShape.
-            The GroupShape is than removed from the
+            The GroupShape is then removed from the
             GenericDrawPage and disposed.
      */
     void ungroup( [in] com::sun::star::drawing::XShapeGroup aGroup );

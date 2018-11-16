@@ -32,7 +32,7 @@ namespace rptxml
         OUString     m_sPageText; // page count and page number
         OUString     m_sLabel;
         OXMLCell&           m_rCell;
-        OXMLFixedContent*   m_pInP; // if set than we are in text-p element
+        OXMLFixedContent*   m_pInP; // if set then we are in text-p element
         bool                m_bFormattedField;
 
     protected:

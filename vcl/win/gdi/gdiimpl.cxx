@@ -449,7 +449,7 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
                 }
                 while ( GetWindowStyle( hWndTopWindow ) & WS_CHILD );
 
-                // If one or more Parents clip our window, than we must
+                // If one or more Parents clip our window, then we must
                 // calculate the outside area
                 if ( !EqualRect( &aSrcRect, &aTempRect3 ) )
                 {
