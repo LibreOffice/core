@@ -2143,7 +2143,6 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
         RequestingChildren( pParent );
     if( pParent->HasChildren() )
     {
-        nImpFlags |= SvTreeListBoxFlags::IS_EXPANDING;
         if( ExpandingHdl() )
         {
             bExpanded = true;
@@ -2177,7 +2176,6 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
 
 bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
 {
-    nImpFlags &= ~SvTreeListBoxFlags::IS_EXPANDING;
     pHdlEntry = pParent;
     bool bCollapsed = false;
 

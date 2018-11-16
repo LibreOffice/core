@@ -180,14 +180,13 @@ enum class SvTreeListBoxFlags
     NONE             = 0x0000,
     IN_EDT           = 0x0001,
     EDT_ENABLED      = 0x0002,
-    IS_EXPANDING     = 0x0004,
-    IS_TRAVELSELECT  = 0x0008,
-    TARGEMPH_VIS     = 0x0010,
-    EDTEND_CALLED    = 0x0020,
+    IS_TRAVELSELECT  = 0x0004,
+    TARGEMPH_VIS     = 0x0008,
+    EDTEND_CALLED    = 0x0010,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvTreeListBoxFlags> : is_typed_flags<SvTreeListBoxFlags, 0x003f> {};
+    template<> struct typed_flags<SvTreeListBoxFlags> : is_typed_flags<SvTreeListBoxFlags, 0x001f> {};
 }
 
 struct SvTreeListBoxImpl;
