@@ -1494,7 +1494,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             {
                 const sal_Int32 nPos = rPos.nContent.GetIndex();
                 m_xScratchSet.reset(new SfxItemSet(pDoc->GetAttrPool(), {{nWhich, nWhich}}));
-                if (pNd->GetTextNode()->GetAttr(*m_xScratchSet, nPos, nPos))
+                if (pNd->GetTextNode()->GetParaAttr(*m_xScratchSet, nPos, nPos))
                     pItem = m_xScratchSet->GetItem(nWhich);
             }
 

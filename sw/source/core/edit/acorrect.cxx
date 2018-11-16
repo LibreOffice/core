@@ -471,7 +471,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
         pDontExpItems.reset( new SfxItemSet( const_cast<SwDoc*>(pTextNd->GetDoc())->GetAttrPool(),
                                             aCharFormatSetRange ) );
         const sal_Int32 n = rPos.nContent.GetIndex();
-        if( !pTextNd->GetAttr( *pDontExpItems, n, n,
+        if (!pTextNd->GetParaAttr( *pDontExpItems, n, n,
                                 n != pTextNd->GetText().getLength() ))
         {
             pDontExpItems.reset();
