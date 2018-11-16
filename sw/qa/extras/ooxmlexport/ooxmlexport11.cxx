@@ -120,6 +120,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf63561_clearTabs2, "tdf63561_clearTabs2.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< uno::Sequence<style::TabStop> >(getParagraph(4), "ParaTabStops").getLength());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf121456_tabsOffset, "tdf121456_tabsOffset.odt")
+{
+    for (int i=2; i<8; i++)
+    {
+        uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( i ), "ParaTabStops");
+        CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
+        CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_RIGHT, stops[ 0 ].Alignment );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32(17000), stops[ 0 ].Position );
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
