@@ -54,14 +54,15 @@ private:
 
 inline bool KDE5SalGraphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
 {
-    return m_aControl.IsNativeControlSupported(nType, nPart);
+    return Qt5Graphics_Controls::IsNativeControlSupported(nType, nPart);
 }
 
 inline bool KDE5SalGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
                                                   const tools::Rectangle& rControlRegion,
                                                   const Point& aPos, bool& rIsInside)
 {
-    return m_aControl.hitTestNativeControl(nType, nPart, rControlRegion, aPos, rIsInside);
+    return Qt5Graphics_Controls::hitTestNativeControl(nType, nPart, rControlRegion, aPos,
+                                                      rIsInside);
 }
 
 inline bool KDE5SalGraphics::getNativeControlRegion(
@@ -69,8 +70,9 @@ inline bool KDE5SalGraphics::getNativeControlRegion(
     ControlState nState, const ImplControlValue& aValue, const OUString& aCaption,
     tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
 {
-    return m_aControl.getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, aCaption,
-                                             rNativeBoundingRegion, rNativeContentRegion);
+    return Qt5Graphics_Controls::getNativeControlRegion(nType, nPart, rControlRegion, nState,
+                                                        aValue, aCaption, rNativeBoundingRegion,
+                                                        rNativeContentRegion);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

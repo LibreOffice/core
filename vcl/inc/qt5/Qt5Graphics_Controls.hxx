@@ -44,18 +44,18 @@ public:
 
     QImage& getImage() { return *m_image; }
 
-    bool IsNativeControlSupported(ControlType nType, ControlPart nPart);
-    bool hitTestNativeControl(ControlType nType, ControlPart nPart,
-                              const tools::Rectangle& rControlRegion, const Point& aPos,
-                              bool& rIsInside);
+    static bool IsNativeControlSupported(ControlType nType, ControlPart nPart);
+    static bool hitTestNativeControl(ControlType nType, ControlPart nPart,
+                                     const tools::Rectangle& rControlRegion, const Point& aPos,
+                                     bool& rIsInside);
     bool drawNativeControl(ControlType nType, ControlPart nPart,
                            const tools::Rectangle& rControlRegion, ControlState nState,
                            const ImplControlValue& aValue, const OUString& aCaption);
-    bool getNativeControlRegion(ControlType nType, ControlPart nPart,
-                                const tools::Rectangle& rControlRegion, ControlState nState,
-                                const ImplControlValue& aValue, const OUString& aCaption,
-                                tools::Rectangle& rNativeBoundingRegion,
-                                tools::Rectangle& rNativeContentRegion);
+    static bool getNativeControlRegion(ControlType nType, ControlPart nPart,
+                                       const tools::Rectangle& rControlRegion, ControlState nState,
+                                       const ImplControlValue& aValue, const OUString& aCaption,
+                                       tools::Rectangle& rNativeBoundingRegion,
+                                       tools::Rectangle& rNativeContentRegion);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

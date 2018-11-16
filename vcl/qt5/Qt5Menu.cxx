@@ -148,7 +148,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
                     pAction->setVisible(pSalMenuItem->mbVisible);
 
                     connect(pAction, &QAction::triggered, this,
-                            [this, pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
+                            [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
                 }
             }
         }

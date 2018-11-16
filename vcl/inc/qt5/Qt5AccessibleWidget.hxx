@@ -73,8 +73,8 @@ public:
     void doAction(const QString& actionName) override;
     QStringList keyBindingsForAction(const QString& actionName) const override;
 
-    QAccessibleValueInterface* valueInterface();
-    QAccessibleTextInterface* textInterface();
+    static QAccessibleValueInterface* valueInterface();
+    static QAccessibleTextInterface* textInterface();
 
     // QAccessibleTextInterface
     void addSelection(int startOffset, int endOffset) override;
