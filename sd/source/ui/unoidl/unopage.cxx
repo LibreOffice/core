@@ -1018,10 +1018,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= static_cast<sal_Int32>( GetPage()->GetSize().getHeight() );
         break;
     case WID_PAGE_ORIENT:
-        aAny <<= view::PaperOrientation(
+        aAny <<=
             GetPage()->GetOrientation() == Orientation::Portrait
             ? view::PaperOrientation_PORTRAIT
-            : view::PaperOrientation_LANDSCAPE);
+            : view::PaperOrientation_LANDSCAPE;
         break;
     case WID_PAGE_EFFECT:
         aAny <<= GetPage()->GetFadeEffect();

@@ -119,7 +119,7 @@ namespace sdbtools
 
     Reference< XInterface > ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
     {
-        return *( new ConnectionTools( Reference<XComponentContext>( _rxContext ) ) );
+        return *( new ConnectionTools( _rxContext ) );
     }
 
     void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments)

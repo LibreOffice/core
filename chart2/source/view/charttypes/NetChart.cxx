@@ -619,16 +619,16 @@ void NetChart::createShapes()
                                 if( pPolarPosHelper )
                                 {
                                     PolarLabelPositionHelper aPolarLabelPositionHelper(pPolarPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
-                                    aScreenPosition2D = awt::Point( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
-                                        eAlignment, fLogicX, fLogicY, fLogicZ, nOffset ));
+                                    aScreenPosition2D = aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
+                                        eAlignment, fLogicX, fLogicY, fLogicZ, nOffset );
                                 }
                             }
                             else
                             {
                                 if(eAlignment==LABEL_ALIGN_CENTER )
                                     nOffset = 0;
-                                aScreenPosition2D = awt::Point( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
-                                    .transformSceneToScreenPosition( aScenePosition3D ) );
+                                aScreenPosition2D = LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                                    .transformSceneToScreenPosition( aScenePosition3D );
                             }
 
                             createDataLabel( m_xTextTarget, *pSeries, nIndex

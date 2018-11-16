@@ -207,7 +207,7 @@ namespace drawinglayer
                                     aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
 
                                 // create primitive
-                                xRetval = new BitmapPrimitive2D(BitmapEx(aContent), aBitmapTransform);
+                                xRetval = new BitmapPrimitive2D(aContent, aBitmapTransform);
                             }
                             catch( const uno::Exception& )
                             {

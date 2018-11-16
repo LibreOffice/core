@@ -73,9 +73,8 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? u'.' : aSep[0];
 
-    maSavedDocOptions = ScDocOptions(
-        static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
-            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions());
+    maSavedDocOptions = static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
+            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions();
 }
 
 ScTpFormulaOptions::~ScTpFormulaOptions()

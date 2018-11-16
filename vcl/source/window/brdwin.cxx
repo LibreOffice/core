@@ -1400,7 +1400,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
 {
     ImplBorderFrameData* pData = &maFrameData;
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
-    Point aTmpPoint = pOffset ? Point(*pOffset) : Point();
+    Point aTmpPoint = pOffset ? *pOffset : Point();
     tools::Rectangle aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     DecorationView aDecoView(&rRenderContext);

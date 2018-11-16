@@ -1442,11 +1442,11 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
                 --w.m_nPtIndex;
                 w.AssignBack(pTextNd, nPtPos);
 
-                aBndry = Boundary( g_pBreakIt->GetBreakIter()->getWordBoundary(
+                aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                                     *w.m_pText, w.m_nPtIndex,
                                     g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                                     nWordType,
-                                    bForward ));
+                                    bForward );
 
             }
 
