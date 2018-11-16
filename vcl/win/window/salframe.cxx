@@ -1342,7 +1342,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         // Search for TopLevel Frame
         while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_CHILD) )
             hWndParent = ::GetParent( hWndParent );
-        // if the Window has a Parent, than center the window to
+        // if the Window has a Parent, then center the window to
         // the parent, in the other case to the screen
         if ( hWndParent && !IsIconic( hWndParent ) &&
              (GetWindowStyle( hWndParent ) & WS_VISIBLE) )
@@ -3556,7 +3556,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
                 bIgnoreCharMsg = false;
 
-                // char-message, than remove or ignore
+                // char-message, then remove or ignore
                 if ( bCharPeek )
                 {
                     nDeadChar = 0;
