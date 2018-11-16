@@ -1865,7 +1865,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                             sal_Int32 searchIndex=1;
                             while(aColumnMap.find(sAlias) != aColumnMap.end())
                             {
-                                (sAlias = sName) += OUString::number(searchIndex++);
+                                sAlias = sName + OUString::number(searchIndex++);
                             }
                             sName = sAlias;
                         }

@@ -2507,7 +2507,8 @@ void PSWriter::StartCompression()
     for ( i = 0; i < 4096; i++ )
     {
         pTable[ i ].pBrother = pTable[ i ].pFirstChild = nullptr;
-        pTable[ i ].nValue = static_cast<sal_uInt8>( pTable[ i ].nCode = i );
+        pTable[ i ].nCode = i;
+        pTable[ i ].nValue = static_cast<sal_uInt8>( i );
     }
     pPrefix = nullptr;
     WriteBits( nClearCode, nCodeSize );

@@ -227,8 +227,12 @@ public:
     bool                    IsValid( SvxBoxInfoItemValidFlags nValid ) const
                                 { return bool( nValidFlags & nValid ); }
     void                    SetValid( SvxBoxInfoItemValidFlags nValid, bool bValid = true )
-                                { bValid ? ( nValidFlags |= nValid )
-                                         : ( nValidFlags &= ~nValid ); }
+    {
+        if (bValid)
+            nValidFlags |= nValid;
+        else
+            nValidFlags &= ~nValid;
+    }
     void                    ResetFlags();
 };
 

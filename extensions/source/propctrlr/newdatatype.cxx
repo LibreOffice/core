@@ -55,7 +55,7 @@ namespace pcr
         sal_Int32 nPostfixNumber = 1;
         do
         {
-            ( sInitialName = sNameBase ) += OUString::number(nPostfixNumber++);
+            sInitialName = sNameBase + OUString::number(nPostfixNumber++);
         }
         while ( m_aProhibitedNames.find( sInitialName ) != m_aProhibitedNames.end() );
 

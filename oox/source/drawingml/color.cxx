@@ -553,7 +553,7 @@ void Color::clearTransparence()
                 case XML_comp:
                     // comp: rotate hue by 180 degrees, do not change lum/sat
                     toHsl();
-                    (mnC1 += 180 * PER_DEGREE) %= MAX_DEGREE;
+                    mnC1 = (mnC1 + (180 * PER_DEGREE)) % MAX_DEGREE;
                 break;
                 case XML_inv:
                     // invert percentual RGB values
