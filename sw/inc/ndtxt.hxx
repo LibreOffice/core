@@ -305,7 +305,8 @@ public:
     bool GetParaAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                   const bool bOnlyTextAttr  = false,
                   const bool bGetFromChrFormat = true,
-                  const bool bMergeIndentValuesOfNumRule = false ) const;
+                  const bool bMergeIndentValuesOfNumRule = false,
+                  SwRootFrame const* pLayout = nullptr) const;
 
     /// Convey attributes of an AttrSet (AutoFormat) to SwpHintsArray.
     void FormatToTextAttr( SwTextNode* pNd );
