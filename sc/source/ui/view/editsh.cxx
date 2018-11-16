@@ -41,6 +41,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/cjkoptions.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -87,6 +88,7 @@ SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 void ScEditShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("celledit");
+    GetStaticInterface()->RegisterChildWindow(SID_RUBY_DIALOG);
 }
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
@@ -186,6 +188,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
+        case SID_RUBY_DIALOG:
+        {
+            std::cout<<__FUNCTION__<<std::endl;
+            SfxRequest aReq(nSlot, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
+            pViewData->GetViewShell()->GetViewFrame()->ExecuteSlot(aReq);
+            rReq.Ignore();
+        }
+        break;
+
         case SID_ATTR_INSERT:
         case FID_INS_CELL_CONTENTS: // Insert taste, while defined as Acc
             bIsInsertMode = !pTableView->IsInsertMode();
@@ -703,6 +714,22 @@ void ScEditShell::GetState( SfxItemSet& rSet )
     {
         switch (nWhich)
         {
+            case SID_RUBY_DIALOG:
+               {
+                    std::cout<<__FUNCTION__<<std::endl;
+                    SvtCJKOptions aCJKOptions;
+#if 0
+                    if(!aCJKOptions.IsRubyEnabled())
+                    {
+                        pViewData->GetViewShell()->GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
+                        rSet.DisableItem(nWhich);
+                    }
+                    else
+#endif
+                        pViewData->GetViewShell()->GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
+                }
+
+            break;
             case SID_ATTR_INSERT:   // Status row
                 {
                     if ( pActiveView )
