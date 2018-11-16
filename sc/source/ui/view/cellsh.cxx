@@ -770,9 +770,10 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if( nCol2 != nCol1 || nRow1 != nRow2 )
                     {
                         const auto nRows = nRow2 - nRow1 + 1;
-                        OUString aRowArg = ScResId(STR_SELCOUNT_ROWARG, nRows).replaceAll("$1", OUString::number(nRows));
                         const auto nCols = nCol2 - nCol1 + 1;
-                        OUString aColArg = ScResId(STR_SELCOUNT_COLARG, nCols).replaceAll("$1", OUString::number(nCols));
+                        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
+                        OUString aRowArg = ScResId(STR_SELCOUNT_ROWARG, nRows).replaceAll("$1", rLocaleData.getNum(nRows, 0));
+                        OUString aColArg = ScResId(STR_SELCOUNT_COLARG, nCols).replaceAll("$1", rLocaleData.getNum(nCols, 0));
                         OUString aStr = ScResId(STR_SELCOUNT);
                         aStr = aStr.replaceAll("$1", aRowArg);
                         aStr = aStr.replaceAll("$2", aColArg);
