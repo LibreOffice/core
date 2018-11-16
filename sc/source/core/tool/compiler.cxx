@@ -2643,10 +2643,14 @@ Label_MaskStateMachine:
             ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass );
 
             if ( !aRes.TokenType )
-                SetError( nErr = FormulaError::IllegalChar );      // parsed chars as string
+            {
+                nErr = FormulaError::IllegalChar;
+                SetError( nErr );      // parsed chars as string
+            }
             if ( aRes.EndPos <= nSrcPos )
             {   // ?!?
-                SetError( nErr = FormulaError::IllegalChar );
+                nErr = FormulaError::IllegalChar;
+                SetError( nErr );
                 nSrcPos = aFormula.getLength();
                 aSymbol.truncate();
             }
