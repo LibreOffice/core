@@ -69,7 +69,7 @@ DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.docx")
 {
-    //using .docx input file to verify cross-format compatability.
+    //using .docx input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField;
     xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(5), 3), "Bookmark");
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
