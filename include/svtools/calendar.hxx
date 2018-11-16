@@ -192,7 +192,6 @@ class SVT_DLLPUBLIC Calendar final : public Control
     SVT_DLLPRIVATE void         ImplUpdate( bool bCalcNew = false );
     using Window::ImplScroll;
     SVT_DLLPRIVATE void         ImplScroll( bool bPrev );
-    SVT_DLLPRIVATE void         ImplInvertDropPos();
     SVT_DLLPRIVATE void         ImplShowMenu( const Point& rPos, const Date& rDate );
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( bool bCancel );

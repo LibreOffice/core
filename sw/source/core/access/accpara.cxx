@@ -533,40 +533,6 @@ bool SwAccessibleParagraph::IsValidRange(
     return IsValidPosition(nBegin, nLength) && IsValidPosition(nEnd, nLength);
 }
 
-SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
-{
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
-    assert(pFrame);
-    const SwTextNode *const pTextNd = pFrame->GetTextNodeFirst();
-    if( pTextNd )
-    {
-        const SwSectionNode * pSectNd = pTextNd->FindSectionNode();
-        if( pSectNd )
-        {
-            const SwSection * pSect = &pSectNd->GetSection();
-            const  SwTOXBaseSection *pTOXBaseSect = static_cast<const SwTOXBaseSection *>(pSect);
-            if( pSect->GetType() == TOX_CONTENT_SECTION )
-            {
-                SwTOXSortTabBase* pSortBase = nullptr;
-                size_t nSize = pTOXBaseSect->GetTOXSortTabBases().size();
-
-                for(size_t nIndex = 0; nIndex<nSize; nIndex++ )
-                {
-                    pSortBase = pTOXBaseSect->GetTOXSortTabBases()[nIndex].get();
-                    if( pSortBase->pTOXNd == pTextNd )
-                        break;
-                }
-
-                if (pSortBase)
-                {
-                    return pSortBase;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
 //the function is to check whether the position is in a redline range.
 const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex()
 {
