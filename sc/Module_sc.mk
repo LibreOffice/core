@@ -136,6 +136,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_headerfootercontentobj \
 	CppunitTest_sc_indexenumeration_ddelinksenumeration \
 	CppunitTest_sc_indexenumeration_scenariosenumeration \
+	CppunitTest_sc_indexenumeration_tablecolumnsenumeration \
 	CppunitTest_sc_indexenumeration_tablerowsenumeration \
 	CppunitTest_sc_indexenumeration_textfieldenumeration \
 	CppunitTest_sc_importdescriptorbaseobj \
