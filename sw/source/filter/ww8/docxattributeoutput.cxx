@@ -7443,8 +7443,8 @@ void DocxAttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
         m_pSerializer->singleElementNS( XML_w, XML_widowControl, FSNS( XML_w, XML_val ), "false", FSEND );
 }
 
-static void impl_WriteTabElement( FSHelperPtr pSerializer,
-                                  const SvxTabStop& rTab, long /* nCurrentLeft */ )
+static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
+                                  const SvxTabStop& rTab, long tabsOffset )
 {
     FastAttributeList *pTabElementAttrList = FastSerializerHelper::createAttrList();
 
@@ -7466,9 +7466,11 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
         break;
     }
 
-    // Because GetTabPos already includes indent, we don't need to add nCurrentLeft (CurrentLeft is indentation information)
-    //pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::valueOf( rTab.GetTabPos() + nCurrentLeft ) );
-    pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::number( rTab.GetTabPos()                ) );
+    // Write position according to used offset of the whole paragraph.
+    // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
+    // But in ODT, zero position could be page margins or paragraph indent according to used settings.
+    // This is handled outside of this method and provided for us in tabsOffset parameter.
+    pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::number( rTab.GetTabPos() + tabsOffset ) );
 
     sal_Unicode cFillChar = rTab.GetFill();
 
@@ -7488,9 +7490,6 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
 
 void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 {
-    const SfxPoolItem* pLR = m_rExport.HasItem( RES_LR_SPACE );
-    long nCurrentLeft = pLR ? static_cast<const SvxLRSpaceItem*>(pLR)->GetTextLeft() : 0;
-
     sal_uInt16 nCount = rTabStop.Count();
 
     // <w:tabs> must contain at least one <w:tab>, so don't write it empty
@@ -7504,10 +7503,20 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
     m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
 
+    // Get offset for tabs
+    // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
+    // But in ODT, zero position could be page margins or paragraph indent according to used settings.
+    long tabsOffset = 0;
+    if (m_rExport.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
+    {
+        const SfxPoolItem* pLR = m_rExport.HasItem( RES_LR_SPACE );
+        tabsOffset = pLR ? static_cast<const SvxLRSpaceItem*>(pLR)->GetTextLeft() : 0;
+    }
+
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
         if( rTabStop[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
-            impl_WriteTabElement( m_pSerializer, rTabStop[i], nCurrentLeft );
+            impl_WriteTabElement( m_pSerializer, rTabStop[i], tabsOffset );
         else
             GetExport().setDefaultTabStop( rTabStop[i].GetTabPos());
     }
