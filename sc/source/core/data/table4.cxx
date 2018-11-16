@@ -139,14 +139,16 @@ void setSuffixCell(
     OUString aValue = lcl_ValueString(nValue, nDigits);
     if (!bIsOrdinalSuffix)
     {
-        rColumn.SetRawString(nRow, aValue += rSuffix);
+        aValue += rSuffix;
+        rColumn.SetRawString(nRow, aValue);
         return;
     }
 
     OUString aOrdinalSuffix = ScGlobal::GetOrdinalSuffix(nValue);
     if (eCellType != CELLTYPE_EDIT)
     {
-        rColumn.SetRawString(nRow, aValue += aOrdinalSuffix);
+        aValue += aOrdinalSuffix;
+        rColumn.SetRawString(nRow, aValue);
         return;
     }
 
