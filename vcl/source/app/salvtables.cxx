@@ -526,7 +526,7 @@ namespace
 
     Image createImage(VirtualDevice& rDevice)
     {
-        return Image(BitmapEx(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel())));
+        return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
     }
 
     void insert_to_menu(PopupMenu* pMenu, int pos, const OUString& rId, const OUString& rStr,

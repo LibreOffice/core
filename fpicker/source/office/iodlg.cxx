@@ -2468,7 +2468,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevWin->SetOutputSizePixel(Size(200, 300));
         _pPrevWin->Show();
 
-        _pPrevBmp = VclPtr<FixedBitmap>::Create( _pPrevWin, WinBits( WB_BORDER ) );
+        _pPrevBmp = VclPtr<FixedBitmap>::Create( _pPrevWin, WB_BORDER );
         _pPrevBmp->SetBackground( Wallpaper( COL_WHITE ) );
         _pPrevBmp->SetSizePixel(_pPrevWin->GetSizePixel());
         _pPrevBmp->Show();

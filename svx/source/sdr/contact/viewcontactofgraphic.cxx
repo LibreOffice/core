@@ -210,8 +210,7 @@ namespace sdr
                     xRetval.push_back(
                         drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                                BitmapEx(aDraftBitmap),
-                                aBitmapMatrix)));
+                                aDraftBitmap, aBitmapMatrix)));
 
                     // consume bitmap size in X
                     aScale.setX(std::max(0.0, aScale.getX() - (fWidth + fDistance)));

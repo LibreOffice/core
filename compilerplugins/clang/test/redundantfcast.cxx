@@ -23,6 +23,21 @@ struct Foo
 
 void func1(Foo const& f); // expected-note {{in call to method here [loplugin:redundantfcast]}}
 
+namespace tools
+{
+struct Polygon
+{
+    Polygon() = default;
+};
+struct PolyPolygon
+{
+    PolyPolygon(
+        Polygon const&); // expected-note {{in call to method here [loplugin:redundantfcast]}}
+};
+}
+
+void ImplWritePolyPolygonRecord(const tools::PolyPolygon& rPolyPoly);
+
 int main()
 {
     OUString s;
@@ -53,7 +68,11 @@ int main()
 
     Foo foo(1);
     func1(Foo(
-        foo)); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
+        foo)); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}} expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
+
+    const tools::Polygon aPolygon;
+    ImplWritePolyPolygonRecord(tools::PolyPolygon(tools::Polygon(
+        aPolygon))); // expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' [loplugin:redundantfcast]}} expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' [loplugin:redundantfcast]}}
 }
 
 class Class1
@@ -62,7 +81,7 @@ class Class1
     Foo func2()
     {
         return Foo(
-            foo); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
+            foo); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}} expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
     }
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

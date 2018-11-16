@@ -322,7 +322,7 @@ public:
     sal_Int32  GetIndex() const         { return nIndex; }
     void       SetIndex( sal_Int32 n )  { nIndex = n; }
 
-    bool       DbgIsBuggy( EditDoc const & rDoc );
+    bool       DbgIsBuggy( EditDoc const & rDoc ) const;
 
     friend bool operator == ( const EditPaM& r1, const EditPaM& r2 );
     friend bool operator != ( const EditPaM& r1, const EditPaM& r2 );
@@ -697,7 +697,7 @@ public:
 
     bool            HasRange() const    { return aStartPaM != aEndPaM; }
     bool            IsInvalid() const { return !aStartPaM || !aEndPaM; }
-    bool            DbgIsBuggy( EditDoc const & rDoc );
+    bool            DbgIsBuggy( EditDoc const & rDoc ) const;
 
     void            Adjust( const EditDoc& rNodes );
 
