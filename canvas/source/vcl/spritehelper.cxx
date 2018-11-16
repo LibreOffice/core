@@ -141,7 +141,7 @@ namespace vclcanvas
                     // opaque. Note: since we retrieved aBmp directly
                     // from an OutDev, it's already a 'display bitmap'
                     // on windows.
-                    maContent = BitmapEx( aBmp );
+                    maContent = aBmp;
                 }
                 else
                 {

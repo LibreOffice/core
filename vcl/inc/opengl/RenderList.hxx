@@ -120,7 +120,7 @@ private:
                 double area;
                 for (size_t i = 1; i < maRectangles.size(); ++i)
                 {
-                    aTempRectangle = basegfx::B2DRange(maRectangles[i]);
+                    aTempRectangle = maRectangles[i];
                     aTempRectangle.expand(rDrawRectangle);
                     area = aTempRectangle.getWidth() * aTempRectangle.getHeight();
                     if (area < minArea)

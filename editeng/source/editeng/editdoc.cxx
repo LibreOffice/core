@@ -1113,14 +1113,14 @@ void EditPaM::SetNode(ContentNode* p)
     pNode = p;
 }
 
-bool EditPaM::DbgIsBuggy( EditDoc const & rDoc )
+bool EditPaM::DbgIsBuggy( EditDoc const & rDoc ) const
 {
     return !pNode ||
            rDoc.GetPos( pNode ) >= rDoc.Count() ||
            nIndex > pNode->Len();
 }
 
-bool EditSelection::DbgIsBuggy( EditDoc const & rDoc )
+bool EditSelection::DbgIsBuggy( EditDoc const & rDoc ) const
 {
     return aStartPaM.DbgIsBuggy( rDoc ) || aEndPaM.DbgIsBuggy( rDoc );
 }

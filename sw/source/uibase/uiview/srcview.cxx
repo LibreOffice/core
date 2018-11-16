@@ -829,7 +829,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             ErrCode nRes = aWriter.Write(xWriter, &sWriteName);
             if(nRes)
             {
-                ErrorHandler::HandleError(ErrCode(nRes));
+                ErrorHandler::HandleError(nRes);
                 aEditWin->SetReadonly(true);
             }
             aMedium.Commit();

@@ -453,7 +453,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aHeaderSet.Put(aFirstShared);
 
         // Size
-        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrameSize.GetSize()));
+        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, rFrameSize.GetSize());
         aHeaderSet.Put(aSize);
 
         // Shifting frame attributes
@@ -503,7 +503,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aFooterSet.Put(aFirstShared);
 
         // Size
-        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrameSize.GetSize()));
+        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, rFrameSize.GetSize());
         aFooterSet.Put(aSize);
 
         // Shifting Frame attributes

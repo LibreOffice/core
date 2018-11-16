@@ -312,8 +312,7 @@ void PresenterScreen::InitializePresenterScreen()
     try
     {
         Reference<XComponentContext> xContext (mxContextWeak);
-        mpPaneContainer =
-            new PresenterPaneContainer(Reference<XComponentContext>(xContext));
+        mpPaneContainer = new PresenterPaneContainer(xContext);
 
         Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
         Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);

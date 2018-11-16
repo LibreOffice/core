@@ -2029,7 +2029,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
                 sal_uInt8 nTransparency )
 {
     VCL_GL_INFO("::drawAlphaRect (" << nX << ", " << nY << ") [" << nWidth << ", " << nHeight << "]");
-    mpRenderList->addDrawRectangle(nX, nY, nWidth, nHeight, double(nTransparency / 100.0), mnLineColor, mnFillColor);
+    mpRenderList->addDrawRectangle(nX, nY, nWidth, nHeight, nTransparency / 100.0, mnLineColor, mnFillColor);
     PostBatchDraw();
     return true;
 }
