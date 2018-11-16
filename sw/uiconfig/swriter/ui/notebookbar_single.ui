@@ -26,7 +26,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="file">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkMenuToolButton" id="open">
@@ -91,7 +91,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="do">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="undo">
@@ -143,7 +143,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="functions">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="search">
@@ -216,7 +216,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="style">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="parastyle">
@@ -259,7 +259,7 @@
                 <child>
                   <object class="sfxlo-NotebookbarToolBox" id="fontnamebar">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="show_arrow">False</property>
                     <child>
                       <object class="GtkToolButton" id="fontname">
@@ -283,7 +283,7 @@
                 <child>
                   <object class="sfxlo-NotebookbarToolBox" id="fontsizebar">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="show_arrow">False</property>
                     <child>
                       <object class="GtkToolButton" id="fontsize">
@@ -328,7 +328,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="fonteffect">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="bold">
@@ -418,7 +418,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="fontfunction">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="clone">
@@ -469,7 +469,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="halignment">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="notebookbar_single|halignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
@@ -552,7 +552,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="line">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="halign">end</property>
                 <property name="show_arrow">False</property>
                 <child>
@@ -592,7 +592,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="outlineindent">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="notebookbar_single|outlineindent|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
@@ -672,7 +672,7 @@
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="insert">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="notebookbar_single|insert|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
