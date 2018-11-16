@@ -101,14 +101,14 @@ bool AddressConverter::parseOoxAddress2d(
             case STATE_COL:
             {
                 if( ('a' <= cChar) && (cChar <= 'z') )
-                    (cChar -= 'a') += 'A';
+                    cChar = (cChar - 'a') + 'A';
                 if( ('A' <= cChar) && (cChar <= 'Z') )
                 {
                     /*  Return, if 1-based column index is already 6 characters
                         long (12356631 is column index for column AAAAAA). */
                     if( ornColumn >= 12356631 )
                         return false;
-                    (ornColumn *= 26) += (cChar - 'A' + 1);
+                    ornColumn = (ornColumn * 26) + (cChar - 'A' + 1);
                 }
                 else if( ornColumn > 0 )
                 {
@@ -127,7 +127,7 @@ bool AddressConverter::parseOoxAddress2d(
                     // return, if 1-based row is already 9 digits long
                     if( ornRow >= 100000000 )
                         return false;
-                    (ornRow *= 10) += (cChar - '0');
+                    ornRow = (ornRow * 10) + (cChar - '0');
                 }
                 else
                     return false;
@@ -156,14 +156,14 @@ bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRo
             case STATE_COL:
             {
                 if( ('a' <= cChar) && (cChar <= 'z') )
-                    (cChar -= 'a') += 'A';
+                    cChar = (cChar - 'a') + 'A';
                 if( ('A' <= cChar) && (cChar <= 'Z') )
                 {
                     /*  Return, if 1-based column index is already 6 characters
                         long (12356631 is column index for column AAAAAA). */
                     if( ornColumn >= 12356631 )
                         return false;
-                    (ornColumn *= 26) += (cChar - 'A' + 1);
+                    ornColumn = (ornColumn * 26) + (cChar - 'A' + 1);
                 }
                 else if( ornColumn > 0 )
                 {
@@ -182,7 +182,7 @@ bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRo
                     // return, if 1-based row is already 9 digits long
                     if( ornRow >= 100000000 )
                         return false;
-                    (ornRow *= 10) += (cChar - '0');
+                    ornRow = (ornRow * 10) + (cChar - '0');
                 }
                 else
                     return false;
