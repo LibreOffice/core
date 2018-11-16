@@ -3413,11 +3413,17 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
                                                   RES_CHRATR_FONT>{} );
 
             pCFormat = pInfo->GetCharFormat( *m_pDoc );
-            aSet.Set( pCFormat->GetAttrSet() );
 
-            pTextFootnote->GetTextNode().GetAttr( aSet, pTextFootnote->GetStart(),
-                                            (pTextFootnote->GetStart()) + 1 );
-            m_pAttrOutput->OutputItem( aSet.Get( RES_CHRATR_FONT ) );
+            pTextFootnote->GetTextNode().GetAttr(aSet,
+                pTextFootnote->GetStart(), pTextFootnote->GetStart() + 1, true);
+            if (aSet.Count())
+            {
+                m_pAttrOutput->OutputItem( aSet.Get( RES_CHRATR_FONT ) );
+            }
+            else
+            {
+                m_pAttrOutput->OutputItem( pCFormat->GetAttrSet().Get(RES_CHRATR_FONT) );
+            }
             pO = pOld;
         }
         m_pChpPlc->AppendFkpEntry( Strm().Tell(), aOutArr.size(),
