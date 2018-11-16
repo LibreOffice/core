@@ -113,7 +113,7 @@ void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
 
             OSL_ENSURE( pInfoItem, "NumberInfoItem not found!" );
 
-            aSet.Put (SvxNumberInfoItem( static_cast<const SvxNumberInfoItem&>(*pInfoItem) ) );
+            aSet.Put ( static_cast<const SvxNumberInfoItem&>(*pInfoItem) );
             rTabPage.PageCreated(aSet);
         }
         else if (rPageId == "font")

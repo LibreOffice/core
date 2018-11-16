@@ -3038,7 +3038,7 @@ bool PrintPageRanges::checkIfAlreadyCalculatedAndSet(
     m_aInput.m_nStartCol  = nStartCol;
     m_aInput.m_nEndCol    = nEndCol;
     m_aInput.m_nPrintTab  = nPrintTab;
-    m_aInput.m_aDocSize   = Size(rDocSize);
+    m_aInput.m_aDocSize   = rDocSize;
 
     return false;
 }

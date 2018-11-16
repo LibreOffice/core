@@ -174,7 +174,7 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 
 
 BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
-    :Control( pParent, WinBits(WB_CLIPCHILDREN) )
+    :Control( pParent, WB_CLIPCHILDREN )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
     ,pHeaderBar( nullptr )

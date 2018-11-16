@@ -487,7 +487,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_CASEMAP:
                     {
-                        aNewAttr.Put( SvxCaseMapItem( aEditAttr.Get( EE_CHAR_CASEMAP ) ) );
+                        aNewAttr.Put( aEditAttr.Get( EE_CHAR_CASEMAP ) );
                     }
                     break;
                     case SID_ATTR_CHAR_STRIKEOUT:

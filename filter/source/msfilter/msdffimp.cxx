@@ -4538,7 +4538,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 aP.setY( nY );
                                 aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
                             }
-                            aPolyBoundRect = tools::Rectangle( aXP.GetBoundRect() );
+                            aPolyBoundRect = aXP.GetBoundRect();
                             if ( nNumElemVert >= 3 )
                             { // arc first command is always wr -- clockwise arc
                                 // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
@@ -6351,7 +6351,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
         if (iter != aEscherBlipCache.end())
         {
             /* if this entry is available */
-            rGraphic = Graphic(iter->second);
+            rGraphic = iter->second;
             if (rGraphic.GetType() != GraphicType::NONE)
                 bOk = true;
             else

@@ -89,7 +89,7 @@ DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case DGM_TOKEN( layoutDef ):
-        return new DiagramDefinitionContext( *this, AttributeList( rAttribs ), mpDataPtr );
+        return new DiagramDefinitionContext( *this, rAttribs, mpDataPtr );
     default:
         break;
     }

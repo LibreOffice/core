@@ -1664,8 +1664,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     sal_uInt16 nOld = rNums[0],
            nBeg = nOld,
            nCount  = 0;
-    OUString aNumStr( SvxNumberType( rDescs[0]->GetNumType() ).
-                    GetNumStr( nBeg ) );
+    OUString aNumStr( rDescs[0]->GetNumType().GetNumStr( nBeg ) );
     if( xCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
         xCharStyleIdx->push_back( 0 );
@@ -1759,7 +1758,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
                 aNumStr += S_PAGE_DELI;
             //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
             if(nCount)
-                aNumStr += SvxNumberType( rDescs[i-1]->GetNumType() ).GetNumStr( nBeg+nCount );
+                aNumStr += rDescs[i-1]->GetNumType().GetNumStr( nBeg+nCount );
         }
     }
     pNd->InsertText( aNumStr, aPos, SwInsertFlags::EMPTYEXPAND | SwInsertFlags::FORCEHINTEXPAND );

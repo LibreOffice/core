@@ -1019,7 +1019,7 @@ namespace cppcanvas
                             B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
                             B2DSize mappedSize( MapSize (dw/2, dh/2));
 
-                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::utils::createPolygonFromEllipse( mappedCenter, mappedSize.getX (), mappedSize.getY () ) ) );
+                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::utils::createPolygonFromEllipse( mappedCenter, mappedSize.getX (), mappedSize.getY () ) );
 
                             if ( type == EmfPlusRecordTypeFillEllipse )
                                 EMFPPlusFillPolygon( polyPolygon,
@@ -1516,9 +1516,9 @@ namespace cppcanvas
                             B2DPoint mappedPoint (Map (dx, dy));
                             B2DSize mappedSize( MapSize (dw, dh));
 
-                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( mappedPoint.getX(), mappedPoint.getY(),
+                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( mappedPoint.getX(), mappedPoint.getY(),
                                                                                                                                                             mappedPoint.getX() + mappedSize.getX(),
-                                                                                                                                                            mappedPoint.getY() + mappedSize.getY() ) ) ) );
+                                                                                                                                                            mappedPoint.getY() + mappedSize.getY() ) ) );
                             polyPolygon.transform(rState.mapModeTransform);
 
                             updateClipping (polyPolygon, rFactoryParms, combineMode == 1);

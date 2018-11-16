@@ -111,7 +111,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
-    ,aHScroll( VclPtr<ScrollBar>::Create(this, WinBits( WB_HSCROLL )) )
+    ,aHScroll( VclPtr<ScrollBar>::Create(this, WB_HSCROLL) )
 {
     ConstructImpl( nMode );
 }
@@ -2146,10 +2146,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     WinBits nVScrollWinBits =
         WB_VSCROLL | ( ( nMode & BrowserMode::THUMBDRAGGING ) ? WB_DRAG : 0 );
-    pVScroll = VclPtr<ScrollBar>(
-                ( nMode & BrowserMode::TRACKING_TIPS ) == BrowserMode::TRACKING_TIPS
+    pVScroll = ( nMode & BrowserMode::TRACKING_TIPS ) == BrowserMode::TRACKING_TIPS
                 ? VclPtr<BrowserScrollBar>::Create( this, nVScrollWinBits, pDataWin.get() )
-                : VclPtr<ScrollBar>::Create( this, nVScrollWinBits ));
+                : VclPtr<ScrollBar>::Create( this, nVScrollWinBits );
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );

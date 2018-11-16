@@ -32,7 +32,7 @@ BreakPointList::BreakPointList()
 BreakPointList::BreakPointList(BreakPointList const & rList)
 {
     for (size_t i = 0; i < rList.size(); ++i)
-        maBreakPoints.push_back( BreakPoint(rList.at( i )) );
+        maBreakPoints.push_back( rList.at( i ) );
 }
 
 BreakPointList::~BreakPointList()

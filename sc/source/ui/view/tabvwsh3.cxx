@@ -666,9 +666,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bFormulaMode = static_cast<const SfxBoolItem *>(pItem)->GetValue();
 
-                ScViewOptions rSetOpts = ScViewOptions( rOpts );
-                rSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
-                rViewData.SetOptions( rSetOpts );
+                ScViewOptions aSetOpts = rOpts;
+                aSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
+                rViewData.SetOptions( aSetOpts );
 
                 rViewData.GetDocShell()->PostPaintGridAll();
 

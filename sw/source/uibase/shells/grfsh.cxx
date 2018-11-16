@@ -213,7 +213,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     convertTwipToMm100(aCrop.GetRight()),
                     convertTwipToMm100(aCrop.GetBottom()) );
 
-                Graphic aGraphic = Graphic( *pGraphic );
+                Graphic aGraphic = *pGraphic;
 
                 CompressGraphicsDialog aDialog(GetView().GetFrameWeld(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings());
                 if (aDialog.run() == RET_OK)

@@ -930,8 +930,8 @@ void AreaChart::createShapes()
                             {
                                 if(eAlignment==LABEL_ALIGN_CENTER || m_nDimension == 3 )
                                     nOffset = 0;
-                                aScreenPosition2D = awt::Point( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
-                                        .transformSceneToScreenPosition( aScenePosition3D ) );
+                                aScreenPosition2D = LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                                        .transformSceneToScreenPosition( aScenePosition3D );
                             }
 
                             createDataLabel( m_xTextTarget, *pSeries, nIndex

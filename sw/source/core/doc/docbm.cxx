@@ -141,13 +141,13 @@ namespace
         bool bPosAtEndOfNode = false;
         if ( pNode == nullptr)
         {
-            SwNodeIndex aEnd = SwNodeIndex(rEnd);
+            SwNodeIndex aEnd = rEnd;
             pNode = rEnd.GetNodes().GoNext( &aEnd );
             bPosAtEndOfNode = false;
         }
         if ( pNode == nullptr )
         {
-            SwNodeIndex aStt = SwNodeIndex(rStt);
+            SwNodeIndex aStt = rStt;
             pNode = SwNodes::GoPrevious(&aStt);
             bPosAtEndOfNode = true;
         }
