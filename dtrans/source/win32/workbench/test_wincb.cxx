@@ -271,7 +271,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_FAIL("Error shuting down");
+        OSL_FAIL("Error shutting down");
 
     // Dispose and clear factory
     xComponent->dispose();

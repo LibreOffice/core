@@ -375,7 +375,7 @@ bool office_is_running()
     else
     {
         OSL_FAIL("NOT osl_Process_E_None ");
-        //if osl_getExecutable file than we take the risk of creating a pipe
+        //if osl_getExecutable file then we take the risk of creating a pipe
         ret =  existsOfficePipe();
     }
     return ret;

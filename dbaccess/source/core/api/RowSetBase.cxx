@@ -989,7 +989,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  )
         bRet = m_pCache->previous();
         doCancelModification( );
 
-        // if m_bBeforeFirst is false and bRet is false than we stood on the first row
+        // if m_bBeforeFirst is false and bRet is false then we stood on the first row
         if(!m_bBeforeFirst || bRet)
         {
             // notification order
