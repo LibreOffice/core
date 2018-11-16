@@ -952,7 +952,9 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         const SwFieldType* pFieldType;
         // process separately:
         for( auto n = mpFieldTypes->size(); n; )
-            switch( ( pFieldType = (*mpFieldTypes)[ --n ] )->Which() )
+        {
+            pFieldType = (*mpFieldTypes)[ --n ];
+            switch( pFieldType->Which() )
             {
             case SwFieldIds::User:
                 {
@@ -972,6 +974,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                 break;
             default: break;
             }
+        }
     }
 
     // The array is filled with all fields; start calculation.
@@ -1057,7 +1060,8 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         SwFormatField* pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
         const SwField* pField = pFormatField->GetField();
 
-        switch( nWhich = pField->GetTyp()->Which() )
+        nWhich = pField->GetTyp()->Which();
+        switch( nWhich )
         {
         case SwFieldIds::HiddenText:
         {

@@ -118,9 +118,12 @@ namespace sw {
 
 Filters::Filters()
 {
-    SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
-    SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
-    SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
+    ReadAscii = new AsciiReader;
+    ReadHTML = new HTMLReader;
+    ReadXML = new XMLReader;
+    SetFltPtr( READER_WRITER_BAS, ReadAscii );
+    SetFltPtr( READER_WRITER_HTML, ReadHTML );
+    SetFltPtr( READER_WRITER_XML, ReadXML );
     SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
     SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }

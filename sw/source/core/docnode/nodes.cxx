@@ -452,7 +452,9 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
     // continue until everything has been moved
     while( aRg.aStart < aRg.aEnd )
-        switch( (pCurrentNode = &aRg.aEnd.GetNode())->GetNodeType() )
+    {
+        pCurrentNode = &aRg.aEnd.GetNode();
+        switch( pCurrentNode->GetNodeType() )
         {
         case SwNodeType::End:
             {
@@ -841,6 +843,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             OSL_FAIL( "Unknown node type" );
             break;
         }
+    }
 
     if( nInsPos ) // copy remaining rest
     {

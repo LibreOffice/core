@@ -858,8 +858,14 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
         long d;         /* Active diagonal. */
 
         /* Extend the top-down search by an edit step in each diagonal. */
-        fmin > dmin ? pFDiag[--fmin - 1] = -1 : ++fmin;
-        fmax < dmax ? pFDiag[++fmax + 1] = -1 : --fmax;
+        if (fmin > dmin)
+            pFDiag[--fmin - 1] = -1;
+        else
+            ++fmin;
+        if (fmax < dmax)
+            pFDiag[++fmax + 1] = -1;
+        else
+            --fmax;
         for (d = fmax; d >= fmin; d -= 2)
         {
             long x, y, tlo = pFDiag[d - 1], thi = pFDiag[d + 1];
@@ -884,8 +890,14 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
         }
 
         /* Similar extend the bottom-up search. */
-        bmin > dmin ? pBDiag[--bmin - 1] = INT_MAX : ++bmin;
-        bmax < dmax ? pBDiag[++bmax + 1] = INT_MAX : --bmax;
+        if (bmin > dmin)
+            pBDiag[--bmin - 1] = INT_MAX;
+        else
+            ++bmin;
+        if (bmax < dmax)
+            pBDiag[++bmax + 1] = INT_MAX;
+        else
+            --bmax;
         for (d = bmax; d >= bmin; d -= 2)
         {
             long x, y, tlo = pBDiag[d - 1], thi = pBDiag[d + 1];
@@ -1013,7 +1025,7 @@ sal_uLong SwCompareLine::GetHashValue() const
         {
             OUString sStr( GetText() );
             for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
-                ( nRet <<= 1 ) += sStr[ n ];
+                nRet = (nRet << 1) + sStr[ n ];
         }
         break;
 
@@ -1233,7 +1245,7 @@ sal_uLong SwCompareLine::GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong 
 {
     OUString sStr( rNd.GetExpandText(nullptr) );
     for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
-        ( nVal <<= 1 ) += sStr[ n ];
+        nVal = (nVal << 1 ) + sStr[ n ];
     return nVal;
 }
 

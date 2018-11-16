@@ -1967,12 +1967,14 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( nSpace = nSpace + pArr[ n ] );
+                    nSpace += pArr[ n ];
+                    aFormat.SetAbsLSpace( nSpace );
                     aFormat.SetFirstLineOffset( - pArr[ n ] );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    aFormat.SetListtabPos( nSpace = nSpace + pArr[ n ] );
+                    nSpace += pArr[ n ];
+                    aFormat.SetListtabPos( nSpace );
                     aFormat.SetIndentAt( nSpace );
                     aFormat.SetFirstLineIndent( - pArr[ n ] );
                 }

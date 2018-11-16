@@ -408,7 +408,10 @@ void SwSortDlg::LanguageHdl(weld::ComboBox const* pLBox)
     for( sal_Int32 nCnt = 0; nCnt <= nEnd; ++nCnt )
     {
         if( nCnt < nEnd )
-            sUINm = m_xColRes->GetTranslation( sAlg = aSeq[ nCnt ] );
+        {
+            sAlg = aSeq[ nCnt ];
+            sUINm = m_xColRes->GetTranslation( sAlg );
+        }
         else
             sUINm = sAlg = aNumericText;
 

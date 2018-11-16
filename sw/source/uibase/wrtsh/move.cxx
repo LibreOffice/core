@@ -46,7 +46,8 @@ public:
     ShellMoveCursor( SwWrtShell* pWrtSh, bool bSel )
     {
         bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrameType(nullptr,false) & FrameTypeFlags::FLY_ANY);
-        ( pSh = pWrtSh )->MoveCursor( bSel );
+        pSh = pWrtSh;
+        pSh->MoveCursor( bSel );
         pWrtSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_HYPERLINK_GETLINK);
     }
     ~ShellMoveCursor() COVERITY_NOEXCEPT_FALSE

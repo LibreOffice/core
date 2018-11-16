@@ -2081,17 +2081,17 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     if( bInsertUnknown )
     {
-        OUString aComment("HTML: <");
+        OUStringBuffer aComment("HTML: <");
         if( (nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken) )
-            aComment += "/";
-        aComment += sSaveToken;
+            aComment.append("/");
+        aComment.append(sSaveToken);
         if( !aToken.isEmpty() )
         {
             UnescapeToken();
-            (aComment += " ") += aToken;
+            aComment.append(" ").append(aToken);
         }
-        aComment += ">";
-        InsertComment( aComment );
+        aComment.append(">");
+        InsertComment( aComment.makeStringAndClear() );
     }
 
     // if there are temporary paragraph attributes and the

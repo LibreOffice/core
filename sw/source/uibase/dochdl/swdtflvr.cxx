@@ -1278,7 +1278,15 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     SwTransferable *pTrans=nullptr, *pTunneledTrans=GetSwTransferable( rData );
 
     // check for private drop
-    bool bPrivateDrop(pPt && (bPasteSelection ? nullptr != (pTrans = pMod->m_pXSelection) : nullptr != (pTrans = pMod->m_pDragDrop)));
+    bool bPrivateDrop(pPt);
+    if (bPrivateDrop)
+    {
+        if (bPasteSelection)
+            pTrans = pMod->m_pXSelection;
+        else
+            pTrans = pMod->m_pDragDrop;
+        bPrivateDrop = nullptr != pTrans;
+    }
     bool bNeedToSelectBeforePaste(false);
 
     if(bPrivateDrop && DND_ACTION_LINK == nDropAction)

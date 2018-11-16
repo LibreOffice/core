@@ -1165,11 +1165,15 @@ SwXTextCursor::gotoRange(
 
         // now there are four SwPositions,
         // two of them are going to be used, but which ones?
-        *rOwnCursor.GetPoint() = (aOwnRight > rParamRight)
-            ? aOwnRight : *rOwnCursor.GetPoint() = rParamRight;
+        if (aOwnRight > rParamRight)
+            *rOwnCursor.GetPoint() = aOwnRight;
+        else
+            *rOwnCursor.GetPoint() = rParamRight;
         rOwnCursor.SetMark();
-        *rOwnCursor.GetMark() = (aOwnLeft < rParamLeft)
-            ? aOwnLeft : *rOwnCursor.GetMark() = rParamLeft;
+        if (aOwnLeft < rParamLeft)
+            *rOwnCursor.GetMark() = aOwnLeft;
+        else
+            *rOwnCursor.GetMark() = rParamLeft;
     }
     else
     {

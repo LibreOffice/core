@@ -2923,8 +2923,10 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 while( *pPoolIds )
                 {
                     if( !bIsSearchUsed || rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( *pPoolIds ) )
-                        aLst.Append( cPARA,
-                            s = SwStyleNameMapper::GetUIName( *pPoolIds, s ));
+                    {
+                        s = SwStyleNameMapper::GetUIName( *pPoolIds, s );
+                        aLst.Append( cPARA, s);
+                    }
                     ++pPoolIds;
                 }
             }

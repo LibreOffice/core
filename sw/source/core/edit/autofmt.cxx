@@ -821,7 +821,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
                     c += SVX_NUM_ROMAN_LOWER;
                 }
 
-                ( eScan &= ~(UPPER_ALPHA|LOWER_ALPHA)) |= eTmpScan;
+                eScan = (eScan & ~(UPPER_ALPHA|LOWER_ALPHA)) | eTmpScan;
                 if( pNumTypes )
                     (*pNumTypes) = pNumTypes->replaceAt( pNumTypes->getLength() - 1, 1, OUString(c) );
             }
@@ -1877,7 +1877,9 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
         if (nPos && IsSpace((*pText)[nPos-1]))
             nLastBlank = nPos;
         for (nSttPos = nPos; !bBreak && nPos < pText->getLength(); ++nPos)
-            switch (cChar = (*pText)[nPos])
+        {
+            cChar = (*pText)[nPos];
+            switch (cChar)
             {
             case '\"':
             case '\'':
@@ -1991,6 +1993,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 }
                 break;
             }
+        }
 
         if( nPos == nSttPos )
         {
@@ -2122,9 +2125,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
     m_nEndNdIdx = m_aEndNdIdx.GetIndex();
 
     if( !m_aFlags.bAFormatByInput )
+    {
+        m_nEndNdIdx = m_aEndNdIdx.GetIndex();
         ::StartProgress( STR_STATSTR_AUTOFORMAT, m_aNdIdx.GetIndex(),
-                         m_nEndNdIdx = m_aEndNdIdx.GetIndex(),
+                         m_nEndNdIdx,
                          m_pDoc->GetDocShell() );
+    }
 
     RedlineFlags eRedlMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     if( m_aFlags.bWithRedlining )

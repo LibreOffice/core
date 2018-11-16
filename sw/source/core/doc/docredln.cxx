@@ -1671,7 +1671,8 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             if( m_bDelLastPara )
             {
                 ++GetPoint()->nNode;
-                GetPoint()->nContent.Assign( pCNd = GetContentNode(), 0 );
+                pCNd = GetContentNode();
+                GetPoint()->nContent.Assign( pCNd, 0 );
                 m_bDelLastPara = false;
             }
             else if( pColl )

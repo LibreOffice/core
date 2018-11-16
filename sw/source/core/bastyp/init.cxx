@@ -753,7 +753,10 @@ CharClass& GetAppCharClass()
 void SwCalendarWrapper::LoadDefaultCalendar( LanguageType eLang )
 {
     if( eLang != nLang )
-        loadDefaultCalendar( LanguageTag::convertToLocale( nLang = eLang ));
+    {
+        nLang = eLang;
+        loadDefaultCalendar( LanguageTag::convertToLocale( nLang ));
+    }
 }
 
 LanguageType GetAppLanguage()

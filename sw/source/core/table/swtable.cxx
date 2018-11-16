@@ -1834,13 +1834,15 @@ OUString SwTableBox::GetName() const
         const SwTableLines* pLines = pLine->GetUpper()
                 ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
 
-        sTmp = OUString::number( nPos = pLines->GetPos( pLine ) + 1 );
+        nPos = pLines->GetPos( pLine ) + 1;
+        sTmp = OUString::number( nPos );
         if( !sNm.isEmpty() )
             sNm = sTmp + "." + sNm;
         else
             sNm = sTmp;
 
-        sTmp = OUString::number(( nPos = pBox->GetUpper()->GetBoxPos( pBox )) + 1 );
+        nPos = pBox->GetUpper()->GetBoxPos( pBox );
+        sTmp = OUString::number(nPos + 1);
         if( nullptr != ( pBox = pLine->GetUpper()) )
             sNm = sTmp + "." + sNm;
         else
