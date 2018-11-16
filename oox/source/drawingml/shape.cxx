@@ -175,6 +175,8 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , maLinkedTxbxAttr()
 , mbHasLinkedTxbx(false)
 , maDiagramDoms( pSourceShape->maDiagramDoms )
+, mnZOrder(pSourceShape->mnZOrder)
+, mnZOrderOff(pSourceShape->mnZOrderOff)
 {}
 
 Shape::~Shape()

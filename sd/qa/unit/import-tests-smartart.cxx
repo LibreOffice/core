@@ -462,12 +462,13 @@ void SdImportTestSmartArt::testAccentProcess()
     uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
 
-    // The pair if a parent (text + shape) and a child, so 3 shapes in total.
+    // The pair is a parent (shape + text) and a child, so 3 shapes in total.
+    // The order is importent, first is at the back, last is at the front.
     uno::Reference<drawing::XShapes> xFirstPair(xGroup->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstPair.is());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstPair->getCount());
 
-    uno::Reference<text::XText> xFirstParentText(xFirstPair->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFirstParentText(xFirstPair->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstParentText.is());
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xFirstParentText->getString());
     uno::Reference<drawing::XShape> xFirstParent(xFirstParentText, uno::UNO_QUERY);
