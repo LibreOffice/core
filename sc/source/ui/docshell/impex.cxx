@@ -1162,16 +1162,18 @@ static bool lcl_PutString(
                 pCalendar->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDay );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MONTH, nMonth );
                 pCalendar->setValue( i18n::CalendarFieldIndex::YEAR, nYear );
-                sal_Int16 nHour, nMinute, nSecond, nMilli;
+                sal_Int16 nHour, nMinute, nSecond;
                 // #i14974# The imported value should have no fractional value, so set the
                 // time fields to zero (ICU calendar instance defaults to current date/time)
-                nHour = nMinute = nSecond = nMilli = 0;
+                nHour = nMinute = nSecond = 0;
                 if (nFound > 3)
                     nHour = static_cast<sal_Int16>(rStr.copy( nStart[3], nEnd[3]+1-nStart[3]).toInt32());
                 if (nFound > 4)
                     nMinute = static_cast<sal_Int16>(rStr.copy( nStart[4], nEnd[4]+1-nStart[4]).toInt32());
                 if (nFound > 5)
                     nSecond = static_cast<sal_Int16>(rStr.copy( nStart[5], nEnd[5]+1-nStart[5]).toInt32());
+                // do not use calendar's milliseconds, to avoid fractional part truncation
+                double fFrac = 0.0;
                 if (nFound > 6)
                 {
                     sal_Unicode cDec = '.';
@@ -1180,19 +1182,19 @@ static bool lcl_PutString(
                     rtl_math_ConversionStatus eStatus;
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus );
                     if (eStatus == rtl_math_ConversionStatus_Ok)
-                        nMilli = static_cast<sal_Int16>(1000.0 * fV + 0.5);
+                        fFrac = fV / 86400.0;
                 }
                 pCalendar->setValue( i18n::CalendarFieldIndex::HOUR, nHour );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MINUTE, nMinute );
                 pCalendar->setValue( i18n::CalendarFieldIndex::SECOND, nSecond );
-                pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, nMilli );
+                pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, 0 );
                 if ( pCalendar->isValid() )
                 {
                     double fDiff = DateTime(pDocFormatter->GetNullDate()) -
                         pCalendar->getEpochStart();
                     // #i14974# must use getLocalDateTime to get the same
                     // date values as set above
-                    double fDays = pCalendar->getLocalDateTime();
+                    double fDays = pCalendar->getLocalDateTime() + fFrac;
                     fDays -= fDiff;
 
                     LanguageType eLatin, eCjk, eCtl;
