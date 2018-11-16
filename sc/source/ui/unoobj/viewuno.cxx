@@ -71,6 +71,8 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <formatsh.hxx>
 #include <sfx2/app.hxx>
+#include <rubylistentry.hxx>
+#include <vector>
 
 using namespace com::sun::star;
 
@@ -474,6 +476,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( container::XIndexAccess )
     SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
     SC_QUERYINTERFACE( view::XSelectionSupplier )
+    SC_QUERYINTERFACE( text::XRubySelection )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( sheet::XViewSplitable )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
@@ -1658,6 +1661,68 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
         }
     }
 }
+
+
+uno::Sequence<uno::Sequence<beans::PropertyValue>> SAL_CALL ScTabViewObj::getRubyList(sal_Bool /*bAutomatic*/)
+{
+    ScEditShell* pShell = dynamic_cast<ScEditShell*>(GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0));
+
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aRetval;
+    if (pShell)
+    {
+        std::vector<ScRubyListEntry> aRubyList;
+        pShell->GetRubyList(aRubyList);
+        aRetval.realloc(aRubyList.size());
+        sal_Int32 nIdx = 0;
+
+        for(const ScRubyListEntry& rEntry: aRubyList)
+        {
+            uno::Sequence<beans::PropertyValue>& rSequence = aRetval.getArray()[++nIdx];
+            rSequence.realloc(2);
+            beans::PropertyValue* pValues = rSequence.getArray();
+
+            pValues[0].Name = "RubyBaseText";
+            pValues[0].Value <<= rEntry.maBaseText;
+            pValues[1].Name = "RubyText";
+            pValues[1].Value <<= rEntry.maRubyText;
+/*
+            pValues[0].Name = UNO_NAME_RUBY_BASE_TEXT;
+            pValues[1].Name = UNO_NAME_RUBY_TEXT;
+            pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
+            pValues[3].Name = UNO_NAME_RUBY_ADJUST;
+            pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
+            pValues[5].Name = UNO_NAME_RUBY_POSITION;
+*/
+        }
+    }
+    return aRetval;
+}
+
+void SAL_CALL ScTabViewObj::setRubyList(
+        const uno::Sequence<uno::Sequence<beans::PropertyValue>>& rRubyList,
+        sal_Bool /*bAutomatic*/)
+{
+    std::vector<ScRubyListEntry> aRubyList;
+    ScEditShell* pShell = dynamic_cast<ScEditShell*>(GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0));
+
+    if (pShell)
+    {
+        for(const uno::Sequence<beans::PropertyValue>& rValues: rRubyList)
+        {
+            ScRubyListEntry aEntry;
+            for(const beans::PropertyValue& rValue: rValues)
+            {
+                if (rValue.Name == "RubyBaseText")
+                    rValue.Value >>= aEntry.maBaseText;
+                else if (rValue.Name == "RubyText")
+                    rValue.Value >>= aEntry.maRubyText;
+            }
+            aRubyList.push_back(aEntry);
+        }
+        pShell->SetRubyList(aRubyList);
+    }
+}
+
 
 void ScTabViewObj::SelectionChanged()
 {
