@@ -52,7 +52,7 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
     Reference< XComponent > xComponent( SrvMgr, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_FAIL("Error shuting down");
+        OSL_FAIL("Error shutting down");
 
     // Dispose and clear factory
     xComponent->dispose();
