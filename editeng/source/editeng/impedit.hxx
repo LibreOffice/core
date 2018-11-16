@@ -533,7 +533,6 @@ private:
     bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
     bool            mbLastTryMerge:1;
     bool            mbReplaceLeadingSingleQuotationMark:1;
-    bool            mbHoriAlignIgnoreTrailingWhitespace:1;
 
     bool            mbNbspRunNext;  // can't be a bitfield as it is passed as bool&
 
@@ -824,9 +823,9 @@ public:
     sal_uInt32      CalcTextHeight( sal_uInt32* pHeightNTP );
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
-    sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace );
+    sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace);
     sal_uInt32      CalcParaWidth( sal_Int32 nParagraph, bool bIgnoreExtraSpace );
-    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace, bool bIgnoreTrailingWhiteSpaces = false );
+    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace);
     sal_Int32       GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32       GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
     void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
@@ -1053,10 +1052,6 @@ public:
     bool            IsNbspRunNext() const { return mbNbspRunNext; }
 
     void Dispose();
-
-    // tdf#115639 compatibility flag
-    void SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled) { mbHoriAlignIgnoreTrailingWhitespace = bEnabled; }
-    bool IsHoriAlignIgnoreTrailingWhitespace() const { return mbHoriAlignIgnoreTrailingWhitespace; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )

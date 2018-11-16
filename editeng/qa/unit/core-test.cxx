@@ -33,7 +33,6 @@
 #include <svl/srchitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/adjustitem.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -100,9 +99,6 @@ public:
 
     void testTransliterate();
 
-    /// Test HoriAlignIgnoreTrailingWhitespace compatibility flag
-    void testHoriAlignIgnoreTrailingWhitespace();
-
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
@@ -125,7 +121,6 @@ public:
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST(testLargeParaCopyPaste);
     CPPUNIT_TEST(testTransliterate);
-    CPPUNIT_TEST(testHoriAlignIgnoreTrailingWhitespace);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1841,145 +1836,6 @@ void Test::testTransliterate()
     aEditEngine.SetText(sText);
     aEditEngine.TransliterateText(ESelection(0, 0, 0, sText.getLength()), TransliterationFlags::TITLE_CASE);
     CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"), aEditEngine.GetText());
-}
-
-void Test::testHoriAlignIgnoreTrailingWhitespace()
-{
-    // Create EditEngine's instance
-    EditEngine aEditEngine(mpItemPool);
-
-    // Get EditDoc for current EditEngine's instance
-    EditDoc &rDoc = aEditEngine.GetEditDoc();
-
-    // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(0), rDoc.GetTextLen());
-    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(sal_Int32(0)));
-
-    // Set initial text
-    OUString aText = "Some text    ";
-    sal_Int32 aTextLen = aText.getLength();
-    aEditEngine.SetText(aText);
-
-    // Assert changes - text insertion
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(aTextLen), rDoc.GetTextLen());
-    CPPUNIT_ASSERT_EQUAL(aText, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
-
-    // First test case: center alignment with compatibility option enabled
-    {
-        aEditEngine.SetHoriAlignIgnoreTrailingWhitespace(true);
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
-        pSet->Put(SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pSet->Count());
-
-        // Select all paragraphs and apply changes
-        ESelection aSelection(0, 0, 0, aTextLen);
-        aEditEngine.QuickSetAttribs(*pSet, aSelection);
-
-        // Use a one line paragraph
-        aEditEngine.SetPaperSize(Size(10000, 6000));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEditEngine.GetLineCount(0));
-
-        // Check horizontal position
-        ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pLine->GetStartPosX(), 100);
-    }
-
-    // Second test case: center alignment with compatibility option disabled
-    {
-        aEditEngine.SetHoriAlignIgnoreTrailingWhitespace(false);
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
-        pSet->Put(SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pSet->Count());
-
-        // Select all paragraphs and apply changes
-        ESelection aSelection(0, 0, 0, aTextLen);
-        aEditEngine.QuickSetAttribs(*pSet, aSelection);
-
-        // Use a one line paragraph
-        aEditEngine.SetPaperSize(Size(10000, 6000));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEditEngine.GetLineCount(0));
-
-        // Check horizontal position
-        ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4407), pLine->GetStartPosX(), 100);
-    }
-
-    // Third test case: right alignment with compatibility option enabled
-    {
-        aEditEngine.SetHoriAlignIgnoreTrailingWhitespace(true);
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
-        pSet->Put(SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pSet->Count());
-
-        // Select all paragraphs and apply changes
-        ESelection aSelection(0, 0, 0, aTextLen);
-        aEditEngine.QuickSetAttribs(*pSet, aSelection);
-
-        // Use a one line paragraph
-        aEditEngine.SetPaperSize(Size(10000, 6000));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEditEngine.GetLineCount(0));
-
-        // Check horizontal position
-        ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(9054), pLine->GetStartPosX(), 100);
-    }
-
-    // Fourth test case: right alignment with compatibility option disabled
-    {
-        aEditEngine.SetHoriAlignIgnoreTrailingWhitespace(false);
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
-        pSet->Put(SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pSet->Count());
-
-        // Select all paragraphs and apply changes
-        ESelection aSelection(0, 0, 0, aTextLen);
-        aEditEngine.QuickSetAttribs(*pSet, aSelection);
-
-        // Use a one line paragraph
-        aEditEngine.SetPaperSize(Size(10000, 6000));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEditEngine.GetLineCount(0));
-
-        // Check horizontal position
-        ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(8815), pLine->GetStartPosX(), 100);
-    }
-
-    // Test multiple paragraph case
-    {
-        // Set initial text
-        aText = "Some text    \nMore Text   ";
-        aTextLen = aText.getLength();
-        aEditEngine.SetText(aText);
-
-        // Assert changes - text insertion
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(aTextLen - 1), rDoc.GetTextLen());
-        CPPUNIT_ASSERT_EQUAL(OUString("Some text    "), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("More Text   "), rDoc.GetParaAsString(static_cast<sal_Int32>(1)));
-
-        aEditEngine.SetHoriAlignIgnoreTrailingWhitespace(true);
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
-        pSet->Put(SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pSet->Count());
-
-        // Select all paragraphs and apply changes
-        ESelection aSelection(0, 0, 0, aTextLen);
-        aEditEngine.QuickSetAttribs(*pSet, aSelection);
-
-        // Get one line paragraphs
-        aEditEngine.SetPaperSize(Size(10000, 6000));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEditEngine.GetLineCount(0));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEditEngine.GetLineCount(1));
-
-        // Check horizontal position
-        ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pParaPortion->GetLines()[0].GetStartPosX(), 100);
-        pParaPortion = aEditEngine.GetParaPortions()[1];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(8815), pParaPortion->GetLines()[0].GetStartPosX(), 100);
-    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
