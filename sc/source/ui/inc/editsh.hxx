@@ -33,6 +33,7 @@ class ScInputHandler;
 class SvxURLField;
 class TransferableDataHelper;
 class TransferableClipboardListener;
+class ScRubyListEntry;
 
 class ScEditShell : public SfxShell
 {
@@ -72,6 +73,9 @@ public:
 
     void    ExecuteUndo(const SfxRequest& rReq);
     void    GetUndoState(SfxItemSet &rSet);
+
+    void    SetRubyList(const std::vector<ScRubyListEntry>& rRubyVector);
+    void    GetRubyList(std::vector<ScRubyListEntry>& rRubyVector);
 
     OUString GetSelectionText( bool bWholeWord );
 };
