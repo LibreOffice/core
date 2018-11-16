@@ -3081,7 +3081,7 @@ void OpQuotient::GenSlidingWindowFunction(std::stringstream &ss,
 void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    if( vSubArguments.size() != 4){return;}
+    CHECK_PARAMETER_COUNT(4,4);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -3185,6 +3185,8 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "        return 0;\n";
         }
+        else
+            throw Unhandled(__FILE__, __LINE__);
     }
     ss << "    return res;\n";
     ss << "}";
