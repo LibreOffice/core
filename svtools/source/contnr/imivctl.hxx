@@ -171,7 +171,6 @@ class SvxIconChoiceCtrl_Impl
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     std::vector< SvxIconChoiceCtrlEntry* > maZOrderList;
     std::unique_ptr<SvxIconChoiceCtrlColumnInfoMap> m_pColumns;
-    VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
     IconChoiceFlags         nFlags;
@@ -413,7 +412,6 @@ public:
                             std::vector<tools::Rectangle>* pOtherRects
                         );
 
-    bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
     void               MakeVisible(
                             const tools::Rectangle& rDocPos,
                             bool bInScrollBarEvent=false
@@ -426,8 +424,6 @@ public:
                         );
 #endif
     bool                IsEntryEditing() const { return (pCurEditedEntry!=nullptr); }
-    void                EditEntry( SvxIconChoiceCtrlEntry* pEntry );
-    void                StopEntryEditing();
     size_t              GetEntryCount() const { return aEntries.size(); }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos )
                             {

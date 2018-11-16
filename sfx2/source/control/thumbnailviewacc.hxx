@@ -180,10 +180,6 @@ public:
     ThumbnailViewItemAcc( ThumbnailViewItem* pParent, bool bIsTransientChildrenDisabled );
     virtual ~ThumbnailViewItemAcc() override;
 
-    void FireAccessibleEvent( short nEventId,
-                              const css::uno::Any& rOldValue,
-                              const css::uno::Any& rNewValue );
-
     void    ParentDestroyed();
 
     static ThumbnailViewItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
