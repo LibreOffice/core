@@ -159,8 +159,6 @@ class SwAccessibleParagraph :
             std::vector< css::beans::PropertyValue >& rValues );
 
 public:
-    SwTOXSortTabBase* GetTOXSortTabBase();
-
     bool IsHeading() const;
 
 protected:

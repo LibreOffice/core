@@ -39,9 +39,6 @@
 #include <memory>
 #include <vcl/idle.hxx>
 
-#define IMPICNVIEW_ACC_RETURN 1
-#define IMPICNVIEW_ACC_ESCAPE 2
-
 static constexpr auto DRAWTEXT_FLAGS_ICON =
     DrawTextFlags::Center | DrawTextFlags::Top | DrawTextFlags::EndEllipsis |
     DrawTextFlags::Clip | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Mnemonic;
@@ -52,39 +49,6 @@ static constexpr auto DRAWTEXT_FLAGS_ICON =
 #define EVENTID_ADJUST_SCROLLBARS       (reinterpret_cast<void*>(2))
 
 static bool bEndScrollInvalidate = true;
-
-class IcnViewEdit_Impl : public MultiLineEdit
-{
-    Link<LinkParamNone*,void> const aCallBackHdl;
-    Accelerator     aAccReturn;
-    Accelerator     aAccEscape;
-    Idle            maLoseFocusIdle;
-    bool            bCanceled;
-    bool            bAlreadyInCallback;
-    bool            bGrabFocus;
-
-    void            CallCallBackHdl_Impl();
-                    DECL_LINK(Timeout_Impl, Timer *, void);
-                    DECL_LINK( ReturnHdl_Impl, Accelerator&, void );
-                    DECL_LINK( EscapeHdl_Impl, Accelerator&, void );
-
-public:
-
-                    IcnViewEdit_Impl(
-                        SvtIconChoiceCtrl* pParent,
-                        const Point& rPos,
-                        const Size& rSize,
-                        const OUString& rData,
-                        const Link<LinkParamNone*,void>& rNotifyEditEnd );
-
-    virtual         ~IcnViewEdit_Impl() override;
-    virtual void    dispose() override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    bool            EditingCanceled() const { return bCanceled; }
-    void            StopEditing();
-    bool            IsGrabFocus() const { return bGrabFocus; }
-};
 
 SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     SvtIconChoiceCtrl* pCurView,
@@ -104,7 +68,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pEntryPaintDev = nullptr;
     pCurEditedEntry = nullptr;
     pCurHighlightFrame = nullptr;
-    pEdit = nullptr;
     pAnchor = nullptr;
     pHdlEntry = nullptr;
     pHead = nullptr;
@@ -160,7 +123,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 {
     pCurEditedEntry = nullptr;
-    pEdit.disposeAndClear();
     Clear(false);
     CancelUserEvents();
     pImpCursor.reset();
@@ -178,7 +140,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 
 void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
 {
-    StopEntryEditing();
     nSelectionCount = 0;
     pCurHighlightFrame = nullptr;
     CancelUserEvents();
@@ -236,7 +197,6 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
 
 IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
 {
-    StopEntryEditing();
     // arrow up: delta=-1; arrow down: delta=+1
     Scroll( 0, pScrollBar->GetDelta() );
     bEndScrollInvalidate = true;
@@ -244,7 +204,6 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void
 
 IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, void )
 {
-    StopEntryEditing();
     // arrow left: delta=-1; arrow right: delta=+1
     Scroll( pScrollBar->GetDelta(), 0 );
     bEndScrollInvalidate = true;
@@ -2603,12 +2562,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Timer *, void)
     aDocRectChangedIdle.Stop();
 }
 
-bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos )
-{
-    tools::Rectangle aRect( CalcTextRect( pEntry ));
-    return aRect.IsInside( rDocPos );
-}
-
 #ifdef DBG_UTIL
 void SvxIconChoiceCtrl_Impl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
 {
@@ -2719,75 +2672,6 @@ void SvxIconChoiceCtrl_Impl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
         ShowCursor( true );
 }
 
-void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
-{
-    DBG_ASSERT(pEntry,"EditEntry: Entry not set");
-    if( !pEntry )
-        return;
-
-    StopEntryEditing();
-    pEdit.disposeAndClear();
-    SetNoSelection();
-
-    pCurEditedEntry = pEntry;
-    OUString aEntryText( SvtIconChoiceCtrl::GetEntryText( pEntry ) );
-    tools::Rectangle aRect( CalcTextRect( pEntry, nullptr, true, &aEntryText ) );
-    MakeVisible( aRect );
-    Point aPos( aRect.TopLeft() );
-    aPos = pView->GetPixelPos( aPos );
-    aRect.SetPos( aPos );
-    pView->HideFocus();
-    pEdit = VclPtr<IcnViewEdit_Impl>::Create(
-
-        pView,
-        aRect.TopLeft(),
-        aRect.GetSize(),
-        aEntryText,
-        LINK( this, SvxIconChoiceCtrl_Impl, TextEditEndedHdl ) );
-}
-
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl, LinkParamNone*, void)
-{
-    DBG_ASSERT(pEdit,"TextEditEnded: pEdit not set");
-    if( !pEdit )
-    {
-        pCurEditedEntry = nullptr;
-        return;
-    }
-    DBG_ASSERT(pCurEditedEntry,"TextEditEnded: pCurEditedEntry not set");
-
-    if( !pCurEditedEntry )
-    {
-        pEdit->Hide();
-        if( pEdit->IsGrabFocus() )
-            pView->GrabFocus();
-        return;
-    }
-
-    OUString aText;
-    if ( !pEdit->EditingCanceled() )
-        aText = pEdit->GetText();
-    else
-        aText = pEdit->GetSavedValue();
-
-    InvalidateEntry( pCurEditedEntry );
-    if( !GetSelectionCount() )
-        SelectEntry( pCurEditedEntry, true );
-
-    pEdit->Hide();
-    if( pEdit->IsGrabFocus() )
-        pView->GrabFocus();
-    // The edit can not be deleted here, because it is not within a handler. It
-    // will be deleted in the dtor or in the next EditEntry.
-    pCurEditedEntry = nullptr;
-}
-
-void SvxIconChoiceCtrl_Impl::StopEntryEditing()
-{
-    if( pEdit )
-        pEdit->StopEditing();
-}
-
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
 {
     if( !GetSelectionCount() )
@@ -2842,133 +2726,8 @@ void SvxIconChoiceCtrl_Impl::SelectAll()
     pAnchor = nullptr;
 }
 
-IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPos,
-    const Size& rSize, const OUString& rData, const Link<LinkParamNone*,void>& rNotifyEditEnd ) :
-    MultiLineEdit( pParent, (pParent->GetStyle() & WB_ICON) ? WB_CENTER : WB_LEFT),
-    aCallBackHdl( rNotifyEditEnd ),
-    bCanceled( false ),
-    bAlreadyInCallback( false ),
-    bGrabFocus( false )
-{
-    maLoseFocusIdle.SetPriority(TaskPriority::REPAINT);
-    maLoseFocusIdle.SetInvokeHandler(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
-    maLoseFocusIdle.SetDebugName( "svx::IcnViewEdit_Impl maLoseFocusIdle" );
 
-    // FIXME: Outside of Paint Hierarchy
-    vcl::Font aFont(pParent->GetPointFont(*this));
-    aFont.SetTransparent( false );
-    SetControlFont(aFont);
-    SetControlBackground(aFont.GetFillColor());
-    SetControlForeground(aFont.GetColor());
-    SetPosPixel(rPos);
-    SetSizePixel(CalcAdjustedSize(rSize));
-    SetText(rData);
-    SaveValue();
 
-    aAccReturn.InsertItem( IMPICNVIEW_ACC_RETURN, vcl::KeyCode(KEY_RETURN) );
-    aAccEscape.InsertItem( IMPICNVIEW_ACC_ESCAPE, vcl::KeyCode(KEY_ESCAPE) );
-
-    aAccReturn.SetActivateHdl( LINK( this, IcnViewEdit_Impl, ReturnHdl_Impl) );
-    aAccEscape.SetActivateHdl( LINK( this, IcnViewEdit_Impl, EscapeHdl_Impl) );
-    Application::InsertAccel( &aAccReturn);//, ACCEL_ALWAYS );
-    Application::InsertAccel( &aAccEscape);//, ACCEL_ALWAYS );
-    Show();
-    GrabFocus();
-}
-
-IcnViewEdit_Impl::~IcnViewEdit_Impl()
-{
-    disposeOnce();
-}
-
-void IcnViewEdit_Impl::dispose()
-{
-    if( !bAlreadyInCallback )
-    {
-        Application::RemoveAccel( &aAccReturn );
-        Application::RemoveAccel( &aAccEscape );
-    }
-    MultiLineEdit::dispose();
-}
-
-void IcnViewEdit_Impl::CallCallBackHdl_Impl()
-{
-    maLoseFocusIdle.Stop();
-    if ( !bAlreadyInCallback )
-    {
-        bAlreadyInCallback = true;
-        Application::RemoveAccel( &aAccReturn );
-        Application::RemoveAccel( &aAccEscape );
-        Hide();
-        aCallBackHdl.Call( nullptr );
-    }
-}
-
-IMPL_LINK_NOARG(IcnViewEdit_Impl, Timeout_Impl, Timer *, void)
-{
-    CallCallBackHdl_Impl();
-}
-
-IMPL_LINK_NOARG( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator&, void )
-{
-    bCanceled = false;
-    bGrabFocus = true;
-    CallCallBackHdl_Impl();
-}
-
-IMPL_LINK_NOARG( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator&, void )
-{
-    bCanceled = true;
-    bGrabFocus = true;
-    CallCallBackHdl_Impl();
-}
-
-void IcnViewEdit_Impl::KeyInput( const KeyEvent& rKEvt )
-{
-    vcl::KeyCode aCode = rKEvt.GetKeyCode();
-    sal_uInt16 nCode = aCode.GetCode();
-
-    switch ( nCode )
-    {
-        case KEY_ESCAPE:
-            bCanceled = true;
-            bGrabFocus = true;
-            CallCallBackHdl_Impl();
-            break;
-
-        case KEY_RETURN:
-            bCanceled = false;
-            bGrabFocus = true;
-            CallCallBackHdl_Impl();
-            break;
-
-        default:
-            MultiLineEdit::KeyInput( rKEvt );
-    }
-}
-
-bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-    {
-        if ( !bAlreadyInCallback &&
-            ((!Application::GetFocusWindow()) || !IsChild(Application::GetFocusWindow())))
-        {
-            bCanceled = false;
-            maLoseFocusIdle.Start();
-        }
-    }
-    return false;
-}
-
-void IcnViewEdit_Impl::StopEditing()
-{
-    if ( !bAlreadyInCallback )
-    {
-        bCanceled = true;
-        CallCallBackHdl_Impl();
-    }
-}
 
 sal_Int32 SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const
 {

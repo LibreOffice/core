@@ -871,14 +871,6 @@ void Calendar::ImplUpdate( bool bCalcNew )
     mbFormat = true;
 }
 
-void Calendar::ImplInvertDropPos()
-{
-    tools::Rectangle aRect = GetDateRect( maDropDate );//this is one Pixel to width and one to height
-    aRect.SetBottom( aRect.Top()+mnDayHeight-1 );
-    aRect.SetRight( aRect.Left()+mnDayWidth-1 );
-    Invert( aRect );
-}
-
 void Calendar::ImplScroll( bool bPrev )
 {
     Date aNewFirstMonth = GetFirstMonth();
