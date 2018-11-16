@@ -915,14 +915,16 @@ void SAL_CALL OResultSet::updateRow(  )
                                 &nRealLen
                                 );
             OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-            fillNeededData(nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_UPDATE_BY_BOOKMARK));
+            nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_UPDATE_BY_BOOKMARK);
+            fillNeededData(nRet);
             // the driver should not have touched this
             // (neither the contents of aBookmark FWIW)
             assert(nRealLen == aBookmark.getLength());
         }
         else
         {
-            fillNeededData(nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE));
+            nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE);
+            fillNeededData(nRet);
         }
         OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         // unbind all columns so we can fetch all columns again with SQLGetData

@@ -625,8 +625,8 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     {
                         for( short j = nMaxDigit; j > nDigitPos; j-- )
                         {
-                            short nTempDigit;
-                            AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPosScan( j, bFoundFirstDigit ) );
+                            short nTempDigit = GetDigitAtPosScan( j, bFoundFirstDigit );
+                            AppendDigit( sReturnStrg, nTempDigit );
                             if( nTempDigit != NO_DIGIT_ )
                             {
                                 bFirstDigit = false;
@@ -654,8 +654,8 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 }
                 else
                 {
-                    short nTempDigit;
-                    AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit ) );
+                    short nTempDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit ) ;
+                    AppendDigit( sReturnStrg, nTempDigit );
 
                     if( nTempDigit != NO_DIGIT_ )
                     {
