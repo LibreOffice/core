@@ -332,6 +332,8 @@
                 <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:WrapText"/>
                 <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:RubyDialog"/>
+                <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
                 <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
                 <menu:menuitem menu:id=".uno:ChangeCaseRotateCase"/>

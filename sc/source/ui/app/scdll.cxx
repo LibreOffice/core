@@ -100,6 +100,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
+#include <svx/rubydialog.hxx>
 
 #include <editutil.hxx>
 
@@ -260,6 +261,9 @@ void ScDLL::Init()
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
     ScCondFormatDlgWrapper::RegisterChildWindow(false, pMod);
+
+    // Ruby
+    SvxRubyChildWindow::RegisterChildWindow( false, pMod);
 
     // Add 3DObject Factory
     E3dObjFactory();
