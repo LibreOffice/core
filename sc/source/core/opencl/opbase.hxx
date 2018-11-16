@@ -60,6 +60,25 @@ public:
     int const mLineNumber;
 };
 
+class InvalidParameterCount
+{
+public:
+    InvalidParameterCount( int parameterCount, const std::string& file, int ln );
+
+    int mParameterCount;
+    std::string mFile;
+    int const mLineNumber;
+};
+
+// Helper macro to be used in code emitting OpenCL code for Calc functions.
+// Requires the vSubArguments parameter.
+#define CHECK_PARAMETER_COUNT(min, max) \
+    do { \
+        const int count = vSubArguments.size(); \
+        if( count < ( min ) || count > ( max )) \
+            throw InvalidParameterCount( count, __FILE__, __LINE__ ); \
+    } while( false )
+
 typedef std::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
 
 class FormulaTreeNode
