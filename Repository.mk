@@ -390,7 +390,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
+	$(if $(ENABLE_JAVA),$(call gb_Helper_optional,DBCONNECTIVITY,mysql)) \
 	odbc \
 	odfflatxml \
 	offacc \
