@@ -371,6 +371,54 @@ namespace sw {
         return std::make_pair(pTextNode, pTextNode);
     }
 
+    SwTextNode const& GetAttrMerged(SfxItemSet & rFormatSet,
+            SwTextNode const& rNode, SwRootFrame const*const pLayout)
+    {
+        rNode.SwContentNode::GetAttr(rFormatSet);
+        if (pLayout && pLayout->IsHideRedlines())
+        {
+            if (sw::MergedPara const*const pMerged =
+                static_cast<SwTextFrame*>(rNode.getLayoutFrame(pLayout))->GetMergedPara())
+            {
+                if (pMerged->pFirstNode != &rNode)
+                {
+                    rFormatSet.ClearItem(RES_PAGEDESC);
+                    rFormatSet.ClearItem(RES_BREAK);
+                    static_assert(RES_PAGEDESC + 1 == sal_uInt16(RES_BREAK),
+                            "first-node items must be adjacent");
+                    SfxItemSet firstSet(*rFormatSet.GetPool(),
+                            svl::Items<RES_PAGEDESC, RES_BREAK>{});
+                    pMerged->pFirstNode->SwContentNode::GetAttr(firstSet);
+                    rFormatSet.Put(firstSet);
+
+                }
+                if (pMerged->pParaPropsNode != &rNode)
+                {
+                    for (sal_uInt16 i = RES_PARATR_BEGIN; i != RES_FRMATR_END; ++i)
+                    {
+                        if (i != RES_PAGEDESC && i != RES_BREAK)
+                        {
+                            rFormatSet.ClearItem(i);
+                        }
+                    }
+                    for (sal_uInt16 i = XATTR_FILL_FIRST; i <= XATTR_FILL_LAST; ++i)
+                    {
+                        rFormatSet.ClearItem(i);
+                    }
+                    SfxItemSet propsSet(*rFormatSet.GetPool(),
+                        svl::Items<RES_PARATR_BEGIN, RES_PAGEDESC,
+                                   RES_BREAK+1, RES_FRMATR_END,
+                                   XATTR_FILL_FIRST, XATTR_FILL_LAST+1>{});
+                    pMerged->pParaPropsNode->SwContentNode::GetAttr(propsSet);
+                    rFormatSet.Put(propsSet);
+                    return *pMerged->pParaPropsNode;
+                }
+                // keep all the CHRATR/UNKNOWNATR anyway...
+            }
+        }
+        return rNode;
+    }
+
 } // namespace sw
 
 /// Switches width and height of the text frame

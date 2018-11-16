@@ -108,6 +108,9 @@ SwPosition GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos);
 std::pair<SwTextNode *, SwTextNode *>
 GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos);
 
+SwTextNode const& GetAttrMerged(SfxItemSet & rFormatSet,
+        SwTextNode const& rNode, SwRootFrame const* pLayout);
+
 void GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
 void GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
 

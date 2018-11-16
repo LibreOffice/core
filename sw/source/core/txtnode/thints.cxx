@@ -64,6 +64,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <docufld.hxx>
@@ -2058,18 +2059,28 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
 // request the attributes of the TextNode at the range
 bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                          const bool bOnlyTextAttr, const bool bGetFromChrFormat,
-                         const bool bMergeIndentValuesOfNumRule ) const
+                         const bool bMergeIndentValuesOfNumRule,
+                         SwRootFrame const*const pLayout) const
 {
     assert(!rSet.Count()); // handled inconsistently, typically an error?
+
+    if (pLayout && pLayout->IsHideRedlines())
+    {
+        if (GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        {
+            return false; // ignore deleted node
+        }
+    }
 
     // get the node's automatic attributes
     SfxItemSet aFormatSet( *rSet.GetPool(), rSet.GetRanges() );
     if (!bOnlyTextAttr)
     {
-        SwContentNode::GetAttr( aFormatSet );
-        if ( bMergeIndentValuesOfNumRule )
+        SwTextNode const& rParaPropsNode(
+                sw::GetAttrMerged(aFormatSet, *this, pLayout));
+        if (bMergeIndentValuesOfNumRule)
         {
-            lcl_MergeListLevelIndentAsLRSpaceItem( *this, aFormatSet );
+            lcl_MergeListLevelIndentAsLRSpaceItem(rParaPropsNode, aFormatSet);
         }
     }
 
