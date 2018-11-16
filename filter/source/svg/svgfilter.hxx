@@ -196,32 +196,40 @@ public:
 
 private:
 
+    /// Generally use members
+
     Reference< XComponentContext >      mxContext;
     SvXMLElementExport*                 mpSVGDoc;
     SVGExport*                          mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;
     SVGActionWriter*                    mpSVGWriter;
+    bool                                mbSinglePage;
+    sal_Int32                           mnVisiblePage;
+    ObjectMap*                          mpObjects;
+    Reference< XComponent >             mxSrcDoc;
+    Reference< XComponent >             mxDstDoc;
+    // #i124608# explicit ShapeSelection for export when export of the selection is wanted
+    Reference< XShapes >                maShapeSelection;
+    bool                                mbExportShapeSelection;
+    Sequence< PropertyValue >           maFilterData;
+    Reference< XDrawPage >              mxDefaultPage;
+    std::vector< Reference< XDrawPage > > mSelectedPages;
+
+    bool                                mbWriterFilter;
+
+
+    /// Impress / draw only members
+
     SdrPage*                            mpDefaultSdrPage;
     SdrModel*                           mpSdrModel;
-    bool                            mbPresentation;
-    bool                            mbSinglePage;
-    sal_Int32                           mnVisiblePage;
+    bool                                mbPresentation;
     PagePropertySet                     mVisiblePagePropSet;
-    OUString                     msClipPathId;
+    OUString                            msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
     Reference< XInterface >             mCreateOjectsCurrentMasterPage;
     UOStringMap                         mTextShapeIdListMap;
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;
-    ObjectMap*                          mpObjects;
-    Reference< XComponent >             mxSrcDoc;
-    Reference< XComponent >             mxDstDoc;
-    Reference< XDrawPage >              mxDefaultPage;
-    Sequence< PropertyValue >           maFilterData;
-    // #i124608# explicit ShapeSelection for export when export of the selection is wanted
-    Reference< XShapes >                maShapeSelection;
-    bool                                mbExportShapeSelection;
-    std::vector< Reference< XDrawPage > > mSelectedPages;
     std::vector< Reference< XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
@@ -232,6 +240,8 @@ private:
 
     /// @throws css::uno::RuntimeException
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
+    bool                            implExportImpressDraw( const Reference< XOutputStream >& rxOStm );
+    bool                            implExportWriter( const Reference< XOutputStream >& rxOStm );
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     void                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
@@ -243,6 +253,10 @@ private:
     void                            implGenerateScript();
 
     bool                            implExportDocument();
+    void                            implExportDocumentHeaderImpressDraw(sal_Int32 nDocX, sal_Int32 nDocY,
+                                                                        sal_Int32 nDocWidth, sal_Int32 nDocHeight);
+    void                            implExportDocumentHeaderWriter(sal_Int32 nDocX, sal_Int32 nDocY,
+                                                                   sal_Int32 nDocWidth, sal_Int32 nDocHeight);
     void                            implExportAnimations();
 
     bool                            implExportMasterPages( const std::vector< Reference< XDrawPage > >& rxPages,
@@ -276,6 +290,9 @@ private:
 
     static bool isStreamGZip(const css::uno::Reference<css::io::XInputStream>& xInput);
     static bool isStreamSvg(const css::uno::Reference<css::io::XInputStream>& xInput);
+
+    sal_Bool filterImpressDraw( const Sequence< PropertyValue >& rDescriptor );
+    sal_Bool filterWriter( const Sequence< PropertyValue >& rDescriptor );
 
 protected:
 
