@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_f146f721",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-16T11:57:37Z",
+      "side": 1,
+      "message": "Please check you default editor settings, as it seems that it is not set indentation properly.",
+      "revId": "79a69bbd7ef75ca3f04885c58edf7b0ed350a670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
