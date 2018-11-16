@@ -1335,10 +1335,17 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 sal_uLong nWord = selectionStats.nWord ? selectionStats.nWord : documentStats.nWord;
                 sal_uLong nChar = selectionStats.nChar ? selectionStats.nChar : documentStats.nChar;
-                OUString aWordCount( SwResId( selectionStats.nWord ? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION ) );
+                const char* pResId = selectionStats.nWord ? STR_WORDCOUNT : STR_WORDCOUNT_NO_SELECTION;
+                const char* pWordResId = selectionStats.nWord ? STR_WORDCOUNT_WORDARG : STR_WORDCOUNT_WORDARG_NO_SELECTION;
+                const char* pCharResId = selectionStats.nWord ? STR_WORDCOUNT_CHARARG : STR_WORDCOUNT_CHARARG_NO_SELECTION;
+
                 const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
-                aWordCount = aWordCount.replaceFirst( "%1", rLocaleData.getNum( nWord, 0 ) );
-                aWordCount = aWordCount.replaceFirst( "%2", rLocaleData.getNum( nChar, 0 ) );
+                OUString aWordArg = SwResId(pWordResId, nWord).replaceAll("$1", rLocaleData.getNum(nWord, 0));
+                OUString aCharArg = SwResId(pCharResId, nChar).replaceAll("$1", rLocaleData.getNum(nChar, 0));
+                OUString aWordCount(SwResId(pResId));
+                aWordCount = aWordCount.replaceAll("$1", aWordArg);
+                aWordCount = aWordCount.replaceAll("$2", aCharArg);
+
                 rSet.Put( SfxStringItem( FN_STAT_WORDCOUNT, aWordCount ) );
 
                 SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
