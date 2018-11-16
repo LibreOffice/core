@@ -101,7 +101,7 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 {
     unsigned long nMask = ((1UL << nBitCount) - 1);
     Type nNewValue = static_cast< Type >( nValue & nMask );
-    (rnBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
+    rnBitField = (rnBitField & ~(nMask << nStartBit)) | (nNewValue << nStartBit);
 }
 
 class Color;

@@ -119,14 +119,17 @@ public:
     void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
     SCTAB               GetTab() const          { return mnScTab; }
 
-    void                SetLocked( bool b )
-                                    { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
-    void                SetPrintable( bool b )
-                                    { b ? nGrbit |= 0x0010 : nGrbit &= ~0x0010; }
-    void                SetAutoFill( bool b )
-                                    { b ? nGrbit |= 0x2000 : nGrbit &= ~0x2000; }
-    void                SetAutoLine( bool b )
-                                    { b ? nGrbit |= 0x4000 : nGrbit &= ~0x4000; }
+    void                SetLocked( bool b ) { SetGrBit(b, 0x0001); }
+    void                SetPrintable( bool b ) { SetGrBit(b, 0x0010); }
+    void                SetAutoFill( bool b ) { SetGrBit(b, 0x2000); }
+    void                SetAutoLine( bool b ) { SetGrBit(b, 0x4000); }
+    void                SetGrBit( bool b, int f )
+    {
+        if (b)
+            nGrbit |= f;
+        else
+            nGrbit &= ~f;
+    }
 
                                 // set corresponding Excel object type in OBJ/ftCmo
             void                SetEscherShapeType( sal_uInt16 nType );

@@ -337,7 +337,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if ( nResult & ScRefFlags::TAB_3D )
                     {
                         if( aScRange.aStart.Tab() != nTab )
-                            SetTabNo( nTab = aScRange.aStart.Tab() );
+                        {
+                            nTab = aScRange.aStart.Tab();
+                            SetTabNo( nTab );
+                        }
                     }
                     else
                     {
@@ -351,7 +354,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if ( nResult & ScRefFlags::TAB_3D )
                     {
                         if( aScAddress.Tab() != nTab )
-                            SetTabNo( nTab = aScAddress.Tab() );
+                        {
+                            nTab = aScAddress.Tab();
+                            SetTabNo( nTab );
+                        }
                     }
                     else
                         aScAddress.SetTab( nTab );
@@ -370,7 +376,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         nResult |= ScRefFlags::VALID;
                         if( aScRange.aStart.Tab() != nTab )
-                            SetTabNo( nTab = aScRange.aStart.Tab() );
+                        {
+                            nTab = aScRange.aStart.Tab();
+                            SetTabNo( nTab );
+                        }
                     }
                 }
 
@@ -875,7 +884,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // special case: only hidden tables selected -> do nothing
                 bool bVisSelected = false;
                 for( nSelIx = 0; !bVisSelected && (nSelIx < nSelCount); ++nSelIx )
-                    bVisSelected = rDoc.IsVisible( nFirstVisTab = static_cast<SCTAB>(aIndexList[nSelIx]) );
+                {
+                    nFirstVisTab = static_cast<SCTAB>(aIndexList[nSelIx]);
+                    bVisSelected = rDoc.IsVisible( nFirstVisTab );
+                }
                 if( !bVisSelected )
                     nSelCount = 0;
 

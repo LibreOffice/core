@@ -691,7 +691,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     if( const XclExpFont* pFirstFont = GetFontBuffer().GetFont( EXC_FONT_APP ) )
     {
         aFontData = pFirstFont->GetFontData();
-        (aFontData.mnHeight += 10) /= 20;   // using pt here, not twips
+        aFontData.mnHeight = (aFontData.mnHeight + 10) / 20;   // using pt here, not twips
     }
     else
         aFontData.mnHeight = 10;
@@ -754,7 +754,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 // is calculated wrong in ScPatternAttr::GetFromEditItemSet, because already in twips and not 100thmm
                 // -> get it directly from edit engine item set
                 aNewData.mnHeight = ulimit_cast< sal_uInt16 >( aEditSet.Get( EE_CHAR_FONTHEIGHT ).GetHeight() );
-                (aNewData.mnHeight += 10) /= 20;
+                aNewData.mnHeight = (aNewData.mnHeight + 10) / 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
                     aParaText.append("&").append(OUString::number( aNewData.mnHeight ));
