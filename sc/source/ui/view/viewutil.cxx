@@ -300,6 +300,7 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
     {
         case SID_CHINESE_CONVERSION:
         case SID_HANGUL_HANJA_CONVERSION:
+        case SID_RUBY_DIALOG:
             bEnabled = aCJKOptions.IsAnyEnabled();
         break;
 

@@ -425,6 +425,8 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:RubyDialog"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
             <menu:menuitem menu:id=".uno:AutoFormat"/>
             <menu:menuitem menu:id=".uno:ChooseDesign"/>

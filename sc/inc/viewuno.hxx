@@ -24,6 +24,7 @@
 #include <svl/itemprop.hxx>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XRubySelection.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XViewSplitable.hpp>
 #include <com/sun/star/sheet/XViewFreezable.hpp>
@@ -130,6 +131,7 @@ class ScTabViewObj : public ScViewPaneBase,
                      public css::container::XEnumerationAccess,
                      public css::container::XIndexAccess,
                      public css::view::XSelectionSupplier,
+                     public css::text::XRubySelection,
                      public css::beans::XPropertySet,
                      public css::sheet::XViewSplitable,
                      public css::sheet::XViewFreezable,
@@ -195,6 +197,11 @@ public:
     virtual css::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL   addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL   removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+
+    // XRubySelection
+    virtual css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> SAL_CALL getRubyList(sal_Bool bAutomatic) override;
+
+    virtual void SAL_CALL setRubyList(const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& RubyList, sal_Bool bAutomatic) override;
 
     //! XPrintable?
 
