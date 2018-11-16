@@ -62,6 +62,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk3_kde5,\
     tl \
     utl \
     sot \
+    svl \
     ucbhelper \
     basegfx \
     comphelper \
