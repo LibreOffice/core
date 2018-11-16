@@ -3991,7 +3991,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 SfxItemSet aSet( m_rDoc.GetAttrPool(),
                             svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
                             RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
-                pTextNd->GetAttr( aSet, nStt+1, nStt+1 );
+                pTextNd->GetParaAttr( aSet, nStt+1, nStt+1 );
 
                 aSet.ClearItem( RES_TXTATR_REFMARK );
                 aSet.ClearItem( RES_TXTATR_TOXMARK );

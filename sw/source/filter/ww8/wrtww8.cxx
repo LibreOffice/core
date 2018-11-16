@@ -2100,7 +2100,8 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
             if( pCNd && pCNd->IsTextNode())
             {
                 SfxItemSet aCoreSet(rDoc.GetAttrPool(), svl::Items<RES_CHRATR_ROTATE, RES_CHRATR_ROTATE>{});
-                static_cast<const SwTextNode*>(pCNd)->GetAttr( aCoreSet, 0, static_cast<const SwTextNode*>(pCNd)->GetText().getLength());
+                static_cast<const SwTextNode*>(pCNd)->GetParaAttr(aCoreSet,
+                    0, static_cast<const SwTextNode*>(pCNd)->GetText().getLength());
                 const SfxPoolItem * pRotItem;
                 if ( SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
                 {

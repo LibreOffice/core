@@ -405,7 +405,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
                     const sal_Int32 nEnd   = (n == nEndNd)
                         ? rEnd.nContent.GetIndex()
                         : pNd->GetTextNode()->GetText().getLength();
-                    pNd->GetTextNode()->GetAttr(*pSet, nStart, nEnd, bOnlyTextAttr, bGetFromChrFormat);
+                    pNd->GetTextNode()->GetParaAttr(*pSet, nStart, nEnd, bOnlyTextAttr, bGetFromChrFormat);
                 }
                 break;
 

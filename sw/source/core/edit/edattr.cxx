@@ -141,7 +141,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                         ? nEndCnt
                         : pNd->GetTextNode()->GetText().getLength();
 
-                    static_cast<SwTextNode*>(pNd)->GetAttr( *pSet, nStt, nEnd,
+                    static_cast<SwTextNode*>(pNd)->GetParaAttr(*pSet, nStt, nEnd,
                                                 false, true,
                                                 bMergeIndentValuesOfNumRule );
                 }

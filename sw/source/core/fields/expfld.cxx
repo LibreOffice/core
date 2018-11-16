@@ -1000,7 +1000,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
             0, 0
         };
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
-        rTextNode.GetAttr(aSet, nRet, nRet+1);
+        rTextNode.GetParaAttr(aSet, nRet, nRet+1);
 
         if( RTL_TEXTENCODING_SYMBOL != static_cast<const SvxFontItem&>(aSet.Get(
                 GetWhichOfScript( RES_CHRATR_FONT, nSrcpt )) ).GetCharSet() )
