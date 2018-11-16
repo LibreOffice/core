@@ -136,7 +136,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         sal_Int32 searchIndex=1;
         while(_rColumns.find(sAlias) != _rColumns.end())
         {
-            (sAlias = sLabel) += OUString::number(searchIndex++);
+            sAlias = sLabel + OUString::number(searchIndex++);
         }
         sLabel = sAlias;
     }

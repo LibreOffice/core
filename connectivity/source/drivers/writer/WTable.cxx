@@ -164,7 +164,7 @@ void OWriterTable::fillColumns()
         sal_Int32 nExprCnt = 0;
         while (aFind != m_aColumns->get().end())
         {
-            (aAlias = aColumnName) += OUString::number(++nExprCnt);
+            aAlias = aColumnName + OUString::number(++nExprCnt);
             aFind = connectivity::find(m_aColumns->get().begin(), m_aColumns->get().end(), aAlias,
                                        aCase);
         }

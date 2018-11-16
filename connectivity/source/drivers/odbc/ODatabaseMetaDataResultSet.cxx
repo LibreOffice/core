@@ -1151,13 +1151,32 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUSt
     if ( catalog2.hasValue() )
         aFKQ = OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = schema && !schema->isEmpty() ? (aPKO = OUStringToOString(*schema,m_nTextEncoding)).getStr() : nullptr,
-                *pPKN = table   ? (aPKN = OUStringToOString(*table,m_nTextEncoding)).getStr(): nullptr,
-                *pFKQ = catalog2.hasValue() && !aFKQ.isEmpty() ? aFKQ.getStr() : nullptr,
-                *pFKO = schema2 && !schema2->isEmpty() ? (aFKO = OUStringToOString(*schema2,m_nTextEncoding)).getStr() : nullptr,
-                *pFKN = table2  ? (aFKN = OUStringToOString(*table2,m_nTextEncoding)).getStr() : nullptr;
-
+    const char *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr;
+    const char *pPKO = nullptr;
+    if (schema && !schema->isEmpty())
+    {
+        aPKO = OUStringToOString(*schema,m_nTextEncoding);
+        pPKO = aPKO.getStr();
+    }
+    const char *pPKN = nullptr;
+    if (table)
+    {
+        aPKN = OUStringToOString(*table,m_nTextEncoding);
+        pPKN = aPKN.getStr();
+    }
+    const char *pFKQ = catalog2.hasValue() && !aFKQ.isEmpty() ? aFKQ.getStr() : nullptr;
+    const char *pFKO = nullptr;
+    if (schema2 && !schema2->isEmpty())
+    {
+        aFKO = OUStringToOString(*schema2,m_nTextEncoding);
+        pFKO = aFKO.getStr();
+    }
+    const char *pFKN = nullptr;
+    if (table2)
+    {
+        aFKN = OUStringToOString(*table2,m_nTextEncoding);
+        pFKN = aFKN.getStr();
+    }
 
     SQLRETURN nRetcode = N3SQLForeignKeys(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
@@ -1199,10 +1218,11 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
     if ( catalog.hasValue() )
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schema,m_nTextEncoding);
+    aPKN = OUStringToOString(table,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
                 *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = (aPKN = OUStringToOString(table,m_nTextEncoding)).getStr();
+                *pPKN = aPKN.getStr();
 
 
     SQLRETURN nRetcode = N3SQLPrimaryKeys(m_aStatementHandle,
@@ -1228,11 +1248,11 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
     if ( catalog.hasValue() )
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
+    aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
                 *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = (aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
-
+                *pPKN = aPKN.getStr();
 
     SQLRETURN nRetcode = N3SQLTablePrivileges(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
@@ -1257,11 +1277,11 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
     if ( catalog.hasValue() )
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schema,m_nTextEncoding);
+    aPKN = OUStringToOString(table,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
                 *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = (aPKN = OUStringToOString(table,m_nTextEncoding)).getStr();
-
+                *pPKN = aPKN.getStr();
 
     SQLRETURN nRetcode = N3SQLStatistics(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,

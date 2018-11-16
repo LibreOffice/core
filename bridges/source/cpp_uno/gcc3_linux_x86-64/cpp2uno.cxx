@@ -160,7 +160,8 @@ static typelib_TypeClass cpp2uno_call(
             }
             else if ( bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ) ) // is in/inout
             {
-                uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                uno_copyAndConvertData( pUnoArgs[nPos],
                                         pCppStack, pParamTypeDescr,
                                         pThis->getBridge()->getCpp2Uno() );
                 pTempIndices[nTempIndices] = nPos; // has to be reconverted
