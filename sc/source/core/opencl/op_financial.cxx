@@ -3913,6 +3913,7 @@ void OpReceived::GenSlidingWindowFunction(std::stringstream &ss,
 void OpYielddisc::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT(5,5);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -4010,6 +4011,8 @@ void OpYielddisc::GenSlidingWindowFunction(
     ss << vSubArguments[4]->GenSlidingWindowDeclRef();
     ss<<";\n\t";
 
+    ss<< "if(tmp002 <= 0 || tmp003 <= 0 || tmp000 >= tmp001 )\n";
+    ss<< "    return CreateDoubleError(IllegalArgument);\n";
     ss<< "tmp = (tmp003/tmp002)-1;\n\t";
     ss << "tmp /= GetYearFrac( GetNullDate(),tmp000,tmp001,tmp004);\n\t";
     ss << "return tmp;\n";
