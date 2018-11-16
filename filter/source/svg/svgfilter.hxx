@@ -215,7 +215,7 @@ private:
     Reference< XDrawPage >              mxDefaultPage;
     std::vector< Reference< XDrawPage > > mSelectedPages;
 
-    bool                                mbWriterFilter;
+    bool                                mbWriterOrCalcFilter;
 
 
     /// Impress / draw only members
@@ -240,8 +240,8 @@ private:
 
     /// @throws css::uno::RuntimeException
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
-    bool                            implExportImpressDraw( const Reference< XOutputStream >& rxOStm );
-    bool                            implExportWriter( const Reference< XOutputStream >& rxOStm );
+    bool                            implExportImpressOrDraw( const Reference< XOutputStream >& rxOStm );
+    bool                            implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm );
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     void                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
@@ -253,10 +253,10 @@ private:
     void                            implGenerateScript();
 
     bool                            implExportDocument();
-    void                            implExportDocumentHeaderImpressDraw(sal_Int32 nDocX, sal_Int32 nDocY,
-                                                                        sal_Int32 nDocWidth, sal_Int32 nDocHeight);
-    void                            implExportDocumentHeaderWriter(sal_Int32 nDocX, sal_Int32 nDocY,
-                                                                   sal_Int32 nDocWidth, sal_Int32 nDocHeight);
+    void                            implExportDocumentHeaderImpressOrDraw(sal_Int32 nDocX, sal_Int32 nDocY,
+                                                                          sal_Int32 nDocWidth, sal_Int32 nDocHeight);
+    void                            implExportDocumentHeaderWriterOrCalc(sal_Int32 nDocX, sal_Int32 nDocY,
+                                                                         sal_Int32 nDocWidth, sal_Int32 nDocHeight);
     void                            implExportAnimations();
 
     bool                            implExportMasterPages( const std::vector< Reference< XDrawPage > >& rxPages,
@@ -291,8 +291,8 @@ private:
     static bool isStreamGZip(const css::uno::Reference<css::io::XInputStream>& xInput);
     static bool isStreamSvg(const css::uno::Reference<css::io::XInputStream>& xInput);
 
-    sal_Bool filterImpressDraw( const Sequence< PropertyValue >& rDescriptor );
-    sal_Bool filterWriter( const Sequence< PropertyValue >& rDescriptor );
+    sal_Bool filterImpressOrDraw( const Sequence< PropertyValue >& rDescriptor );
+    sal_Bool filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor );
 
 protected:
 

@@ -519,13 +519,13 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         }
     }
 
-    if(mbWriterFilter)
-       return implExportWriter(xOStm);
+    if(mbWriterOrCalcFilter)
+       return implExportWriterOrCalc(xOStm);
 
-    return implExportImpressDraw(xOStm);
+    return implExportImpressOrDraw(xOStm);
 }
 
-bool SVGFilter::implExportImpressDraw( const Reference< XOutputStream >& rxOStm)
+bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOStm)
 {
     Reference< XComponentContext >        xContext( ::comphelper::getProcessComponentContext() ) ;
     bool                                  bRet = false;
@@ -619,7 +619,7 @@ bool SVGFilter::implExportImpressDraw( const Reference< XOutputStream >& rxOStm)
 }
 
 
-bool SVGFilter::implExportWriter( const Reference< XOutputStream >& rxOStm )
+bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm )
 {
     Reference< XComponentContext >        xContext( ::comphelper::getProcessComponentContext() ) ;
     bool                                  bRet = false;
@@ -776,10 +776,10 @@ bool SVGFilter::implExportDocument()
         }
     }
 
-    if(mbWriterFilter)
-        implExportDocumentHeaderWriter(nDocX, nDocY, nDocWidth, nDocHeight);
+    if(mbWriterOrCalcFilter)
+        implExportDocumentHeaderWriterOrCalc(nDocX, nDocY, nDocWidth, nDocHeight);
     else
-        implExportDocumentHeaderImpressDraw(nDocX, nDocY, nDocWidth, nDocHeight);
+        implExportDocumentHeaderImpressOrDraw(nDocX, nDocY, nDocWidth, nDocHeight);
 
 
     if( implLookForFirstVisiblePage() )  // OK! We found at least one visible page.
@@ -840,7 +840,7 @@ bool SVGFilter::implExportDocument()
     return bRet;
 }
 
-void SVGFilter::implExportDocumentHeaderImpressDraw(sal_Int32 nDocX, sal_Int32 nDocY,
+void SVGFilter::implExportDocumentHeaderImpressOrDraw(sal_Int32 nDocX, sal_Int32 nDocY,
                                                     sal_Int32 nDocWidth, sal_Int32 nDocHeight)
 {
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
@@ -933,7 +933,7 @@ void SVGFilter::implExportDocumentHeaderImpressDraw(sal_Int32 nDocX, sal_Int32 n
     }
 }
 
-void SVGFilter::implExportDocumentHeaderWriter(sal_Int32 nDocX, sal_Int32 nDocY,
+void SVGFilter::implExportDocumentHeaderWriterOrCalc(sal_Int32 nDocX, sal_Int32 nDocY,
                                                sal_Int32 nDocWidth, sal_Int32 nDocHeight)
 {
     OUString aAttr;
