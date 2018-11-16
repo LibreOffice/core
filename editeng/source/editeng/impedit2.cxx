@@ -2304,7 +2304,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
 EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 nMode, DeleteMode nDelMode )
 {
-    OSL_ENSURE( !EditSelection( rSel ).DbgIsBuggy( aEditDoc ), "Index out of range in DeleteLeftOrRight" );
+    OSL_ENSURE( !rSel.DbgIsBuggy( aEditDoc ), "Index out of range in DeleteLeftOrRight" );
 
     if ( rSel.HasRange() )  // only then Delete Selection
         return ImpDeleteSelection( rSel );

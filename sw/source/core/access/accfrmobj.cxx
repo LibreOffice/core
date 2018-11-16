@@ -234,7 +234,7 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
         }
         else if ( mpFrame->IsTabFrame() )
         {
-            aBox = SwRect( mpFrame->getFrameArea() );
+            aBox = mpFrame->getFrameArea();
             aBox.Intersection( mpFrame->GetUpper()->getFrameArea() );
         }
         else

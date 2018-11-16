@@ -1048,7 +1048,7 @@ namespace {
         for (const auto& aItemPair: aRoot)
         {
             // This is an array, so no key
-            CPPUNIT_ASSERT_EQUAL(std::string(aItemPair.first), std::string(""));
+            CPPUNIT_ASSERT_EQUAL(aItemPair.first, std::string(""));
 
             boost::property_tree::ptree aItemValue = aItemPair.second;
             boost::optional<boost::property_tree::ptree&> aText = aItemValue.get_child_optional("text");
@@ -1143,7 +1143,7 @@ void DesktopLOKTest::testContextMenuCalc()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
 
     // Copy is enabled
@@ -1153,7 +1153,7 @@ void DesktopLOKTest::testContextMenuCalc()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
 
     // Paste is enabled
@@ -1163,7 +1163,7 @@ void DesktopLOKTest::testContextMenuCalc()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
 
     // Remove hyperlink is disabled
@@ -1173,7 +1173,7 @@ void DesktopLOKTest::testContextMenuCalc()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // open hyperlink is disabled
@@ -1183,7 +1183,7 @@ void DesktopLOKTest::testContextMenuCalc()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // checkbutton tests
@@ -1203,21 +1203,21 @@ void DesktopLOKTest::testContextMenuCalc()
         // these are radio buttons
         boost::optional<boost::property_tree::ptree&> aChecktypeToPage = aMenuItemToPage.get().get_child_optional("checktype");
         CPPUNIT_ASSERT(aChecktypeToPage);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecktypeToPage.get().data()), std::string("radio"));
+        CPPUNIT_ASSERT_EQUAL(aChecktypeToPage.get().data(), std::string("radio"));
 
         boost::optional<boost::property_tree::ptree&> aChecktypeToCell = aMenuItemToCell.get().get_child_optional("checktype");
         CPPUNIT_ASSERT(aChecktypeToCell);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecktypeToCell.get().data()), std::string("radio"));
+        CPPUNIT_ASSERT_EQUAL(aChecktypeToCell.get().data(), std::string("radio"));
 
         // ToPage is checked
         boost::optional<boost::property_tree::ptree&> aCheckedToPage = aMenuItemToPage.get().get_child_optional("checked");
         CPPUNIT_ASSERT(aCheckedToPage);
-        CPPUNIT_ASSERT_EQUAL(std::string(aCheckedToPage.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aCheckedToPage.get().data(), std::string("true"));
 
         // ToCell is unchecked
         boost::optional<boost::property_tree::ptree&> aCheckedToCell = aMenuItemToCell.get().get_child_optional("checked");
         CPPUNIT_ASSERT(aCheckedToCell);
-        CPPUNIT_ASSERT_EQUAL(std::string(aCheckedToCell.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aCheckedToCell.get().data(), std::string("false"));
     }
 
     comphelper::LibreOfficeKit::setActive(false);
@@ -1254,7 +1254,7 @@ void DesktopLOKTest::testContextMenuWriter()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // Copy is disabled
@@ -1264,7 +1264,7 @@ void DesktopLOKTest::testContextMenuWriter()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // Paste is enabled
@@ -1274,7 +1274,7 @@ void DesktopLOKTest::testContextMenuWriter()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
 
     comphelper::LibreOfficeKit::setActive(false);
@@ -1312,7 +1312,7 @@ void DesktopLOKTest::testContextMenuImpress()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // Copy is disabled
@@ -1322,7 +1322,7 @@ void DesktopLOKTest::testContextMenuImpress()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // Paste is enabled
@@ -1332,7 +1332,7 @@ void DesktopLOKTest::testContextMenuImpress()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
 
     // SaveBackground is disabled
@@ -1342,7 +1342,7 @@ void DesktopLOKTest::testContextMenuImpress()
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(std::string(aEnabled.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
     }
 
     // checkbutton tests
@@ -1352,11 +1352,11 @@ void DesktopLOKTest::testContextMenuImpress()
 
         boost::optional<boost::property_tree::ptree&> aChecktype = aMenuItem.get().get_child_optional("checktype");
         CPPUNIT_ASSERT(aChecktype);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecktype.get().data()), std::string("checkmark"));
+        CPPUNIT_ASSERT_EQUAL(aChecktype.get().data(), std::string("checkmark"));
 
         boost::optional<boost::property_tree::ptree&> aChecked = aMenuItem.get().get_child_optional("checked");
         CPPUNIT_ASSERT(aChecked);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecked.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aChecked.get().data(), std::string("false"));
     }
 
     // Checkbutton tests inside SnapLines submenu
@@ -1379,30 +1379,30 @@ void DesktopLOKTest::testContextMenuImpress()
         // these are checkmarks
         boost::optional<boost::property_tree::ptree&> aChecktypeHelpVis = aMenuItemHelpVis.get().get_child_optional("checktype");
         CPPUNIT_ASSERT(aChecktypeHelpVis);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecktypeHelpVis.get().data()), std::string("checkmark"));
+        CPPUNIT_ASSERT_EQUAL(aChecktypeHelpVis.get().data(), std::string("checkmark"));
 
         boost::optional<boost::property_tree::ptree&> aChecktypeHelpUse = aMenuItemHelpUse.get().get_child_optional("checktype");
         CPPUNIT_ASSERT(aChecktypeHelpUse);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecktypeHelpUse.get().data()), std::string("checkmark"));
+        CPPUNIT_ASSERT_EQUAL(aChecktypeHelpUse.get().data(), std::string("checkmark"));
 
         boost::optional<boost::property_tree::ptree&> aChecktypeHelpFront = aMenuItemHelpFront.get().get_child_optional("checktype");
         CPPUNIT_ASSERT(aChecktypeHelpFront);
-        CPPUNIT_ASSERT_EQUAL(std::string(aChecktypeHelpFront.get().data()), std::string("checkmark"));
+        CPPUNIT_ASSERT_EQUAL(aChecktypeHelpFront.get().data(), std::string("checkmark"));
 
         // HelplineVisible is unchecked
         boost::optional<boost::property_tree::ptree&> aCheckedHelpVis = aMenuItemHelpVis.get().get_child_optional("checked");
         CPPUNIT_ASSERT(aCheckedHelpVis);
-        CPPUNIT_ASSERT_EQUAL(std::string(aCheckedHelpVis.get().data()), std::string("false"));
+        CPPUNIT_ASSERT_EQUAL(aCheckedHelpVis.get().data(), std::string("false"));
 
         // HelplineUse is checked
         boost::optional<boost::property_tree::ptree&> aCheckedHelpUse = aMenuItemHelpUse.get().get_child_optional("checked");
         CPPUNIT_ASSERT(aCheckedHelpUse);
-        CPPUNIT_ASSERT_EQUAL(std::string(aCheckedHelpUse.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aCheckedHelpUse.get().data(), std::string("true"));
 
         // HelplineFront is checked
         boost::optional<boost::property_tree::ptree&> aCheckedHelpFront = aMenuItemHelpFront.get().get_child_optional("checked");
         CPPUNIT_ASSERT(aCheckedHelpFront);
-        CPPUNIT_ASSERT_EQUAL(std::string(aCheckedHelpFront.get().data()), std::string("true"));
+        CPPUNIT_ASSERT_EQUAL(aCheckedHelpFront.get().data(), std::string("true"));
     }
 
     comphelper::LibreOfficeKit::setActive(false);

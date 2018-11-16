@@ -103,7 +103,7 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
             = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
         if (aDefinition)
         {
-            rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
+            rFeature.m_aDefinition = aDefinition;
         }
     }
 }

@@ -43,7 +43,7 @@ Graphic::~Graphic() throw()
 void Graphic::init( const ::Graphic& rGraphic )
     throw()
 {
-    maGraphic = ::Graphic(rGraphic);
+    maGraphic = rGraphic;
     unographic::GraphicDescriptor::init(maGraphic);
 }
 

@@ -1063,12 +1063,11 @@ namespace wmfemfhelper
         const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aFontScaling;
 
-        rFontAttribute = drawinglayer::attribute::FontAttribute(
-            drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                aFontScaling,
-                rFont,
-                bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiRtl),
-                bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiStrong)));
+        rFontAttribute = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                            aFontScaling,
+                            rFont,
+                            bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiRtl),
+                            bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiStrong));
 
         // add FontScaling
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());

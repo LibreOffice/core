@@ -418,7 +418,7 @@ void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
 
     if (!mbFontInitialized)
     {
-        maFont = vcl::Font(rRenderContext.GetFont());
+        maFont = rRenderContext.GetFont();
         maFont.SetFontHeight(maFont.GetFontHeight() * 120 / 100);
         mbFontInitialized = true;
     }

@@ -49,7 +49,7 @@ void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xR
             ++it;
         }
     }
-    maVector.emplace_back( uno::WeakReference< uno::XInterface >( xRef ) );
+    maVector.emplace_back( xRef );
 }
 
 /** searches the container for a ref that returns true on the given

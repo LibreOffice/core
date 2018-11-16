@@ -585,7 +585,7 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 
     if( !pFnd )
     {
-        pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), nullptr );
+        pFnd = new SwCalcExp( aStr, rValue, nullptr );
         pFnd->pNext = std::move( m_aVarTable[ nPos ] );
         m_aVarTable[ nPos ].reset( pFnd );
     }

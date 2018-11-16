@@ -918,7 +918,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
             const SfxDocumentInfoItem* pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
             bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             const_cast<SfxDocumentInfoItem*>(pInfoItem)->SetUseUserData( bUseData );
-            rSet->Put( SfxDocumentInfoItem( *pInfoItem ) );
+            rSet->Put( *pInfoItem );
             bRet = true;
         }
     }
@@ -955,7 +955,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
             const SfxDocumentInfoItem* pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
             bool bUseThumbnail = ( TRISTATE_TRUE == m_pUseThumbnailSaveCB->GetState() );
             const_cast<SfxDocumentInfoItem*>(pInfoItem)->SetUseThumbnailSave( bUseThumbnail );
-            rSet->Put( SfxDocumentInfoItem( *pInfoItem ) );
+            rSet->Put( *pInfoItem );
             bRet = true;
         }
     }

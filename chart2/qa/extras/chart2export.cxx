@@ -1858,7 +1858,7 @@ void Chart2ExportTest::testCustomDataLabelMultipleSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Bars"), aFields[2]->getString());
 
     // Second series
-    xDataSeries = uno::Reference<chart2::XDataSeries>(getDataSeriesFromDoc(xChartDoc, 0, 1));
+    xDataSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
     CPPUNIT_ASSERT(xDataSeries.is());
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);

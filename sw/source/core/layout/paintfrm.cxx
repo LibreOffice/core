@@ -734,7 +734,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
     {
         // get a copy instead of a reference, because an <insert> may destroy
         // the object due to a necessary array resize.
-        const SwLineRect aSubsLineRect = SwLineRect(aLineRects[i]);
+        const SwLineRect aSubsLineRect(aLineRects[i]);
 
         // add condition <aSubsLineRect.IsLocked()> in order to consider only
         // border lines, which are *not* locked.
@@ -3576,9 +3576,9 @@ void SwColumnFrame::PaintBreak( ) const
                                 aRect.Left() + nTextOff, aRect.Top() ) );
                     if ( IsVertical() )
                     {
-                        aTextMatrix = basegfx::B2DHomMatrix( basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix (
+                        aTextMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix (
                                 aFontSize.getX(), aFontSize.getY(), 0.0, M_PI_2,
-                                aRect.Right(), aRect.Top() + nTextOff ) );
+                                aRect.Right(), aRect.Top() + nTextOff );
                     }
 
                     drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =

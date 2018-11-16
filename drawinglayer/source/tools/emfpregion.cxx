@@ -74,13 +74,12 @@ namespace emfplushelper
             ::basegfx::B2DSize mappedSize(rR.MapSize(dw, dh));
 
             ::basegfx::B2DPolyPolygon polyPolygon(
-                ::basegfx::B2DPolygon(
                     ::basegfx::utils::createPolygonFromRect(
                         ::basegfx::B2DRectangle(
                             mappedPoint.getX(),
                             mappedPoint.getY(),
                             mappedPoint.getX() + mappedSize.getX(),
-                            mappedPoint.getY() + mappedSize.getY()))));
+                            mappedPoint.getY() + mappedSize.getY())));
             polygon = polyPolygon;
             break;
         }

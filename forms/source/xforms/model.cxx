@@ -345,7 +345,7 @@ void Model::loadInstance( sal_Int32 nInstance )
         try
         {
             Reference<XInputStream> xInput =
-                Reference<XSimpleFileAccess3>( SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) )->openFileRead( sURL );
+                SimpleFileAccess::create( ::comphelper::getProcessComponentContext() )->openFileRead( sURL );
             if( xInput.is() )
             {
                 Reference<XDocument> xInstance =

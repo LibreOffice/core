@@ -236,7 +236,7 @@ void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*,void> &rLink)
 void SvxCharView::SetFont( const vcl::Font& rFont )
 {
     long nWinHeight = GetOutputSizePixel().Height();
-    maFont = vcl::Font(rFont);
+    maFont = rFont;
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);
     maFont.SetFontSize(mxVirDev->PixelToLogic(Size(0, nWinHeight / 2)));
@@ -435,7 +435,7 @@ void SvxCharViewControl::setMouseClickHdl(const Link<SvxCharViewControl*,void> &
 void SvxCharViewControl::SetFont( const vcl::Font& rFont )
 {
     long nWinHeight = GetOutputSizePixel().Height();
-    maFont = vcl::Font(rFont);
+    maFont = rFont;
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);
     maFont.SetFontSize(PixelToLogic(Size(0, nWinHeight / 2)));

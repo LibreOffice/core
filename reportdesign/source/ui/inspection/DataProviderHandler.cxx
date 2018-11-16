@@ -486,7 +486,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 {
     uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
     {
-        {"ParentWindow", uno::Any(m_xContext->getValueByName("DialogParentWindow"))},
+        {"ParentWindow", m_xContext->getValueByName("DialogParentWindow")},
         {"Detail", uno::Any(m_xDataProvider)},
         {"Master", uno::Any(m_xReportComponent->getSection()->getReportDefinition())},
         {"Explanation", uno::Any(RptResId(RID_STR_EXPLANATION))},
@@ -507,7 +507,7 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 {
     uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
     {
-        {"ParentWindow", uno::Any(m_xContext->getValueByName("DialogParentWindow"))},
+        {"ParentWindow", m_xContext->getValueByName("DialogParentWindow")},
         {"ChartModel", uno::Any(m_xChartModel)}
     }));
 

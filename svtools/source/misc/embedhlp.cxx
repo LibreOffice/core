@@ -404,7 +404,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     if ( bUpdate )
     {
         if (mpImpl->pGraphic)
-            aOldGraphic = Graphic(*mpImpl->pGraphic);
+            aOldGraphic = *mpImpl->pGraphic;
 
         mpImpl->pGraphic.reset();
         mpImpl->aMediaType.clear();

@@ -2470,7 +2470,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
             pCurrentChild->set_font_attribute(rKey, rValue);
         }
 
-        m_pParserState->m_aAtkInfo[VclPtr<vcl::Window>(pCurrentChild)] = rAtk;
+        m_pParserState->m_aAtkInfo[pCurrentChild] = rAtk;
     }
 
     rProps.clear();

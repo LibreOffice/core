@@ -559,7 +559,7 @@ namespace pcr
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         if (rId == "font")
         {
-            aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
+            aSet.Put (static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST)));
             aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
             rPage.PageCreated(aSet);
         }

@@ -38,7 +38,7 @@ SwNumFormatDlg::SwNumFormatDlg(weld::Window* pParent, const SfxItemSet& rSet)
         TabPageParent pPageParent(get_content_area(), this);
         VclPtr<SfxTabPage> xNewPage = (*fnCreatePage)(pPageParent, &rSet);
         SfxAllItemSet aSet(*(rSet.GetPool()));
-        aSet.Put(SvxNumberInfoItem(xNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO)));
+        aSet.Put(xNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO));
         xNewPage->PageCreated(aSet);
         SetTabPage(xNewPage);
     }

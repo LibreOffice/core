@@ -293,7 +293,7 @@ namespace drawinglayer
 
                 if(0.0 != fStartWidth)
                 {
-                    aStartPolyPolygon = basegfx::B2DPolyPolygon(rSet.Get(XATTR_LINESTART).GetLineStartValue());
+                    aStartPolyPolygon = rSet.Get(XATTR_LINESTART).GetLineStartValue();
 
                     if(aStartPolyPolygon.count() && aStartPolyPolygon.getB2DPolygon(0).count())
                     {
@@ -316,7 +316,7 @@ namespace drawinglayer
 
                 if(0.0 != fEndWidth)
                 {
-                    aEndPolyPolygon = basegfx::B2DPolyPolygon(rSet.Get(XATTR_LINEEND).GetLineEndValue());
+                    aEndPolyPolygon = rSet.Get(XATTR_LINEEND).GetLineEndValue();
 
                     if(aEndPolyPolygon.count() && aEndPolyPolygon.getB2DPolygon(0).count())
                     {

@@ -4562,7 +4562,7 @@ void SwUiWriterTest::testTdf96479()
         CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
         xCursorNew->getText()->insertTextContent(xCursorNew, xTextField, true);
         xBookmarkNew = uno::Reference<text::XTextContent>(xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
-        xCursorNew = uno::Reference<text::XTextCursor>(xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(xBookmarkNew->getAnchor()));
+        xCursorNew = xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(xBookmarkNew->getAnchor());
         CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
 
         // Can't check the actual content of the text node via UNO

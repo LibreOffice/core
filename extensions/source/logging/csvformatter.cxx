@@ -184,7 +184,7 @@ namespace logging
 
     void CsvFormatter::setColumnnames(const Sequence< OUString >& columnnames)
     {
-        m_Columnnames = Sequence< OUString>(columnnames);
+        m_Columnnames = columnnames;
         m_MultiColumn = (m_Columnnames.getLength()>1);
     }
 

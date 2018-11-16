@@ -162,7 +162,7 @@ public:
 
 std::shared_ptr<BitmapReplacement> PngCompression::Compress (const BitmapEx& rBitmap) const
 {
-    vcl::PNGWriter aWriter ((BitmapEx(rBitmap)));
+    vcl::PNGWriter aWriter(rBitmap);
     SvMemoryStream aStream (32768, 32768);
     aWriter.Write(aStream);
 
