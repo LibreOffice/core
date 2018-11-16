@@ -224,8 +224,8 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
         aEndColor.SetGreen( static_cast<sal_uInt8>( ( aEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) );
         aEndColor.SetBlue( static_cast<sal_uInt8>( ( aEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) );
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId,
-                            ( rGradientId = "Gradient_" ) += OUString::number( nCurGradientId++ ) );
+        rGradientId = "Gradient_" + OUString::number( nCurGradientId++ );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, rGradientId );
 
         {
             std::unique_ptr< SvXMLElementExport >   apGradient;
@@ -3705,11 +3705,14 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     mpVDev->Push();
 
     Size aSize( OutputDevice::LogicToLogic(rSize100thmm, MapMode(MapUnit::Map100thMM), aMapMode) );
-    aMapMode.SetScaleX( aFractionX *= Fraction( aSize.Width(), aPrefSize.Width() ) );
-    aMapMode.SetScaleY( aFractionY *= Fraction( aSize.Height(), aPrefSize.Height() ) );
+    aFractionX *= Fraction( aSize.Width(), aPrefSize.Width() );
+    aMapMode.SetScaleX( aFractionX );
+    aFractionY *= Fraction( aSize.Height(), aPrefSize.Height() );
+    aMapMode.SetScaleY( aFractionY );
 
     Point aOffset( OutputDevice::LogicToLogic(rPos100thmm, MapMode(MapUnit::Map100thMM), aMapMode ) );
-    aMapMode.SetOrigin( aOffset += aMapMode.GetOrigin() );
+    aOffset += aMapMode.GetOrigin();
+    aMapMode.SetOrigin( aOffset );
 
     mpVDev->SetMapMode( aMapMode );
 

@@ -336,7 +336,10 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
-            aProp.Value <<= sMenuBar += pMenu->Name(); // name of popup
+        {
+            sMenuBar += pMenu->Name();
+            aProp.Value <<= sMenuBar; // name of popup
+        }
         nStyle |= ui::ItemStyle::DROP_DOWN;
         props.push_back( aProp );
     }

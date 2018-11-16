@@ -1252,12 +1252,15 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if( bIsReplaceQuote )
             {
                 sal_Unicode cPrev;
-                bool bSttQuote = !nInsPos ||
-                        NonFieldWordDelim( ( cPrev = rTxt[ nInsPos-1 ])) ||
+                bool bSttQuote = !nInsPos;
+                if (!bSttQuote)
+                {
+                    cPrev = rTxt[ nInsPos-1 ];
+                    bSttQuote = NonFieldWordDelim(cPrev) ||
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash == cPrev ) ||
                         ( cEnDash == cPrev );
-
+                }
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert );
                 break;
             }
@@ -1890,15 +1893,15 @@ OUString SvxAutoCorrect::GetAutoCorrFileName( const LanguageTag& rLanguageTag,
 
     sExt = "_" + sExt + ".dat";
     if( bNewFile )
-        ( sRet = sUserAutoCorrFile )  += sExt;
+        sRet = sUserAutoCorrFile + sExt;
     else if( !bTst )
-        ( sRet = sShareAutoCorrFile )  += sExt;
+        sRet = sShareAutoCorrFile + sExt;
     else
     {
         // test first in the user directory - if not exist, then
-        ( sRet = sUserAutoCorrFile ) += sExt;
+        sRet = sUserAutoCorrFile + sExt;
         if( !FStatHelper::IsDocument( sRet ))
-            ( sRet = sShareAutoCorrFile ) += sExt;
+            sRet = sShareAutoCorrFile + sExt;
     }
     return sRet;
 }

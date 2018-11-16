@@ -86,7 +86,8 @@ CollatorImpl::loadCollatorAlgorithm(const OUString& impl, const lang::Locale& rL
 
     if (!cachedItem)
         throw RuntimeException(); // impl could not be loaded
-    cachedItem->xC->loadCollatorAlgorithm(cachedItem->algorithm, nLocale = rLocale, collatorOptions);
+    nLocale = rLocale;
+    cachedItem->xC->loadCollatorAlgorithm(cachedItem->algorithm, nLocale, collatorOptions);
 
     return 0;
 }
