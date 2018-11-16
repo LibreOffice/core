@@ -716,7 +716,10 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                         if ( bLeftValid )
                         {
                             aBox.SetLine( bRightOver ? pLeft : nullptr, SvxBoxItemLine::RIGHT );
-                            bVertValid ? nType |= 0x0020 : nType |= 0x0010;
+                            if (bVertValid)
+                                nType |= 0x0020;
+                            else
+                                nType |= 0x0010;
                         }
                         if ( bLeftOver )
                         {

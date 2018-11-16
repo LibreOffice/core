@@ -2285,10 +2285,13 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
                 const SwContentFrame *const pRefFrame = pRefTextField->GetTextNode().getLayoutFrame(
                     pLayout, nullptr, &tmp);
                 const SwPageFrame* pPgFrame = nullptr;
-                const short nDiff = ( pFrame && pRefFrame )
-                        ?   (pPgFrame = pFrame->FindPageFrame())->GetPhyPageNum() -
-                            pRefFrame->FindPageFrame()->GetPhyPageNum() + 1
-                        : 1;
+                short nDiff = 1;
+                if ( pFrame && pRefFrame )
+                {
+                    pPgFrame = pFrame->FindPageFrame();
+                    nDiff = pPgFrame->GetPhyPageNum() -
+                            pRefFrame->FindPageFrame()->GetPhyPageNum() + 1;
+                }
 
                 SvxNumType nTmpFormat = SVX_NUM_PAGEDESC == static_cast<SvxNumType>(pGetField->GetFormat())
                         ? ( !pPgFrame

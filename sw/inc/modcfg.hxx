@@ -278,26 +278,30 @@ public:
     bool        IsInsTableFormatNum(bool bHTML) const
                     { return bHTML ? m_aWebTableConfig.bInsTableFormatNum : m_aTableConfig.bInsTableFormatNum; }
     void        SetInsTableFormatNum( bool bHTML, bool b )
-                    { bHTML ? (m_aWebTableConfig.bInsTableFormatNum = b) : (m_aTableConfig.bInsTableFormatNum = b);
-                      bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
+                    { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
+                      config.bInsTableFormatNum = b;
+                      config.SetModified();}
 
     bool        IsInsTableChangeNumFormat(bool bHTML) const
                     { return bHTML ? m_aWebTableConfig.bInsTableChangeNumFormat : m_aTableConfig.bInsTableChangeNumFormat; }
     void        SetInsTableChangeNumFormat( bool bHTML, bool b )
-                    { bHTML ? (m_aWebTableConfig.bInsTableChangeNumFormat = b) : (m_aTableConfig.bInsTableChangeNumFormat = b);
-                      bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
+                    { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
+                      config.bInsTableChangeNumFormat = b;
+                      config.SetModified();}
 
     bool        IsInsTableAlignNum(bool bHTML) const
                     { return bHTML ? m_aWebTableConfig.bInsTableAlignNum : m_aTableConfig.bInsTableAlignNum; }
     void        SetInsTableAlignNum( bool bHTML, bool b )
-                    { bHTML ? (m_aWebTableConfig.bInsTableAlignNum = b) : (m_aTableConfig.bInsTableAlignNum = b);
-                        bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
+                    { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
+                      config.bInsTableAlignNum = b;
+                      config.SetModified();}
 
     const SwInsertTableOptions& GetInsTableFlags(bool bHTML) const
                     { return bHTML ? m_aWebInsertConfig.m_aInsTableOpts : m_aInsertConfig.m_aInsTableOpts;}
     void        SetInsTableFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
-                    bHTML ? (m_aWebInsertConfig.m_aInsTableOpts = rOpts) : (m_aInsertConfig.m_aInsTableOpts = rOpts);
-                    bHTML ? m_aWebInsertConfig.SetModified() : m_aInsertConfig.SetModified();}
+                    auto & config = bHTML ? m_aWebInsertConfig : m_aInsertConfig;
+                    config.m_aInsTableOpts = rOpts;
+                    config.SetModified();}
 
     const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
     bool        SetCapOption(bool bHTML, const InsCaptionOpt* pOpt);

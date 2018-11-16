@@ -1047,7 +1047,8 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
             nI < rStr.getLength() && rStr.getLength() < (MAX_FIELDLEN - 4); ++nI )
     {
         bool bSetAsHex = false;
-        switch( cChar = rStr[ nI ] )
+        cChar = rStr[ nI ];
+        switch( cChar )
         {
             case 132:                       // Exchange typographical quotation marks for normal ones
             case 148:
@@ -1467,7 +1468,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
         aField.SetSubType(aField.GetSubType() | nsSwExtendedSubType::SUB_INVISIBLE);
 
     if (!sStart.isEmpty())
-        aField.SetFormula( ( aSequenceName += "=" ) += sStart );
+        aField.SetFormula( aSequenceName + "=" + sStart );
     else if (!bCountOn)
         aField.SetFormula(aSequenceName);
 
@@ -3513,7 +3514,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
    OSL_ENSURE(!sURL.isEmpty() || !sMark.isEmpty(), "WW8: Empty URL");
 
     if( !sMark.isEmpty() )
-        ( sURL += "#" ) += sMark;
+        sURL = sURL + "#" + sMark;
 
     SwFormatINetFormat aURL(sURL, sTarget);
     // If on loading TOC field, change the default style into the "index link"

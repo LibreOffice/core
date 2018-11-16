@@ -137,7 +137,8 @@ SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rText ) const
         for( sal_Int32 n = 0, nEnd = rText.getLength(); n < nEnd;
                 n = m_xBreak->endOfScript(rText, n, nScript) )
         {
-            switch( nScript = m_xBreak->getScriptType(rText, n) )
+            nScript = m_xBreak->getScriptType(rText, n);
+            switch( nScript )
             {
             case i18n::ScriptType::LATIN:   nRet |= SvtScriptType::LATIN;   break;
             case i18n::ScriptType::ASIAN:   nRet |= SvtScriptType::ASIAN;   break;

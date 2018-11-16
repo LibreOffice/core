@@ -167,10 +167,26 @@ bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason 
     {
         OUString sReloadDocument;
         bReturn = m_xCurrentDocRB->get_active() ||
-                m_xNewDocRB->get_active() ||
-                (!(sReloadDocument = m_sLoadFileName).isEmpty() && m_xLoadDocRB->get_active() )||
-                (!(sReloadDocument = m_sLoadTemplateName).isEmpty() && m_xLoadTemplateRB->get_active())||
-                (m_xRecentDocRB->get_active() && !(sReloadDocument = m_xRecentDocLB->get_active_text()).isEmpty());
+                m_xNewDocRB->get_active();
+        if (!bReturn)
+        {
+            sReloadDocument = m_sLoadFileName;
+            bReturn = !sReloadDocument.isEmpty() && m_xLoadDocRB->get_active();
+        }
+        if (!bReturn)
+        {
+            sReloadDocument = m_sLoadTemplateName;
+            bReturn = !sReloadDocument.isEmpty() && m_xLoadTemplateRB->get_active();
+        }
+        if (!bReturn)
+        {
+            bReturn = m_xRecentDocRB->get_active();
+            if (bReturn)
+            {
+                sReloadDocument = m_xRecentDocLB->get_active_text();
+                bReturn = !sReloadDocument.isEmpty();
+            }
+        }
         if( _eReason == ::svt::WizardTypes::eValidate )
             m_pWizard->SetDocumentLoad(!m_xCurrentDocRB->get_active());
 
