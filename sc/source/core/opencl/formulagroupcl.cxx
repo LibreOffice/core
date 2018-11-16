@@ -40,6 +40,7 @@
 
 static const char* const publicFunc =
  "\n"
+ "#define IllegalArgument 502\n"
  "#define IllegalFPOperation 503 // #NUM!\n"
  "#define NoValue 519 // #VALUE!\n"
  "#define DivisionByZero 532 // #DIV/0!\n"
