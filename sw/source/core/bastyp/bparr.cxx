@@ -430,7 +430,7 @@ sal_uInt16 BigPtrArray::Compress()
             if( USHRT_MAX == nFirstChgPos )
                 nFirstChgPos = cur;
 
-            // Not full yet? Than fill up.
+            // Not full yet? Then fill up.
             if( n > nLast )
                 n = nLast;
 

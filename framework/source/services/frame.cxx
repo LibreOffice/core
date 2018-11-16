@@ -2287,7 +2287,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
                                                                             const OUString& sTargetFrameName,
                                                                             sal_Int32 nSearchFlags)
 {
-    // Don't check incoming parameter here! Our helper do it for us and it is not a good idea to do it more than ones!
+    // Don't check incoming parameter here! Our helper do it for us and it is not a good idea to do it more than once!
 
     checkDisposed();
 

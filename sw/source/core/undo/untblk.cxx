@@ -106,9 +106,9 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         nSttNode = pTmpPos->nNode.GetIndex();
         nSttContent = pTmpPos->nContent.GetIndex();
 
-        if( !bSttIsTextNd )      // if a table selection is added ...
+        if( !bSttIsTextNd )      // if a table selection is added...
         {
-            ++nSttNode;         // ... than the CopyPam is not fully correct
+            ++nSttNode;         // ... then the CopyPam is not fully correct
             bSttWasTextNd = false;
         }
     }

@@ -169,7 +169,7 @@ public:
     sal_Int32 removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /**
       Call disposing on all object in the container that
-      support XEventListener. Than clear the container.
+      support XEventListener. Then clear the container.
      */
     void disposeAndClear( const css::lang::EventObject & rEvt );
     /**
