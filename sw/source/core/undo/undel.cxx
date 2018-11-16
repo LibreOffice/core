@@ -511,7 +511,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
             : pEndTextNd->CreateUndo();
     }
 
-    // if there are only two Nodes than we're done
+    // if there are only two Nodes then we're done
     if( ( pSttTextNd || pEndTextNd ) && nSttNode + 1 == nEndNode )
         return false;           // do not move any Node
 

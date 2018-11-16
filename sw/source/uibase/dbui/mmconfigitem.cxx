@@ -144,7 +144,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     std::vector< SwDocMergeInfo >           m_aMergeInfos;
 
     //we do overwrite the usersettings in a special case
-    //than we do remind the usersettings here
+    //then we do remind the usersettings here
     bool                                m_bUserSettingWereOverwritten;
     bool                                m_bIsAddressBlock_LastUserSetting;
     bool                                m_bIsGreetingLineInMail_LastUserSetting;
