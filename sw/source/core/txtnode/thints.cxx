@@ -2054,6 +2054,17 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 {
     assert(!rSet.Count()); // handled inconsistently, typically an error?
 
+    // get the node's automatic attributes
+    SfxItemSet aFormatSet( *rSet.GetPool(), rSet.GetRanges() );
+    if (!bOnlyTextAttr)
+    {
+        SwContentNode::GetAttr( aFormatSet );
+        if ( bMergeIndentValuesOfNumRule )
+        {
+            lcl_MergeListLevelIndentAsLRSpaceItem( *this, aFormatSet );
+        }
+    }
+
     if( HasHints() )
     {
         // First, check which text attributes are valid in the range.
@@ -2070,17 +2081,6 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         void (*fnMergeAttr)( SfxItemSet&, const SfxPoolItem& )
             = bGetFromChrFormat ? &lcl_MergeAttr_ExpandChrFormat
                              : &lcl_MergeAttr;
-
-        // get the node's automatic attributes
-        SfxItemSet aFormatSet( *rSet.GetPool(), rSet.GetRanges() );
-        if( !bOnlyTextAttr )
-        {
-            SwContentNode::GetAttr( aFormatSet );
-            if ( bMergeIndentValuesOfNumRule )
-            {
-                lcl_MergeListLevelIndentAsLRSpaceItem( *this, aFormatSet );
-            }
-        }
 
         const size_t nSize = m_pSwpHints->Count();
 
@@ -2249,18 +2249,13 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         {
             // remove all from the format-set that are also set in the text-set
             aFormatSet.Differentiate( rSet );
-            // now "merge" everything
-            rSet.Put( aFormatSet );
         }
     }
-    else if( !bOnlyTextAttr )
+
+    if (aFormatSet.Count())
     {
-        // get the node's automatic attributes
-        SwContentNode::GetAttr( rSet );
-        if ( bMergeIndentValuesOfNumRule )
-        {
-            lcl_MergeListLevelIndentAsLRSpaceItem( *this, rSet );
-        }
+        // now "merge" everything
+        rSet.Put( aFormatSet );
     }
 
     return rSet.Count() != 0;
