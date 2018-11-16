@@ -378,9 +378,8 @@ void OpINTRATE::GenSlidingWindowFunction(std::stringstream& ss,
         }
     }
     ss << "    int nNullDate = GetNullDate();\n";
-    ss << "    tmp = arg3 * pow(arg2,-1) - 1.0;\n";
-    ss << "    tmp = tmp * pow(GetYearDiff_new(nNullDate, (int)arg0,";
-    ss << " (int)arg1,(int)arg4),-1);\n";
+    ss << "    tmp = ((arg3 / arg2) - 1) / GetYearDiff_new(nNullDate, (int)arg0,";
+    ss << "             (int)arg1,(int)arg4);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
