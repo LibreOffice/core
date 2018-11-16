@@ -2483,7 +2483,7 @@ void OpSqrtPi::GenSlidingWindowFunction(std::stringstream &ss,
         ss << ";\n";
     }
     ss << "    return (double)sqrt(arg0 *";
-    ss << " 3.1415926535897932384626433832795f);\n";
+    ss << " 3.1415926535897932);\n";
     ss << "}";
 }
 void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
