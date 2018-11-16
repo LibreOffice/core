@@ -124,6 +124,7 @@ void OpSecH::GenSlidingWindowFunction(std::stringstream &ss,
 void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT(2, 2);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
