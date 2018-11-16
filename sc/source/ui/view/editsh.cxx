@@ -77,7 +77,9 @@
 
 #include <scui_def.hxx>
 #include <scabstdlg.hxx>
+#include <rubylistentry.hxx>
 #include <memory>
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -87,6 +89,7 @@ SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 void ScEditShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("celledit");
+    GetStaticInterface()->RegisterChildWindow(SID_RUBY_DIALOG);
 }
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
@@ -186,6 +189,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
+        case SID_RUBY_DIALOG:
+        {
+            SfxRequest aReq(nSlot, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
+            pViewData->GetViewShell()->GetViewFrame()->ExecuteSlot(aReq);
+            rReq.Ignore();
+        }
+        break;
+
         case SID_ATTR_INSERT:
         case FID_INS_CELL_CONTENTS: // Insert taste, while defined as Acc
             bIsInsertMode = !pTableView->IsInsertMode();
@@ -756,6 +767,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_KATAGANA:
             case SID_INSERT_RLM:
             case SID_INSERT_LRM:
+            case SID_RUBY_DIALOG:
                 ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
             break;
 
@@ -1304,6 +1316,90 @@ void ScEditShell::ExecuteTrans( const SfxRequest& rReq )
             pTopView->TransliterateText( nType );
 
         pHdl->DataChanged();
+    }
+}
+
+void ScEditShell::SetRubyList(const std::vector<ScRubyListEntry>& aRubyList)
+{
+    ScInputHandler* pHdl = GetMyInputHdl();
+    OSL_ENSURE(pHdl,"no ScInputHandler");
+
+    EditView* pTableView = pHdl->GetTableView();
+    OSL_ENSURE(pTableView,"no EditView");
+
+    EditEngine* pEngine = pTableView->GetEditEngine();
+    if (!pEngine)
+        return;
+
+    ESelection  aSel = pTableView->GetSelection();
+
+    aSel.Adjust();
+    sal_Int32 nMax = aSel.HasRange() ? aSel.nEndPos : pEngine->GetTextLen(aSel.nStartPara);
+
+    // Collapsed the selection to start.
+    aSel.nEndPara = aSel.nStartPara;
+    aSel.nEndPos = aSel.nStartPos;
+
+    bool bOld = pEngine->GetUpdateMode();
+    pEngine->SetUpdateMode(false);
+
+    for(const ScRubyListEntry& rEntry: aRubyList)
+    {
+        aSel.nEndPos = aSel.nEndPos + rEntry.maBaseText.getLength();
+        if (aSel.nStartPos >= nMax || aSel.nEndPos >= nMax)
+            break;
+
+        if (rEntry.maRubyText.getLength())
+        {
+            SfxItemSet aSet(pTableView->GetEmptyItemSet());
+            // Change EE_CHAR_RUBI_DUMMY to something useful!!!
+            aSet.Put(SvxColorItem(COL_RED, EE_CHAR_COLOR));
+            pEngine->QuickSetAttribs(aSet, aSel);
+        }
+
+        aSel.nStartPos = aSel.nEndPos;
+    }
+
+    pEngine->SetUpdateMode(bOld);
+
+    pTableView->Invalidate();
+    pHdl->SetModified();
+}
+
+void ScEditShell::GetRubyList(std::vector<ScRubyListEntry>& aRubyList)
+{
+    ScInputHandler* pHdl = GetMyInputHdl();
+    OSL_ENSURE(pHdl,"no ScInputHandler");
+
+    EditView* pTableView = pHdl->GetTableView();
+    OSL_ENSURE(pTableView,"no EditView");
+
+    EditEngine* pEngine = pTableView->GetEditEngine();
+    if (!pEngine)
+        return;
+
+    ESelection  aSel = pTableView->GetSelection();
+
+    aSel.Adjust();
+    sal_Int32 nMax = aSel.HasRange() ? aSel.nEndPos : pEngine->GetTextLen(aSel.nStartPara);
+
+    // Collapsed the selection to start.
+    aSel.nEndPara = aSel.nStartPara;
+    aSel.nEndPos = aSel.nStartPos;
+
+    sal_Int32 nCount = 0;
+    while (nCount < 30 && aSel.nStartPos < nMax)
+    {
+        // Todo: match existing rubies.
+        aSel = pEngine->GetWord(aSel, i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+
+        ScRubyListEntry aEntry;
+        aEntry.maBaseText = pEngine->GetText(aSel);
+        aRubyList.push_back(aEntry);
+        ++nCount;
+
+        aSel.nStartPos = aSel.nEndPos;
+        aSel.nEndPos = aSel.nStartPos;
     }
 }
 
