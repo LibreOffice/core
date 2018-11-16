@@ -1010,7 +1010,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableChartsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableColumnsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableConditionalEntryEnumeration \
-    qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TextFieldEnumeration \
     qadevOOo/tests/java/mod/_sc/ScLabelRangesObj \
     qadevOOo/tests/java/mod/_sc/ScModelObj \
     qadevOOo/tests/java/mod/_sc/ScNamedRangesObj \
