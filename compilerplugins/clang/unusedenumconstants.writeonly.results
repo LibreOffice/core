@@ -2726,8 +2726,6 @@ include/svtools/treelistbox.hxx:191
     enum SvTreeListBoxFlags IN_EDT
 include/svtools/treelistbox.hxx:192
     enum SvTreeListBoxFlags EDT_ENABLED
-include/svtools/treelistbox.hxx:194
-    enum SvTreeListBoxFlags IS_TRAVELSELECT
 include/svtools/treelistbox.hxx:195
     enum SvTreeListBoxFlags TARGEMPH_VIS
 include/svtools/treelistbox.hxx:196

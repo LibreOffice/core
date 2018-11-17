@@ -1954,16 +1954,12 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     if( IsEditingActive() )
         return;
 
-    nImpFlags |= SvTreeListBoxFlags::IS_TRAVELSELECT;
-
     if( !pImpl->KeyInput( rKEvt ) )
     {
         bool bHandled = HandleKeyInput( rKEvt );
         if ( !bHandled )
             Control::KeyInput( rKEvt );
     }
-
-    nImpFlags &= ~SvTreeListBoxFlags::IS_TRAVELSELECT;
 }
 
 void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
