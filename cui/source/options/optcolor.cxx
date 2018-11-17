@@ -24,7 +24,7 @@
 #include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/colorbox.hxx>

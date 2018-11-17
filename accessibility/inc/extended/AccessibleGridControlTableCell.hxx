@@ -22,7 +22,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <extended/AccessibleGridControlBase.hxx>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 
 namespace accessibility
 {
@@ -43,10 +43,10 @@ namespace accessibility
     protected:
         AccessibleGridControlCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-            ::svt::table::IAccessibleTable& _rTable,
+            ::vcl::table::IAccessibleTable& _rTable,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
-            ::svt::table::AccessibleTableControlObjType _eType
+            ::vcl::table::AccessibleTableControlObjType _eType
         );
 
         virtual ~AccessibleGridControlCell() override = default;
@@ -74,7 +74,7 @@ namespace accessibility
 
     public:
         AccessibleGridControlTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                                    ::svt::table::IAccessibleTable& _rTable,
+                                    ::vcl::table::IAccessibleTable& _rTable,
                                     sal_Int32 _nRowId,
                                     sal_uInt16 _nColId);
 

@@ -18,7 +18,7 @@
  */
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -48,9 +48,9 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider&                      rBrowseBox,
+        ::vcl::IAccessibleTableProvider&                      rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        ::svt::AccessibleBrowseBoxObjType      eObjType ) :
+        ::vcl::AccessibleBrowseBoxObjType      eObjType ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
     mxParent( rxParent ),
     mpBrowseBox( &rBrowseBox ),
@@ -66,9 +66,9 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider&                      rBrowseBox,
+        ::vcl::IAccessibleTableProvider&                      rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        ::svt::AccessibleBrowseBoxObjType      eObjType,
+        ::vcl::AccessibleBrowseBoxObjType      eObjType,
         const OUString&          rName,
         const OUString&          rDescription ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
@@ -439,24 +439,24 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
     switch ( meObjType )
     {
-        case BBTYPE_ROWHEADERCELL:
+        case vcl::BBTYPE_ROWHEADERCELL:
             nRole = AccessibleRole::ROW_HEADER;
             break;
-        case BBTYPE_COLUMNHEADERCELL:
+        case vcl::BBTYPE_COLUMNHEADERCELL:
             nRole = AccessibleRole::COLUMN_HEADER;
             break;
-        case BBTYPE_COLUMNHEADERBAR:
-        case BBTYPE_ROWHEADERBAR:
-        case BBTYPE_TABLE:
+        case vcl::BBTYPE_COLUMNHEADERBAR:
+        case vcl::BBTYPE_ROWHEADERBAR:
+        case vcl::BBTYPE_TABLE:
             nRole = AccessibleRole::TABLE;
             break;
-        case BBTYPE_TABLECELL:
+        case vcl::BBTYPE_TABLECELL:
             nRole = AccessibleRole::TABLE_CELL;
             break;
-        case BBTYPE_BROWSEBOX:
+        case vcl::BBTYPE_BROWSEBOX:
             nRole = AccessibleRole::PANEL;
             break;
-        case BBTYPE_CHECKBOXCELL:
+        case vcl::BBTYPE_CHECKBOXCELL:
             nRole = AccessibleRole::CHECK_BOX;
             break;
     }
@@ -533,15 +533,15 @@ Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessible
 }
 
 
-BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::svt::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, ::svt::AccessibleBrowseBoxObjType  eObjType )
+BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, ::vcl::AccessibleBrowseBoxObjType  eObjType )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType )
 {
 }
 
 
-BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::svt::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, ::svt::AccessibleBrowseBoxObjType  eObjType,
+BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, ::vcl::AccessibleBrowseBoxObjType  eObjType,
         const OUString& rName, const OUString& rDescription )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription )
 {

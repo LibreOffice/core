@@ -312,11 +312,11 @@
     <glade-widget-class title="Animation ListBox" name="sdlo-CustomAnimationList"
                         generic-name="Animation ListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Tab List" name="svtlo-SvTabListBox"
+    <glade-widget-class title="Tab List" name="vcllo-SvTabListBox"
                         generic-name="Tab List" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="CheckBox List" name="basctllo-CheckBox"
-                        generic-name="CheckBox List" parent="svtlo-SvTabListBox"
+                        generic-name="CheckBox List" parent="vcllo-SvTabListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="SwIdxTreeListBox" name="swuilo-SwIdxTreeListBox"
                         generic-name="SwIdxTreeListBox" parent="vcllo-SvTreeListBox"

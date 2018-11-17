@@ -23,7 +23,7 @@
 #include <extended/AccessibleBrowseBox.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 
 class SvHeaderTabListBox;
 
@@ -39,7 +39,7 @@ typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
 class AccessibleTabListBox final
                 :public AccessibleBrowseBox
                 ,public AccessibleTabListBox_Base
-                ,public ::svt::IAccessibleTabListBox
+                ,public ::vcl::IAccessibleTabListBox
 {
 private:
     VclPtr<SvHeaderTabListBox>        m_pTabListBox;
@@ -79,7 +79,7 @@ public:
     css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar() override
     {
-        return AccessibleBrowseBox::getHeaderBar( svt::BBTYPE_COLUMNHEADERBAR );
+        return AccessibleBrowseBox::getHeaderBar( vcl::BBTYPE_COLUMNHEADERBAR );
     }
 
 private:

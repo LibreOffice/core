@@ -187,7 +187,7 @@
               </packing>
             </child>
             <child>
-              <object class="svtlo-SvTabListBox" id="LB_ROLE:border">
+              <object class="vcllo-SvTabListBox" id="LB_ROLE:border">
                 <property name="width_request">440</property>
                 <property name="height_request">100</property>
                 <property name="visible">True</property>

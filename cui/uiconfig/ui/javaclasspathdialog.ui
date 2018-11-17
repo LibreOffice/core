@@ -4,12 +4,12 @@
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
     </columns>
   </object>
   <object class="GtkDialog" id="JavaClassPath">
@@ -138,7 +138,7 @@
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
                               <attributes>
-                                <attribute name="pixbuf">2</attribute>
+                                <attribute name="pixbuf">0</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -148,7 +148,7 @@
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext2"/>
                               <attributes>
-                                <attribute name="text">0</attribute>
+                                <attribute name="text">1</attribute>
                               </attributes>
                             </child>
                           </object>
