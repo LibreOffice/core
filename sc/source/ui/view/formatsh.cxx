@@ -847,7 +847,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                pDlg.disposeAndReset(pFact->CreateScStyleDlg(rReq.GetFrameWeld(), *pStyleSheet, bPage));
+                pDlg.disposeAndReset(pFact->CreateScStyleDlg(pTabViewShell->GetFrameWeld(), *pStyleSheet, bPage));
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(false);
 
