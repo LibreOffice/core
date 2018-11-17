@@ -62,7 +62,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    const sal_Char *implementationName;
     std::unique_ptr<icu::RuleBasedCollator> uca_base, collator;
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;

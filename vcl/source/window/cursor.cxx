@@ -36,7 +36,6 @@ struct ImplCursorData
     Point           maPixPos;           // Pixel-Position
     Point           maPixRotOff;        // Pixel-Offset-Position
     Size            maPixSize;          // Pixel-Size
-    long            mnPixSlant;         // Pixel-Slant
     short           mnOrientation;      // Pixel-Orientation
     CursorDirection mnDirection;        // indicates writing direction
     sal_uInt16      mnStyle;            // Cursor-Style
@@ -62,23 +61,13 @@ static void ImplCursorInvert( ImplCursorData const * pData )
         nInvertStyle = InvertFlags::NONE;
 
     tools::Rectangle aRect( pData->maPixPos, pData->maPixSize );
-    if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation || pData->mnPixSlant )
+    if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation )
     {
         tools::Polygon aPoly( aRect );
         if( aPoly.GetSize() == 5 )
         {
             aPoly[1].AdjustX(1 );  // include the right border
             aPoly[2].AdjustX(1 );
-            if ( pData->mnPixSlant )
-            {
-                Point aPoint = aPoly.GetPoint( 0 );
-                aPoint.AdjustX(pData->mnPixSlant );
-                aPoly.SetPoint( aPoint, 0 );
-                aPoly.SetPoint( aPoint, 4 );
-                aPoint = aPoly.GetPoint( 1 );
-                aPoint.AdjustX(pData->mnPixSlant );
-                aPoly.SetPoint( aPoint, 1 );
-            }
 
             // apply direction flag after slant to use the correct shape
             if ( pData->mnDirection != CursorDirection::NONE)
@@ -139,7 +128,6 @@ void vcl::Cursor::ImplDraw()
         vcl::Window* pWindow         = mpData->mpWindow;
         mpData->maPixPos        = pWindow->LogicToPixel( maPos );
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
-        mpData->mnPixSlant      = 0;
         mpData->mnOrientation   = mnOrientation;
         mpData->mnDirection     = mnDirection;
 

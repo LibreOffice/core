@@ -36,9 +36,10 @@ using namespace ::com::sun::star::uno;
 
 namespace i18npool {
 
+static const char implementationName[] = "com.sun.star.i18n.Collator_Unicode";
+
 Collator_Unicode::Collator_Unicode()
 {
-    implementationName = "com.sun.star.i18n.Collator_Unicode";
     collator = nullptr;
     uca_base = nullptr;
 #ifndef DISABLE_DYNLOADING
@@ -399,7 +400,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 OUString SAL_CALL
 Collator_Unicode::getImplementationName()
 {
-    return OUString::createFromAscii(implementationName);
+    return OUString(implementationName);
 }
 
 sal_Bool SAL_CALL
@@ -411,7 +412,7 @@ Collator_Unicode::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 Collator_Unicode::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { OUString::createFromAscii(implementationName) };
+    Sequence< OUString > aRet { OUString(implementationName) };
     return aRet;
 }
 

@@ -22,7 +22,7 @@ include/svtools/headbar.hxx:219
 include/svtools/headbar.hxx:220
     HeaderBar mnBorderOff2
     long
-include/svtools/ruler.hxx:628
+include/svtools/ruler.hxx:627
     Ruler mnBorderWidth
     long
 include/tools/ref.hxx:126
