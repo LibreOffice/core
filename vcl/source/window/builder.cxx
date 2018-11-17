@@ -36,11 +36,11 @@
 #include <vcl/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/throbber.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
@@ -518,7 +518,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         vcl::Window* pTarget = get<vcl::Window>(elem.m_sID);
         ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
         ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
-        SvTreeListBox *pTreeBoxTarget = dynamic_cast<SvTreeListBox*>(pTarget);
+        SvTabListBox *pTreeBoxTarget = dynamic_cast<SvTabListBox*>(pTarget);
         // pStore may be empty
         const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget && !pTreeBoxTarget, "vcl", "missing elements of combobox");
@@ -1872,10 +1872,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkTreeView")
     {
         //To-Do
-        //a) make SvTreeListBox the default target for GtkTreeView
+        //a) make SvTabListBox the default target for GtkTreeView
         //b) remove the non-drop down mode of ListBox and convert
-        //   everything over to SvTreeListBox
-        //c) remove the users of makeSvTreeListBox
+        //   everything over to SvTabListBox
+        //c) remove the users of makeSvTabListBox and makeSvTreeListBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
         if (m_bLegacy)
@@ -1884,7 +1884,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (!sBorder.isEmpty())
                 nWinStyle |= WB_BORDER;
         }
-        //ListBox/SvTreeListBox manages its own scrolling,
+        //ListBox/SvTabListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         if (pRealParent != pParent)
             nWinStyle |= WB_BORDER;
@@ -1892,7 +1892,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
         else
         {
-            VclPtrInstance<SvTreeListBox> xBox(pRealParent, nWinStyle | WB_HASBUTTONS | WB_HASBUTTONSATROOT);
+            VclPtrInstance<SvTabListBox> xBox(pRealParent, nWinStyle);
             xBox->SetNoAutoCurEntry(true);
             xBox->SetHighlightRange(); // select over the whole width
             xWindow = xBox;
@@ -4081,7 +4081,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         rTarget.SelectEntryPos(nActiveId);
 }
 
-void VclBuilder::mungeModel(SvTreeListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
+void VclBuilder::mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
 {
     for (auto const& entry : rStore.m_aEntries)
     {

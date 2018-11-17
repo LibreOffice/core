@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_BRWHEAD_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 
 class BrowseBox;
 

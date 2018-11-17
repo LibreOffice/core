@@ -10,7 +10,7 @@
 #include "PlacesListBox.hxx"
 #include <svtools/PlaceEditDialog.hxx>
 
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <bitmaps.hlst>
 
 #define COLUMN_NAME     1

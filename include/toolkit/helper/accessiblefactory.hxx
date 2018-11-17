@@ -38,6 +38,7 @@ class VCLXScrollBar;
 class VCLXEdit;
 class VCLXComboBox;
 class VCLXToolBox;
+class VCLXHeaderBar;
 class VCLXWindow;
 class Menu;
 
@@ -110,6 +111,11 @@ namespace toolkit
         */
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXToolBox* _pXWindow ) = 0;
+
+        /** creates an accessible context for a headerbar window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+            createAccessibleContext( VCLXHeaderBar* _pXWindow ) = 0;
 
         /** creates an accessible context for a generic window
         */

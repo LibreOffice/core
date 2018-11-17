@@ -337,10 +337,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
-#include <svtools/accessibletable.hxx>
-#include <svtools/accessibletableprovider.hxx>
-#include <svtools/headbar.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/tabbar.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -380,6 +376,10 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibletable.hxx>
+#include <vcl/accessibletableprovider.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
 #include <vcl/treelistbox.hxx>

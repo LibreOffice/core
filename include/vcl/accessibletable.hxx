@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
-#define INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
+#ifndef INCLUDED_VCL_ACCESSIBLETABLE_HXX
+#define INCLUDED_VCL_ACCESSIBLETABLE_HXX
 
 #include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-
-namespace svt{ namespace table
+namespace vcl { namespace table
 {
 
 typedef sal_Int32   RowPos;
@@ -166,10 +165,9 @@ protected:
     ~IAccessibleTableControl() {}
 };
 
-
 } // namespace table
-} // namespace svt
+} // namespace vcl
 
-#endif // INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
+#endif // INCLUDED_VCL_ACCESSIBLETABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

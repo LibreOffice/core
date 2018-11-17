@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_HEADBAR_HXX
-#define INCLUDED_SVTOOLS_HEADBAR_HXX
+#ifndef INCLUDED_VCL_HEADBAR_HXX
+#define INCLUDED_VCL_HEADBAR_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -212,7 +212,7 @@ namespace o3tl
 class VCLXHeaderBar;
 
 
-class SVT_DLLPUBLIC HeaderBar : public vcl::Window
+class VCL_DLLPUBLIC HeaderBar : public vcl::Window
 {
 private:
     std::vector<std::unique_ptr<ImplHeadItem>> mvItemList;
@@ -243,22 +243,22 @@ private:
                           mxAccessible;
 
     using Window::ImplInit;
-    SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
-    SVT_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SVT_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
-    SVT_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
+    VCL_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
+    VCL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    VCL_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
+    VCL_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE sal_uInt16       ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
-    SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
-    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+    VCL_DLLPRIVATE sal_uInt16       ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
+    VCL_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
+    VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);
-    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+    VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle* pRect);
-    SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
+    VCL_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
                                        bool bEnd = false );
-    SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
-    SVT_DLLPRIVATE void             ImplDrag( const Point& rPos );
-    SVT_DLLPRIVATE void             ImplEndDrag( bool bCancel );
+    VCL_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
+    VCL_DLLPRIVATE void             ImplDrag( const Point& rPos );
+    VCL_DLLPRIVATE void             ImplEndDrag( bool bCancel );
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
@@ -326,10 +326,8 @@ public:
     /** Creates and returns the accessible object of the header bar. */
     virtual css::uno::Reference< css::accessibility::XAccessible >  CreateAccessible() override;
     void SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& );
-    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface( bool bCreate = true ) override;
-
 };
 
-#endif // INCLUDED_SVTOOLS_HEADBAR_HXX
+#endif // INCLUDED_VCL_HEADBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -432,11 +432,10 @@
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/undo.hxx>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/framestatuslistener.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <svtools/svtdllapi.h>
@@ -575,6 +574,7 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelistentries.hxx>
 #include <vcl/viewdataentry.hxx>

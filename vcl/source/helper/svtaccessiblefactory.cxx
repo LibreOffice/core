@@ -19,14 +19,14 @@
 
 #include <config_features.h>
 
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 
 #include <tools/svlibrary.h>
 
 #include <osl/module.h>
 #include <osl/diagnose.h>
 
-namespace svt
+namespace vcl
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -58,7 +58,7 @@ namespace svt
 
         public:
             // IAccessibleFactory
-            virtual IAccessibleTabListBox*
+            virtual vcl::IAccessibleTabListBox*
                 createAccessibleTabListBox(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
                     SvHeaderTabListBox& /*rBox*/
@@ -67,10 +67,19 @@ namespace svt
                 return nullptr;
             }
 
-            virtual IAccessibleBrowseBox*
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleTreeListBox(
+                    SvTreeListBox& /*_rListBox*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual vcl::IAccessibleBrowseBox*
                 createAccessibleBrowseBox(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
-                    IAccessibleTableProvider& /*_rBrowseBox*/
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/
                 ) const override
             {
                 return nullptr;
@@ -113,8 +122,8 @@ namespace svt
             virtual css::uno::Reference< css::accessibility::XAccessible >
                 createAccessibleBrowseBoxHeaderBar(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
-                    IAccessibleTableProvider& /*_rOwningTable*/,
-                    AccessibleBrowseBoxObjType /*_eObjType*/
+                    vcl::IAccessibleTableProvider& /*_rOwningTable*/,
+                    vcl::AccessibleBrowseBoxObjType /*_eObjType*/
                 ) const override
             {
                 return nullptr;
@@ -123,7 +132,7 @@ namespace svt
             virtual css::uno::Reference< css::accessibility::XAccessible >
                 createAccessibleBrowseBoxTableCell(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
-                    IAccessibleTableProvider& /*_rBrowseBox*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
                     const css::uno::Reference< css::awt::XWindow >& /*_xFocusWindow*/,
                     sal_Int32 /*_nRowId*/,
                     sal_uInt16 /*_nColId*/,
@@ -137,9 +146,9 @@ namespace svt
                 createAccessibleBrowseBoxHeaderCell(
                     sal_Int32 /*_nColumnRowId*/,
                     const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
-                    IAccessibleTableProvider& /*_rBrowseBox*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
                     const css::uno::Reference< css::awt::XWindow >& /*_xFocusWindow*/,
-                    AccessibleBrowseBoxObjType  /*_eObjType*/
+                    vcl::AccessibleBrowseBoxObjType  /*_eObjType*/
                 ) const override
             {
                 return nullptr;
@@ -148,7 +157,7 @@ namespace svt
             virtual css::uno::Reference< css::accessibility::XAccessible >
                 createAccessibleCheckBoxCell(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
-                    IAccessibleTableProvider& /*_rBrowseBox*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
                     const css::uno::Reference< css::awt::XWindow >& /*_xFocusWindow*/,
                     sal_Int32 /*_nRowPos*/,
                     sal_uInt16 /*_nColPos*/,
@@ -164,7 +173,7 @@ namespace svt
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxControlAccessible*/,
                     const css::uno::Reference< css::awt::XWindow >& /*_rxFocusWindow*/,
-                    IAccessibleTableProvider& /*_rBrowseBox*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
                     sal_Int32 /*_nRowPos*/,
                     sal_uInt16 /*_nColPos*/
                 ) const override
@@ -256,7 +265,6 @@ namespace svt
         return *s_pFactory;
     }
 
-
-}   // namespace svt
+}   // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

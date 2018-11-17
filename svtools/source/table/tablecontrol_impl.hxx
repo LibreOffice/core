@@ -23,7 +23,7 @@
 #include <svtools/table/tablemodel.hxx>
 #include <table/tablecontrolinterface.hxx>
 
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 
 #include <vcl/seleng.hxx>
 
@@ -130,8 +130,8 @@ namespace svt { namespace table
         RowPos                  m_nAnchor;
         bool                    m_bUpdatingColWidths;
 
-        AccessibleFactoryAccess     m_aFactoryAccess;
-        IAccessibleTableControl*    m_pAccessibleTable;
+        vcl::AccessibleFactoryAccess     m_aFactoryAccess;
+        vcl::table::IAccessibleTableControl*    m_pAccessibleTable;
 
     public:
         void        setModel( const PTableModel& _pModel );

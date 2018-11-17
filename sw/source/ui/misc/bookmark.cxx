@@ -21,7 +21,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/treelistentry.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 

@@ -22,7 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/simptabl.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/treelistentry.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>

@@ -24,7 +24,7 @@
 #include <extended/AccessibleBrowseBoxBase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 #include <memory>
 
 namespace accessibility {
@@ -42,7 +42,7 @@ protected:
     AccessibleBrowseBox(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-        ::svt::IAccessibleTableProvider& _rBrowseBox
+        ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 
     virtual ~AccessibleBrowseBox() override;
@@ -122,7 +122,7 @@ public:
     */
     css::uno::Reference<
         css::accessibility::XAccessible >
-        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType )
+        getHeaderBar( ::vcl::AccessibleBrowseBoxObjType _eObjType )
         {
             return implGetHeaderBar(_eObjType);
         }
@@ -159,7 +159,7 @@ protected:
         @return  The XAccessible interface of the header bar. */
     css::uno::Reference<
         css::accessibility::XAccessible >
-        implGetHeaderBar( ::svt::AccessibleBrowseBoxObjType eObjType );
+        implGetHeaderBar( ::vcl::AccessibleBrowseBoxObjType eObjType );
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.
@@ -195,20 +195,20 @@ private:
 */
 class AccessibleBrowseBoxAccess:
     public cppu::WeakImplHelper<css::accessibility::XAccessible>,
-    public ::svt::IAccessibleBrowseBox
+    public ::vcl::IAccessibleBrowseBox
 {
 private:
     ::osl::Mutex                        m_aMutex;
     css::uno::Reference< css::accessibility::XAccessible >
                                         m_xParent;
-    ::svt::IAccessibleTableProvider&    m_rBrowseBox;
+    ::vcl::IAccessibleTableProvider&    m_rBrowseBox;
 
     rtl::Reference<AccessibleBrowseBox> m_xContext;
 
 public:
     AccessibleBrowseBoxAccess(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-        ::svt::IAccessibleTableProvider& _rBrowseBox
+        ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 
     /// returns the AccessibleContext belonging to this Accessible
@@ -233,7 +233,7 @@ protected:
         return m_xContext.is() && m_xContext->isAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) override
+        getHeaderBar( ::vcl::AccessibleBrowseBoxObjType _eObjType ) override
     {
         css::uno::Reference< css::accessibility::XAccessible > xAccessible;
         AccessibleBrowseBox* pContext( getContext() );

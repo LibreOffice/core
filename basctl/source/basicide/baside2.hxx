@@ -27,8 +27,8 @@
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 
-#include <svtools/svtabbx.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/svtabbx.hxx>
+#include <vcl/headbar.hxx>
 
 #include <vcl/button.hxx>
 #include <basic/sbmod.hxx>

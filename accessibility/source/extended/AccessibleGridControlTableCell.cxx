@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <extended/AccessibleGridControlTableCell.hxx>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
@@ -42,16 +41,16 @@ namespace accessibility
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::accessibility::XAccessible;
     using namespace ::com::sun::star::accessibility;
-    using namespace ::svt;
-    using namespace ::svt::table;
+    using namespace ::vcl;
+    using namespace ::vcl::table;
 
 
     // = AccessibleGridControlCell
 
 
     AccessibleGridControlCell::AccessibleGridControlCell(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::svt::table::IAccessibleTable& _rTable,
-            sal_Int32 _nRowPos, sal_uInt16 _nColPos, ::svt::table::AccessibleTableControlObjType _eType )
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::table::IAccessibleTable& _rTable,
+            sal_Int32 _nRowPos, sal_uInt16 _nColPos, ::vcl::table::AccessibleTableControlObjType _eType )
         :AccessibleGridControlBase( _rxParent, _rTable, _eType )
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
@@ -95,7 +94,7 @@ namespace accessibility
     }
 
     AccessibleGridControlTableCell::AccessibleGridControlTableCell(const css::uno::Reference<XAccessible >& _rxParent,
-                                ::svt::table::IAccessibleTable& _rTable,
+                                ::vcl::table::IAccessibleTable& _rTable,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos)
         :AccessibleGridControlCell( _rxParent, _rTable, _nRowPos, _nColPos, TCTYPE_TABLECELL )
