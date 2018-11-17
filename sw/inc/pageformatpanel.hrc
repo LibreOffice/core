@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SW_INC_PAGEFORMATPANEL_HRC
 #define INCLUDED_SW_INC_PAGEFORMATPANEL_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 // To translators: this is a listbox labelled by "Margins:", inch units
 const char* RID_PAGEFORMATPANEL_MARGINS_INCH[] =

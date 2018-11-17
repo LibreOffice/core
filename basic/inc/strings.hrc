@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_INC_STRINGS_HRC
 #define INCLUDED_BASIC_INC_STRINGS_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #define STR_BASICKEY_FORMAT_ON          NC_("STR_BASICKEY_FORMAT_ON", "On")
 #define STR_BASICKEY_FORMAT_OFF         NC_("STR_BASICKEY_FORMAT_OFF", "Off")

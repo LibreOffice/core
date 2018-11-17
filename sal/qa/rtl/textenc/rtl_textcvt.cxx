@@ -2918,11 +2918,12 @@ void Test::testInvalidUtf8() {
         auto const converter = rtl_createTextToUnicodeConverter(
             RTL_TEXTENCODING_JAVA_UTF8);
         CPPUNIT_ASSERT(converter != nullptr);
+        OStringLiteral const input(u8"\U00010000");
         sal_Unicode buf[TEST_STRING_SIZE];
         sal_uInt32 info;
         sal_Size converted;
         auto const size = rtl_convertTextToUnicode(
-            converter, nullptr, RTL_CONSTASCII_STRINGPARAM(u8"\U00010000"), buf,
+            converter, nullptr, input.data, input.size, buf,
             TEST_STRING_SIZE,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR

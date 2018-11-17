@@ -207,6 +207,28 @@ struct ConstCharArrayDetector< const char[ 1 ], T >
 };
 #endif
 
+#if defined LIBO_INTERNAL_ONLY && defined __cpp_char8_t
+template<std::size_t N, typename T>
+struct ConstCharArrayDetector<char8_t const [N], T> {
+    using Type = T;
+    static constexpr bool const ok = true;
+    static constexpr std::size_t const length = N - 1;
+#if HAVE_CXX14_CONSTEXPR
+    constexpr
+#endif
+    static bool isValid(char8_t const (& literal)[N]) {
+        for (std::size_t i = 0; i != N - 1; ++i) {
+            if (literal[i] == u8'\0') {
+                return false;
+            }
+        }
+        return literal[N - 1] == u8'\0';
+    }
+    static constexpr char const * toPointer(char8_t const (& literal)[N])
+    { return reinterpret_cast<char const *>(literal); }
+};
+#endif
+
 #if defined LIBO_INTERNAL_ONLY
 template<std::size_t N, typename T>
 struct ConstCharArrayDetector<sal_Unicode const [N], T> {

@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <sfx2/pageids.hxx>
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const std::pair<const char*, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =
 {

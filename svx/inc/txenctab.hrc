@@ -23,7 +23,7 @@
 #include <rtl/textenc.h>
 #include <utility>
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 // Encodings for which no conversion exist yet are commented out.
 

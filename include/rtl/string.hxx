@@ -1804,6 +1804,10 @@ struct SAL_WARN_UNUSED OStringLiteral
 {
     template< int N >
     explicit OStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
+#if defined __cpp_char8_t
+    template< int N >
+    explicit OStringLiteral( const char8_t (&str)[ N ] ) : size( N - 1 ), data( reinterpret_cast<char const *>(str) ) { assert( strlen( data ) == N - 1 ); }
+#endif
     int size;
     const char* data;
 };

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 #define INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const char* RSC_QUERY_OBJECT_TYPE[] =
 {

@@ -23,7 +23,7 @@
 #include <formula/compiler.hxx>
 #include <utility>
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 /** These English names are used to store/load ODFF as of ODF v1.2. */
 // NAMES CAN ONLY BE CHANGED WHEN PROVIDING BACKWARD AND FORWARD COMPATIBILITY
