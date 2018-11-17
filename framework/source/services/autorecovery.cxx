@@ -1092,8 +1092,8 @@ class CacheLockGuard
         // this variable knows the state of the "cache lock"
         sal_Int32& m_rCacheLock;
 
-        // to prevent increasing/decreasing of m_rCacheLock more than ones
-        // we must know if THIS guard has an actual lock set there !
+        // to prevent increasing/decreasing of m_rCacheLock more than once
+        // we must know if THIS guard has an actual lock set there!
         bool m_bLockedByThisGuard;
 
     public:

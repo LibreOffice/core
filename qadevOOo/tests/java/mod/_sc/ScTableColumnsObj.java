@@ -98,7 +98,7 @@ public class ScTableColumnsObj extends TestCase {
 
         // creation of the testobject here
         // first we write what we are intend to do to log file
-        log.println("craeting a test environment");
+        log.println("creating a test environment");
 
         log.println("getting column");
         XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
