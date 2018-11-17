@@ -185,7 +185,7 @@ sal_uInt64 SotStorageStream::TellEnd()
 {
     // Need to flush the buffer so we materialise the stream and return the correct answer
     // otherwise we return a 0 value from StgEntry::GetSize
-    FlushBuffer(true);
+    FlushBuffer();
 
     if (pOwnStm)
         return pOwnStm->GetSize();

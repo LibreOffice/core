@@ -1211,9 +1211,9 @@ SvStream& SvStream::WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding
     return *this;
 }
 
-void SvStream::FlushBuffer(bool isConsistent)
+void SvStream::FlushBuffer()
 {
-    if (m_isDirty && isConsistent) // Does stream require a flush?
+    if (m_isDirty) // Does stream require a flush?
     {
         SeekPos(m_nBufFilePos);
         if (m_nCryptMask)
@@ -1251,7 +1251,7 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
         }
         else
         {
-            FlushBuffer(true);
+            FlushBuffer();
 
             // Does data block fit into buffer?
             if (nCount > m_nBufSize)
@@ -1338,7 +1338,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
     }
     else
     {
-        FlushBuffer(true);
+        FlushBuffer();
 
         // Does data block fit into buffer?
         if (nCount > m_nBufSize)
@@ -1393,7 +1393,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
     }
     else
     {
-        FlushBuffer(true);
+        FlushBuffer();
         m_nBufActualLen = 0;
         m_nBufActualPos = 0;
         m_pBufPos     = m_pRWBuf.get();
@@ -1422,7 +1422,7 @@ sal_uInt64 SvStream::remainingSize()
 
 sal_uInt64 SvStream::TellEnd()
 {
-    FlushBuffer(true);
+    FlushBuffer();
     sal_uInt64 const nCurr = Tell();
     sal_uInt64 const nEnd = Seek(STREAM_SEEK_TO_END);
     Seek(nCurr);
@@ -1431,14 +1431,14 @@ sal_uInt64 SvStream::TellEnd()
 
 void SvStream::Flush()
 {
-    FlushBuffer(true);
+    FlushBuffer();
     if (m_isWritable)
         FlushData();
 }
 
 void SvStream::RefreshBuffer()
 {
-    FlushBuffer(true);
+    FlushBuffer();
     SeekPos(m_nBufFilePos);
     m_nBufActualLen = static_cast<sal_uInt16>(GetData( m_pRWBuf.get(), m_nBufSize ));
     if (m_nBufActualLen && m_nError == ERRCODE_IO_PENDING)

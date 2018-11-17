@@ -247,8 +247,7 @@ public:
 
     void                CopyToClipboard( vcl::Window *pWindow ) const;
     void                CopyToSelection( vcl::Window *pWindow ) const;
-    void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                   sal_Int32 nDragPointer = DND_POINTER_NONE );
+    void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions );
 
     static void         ClearSelection( vcl::Window *pWindow );
 

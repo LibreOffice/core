@@ -16,7 +16,7 @@ include/basegfx/polygon/b2dpolygontools.hxx:144
 include/framework/framelistanalyzer.hxx:181
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:468
+include/sfx2/objsh.hxx:472
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
 include/svtools/brwbox.hxx:438

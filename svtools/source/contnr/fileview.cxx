@@ -1358,7 +1358,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     OSL_ENSURE( !m_xContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
     m_xContentEnumerator.set(new ::svt::FileViewContentEnumerator(
-        mpView->GetCommandEnvironment(), maContent, maMutex, nullptr));
+        mpView->GetCommandEnvironment(), maContent, maMutex));
         // TODO: should we cache and re-use this thread?
 
     if ( !pAsyncDescriptor )

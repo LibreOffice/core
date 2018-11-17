@@ -188,7 +188,6 @@ namespace svt
         FolderDescriptor                m_aFolder;
         css::uno::Reference< css::ucb::XCommandEnvironment >
                                         m_xCommandEnv;
-        const IContentTitleTranslation* m_pTranslator;
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
@@ -212,8 +211,7 @@ namespace svt
         FileViewContentEnumerator(
             const css::uno::Reference< css::ucb::XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill,
-            ::osl::Mutex& _rContentMutex,
-            const IContentTitleTranslation* _pTranslator
+            ::osl::Mutex& _rContentMutex
         );
 
         /** enumerates the content of a given folder
