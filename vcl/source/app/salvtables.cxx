@@ -1924,6 +1924,12 @@ public:
         return m_xTreeView->GetEntryText(pEntry);
     }
 
+    virtual void set_text(int pos, const OUString& rText) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        m_xTreeView->SetEntryText(pEntry, rText);
+    }
+
     const OUString* getEntryData(int index) const
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, index);
