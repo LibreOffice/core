@@ -16,6 +16,24 @@
       "revId": "74b024dffafcc0a4ca5e408bb8d62204d8a8a57a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_94a0c9a7",
+        "filename": "scaddins/source/analysis/deffuncname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-17T16:17:22Z",
+      "side": 1,
+      "message": "Some of them, like \"RENDITEFÄLL\", contain German umlauts.",
+      "parentUuid": "ff5d4b2f_94bb29e4",
+      "revId": "74b024dffafcc0a4ca5e408bb8d62204d8a8a57a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
