@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_94bb29e4",
+        "filename": "scaddins/source/analysis/deffuncname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-17T15:41:21Z",
+      "side": 1,
+      "message": "why are these u8 at all? I don\u0027t see anything other than ascii in them?",
+      "revId": "74b024dffafcc0a4ca5e408bb8d62204d8a8a57a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
