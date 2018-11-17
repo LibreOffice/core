@@ -35,7 +35,7 @@ class AccessibleBrowseBoxTable : public AccessibleBrowseBoxTableBase
 public:
     AccessibleBrowseBoxTable(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider& rBrowseBox );
+        ::vcl::IAccessibleTableProvider& rBrowseBox );
 
 protected:
     virtual ~AccessibleBrowseBoxTable() override;

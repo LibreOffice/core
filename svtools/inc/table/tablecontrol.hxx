@@ -22,8 +22,8 @@
 
 #include <svtools/svtdllapi.h>
 #include <svtools/table/tablemodel.hxx>
-#include <svtools/accessibletable.hxx>
-#include <svtools/accessiblefactory.hxx>
+#include <vcl/accessibletable.hxx>
+#include <vcl/accessiblefactory.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
@@ -32,8 +32,6 @@
 
 namespace svt { namespace table
 {
-
-
     class TableControl_Impl;
 
 
@@ -55,7 +53,7 @@ namespace svt { namespace table
         cell).
         The control supports accessibility, this is encapsulated in IAccessibleTable
     */
-    class SVT_DLLPUBLIC TableControl : public Control, public IAccessibleTable
+    class SVT_DLLPUBLIC TableControl : public Control, public vcl::table::IAccessibleTable
     {
     private:
         std::shared_ptr<TableControl_Impl>            m_pImpl;
@@ -118,10 +116,10 @@ namespace svt { namespace table
         /** Creates and returns the accessible object of the whole GridControl. */
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) override;
-        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(vcl::table::AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
         SVT_DLLPRIVATE virtual void GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
-        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const override;
-        SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const override;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(vcl::table::AccessibleTableControlObjType eObjType) const override;
+        SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, vcl::table::AccessibleTableControlObjType eObjType ) const override;
 
         // temporary methods
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,

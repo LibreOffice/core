@@ -18,7 +18,7 @@
  */
 
 #include "iodlgimp.hxx"
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>

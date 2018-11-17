@@ -38,12 +38,6 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name image -->
-      <column type="CairoSurface"/>
-      <!-- column-name textcolor -->
-      <column type="GdkRGBA"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore3">
@@ -52,10 +46,6 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name image -->
-      <column type="CairoSurface"/>
       <!-- column-name textcolor -->
       <column type="GdkRGBA"/>
     </columns>
@@ -529,7 +519,7 @@
                                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                   <attributes>
                                     <attribute name="text">0</attribute>
-                                    <attribute name="foreground-rgba">4</attribute>
+                                    <attribute name="foreground-rgba">2</attribute>
                                   </attributes>
                                 </child>
                               </object>

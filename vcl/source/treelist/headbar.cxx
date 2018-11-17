@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/headbar.hxx>
-#include <vclxaccessibleheaderbar.hxx>
+#include <vcl/headbar.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
@@ -96,10 +95,11 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     ImplInitSettings( true, true, true );
 }
 
-HeaderBar::HeaderBar( vcl::Window* pParent, WinBits nWinStyle ) :
-    Window( pParent, nWinStyle & WB_3DLOOK )
+HeaderBar::HeaderBar(vcl::Window* pParent, WinBits nWinStyle)
+    : Window(pParent, nWinStyle & WB_3DLOOK)
 {
-    ImplInit( nWinStyle );
+    SetType(WindowType::HEADERBAR);
+    ImplInit(nWinStyle);
     SetSizePixel( CalcWindowSizePixel() );
 }
 
@@ -1351,17 +1351,4 @@ void HeaderBar::SetAccessible( const css::uno::Reference< css::accessibility::XA
     mxAccessible = _xAccessible;
 }
 
-css::uno::Reference< css::awt::XWindowPeer > HeaderBar::GetComponentInterface( bool bCreate )
-{
-    css::uno::Reference< css::awt::XWindowPeer > xPeer
-        (Window::GetComponentInterface(false));
-    if ( !xPeer.is() && bCreate )
-    {
-        css::awt::XWindowPeer* pPeer = new VCLXHeaderBar(this);
-        SetComponentInterface(pPeer);
-        return pPeer;
-    }
-    else
-        return xPeer;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

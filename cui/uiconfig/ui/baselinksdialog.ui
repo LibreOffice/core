@@ -184,7 +184,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-SvTabListBox" id="TB_LINKS:border">
+                  <object class="vcllo-SvTabListBox" id="TB_LINKS:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>

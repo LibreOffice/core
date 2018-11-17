@@ -45,9 +45,9 @@
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svlbitm.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
@@ -1039,7 +1039,7 @@ public:
 
     virtual int get_vscroll_width() const override
     {
-        return m_xScrolledWindow->getVertScrollBar().GetSizePixel().Width();
+        return m_xScrolledWindow->getVertScrollBar().get_preferred_size().Width();
     }
 
     virtual void set_user_managed_scrolling() override
@@ -1764,14 +1764,14 @@ class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::Tr
 private:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
-    VclPtr<SvTreeListBox> m_xTreeView;
+    VclPtr<SvTabListBox> m_xTreeView;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(ExpandingHdl, SvTreeListBox*, bool);
 
 public:
-    SalInstanceTreeView(SvTreeListBox* pTreeView, bool bTakeOwnership)
+    SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
     {
@@ -1779,6 +1779,16 @@ public:
         m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
+        const long aTabPositions[] = { 0 };
+        m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
+    }
+
+    virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
+    {
+        std::vector<long> aTabPositions;
+        aTabPositions.push_back(0);
+        aTabPositions.insert(aTabPositions.end(), rWidths.begin(), rWidths.end());
+        m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rStr, const OUString* pId,
@@ -1916,10 +1926,44 @@ public:
         return aRows;
     }
 
-    virtual OUString get_text(int pos) const override
+    virtual OUString get_text(int pos, int col) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        return m_xTreeView->GetEntryText(pEntry);
+        if (col == -1)
+            return SvTabListBox::GetEntryText(pEntry, 0);
+
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+            return OUString();
+
+        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        assert(dynamic_cast<SvLBoxString*>(&rItem));
+        return static_cast<SvLBoxString&>(rItem).GetText();
+    }
+
+    virtual void set_text(int pos, const OUString& rText, int col) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        if (col == -1)
+        {
+            m_xTreeView->SetEntryText(pEntry, rText);
+            return;
+        }
+
+        ++col; //skip dummy/expander column
+
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+        {
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rText));
+        }
+        else
+        {
+            assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+            SvLBoxItem& rItem = pEntry->GetItem(col);
+            assert(dynamic_cast<SvLBoxString*>(&rItem));
+            static_cast<SvLBoxString&>(rItem).SetText(rText);
+        }
+        m_xTreeView->ModelHasEntryInvalidated(pEntry);
     }
 
     const OUString* getEntryData(int index) const
@@ -2115,7 +2159,7 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
     }
 
-    SvTreeListBox& getTreeView()
+    SvTabListBox& getTreeView()
     {
         return *m_xTreeView;
     }
@@ -3248,7 +3292,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
     {
-        SvTreeListBox* pTreeView = m_xBuilder->get<SvTreeListBox>(id);
+        SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
         return pTreeView ? o3tl::make_unique<SalInstanceTreeView>(pTreeView, bTakeOwnership) : nullptr;
     }
 

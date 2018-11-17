@@ -39,7 +39,7 @@
 #include <unotools/viewoptions.hxx>
 #include <svtools/fileview.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <fpicker/strings.hrc>

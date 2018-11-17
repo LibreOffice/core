@@ -17,16 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ACCESSIBLETABLEPROVIDER_HXX
-#define INCLUDED_SVTOOLS_ACCESSIBLETABLEPROVIDER_HXX
+#ifndef INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
+#define INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 
 #include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-
-namespace svt
+namespace vcl
 {
 
 #define OFFSET_DEFAULT  (sal_Int32(-1))
@@ -103,10 +102,10 @@ public:
     virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) = 0;
     virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
 
-    virtual OUString                GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
-    virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual OUString                GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual OUString                GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
 
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const = 0;
+    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::vcl::AccessibleBrowseBoxObjType _eType ) const = 0;
     virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
     virtual void                    GrabTableFocus() = 0;
 
@@ -179,7 +178,7 @@ public:
     /** returns the accessible object for the row or the column header bar
     */
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
+        getHeaderBar( ::vcl::AccessibleBrowseBoxObjType _eObjType ) = 0;
 
     /** returns the accessible object for the table representation
     */
@@ -226,10 +225,8 @@ protected:
     ~IAccessibleBrowseBox() {}
 };
 
+} // namespace vcl
 
-} // namespace svt
-
-
-#endif // INCLUDED_SVTOOLS_ACCESSIBLETABLEPROVIDER_HXX
+#endif // INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

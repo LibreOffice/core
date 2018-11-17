@@ -16,11 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vclxaccessibleheaderbar.hxx>
-#include <vclxaccessibleheaderbaritem.hxx>
+
+#include <standard/vclxaccessibleheaderbar.hxx>
+#include <standard/vclxaccessibleheaderbaritem.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -36,21 +37,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
-
-VCLXHeaderBar::VCLXHeaderBar(vcl::Window* pHeaderBar)
-{
-    SetWindow(pHeaderBar);
-}
-
-VCLXHeaderBar::~VCLXHeaderBar()
-{
-}
-
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::CreateAccessibleContext()
-{
-    return new VCLXAccessibleHeaderBar(this);
-}
-
 
 VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     :VCLXAccessibleComponent( pVCLWindow )

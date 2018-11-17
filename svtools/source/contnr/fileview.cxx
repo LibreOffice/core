@@ -26,14 +26,14 @@
 #include <svtools/fileview.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/headbar.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/headbar.hxx>
+#include <vcl/svtabbx.hxx>
 #include <svtools/strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -187,7 +187,7 @@ private:
 
 protected:
     virtual bool     DoubleClickHdl() override;
-    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
+    virtual OUString GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
 
 public:
     ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, FileViewFlags nFlags );
@@ -797,10 +797,10 @@ bool ViewTabListBox_Impl::DoubleClickHdl()
         // who knows ...)
 }
 
-OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
     OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
-    if ( ::svt::BBTYPE_TABLECELL == _eType )
+    if ( ::vcl::BBTYPE_TABLECELL == _eType )
     {
         sal_Int32 nRow = -1;
         const sal_uInt16 nColumnCount = GetColumnCount();

@@ -50,8 +50,8 @@ public:
         @param eObjType         Type of BrowseBox object. */
     AccessibleBrowseBoxTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider& rBrowseBox,
-        ::svt::AccessibleBrowseBoxObjType eObjType );
+        ::vcl::IAccessibleTableProvider& rBrowseBox,
+        ::vcl::AccessibleBrowseBoxObjType eObjType );
 
 protected:
     virtual ~AccessibleBrowseBoxTableBase() override = default;

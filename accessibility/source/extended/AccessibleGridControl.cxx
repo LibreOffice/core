@@ -23,24 +23,22 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <comphelper/types.hxx>
-
 
 namespace accessibility
 {
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-using namespace ::svt;
-using namespace ::svt::table;
+using namespace ::vcl;
+using namespace ::vcl::table;
 
 AccessibleGridControl::AccessibleGridControl(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-            ::svt::table::IAccessibleTable& _rTable )
+            ::vcl::table::IAccessibleTable& _rTable )
     : AccessibleGridControlBase( _rxParent, _rTable, TCTYPE_GRIDCONTROL ),
       m_aCreator(_rxCreator)
 {
@@ -102,7 +100,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
         {
             if(!m_xColumnHeaderBar.is())
             {
-                m_xColumnHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable, svt::table::TCTYPE_COLUMNHEADERBAR);
+                m_xColumnHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable, vcl::table::TCTYPE_COLUMNHEADERBAR);
             }
             xChild = m_xColumnHeaderBar.get();
         }
@@ -110,7 +108,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
         {
             if(!m_xRowHeaderBar.is())
             {
-                m_xRowHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable, svt::table::TCTYPE_ROWHEADERBAR);
+                m_xRowHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable, vcl::table::TCTYPE_ROWHEADERBAR);
             }
             xChild = m_xRowHeaderBar.get();
         }
@@ -348,7 +346,7 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 
 
 AccessibleGridControlAccess::AccessibleGridControlAccess(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::svt::table::IAccessibleTable& rTable )
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::table::IAccessibleTable& rTable )
     : m_xParent( rxParent )
     , m_pTable( & rTable )
 {

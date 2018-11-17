@@ -29,7 +29,7 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <unotools/syslocale.hxx>

@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>

@@ -16,12 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_SVTABBX_HXX
-#define INCLUDED_SVTOOLS_SVTABBX_HXX
+#ifndef INCLUDED_VCL_SVTABBX_HXX
+#define INCLUDED_VCL_SVTABBX_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <vcl/treelistbox.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 
 #include <memory>
 #include <vector>
@@ -44,7 +44,7 @@ struct TabListBoxEventData
         m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}
 };
 
-class SVT_DLLPUBLIC SvTabListBox : public SvTreeListBox
+class VCL_DLLPUBLIC SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
@@ -114,19 +114,19 @@ inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const
 // class SvHeaderTabListBox ---------------------------------------------------
 
 class HeaderBar;
-namespace svt {
+namespace vcl {
     class IAccessibleTabListBox;
     struct SvHeaderTabListBoxImpl;
 }
 
-class SVT_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public svt::IAccessibleTableProvider
+class VCL_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public vcl::IAccessibleTableProvider
 {
 private:
     typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     bool                            m_bFirstPaint;
-    std::unique_ptr<::svt::SvHeaderTabListBoxImpl>  m_pImpl;
-    ::svt::IAccessibleTabListBox*   m_pAccessible;
+    std::unique_ptr<::vcl::SvHeaderTabListBoxImpl>  m_pImpl;
+    ::vcl::IAccessibleTabListBox*   m_pAccessible;
     AccessibleChildren              m_aAccessibleChildren;
 
     DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, SvTreeListBox*, void );
@@ -218,11 +218,11 @@ public:
     virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) override;
     virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) override;
 
-    virtual OUString                GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
-    virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
+    virtual OUString                GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
+    virtual OUString                GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
     virtual vcl::Window*                 GetWindowInstance() override;
 
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const override;
+    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::vcl::AccessibleBrowseBoxObjType _eType ) const override;
     virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual void                    GrabTableFocus() override;
 
@@ -230,19 +230,18 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) override;
 
     // Window
-    virtual tools::Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
+    virtual tools::Rectangle        GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
-    virtual vcl::Window*                 GetAccessibleParentWindow() const override;
-
     /** Creates and returns the accessible object of the whole BrowseBox. */
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual vcl::Window*            GetAccessibleParentWindow() const override;
 
-    virtual tools::Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+    virtual tools::Rectangle        GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 };
 
-#endif // INCLUDED_SVTOOLS_SVTABBX_HXX
+#endif // INCLUDED_VCL_SVTABBX_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -96,6 +96,8 @@ static css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window c
         case WindowType::TOOLBOX:        return new VCLXToolBox;
         case WindowType::TABCONTROL:     return new VCLXMultiPage;
 
+        case WindowType::HEADERBAR:     return new VCLXHeaderBar;
+
         // case WindowType::FIXEDLINE:
         // case WindowType::FIXEDBITMAP:
         // case WindowType::DATEBOX:
