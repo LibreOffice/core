@@ -1,10 +1,16 @@
+avmedia/inc/mediacontrol.hxx:74
+    avmedia::MediaControl maIdle
+    avmedia MediaControl Idle
+avmedia/source/framework/soundhandler.hxx:123
+    avmedia::SoundHandler m_aUpdateIdle
+    avmedia SoundHandler Update
 basctl/source/basicide/baside2.hxx:87
     basctl::EditorWindow aHighlighter
     0
-basctl/source/inc/accessibledialogwindow.hxx:76
-    basctl::AccessibleDialogWindow m_pDlgEditor
-    0
-basic/source/runtime/methods.cxx:3427
+basctl/source/inc/dlged.hxx:132
+    basctl::DlgEditor aMarkIdle
+    basctl DlgEditor Mark
+basic/source/runtime/methods.cxx:3450
     (anonymous namespace)::RandomNumberGenerator global_rng
     5489
 binaryurp/source/proxy.hxx:83
@@ -37,9 +43,6 @@ bridges/source/jni_uno/jni_uno2java.cxx:389
 chart2/source/controller/inc/ChartController.hxx:377
     chart::ChartController m_aLifeTimeManager
     0
-chart2/source/controller/inc/dlg_ObjectProperties.hxx:110
-    chart::SchAttribTabDlg nDlgType
-    1101
 chart2/source/controller/inc/TitleDialogData.hxx:34
     chart::TitleDialogData aPossibilityList
     7
@@ -88,42 +91,33 @@ connectivity/source/inc/OColumn.hxx:48
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol
     0
-cui/source/inc/border.hxx:118
-    SvxBorderTabPage mbAllowPaddingWithoutBorders
-    1
-cui/source/inc/paragrph.hxx:56
-    SvxStdParagraphTabPage nAbst
-    5670
-cui/source/inc/tabstpge.hxx:91
-    SvxTabulatorTabPage eDefUnit
-    15
+cui/source/inc/linkdlg.hxx:64
+    SvBaseLinksDlg aUpdateIdle
+    cui SvBaseLinksDlg UpdateIdle
+cui/source/inc/thesdlg.hxx:37
+    LookUpComboBox m_aModifyIdle
+    cui LookUpComboBox Modify
 cui/source/options/optgdlg.cxx:1102
     LanguageConfig_Impl aLanguageOptions
     0
+cui/source/options/optjava.hxx:79
+    SvxJavaOptionsPage m_aResetIdle
+    cui options SvxJavaOptionsPage Reset
 cui/source/options/treeopt.cxx:456
     OptionsPageInfo m_pPage
     0
-cui/source/options/treeopt.cxx:474
-    OptionsGroupInfo m_pExtPage
-    0
-dbaccess/source/ui/inc/directsql.hxx:61
-    dbaui::DirectSQLDialog m_nHistoryLimit
-    20
-dbaccess/source/ui/inc/JoinTableView.hxx:104
-    dbaui::OJoinTableView m_bTrackingInitiallyMoved
+cui/source/options/treeopt.cxx:472
+    OptionsGroupInfo m_bLoadError
     0
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
     0
-desktop/source/deployment/gui/dp_gui_extlistbox.hxx:121
-    dp_gui::ExtensionBox_Impl m_nExtraHeight
-    2
 editeng/source/editeng/impedit.hxx:472
     ImpEditEngine nBigTextObjectStart
     20
-extensions/source/bibliography/framectr.hxx:68
-    BibFrameController_Impl bHierarchical
-    1
+extensions/source/bibliography/bibcont.hxx:70
+    BibBookContainer aIdle
+    extensions BibBookContainer Split Idle
 extensions/source/propctrlr/browserline.hxx:60
     pcr::OBrowserLine m_pBrowseButton
     0
@@ -136,18 +130,18 @@ filter/source/msfilter/viscache.hxx:31
 fpicker/source/office/commonpicker.hxx:66
     svt::OCommonPicker m_pDlg
     0
-framework/inc/uielement/toolbarsmenucontroller.hxx:96
-    framework::ToolbarsMenuController m_aPropUIName
-    UIName
-framework/inc/uielement/toolbarsmenucontroller.hxx:97
-    framework::ToolbarsMenuController m_aPropResourceURL
-    ResourceURL
+framework/source/services/autorecovery.cxx:391
+    (anonymous namespace)::AutoRecovery m_aTimer
+    Auto save timer
 framework/source/uiconfiguration/imagemanagerimpl.hxx:182
     framework::ImageManagerImpl m_aResourceString
     private:resource/images/moduleimages
 helpcompiler/inc/BasCodeTagger.hxx:35
     BasicCodeTagger m_Highlighter
     0
+i18npool/inc/collator_unicode.hxx:65
+    i18npool::Collator_Unicode implementationName
+    com.sun.star.i18n.Collator_Unicode
 include/basegfx/pixel/bpixel.hxx:43
     basegfx::BPixel::(anonymous union)::(anonymous) mnValue
     0
@@ -157,21 +151,6 @@ include/basegfx/pixel/bpixel.hxx:44
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData
     0
-include/canvas/base/canvascustomspritehelper.hxx:207
-    canvas::CanvasCustomSpriteHelper mbAlphaDirty
-    1
-include/canvas/base/canvascustomspritehelper.hxx:210
-    canvas::CanvasCustomSpriteHelper mbPositionDirty
-    1
-include/canvas/base/canvascustomspritehelper.hxx:216
-    canvas::CanvasCustomSpriteHelper mbClipDirty
-    1
-include/canvas/base/canvascustomspritehelper.hxx:219
-    canvas::CanvasCustomSpriteHelper mbPrioDirty
-    1
-include/canvas/base/canvascustomspritehelper.hxx:222
-    canvas::CanvasCustomSpriteHelper mbVisibilityDirty
-    1
 include/canvas/rendering/irendermodule.hxx:40
     canvas::Vertex g
     1
@@ -229,36 +208,9 @@ include/sfx2/msg.hxx:200
 include/sfx2/msg.hxx:201
     SfxSlot nArgDefCount
     0
-include/sfx2/thumbnailview.hxx:303
-    ThumbnailView mnFineness
-    5
-include/sfx2/thumbnailview.hxx:308
-    ThumbnailView mbIsTransientChildrenDisabled
-    0
-include/svtools/calendar.hxx:171
-    Calendar mbDropPos
-    0
-include/svtools/calendar.hxx:174
-    Calendar mnDragScrollHitTest
-    0
-include/svtools/calendar.hxx:294
-    CalendarField maDefaultDate
-    0
-include/svtools/ruler.hxx:553
-    RulerLine nStyle
-    0
-include/svtools/ruler.hxx:631
-    Ruler mnUpdateEvtId
-    0
-include/svtools/scrwin.hxx:41
-    ScrollableWindow bHandleDragging
-    1
-include/svtools/scrwin.hxx:42
-    ScrollableWindow bHCenter
-    1
-include/svtools/scrwin.hxx:43
-    ScrollableWindow bVCenter
-    1
+include/svtools/filechangedchecker.hxx:29
+    FileChangedChecker mIdle
+    SVTools FileChangedChecker Idle
 include/svtools/svparser.hxx:56
     SvParser pImplData
     0
@@ -271,9 +223,6 @@ include/svtools/svparser.hxx:75
 include/svtools/tabbar.hxx:325
     TabBar mnOffY
     0
-include/svtools/valueset.hxx:446
-    SvtValueSet mbFullMode
-    1
 include/svx/ctredlin.hxx:122
     SvxRedlinTable aDaTiFirst
     0
@@ -310,15 +259,18 @@ include/svx/dialcontrol.hxx:111
 include/svx/dialcontrol.hxx:118
     svx::DialControl::DialControl_Impl mbNoRot
     0
-include/svx/dlgctrl.hxx:234
-    LineLB mbAddStandardFields
-    1
 include/svx/fillctrl.hxx:54
     SvxFillToolBoxControl mpFillControl
     0
-include/svx/float3d.hxx:174
-    Svx3DWin pVDev
-    0
+include/svx/fontwork.hxx:102
+    SvxFontWorkDialog aInputIdle
+    SvxFontWorkDialog Input
+include/svx/graphctl.hxx:54
+    GraphCtrl aUpdateIdle
+    svx GraphCtrl Update
+include/svx/numvset.hxx:131
+    SvxBmpNumValueSet aFormatIdle
+    SvxBmpNumValueSet FormatIdle
 include/svx/svdcrtv.hxx:50
     SdrCreateView nAutoCloseDistPix
     5
@@ -334,35 +286,23 @@ include/svx/svdmark.hxx:145
 include/svx/svdmrkv.hxx:116
     SdrMarkView mnFrameHandlesLimit
     50
-include/svx/view3d.hxx:50
-    E3dView eDragConstraint
-    7
 include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet maPropsToTest
     1
-include/tools/stream.hxx:159
-    SvStream m_isConsistent
-    1
-include/vcl/cursor.hxx:50
-    vcl::Cursor mnSlant
-    0
-include/vcl/field.hxx:49
-    FormatterBase mbDefaultLocale
-    1
+include/vcl/ITiledRenderable.hxx:90
+    vcl::ITiledRenderable mnTilePixelWidth
+    256
+include/vcl/ITiledRenderable.hxx:90
+    vcl::ITiledRenderable mnTilePixelHeight
+    256
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters
     0
 include/vcl/slider.hxx:39
     Slider mnChannelPixOffset
     0
-include/vcl/tabctrl.hxx:56
-    TabControl mnMaxPageWidth
-    0
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
-    0
-lotuswordpro/inc/xfilter/xffontdecl.hxx:92
-    XFFontDecl m_bPitchFixed
     0
 oox/source/core/contexthandler2.cxx:36
     oox::core::ElementInfo maChars
@@ -406,9 +346,6 @@ sc/inc/compiler.hxx:111
 sc/inc/dpfilteredcache.hxx:93
     ScDPFilteredCache::Criterion mpFilter
     0
-sc/inc/funcdesc.hxx:221
-    ScFuncDesc bHasSuppressedArgs
-    0
 sc/inc/listenercontext.hxx:46
     sc::EndListeningContext maSet
     0
@@ -418,6 +355,12 @@ sc/inc/markmulti.hxx:79
 sc/inc/refdata.hxx:37
     ScSingleRefData::(anonymous) mnFlagValue
     0
+sc/inc/scmod.hxx:80
+    ScModule m_aIdleTimer
+    sc ScModule IdleTimer
+sc/inc/scmod.hxx:81
+    ScModule m_aSpellIdle
+    sc ScModule SpellIdle
 sc/inc/table.hxx:178
     ScTable mpRowHeights
     0
@@ -436,27 +379,30 @@ sc/source/core/inc/parclass.hxx:94
 sc/source/filter/inc/orcusinterface.hxx:179
     ScOrcusConditionalFormat meEntryType
     0
-sc/source/filter/inc/xepivotxml.hxx:31
-    XclExpXmlPivotCaches::Entry meType
-    0
 sc/source/filter/inc/xltracer.hxx:82
     XclTracer mbEnabled
     0
-sc/source/ui/inc/anyrefdg.hxx:111
-    ScRefHandler m_pActiveWin
-    0
+sc/source/ui/inc/acredlin.hxx:50
+    ScAcceptChgDlg aSelectionIdle
+    ScAcceptChgDlg SelectionIdle
+sc/source/ui/inc/acredlin.hxx:51
+    ScAcceptChgDlg aReOpenIdle
+    ScAcceptChgDlg ReOpenIdle
+sc/source/ui/inc/autostyl.hxx:57
+    ScAutoStyleList aTimer
+    ScAutoStyleList Timer
+sc/source/ui/inc/autostyl.hxx:58
+    ScAutoStyleList aInitIdle
+    ScAutoStyleList InitIdle
 sc/source/ui/inc/checklistmenu.hxx:155
     ScMenuFloatingWindow::MenuItemData mpAction
     0
 sc/source/ui/inc/checklistmenu.hxx:156
     ScMenuFloatingWindow::MenuItemData mpSubMenuWin
     0
-sc/source/ui/inc/fupoor.hxx:50
-    FuPoor pDialog
-    0
-sc/source/ui/inc/inscodlg.hxx:57
-    ScInsertContentsDlg nShortCutMoveMode
-    4
+sc/source/ui/inc/conflictsdlg.hxx:134
+    ScConflictsDlg maSelectionIdle
+    ScConflictsDlg SelectionIdle
 sc/source/ui/inc/retypepassdlg.hxx:91
     ScRetypePassDlg mpDocItem
     0
@@ -469,17 +415,23 @@ sd/inc/sdpptwrp.hxx:42
 sd/source/filter/html/htmlex.hxx:113
     HtmlExport mbAutoSlide
     1
+sd/source/ui/framework/module/ShellStackGuard.hxx:82
+    sd::framework::ShellStackGuard maPrinterPollingIdle
+    sd ShellStackGuard PrinterPollingIdle
 sd/source/ui/inc/DrawController.hxx:289
     sd::DrawController mpCurrentPage
     0
 sd/source/ui/inc/pubdlg.hxx:151
     SdPublishingDlg aAssistentFunc
     6
+sd/source/ui/inc/View.hxx:240
+    sd::View maDropErrorIdle
+    sd View DropError
+sd/source/ui/inc/View.hxx:241
+    sd::View maDropInsertFileIdle
+    sd View DropInsertFile
 sd/source/ui/inc/ViewTabBar.hxx:144
     sd::ViewTabBar mpTabPage
-    0
-sd/source/ui/inc/Window.hxx:154
-    sd::Window mpShareWin
     0
 sd/source/ui/inc/WindowUpdater.hxx:96
     sd::WindowUpdater maCTLOptions
@@ -490,30 +442,30 @@ sd/source/ui/presenter/SlideRenderer.hxx:82
 sd/source/ui/sidebar/PanelBase.hxx:56
     sd::sidebar::PanelBase mpWrappedControl
     0
-sd/source/ui/slideshow/slideshowimpl.hxx:333
-    sd::SlideshowImpl mpTimeButton
-    0
 sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:46
     sd::slidesorter::cache::BitmapFactory maRenderer
     0
+sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:92
+    sd::slidesorter::controller::Animator maIdle
+    sd slidesorter controller Animator
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
     StringEmitContext m_aBuf
     256
-sfx2/source/appl/fileobj.hxx:45
-    SvFileObject bInNewData
-    0
 sfx2/source/appl/lnkbase2.cxx:76
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
 sfx2/source/appl/lnkbase2.cxx:81
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
-sfx2/source/dialog/filedlgimpl.hxx:79
-    sfx2::FileDialogHelper_Impl mbIsGpgEnabled
-    1
-slideshow/source/engine/shapes/viewmediashape.hxx:151
-    slideshow::internal::ViewMediaShape mpEventHandlerParent
-    0
+sfx2/source/appl/newhelp.hxx:292
+    SfxHelpIndexWindow_Impl aIdle
+    sfx2 appl SfxHelpIndexWindow_Impl
+sfx2/source/appl/newhelp.hxx:424
+    SfxHelpTextWindow_Impl aSelectIdle
+    sfx2 appl SfxHelpTextWindow_Impl Select
+sfx2/source/control/itemdel.cxx:31
+    SfxItemDisruptor_Impl m_Idle
+    sfx SfxItemDisruptor_Impl::Delete
 slideshow/source/engine/slideshowimpl.cxx:479
     (anonymous namespace)::SlideShowImpl maFrameSynchronization
     0.02
@@ -526,6 +478,9 @@ soltools/mkdepend/def.h:130
 soltools/mkdepend/def.h:132
     inclist i_searched
     1
+starmath/inc/edit.hxx:54
+    SmEditWindow aModifyIdle
+    SmEditWindow ModifyIdle
 starmath/source/cfgitem.hxx:102
     SmMathConfig vFontPickList
     5
@@ -541,45 +496,72 @@ stoc/source/security/access_controller.cxx:306
 stoc/source/security/lru_cache.h:54
     stoc_sec::lru_cache m_block
     0
-svl/source/crypto/cryptosign.cxx:150
+svl/source/crypto/cryptosign.cxx:152
     (anonymous namespace)::(anonymous) extensions
     0
-svtools/source/contnr/fileview.cxx:336
-    SvtFileView_Impl mbReplaceNames
-    0
-svtools/source/contnr/imivctl.hxx:181
-    SvxIconChoiceCtrl_Impl nUserEventShowCursor
-    0
-svtools/source/contnr/imivctl.hxx:202
-    SvxIconChoiceCtrl_Impl bEntryEditingEnabled
-    0
+svtools/source/contnr/imivctl.hxx:159
+    SvxIconChoiceCtrl_Impl aAutoArrangeIdle
+    svtools contnr SvxIconChoiceCtrl_Impl AutoArrange
+svtools/source/contnr/imivctl.hxx:160
+    SvxIconChoiceCtrl_Impl aDocRectChangedIdle
+    svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged
+svtools/source/contnr/imivctl.hxx:161
+    SvxIconChoiceCtrl_Impl aVisRectChangedIdle
+    svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged
+svtools/source/contnr/imivctl.hxx:162
+    SvxIconChoiceCtrl_Impl aCallSelectHdlIdle
+    svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl
 svtools/source/dialogs/roadmapwizard.cxx:54
     svt::RoadmapWizardImpl pRoadmap
     0
+svx/inc/sdr/overlay/overlaymanagerbuffered.hxx:44
+    sdr::overlay::OverlayManagerBuffered maBufferIdle
+    sdr overlay OverlayManagerBuffered Idle
+svx/inc/svdibrow.hxx:96
+    SdrItemBrowser aIdle
+    svx svdraw SdrItemBrowser
+svx/source/dialog/contimp.hxx:52
+    SvxSuperContourDlg aUpdateIdle
+    SvxSuperContourDlg UpdateIdle
+svx/source/dialog/contimp.hxx:53
+    SvxSuperContourDlg aCreateIdle
+    SvxSuperContourDlg CreateIdle
+svx/source/sidebar/media/MediaPlaybackPanel.hxx:66
+    svx::sidebar::MediaPlaybackPanel maIdle
+    MediaPlaybackPanel
+sw/inc/authfld.hxx:158
+    SwAuthorityField m_nTempSequencePos
+    -1
+sw/inc/authfld.hxx:159
+    SwAuthorityField m_nTempSequencePosRLHidden
+    -1
 sw/inc/ftninfo.hxx:46
     SwEndNoteInfo aFormat
     4
 sw/inc/hints.hxx:223
     SwAttrSetChg m_bDelSet
     0
+sw/inc/modcfg.hxx:206
+    SwModuleOptions m_aWebInsertConfig
+    1
+sw/inc/modcfg.hxx:209
+    SwModuleOptions m_aWebTableConfig
+    1
 sw/inc/view.hxx:189
     SwView m_pHScrollbar
     0
 sw/inc/view.hxx:190
     SwView m_pVScrollbar
     0
-sw/inc/view.hxx:200
-    SwView m_pTogglePageBtn
-    0
 sw/inc/viewopt.hxx:189
     SwViewOption m_bTest10
-    0
-sw/inc/viewsh.hxx:116
-    SwViewShell mpTmpRef
     0
 sw/source/core/bastyp/calc.cxx:95
     CalcOp eOp
     0
+sw/source/core/docnode/threadmanager.hxx:125
+    ThreadManager maStartNewThreadIdle
+    SW ThreadManager StartNewThreadIdle
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nID
     4294967295
@@ -622,30 +604,30 @@ sw/source/filter/ww8/ww8scan.hxx:1517
 sw/source/filter/ww8/ww8struc.hxx:892
     WW8_TablePos nSp37
     2
-sw/source/uibase/docvw/srcedtw.cxx:55
-    (anonymous namespace)::TextPortion nLine
-    0
+sw/source/ui/envelp/labfmt.hxx:67
+    SwLabFormatPage aPreviewIdle
+    SwLabFormatPage Preview
 sw/source/uibase/inc/instable.hxx:48
     SwInsTableDlg minTableIndexInLb
     1
-sw/source/uibase/inc/optpage.hxx:160
-    SwStdFontTabPage m_bSetListHeightDefault
-    0
-sw/source/uibase/inc/optpage.hxx:162
-    SwStdFontTabPage m_bSetLabelHeightDefault
-    0
-sw/source/uibase/inc/optpage.hxx:164
-    SwStdFontTabPage m_bSetIndexHeightDefault
-    0
 sw/source/uibase/inc/pview.hxx:178
     SwPagePreview m_pHScrollbar
     0
 sw/source/uibase/inc/pview.hxx:179
     SwPagePreview m_pVScrollbar
     0
+sw/source/uibase/inc/srcedtw.hxx:87
+    SwSrcEditWindow m_aSyntaxIdle
+    sw uibase SwSrcEditWindow Syntax
+sw/source/uibase/inc/unotools.hxx:63
+    SwOneExampleFrame m_aLoadedIdle
+    sw uibase SwOneExampleFrame Loaded
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
     0
+vcl/inc/graphic/Manager.hxx:42
+    vcl::graphic::Manager maSwapOutTimer
+    graphic::Manager maSwapOutTimer
 vcl/inc/impfontcache.hxx:77
     ImplFontCache m_aBoundRectCache
     3000
@@ -676,45 +658,6 @@ vcl/inc/svdata.hxx:292
 vcl/inc/svdata.hxx:301
     ImplSVNWFData mbRolloverMenubar
     0
-vcl/source/app/settings.cxx:68
-    ImplMouseData mnStartDragCode
-    1
-vcl/source/app/settings.cxx:69
-    ImplMouseData mnContextMenuCode
-    4
-vcl/source/app/settings.cxx:70
-    ImplMouseData mnContextMenuClicks
-    1
-vcl/source/app/settings.cxx:71
-    ImplMouseData mnScrollRepeat
-    100
-vcl/source/app/settings.cxx:72
-    ImplMouseData mnButtonStartRepeat
-    370
-vcl/source/app/settings.cxx:74
-    ImplMouseData mnActionDelay
-    250
-vcl/source/app/settings.cxx:154
-    ImplStyleData mnBorderSize
-    1
-vcl/source/app/settings.cxx:158
-    ImplStyleData mnSplitSize
-    3
-vcl/source/app/settings.cxx:202
-    ImplStyleData mnColorValueSetMaximumRowCount
-    10
-vcl/source/app/settings.cxx:205
-    ImplStyleData mnListBoxPreviewDefaultLineWidth
-    1
-vcl/source/app/settings.cxx:226
-    ImplHelpData mnTipDelay
-    500
-vcl/source/app/settings.cxx:228
-    ImplHelpData mnBalloonDelay
-    1500
-vcl/source/app/settings.cxx:242
-    ImplAllSettingsData mnWindowUpdate
-    39
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
     0
@@ -778,6 +721,9 @@ vcl/source/gdi/dibtools.cxx:118
 vcl/source/gdi/pdfwriter_impl.hxx:741
     vcl::PDFWriterImpl m_DocDigest
     0
+vcl/source/window/cursor.cxx:39
+    ImplCursorData mnPixSlant
+    0
 writerfilter/source/dmapper/SettingsTable.cxx:239
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
@@ -790,6 +736,3 @@ writerfilter/source/rtftok/rtfdocumentimpl.hxx:620
 writerfilter/source/rtftok/rtfdocumentimpl.hxx:623
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
-xmloff/source/draw/animexp.cxx:213
-    XMLEffectHint mnPathShapeId
-    -1

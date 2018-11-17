@@ -469,12 +469,11 @@ struct OptionsGroupInfo
     SfxShell*           m_pShell;       // used to create the page
     SfxModule*          m_pModule;      // used to create the ItemSet
     sal_uInt16          m_nDialogId;    // Id of the former dialog
-    bool            m_bLoadError;   // load fails?
     OUString       m_sPageURL;
 
     OptionsGroupInfo( SfxShell* pSh, SfxModule* pMod, sal_uInt16 nId ) :
         m_pShell( pSh ),
-        m_pModule( pMod ), m_nDialogId( nId ), m_bLoadError( false ),
+        m_pModule( pMod ), m_nDialogId( nId ),
         m_sPageURL( OUString() ) {}
 };
 
@@ -994,9 +993,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo *>(pParent->GetUserData());
     if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
     {
-        if(pGroupInfo->m_bLoadError)
-            return;
-
         if(!pGroupInfo->m_pInItemSet)
             pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
                 ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
