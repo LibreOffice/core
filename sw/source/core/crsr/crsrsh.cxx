@@ -64,6 +64,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/sequence.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <editeng/editview.hxx>
 #include <sal/log.hxx>
@@ -3546,12 +3547,7 @@ static void lcl_FillRecognizerData( std::vector< OUString >& rSmartTagTypes,
 
     if ( !rSmartTagTypes.empty() )
     {
-        rStringKeyMaps.realloc( rSmartTagTypes.size() );
-
-        std::vector< uno::Reference< container::XStringKeyMap > >::const_iterator aMapsIter = aStringKeyMaps.begin();
-        sal_uInt16 i = 0;
-        for ( aMapsIter = aStringKeyMaps.begin(); aMapsIter != aStringKeyMaps.end(); ++aMapsIter )
-            rStringKeyMaps[i++] = *aMapsIter;
+        rStringKeyMaps = comphelper::containerToSequence(aStringKeyMaps);
     }
 }
 

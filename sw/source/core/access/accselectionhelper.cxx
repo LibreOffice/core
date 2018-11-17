@@ -182,11 +182,8 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
         std::list< SwAccessibleChild > aChildren;
         m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
-        std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
-        std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
-        while( aIter != aEndIter )
+        for( const SwAccessibleChild& rChild : aChildren )
         {
-            const SwAccessibleChild& rChild = *aIter;
             const SdrObject* pObj = rChild.GetDrawObject();
             const SwFrame* pFrame = rChild.GetSwFrame();
             if( pObj && !(pFrame != nullptr && pFEShell->IsObjSelected()) )
@@ -195,7 +192,6 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
                 if( pFrame )
                     break;
             }
-            ++aIter;
         }
     }
 }
@@ -223,13 +219,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 std::list< SwAccessibleChild > aChildren;
                 m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
-                std::list< SwAccessibleChild >::const_iterator aIter =
-                    aChildren.begin();
-                std::list< SwAccessibleChild >::const_iterator aEndIter =
-                    aChildren.end();
-                while( aIter != aEndIter && static_cast<size_t>(nCount) < nSelObjs )
+                for( const SwAccessibleChild& rChild : aChildren )
                 {
-                    const SwAccessibleChild& rChild = *aIter;
                     if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
                         SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview())
                            == m_rContext.GetFrame() &&
@@ -237,7 +228,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                     {
                         nCount++;
                     }
-                    ++aIter;
+                    if (static_cast<size_t>(nCount) >= nSelObjs)
+                        break;
                 }
             }
         }
@@ -247,17 +239,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         {
             std::list< SwAccessibleChild > aChildren;
             m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
-            std::list< SwAccessibleChild >::const_iterator aIter =
-                aChildren.begin();
-            std::list< SwAccessibleChild >::const_iterator aEndIter =
-                aChildren.end();
-            while( aIter != aEndIter )
-            {
-                const SwAccessibleChild& aChild = *aIter;
-                if( lcl_getSelectedState( aChild, &m_rContext, m_rContext.GetMap() ) )
-                    nCount++;
-                ++aIter;
-            }
+            nCount = static_cast<sal_Int32>(std::count_if(aChildren.begin(), aChildren.end(),
+                [this](const SwAccessibleChild& aChild) { return lcl_getSelectedState(aChild, &m_rContext, m_rContext.GetMap()); }));
         }
     }
     return nCount;
@@ -310,11 +293,8 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         std::list< SwAccessibleChild > aChildren;
         m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
-        std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
-        std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
-        while( aIter != aEndIter && !aChild.IsValid() )
+        for( const SwAccessibleChild& rChild : aChildren )
         {
-            const SwAccessibleChild& rChild = *aIter;
             if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
                 SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview()) ==
                     m_rContext.GetFrame() &&
@@ -325,7 +305,8 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
                 else
                     --nSelectedChildIndex;
             }
-            ++aIter;
+            if (aChild.IsValid())
+                break;
         }
     }
 
