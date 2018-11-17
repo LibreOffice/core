@@ -3280,7 +3280,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     // when we are in EditMode. For whatever reason URLs are drawn as single
                                     // line in edit mode, originally clipped against edit area (which is no
                                     // longer done in Overlay mode and allows to *read* the URL).
-                                    // It would be difficult to change this due to needed adaptions in
+                                    // It would be difficult to change this due to needed adaptations in
                                     // EditEngine (look for lineBreaksList creation)
                                     if( nullptr == pActiveView && bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty() )
                                     {

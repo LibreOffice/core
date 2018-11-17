@@ -534,7 +534,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     }
 
     // than create table structure partially. First a single line that contains
-    // all boxes. The correct structure is than taken from SaveStruct.
+    // all boxes. The correct structure is then taken from SaveStruct.
     SwTableBoxFormat* pBoxFormat = GetDoc()->MakeTableBoxFormat();
     SwTableLineFormat* pLineFormat = GetDoc()->MakeTableLineFormat();
     SwTableLine* pLine = new SwTableLine( pLineFormat, rSavedData.size(), nullptr );

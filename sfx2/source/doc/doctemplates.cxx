@@ -979,7 +979,7 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
         }
 
         // To ensure a reloctable office installation, the path to the
-        // office installtion directory must never be stored directly.
+        // office installation directory must never be stored directly.
         if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
         {
             OUString aValue;
@@ -1038,7 +1038,7 @@ bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rProp
         rPropValue = rContent.getPropertyValue( rPropName );
 
         // To ensure a reloctable office installation, the path to the
-        // office installtion directory must never be stored directly.
+        // office installation directory must never be stored directly.
         if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
         {
             OUString aValue;
