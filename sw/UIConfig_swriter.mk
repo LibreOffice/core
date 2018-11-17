@@ -112,6 +112,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/columndialog \
 	sw/uiconfig/swriter/ui/columnpage \
 	sw/uiconfig/swriter/ui/columnwidth \
+	sw/uiconfig/swriter/ui/comboboxfragment \
 	sw/uiconfig/swriter/ui/conditionpage \
 	sw/uiconfig/swriter/ui/converttexttable \
 	sw/uiconfig/swriter/ui/createaddresslist \

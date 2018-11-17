@@ -100,10 +100,6 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
     , m_nHeaderId(0)
     , m_nFooterId(0)
     , m_nPageId(0)
-    , m_nBulletId(0)
-    , m_nNumId(0)
-    , m_nNumOptId(0)
-    , m_nNumPosId(0)
 {
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -250,54 +246,6 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
 
         break;
         }
-        // page styles
-        case SfxStyleFamily::Page:
-        {
-            // add Area and Transparence TabPages
-            m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
-            m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
-
-            m_nHeaderId = AddTabPage("header",  SvxHeaderPage::Create, SvxHeaderPage::GetRanges);
-            m_nFooterId = AddTabPage("footer", SvxFooterPage::Create, SvxFooterPage::GetRanges);
-
-            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
-            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
-            m_nPageId = AddTabPage("page",
-                                            pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
-                                            pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ) );
-            if (0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
-            {
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
-                m_nBorderId = AddTabPage("borders",
-                                pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-                m_nColumnId = AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
-                AddTabPage("footnotes", SwFootNotePage::Create, SwFootNotePage::GetRanges );
-                AddTabPage("textgrid", SwTextGridPage::Create, SwTextGridPage::GetRanges );
-                SvtCJKOptions aCJKOptions;
-                if(!aCJKOptions.IsAsianTypographyEnabled())
-                    RemoveTabPage("textgrid");
-            }
-            else
-            {
-                RemoveTabPage("borders");
-                RemoveTabPage("columns");
-                RemoveTabPage("footnotes");
-                RemoveTabPage("textgrid");
-            }
-        }
-        break;
-        // numbering styles
-        case SfxStyleFamily::Pseudo:
-        {
-            AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
-            m_nBulletId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
-            m_nNumId = AddTabPage("outline", RID_SVXPAGE_PICK_NUM);
-            AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
-            m_nNumOptId = AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
-            m_nNumPosId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
-        }
-        break;
 
         default:
             OSL_ENSURE(false, "wrong family");
@@ -494,47 +442,6 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
     }
-    else if (nId == m_nNumId)
-    {
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
-        rPage.PageCreated(aSet);
-    }
-    else if (nId == m_nNumOptId)
-    {
-
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
-        // collect character styles
-        ScopedVclPtrInstance< ListBox > rCharFormatLB(this);
-        rCharFormatLB->Clear();
-        rCharFormatLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
-        SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-        ::FillCharStyleListBox(*rCharFormatLB.get(),  pDocShell);
-
-        std::vector<OUString> aList;
-        aList.reserve(rCharFormatLB->GetEntryCount());
-        for (sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
-            aList.push_back(rCharFormatLB->GetEntry(j));
-
-        aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
-        FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
-        rPage.PageCreated(aSet);
-    }
-    else if (nId == m_nNumPosId)
-    {
-        SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-        FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
-
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
-        rPage.PageCreated(aSet);
-    }
-    else if (nId == m_nBulletId)
-    {
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
-        rPage.PageCreated(aSet);
-    }
     else if (nId == m_nHeaderId)
     {
         if(0 == (nHtmlMode & HTMLMODE_ON ))
@@ -636,6 +543,17 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                 RemoveTabPage("footnotes");
                 RemoveTabPage("textgrid");
             }
+        }
+        break;
+        // numbering styles
+        case SfxStyleFamily::Pseudo:
+        {
+            AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
+            AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
+            AddTabPage("outline", RID_SVXPAGE_PICK_NUM);
+            AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
+            AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
+            AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
         }
         break;
         default:
@@ -783,6 +701,54 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     else if (rId == "transparence")
     {
         rPage.PageCreated(GetStyleSheet().GetItemSet());
+    }
+    else if (rId == "bullets")
+    {
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "outline")
+    {
+        if (SfxStyleFamily::Pseudo == nType)
+        {
+            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
+            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+            rPage.PageCreated(aSet);
+        }
+    }
+    else if (rId == "customize")
+    {
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+
+        // collect character styles
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/comboboxfragment.ui"));
+        std::unique_ptr<weld::ComboBox> xCharFormatLB(xBuilder->weld_combo_box("combobox"));
+        xCharFormatLB->clear();
+        xCharFormatLB->append_text(SwViewShell::GetShellRes()->aStrNone);
+        SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
+        ::FillCharStyleListBox(*xCharFormatLB,  pDocShell);
+
+        std::vector<OUString> aList;
+        aList.reserve(xCharFormatLB->get_count());
+        for (sal_Int32 j = 0; j < xCharFormatLB->get_count(); j++)
+            aList.push_back(xCharFormatLB->get_text(j));
+
+        aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
+        FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "position")
+    {
+        if (SfxStyleFamily::Pseudo == nType)
+        {
+            SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
+            FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
+
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+            rPage.PageCreated(aSet);
+        }
     }
 }
 

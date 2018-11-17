@@ -53,10 +53,6 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_uInt16 m_nHeaderId;
     sal_uInt16 m_nFooterId;
     sal_uInt16 m_nPageId;
-    sal_uInt16 m_nBulletId;
-    sal_uInt16 m_nNumId;
-    sal_uInt16 m_nNumOptId;
-    sal_uInt16 m_nNumPosId;
 
 public:
     /// @param sPage
