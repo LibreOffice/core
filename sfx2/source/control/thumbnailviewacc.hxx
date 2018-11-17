@@ -54,7 +54,7 @@ class ThumbnailViewAcc :
 {
 public:
 
-    ThumbnailViewAcc( ThumbnailView* pParent, bool bIsTransientChildrenDisabled );
+    ThumbnailViewAcc( ThumbnailView* pParent );
     virtual ~ThumbnailViewAcc() override;
 
     void FireAccessibleEvent( short nEventId,
@@ -123,7 +123,6 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
     VclPtr<ThumbnailView>                                               mpParent;
-    bool const                                             mbIsTransientChildrenDisabled;
     /// The current FOCUSED state.
     bool mbIsFocused;
 

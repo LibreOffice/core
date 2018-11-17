@@ -73,13 +73,11 @@ namespace svt
 
     FileViewContentEnumerator::FileViewContentEnumerator(
             const Reference< XCommandEnvironment >& _rxCommandEnv,
-            ContentData& _rContentToFill, ::osl::Mutex& _rContentMutex,
-            const IContentTitleTranslation* _pTranslator )
+            ContentData& _rContentToFill, ::osl::Mutex& _rContentMutex )
         :Thread                  ( "FileViewContentEnumerator" )
         ,m_rContent              ( _rContentToFill )
         ,m_rContentMutex         ( _rContentMutex  )
         ,m_xCommandEnv           ( _rxCommandEnv   )
-        ,m_pTranslator           ( _pTranslator    )
         ,m_pResultHandler        ( nullptr            )
         ,m_bCancelled            ( false           )
         ,m_rBlackList            ( css::uno::Sequence< OUString >() )
@@ -97,7 +95,6 @@ namespace svt
         ::osl::MutexGuard aGuard( m_aMutex );
         m_bCancelled = true;
         m_pResultHandler = nullptr;
-        m_pTranslator = nullptr;
         m_aFolder.aContent = ::ucbhelper::Content();
         m_aFolder.sURL.clear();
     }
@@ -266,24 +263,6 @@ namespace svt
                             else
                                 pData->maType = SvFileInformationManager::GetFileDescription(
                                     INetURLObject( pData->maTargetURL ) );
-
-                            // replace names on demand
-                            {
-                                ::osl::MutexGuard aGuard( m_aMutex );
-                                if( m_pTranslator )
-                                {
-                                    OUString sNewTitle;
-                                    bool bTranslated = false;
-
-                                    if ( pData->mbIsFolder )
-                                        bTranslated = m_pTranslator->GetTranslation( pData->GetTitle(), sNewTitle );
-                                    else
-                                        bTranslated = implGetDocTitle( pData->maTargetURL, sNewTitle );
-
-                                    if ( bTranslated )
-                                        pData->ChangeTitle( sNewTitle );
-                                }
-                            }
 
                             {
                                 ::osl::MutexGuard aGuard( m_rContentMutex );

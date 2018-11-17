@@ -34,10 +34,9 @@
 
 using namespace ::com::sun::star;
 
-ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent, bool bIsTransientChildrenDisabled ) :
+ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent ) :
     ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),
-    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled ),
     mbIsFocused(false)
 {
 }
@@ -143,7 +142,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
     return xRet;
 }
 
@@ -189,9 +188,7 @@ sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
     ThrowIfDisposed();
     // #i73746# As the Java Access Bridge (v 2.0.1) uses "managesDescendants"
     // always if the role is LIST, we need a different role in this case
-    return (mbIsTransientChildrenDisabled
-            ? accessibility::AccessibleRole::PANEL
-            : accessibility::AccessibleRole::LIST );
+    return accessibility::AccessibleRole::LIST;
 }
 
 OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
@@ -236,8 +233,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewAcc::
     pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
     pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-    if ( !mbIsTransientChildrenDisabled )
-        pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
+    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
     pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
     if (mbIsFocused)
         pStateSet->AddState (accessibility::AccessibleStateType::FOCUSED);
@@ -325,7 +321,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
         if( THUMBNAILVIEW_ITEM_NONEITEM != nItemPos )
         {
             ThumbnailViewItem *const pItem = mpParent->mFilteredItemList[nItemPos];
-            xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+            xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
         }
     }
 
@@ -469,7 +465,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelec
         ThumbnailViewItem* pItem = getItem(i);
 
         if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
-            xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+            xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
     }
 
     return xRet;

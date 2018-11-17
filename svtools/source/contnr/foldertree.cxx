@@ -57,7 +57,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 
         ::rtl::Reference< ::svt::FileViewContentEnumerator >
             xContentEnumerator(new FileViewContentEnumerator(
-            m_xEnv, aContent, m_aMutex, nullptr));
+            m_xEnv, aContent, m_aMutex));
 
         FolderDescriptor aFolder( *pURL );
 

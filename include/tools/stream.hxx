@@ -185,7 +185,7 @@ protected:
     virtual void    FlushData();
     virtual void    SetSize(sal_uInt64 nSize);
 
-    void            FlushBuffer(bool isConsistent);
+    void            FlushBuffer();
     void            ClearError();
     void            ClearBuffer();
 
@@ -666,7 +666,7 @@ public:
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     void            SetResizeOffset( std::size_t nNewResize ) { nResize = nNewResize; }
-    virtual sal_uInt64 TellEnd() override { FlushBuffer(true); return nEndOfData; }
+    virtual sal_uInt64 TellEnd() override { FlushBuffer(); return nEndOfData; }
 };
 
 #endif

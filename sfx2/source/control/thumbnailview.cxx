@@ -224,7 +224,7 @@ void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
 
 css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAccessible()
 {
-    return new ThumbnailViewAcc( this, false );
+    return new ThumbnailViewAcc( this );
 }
 
 void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
