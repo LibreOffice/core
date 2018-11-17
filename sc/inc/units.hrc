@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_UNITS_HRC
 #define INCLUDED_SC_INC_UNITS_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const std::pair<const char*, FieldUnit> SCSTR_UNIT[] =
 {

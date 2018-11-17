@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_PRINT_HRC
 #define INCLUDED_VCL_INC_PRINT_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const char* RID_STR_PAPERNAMES[] =
 {

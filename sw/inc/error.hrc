@@ -22,7 +22,7 @@
 
 #include "swerror.h"
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class, err.GetCode())
 #define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class, err.GetCode())

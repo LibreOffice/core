@@ -22,7 +22,7 @@
 
 #include <utility>
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #include <svx/svxerr.hxx>
 #include <editeng/editerr.hxx>

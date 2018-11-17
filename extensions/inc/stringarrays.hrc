@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
 #define INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const char* RID_RSC_ENUM_VERTICAL_ALIGN[] =
 {

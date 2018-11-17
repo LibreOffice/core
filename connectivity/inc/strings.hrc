@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_STRINGS_HRC
 #define CONNECTIVITY_STRINGS_HRC
 
-#define NC_(Context, String) (Context "\004" u8##String)
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 // = the mozab driver's resource strings
 #define STR_ERR_EXECUTING_QUERY                 NC_("STR_ERR_EXECUTING_QUERY", "An error occurred while executing the query.")
