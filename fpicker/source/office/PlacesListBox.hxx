@@ -12,7 +12,7 @@
 #include "iodlg.hxx"
 
 #include <svtools/place.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 
 #include <memory>
 #include <vector>

@@ -24,7 +24,7 @@
 #include <extended/AccessibleGridControlTable.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <memory>
 
 namespace accessibility {
@@ -40,7 +40,7 @@ class AccessibleGridControl final : public AccessibleGridControlBase
     AccessibleGridControl(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-    ::svt::table::IAccessibleTable& _rTable
+    ::vcl::table::IAccessibleTable& _rTable
     );
 
     virtual ~AccessibleGridControl() override = default;
@@ -125,7 +125,7 @@ private:
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the header bar. */
     css::uno::Reference< css::accessibility::XAccessible >
-        implGetHeaderBar( ::svt::table::AccessibleTableControlObjType eObjType );
+        implGetHeaderBar( ::vcl::table::AccessibleTableControlObjType eObjType );
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.
@@ -163,17 +163,17 @@ private:
 
 class AccessibleGridControlAccess :
      public ::cppu::WeakImplHelper< css::accessibility::XAccessible >
-    ,public ::svt::table::IAccessibleTableControl
+    ,public ::vcl::table::IAccessibleTableControl
 {
 private:
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
-    ::svt::table::IAccessibleTable *                       m_pTable;
+    ::vcl::table::IAccessibleTable *                       m_pTable;
     rtl::Reference<AccessibleGridControl>                  m_xContext;
 
 public:
     AccessibleGridControlAccess(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-        ::svt::table::IAccessibleTable& _rTable
+        ::vcl::table::IAccessibleTable& _rTable
     );
 
     /// returns the AccessibleContext belonging to this Accessible

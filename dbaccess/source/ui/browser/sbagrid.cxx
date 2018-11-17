@@ -1460,10 +1460,10 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
     m_aDataDescriptor.clear();
 }
 
-OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
+OUString SbaGridControl::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
 {
     OUString sRet;
-    if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
+    if ( ::vcl::BBTYPE_BROWSEBOX == eObjType )
     {
         SolarMutexGuard aGuard;
         sRet = DBA_RES(STR_DATASOURCE_GRIDCONTROL_DESC);

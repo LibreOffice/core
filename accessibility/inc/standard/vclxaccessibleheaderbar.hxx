@@ -16,18 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_INC_VCLXACCESSIBLEHEADERBAR_HXX
-#define INCLUDED_SVTOOLS_INC_VCLXACCESSIBLEHEADERBAR_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEHEADERBAR_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEHEADERBAR_HXX
 
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-class HeaderBar;
-
-
 //  class VCLXAccessibleHeaderBar
-
 
 typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
     ListItems;
@@ -57,20 +53,8 @@ public:
 
 private:
     ListItems m_aAccessibleChildren;
-
-
 };
 
-class VCLXHeaderBar :  public VCLXWindow
-{
-public:
-    VCLXHeaderBar(vcl::Window* pHeaderBar);
-    virtual ~VCLXHeaderBar() override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
-
-};
-
-#endif // INCLUDED_SVTOOLS_INC_VCLXACCESSIBLEHEADERBAR_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEHEADERBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

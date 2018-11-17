@@ -64,6 +64,8 @@ accessibility/inc/standard/vclxaccessibledropdownlistbox.hxx
 accessibility/inc/standard/vclxaccessibleedit.hxx
 accessibility/inc/standard/vclxaccessiblefixedhyperlink.hxx
 accessibility/inc/standard/vclxaccessiblefixedtext.hxx
+accessibility/inc/standard/vclxaccessibleheaderbar.hxx
+accessibility/inc/standard/vclxaccessibleheaderbaritem.hxx
 accessibility/inc/standard/vclxaccessiblelist.hxx
 accessibility/inc/standard/vclxaccessiblelistbox.hxx
 accessibility/inc/standard/vclxaccessiblelistitem.hxx
@@ -131,6 +133,8 @@ accessibility/source/standard/vclxaccessibledropdownlistbox.cxx
 accessibility/source/standard/vclxaccessibleedit.cxx
 accessibility/source/standard/vclxaccessiblefixedhyperlink.cxx
 accessibility/source/standard/vclxaccessiblefixedtext.cxx
+accessibility/source/standard/vclxaccessibleheaderbar.cxx
+accessibility/source/standard/vclxaccessibleheaderbaritem.cxx
 accessibility/source/standard/vclxaccessiblelist.cxx
 accessibility/source/standard/vclxaccessiblelistbox.cxx
 accessibility/source/standard/vclxaccessiblelistitem.cxx
@@ -7003,7 +7007,6 @@ include/svl/visitem.hxx
 include/svl/whiter.hxx
 include/svl/zforlist.hxx
 include/svl/zformat.hxx
-include/svtools/AccessibleBrowseBoxObjType.hxx
 include/svtools/DocumentInfoPreview.hxx
 include/svtools/DocumentToGraphicRenderer.hxx
 include/svtools/HtmlWriter.hxx
@@ -7011,10 +7014,7 @@ include/svtools/PlaceEditDialog.hxx
 include/svtools/ServerDetailsControls.hxx
 include/svtools/acceleratorexecute.hxx
 include/svtools/accessibilityoptions.hxx
-include/svtools/accessiblefactory.hxx
 include/svtools/accessibleruler.hxx
-include/svtools/accessibletable.hxx
-include/svtools/accessibletableprovider.hxx
 include/svtools/addresstemplate.hxx
 include/svtools/apearcfg.hxx
 include/svtools/asynclink.hxx
@@ -7052,7 +7052,6 @@ include/svtools/fontsubstconfig.hxx
 include/svtools/framestatuslistener.hxx
 include/svtools/generictoolboxcontroller.hxx
 include/svtools/genericunodialog.hxx
-include/svtools/headbar.hxx
 include/svtools/helpids.h
 include/svtools/helpopt.hxx
 include/svtools/htmlcfg.hxx
@@ -7101,7 +7100,6 @@ include/svtools/stringtransfer.hxx
 include/svtools/svmedit.hxx
 include/svtools/svmedit2.hxx
 include/svtools/svparser.hxx
-include/svtools/svtabbx.hxx
 include/svtools/svtdllapi.h
 include/svtools/svtresid.hxx
 include/svtools/tabbar.hxx
@@ -7881,6 +7879,7 @@ include/vbahelper/vbashaperange.hxx
 include/vbahelper/vbashapes.hxx
 include/vbahelper/vbatextframe.hxx
 include/vbahelper/vbawindowbase.hxx
+include/vcl/AccessibleBrowseBoxObjType.hxx
 include/vcl/BitmapTools.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
@@ -7898,6 +7897,9 @@ include/vcl/ImageTree.hxx
 include/vcl/NotebookbarContextControl.hxx
 include/vcl/abstdlg.hxx
 include/vcl/accel.hxx
+include/vcl/accessiblefactory.hxx
+include/vcl/accessibletable.hxx
+include/vcl/accessibletableprovider.hxx
 include/vcl/alpha.hxx
 include/vcl/animate.hxx
 include/vcl/bitmap.hxx
@@ -7952,6 +7954,7 @@ include/vcl/graph.hxx
 include/vcl/graphicfilter.hxx
 include/vcl/graphictools.hxx
 include/vcl/hatch.hxx
+include/vcl/headbar.hxx
 include/vcl/help.hxx
 include/vcl/i18nhelp.hxx
 include/vcl/idle.hxx
@@ -8030,6 +8033,8 @@ include/vcl/svapp.hxx
 include/vcl/svimpbox.hxx
 include/vcl/svlbitm.hxx
 include/vcl/svmain.hxx
+include/vcl/svtabbx.hxx
+include/vcl/svtaccessiblefactory.hxx
 include/vcl/syschild.hxx
 include/vcl/sysdata.hxx
 include/vcl/syswin.hxx
@@ -13839,8 +13844,6 @@ svtools/inc/table/gridtablerenderer.hxx
 svtools/inc/table/tablecontrol.hxx
 svtools/inc/table/tablecontrolinterface.hxx
 svtools/inc/uitest/uiobject.hxx
-svtools/inc/vclxaccessibleheaderbar.hxx
-svtools/inc/vclxaccessibleheaderbaritem.hxx
 svtools/langsupport/langsupport.cxx
 svtools/qa/unit/GraphicObjectTest.cxx
 svtools/qa/unit/svtools-dialogs-test.cxx
@@ -13883,7 +13886,6 @@ svtools/source/contnr/imivctl1.cxx
 svtools/source/contnr/imivctl2.cxx
 svtools/source/contnr/ivctrl.cxx
 svtools/source/contnr/simptabl.cxx
-svtools/source/contnr/svtabbx.cxx
 svtools/source/contnr/templwin.cxx
 svtools/source/contnr/templwin.hxx
 svtools/source/control/accessibleruler.cxx
@@ -13896,7 +13898,6 @@ svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
 svtools/source/control/filectrl.cxx
 svtools/source/control/fileurlbox.cxx
-svtools/source/control/headbar.cxx
 svtools/source/control/hyperlabel.cxx
 svtools/source/control/indexentryres.cxx
 svtools/source/control/inettbc.cxx
@@ -13913,8 +13914,6 @@ svtools/source/control/urlcontrol.cxx
 svtools/source/control/valueacc.cxx
 svtools/source/control/valueimp.hxx
 svtools/source/control/valueset.cxx
-svtools/source/control/vclxaccessibleheaderbar.cxx
-svtools/source/control/vclxaccessibleheaderbaritem.cxx
 svtools/source/dialogs/PlaceEditDialog.cxx
 svtools/source/dialogs/ServerDetailsControls.cxx
 svtools/source/dialogs/addresstemplate.cxx
@@ -13941,7 +13940,6 @@ svtools/source/hatchwindow/ipwin.cxx
 svtools/source/hatchwindow/ipwin.hxx
 svtools/source/inc/hatchwindow.hxx
 svtools/source/inc/iconviewimpl.hxx
-svtools/source/inc/svtaccessiblefactory.hxx
 svtools/source/inc/unoiface.hxx
 svtools/source/java/javacontext.cxx
 svtools/source/java/javainteractionhandler.cxx
@@ -13961,7 +13959,6 @@ svtools/source/misc/langtab.cxx
 svtools/source/misc/openfiledroptargetlistener.cxx
 svtools/source/misc/sampletext.cxx
 svtools/source/misc/stringtransfer.cxx
-svtools/source/misc/svtaccessiblefactory.cxx
 svtools/source/misc/svtresid.cxx
 svtools/source/misc/templatefoldercache.cxx
 svtools/source/misc/unitconv.cxx
@@ -18134,6 +18131,7 @@ vcl/source/helper/displayconnectiondispatch.cxx
 vcl/source/helper/evntpost.cxx
 vcl/source/helper/lazydelete.cxx
 vcl/source/helper/strhelper.cxx
+vcl/source/helper/svtaccessiblefactory.cxx
 vcl/source/helper/threadex.cxx
 vcl/source/image/Image.cxx
 vcl/source/image/ImageRepository.cxx
@@ -18165,8 +18163,10 @@ vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
 vcl/source/salmain/salmain.cxx
+vcl/source/treelist/svtabbx.cxx
 vcl/source/treelist/transfer.cxx
 vcl/source/treelist/transfer2.cxx
+vcl/source/treelist/headbar.cxx
 vcl/source/treelist/imap.cxx
 vcl/source/treelist/imap2.cxx
 vcl/source/treelist/imap3.cxx

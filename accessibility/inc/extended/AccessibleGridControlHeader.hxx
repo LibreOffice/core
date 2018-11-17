@@ -40,8 +40,8 @@ public:
     AccessibleGridControlHeader(
         const css::uno::Reference<
             css::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable& rTable,
-            ::svt::table::AccessibleTableControlObjType  eObjType );
+            ::vcl::table::IAccessibleTable& rTable,
+            ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 private:
     virtual ~AccessibleGridControlHeader() override = default;
@@ -141,12 +141,12 @@ private:
 
 inline bool AccessibleGridControlHeader::isRowBar() const
 {
-    return getType() == ::svt::table::TCTYPE_ROWHEADERBAR;
+    return getType() == ::vcl::table::TCTYPE_ROWHEADERBAR;
 }
 
 inline bool AccessibleGridControlHeader::isColumnBar() const
 {
-    return getType() == ::svt::table::TCTYPE_COLUMNHEADERBAR;
+    return getType() == ::vcl::table::TCTYPE_COLUMNHEADERBAR;
 }
 
 

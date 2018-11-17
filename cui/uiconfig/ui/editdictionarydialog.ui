@@ -213,7 +213,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-SvTabListBox" id="words:border">
+                  <object class="vcllo-SvTabListBox" id="words:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>

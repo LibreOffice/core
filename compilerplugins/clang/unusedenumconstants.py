@@ -155,7 +155,7 @@ def is_ignore(srcLoc):
          "include/oox/drawingml/shapepropertymap.hxx",
          "include/svl/nfkeytab.hx",
          "include/svl/zforlist.hxx",
-         "include/svtools/svtabbx.hxx",
+         "include/vcl/svtabbx.hxx",
          "include/vcl/print.hxx", # NupOrderType, from UI combobox
          "sw/source/uibase/inc/swcont.hxx", # RegionMode, from UI; ContentTypeId, from UI(registry)
          "sw/inc/toxe.hxx", # ToxAuthorityType (from UI)

@@ -112,6 +112,11 @@ namespace toolkit
             return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
+                createAccessibleContext( VCLXHeaderBar* /*_pXWindow*/ ) override
+        {
+            return nullptr;
+        }
+        css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXWindow* /*_pXWindow*/ ) override
         {
             return nullptr;

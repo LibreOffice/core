@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <svtools/svtabbx.hxx>
-#include <svtools/headbar.hxx>
-#include <svtools/svtresid.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/svtabbx.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/svlbitm.hxx>
-#include <svtools/strings.hrc>
 #include <vcl/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <svtaccessiblefactory.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <strings.hrc>
+#include <svdata.hxx>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -90,6 +90,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aToken));
     }
 }
+
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
 {
@@ -388,7 +389,7 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
                     {
                         OUString sRet = static_cast<const SvLBoxString&>(rBoxItem).GetText();
                         if ( sRet.isEmpty() )
-                            sRet = SvtResId( STR_SVT_ACC_EMPTY_FIELD );
+                            sRet = VclResId( STR_SVT_ACC_EMPTY_FIELD );
                         return sRet;
                     }
                     --nCol;
@@ -468,7 +469,7 @@ long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
     return aTabs[ nTab ]->GetPos();
 }
 
-namespace svt
+namespace vcl
 {
     struct SvHeaderTabListBoxImpl
     {
@@ -482,7 +483,7 @@ namespace svt
 SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle )
     : SvTabListBox(pParent, nWinStyle)
     , m_bFirstPaint(true)
-    , m_pImpl(new ::svt::SvHeaderTabListBoxImpl)
+    , m_pImpl(new ::vcl::SvHeaderTabListBoxImpl)
     , m_pAccessible(nullptr)
 {
 }
@@ -598,7 +599,7 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
         if ( xAccParent.is() )
         {
             Reference< XAccessible > xAccessible = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderBar(
-                xAccParent, *this, ::svt::BBTYPE_COLUMNHEADERBAR );
+                xAccParent, *this, ::vcl::BBTYPE_COLUMNHEADERBAR );
             m_pImpl->m_pHeaderBar->SetAccessible( xAccessible );
         }
     }
@@ -879,13 +880,12 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
         // no -> create new header cell
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderCell(
             _nColumn, m_pAccessible->getHeaderBar(),
-            *this, nullptr, ::svt::BBTYPE_COLUMNHEADERCELL
+            *this, nullptr, ::vcl::BBTYPE_COLUMNHEADERCELL
         );
 
         // insert into list
         m_aAccessibleChildren[ _nColumn ] = xChild;
     }
-
     return xChild;
 }
 
@@ -920,19 +920,19 @@ bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Point& )
     return false;
 }
 
-OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+OUString SvHeaderTabListBox::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
     OUString aRetText;
     switch( _eType )
     {
-        case ::svt::BBTYPE_BROWSEBOX:
-        case ::svt::BBTYPE_TABLE:
-        case ::svt::BBTYPE_COLUMNHEADERBAR:
+        case ::vcl::BBTYPE_BROWSEBOX:
+        case ::vcl::BBTYPE_TABLE:
+        case ::vcl::BBTYPE_COLUMNHEADERBAR:
             // should be empty now (see #i63983)
             aRetText.clear();
             break;
 
-        case ::svt::BBTYPE_TABLECELL:
+        case ::vcl::BBTYPE_TABLECELL:
         {
             // here we need a valid pos, we can not handle -1
             if ( _nPos >= 0 )
@@ -947,18 +947,18 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBox
             }
             break;
         }
-        case ::svt::BBTYPE_CHECKBOXCELL:
+        case ::vcl::BBTYPE_CHECKBOXCELL:
         {
             break; // checkbox cells have no name
         }
-        case ::svt::BBTYPE_COLUMNHEADERCELL:
+        case ::vcl::BBTYPE_COLUMNHEADERCELL:
         {
             aRetText = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( static_cast<sal_uInt16>(_nPos) ) );
             break;
         }
 
-        case ::svt::BBTYPE_ROWHEADERBAR:
-        case ::svt::BBTYPE_ROWHEADERCELL:
+        case ::vcl::BBTYPE_ROWHEADERBAR:
+        case ::vcl::BBTYPE_ROWHEADERCELL:
             aRetText = "error";
             break;
 
@@ -968,11 +968,11 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBox
     return aRetText;
 }
 
-OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
     OUString aRetText;
 
-    if( _eType == ::svt::BBTYPE_TABLECELL && _nPos != -1 )
+    if( _eType == ::vcl::BBTYPE_TABLECELL && _nPos != -1 )
     {
         const OUString sVar1( "%1" );
         const OUString sVar2( "%2" );
@@ -983,7 +983,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBr
             sal_Int32 nRow = _nPos / nColumnCount;
             sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
-            OUString aText( SvtResId(STR_SVT_ACC_DESC_TABLISTBOX) );
+            OUString aText( VclResId(STR_SVT_ACC_DESC_TABLISTBOX) );
             aText = aText.replaceFirst( sVar1, OUString::number( nRow ) );
             OUString sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
             if ( sColHeader.isEmpty() )
@@ -996,12 +996,12 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBr
     return aRetText;
 }
 
-void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const
+void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::vcl::AccessibleBrowseBoxObjType _eType ) const
 {
     switch( _eType )
     {
-        case ::svt::BBTYPE_BROWSEBOX:
-        case ::svt::BBTYPE_TABLE:
+        case ::vcl::BBTYPE_BROWSEBOX:
+        case ::vcl::BBTYPE_TABLE:
         {
             _rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             if ( HasFocus() )
@@ -1015,7 +1015,7 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             }
             if ( IsReallyVisible() )
                 _rStateSet.AddState( AccessibleStateType::VISIBLE );
-            if ( _eType == ::svt::BBTYPE_TABLE )
+            if ( _eType == ::vcl::BBTYPE_TABLE )
             {
 
                 if ( AreChildrenTransient() )
@@ -1025,7 +1025,7 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             break;
         }
 
-        case ::svt::BBTYPE_COLUMNHEADERBAR:
+        case ::vcl::BBTYPE_COLUMNHEADERBAR:
         {
             sal_Int32 nCurRow = GetCurrRow();
             sal_uInt16 nCurColumn = GetCurrColumn();
@@ -1037,8 +1037,8 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             break;
         }
 
-        case ::svt::BBTYPE_ROWHEADERCELL:
-        case ::svt::BBTYPE_COLUMNHEADERCELL:
+        case ::vcl::BBTYPE_ROWHEADERCELL:
+        case ::vcl::BBTYPE_COLUMNHEADERCELL:
         {
             _rStateSet.AddState( AccessibleStateType::VISIBLE );
             _rStateSet.AddState( AccessibleStateType::FOCUSABLE );

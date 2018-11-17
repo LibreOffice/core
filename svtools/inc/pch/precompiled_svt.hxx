@@ -413,10 +413,8 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/headbar.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/iconview.hxx>
@@ -428,6 +426,8 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/table/tabletypes.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/imap.hxx>

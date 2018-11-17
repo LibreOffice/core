@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/diagnose.h>
 
@@ -52,8 +52,8 @@ namespace svt
         };
 
     public:
-        AccessibleFactoryAccess m_aFactoryAccess;
-        IAccessibleBrowseBox*   m_pAccessible;
+        vcl::AccessibleFactoryAccess m_aFactoryAccess;
+        vcl::IAccessibleBrowseBox* m_pAccessible;
         THeaderCellMap          m_aColHeaderCellMap;
         THeaderCellMap          m_aRowHeaderCellMap;
 
@@ -65,7 +65,7 @@ namespace svt
 
         /// @see AccessibleBrowseBox::getHeaderBar
         css::uno::Reference< css::accessibility::XAccessible >
-            getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType );
+            getAccessibleHeaderBar( vcl::AccessibleBrowseBoxObjType _eObjType );
 
         /// @see AccessibleBrowseBox::getTable
         css::uno::Reference< css::accessibility::XAccessible >

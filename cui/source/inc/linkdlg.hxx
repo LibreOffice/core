@@ -29,7 +29,7 @@
 #include <vcl/fixedhyper.hxx>
 
 #include <svtools/svmedit.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 
 /********************** SvUpdateLinksDialog ******************************
 *************************************************************************/

@@ -29,8 +29,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/simptabl.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/svtabbx.hxx>
+#include <vcl/headbar.hxx>
 #include <mailmergehelper.hxx>
 
 class SwMailMergeWizard;

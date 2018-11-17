@@ -4,16 +4,12 @@
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
-      <!-- column-name expander -->
-      <column type="GdkPixbuf"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore2">
@@ -22,12 +18,6 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
-      <!-- column-name expander -->
-      <column type="GdkPixbuf"/>
     </columns>
   </object>
   <object class="GtkDialog" id="BasicMacroDialog">
@@ -174,6 +164,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="basicmacrodialog|existingmacrosft">Existing Macros In:</property>
+                        <property name="ellipsize">end</property>
                         <property name="track_visited_links">False</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
@@ -218,7 +209,8 @@
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore1</property>
                                 <property name="headers_visible">False</property>
-                                <property name="search_column">0</property>
+                                <property name="search_column">1</property>
+                                <property name="show_expanders">True</property>
                                 <property name="enable_tree_lines">True</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
@@ -229,13 +221,13 @@
                                     <child>
                                       <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
                                       <attributes>
-                                        <attribute name="pixbuf">4</attribute>
+                                        <attribute name="pixbuf">0</attribute>
                                       </attributes>
                                     </child>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                       <attributes>
-                                        <attribute name="text">0</attribute>
+                                        <attribute name="text">1</attribute>
                                       </attributes>
                                     </child>
                                   </object>

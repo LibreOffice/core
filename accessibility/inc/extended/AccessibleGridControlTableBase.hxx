@@ -46,8 +46,8 @@ public:
         @param eObjType  Type of table control object */
     AccessibleGridControlTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::table::IAccessibleTable& rTable,
-        ::svt::table::AccessibleTableControlObjType  eObjType );
+        ::vcl::table::IAccessibleTable& rTable,
+        ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:
     virtual ~AccessibleGridControlTableBase() override = default;
