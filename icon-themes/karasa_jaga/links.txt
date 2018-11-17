@@ -64,6 +64,7 @@ cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
 cmd/32/dbviewfunctions.png cmd/32/insertformula.png
 cmd/32/defaultparastyle.png cmd/32/controlcodes.png
 cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
+cmd/32/deletecell.png cmd/32/delete.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
 cmd/32/deleteshapehyperlink.png cmd/32/removehyperlink.png
 cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
@@ -405,6 +406,7 @@ cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
 cmd/lc_dbviewfunctions.png cmd/lc_insertformula.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
+cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
 cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
 cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
@@ -696,6 +698,7 @@ cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_dbviewfunctions.png cmd/sc_insertformula.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
+cmd/sc_deletecell.png cmd/sc_delete.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
 cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
