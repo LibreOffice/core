@@ -200,7 +200,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
             // TargetURL property may contain a reference to the Office
             // installation directory. To ensure a reloctable office
-            // installation, the path to the office installtion directory must
+            // installation, the path to the office installation directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
             if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty()  )
@@ -399,7 +399,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 
                     // TargetURL property may contain a reference to the Office
                     // installation directory. To ensure a reloctable office
-                    // installation, the path to the office installtion
+                    // installation, the path to the office installation
                     // directory must never be stored directly. Use a
                     // placeholder instead.
                     OUString aValue( rData.getTargetURL() );
@@ -704,7 +704,7 @@ bool HierarchyEntry::move(
 
         // TargetURL property may contain a reference to the Office
         // installation directory. To ensure a reloctable office
-        // installation, the path to the office installtion
+        // installation, the path to the office installation
         // directory must never be stored directly. Use a placeholder
         // instead.
         OUString aValue( rData.getTargetURL() );
@@ -1092,7 +1092,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 
             // TargetURL property may contain a reference to the Office
             // installation directory. To ensure a reloctable office
-            // installation, the path to the office installtion directory must
+            // installation, the path to the office installation directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
             if ( m_pImpl->officeDirs.is() && !aValue.isEmpty() )

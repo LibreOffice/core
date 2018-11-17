@@ -197,7 +197,7 @@ function getOfficeHome()
                 continue;
             }
         }
-        //Check if this is a valid office installtion folder by looking for the
+        //Check if this is a valid office installation folder by looking for the
 		//program sub-directory
         var progDir = sHome + "\\program";
         if (! aFileSystemObject.FolderExists(progDir))
