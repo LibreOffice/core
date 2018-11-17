@@ -3586,14 +3586,6 @@ void SvTreeListBox::EnableContextMenuHandling()
     pImpl->bContextMenuHandling = true;
 }
 
-void SvTreeListBox::EnableList( bool _bEnable )
-{
-    // call base class method
-    Window::Enable(_bEnable);
-    // then invalidate
-    Invalidate(tools::Rectangle(Point(), GetSizePixel()));
-}
-
 void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
 {
     assert(pEntry && "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry");
