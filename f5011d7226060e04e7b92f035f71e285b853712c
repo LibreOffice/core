@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_d4be41fe",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-17T10:06:56Z",
+      "side": 1,
+      "message": "From the micro-optimization PoV, is this ~the same as\n\n    fNorm \u003d std::max(fNorm, fabs(pMatA-\u003eGetDouble(nC,row)))\n\nor is the extra assignment significant?",
+      "revId": "f5011d7226060e04e7b92f035f71e285b853712c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
