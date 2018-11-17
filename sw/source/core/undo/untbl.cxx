@@ -2451,7 +2451,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                 {
                     // The old content was not empty or he has been merged with the new content
                     bDeleteCompleteParagraph = !pEntry->bJoin; // bJoin is set when merged
-                    // Set aTmpIdx to the beginning fo the old content
+                    // Set aTmpIdx to the beginning of the old content
                     SwNodeIndex aTmpIdx( *pEndNode,
                             pUndoRedlineDelete->NodeDiff()-1 );
                     SwTextNode *pText = aTmpIdx.GetNode().GetTextNode();

@@ -730,7 +730,7 @@ sub generate_cygwin_paths
         }
     }
 
-    # Checking existence fo cyg_sourcepath for every file
+    # Checking existence of cyg_sourcepath for every file
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
         if (( ! exists(${$filesref}[$i]->{'cyg_sourcepath'}) ) || ( ${$filesref}[$i]->{'cyg_sourcepath'} eq "" ))

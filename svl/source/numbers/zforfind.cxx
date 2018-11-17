@@ -1255,7 +1255,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             xLocaleData.changeLocale( aSaveLocale);
             // When concatenating don't care about duplicates, combining
             // weeding those out reallocs yet another time and probably doesn't
-            // take less time than looping over two additional patterns below..
+            // take less time than looping over two additional patterns below...
             switch (eEDF)
             {
                 case NF_EVALDATEFORMAT_FORMAT:

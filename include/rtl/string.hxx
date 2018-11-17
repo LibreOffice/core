@@ -80,7 +80,7 @@ namespace rtl
   It provide also functionality to change the string, but this results
   in every case in a new string instance (in the most cases with an
   memory allocation). You don't have functionality to change the
-  content of the string. If you want change the string content, than
+  content of the string. If you want change the string content, then
   you should us the OStringBuffer class, which provide these
   functionality and avoid to much memory allocation.
 
