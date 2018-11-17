@@ -80,7 +80,6 @@ class MacSpellChecker :
     }
 
     sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
-    Reference< XSpellAlternatives > GetProposals( const OUString &rWord, const Locale &rLocale );
 
 public:
     MacSpellChecker();
