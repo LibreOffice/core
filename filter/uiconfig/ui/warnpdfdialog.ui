@@ -6,10 +6,10 @@
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkMessageDialog" id="WarnPDFDialog">
@@ -82,7 +82,7 @@
                     <property name="model">liststore1</property>
                     <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
-                    <property name="search_column">0</property>
+                    <property name="search_column">1</property>
                     <property name="show_expanders">False</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection1"/>
@@ -92,7 +92,7 @@
                         <child>
                           <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
                           <attributes>
-                            <attribute name="pixbuf">2</attribute>
+                            <attribute name="pixbuf">0</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -102,7 +102,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext2"/>
                           <attributes>
-                            <attribute name="text">0</attribute>
+                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>

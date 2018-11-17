@@ -22,7 +22,7 @@
 #include <svtools/wizardmachine.hxx>
 
 #include <vcl/fixed.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/treelistbox.hxx>
 
 #include <RangeSelectionListener.hxx>

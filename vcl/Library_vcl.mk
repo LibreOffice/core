@@ -230,10 +230,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/vclreferencebase \
     vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
+    vcl/source/treelist/headbar \
     vcl/source/treelist/imap \
     vcl/source/treelist/imap2 \
     vcl/source/treelist/imap3 \
     vcl/source/treelist/inetimg \
+    vcl/source/treelist/svtabbx \
     vcl/source/treelist/transfer \
     vcl/source/treelist/transfer2 \
     vcl/source/treelist/viewdataentry \
@@ -351,6 +353,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/evntpost \
     vcl/source/helper/lazydelete \
     vcl/source/helper/strhelper \
+    vcl/source/helper/svtaccessiblefactory \
     vcl/source/helper/threadex \
     vcl/source/app/brand \
     vcl/source/app/customweld \

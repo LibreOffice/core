@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>

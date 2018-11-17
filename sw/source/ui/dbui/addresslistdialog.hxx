@@ -21,8 +21,8 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/button.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/svtabbx.hxx>
+#include <vcl/headbar.hxx>
 #include <swdbdata.hxx>
 #include <sharedconnection.hxx>
 

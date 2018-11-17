@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <extended/AccessibleGridControlHeaderCell.hxx>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <extended/AccessibleGridControl.hxx>
 
 namespace accessibility
@@ -27,8 +26,8 @@ namespace accessibility
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::uno;
-    using namespace ::svt;
-    using namespace ::svt::table;
+    using namespace ::vcl;
+    using namespace ::vcl::table;
 
 AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,

@@ -47,8 +47,8 @@ public:
                          BBTYPE_COLUMNHEADERBAR. */
     AccessibleBrowseBoxHeaderBar(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider& rBrowseBox,
-        ::svt::AccessibleBrowseBoxObjType eObjType );
+        ::vcl::IAccessibleTableProvider& rBrowseBox,
+        ::vcl::AccessibleBrowseBoxObjType eObjType );
 
 private:
     virtual ~AccessibleBrowseBoxHeaderBar() override;
@@ -204,12 +204,12 @@ private:
 
 inline bool AccessibleBrowseBoxHeaderBar::isRowBar() const
 {
-    return getType() == ::svt::BBTYPE_ROWHEADERBAR;
+    return getType() == ::vcl::BBTYPE_ROWHEADERBAR;
 }
 
 inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 {
-    return getType() == ::svt::BBTYPE_COLUMNHEADERBAR;
+    return getType() == ::vcl::BBTYPE_COLUMNHEADERBAR;
 }
 
 

@@ -4049,63 +4049,6 @@ namespace
         return pixbuf;
     }
 
-    void insert_row(GtkTreeStore* pTreeStore, GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString& rText,
-                    const OUString* pIconName, VirtualDevice* pDevice, const OUString* pExpanderName)
-    {
-        if (!pIconName && !pDevice)
-        {
-            gtk_tree_store_insert_with_values(pTreeStore, &iter, parent, pos,
-                                              0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                                              1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
-                                              -1);
-        }
-        else
-        {
-            if (pIconName)
-            {
-                GdkPixbuf* pixbuf = getPixbuf(*pIconName);
-
-                gtk_tree_store_insert_with_values(pTreeStore, &iter, parent, pos,
-                                                  0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                                                  1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
-                                                  2, pixbuf,
-                                                  -1);
-
-                if (pixbuf)
-                    g_object_unref(pixbuf);
-            }
-            else
-            {
-                cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
-
-                Size aSize(pDevice->GetOutputSizePixel());
-                cairo_surface_t* target = cairo_surface_create_similar(surface,
-                                                                        cairo_surface_get_content(surface),
-                                                                        aSize.Width(),
-                                                                        aSize.Height());
-
-                cairo_t* cr = cairo_create(target);
-                cairo_set_source_surface(cr, surface, 0, 0);
-                cairo_paint(cr);
-                cairo_destroy(cr);
-
-                gtk_tree_store_insert_with_values(pTreeStore, &iter, parent, pos,
-                                                  0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                                                  1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
-                                                  3, target,
-                                                  -1);
-                cairo_surface_destroy(target);
-            }
-        }
-
-        if (pExpanderName)
-        {
-            GdkPixbuf* pixbuf = getPixbuf(*pExpanderName);
-            gtk_tree_store_set(pTreeStore, &iter, 4, pixbuf, -1);
-            if (pixbuf)
-                g_object_unref(pixbuf);
-        }
-    }
 }
 
 namespace
@@ -4143,6 +4086,10 @@ private:
     GtkTreeView* m_pTreeView;
     GtkTreeStore* m_pTreeStore;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
+    gint m_nTextCol;
+    gint m_nImageCol;
+    gint m_nExpanderImageCol;
+    gint m_nIdCol;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
@@ -4168,6 +4115,48 @@ private:
         pThis->signal_row_activated();
     }
 
+    void insert_row(GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString& rText,
+                    const OUString* pIconName, VirtualDevice* pDevice, const OUString* pExpanderName)
+    {
+        gtk_tree_store_insert_with_values(m_pTreeStore, &iter, parent, pos,
+                                          m_nTextCol, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                          m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                          -1);
+        if (pIconName)
+        {
+            GdkPixbuf* pixbuf = getPixbuf(*pIconName);
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
+            if (pixbuf)
+                g_object_unref(pixbuf);
+        }
+        else if (pDevice)
+        {
+            cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
+
+            Size aSize(pDevice->GetOutputSizePixel());
+            cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                                    cairo_surface_get_content(surface),
+                                                                    aSize.Width(),
+                                                                    aSize.Height());
+
+            cairo_t* cr = cairo_create(target);
+            cairo_set_source_surface(cr, surface, 0, 0);
+            cairo_paint(cr);
+            cairo_destroy(cr);
+
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, target, -1);
+            cairo_surface_destroy(target);
+        }
+
+        if (pExpanderName)
+        {
+            GdkPixbuf* pixbuf = getPixbuf(*pExpanderName);
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nExpanderImageCol, pixbuf, -1);
+            if (pixbuf)
+                g_object_unref(pixbuf);
+        }
+    }
+
     OUString get(int pos, int col) const
     {
         OUString sRet;
@@ -4181,6 +4170,17 @@ private:
             g_free(pStr);
         }
         return sRet;
+    }
+
+    void set(int pos, int col, const OUString& rText)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+            gtk_tree_store_set(m_pTreeStore, &iter, col, aStr.getStr(), -1);
+        }
     }
 
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
@@ -4215,7 +4215,7 @@ private:
         if (!bRet && bPlaceHolder)
         {
             GtkTreeIter subiter;
-            insert_row(m_pTreeStore, subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
+            insert_row(subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
         }
 
         return bRet;
@@ -4226,11 +4226,53 @@ public:
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), bTakeOwnership)
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
+        , m_nTextCol(-1)
+        , m_nImageCol(-1)
+        , m_nExpanderImageCol(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
     {
+        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        int nIndex(0);
+        for (GList* pEntry = g_list_first(pColumns); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+            {
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                if (m_nTextCol == -1 && GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+                    m_nTextCol = nIndex;
+                else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
+                {
+                    const bool bExpander = g_list_next(pRenderer) != nullptr;
+                    if (bExpander && m_nExpanderImageCol == -1)
+                        m_nExpanderImageCol = nIndex;
+                    else if (m_nImageCol == -1)
+                        m_nImageCol = nIndex;
+                }
+                ++nIndex;
+            }
+            g_list_free(pRenderers);
+        }
+        g_list_free(pColumns);
+        m_nIdCol = nIndex;
+    }
+
+    virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
+    {
+        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        GList* pEntry = g_list_first(pColumns);
+        for (auto nWidth : rWidths)
+        {
+            assert(pEntry && "wrong count");
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            gtk_tree_view_column_set_fixed_width(pColumn, nWidth);
+            pEntry = g_list_next(pEntry);
+        }
+        g_list_free(pColumns);
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rText, const OUString* pId, const OUString* pIconName,
@@ -4239,11 +4281,11 @@ public:
         disable_notify_events();
         GtkTreeIter iter;
         GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pParent);
-        insert_row(m_pTreeStore, iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, rText, pIconName, pImageSurface, pExpanderName);
+        insert_row(iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, rText, pIconName, pImageSurface, pExpanderName);
         if (bChildrenOnDemand)
         {
             GtkTreeIter subiter;
-            insert_row(m_pTreeStore, subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
+            insert_row(subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
         }
         enable_notify_events();
     }
@@ -4253,7 +4295,7 @@ public:
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
         GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-        gtk_tree_store_set(m_pTreeStore, &iter, 4, &aColor, -1);
+        gtk_tree_store_set(m_pTreeStore, &iter, m_nIdCol + 1, &aColor, -1);
     }
 
     virtual void remove(int pos) override
@@ -4274,7 +4316,7 @@ public:
 
     virtual int find_id(const OUString& rId) const override
     {
-        Search aSearch(rId, 1);
+        Search aSearch(rId, m_nIdCol);
         gtk_tree_model_foreach(GTK_TREE_MODEL(m_pTreeStore), foreach_find, &aSearch);
         return aSearch.index;
     }
@@ -4317,8 +4359,8 @@ public:
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-        gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
-        gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+        gtk_tree_sortable_set_sort_func(pSortable, m_nTextCol, sort_func, m_xSorter.get(), nullptr);
+        gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
     }
 
     virtual int n_children() const override
@@ -4377,14 +4419,23 @@ public:
         return aRows;
     }
 
-    virtual OUString get_text(int pos) const override
+    virtual OUString get_text(int pos, int col) const override
     {
-        return get(pos, 0);
+        if (col == -1)
+            return get(pos, m_nTextCol);
+        return get(pos, col);
+    }
+
+    virtual void set_text(int pos, const OUString& rText, int col) override
+    {
+        if (col == -1)
+            return set(pos, m_nTextCol, rText);
+        return set(pos, col, rText);
     }
 
     virtual OUString get_id(int pos) const override
     {
-        return get(pos, 1);
+        return get(pos, m_nIdCol);
     }
 
     virtual int get_selected_index() const override
@@ -4572,7 +4623,7 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         gchar* pStr;
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), 0, &pStr, -1);
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), m_nTextCol, &pStr, -1);
         OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
         return sRet;
@@ -4583,7 +4634,7 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         gchar* pStr;
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), 1, &pStr, -1);
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), m_nIdCol, &pStr, -1);
         OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
         return sRet;
@@ -4594,7 +4645,7 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         disable_notify_events();
         GdkPixbuf* pixbuf = getPixbuf(rExpanderName);
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&rGtkIter.iter), 4, pixbuf, -1);
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&rGtkIter.iter), m_nExpanderImageCol, pixbuf, -1);
         if (pixbuf)
             g_object_unref(pixbuf);
         enable_notify_events();
@@ -4620,7 +4671,7 @@ public:
         if (m_xSorter)
         {
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-            gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+            gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
         }
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore));
         GtkInstanceContainer::thaw();

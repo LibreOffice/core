@@ -25,7 +25,7 @@
 #include <svx/svxdllapi.h>
 #include <svtools/simptabl.hxx>
 #include <vcl/svlbitm.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
 #include <tools/color.hxx>

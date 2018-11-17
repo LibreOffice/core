@@ -30,7 +30,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <strings.hrc>

@@ -295,25 +295,25 @@ namespace svt { namespace table
     }
 
 
-    OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
+    OUString TableControl::GetAccessibleObjectName( vcl::table::AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
     {
         OUString aRetText;
         //Window* pWin;
         switch( eObjType )
         {
-            case TCTYPE_GRIDCONTROL:
+            case vcl::table::TCTYPE_GRIDCONTROL:
                 aRetText = "Grid control";
                 break;
-            case TCTYPE_TABLE:
+            case vcl::table::TCTYPE_TABLE:
                 aRetText = "Grid control";
                 break;
-            case TCTYPE_ROWHEADERBAR:
+            case vcl::table::TCTYPE_ROWHEADERBAR:
                 aRetText = "RowHeaderBar";
                 break;
-            case TCTYPE_COLUMNHEADERBAR:
+            case vcl::table::TCTYPE_COLUMNHEADERBAR:
                 aRetText = "ColumnHeaderBar";
                 break;
-            case TCTYPE_TABLECELL:
+            case vcl::table::TCTYPE_TABLECELL:
                 //the name of the cell consists of column name and row name if defined
                 //if the name is equal to cell content, it'll be read twice
                 if(GetModel()->hasColumnHeaders())
@@ -326,10 +326,10 @@ namespace svt { namespace table
                 }
                 //aRetText = GetAccessibleCellText(_nRow, _nCol);
                 break;
-            case TCTYPE_ROWHEADERCELL:
+            case vcl::table::TCTYPE_ROWHEADERCELL:
                 aRetText = GetRowName(_nRow);
                 break;
-            case TCTYPE_COLUMNHEADERCELL:
+            case vcl::table::TCTYPE_COLUMNHEADERCELL:
                 aRetText = GetColumnName(_nCol);
                 break;
             default:
@@ -339,24 +339,24 @@ namespace svt { namespace table
     }
 
 
-    OUString TableControl::GetAccessibleObjectDescription( AccessibleTableControlObjType eObjType ) const
+    OUString TableControl::GetAccessibleObjectDescription( vcl::table::AccessibleTableControlObjType eObjType ) const
     {
         OUString aRetText;
         switch( eObjType )
         {
-            case TCTYPE_GRIDCONTROL:
+            case vcl::table::TCTYPE_GRIDCONTROL:
                 aRetText = "Grid control description";
                 break;
-            case TCTYPE_TABLE:
+            case vcl::table::TCTYPE_TABLE:
                     aRetText = "TABLE description";
                 break;
-            case TCTYPE_ROWHEADERBAR:
+            case vcl::table::TCTYPE_ROWHEADERBAR:
                     aRetText = "ROWHEADERBAR description";
                 break;
-            case TCTYPE_COLUMNHEADERBAR:
+            case vcl::table::TCTYPE_COLUMNHEADERBAR:
                     aRetText = "COLUMNHEADERBAR description";
                 break;
-            case TCTYPE_TABLECELL:
+            case vcl::table::TCTYPE_TABLECELL:
                 // the description of the cell consists of column name and row name if defined
                 // if the name is equal to cell content, it'll be read twice
                 if ( GetModel()->hasColumnHeaders() )
@@ -368,10 +368,10 @@ namespace svt { namespace table
                     aRetText += GetRowName( GetCurrentRow() );
                 }
                 break;
-            case TCTYPE_ROWHEADERCELL:
+            case vcl::table::TCTYPE_ROWHEADERCELL:
                     aRetText = "ROWHEADERCELL description";
                 break;
-            case TCTYPE_COLUMNHEADERCELL:
+            case vcl::table::TCTYPE_COLUMNHEADERCELL:
                     aRetText = "COLUMNHEADERCELL description";
                 break;
         }
@@ -413,12 +413,12 @@ namespace svt { namespace table
 
     void TableControl::FillAccessibleStateSet(
             ::utl::AccessibleStateSetHelper& rStateSet,
-            AccessibleTableControlObjType eObjType ) const
+            vcl::table::AccessibleTableControlObjType eObjType ) const
     {
         switch( eObjType )
         {
-            case TCTYPE_GRIDCONTROL:
-            case TCTYPE_TABLE:
+            case vcl::table::TCTYPE_GRIDCONTROL:
+            case vcl::table::TCTYPE_TABLE:
 
                 rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
@@ -440,21 +440,21 @@ namespace svt { namespace table
                 if ( IsReallyVisible() )
                     rStateSet.AddState( AccessibleStateType::VISIBLE );
 
-                if ( eObjType == TCTYPE_TABLE )
+                if ( eObjType == vcl::table::TCTYPE_TABLE )
                     rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
                 break;
 
-            case TCTYPE_ROWHEADERBAR:
+            case vcl::table::TCTYPE_ROWHEADERBAR:
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
                 rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
                 break;
 
-            case TCTYPE_COLUMNHEADERBAR:
+            case vcl::table::TCTYPE_COLUMNHEADERBAR:
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
                 rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
                 break;
 
-            case TCTYPE_TABLECELL:
+            case vcl::table::TCTYPE_TABLECELL:
                 {
                     rStateSet.AddState( AccessibleStateType::FOCUSABLE );
                     if ( HasChildPathFocus() )
@@ -470,12 +470,12 @@ namespace svt { namespace table
                 }
                 break;
 
-            case TCTYPE_ROWHEADERCELL:
+            case vcl::table::TCTYPE_ROWHEADERCELL:
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
                 rStateSet.AddState( AccessibleStateType::TRANSIENT );
                 break;
 
-            case TCTYPE_COLUMNHEADERCELL:
+            case vcl::table::TCTYPE_COLUMNHEADERCELL:
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
                 break;
         }

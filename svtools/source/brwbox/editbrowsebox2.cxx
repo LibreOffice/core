@@ -23,7 +23,7 @@
 #include "editbrowseboximpl.hxx"
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 #include <osl/diagnose.h>
 
 namespace svt
@@ -44,7 +44,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow,
     if ( xAccContext.is() )
     {
         xReturn = getAccessibleFactory().createAccessibleCheckBoxCell(
-            xAccContext->getAccessibleChild( ::svt::BBINDEX_TABLE ),
+            xAccContext->getAccessibleChild( ::vcl::BBINDEX_TABLE ),
             *this,
             nullptr,
             _nRow,

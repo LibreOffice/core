@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -45,7 +45,7 @@ private:
 
     TextEngine & m_rEngine;
     TextView & m_rView;
-    svt::AccessibleFactoryAccess m_aFactoryAccess;
+    vcl::AccessibleFactoryAccess m_aFactoryAccess;
 };
 
 TextWindowPeer::TextWindowPeer(TextView & view):

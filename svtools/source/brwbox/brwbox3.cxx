@@ -18,7 +18,7 @@
  */
 
 #include <svtools/brwbox.hxx>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
@@ -41,10 +41,10 @@ namespace svt
 
     static Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
-                                            AccessibleBrowseBoxObjType _eType,
+                                            vcl::AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,
                                             BrowseBox& _rBrowseBox,
-                                            IAccessibleFactory const & rFactory
+                                            vcl::IAccessibleFactory const & rFactory
                                           )
     {
         Reference< XAccessible > xRet;
@@ -66,7 +66,7 @@ namespace svt
     }
 
 
-    Reference< XAccessible > BrowseBoxImpl::getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType )
+    Reference< XAccessible > BrowseBoxImpl::getAccessibleHeaderBar( vcl::AccessibleBrowseBoxObjType _eObjType )
     {
         if ( m_pAccessible && m_pAccessible->isAlive() )
             return m_pAccessible->getHeaderBar( _eObjType );
@@ -130,8 +130,8 @@ Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
     return svt::getHeaderCell(
         m_pImpl->m_aRowHeaderCellMap,
         _nRow,
-        svt::BBTYPE_ROWHEADERCELL,
-        m_pImpl->getAccessibleHeaderBar(svt::BBTYPE_ROWHEADERBAR),
+        vcl::BBTYPE_ROWHEADERCELL,
+        m_pImpl->getAccessibleHeaderBar(vcl::BBTYPE_ROWHEADERBAR),
         *this,
         m_pImpl->m_aFactoryAccess.getFactory()
     );
@@ -143,8 +143,8 @@ Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nC
     return svt::getHeaderCell(
             m_pImpl->m_aColHeaderCellMap,
             _nColumnPos,
-            svt::BBTYPE_COLUMNHEADERCELL,
-            m_pImpl->getAccessibleHeaderBar(svt::BBTYPE_COLUMNHEADERBAR),
+            vcl::BBTYPE_COLUMNHEADERCELL,
+            m_pImpl->getAccessibleHeaderBar(vcl::BBTYPE_COLUMNHEADERBAR),
             *this,
             m_pImpl->m_aFactoryAccess.getFactory()
     );
@@ -206,24 +206,24 @@ bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _r
 
 // Object data and state ------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
+OUString BrowseBox::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
 {
     OUString aRetText;
     switch( eObjType )
     {
-        case ::svt::BBTYPE_BROWSEBOX:
+        case ::vcl::BBTYPE_BROWSEBOX:
             aRetText = "BrowseBox";
             break;
-        case ::svt::BBTYPE_TABLE:
+        case ::vcl::BBTYPE_TABLE:
             aRetText = "Table";
             break;
-        case ::svt::BBTYPE_ROWHEADERBAR:
+        case ::vcl::BBTYPE_ROWHEADERBAR:
             aRetText = "RowHeaderBar";
             break;
-        case ::svt::BBTYPE_COLUMNHEADERBAR:
+        case ::vcl::BBTYPE_COLUMNHEADERBAR:
             aRetText = "ColumnHeaderBar";
             break;
-        case ::svt::BBTYPE_TABLECELL:
+        case ::vcl::BBTYPE_TABLECELL:
             if( ColCount() !=0 && GetRowCount()!=0)
             {
 
@@ -242,7 +242,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
                         + "]";
 #endif
             break;
-        case ::svt::BBTYPE_ROWHEADERCELL:
+        case ::vcl::BBTYPE_ROWHEADERCELL:
             {
                 sal_Int32 rowId = _nPosition + 1;
                 aRetText = OUString::number( rowId );
@@ -255,7 +255,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
                         + "]";
 #endif
             break;
-        case ::svt::BBTYPE_COLUMNHEADERCELL:
+        case ::vcl::BBTYPE_COLUMNHEADERCELL:
             aRetText = GetColumnDescription( sal_Int16( _nPosition ) );
 #if OSL_DEBUG_LEVEL > 0
             aRetText += " ["
@@ -272,33 +272,33 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 }
 
 
-OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
+OUString BrowseBox::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
 {
     OUString aRetText;
     switch( eObjType )
     {
-        case ::svt::BBTYPE_BROWSEBOX:
+        case ::vcl::BBTYPE_BROWSEBOX:
             aRetText = "BrowseBox description";
             break;
-        case ::svt::BBTYPE_TABLE:
+        case ::vcl::BBTYPE_TABLE:
             //  aRetText = "TABLE description";
             break;
-        case ::svt::BBTYPE_ROWHEADERBAR:
+        case ::vcl::BBTYPE_ROWHEADERBAR:
             //  aRetText = "ROWHEADERBAR description";
             break;
-        case ::svt::BBTYPE_COLUMNHEADERBAR:
+        case ::vcl::BBTYPE_COLUMNHEADERBAR:
             //  aRetText = "COLUMNHEADERBAR description";
             break;
-        case ::svt::BBTYPE_TABLECELL:
+        case ::vcl::BBTYPE_TABLECELL:
             //  aRetText = "TABLECELL description";
             break;
-        case ::svt::BBTYPE_ROWHEADERCELL:
+        case ::vcl::BBTYPE_ROWHEADERCELL:
             //  aRetText = "ROWHEADERCELL description";
             break;
-        case ::svt::BBTYPE_COLUMNHEADERCELL:
+        case ::vcl::BBTYPE_COLUMNHEADERCELL:
             //  aRetText = "COLUMNHEADERCELL description";
             break;
-        case ::svt::BBTYPE_CHECKBOXCELL:
+        case ::vcl::BBTYPE_CHECKBOXCELL:
             break;
     }
     return aRetText;
@@ -319,12 +319,12 @@ OUString BrowseBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 
 void BrowseBox::FillAccessibleStateSet(
         ::utl::AccessibleStateSetHelper& rStateSet,
-        ::svt::AccessibleBrowseBoxObjType eObjType ) const
+        ::vcl::AccessibleBrowseBoxObjType eObjType ) const
 {
     switch( eObjType )
     {
-        case ::svt::BBTYPE_BROWSEBOX:
-        case ::svt::BBTYPE_TABLE:
+        case ::vcl::BBTYPE_BROWSEBOX:
+        case ::vcl::BBTYPE_TABLE:
 
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             if ( HasFocus() )
@@ -340,25 +340,25 @@ void BrowseBox::FillAccessibleStateSet(
             }
             if ( IsReallyVisible() )
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
-            if ( eObjType == ::svt::BBTYPE_TABLE )
+            if ( eObjType == ::vcl::BBTYPE_TABLE )
                 rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
 
             break;
-        case ::svt::BBTYPE_ROWHEADERBAR:
+        case ::vcl::BBTYPE_ROWHEADERBAR:
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectRowCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
             rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
             break;
-        case ::svt::BBTYPE_COLUMNHEADERBAR:
+        case ::vcl::BBTYPE_COLUMNHEADERBAR:
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectColumnCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
             rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
             break;
-        case ::svt::BBTYPE_TABLECELL:
+        case ::vcl::BBTYPE_TABLECELL:
             {
                 sal_Int32 nRow = GetCurRow();
                 sal_uInt16 nColumn = GetCurColumnId();
@@ -369,9 +369,9 @@ void BrowseBox::FillAccessibleStateSet(
                 rStateSet.AddState( AccessibleStateType::TRANSIENT );
             }
             break;
-        case ::svt::BBTYPE_ROWHEADERCELL:
-        case ::svt::BBTYPE_COLUMNHEADERCELL:
-        case ::svt::BBTYPE_CHECKBOXCELL:
+        case ::vcl::BBTYPE_ROWHEADERCELL:
+        case ::vcl::BBTYPE_COLUMNHEADERCELL:
+        case ::vcl::BBTYPE_CHECKBOXCELL:
             OSL_FAIL("Illegal call here!");
             break;
     }
@@ -410,7 +410,6 @@ void BrowseBox::commitHeaderBarEvent(sal_Int16 nEventId,
             rNewValue, rOldValue, _bColumnHeaderBar );
 }
 
-
 void BrowseBox::commitTableEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
@@ -423,12 +422,10 @@ void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue
         m_pImpl->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
 }
 
-
-::svt::IAccessibleFactory& BrowseBox::getAccessibleFactory()
+::vcl::IAccessibleFactory& BrowseBox::getAccessibleFactory()
 {
     return m_pImpl->m_aFactoryAccess.getFactory();
 }
-
 
 bool BrowseBox::isAccessibleAlive( ) const
 {

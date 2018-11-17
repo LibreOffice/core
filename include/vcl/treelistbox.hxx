@@ -493,6 +493,9 @@ public:
 
     // ACCESSIBILITY ==========================================================
 
+    /** Creates and returns the accessible object of the Box. */
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+
     /** Fills the StateSet of one entry. */
     void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const;
 
@@ -749,8 +752,6 @@ public:
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling();
-
-    void            EnableList( bool _bEnable );
 
     long            getPreferredDimensions(std::vector<long> &rWidths) const;
 

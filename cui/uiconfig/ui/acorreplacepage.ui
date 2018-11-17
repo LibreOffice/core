@@ -71,7 +71,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-SvTabListBox" id="tabview:border">
+      <object class="vcllo-SvTabListBox" id="tabview:border">
         <property name="width_request">1</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

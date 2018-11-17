@@ -29,9 +29,9 @@ namespace accessibility
     public:
         AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
                                           const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                                          ::svt::IAccessibleTableProvider&                  _rBrowseBox,
+                                          ::vcl::IAccessibleTableProvider&                  _rBrowseBox,
                                           const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-                                          ::svt::AccessibleBrowseBoxObjType  _eObjType);
+                                          ::vcl::AccessibleBrowseBoxObjType  _eObjType);
         /** @return  The count of visible children. */
         virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
 
@@ -47,7 +47,7 @@ namespace accessibility
 
         bool isRowBarCell() const
         {
-            return getType() == ::svt::BBTYPE_ROWHEADERCELL;
+            return getType() == ::vcl::BBTYPE_ROWHEADERCELL;
         }
 
         /** @return

@@ -27,7 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 
 #include <limits.h>
 
@@ -187,7 +187,7 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<VirtualDevice>   pEntryPaintDev;
     SvxIconChoiceCtrlEntry* pAnchor;                    // for selection
     LocalFocus              aFocus;                             // Data for focusrect
-    ::svt::AccessibleFactoryAccess aAccFactory;
+    ::vcl::AccessibleFactoryAccess aAccFactory;
 
     SvxIconChoiceCtrlEntry* pCurEditedEntry;
     SvxIconChoiceCtrlTextMode eTextMode;
@@ -456,7 +456,7 @@ public:
 
     void                CallEventListeners( VclEventId nEvent, void* pData );
 
-    ::svt::IAccessibleFactory& GetAccessibleFactory()
+    ::vcl::IAccessibleFactory& GetAccessibleFactory()
     {
         return aAccFactory.getFactory();
     }
