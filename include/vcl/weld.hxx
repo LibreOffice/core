@@ -441,6 +441,7 @@ public:
 
     //by text
     virtual OUString get_text(int pos) const = 0;
+    virtual void set_text(int pos, const OUString& rText) = 0;
     virtual int find_text(const OUString& rText) const = 0;
     OUString get_selected_text() const
     {

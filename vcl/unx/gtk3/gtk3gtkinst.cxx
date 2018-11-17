@@ -4182,6 +4182,17 @@ private:
         return sRet;
     }
 
+    void set(int pos, int col, const OUString& rText)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+            gtk_tree_store_set(m_pTreeStore, &iter, col, aStr.getStr(), -1);
+        }
+    }
+
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
@@ -4379,6 +4390,11 @@ public:
     virtual OUString get_text(int pos) const override
     {
         return get(pos, 0);
+    }
+
+    virtual void set_text(int pos, const OUString& rText) override
+    {
+        return set(pos, 0, rText);
     }
 
     virtual OUString get_id(int pos) const override

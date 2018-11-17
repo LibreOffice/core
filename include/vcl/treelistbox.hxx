@@ -750,8 +750,6 @@ public:
 
     void            EnableContextMenuHandling();
 
-    void            EnableList( bool _bEnable );
-
     long            getPreferredDimensions(std::vector<long> &rWidths) const;
 
     virtual Size    GetOptimalSize() const override;
